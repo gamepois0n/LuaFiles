@@ -1,0 +1,127 @@
+-- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_action_cloth.luac 
+
+-- params : ...
+-- function num : 0
+local Frame_ContentImage = (UI.getChildControl)(Panel_CustomizationCloth, "Frame_Content_Image")
+local Static_Frame = (UI.getChildControl)(Panel_CustomizationCloth, "Static_Frame")
+local StaticText_Title = (UI.getChildControl)(Panel_CustomizationCloth, "StaticText_Title")
+local Static_SelectMark = (UI.getChildControl)(Panel_CustomizationCloth, "Static_SelectMark")
+local Button_Close = (UI.getChildControl)(Panel_CustomizationCloth, "Button_Close")
+local StaticText_ShowHelmet = (UI.getChildControl)(Panel_CustomizationCloth, "StaticText_ShowHelmet")
+local CheckButton_ShowHelmet = (UI.getChildControl)(Panel_CustomizationCloth, "CheckButton_ShowHelmet")
+StaticText_Title:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONCLOTH_DRESS_FITTING"))
+StaticText_ShowHelmet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONCLOTH_SHOWHELMET"))
+local textureColumnCount = 4
+local ColumnCount = 5
+local clothImageGap = 5
+local contentsGap = 10
+local columnWidth = Frame_ContentImage:GetSizeX() + clothImageGap
+local columnHeight = Frame_ContentImage:GetSizeY() + clothImageGap
+local frameStartY = 50
+local contentsOffsetX = 20
+local contentsOffsetY = 60
+local image = nil
+local ContentImage = {}
+local selectedClassType = nil
+Button_Close:addInputEvent("Mouse_LUp", "closeClothUI()")
+CheckButton_ShowHelmet:addInputEvent("Mouse_LUp", "ShowHelmet()")
+registerEvent("EventOpenClothUI", "openClothUI")
+registerEvent("EventCloseClothUI", "closeClothUI")
+local UpdateMarkPosition = function(index)
+  -- function num : 0_0 , upvalues : Static_SelectMark, ColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY
+  if index ~= -1 then
+    Static_SelectMark:SetShow(true)
+    Static_SelectMark:SetPosX(index % ColumnCount * columnWidth + contentsOffsetX)
+    Static_SelectMark:SetPosY((math.floor)(index / ColumnCount) * columnHeight + contentsOffsetY)
+  else
+    Static_SelectMark:SetShow(false)
+  end
+end
+
+UpdateCloth = function(index)
+  -- function num : 0_1 , upvalues : UpdateMarkPosition
+  UpdateMarkPosition(index)
+  applyCloth(index)
+end
+
+local clearContentList = function()
+  -- function num : 0_2 , upvalues : ContentImage
+  for _,content in pairs(ContentImage) do
+    content:SetShow(false)
+    ;
+    (UI.deleteControl)(content)
+  end
+  ContentImage = {}
+end
+
+createClothList = function()
+  -- function num : 0_3 , upvalues : clearContentList, selectedClassType, Frame_ContentImage, textureColumnCount, ColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, ContentImage, contentsGap, frameStartY, CheckButton_ShowHelmet, StaticText_ShowHelmet, Static_Frame
+  clearContentList()
+  local count = getClothCount(selectedClassType)
+  local textureName = getClothTextureName(selectedClassType)
+  local texSize = 48.25
+  for itemIdx = 0, count - 1 do
+    local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationCloth, "Frame_Image_" .. itemIdx)
+    CopyBaseProperty(Frame_ContentImage, tempContentImage)
+    tempContentImage:addInputEvent("Mouse_LUp", "UpdateCloth(" .. itemIdx .. ")")
+    local mod = itemIdx % textureColumnCount
+    local divi = (math.floor)(itemIdx / textureColumnCount)
+    local texUV = {x1, y1, x2, y2}
+    texUV.x1 = mod * texSize
+    texUV.y1 = divi * texSize
+    texUV.x2 = texUV.x1 + texSize
+    texUV.y2 = texUV.y1 + texSize
+    tempContentImage:ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/" .. textureName)
+    local x1, y1, x2, y2 = setTextureUV_Func(tempContentImage, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
+    ;
+    (tempContentImage:getBaseTexture()):setUV(x1, y1, x2, y2)
+    tempContentImage:SetPosX(itemIdx % ColumnCount * columnWidth + contentsOffsetX)
+    tempContentImage:SetPosY((math.floor)(itemIdx / ColumnCount) * columnHeight + contentsOffsetY)
+    tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
+    tempContentImage:SetShow(true)
+    -- DECOMPILER ERROR at PC104: Confused about usage of register: R15 in 'UnsetPending'
+
+    ContentImage[itemIdx] = tempContentImage
+  end
+  local totalImageHeight = contentsGap + ((math.floor)((count - 1) / ColumnCount) + 1) * columnHeight
+  local showHelmetStartY = frameStartY + totalImageHeight
+  CheckButton_ShowHelmet:SetPosY(showHelmetStartY)
+  StaticText_ShowHelmet:SetPosY(showHelmetStartY)
+  local FrameSizeY = totalImageHeight + CheckButton_ShowHelmet:GetSizeY() + contentsGap
+  Static_Frame:SetSize(Static_Frame:GetSizeX(), FrameSizeY)
+  Panel_CustomizationCloth:SetSize(Panel_CustomizationCloth:GetSizeX(), frameStartY + FrameSizeY + contentsGap)
+end
+
+openClothUI = function(classType, showHelmet)
+  -- function num : 0_4 , upvalues : selectedClassType, UpdateMarkPosition, CheckButton_ShowHelmet
+  selectedClassType = classType
+  UpdateMarkPosition(-1)
+  createClothList()
+  CheckButton_ShowHelmet:SetCheck(showHelmet)
+  Panel_CustomizationCloth:SetShow(true)
+  CloseFrameForPoseUI()
+  Panel_CustomizationCloth:SetPosX(Panel_CustomizationFrame:GetPosX())
+  Panel_CustomizationCloth:SetPosY(Panel_CustomizationFrame:GetPosY())
+end
+
+closeClothUI = function()
+  -- function num : 0_5 , upvalues : clearContentList
+  if Panel_CustomizationTextureMenu:GetShow() then
+    CloseTextureUi()
+    return 
+  end
+  Panel_CustomizationCloth:SetShow(false)
+  Panel_CustomizationFrame:SetPosX(Panel_CustomizationCloth:GetPosX())
+  Panel_CustomizationFrame:SetPosY(Panel_CustomizationCloth:GetPosY())
+  clearContentList()
+  CustomizationMainUIShow(true)
+  selectPoseControl(0)
+end
+
+ShowHelmet = function()
+  -- function num : 0_6 , upvalues : CheckButton_ShowHelmet
+  setShowHelmet(CheckButton_ShowHelmet:IsCheck())
+end
+
+
