@@ -501,44 +501,50 @@ local settingUIMainGroup = function(isFullUpdate)
   local discountIndex = 0
   for index = 0, childCount - 1 do
     local value = (ui.mainGroup)[index]
-    local mentalCardKeyRaw = knowledge:getMainKnowledgeKeyByIndex(index)
-    local mentalObject = knowledge:getThemeByKeyRaw(mentalCardKeyRaw)
-    if circularColorValue[mentalCardKeyRaw] ~= nil then
-      if isFullUpdate then
-        (value._gauge):SetColor(circularColorValue[mentalCardKeyRaw])
-        ;
-        (value._gauge):SetProgressRate(mentalObject:getCardCollectPercents())
-        ;
-        (value._name):SetText(mentalObject:getName())
-      end
-      local pos2d = knowledge:getElementaPos2dByPlayerPos(rotateValue + index - discountIndex, visibleChildCount, radiusValue)
-      ;
-      (value._gaugeBG):SetDepth(-pos2d.z)
-      local zOrder = (math.min)((math.max)(pos2d.z, 0), 1)
-      ;
-      (value._gaugeBG):SetScale(zOrder, zOrder)
-      ;
-      (value._icon):SetScale(zOrder, zOrder)
-      ;
-      (value._gauge):SetScale(zOrder, zOrder)
-      ;
-      (value._name):SetScale(zOrder, zOrder)
-      ;
-      (value._gaugeBG):SetPosX(pos2d.x - (value._gaugeBG):GetSizeX() / 2)
-      ;
-      (value._gaugeBG):SetPosY(pos2d.y - (value._gaugeBG):GetSizeY() / 2)
-    else
-      do
-        do
-          discountIndex = discountIndex + 1
+    if value ~= nil then
+      local mentalCardKeyRaw = knowledge:getMainKnowledgeKeyByIndex(index)
+      local mentalObject = knowledge:getThemeByKeyRaw(mentalCardKeyRaw)
+      if circularColorValue[mentalCardKeyRaw] ~= nil then
+        if isFullUpdate then
+          (value._gauge):SetColor(circularColorValue[mentalCardKeyRaw])
           ;
-          (value._gaugeBG):SetShow(false)
-          -- DECOMPILER ERROR at PC127: LeaveBlock: unexpected jumping out DO_STMT
+          (value._gauge):SetProgressRate(mentalObject:getCardCollectPercents())
+          ;
+          (value._name):SetText(mentalObject:getName())
+        end
+        local pos2d = knowledge:getElementaPos2dByPlayerPos(rotateValue + index - discountIndex, visibleChildCount, radiusValue)
+        ;
+        (value._gaugeBG):SetDepth(-pos2d.z)
+        local zOrder = (math.min)((math.max)(pos2d.z, 0), 1)
+        ;
+        (value._gaugeBG):SetScale(zOrder, zOrder)
+        ;
+        (value._icon):SetScale(zOrder, zOrder)
+        ;
+        (value._gauge):SetScale(zOrder, zOrder)
+        ;
+        (value._name):SetScale(zOrder, zOrder)
+        ;
+        (value._gaugeBG):SetPosX(pos2d.x - (value._gaugeBG):GetSizeX() / 2)
+        ;
+        (value._gaugeBG):SetPosY(pos2d.y - (value._gaugeBG):GetSizeY() / 2)
+      else
+        do
+          do
+            discountIndex = discountIndex + 1
+            ;
+            (value._gaugeBG):SetShow(false)
+            -- DECOMPILER ERROR at PC129: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC127: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC129: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC127: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC129: LeaveBlock: unexpected jumping out IF_STMT
 
+            -- DECOMPILER ERROR at PC129: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+            -- DECOMPILER ERROR at PC129: LeaveBlock: unexpected jumping out IF_STMT
+
+          end
         end
       end
     end
@@ -1072,6 +1078,7 @@ Panel_Knowledge_Hide = function()
   ;
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
   onHideCloseControls()
+  PackageIconPosition()
 end
 
 Panel_Knowledge_ShowHint = function(index)

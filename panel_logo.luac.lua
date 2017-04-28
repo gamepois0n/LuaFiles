@@ -132,7 +132,12 @@ else
   static_Movie:SetPosX(-8)
   static_Movie:SetPosY(-8)
   static_Movie:SetSize(sizeX + 34, sizeY + 19)
-  static_Movie:SetUrl(1920, 1080, "coui://UI_Movie/CI_Play.html", false, true)
+  local soundEnabled = getEnableSound(2)
+  if soundEnabled == true then
+    static_Movie:SetUrl(1920, 1080, "coui://UI_Movie/CI_Play.html", false, true)
+  else
+    static_Movie:SetUrl(1920, 1080, "coui://UI_Movie/CI_Play_NoSound.html", false, true)
+  end
 end
 
               Panel_Logo_Pause = function(deltaTime)

@@ -45,13 +45,22 @@ end
 local oneLineTextSizeY = 17
 local guildWarInfo_ShowCheck = false
 local siegeType = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_DEAD"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_SIEGESYMBOLDESTROY"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_SIEGETENTDESTROY"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_LORDKILL"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_GUILDMASTERKILL"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_CASTLEGATEDESTROY"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_SQUADCAPTAINKILL"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_GUILDMEMBERKILL"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_HELP"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_SUMMONKILL"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_INSTALLKILL"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWARINFO_SIEGETYPE_IGNORE")}
-local warInfo_Main = {btn_Close = (UI.getChildControl)(Panel_GuildWarInfo, "Button_Win_Close"), btn_Question = (UI.getChildControl)(Panel_GuildWarInfo, "Button_Question"), comboBox_Territory = (UI.getChildControl)(Panel_GuildWarInfo, "Combobox_Territory"), frame_SiegeInfo = (UI.getChildControl)(Panel_GuildWarInfo, "Frame_SiegeInfo"), subTitle = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_TitleBar")}
+local warInfo_Main = {btn_Close = (UI.getChildControl)(Panel_GuildWarInfo, "Button_Win_Close"), btn_Question = (UI.getChildControl)(Panel_GuildWarInfo, "Button_Question"), comboBox_Territory = (UI.getChildControl)(Panel_GuildWarInfo, "Combobox_Territory"), checkPopUp = (UI.getChildControl)(Panel_GuildWarInfo, "CheckButton_PopUp"), frame_SiegeInfo = (UI.getChildControl)(Panel_GuildWarInfo, "Frame_SiegeInfo"), subTitle = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_TitleBar")}
 local comboxList = (UI.getChildControl)(warInfo_Main.comboBox_Territory, "Combobox_List")
 comboxList:SetSize(comboxList:GetSizeX(), 20 * siegingAreaCount + 5)
 ;
 (warInfo_Main.btn_Question):SetShow(false)
 ;
 (warInfo_Main.btn_Close):addInputEvent("Mouse_LUp", "Panel_GuildWarInfo_Hide()")
+;
+(warInfo_Main.checkPopUp):addInputEvent("Mouse_LUp", "HandleClicked_GuildWarInfo_PopUp()")
+;
+(warInfo_Main.checkPopUp):addInputEvent("Mouse_On", "GuildWarInfo_PopUp_ShowIconToolTip( true )")
+;
+(warInfo_Main.checkPopUp):addInputEvent("Mouse_Out", "GuildWarInfo_PopUp_ShowIconToolTip( false )")
+local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
+;
+(warInfo_Main.checkPopUp):SetShow(isPopUpContentsEnable)
 ;
 (warInfo_Main.comboBox_Territory):SetText(territoryName[0])
 ;
@@ -1241,22 +1250,22 @@ end
 
 local guildScore = {}
 for territoryIndex = 0, siegingAreaCount - 1 do
-  -- DECOMPILER ERROR at PC540: Confused about usage of register: R38 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC568: Confused about usage of register: R39 in 'UnsetPending'
 
   (guildScore.destroyBuildCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC543: Confused about usage of register: R38 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC571: Confused about usage of register: R39 in 'UnsetPending'
 
   ;
   (guildScore.killPlayerCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC546: Confused about usage of register: R38 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC574: Confused about usage of register: R39 in 'UnsetPending'
 
   ;
   (guildScore.deathCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC549: Confused about usage of register: R38 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC577: Confused about usage of register: R39 in 'UnsetPending'
 
   ;
   (guildScore.killServantCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC552: Confused about usage of register: R38 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC580: Confused about usage of register: R39 in 'UnsetPending'
 
   ;
   (guildScore.guildMp)[territoryIndex] = {}
@@ -1424,9 +1433,12 @@ HandleClicked_Cheer = function(territoryKey, index)
 end
 
 FGlobal_GuildWarInfo_Show = function()
-  -- function num : 0_12 , upvalues : guildWarInfo_ShowCheck, controlReGenerate, selectTerritoy
+  -- function num : 0_12 , upvalues : warInfo_Main, guildWarInfo_ShowCheck, controlReGenerate, selectTerritoy
   if Panel_GuildWarInfo:GetShow() then
     Panel_GuildWarInfo:SetShow(false, true)
+    Panel_GuildWarInfo:CloseUISubApp()
+    ;
+    (warInfo_Main.checkPopUp):SetCheck(false)
     return 
   end
   if not Panel_GuildWarInfo:GetShow() then
@@ -1440,8 +1452,18 @@ FGlobal_GuildWarInfo_Show = function()
   FromClient_NotifySiegeScoreToLog()
 end
 
+HandleClicked_GuildWarInfo_PopUp = function()
+  -- function num : 0_13 , upvalues : warInfo_Main
+  if (warInfo_Main.checkPopUp):IsCheck() then
+    Panel_GuildWarInfo:OpenUISubApp()
+  else
+    Panel_GuildWarInfo:CloseUISubApp()
+  end
+  TooltipSimple_Hide()
+end
+
 FromClient_NotifySiegeScoreToLog = function()
-  -- function num : 0_13 , upvalues : viewalbeCount, log_Content, defaultLogFrameSize, textGap, UI_PUCT, warInfo_Log, siegeType, UI_TM, oneLineTextSizeY, guildWarInfo_ShowCheck
+  -- function num : 0_14 , upvalues : viewalbeCount, log_Content, defaultLogFrameSize, textGap, UI_PUCT, warInfo_Log, siegeType, UI_TM, oneLineTextSizeY, guildWarInfo_ShowCheck
   if Panel_GuildWarInfo:GetShow() == false then
     return 
   end
@@ -1646,12 +1668,15 @@ FromClient_NotifySiegeScoreToLog = function()
 end
 
 Panel_GuildWarInfo_Hide = function()
-  -- function num : 0_14
+  -- function num : 0_15 , upvalues : warInfo_Main
   Panel_GuildWarInfo:SetShow(false, true)
+  Panel_GuildWarInfo:CloseUISubApp()
+  ;
+  (warInfo_Main.checkPopUp):SetCheck(false)
 end
 
 Panel_GuildWarInfo_RePos = function()
-  -- function num : 0_15
+  -- function num : 0_16
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
   local posY = scrY / 2 - Panel_GuildWarInfo:GetSizeY() / 2 - 100
@@ -1663,14 +1688,33 @@ Panel_GuildWarInfo_RePos = function()
 end
 
 SiegeStatusUpdate = function()
-  -- function num : 0_16
+  -- function num : 0_17
   FromClient_WarInfoContent_Set(-1)
 end
 
 FromClient_NotifyAttackedKingOrLordTentToScore = function(percent, territoryKey, guildNo)
-  -- function num : 0_17 , upvalues : selectTerritoy
+  -- function num : 0_18 , upvalues : selectTerritoy
   if selectTerritoy == territoryKey then
     FromClient_WarInfoContent_Set(territoryKey)
+  end
+end
+
+GuildWarInfo_PopUp_ShowIconToolTip = function(isShow)
+  -- function num : 0_19 , upvalues : warInfo_Main
+  if isShow then
+    local self = warInfo_Main
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
+    local desc = ""
+    if (self.checkPopUp):IsCheck() then
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
+    else
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
+    end
+    TooltipSimple_Show(self.checkPopUp, name, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
   end
 end
 

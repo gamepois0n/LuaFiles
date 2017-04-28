@@ -152,7 +152,7 @@ PaGlobal_TutorialUiManager.restoreAllUiByUserSetting = function(self)
     end
   end
   if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR) or isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP) then
-    FGlobal_MovieGuideButton_Position()
+    FGlobal_PersonalIcon_ButtonPosUpdate()
   end
   self:showConditionalUi()
 end
@@ -162,7 +162,7 @@ end
 PaGlobal_TutorialUiManager.showConditionalUi = function(self)
   -- function num : 0_10
   FGlobal_MyHouseNavi_Update()
-  FGlobal_MovieGuideButton_Position()
+  FGlobal_PersonalIcon_ButtonPosUpdate()
   Panel_Widget_TownNpcNavi:SetShow(true, true)
   FGlobal_PetControl_CheckUnSealPet()
   FGlobal_Party_ConditionalShow()
@@ -183,6 +183,8 @@ end
 PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
   -- function num : 0_11
   Panel_SelfPlayerExpGage:SetShow(isShow)
+  Panel_PersonalIcon:SetShow(isShow)
+  Panel_PersonalIcon_Left:SetShow(isShow)
   Panel_TimeBar:SetShow(isShow)
   FGlobal_Panel_Radar_Show(isShow)
   FGlobal_Panel_RadarRealLine_Show(isShow)
@@ -203,16 +205,22 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
     Panel_UIMain:SetShow(isShow)
     Panel_SkillCommand:SetShow(isShow)
     if isShow == true then
-      FGlobal_MovieGuideButton_Position()
+      FGlobal_PersonalIcon_ButtonPosUpdate()
       FGlobal_MyHouseNavi_Update()
       Panel_NewEventProduct_Alarm:SetShow(isShow)
       FGlobal_PetControl_CheckUnSealPet()
     elseif isShow == false then
-      Panel_AutoTraining:SetShow(false)
-      Panel_VillageSiegeArea:SetShow(false)
-      Panel_HuntingAlertButton:SetShow(false)
-      Panel_VoiceChatStatus:SetShow(false)
-      Panel_MovieGuideButton:SetShow(false)
+      local navi = FGlobal_GetPersonalIconControl(0)
+      local movie = FGlobal_GetPersonalIconControl(1)
+      local voiceChat = FGlobal_GetPersonalIconControl(2)
+      local hunting = FGlobal_GetPersonalIconControl(3)
+      local siegeArea = FGlobal_GetPersonalIconControl(4)
+      local autoTraining = FGlobal_GetPersonalIconControl(5)
+      autoTraining:SetShow(false)
+      siegeArea:SetShow(false)
+      hunting:SetShow(false)
+      voiceChat:SetShow(false)
+      movie:SetShow(false)
       Panel_Widget_TownNpcNavi:SetShow(false)
       Panel_MyHouseNavi:SetShow(false)
       Panel_Window_PetIcon:SetShow(false)

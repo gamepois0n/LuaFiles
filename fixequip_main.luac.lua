@@ -11,14 +11,14 @@ Panel_FixEquip:RegisterShowEventFunc(true, "FixEquip_ShowAni()")
 Panel_FixEquip:RegisterShowEventFunc(false, "FixEquip_HideAni()")
 PaGlobal_FixEquip = {_s64_allWeight, _useCash, _onlyItemCheck; 
 _slotConfig = {createIcon = false, createBorder = true, createCount = true, createEnchant = true, createCash = true}
-, _uiButtonApply = (UI.getChildControl)(Panel_FixEquip, "Button_Apply"), _uiButtonApplyCash = (UI.getChildControl)(Panel_FixEquip, "Button_CashItemUse"), _uiFixHelp = (UI.getChildControl)(Panel_FixEquip, "StaticText_HelpDesc"), _uiItemFix = (UI.getChildControl)(Panel_FixEquip, "RadioButton_OnlyItem"), _uiMoneyItemFix = (UI.getChildControl)(Panel_FixEquip, "RadioButton_ItemMoneyRecovery"), _uiEquipPrice = (UI.getChildControl)(Panel_FixEquip, "StaticText_EquipPrice"), _uiStreamRecovery = (UI.getChildControl)(Panel_FixEquip, "CheckButton_StreamRecovery"), _uiChkInven = (UI.getChildControl)(Panel_FixEquip, "RadioButton_Icon_Money"), _uiChkWarehouse = (UI.getChildControl)(Panel_FixEquip, "RadioButton_Icon_Money2"), _uiTxtInven = (UI.getChildControl)(Panel_FixEquip, "Static_Text_Money"), _uiTxtWarehouse = (UI.getChildControl)(Panel_FixEquip, "Static_Text_Money2"), _uiButtonQuestion = (UI.getChildControl)(Panel_FixEquip, "Button_Question"), _slot_0_Notice = (UI.getChildControl)(Panel_FixEquip, "StaticText_Notice_Slot_0"), _slot_1_Notice = (UI.getChildControl)(Panel_FixEquip, "StaticText_Notice_Slot_1"), 
+, _uiButtonApply = (UI.getChildControl)(Panel_FixEquip, "Button_Apply"), _uiButtonApplyCash = (UI.getChildControl)(Panel_FixEquip, "Button_CashItemUse"), _uiFixHelp = (UI.getChildControl)(Panel_FixEquip, "StaticText_HelpDesc"), _uiItemFix = (UI.getChildControl)(Panel_FixEquip, "RadioButton_OnlyItem"), _uiMoneyItemFix = (UI.getChildControl)(Panel_FixEquip, "RadioButton_ItemMoneyRecovery"), _uiEquipPrice = (UI.getChildControl)(Panel_FixEquip, "StaticText_EquipPrice"), _uiStreamRecovery = (UI.getChildControl)(Panel_FixEquip, "CheckButton_StreamRecovery"), _uiChkInven = (UI.getChildControl)(Panel_FixEquip, "RadioButton_Icon_Money"), _uiChkWarehouse = (UI.getChildControl)(Panel_FixEquip, "RadioButton_Icon_Money2"), _uiTxtInven = (UI.getChildControl)(Panel_FixEquip, "Static_Text_Money"), _uiTxtWarehouse = (UI.getChildControl)(Panel_FixEquip, "Static_Text_Money2"), _uiButtonQuestion = (UI.getChildControl)(Panel_FixEquip, "Button_Question"), _slot_0_Notice = (UI.getChildControl)(Panel_FixEquip, "StaticText_Notice_Slot_0"), _slot_1_Notice = (UI.getChildControl)(Panel_FixEquip, "StaticText_Notice_Slot_1"), _enduranceText = (UI.getChildControl)(Panel_FixEquip, "StaticText_UseLimit_endurance"), _enduranceGauge = (UI.getChildControl)(Panel_FixEquip, "Static_UseLimit_endurance_gage"), _enduranceMax = (UI.getChildControl)(Panel_FixEquip, "Progress2_MaxEndurance"), _enduranceGaugeValue = (UI.getChildControl)(Panel_FixEquip, "Progress_UseLimit_endurance_gage_value"), _enduranceValue = (UI.getChildControl)(Panel_FixEquip, "StaticText_UseLimit_endurance_value"), 
 _fixEquipData = {slotNoMain, whereTypeMain, whereTypeSub, itemKeySub}
 , _slotMain = nil, _slotSub = nil, 
 _slotMainTbl = {}
 , 
 _slotSubTbl = {}
-, _onlyMoneyCheck = false, _moneyItemCheck = false}
--- DECOMPILER ERROR at PC134: Confused about usage of register: R3 in 'UnsetPending'
+, _onlyMoneyCheck = false, _moneyItemCheck = false, _memoryFlagRecoveryCount = 0}
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.initialize = function(self)
   -- function num : 0_0
@@ -38,9 +38,23 @@ PaGlobal_FixEquip.initialize = function(self)
   local btnButtonApplyCashTextPosX = btnButtonApplyCashSizeX - btnButtonApplyCashSizeX / 2 - (self._uiButtonApplyCash):GetTextSizeX() / 2
   ;
   (self._uiButtonApplyCash):SetTextSpan(btnButtonApplyCashTextPosX, 5)
+  ;
+  (self._enduranceGaugeValue):SetAniSpeed(0)
+  ;
+  (self._enduranceMax):SetAniSpeed(0)
+  ;
+  (self._enduranceText):SetShow(false)
+  ;
+  (self._enduranceGauge):SetShow(false)
+  ;
+  (self._enduranceMax):SetShow(false)
+  ;
+  (self._enduranceGaugeValue):SetShow(false)
+  ;
+  (self._enduranceValue):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC137: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquip_FixHelp = function(self)
   -- function num : 0_1
@@ -52,7 +66,7 @@ PaGlobal_FixEquip.fixEquip_FixHelp = function(self)
   Panel_FixEquip:SetSize(Panel_FixEquip:GetSizeX(), (self._uiFixHelp):GetTextSizeY() + 305)
 end
 
--- DECOMPILER ERROR at PC140: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquip_clearData = function(self)
   -- function num : 0_2
@@ -108,7 +122,7 @@ PaGlobal_FixEquip.fixEquip_clearData = function(self)
   PaGlobal_FixEquip:fixEquip_MouseEvent_OutSlots_Done(true)
 end
 
--- DECOMPILER ERROR at PC143: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC174: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquip_clearDataOnlySub = function(self)
   -- function num : 0_3
@@ -146,7 +160,7 @@ PaGlobal_FixEquip.fixEquip_clearDataOnlySub = function(self)
   PaGlobal_FixEquip:fixEquip_MouseEvent_OutSlots_Done(false)
 end
 
--- DECOMPILER ERROR at PC146: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC177: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquip_clearDataStreamRecovery = function(self, isOn, str)
   -- function num : 0_4
@@ -173,7 +187,7 @@ PaGlobal_FixEquip.fixEquip_clearDataStreamRecovery = function(self, isOn, str)
   end
 end
 
--- DECOMPILER ERROR at PC149: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC180: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquip_MouseEvent_OutSlots_Done = function(self, isDone)
   -- function num : 0_5
@@ -187,7 +201,7 @@ PaGlobal_FixEquip.fixEquip_MouseEvent_OutSlots_Done = function(self, isDone)
   end
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC183: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquip_createControl = function(self)
   -- function num : 0_6
@@ -232,15 +246,16 @@ PaGlobal_FixEquip.fixEquip_createControl = function(self)
   ((self._slotSubTbl).icon):addInputEvent("Mouse_Out", "PaGlobal_FixEquip:panel_FixEquipMouseOnEvent(1, \"FixEquip\", false)")
   Panel_Tooltip_Item_SetPosition(1, self._slotSubTbl, "FixEquip")
   self._slotSub = self._slotSubTbl
+  local sizeX = (self._uiStreamRecovery):GetTextSizeX() + 23
   if isGameTypeEnglish() then
-    (self._uiStreamRecovery):SetSpanSize(140, 200)
+    (self._uiStreamRecovery):SetSpanSize(sizeX, 202)
     ;
     (self._uiItemFix):SetSpanSize(-165, 220)
     ;
     (self._uiMoneyItemFix):SetSpanSize(-165, 245)
   else
     ;
-    (self._uiStreamRecovery):SetSpanSize(100, 200)
+    (self._uiStreamRecovery):SetSpanSize(sizeX, 202)
     ;
     (self._uiItemFix):SetSpanSize(-20, 210)
     ;
@@ -255,7 +270,7 @@ PaGlobal_FixEquip.fixEquip_createControl = function(self)
   PaGlobal_FixEquip:fixEquip_clearData()
 end
 
--- DECOMPILER ERROR at PC156: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC187: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.panel_FixEquipMouseOnEvent = function(self, index, type, isMouseOn)
   -- function num : 0_7 , upvalues : UI_TM
@@ -303,7 +318,7 @@ PaGlobal_FixEquip.panel_FixEquipMouseOnEvent = function(self, index, type, isMou
   Panel_Tooltip_Item_Show_GeneralNormal(index, type, isMouseOn)
 end
 
--- DECOMPILER ERROR at PC159: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC190: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.isReadyToReapirMaxEndurance = function(self)
   -- function num : 0_8
@@ -316,7 +331,7 @@ PaGlobal_FixEquip.isReadyToReapirMaxEndurance = function(self)
   return true
 end
 
--- DECOMPILER ERROR at PC162: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC193: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.isCheckSlot = function(self)
   -- function num : 0_9
@@ -326,7 +341,7 @@ PaGlobal_FixEquip.isCheckSlot = function(self)
   return true
 end
 
--- DECOMPILER ERROR at PC165: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC196: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.useCashBtnEffectDelete = function(self)
   -- function num : 0_10
@@ -378,21 +393,21 @@ PaGlobal_FixEquip.useCashBtnEffectDelete = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC168: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC199: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.isFixEquip_SubSlotItemKey = function(self)
   -- function num : 0_11
   return (self._fixEquipData).itemKeySub
 end
 
--- DECOMPILER ERROR at PC171: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC202: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.isRepeatRepair = function(self)
   -- function num : 0_12
   return (self._uiStreamRecovery):IsCheck()
 end
 
--- DECOMPILER ERROR at PC174: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC205: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquipContinue = function(self, slotNo)
   -- function num : 0_13
@@ -438,7 +453,7 @@ PaGlobal_FixEquip.fixEquipContinue = function(self, slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC177: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC208: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquipData_Clear = function(self)
   -- function num : 0_14
@@ -461,7 +476,7 @@ PaGlobal_FixEquip.fixEquipData_Clear = function(self)
   self._useCash = nil
 end
 
--- DECOMPILER ERROR at PC180: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC211: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fGlobal_closeFix = function(self)
   -- function num : 0_15
@@ -505,7 +520,7 @@ PaGlobal_FixEquip.fGlobal_closeFix = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC183: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC214: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquipItem_registEventHandler = function(self)
   -- function num : 0_16
@@ -540,7 +555,7 @@ PaGlobal_FixEquip.fixEquipItem_registEventHandler = function(self)
   (self._uiStreamRecovery):setTooltipEventRegistFunc("FixEquip_SimpleTooltips( true, 3 )")
 end
 
--- DECOMPILER ERROR at PC186: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC217: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.handleClicked_FixType = function(self, fixType)
   -- function num : 0_17
@@ -572,7 +587,7 @@ PaGlobal_FixEquip.handleClicked_FixType = function(self, fixType)
   end
 end
 
--- DECOMPILER ERROR at PC189: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC220: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_FixEquip.StreamRecoveryStop = function(self)
   -- function num : 0_18

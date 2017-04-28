@@ -174,12 +174,23 @@ end
 
 PvpMode_Resize = function()
   -- function num : 0_11
-  Panel_PvpMode:SetPosX(Panel_MainStatus_User_Bar:GetPosX() - 20)
-  Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47)
-  changePositionBySever(Panel_PvpMode, (CppEnums.PAGameUIType).PAGameUIPanel_PvpMode, false, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_PvpMode:GetRelativePosX() == 0 and Panel_PvpMode:GetRelativePosY() == 0 then
+      Panel_PvpMode:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2 - 20)
+      Panel_PvpMode:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_PvpMode:GetSizeY())
+    else
+      Panel_PvpMode:SetPosX(Panel_PvpMode:GetRelativePosX() * getScreenSizeX() - Panel_PvpMode:GetSizeX() / 2)
+      Panel_PvpMode:SetPosY(Panel_PvpMode:GetRelativePosY() * getScreenSizeY() - Panel_PvpMode:GetSizeY() / 2)
+    end
+  else
+    Panel_PvpMode:SetPosX(Panel_MainStatus_User_Bar:GetPosX() - 20)
+    Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47)
+    changePositionBySever(Panel_PvpMode, (CppEnums.PAGameUIType).PAGameUIPanel_PvpMode, false, true, false)
+  end
 end
 
 registerEvent("EventPvPModeChanged", "pvpMode_changedMode1")
 registerEvent("EventPlayerPvPAbleChanged", "PvpMode_PlayerPvPAbleChanged")
 registerEvent("onScreenResize", "PvpMode_Resize")
+changePositionBySever(Panel_PvpMode, (CppEnums.PAGameUIType).PAGameUIPanel_PvpMode, true, true, false)
 

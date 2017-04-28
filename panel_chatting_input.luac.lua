@@ -27,7 +27,7 @@ config = {startPosX = 7, startPosY = 7, btnPosYGap = 21}
 , 
 control = {edit = (UI.getChildControl)(Panel_Chatting_Input, "Edit_ChatMessage"), dragButton = (UI.getChildControl)(Panel_Chatting_Input, "Button_Drag"), buttons = (Array.new)(), whisperEdit = (UI.getChildControl)(Panel_Chatting_Input, "Edit_WhisperName"), noticeShortcut = (UI.getChildControl)(Panel_Chatting_Input, "StaticText_Notice_Shortcut"), whisperNotice = (UI.getChildControl)(Panel_Chatting_Input, "StaticText_Whisper_Notice"), macroButton = (UI.getChildControl)(Panel_Chatting_Input, "RadioButton_Macro"), socialButton = (UI.getChildControl)(Panel_Chatting_Input, "RadioButton_SocialAction")}
 , 
-buttonIds = {[0] = nil, [1] = "Button_Anounce", [2] = "Button_World", [3] = "Button_Normal", [4] = "Button_Whisper", [5] = "Button_System", [6] = "Button_Party", [7] = "Button_Guild", [12] = "Button_WorldWithItem", [14] = "Button_LocalWar", [15] = "Button_RolePlay", [17] = "Button_Arsha"}
+buttonIds = {[0] = nil, [1] = "Button_Anounce", [2] = "Button_World", [3] = "Button_Normal", [4] = "Button_Whisper", [5] = "Button_System", [6] = "Button_Party", [7] = "Button_Guild", [12] = "Button_WorldWithItem", [14] = "Button_LocalWar", [15] = "Button_RolePlay", [17] = "Button_Arsha", [18] = "Button_Team"}
 , permissions = (Array.new)(), lastChatType = UI_CT.Public, isChatTypeChangedMode = false, maxEditInput = 100, linkedItemCount = 0, maxLinkedItemCount = 1, 
 linkedItemData = {[0] = nil}
 }
@@ -68,8 +68,8 @@ isFocusInChatting = function()
   return false
 end
 
-local chatShortCutKey = {-1, VCK.KeyCode_2, VCK.KeyCode_1, VCK.KeyCode_3, -1, VCK.KeyCode_4, VCK.KeyCode_5, -1, -1, -1, -1, VCK.KeyCode_6, -1, VCK.KeyCode_7, VCK.KeyCode_8, -1, VCK.KeyCode_9}
-local chatShortCutKey_Value = {-1, 2, 1, 3, -1, 4, 5, -1, -1, -1, -1, 6, -1, 7, 8, -1, 9}
+local chatShortCutKey = {-1, VCK.KeyCode_2, VCK.KeyCode_1, VCK.KeyCode_3, -1, VCK.KeyCode_4, VCK.KeyCode_5, -1, -1, -1, -1, VCK.KeyCode_6, -1, VCK.KeyCode_7, VCK.KeyCode_8, -1, VCK.KeyCode_9, VCK.KeyCode_0}
+local chatShortCutKey_Value = {-1, 2, 1, 3, -1, 4, 5, -1, -1, -1, -1, 6, -1, 7, 8, -1, 9, 0}
 ;
 ((chatInput.control).dragButton):SetShow(false)
 ChattingShowAni = function()
@@ -272,7 +272,7 @@ ChatInput_ChangeChatType_Immediately = function(chatType)
     button:SetPosY((self.config).startPosY)
     SetFocusEdit((self.control).edit)
     checkFocusWhisperEdit = false
-    if self.lastChatType == UI_CT.World or self.lastChatType == UI_CT.Guild or self.lastChatType == UI_CT.Public or self.lastChatType == UI_CT.Party or self.lastChatType == UI_CT.WorldWithItem or self.lastChatType == UI_CT.LocalWar or self.lastChatType == UI_CT.Arsha then
+    if self.lastChatType == UI_CT.World or self.lastChatType == UI_CT.Guild or self.lastChatType == UI_CT.Public or self.lastChatType == UI_CT.Party or self.lastChatType == UI_CT.WorldWithItem or self.lastChatType == UI_CT.LocalWar or self.lastChatType == UI_CT.Arsha or self.lastChatType == UI_CT.Team then
       ((self.control).edit):SetEditText("", true)
       ToClient_ClearLinkedItemList()
       chatInput:clearLinkedItem()
@@ -393,6 +393,10 @@ ChatInput_UpdatePermission = function()
 
               ;
               (self.permissions)[UI_CT.Arsha] = true
+              -- DECOMPILER ERROR at PC127: Confused about usage of register: R2 in 'UnsetPending'
+
+              ;
+              (self.permissions)[UI_CT.Team] = true
               for chatType,btn in pairs((self.control).buttons) do
                 local perm = (self.permissions)[chatType]
                 local disAllowed = not (self.permissions)[chatType]
@@ -623,8 +627,14 @@ ChatInput_IsInstantCommand_Arsha = function(str)
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
+ChatInput_IsInstantCommand_Team = function(str)
+  -- function num : 0_37
+  do return str == "/t" or str == "/ã…\133" or str == "/team" or str == "/íŒ\128" end
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
+end
+
 ChatInput_CheckInstantCommand = function()
-  -- function num : 0_37 , upvalues : chatInput, toChangeChatType, UI_CT, checkFocusWhisperEdit, lastWhispersId
+  -- function num : 0_38 , upvalues : chatInput, toChangeChatType, UI_CT, checkFocusWhisperEdit, lastWhispersId
   local self = chatInput
   local chatMessage = ((self.control).edit):GetEditText()
   local chatMessageLength = (string.len)(chatMessage)
@@ -674,15 +684,22 @@ ChatInput_CheckInstantCommand = function()
                 (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Arsha)
                 isProcess = true
               else
-                if isWhisper or isReply then
-                  toChangeChatType = (CppEnums.ChatType).Private
+                if ChatInput_IsInstantCommand_Team(chatMessage) then
+                  toChangeChatType = (CppEnums.ChatType).Team
                   ;
-                  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Private)
+                  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Team)
                   isProcess = true
                 else
-                  if UI_CT.Private == self.lastChatType and checkFocusWhisperEdit then
-                    SetFocusEdit((self.control).edit)
-                    checkFocusWhisperEdit = false
+                  if isWhisper or isReply then
+                    toChangeChatType = (CppEnums.ChatType).Private
+                    ;
+                    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Private)
+                    isProcess = true
+                  else
+                    if UI_CT.Private == self.lastChatType and checkFocusWhisperEdit then
+                      SetFocusEdit((self.control).edit)
+                      checkFocusWhisperEdit = false
+                    end
                   end
                 end
               end
@@ -721,7 +738,7 @@ ChatInput_CheckInstantCommand = function()
 end
 
 FGlobal_ChatInput_CheckReply = function()
-  -- function num : 0_38 , upvalues : lastWhispersId
+  -- function num : 0_39 , upvalues : lastWhispersId
   if lastWhispersId == "" then
     return false
   end
@@ -729,7 +746,7 @@ FGlobal_ChatInput_CheckReply = function()
 end
 
 FGlobal_ChatInput_Reply = function(isReply)
-  -- function num : 0_39 , upvalues : chatInput, lastWhispersId, checkFocusWhisperEdit
+  -- function num : 0_40 , upvalues : chatInput, lastWhispersId, checkFocusWhisperEdit
   local self = chatInput
   if isReply then
     ((self.control).whisperEdit):SetEditText(lastWhispersId, true)
@@ -739,7 +756,7 @@ FGlobal_ChatInput_Reply = function(isReply)
 end
 
 ChatInput_Show = function()
-  -- function num : 0_40 , upvalues : chatInput, UI_CT, curChatMsgCnt, curWhisperMsgCnt
+  -- function num : 0_41 , upvalues : chatInput, UI_CT, curChatMsgCnt, curWhisperMsgCnt
   if Panel_Chatting_Input:IsShow() then
     return 
   end
@@ -787,7 +804,7 @@ ChatInput_Show = function()
 end
 
 ChatInput_CancelAction = function()
-  -- function num : 0_41 , upvalues : chatInput
+  -- function num : 0_42 , upvalues : chatInput
   local self = chatInput
   local message = ((self.control).edit):GetEditText()
   if message == "" then
@@ -796,7 +813,7 @@ ChatInput_CancelAction = function()
 end
 
 ChatInput_Close = function()
-  -- function num : 0_42 , upvalues : chatInput
+  -- function num : 0_43 , upvalues : chatInput
   ClearFocusEdit()
   ToClient_ClearLinkedItemList()
   chatInput:clearLinkedItem()
@@ -807,13 +824,13 @@ ChatInput_Close = function()
 end
 
 ChatInput_CheckCurrentUiEdit = function(targetUI)
-  -- function num : 0_43 , upvalues : chatInput
+  -- function num : 0_44 , upvalues : chatInput
   do return targetUI ~= nil and targetUI:GetKey() == ((chatInput.control).edit):GetKey() or targetUI:GetKey() == ((chatInput.control).whisperEdit):GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 ChatInput_ChangeInputFocus = function()
-  -- function num : 0_44 , upvalues : chatInput, UI_CT, checkFocusWhisperEdit
+  -- function num : 0_45 , upvalues : chatInput, UI_CT, checkFocusWhisperEdit
   local self = chatInput
   if UI_CT.Private == self.lastChatType then
     if not checkFocusWhisperEdit then
@@ -827,7 +844,7 @@ ChatInput_ChangeInputFocus = function()
 end
 
 HandleClicked_ToggleChatMacro = function(number)
-  -- function num : 0_45
+  -- function num : 0_46
   if number == 0 then
     FGlobal_Chatting_Macro_ShowToggle()
   else
@@ -836,7 +853,7 @@ HandleClicked_ToggleChatMacro = function(number)
 end
 
 FGlobal_Chatting_Macro_SetCHK = function(show)
-  -- function num : 0_46 , upvalues : chatInput
+  -- function num : 0_47 , upvalues : chatInput
   if show == true then
     ((chatInput.control).macroButton):SetCheck(true)
   else
@@ -846,7 +863,7 @@ FGlobal_Chatting_Macro_SetCHK = function(show)
 end
 
 FGlobal_SocialAction_SetCHK = function(show)
-  -- function num : 0_47 , upvalues : chatInput
+  -- function num : 0_48 , upvalues : chatInput
   if show == true then
     ((chatInput.control).socialButton):SetCheck(true)
   else
@@ -856,7 +873,7 @@ FGlobal_SocialAction_SetCHK = function(show)
 end
 
 isChatInputLinkedItem = function(itemWrapper)
-  -- function num : 0_48 , upvalues : chatInput
+  -- function num : 0_49 , upvalues : chatInput
   if itemWrapper == nil then
     return 
   end
@@ -883,7 +900,7 @@ isChatInputLinkedItem = function(itemWrapper)
 end
 
 FGlobal_ChattingInput_LinkedItemByInventory = function(slotNo, inventoryType)
-  -- function num : 0_49 , upvalues : UI_CT, chatInput
+  -- function num : 0_50 , upvalues : UI_CT, chatInput
   if UI_CT.World ~= chatInput.lastChatType and UI_CT.Guild ~= chatInput.lastChatType and UI_CT.Public ~= chatInput.lastChatType and UI_CT.Party ~= chatInput.lastChatType and UI_CT.WorldWithItem ~= chatInput.lastChatType and UI_CT.Private ~= chatInput.lastChatType then
     return 
   end
@@ -906,7 +923,7 @@ FGlobal_ChattingInput_LinkedItemByInventory = function(slotNo, inventoryType)
 end
 
 FGlobal_ChattingInput_ShowWhisper = function(characterName)
-  -- function num : 0_50 , upvalues : chatInput
+  -- function num : 0_51 , upvalues : chatInput
   ChatInput_Show()
   ChatInput_ChangeChatType_Immediately(4)
   ;
@@ -916,7 +933,7 @@ FGlobal_ChattingInput_ShowWhisper = function(characterName)
 end
 
 ChatInput_CheckRemoveLinkedItem = function()
-  -- function num : 0_51 , upvalues : UI_CT, chatInput
+  -- function num : 0_52 , upvalues : UI_CT, chatInput
   if UI_CT.World ~= chatInput.lastChatType and UI_CT.Guild ~= chatInput.lastChatType and UI_CT.Public ~= chatInput.lastChatType and UI_CT.Party ~= chatInput.lastChatType and UI_CT.WorldWithItem ~= chatInput.lastChatType and UI_CT.Private ~= chatInput.lastChatType then
     return 
   end
@@ -938,7 +955,7 @@ ChatInput_CheckRemoveLinkedItem = function()
 end
 
 ChatInput_Resize = function()
-  -- function num : 0_52
+  -- function num : 0_53
   Panel_Chatting_Input:SetSize(352, 30)
   Panel_Chatting_Input:ComputePos()
 end
@@ -955,7 +972,7 @@ chatInput:registEventHandler()
 ;
 ((chatInput.control).edit):addInputEvent("Mouse_LUp", "HandleClicked_ChatInputEdit()")
 HandleClicked_ChatInputEdit = function()
-  -- function num : 0_53 , upvalues : IM
+  -- function num : 0_54 , upvalues : IM
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 

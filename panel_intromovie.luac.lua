@@ -11,11 +11,7 @@ isIntroMoviePlaying = false
 local introMoviePlayTime = 20
 InitIntroMoviePanel = function()
   -- function num : 0_0 , upvalues : static_IntroMovie, introMoviePlayTime
-  local gameOptionWrapper = ToClient_getGameOptionControllerWrapper()
-  if gameOptionWrapper == nil then
-    return 
-  end
-  local uiScale = gameOptionWrapper:getUIScale()
+  local uiScale = getGlobalScale()
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
     return 

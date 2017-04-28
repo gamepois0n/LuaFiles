@@ -141,7 +141,17 @@ HandleClicked_LetsWorkerParty = function()
 end
 
 HandleClicked_SetShowUnderWearToggle = function()
-  -- function num : 0_4
+  -- function num : 0_4 , upvalues : ui
+  if not IsSelfPlayerWaitAction() or IsSelfPlayerBattleWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_UNDERWEAR"))
+    if (ui._btnSetUnderWear):IsCheck() then
+      (ui._btnSetUnderWear):SetCheck(false)
+    else
+      ;
+      (ui._btnSetUnderWear):SetCheck(true)
+    end
+    return 
+  end
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 

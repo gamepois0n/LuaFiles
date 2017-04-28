@@ -66,7 +66,7 @@ IngameCustomize_Hide = function()
     do
       HandleClicked_CloseIngameCustomization()
       if gameExitPhoto == true then
-        TargetWindow_ShowToggle(41)
+        TargetWindow_ShowToggle(45)
         refreshCharacterInfoData(CharacterSlotIndex + 1)
       end
     end

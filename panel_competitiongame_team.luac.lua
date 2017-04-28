@@ -146,7 +146,6 @@ FromClient_UpdateFightState = function(isFight)
     _txt_CompetitionGameTeamB:SetShow(isShowTeamInfo)
     _txt_ScoreTeamA:SetShow(isShowTeamInfo)
     _txt_ScoreTeamB:SetShow(isShowTeamInfo)
-    CompetitionGame_TeamUi_Create()
     Panel_CompetitionGame_Team:SetShow(true)
     local message = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_START_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_START_SUB"), addMsg = ""}
     Proc_ShowMessage_Ack_For_RewardSelect(message, 5, 56, false)
@@ -154,7 +153,6 @@ FromClient_UpdateFightState = function(isFight)
     do
       if (CppEnums.CompetitionFightState).eCompetitionFightState_Done == isFight then
         Panel_CompetitionGame_Team:SetShow(false)
-        CompetitionGameTeamUI_Close()
         local message = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_SUB"), addMsg = ""}
         Proc_ShowMessage_Ack_For_RewardSelect(message, 5, 57, false)
       else

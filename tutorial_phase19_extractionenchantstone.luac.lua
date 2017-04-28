@@ -3,14 +3,8 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_ExtractionEnchantStone = {_phaseNo = 19, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = true, _isSkippable = true, 
-_regionKeyRawList = {187}
-, 
-_talkerCharacterKeyData = {[1] = 43433}
-, 
-_targerWeaponItemKeyList = {10011, 10070, 10142, 10143, 10211, 10270, 10342, 10343, 10411, 10470, 10542, 10543, 10611, 10670, 10742, 10743, 11361, 11423, 13042, 13043, 13142, 13143, 13211, 13270, 13311, 13370, 14411, 14470, 14542, 14543, 14642, 14643}
-, _targetEnchantLevel = 1, _buttonExtraction_EnchantStone = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_EnchantStone")}
--- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobal_TutorialPhase_ExtractionEnchantStone = {_phaseNo = 19, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = false, _isSkippable = false, _buttonExtraction_EnchantStone = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_EnchantStone"), _buttonExtraction_Crystal = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Crystal"), _buttonExtraction_Cloth = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Cloth")}
+-- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.checkPossibleForPhaseStart = function(self, stepNo)
   -- function num : 0_0
@@ -23,37 +17,25 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.checkPossibleForPhaseStart = funct
     _PA_LOG("곽민�\176", "튜토리얼 시작 �\128�\165 여부 �\128사중�\144 selfPlayer�\128 없습니다! _phaseNo : " .. tostring(self._phaseNo))
     return false
   end
-  local hasItem = false
-  for index,value in ipairs(self._targerWeaponItemKeyList) do
-    if PaGlobal_Inventory:findItemWrapper((CppEnums.ItemWhereType).eInventory, value, 1) ~= nil then
-      hasItem = true
-      break
-    end
+  if PaGlobal_TutorialManager:isDoingTutorial() == true or PaGlobal_ArousalTutorial_Manager:isDoingArousalTutorial() == true or PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
+    return false
   end
-  do
-    if hasItem == false then
-      _PA_LOG("곽민�\176", "추출�\144 필요�\156 아이�\156(바스티어 무기+1�\149)�\132 소지하고 있지 않습니다. _phaseNo : " .. tostring(self._phaseNo))
-      return false
-    end
-    local currentRegionKeyRaw = selfPlayer:getRegionKeyRaw()
-    local isPossiblePhaseRegion = false
-    for index,value in pairs(self._regionKeyRawList) do
-      if value == currentRegionKeyRaw then
-        isPossiblePhaseRegion = true
-        break
-      end
-    end
-    do
-      if isPossiblePhaseRegion == false then
-        _PA_LOG("곽민�\176", "튜토리얼�\180 �\128능한 �\128역이 아니�\128�\156 튜토리얼�\132 실행하지 않습니다. _phaseNo : " .. tostring(self._phaseNo))
-        return false
-      end
-      return true
-    end
+  local pcPosition = (selfPlayer:get()):getPosition()
+  local regionInfo = getRegionInfoByPosition(pcPosition)
+  if (regionInfo:get()):isSafeZone() == false then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_DO_SAFEZONE"))
+    return false
   end
+  local playerLevel = ((getSelfPlayer()):get()):getLevel()
+  if playerLevel < 40 or playerLevel > 56 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_POPUP_NOLEVEL_ACK"))
+    return false
+  end
+  return true
 end
 
--- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.checkSkippablePhase = function(self)
   -- function num : 0_1
@@ -63,10 +45,32 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.checkSkippablePhase = function(sel
   return false
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.addEffectExtractionDialogButton = function(self, extractionDialogButton)
+  -- function num : 0_2
+  if self.extractionDialogButton ~= nil then
+    (self.extractionDialogButton):EraseAllEffect()
+    ;
+    (self.extractionDialogButton):AddEffect("UI_ArrowMark02", true, 0, -50)
+  end
+end
+
+-- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eraseAllEffectExtractionDialogButton = function(self, extractionDialogButton)
+  -- function num : 0_3
+  if self.extractionDialogButton ~= nil then
+    (self.extractionDialogButton):EraseAllEffect()
+    ;
+    (self.extractionDialogButton):AddEffect("UI_ArrowMark02", true, 0, -50)
+  end
+end
+
+-- DECOMPILER ERROR at PC42: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.startPhase = function(self, stepNo)
-  -- function num : 0_2
+  -- function num : 0_4
   if self:checkPossibleForPhaseStart(stepNo) == false then
     return 
   end
@@ -82,10 +86,11 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.startPhase = function(self, stepNo
   end
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.startPhaseXXX = function(self, stepNo)
-  -- function num : 0_3
+  -- function num : 0_5
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_ExtractionEnchantStone:startStep() stepNo : " .. tostring(stepNo) .. " typeNo : " .. tostring(typeNo))
   self._currentStep = 0
@@ -93,75 +98,79 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.startPhaseXXX = function(self, ste
   self._currentProgress = 1
   self._prevProgress = 0
   self._updateTime = 0
+  self._buttonExtraction_EnchantStone = PaGlobal_Extraction:getExtractionButtonEnchantStone()
+  self._buttonExtraction_Crystal = PaGlobal_Extraction:getExtractionButtonCrystal()
+  self._buttonExtraction_Cloth = PaGlobal_Extraction:getExtractionButtonCloth()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(true)
   PaGlobal_TutorialManager:setAllowShowQuickSlot(true)
   PaGlobal_TutorialManager:setAllowNewQuickSlot(true)
   FGlobal_WorldmapMain_SetAllowTutorialPanelShow(false)
-  FGlobal_Dialog_SetAllowTutorialPanelShow(false)
+  FGlobal_Dialog_SetAllowTutorialPanelShow(true)
   ;
   (PaGlobal_TutorialUiManager:getUiKeyButton()):setShowAll(false)
   PaGlobal_TutorialUiManager:hideAllTutorialUi()
   PaGlobal_TutorialUiManager:repositionScreen()
-  Panel_Tutorial:SetShow(true, false)
+  Panel_Tutorial:SetShow(true, true)
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.endPhase = function(self)
-  -- function num : 0_4
+  -- function num : 0_6
   (self._buttonExtraction_EnchantStone):EraseAllEffect()
   ;
+  (self._buttonExtraction_Crystal):EraseAllEffect()
+  ;
+  (self._buttonExtraction_Cloth):EraseAllEffect()
+  ;
   (PaGlobal_ExtractionEnchantStone:getButtonExtractionApply()):EraseAllEffect()
-  FGlobal_EraseAllEffect_DialogButton((CppEnums.ContentsType).Contents_Shop)
-  if self._radioButtonSell ~= nil then
-    (self._radioButtonSell):EraseAllEffect()
+  local funcButtonIndex = FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Extract)
+  if funcButtonIndex ~= -1 then
+    FGlobal_EraseAllEffect_DialogButton(funcButtonIndex)
   end
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(true)
   PaGlobal_TutorialManager:endTutorial()
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.updatePerFrame = function(self, deltaTime)
-  -- function num : 0_5
+  -- function num : 0_7
   if self._currentStep ~= self._nextStep then
     self._currentStep = self._nextStep
     self:handleChangeStep(self._currentStep)
   end
-  if self._currentStep == 1 then
-    self:updateStep1(deltaTime)
-  end
 end
 
--- DECOMPILER ERROR at PC79: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleChangeStep = function(self, currentStep)
-  -- function num : 0_6
+  -- function num : 0_8
   if self._currentStep == 1 then
     self:changeStep1()
   end
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.toNextProgress = function(self)
-  -- function num : 0_7
+  -- function num : 0_9
   self._currentProgress = self._currentProgress + 1
   self:handleChangeStep(self._currentStep)
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.toNextStep = function(self)
-  -- function num : 0_8
+  -- function num : 0_10
   self._currentProgress = 1
   self._nextStep = self._nextStep + 1
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.toStep = function(self, destStep, destProgress)
-  -- function num : 0_9
+  -- function num : 0_11
   self._nextStep = destStep
   if destProgress == nil then
     self._currentProgress = 1
@@ -173,10 +182,10 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.toStep = function(self, destStep, 
   end
 end
 
--- DECOMPILER ERROR at PC91: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.setEffectDialogButtonByType = function(self, funcButtonType)
-  -- function num : 0_10
+  -- function num : 0_12
   local funcButtonIndex = FGlobal_Dialog_FindFuncButtonIndexByType(funcButtonType)
   if funcButtonIndex == -1 then
     return false
@@ -186,69 +195,135 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.setEffectDialogButtonByType = func
   return true
 end
 
--- DECOMPILER ERROR at PC94: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_ExtractionEnchantStone.eraseAllEffectDialogButtonByType = function(self, funcButtonType)
+  -- function num : 0_13
+  local funcButtonIndex = FGlobal_Dialog_FindFuncButtonIndexByType(funcButtonType)
+  if funcButtonIndex == -1 then
+    return false
+  end
+  FGlobal_EraseAllEffect_DialogButton(funcButtonIndex)
+  return true
+end
+
+-- DECOMPILER ERROR at PC72: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.changeStep1 = function(self)
-  -- function num : 0_11
+  -- function num : 0_14
   if self._currentProgress == 1 then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_0
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("잠재�\165 돌파�\148 정말 잘했�\180.", "�\128�\156 �\176 아니�\128? 그럼 추출�\144 �\128해서�\132 배워보자.", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+    -- function num : 0_14_0
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_43"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_44"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
   end
 )
   else
     if self._currentProgress == 2 then
+      self:setEffectDialogButtonByType((CppEnums.ContentsType).Contents_Extract)
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_1
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("추출�\128 쉽게 말해 블랙스톤�\132 돌려받는 기능이야.", "+1�\180 �\156 무기�\188 추출하면 블랙스톤 1개를 돌려받을 �\152 있지.", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+    -- function num : 0_14_1
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_45"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_46"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, true)
   end
 )
     else
       if self._currentProgress == 3 then
-        worldmapNavigatorStart(float3(-133003.98, 2729.52, -46023.2), NavigationGuideParam(), false, false, true)
+        (self._buttonExtraction_EnchantStone):AddEffect("UI_ArrowMark02", true, 0, -50)
         PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_2
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("�\180 �\144 필요 없이 당장 해보�\144.", "여기 주변�\144 그랜빌이라는 �\128석이 있어. 찾아�\128�\144!", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, true)
+    -- function num : 0_14_2
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_47"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_48"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, true)
   end
 )
       else
         if self._currentProgress == 4 then
           PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_3
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("�\152 도착했군. 그랜빌과 �\128화하�\160,", "[추출]이라�\148 버튼�\132 이용하면 �\188", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, true)
-    ;
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):addBubbleKey("_bubbleKey_R")
+    -- function num : 0_14_3
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_49"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_50"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
   end
 )
         else
           if self._currentProgress == 5 then
-            Panel_Tutorial:SetShow(true, true)
             PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_4
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("그래 잘했�\180. 그럼 여기�\144 +1 바스티어 무기�\188 올려�\144", "그리�\160 추출�\132 누르�\180 블랙스톤�\132 돌려받을 �\152 있어.", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, true)
+    -- function num : 0_14_4
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_51"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_52"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
   end
 )
           else
             if self._currentProgress == 6 then
               PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_5
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("이제 �\128방을 보면 추출�\156 블랙스톤�\180 있을 거야.", "어때? 쉽게 진행�\160 �\152 있겠�\128?", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+    -- function num : 0_14_5
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_53"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_54"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
   end
 )
             else
               if self._currentProgress == 7 then
                 PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_6
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("만약 잠재력이 돌파�\156 무기�\188 쓰다�\128 네가 �\148 좋은 무기�\188 얻었�\132 �\140,\n추출�\132 하고 새로�\180 무기�\188 �\144 잠재�\165 돌파하면 되는 거야.", "", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+    -- function num : 0_14_6
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_55"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_56"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
   end
 )
               else
                 if self._currentProgress == 8 then
+                  (PaGlobal_ExtractionEnchantStone:getButtonExtractionApply()):EraseAllEffect()
+                  ;
+                  (self._buttonExtraction_EnchantStone):EraseAllEffect()
+                  ;
+                  (self._buttonExtraction_Crystal):AddEffect("UI_ArrowMark02", true, 0, -50)
                   PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_7
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("이제 구조�\148 �\152 알겠�\128?\n�\148 강해�\128�\176 위해! 잠재�\165 돌파�\128 추출�\132 �\152 활용하라�\172.", "그럼 즐거�\180 모험 되길 바라! 의뢰�\188 완료�\180!", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+    -- function num : 0_14_7
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_57"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_58"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, true)
   end
 )
+                else
+                  if self._currentProgress == 9 then
+                    PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
+    -- function num : 0_14_8
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_59"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_60"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+  end
+)
+                  else
+                    if self._currentProgress == 10 then
+                      PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
+    -- function num : 0_14_9
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_61"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_62"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+  end
+)
+                    else
+                      if self._currentProgress == 11 then
+                        (self._buttonExtraction_Crystal):EraseAllEffect()
+                        ;
+                        (self._buttonExtraction_Cloth):AddEffect("UI_ArrowMark02", true, 0, -50)
+                        PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
+    -- function num : 0_14_10
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_63"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_64"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, true)
+  end
+)
+                      else
+                        if self._currentProgress == 12 then
+                          PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
+    -- function num : 0_14_11
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_65"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_66"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+  end
+)
+                        else
+                          if self._currentProgress == 13 then
+                            PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
+    -- function num : 0_14_12
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_67"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_68"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+  end
+)
+                          else
+                            if self._currentProgress == 14 then
+                              PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
+    -- function num : 0_14_13
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_69"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_70"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+  end
+)
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
                 end
               end
             end
@@ -259,37 +334,10 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.changeStep1 = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC97: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_TutorialPhase_ExtractionEnchantStone.updateStep1 = function(self, deltaTime)
-  -- function num : 0_12
-  if self._currentProgress ~= 3 and self._currentProgress ~= 4 then
-    return 
-  end
-  local currentInteractableActor = interaction_getInteractable()
-  local isMatchCharacterKey = false
-  if currentInteractableActor:getCharacterKeyRaw() ~= (self._talkerCharacterKeyData)[1] then
-    do
-      isMatchCharacterKey = currentInteractableActor == nil
-      -- DECOMPILER ERROR at PC25: Unhandled construct in 'MakeBoolean' P1
-
-      if isMatchCharacterKey == true and self._currentProgress == 3 then
-        self._currentProgress = 4
-        self:handleChangeStep(self._currentStep)
-      end
-      if isMatchCharacterKey == false and self._currentProgress == 4 then
-        self._currentProgress = 3
-        self:handleChangeStep(self._currentStep)
-      end
-      -- DECOMPILER ERROR: 4 unprocessed JMP targets
-    end
-  end
-end
-
--- DECOMPILER ERROR at PC100: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC75: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ShowDialog = function(self, dialogData)
-  -- function num : 0_13
+  -- function num : 0_15
   if (self._currentProgress == 3 or self._currentProgress == 4 or self._currentProgress == 5) and (self._talkerCharacterKeyData)[1] == dialog_getTalkNpcKey() then
     local funcButtonIndex = FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Extract)
     FGlobal_EraseAllEffect_DialogButton(funcButtonIndex)
@@ -297,31 +345,40 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ShowDialog = functio
   end
 end
 
--- DECOMPILER ERROR at PC103: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC78: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickedExitButton = function(self, talker)
-  -- function num : 0_14
-  if (self._currentProgress == 3 or self._currentProgress == 4 or self._currentProgress == 5) and (self._talkerCharacterKeyData)[1] == dialog_getTalkNpcKey() then
+  -- function num : 0_16
+  self:endPhase()
+end
+
+-- DECOMPILER ERROR at PC81: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickedDialogFuncButton = function(self, funcButtonType)
+  -- function num : 0_17
+  _PA_LOG("곽민�\176", "funcButtonType : " .. tostring(funcButtonType))
+  if (CppEnums.ContentsType).Contents_Extract ~= funcButtonType then
+    self:endPhase()
+  end
+  if self._currentProgress == 2 then
     self._currentProgress = 3
     self:handleChangeStep(self._currentStep)
   end
 end
 
--- DECOMPILER ERROR at PC106: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC84: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1OpenExtractionPanel = function(self, isShow)
-  -- function num : 0_15
-  if (self._currentProgress == 3 or self._currentProgress == 4) and (self._talkerCharacterKeyData)[1] == dialog_getTalkNpcKey() and isShow == true then
-    local buttonExtraction_EnchantStone = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_EnchantStone")
-    buttonExtraction_EnchantStone:EraseAllEffect()
-    buttonExtraction_EnchantStone:AddEffect("UI_ArrowMark02", true, 0, -50)
+  -- function num : 0_18
+  if isShow == false then
+    self:endPhase()
   end
 end
 
--- DECOMPILER ERROR at PC109: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC87: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionEnchantStoneButton = function(self)
-  -- function num : 0_16
+  -- function num : 0_19
   if self._currentProgress == 3 or self._currentProgress == 4 or self._currentProgress == 5 then
     (PaGlobal_ExtractionEnchantStone:getButtonExtractionApply()):EraseAllEffect()
     ;
@@ -335,105 +392,118 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionEncha
   end
 end
 
--- DECOMPILER ERROR at PC112: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC90: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ApplyExtractionEnchantStone = function(self)
-  -- function num : 0_17
-  if self._currentProgress == 5 then
-    self._currentProgress = 6
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionCrystalButton = function(self)
+  -- function num : 0_20
+  if (self._currentProgress ~= 9 and self._currentProgress ~= 10) or self._currentProgress == 8 then
+    self._currentProgress = 9
     self:handleChangeStep(self._currentStep)
   end
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionClothButton = function(self)
+  -- function num : 0_21
+  if (self._currentProgress ~= 12 and self._currentProgress ~= 13) or self._currentProgress == 11 then
+    self._currentProgress = 12
+    self:handleChangeStep(self._currentStep)
+  end
+end
+
+-- DECOMPILER ERROR at PC96: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ExtractionEnchantStoneWindowClose = function(self)
+  -- function num : 0_22
+  self:endPhase()
+end
+
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1SocketExtractionCrystalWindowClose = function(self)
+  -- function num : 0_23
+  self:endPhase()
+end
+
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1MouseLUpBubble = function(self)
-  -- function num : 0_18
-  if self._currentProgress == 8 then
+  -- function num : 0_24
+  if self._currentProgress == 14 then
     self:endPhase()
   else
     self:toNextProgress()
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleShowDialog = function(self, dialogData)
-  -- function num : 0_19
+  -- function num : 0_25
   if self._currentStep == 1 then
     self:eventCallStep1ShowDialog(dialogData)
   end
 end
 
--- DECOMPILER ERROR at PC121: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC108: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickedExitButton = function(self, talker)
-  -- function num : 0_20
+  -- function num : 0_26
   if self._currentStep == 1 then
     self:eventCallStep1ClickedExitButton(talker)
   end
 end
 
--- DECOMPILER ERROR at PC124: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickedDialogFuncButton = function(self, funcButtonType)
+  -- function num : 0_27
+  if self._currentStep == 1 then
+    self:eventCallStep1ClickedDialogFuncButton(funcButtonType)
+  end
+end
+
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleOpenExtractionPanel = function(self, isShow)
-  -- function num : 0_21
+  -- function num : 0_28
   if self._currentStep == 1 then
     self:eventCallStep1OpenExtractionPanel(isShow)
   end
 end
 
--- DECOMPILER ERROR at PC127: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC117: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionEnchantStoneButton = function(self)
-  -- function num : 0_22
+  -- function num : 0_29
   if self._currentStep == 1 then
     self:eventCallStep1ClickExtractionEnchantStoneButton()
   end
 end
 
--- DECOMPILER ERROR at PC130: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC120: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.handleApplyExtractionEnchantStone = function(self)
-  -- function num : 0_23
+PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionCrystalButton = function(self)
+  -- function num : 0_30
   if self._currentStep == 1 then
-    self:eventCallStep1ApplyExtractionEnchantStone()
+    self:eventCallStep1ClickExtractionCrystalButton()
   end
 end
 
--- DECOMPILER ERROR at PC133: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC123: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.handleExtractionEnchantStoneResultShow = function(self)
-  -- function num : 0_24
-  if self._currentProgress == 5 then
-    (self._buttonExtraction_EnchantStone):EraseAllEffect()
-    self._currentProgress = 6
-    self:handleChangeStep(self._currentStep)
+PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionClothButton = function(self)
+  -- function num : 0_31
+  if self._currentStep == 1 then
+    self:eventCallStep1ClickExtractionClothButton()
   end
 end
 
--- DECOMPILER ERROR at PC136: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_TutorialPhase_ExtractionEnchantStone.handleInventoryDelete = function(self, itemWrapper, deleteWhereType, deleteSlotNo)
-  -- function num : 0_25
-  if itemWrapper == nil then
-    return 
-  end
-  local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-  local enchantLevel = ((itemWrapper:get()):getKey()):getEnchantLevel()
-  for index,value in ipairs(self._targerWeaponItemKeyList) do
-    if value == itemKey and enchantLevel == self._targetEnchantLevel then
-      self:endPhase()
-      _PA_LOG("곽민�\176", "추출�\144 필요�\156 아이�\156(바스티어 무기+1�\149)�\132 버렸으므�\156 튜토리얼�\132 종료합니�\164. _phaseNo : " .. tostring(self._phaseNo))
-      return 
-    end
-  end
-end
-
--- DECOMPILER ERROR at PC139: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC126: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleMouseLUpBubble = function(self)
-  -- function num : 0_26
+  -- function num : 0_32
   if self._currentStep == 1 then
     self:eventCallStep1MouseLUpBubble()
   end

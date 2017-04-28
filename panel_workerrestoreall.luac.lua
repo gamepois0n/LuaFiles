@@ -11,7 +11,7 @@ local UI_PP = CppEnums.PAUIMB_PRIORITY
 local UI_Color = Defines.Color
 local workerRestoreAll = {
 slot = {}
-, startPosY = 5, _startIndex = 0, _listCount = 0, _panelTitle = (UI.getChildControl)(Panel_WorkerRestoreAll, "titlebar_RestoreAll"), _itemListBG = (UI.getChildControl)(Panel_WorkerRestoreAll, "Static_ItemList_BG"), _selectItemGuide = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_Select_Item_Guide"), _workerStatusBG = (UI.getChildControl)(Panel_WorkerRestoreAll, "Static_WorkerStatusBG"), _workernPoint = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_Worker"), _workernPointValue = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_WorkerValue"), _restorePoint = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_RestorePoint"), _restorePointValue = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_RestorePoint_Value"), _slider = (UI.getChildControl)(Panel_WorkerRestoreAll, "Slider_Restore_Item"), _btnWinClose = (UI.getChildControl)(Panel_WorkerRestoreAll, "Button_Close"), _btnConfirm = (UI.getChildControl)(Panel_WorkerRestoreAll, "Button_Restore"), _btnCancel = (UI.getChildControl)(Panel_WorkerRestoreAll, "Button_Cancel"), restoreItemMaxCount = 5, restoreItemHasCount = 0, 
+, startPosY = 5, _startIndex = 0, _listCount = 0, _panelTitle = (UI.getChildControl)(Panel_WorkerRestoreAll, "titlebar_RestoreAll"), _itemListBG = (UI.getChildControl)(Panel_WorkerRestoreAll, "Static_ItemList_BG"), _selectItemGuide = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_Select_Item_Guide"), _workerStatusBG = (UI.getChildControl)(Panel_WorkerRestoreAll, "Static_WorkerStatusBG"), _workernPoint = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_Worker"), _restorePoint = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_RestorePoint"), _possiblePoint = (UI.getChildControl)(Panel_WorkerRestoreAll, "StaticText_PossiblePoint"), _slider = (UI.getChildControl)(Panel_WorkerRestoreAll, "Slider_Restore_Item"), _midLine = (UI.getChildControl)(Panel_WorkerRestoreAll, "Static_MidLine"), _btnWinClose = (UI.getChildControl)(Panel_WorkerRestoreAll, "Button_Close"), _btnConfirm = (UI.getChildControl)(Panel_WorkerRestoreAll, "Button_Restore"), _btnCancel = (UI.getChildControl)(Panel_WorkerRestoreAll, "Button_Cancel"), restoreItemMaxCount = 5, restoreItemHasCount = 0, 
 restoreItemSlot = {}
 , selectedRestoreWorkerIdx = 0, selectedItemIdx = 0, selectedUiIndex = -1, sliderStartIdx = 0, upgradeWokerIdx = -1}
 workerRestoreAll._sliderBtn = (UI.getChildControl)(workerRestoreAll._slider, "Slider_Restore_Item_Button")
@@ -79,10 +79,6 @@ local workerRestoreAll_Init = function()
   (self._slider):SetPosX(10)
   ;
   (self._slider):SetPosY(75)
-  ;
-  (self._workernPointValue):SetPosX((self._workernPoint):GetPosX() + (self._workernPoint):GetTextSizeX() + 5)
-  ;
-  (self._restorePointValue):SetPosX((self._restorePoint):GetPosX() + (self._restorePoint):GetTextSizeX() + 5)
   Panel_WorkerRestoreAll:RemoveControl(self._slider)
 end
 
@@ -103,6 +99,9 @@ local restoreItem_update = function()
   self.restoreItemHasCount = ToClient_getNpcRecoveryItemList()
   if self.restoreItemHasCount <= 0 then
     Panel_WorkerRestoreAll:SetShow(false)
+    if Panel_WorkerRestoreAll:IsUISubApp() then
+      Panel_WorkerRestoreAll:CloseUISubApp()
+    end
   end
   local uiIdx = 0
   for itemIdx = self.sliderStartIdx, self.restoreItemHasCount - 1 do
@@ -169,15 +168,69 @@ local restoreItem_update = function()
             totalPoint = totalPoint + (restoreActionPoint - remainder)
           end
         end
+        local WorkerRestore = function()
+    -- function num : 0_1_0 , upvalues : self
+    local sizeX = 0
+    local itemTextSizeX = (self._selectItemGuide):GetTextSizeX()
+    local workerTextSizeX = (self._workernPoint):GetTextSizeX()
+    local restoreTextSizeX = (self._restorePoint):GetTextSizeX()
+    local possibleTextSizeX = (self._possiblePoint):GetTextSizeX()
+    local Size_Com = function(bgSize, controlSize)
+      -- function num : 0_1_0_0
+      if bgSize < controlSize then
+        bgSize = controlSize
+      end
+      return bgSize
+    end
+
+    sizeX = Size_Com(sizeX, itemTextSizeX)
+    sizeX = Size_Com(sizeX, workerTextSizeX)
+    sizeX = Size_Com(sizeX, restoreTextSizeX)
+    sizeX = Size_Com(sizeX, possibleTextSizeX)
+    local bgSizeX = 0
+    local itemBGSizeX1 = (self._itemListBG):GetSizeX()
+    local descBGSizeX2 = (self._workerStatusBG):GetSizeX()
+    bgSizeX = Size_Com(bgSizeX, itemBGSizeX1)
+    bgSizeX = Size_Com(bgSizeX, descBGSizeX2)
+    if bgSizeX < sizeX + 20 then
+      local sizeX = sizeX + 20 - bgSizeX
+      Panel_WorkerRestoreAll:SetSize(Panel_WorkerRestoreAll:GetSizeX() + sizeX, Panel_WorkerRestoreAll:GetSizeY())
+      Panel_WorkerRestoreAll:SetPosX(Panel_WorkerRestoreAll:GetPosX() - sizeX)
+      ;
+      (self._itemListBG):SetSize(bgSizeX + sizeX, (self._itemListBG):GetSizeY())
+      ;
+      (self._workerStatusBG):SetSize((self._workerStatusBG):GetSizeX() + sizeX, (self._workerStatusBG):GetSizeY())
+      ;
+      (self._panelTitle):SetSize((self._panelTitle):GetSizeX() + sizeX, (self._panelTitle):GetSizeY())
+      ;
+      (self._midLine):SetSize((self._midLine):GetSizeX() + sizeX, (self._midLine):GetSizeY())
+      ;
+      (self._slider):SetSize((self._slider):GetSizeX() + sizeX, (self._slider):GetSizeY())
+      ;
+      (self._slider):SetInterval((self._slider):GetSizeX() + sizeX)
+      ;
+      (self._btnCancel):ComputePos()
+      ;
+      (self._btnConfirm):ComputePos()
+      ;
+      (self._btnWinClose):ComputePos()
+    end
+  end
+
         ;
-        (self._workernPointValue):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORKERRESTORE_TOTALPOINT", "count", tostring(workerCount), "point", tostring(totalPoint)))
+        (self._selectItemGuide):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERRESTOREALL_DESC_SELECTITEM"))
+        ;
+        (self._workernPoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERRESTORE_WORKERCOUNT", "count", tostring(workerCount)))
+        ;
+        (self._restorePoint):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERRESTORE_POSSIBLE", "totalPoint", tostring(totalPoint)))
         if totalPoint <= totalselectItemPoint then
-          (self._restorePointValue):SetText(tostring(totalPoint))
+          (self._possiblePoint):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORKERRESTORE_CONSUMEITEM", "selectItemCount", tostring((totalPoint) / selectItemPoint), "totalPoint", tostring(totalPoint)))
         else
           if totalselectItemPoint < totalPoint then
-            (self._restorePointValue):SetText(tostring(totalselectItemPoint))
+            (self._possiblePoint):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORKERRESTORE_CONSUMEITEM", "selectItemCount", tostring(selectItemCount), "totalPoint", tostring(totalselectItemPoint)))
           end
         end
+        WorkerRestore()
       end
     end
   end
@@ -303,14 +356,25 @@ FGlobal_WorkerRestoreAll_Open = function(listCount, workerNoRaw)
   -- function num : 0_7 , upvalues : workerListCount, workerArray
   Panel_WorkerRestoreAll:SetPosX(getScreenSizeX() - Panel_WorkerManager:GetSizeX() - Panel_WorkerRestoreAll:GetSizeX() - 10)
   Panel_WorkerRestoreAll:SetPosY(Panel_WorkerManager:GetPosY())
+  if Panel_WorkerManager:IsUISubApp() then
+    if Panel_WorkerManager:GetScreenParentPosX() > 0 then
+      Panel_WorkerRestoreAll:SetPosX(Panel_WorkerManager:GetScreenParentPosX() - Panel_WorkerRestoreAll:GetSizeX() - 10)
+    else
+      Panel_WorkerRestoreAll:SetPosX(Panel_WorkerManager:GetScreenParentPosX() + Panel_WorkerManager:GetSizeX() - 10)
+    end
+    Panel_WorkerRestoreAll:SetPosY(Panel_WorkerManager:GetScreenParentPosY())
+  end
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:push(Panel_WorkerRestoreAll, true)
   else
     Panel_WorkerRestoreAll:SetShow(true)
+    if Panel_WorkerManager:IsUISubApp() then
+      Panel_WorkerRestoreAll:OpenUISubApp()
+    end
   end
   workerListCount = listCount
   workerArray = workerNoRaw
-  -- DECOMPILER ERROR at PC37: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC84: Confused about usage of register: R2 in 'UnsetPending'
 
   self.sliderStartIdx = 0
   HandleClicked_restoreAll_SelectItem(0)
@@ -319,6 +383,9 @@ end
 workerRestoreAll_Close = function()
   -- function num : 0_8
   Panel_WorkerRestoreAll:SetShow(false)
+  if Panel_WorkerRestoreAll:IsUISubApp() then
+    Panel_WorkerRestoreAll:CloseUISubApp()
+  end
 end
 
 workerRestoreAll_Init()

@@ -44,6 +44,8 @@ local classPicture = {
 [UI_classType.ClassType_NinjaWomen] = {1, 291, 96, 435}
 , 
 [UI_classType.ClassType_NinjaMan] = {97, 291, 192, 435}
+, 
+[UI_classType.ClassType_DarkElf] = {193, 291, 288, 435}
 }
 Guild_Recruitment_Initialize = function()
   -- function num : 0_0 , upvalues : GuildRecruitment, UI_TM, defaultFrameBG_Recruitment

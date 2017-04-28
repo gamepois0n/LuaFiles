@@ -132,6 +132,7 @@ registerEvent("EventSelfServantUpdate", "HorseHP_Update")
 registerEvent("EventSelfPlayerRideOff", "HorseHP_Close")
 registerEvent("EventSelfPlayerRideOn", "HorseHP_OpenByInteraction")
 registerEvent("EventSelfPlayerCarrierChanged", "HorseHP_EventSelfPlayerCarrierChanged")
+registerEvent("EventSelfServantUpdateOnlyHpMp", "HorseHP_Update")
 renderModechange_HorseHP_OpenByInteraction = function(prevRenderModeList, nextRenderModeList)
   -- function num : 0_9
   if CheckRenderModebyGameMode(nextRenderModeList) == false then

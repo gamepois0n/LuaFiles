@@ -105,12 +105,7 @@ local iconTexture = {
 , 
 [UI_ST.eSpawnType_transfer] = {76, 224, 112, 260, 76, 261, 112, 297, 76, 298, 112, 334}
 }
-local toggleBtn = nil
-if ((getSelfPlayer()):get()):getLevel() > 51 then
-  toggleBtn = (UI.getChildControl)(Panel_Widget_TownNpcNavi, "Button_FindNavi")
-else
-  toggleBtn = (UI.getChildControl)(Panel_Widget_TownNpcNavi, "Button_FindNaviTW")
-end
+local toggleBtn = FGlobal_GetPersonalIconControl(0)
 toggleBtn:SetShow(true)
 toggleBtn:addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
 local iconBG = (UI.getChildControl)(Panel_Widget_TownNpcNavi, "StaticText_ToolTip")
@@ -378,11 +373,9 @@ TownNpcIcon_Tooltip = function(index, spawnType)
 end
 
 TownNpcIcon_Resize = function()
-  -- function num : 0_7 , upvalues : toggleBtn
+  -- function num : 0_7
   Panel_Widget_TownNpcNavi:SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - Panel_Widget_TownNpcNavi:GetSizeX() - 20)
   Panel_Widget_TownNpcNavi:SetPosY(10)
-  toggleBtn:SetPosX(Panel_Widget_TownNpcNavi:GetSizeX() - toggleBtn:GetSizeX())
-  toggleBtn:SetPosY(0)
 end
 
 FGlobal_TownfunctionNavi_Set = function()
@@ -444,7 +437,7 @@ FGlobal_TownNavi_SetEffectForNewbie = function(bShow)
     if ((getSelfPlayer()):get()):getLevel() > 51 then
       return 
     end
-    toggleBtn:AddEffect("UI_NPCNavi_Line", true, -1, 0)
+    toggleBtn:AddEffect("UI_NPCNavi_Line", true, -1, 1)
   end
 end
 

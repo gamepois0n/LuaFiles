@@ -15,9 +15,15 @@ Panel_Radar:RegisterShowEventFunc(false, "RaderHideAni()")
 ToClient_setRadorUIPanel(Panel_Radar)
 ToClient_setRadorUIViewDistanceRate(7225)
 ToCleint_InitializeRadarActorPool(1000)
+local radorType = {radorType_none = 0, radorType_hide = 1, radorType_allymonster = 2, radorType_normalMonster = 3, radorType_namedMonster = 4, radorType_bossMonster = 5, radorType_normalMonsterQuestTarget = 6, radorType_namedMonsterQuestTarget = 7, radorType_bossMonsterQuestTarget = 8, radorType_lordManager = 9, radorType_skillTrainner = 10, radorType_tradeMerchantNpc = 11, radorType_nodeManager = 12, radorType_normalNpc = 13, radorType_warehouseNpc = 14, radorType_potionNpc = 15, radorType_weaponNpc = 16, radorType_horseNpc = 17, radorType_workerNpc = 18, radorType_jewelNpc = 19, radorType_furnitureNpc = 20, radorType_collectNpc = 21, radorType_shipNpc = 22, radorType_alchemyNpc = 23, radorType_fishNpc = 24, radorType_guild = 25, radorType_guildShop = 26, radorType_itemTrader = 27, radorType_TerritorySupply = 28, radorType_TerritoryTrade = 29, radorType_Cook = 30, radorType_Wharf = 31, radorType_itemRepairer = 32, radorType_shopMerchantNpc = 33, radorType_ImportantNpc = 34, radorType_QuestAcceptable = 35, radorType_QuestProgress = 36, radorType_QuestComplete = 37, radorType_unknownNpc = 38, radorType_partyMember = 39, radorType_guildMember = 40, radorType_normalPlayer = 41, radorType_isHorse = 42, radorType_isDonkey = 43, radorType_isCamel = 44, radorType_isElephant = 45, radorType_isBabyElePhant = 46, radorType_isShip = 47, radorType_isCarriage = 48, radorType_installation = 49, radorType_kingGuildTent = 50, radorType_lordGuildTent = 51, radorType_villageGuildTent = 52, radorType_selfDeadBody = 53, radorType_advancedBase = 54, VehicleType_Raft = 55, VehicleType_Boat = 56, VehicleType_FishingBoat = 57, VehicleType_PersonalTradeShip = 58, VehicleType_GalleyShip = 59, VehicleType_TradeShip = 60, radorType_huntingMonster = 61, radorType_huntingMonsterQuestTarget = 62, radorType_Count = 63}
+local template = {[radorType.radorType_none] = nil, [radorType.radorType_hide] = (UI.getChildControl)(Panel_Radar, "icon_hide"), [radorType.radorType_allymonster] = (UI.getChildControl)(Panel_Radar, "icon_horse"), [radorType.radorType_normalMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterGeneral_normal"), [radorType.radorType_namedMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterNamed_normal"), [radorType.radorType_bossMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterBoss_normal"), [radorType.radorType_normalMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterGeneral_quest"), [radorType.radorType_namedMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterNamed_quest"), [radorType.radorType_bossMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterBoss_quest"), [radorType.radorType_lordManager] = (UI.getChildControl)(Panel_Radar, "icon_npc_lordManager"), [radorType.radorType_skillTrainner] = (UI.getChildControl)(Panel_Radar, "icon_npc_skillTrainner"), [radorType.radorType_tradeMerchantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_trader"), [radorType.radorType_nodeManager] = (UI.getChildControl)(Panel_Radar, "icon_npc_nodeManager"), [radorType.radorType_normalNpc] = nil, [radorType.radorType_warehouseNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_warehouse"), [radorType.radorType_potionNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_potion"), [radorType.radorType_weaponNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_storeArmor"), [radorType.radorType_horseNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_horse"), [radorType.radorType_workerNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_worker"), [radorType.radorType_jewelNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_jewel"), [radorType.radorType_furnitureNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_furniture"), [radorType.radorType_collectNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_collect"), [radorType.radorType_shipNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_ship"), [radorType.radorType_alchemyNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_alchemy"), [radorType.radorType_fishNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_fish"), [radorType.radorType_guild] = (UI.getChildControl)(Panel_Radar, "icon_npc_guild"), [radorType.radorType_guildShop] = (UI.getChildControl)(Panel_Radar, "icon_npc_guildShop"), [radorType.radorType_itemTrader] = (UI.getChildControl)(Panel_Radar, "icon_npc_itemTrader"), [radorType.radorType_TerritorySupply] = (UI.getChildControl)(Panel_Radar, "icon_npc_territorySupply"), [radorType.radorType_TerritoryTrade] = (UI.getChildControl)(Panel_Radar, "icon_npc_territoryTrade"), [radorType.radorType_Cook] = (UI.getChildControl)(Panel_Radar, "icon_npc_cook"), [radorType.radorType_Wharf] = (UI.getChildControl)(Panel_Radar, "icon_npc_wharf"), [radorType.radorType_itemRepairer] = (UI.getChildControl)(Panel_Radar, "icon_npc_repairer"), [radorType.radorType_shopMerchantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_shop"), [radorType.radorType_ImportantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_important"), [radorType.radorType_QuestAcceptable] = (UI.getChildControl)(Panel_Radar, "icon_quest_accept"), [radorType.radorType_QuestProgress] = (UI.getChildControl)(Panel_Radar, "icon_quest_doing"), [radorType.radorType_QuestComplete] = (UI.getChildControl)(Panel_Radar, "icon_quest_clear"), [radorType.radorType_unknownNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_unknown"), [radorType.radorType_partyMember] = (UI.getChildControl)(Panel_Radar, "icon_partyMember"), [radorType.radorType_guildMember] = (UI.getChildControl)(Panel_Radar, "icon_guildMember"), [radorType.radorType_normalPlayer] = (UI.getChildControl)(Panel_Radar, "icon_player"), [radorType.radorType_isHorse] = (UI.getChildControl)(Panel_Radar, "icon_horse"), [radorType.radorType_isDonkey] = (UI.getChildControl)(Panel_Radar, "icon_donkey"), [radorType.radorType_isShip] = (UI.getChildControl)(Panel_Radar, "icon_ship"), [radorType.radorType_isCarriage] = (UI.getChildControl)(Panel_Radar, "icon_carriage"), [radorType.radorType_isCamel] = (UI.getChildControl)(Panel_Radar, "icon_camel"), [radorType.radorType_isElephant] = nil, [radorType.radorType_isBabyElePhant] = (UI.getChildControl)(Panel_Radar, "icon_babyElephant"), [radorType.radorType_installation] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_kingGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_lordGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_villageGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_selfDeadBody] = (UI.getChildControl)(Panel_Radar, "icon_deadbody"), [radorType.radorType_advancedBase] = (UI.getChildControl)(Panel_Radar, "icon_Outpost"), [radorType.VehicleType_Raft] = (UI.getChildControl)(Panel_Radar, "icon_Raft"), [radorType.VehicleType_Boat] = (UI.getChildControl)(Panel_Radar, "icon_Boat"), [radorType.VehicleType_FishingBoat] = (UI.getChildControl)(Panel_Radar, "icon_FishingBoat"), [radorType.VehicleType_PersonalTradeShip] = (UI.getChildControl)(Panel_Radar, "icon_PersonalTradeShip"), [radorType.VehicleType_GalleyShip] = (UI.getChildControl)(Panel_Radar, "icon_GalleyShip"), [radorType.radorType_huntingMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterHunting_normal"), [radorType.radorType_huntingMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterHunting_quest")}
+local typeDepth = {[radorType.radorType_none] = 0, [radorType.radorType_hide] = 0, [radorType.radorType_allymonster] = -5, [radorType.radorType_normalMonster] = -2, [radorType.radorType_namedMonster] = -10, [radorType.radorType_bossMonster] = -12, [radorType.radorType_normalMonsterQuestTarget] = -3, [radorType.radorType_namedMonsterQuestTarget] = -11, [radorType.radorType_bossMonsterQuestTarget] = -13, [radorType.radorType_huntingMonster] = -11, [radorType.radorType_huntingMonsterQuestTarget] = -12, [radorType.radorType_lordManager] = -14, [radorType.radorType_skillTrainner] = -15, [radorType.radorType_tradeMerchantNpc] = -16, [radorType.radorType_nodeManager] = -17, [radorType.radorType_normalNpc] = -2, [radorType.radorType_warehouseNpc] = -7, [radorType.radorType_potionNpc] = -8, [radorType.radorType_weaponNpc] = -9, [radorType.radorType_horseNpc] = -6, [radorType.radorType_workerNpc] = -10, [radorType.radorType_jewelNpc] = -11, [radorType.radorType_furnitureNpc] = -12, [radorType.radorType_collectNpc] = -13, [radorType.radorType_shipNpc] = -5, [radorType.radorType_alchemyNpc] = -4, [radorType.radorType_fishNpc] = -3, [radorType.radorType_guild] = -21, [radorType.radorType_guildShop] = -25, [radorType.radorType_itemTrader] = -26, [radorType.radorType_TerritorySupply] = -23, [radorType.radorType_TerritoryTrade] = -22, [radorType.radorType_Cook] = -24, [radorType.radorType_Wharf] = -20, [radorType.radorType_itemRepairer] = -33, [radorType.radorType_shopMerchantNpc] = -34, [radorType.radorType_ImportantNpc] = -32, [radorType.radorType_QuestAcceptable] = -41, [radorType.radorType_QuestProgress] = -40, [radorType.radorType_QuestComplete] = -42, [radorType.radorType_unknownNpc] = -2, [radorType.radorType_partyMember] = -90, [radorType.radorType_guildMember] = -80, [radorType.radorType_normalPlayer] = -1, [radorType.radorType_isHorse] = -100, [radorType.radorType_isDonkey] = -100, [radorType.radorType_isShip] = -100, [radorType.radorType_isCarriage] = -100, [radorType.radorType_isCamel] = -100, [radorType.radorType_isElephant] = -100, [radorType.radorType_isBabyElePhant] = -100, [radorType.radorType_installation] = -20, [radorType.radorType_kingGuildTent] = -20, [radorType.radorType_lordGuildTent] = -20, [radorType.radorType_selfDeadBody] = -40, [radorType.radorType_advancedBase] = -30, [radorType.VehicleType_Raft] = -100, [radorType.VehicleType_Boat] = -100, [radorType.VehicleType_FishingBoat] = -100, [radorType.VehicleType_PersonalTradeShip] = -100, [radorType.VehicleType_GalleyShip] = -100}
+local UI_color = Defines.Color
+local colorBlindNone = {[radorType.radorType_allymonster] = UI_color.C_FFB22300, [radorType.radorType_normalMonster] = UI_color.C_FFB22300, [radorType.radorType_namedMonster] = UI_color.C_FFB22300, [radorType.radorType_bossMonster] = UI_color.C_FFB22300, [radorType.radorType_huntingMonster] = UI_color.C_FFB22300, [radorType.radorType_normalMonsterQuestTarget] = UI_color.C_FFEE9900, [radorType.radorType_namedMonsterQuestTarget] = UI_color.C_FFEE9900, [radorType.radorType_bossMonsterQuestTarget] = UI_color.C_FFEE9900, [radorType.radorType_huntingMonsterQuestTarget] = UI_color.C_FFEE9900}
+local colorBlindRed = {[radorType.radorType_allymonster] = UI_color.C_FFD85300, [radorType.radorType_normalMonster] = UI_color.C_FFD85300, [radorType.radorType_namedMonster] = UI_color.C_FFD85300, [radorType.radorType_bossMonster] = UI_color.C_FFD85300, [radorType.radorType_huntingMonster] = UI_color.C_FFD85300, [radorType.radorType_normalMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_namedMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_bossMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_huntingMonsterQuestTarget] = UI_color.C_FFFFE866}
+local colorBlindGreen = {[radorType.radorType_allymonster] = UI_color.C_FFD82800, [radorType.radorType_normalMonster] = UI_color.C_FFD82800, [radorType.radorType_namedMonster] = UI_color.C_FFD82800, [radorType.radorType_bossMonster] = UI_color.C_FFD82800, [radorType.radorType_huntingMonster] = UI_color.C_FFD82800, [radorType.radorType_normalMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_namedMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_bossMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_huntingMonsterQuestTarget] = UI_color.C_FFFFE866}
 local CGT = CppEnums.CharacterGradeType
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
-local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
 local UI_RT = CppEnums.RegionType
 local isDrag = false
@@ -217,7 +223,7 @@ FromClient_MapSizeScale = function()
   Panel_CarriageEndurance_Position()
   Panel_HorseEndurance_Position()
   Panel_ShipEndurance_Position()
-  FGlobal_MovieGuideButton_Position()
+  FGlobal_PersonalIcon_ButtonPosUpdate()
   ToClient_SaveUiInfo(false)
   raderAlert_Resize()
 end
@@ -373,8 +379,16 @@ RadarMap_Background_MouseRUp = function()
     local intervalZ = ((radarMap.controls).icon_SelfPlayer):GetPosY() + ((radarMap.controls).icon_SelfPlayer):GetSizeY() / 2 - posY
     intervalX = intervalX * (100 / (radarMap.worldDistanceToPixelRate * 2))
     intervalZ = intervalZ * (100 / (radarMap.worldDistanceToPixelRate * 2))
+    local selfPlayerControlPos = radarMap.pcPosBaseControl
+    local dist = intervalX - selfPlayerControlPos.x
+    local disty = intervalZ - selfPlayerControlPos.y
+    local tempPos = float2(dist, disty)
+    local camRot = getCameraRotation()
+    if radarMap.isRotateMode then
+      tempPos:rotate(camRot + math.pi)
+    end
     local selfPosition = (getSelfPlayer()):get3DPos()
-    local float3Pos = float3(selfPosition.x + intervalX, 0, selfPosition.z + intervalZ)
+    local float3Pos = float3(selfPosition.x + tempPos.x, 0, selfPosition.z + tempPos.y)
     float3Pos.y = selfPosition.y
     ToClient_WorldMapNaviStart(float3Pos, NavigationGuideParam(), false, true)
     audioPostEvent_SystemUi(0, 14)
@@ -720,7 +734,7 @@ SortRador_IconIndex = function()
   Panel_Radar:SetChildIndex(radar_MiniMapScl, 9999)
 end
 
--- DECOMPILER ERROR at PC463: Confused about usage of register: R66 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1195: Confused about usage of register: R72 in 'UnsetPending'
 
 radarMap.getIdleIcon = function(self)
   -- function num : 0_29
@@ -734,14 +748,14 @@ radarMap.getIdleIcon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC466: Confused about usage of register: R66 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1199: Confused about usage of register: R72 in 'UnsetPending'
 
 radarMap.returnIconToPool = function(self, icon)
   -- function num : 0_30
   (self.iconPool):push_back(icon)
 end
 
--- DECOMPILER ERROR at PC470: Confused about usage of register: R66 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1204: Confused about usage of register: R72 in 'UnsetPending'
 
 radarMap.getIdleQuest = function(self)
   -- function num : 0_31 , upvalues : QuestArrowHalfSize
@@ -766,7 +780,7 @@ radarMap.getIdleQuest = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC473: Confused about usage of register: R66 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1208: Confused about usage of register: R72 in 'UnsetPending'
 
 radarMap.returnQuestToPool = function(self, questIcon)
   -- function num : 0_32
@@ -1212,7 +1226,7 @@ QuestTooltipForHandle = function(index, controlIdx, IsArrow)
 end
 
 Radar_UpdateQuestList = function()
-  -- function num : 0_49 , upvalues : RadarMap_DestoryQuestIcons, floor
+  -- function num : 0_49 , upvalues : RadarMap_DestoryQuestIcons, floor, RadarMap_UpdatePixelRate
   RadarMap_DestoryQuestIcons()
   local questCount = questList_getCheckedProgressQuestCount()
   local controlCount = 1
@@ -1280,6 +1294,7 @@ Radar_UpdateQuestList = function()
   for actorKeyRaw,_ in pairs(radarMap.actorIcons) do
     RadarMap_DestoryOtherActor(actorKeyRaw)
   end
+  RadarMap_UpdatePixelRate()
 end
 
 RadarMap_UpdatePixelRate = function()
@@ -1303,7 +1318,7 @@ local RadarMap_UpdateQuestAreaPositionPerFrame = function()
   local radarPosX = Panel_Radar:GetPosX()
   local radarPosY = Panel_Radar:GetPosY()
   local selfPlayerControlPos = radarMap.pcPosBaseControl
-  local selfPlayerControlPos = radarMap.pcPosBaseControl
+  local selfPlayerPos = (radarMap.pcInfo).position
   for _,areaQuest in pairs(self.areaQuests) do
     local questAreaIcon = areaQuest.icon_QuestArea
     local questArrowIcon = areaQuest.icon_QuestArrow
@@ -1314,7 +1329,9 @@ local RadarMap_UpdateQuestAreaPositionPerFrame = function()
       local dist = posX - selfPlayerControlPos.x
       local disty = posY - selfPlayerControlPos.y
       local tempPos = float2(dist, disty)
-      tempPos:rotate(camRot + math.pi)
+      if radarMap.isRotateMode then
+        tempPos:rotate(camRot + math.pi)
+      end
       posX = posX - floor(areaHalfSize)
       posY = posY - floor(areaHalfSize)
       questAreaIcon:SetPosX(posX)
@@ -1338,7 +1355,7 @@ local RadarMap_UpdateQuestAreaPositionPerFrame = function()
         questAreaIcon:SetParentRotCalc(radarMap.isRotateMode)
         do
           local tempPos = float2(0, QuestArrowHalfSize)
-          tempPos:rotate(arrowCalcRotate)
+          tempPos:rotate(-(arrowIconRotate))
           questArrowIcon:SetEnableArea(QuestArrowHalfSize + tempPos.x - enableHalfSize, QuestArrowHalfSize + tempPos.y - enableHalfSize, QuestArrowHalfSize + tempPos.x + enableHalfSize, QuestArrowHalfSize + tempPos.y + enableHalfSize)
           local sizeX = Panel_Radar:GetSizeX() / 2
           local sizeY = Panel_Radar:GetSizeY() / 2
@@ -1364,13 +1381,13 @@ local RadarMap_UpdateQuestAreaPositionPerFrame = function()
                 questArrowIcon:SetShow(not isShow)
               end
             end
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -2121,12 +2138,6 @@ if getEnableSimpleUI() then
   isDrag = isSet
 end
 
-  local radorType = {radorType_none = 0, radorType_hide = 1, radorType_allymonster = 2, radorType_normalMonster = 3, radorType_namedMonster = 4, radorType_bossMonster = 5, radorType_normalMonsterQuestTarget = 6, radorType_namedMonsterQuestTarget = 7, radorType_bossMonsterQuestTarget = 8, radorType_lordManager = 9, radorType_skillTrainner = 10, radorType_tradeMerchantNpc = 11, radorType_nodeManager = 12, radorType_normalNpc = 13, radorType_warehouseNpc = 14, radorType_potionNpc = 15, radorType_weaponNpc = 16, radorType_horseNpc = 17, radorType_workerNpc = 18, radorType_jewelNpc = 19, radorType_furnitureNpc = 20, radorType_collectNpc = 21, radorType_shipNpc = 22, radorType_alchemyNpc = 23, radorType_fishNpc = 24, radorType_guild = 25, radorType_guildShop = 26, radorType_itemTrader = 27, radorType_TerritorySupply = 28, radorType_TerritoryTrade = 29, radorType_Cook = 30, radorType_Wharf = 31, radorType_itemRepairer = 32, radorType_shopMerchantNpc = 33, radorType_ImportantNpc = 34, radorType_QuestAcceptable = 35, radorType_QuestProgress = 36, radorType_QuestComplete = 37, radorType_unknownNpc = 38, radorType_partyMember = 39, radorType_guildMember = 40, radorType_normalPlayer = 41, radorType_isHorse = 42, radorType_isDonkey = 43, radorType_isCamel = 44, radorType_isElephant = 45, radorType_isBabyElePhant = 46, radorType_isShip = 47, radorType_isCarriage = 48, radorType_installation = 49, radorType_kingGuildTent = 50, radorType_lordGuildTent = 51, radorType_villageGuildTent = 52, radorType_selfDeadBody = 53, radorType_advancedBase = 54, VehicleType_Raft = 55, VehicleType_Boat = 56, VehicleType_FishingBoat = 57, VehicleType_PersonalTradeShip = 58, VehicleType_GalleyShip = 59, radorType_Count = 60}
-  local template = {[radorType.radorType_none] = nil, [radorType.radorType_hide] = (UI.getChildControl)(Panel_Radar, "icon_hide"), [radorType.radorType_allymonster] = (UI.getChildControl)(Panel_Radar, "icon_horse"), [radorType.radorType_normalMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterGeneral_normal"), [radorType.radorType_namedMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterNamed_normal"), [radorType.radorType_bossMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterBoss_normal"), [radorType.radorType_normalMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterGeneral_quest"), [radorType.radorType_namedMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterNamed_quest"), [radorType.radorType_bossMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterBoss_quest"), [radorType.radorType_lordManager] = (UI.getChildControl)(Panel_Radar, "icon_npc_lordManager"), [radorType.radorType_skillTrainner] = (UI.getChildControl)(Panel_Radar, "icon_npc_skillTrainner"), [radorType.radorType_tradeMerchantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_trader"), [radorType.radorType_nodeManager] = (UI.getChildControl)(Panel_Radar, "icon_npc_nodeManager"), [radorType.radorType_normalNpc] = nil, [radorType.radorType_warehouseNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_warehouse"), [radorType.radorType_potionNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_potion"), [radorType.radorType_weaponNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_storeArmor"), [radorType.radorType_horseNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_horse"), [radorType.radorType_workerNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_worker"), [radorType.radorType_jewelNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_jewel"), [radorType.radorType_furnitureNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_furniture"), [radorType.radorType_collectNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_collect"), [radorType.radorType_shipNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_ship"), [radorType.radorType_alchemyNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_alchemy"), [radorType.radorType_fishNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_fish"), [radorType.radorType_guild] = (UI.getChildControl)(Panel_Radar, "icon_npc_guild"), [radorType.radorType_guildShop] = (UI.getChildControl)(Panel_Radar, "icon_npc_guildShop"), [radorType.radorType_itemTrader] = (UI.getChildControl)(Panel_Radar, "icon_npc_itemTrader"), [radorType.radorType_TerritorySupply] = (UI.getChildControl)(Panel_Radar, "icon_npc_territorySupply"), [radorType.radorType_TerritoryTrade] = (UI.getChildControl)(Panel_Radar, "icon_npc_territoryTrade"), [radorType.radorType_Cook] = (UI.getChildControl)(Panel_Radar, "icon_npc_cook"), [radorType.radorType_Wharf] = (UI.getChildControl)(Panel_Radar, "icon_npc_wharf"), [radorType.radorType_itemRepairer] = (UI.getChildControl)(Panel_Radar, "icon_npc_repairer"), [radorType.radorType_shopMerchantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_shop"), [radorType.radorType_ImportantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_important"), [radorType.radorType_QuestAcceptable] = (UI.getChildControl)(Panel_Radar, "icon_quest_accept"), [radorType.radorType_QuestProgress] = (UI.getChildControl)(Panel_Radar, "icon_quest_doing"), [radorType.radorType_QuestComplete] = (UI.getChildControl)(Panel_Radar, "icon_quest_clear"), [radorType.radorType_unknownNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_unknown"), [radorType.radorType_partyMember] = (UI.getChildControl)(Panel_Radar, "icon_partyMember"), [radorType.radorType_guildMember] = (UI.getChildControl)(Panel_Radar, "icon_guildMember"), [radorType.radorType_normalPlayer] = (UI.getChildControl)(Panel_Radar, "icon_player"), [radorType.radorType_isHorse] = (UI.getChildControl)(Panel_Radar, "icon_horse"), [radorType.radorType_isDonkey] = (UI.getChildControl)(Panel_Radar, "icon_donkey"), [radorType.radorType_isShip] = (UI.getChildControl)(Panel_Radar, "icon_ship"), [radorType.radorType_isCarriage] = (UI.getChildControl)(Panel_Radar, "icon_carriage"), [radorType.radorType_isCamel] = (UI.getChildControl)(Panel_Radar, "icon_camel"), [radorType.radorType_isElephant] = nil, [radorType.radorType_isBabyElePhant] = (UI.getChildControl)(Panel_Radar, "icon_babyElephant"), [radorType.radorType_installation] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_kingGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_lordGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_villageGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_selfDeadBody] = (UI.getChildControl)(Panel_Radar, "icon_deadbody"), [radorType.radorType_advancedBase] = (UI.getChildControl)(Panel_Radar, "icon_Outpost"), [radorType.VehicleType_Raft] = (UI.getChildControl)(Panel_Radar, "icon_Raft"), [radorType.VehicleType_Boat] = (UI.getChildControl)(Panel_Radar, "icon_Boat"), [radorType.VehicleType_FishingBoat] = (UI.getChildControl)(Panel_Radar, "icon_FishingBoat"), [radorType.VehicleType_PersonalTradeShip] = (UI.getChildControl)(Panel_Radar, "icon_PersonalTradeShip"), [radorType.VehicleType_GalleyShip] = (UI.getChildControl)(Panel_Radar, "icon_GalleyShip")}
-  local typeDepth = {[radorType.radorType_none] = 0, [radorType.radorType_hide] = 0, [radorType.radorType_allymonster] = -5, [radorType.radorType_normalMonster] = -2, [radorType.radorType_namedMonster] = -10, [radorType.radorType_bossMonster] = -12, [radorType.radorType_normalMonsterQuestTarget] = -3, [radorType.radorType_namedMonsterQuestTarget] = -11, [radorType.radorType_bossMonsterQuestTarget] = -13, [radorType.radorType_lordManager] = -14, [radorType.radorType_skillTrainner] = -15, [radorType.radorType_tradeMerchantNpc] = -16, [radorType.radorType_nodeManager] = -17, [radorType.radorType_normalNpc] = -2, [radorType.radorType_warehouseNpc] = -7, [radorType.radorType_potionNpc] = -8, [radorType.radorType_weaponNpc] = -9, [radorType.radorType_horseNpc] = -6, [radorType.radorType_workerNpc] = -10, [radorType.radorType_jewelNpc] = -11, [radorType.radorType_furnitureNpc] = -12, [radorType.radorType_collectNpc] = -13, [radorType.radorType_shipNpc] = -5, [radorType.radorType_alchemyNpc] = -4, [radorType.radorType_fishNpc] = -3, [radorType.radorType_guild] = -21, [radorType.radorType_guildShop] = -25, [radorType.radorType_itemTrader] = -26, [radorType.radorType_TerritorySupply] = -23, [radorType.radorType_TerritoryTrade] = -22, [radorType.radorType_Cook] = -24, [radorType.radorType_Wharf] = -20, [radorType.radorType_itemRepairer] = -33, [radorType.radorType_shopMerchantNpc] = -34, [radorType.radorType_ImportantNpc] = -32, [radorType.radorType_QuestAcceptable] = -41, [radorType.radorType_QuestProgress] = -40, [radorType.radorType_QuestComplete] = -42, [radorType.radorType_unknownNpc] = -2, [radorType.radorType_partyMember] = -90, [radorType.radorType_guildMember] = -80, [radorType.radorType_normalPlayer] = -1, [radorType.radorType_isHorse] = -100, [radorType.radorType_isDonkey] = -100, [radorType.radorType_isShip] = -100, [radorType.radorType_isCarriage] = -100, [radorType.radorType_isCamel] = -100, [radorType.radorType_isElephant] = -100, [radorType.radorType_isBabyElePhant] = -100, [radorType.radorType_installation] = -20, [radorType.radorType_kingGuildTent] = -20, [radorType.radorType_lordGuildTent] = -20, [radorType.radorType_selfDeadBody] = -40, [radorType.radorType_advancedBase] = -30, [radorType.VehicleType_Raft] = -100, [radorType.VehicleType_Boat] = -100, [radorType.VehicleType_FishingBoat] = -100, [radorType.VehicleType_PersonalTradeShip] = -100, [radorType.VehicleType_GalleyShip] = -100}
-  local colorBlindNone = {[radorType.radorType_allymonster] = UI_color.C_FFB22300, [radorType.radorType_normalMonster] = UI_color.C_FFB22300, [radorType.radorType_namedMonster] = UI_color.C_FFB22300, [radorType.radorType_bossMonster] = UI_color.C_FFB22300, [radorType.radorType_normalMonsterQuestTarget] = UI_color.C_FFEE9900, [radorType.radorType_namedMonsterQuestTarget] = UI_color.C_FFEE9900, [radorType.radorType_bossMonsterQuestTarget] = UI_color.C_FFEE9900}
-  local colorBlindRed = {[radorType.radorType_allymonster] = UI_color.C_FFD85300, [radorType.radorType_normalMonster] = UI_color.C_FFD85300, [radorType.radorType_namedMonster] = UI_color.C_FFD85300, [radorType.radorType_bossMonster] = UI_color.C_FFD85300, [radorType.radorType_normalMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_namedMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_bossMonsterQuestTarget] = UI_color.C_FFFFE866}
-  local colorBlindGreen = {[radorType.radorType_allymonster] = UI_color.C_FFD82800, [radorType.radorType_normalMonster] = UI_color.C_FFD82800, [radorType.radorType_namedMonster] = UI_color.C_FFD82800, [radorType.radorType_bossMonster] = UI_color.C_FFD82800, [radorType.radorType_normalMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_namedMonsterQuestTarget] = UI_color.C_FFFFE866, [radorType.radorType_bossMonsterQuestTarget] = UI_color.C_FFFFE866}
   resetRadorActorListRotateValue = function()
   -- function num : 0_78 , upvalues : typeDepth
   local actorList = nil
@@ -2195,14 +2206,22 @@ end
             if radorType.radorType_bossMonster == radorTypeValue then
               control:SetColor(UI_color.C_FFB22300)
             else
-              if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
-                control:SetColor(UI_color.C_FFEE9900)
+              if radorType.radorType_huntingMonster == radorTypeValue then
+                control:SetColor(UI_color.C_FFB22300)
               else
-                if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
+                if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
                   control:SetColor(UI_color.C_FFEE9900)
                 else
-                  if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                  if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
                     control:SetColor(UI_color.C_FFEE9900)
+                  else
+                    if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                      control:SetColor(UI_color.C_FFEE9900)
+                    else
+                      if radorType.radorType_huntingMonsterQuestTarget == radorTypeValue then
+                        control:SetColor(UI_color.C_FFEE9900)
+                      end
+                    end
                   end
                 end
               end
@@ -2224,14 +2243,22 @@ end
               if radorType.radorType_bossMonster == radorTypeValue then
                 control:SetColor(UI_color.C_FFD85300)
               else
-                if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
-                  control:SetColor(UI_color.C_FFFFE866)
+                if radorType.radorType_huntingMonster == radorTypeValue then
+                  control:SetColor(UI_color.C_FFD85300)
                 else
-                  if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
+                  if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
                     control:SetColor(UI_color.C_FFFFE866)
                   else
-                    if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                    if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
                       control:SetColor(UI_color.C_FFFFE866)
+                    else
+                      if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                        control:SetColor(UI_color.C_FFFFE866)
+                      else
+                        if radorType.radorType_huntingMonsterQuestTarget == radorTypeValue then
+                          control:SetColor(UI_color.C_FFFFE866)
+                        end
+                      end
                     end
                   end
                 end
@@ -2253,14 +2280,22 @@ end
                 if radorType.radorType_bossMonster == radorTypeValue then
                   control:SetColor(UI_color.C_FFD82800)
                 else
-                  if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
-                    control:SetColor(UI_color.C_FFFFE866)
+                  if radorType.radorType_huntingMonster == radorTypeValue then
+                    control:SetColor(UI_color.C_FFD82800)
                   else
-                    if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
+                    if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
                       control:SetColor(UI_color.C_FFFFE866)
                     else
-                      if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                      if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
                         control:SetColor(UI_color.C_FFFFE866)
+                      else
+                        if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                          control:SetColor(UI_color.C_FFFFE866)
+                        else
+                          if radorType.radorType_huntingMonsterQuestTarget == radorTypeValue then
+                            control:SetColor(UI_color.C_FFFFE866)
+                          end
+                        end
                       end
                     end
                   end
@@ -2303,14 +2338,22 @@ end
           if radorType.radorType_bossMonster == radorTypeValue then
             targetUI:SetColor(UI_color.C_FFB22300)
           else
-            if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
-              targetUI:SetColor(UI_color.C_FFEE9900)
+            if radorType.radorType_huntingMonster == radorTypeValue then
+              targetUI:SetColor(UI_color.C_FFB22300)
             else
-              if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
+              if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
                 targetUI:SetColor(UI_color.C_FFEE9900)
               else
-                if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
                   targetUI:SetColor(UI_color.C_FFEE9900)
+                else
+                  if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                    targetUI:SetColor(UI_color.C_FFEE9900)
+                  else
+                    if radorType.radorType_huntingMonsterQuestTarget == radorTypeValue then
+                      targetUI:SetColor(UI_color.C_FFEE9900)
+                    end
+                  end
                 end
               end
             end
@@ -2332,14 +2375,22 @@ end
             if radorType.radorType_bossMonster == radorTypeValue then
               targetUI:SetColor(UI_color.C_FFD85300)
             else
-              if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
-                targetUI:SetColor(UI_color.C_FFFFE866)
+              if radorType.radorType_huntingMonster == radorTypeValue then
+                targetUI:SetColor(UI_color.C_FFD85300)
               else
-                if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
+                if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
                   targetUI:SetColor(UI_color.C_FFFFE866)
                 else
-                  if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                  if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
                     targetUI:SetColor(UI_color.C_FFFFE866)
+                  else
+                    if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                      targetUI:SetColor(UI_color.C_FFFFE866)
+                    else
+                      if radorType.radorType_huntingMonsterQuestTarget == radorTypeValue then
+                        targetUI:SetColor(UI_color.C_FFFFE866)
+                      end
+                    end
                   end
                 end
               end
@@ -2361,14 +2412,22 @@ end
               if radorType.radorType_bossMonster == radorTypeValue then
                 targetUI:SetColor(UI_color.C_FFD82800)
               else
-                if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
-                  targetUI:SetColor(UI_color.C_FFFFE866)
+                if radorType.radorType_huntingMonster == radorTypeValue then
+                  targetUI:SetColor(UI_color.C_FFD82800)
                 else
-                  if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
+                  if radorType.radorType_normalMonsterQuestTarget == radorTypeValue then
                     targetUI:SetColor(UI_color.C_FFFFE866)
                   else
-                    if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                    if radorType.radorType_namedMonsterQuestTarget == radorTypeValue then
                       targetUI:SetColor(UI_color.C_FFFFE866)
+                    else
+                      if radorType.radorType_bossMonsterQuestTarget == radorTypeValue then
+                        targetUI:SetColor(UI_color.C_FFFFE866)
+                      else
+                        if radorType.radorType_huntingMonsterQuestTarget == radorTypeValue then
+                          targetUI:SetColor(UI_color.C_FFFFE866)
+                        end
+                      end
                     end
                   end
                 end
@@ -2414,21 +2473,21 @@ end
 end
 
   check_ServerChannel()
-  CalcPositionUseToTextUI = function(targetUI, textUI)
+  CalcPositionUseToTextUI = function(targetUIposX, targetUIposY, textUI)
   -- function num : 0_83
-  if Panel_Radar:GetSizeX() < targetUI:GetPosX() + textUI:GetTextSizeX() then
+  if Panel_Radar:GetSizeX() < targetUIposX + textUI:GetTextSizeX() then
     textUI:SetPosX(Panel_Radar:GetSizeX() - textUI:GetTextSizeX())
   else
-    textUI:SetPosX(targetUI:GetPosX())
+    textUI:SetPosX(targetUIposX)
   end
-  if targetUI:GetPosY() - textUI:GetTextSizeY() < Panel_Radar:GetPosY() then
+  if targetUIposY - textUI:GetTextSizeY() < Panel_Radar:GetPosY() then
     textUI:SetPosY(Panel_Radar:GetPosY())
   else
-    textUI:SetPosY(targetUI:GetPosY() - textUI:GetTextSizeY())
+    textUI:SetPosY(targetUIposY - textUI:GetTextSizeY())
   end
 end
 
-  FromClient_setNameOfMouseOverIcon = function(actorProxyWrapper, targetUI)
+  FromClient_setNameOfMouseOverIcon = function(actorProxyWrapper, targetUI, targetUIposX, targetUIposY)
   -- function num : 0_84 , upvalues : radar_OverName
   local actorName = ""
   if (actorProxyWrapper:get()):isNpc() then
@@ -2444,11 +2503,17 @@ end
       actorName = actorProxyWrapper:getName()
     end
   end
+  if radarMap.isRotateMode then
+    targetUIposY = targetUIposY - targetUI:GetSizeY() * 2 - targetUI:GetSizeY() / 2
+  else
+    targetUIposX = targetUI:GetPosX()
+    targetUIposY = targetUI:GetPosY()
+  end
   radar_OverName:SetShow(true)
   radar_OverName:SetText(actorName)
   radar_OverName:SetSize(radar_OverName:GetTextSizeX() + 15, radar_OverName:GetTextSizeY() + (radar_OverName:GetSpanSize()).y)
   Panel_Radar:SetChildIndex(radar_OverName, 9999)
-  CalcPositionUseToTextUI(targetUI, radar_OverName)
+  CalcPositionUseToTextUI(targetUIposX, targetUIposY, radar_OverName)
   radar_OverName:SetDepth(-1000)
 end
 
@@ -2462,15 +2527,14 @@ end
   RaderResizeByReset = function()
   -- function num : 0_86 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
   Panel_Radar:SetSize(Panel_OrigSizeX, Panel_OrigSizeY)
-  Panel_Radar:SetSpanSize(7, 20)
   ;
   ((radarMap.controls).rader_Background):SetPosX(0)
   ;
   ((radarMap.controls).rader_Background):SetSize(Panel_OrigSizeX, Panel_OrigSizeY)
-  -- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
 
   radarMap.scaleRateWidth = Panel_Radar:GetSizeX() / Panel_OrigSizeX
-  -- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
 
   radarMap.scaleRateHeight = Panel_Radar:GetSizeY() / Panel_OrigSizeY
   local SPI = (radarMap.controls).icon_SelfPlayer
@@ -2480,11 +2544,11 @@ end
   local halfSizeY = Panel_Radar:GetSizeY() / 2
   SPI:SetPosX(halfSizeX - halfSelfSizeX)
   SPI:SetPosY(halfSizeY - halfSelfSizeY)
-  -- DECOMPILER ERROR at PC65: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC60: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (radarMap.pcPosBaseControl).x = SPI:GetPosX() + halfSelfSizeX
-  -- DECOMPILER ERROR at PC71: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC66: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (radarMap.pcPosBaseControl).y = SPI:GetPosY() + halfSelfSizeY
@@ -2496,7 +2560,7 @@ end
   Panel_CarriageEndurance_Position()
   Panel_HorseEndurance_Position()
   Panel_ShipEndurance_Position()
-  FGlobal_MovieGuideButton_Position()
+  FGlobal_PersonalIcon_ButtonPosUpdate()
   ToClient_SaveUiInfo(false)
   raderAlert_Resize()
 end
@@ -2516,5 +2580,6 @@ end
   registerEvent("FromClient_ChangeRadarRotateMode", "Radar_SetRotateMode")
   changePositionBySever(Panel_Radar, (CppEnums.PAGameUIType).PAGameUIPanel_RadarMap, true, false, false)
   changePositionBySever(Panel_TimeBar, (CppEnums.PAGameUIType).PAGameUIPanel_TimeBar, true, false, false)
+  Panel_Radar:SetSpanSize(7, 20)
 end
 

@@ -884,7 +884,7 @@ TradeShopMoneyRefresh = function()
     (npcTradeShop._staticPossessMoneyValue):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
     eventBuyFromNpcListRefesh()
     global_refreshScrollIndex()
-    Panel_Window_Inventory:SetShow(false, false)
+    InventoryWindow_Close()
   end
 end
 

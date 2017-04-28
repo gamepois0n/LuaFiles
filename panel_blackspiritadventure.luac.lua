@@ -41,6 +41,12 @@ local btnClose = (UI.getChildControl)(Panel_Window_BlackSpiritAdventure, "Button
 btnClose:addInputEvent("Mouse_LUp", "BlackSpiritAd_Hide()")
 local btnQuestion = (UI.getChildControl)(Panel_Window_BlackSpiritAdventure, "Button_Question")
 btnQuestion:SetShow(false)
+local checkPopUp = (UI.getChildControl)(Panel_Window_BlackSpiritAdventure, "CheckButton_PopUp")
+local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
+checkPopUp:SetShow(isPopUpContentsEnable)
+checkPopUp:addInputEvent("Mouse_LUp", "HandleClicked_BlackSpiritAdventure_PopUp()")
+checkPopUp:addInputEvent("Mouse_On", "BlackSpirit_PopUp_ShowIconToolTip( true )")
+checkPopUp:addInputEvent("Mouse_Out", "BlackSpirit_PopUp_ShowIconToolTip( false )")
 local _Web = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_Window_BlackSpiritAdventure, "WebControl_EventNotify_WebLink")
 _Web:SetShow(true)
 _Web:SetPosX(11)
@@ -88,19 +94,31 @@ BlackSpiritAd_Show = function()
   end
 end
 
+HandleClicked_BlackSpiritAdventure_PopUp = function()
+  -- function num : 0_3 , upvalues : checkPopUp
+  if checkPopUp:IsCheck() then
+    Panel_Window_BlackSpiritAdventure:OpenUISubApp()
+  else
+    Panel_Window_BlackSpiritAdventure:CloseUISubApp()
+  end
+  TooltipSimple_Hide()
+end
+
 BlackSpiritAd_Hide = function()
-  -- function num : 0_3 , upvalues : _Web
+  -- function num : 0_4 , upvalues : checkPopUp, _Web
   Panel_Window_BlackSpiritAdventure:SetShow(false, false)
+  Panel_Window_BlackSpiritAdventure:CloseUISubApp()
+  checkPopUp:SetCheck(false)
   _Web:ResetUrl()
 end
 
 FGlobal_BlackSpiritAdventure_Open = function()
-  -- function num : 0_4
+  -- function num : 0_5
   BlackSpiritAd_Show()
 end
 
 blackSpiritUrlByServiceType = function()
-  -- function num : 0_5
+  -- function num : 0_6
   local url = nil
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
@@ -164,6 +182,24 @@ blackSpiritUrlByServiceType = function()
     end
   end
   return url
+end
+
+BlackSpirit_PopUp_ShowIconToolTip = function(isShow)
+  -- function num : 0_7 , upvalues : checkPopUp
+  if isShow then
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
+    local desc = ""
+    if checkPopUp:IsCheck() then
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
+    else
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
+    end
+    TooltipSimple_Show(checkPopUp, name, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
+  end
 end
 
 

@@ -709,62 +709,62 @@ tradeSellMarket.setBuyItemDataInfo = function(self, index, itemName, leftCount, 
   ((tradeSellMarket.itemName)[index]):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
   ;
   ((tradeSellMarket.itemName)[index]):setLineCountByLimitAutoWrap(2)
+  local characterStaticStatusWrapper = npcShop_getCurrentCharacterKeyForTrade()
+  local characterStaticStatus = characterStaticStatusWrapper:get()
   local wp = (getSelfPlayer()):getWp()
-  local bigHand = ((getSelfPlayer()):get()):getlTradeItemCountRate() ~= 1000000
-  local sellPrice = Int64toInt32(price)
-  if isTradeGameSuccess() == true or bigHand then
-    _btnTradeGame:SetIgnore(true)
-    _btnTradeGame:SetMonoTone(true)
-    if isNA then
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
-    else
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
-    end
-    if checkLinkedNode(index) == true then
-      ((tradeSellMarket.ListBody)[index]):AddEffect("UI_Trade_SellRing", true, 0, 0)
+  local bigHand = (((getSelfPlayer()):get()):getlTradeItemCountRate() ~= 1000000 and not characterStaticStatus:isSupplyMerchant() and not characterStaticStatus:isFishSupplyMerchant())
+  do
+    local sellPrice = Int64toInt32(price)
+    if isTradeGameSuccess() == true or bigHand then
+      _btnTradeGame:SetIgnore(true)
+      _btnTradeGame:SetMonoTone(true)
+      if isNA then
+        _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
+      else
+        _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
+      end
+      if checkLinkedNode(index) == true then
+        ((tradeSellMarket.ListBody)[index]):AddEffect("UI_Trade_SellRing", true, 0, 0)
+        ;
+        ((tradeSellMarket.itemName)[index]):SetText(tostring(itemName) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_TRADEGAME"))
+      else
+        ((tradeSellMarket.itemName)[index]):SetText(tostring(itemName))
+      end
+    elseif wp < 5 then
+      _btnTradeGame:SetIgnore(true)
+      _btnTradeGame:SetMonoTone(true)
+      if isNA then
+        _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
+      else
+        _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
+      end
       ;
-      ((tradeSellMarket.itemName)[index]):SetText(tostring(itemName) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_TRADEGAME"))
+      ((tradeSellMarket.itemName)[index]):SetText(tostring(itemName))
     else
+      _btnTradeGame:SetIgnore(false)
+      _btnTradeGame:SetMonoTone(false)
+      if isNA then
+        _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
+      else
+        _btnTradeGame:AddEffect("UI_TradeMarket_ScaleButton", true, 0, -1)
+        _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
+      end
+      ;
       ((tradeSellMarket.itemName)[index]):SetText(tostring(itemName))
     end
-  elseif wp < 5 then
-    _btnTradeGame:SetIgnore(true)
-    _btnTradeGame:SetMonoTone(true)
-    if isNA then
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
-    else
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
-    end
     ;
-    ((tradeSellMarket.itemName)[index]):SetText(tostring(itemName))
-  else
-    _btnTradeGame:SetIgnore(false)
-    _btnTradeGame:SetMonoTone(false)
-    if isNA then
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -95, -1)
-    else
-      _btnTradeGame:AddEffect("UI_TradeMarket_ScaleButton", true, 0, -1)
-      _btnTradeGame:AddEffect("UI_TradeMarket_Scale", true, -41, -1)
-    end
-    ;
-    ((tradeSellMarket.itemName)[index]):SetText(tostring(itemName))
-  end
-  ;
-  ((tradeSellMarket.sellPrice)[index]):SetText(makeDotMoney(sellPrice))
-  -- DECOMPILER ERROR at PC197: Confused about usage of register: R9 in 'UnsetPending'
+    ((tradeSellMarket.sellPrice)[index]):SetText(makeDotMoney(sellPrice))
+    -- DECOMPILER ERROR at PC209: Confused about usage of register: R11 in 'UnsetPending'
 
-  ;
-  (tradeSellMarket.remainItemCount)[index] = leftCount
-  ;
-  ((tradeSellMarket.remainCount)[index]):SetText(tostring(leftCount))
-  if possibleCount == (Defines.s64_const).toInt64 then
-    ((tradeSellMarket.npcRemainCount)[index]):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_NPCREMAINCOUNT", "possibleCount", tostring(possibleCount)))
-  else
-    ((tradeSellMarket.npcRemainCount)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_REMAININFINITY"))
-  end
-  local characterStaticStatusWrapper = npcShop_getCurrentCharacterKeyForTrade()
-  do
-    local characterStaticStatus = characterStaticStatusWrapper:get()
+    ;
+    (tradeSellMarket.remainItemCount)[index] = leftCount
+    ;
+    ((tradeSellMarket.remainCount)[index]):SetText(tostring(leftCount))
+    if possibleCount == (Defines.s64_const).toInt64 then
+      ((tradeSellMarket.npcRemainCount)[index]):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_NPCREMAINCOUNT", "possibleCount", tostring(possibleCount)))
+    else
+      ((tradeSellMarket.npcRemainCount)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_REMAININFINITY"))
+    end
     if characterStaticStatus:isTerritorySupplyMerchant() == true then
       ((tradeSellMarket.AddCart)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_SELLMARKET"))
       _btnSellAllItem:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_SELLALLITEM"))
@@ -779,7 +779,7 @@ tradeSellMarket.setBuyItemDataInfo = function(self, index, itemName, leftCount, 
     else
       _btnTradeGame:SetShow(true)
     end
-    -- DECOMPILER ERROR: 19 unprocessed JMP targets
+    -- DECOMPILER ERROR: 20 unprocessed JMP targets
   end
 end
 

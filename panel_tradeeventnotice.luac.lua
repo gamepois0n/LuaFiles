@@ -25,6 +25,8 @@ local btnClose = (UI.getChildControl)(Panel_TradeMarket_EventInfo, "Button_Close
 btnClose:addInputEvent("Mouse_LUp", "TradeEventInfo_Close()")
 local checkPopUp = (UI.getChildControl)(Panel_TradeMarket_EventInfo, "CheckButton_PopUp")
 checkPopUp:addInputEvent("Mouse_LUp", "TradeEventInfo_PopUp()")
+checkPopUp:addInputEvent("Mouse_On", "TradeEventInfo_PopUp_ShowIconToolTip(true)")
+checkPopUp:addInputEvent("Mouse_Out", "TradeEventInfo_PopUp_ShowIconToolTip(false)")
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 checkPopUp:SetShow(isPopUpContentsEnable)
 local tradeEvent = (UI.getChildControl)(Panel_TradeMarket_EventInfo, "StaticText_TradeEvent")
@@ -143,7 +145,7 @@ TradeEventInfo_Set = function()
   if eventInfo == nil then
     eventDesc:SetShow(false)
     eventAlert:SetShow(true)
-    eventAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_6") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_7"))
+    eventAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_6") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_7") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_8"))
     eventNavi:SetShow(false)
     eventSizeY = eventAlert:GetTextSizeY()
   else
@@ -181,10 +183,10 @@ TradeEventInfo_Set = function()
     local supplyStart = false
     tradeSupplyItemGroup = {}
     for terrIndex = 0, terrCount - 1 do
-      -- DECOMPILER ERROR at PC190: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC196: Confused about usage of register: R13 in 'UnsetPending'
 
       tradeSupplyCount[terrIndex] = ToClient_worldmap_getTradeSupplyCount(terrIndex)
-      -- DECOMPILER ERROR at PC197: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC203: Confused about usage of register: R13 in 'UnsetPending'
 
       if tradeSupplyCount[terrIndex] > 0 then
         tradeSupplyItemGroup[terrIndex] = {}
@@ -192,7 +194,7 @@ TradeEventInfo_Set = function()
         (_townName[terrIndex]):SetShow(true)
         ;
         (_townName[terrIndex]):SetText(territoryName[terrIndex] .. Show_TerritorySupplyNpcName(terrIndex))
-        -- DECOMPILER ERROR at PC226: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC232: Unhandled construct in 'MakeBoolean' P1
 
         if ToClient_IsContentsGroupOpen("83") and terrIndex < terrCount - 1 then
           (_btnNavi[terrIndex]):SetShow(true)
@@ -233,11 +235,11 @@ TradeEventInfo_Set = function()
                 ;
                 (slot.icon):addInputEvent("Mouse_Out", "")
                 slot:clearItem()
-                -- DECOMPILER ERROR at PC352: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC358: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC352: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC358: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC352: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC358: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -363,12 +365,31 @@ TradeEventInfo_PopUp = function()
   else
     Panel_TradeMarket_EventInfo:CloseUISubApp()
   end
+  TooltipSimple_Hide()
 end
 
 TradeEventInfo_Resize = function()
   -- function num : 0_12
   Panel_TradeMarket_EventInfo:SetPosX(getScreenSizeX() / 2 - Panel_TradeMarket_EventInfo:GetSizeX() / 2)
   Panel_TradeMarket_EventInfo:SetPosY(getScreenSizeY() / 2 - Panel_TradeMarket_EventInfo:GetSizeY() / 2)
+end
+
+TradeEventInfo_PopUp_ShowIconToolTip = function(isShow)
+  -- function num : 0_13 , upvalues : checkPopUp
+  if isShow then
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
+    local desc = ""
+    if checkPopUp:IsCheck() then
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
+    else
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
+    end
+    TooltipSimple_Show(checkPopUp, name, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
+  end
 end
 
 registerEvent("FromClient_NotifyVariableTradeItemMsg", "TradeEventInfo_Set")

@@ -21,21 +21,42 @@ local _phantom_Effect_2ndChk = false
 local _phantom_Effect_3rdChk = false
 _phantomCount_Icon:addInputEvent("Mouse_On", "PhantomCount_HelpComment( true )")
 _phantomCount_Icon:addInputEvent("Mouse_Out", "PhantomCount_HelpComment( false )")
+local _fighterIcon = (UI.getChildControl)(Panel_ClassResource, "Static_FighterIcon")
+local _fighterIcon_Point1 = (UI.getChildControl)(_fighterIcon, "Static_Point1")
+local _fighterIcon_Point2 = (UI.getChildControl)(_fighterIcon, "Static_Point2")
+local _fighterIcon_Point3 = (UI.getChildControl)(_fighterIcon, "Static_Point3")
+_fighterIcon:addInputEvent("Mouse_On", "")
+_fighterIcon:addInputEvent("Mouse_Out", "")
+local isSorcerer = false
+local isFighter = false
 local init = function()
-  -- function num : 0_0 , upvalues : resourceValue
+  -- function num : 0_0 , upvalues : resourceValue, _phantomCount_Icon, _fighterIcon, isSorcerer, isFighter
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     Panel_ClassResource:SetShow(false)
     return 
   end
+  resourceValue:SetShow(false)
+  _phantomCount_Icon:SetShow(false)
+  _fighterIcon:SetShow(false)
+  Panel_ClassResource:SetShow(false)
   local classType = selfPlayer:getClassType()
   if (CppEnums.ClassType).ClassType_Sorcerer == classType then
+    isSorcerer = true
     local phantomCount = (selfPlayer:get()):getSubResourcePoint()
     Panel_ClassResource:SetShow(true)
     resourceValue:SetText("X " .. phantomCount)
+    resourceValue:SetShow(true)
+    _phantomCount_Icon:SetShow(true)
   else
     do
-      Panel_ClassResource:SetShow(false)
+      if (CppEnums.ClassType).ClassType_Combattant == classType then
+        Panel_ClassResource:SetShow(true)
+        _fighterIcon:SetShow(true)
+        isFighter = true
+      else
+        Panel_ClassResource:SetShow(false)
+      end
     end
   end
 end
@@ -101,7 +122,7 @@ ClassResource_HideAni = function()
 end
 
 ClassResource_Update = function()
-  -- function num : 0_6 , upvalues : resourceValue, _phantom_Effect_1stChk, _phantomCount_Icon, _phantom_Effect_2ndChk, _phantom_Effect_3rdChk, phantomPopMSG
+  -- function num : 0_6 , upvalues : isSorcerer, resourceValue, _phantom_Effect_1stChk, _phantomCount_Icon, _phantom_Effect_2ndChk, _phantom_Effect_3rdChk, phantomPopMSG, isFighter, _fighterIcon_Point1, _fighterIcon_Point2, _fighterIcon_Point3
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -109,43 +130,57 @@ ClassResource_Update = function()
   local playerMp = (selfPlayer:get()):getMp()
   local playerMaxMp = (selfPlayer:get()):getMaxMp()
   local playerMpRate = playerMp / playerMaxMp * 100
-  local phantomCount = (selfPlayer:get()):getSubResourcePoint()
-  resourceValue:SetText("X " .. phantomCount)
-  if phantomCount >= 10 and phantomCount <= 19 and _phantom_Effect_1stChk == false then
-    _phantomCount_Icon:EraseAllEffect()
-    _phantomCount_Icon:AddEffect("UI_Button_Hide", false, 0, 0)
-    _phantom_Effect_1stChk = true
-    _phantom_Effect_2ndChk = false
-    _phantom_Effect_3rdChk = false
-  else
-    if phantomCount >= 20 and phantomCount <= 29 and _phantom_Effect_2ndChk == false then
+  if isSorcerer then
+    local phantomCount = (selfPlayer:get()):getSubResourcePoint()
+    resourceValue:SetText("X " .. phantomCount)
+    if phantomCount >= 10 and phantomCount <= 19 and _phantom_Effect_1stChk == false then
       _phantomCount_Icon:EraseAllEffect()
       _phantomCount_Icon:AddEffect("UI_Button_Hide", false, 0, 0)
-      _phantom_Effect_1stChk = false
-      _phantom_Effect_2ndChk = true
+      _phantom_Effect_1stChk = true
+      _phantom_Effect_2ndChk = false
       _phantom_Effect_3rdChk = false
     else
-      if phantomCount == 30 and _phantom_Effect_3rdChk == false then
+      if phantomCount >= 20 and phantomCount <= 29 and _phantom_Effect_2ndChk == false then
         _phantomCount_Icon:EraseAllEffect()
         _phantomCount_Icon:AddEffect("UI_Button_Hide", false, 0, 0)
         _phantom_Effect_1stChk = false
-        _phantom_Effect_2ndChk = false
-        _phantom_Effect_3rdChk = true
+        _phantom_Effect_2ndChk = true
+        _phantom_Effect_3rdChk = false
       else
-        if phantomCount == 0 then
+        if phantomCount == 30 and _phantom_Effect_3rdChk == false then
           _phantomCount_Icon:EraseAllEffect()
+          _phantomCount_Icon:AddEffect("UI_Button_Hide", false, 0, 0)
           _phantom_Effect_1stChk = false
           _phantom_Effect_2ndChk = false
-          _phantom_Effect_3rdChk = false
+          _phantom_Effect_3rdChk = true
+        else
+          if phantomCount == 0 then
+            _phantomCount_Icon:EraseAllEffect()
+            _phantom_Effect_1stChk = false
+            _phantom_Effect_2ndChk = false
+            _phantom_Effect_3rdChk = false
+          end
         end
       end
     end
-  end
-  if phantomCount >= 10 and playerMpRate < 20 then
-    phantomPopMSG:SetShow(true)
-    phantomPopMSG:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_PHANTOMPOPMSG"))
+    if phantomCount >= 10 and playerMpRate < 20 then
+      phantomPopMSG:SetShow(true)
+      phantomPopMSG:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_PHANTOMPOPMSG"))
+    else
+      phantomPopMSG:SetShow(false)
+    end
   else
-    phantomPopMSG:SetShow(false)
+    do
+      do
+        if isFighter then
+          local fighterCount = (selfPlayer:get()):getSubResourcePoint()
+          _fighterIcon_Point1:SetShow(fighterCount >= 10)
+          _fighterIcon_Point2:SetShow(fighterCount >= 20)
+          _fighterIcon_Point3:SetShow(fighterCount >= 30)
+        end
+        -- DECOMPILER ERROR: 4 unprocessed JMP targets
+      end
+    end
   end
 end
 
@@ -185,9 +220,22 @@ Phantom_Locate = function()
   if isFlushedUI() then
     return 
   end
-  Panel_ClassResource:SetPosX(Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5)
-  Panel_ClassResource:SetPosY(Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5)
-  changePositionBySever(Panel_ClassResource, (CppEnums.PAGameUIType).PAGameUIPanel_ClassResource, true, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_ClassResource:GetRelativePosX() == 0 and Panel_ClassResource:GetRelativePosY() == 0 then
+      Panel_ClassResource:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2 + _phantomCount_Icon:GetSizeX() - 5)
+      Panel_ClassResource:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY() - _phantomCount_Icon:GetSizeY() + 5)
+    else
+      Panel_ClassResource:SetPosX(getScreenSizeX() * Panel_ClassResource:GetRelativePosX() - Panel_ClassResource:GetSizeX() / 2)
+      Panel_ClassResource:SetPosY(getScreenSizeY() * Panel_ClassResource:GetRelativePosY() - Panel_ClassResource:GetSizeY() / 2)
+    end
+    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ClassResource, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+      Panel_ClassResource:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ClassResource, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+    end
+  else
+    Panel_ClassResource:SetPosX(Panel_MainStatus_User_Bar:GetPosX() + _phantomCount_Icon:GetSizeX() - 5)
+    Panel_ClassResource:SetPosY(Panel_MainStatus_User_Bar:GetPosY() - _phantomCount_Icon:GetSizeY() + 5)
+    changePositionBySever(Panel_ClassResource, (CppEnums.PAGameUIType).PAGameUIPanel_ClassResource, true, true, false)
+  end
   init()
 end
 

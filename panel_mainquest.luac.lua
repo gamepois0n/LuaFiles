@@ -627,15 +627,27 @@ end
 
 FromClient_MainQuestWidget_ResetPosition = function()
   -- function num : 0_25
-  do
+  if CppDefine.ChangeUIAndResolution == true then
+    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+      Panel_MainQuest:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+    end
+    if Panel_MainQuest:GetRelativePosX() == 0 and Panel_MainQuest:GetRelativePosY() == 0 then
+      Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20)
+      Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10)
+    else
+      Panel_MainQuest:SetPosX(getScreenSizeX() * Panel_MainQuest:GetRelativePosX() - Panel_MainQuest:GetSizeX() / 2)
+      Panel_MainQuest:SetPosY(getScreenSizeY() * Panel_MainQuest:GetRelativePosY() - Panel_MainQuest:GetSizeY() / 2)
+    end
+    changePositionBySever(Panel_MainQuest, (CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, true, false, true)
+  else
     local haveServerPosition = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0
     if not haveServerPosition then
       Panel_MainQuest:SetPosX(getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20)
       Panel_MainQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10)
     end
     changePositionBySever(Panel_MainQuest, (CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, true, true, true)
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
   end
+  -- DECOMPILER ERROR: 3 unprocessed JMP targets
 end
 
 renderModeChange_Panel_MainQuest_ResetPosition = function(prevRenderModeList, nextRenderModeList)

@@ -3379,37 +3379,57 @@ HandleClicked_ItemMarket_PopUp = function()
   else
     Panel_Window_ItemMarket:CloseUISubApp()
   end
+  TooltipSimple_Hide()
+end
+
+ItemMarketPopUp_ShowIconToolTip = function(isShow)
+  -- function num : 0_52 , upvalues : ItemMarket
+  if isShow then
+    local self = ItemMarket
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
+    local desc = ""
+    if (self.checkPopUp):IsCheck() then
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
+    else
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
+    end
+    TooltipSimple_Show(self.checkPopUp, name, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
+  end
 end
 
 HandleClicked_ItemMarket_Search = function()
-  -- function num : 0_52
+  -- function num : 0_53
   _itemMarket_Search()
 end
 
 FGlobal_ItemMarket_FavoriteItemRegiste = function()
-  -- function num : 0_53
+  -- function num : 0_54
   _itemMarket_FavoriteItemRegist()
 end
 
 HandleClicked_ItemMarket_SpecialSearch = function()
-  -- function num : 0_54
+  -- function num : 0_55
   _itemMarket_SpecialSearch()
 end
 
 HandleClicked_ItemMarket_RefreshList = function()
-  -- function num : 0_55 , upvalues : ItemMarket
+  -- function num : 0_56 , upvalues : ItemMarket
   HandleClicked_ItemMarket_GroupItem(ItemMarket.curSummaryItemIndex, ItemMarket.sellInfoItemEnchantKeyRaw)
 end
 
 FGlobal_ItemMarket_FavoriteBtn_CheckOff = function()
-  -- function num : 0_56 , upvalues : ItemMarket
+  -- function num : 0_57 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.btn_FavoriteOnOff):SetCheck(false)
 end
 
 HandleClicked_ItemMarket_FavoriteCheckOnOff = function()
-  -- function num : 0_57 , upvalues : ItemMarket
+  -- function num : 0_58 , upvalues : ItemMarket
   local self = ItemMarket
   if (self.btn_FavoriteOnOff):IsCheck() then
     FGlobal_ItemMarket_FavoriteItem_Open()
@@ -3419,7 +3439,7 @@ HandleClicked_ItemMarket_FavoriteCheckOnOff = function()
 end
 
 HandleClicked_ItemMarket_EditText = function()
-  -- function num : 0_58 , upvalues : ItemMarket
+  -- function num : 0_59 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.edit_ItemName):SetEditText("", true)
@@ -3435,7 +3455,7 @@ HandleClicked_ItemMarket_EditText = function()
 end
 
 HandleClicked_ItemMarket_SpecialEditText = function()
-  -- function num : 0_59 , upvalues : ItemMarket
+  -- function num : 0_60 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.edit_SpecialItemName):SetEditText("", true)
@@ -3450,7 +3470,7 @@ HandleClicked_ItemMarket_SpecialEditText = function()
 end
 
 FGolbal_ItemMarketNew_Search = function()
-  -- function num : 0_60 , upvalues : IM, ItemMarket
+  -- function num : 0_61 , upvalues : IM, ItemMarket
   _itemMarket_Search()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
@@ -3465,7 +3485,7 @@ FGolbal_ItemMarketNew_Search = function()
 end
 
 FGolbal_ItemMarketNew_SpecialSearch = function()
-  -- function num : 0_61 , upvalues : IM, ItemMarket
+  -- function num : 0_62 , upvalues : IM, ItemMarket
   _itemMarket_SpecialSearch()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
@@ -3480,7 +3500,7 @@ FGolbal_ItemMarketNew_SpecialSearch = function()
 end
 
 HandleClicked_ItemMarket_ClearEdit = function()
-  -- function num : 0_62 , upvalues : IM, ItemMarket
+  -- function num : 0_63 , upvalues : IM, ItemMarket
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   ;
   (ItemMarket.edit_ItemName):SetEditText("", true)
@@ -3488,16 +3508,30 @@ HandleClicked_ItemMarket_ClearEdit = function()
 end
 
 HandleClicked_ItemMarket_RegistItem = function()
-  -- function num : 0_63
+  -- function num : 0_64 , upvalues : ItemMarket
   Warehouse_OpenPanelFromMaid()
   HandleClicked_WhItemMarketRegistItem_Open(true)
   Panel_Window_ItemMarket:SetShow(false)
+  if Panel_Window_ItemMarket:IsUISubApp() then
+    Panel_Window_ItemMarket:CloseUISubApp()
+    ;
+    (ItemMarket.checkPopUp):SetCheck(false)
+  end
   FGlobal_ItemMarket_FavoriteItem_Close()
 end
 
 FGlobal_ItemMarketNew_Open = function()
-  -- function num : 0_64 , upvalues : ItemMarket, IM, selectedKey, tree2IndexMap
+  -- function num : 0_65 , upvalues : ItemMarket, IM, selectedKey, tree2IndexMap
   local self = ItemMarket
+  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
+
+  if (ItemMarket.checkPopUp):IsCheck() then
+    ItemMarket.escMenuSaveValue = false
+    ;
+    (ItemMarket.checkPopUp):SetCheck(false)
+  end
+  ;
+  (ItemMarket.checkPopUp):SetShow(false)
   if Panel_Window_ItemMarket:GetShow() == true then
     return 
   end
@@ -3628,11 +3662,25 @@ FGlobal_ItemMarketNew_Open = function()
 end
 
 FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
-  -- function num : 0_65 , upvalues : ItemMarket, selectedKey, tree2IndexMap
+  -- function num : 0_66 , upvalues : ItemMarket, isPopUpContentsEnable, selectedKey, tree2IndexMap
   local self = ItemMarket
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R3 in 'UnsetPending'
 
   ItemMarket.escMenuSaveValue = escMenu
+  if Panel_Window_ItemMarket:GetShow() == true then
+    return 
+  end
+  local bCheck = Panel_Window_ItemMarket:IsUISubApp()
+  ;
+  (ItemMarket.checkPopUp):SetCheck(bCheck)
+  if not (ItemMarket.checkPopUp):GetShow() then
+    (ItemMarket.checkPopUp):SetShow(isPopUpContentsEnable)
+  end
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R4 in 'UnsetPending'
+
+  if bCheck == true then
+    ItemMarket.escMenuSaveValue = false
+  end
   if Panel_Window_ItemMarket_ItemSet:GetShow() == true then
     FGlobal_ItemMarketItemSet_Close()
   end
@@ -3736,8 +3784,19 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
 end
 
 FGlobal_ItemMarket_OpenByMaid = function()
-  -- function num : 0_66 , upvalues : ItemMarket, isOpenByMaid, selectedKey, tree2IndexMap
+  -- function num : 0_67 , upvalues : ItemMarket, isOpenByMaid, selectedKey, tree2IndexMap
   local self = ItemMarket
+  if Panel_Window_ItemMarket:IsUISubApp() then
+    Panel_Window_ItemMarket:CloseUISubApp()
+    Panel_Window_ItemMarket:SetShow(false)
+    ;
+    (ItemMarket.checkPopUp):SetCheck(false)
+    -- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+
+    ItemMarket.escMenuSaveValue = false
+  end
+  ;
+  (ItemMarket.checkPopUp):SetShow(false)
   if Panel_Window_ItemMarket:GetShow() == true then
     return 
   end
@@ -3866,7 +3925,7 @@ FGlobal_ItemMarket_OpenByMaid = function()
 end
 
 FGolbal_ItemMarketNew_Close = function()
-  -- function num : 0_67 , upvalues : selectedKey, IM, isOpenByMaid, ItemMarket
+  -- function num : 0_68 , upvalues : selectedKey, IM, isOpenByMaid, ItemMarket
   if Panel_Window_ItemMarket:IsShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true then
     return 
   end
@@ -3895,20 +3954,9 @@ FGolbal_ItemMarketNew_Close = function()
   end
   Panel_ItemMarket_BidDesc_Hide()
   FGlobal_ItemMarket_FavoriteItem_Close()
-  toClient_requestCloseItemMarket()
 end
 
 Update_ItemMarketMasterInfo = function()
-  -- function num : 0_68 , upvalues : ItemMarket
-  local self = ItemMarket
-  if self.isSpecialCategory then
-    self:SpecialGoodsUpdate()
-    return 
-  end
-  ItemMarket:Update()
-end
-
-Update_ItemMarketSummaryInfo = function()
   -- function num : 0_69 , upvalues : ItemMarket
   local self = ItemMarket
   if self.isSpecialCategory then
@@ -3918,8 +3966,18 @@ Update_ItemMarketSummaryInfo = function()
   ItemMarket:Update()
 end
 
-Update_ItemMarketSellInfo = function()
+Update_ItemMarketSummaryInfo = function()
   -- function num : 0_70 , upvalues : ItemMarket
+  local self = ItemMarket
+  if self.isSpecialCategory then
+    self:SpecialGoodsUpdate()
+    return 
+  end
+  ItemMarket:Update()
+end
+
+Update_ItemMarketSellInfo = function()
+  -- function num : 0_71 , upvalues : ItemMarket
   local self = ItemMarket
   if self.isSpecialCategory then
     self:SpecialGoodsUpdate()
@@ -3929,7 +3987,7 @@ Update_ItemMarketSellInfo = function()
 end
 
 FromClient_NotifyItemMarketByParty = function(notifyType, param0, param1)
-  -- function num : 0_71 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
+  -- function num : 0_72 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
   if notifyType == 0 and Panel_Window_ItemMarket:GetShow() then
     ItemMarket:SpecialGoodsUpdate()
   end
@@ -3974,7 +4032,7 @@ FromClient_NotifyItemMarketByParty = function(notifyType, param0, param1)
 end
 
 FGlobal_HandleClicked_ItemMarketBackPage = function()
-  -- function num : 0_72 , upvalues : ItemMarket
+  -- function num : 0_73 , upvalues : ItemMarket
   local self = ItemMarket
   TooltipSimple_Hide()
   ;
@@ -3999,7 +4057,7 @@ FGlobal_HandleClicked_ItemMarketBackPage = function()
 end
 
 FGlobal_HandleClicked_SpecialItemMarketBackPage = function()
-  -- function num : 0_73 , upvalues : ItemMarket
+  -- function num : 0_74 , upvalues : ItemMarket
   local self = ItemMarket
   TooltipSimple_Hide()
   ;
@@ -4022,25 +4080,25 @@ FGlobal_HandleClicked_SpecialItemMarketBackPage = function()
 end
 
 FGlobal_isOpenItemMarketBackPage = function()
-  -- function num : 0_74 , upvalues : ItemMarket
+  -- function num : 0_75 , upvalues : ItemMarket
   local self = ItemMarket
   return (self.btn_BackPage):GetShow()
 end
 
 FGlobal_SpecialListPage = function()
-  -- function num : 0_75 , upvalues : ItemMarket
+  -- function num : 0_76 , upvalues : ItemMarket
   local self = ItemMarket
   return self.isSpecialInside
 end
 
 FGlobal_ItemmarketNew_OpenInventory = function()
-  -- function num : 0_76
+  -- function num : 0_77
   Inventory_SetFunctor(nil, nil, nil, nil)
   InventoryWindow_Show(true, false, true)
 end
 
 Panel_ItemMarket_BidDesc_Init = function()
-  -- function num : 0_77 , upvalues : itemMarketBidDesc, UI_TM
+  -- function num : 0_78 , upvalues : itemMarketBidDesc, UI_TM
   local self = itemMarketBidDesc
   ;
   (self._txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -4058,23 +4116,23 @@ Panel_ItemMarket_BidDesc_Init = function()
 end
 
 HandleClicked_ItemMarket_BidDesc_Open = function()
-  -- function num : 0_78 , upvalues : itemMarketBidDesc
+  -- function num : 0_79 , upvalues : itemMarketBidDesc
   local self = itemMarketBidDesc
   Panel_ItemMarket_BidDesc_Show()
 end
 
 Panel_ItemMarket_BidDesc_Show = function()
-  -- function num : 0_79
+  -- function num : 0_80
   Panel_ItemMarket_BidDesc:SetShow(true)
 end
 
 Panel_ItemMarket_BidDesc_Hide = function()
-  -- function num : 0_80
+  -- function num : 0_81
   Panel_ItemMarket_BidDesc:SetShow(false)
 end
 
 ItemMarket.registEventHandler = function(self)
-  -- function num : 0_81
+  -- function num : 0_82
   (self.edit_ItemName):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_EditText()")
   ;
   (self.edit_ItemName):RegistReturnKeyEvent("FGolbal_ItemMarketNew_Search()")
@@ -4092,6 +4150,10 @@ ItemMarket.registEventHandler = function(self)
   (self.btn_Close):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_Close()")
   ;
   (self.checkPopUp):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_PopUp()")
+  ;
+  (self.checkPopUp):addInputEvent("Mouse_On", "ItemMarketPopUp_ShowIconToolTip(true)")
+  ;
+  (self.checkPopUp):addInputEvent("Mouse_Out", "ItemMarketPopUp_ShowIconToolTip(false)")
   ;
   (self.btn_Search):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_Search()")
   ;
@@ -4125,7 +4187,7 @@ ItemMarket.registEventHandler = function(self)
 end
 
 ItemMarket.registMessageHandler = function(self)
-  -- function num : 0_82
+  -- function num : 0_83
   registerEvent("FromClient_notifyItemMarketMessage", "FromClient_notifyItemMarketMessage")
   registerEvent("FromClient_NotifyItemMarketByParty", "FromClient_NotifyItemMarketByParty")
   registerEvent("FromClient_InventoryUpdate", "ItemMarket_UpdateMoneyByWarehouse")

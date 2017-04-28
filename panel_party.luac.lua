@@ -408,10 +408,10 @@ local createPartyControls = function()
     partyMember._mp = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_PROGRESS2, partyMember._base, "PartyMember_Mp" .. index)
     partyMember._level = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, partyMember._base, "PartyMember_UserLevel" .. index)
     partyMember._conditionBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, partyMember._base, "PartyMember_ConditionBG" .. index)
-    partyMember._conditionTxt = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, partyMember._base, "PartyMember_ConditionTxt" .. index)
     partyMember._stylePartyOptionBtn = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, partyMember._base, "PartyMember_OptionBtn" .. index)
     partyMember._styleFollowBtn = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, partyMember._base, "PartyMember_FollowBtn" .. index)
     partyMember._distance = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, partyMember._base, "PartyMember_Distance" .. index)
+    partyMember._conditionTxt = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, partyMember._base, "PartyMember_ConditionTxt" .. index)
     CopyBaseProperty(controlTemplate._styleLeaderIcon, partyMember._leader)
     CopyBaseProperty(controlTemplate._styleUserName, partyMember._name)
     CopyBaseProperty(controlTemplate._styleBackGround, partyMember._base)
@@ -421,10 +421,10 @@ local createPartyControls = function()
     CopyBaseProperty(controlTemplate._styleMp, partyMember._mp)
     CopyBaseProperty(controlTemplate._styleUserLevel, partyMember._level)
     CopyBaseProperty(controlTemplate._styleConditionBG, partyMember._conditionBG)
-    CopyBaseProperty(controlTemplate._styleConditionTxt, partyMember._conditionTxt)
     CopyBaseProperty(controlTemplate._stylePartyOptionBtn, partyMember._stylePartyOptionBtn)
     CopyBaseProperty(controlTemplate._styleFollowBtn, partyMember._styleFollowBtn)
     CopyBaseProperty(controlTemplate._distance, partyMember._distance)
+    CopyBaseProperty(controlTemplate._styleConditionTxt, partyMember._conditionTxt)
     ;
     (partyMember._leader):SetShow(false)
     ;
@@ -1393,6 +1393,12 @@ partWidget_OnscreenEvent = function()
       Panel_Party:SetShow(true)
     end
     ResponseParty_updatePartyList()
+  end
+  -- DECOMPILER ERROR at PC48: Unhandled construct in 'MakeBoolean' P1
+
+  if CppDefine.ChangeUIAndResolution == true and (Panel_Party:GetRelativePosX() ~= 0 or Panel_Party:GetRelativePosY() ~= 0) then
+    Panel_Party:SetPosX(getScreenSizeX() * Panel_Party:GetRelativePosX() - Panel_Party:GetSizeX() / 2)
+    Panel_Party:SetPosY(getScreenSizeY() * Panel_Party:GetRelativePosY() - Panel_Party:GetSizeY() / 2)
   end
   changePositionBySever(Panel_Party, (CppEnums.PAGameUIType).PAGameUIPanel_Party, false, true, false)
   _uiComboLootingOption:ComputePos()

@@ -21,8 +21,29 @@ end
 PaGlobal_Extraction = {_screenX = nil, _screenY = nil, _extractionBG = (UI.getChildControl)(Panel_Window_Extraction, "ExtractionBackGround"), _buttonExtraction_EnchantStone = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_EnchantStone"), _buttonExtraction_Crystal = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Crystal"), _buttonExtraction_Cloth = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Cloth"), _buttonExtractionExit = (UI.getChildControl)(Panel_Window_Extraction, "Button_Exit")}
 -- DECOMPILER ERROR at PC67: Confused about usage of register: R2 in 'UnsetPending'
 
-PaGlobal_Extraction.initialize = function(self)
+PaGlobal_Extraction.getExtractionButtonEnchantStone = function(self)
   -- function num : 0_2
+  return self._buttonExtraction_EnchantStone
+end
+
+-- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
+
+PaGlobal_Extraction.getExtractionButtonCrystal = function(self)
+  -- function num : 0_3
+  return self._buttonExtraction_Crystal
+end
+
+-- DECOMPILER ERROR at PC73: Confused about usage of register: R2 in 'UnsetPending'
+
+PaGlobal_Extraction.getExtractionButtonCloth = function(self)
+  -- function num : 0_4
+  return self._buttonExtraction_Cloth
+end
+
+-- DECOMPILER ERROR at PC76: Confused about usage of register: R2 in 'UnsetPending'
+
+PaGlobal_Extraction.initialize = function(self)
+  -- function num : 0_5
   (self._extractionBG):setGlassBackground(true)
   ;
   (self._extractionBG):SetShow(true)
@@ -43,10 +64,10 @@ PaGlobal_Extraction.initialize = function(self)
 end
 
 registerEvent("onScreenResize", "Extraction_Resize")
--- DECOMPILER ERROR at PC74: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_Extraction.extraction_BtnResize = function(self)
-  -- function num : 0_3
+  -- function num : 0_6
   local btnEnchantStoneSizeX = (self._buttonExtraction_EnchantStone):GetSizeX() + 23
   local btnEnchantStoneTextPosX = btnEnchantStoneSizeX - btnEnchantStoneSizeX / 2 - (self._buttonExtraction_EnchantStone):GetTextSizeX() / 2
   local btnCrystalSizeX = (self._buttonExtraction_Crystal):GetSizeX() + 23
@@ -66,7 +87,7 @@ PaGlobal_Extraction.extraction_BtnResize = function(self)
 end
 
 Extraction_Resize = function()
-  -- function num : 0_4
+  -- function num : 0_7
   local self = PaGlobal_Extraction
   self._screenX = getScreenSizeX()
   self._screenY = getScreenSizeY()
@@ -96,10 +117,10 @@ Extraction_Resize = function()
   (self._buttonExtractionExit):ComputePos()
 end
 
--- DECOMPILER ERROR at PC79: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_Extraction.openPanel = function(self, isShow)
-  -- function num : 0_5
+  -- function num : 0_8
   if isShow == true then
     SetUIMode((Defines.UIMode).eUIMode_Extraction)
     setIgnoreShowDialog(true)
@@ -125,10 +146,10 @@ PaGlobal_Extraction.openPanel = function(self, isShow)
   PaGlobal_TutorialManager:handleOpenExtractionPanel(isShow)
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC91: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_Extraction.button_ExtractionCrystal_Click = function(self)
-  -- function num : 0_6
+  -- function num : 0_9
   if Panel_Window_Extraction_Crystal:GetShow() == false then
     ExtractionEnchantStone_WindowClose()
     ExtractionCloth_WindowClose()
@@ -139,14 +160,15 @@ PaGlobal_Extraction.button_ExtractionCrystal_Click = function(self)
   else
     PaGlobal_ExtractionCrystal:show(false)
     InventoryWindow_Close()
-    Panel_Equipment:SetShow(false, false)
+    EquipmentWindow_Close()
   end
+  PaGlobal_TutorialManager:handleClickExtractionCrystalButton()
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC94: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_Extraction.button_ExtractionEnchantStone_Click = function(self)
-  -- function num : 0_7
+  -- function num : 0_10
   if Panel_Window_Extraction_EnchantStone:GetShow() == false then
     Socket_ExtractionCrystal_WindowClose()
     ExtractionCloth_WindowClose()
@@ -155,15 +177,15 @@ PaGlobal_Extraction.button_ExtractionEnchantStone_Click = function(self)
   else
     ExtractionEnchantStone_WindowClose()
     InventoryWindow_Close()
-    Panel_Equipment:SetShow(false, false)
+    EquipmentWindow_Close()
   end
   PaGlobal_TutorialManager:handleClickExtractionEnchantStoneButton()
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC97: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_Extraction.button_ExtractionCloth_Click = function(self)
-  -- function num : 0_8
+  -- function num : 0_11
   if PaGlobal_ExtractionCloth:getShow() == false then
     ExtractionEnchantStone_WindowClose()
     Socket_ExtractionCrystal_WindowClose()
@@ -172,8 +194,9 @@ PaGlobal_Extraction.button_ExtractionCloth_Click = function(self)
   else
     ExtractionCloth_WindowClose()
     InventoryWindow_Close()
-    Panel_Equipment:SetShow(false, false)
+    EquipmentWindow_Close()
   end
+  PaGlobal_TutorialManager:handleClickExtractionClothButton()
 end
 
 PaGlobal_Extraction:initialize()

@@ -50,6 +50,7 @@ end
 
 PaGlobal_TutorialPhase_Hidel_FindNearNpc.startPhaseXXX = function(self, stepNo)
   -- function num : 0_3
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_Hidel_FindNearNpc:startStep() stepNo : " .. tostring(stepNo) .. " typeNo : " .. tostring(typeNo))
   self._currentStep = 0

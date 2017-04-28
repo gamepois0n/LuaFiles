@@ -113,7 +113,7 @@ BtnEvent_WorkerTrade = function()
     GrandWorldMap_CheckPopup(popupType.workerTrade)
     WorldMapPopupManager:increaseLayer(true)
     WorldMapPopupManager:push(Panel_WorkerTrade, true)
-    WorkerTrade_Open()
+    FGlobal_WorkerTrade_Update()
   end
 end
 

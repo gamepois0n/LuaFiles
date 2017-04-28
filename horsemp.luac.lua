@@ -408,5 +408,6 @@ registerEvent("EventSelfServantUpdate", "HorseMP_Update")
 registerEvent("EventSelfPlayerRideOff", "HorseMP_Close")
 registerEvent("EventSelfPlayerRideOn", "HorseMP_OpenByInteraction")
 registerEvent("EventSelfPlayerCarrierChanged", "HorseMP_EventSelfPlayerCarrierChanged")
+registerEvent("EventSelfServantUpdateOnlyHpMp", "HorseMP_Update")
 HorseMP_init()
 

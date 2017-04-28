@@ -301,6 +301,10 @@ FGlobal_ShowWorkerTooltip = function(workerData, uiBase, isRight, isPlant)
           local tooltipSizeY = Panel_Worker_Tooltip:GetSizeY()
           local scrnSizeX = getScreenSizeX()
           local scrnSizeY = getScreenSizeY()
+          if uiBase:IsUISubApp() then
+            posX = uiBase:GetScreenParentPosX()
+            posY = uiBase:GetScreenParentPosY()
+          end
           if scrnSizeX - posX - parentSizeX < posX then
             posX = posX - tooltipSizeX - 5
           else
@@ -329,6 +333,9 @@ FGlobal_ShowWorkerTooltip = function(workerData, uiBase, isRight, isPlant)
           Panel_Worker_Tooltip:SetPosY(posY)
           Panel_Worker_Tooltip:SetShow(true, false)
           Panel_Worker_Tooltip:setFlushAble(false)
+          if uiBase:IsUISubApp() then
+            Panel_Worker_Tooltip:OpenUISubApp()
+          end
         end
       end
     end
@@ -509,6 +516,10 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, uiBase, isRight, 
       local tooltipSizeY = Panel_Worker_Tooltip:GetSizeY()
       local scrnSizeX = getScreenSizeX()
       local scrnSizeY = getScreenSizeY()
+      if uiBase:IsUISubApp() then
+        posX = uiBase:GetScreenParentPosX()
+        posY = uiBase:GetScreenParentPosY()
+      end
       if posX < tooltipSizeX then
         posX = posX + parentSizeX + 5
       else
@@ -530,6 +541,9 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, uiBase, isRight, 
       Panel_Worker_Tooltip:SetPosY(posY)
       Panel_Worker_Tooltip:SetShow(true, false)
       Panel_Worker_Tooltip:setFlushAble(false)
+      if Panel_WorkerManager:IsUISubApp() then
+        Panel_Worker_Tooltip:OpenUISubApp()
+      end
     end
   end
 end
@@ -538,6 +552,9 @@ FGlobal_HideWorkerTooltip = function()
   -- function num : 0_5
   if Panel_Worker_Tooltip:GetShow() and workerInfoTooltip == nil then
     Panel_Worker_Tooltip:SetShow(false, false)
+    if Panel_Worker_Tooltip:IsUISubApp() then
+      Panel_Worker_Tooltip:CloseUISubApp()
+    end
   end
 end
 

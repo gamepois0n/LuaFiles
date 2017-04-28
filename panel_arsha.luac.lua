@@ -271,15 +271,15 @@ ArshaPvP_TeamA_Update = function(contents, key)
       local _txt_Level = (UI.getChildControl)(contents, "StaticText_Level")
       _txt_Level:SetShow(true)
       _txt_Level:SetPosX(7)
-      _txt_Level:SetPosY(5)
+      _txt_Level:SetPosY(0)
       local _txt_Class = (UI.getChildControl)(contents, "StaticText_Class")
       _txt_Class:SetShow(true)
       _txt_Class:SetPosX(80)
-      _txt_Class:SetPosY(5)
+      _txt_Class:SetPosY(0)
       local _txt_Name = (UI.getChildControl)(contents, "StaticText_Name")
       _txt_Name:SetShow(true)
       _txt_Name:SetPosX(175)
-      _txt_Name:SetPosY(5)
+      _txt_Name:SetPosY(0)
       local teamNo = waitListInfo:getTeamNo()
       local userNo = waitListInfo:getUserNo()
       local userLevel = waitListInfo:getCharacterLevel()
@@ -1710,8 +1710,19 @@ FromClient_CompetitionOptionChanged = function(isOpen, matchTimeLimit, targetSco
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SETTING_GAME_ACK"))
       end
       HandleClicked_ArshaPvP_ChangeOption()
+      ArshaPvP_Widget_Update()
     end
   end
+end
+
+FromClient_NotifyUseSkill = function(userName, skillName)
+  -- function num : 0_56
+  local message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ARSHA_NOTIFYUSESKILL_MESSAGE", "userName", userName, "skillName", skillName)
+  chatting_sendMessage("", message, (CppEnums.ChatType).System, (CppEnums.ChatSystemType).Undefine)
+end
+
+FromClient_NotifyUseSkillCoolTime = function(userNo, actorKey, skillKey, usableTime)
+  -- function num : 0_57
 end
 
 ArshaPvP_init()
@@ -1726,4 +1737,7 @@ registerEvent("FromClient_KillHistory", "FromClient_KillHistory")
 registerEvent("FromClient_EntryUserChangeTeam", "FromClient_EntryUserChangeTeam")
 registerEvent("FromClient_GetOutUserFromCompetition", "FromClient_GetOutUserFromCompetition")
 registerEvent("FromClient_ChangeAssistant", "FromClient_ChangeAssistant")
+registerEvent("FromClient_NotifyUseSkill", "FromClient_NotifyUseSkill")
+registerEvent("FromClient_NotifyUseSkillCoolTime", "FromClient_NotifyUseSkillCoolTime")
+Panel_Window_Arsha:RegisterUpdateFunc("SkillCooltime_UpdatePerFrame")
 

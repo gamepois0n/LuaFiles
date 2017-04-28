@@ -644,7 +644,7 @@ end
 Chatting_MessageColor = function(msgChatType, msgNoticeType, panelIndex)
   -- function num : 0_48 , upvalues : UI_color, UI_CT, UI_CNT
   local msgColor = UI_color.C_FFE7E7E7
-  if msgChatType == nil or msgChatType < -1 or msgChatType > 17 then
+  if msgChatType == nil or msgChatType < -1 or msgChatType > 18 then
     return UI_color.C_FFC4BEBE
   end
   local chatColorIndex = -1
@@ -742,8 +742,14 @@ Chatting_MessageColor = function(msgChatType, msgNoticeType, panelIndex)
       msgColor = UI_color.C_FF00B4FF
       return msgColor
     end
+    -- DECOMPILER ERROR at PC193: Unhandled construct in 'MakeBoolean' P1
+
     if UI_CT.Arsha == msgChatType and chatColorIndex == -1 then
       msgColor = UI_color.C_FFFFD237
+      return msgColor
+    end
+    if UI_CT.Team == msgChatType and chatColorIndex == -1 then
+      msgColor = UI_color.C_FFB97FEF
       return msgColor
     end
     return FGlobal_ColorList(chatColorIndex)
@@ -788,7 +794,11 @@ getContryTypeLua = function()
             if eCountryType.TW_ALPHA == gameServiceType or eCountryType.TW_REAL == gameServiceType then
               returnValue = (CppEnums.ContryCode).eContryCode_TW
             else
-              returnValue = (CppEnums.ContryCode).eContryCode_Count
+              if eCountryType.SA_ALPHA == gameServiceType or eCountryType.SA_REAL == gameServiceType then
+                returnValue = (CppEnums.ContryCode).eContryCode_SA
+              else
+                returnValue = (CppEnums.ContryCode).eContryCode_Count
+              end
             end
           end
         end
@@ -826,7 +836,15 @@ getContryDetailTypeLua = function()
           if eCountryType.NA_ALPHA == gameServiceType or eCountryType.NA_REAL == gameServiceType then
             returnValue = (CppEnums.ContryCode).eContryCode_NA
           else
-            returnValue = (CppEnums.ContryCode).eContryCode_Count
+            if eCountryType.TW_ALPHA == gameServiceType or eCountryType.TW_REAL == gameServiceType then
+              returnValue = (CppEnums.ContryCode).eContryCode_TW
+            else
+              if eCountryType.SA_ALPHA == gameServiceType or eCountryType.SA_REAL == gameServiceType then
+                returnValue = (CppEnums.ContryCode).eContryCode_SA
+              else
+                returnValue = (CppEnums.ContryCode).eContryCode_Count
+              end
+            end
           end
         end
       end
@@ -905,8 +923,13 @@ isGameTypeTaiwan = function()
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TW)
 end
 
-isCommonGameType = function()
+isGameTypeSouthAmerica = function()
   -- function num : 0_62
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_SA)
+end
+
+isCommonGameType = function()
+  -- function num : 0_63
   local returnValue = false
   if isGameTypeJapan() then
     returnValue = true
@@ -929,9 +952,9 @@ isCommonGameType = function()
 end
 
 isItemMarketSecureCode = function()
-  -- function num : 0_63
+  -- function num : 0_64
   local isSecureCode = false
-  if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan()) and isSecureCode == true then
+  if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSouthAmerica()) and isSecureCode == true then
     return true
   else
     return false
@@ -943,7 +966,7 @@ local g_TimerNo = 0
 local g_Timerlist = {}
 local g_TimerCount = 0
 luaTimer_UpdatePerFrame = function(fDelta)
-  -- function num : 0_64 , upvalues : g_TimerCount, g_Timerlist
+  -- function num : 0_65 , upvalues : g_TimerCount, g_Timerlist
   if g_TimerCount <= 0 then
     return 
   end
@@ -984,7 +1007,7 @@ luaTimer_UpdatePerFrame = function(fDelta)
 end
 
 luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
-  -- function num : 0_65 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
+  -- function num : 0_66 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
   g_TimerNo = g_TimerNo + 1
   local tempTimer = {}
   tempTimer._timerNo = g_TimerNo
@@ -1003,7 +1026,7 @@ luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
 end
 
 luaTimer_RemoveEvent = function(timerNo)
-  -- function num : 0_66 , upvalues : g_Timerlist, g_TimerCount
+  -- function num : 0_67 , upvalues : g_Timerlist, g_TimerCount
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
   if g_Timerlist[timerNo] ~= nil then

@@ -7,108 +7,101 @@ Panel_Window_StableStallion_Effect:SetShow(false)
 local horseToehold = (UI.getChildControl)(Panel_Window_StableStallion_Effect, "Static_HorseToehold")
 local awakenSuccess = (UI.getChildControl)(Panel_Window_StableStallion_Effect, "Static_AwakenSuccess")
 local awakenFail = (UI.getChildControl)(Panel_Window_StableStallion_Effect, "Static_AwakenFail")
-local limitEffect = false
 local effectControl = {}
 local controlCount = 0
 StableStallion_AwakenEffect = function(isAwaken)
-  -- function num : 0_0 , upvalues : horseToehold, awakenSuccess, awakenFail, limitEffect
-  local index = 0
+  -- function num : 0_0 , upvalues : horseToehold, awakenFail, awakenSuccess
   if isAwaken == 0 then
-    local randomIndexX = getRandomValue(0, 300)
-    local randomIndexY = getRandomValue(0, 300)
-    StableStallion_Effect(Panel_Window_StableStallion_Effect, 6, randomIndexX - 100, randomIndexY)
+    StableStallion_Effect(Panel_Window_StableStallion_Effect, 6, 0, 220)
     return 
   else
-    do
-      if isAwaken == true then
-        horseToehold:SetShow(true)
-        awakenSuccess:SetShow(true)
-        awakenFail:SetShow(false)
-        horseToehold:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_AWAKENSUCCESS"))
-        if limitEffect == false then
-          StableStallion_Effect(Panel_Window_StableStallion_Effect, 8, 0, 220)
-          limitEffect = true
-        end
-        local randomIndexX = getRandomValue(0, 1600)
-        local randomIndexY = getRandomValue(0, 1400)
-        local randomEffect = getRandomValue(0, index)
-        if randomEffect == 0 then
-          StableStallion_Effect(Panel_Window_StableStallion_Effect, 7, randomIndexX - 800, randomIndexX - 500)
-        else
-          if randomEffect == 1 then
-            StableStallion_Effect(Panel_Window_StableStallion_Effect, 6, randomIndexX - 800, randomIndexX - 500)
-          end
-        end
-        index = 1
-      else
-        do
-          horseToehold:SetShow(true)
-          awakenSuccess:SetShow(false)
-          awakenFail:SetShow(true)
-          horseToehold:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_AWAKENFAIL"))
-          if limitEffect == false then
-            Panel_Window_StableStallion_Effect:AddEffect("fUI_RedWar_Lose01", false, 0, 220)
-            limitEffect = true
-          end
-          index = 10
-        end
-      end
+    if isAwaken == true then
+      horseToehold:SetShow(true)
+      awakenFail:SetShow(false)
+      horseToehold:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_AWAKENSUCCESS"))
+      StableStallion_Effect(Panel_Window_StableStallion_Effect, 7, 0, 220)
+    else
+      horseToehold:SetShow(true)
+      awakenSuccess:SetShow(false)
+      horseToehold:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_AWAKENFAIL"))
+      StableStallion_Effect(Panel_Window_StableStallion_Effect, 12, 0, 220)
     end
   end
 end
 
+StableStallion_doAwakenEffect = function()
+  -- function num : 0_1
+  StableStallion_Effect(Panel_Window_StableStallion_Effect, 13, 0, -190)
+end
+
 StableStallion_Effect = function(control, index, posX, posY)
-  -- function num : 0_1 , upvalues : effectControl, controlCount
+  -- function num : 0_2 , upvalues : effectControl, controlCount
   if index == 0 then
     control:AddEffect("fUI_Alchemy_UpgradeStart01", false, posX, posY)
   else
-    if index == 1 then
-      control:AddEffect("UI_ImperialLight", false, posX, posY)
+  end
+  if index ~= 1 or index == 2 then
+    control:AddEffect("fCO_Egg_Random_01B", false, posX, posY)
+  else
+    if index == 3 then
+      control:AddEffect("UI_NewSkill01", false, posX, posY)
+      control:AddEffect("fUI_Horse_Upgrade_02A", false, posX, posY)
     else
-      if index == 2 then
-        control:AddEffect("fCO_Egg_Random_01B", false, posX, posY)
+      if index == 4 then
+        control:AddEffect("fUI_Horse_Upgrade_03A", false, posX, posY)
       else
-        if index == 3 then
-          control:AddEffect("UI_NewSkill01", false, posX, posY)
+        if index == 5 then
+          control:AddEffect("fUI_Horse_Upgrade_04A", false, posX, posY)
         else
-          if index == 4 then
-            control:AddEffect("UI_QustComplete02", false, posX, posY)
+          if index == 6 then
+            control:AddEffect("fUI_Horse_Upgrade_05B", false, posX, posY)
           else
-            if index == 5 then
-              control:AddEffect("fCO_Egg_Random_01B", false, posX, posY)
+            if index == 7 then
+              control:AddEffect("fUI_Horse_Upgrade_06B", false, posX, posY)
             else
-              if index == 6 then
-                control:AddEffect("fUI_ImperialStart", false, posX, posY)
-              else
-                if index == 7 then
-                  control:AddEffect("fUI_GoldenBell_01A", false, posX, posY)
-                else
-                  if index == 8 then
-                    control:AddEffect("fUI_RedWar_Win01", false, posX, posY)
-                  end
-                end
-              end
             end
           end
         end
       end
     end
   end
-  -- DECOMPILER ERROR at PC82: Confused about usage of register: R4 in 'UnsetPending'
+  if index ~= 8 or index == 9 then
+    control:AddEffect("fUI_Horse_Upgrade_01A", false, posX, posY)
+    control:AddEffect("CO_UI_Horse_Upgrade_01A", false, posX, posY)
+  else
+    if index == 10 then
+      control:AddEffect("fUI_Horse_Upgrade_01B", false, posX, posY)
+      control:AddEffect("CO_UI_Horse_Upgrade_01B", false, posX, posY)
+    else
+      if index == 11 then
+        control:AddEffect("fUI_Horse_Upgrade_01C", false, posX, posY)
+        control:AddEffect("CO_UI_Horse_Upgrade_01C", false, posX, posY)
+      else
+        if index == 12 then
+          control:AddEffect("fUI_Horse_Upgrade_06A", false, posX, posY)
+        else
+          if index == 13 then
+            control:AddEffect("fUI_Horse_Upgrade_05A", false, posX, posY)
+          end
+        end
+      end
+    end
+  end
+  -- DECOMPILER ERROR at PC139: Confused about usage of register: R4 in 'UnsetPending'
 
   effectControl[controlCount] = control
   controlCount = controlCount + 1
 end
 
 StableStallion_EffectErase = function()
-  -- function num : 0_2 , upvalues : controlCount, effectControl
+  -- function num : 0_3 , upvalues : controlCount, effectControl
   for i = 0, controlCount - 1 do
     (effectControl[i]):EraseAllEffect()
   end
 end
 
 StableStallion_EffectClose = function()
-  -- function num : 0_3 , upvalues : awakenFail, awakenSuccess, horseToehold, limitEffect
+  -- function num : 0_4 , upvalues : awakenFail, awakenSuccess, horseToehold
   Panel_Window_StableStallion_Effect:SetShow(false)
   awakenFail:SetShow(false)
   awakenSuccess:SetShow(false)

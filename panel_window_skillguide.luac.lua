@@ -47,16 +47,21 @@ local difficultyDesc_Giant_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LU
 local difficultyDesc_Tamer = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
 local difficultyDesc_Tamer_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_BladeMaster = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
+local difficultyDesc_BladeMaster_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_Valkyrie = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
 local difficultyDesc_Valkyrie_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_BladeMasterWomen = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
+local difficultyDesc_BladeMasterWomen_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_Wizard = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
 local difficultyDesc_Wizard_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_WizardWomen = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
 local difficultyDesc_WizardWomen_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_NinjaWomen = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
+local difficultyDesc_NinjaWomen_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_NinjaMan = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
+local difficultyDesc_NinjaMan_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_Darkelf = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
+local difficultyDesc_Darkelf_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 Panel_Window_SkillGuide_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
   (UIAni.AlphaAnimation)(1, Panel_Window_SkillGuide, 0, 0.15)
@@ -1129,7 +1134,7 @@ Panel_SkillGuide_ScrollEventFunc = function(UpDown)
 end
 
 SetClassMovieInfo = function(classNo)
-  -- function num : 0_5 , upvalues : maxCount, skillMovieList, ui, classType, difficultyDesc_Warrior_TW, difficultyDesc_Warrior, difficultyDesc_Ranger_TW, difficultyDesc_Ranger, difficultyDesc_Sorcer_TW, difficultyDesc_Sorcer, difficultyDesc_Giant_TW, difficultyDesc_Giant, difficultyDesc_Tamer_TW, difficultyDesc_Tamer, difficultyDesc_BladeMaster, difficultyDesc_BladeMasterWomen, difficultyDesc_Valkyrie_TW, difficultyDesc_Valkyrie, difficultyDesc_NinjaWomen, difficultyDesc_NinjaMan, difficultyDesc_Darkelf, difficultyDesc_Wizard_TW, difficultyDesc_Wizard, difficultyDesc_WizardWomen_TW, difficultyDesc_WizardWomen
+  -- function num : 0_5 , upvalues : maxCount, skillMovieList, ui, classType, difficultyDesc_Warrior_TW, difficultyDesc_Warrior, difficultyDesc_Ranger_TW, difficultyDesc_Ranger, difficultyDesc_Sorcer_TW, difficultyDesc_Sorcer, difficultyDesc_Giant_TW, difficultyDesc_Giant, difficultyDesc_Tamer_TW, difficultyDesc_Tamer, difficultyDesc_BladeMaster_TW, difficultyDesc_BladeMaster, difficultyDesc_BladeMasterWomen_TW, difficultyDesc_BladeMasterWomen, difficultyDesc_Valkyrie_TW, difficultyDesc_Valkyrie, difficultyDesc_NinjaWomen_TW, difficultyDesc_NinjaWomen, difficultyDesc_NinjaMan_TW, difficultyDesc_NinjaMan, difficultyDesc_Darkelf_TW, difficultyDesc_Darkelf, difficultyDesc_Wizard_TW, difficultyDesc_Wizard, difficultyDesc_WizardWomen_TW, difficultyDesc_WizardWomen
   for index = 0, maxCount - 1 do
     ((skillMovieList[index])._bg):SetShow(false)
   end
@@ -1182,10 +1187,20 @@ SetClassMovieInfo = function(classNo)
               end
             else
               if classNo == 20 then
-                ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_BladeMaster[index]))
+                if isGameTypeTaiwan() then
+                  ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_BladeMaster_TW[index]))
+                else
+                  ;
+                  ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_BladeMaster[index]))
+                end
               else
                 if classNo == 21 then
-                  ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_BladeMasterWomen[index]))
+                  if isGameTypeTaiwan() then
+                    ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_BladeMasterWomen_TW[index]))
+                  else
+                    ;
+                    ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_BladeMasterWomen[index]))
+                  end
                 else
                   if classNo == 24 then
                     if isGameTypeTaiwan() then
@@ -1196,13 +1211,28 @@ SetClassMovieInfo = function(classNo)
                     end
                   else
                     if classNo == 25 then
-                      ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaWomen[index]))
+                      if isGameTypeTaiwan() then
+                        ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaWomen_TW[index]))
+                      else
+                        ;
+                        ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaWomen[index]))
+                      end
                     else
                       if classNo == 26 then
-                        ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaMan[index]))
+                        if isGameTypeTaiwan() then
+                          ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaMan_TW[index]))
+                        else
+                          ;
+                          ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaMan[index]))
+                        end
                       else
                         if classNo == 27 then
-                          ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Darkelf[index]))
+                          if isGameTypeTaiwan() then
+                            ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Darkelf_TW[index]))
+                          else
+                            ;
+                            ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Darkelf[index]))
+                          end
                         else
                           if classNo == 28 then
                             if isGameTypeTaiwan() then

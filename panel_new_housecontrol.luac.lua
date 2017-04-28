@@ -268,13 +268,27 @@ Set_HouseUseType_Texture_BG = function(_control)
                                                                                     HouseProgressSection_SetBaseTextureUV(_Target, path, 1, 477, 626, 544)
                                                                                   else
                                                                                     do
-                                                                                      if useType == 0 then
+                                                                                      if useType == 22 then
                                                                                         local path = "new_ui_common_forlua/Window/HouseInfo/HouseInfo_01.dds"
-                                                                                        HouseProgressSection_SetBaseTextureUV(_Target, path, 1, 1, 626, 68)
+                                                                                        HouseProgressSection_SetBaseTextureUV(_Target, path, 1, 477, 626, 544)
                                                                                       else
                                                                                         do
-                                                                                          local path = "new_ui_common_forlua/Window/HouseInfo/HouseInfo_01.dds"
-                                                                                          HouseProgressSection_SetBaseTextureUV(_Target, path, 1, 545, 626, 612)
+                                                                                          if useType == 23 then
+                                                                                            local path = "new_ui_common_forlua/Window/HouseInfo/HouseInfo_01.dds"
+                                                                                            HouseProgressSection_SetBaseTextureUV(_Target, path, 1, 477, 626, 544)
+                                                                                          else
+                                                                                            do
+                                                                                              if useType == 0 then
+                                                                                                local path = "new_ui_common_forlua/Window/HouseInfo/HouseInfo_01.dds"
+                                                                                                HouseProgressSection_SetBaseTextureUV(_Target, path, 1, 1, 626, 68)
+                                                                                              else
+                                                                                                do
+                                                                                                  local path = "new_ui_common_forlua/Window/HouseInfo/HouseInfo_01.dds"
+                                                                                                  HouseProgressSection_SetBaseTextureUV(_Target, path, 1, 545, 626, 612)
+                                                                                                end
+                                                                                              end
+                                                                                            end
+                                                                                          end
                                                                                         end
                                                                                       end
                                                                                     end
@@ -869,10 +883,18 @@ HouseControlManager.UseTypeIconTexture = function(self, index, useType)
                                           if useType == 21 then
                                             pos = {189, 303, 207, 321}
                                           else
-                                            if useType == 0 then
-                                              pos = {170, 265, 188, 283}
+                                            if useType == 22 then
+                                              pos = {246, 303, 264, 321}
                                             else
-                                              pos = {0, 0, 0, 0}
+                                              if useType == 23 then
+                                                pos = {265, 303, 283, 321}
+                                              else
+                                                if useType == 0 then
+                                                  pos = {170, 265, 188, 283}
+                                                else
+                                                  pos = {0, 0, 0, 0}
+                                                end
+                                              end
                                             end
                                           end
                                         end
@@ -971,10 +993,18 @@ HouseControlManager.WorkinUseTypeIconTexture = function(self, index, useType)
                                           if useType == 21 then
                                             path = useType .. ".dds"
                                           else
-                                            if useType == 0 then
+                                            if useType == 22 then
                                               path = useType .. ".dds"
                                             else
-                                              path = useType .. ".dds"
+                                              if useType == 23 then
+                                                path = useType .. ".dds"
+                                              else
+                                                if useType == 0 then
+                                                  path = useType .. ".dds"
+                                                else
+                                                  path = useType .. ".dds"
+                                                end
+                                              end
                                             end
                                           end
                                         end
@@ -2912,6 +2942,10 @@ pos = {388, 44, 430, 86}
 , 
 [(CppEnums.eHouseUseType).WagonParts] = {path = "new_ui_common_forlua/Window/HouseInfo/HouseIcon.dds", 
 pos = {345, 44, 387, 86}
+}
+, 
+[(CppEnums.eHouseUseType).AssetManagementshop] = {path = "new_ui_common_forlua/Window/HouseInfo/HouseIcon.dds", 
+pos = {388, 259, 430, 301}
 }
 }
 Set_HouseUseType_Texture_Icon = function(_Target)

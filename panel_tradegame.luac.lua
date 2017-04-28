@@ -40,6 +40,12 @@ local btnSellAll = (UI.getChildControl)(Panel_TradeGame, "Button_SellAll")
 local remainCount = (UI.getChildControl)(Panel_TradeGame, "StaticText_RemainCount")
 local processMsg = (UI.getChildControl)(Panel_TradeGame, "StaticText_ProcessMsg")
 local resultMsg = (UI.getChildControl)(Panel_TradeGame, "StaticText_ResultMsg")
+local tradeGameDescBG = (UI.getChildControl)(Panel_TradeGame, "Static_TradeGame_DescBG")
+local tradeGameDescText = (UI.getChildControl)(Panel_TradeGame, "StaticText_Desc")
+local tradeGameDescText_1 = (UI.getChildControl)(Panel_TradeGame, "StaticText_Desc_1")
+local tradeGameDescText_2 = (UI.getChildControl)(Panel_TradeGame, "StaticText_Desc_2")
+local tradeGameDescText_3 = (UI.getChildControl)(Panel_TradeGame, "StaticText_Desc_3")
+local tradeGameDescText_4 = (UI.getChildControl)(Panel_TradeGame, "StaticText_Desc_4")
 local btnClose = (UI.getChildControl)(Panel_TradeGame, "Button_Close")
 local btnQuestion = (UI.getChildControl)(Panel_TradeGame, "Button_Question")
 local msgTooltipType = 0
@@ -56,6 +62,17 @@ processMsg:addInputEvent("Mouse_On", "TradeGame_HelpDesc(true, " .. msgTooltipTy
 processMsg:addInputEvent("Mouse_Out", "TradeGame_HelpDesc( false )")
 btnClose:addInputEvent("Mouse_LUp", "Fglobal_TradeGame_Close()")
 processMsg:SetAutoResize(true)
+local textSizeY = tradeGameDescText:GetTextSizeY()
+tradeGameDescText:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+tradeGameDescText:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TRADEGAME_DESC"))
+tradeGameDescText_1:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+tradeGameDescText_1:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TRADEGAME_DESC1"))
+tradeGameDescText_2:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+tradeGameDescText_2:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TRADEGAME_DESC2"))
+tradeGameDescText_3:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+tradeGameDescText_3:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TRADEGAME_DESC3"))
+tradeGameDescText_4:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+tradeGameDescText_4:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TRADEGAME_DESC4"))
 if (getGameServiceType() == 7 or getGameServiceType() == 8) and getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
   processMsg:SetTextMode(UI_TM.eTextMode_LimitText)
 else
@@ -554,8 +571,34 @@ ProcessMsg_SetPos = function()
   end
 end
 
+TradeGameDesc_SetPos = function()
+  -- function num : 0_18 , upvalues : textSizeY, tradeGameDescBG, tradeGameDescText, tradeGameDescText_1, tradeGameDescText_2, tradeGameDescText_3, tradeGameDescText_4
+  local index = 0
+  local sizeY = 0
+  local setPos = function(control, nextControl)
+    -- function num : 0_18_0 , upvalues : sizeY, textSizeY, index, tradeGameDescBG
+    sizeY = control:GetTextSizeY()
+    if textSizeY < sizeY then
+      index = index + 1
+    end
+    if nextControl ~= nil then
+      nextControl:SetPosY(nextControl:GetPosY() + textSizeY * index + 2)
+    else
+      Panel_TradeGame:SetSize(Panel_TradeGame:GetSizeX(), Panel_TradeGame:GetSizeY() + textSizeY * index)
+      tradeGameDescBG:SetSize(tradeGameDescBG:GetSizeX(), tradeGameDescBG:GetSizeY() + textSizeY * index)
+    end
+  end
+
+  setPos(tradeGameDescText, tradeGameDescText_1)
+  setPos(tradeGameDescText_1, tradeGameDescText_2)
+  setPos(tradeGameDescText_2, tradeGameDescText_3)
+  setPos(tradeGameDescText_3, tradeGameDescText_4)
+  setPos(tradeGameDescText_4, nil)
+end
+
 setTradeGameCountrySet()
 registerEvent("FromClient_TradeGameStart", "FromClient_TradeGameStart")
 registerEvent("FromClient_TradeGameResult", "FromClient_TradeGameResult")
 registerEvent("FromClient_TradeGameReciveDice", "FromClient_TradeGameReciveDice")
+TradeGameDesc_SetPos()
 

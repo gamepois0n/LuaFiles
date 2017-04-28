@@ -659,9 +659,22 @@ ServantIcon_Resize = function()
   local self = servantIcon
   screenX = getScreenSizeX()
   screenY = getScreenSizeY()
-  if not changePositionBySever(Panel_Window_Servant, (CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, true, true, false) then
-    Panel_Window_Servant:SetPosX(10)
-    Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_Window_Servant:GetRelativePosX() == 0 and Panel_Window_Servant:GetRelativePosY() == 0 then
+      Panel_Window_Servant:SetPosX(10)
+      Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
+    else
+      Panel_Window_Servant:SetPosX(getScreenSizeX() * Panel_Window_Servant:GetRelativePosX() - Panel_Window_Servant:GetSizeX() / 2)
+      Panel_Window_Servant:SetPosY(getScreenSizeY() * Panel_Window_Servant:GetRelativePosY() - Panel_Window_Servant:GetSizeY() / 2)
+    end
+    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+      Panel_Window_Servant:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+    end
+  else
+    if not changePositionBySever(Panel_Window_Servant, (CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, true, true, false) then
+      Panel_Window_Servant:SetPosX(10)
+      Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
+    end
   end
 end
 

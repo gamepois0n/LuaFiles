@@ -402,7 +402,10 @@ PaGlobal_LatestQuest.setButtons = function(self, index, uiQuestInfo)
     local questStaticStatus = questList_getQuestStatic((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest)
     local posCount = questStaticStatus:getQuestPositionCount()
     local isCleared = uiQuestInfo._isCleared
-    local enableNavi = (posCount ~= 0 and not isCleared)
+    local enableNavi = true
+    if uiQuestInfo:isSatisfied() == false and posCount == 0 then
+      enableNavi = false
+    end
     local isMouseOn = FGlobal_QuestWidget_IsMouseOn()
     if enableNavi == true then
       (questEntry._uiAutoNaviBtn):SetShow(isMouseOn)
@@ -446,7 +449,7 @@ PaGlobal_LatestQuest.setButtons = function(self, index, uiQuestInfo)
       (questEntry._uiNaviBtn):addInputEvent("Mouse_LUp", "HandleClicked_CallBlackSpirit()")
     end
   end
-  -- DECOMPILER ERROR: 7 unprocessed JMP targets
+  -- DECOMPILER ERROR: 4 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC65: Confused about usage of register: R7 in 'UnsetPending'

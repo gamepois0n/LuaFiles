@@ -76,6 +76,7 @@ end
 
 PaGlobal_TutorialPhase_InteractionSupplyBox.startPhaseXXX = function(self, stepNo)
   -- function num : 0_3 , upvalues : classType
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_InteractionSupplyBox:startPhase()")
   self._currentStep = 0

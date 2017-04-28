@@ -258,6 +258,8 @@ GuildListInfoPage.initialize = function(self)
   (self._contentGuildList):addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
   ;
   (self._contentGuildList):addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
+  ;
+  (GuildListInfoPage._textBusinessFunds):SetShow(false)
   createListInfo = function(pIndex)
     -- function num : 0_3_0 , upvalues : UCT, self, _copyGrade, _copyLevel, _copyClass, _copyCharName, _copyContributedTendency, _copyActivity, _copyPartLine, _copyContractButton, _copyGuardHim, _constStartY, isVoiceOpen, _copySaying, _copyListening
     local rtGuildListInfo = {}
@@ -475,12 +477,12 @@ GuildListInfoPage.initialize = function(self)
   ;
   (self._buttonListBG):addInputEvent("Mouse_Out", "MouseOutGuildMenuButton()")
   for index = 0, _constGuildListMaxCount - 1 do
-    -- DECOMPILER ERROR at PC197: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC202: Confused about usage of register: R17 in 'UnsetPending'
 
     (self._list)[index] = createListInfo(index)
   end
   for index = 0, _UI_Menu_Button.Type_Count - 1 do
-    -- DECOMPILER ERROR at PC209: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC214: Confused about usage of register: R17 in 'UnsetPending'
 
     (self._buttonList)[index] = createListInfoButton(index)
     ;
@@ -923,7 +925,6 @@ HandleClickedVoiceChatSaying = function(index)
   end
 
         if isSaying == false then
-          _PA_LOG("asdf", "이미 말못�\168")
           return 
         end
         local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "Lua_Guild_List_VoiceChatControl_ForceSpeakOff", "GuildMember", myGuildMemberInfo:getName())
@@ -987,7 +988,6 @@ HandleClicked_VoiceChatListeningVolume = function()
   if myGuildMemberInfo:isSelf() then
     ToClient_setSpeakerVolume(volume)
     if prevVoiceChatListen ~= isListening then
-      _PA_LOG("asdf", "옵션�\180 �\128�\189 됩니�\164.")
       ToClient_VoiceChatChangeState((CppEnums.VoiceChatType).eVoiceChatType_Guild, myGuildMemberInfo:getUserNo(), isSaying, isListening, false)
     end
     FGlobal_VoiceChatState()
@@ -1183,7 +1183,6 @@ HandleClick_GuildMemberList_Listening = function(index)
   local dataIdx = (tempGuildList[index + 1]).idx
   local myGuildMemberInfo = myGuildListInfo:getMember(dataIdx)
   if myGuildMemberInfo == nil then
-    _PA_LOG("asdf", " 길드원을 찾을 �\152 없습니다. index : " .. tostring(index) .. " dataIdx : " .. tostring(dataIdx))
     return 
   end
   listening_Volume:SetShow(true)
@@ -1597,7 +1596,9 @@ GuildListInfoPage.UpdateData = function(self)
   local businessFunds_s64 = myGuildListInfo:getGuildBusinessFunds_s64()
   local guildGrade = myGuildListInfo:getGuildGrade()
   ;
-  (GuildListInfoPage._textBusinessFunds):SetText(makeDotMoney(businessFunds_s64))
+  (GuildListInfoPage._textBusinessFundsBG):SetText(PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_GUILDMONEY") .. " <PAColor0xffffebbc>" .. makeDotMoney(businessFunds_s64) .. "<PAOldColor>")
+  ;
+  (GuildListInfoPage._textBusinessFunds):SetShow(false)
   local memberCount = myGuildListInfo:getMemberCount()
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
@@ -1659,7 +1660,7 @@ GuildListInfoPage.UpdateData = function(self)
                   ;
                   (((self._list)[index])._grade):addInputEvent("Mouse_Out", "GuildListInfoTooltip_Grade( false, " .. index .. ", " .. gradeType .. " )")
                   local userNo = myGuildMemberInfo:getUserNo()
-                  -- DECOMPILER ERROR at PC266: Confused about usage of register: R15 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC279: Confused about usage of register: R15 in 'UnsetPending'
 
                   tempGuildUserNolist[index] = userNo
                   if myGuildMemberInfo:isSelf() then
@@ -1852,47 +1853,47 @@ GuildListInfoPage.UpdateData = function(self)
                                   end
                                   contentSizeY = contentSizeY + (((self._list)[index])._charName):GetSizeY() + 2
                                   btn_GuildMasterMandate:addInputEvent("Mouse_LUp", "HandleClicked_GuildMasterMandate( " .. index .. " )")
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC953: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
 
                                 end
                               end
@@ -2410,7 +2411,7 @@ FromClient_RequestChangeGuildMemberGrade = function(grade)
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CLAN_GRADECHANGE_MESSAGE_2"))
         else
           if grade == 2 then
-            Proc_ShowMessage_Ack(PAGetString(DEfines.StringSheet_GAME, "LUA_CLAN_GRADECHANGE_MESSAGE_3"))
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CLAN_GRADECHANGE_MESSAGE_3"))
           end
         end
       end

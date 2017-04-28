@@ -15,15 +15,22 @@ local defaultWorkingListSize = 0
 local defaultWorkingDataSizeWithoutList = 0
 local defaultWorkingPanelSizeWithoutList = 0
 local tentInformationMouseOverActorKey = 0
+local defaultPercentPosX = 0
+local defaultIconPruningPosX = 0
+local defaultIconInsectDamegePosX = 0
+local defalutRemainTimePosX = _remainTime:GetPosX()
+local defalutWorkingDataBGSizeX = _workingDataBg:GetSizeX()
+local defalutWorkingListBGSizeX = _workingListBg:GetSizeX()
+local defalutPanelSizeX = Panel_Worldmap_TentInfo:GetSizeX()
 local template = {_iconSlot = (UI.getChildControl)(Panel_Worldmap_TentInfo, "Static_C_IconSlot"), _icon = (UI.getChildControl)(Panel_Worldmap_TentInfo, "Static_C_Icon"), _itemName = (UI.getChildControl)(Panel_Worldmap_TentInfo, "StaticText_C_ItemName"), _gageBg = (UI.getChildControl)(Panel_Worldmap_TentInfo, "Static_C_GaugeBG"), _progress = (UI.getChildControl)(Panel_Worldmap_TentInfo, "Progress2_C_Gauge"), _percent = (UI.getChildControl)(Panel_Worldmap_TentInfo, "StaticText_C_Percent"), _iconPruning = (UI.getChildControl)(Panel_Worldmap_TentInfo, "Static_CropsIcon_Pruning"), _iconInsectDamege = (UI.getChildControl)(Panel_Worldmap_TentInfo, "Static_CropsIcon_InsectDamege")}
 local createList = {}
 local initTentInfo = function()
-  -- function num : 0_0 , upvalues : template, workingRawSizeY, defaultWorkingListSize, _workingListBg, defaultWorkingDataSizeWithoutList, _workingDataBg, defaultWorkingPanelSizeWithoutList, UI_TYPE, createList
+  -- function num : 0_0 , upvalues : template, workingRawSizeY, defaultWorkingListSize, _workingListBg, defaultWorkingDataSizeWithoutList, _workingDataBg, defaultWorkingPanelSizeWithoutList, UI_TYPE, createList, defaultPercentPosX, defaultIconPruningPosX, defaultIconInsectDamegePosX
   for _,value in pairs(template) do
     workingRawSizeY = (math.max)(workingRawSizeY, value:GetSizeY())
     value:SetShow(false)
   end
-  workingRawSizeY = workingRawSizeY + 1
+  workingRawSizeY = workingRawSizeY + 6
   defaultWorkingListSize = _workingListBg:GetSizeY() - workingRawSizeY
   defaultWorkingDataSizeWithoutList = _workingDataBg:GetSizeY() - _workingListBg:GetSizeY()
   defaultWorkingPanelSizeWithoutList = Panel_Worldmap_TentInfo:GetSizeY() - _workingListBg:GetSizeY()
@@ -67,22 +74,35 @@ local initTentInfo = function()
 
     createList[index] = dataGroup
     pushYValue = pushYValue + workingRawSizeY
+    defaultPercentPosX = (dataGroup._percent):GetPosX()
+    defaultIconPruningPosX = (dataGroup._iconPruning):GetPosX()
+    defaultIconInsectDamegePosX = (dataGroup._iconInsectDamege):GetPosX()
   end
 end
 
 local tooltipTentUI = 0
 FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWrapper)
-  -- function num : 0_1 , upvalues : _remainTime, tentInformationMouseOverActorKey, createList, UI_INSTALL, _workingListBg, _workingText, defaultWorkingListSize, _workingDataBg, defaultWorkingDataSizeWithoutList, defaultWorkingPanelSizeWithoutList, workingRawSizeY, tooltipTentUI
+  -- function num : 0_1 , upvalues : _remainTime, tentInformationMouseOverActorKey, createList, UI_INSTALL, defaultPercentPosX, defaultIconPruningPosX, defaultIconInsectDamegePosX, _workingListBg, _workingText, defaultWorkingListSize, _workingDataBg, defaultWorkingDataSizeWithoutList, defaultWorkingPanelSizeWithoutList, workingRawSizeY, defalutRemainTimePosX, defalutWorkingListBGSizeX, defalutWorkingDataBGSizeX, defalutPanelSizeX, tooltipTentUI
   local expireTime = householdDataWithInstallationWrapper:getSelfTentExpiredTime_s64()
   local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
   _remainTime:SetText(lefttimeText)
   local maxCount = ToClient_GetMaxHarvestCount()
   local count = householdDataWithInstallationWrapper:getSelfHarvestCount()
   tentInformationMouseOverActorKey = householdDataWithInstallationWrapper:getActorKeyRaw()
+  local nameSizeX = 0
   local viewIndex = 0
   for index = 0, maxCount - 1 do
     local dataGroup = createList[viewIndex]
     if count <= index then
+      for index = 0, viewIndex - 1 do
+        local group = createList[index]
+        ;
+        (group._percent):SetPosX((group._percent):GetPosX() + nameSizeX)
+        ;
+        (group._iconPruning):SetPosX((group._iconPruning):GetPosX() + nameSizeX)
+        ;
+        (group._iconInsectDamege):SetPosX((group._iconInsectDamege):GetPosX() + nameSizeX)
+      end
       break
     end
     local progressingInfo = householdDataWithInstallationWrapper:getInstallationProgressingInfo(index)
@@ -158,20 +178,47 @@ FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWra
             (dataGroup._iconInsectDamege):setRenderTexture((dataGroup._iconInsectDamege):getBaseTexture())
           end
           do
-            do
-              viewIndex = viewIndex + 1
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out DO_STMT
+            ;
+            (dataGroup._percent):SetPosX(defaultPercentPosX)
+            ;
+            (dataGroup._iconPruning):SetPosX(defaultIconPruningPosX)
+            ;
+            (dataGroup._iconInsectDamege):SetPosX(defaultIconInsectDamegePosX)
+            if (dataGroup._percent):GetPosX() < (dataGroup._itemName):GetTextSizeX() + (dataGroup._itemName):GetPosX() then
+              local sizeX = (dataGroup._itemName):GetTextSizeX() + (dataGroup._itemName):GetPosX() - (dataGroup._percent):GetPosX()
+              if nameSizeX < sizeX then
+                nameSizeX = sizeX
+              end
+            else
+              do
+                do
+                  do
+                    local sizeX = (dataGroup._itemName):GetTextSizeX() + (dataGroup._itemName):GetPosX() - (dataGroup._percent):GetPosX()
+                    nameSizeX = sizeX
+                    viewIndex = viewIndex + 1
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
 
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+
+                  end
+                end
+              end
             end
           end
         end
@@ -214,6 +261,10 @@ FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWra
     Panel_Worldmap_TentInfo:SetPosX(tentIcon:GetPosX() - (Panel_Worldmap_TentInfo:GetSizeX() / 2 - tentIcon:GetSizeX() / 2))
     Panel_Worldmap_TentInfo:SetPosY(tentIcon:GetPosY() - Panel_Worldmap_TentInfo:GetSizeY())
   end
+  _remainTime:SetPosX(defalutRemainTimePosX + nameSizeX)
+  _workingListBg:SetSize(defalutWorkingListBGSizeX + nameSizeX, _workingListBg:GetSizeY())
+  _workingDataBg:SetSize(defalutWorkingDataBGSizeX + nameSizeX, _workingDataBg:GetSizeY())
+  Panel_Worldmap_TentInfo:SetSize(defalutPanelSizeX + nameSizeX, Panel_Worldmap_TentInfo:GetSizeY())
   tooltipTentUI = tentIcon:GetID()
   Panel_Worldmap_TentInfo:SetShow(true)
 end
@@ -234,6 +285,7 @@ Panel_Worldmap_TentInfo_UpdateFrame = function(deltaTime)
   end
   local maxCount = ToClient_GetMaxHarvestCount()
   local count = householdDataWithInstallationWrapper:getSelfHarvestCount()
+  local nameSizeX = 0
   local viewIndex = 0
   for index = 0, maxCount - 1 do
     local dataGroup = createList[viewIndex]
@@ -302,6 +354,187 @@ Panel_Worldmap_TentInfo_UpdateFrame = function(deltaTime)
       Panel_Worldmap_TentInfo:SetPosY(tentIcon:GetPosY() - Panel_Worldmap_TentInfo:GetSizeY())
     end
   end
+end
+
+FGlobal_TentTooltipShow = function(householdDataWithInstallationWrapper)
+  -- function num : 0_4 , upvalues : _remainTime, tentInformationMouseOverActorKey, createList, UI_INSTALL, defaultPercentPosX, defaultIconPruningPosX, defaultIconInsectDamegePosX, _workingListBg, _workingText, defaultWorkingListSize, _workingDataBg, defaultWorkingDataSizeWithoutList, defaultWorkingPanelSizeWithoutList, workingRawSizeY, defalutRemainTimePosX, defalutWorkingListBGSizeX, defalutWorkingDataBGSizeX, defalutPanelSizeX
+  local expireTime = householdDataWithInstallationWrapper:getSelfTentExpiredTime_s64()
+  local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
+  _remainTime:SetText(lefttimeText)
+  local maxCount = ToClient_GetMaxHarvestCount()
+  local count = householdDataWithInstallationWrapper:getSelfHarvestCount()
+  tentInformationMouseOverActorKey = householdDataWithInstallationWrapper:getActorKeyRaw()
+  local nameSizeX = 0
+  local viewIndex = 0
+  for index = 0, maxCount - 1 do
+    local dataGroup = createList[viewIndex]
+    if count <= index then
+      for index = 0, viewIndex - 1 do
+        local group = createList[index]
+        ;
+        (group._percent):SetPosX((group._percent):GetPosX() + nameSizeX)
+        ;
+        (group._iconPruning):SetPosX((group._iconPruning):GetPosX() + nameSizeX)
+        ;
+        (group._iconInsectDamege):SetPosX((group._iconInsectDamege):GetPosX() + nameSizeX)
+      end
+      break
+    end
+    local progressingInfo = householdDataWithInstallationWrapper:getInstallationProgressingInfo(index)
+    if progressingInfo ~= nil then
+      local harvestCharacterSSW = householdDataWithInstallationWrapper:getSelfHarvest(index)
+      local percent = (math.min)(householdDataWithInstallationWrapper:getSelfHarvestCompleteRate(index) * 100, 200)
+      local objectSSW = harvestCharacterSSW:getObjectStaticStatus()
+      local installationType = objectSSW:getInstallationType()
+      local iconPath = objectSSW:getHouseScreenShotPath(0)
+      if iconPath ~= nil and iconPath ~= "" then
+        (dataGroup._icon):SetShow(true)
+        ;
+        (dataGroup._icon):ChangeTextureInfoName(iconPath)
+      else
+        ;
+        (dataGroup._icon):SetShow(false)
+      end
+      ;
+      (dataGroup._itemName):SetText(harvestCharacterSSW:getName())
+      ;
+      (dataGroup._progress):SetCurrentProgressRate(percent)
+      ;
+      (dataGroup._progress):SetProgressRate(percent)
+      ;
+      (dataGroup._percent):SetText((math.floor)(percent) .. "%")
+      ;
+      (dataGroup._iconPruning):SetMonoTone(not progressingInfo:getNeedLop())
+      ;
+      (dataGroup._iconInsectDamege):SetMonoTone(not progressingInfo:getNeedPestControl())
+      ;
+      (dataGroup._iconSlot):SetShow(true)
+      ;
+      (dataGroup._itemName):SetShow(true)
+      ;
+      (dataGroup._gageBg):SetShow(true)
+      ;
+      (dataGroup._progress):SetShow(true)
+      ;
+      (dataGroup._percent):SetShow(true)
+      ;
+      (dataGroup._iconPruning):SetShow(true)
+      ;
+      (dataGroup._iconInsectDamege):SetShow(true)
+      if installationType == UI_INSTALL.eType_Havest then
+        (dataGroup._iconPruning):ChangeTextureInfoName("New_UI_Common_ForLua/Widget/Housing/Housing_TentObjectInfo_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(dataGroup._iconPruning, 199, 76, 224, 101)
+        ;
+        ((dataGroup._iconPruning):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (dataGroup._iconPruning):setRenderTexture((dataGroup._iconPruning):getBaseTexture())
+        ;
+        (dataGroup._iconInsectDamege):ChangeTextureInfoName("New_UI_Common_ForLua/Widget/Housing/Housing_TentObjectInfo_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(dataGroup._iconInsectDamege, 226, 76, 251, 101)
+        ;
+        ((dataGroup._iconInsectDamege):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (dataGroup._iconInsectDamege):setRenderTexture((dataGroup._iconInsectDamege):getBaseTexture())
+      else
+        do
+          if installationType == UI_INSTALL.eType_LivestockHarvest then
+            (dataGroup._iconPruning):ChangeTextureInfoName("New_UI_Common_ForLua/Widget/Housing/Housing_TentObjectInfo_00.dds")
+            local x1, y1, x2, y2 = setTextureUV_Func(dataGroup._iconPruning, 199, 212, 224, 237)
+            ;
+            ((dataGroup._iconPruning):getBaseTexture()):setUV(x1, y1, x2, y2)
+            ;
+            (dataGroup._iconPruning):setRenderTexture((dataGroup._iconPruning):getBaseTexture())
+            ;
+            (dataGroup._iconInsectDamege):ChangeTextureInfoName("New_UI_Common_ForLua/Widget/Housing/Housing_TentObjectInfo_00.dds")
+            local x1, y1, x2, y2 = setTextureUV_Func(dataGroup._iconInsectDamege, 226, 212, 251, 237)
+            ;
+            ((dataGroup._iconInsectDamege):getBaseTexture()):setUV(x1, y1, x2, y2)
+            ;
+            (dataGroup._iconInsectDamege):setRenderTexture((dataGroup._iconInsectDamege):getBaseTexture())
+          end
+          do
+            ;
+            (dataGroup._percent):SetPosX(defaultPercentPosX)
+            ;
+            (dataGroup._iconPruning):SetPosX(defaultIconPruningPosX)
+            ;
+            (dataGroup._iconInsectDamege):SetPosX(defaultIconInsectDamegePosX)
+            do
+              do
+                if (dataGroup._percent):GetPosX() < (dataGroup._itemName):GetTextSizeX() + (dataGroup._itemName):GetPosX() then
+                  local sizeX = (dataGroup._itemName):GetTextSizeX() + (dataGroup._itemName):GetPosX() - (dataGroup._percent):GetPosX()
+                  if nameSizeX < sizeX then
+                    nameSizeX = sizeX
+                  end
+                end
+                viewIndex = viewIndex + 1
+                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out DO_STMT
+
+                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out DO_STMT
+
+                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out DO_STMT
+
+                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_STMT
+
+                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_STMT
+
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  for index = viewIndex, maxCount - 1 do
+    local dataGroup = createList[index]
+    ;
+    (dataGroup._iconSlot):SetShow(false)
+    ;
+    (dataGroup._icon):SetShow(false)
+    ;
+    (dataGroup._itemName):SetShow(false)
+    ;
+    (dataGroup._gageBg):SetShow(false)
+    ;
+    (dataGroup._progress):SetShow(false)
+    ;
+    (dataGroup._percent):SetShow(false)
+    ;
+    (dataGroup._iconPruning):SetShow(false)
+    ;
+    (dataGroup._iconInsectDamege):SetShow(false)
+  end
+  if viewIndex <= 0 then
+    _workingListBg:SetShow(false)
+    _workingText:SetShow(false)
+    _workingListBg:SetSize(_workingListBg:GetSizeX(), defaultWorkingListSize)
+    _workingDataBg:SetSize(_workingDataBg:GetSizeX(), defaultWorkingDataSizeWithoutList)
+    Panel_Worldmap_TentInfo:SetSize(Panel_Worldmap_TentInfo:GetSizeX(), defaultWorkingPanelSizeWithoutList)
+  else
+    _workingListBg:SetShow(true)
+    _workingText:SetShow(true)
+    _workingListBg:SetSize(_workingListBg:GetSizeX(), workingRawSizeY * (viewIndex) + defaultWorkingListSize)
+    _workingDataBg:SetSize(_workingDataBg:GetSizeX(), defaultWorkingDataSizeWithoutList + _workingListBg:GetSizeY())
+    Panel_Worldmap_TentInfo:SetSize(Panel_Worldmap_TentInfo:GetSizeX(), defaultWorkingPanelSizeWithoutList + _workingListBg:GetSizeY())
+  end
+  _remainTime:SetPosX(defalutRemainTimePosX + nameSizeX)
+  _workingListBg:SetSize(defalutWorkingListBGSizeX + nameSizeX, _workingListBg:GetSizeY())
+  _workingDataBg:SetSize(defalutWorkingDataBGSizeX + nameSizeX, _workingDataBg:GetSizeY())
+  Panel_Worldmap_TentInfo:SetSize(defalutPanelSizeX + nameSizeX, Panel_Worldmap_TentInfo:GetSizeY())
+  if Panel_Worldmap_TentInfo:IsShow() == false then
+    Panel_Worldmap_TentInfo:SetPosX(Panel_HarvestList:GetPosX() + Panel_HarvestList:GetSizeX())
+    Panel_Worldmap_TentInfo:SetPosY(Panel_HarvestList:GetPosY())
+  end
+  Panel_Worldmap_TentInfo:SetShow(true)
+end
+
+FGlobal_TentTooltipHide = function()
+  -- function num : 0_5
+  Panel_Worldmap_TentInfo:SetShow(false)
 end
 
 initTentInfo()

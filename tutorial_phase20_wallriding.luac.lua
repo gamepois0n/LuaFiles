@@ -10,13 +10,13 @@ _questData = {
 [1] = {_questGroupNo = 658, _questId = 8}
 }
 }
-local uiQuestIconGuideImage = (UI.getChildControl)(Panel_Tutorial, "Static_QuestImage")
+local uiWallRidingGuideImage = (UI.getChildControl)(Panel_Tutorial, "Static_KeyTutorialImage")
 local setQuestIconGuideImage = function(posX, posY)
-  -- function num : 0_0 , upvalues : uiQuestIconGuideImage
-  local uiQuestIconGuideImageSizeX = uiQuestIconGuideImage:GetSizeX()
-  local uiQuestIconGuideImageSizeY = uiQuestIconGuideImage:GetSizeY()
-  uiQuestIconGuideImage:SetPosX(posX - uiQuestIconGuideImageSizeX * 0.5)
-  uiQuestIconGuideImage:SetPosY(posY - uiQuestIconGuideImageSizeY * 0.5)
+  -- function num : 0_0 , upvalues : uiWallRidingGuideImage
+  local uiWallRidingGuideImageSizeX = uiWallRidingGuideImage:GetSizeX()
+  local uiWallRidingGuideImageSizeY = uiWallRidingGuideImage:GetSizeY()
+  uiWallRidingGuideImage:SetPosX(posX - uiWallRidingGuideImageSizeX * 0.5)
+  uiWallRidingGuideImage:SetPosY(posY - uiWallRidingGuideImageSizeY * 0.5)
 end
 
 -- DECOMPILER ERROR at PC29: Confused about usage of register: R2 in 'UnsetPending'
@@ -86,6 +86,7 @@ end
 
 PaGlobal_TutorialPhase_WallRiding.startPhaseXXX = function(self, stepNo)
   -- function num : 0_4
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("조재�\144", "PaGlobal_TutorialPhase_WallRiding:startStep() stepNo : " .. tostring(stepNo) .. " typeNo : " .. tostring(typeNo))
   self._currentStep = 0
@@ -157,32 +158,32 @@ end
 -- DECOMPILER ERROR at PC61: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_WallRiding.changeStep1 = function(self)
-  -- function num : 0_11 , upvalues : setQuestIconGuideImage, uiQuestIconGuideImage
+  -- function num : 0_11 , upvalues : setQuestIconGuideImage, uiWallRidingGuideImage
   if self._currentProgress == 1 then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_11_0
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("우리 이제 �\128 높은 곳에 올라�\128�\188 �\180", "흐흐.. 너무 무서워하�\132 말라�\172.", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_71"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_72"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
   end
 )
   else
     if self._currentProgress == 2 then
       setQuestIconGuideImage(getScreenSizeX() * 0.5, getScreenSizeY() * 0.5)
-      uiQuestIconGuideImage:SetAlpha(0.5)
-      uiQuestIconGuideImage:SetShow(true)
+      uiWallRidingGuideImage:SetAlpha(0.5)
+      uiWallRidingGuideImage:SetShow(true)
       ;
-      (UIAni.AlphaAnimation)(1, uiQuestIconGuideImage, 0, 1.5)
-      uiQuestIconGuideImage:SetIgnore(false)
-      uiQuestIconGuideImage:addInputEvent("Mouse_LUp", "PaGlobal_TutorialPhase_WallRiding:handleMouseLUp_QuestIconGuideImage()")
+      (UIAni.AlphaAnimation)(1, uiWallRidingGuideImage, 0, 1.5)
+      uiWallRidingGuideImage:SetIgnore(false)
+      uiWallRidingGuideImage:addInputEvent("Mouse_LUp", "PaGlobal_TutorialPhase_WallRiding:handleMouseLUp_QuestIconGuideImage()")
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_11_1
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("방법�\132 �\152 알겠으면", "이제 그림�\132 클릭�\180", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 320)
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_73"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_74"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 320)
   end
 )
     else
       if self._currentProgress == 3 then
         PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_11_2
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial("그럼 이제 올라�\128 보자.", "올라�\136 �\152 있을 법한 물체 앞에�\156 스페이스바를 누르�\180 �\188.\n사다리는 R키를 누르�\180 �\160 거야.", false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300)
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_75"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_76"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300)
   end
 )
       end
@@ -224,9 +225,9 @@ end
 -- DECOMPILER ERROR at PC74: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_WallRiding.handleMouseLUp_QuestIconGuideImage = function(self)
-  -- function num : 0_15 , upvalues : uiQuestIconGuideImage
-  uiQuestIconGuideImage:SetIgnore(true)
-  local aniInfo = (UIAni.AlphaAnimation)(0, uiQuestIconGuideImage, 0, 0.25)
+  -- function num : 0_15 , upvalues : uiWallRidingGuideImage
+  uiWallRidingGuideImage:SetIgnore(true)
+  local aniInfo = (UIAni.AlphaAnimation)(0, uiWallRidingGuideImage, 0, 0.25)
   aniInfo:SetHideAtEnd(true)
   self:toNextProgress()
 end

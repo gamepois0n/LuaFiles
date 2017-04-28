@@ -468,7 +468,7 @@ local deadMessage_Animation = function()
 end
 
 deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestoreExp, isAblePvPMatchRevive, respawnTime)
-  -- function num : 0_7 , upvalues : _button_ObserverMode, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _text_ImmediateCount, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _button_LocalWar, _deadMessage, ResurrectionTime, _regenTime, deadMessage_Animation, revivalTime, isHasRestoreExperience, isSiegeBeingInDead, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
+  -- function num : 0_7 , upvalues : _button_ObserverMode, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _text_ImmediateCount, _button_LocalWar, _deadMessage, ResurrectionTime, revivalTime, deadMessage_Animation, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
   if Panel_GameExit:GetShow() then
     Panel_GameExit:SetShow(false)
   end
@@ -483,6 +483,31 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
   _button_ObserverMode:SetShow(false)
   local attackerActorProxyWrapper = getActor(attackerActorKeyRaw)
   isPvPMatchRevive = isAblePvPMatchRevive
+  if (selfProxy:get()):isBattleGroundDefine() then
+    _button_SiegeIng:SetShow(false)
+    _button_MoveExploration:SetShow(false)
+    _button_MoveTown:SetShow(false)
+    _button_AdvancedBase:SetShow(false)
+    _text_AdvancedBaseAlert:SetShow(false)
+    _text_reviveNotify:SetShow(false)
+    _button_Immediate:SetShow(true)
+    _button_GuildSpawn:SetShow(false)
+    _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
+    _useCashItemBG:SetShow(false)
+    _checkBoxUseCache:SetShow(false)
+    _text_ImmediateCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_IMMEDIATECOUNT_TEXT"))
+    _text_ImmediateCount:SetShow(true)
+    _button_LocalWar:SetShow(false)
+    if attackerActorProxyWrapper == nil then
+      _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
+    else
+      _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+    end
+    ResurrectionTime = revivalTime
+    Panel_DeadMessage:SetShow(true, false)
+    deadMessage_Animation()
+    return 
+  end
   do
     if (selfProxy:get()):isCompetitionDefined() then
       local hostCanSelfRebirth = (selfProxy:get()):isCompetitionHost()

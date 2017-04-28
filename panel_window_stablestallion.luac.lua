@@ -156,60 +156,33 @@ StableStallion.init = function(self)
   ;
   (self._stallionNotify):SetShow(true)
   ;
+  (self._stallionNotify):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
   (self._stallionNotify):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_NOTIFY"))
-  local notifySizeY = (self._stallionNotify):GetTextSizeY()
-  local notifyBGSizeY = (self._stallionNotifyBG):GetSizeY()
-  if notifyBGSizeY + 20 < notifySizeY then
-    local sizeX = (self._stallionNotifyBG):GetSizeX()
-    local sizeY = notifySizeY - notifyBGSizeY + 10
-    local panelSizeX = Panel_Window_StableStallion:GetSizeX()
-    local panelSizeY = Panel_Window_StableStallion:GetSizeY()
-    local textPosY = (self._stallionNotify):GetPosY()
-    ;
-    (self._stallionNotify):SetPosY(textPosY + sizeY - 10)
-    ;
-    (self._stallionNotifyBG):SetSize(sizeX, notifyBGSizeY + sizeY)
-    Panel_Window_StableStallion:SetSize(panelSizeX, panelSizeY + sizeY)
-    ;
-    ((self.awaken)._awakenButton):SetPosY(((self.awaken)._awakenButton):GetPosY() + sizeY)
-    ;
-    ((self.awaken)._awakenArea):SetPosY(((self.awaken)._awakenArea):GetPosY() + sizeY)
-    ;
-    ((self.protect)._protectMainBG):SetPosY(((self.protect)._protectMainBG):GetPosY() + sizeY)
-    ;
-    ((self.protect)._protectIconBG):SetPosY(((self.protect)._protectIconBG):GetPosY() + sizeY)
-    ;
-    ((self.protect)._protectIcon):SetPosY(((self.protect)._protectIcon):GetPosY() + sizeY)
-    ;
-    ((self.protect)._protectCount):SetPosY(((self.protect)._protectCount):GetPosY() + sizeY)
-    ;
-    ((self.protect)._protectButton):SetPosY(((self.protect)._protectButton):GetPosY() + sizeY)
-    ;
-    ((self.protect)._protectItemDescBG):SetPosY(((self.protect)._protectItemDescBG):GetPosY() + sizeY)
-    ;
-    ((self.protect)._protectItemDesc):SetPosY(((self.protect)._protectItemDesc):GetPosY() + sizeY)
-  end
-  do
-    ;
-    ((self.protect)._protectButton):SetText("")
-    ;
-    ((self.awaken)._awakenButton):addInputEvent("Mouse_LUp", "Awaken_Training()")
-    ;
-    (self._closeBtn):addInputEvent("Mouse_LUp", "StableStallion_Close()")
-    ;
-    ((self.awaken)._awakenIcon):SetIgnore(false)
-    ;
-    ((self.protect)._protectIcon):SetIgnore(false)
-    for i = 0, self._slotCount - 1 do
-      -- DECOMPILER ERROR at PC488: Confused about usage of register: R7 in 'UnsetPending'
+  ;
+  ((self.protect)._protectItemDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  ((self.protect)._protectItemDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_PROTECTITEMNOTIFY"))
+  ;
+  ((self.protect)._protectButton):SetText("")
+  ;
+  ((self.awaken)._awakenButton):addInputEvent("Mouse_LUp", "Awaken_Training()")
+  ;
+  (self._closeBtn):addInputEvent("Mouse_LUp", "StableStallion_Close()")
+  ;
+  ((self.awaken)._awakenIcon):SetIgnore(false)
+  ;
+  ((self.protect)._protectIcon):SetIgnore(false)
+  for i = 0, self._slotCount - 1 do
+    -- DECOMPILER ERROR at PC391: Confused about usage of register: R5 in 'UnsetPending'
 
-      (self._selectedItemSlotNo)[i] = nil
-      -- DECOMPILER ERROR at PC490: Confused about usage of register: R7 in 'UnsetPending'
+    (self._selectedItemSlotNo)[i] = nil
+    -- DECOMPILER ERROR at PC393: Confused about usage of register: R5 in 'UnsetPending'
 
-      ;
-      (self._isExpUp)[i] = false
-    end
+    ;
+    (self._isExpUp)[i] = false
   end
+  StableStallion_SetPos()
 end
 
 local over_SlotEffect = nil
@@ -368,8 +341,6 @@ StableStallion.setProtectItem = function(self)
   -- function num : 0_8 , upvalues : StableStallion
   local self = StableStallion
   local itemSSW = stable_getPreventStallionTrainingSkillExpItem()
-  ;
-  ((self.protect)._protectItemDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_PROTECTITEMNOTIFY"))
   if itemSSW ~= nil then
     local name = itemSSW:getName()
     ;
@@ -379,7 +350,7 @@ StableStallion.setProtectItem = function(self)
     local needCount = toInt64(0, 0)
     local haveCount = toInt64(0, 0)
     needCount = toInt64(0, stable_getPreventStallionTrainingSkillExpDownItemCount())
-    -- DECOMPILER ERROR at PC47: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC38: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self.protect)._protectSlotNo = self:protectItemCount()
@@ -387,7 +358,7 @@ StableStallion.setProtectItem = function(self)
     ((self.protect)._protectButton):SetIgnore(true)
     ;
     ((self.protect)._protectButton):SetMonoTone(true)
-    -- DECOMPILER ERROR at PC65: Overwrote pending register: R5 in 'AssignReg'
+    -- DECOMPILER ERROR at PC56: Overwrote pending register: R5 in 'AssignReg'
 
     if haveCount < needCount then
       ((self.protect)._protectIcon):SetMonoTone(true)
@@ -1016,14 +987,14 @@ StableStallion_UpdateTime = function(updateTime)
       else
         -- DECOMPILER ERROR at PC338: Unhandled construct in 'MakeBoolean' P1
 
-        if self._elapsedTime > 7.5 and self._elapsedTime < 10.5 and self._awakenDoing == true then
+        if self._elapsedTime > 8 and self._elapsedTime < 10.5 and self._awakenDoing == true then
           Awaken_Training_isNineTier()
           self._awakenDoing = false
         end
       end
       -- DECOMPILER ERROR at PC352: Unhandled construct in 'MakeBoolean' P1
 
-      if self._elapsedTime > 10.5 and self._elapsedTime < 12 and self._effectType == 3 then
+      if self._elapsedTime > 11.5 and self._elapsedTime < 12 and self._effectType == 3 then
         StableStallion:Refresh_UIData()
         StableList_CharacterSceneResetServantNo(self._servantNo)
         self._effectType = 4
@@ -1049,6 +1020,58 @@ FGlobal_IsButtonClick = function()
   -- function num : 0_28 , upvalues : StableStallion
   local self = StableStallion
   return self._buttonClick
+end
+
+StableStallion_SetPos = function()
+  -- function num : 0_29 , upvalues : StableStallion
+  local self = StableStallion
+  local stallionTextSizeY = (self._stallionNotify):GetTextSizeY()
+  local stallionTextBGSizeY = (self._stallionNotifyBG):GetSizeY()
+  local protectTextSizeY = ((self.protect)._protectItemDesc):GetTextSizeY()
+  local protectTextBGSizeY = ((self.protect)._protectItemDescBG):GetSizeY()
+  local stallionSizeY = 0
+  local protectSizeY = 0
+  _PA_LOG("임승�\177", "stallion :" .. tostring(stallionTextSizeY) .. "/ bg :" .. tostring(stallionTextBGSizeY) .. " / pro :" .. tostring(protectTextSizeY) .. " / bg :" .. tostring(protectTextBGSizeY))
+  if stallionTextBGSizeY < stallionTextSizeY + 10 or protectTextBGSizeY < protectTextSizeY then
+    stallionSizeY = stallionTextSizeY - stallionTextBGSizeY
+    protectSizeY = protectTextSizeY - protectTextBGSizeY
+    if stallionSizeY < 0 then
+      stallionSizeY = 0
+    end
+    if protectSizeY < 0 then
+      protectSizeY = 0
+    end
+    ;
+    (self._stallionNotifyBG):SetSize((self._stallionNotifyBG):GetSizeX(), (self._stallionNotifyBG):GetSizeY() + stallionSizeY + 10)
+    local SetPos = function(control)
+    -- function num : 0_29_0 , upvalues : self, stallionSizeY, protectSizeY
+    if (self.awaken)._awakenButton == control then
+      control:SetPosY(control:GetPosY() + stallionSizeY + protectSizeY + 10)
+    else
+      if (self.protect)._protectCount == control or (self.protect)._protectIcon == control or (self.protect)._protectButton == control or (self.protect)._protectIconBG == control then
+        control:SetPosY(control:GetPosY() + stallionSizeY + protectSizeY / 2 + 10)
+      else
+        control:SetPosY(control:GetPosY() + stallionSizeY + 10)
+      end
+    end
+  end
+
+    SetPos((self.protect)._protectMainBG)
+    ;
+    ((self.protect)._protectItemDescBG):SetSize(((self.protect)._protectItemDescBG):GetSizeX(), protectTextSizeY + 8)
+    ;
+    ((self.protect)._protectMainBG):SetSize(((self.protect)._protectMainBG):GetSizeX(), ((self.protect)._protectItemDescBG):GetSizeY() + 20)
+    ;
+    ((self.protect)._protectItemDescBG):SetPosY(((self.protect)._protectMainBG):GetPosY() + 10)
+    ;
+    ((self.protect)._protectItemDesc):SetPosY(((self.protect)._protectItemDescBG):GetPosY() + 4)
+    SetPos((self.awaken)._awakenButton)
+    SetPos((self.protect)._protectIconBG)
+    SetPos((self.protect)._protectIcon)
+    SetPos((self.protect)._protectCount)
+    SetPos((self.protect)._protectButton)
+    Panel_Window_StableStallion:SetSize(Panel_Window_StableStallion:GetSizeX(), Panel_Window_StableStallion:GetSizeY() + stallionSizeY + protectSizeY + 10)
+  end
 end
 
 StableStallion:init()

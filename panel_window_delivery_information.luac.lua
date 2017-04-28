@@ -21,14 +21,14 @@ DeliveryInformationShowAni = function()
   aniInfo1.AxisX = Panel_Window_Delivery_Information:GetSizeX() / 2
   aniInfo1.AxisY = Panel_Window_Delivery_Information:GetSizeY() / 2
   aniInfo1.ScaleType = 2
-  aniInfo1.IsChangeChild = true
+  aniInfo1.IsChangeChild = false
   local aniInfo2 = Panel_Window_Delivery_Information:addScaleAnimation(0.08, 0.15, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo2:SetStartScale(1.1)
   aniInfo2:SetEndScale(1)
   aniInfo2.AxisX = Panel_Window_Delivery_Information:GetSizeX() / 2
   aniInfo2.AxisY = Panel_Window_Delivery_Information:GetSizeY() / 2
   aniInfo2.ScaleType = 2
-  aniInfo2.IsChangeChild = true
+  aniInfo2.IsChangeChild = false
 end
 
 DeliveryInformationHideAni = function()
@@ -42,10 +42,8 @@ end
 local deliveryInformation = {
 slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true, createEnduranceIcon = true}
 , 
-config = {slotCount = 7, slotStartX = 10, slotStartY = 105, slotGapY = 70, slotIconStartX = 5, slotIconStartY = 8, slotCarriageTypeStartX = 88, slotCarriageTypeStartY = 8, slotDepartureStartX = 65, slotDepartureStartY = 31, slotDestinationStartX = 215, slotDestinationStartY = 31, slotArrowStartX = 180, slotArrowStartY = 34, slotButtonStartX = 320, slotButtonStartY = 5}
-, 
 const = {deliveryProgressTypeRequest = 0, deliveryProgressTypeIng = 1, deliveryProgressTypeComplete = 2}
-, panel_Background = (UI.getChildControl)(Panel_Window_Delivery_Information, "Static_Bakcground"), button_Close = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Win_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Question"), button_Request = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Send"), button_Information = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Cancel_Recieve"), button_ReceiveAll = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_ReceiveAll"), button_Refresh = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Refresh"), check_Cancel = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Cancel"), check_Recieve = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Recieve"), empty_List = (UI.getChildControl)(Panel_Window_Delivery_Information, "StaticText_Empty_List"), scroll = (UI.getChildControl)(Panel_Window_Delivery_Information, "Scroll_1"), slots = (Array.new)(), startSlotNo = 0, currentWaypointKey = 0}
+, panel_Background = (UI.getChildControl)(Panel_Window_Delivery_Information, "Static_Bakcground"), button_Close = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Win_Close"), buttonQuestion = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Question"), button_Request = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Send"), button_Information = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Cancel_Recieve"), button_ReceiveAll = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_ReceiveAll"), button_Refresh = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Refresh"), check_Cancel = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Cancel"), check_Recieve = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Recieve"), empty_List = (UI.getChildControl)(Panel_Window_Delivery_Information, "StaticText_Empty_List"), list2 = (UI.getChildControl)(Panel_Window_Delivery_Information, "List2_DeliveryItemList"), currentWaypointKey = 0, scrollIndex = 0}
 deliveryInformation.registMessageHandler = function(self)
   -- function num : 0_2
   registerEvent("FromClient_MoveDeliveryItem", "DeliveryInformation_UpdateSlotData")
@@ -53,130 +51,59 @@ end
 
 deliveryInformation.registEventHandler = function(self)
   -- function num : 0_3
-  Panel_Window_Delivery_Information:addInputEvent("Mouse_UpScroll", "DeliveryInformation_ScrollEvent( true )")
-  Panel_Window_Delivery_Information:addInputEvent("Mouse_DownScroll", "DeliveryInformation_ScrollEvent( false )")
-  ;
-  (self.panel_Background):addInputEvent("Mouse_UpScroll", "DeliveryInformation_ScrollEvent( true )")
-  ;
-  (self.panel_Background):addInputEvent("Mouse_DownScroll", "DeliveryInformation_ScrollEvent( false )")
-  ;
-  (self.button_Request):addInputEvent("Mouse_LUp", "DeliveryRequestWindow_Open()")
-  ;
   (self.button_Close):addInputEvent("Mouse_LUp", "DeliveryInformationWindow_Close()")
   ;
-  (self._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"DeliveryInformation\" )")
+  (self.buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"DeliveryInformation\" )")
+  ;
+  (self.button_Request):addInputEvent("Mouse_LUp", "DeliveryRequestWindow_Open()")
   ;
   (self.button_Refresh):addInputEvent("Mouse_LUp", "DeliveryInformation_Refresh()")
   ;
   (self.button_ReceiveAll):addInputEvent("Mouse_LUp", "Delivery_Receive_All()")
   ;
-  (self._buttonQuestion):addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"DeliveryInformation\", \"true\")")
+  (self.buttonQuestion):addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"DeliveryInformation\", \"true\")")
   ;
-  (self._buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"DeliveryInformation\", \"false\")")
+  (self.buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"DeliveryInformation\", \"false\")")
   ;
   (self.check_Cancel):addInputEvent("Mouse_LUp", "DeliveryInformation_UpdateSlotData()")
   ;
   (self.check_Recieve):addInputEvent("Mouse_LUp", "DeliveryInformation_UpdateSlotData()")
   ;
   (self.check_Recieve):SetAutoDisableTime(4)
-  ;
-  (UIScroll.InputEvent)(self.scroll, "DeliveryInformation_ScrollEvent")
 end
 
 deliveryInformation.init = function(self)
   -- function num : 0_4
-  for ii = 0, (self.config).slotCount - 1 do
-    local slot = {}
-    slot.slotNo = ii
-    slot.panel = Panel_Window_Delivery_Information
-    slot.base = (UI.createAndCopyBasePropertyControl)(Panel_Window_Delivery_Information, "Static_Slot", Panel_Window_Delivery_Information, "Delivery_Slot_" .. ii)
-    slot.carriageType = (UI.createAndCopyBasePropertyControl)(Panel_Window_Delivery_Information, "StaticText_CarriageType", slot.base, "Delivery_Slot_CarriageType_" .. ii)
-    slot.departure = (UI.createAndCopyBasePropertyControl)(Panel_Window_Delivery_Information, "StaticText_Departure", slot.base, "Delivery_Slot_Departure_" .. ii)
-    slot.destination = (UI.createAndCopyBasePropertyControl)(Panel_Window_Delivery_Information, "StaticText_Destination", slot.base, "Delivery_Slot_Destination_" .. ii)
-    slot.static_Arrow = (UI.createAndCopyBasePropertyControl)(Panel_Window_Delivery_Information, "Static_Arrow", slot.base, "Delivery_Slot_Arrow_" .. ii)
-    slot.button_Cancel = (UI.createAndCopyBasePropertyControl)(Panel_Window_Delivery_Information, "Button_Cancel", slot.base, "Delivery_Slot_Cancel_" .. ii)
-    slot.button_Receive = (UI.createAndCopyBasePropertyControl)(Panel_Window_Delivery_Information, "Button_Receive", slot.base, "Delivery_Slot_Receive_" .. ii)
-    slot.icon = {}
-    ;
-    (SlotItem.new)(slot.icon, "Delivery_Slot_Icon_" .. slot.slotNo, slot.slotNo, slot.base, self.slotConfig)
-    ;
-    (slot.icon):createChild()
-    ;
-    (slot.base):SetPosX((self.config).slotStartX)
-    ;
-    (slot.base):SetPosY((self.config).slotStartY + (self.config).slotGapY * slot.slotNo)
-    ;
-    ((slot.icon).icon):SetPosX((self.config).slotIconStartX)
-    ;
-    ((slot.icon).icon):SetPosY((self.config).slotIconStartY)
-    ;
-    (slot.carriageType):SetPosX((self.config).slotCarriageTypeStartX)
-    ;
-    (slot.carriageType):SetPosY((self.config).slotCarriageTypeStartY)
-    ;
-    (slot.departure):SetPosX((self.config).slotDepartureStartX)
-    ;
-    (slot.departure):SetPosY((self.config).slotDepartureStartY)
-    ;
-    (slot.destination):SetPosX((self.config).slotDestinationStartX)
-    ;
-    (slot.destination):SetPosY((self.config).slotDestinationStartY)
-    ;
-    (slot.static_Arrow):SetPosX((self.config).slotArrowStartX)
-    ;
-    (slot.static_Arrow):SetPosY((self.config).slotArrowStartY)
-    ;
-    (slot.button_Cancel):SetPosX((self.config).slotButtonStartX)
-    ;
-    (slot.button_Cancel):SetPosY((self.config).slotButtonStartY)
-    ;
-    (slot.button_Receive):SetPosX((self.config).slotButtonStartX)
-    ;
-    (slot.button_Receive):SetPosY((self.config).slotButtonStartY)
-    ;
-    (self.check_Cancel):SetCheck(true)
-    ;
-    (self.check_Recieve):SetCheck(true)
-    ;
-    (slot.base):addInputEvent("Mouse_UpScroll", "DeliveryInformation_ScrollEvent( true )")
-    ;
-    (slot.base):addInputEvent("Mouse_DownScroll", "DeliveryInformation_ScrollEvent( false )")
-    ;
-    ((slot.icon).icon):addInputEvent("Mouse_UpScroll", "DeliveryInformation_ScrollEvent( true )")
-    ;
-    ((slot.icon).icon):addInputEvent("Mouse_DownScroll", "DeliveryInformation_ScrollEvent( false )")
-    ;
-    ((slot.icon).icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralNormal(" .. ii .. ", \"DeliveryInformation\",true)")
-    ;
-    ((slot.icon).icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralNormal(" .. ii .. ", \"DeliveryInformation\",false)")
-    ;
-    (slot.button_Cancel):addInputEvent("Mouse_LUp", "Delivery_Cancel(" .. ii .. ")")
-    ;
-    (slot.button_Cancel):addInputEvent("Mouse_UpScroll", "DeliveryInformation_ScrollEvent( true )")
-    ;
-    (slot.button_Cancel):addInputEvent("Mouse_DownScroll", "DeliveryInformation_ScrollEvent( false )")
-    ;
-    (slot.button_Receive):addInputEvent("Mouse_LUp", "Delivery_Receive(" .. ii .. ")")
-    ;
-    (slot.button_Receive):addInputEvent("Mouse_UpScroll", "DeliveryInformation_ScrollEvent( true )")
-    ;
-    (slot.button_Receive):addInputEvent("Mouse_DownScroll", "DeliveryInformation_ScrollEvent( false )")
-    Panel_Tooltip_Item_SetPosition(ii, slot.icon, "DeliveryInformation")
-    slot.deliveryIndex = 0
-    -- DECOMPILER ERROR at PC273: Confused about usage of register: R6 in 'UnsetPending'
-
-    ;
-    (self.slots)[ii] = slot
-  end
+  local minSize = float2()
+  minSize.x = 100
+  minSize.y = 50
+  local list2 = (UI.getChildControl)(Panel_Window_Delivery_Information, "List2_DeliveryItemList")
+  local list2_Content = (UI.getChildControl)(list2, "List2_1_Content")
+  local slot = {}
+  list2:setMinScrollBtnSize(minSize)
+  local list2_ItemSlot = (UI.getChildControl)(list2_Content, "Static_List2_Slot")
+  ;
+  (SlotItem.new)(slot, "Delivery_Slot_Icon_", 0, list2_ItemSlot, self.slotConfig)
+  slot:createChild()
+  ;
+  (slot.icon):SetPosX(4)
+  ;
+  (slot.icon):SetPosY(1)
+  ;
+  (self.list2):changeAnimationSpeed(10)
+  ;
+  (self.list2):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "Delivery_ListControlCreate")
+  ;
+  (self.list2):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
+  ;
+  (self.check_Cancel):SetCheck(true)
+  ;
+  (self.check_Recieve):SetCheck(true)
 end
 
+local deliveryCountCache = 0
 deliveryInformation.updateSlot = function(self)
-  -- function num : 0_5
-  for ii = 0, (self.config).slotCount - 1 do
-    local slot = (self.slots)[ii]
-    ;
-    (slot.base):SetShow(false)
-  end
+  -- function num : 0_5 , upvalues : deliveryCountCache
   local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
   if deliveryList == nil then
     (self.empty_List):SetShow(true)
@@ -186,73 +113,34 @@ deliveryInformation.updateSlot = function(self)
     (self.empty_List):SetShow(false)
   end
   local deliveryCount = deliveryList:size()
-  if deliveryCount == 0 then
-    (self.empty_List):SetShow(true)
-    return 
+  if deliveryCountCache < deliveryCount then
+    for idx = deliveryCountCache, deliveryCount - 1 do
+      local deliveryInfo = deliveryList:atPointer(idx)
+      -- DECOMPILER ERROR at PC60: Unhandled construct in 'MakeBoolean' P1
+
+      if (((self.check_Cancel):IsCheck() and (self.const).deliveryProgressTypeRequest == deliveryInfo:getProgressType()) or not (self.check_Recieve):IsCheck() or (self.const).deliveryProgressTypeComplete == deliveryInfo:getProgressType()) and deliveryInfo ~= nil then
+        ((self.list2):getElementManager()):pushKey(toInt64(0, idx))
+      end
+      ;
+      ((self.list2):getElementManager()):removeKey(toInt64(0, idx))
+    end
   else
-    ;
-    (self.empty_List):SetShow(false)
-  end
-  local showCount = 0
-  if (self.check_Cancel):IsCheck() then
-    showCount = showCount + deliveryList:sizeByProgress((self.const).deliveryProgressTypeRequest)
-  end
-  if (self.check_Recieve):IsCheck() then
-    showCount = showCount + deliveryList:sizeByProgress((self.const).deliveryProgressTypeComplete)
-  end
-  if deliveryCount <= 7 then
-    self.startSlotNo = 0
-  end
-  local showSlot = 0
-  for ii = self.startSlotNo, deliveryCount - 1 do
-    if showSlot < (self.config).slotCount and showSlot < showCount then
-      local deliveryInfo = deliveryList:atPointer(ii)
-      if ((self.check_Cancel):IsCheck() and (self.const).deliveryProgressTypeRequest == deliveryInfo:getProgressType()) or (self.check_Recieve):IsCheck() and (self.const).deliveryProgressTypeComplete == deliveryInfo:getProgressType() then
-        local itemWrapper = deliveryInfo:getItemWrapper()
-        if itemWrapper ~= nil then
-          local slot = (self.slots)[showSlot]
+    do
+      for idx = deliveryCount, deliveryCountCache - 1 do
+        ((self.list2):getElementManager()):removeKey(toInt64(0, idx))
+      end
+      do
+        deliveryCountCache = deliveryCount
+        if deliveryCount == 0 then
+          (self.empty_List):SetShow(true)
+        else
           ;
-          (slot.icon):setItem(itemWrapper)
-          ;
-          (slot.departure):SetText(deliveryInfo:getFromRegionName())
-          ;
-          (slot.destination):SetText(deliveryInfo:getToRegionName())
-          if deliveryInfo:getCarriageType() == 1 then
-            (slot.carriageType):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_carriage"))
-          else
-            if deliveryInfo:getCarriageType() == 2 then
-              (slot.carriageType):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_Transport"))
-            else
-              if deliveryInfo:getCarriageType() == 3 then
-                (slot.carriageType):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_TradeShip"))
-              else
-                ;
-                (slot.carriageType):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_carriage"))
-              end
-            end
-          end
-          if deliveryInfo:getProgressType() == 0 then
-            (slot.button_Receive):SetShow(false)
-            ;
-            (slot.button_Cancel):SetShow(true)
-          else
-            ;
-            (slot.button_Cancel):SetShow(false)
-            ;
-            (slot.button_Receive):SetShow(true)
-          end
-          slot.deliveryIndex = ii
-          ;
-          (slot.base):SetShow(true)
-          showSlot = showSlot + 1
+          (self.empty_List):SetShow(false)
         end
+        ;
+        (self.list2):moveIndex(self.scrollIndex)
       end
     end
-  end
-  ;
-  (UIScroll.SetButtonSize)(self.scroll, (self.config).slotCount, deliveryCount)
-  if self.startSlotNo + 7 == deliveryCount then
-    (self.scroll):SetControlPos(1)
   end
 end
 
@@ -265,28 +153,11 @@ end
 DeliveryInformation_SlotIndex = function(slotNo)
   -- function num : 0_7 , upvalues : deliveryInformation
   local self = deliveryInformation
-  return ((self.slots)[slotNo]).deliveryIndex
-end
-
-DeliveryInformation_ScrollEvent = function(isScrollUp)
-  -- function num : 0_8 , upvalues : deliveryInformation
-  local self = deliveryInformation
-  local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
-  if deliveryList == nil then
-    return 
-  end
-  ;
-  (self.scroll):SetShow(false)
-  local deliveryCount = deliveryList:size()
-  if deliveryCount > 7 then
-    (self.scroll):SetShow(true)
-    self.startSlotNo = (UIScroll.ScrollEvent)(self.scroll, isScrollUp, (self.config).slotCount, deliveryCount, self.startSlotNo, 1)
-  end
-  self:updateSlot()
+  return slotNo
 end
 
 DeliveryInformation_UpdateSlotData = function()
-  -- function num : 0_9 , upvalues : deliveryInformation
+  -- function num : 0_8 , upvalues : deliveryInformation, deliveryCountCache
   if not Panel_Window_Delivery_Information:IsShow() then
     return 
   end
@@ -294,16 +165,14 @@ DeliveryInformation_UpdateSlotData = function()
   if DeliveryInformation_WaypointKey() ~= nil then
     deliveryList = delivery_list(DeliveryInformation_WaypointKey())
   end
-  if deliveryList ~= nil and deliveryList:size() > 7 and deliveryList:size() < self.startSlotNo + 7 then
-    self.startSlotNo = self.startSlotNo - 1
-    ;
-    (self.scroll):SetControlPos(self.startSlotNo / deliveryList:size() - 7)
-  end
+  ;
+  ((self.list2):getElementManager()):clearKey()
+  deliveryCountCache = 0
   self:updateSlot()
 end
 
 DeliveryInformationWindow_Open = function()
-  -- function num : 0_10 , upvalues : deliveryInformation
+  -- function num : 0_9 , upvalues : deliveryInformation
   DeliveryRequestWindow_Close()
   Warehouse_SetIgnoreMoneyButton(true)
   if not Panel_Window_Delivery_Information:IsShow() then
@@ -316,18 +185,18 @@ DeliveryInformationWindow_Open = function()
     end
   end
   local self = deliveryInformation
-  self.startSlotNo = 0
   self:updateSlot()
-  ;
-  (self.scroll):SetControlPos(0)
   Panel_Window_Delivery_Information:SetPosX(Panel_Window_Warehouse:GetPosX() - Panel_Window_Delivery_Information:GetSizeX())
   Panel_Window_Delivery_Information:SetPosY(Panel_Window_Warehouse:GetPosY() - 40)
   Panel_Window_Delivery_Request:SetPosX(Panel_Window_Warehouse:GetPosX() - Panel_Window_Delivery_Information:GetSizeX())
   Panel_Window_Delivery_Request:SetPosY(Panel_Window_Warehouse:GetPosY() - 40)
+  ;
+  (self.list2):moveTopIndex()
+  self.scrollIndex = 0
 end
 
 DeliveryInformationWindow_Close = function()
-  -- function num : 0_11
+  -- function num : 0_10 , upvalues : deliveryInformation, deliveryCountCache
   if ToClient_WorldMapIsShow() and Panel_Window_Delivery_Information:GetShow() then
     WorldMapPopupManager:pop()
   end
@@ -335,16 +204,20 @@ DeliveryInformationWindow_Close = function()
     Panel_Window_Delivery_Information:ChangeSpecialTextureInfoName("")
     Panel_Window_Delivery_Information:SetShow(false, false)
   end
+  local self = deliveryInformation
+  ;
+  ((self.list2):getElementManager()):clearKey()
+  deliveryCountCache = 0
 end
 
 DeliveryInformation_Refresh = function()
-  -- function num : 0_12
+  -- function num : 0_11
   delivery_refreshClear()
   delivery_requsetList()
 end
 
 DeliveryInformation_OpenPanelFromWorldmap = function(waypointKey)
-  -- function num : 0_13 , upvalues : deliveryInformation
+  -- function num : 0_12 , upvalues : deliveryInformation
   local self = deliveryInformation
   self.currentWaypointKey = waypointKey
   WorldMapPopupManager:increaseLayer(true)
@@ -353,7 +226,7 @@ DeliveryInformation_OpenPanelFromWorldmap = function(waypointKey)
 end
 
 DeliveryInformation_OpenPanelFromDialog = function()
-  -- function num : 0_14 , upvalues : deliveryInformation
+  -- function num : 0_13 , upvalues : deliveryInformation
   local self = deliveryInformation
   self.currentWaypointKey = getCurrentWaypointKey()
   Warehouse_OpenPanelFromDialogWithoutInventory(getCurrentWaypointKey(), (CppEnums.WarehoouseFromType).eWarehoouseFromType_Npc)
@@ -363,21 +236,122 @@ DeliveryInformation_OpenPanelFromDialog = function()
   DeliveryInformationWindow_Open()
 end
 
-Delivery_Cancel = function(slotNo)
-  -- function num : 0_15 , upvalues : deliveryInformation
+Delivery_Cancel = function(index)
+  -- function num : 0_14 , upvalues : deliveryInformation
   local self = deliveryInformation
-  delivery_cancel(DeliveryInformation_WaypointKey(), ((self.slots)[slotNo]).deliveryIndex)
+  local deliveryList = delivery_list(self.currentWaypointKey)
+  local deliveryInfo = deliveryList:atPointer(index)
+  local itemNo = deliveryInfo:getItemNo()
+  delivery_cancelbyItemNo(itemNo)
+  self:updateSlot()
 end
 
-Delivery_Receive = function(slotNo)
-  -- function num : 0_16 , upvalues : deliveryInformation
+Delivery_Receive = function(index)
+  -- function num : 0_15 , upvalues : deliveryInformation
   local self = deliveryInformation
-  delivery_receive(DeliveryInformation_WaypointKey(), ((self.slots)[slotNo]).deliveryIndex)
+  local deliveryList = delivery_list(self.currentWaypointKey)
+  local deliveryInfo = deliveryList:atPointer(index)
+  local itemNo = deliveryInfo:getItemNo()
+  delivery_receiveItemNo(itemNo)
+  self:updateSlot()
 end
 
 Delivery_Receive_All = function()
-  -- function num : 0_17
+  -- function num : 0_16 , upvalues : deliveryCountCache
   delivery_receiveAll(DeliveryInformation_WaypointKey())
+  deliveryCountCache = 0
+end
+
+Delivery_ListControlCreate = function(content, key)
+  -- function num : 0_17 , upvalues : deliveryInformation
+  local self = deliveryInformation
+  local index = Int64toInt32(key)
+  local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+  local deliveryInfo = deliveryList:atPointer(index)
+  local itemWrapper = deliveryInfo:getItemWrapper()
+  if itemWrapper == nil then
+    return 
+  end
+  local itemBG = (UI.getChildControl)(content, "Static_List2_ItemBG")
+  itemBG:SetPosX(0)
+  itemBG:SetPosY(0)
+  local slot = {}
+  local itemSlot = (UI.getChildControl)(content, "Static_List2_Slot")
+  itemSlot:SetShow(true)
+  itemSlot:SetPosX(8)
+  itemSlot:SetPosY(8)
+  itemSlot:SetSize(40, 40)
+  ;
+  (SlotItem.reInclude)(slot, "Delivery_Slot_Icon_", 0, itemSlot, self.slotConfig)
+  slot:setItem(itemWrapper)
+  local carriageType = (UI.getChildControl)(content, "StaticText_List2_CarriageType")
+  carriageType:SetShow(true)
+  if deliveryInfo:getCarriageType() == 1 then
+    carriageType:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_carriage"))
+  else
+    if deliveryInfo:getCarriageType() == 2 then
+      carriageType:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_Transport"))
+    else
+      if deliveryInfo:getCarriageType() == 3 then
+        carriageType:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_TradeShip"))
+      else
+        carriageType:SetText(PAGetString(Defines.StringSheet_GAME, "Lua_DeliveryInformation_carriageType_carriage"))
+      end
+    end
+  end
+  local departure = (UI.getChildControl)(content, "StaticText_List2_Departure")
+  departure:SetShow(true)
+  departure:SetText(deliveryInfo:getFromRegionName())
+  local destination = (UI.getChildControl)(content, "StaticText_List2_Destination")
+  destination:SetShow(true)
+  destination:SetText(deliveryInfo:getToRegionName())
+  local receive = (UI.getChildControl)(content, "Button_List2_Receive")
+  receive:SetPosX(314)
+  receive:SetPosY(5)
+  local cancel = (UI.getChildControl)(content, "Button_List2_Cancel")
+  cancel:SetPosX(314)
+  cancel:SetPosY(5)
+  if deliveryInfo:getProgressType() == 0 then
+    receive:SetShow(false)
+    cancel:SetShow(true)
+  else
+    cancel:SetShow(false)
+    receive:SetShow(true)
+  end
+  local arrow = (UI.getChildControl)(content, "Static_List2_Arrow")
+  arrow:SetShow(true)
+  local itemNo = deliveryInfo:getItemNo()
+  receive:addInputEvent("Mouse_LUp", "Delivery_Receive(" .. index .. " )")
+  cancel:addInputEvent("Mouse_LUp", "Delivery_Cancel(" .. index .. " )")
+  ;
+  (slot.icon):addInputEvent("Mouse_On", "DeliveryItem_Tooltip_Show(" .. index .. ", true)")
+  ;
+  (slot.icon):addInputEvent("Mouse_Out", "DeliveryItem_Tooltip_Show(" .. index .. ", false)")
+  if self.scrollIndex < index then
+    self.scrollIndex = index - 8
+  else
+    self.scrollIndex = index
+  end
+end
+
+DeliveryItem_Tooltip_Show = function(idx, isOn)
+  -- function num : 0_18 , upvalues : deliveryInformation
+  local self = deliveryInformation
+  if isOn == false then
+    Panel_Tooltip_Item_hideTooltip()
+  end
+  local control = self.list2
+  local contents = control:GetContentByKey(toInt64(0, idx))
+  if contents ~= nil then
+    local itemIcon = (UI.getChildControl)(contents, "Static_List2_Slot")
+    if isOn == true then
+      local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+      local deliveryInfo = deliveryList:atPointer(idx)
+      local itemWrapper = deliveryInfo:getItemWrapper()
+      local itemSSW = itemWrapper:getStaticStatus()
+      Panel_Tooltip_Item_Show(itemSSW, itemIcon, true, false, nil, nil, true)
+    end
+  end
 end
 
 deliveryInformation:init()

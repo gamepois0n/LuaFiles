@@ -10,7 +10,7 @@ local CT = CppEnums.ClassType
 local UI_BUFFTYPE = CppEnums.UserChargeType
 Panel_Dye_New:SetShow(false)
 local renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_Dye}, false)
-local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913")}
+local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [CT.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914")}
 local enableDyePearl = ToClient_IsContentsGroupOpen("82")
 local enableCamel = ToClient_IsContentsGroupOpen("4")
 local classType = (getSelfPlayer()):getClassType()
@@ -1763,24 +1763,25 @@ HandleClicked_DeyNew_SelectCharacterType = function(idx)
         self.selectedEquipSlotNo = 3
       end
     end
+    dye_New_SelectEquipItem(self.selectedEquipSlotNo)
     Inventory_SetFunctor(FGlobal_Panel_DyeNew_InventoryFilter, FGlobal_Panel_DyeNew_Interaction_FromInventory, nil, nil)
     FromClient_updateDyeingTargetList()
     self:Update_EquipItem()
     self:Update_Part()
     dye_New_AmpuleScrollSet()
-    -- DECOMPILER ERROR at PC35: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    ((self.palette).config).isShowAll = false
     -- DECOMPILER ERROR at PC38: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
-    ((self.palette).config).isPearlPallete = false
+    ((self.palette).config).isShowAll = false
     -- DECOMPILER ERROR at PC41: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
-    ((self.palette).config).selectedCategoryIdx = 0
+    ((self.palette).config).isPearlPallete = false
     -- DECOMPILER ERROR at PC44: Confused about usage of register: R3 in 'UnsetPending'
+
+    ;
+    ((self.palette).config).selectedCategoryIdx = 0
+    -- DECOMPILER ERROR at PC47: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
     ((self.palette).config).scrollStartIdx = 0

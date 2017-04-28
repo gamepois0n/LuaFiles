@@ -43,16 +43,28 @@ changePositionBySever = function(panel, panelId, isShow, isChangePosition, isCha
     if isChangePosition then
       panel:SetPosX(ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionX))
       panel:SetPosY(ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionY))
+      if CppDefine.ChangeUIAndResolution == true then
+        local relativePosX = ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionX)
+        local relativePosY = ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionY)
+        if relativePosX == -1 or relativePosY == -1 then
+          relativePosX = 0
+          relativePosY = 0
+        end
+        panel:SetRelativePosX(relativePosX)
+        panel:SetRelativePosY(relativePosY)
+      end
     end
-    if isChangeSize then
-      panel:SetSize(ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_SizeX), ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_SizeY))
+    do
+      if isChangeSize then
+        panel:SetSize(ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_SizeX), ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_SizeY))
+      end
+      if isChangePosition or isChangeSize then
+        checkAndSetPosInScreen(panel)
+      end
+      do return true end
+      return false
     end
-    if isChangePosition or isChangeSize then
-      checkAndSetPosInScreen(panel)
-    end
-    return true
   end
-  return false
 end
 
 FGlobal_PanelMove = function(panel, isOnlyMovableMode)

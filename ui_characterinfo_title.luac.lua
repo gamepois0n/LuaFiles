@@ -15,80 +15,23 @@ TitleUIPool = {}
 Category_BTN = {(UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_Combat"), (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_Product"), (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_Fishing"); [0] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Taste_AllRound")}
 , _titleRightListBG = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "Static_RightBG"), 
 titleSubject_Btn = {(UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Top_Combat"), (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Top_Product"), (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Top_Fish"); [0] = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "RadioButton_Top_AllRound")}
-, titleListScroll = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "Scroll_TitleList"), title_ListAll = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRound_CountValue"), title_ListCombat = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Combat_CountValue"), title_ListProduct = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Product_CountValue"), title_ListFish = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Fishing_CountValue"), title_ListAllPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRound_PercentValue"), title_ListCombatPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Combat_PercentValue"), title_ListProductPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Product_PercentValue"), title_ListFishPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Fishing_PercentValue"), title_ListAllProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_AllRound"), title_ListCombatProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Combat"), title_ListProductProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Product"), title_ListFishProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Fishing"), txt_AllRoundDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRoundDesc"), txt_CombatDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_CombatDesc"), txt_ProductDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_ProductDesc"), txt_FishingDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_FishingDesc"), txt_TotalReward = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward"), txt_TotalReward_Value = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward_Value"), txt_PartDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_SelectedType"), txt_SubTitleBar = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_LeftSubTitle"), CurrentCategoryIdx = 0, CurrentCategoryCount = 0, maxTitleShow = 13, NowTitleInterval = 0, MinTitleInterval = 0, MaxTitleInterval = 0, title_LastUpdateTime = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AcceptCooltime")}
-TitleInfo.titleListScrollBtn = (UI.getChildControl)(TitleInfo.titleListScroll, "Scroll_CtrlButton")
-local titleTemplate = {_titleListBG = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "Static_TitleList_TitleBG"), _titleListTitle = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_TitleList_Title"), _titleSetTitle = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "Button_SetTitle")}
+, title_ListAll = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRound_CountValue"), title_ListCombat = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Combat_CountValue"), title_ListProduct = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Product_CountValue"), title_ListFish = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Fishing_CountValue"), title_ListAllPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRound_PercentValue"), title_ListCombatPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Combat_PercentValue"), title_ListProductPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Product_PercentValue"), title_ListFishPercent = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_Fishing_PercentValue"), title_ListAllProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_AllRound"), title_ListCombatProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Combat"), title_ListProductProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Product"), title_ListFishProgress = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "CircularProgress_Fishing"), txt_AllRoundDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AllRoundDesc"), txt_CombatDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_CombatDesc"), txt_ProductDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_ProductDesc"), txt_FishingDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_FishingDesc"), txt_TotalReward = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward"), txt_TotalReward_Value = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_TotalProgressReward_Value"), txt_PartDesc = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_SelectedType"), txt_SubTitleBar = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_LeftSubTitle"), CurrentCategoryIdx = 0, CurrentCategoryCount = 0, title_LastUpdateTime = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "StaticText_AcceptCooltime"), list2 = (UI.getChildControl)(Panel_Window_CharInfo_TitleInfo, "List2_CharacterInfo_TitleList")}
 TitleInfo.Initialize = function(self)
-  -- function num : 0_0 , upvalues : UI_PUCT, titleTemplate, TitleInfo
+  -- function num : 0_0 , upvalues : TitleInfo
+  local self = TitleInfo
   local titleStartY = 75
   local titleGapY = 35
-  for titleIdx = 0, self.maxTitleShow - 1 do
-    local tempTitleUIPool = {}
-    local CreateTitleListBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, self._titleRightListBG, "Title_ListBG_" .. titleIdx)
-    CopyBaseProperty(titleTemplate._titleListBG, CreateTitleListBG)
-    CreateTitleListBG:SetPosX(5)
-    CreateTitleListBG:SetPosY(titleStartY)
-    CreateTitleListBG:SetShow(false)
-    tempTitleUIPool._titleListBG = CreateTitleListBG
-    local CreateTitleListTitle = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, CreateTitleListBG, "Title_ListTitle_" .. titleIdx)
-    CopyBaseProperty(titleTemplate._titleListTitle, CreateTitleListTitle)
-    CreateTitleListTitle:SetPosX(20)
-    CreateTitleListTitle:SetPosY(5)
-    CreateTitleListTitle:SetShow(false)
-    tempTitleUIPool._titleListTitle = CreateTitleListTitle
-    local CreateTitleSet = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, CreateTitleListBG, "Title_ListTitleSet_" .. titleIdx)
-    CopyBaseProperty(titleTemplate._titleSetTitle, CreateTitleSet)
-    CreateTitleSet:SetPosX(265)
-    CreateTitleSet:SetPosY(5)
-    CreateTitleSet:SetShow(false)
-    tempTitleUIPool._titleSetBTN = CreateTitleSet
-    -- DECOMPILER ERROR at PC81: Confused about usage of register: R11 in 'UnsetPending'
-
-    ;
-    (self.TitleUIPool)[titleIdx] = tempTitleUIPool
-    titleStartY = titleStartY + titleGapY
-    for key,value in pairs(tempTitleUIPool) do
-      value:addInputEvent("Mouse_DownScroll", "TitleInfo_ListUpdate( true )")
-      value:addInputEvent("Mouse_UpScroll", "TitleInfo_ListUpdate( false )")
-    end
-  end
+  local minSize = float2()
+  minSize.x = 10
+  minSize.y = 50
+  ;
+  (self.list2):setMinScrollBtnSize(minSize)
   ;
   (TitleInfo.txt_SubTitleBar):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_SUBTITLEBAR_COUNT", "count", ToClient_GetTotalAcquiredTitleCount()))
 end
 
-TitleInfo_ListUpdate = function(UpDown)
-  -- function num : 0_1 , upvalues : TitleInfo
-  local self = TitleInfo
-  local nowTitleInterval = self.NowTitleInterval
-  local minTitleInterval = self.MinTitleInterval
-  local maxTitleInterval = self.CurrentCategoryCount - 13
-  local categoryCurrent = self.CurrentCategoryCount
-  if categoryCurrent < self.maxTitleShow then
-    return 
-  end
-  if UpDown == true then
-    if nowTitleInterval < maxTitleInterval then
-      (self.titleListScroll):ControlButtonDown()
-      nowTitleInterval = nowTitleInterval + 1
-      self.NowTitleInterval = nowTitleInterval
-      self:TitleUpdate(nowTitleInterval)
-    else
-      return 
-    end
-  else
-    if minTitleInterval < nowTitleInterval then
-      (self.titleListScroll):ControlButtonUp()
-      nowTitleInterval = nowTitleInterval - 1
-      self.NowTitleInterval = nowTitleInterval
-      self:TitleUpdate(nowTitleInterval)
-    else
-      return 
-    end
-  end
-end
-
-TitleInfo.TitleUpdate = function(self, startIdx)
-  -- function num : 0_2 , upvalues : UI_TM, TitleInfo
+TitleInfo.TitleUpdate = function(self)
+  -- function num : 0_1 , upvalues : UI_TM, TitleInfo
   local titleCountByAll = ToClient_GetTotalTitleCount()
   local titleTotalCount = ToClient_GetTotalTitleBuffCount()
   ;
@@ -101,7 +44,6 @@ TitleInfo.TitleUpdate = function(self, startIdx)
   if titleCountByAll == nil then
     return 
   end
-  self.MaxTitleInterval = titleCountByAll
   local gotTitleCountByAll = ToClient_GetTotalAcquiredTitleCount()
   if gotTitleCountByAll == nil then
     return 
@@ -137,28 +79,28 @@ TitleInfo.TitleUpdate = function(self, startIdx)
       ((self.titleSubject_Btn)[categoryIdx]):SetCheck(true)
     end
     if categoryIdx == 0 then
-      (self.title_ListAll):SetText(titleCurrentGetCount)
+      (self.title_ListAll):SetText(titleCurrentGetCount .. "/" .. titleCurrentCount)
       ;
       (self.title_ListAllPercent):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_LISTALL", "percent", (string.format)("%.1f", titleCurrentPercent)))
       ;
       (self.title_ListAllProgress):SetProgressRate(titleCurrentPercent)
     else
       if categoryIdx == 1 then
-        (self.title_ListCombat):SetText(titleCurrentGetCount)
+        (self.title_ListCombat):SetText(titleCurrentGetCount .. "/" .. titleCurrentCount)
         ;
         (self.title_ListCombatPercent):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_LISTCOMBAT", "percent", (string.format)("%.1f", titleCurrentPercent)))
         ;
         (self.title_ListCombatProgress):SetProgressRate(titleCurrentPercent)
       else
         if categoryIdx == 2 then
-          (self.title_ListProduct):SetText(titleCurrentGetCount)
+          (self.title_ListProduct):SetText(titleCurrentGetCount .. "/" .. titleCurrentCount)
           ;
           (self.title_ListProductPercent):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_LISTPRODUCT", "percent", (string.format)("%.1f", titleCurrentPercent)))
           ;
           (self.title_ListProductProgress):SetProgressRate(titleCurrentPercent)
         else
           if categoryIdx == 3 then
-            (self.title_ListFish):SetText(titleCurrentGetCount)
+            (self.title_ListFish):SetText(titleCurrentGetCount .. "/" .. titleCurrentCount)
             ;
             (self.title_ListFishPercent):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_LISTFISH", "percent", (string.format)("%.1f", titleCurrentPercent)))
             ;
@@ -168,104 +110,47 @@ TitleInfo.TitleUpdate = function(self, startIdx)
       end
     end
   end
-  for idx = 0, 12 do
-    local titleList = (self.TitleUIPool)[idx]
-    for key,value in pairs(titleList) do
-      value:SetShow(false)
-    end
-  end
-  local slotLimitedIdx = 0
   local lastCount = self.CurrentCategoryCount
   if lastCount < 1 then
     return 
   end
-  if lastCount <= self.maxTitleShow then
-    (self.titleListScroll):SetShow(false)
-  else
-    ;
-    (self.titleListScroll):SetShow(true)
-  end
-  for titleIdx = startIdx, lastCount - 1 do
-    local uiIdx = titleIdx - startIdx
-    local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
-    local titleSlot = (self.TitleUIPool)[uiIdx]
-    if titleSlot == nil then
-      return 
-    end
-    if titleWrapper == nil then
-      (titleSlot._titleListBG):SetShow(false)
-    else
-      ;
-      (titleSlot._titleListBG):SetShow(true)
-      if titleWrapper:isAcquired() == true then
-        (titleSlot._titleListBG):SetText(titleWrapper:getName())
-        ;
-        (titleSlot._titleListBG):addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. "," .. titleIdx .. ")")
-        ;
-        (titleSlot._titleSetBTN):SetShow(true)
-        ;
-        (titleSlot._titleSetBTN):addInputEvent("Mouse_LUp", "HandleClick_TitleSet(" .. self.CurrentCategoryIdx .. "," .. titleIdx .. ")")
-        if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
-          (titleSlot._titleSetBTN):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_RELEASE"))
-        else
-          ;
-          (titleSlot._titleSetBTN):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
-        end
-      else
-        ;
-        (titleSlot._titleListBG):SetText("<PAColor0xFF444444>" .. titleWrapper:getName() .. "<PAOldColor>")
-        ;
-        (titleSlot._titleListBG):addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. "," .. titleIdx .. ")")
-        ;
-        (titleSlot._titleSetBTN):SetShow(false)
-      end
-    end
-    if uiIdx > 12 then
-      return 
-    end
+  ;
+  ((self.list2):getElementManager()):clearKey()
+  for titleIndex = 0, lastCount - 1 do
+    ((self.list2):getElementManager()):pushKey(toInt64(0, titleIndex))
   end
 end
 
 FromClient_TitleInfo_Update = function()
-  -- function num : 0_3 , upvalues : TitleInfo
+  -- function num : 0_2 , upvalues : TitleInfo
   local self = TitleInfo
-  self:TitleUpdate(self.NowTitleInterval)
+  self:TitleUpdate()
   self:updateCoolTime()
 end
 
 TitleInfo.updateCoolTime = function(self)
-  -- function num : 0_4
+  -- function num : 0_3
   local coolTime = ToClient_GetUpdateTitleDelay()
   ;
   (self.title_LastUpdateTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_LASTUPDATETIME", "coolTime", coolTime))
 end
 
 TitleInfo_Open = function()
-  -- function num : 0_5 , upvalues : TitleInfo
+  -- function num : 0_4 , upvalues : TitleInfo
   ToClient_SetCurrentTitleCategory(0)
   TitleInfo_SetCategory(0)
   local self = TitleInfo
   ;
   (self.txt_SubTitleBar):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_SUBTITLEBAR_COUNT", "count", ToClient_GetTotalAcquiredTitleCount()))
   self.CurrentCategoryCount = ToClient_GetCategoryTitleCount(0)
-  self:SetScroll()
   ;
   (TitleInfo.txt_PartDesc):SetText("")
-  self:TitleUpdate(0)
+  self:TitleUpdate()
   self:updateCoolTime()
 end
 
 TitleInfo.registEventHandler = function(self)
-  -- function num : 0_6
-  (self._titleRightListBG):addInputEvent("Mouse_DownScroll", "TitleInfo_ListUpdate( true )")
-  ;
-  (self._titleRightListBG):addInputEvent("Mouse_UpScroll", "TitleInfo_ListUpdate( false )")
-  ;
-  (self.titleListScroll):addInputEvent("Mouse_LUp", "HandleClick_TitleInfo()")
-  ;
-  (self.titleListScrollBtn):addInputEvent("Mouse_LUp", "HandleClick_TitleInfo()")
-  ;
-  (self.titleListScrollBtn):addInputEvent("Mouse_LPress", "HandleClick_TitleInfo()")
+  -- function num : 0_5
   for idx = 0, 3 do
     ((self.Category_BTN)[idx]):addInputEvent("Mouse_LUp", "TitleInfo_SetCategory( " .. idx .. " )")
     ;
@@ -275,10 +160,14 @@ TitleInfo.registEventHandler = function(self)
     ;
     ((self.Category_BTN)[idx]):addInputEvent("Mouse_Out", "HandleMouseEvent_CategoryDesc( " .. idx .. ", false )")
   end
+  ;
+  (self.list2):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "CharacterInfo_Title_ListControlCreate")
+  ;
+  (self.list2):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
 end
 
 HandleMouseEvent_CategoryDesc = function(descType, isOn)
-  -- function num : 0_7 , upvalues : TitleInfo
+  -- function num : 0_6 , upvalues : TitleInfo
   if descType == 0 and isOn == true then
     (TitleInfo.txt_AllRoundDesc):SetAlpha(0)
     ;
@@ -362,7 +251,7 @@ HandleMouseEvent_CategoryDesc = function(descType, isOn)
 end
 
 TitleInfo_SetCategory = function(categoryIdx)
-  -- function num : 0_8 , upvalues : TitleInfo
+  -- function num : 0_7 , upvalues : TitleInfo
   local self = TitleInfo
   for idx = 0, 3 do
     ((self.Category_BTN)[idx]):SetCheck(false)
@@ -391,44 +280,17 @@ TitleInfo_SetCategory = function(categoryIdx)
       end
     end
   end
-  self:SetScroll()
-  self.NowTitleInterval = 0
-  self:TitleUpdate(self.NowTitleInterval)
+  self:TitleUpdate()
   self:updateCoolTime()
 end
 
-TitleInfo.SetScroll = function(self)
-  -- function num : 0_9
-  (self.titleListScrollBtn):ComputePos()
-  ;
-  (self.titleListScroll):SetInterval(self.CurrentCategoryCount - self.maxTitleShow)
-  local titleCtrBtn = (self.titleListScrollBtn):GetSizeY() / self.maxTitleShow * 3
-  if titleCtrBtn < 100 then
-    titleCtrBtn = 100
-  end
-  ;
-  (self.titleListScrollBtn):SetSize((self.titleListScrollBtn):GetSizeX(), titleCtrBtn)
-  ;
-  (self.titleListScroll):SetControlTop()
-end
-
-HandleClick_TitleInfo = function()
-  -- function num : 0_10 , upvalues : TitleInfo
-  local self = TitleInfo
-  local maxTitleInterval = self.CurrentCategoryCount - self.maxTitleShow
-  local posByTitleInterval = 1 / maxTitleInterval
-  local currentTitleInterval = (math.floor)((self.titleListScroll):GetControlPos() / posByTitleInterval + 0.5)
-  self.NowTitleInterval = currentTitleInterval
-  self:TitleUpdate(self.NowTitleInterval)
-end
-
 TitleInfo.registMessageHandler = function(self)
-  -- function num : 0_11
+  -- function num : 0_8
   registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_TitleInfo_Update")
 end
 
 HandleClick_ShowDescription = function(categoryIdx, titleIdx)
-  -- function num : 0_12 , upvalues : TitleInfo, UI_TM
+  -- function num : 0_9 , upvalues : TitleInfo, UI_TM
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   ;
@@ -438,7 +300,7 @@ HandleClick_ShowDescription = function(categoryIdx, titleIdx)
 end
 
 HandleClick_TitleSet = function(categoryIdx, titleIdx)
-  -- function num : 0_13 , upvalues : TitleInfo, UI_TM
+  -- function num : 0_10 , upvalues : TitleInfo, UI_TM
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   ;
@@ -446,6 +308,39 @@ HandleClick_TitleSet = function(categoryIdx, titleIdx)
   ;
   (TitleInfo.txt_PartDesc):SetText(titleWrapper:getDescription())
   ToClient_TitleSetRequest(categoryIdx, titleIdx)
+end
+
+CharacterInfo_Title_ListControlCreate = function(content, key)
+  -- function num : 0_11 , upvalues : TitleInfo
+  local self = TitleInfo
+  local titleIndex = Int64toInt32(key)
+  local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIndex)
+  if titleWrapper == nil then
+    return 
+  end
+  local titleBG = (UI.getChildControl)(content, "List2_Static_TitleList_TitleBG")
+  titleBG:setNotImpactScrollEvent(true)
+  local titleName = (UI.getChildControl)(content, "List2_StaticText_TitleList_Title")
+  local titleSet = (UI.getChildControl)(content, "List2_Button_SetTitle")
+  if titleWrapper:isAcquired() == true then
+    titleBG:SetIgnore(false)
+    titleBG:addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. ", " .. titleIndex .. " )")
+    titleName:SetShow(true)
+    titleName:SetText(titleWrapper:getName())
+    titleSet:SetShow(true)
+    titleSet:addInputEvent("Mouse_LUp", "HandleClick_TitleSet(" .. self.CurrentCategoryIdx .. ", " .. titleIndex .. " )")
+    if ToClient_IsAppliedTitle(titleWrapper:getKey()) then
+      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_RELEASE"))
+    else
+      titleSet:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TITLE_APPLICATION"))
+    end
+  else
+    titleBG:SetIgnore(false)
+    titleName:SetShow(true)
+    titleName:SetText("<PAColor0xFF444444>" .. titleWrapper:getName() .. "<PAOldColor>")
+    titleBG:addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. "," .. titleIndex .. ")")
+    titleSet:SetShow(false)
+  end
 end
 
 TitleInfo:Initialize()

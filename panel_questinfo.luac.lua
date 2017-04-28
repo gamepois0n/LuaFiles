@@ -161,6 +161,9 @@ for index = 0, _maxSelectSlotCount - 1 do
 end
 FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, questGroupCount, fromQuestWidget, isRecommand, isNextQuest)
   -- function num : 0_2 , upvalues : questInfoWindow_groupTitle, UI_color, questInfoWindow_questTitleBG, questInfoWindow_questTitle, questInfoWindow_naviButton, questInfoWindow_giveupButton, button_Giveup_QuestInfoWindow, button_CallSpirit_QuestInfoWindow, button_Navi_QuestInfoWindow, button_AutoNavi_QuestInfoWindow, questInfoWindow_questIcon, questInfoWindow_questIconBG, questInfoWindow_completeNpc, questInfoWindow_questCondition, UI_TM, questInfoWindow_questDesc
+  if Panel_CheckedQuestInfo:IsUISubApp() then
+    Panel_CheckedQuestInfo:CloseUISubApp()
+  end
   if _questInfoDetailGroupId == groupId and _questInfoDetailQuestId == questId then
     FGlobal_QuestInfoDetail_Close()
     return 
@@ -225,7 +228,7 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
         questInfoWindow_naviButton:SetCheck(false)
         button_Navi_QuestInfoWindow:SetCheck(false)
       end
-      if uiCondition == 0 and questInfo:getQuestType() == 0 then
+      if uiCondition == 0 and questInfo:getCompleteNpc() == 0 then
         questInfoWindow_naviButton:SetShow(false)
         button_Navi_QuestInfoWindow:SetShow(false)
         button_AutoNavi_QuestInfoWindow:SetShow(false)
@@ -284,11 +287,10 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
           button_AutoNavi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - 20)
         end
       else
+        button_Giveup_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Giveup_QuestInfoWindow:GetSizeX() * 1.5 - 30)
         if uiCondition == 0 and questInfo:getQuestType() == 0 then
-          button_Giveup_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Giveup_QuestInfoWindow:GetSizeX() - 30)
           button_CallSpirit_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 + 5)
         else
-          button_Giveup_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Giveup_QuestInfoWindow:GetSizeX() * 1.5 - 30)
           button_Navi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 - button_Navi_QuestInfoWindow:GetSizeX() / 2 - 20)
           button_AutoNavi_QuestInfoWindow:SetPosX(Panel_CheckedQuestInfo:GetSizeX() / 2 + button_AutoNavi_QuestInfoWindow:GetSizeX() / 2 - 20)
         end
@@ -300,13 +302,21 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
         checkedQuestInfo_PosY = getMousePosY() - Panel_CheckedQuestInfo:GetSizeY()
       end
       if Panel_Window_Quest_New:GetShow() then
-        Panel_CheckedQuestInfo:SetPosX(Panel_Window_Quest_New:GetPosX() + Panel_Window_Quest_New:GetSizeX())
-        Panel_CheckedQuestInfo:SetPosY(Panel_Window_Quest_New:GetPosY() + 10)
+        if Panel_Window_Quest_New:IsUISubApp() then
+          Panel_CheckedQuestInfo:SetPosX(Panel_Window_Quest_New:GetScreenParentPosX() + Panel_Window_Quest_New:GetSizeX())
+          Panel_CheckedQuestInfo:SetPosY(Panel_Window_Quest_New:GetScreenParentPosY() + 10)
+        else
+          Panel_CheckedQuestInfo:SetPosX(Panel_Window_Quest_New:GetPosX() + Panel_Window_Quest_New:GetSizeX())
+          Panel_CheckedQuestInfo:SetPosY(Panel_Window_Quest_New:GetPosY() + 10)
+        end
       else
         Panel_CheckedQuestInfo:SetPosX(getScreenSizeX() - getScreenSizeX() / 2 - Panel_CheckedQuestInfo:GetSizeX() / 2)
         Panel_CheckedQuestInfo:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_CheckedQuestInfo:GetSizeY() / 2)
       end
       Panel_CheckedQuestInfo:SetShow(true, true)
+      if Panel_Window_Quest_New:IsUISubApp() then
+        Panel_CheckedQuestInfo:OpenUISubApp()
+      end
       local btnGiveupSizeX = button_Giveup_QuestInfoWindow:GetSizeX() + 20
       local btnGiveupTextPosX = btnGiveupSizeX - btnGiveupSizeX / 2 - button_Giveup_QuestInfoWindow:GetTextSizeX() / 2
       button_Giveup_QuestInfoWindow:SetTextSpan(btnGiveupTextPosX, 5)
@@ -339,6 +349,9 @@ end
 
 FGlobal_QuestInfoDetail_Close = function()
   -- function num : 0_4 , upvalues : expTooltip
+  if Panel_CheckedQuestInfo:IsUISubApp() then
+    Panel_CheckedQuestInfo:CloseUISubApp()
+  end
   Panel_CheckedQuestInfo:SetShow(false, false)
   checkedQuestInfo_PosX = Panel_CheckedQuestInfo:GetPosX()
   checkedQuestInfo_PosY = Panel_CheckedQuestInfo:GetPosY()

@@ -10,7 +10,7 @@ local paymentPassword = {
 _config = {indexMax = 10, startX = 30, startY = 95, gapX = 70, gapY = 40, row = 2, column = 5}
 , 
 _const = {type_CreatePassword = 0, type_Reconfirm = 1, type_Authentic = 2}
-, _staticTextTitle = (UI.getChildControl)(Panel_IngameCashShop_Password, "Static_Text_Title_Import"), _editPassword = (UI.getChildControl)(Panel_IngameCashShop_Password, "Edit_DisplayNumber"), _checkPasswordView = (UI.getChildControl)(Panel_IngameCashShop_Password, "CheckButton_NumberView"), _buttonKeypadBack = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Back_Import"), _buttonKeypadClear = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Clear_Import"), _buttonApply = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Apply_Import"), _buttonCancel = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Cancel_Import"), _indexs = (Array.new)(), _state = 0, _isChangeTexture = false, _function = nil}
+, _staticTextTitle = (UI.getChildControl)(Panel_IngameCashShop_Password, "Static_Text_Title_Import"), _editPassword = (UI.getChildControl)(Panel_IngameCashShop_Password, "Edit_DisplayNumber"), _checkPasswordView = (UI.getChildControl)(Panel_IngameCashShop_Password, "CheckButton_NumberView"), _buttonKeypadBack = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Back_Import"), _buttonKeypadClear = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Clear_Import"), _buttonApply = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Apply_Import"), _buttonCancel = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Cancel_Import"), _staticText_Guide = (UI.getChildControl)(Panel_IngameCashShop_Password, "StaticText_Guide"), _indexs = (Array.new)(), _state = 0, _isChangeTexture = false, _function = nil}
 paymentPassword.init = function(self)
   -- function num : 0_0
   local config = self._config
@@ -229,11 +229,25 @@ PaymentPassword_ButtonMouseOut = function(index)
 end
 
 PaymentPassword_Open = function()
-  -- function num : 0_14
+  -- function num : 0_14 , upvalues : paymentPassword
   if Panel_IngameCashShop_Password:GetShow() then
     return 
   end
+  local self = paymentPassword
   Panel_IngameCashShop_Password:SetShow(true)
+  ;
+  (self._staticText_Guide):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  local beforeSizeY = (self._staticText_Guide):GetTextSizeY()
+  ;
+  (self._staticText_Guide):SetText(PAGetString(Defines.StringSheet_RESOURCE, "LUA_SECURITYPASSWORD_NOTIFY"))
+  local sizeY = (self._staticText_Guide):GetTextSizeY()
+  if sizeY ~= beforeSizeY then
+    Panel_IngameCashShop_Password:SetSize(Panel_IngameCashShop_Password:GetSizeX(), Panel_IngameCashShop_Password:GetSizeY() + 10)
+    ;
+    (self._buttonApply):SetPosY((self._buttonApply):GetPosY() + 10)
+    ;
+    (self._buttonCancel):SetPosY((self._buttonCancel):GetPosY() + 10)
+  end
 end
 
 PaymentPassword_Close = function()

@@ -21,7 +21,7 @@ local MaidControl = {buttonMaid = (UI.getChildControl)(Panel_Icon_Maid, "Button_
 Panel_Window_MaidList:SetShow(false)
 Panel_Window_MaidList:setGlassBackground(true)
 Panel_Window_MaidList:ActiveMouseEventEffect(true)
-local maidList = {contentBg = (UI.getChildControl)(Panel_Window_MaidList, "Static_MaidListContentBG"), name = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Name"), town = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Town"), func = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Func"), coolTime = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Cooltime"), btnWarehouse = (UI.getChildControl)(Panel_Window_MaidList, "Button_SummonMaid_Warehouse"), btnMarket = (UI.getChildControl)(Panel_Window_MaidList, "Button_SummonMaid_Market"), albeCount = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_LeftMaidCountValue"), scroll = (UI.getChildControl)(Panel_Window_MaidList, "Scroll_MaidList"), btnClose = (UI.getChildControl)(Panel_Window_MaidList, "Button_Close"), 
+local maidList = {contentBg = (UI.getChildControl)(Panel_Window_MaidList, "Static_MaidListContentBG"), name = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Name"), town = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Town"), func = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Func"), coolTime = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_Cooltime"), btnWarehouse = (UI.getChildControl)(Panel_Window_MaidList, "Button_SummonMaid_Warehouse"), btnMarket = (UI.getChildControl)(Panel_Window_MaidList, "Button_SummonMaid_Market"), albeCount = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_LeftMaidCount"), albeCountValue = (UI.getChildControl)(Panel_Window_MaidList, "StaticText_LeftMaidCountValue"), scroll = (UI.getChildControl)(Panel_Window_MaidList, "Scroll_MaidList"), btnClose = (UI.getChildControl)(Panel_Window_MaidList, "Button_Close"), 
 config = {gapY = 25, normalSizeY = 155}
 , 
 maidInfo = {}
@@ -249,9 +249,12 @@ MaidCoolTime_Update = function()
     ;
     (self.btnMarket):SetFontColor((Defines.Color).C_FFC4BEBE)
   end
+  local countValuePos = (self.albeCount):GetTextSizeX()
   local ableMaidCount = albeWarehouseMaidCount + (albeMarketMaidCount)
   ;
-  (self.albeCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
+  (self.albeCountValue):SetPosX(countValuePos)
+  ;
+  (self.albeCountValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MAIDLIST_TOOLTIP_DESC_5", "maidCount", ableMaidCount))
 end
 
 MaidList_SetScroll = function()

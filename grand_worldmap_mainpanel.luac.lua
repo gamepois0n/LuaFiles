@@ -986,7 +986,13 @@ WorldMapCheckListChange = function(checkState)
     if withSave then
       (worldMapCheckStateInMode[_currentRenderMode])[checkState] = (worldMapCheckState[checkState]):IsCheck()
     end
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+    -- DECOMPILER ERROR at PC38: Unhandled construct in 'MakeBoolean' P1
+
+    if (worldMapCheckState[checkState]):IsCheck() == true and eWorldmapState.eWMS_EXPLORE_PLANT == _currentRenderMode then
+      FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
+    end
+    FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
   end
 end
 
@@ -1295,6 +1301,11 @@ WorldMapStateChange = function(state)
   ToClient_setDoTerrainHide(_isBlackFog)
   ;
   ((worldmapGrand.ui).filterArrow):SetPosX((worldMapState[state]):GetPosX() + (worldMapState[state]):GetSizeX() / 2 - ((worldmapGrand.ui).filterArrow):GetSizeX() / 2)
+  if state == eWorldmapState.eWMS_EXPLORE_PLANT then
+    FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
+  else
+    FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
+  end
 end
 
 WorldMapArrowEffectEraseClear = function()

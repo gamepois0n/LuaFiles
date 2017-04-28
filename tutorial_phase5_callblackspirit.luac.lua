@@ -88,6 +88,7 @@ end
 
 PaGlobal_TutorialPhase_CallBlackSpirit.startPhaseXXX = function(self, stepNo)
   -- function num : 0_3 , upvalues : classType
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_CallBlackSpirit:startPhase()")
   self._currentStep = 0
@@ -408,6 +409,7 @@ PaGlobal_TutorialPhase_CallBlackSpirit.changeStepFindSkillInstructor = function(
     (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial((self._lastSpiritUiData)._stringBlack, (self._lastSpiritUiData)._stringYellow, (self._lastSpiritUiData)._isLeftSideBubble, (self._lastSpiritUiData)._posX, (self._lastSpiritUiData)._posY)
   end
 )
+    FGlobal_DailyStamp_ShowCheck()
   end
 end
 

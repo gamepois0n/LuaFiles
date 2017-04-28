@@ -476,7 +476,7 @@ end
 
 FGlobal_AlchemyFigureHead_Open = function()
   -- function num : 0_14 , upvalues : AlchemyFigureHead
-  local isAlchemyFigureHeadEnble = ToClient_IsContentsGroupOpen("37")
+  local isAlchemyFigureHeadEnble = ToClient_IsContentsGroupOpen("44")
   if not isAlchemyFigureHeadEnble then
     return 
   end

@@ -125,7 +125,7 @@ local _selectChannel = -1
 local slot = {}
 local _dailyStampSlotConfig = {createIcon = true, createBorder = true, createCount = true, createClassEquipBG = true, createCash = true}
 Panel_GameExit_Initialize = function()
-  -- function num : 0_2 , upvalues : totalCharacterCount, UCT, _charSlotBG, Copy_UI_CharChange, startPosX, isCharacterSlotBG, isCharacterSlot, charLevelPool, UI_TM, charNamePool, charWorking, charPcDeliveryRemainTime, charPositionPool, charEnterWaiting, CharacterChangeButton, isCharacterSelect, normalStackPool, charWpCountPool, _btn_ChangeChannel, _block_BG, _btn_FacePhoto, _dailyStampSlotBg, _dailyStampSlotConfig, slot
+  -- function num : 0_2 , upvalues : totalCharacterCount, UCT, _charSlotBG, Copy_UI_CharChange, startPosX, isCharacterSlotBG, isCharacterSlot, charLevelPool, UI_TM, charNamePool, charWorking, charPcDeliveryRemainTime, charPositionPool, charEnterWaiting, CharacterChangeButton, isCharacterSelect, normalStackPool, charWpCountPool, _btn_ChangeChannel, _block_BG, _btn_FacePhoto, _dailyStampSlotBg, _dailyStampSlotConfig, slot, _btn_selectCharacter, _btn_gameExit, _btn_cancel
   local selfProxy = getSelfPlayer()
   local characterNo_64 = toInt64(0, 0)
   if selfProxy ~= nil then
@@ -239,6 +239,12 @@ Panel_GameExit_Initialize = function()
   ;
   (temp.icon):SetPosY(12)
   slot = temp
+  _btn_selectCharacter:SetText(_btn_selectCharacter:GetText())
+  _btn_gameExit:SetText(_btn_gameExit:GetText())
+  _btn_cancel:SetText(_btn_cancel:GetText())
+  _btn_selectCharacter:setChangeFontAfterTransSizeValue()
+  _btn_gameExit:setChangeFontAfterTransSizeValue()
+  _btn_cancel:setChangeFontAfterTransSizeValue()
 end
 
 GameExit_ForFacePhoto = function()
@@ -266,7 +272,7 @@ ButtonFacePhoto_ToolTip = function(isOn)
 end
 
 refreshCharacterInfoData = function(startIdx)
-  -- function num : 0_5 , upvalues : photoIndex, isCharacterSlot, UI_Class, charLevelPool, charNamePool, charPositionPool, normalStackPool, charWpCountPool, UI_color, charWorking, charPcDeliveryRemainTime, charEnterWaiting, CharacterChangeButton, isCharacterSlotBG, _charSlotBG, const_64, _btn_ChangeChannel, _btn_CharTransport, _btn_NextCharPage, _btn_PreCharPage
+  -- function num : 0_5 , upvalues : photoIndex, isCharacterSlot, isExitPhoto, UI_Class, charLevelPool, charNamePool, charPositionPool, normalStackPool, charWpCountPool, UI_color, charWorking, charPcDeliveryRemainTime, charEnterWaiting, CharacterChangeButton, isCharacterSlotBG, _charSlotBG, const_64, _btn_ChangeChannel, _btn_CharTransport, _btn_NextCharPage, _btn_PreCharPage
   local selfProxy = getSelfPlayer()
   local characterNo_64 = toInt64(0, 0)
   if startIdx == nil or startIdx <= 0 then
@@ -309,7 +315,7 @@ refreshCharacterInfoData = function(startIdx)
         local regionInfo = getRegionInfoByPosition(characterData._currentPosition)
         ;
         (isCharacterSlot[uiCount]):SetShow(true)
-        local isCaptureExist = (isCharacterSlot[uiCount]):ChangeTextureInfoNameNotDDS(char_TextureName, char_Type)
+        local isCaptureExist = (isCharacterSlot[uiCount]):ChangeTextureInfoNameNotDDS(char_TextureName, char_Type, isExitPhoto)
         if isCaptureExist == true then
           ((isCharacterSlot[uiCount]):getBaseTexture()):setUV(0, 0, 1, 1)
         else
@@ -582,101 +588,101 @@ refreshCharacterInfoData = function(startIdx)
                                                                       if uiCount == 4 then
                                                                         break
                                                                       end
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out DO_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                      -- DECOMPILER ERROR at PC1065: LeaveBlock: unexpected jumping out IF_STMT
+                                                                      -- DECOMPILER ERROR at PC1066: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                     end
                                                                   end
@@ -914,6 +920,11 @@ Panel_GameExit_ChangeCharacter = function(index)
   local classType = getCharacterClassType(characterData)
   if ToClient_IsCustomizeOnlyClass(classType) then
     NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET_1"))
+    return 
+  end
+  local curChannelData = getCurrentChannelServerData()
+  if curChannelData._isBalanceChannel == true and characterData._level <= 49 and ToClient_isAccessableBalanceChannel() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_BALENCECHANNEL_JOIN_LIMIT"))
     return 
   end
   if characterData._level < 5 then

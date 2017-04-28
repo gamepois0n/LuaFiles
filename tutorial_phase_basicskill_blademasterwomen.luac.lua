@@ -88,6 +88,7 @@ local navigationGuideParam = nil
 
 PaGlobal_TutorialPhase_BasicSkill_BladeMasterWomen.startPhaseXXX = function(self, stepNo, typeNo)
   -- function num : 0_3 , upvalues : navigationGuideParam
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_BasicSkill_BladeMasterWomen:startStep() typeNo : " .. tostring(typeNo))
   self._currentType = typeNo
@@ -100,7 +101,7 @@ PaGlobal_TutorialPhase_BasicSkill_BladeMasterWomen.startPhaseXXX = function(self
     PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
     PaGlobal_TutorialManager:setAllowMainQuestWidget(false)
     navigationGuideParam = NavigationGuideParam()
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC41: Confused about usage of register: R3 in 'UnsetPending'
 
     navigationGuideParam._isAutoErase = false
     ToClient_DeleteNaviGuideByGroup()

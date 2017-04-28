@@ -79,5 +79,18 @@ PaGlobal_ExtractionResult.setHide = function(self)
   Panel_Window_Extraction_Result:SetShow(false)
 end
 
+PaGlobal_ExtractionResult_Resize = function()
+  -- function num : 0_8
+  PaGlobal_ExtractionResult:initialize()
+end
+
+-- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
+
+PaGlobal_ExtractionResult.registMessageHandler = function(self)
+  -- function num : 0_9
+  registerEvent("onScreenResize", "PaGlobal_ExtractionResult_Resize")
+end
+
 PaGlobal_ExtractionResult:initialize()
+PaGlobal_ExtractionResult:registMessageHandler()
 

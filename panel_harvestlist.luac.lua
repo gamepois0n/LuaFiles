@@ -39,7 +39,7 @@ Panel_HarvestList_HideAni = function()
   aniInfo:SetHideAtEnd(true)
 end
 
-local HarvestList = {_Static_BG = (UI.getChildControl)(Panel_HarvestList, "Static_BG"), _Territory = (UI.getChildControl)(Panel_HarvestList, "StaticText_Territory"), _TownName = (UI.getChildControl)(Panel_HarvestList, "StaticText_TownName"), _Address = (UI.getChildControl)(Panel_HarvestList, "StaticText_Address"), _doWork = (UI.getChildControl)(Panel_HarvestList, "Button_doWork"), _Navi = (UI.getChildControl)(Panel_HarvestList, "Button_Navi"), _btn_Close = (UI.getChildControl)(Panel_HarvestList, "Button_Close"), _frame = (UI.getChildControl)(Panel_HarvestList, "Frame_HarvestList"), 
+local HarvestList = {_Static_BG = (UI.getChildControl)(Panel_HarvestList, "Static_BG"), _Territory = (UI.getChildControl)(Panel_HarvestList, "StaticText_Territory"), _TownName = (UI.getChildControl)(Panel_HarvestList, "StaticText_TownName"), _Address = (UI.getChildControl)(Panel_HarvestList, "StaticText_Address"), _doWork = (UI.getChildControl)(Panel_HarvestList, "Button_doWork"), _info = (UI.getChildControl)(Panel_HarvestList, "RadioButton_Info"), _Navi = (UI.getChildControl)(Panel_HarvestList, "Button_Navi"), _btn_Close = (UI.getChildControl)(Panel_HarvestList, "Button_Close"), _frame = (UI.getChildControl)(Panel_HarvestList, "Frame_HarvestList"), 
 _tentPos = {}
 }
 HarvestList.frameContent = (UI.getChildControl)(HarvestList._frame, "Frame_1_Content")
@@ -65,7 +65,8 @@ HarvestList.Panel_HarvestList_Initialize = function(self)
     listArr._Address = (UI.createAndCopyBasePropertyControl)(Panel_HarvestList, "StaticText_Address", self.frameContent, "HarvestList_StaticText_Address_" .. idx)
     listArr._doWork = (UI.createAndCopyBasePropertyControl)(Panel_HarvestList, "Button_doWork", self.frameContent, "HarvestList_Button_doWork_" .. idx)
     listArr._Navi = (UI.createAndCopyBasePropertyControl)(Panel_HarvestList, "Button_Navi", self.frameContent, "HarvestList_Button_Navi_" .. idx)
-    -- DECOMPILER ERROR at PC62: Confused about usage of register: R6 in 'UnsetPending'
+    listArr._info = (UI.createAndCopyBasePropertyControl)(Panel_HarvestList, "RadioButton_Info", self.frameContent, "HarvestList_Button_Info_" .. idx)
+    -- DECOMPILER ERROR at PC72: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self.listArray)[idx] = listArr
@@ -80,6 +81,11 @@ HarvestList.Panel_HarvestList_Initialize = function(self)
     (((self.listArray)[idx])._doWork):SetShow(false)
     ;
     (((self.listArray)[idx])._Navi):SetShow(false)
+    ;
+    (((self.listArray)[idx])._info):SetShow(false)
+    if idx == 0 then
+      (((self.listArray)[idx])._info):SetCheck(true)
+    end
   end
   ;
   (self.frameContent):SetIgnore(false)
@@ -136,7 +142,7 @@ Panel_HarvestList_Update = function()
         ;
         (((self.listArray)[idx])._Territory):SetText(regionWrapper:getTerritoryName())
         ;
-        (((self.listArray)[idx])._Territory):SetPosX(25)
+        (((self.listArray)[idx])._Territory):SetPosX(10)
         ;
         (((self.listArray)[idx])._Territory):SetPosY(_PosY)
         ;
@@ -152,13 +158,13 @@ Panel_HarvestList_Update = function()
         ;
         (((self.listArray)[idx])._Address):SetText(characterStaticStatusWrapper:getName())
         ;
-        (((self.listArray)[idx])._Address):SetPosX(410)
+        (((self.listArray)[idx])._Address):SetPosX(405)
         ;
         (((self.listArray)[idx])._Address):SetPosY(_PosY)
         ;
         (((self.listArray)[idx])._Address):SetShow(true)
         ;
-        (((self.listArray)[idx])._Navi):SetPosX(635)
+        (((self.listArray)[idx])._Navi):SetPosX(640)
         ;
         (((self.listArray)[idx])._Navi):SetPosY(_PosY + 2)
         ;
@@ -171,6 +177,17 @@ Panel_HarvestList_Update = function()
         (((self.listArray)[idx])._doWork):SetPosY(_PosY)
         ;
         (((self.listArray)[idx])._doWork):SetShow(true)
+        ;
+        (((self.listArray)[idx])._info):SetPosX(698)
+        ;
+        (((self.listArray)[idx])._info):SetPosY(_PosY)
+        ;
+        (((self.listArray)[idx])._info):SetShow(true)
+        if (((self.listArray)[idx])._info):IsCheck() and Panel_HarvestList:GetShow() then
+          HarvestList_TentTooltipShow(idx)
+        end
+        ;
+        (((self.listArray)[idx])._info):addInputEvent("Mouse_LUp", "HarvestList_TentTooltipShow(" .. idx .. ")")
         if isharvestManagement then
           local isShow = isWorkeOnHarvest(householdDataWithInstallationWrapper)
           if isShow then
@@ -194,15 +211,15 @@ Panel_HarvestList_Update = function()
               (((self.listArray)[idx])._doWork):SetShow(false)
               ;
               (((self.listArray)[idx])._Navi):SetPosX(600)
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC287: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC287: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC287: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC287: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC244: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC287: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -212,8 +229,20 @@ Panel_HarvestList_Update = function()
   end
 end
 
-isWorkeOnHarvest = function(hhWrapper)
+HarvestList_TentTooltipShow = function(idx)
   -- function num : 0_5
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  if temporaryWrapper == nil then
+    return 
+  end
+  local householdDataWithInstallationWrapper = temporaryWrapper:getSelfTentWrapperByIndex(idx)
+  if householdDataWithInstallationWrapper ~= nil then
+    FGlobal_TentTooltipShow(householdDataWithInstallationWrapper)
+  end
+end
+
+isWorkeOnHarvest = function(hhWrapper)
+  -- function num : 0_6
   local houseHoldNo = hhWrapper:getHouseholdNo()
   if ToClient_hasWorkerWorkingInHarvest(houseHoldNo) then
     return true
@@ -222,7 +251,7 @@ isWorkeOnHarvest = function(hhWrapper)
 end
 
 _HarvestListNavigatorStart = function(idx, myTentCount)
-  -- function num : 0_6 , upvalues : HarvestList, maxTentCount, _naviCurrentInfo
+  -- function num : 0_7 , upvalues : HarvestList, maxTentCount, _naviCurrentInfo
   local self = HarvestList
   ToClient_DeleteNaviGuideByGroup(0)
   for ii = 0, maxTentCount - 1 do
@@ -243,40 +272,41 @@ _HarvestListNavigatorStart = function(idx, myTentCount)
 end
 
 HarvestList_WorkManager_Open = function(index)
-  -- function num : 0_7
+  -- function num : 0_8
   FGlobal_Harvest_WorkManager_Open(index)
 end
 
 FGlobal_HarvestList_Open = function()
-  -- function num : 0_8
+  -- function num : 0_9
   audioPostEvent_SystemUi(13, 6)
-  Panel_HarvestList_Update()
   Panel_HarvestList:SetShow(true, true)
+  Panel_HarvestList_Update()
 end
 
 HarvestList_Close = function()
-  -- function num : 0_9
+  -- function num : 0_10
   audioPostEvent_SystemUi(13, 5)
+  FGlobal_TentTooltipHide()
   Panel_HarvestList:SetShow(false, false)
 end
 
 HandleClicked_HarvestList_Close = function()
-  -- function num : 0_10
+  -- function num : 0_11
   HarvestList_Close()
 end
 
 FGlobal_HarvestList_Update = function()
-  -- function num : 0_11
+  -- function num : 0_12
   Panel_HarvestList_Update()
 end
 
 HarvestList.registEventHandler = function(self)
-  -- function num : 0_12
+  -- function num : 0_13
   (self._btn_Close):addInputEvent("Mouse_LUp", "HandleClicked_HarvestList_Close()")
 end
 
 renderModeChange_Panel_HarvestList_Update = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_13
+  -- function num : 0_14
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end

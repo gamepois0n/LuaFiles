@@ -662,6 +662,10 @@ CashShopController.Initialize = function(self)
   ;
   (self.cameraControlBG):SetSpanSize(17, 60)
   FGlobal_CashShop_SetEquip_CouponEffectCheck()
+  local _btn_SizeX = (self.btn_Coupon):GetSizeX() + 23
+  local _btn_TextSizeX = _btn_SizeX - _btn_SizeX / 2 - (self.btn_Coupon):GetTextSizeX() / 2
+  ;
+  (self.btn_Coupon):SetTextSpan(_btn_TextSizeX, 4)
 end
 
 FGlobal_CashShop_SetEquip_CouponEffectCheck = function()
@@ -715,6 +719,9 @@ CashShopController.Open = function(self)
   local isWarStance = (getIngameCashMall()):getBattleView()
   ;
   (self.btn_WarStance):SetCheck(isWarStance)
+  local isHelmOpen = (getIngameCashMall()):getIsShowBattleHelmet()
+  ;
+  (self.btn_OpenHelm):SetCheck(isHelmOpen)
   ;
   (self.btn_Coupon):SetSpanSize(10, 90)
   Panel_IngameCashShop_Controller:SetShow(true)
@@ -756,40 +763,47 @@ CashShopController.Close = function(self)
   (self.cameraControlBG):SetSpanSize(17, 60)
 end
 
+local tabIndexList = (Array.new)()
 FGlobal_CashShop_SetEquip_BGToggle = function(tabType)
-  -- function num : 0_23 , upvalues : CashShopController
+  -- function num : 0_23 , upvalues : CashShopController, tabIndexList
   local self = CashShopController
-  self.savedTabType = tabType
   ;
   (self.cameraControlBG):SetSpanSize(17, 60)
-  if tabType == 6 then
-    (self.static_SetOptionBG):SetShow(true)
+  for dd = 1, getCashMainCategorySize() do
+    local mainTabInfo = ToClient_GetMainCategoryStaticStatusWrapperByKeyRaw(dd)
+    -- DECOMPILER ERROR at PC29: Confused about usage of register: R7 in 'UnsetPending'
+
+    if mainTabInfo ~= nil then
+      tabIndexList[dd] = {mainTabInfo:getDisplayOrder(), mainTabInfo:getNoRaw(), mainTabInfo:getTabImageNo(), mainTabInfo:getIconPath(), mainTabInfo:getCategoryType()}
+    end
+  end
+  local realno = nil
+  for dd = 1, getCashMainCategorySize() do
+    if (tabIndexList[dd])[1] == tabType then
+      realno = (tabIndexList[dd])[5]
+    end
+  end
+  self.savedTabType = realno
+  if realno == 7 then
+    (self.cameraControlBG):SetSpanSize(17, 60)
     ;
     (self.petLookBG):SetShow(false)
     ;
-    (self.cameraControlBG):SetSpanSize(17, 150)
+    (self.static_SetOptionBG):SetShow(false)
   else
-    if tabType == 9 then
+    if realno == 4 then
+      (self.static_SetOptionBG):SetShow(true)
+      ;
+      (self.petLookBG):SetShow(false)
+      ;
+      (self.cameraControlBG):SetSpanSize(17, 150)
+    else
+      ;
+      (self.cameraControlBG):SetSpanSize(17, 60)
+      ;
       (self.petLookBG):SetShow(false)
       ;
       (self.static_SetOptionBG):SetShow(false)
-      ;
-      (self.cameraControlBG):SetSpanSize(17, 60)
-    else
-      if tabType == 7 and isGameTypeEnglish() then
-        (self.static_SetOptionBG):SetShow(true)
-        ;
-        (self.petLookBG):SetShow(false)
-        ;
-        (self.cameraControlBG):SetSpanSize(17, 150)
-      else
-        ;
-        (self.cameraControlBG):SetSpanSize(17, 60)
-        ;
-        (self.petLookBG):SetShow(false)
-        ;
-        (self.static_SetOptionBG):SetShow(false)
-      end
     end
   end
 end
@@ -804,24 +818,15 @@ FGlobal_CashShop_SetEquip_SelectedItem = function(productNoRaw)
   local isMainCategory = cashProduct:getMainCategory()
   local isMiddleCategory = cashProduct:getMiddleCategory()
   if isMainCategory == 7 and isMiddleCategory == 1 then
-    if isGameTypeEnglish() then
-      if self.savedTabType == 10 then
-        self.savedTabType = 9
-      end
-      if self.savedTabType == 7 then
-        self.savedTabType = 6
-      end
-    end
-    ;
     (self.cameraControlBG):SetSpanSize(17, 60)
-    if self.savedTabType == 6 then
+    if self.savedTabType == 4 then
       (self.static_SetOptionBG):SetShow(true)
       ;
       (self.petLookBG):SetShow(false)
       ;
       (self.cameraControlBG):SetSpanSize(17, 150)
     else
-      if self.savedTabType == 9 then
+      if self.savedTabType == 7 then
         (self.petLookBG):SetShow(true)
         ;
         (self.static_SetOptionBG):SetShow(false)

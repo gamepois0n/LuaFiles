@@ -14,14 +14,73 @@ local nodeResultIcon = {}
 local nodeHelpBG = (UI.getChildControl)(Panel_WorldMap_Tooltip, "StaticText_NodeIconHelp_BG")
 local nodeHelpMouseL = (UI.getChildControl)(Panel_WorldMap_Tooltip, "Static_Help_MouseL")
 local nodeHelpMouseR = (UI.getChildControl)(Panel_WorldMap_Tooltip, "Static_Help_MouseR")
-local partyMemberName = (UI.getChildControl)(Panel_WorldMap_PartyMemberTooltip, "StaticText_PartyMemberName")
-local partyMemberClassIconBG = (UI.getChildControl)(Panel_WorldMap_PartyMemberTooltip, "Static_PartyClassIconBG")
-local partyMemberClassIcon = (UI.getChildControl)(Panel_WorldMap_PartyMemberTooltip, "Static_PartyClassIcon")
-local partyMemberLevel = (UI.getChildControl)(Panel_WorldMap_PartyMemberTooltip, "StaticText_PartyLevel")
+local partyMember = {}
+local partyCount = 0
+local MAX_PARTY_MEMBER = 5
+local Panel_WorldMap_PartyMemberIcon_table = {}
+local Panel_WorldMap_PartyMemberTail_table = {}
+local RenderModeWorldMapBitSet = PAUIRenderModeBitSet({(Defines.RenderMode).eRenderMode_WorldMap})
+local InitPartyMemberTooltipTable = function()
+  -- function num : 0_0 , upvalues : MAX_PARTY_MEMBER, RenderModeWorldMapBitSet, Panel_WorldMap_PartyMemberIcon_table, Panel_WorldMap_PartyMemberTail_table
+  local Name = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "StaticText_PartyMemberName")
+  local ClassIconBG = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIconBG")
+  local ClassIcon = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIcon")
+  local Level = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "StaticText_PartyLevel")
+  local Tail = (UI.getChildControl)(Panel_WorldMap_PartyMemberTail, "Static_PartyTail")
+  for ii = 1, MAX_PARTY_MEMBER do
+    local panel = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberIcon" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_WorldMap_Popups + ii, RenderModeWorldMapBitSet)
+    local panelTail = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberTail" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_WorldMap_Popups + ii, RenderModeWorldMapBitSet)
+    CopyBaseProperty(Panel_WorldMap_PartyMemberIcon, panel)
+    CopyBaseProperty(Panel_WorldMap_PartyMemberTail, panelTail)
+    panel:setMaskingChild(true)
+    panel:setGlassBackground(true)
+    panelTail:setMaskingChild(true)
+    panelTail:setGlassBackground(true)
+    panel:SetIgnore(false)
+    panel:SetDragAll(false)
+    panelTail:SetIgnore(false)
+    panelTail:SetDragAll(false)
+    local controlName = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_PartyMemberIcon, "StaticText_PartyMemberName")
+    local controlClassIconBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIconBG")
+    local controlClassIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIcon")
+    local controlLevel = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_PartyMemberIcon, "StaticText_PartyLevel")
+    local controlTail = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberTail, "Static_PartyTail")
+    CopyBaseProperty(Name, controlName)
+    CopyBaseProperty(ClassIconBG, controlClassIconBG)
+    CopyBaseProperty(ClassIcon, controlClassIcon)
+    CopyBaseProperty(Level, controlLevel)
+    CopyBaseProperty(Tail, controlTail)
+    panel:SetChild_DoNotUseXXX(controlName)
+    panel:SetChild_DoNotUseXXX(controlClassIconBG)
+    panel:SetChild_DoNotUseXXX(controlClassIcon)
+    panel:SetChild_DoNotUseXXX(controlLevel)
+    panelTail:SetChild_DoNotUseXXX(controlTail)
+    -- DECOMPILER ERROR at PC163: Confused about usage of register: R16 in 'UnsetPending'
+
+    Panel_WorldMap_PartyMemberIcon_table[ii] = panel
+    -- DECOMPILER ERROR at PC165: Confused about usage of register: R16 in 'UnsetPending'
+
+    Panel_WorldMap_PartyMemberTail_table[ii] = panelTail
+  end
+end
+
+FGlobal_ActorTooltip_SetShowPartyMemberIcon = function(isShowValue)
+  -- function num : 0_1 , upvalues : MAX_PARTY_MEMBER, Panel_WorldMap_PartyMemberIcon_table, Panel_WorldMap_PartyMemberTail_table
+  for ii = 1, MAX_PARTY_MEMBER do
+    if Panel_WorldMap_PartyMemberIcon_table[ii] ~= nil then
+      (Panel_WorldMap_PartyMemberIcon_table[ii]):SetShow(isShowValue)
+    end
+    if Panel_WorldMap_PartyMemberTail_table[ii] ~= nil then
+      (Panel_WorldMap_PartyMemberTail_table[ii]):SetShow(isShowValue)
+    end
+  end
+end
+
+InitPartyMemberTooltipTable()
 nodeIconName:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 local villageWar = {title = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildWarTitle"), guildMarkBg = (UI.getChildControl)(Panel_NodeSiegeTooltip, "Static_GuildMarkBG"), guildMark = (UI.getChildControl)(Panel_NodeSiegeTooltip, "Static_GuildMark"), guildName = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildName"), guildMasterName = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildMaster"), guildOption = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_Benefits"), nodeState = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_NodeState"), nodeStateDesc = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_StateDesc"), nodeWarJoinCount = (UI.getChildControl)(Panel_NodeSiegeTooltip, "MultilineText_JoinNodeWarCount"), nodeTaxGrade = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_TaxGrade"), nodeGuildWarDay = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildWarDay"), nodeLastWeek = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_LastWeek")}
 local tooltipHide = function()
-  -- function num : 0_0 , upvalues : nodeIconName, nodeResultDropGroupMaxCount, nodeResultIconName, nodeResultIconBG, nodeResultIcon, nodeHelpBG, nodeHelpMouseL, nodeHelpMouseR, partyMemberName, partyMemberClassIcon, partyMemberClassIconBG, partyMemberLevel
+  -- function num : 0_2 , upvalues : nodeIconName, nodeResultDropGroupMaxCount, nodeResultIconName, nodeResultIconBG, nodeResultIcon, nodeHelpBG, nodeHelpMouseL, nodeHelpMouseR
   nodeIconName:SetShow(false)
   for ii = 1, nodeResultDropGroupMaxCount do
     (nodeResultIconName[ii]):SetShow(false)
@@ -33,21 +92,16 @@ local tooltipHide = function()
   nodeHelpBG:SetShow(false)
   nodeHelpMouseL:SetShow(false)
   nodeHelpMouseR:SetShow(false)
-  partyMemberName:SetShow(false)
-  partyMemberClassIcon:SetShow(false)
-  partyMemberClassIconBG:SetShow(false)
-  partyMemberLevel:SetShow(false)
 end
 
 local sizeGap = 10
 FromClient_WorldmapIconTooltipInit = function(commonOverUI)
-  -- function num : 0_1
+  -- function num : 0_3
 end
 
 FGlobal_ClearWorldmapIconTooltip = function()
-  -- function num : 0_2 , upvalues : nodeIconName, nodeResultDropGroupMaxCount, nodeResultIconName, nodeResultIcon, nodeResultIconBG, nodeHelpBG, nodeHelpMouseL, nodeHelpMouseR
+  -- function num : 0_4 , upvalues : nodeIconName, nodeResultDropGroupMaxCount, nodeResultIconName, nodeResultIcon, nodeResultIconBG, nodeHelpBG, nodeHelpMouseL, nodeHelpMouseR
   Panel_WorldMap_Tooltip:SetShow(false)
-  Panel_WorldMap_PartyMemberTooltip:SetShow(false)
   nodeIconName:SetShow(false)
   for ii = 1, nodeResultDropGroupMaxCount do
     (nodeResultIconName[ii]):SetShow(false)
@@ -64,7 +118,7 @@ end
 local On_waypointKey = nil
 local dayString = {[UI_VT.eVillageSiegeType_Sunday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_SUNDAY"), [UI_VT.eVillageSiegeType_Monday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_MONDAY"), [UI_VT.eVillageSiegeType_Tuesday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_TUESDAY"), [UI_VT.eVillageSiegeType_Wednesday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_WEDNESDAY"), [UI_VT.eVillageSiegeType_Thursday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_THUSDAY"), [UI_VT.eVillageSiegeType_Friday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_FRIDAY"), [UI_VT.eVillageSiegeType_Saturday] = PAGetString(Defines.StringSheet_GAME, "LUA_VILLAGETENT_SATURDAY")}
 initNodeResultDropGroupControl = function()
-  -- function num : 0_3 , upvalues : nodeResultDropGroupMaxCount, nodeResultIconBG, nodeResultIcon, nodeResultIconName, nodeIconName
+  -- function num : 0_5 , upvalues : nodeResultDropGroupMaxCount, nodeResultIconBG, nodeResultIcon, nodeResultIconName, nodeIconName
   local nodeResultIconNameBase = (UI.getChildControl)(Panel_WorldMap_Tooltip, "StaticText_IconName_ResultName")
   local nodeResultIconBase = (UI.getChildControl)(Panel_WorldMap_Tooltip, "StaticText_IconName_ResultIcon")
   local nodeResultIconBGBase = (UI.getChildControl)(Panel_WorldMap_Tooltip, "StaticText_IconName_ResultIconBG")
@@ -98,7 +152,7 @@ initNodeResultDropGroupControl = function()
 end
 
 local showDropGroupControlInTooltip = function(itemExchangeSourceSS)
-  -- function num : 0_4 , upvalues : nodeResultDropGroupMaxCount, nodeResultIconName, nodeResultIconBG, nodeResultIcon
+  -- function num : 0_6 , upvalues : nodeResultDropGroupMaxCount, nodeResultIconName, nodeResultIconBG, nodeResultIcon
   if itemExchangeSourceSS == nil then
     _PA_ASSERT(false, "ItemExchangeSourceStaticStatus�\128 nil 입니�\164.")
     return 
@@ -139,7 +193,7 @@ local showDropGroupControlInTooltip = function(itemExchangeSourceSS)
 end
 
 local findLongestTextControl = function(textControlList)
-  -- function num : 0_5
+  -- function num : 0_7
   local longestSizeX = 0
   local longestTextControl = nil
   for key,value in pairs(textControlList) do
@@ -152,7 +206,7 @@ local findLongestTextControl = function(textControlList)
 end
 
 local setAdjustSizeDropGroupTooltip = function(dropGroupCount)
-  -- function num : 0_6 , upvalues : nodeIconName, findLongestTextControl, nodeResultIconName, sizeGap
+  -- function num : 0_8 , upvalues : nodeIconName, findLongestTextControl, nodeResultIconName, sizeGap
   if dropGroupCount == -1 then
     _PA_ASSERT(false, "getDropGroupCount()�\152 값이 잘못되었습니�\164.")
     return 
@@ -176,7 +230,7 @@ local setAdjustSizeDropGroupTooltip = function(dropGroupCount)
 end
 
 FromClient_OnWorldMapNode = function(nodeBtn)
-  -- function num : 0_7 , upvalues : tooltipHide, nodeIconName, sizeGap, showDropGroupControlInTooltip, setAdjustSizeDropGroupTooltip, nodeHelpBG, nodeHelpMouseL, nodeHelpMouseR, villageWar, dayString
+  -- function num : 0_9 , upvalues : tooltipHide, nodeIconName, sizeGap, showDropGroupControlInTooltip, setAdjustSizeDropGroupTooltip, nodeHelpBG, nodeHelpMouseL, nodeHelpMouseR, villageWar, dayString
   tooltipHide()
   FGlobal_ClearWorldmapIconTooltip()
   local nodeInfo = nodeBtn:FromClient_getExplorationNodeInClient()
@@ -442,7 +496,7 @@ FromClient_OnWorldMapNode = function(nodeBtn)
 end
 
 FromClient_OutWorldMapNode = function(nodeBtn)
-  -- function num : 0_8
+  -- function num : 0_10
   local nodeInfo = nodeBtn:FromClient_getExplorationNodeInClient()
   local plantKey = nodeInfo:getPlantKey()
   local waypointKey = plantKey:getWaypointKey()
@@ -462,8 +516,8 @@ FromClient_OutWorldMapNode = function(nodeBtn)
   Panel_NodeSiegeTooltip:SetShow(false)
 end
 
-FromClient_PartyIconOn = function(index)
-  -- function num : 0_9
+FromClient_PartyIcon = function(index)
+  -- function num : 0_11
   if isShow then
     local memberData = RequestParty_getPartyMemberAt(index)
     if memberData == nil then
@@ -482,14 +536,9 @@ FromClient_PartyIconOn = function(index)
   end
 end
 
-FromClient_PartyIconOut = function()
-  -- function num : 0_10
-  FGlobal_ClearWorldmapIconTooltip()
-end
-
 local houseKey_ToolTip = nil
 FromClient_OnWorldMapHouse = function(houseBtn, commonOverUI)
-  -- function num : 0_11 , upvalues : houseKey_ToolTip, nodeIconName, sizeGap
+  -- function num : 0_12 , upvalues : houseKey_ToolTip, nodeIconName, sizeGap
   FGlobal_ClearWorldmapIconTooltip()
   houseKey_ToolTip = (houseBtn:FromClient_getStaticStatus()):getHouseKey()
   local houseInClientWrapper = houseBtn:FromClient_getStaticStatus()
@@ -515,7 +564,7 @@ FromClient_OnWorldMapHouse = function(houseBtn, commonOverUI)
 end
 
 FromClient_OutWorldMapHouse = function(houseBtn, commonOverUI)
-  -- function num : 0_12 , upvalues : houseKey_ToolTip
+  -- function num : 0_13 , upvalues : houseKey_ToolTip
   if houseKey_ToolTip ~= (houseBtn:FromClient_getStaticStatus()):getHouseKey() then
     return 
   end
@@ -525,7 +574,7 @@ FromClient_OutWorldMapHouse = function(houseBtn, commonOverUI)
 end
 
 FromClient_WorldMapAuctionHouseOn = function(guildHouseBtn, commonOverUI)
-  -- function num : 0_13 , upvalues : nodeIconName, sizeGap
+  -- function num : 0_14 , upvalues : nodeIconName, sizeGap
   FGlobal_ClearWorldmapIconTooltip()
   local auctionHouseWrapper = guildHouseBtn:FromClient_getAuctionHouseInfoWrapper()
   if auctionHouseWrapper == nil then
@@ -565,22 +614,22 @@ FromClient_WorldMapAuctionHouseOn = function(guildHouseBtn, commonOverUI)
 end
 
 FromClient_WorldMapAuctionHouseOut = function()
-  -- function num : 0_14
+  -- function num : 0_15
   FGlobal_ClearWorldmapIconTooltip()
 end
 
 FromClient_WorldMapAuctionHouseRClick = function(position)
-  -- function num : 0_15
+  -- function num : 0_16
   FromClient_RClickWorldmapPanel(position, true, false)
 end
 
 FromClient_RClickActorIcon = function(actorIcon, pos3D)
-  -- function num : 0_16
+  -- function num : 0_17
   FromClient_RClickWorldmapPanel(pos3D, true, false)
 end
 
 FromClient_OnBuildingNode = function(buildingBtn, commonOverUI)
-  -- function num : 0_17
+  -- function num : 0_18
   if buildingBtn == nil then
     return 
   end
@@ -593,13 +642,13 @@ FromClient_OnBuildingNode = function(buildingBtn, commonOverUI)
 end
 
 FromClient_OutBuildingNode = function(buildingBtn, commonOverUI)
-  -- function num : 0_18
+  -- function num : 0_19
   FGlobal_HouseInstallation_MinorWar_Close()
   ToClient_clearBuildingLineInVillageSiege()
 end
 
 FromClient_LClickDeliveryVehicle = function(deliveryIcon)
-  -- function num : 0_19
+  -- function num : 0_20
   local objectID = deliveryIcon:FromClient_GetObjectID()
   local delivererType = deliveryIcon:FromClient_getDelivererType()
   if delivererType == (CppEnums.DelivererType).WagonForPerson or delivererType == (CppEnums.DelivererType).OfferingCarrier then
@@ -609,126 +658,208 @@ FromClient_LClickDeliveryVehicle = function(deliveryIcon)
 end
 
 FromClient_SetTownModeToActorTooltip = function()
-  -- function num : 0_20
+  -- function num : 0_21
   Panel_WorldMap_Tooltip:SetShow(false)
 end
 
-FromClient_PartyIconOn = function(partyMemberIcon, partyMemberProxy)
-  -- function num : 0_21 , upvalues : tooltipHide, UI_Class, partyMemberClassIcon, partyMemberClassIconBG, partyMemberName, partyMemberLevel
-  tooltipHide()
+FromClient_PartyIcon = function(partyMemberIcon, partyMemberProxy, index, isValid)
+  -- function num : 0_22 , upvalues : partyCount, Panel_WorldMap_PartyMemberIcon_table, Panel_WorldMap_PartyMemberTail_table, partyMember, UI_Class
+  local partySize = FGlobal_PartyMemberCount()
+  partyCount = index + 1
+  if isValid == false then
+    (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetShow(false)
+    ;
+    (Panel_WorldMap_PartyMemberTail_table[partyCount]):SetShow(false)
+    return 
+  end
+  -- DECOMPILER ERROR at PC80: Confused about usage of register: R5 in 'UnsetPending'
+
+  partyMember[partyCount] = {Name = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "StaticText_PartyMemberName"), ClassIconBG = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "Static_PartyClassIconBG"), ClassIcon = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "Static_PartyClassIcon"), Level = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "StaticText_PartyLevel"), Tail = (UI.getChildControl)(Panel_WorldMap_PartyMemberTail_table[partyCount], "Static_PartyTail"), PosX = partyMemberIcon:GetPosX(), PosY = partyMemberIcon:GetPosY(), SizeX = (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX(), SizeY = (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY()}
+  ;
+  (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetShow(true)
+  ;
+  (Panel_WorldMap_PartyMemberTail_table[partyCount]):SetShow(true)
   local partyActorName = partyMemberProxy:name()
   local partyActorLevel = partyMemberProxy._level
-  local posX = partyMemberIcon:GetPosX() + partyMemberIcon:GetSizeX()
-  local posY = partyMemberIcon:GetPosY()
   if partyMemberProxy:classType() == UI_Class.ClassType_Warrior then
-    classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-    partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-    local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 77, 25, 107, 55)
+    classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
     ;
-    (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-    partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+    ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+    local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 102, 31, 131)
+    ;
+    (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
   else
     do
       if partyMemberProxy:classType() == UI_Class.ClassType_Ranger then
-        classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-        partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-        local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 108, 25, 138, 55)
+        classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
         ;
-        (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-        partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+        ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+        local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 133, 31, 162)
+        ;
+        (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
       else
         do
           if partyMemberProxy:classType() == UI_Class.ClassType_Sorcerer then
-            classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-            partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-            local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 139, 25, 169, 55)
+            classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
             ;
-            (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-            partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+            ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+            local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 164, 31, 193)
+            ;
+            (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+            ;
+            ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
           else
             do
               if partyMemberProxy:classType() == UI_Class.ClassType_Giant then
-                classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 170, 25, 200, 55)
+                classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                 ;
-                (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+                ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 195, 31, 224)
+                ;
+                (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                ;
+                ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
               else
                 do
                   if partyMemberProxy:classType() == UI_Class.ClassType_Tamer then
-                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                    partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                    local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 167, 56, 197, 86)
+                    classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                     ;
-                    (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                    partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+                    ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                    local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 226, 31, 255)
+                    ;
+                    (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                    ;
+                    ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
                   else
                     do
                       if partyMemberProxy:classType() == UI_Class.ClassType_BladeMaster then
-                        classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                        partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                        local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 198, 56, 228, 86)
+                        classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                         ;
-                        (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                        partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+                        ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                        local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 257, 31, 286)
+                        ;
+                        (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                        ;
+                        ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
                       else
                         do
                           if partyMemberProxy:classType() == UI_Class.ClassType_BladeMasterWomen then
-                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                            partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                            local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 198, 87, 228, 117)
+                            classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                             ;
-                            (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                            partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+                            ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                            local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 319, 31, 348)
+                            ;
+                            (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                            ;
+                            ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
                           else
                             do
                               if partyMemberProxy:classType() == UI_Class.ClassType_Valkyrie then
-                                classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                                local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 167, 87, 197, 117)
+                                classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                                 ;
-                                (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+                                ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                                local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 288, 31, 317)
+                                ;
+                                (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                ;
+                                ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
                               else
                                 do
                                   if partyMemberProxy:classType() == UI_Class.ClassType_Wizard then
-                                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                    partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                                    local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 198, 118, 228, 148)
+                                    classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                                     ;
-                                    (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                    partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+                                    ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                                    local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 381, 31, 410)
+                                    ;
+                                    (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                    ;
+                                    ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
                                   else
                                     do
                                       if partyMemberProxy:classType() == UI_Class.ClassType_WizardWomen then
-                                        classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                        partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                                        local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 198, 149, 228, 179)
+                                        classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                                         ;
-                                        (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                        partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
+                                        ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                                        local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 350, 31, 379)
+                                        ;
+                                        (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                        ;
+                                        ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
                                       else
                                         do
-                                          if partyMemberProxy:classType() == UI_Class.ClassType_DarkElf then
-                                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
-                                            partyMemberClassIcon:ChangeTextureInfoName(classTypeTexture)
-                                            local x1, y1, x2, y2 = setTextureUV_Func(partyMemberClassIcon, 1, 1, 31, 31)
+                                          if partyMemberProxy:classType() == UI_Class.ClassType_NinjaMan then
+                                            classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
                                             ;
-                                            (partyMemberClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                            partyMemberClassIcon:setRenderTexture(partyMemberClassIcon:getBaseTexture())
-                                          end
-                                          do
-                                            Panel_WorldMap_PartyMemberTooltip:SetShow(true)
-                                            partyMemberClassIconBG:SetShow(true)
-                                            partyMemberClassIcon:SetShow(true)
-                                            partyMemberName:SetShow(true)
-                                            partyMemberLevel:SetShow(true)
-                                            partyMemberName:SetText(partyActorName)
-                                            partyMemberLevel:SetText(partyActorLevel)
-                                            partyMemberClassIcon:SetPosX(partyMemberName:GetPosX() - partyMemberName:GetSizeX())
-                                            Panel_WorldMap_PartyMemberTooltip:SetPosX(posX - 15)
-                                            Panel_WorldMap_PartyMemberTooltip:SetPosY(posY + 20)
+                                            ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                                            local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 412, 31, 441)
+                                            ;
+                                            (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                            ;
+                                            ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
+                                          else
+                                            do
+                                              if partyMemberProxy:classType() == UI_Class.ClassType_NinjaWomen then
+                                                classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
+                                                ;
+                                                ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                                                local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 443, 31, 472)
+                                                ;
+                                                (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                ;
+                                                ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
+                                              else
+                                                do
+                                                  if partyMemberProxy:classType() == UI_Class.ClassType_DarkElf then
+                                                    classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
+                                                    ;
+                                                    ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                                                    local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 2, 474, 31, 503)
+                                                    ;
+                                                    (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                    ;
+                                                    ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
+                                                  end
+                                                  do
+                                                    ;
+                                                    ((partyMember[partyCount]).ClassIconBG):SetShow(false)
+                                                    ;
+                                                    ((partyMember[partyCount]).ClassIcon):SetShow(true)
+                                                    ;
+                                                    ((partyMember[partyCount]).Name):SetShow(true)
+                                                    ;
+                                                    ((partyMember[partyCount]).Level):SetShow(true)
+                                                    ;
+                                                    ((partyMember[partyCount]).Name):SetAutoResize(true)
+                                                    ;
+                                                    ((partyMember[partyCount]).Name):SetText(partyActorName)
+                                                    ;
+                                                    ((partyMember[partyCount]).Level):SetText(partyActorLevel)
+                                                    ;
+                                                    ((partyMember[partyCount]).ClassIcon):SetPosX(((partyMember[partyCount]).Name):GetPosX() - ((partyMember[partyCount]).ClassIcon):GetSizeX() * 1.5)
+                                                    ;
+                                                    ((partyMember[partyCount]).ClassIcon):SetPosY(((partyMember[partyCount]).Name):GetPosY() - 2)
+                                                    ;
+                                                    ((partyMember[partyCount]).Level):SetPosX(((partyMember[partyCount]).ClassIcon):GetPosX() + ((partyMember[partyCount]).ClassIcon):GetSizeX() - ((partyMember[partyCount]).Level):GetSizeX() / 2)
+                                                    ;
+                                                    ((partyMember[partyCount]).Level):SetPosY(((partyMember[partyCount]).ClassIcon):GetPosY() + ((partyMember[partyCount]).ClassIcon):GetSizeY() - ((partyMember[partyCount]).Level):GetSizeY())
+                                                    ;
+                                                    (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetSize(((partyMember[partyCount]).ClassIcon):GetSizeX() + ((partyMember[partyCount]).Name):GetTextSizeX() + (((partyMember[partyCount]).Name):GetSpanSize()).x, (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY())
+                                                    ;
+                                                    (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetPosX(partyMemberIcon:GetPosX() + partyMemberIcon:GetSizeX() / 2 - (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX() / 2)
+                                                    ;
+                                                    (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetPosY(partyMemberIcon:GetPosY())
+                                                    ;
+                                                    ((partyMember[partyCount]).Tail):SetPosX((Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetPosX() + (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX() / 2 - ((partyMember[partyCount]).Tail):GetSizeX() / 2)
+                                                    ;
+                                                    ((partyMember[partyCount]).Tail):SetPosY((Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetPosY() + (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY() - 2)
+                                                  end
+                                                end
+                                              end
+                                            end
                                           end
                                         end
                                       end
@@ -752,11 +883,6 @@ FromClient_PartyIconOn = function(partyMemberIcon, partyMemberProxy)
   end
 end
 
-FromClient_PartyIconOut = function()
-  -- function num : 0_22
-  Panel_WorldMap_PartyMemberTooltip:SetShow(false)
-end
-
 FromClient_luaLoadComplete_WorldMap_ActorTooltip = function()
   -- function num : 0_23
   initNodeResultDropGroupControl()
@@ -775,7 +901,6 @@ registerEvent("FromClient_WorldMapAuctionHouseRClick", "FromClient_WorldMapAucti
 registerEvent("FromClient_RClickActorIcon", "FromClient_RClickActorIcon")
 registerEvent("FromClient_LClickDeliveryVehicle", "FromClient_LClickDeliveryVehicle")
 registerEvent("FromClient_SetTownMode", "FromClient_SetTownModeToActorTooltip")
-registerEvent("FromClient_PartyIconOn", "FromClient_PartyIconOn")
-registerEvent("FromClient_PartyIconOut", "FromClient_PartyIconOut")
+registerEvent("FromClient_PartyIcon", "FromClient_PartyIcon")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_WorldMap_ActorTooltip")
 

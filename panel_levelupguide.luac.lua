@@ -121,6 +121,7 @@ FGlobal_LevelupGuide_Open = function(isLevelUp)
     return 
   end
   if Panel_Window_DailyStamp:GetShow() then
+    FGlobal_LevelupGuide_PowerClose()
     return 
   end
   local seflPlayer = getSelfPlayer()
@@ -236,6 +237,12 @@ HandleClicked_LevelupGuide_Close = function()
   if not Panel_LevelupGuide:GetShow() then
     return 
   end
+  Panel_LevelupGuide:SetShow(false, false)
+  _Web:ResetUrl()
+end
+
+FGlobal_LevelupGuide_PowerClose = function()
+  -- function num : 0_8 , upvalues : _Web
   Panel_LevelupGuide:SetShow(false, false)
   _Web:ResetUrl()
 end

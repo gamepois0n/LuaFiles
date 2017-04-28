@@ -199,6 +199,8 @@ servantInfo.update = function(self)
   (self._lv):SetShow(false)
   ;
   (self._staticLevel):SetShow(false)
+  ;
+  (self._iconStallion):SetShow(false)
   if (CppEnums.VehicleType).Type_Elephant ~= servantWrapper:getVehicleType() then
     (self._staticGaugeBar_Exp):SetShow(true)
     ;
@@ -414,11 +416,11 @@ servantInfo.update = function(self)
               do
                 do
                   self._skillCount = self._skillCount + 1
-                  -- DECOMPILER ERROR at PC790: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC794: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC790: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC794: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC790: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC794: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end

@@ -128,6 +128,18 @@ PaGlobal_Enchant.clear = function(self)
   ;
   (self._uiButtonApply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DOENCHANT"))
   ;
+  (self._uiDrasticEnchant):SetCheck(true)
+  ;
+  (self._uiMeticulousEnchant):SetCheck(false)
+  ;
+  (self._uiDrasticEnchant):SetShow(false)
+  ;
+  (self._uiMeticulousEnchant):SetShow(false)
+  ;
+  (self._uiDrasticEnchant):SetIgnore(self._isDoingEnchant)
+  ;
+  (self._uiMeticulousEnchant):SetIgnore(self._isDoingEnchant)
+  ;
   (self._uiHelpEnchantBtn):SetShow(false)
   local dummy, cronCount = self:protectItemCount()
   ;
@@ -483,6 +495,10 @@ PaGlobal_Enchant.startEnchant = function(self, isSureSuccess)
   (self._uiEnchantEffect):EraseAllEffect()
   self._isDoingEnchant = true
   ;
+  (self._uiDrasticEnchant):SetIgnore(self._isDoingEnchant)
+  ;
+  (self._uiMeticulousEnchant):SetIgnore(self._isDoingEnchant)
+  ;
   ((self._slotTargetItem).icon):AddEffect("fUI_LimitOver01A", false, 0, 0)
   ;
   ((self._slotEnchantItem).icon):AddEffect("fUI_LimitOver01A", false, 0, 0)
@@ -521,8 +537,9 @@ PaGlobal_Enchant.doEnchant = function(self)
   if (self._uiCheckBtn_CronEnchnt):IsCheck() then
     ToClient_ReqUpgradeItem((self._slotEnchantItem).inventoryType, (self._slotEnchantItem).slotNo, (self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
   else
+    local checkEasy = (self._uiDrasticEnchant):IsCheck()
     ;
-    (getEnchantInformation()):doEnchant(self._isStartEnchantSureSuccess)
+    (getEnchantInformation()):doEnchant(self._isStartEnchantSureSuccess, not checkEasy)
   end
 end
 
@@ -534,8 +551,9 @@ PaGlobal_Enchant.handleMClickedSkipEnchant = function(self)
   if (self._uiCheckBtn_CronEnchnt):IsCheck() then
     ToClient_ReqUpgradeItem((self._slotEnchantItem).inventoryType, (self._slotEnchantItem).slotNo, (self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
   else
+    local checkEasy = (self._uiDrasticEnchant):IsCheck()
     ;
-    (getEnchantInformation()):doEnchant(false)
+    (getEnchantInformation()):doEnchant(false, not checkEasy)
   end
 end
 
@@ -545,7 +563,7 @@ PaGlobal_Enchant.handleMClickedSkipPerfectEnchant = function(self)
   -- function num : 0_13
   self._isDoingEnchant = false
   ;
-  (getEnchantInformation()):doEnchant(true)
+  (getEnchantInformation()):doEnchant(true, false)
 end
 
 -- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
@@ -568,6 +586,10 @@ PaGlobal_Enchant.cancelEnchant = function(self)
   (self._uiProtectItem_Btn):SetIgnore(false)
   ;
   (self._uiProtectItem_Btn):SetCheck(false)
+  ;
+  (self._uiDrasticEnchant):SetIgnore(self._isDoingEnchant)
+  ;
+  (self._uiMeticulousEnchant):SetIgnore(self._isDoingEnchant)
   ToClient_BlackspiritEnchantCancel()
 end
 
@@ -578,6 +600,36 @@ PaGlobal_Enchant.successEnchant = function(self)
   render_setChromaticBlur(40, 1)
   render_setPointBlur(0.05, 0.045)
   render_setColorBypass(0.85, 0.08)
+  local itemWrapper = getInventoryItemByType((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
+  local enchantCount = ((itemWrapper:get()):getKey()):getEnchantLevel()
+  local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
+  local isDifficultyEnchant = (itemWrapper:getStaticStatus()):getEnchantDifficulty()
+  if enchantCount >= 0 and enchantCount <= 14 then
+    if (CppEnums.EnchantDifficulty).eEnchantDifficulty_Normal == isDifficultyEnchant then
+      (self._uiDrasticEnchant):SetShow(true)
+      ;
+      (self._uiMeticulousEnchant):SetShow(true)
+    else
+      if (CppEnums.EnchantDifficulty).eEnchantDifficulty_Hard == isDifficultyEnchant then
+        (self._uiDrasticEnchant):SetCheck(true)
+        ;
+        (self._uiMeticulousEnchant):SetCheck(false)
+        ;
+        (self._uiDrasticEnchant):SetShow(false)
+        ;
+        (self._uiMeticulousEnchant):SetShow(false)
+      end
+    end
+  else
+    ;
+    (self._uiDrasticEnchant):SetCheck(true)
+    ;
+    (self._uiMeticulousEnchant):SetCheck(false)
+    ;
+    (self._uiDrasticEnchant):SetShow(false)
+    ;
+    (self._uiMeticulousEnchant):SetShow(false)
+  end
   ToClient_BlackspiritEnchantSuccess()
   ;
   (self._uiButtonApply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DOENCHANT"))
@@ -807,7 +859,6 @@ EnchantInvenFilerSubItem = function(slotNo, notUse_itemWrappers, whereType)
     return true
   end
   local returnValue = true
-  _PA_LOG("이문�\133", "getEnchantInformation():checkIsValidSubItem(" .. slotNo .. ") : " .. tostring((getEnchantInformation()):checkIsValidSubItem(slotNo)))
   if (getEnchantInformation()):checkIsValidSubItem(slotNo) ~= 0 then
     returnValue = true
   else
@@ -936,115 +987,140 @@ EnchantInteractionFromInventory = function(slotNo, itemWrapper, count, inventory
     local isCashItem = ((itemWrapper:getStaticStatus()):get()):isCash()
     local enchantCount = ((itemWrapper:get()):getKey()):getEnchantLevel()
     local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-    self._enchantClassifyValue = enchantItemClassify
-    self._enchantPerfectEnduranceValue = enchantPerfectEndurance
-    self._isEnchantSafeTypeValue = isEnchantSafeType
-    self._isItemKey = ((enchantSSW:get())._key):getItemKey()
-    self._isCash = isCashItem
-    self._isEnchantLevel = enchantCount
-    if itemWrapper:getNeedEnchantItem(true) == nil then
-      (self._uiEnchantFailDesc):SetShow(true)
-      self:handleMOnShowHelpDesc(false)
-      self._enchantCountValue = enchantCount
-    else
-      ;
-      (self._uiEnchantFailDesc):SetShow(false)
-      self:handleMOnShowHelpDesc(true)
-      self._enchantCountValue = enchantCount
-      self:setNeedPerfectEnchantItemCount(itemWrapper:getNeedEnchantItem(true), enchantCount, enchantItemClassify)
-    end
-    if self._isContentsEnable then
-      self:setProtectItem((enchantSSW:get())._key, enchantCount)
-    end
-    itemWrapper = getInventoryItemByType(inventoryType, slotNo)
-    ;
-    (self._slotTargetItem):setItem(itemWrapper)
-    Inventory_SetFunctor(EnchantInvenFilerSubItem, EnchantInteractionFromInventory, Enchant_Close, nil)
-    self:CronEnchantCheck(itemWrapper)
-  else
-    do
-      -- DECOMPILER ERROR at PC184: Confused about usage of register: R7 in 'UnsetPending'
-
-      if (self._slotEnchantItem).empty then
-        (self._slotEnchantItem).empty = false
-        -- DECOMPILER ERROR at PC186: Confused about usage of register: R7 in 'UnsetPending'
-
+    local isDifficultyEnchant = (itemWrapper:getStaticStatus()):getEnchantDifficulty()
+    if enchantCount >= 0 and enchantCount <= 14 then
+      if (CppEnums.EnchantDifficulty).eEnchantDifficulty_Normal == isDifficultyEnchant then
+        local isEasyEnchantTypeCheck = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).EnchantType)
         ;
-        (self._slotEnchantItem).slotNo = slotNo
-        -- DECOMPILER ERROR at PC188: Confused about usage of register: R7 in 'UnsetPending'
-
+        (self._uiDrasticEnchant):SetShow(true)
         ;
-        (self._slotEnchantItem).inventoryType = inventoryType
-        itemWrapper = getInventoryItemByType(inventoryType, slotNo)
+        (self._uiMeticulousEnchant):SetShow(true)
         ;
-        (self._slotEnchantItem):setItem(itemWrapper)
+        (self._uiDrasticEnchant):SetCheck(not isEasyEnchantTypeCheck)
         ;
-        ((self._slotEnchantItem).icon):EraseAllEffect()
-        audioPostEvent_SystemUi(0, 7)
-        if ((itemWrapper:get()):getKey()):getItemKey() == 16002 then
-          (self._uiEnchantEffect):AddEffect("fUI_Gauge_Blue", true, 0, 0)
-          ;
-          ((self._slotEnchantItem).icon):AddEffect("fUI_DarkstoneAura02", false, 0, 0)
-          ;
-          ((self._slotEnchantItem).icon):AddEffect("UI_Button_Hide", false, 0, 0)
-          self._enchantItemType = 0
-        else
-          if ((itemWrapper:get()):getKey()):getItemKey() == 16001 then
-            (self._uiEnchantEffect):AddEffect("fUI_Gauge_Red", true, 0, 0)
-            ;
-            ((self._slotEnchantItem).icon):AddEffect("fUI_DarkstoneAura01", true, 0, 0)
-            ;
-            ((self._slotEnchantItem).icon):AddEffect("UI_Button_Hide", false, 0, 0)
-            self._enchantItemType = 1
-          else
-            if ((itemWrapper:get()):getKey()):getItemKey() == 16004 then
+        (self._uiMeticulousEnchant):SetCheck(isEasyEnchantTypeCheck)
+      else
+        do
+          do
+            if (CppEnums.EnchantDifficulty).eEnchantDifficulty_Hard == isDifficultyEnchant then
+              (self._uiDrasticEnchant):SetShow(false)
+              ;
+              (self._uiMeticulousEnchant):SetShow(false)
+              ;
+              (self._uiDrasticEnchant):SetCheck(true)
+              ;
+              (self._uiMeticulousEnchant):SetCheck(false)
+            end
+            self._enchantClassifyValue = enchantItemClassify
+            self._enchantPerfectEnduranceValue = enchantPerfectEndurance
+            self._isEnchantSafeTypeValue = isEnchantSafeType
+            self._isItemKey = ((enchantSSW:get())._key):getItemKey()
+            self._isCash = isCashItem
+            self._isEnchantLevel = enchantCount
+            if itemWrapper:getNeedEnchantItem(true) == nil then
+              (self._uiEnchantFailDesc):SetShow(true)
               self:handleMOnShowHelpDesc(false)
+              self._enchantCountValue = enchantCount
             else
-              if ((itemWrapper:get()):getKey()):getItemKey() == 16005 then
-                self:handleMOnShowHelpDesc(false)
+              ;
+              (self._uiEnchantFailDesc):SetShow(false)
+              self:handleMOnShowHelpDesc(true)
+              self._enchantCountValue = enchantCount
+              self:setNeedPerfectEnchantItemCount(itemWrapper:getNeedEnchantItem(true), enchantCount, enchantItemClassify)
+            end
+            if self._isContentsEnable then
+              self:setProtectItem((enchantSSW:get())._key, enchantCount)
+            end
+            itemWrapper = getInventoryItemByType(inventoryType, slotNo)
+            ;
+            (self._slotTargetItem):setItem(itemWrapper)
+            Inventory_SetFunctor(EnchantInvenFilerSubItem, EnchantInteractionFromInventory, Enchant_Close, nil)
+            self:CronEnchantCheck(itemWrapper)
+            -- DECOMPILER ERROR at PC242: Confused about usage of register: R7 in 'UnsetPending'
+
+            if (self._slotEnchantItem).empty then
+              (self._slotEnchantItem).empty = false
+              -- DECOMPILER ERROR at PC244: Confused about usage of register: R7 in 'UnsetPending'
+
+              ;
+              (self._slotEnchantItem).slotNo = slotNo
+              -- DECOMPILER ERROR at PC246: Confused about usage of register: R7 in 'UnsetPending'
+
+              ;
+              (self._slotEnchantItem).inventoryType = inventoryType
+              itemWrapper = getInventoryItemByType(inventoryType, slotNo)
+              ;
+              (self._slotEnchantItem):setItem(itemWrapper)
+              ;
+              ((self._slotEnchantItem).icon):EraseAllEffect()
+              audioPostEvent_SystemUi(0, 7)
+              if ((itemWrapper:get()):getKey()):getItemKey() == 16002 then
+                (self._uiEnchantEffect):AddEffect("fUI_Gauge_Blue", true, 0, 0)
+                ;
+                ((self._slotEnchantItem).icon):AddEffect("fUI_DarkstoneAura02", false, 0, 0)
+                ;
+                ((self._slotEnchantItem).icon):AddEffect("UI_Button_Hide", false, 0, 0)
+                self._enchantItemType = 0
+              else
+                if ((itemWrapper:get()):getKey()):getItemKey() == 16001 then
+                  (self._uiEnchantEffect):AddEffect("fUI_Gauge_Red", true, 0, 0)
+                  ;
+                  ((self._slotEnchantItem).icon):AddEffect("fUI_DarkstoneAura01", true, 0, 0)
+                  ;
+                  ((self._slotEnchantItem).icon):AddEffect("UI_Button_Hide", false, 0, 0)
+                  self._enchantItemType = 1
+                else
+                  if ((itemWrapper:get()):getKey()):getItemKey() == 16004 then
+                    self:handleMOnShowHelpDesc(false)
+                  else
+                    if ((itemWrapper:get()):getKey()):getItemKey() == 16005 then
+                      self:handleMOnShowHelpDesc(false)
+                    end
+                  end
+                end
               end
+            else
+              ;
+              (UI.ASSERT)(false, "Client data, UI data is Mismatch!!!!!")
+              return 
+            end
+            local enchantable = enchantInfo:IsReadyEnchant() == 0
+            do
+              local enchantablePerfect = enchantInfo:IsReadyPerfectEnchant() == 0
+              ;
+              (self._uiButtonApply):EraseAllEffect()
+              if enchantable == true then
+                (self._uiButtonApply):SetFontColor((Defines.Color).C_FF96D4FC)
+              else
+                (self._uiButtonApply):SetFontColor((Defines.Color).C_FF626262)
+              end
+              ;
+              (self._uiButtonSureSuccess):EraseAllEffect()
+              if enchantablePerfect == true then
+                (self._uiButtonSureSuccess):SetFontColor((Defines.Color).C_FF69BB4C)
+              else
+                (self._uiButtonSureSuccess):SetFontColor((Defines.Color).C_FF626262)
+              end
+              ;
+              (self._uiButtonApply):SetIgnore(enchantable == false)
+              ;
+              (self._uiButtonApply):SetMonoTone(enchantable == false)
+              ;
+              (self._uiButtonSureSuccess):SetIgnore(enchantablePerfect == false)
+              if enchantable == true then
+                self:handleMOnShowHelpDesc(true)
+              end
+              if (self._isEnchantLevel >= 16 and self._isEnchantSafeTypeValue == 3) or self._enchantClassifyValue == 4 then
+                (self._uiProtectItem_Btn):SetIgnore(false)
+              else
+                (self._uiProtectItem_Btn):SetCheck(false)
+                ;
+                (self._uiProtectItem_Btn):SetIgnore(true)
+              end
+              -- DECOMPILER ERROR: 14 unprocessed JMP targets
             end
           end
         end
-      else
-        ;
-        (UI.ASSERT)(false, "Client data, UI data is Mismatch!!!!!")
-        return 
-      end
-      local enchantable = enchantInfo:IsReadyEnchant() == 0
-      do
-        local enchantablePerfect = enchantInfo:IsReadyPerfectEnchant() == 0
-        ;
-        (self._uiButtonApply):EraseAllEffect()
-        if enchantable == true then
-          (self._uiButtonApply):SetFontColor((Defines.Color).C_FF96D4FC)
-        else
-          (self._uiButtonApply):SetFontColor((Defines.Color).C_FF626262)
-        end
-        ;
-        (self._uiButtonSureSuccess):EraseAllEffect()
-        if enchantablePerfect == true then
-          (self._uiButtonSureSuccess):SetFontColor((Defines.Color).C_FF69BB4C)
-        else
-          (self._uiButtonSureSuccess):SetFontColor((Defines.Color).C_FF626262)
-        end
-        ;
-        (self._uiButtonApply):SetIgnore(enchantable == false)
-        ;
-        (self._uiButtonApply):SetMonoTone(enchantable == false)
-        ;
-        (self._uiButtonSureSuccess):SetIgnore(enchantablePerfect == false)
-        if enchantable == true then
-          self:handleMOnShowHelpDesc(true)
-        end
-        if (self._isEnchantLevel >= 16 and self._isEnchantSafeTypeValue == 3) or self._enchantClassifyValue == 4 then
-          (self._uiProtectItem_Btn):SetIgnore(false)
-        else
-          (self._uiProtectItem_Btn):SetCheck(false)
-          ;
-          (self._uiProtectItem_Btn):SetIgnore(true)
-        end
-        -- DECOMPILER ERROR: 14 unprocessed JMP targets
       end
     end
   end

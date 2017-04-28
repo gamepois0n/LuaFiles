@@ -46,6 +46,9 @@ local _buttonAllSelect = (UI.getChildControl)(Panel_Window_Exchange_Number, "But
 _buttonAllSelect:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click()")
 _buttonAllSelect:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
 _buttonAllSelect:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
+local _checkButtonMaxCount = (UI.getChildControl)(Panel_Window_Exchange_Number, "CheckButton_MaxCount")
+_checkButtonMaxCount:addInputEvent("Mouse_LUp", "Panel_NumberPad_SetMaxCount()")
+_checkButtonMaxCount:SetCheck(false)
 numberPad.init = function(self)
   -- function num : 0_0 , upvalues : numberPad
   for ii = 1, numberPad.MAX_NUMBER_BTN_COUNT do
@@ -61,13 +64,70 @@ numberPad.init = function(self)
   confirmFunction = Panel_NumberPad_Default_ConfirmFunction
 end
 
+Panel_NumberPad_CheckButtonShow = function(isShow)
+  -- function num : 0_1 , upvalues : numberPad, _buttonBackSpace, _buttonClear, _buttonAllSelect, _buttonConfirm, _buttonCancel, _checkButtonMaxCount
+  if isShow then
+    ((numberPad._buttonNumber)[1]):SetPosY(180)
+    ;
+    ((numberPad._buttonNumber)[2]):SetPosY(148)
+    ;
+    ((numberPad._buttonNumber)[3]):SetPosY(148)
+    ;
+    ((numberPad._buttonNumber)[4]):SetPosY(148)
+    ;
+    ((numberPad._buttonNumber)[5]):SetPosY(116)
+    ;
+    ((numberPad._buttonNumber)[6]):SetPosY(116)
+    ;
+    ((numberPad._buttonNumber)[7]):SetPosY(116)
+    ;
+    ((numberPad._buttonNumber)[8]):SetPosY(84)
+    ;
+    ((numberPad._buttonNumber)[9]):SetPosY(84)
+    ;
+    ((numberPad._buttonNumber)[10]):SetPosY(84)
+    _buttonBackSpace:SetPosY(180)
+    _buttonClear:SetPosY(180)
+    _buttonAllSelect:SetPosY(216)
+    _buttonConfirm:SetPosY(237)
+    _buttonCancel:SetPosY(237)
+  else
+    ;
+    ((numberPad._buttonNumber)[1]):SetPosY(160)
+    ;
+    ((numberPad._buttonNumber)[2]):SetPosY(128)
+    ;
+    ((numberPad._buttonNumber)[3]):SetPosY(128)
+    ;
+    ((numberPad._buttonNumber)[4]):SetPosY(128)
+    ;
+    ((numberPad._buttonNumber)[5]):SetPosY(96)
+    ;
+    ((numberPad._buttonNumber)[6]):SetPosY(96)
+    ;
+    ((numberPad._buttonNumber)[7]):SetPosY(96)
+    ;
+    ((numberPad._buttonNumber)[8]):SetPosY(64)
+    ;
+    ((numberPad._buttonNumber)[9]):SetPosY(64)
+    ;
+    ((numberPad._buttonNumber)[10]):SetPosY(64)
+    _buttonBackSpace:SetPosY(160)
+    _buttonClear:SetPosY(160)
+    _buttonAllSelect:SetPosY(196)
+    _buttonConfirm:SetPosY(217)
+    _buttonCancel:SetPosY(217)
+  end
+  _checkButtonMaxCount:SetShow(isShow)
+end
+
 ExchangeNumberShowAni = function()
-  -- function num : 0_1
+  -- function num : 0_2
   (UIAni.fadeInSCR_Down)(Panel_Window_Exchange_Number)
 end
 
 ExchangeNumberHideAni = function()
-  -- function num : 0_2 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
+  -- function num : 0_3 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
   Panel_Window_Exchange_Number:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local aniInfo1 = Panel_Window_Exchange_Number:addColorAnimation(0, 0.22, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
@@ -80,7 +140,7 @@ ExchangeNumberHideAni = function()
 end
 
 Panel_NumberPad_Init = function(param0, confirmFunction, isShow, param1)
-  -- function num : 0_3 , upvalues : numberPad, realNumber, _textNumber, _buttonConfirm, UI_color
+  -- function num : 0_4 , upvalues : numberPad, realNumber, _textNumber, _buttonConfirm, UI_color
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R4 in 'UnsetPending'
 
   numberPad.param0 = param0
@@ -119,14 +179,14 @@ Panel_NumberPad_Init = function(param0, confirmFunction, isShow, param1)
 end
 
 Panel_NumberPad_Open = function()
-  -- function num : 0_4
+  -- function num : 0_5
   if not Panel_Window_Exchange_Number:IsShow() then
     Panel_Window_Exchange_Number:SetShow(true, true)
   end
 end
 
 Panel_NumberPad_Close = function()
-  -- function num : 0_5 , upvalues : numberPad
+  -- function num : 0_6 , upvalues : numberPad
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
 
   if Panel_Window_Exchange_Number:IsShow() then
@@ -148,7 +208,7 @@ Panel_NumberPad_Close = function()
 end
 
 Panel_NumberPad_Show_Min = function(isShow, s64_minNumber, param0, confirmFunction, param1)
-  -- function num : 0_6 , upvalues : IM, numberPad, _textNumber, realNumber
+  -- function num : 0_7 , upvalues : IM, numberPad, _textNumber, realNumber
   if not isShow then
     Panel_NumberPad_Close()
     ;
@@ -175,7 +235,7 @@ end
 
 local _isExchange = nil
 Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1, isItemMarket)
-  -- function num : 0_7 , upvalues : _isExchange, _textNumber, IM, numberPad, realNumber
+  -- function num : 0_8 , upvalues : _isExchange, _textNumber, IM, numberPad, realNumber
   _isExchange = isExchange
   local maxLength = (string.len)(tostring(s64_maxNumber))
   _textNumber:SetMaxInput(maxLength + 1)
@@ -217,27 +277,84 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
       end
     end
   end
+  Panel_Window_Exchange_Number:SetSize(200, 240)
+  Panel_NumberPad_CheckButtonShow(false)
+end
+
+local slotNo, whereType = nil, nil
+Panel_NumberPad_Show_MaxCount = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1)
+  -- function num : 0_9 , upvalues : _isExchange, _textNumber, IM, numberPad, _checkButtonMaxCount, realNumber, slotNo, whereType
+  _isExchange = isExchange
+  local maxLength = (string.len)(tostring(s64_maxNumber))
+  _textNumber:SetMaxInput(maxLength + 1)
+  if not isShow then
+    Panel_NumberPad_Close()
+    ;
+    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+    ClearFocusEdit()
+    if numberPad.numberPadUiModeNotInput then
+      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
+    end
+  else
+    -- DECOMPILER ERROR at PC33: Confused about usage of register: R7 in 'UnsetPending'
+
+    numberPad.s64_maxNumber = s64_maxNumber
+    -- DECOMPILER ERROR at PC40: Confused about usage of register: R7 in 'UnsetPending'
+
+    if _checkButtonMaxCount:IsCheck() then
+      numberPad.s64_inputNumber = s64_maxNumber
+    else
+      -- DECOMPILER ERROR at PC46: Confused about usage of register: R7 in 'UnsetPending'
+
+      numberPad.s64_inputNumber = (Defines.s64_const).s64_1
+    end
+    if (Defines.s64_const).s64_1 == s64_maxNumber then
+      Panel_NumberPad_Init(param0, confirmFunction, false, param1)
+      Panel_NumberPad_ButtonConfirm_Mouse_Click()
+    else
+      Panel_NumberPad_Init(param0, confirmFunction, true, param1)
+      ;
+      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+      SetFocusEdit(_textNumber)
+      if _checkButtonMaxCount:IsCheck() then
+        realNumber = s64_maxNumber
+        _textNumber:SetEditText(makeDotMoney(s64_maxNumber))
+      else
+        realNumber = (Defines.s64_const).s64_1
+        _textNumber:SetEditText("1")
+      end
+    end
+  end
+  slotNo = param0
+  whereType = param1
+  Panel_Window_Exchange_Number:SetSize(200, 260)
+  Panel_NumberPad_CheckButtonShow(true)
+end
+
+Panel_NumberPad_SetMaxCount = function()
+  -- function num : 0_10 , upvalues : numberPad, slotNo, whereType
+  Panel_NumberPad_Show_MaxCount(true, numberPad.s64_maxNumber, slotNo, Warehouse_PushFromInventoryItemXXX, nil, whereType)
 end
 
 FGlobal_SetNumberPadUiModeNotInput = function(isSet)
-  -- function num : 0_8 , upvalues : numberPad
+  -- function num : 0_11 , upvalues : numberPad
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   numberPad.numberPadUiModeNotInput = isSet
 end
 
 Panel_NumberPad_ButtonClose_Mouse_Click = function()
-  -- function num : 0_9
+  -- function num : 0_12
   Panel_NumberPad_Show(false, (Defines.s64_const).s64_0, 0, nil)
 end
 
 Panel_NumberPad_ButtonCancel_Mouse_Click = function()
-  -- function num : 0_10
+  -- function num : 0_13
   Panel_NumberPad_Show(false, (Defines.s64_const).s64_0, 0, nil)
 end
 
 Panel_NumberPad_ButtonClear_Mouse_Click = function()
-  -- function num : 0_11 , upvalues : numberPad, _textNumber, realNumber, _isExchange, _buttonConfirm, UI_color
+  -- function num : 0_14 , upvalues : numberPad, _textNumber, realNumber, _isExchange, _buttonConfirm, UI_color
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R0 in 'UnsetPending'
 
   numberPad.s64_inputNumber = (Defines.s64_const).s64_0
@@ -251,7 +368,7 @@ Panel_NumberPad_ButtonClear_Mouse_Click = function()
 end
 
 Panel_NumberPad_ButtonNumber_Mouse_Click = function(number)
-  -- function num : 0_12 , upvalues : _textNumber, numberPad, strlen, substring, realNumber, _isExchange, _buttonConfirm, UI_color
+  -- function num : 0_15 , upvalues : _textNumber, numberPad, strlen, substring, realNumber, _isExchange, _buttonConfirm, UI_color
   local newStr = _textNumber:GetEditText()
   if number ~= nil then
     newStr = newStr .. tostring(number)
@@ -303,7 +420,7 @@ Panel_NumberPad_ButtonNumber_Mouse_Click = function(number)
 end
 
 Panel_NumberPad_ButtonBackSpace_Mouse_Click = function(fromOnKey)
-  -- function num : 0_13 , upvalues : realNumber, strlen, substring, numberPad, _textNumber, _buttonConfirm, UI_color
+  -- function num : 0_16 , upvalues : realNumber, strlen, substring, numberPad, _textNumber, _buttonConfirm, UI_color
   local str = tostring(realNumber)
   local length = strlen(str)
   local newStr = ""
@@ -350,7 +467,7 @@ Panel_NumberPad_ButtonBackSpace_Mouse_Click = function(fromOnKey)
 end
 
 Panel_NumberPad_ButtonConfirm_Mouse_Click = function()
-  -- function num : 0_14 , upvalues : numberPad, _isExchange
+  -- function num : 0_17 , upvalues : numberPad, _isExchange
   if (Defines.s64_const).s64_0 < numberPad.s64_inputNumber or _isExchange == true then
     if numberPad.confirmFunction ~= nil then
       (numberPad.confirmFunction)(numberPad.s64_inputNumber, numberPad.param0, numberPad.param1)
@@ -360,7 +477,7 @@ Panel_NumberPad_ButtonConfirm_Mouse_Click = function()
 end
 
 Panel_NumberPad_ButtonAllSelect_Mouse_Click = function()
-  -- function num : 0_15 , upvalues : numberPad, IM, _textNumber, realNumber
+  -- function num : 0_18 , upvalues : numberPad, IM, _textNumber, realNumber
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
 
   numberPad.s64_inputNumber = numberPad.s64_maxNumber
@@ -378,7 +495,7 @@ Panel_NumberPad_ButtonAllSelect_Mouse_Click = function()
 end
 
 Panel_NumberPad_Mouse_Scroll_Event = function(isUp)
-  -- function num : 0_16 , upvalues : realNumber, numberPad, _textNumber
+  -- function num : 0_19 , upvalues : realNumber, numberPad, _textNumber
   local currentNumber_s32 = Int64toInt32(realNumber)
   local currentNumber_s64 = toInt64(0, currentNumber_s32)
   local inputNumber_s64 = currentNumber_s64
@@ -403,17 +520,17 @@ Panel_NumberPad_Mouse_Scroll_Event = function(isUp)
 end
 
 Panel_NumberPad_Default_ConfirmFunction = function(count, param0, param1)
-  -- function num : 0_17
+  -- function num : 0_20
   Panel_NumberPad_Show(false, (Defines.s64_const).s64_0, 0, nil)
 end
 
 Panel_NumberPad_IsPopUp = function()
-  -- function num : 0_18
+  -- function num : 0_21
   return Panel_Window_Exchange_Number:IsShow()
 end
 
 Panel_NumberPad_NumberKey_Input = function()
-  -- function num : 0_19 , upvalues : numberKeyCode, VCK
+  -- function num : 0_22 , upvalues : numberKeyCode, VCK
   for idx,val in ipairs(numberKeyCode) do
     if isKeyDown_Once(val) then
       Panel_NumberPad_ButtonNumber_Mouse_Click(nil)

@@ -32,8 +32,13 @@ local npcShop_SellBtn_PosX = ((npcShop.radioButtons)[npcShop.tabIndexSell]):GetP
 -- DECOMPILER ERROR at PC250: Confused about usage of register: R11 in 'UnsetPending'
 
 Panel_Window_NpcShop.npcShop = npcShop
+FGlobal_NpcShop_GetNpcShop = function()
+  -- function num : 0_0 , upvalues : npcShop
+  return npcShop
+end
+
 npcShop.init = function(self)
-  -- function num : 0_0 , upvalues : _npcShopHelp, UI_TM
+  -- function num : 0_1 , upvalues : _npcShopHelp, UI_TM
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   (self.config).slotRows = (self.config).slotCount / (self.config).slotCols
@@ -44,7 +49,7 @@ end
 
 local _const = Defines.s64_const
 npcShop.createSlot = function(self)
-  -- function num : 0_1 , upvalues : npcShop, _const, UI_TM, UI_color
+  -- function num : 0_2 , upvalues : npcShop, _const, UI_TM, UI_color
   local index = 1
   for ii = 1, (self.config).slotRows do
     for jj = 1, (self.config).slotCols do
@@ -82,7 +87,7 @@ npcShop.createSlot = function(self)
       slot.invenCount = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_Window_NpcShop, "StaticText_InventoryCount" .. strId)
       CopyBaseProperty((self.template).staticInvenCount, slot.invenCount)
       slot.setPos = function(self, posX, posY, param)
-    -- function num : 0_1_0
+    -- function num : 0_2_0
     (self.button):SetPosX(posX)
     ;
     (self.button):SetPosY(posY)
@@ -113,7 +118,7 @@ npcShop.createSlot = function(self)
   end
 
       slot.setItem = function(self, itemStaticWrapper, s64_stackCount, s64_price, s64_invenCount, Intimacy, disable)
-    -- function num : 0_1_1 , upvalues : _const, UI_TM, UI_color
+    -- function num : 0_2_1 , upvalues : _const, UI_TM, UI_color
     local talker = dialog_getTalker()
     local characterKey = talker:getCharacterKey()
     local count = getIntimacyInformationCount(characterKey)
@@ -235,7 +240,7 @@ npcShop.createSlot = function(self)
   end
 
       slot.setShow = function(self, bShow)
-    -- function num : 0_1_2
+    -- function num : 0_2_2
     if not bShow then
       bShow = false
     end
@@ -258,13 +263,13 @@ npcShop.createSlot = function(self)
   end
 
       slot.setSelect = function(self, bSelect)
-    -- function num : 0_1_3
+    -- function num : 0_2_3
     (self.selectEffect):SetShow(bSelect)
     self.selected = bSelect
   end
 
       slot.clearItem = function(self)
-    -- function num : 0_1_4
+    -- function num : 0_2_4
     self:setSelect(false)
     self:setShow(false)
     self.keyValue = -1
@@ -282,7 +287,7 @@ npcShop.createSlot = function(self)
 end
 
 SellAll_ShowToggle = function()
-  -- function num : 0_2 , upvalues : npcShop
+  -- function num : 0_3 , upvalues : npcShop
   local self = npcShop
   if self.tabIndexSell == self.lastTabIndex then
     (npcShop.buttonSellAll):SetShow(true)
@@ -293,7 +298,7 @@ SellAll_ShowToggle = function()
 end
 
 BuySome_ShowToggle = function()
-  -- function num : 0_3 , upvalues : npcShop
+  -- function num : 0_4 , upvalues : npcShop
   local self = npcShop
   if self.tabIndexBuy == self.lastTabIndex then
     (self.buttonBuySome):SetShow(true)
@@ -308,7 +313,7 @@ BuySome_ShowToggle = function()
 end
 
 npcShop.controlInit = function(self)
-  -- function num : 0_4 , upvalues : npcShop_BuyBtn_PosX, npcShop_SellBtn_PosX
+  -- function num : 0_5 , upvalues : npcShop_BuyBtn_PosX, npcShop_SellBtn_PosX
   ((self.radioButtons)[self.tabIndexBuy]):SetCheck(true)
   ;
   ((self.radioButtons)[self.tabIndexSell]):SetCheck(false)
@@ -365,7 +370,7 @@ npcShop.controlInit = function(self)
 end
 
 npcShop.updateContent = function(self, updateForce)
-  -- function num : 0_5 , upvalues : npcShop, _const, UI_color
+  -- function num : 0_6 , upvalues : npcShop, _const, UI_color
   local self = npcShop
   if not updateForce then
     updateForce = true
@@ -550,7 +555,7 @@ npcShop.updateContent = function(self, updateForce)
 end
 
 FGlobal_NpcShop_GetRadioButtonByIndex = function(radioButtonIndex)
-  -- function num : 0_6 , upvalues : npcShop
+  -- function num : 0_7 , upvalues : npcShop
   local radioButton = (npcShop.radioButtons)[radioButtonIndex]
   if radioButton == nil then
     return nil
@@ -559,7 +564,7 @@ FGlobal_NpcShop_GetRadioButtonByIndex = function(radioButtonIndex)
 end
 
 NpcShop_OnSlotClicked = function(slotIdx)
-  -- function num : 0_7 , upvalues : npcShop, orgButtonBuySome
+  -- function num : 0_8 , upvalues : npcShop, orgButtonBuySome
   local self = npcShop
   local slot = nil
   if self.lastSelectedSlotIndex ~= slotIdx then
@@ -627,13 +632,13 @@ NpcShop_OnSlotClicked = function(slotIdx)
 end
 
 NpcShop_OnRSlotClicked = function(slotIdx)
-  -- function num : 0_8
+  -- function num : 0_9
   NpcShop_OnSlotClicked(slotIdx)
   NpcShop_BuyOrSellItem()
 end
 
 NpcShop_TabButtonClick = function(tabIndex)
-  -- function num : 0_9 , upvalues : npcShop
+  -- function num : 0_10 , upvalues : npcShop
   local self = npcShop
   if tabIndex ~= self.lastTabIndex then
     NpcShop_OnSlotClicked()
@@ -681,7 +686,7 @@ NpcShop_TabButtonClick = function(tabIndex)
 end
 
 NpcShop_ScrollEvent = function(isUpScroll)
-  -- function num : 0_10 , upvalues : npcShop
+  -- function num : 0_11 , upvalues : npcShop
   local self = npcShop
   self._startSlotIndex = (UIScroll.ScrollEvent)(self.scroll, isUpScroll, (self.config).slotRows, self._itemListSize, self._startSlotIndex, (self.config).slotCols)
   if self._startSlotIndex < (self.config).slotCols then
@@ -692,7 +697,7 @@ NpcShop_ScrollEvent = function(isUpScroll)
 end
 
 NpcShop_UpdateContent = function()
-  -- function num : 0_11 , upvalues : npcShop
+  -- function num : 0_12 , upvalues : npcShop
   local talker = dialog_getTalker()
   if talker == nil then
     return 
@@ -720,7 +725,7 @@ NpcShop_UpdateContent = function()
 end
 
 NpcShop_UpdateMoney = function()
-  -- function num : 0_12 , upvalues : npcShop
+  -- function num : 0_13 , upvalues : npcShop
   (npcShop.buttonBuy):SetEnable(true)
   ;
   (npcShop.buttonBuy):SetMonoTone(false)
@@ -759,7 +764,7 @@ NpcShop_UpdateMoney = function()
 end
 
 NpcShop_UpdateMoneyWarehouse = function()
-  -- function num : 0_13 , upvalues : npcShop
+  -- function num : 0_14 , upvalues : npcShop
   if npcShop_isGuildShopContents() then
     (npcShop.checkButton_Warehouse):SetShow(true)
     ;
@@ -794,7 +799,7 @@ NpcShop_UpdateMoneyWarehouse = function()
 end
 
 NpcShop_BuyOrSellItem = function()
-  -- function num : 0_14 , upvalues : npcShop
+  -- function num : 0_15 , upvalues : npcShop
   local self = npcShop
   if self.selectedSlotIndex ~= nil then
     local slot = (self.slots)[self.selectedSlotIndex]
@@ -884,11 +889,11 @@ NpcShop_BuyOrSellItem = function()
             end
           end
           local sellDoit = function()
-    -- function num : 0_14_0 , upvalues : slot, toWhereType, self, pricePiece
+    -- function num : 0_15_0 , upvalues : slot, toWhereType, self, pricePiece
     local itemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_14_0_0 , upvalues : slot, toWhereType
+      -- function num : 0_15_0_0 , upvalues : slot, toWhereType
       npcShop_doSellByItemNo(slot.slotNo, 1, toWhereType)
     end
 
@@ -967,7 +972,7 @@ NpcShop_BuyOrSellItem = function()
 end
 
 NpcShop_SellItemAll = function()
-  -- function num : 0_15 , upvalues : npcShop
+  -- function num : 0_16 , upvalues : npcShop
   local self = npcShop
   if self.selectedSlotIndex ~= nil then
     local slot = (self.slots)[self.selectedSlotIndex]
@@ -981,7 +986,7 @@ NpcShop_SellItemAll = function()
       local toWhereType = 0
       local sellPrice = pricePiece * itemCount
       local sellAllDoit = function()
-    -- function num : 0_15_0 , upvalues : toWhereType, self, sellPrice, slot
+    -- function num : 0_16_0 , upvalues : toWhereType, self, sellPrice, slot
     if npcShop_isGuildShopContents() then
       toWhereType = (CppEnums.ItemWhereType).eGuildWarehouse
     else
@@ -993,7 +998,7 @@ NpcShop_SellItemAll = function()
     local shopItemEndurance = (itemSSW:get()):getEndurance()
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_15_0_0 , upvalues : slot, toWhereType
+      -- function num : 0_16_0_0 , upvalues : slot, toWhereType
       npcShop_doSellAll(slot.keyValue, toWhereType)
     end
 
@@ -1039,7 +1044,7 @@ NpcShop_SellItemAll = function()
 end
 
 NpcShop_BuySome = function()
-  -- function num : 0_16 , upvalues : npcShop
+  -- function num : 0_17 , upvalues : npcShop
   local self = npcShop
   local shopItemWrapper = npcShop_getItemBuy(self._startSlotIndex + self.selectedSlotIndex - 1)
   local shopItem = shopItemWrapper:get()
@@ -1070,7 +1075,7 @@ NpcShop_BuySome = function()
 end
 
 NpcShop_BuySome_ConfirmFunction = function(inputNumber, param)
-  -- function num : 0_17 , upvalues : npcShop
+  -- function num : 0_18 , upvalues : npcShop
   local self = npcShop
   self._inputNumber = inputNumber
   local slot = (self.slots)[self.selectedSlotIndex]
@@ -1104,7 +1109,7 @@ NpcShop_BuySome_ConfirmFunction = function(inputNumber, param)
 end
 
 NpcShop_BuySome_Do = function()
-  -- function num : 0_18 , upvalues : npcShop
+  -- function num : 0_19 , upvalues : npcShop
   local self = npcShop
   local buyCount = self._inputNumber
   local slot = (self.slots)[self.selectedSlotIndex]
@@ -1122,7 +1127,7 @@ NpcShop_BuySome_Do = function()
 end
 
 npcShop.registEventHandler = function(self)
-  -- function num : 0_19
+  -- function num : 0_20
   (self.buttonClose):addInputEvent("Mouse_LUp", "handleClickedNpcShow_WindowClose()")
   ;
   (self.buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"NpcShop\" )")
@@ -1158,17 +1163,17 @@ npcShop.registEventHandler = function(self)
 end
 
 CheckButton_Inventory_ShowText = function()
-  -- function num : 0_20 , upvalues : inventxt
+  -- function num : 0_21 , upvalues : inventxt
   inventxt:SetShow(true)
 end
 
 CheckButton_Inventory_HideText = function()
-  -- function num : 0_21 , upvalues : inventxt
+  -- function num : 0_22 , upvalues : inventxt
   inventxt:SetShow(false)
 end
 
 CheckButton_Warehouse_ShowText = function()
-  -- function num : 0_22 , upvalues : warehousetxt
+  -- function num : 0_23 , upvalues : warehousetxt
   if npcShop_isGuildShopContents() then
     warehousetxt:SetShow(false)
   else
@@ -1177,31 +1182,33 @@ CheckButton_Warehouse_ShowText = function()
 end
 
 CheckButton_Warehouse_HideText = function()
-  -- function num : 0_23 , upvalues : warehousetxt
+  -- function num : 0_24 , upvalues : warehousetxt
   warehousetxt:SetShow(false)
 end
 
 NpcShop_WindowClose = function()
-  -- function num : 0_24
-  if Panel_Window_NpcShop:GetShow() then
-    Panel_Window_NpcShop:SetShow(false, false)
-    InventoryWindow_Close()
-    audioPostEvent_SystemUi(1, 1)
-  end
-end
-
-handleClickedNpcShow_WindowClose = function()
   -- function num : 0_25
   if Panel_Window_NpcShop:GetShow() then
     Panel_Window_NpcShop:SetShow(false, false)
     InventoryWindow_Close()
     audioPostEvent_SystemUi(1, 1)
+    PaGlobal_TutorialManager:handleNpcShopWindowClose()
+  end
+end
+
+handleClickedNpcShow_WindowClose = function()
+  -- function num : 0_26
+  if Panel_Window_NpcShop:GetShow() then
+    Panel_Window_NpcShop:SetShow(false, false)
+    InventoryWindow_Close()
+    audioPostEvent_SystemUi(1, 1)
     ReqeustDialog_retryTalk()
+    PaGlobal_TutorialManager:handleNpcShopWindowClose()
   end
 end
 
 NpcShop_WindowShow = function()
-  -- function num : 0_26 , upvalues : npcShop
+  -- function num : 0_27 , upvalues : npcShop
   if not Panel_Window_NpcShop:GetShow() then
     npcShop:controlInit()
     InventoryWindow_Show()
@@ -1211,7 +1218,7 @@ NpcShop_WindowShow = function()
 end
 
 Panel_NpcShop_InvenFilter_IsExchangeItem = function(slotNo, itemWrapper)
-  -- function num : 0_27
+  -- function num : 0_28
   if itemWrapper == nil then
     return true
   end
@@ -1235,7 +1242,7 @@ end
 
 local itemCount = nil
 Panel_NpcShop_InvenRClick = function(slotNo)
-  -- function num : 0_28 , upvalues : itemCount
+  -- function num : 0_29 , upvalues : itemCount
   local itemWrapper = getInventoryItem(slotNo)
   if itemWrapper ~= nil then
     itemCount = (itemWrapper:get()):getCount_s64()
@@ -1248,11 +1255,11 @@ Panel_NpcShop_InvenRClick = function(slotNo)
 end
 
 donSell = function()
-  -- function num : 0_29
+  -- function num : 0_30
 end
 
 Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
-  -- function num : 0_30 , upvalues : npcShop
+  -- function num : 0_31 , upvalues : npcShop
   local self = npcShop
   local playerWrapper = getSelfPlayer()
   if playerWrapper == nil then
@@ -1280,10 +1287,10 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
     end
   end
   local sellDoit = function()
-    -- function num : 0_30_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType, itemWrapper, sellPrice
+    -- function num : 0_31_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType, itemWrapper, sellPrice
     local isSocketed = false
     local sellConfirm = function()
-      -- function num : 0_30_0_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType
+      -- function num : 0_31_0_0 , upvalues : playerWrapper, slotNo, itemCount, fromWhereType, toWhereType
       (playerWrapper:get()):requestSellItem(slotNo, itemCount, fromWhereType, toWhereType)
     end
 
@@ -1325,14 +1332,14 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
 end
 
 npcShop.registMessageHandler = function(self)
-  -- function num : 0_31
+  -- function num : 0_32
   registerEvent("EventNpcShopUpdate", "NpcShop_UpdateContent")
   registerEvent("FromClient_InventoryUpdate", "NpcShop_UpdateMoney")
   registerEvent("EventWarehouseUpdate", "NpcShop_UpdateMoneyWarehouse")
 end
 
 NpcShop_CheckInit = function()
-  -- function num : 0_32 , upvalues : npcShop
+  -- function num : 0_33 , upvalues : npcShop
   local self = npcShop
   if (self.checkButton_Inventory):IsCheck() then
     return 
@@ -1365,7 +1372,7 @@ NpcShop_CheckInit = function()
 end
 
 NpcShop_CheckFromMoney = function(check)
-  -- function num : 0_33 , upvalues : npcShop
+  -- function num : 0_34 , upvalues : npcShop
   local self = npcShop
   if check == 0 then
     if (self.checkButton_Inventory):IsCheck() then
@@ -1385,7 +1392,7 @@ NpcShop_CheckFromMoney = function(check)
 end
 
 npcShop_GuildCheckByBuy = function()
-  -- function num : 0_34
+  -- function num : 0_35
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildInfo == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DIALOGUE_NPCSHOP_GUILD1"))

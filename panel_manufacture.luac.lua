@@ -176,6 +176,8 @@ local _textDesc = (UI.getChildControl)(Panel_Manufacture, "StaticText_Desc")
 _textDesc:SetIgnore(true)
 _textDesc:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 _textDesc:SetText("")
+local list2 = (UI.getChildControl)(Panel_Manufacture, "List2_Manufacture")
+local selectIndex = -1
 local Manufacture_Notify = {_progress_BG = (UI.getChildControl)(Panel_Manufacture_Notify, "Static_Progress_BG"), _progress_Bar = (UI.getChildControl)(Panel_Manufacture_Notify, "Progress2_Manufacture"), _progress_Text = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Manufacture_Progress"), _progress_Effect = (UI.getChildControl)(Panel_Manufacture_Notify, "Static_Progress_Effect"), _type_Name = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Manufacture_Type"), _result_Title = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Result_Title"), 
 _item_Resource = {}
 , 
@@ -205,37 +207,9 @@ _uiButtonNote:addInputEvent("Mouse_LUp", "Note_Mouse_LUp()")
 _uiButtonNote:addInputEvent("Mouse_On", "Note_Mouse_On()")
 local _frameManufactureDesc = (UI.getChildControl)(Panel_Manufacture, "Frame_ManufactureDesc")
 local _frameContent = (UI.getChildControl)(_frameManufactureDesc, "Frame_1_Content")
-local _frameDescScroll = (UI.getChildControl)(_frameManufactureDesc, "VerticalScroll")
-local _frameDescScroll_Btn = (UI.getChildControl)(_frameDescScroll, "VerticalScroll_CtrlButton")
 local _uiKnowledgeDesc = (UI.getChildControl)(_frameContent, "StaticText_KnowledgeDesc")
 _uiKnowledgeDesc:SetAutoResize(true)
 local _uiKnowledgeIcon = (UI.getChildControl)(Panel_Manufacture, "Static_KnoeledgeIcon")
-local _uiListBG = (UI.getChildControl)(Panel_Manufacture, "Static_ListBG")
-local _uiListScroll = (UI.getChildControl)(Panel_Manufacture, "Scroll_Bar")
-;
-(_uiListScroll:GetControlButton()):addInputEvent("Mouse_LPress", "ManufactureKnowledge_ScrollEvent()")
-local _uiListScrollOriginPosX = _uiListScroll:GetPosX()
-local _uiListSelect = (UI.getChildControl)(Panel_Manufacture, "Static_SelectList")
-_uiListSelect:SetShow(false)
-_uiListSelect:SetIgnore(true)
-local TEMPLATE_KNOWLEDGE_TEXT = (UI.getChildControl)(Panel_Manufacture, "StaticText_KnowledgeRecipe")
-TEMPLATE_KNOWLEDGE_TEXT:SetShow(false)
-local KNOWLEDGE_TEXT_COUNT = 14
-local _uiListText = {}
-for index = 0, KNOWLEDGE_TEXT_COUNT - 1 do
-  local tempText = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, _uiListBG, "StaticText_AlchemyRecipe_" .. index)
-  CopyBaseProperty(TEMPLATE_KNOWLEDGE_TEXT, tempText)
-  tempText:SetPosX(7)
-  tempText:SetPosY(7 + index * tempText:GetSizeY())
-  tempText:SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
-  tempText:addInputEvent("Mouse_UpScroll", "ManufactureKnowledge_ScrollEvent( true )")
-  tempText:addInputEvent("Mouse_DownScroll", "ManufactureKnowledge_ScrollEvent( false )")
-  tempText:addInputEvent("Mouse_LUp", "Manufacture_KnowledgeList_SelectKnowledge(" .. index .. ")")
-  tempText:addInputEvent("Mouse_On", "Manufacture_KnowledgeList_Tooltip( true, " .. index .. ")")
-  tempText:addInputEvent("Mouse_Out", "Manufacture_KnowledgeList_Tooltip( false, " .. index .. ")")
-  tempText:SetIgnore(false)
-  _uiListText[index] = tempText
-end
 local _startKnowledgeIndex = 0
 local SHAKE_MENTALTHEMEKEY = 30200
 local DRY_MENTALTHEMEKEY = 30300
@@ -254,7 +228,7 @@ local textTempPosY = _textTemp:GetPosY()
 local textDescPosY = _textDesc:GetPosY()
 local manufactureNamePosY = _manufactureName:GetPosY()
 ManufactureControlInit = function()
-  -- function num : 0_3 , upvalues : _ACTIONNAME_SHAKE, _listAction, _ACTIONNAME_GRIND, _ACTIONNAME_FIREWOOD, _ACTIONNAME_DRY, _ACTIONNAME_THINNING, _ACTIONNAME_HEAT, _ACTIONNAME_RAINWATER, _ACTIONNAME_REPAIR, _ACTIONNAME_ALCHEMY, _ACTIONNAME_COOK, _ACTIONNAME_RG_COOK, _ACTIONNAME_RG_ALCHEMY, contentsOption, _ACTIONNAME_GUILDMANUFACTURE, _frameManufactureDesc, _frameDescScroll
+  -- function num : 0_3 , upvalues : _ACTIONNAME_SHAKE, _listAction, _ACTIONNAME_GRIND, _ACTIONNAME_FIREWOOD, _ACTIONNAME_DRY, _ACTIONNAME_THINNING, _ACTIONNAME_HEAT, _ACTIONNAME_RAINWATER, _ACTIONNAME_REPAIR, _ACTIONNAME_ALCHEMY, _ACTIONNAME_COOK, _ACTIONNAME_RG_COOK, _ACTIONNAME_RG_ALCHEMY, contentsOption, _ACTIONNAME_GUILDMANUFACTURE
   local manufactureAction1 = {}
   manufactureAction1._actionName = _ACTIONNAME_SHAKE
   manufactureAction1._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action1")
@@ -360,11 +334,9 @@ ManufactureControlInit = function()
     -- DECOMPILER ERROR at PC210: Confused about usage of register: R13 in 'UnsetPending'
 
     _listAction[12] = manufactureAction13
-    _frameManufactureDesc:UpdateContentScroll()
-    _frameDescScroll:SetInterval(3)
   else
     do
-      -- DECOMPILER ERROR at PC225: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC218: Confused about usage of register: R12 in 'UnsetPending'
 
       manufactureAction13._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action13")
       ;
@@ -546,7 +518,7 @@ end
 
 local slideBtnSize = 0
 Manufacture_Show = function(installationType, materialWhereType, isClear, showType, waypointKey)
-  -- function num : 0_10 , upvalues : invenShow, materialItemWhereType, waypointKey_ByWareHouse, _listAction, _textDesc, _uiButtonManufacture, contentsOption, _frameDescScroll, _frameManufactureDesc, _uiListScroll
+  -- function num : 0_10 , upvalues : invenShow, materialItemWhereType, waypointKey_ByWareHouse, _listAction, _textDesc, _uiButtonManufacture, contentsOption, _frameManufactureDesc
   if ToClient_GetMyTeamNoLocalWar() ~= 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_LOCALWAR_ALERT"))
     return 
@@ -668,10 +640,7 @@ Manufacture_Show = function(installationType, materialWhereType, isClear, showTy
               ((_listAction[12])._radioBtn):SetIgnore(true)
               ;
               ((_listAction[12])._radioBtn):SetMonoTone(true)
-              _frameDescScroll:SetControlPos(0)
-              _frameManufactureDesc:UpdateContentScroll()
               _frameManufactureDesc:UpdateContentPos()
-              _uiListScroll:SetShow(false)
             end
           end
         end
@@ -681,7 +650,9 @@ Manufacture_Show = function(installationType, materialWhereType, isClear, showTy
 end
 
 Manufacture_Close = function()
-  -- function num : 0_11 , upvalues : invenShow, _manufactureName, _textTemp, _currentActionIcon
+  -- function num : 0_11 , upvalues : list2, selectIndex, invenShow, _manufactureName, _textTemp, _currentActionIcon
+  (list2:getElementManager()):clearKey()
+  selectIndex = -1
   Panel_Manufacture:SetShow(false, false)
   Panel_Manufacture:CloseUISubApp()
   Inventory_SetFunctor(nil, nil, nil, nil)
@@ -691,7 +662,7 @@ Manufacture_Close = function()
     Panel_Window_Inventory:SetShow(true)
     invenShow = false
   else
-    Panel_Equipment:SetShow(false)
+    EquipmentWindow_Close()
     InventoryWindow_Close()
     HelpMessageQuestion_Out()
   end
@@ -1311,7 +1282,7 @@ Manufacture_Mouse_LUp = function()
     local terraintype = selfPlayerNaviMaterial()
     local onBoat = selfplayerIsCurrentlyOnShip()
     if (terraintype == 2 or terraintype == 4 or terraintype == 6 or terraintype == 8 or ((getSelfPlayer()):getCurrentRegionInfo()):isOcean()) and not onBoat then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DON’T_WARTER_ACK"))
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DONT_WARTER_ACK"))
       return 
     end
   end
@@ -1524,7 +1495,7 @@ Material_Mouse_Out = function(index)
 end
 
 Manufacture_Button_LUp_Shake = function(isClear)
-  -- function num : 0_35 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, SHAKE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_35 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, SHAKE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1551,8 +1522,6 @@ Manufacture_Button_LUp_Shake = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(SHAKE_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1568,7 +1537,7 @@ Manufacture_Button_LUp_Shake = function(isClear)
 end
 
 Manufacture_Button_LUp_Grind = function(isClear)
-  -- function num : 0_36 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, GRIND_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_36 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, GRIND_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1595,8 +1564,6 @@ Manufacture_Button_LUp_Grind = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(GRIND_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1612,7 +1579,7 @@ Manufacture_Button_LUp_Grind = function(isClear)
 end
 
 Manufacture_Button_LUp_FireWood = function(isClear)
-  -- function num : 0_37 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, FIREWOOD_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_37 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, FIREWOOD_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1639,8 +1606,6 @@ Manufacture_Button_LUp_FireWood = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(FIREWOOD_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1656,7 +1621,7 @@ Manufacture_Button_LUp_FireWood = function(isClear)
 end
 
 Manufacture_Button_LUp_Dry = function(isClear)
-  -- function num : 0_38 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, DRY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_38 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, DRY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1683,8 +1648,6 @@ Manufacture_Button_LUp_Dry = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(DRY_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1700,7 +1663,7 @@ Manufacture_Button_LUp_Dry = function(isClear)
 end
 
 Manufacture_Button_LUp_Thinning = function(isClear)
-  -- function num : 0_39 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, THINNING_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_39 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, THINNING_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1727,8 +1690,6 @@ Manufacture_Button_LUp_Thinning = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(THINNING_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1744,7 +1705,7 @@ Manufacture_Button_LUp_Thinning = function(isClear)
 end
 
 Manufacture_Button_LUp_Heat = function(isClear)
-  -- function num : 0_40 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, HEAT_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_40 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, HEAT_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1771,8 +1732,6 @@ Manufacture_Button_LUp_Heat = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(HEAT_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1788,7 +1747,7 @@ Manufacture_Button_LUp_Heat = function(isClear)
 end
 
 Manufacture_Button_LUp_Rainwater = function(isClear)
-  -- function num : 0_41 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, RAINWATER_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_41 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, RAINWATER_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1815,8 +1774,6 @@ Manufacture_Button_LUp_Rainwater = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(RAINWATER_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1870,7 +1827,7 @@ Manufacture_Button_LUp_RepairItem = function(isClear)
 end
 
 Manufacture_Button_LUp_Alchemy = function(isClear)
-  -- function num : 0_43 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, ALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_43 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1901,8 +1858,6 @@ Manufacture_Button_LUp_Alchemy = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(ALCHEMY_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1917,7 +1872,7 @@ Manufacture_Button_LUp_Alchemy = function(isClear)
 end
 
 Manufacture_Button_LUp_Cook = function(isClear)
-  -- function num : 0_44 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, COOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_44 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, COOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1948,8 +1903,6 @@ Manufacture_Button_LUp_Cook = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(COOK_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -1964,7 +1917,7 @@ Manufacture_Button_LUp_Cook = function(isClear)
 end
 
 Manufacture_Button_LUp_RGCook = function(isClear)
-  -- function num : 0_45 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, ROYALCOOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_45 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ROYALCOOK_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1991,8 +1944,6 @@ Manufacture_Button_LUp_RGCook = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(ROYALCOOK_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -2007,7 +1958,7 @@ Manufacture_Button_LUp_RGCook = function(isClear)
 end
 
 Manufacture_Button_LUp_RGAlchemy = function(isClear)
-  -- function num : 0_46 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, ROYALALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_46 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, ROYALALCHEMY_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2034,8 +1985,6 @@ Manufacture_Button_LUp_RGAlchemy = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(ROYALALCHEMY_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -2050,7 +1999,7 @@ Manufacture_Button_LUp_RGAlchemy = function(isClear)
 end
 
 Manufacture_Button_LUp_GuildManufacture = function(isClear)
-  -- function num : 0_47 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, _uiListScroll, _uiListSelect, GUILDMANUFACTURE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  -- function num : 0_47 , upvalues : _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, GUILDMANUFACTURE_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2082,8 +2031,6 @@ Manufacture_Button_LUp_GuildManufacture = function(isClear)
   _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
   Manufacture_UpdateCheckRadioButton()
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _uiListSelect:SetShow(false)
   ReconstructionAlchemyKnowledge(GUILDMANUFACTURE_MENTALTHEMEKEY)
   ManufactureKnowledge_UpdateList()
   _defaultMSG1:SetShow(false)
@@ -2097,52 +2044,11 @@ Manufacture_Button_LUp_GuildManufacture = function(isClear)
   end
 end
 
-ManufactureKnowledge_ScrollEvent = function(isUp)
-  -- function num : 0_48 , upvalues : _uiListScroll, KNOWLEDGE_TEXT_COUNT, _startKnowledgeIndex
-  if _uiListScroll:IsEnable() == false then
-    return 
-  end
-  local count = getCountAlchemyKnowledge()
-  if count == 0 or count <= KNOWLEDGE_TEXT_COUNT then
-    return 
-  end
-  local maxStartSlotCount = count - KNOWLEDGE_TEXT_COUNT
-  local divideScroll = 1 / maxStartSlotCount
-  if isUp ~= nil then
-    if isUp == true then
-      _startKnowledgeIndex = _startKnowledgeIndex - 1
-      _uiListScroll:ControlButtonUp()
-    else
-      _startKnowledgeIndex = _startKnowledgeIndex + 1
-      _uiListScroll:ControlButtonDown()
-    end
-    if _startKnowledgeIndex < 0 then
-      _startKnowledgeIndex = 0
-    end
-    if maxStartSlotCount < _startKnowledgeIndex then
-      _startKnowledgeIndex = maxStartSlotCount
-    end
-  else
-    local currentScrollPos = _uiListScroll:GetControlPos()
-    local startSlotIndexString = (string.format)("%.0f", currentScrollPos / divideScroll)
-    _startKnowledgeIndex = tonumber(startSlotIndexString)
-  end
-  do
-    _uiListScroll:SetControlPos(divideScroll * _startKnowledgeIndex)
-    ManufactureKnowledge_UpdateList()
-  end
-end
-
 Manufacture_KnowledgeList_SelectKnowledge = function(index)
-  -- function num : 0_49 , upvalues : _uiListBG, _uiListText, _uiListSelect, _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _frameDescScroll, _uiKnowledgeIcon
+  -- function num : 0_48 , upvalues : _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _uiKnowledgeIcon, selectIndex, list2
   if Panel_Win_System:GetShow() then
     return 
   end
-  local posX = _uiListBG:GetPosX() + (_uiListText[index]):GetPosX()
-  local posY = _uiListBG:GetPosY() + (_uiListText[index]):GetPosY()
-  _uiListSelect:SetPosX(posX - 7)
-  _uiListSelect:SetPosY(posY - 1)
-  _uiListSelect:SetShow(true)
   local knowledgeIndex = _startKnowledgeIndex + index
   local mentalCardStaticWrapper = getAlchemyKnowledge(knowledgeIndex)
   if mentalCardStaticWrapper ~= nil then
@@ -2151,12 +2057,6 @@ Manufacture_KnowledgeList_SelectKnowledge = function(index)
       _uiKnowledgeDesc:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
       _uiKnowledgeDesc:SetText(mentalCardStaticWrapper:getDesc())
       _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
-      if _uiKnowledgeDesc:GetSizeY() > 110 then
-        _frameDescScroll:SetShow(true)
-        _frameDescScroll:SetControlPos(0)
-      else
-        _frameDescScroll:SetShow(false)
-      end
       _uiKnowledgeIcon:ChangeTextureInfoName(mentalCardStaticWrapper:getImagePath())
       local x1, y1, x2, y2 = setTextureUV_Func(_uiKnowledgeIcon, 0, 0, 360, 360)
       ;
@@ -2164,17 +2064,22 @@ Manufacture_KnowledgeList_SelectKnowledge = function(index)
       _uiKnowledgeIcon:setRenderTexture(_uiKnowledgeIcon:getBaseTexture())
     else
       do
-        _uiKnowledgeDesc:SetText(" ")
-        _uiKnowledgeIcon:ChangeTextureInfoName("UI_Artwork/Unkown_Intelligence.dds")
-        _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
-        _frameDescScroll:SetShow(false)
+        do
+          _uiKnowledgeDesc:SetText(" ")
+          _uiKnowledgeIcon:ChangeTextureInfoName("UI_Artwork/Unkown_Intelligence.dds")
+          _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
+          local prevSelectIndex = selectIndex
+          selectIndex = index
+          list2:requestUpdateByKey(toInt64(0, index))
+          list2:requestUpdateByKey(toInt64(0, prevSelectIndex))
+        end
       end
     end
   end
 end
 
 Manufacture_KnowledgeList_Tooltip = function(isShow, index)
-  -- function num : 0_50 , upvalues : _startKnowledgeIndex, _uiListText
+  -- function num : 0_49 , upvalues : _startKnowledgeIndex
   local knowledgeIndex = _startKnowledgeIndex + index
   local mentalCardStaticWrapper = getAlchemyKnowledge(knowledgeIndex)
   -- DECOMPILER ERROR at PC13: Unhandled construct in 'MakeBoolean' P1
@@ -2182,7 +2087,6 @@ Manufacture_KnowledgeList_Tooltip = function(isShow, index)
   if isShow and mentalCardStaticWrapper ~= nil then
     local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
     if not isLearn then
-      local uiControl = _uiListText[index]
       local name = "???"
       local desc = mentalCardStaticWrapper:getKeyword()
       TooltipSimple_Show(uiControl, name, desc)
@@ -2194,87 +2098,30 @@ Manufacture_KnowledgeList_Tooltip = function(isShow, index)
 end
 
 ManufactureKnowledge_UpdateList = function()
-  -- function num : 0_51 , upvalues : KNOWLEDGE_TEXT_COUNT, _uiListScroll, _startKnowledgeIndex, _uiListText, UI_color
+  -- function num : 0_50 , upvalues : list2, selectIndex, _startKnowledgeIndex
+  (list2:getElementManager()):clearKey()
+  selectIndex = -1
   ManufactureKnowledge_ClearList()
   local count = getCountAlchemyKnowledge()
-  if KNOWLEDGE_TEXT_COUNT < count then
-    _uiListScroll:SetShow(true)
-    _uiListScroll:SetMonoTone(false)
-  else
-    _uiListScroll:SetShow(false)
-    _uiListScroll:SetMonoTone(true)
+  for index = _startKnowledgeIndex, count - 1 do
+    (list2:getElementManager()):pushKey(toInt64(0, index))
   end
-  if count <= 0 then
-    return 
-  end
-  local endIndex = _startKnowledgeIndex + (KNOWLEDGE_TEXT_COUNT - 1)
-  if count - 1 < endIndex then
-    endIndex = count - 1
-  end
-  local ctrlIndex = 0
-  for index = _startKnowledgeIndex, endIndex do
-    local mentalCardStaticWrapper = getAlchemyKnowledge(index)
-    if mentalCardStaticWrapper ~= nil then
-      local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
-      if isLearn == true then
-        (_uiListText[ctrlIndex]):SetFontColor(UI_color.C_FF84FFF5)
-        ;
-        (_uiListText[ctrlIndex]):SetText(mentalCardStaticWrapper:getName())
-      else
-        ;
-        (_uiListText[ctrlIndex]):SetFontColor(UI_color.C_FF888888)
-        ;
-        (_uiListText[ctrlIndex]):SetText("??? ( " .. mentalCardStaticWrapper:getKeyword() .. " )")
-      end
-      ;
-      (_uiListText[ctrlIndex]):SetShow(true)
-    else
-      do
-        do
-          ;
-          (_uiListText[ctrlIndex]):SetShow(false)
-          ctrlIndex = ctrlIndex + 1
-          -- DECOMPILER ERROR at PC91: LeaveBlock: unexpected jumping out DO_STMT
-
-          -- DECOMPILER ERROR at PC91: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-          -- DECOMPILER ERROR at PC91: LeaveBlock: unexpected jumping out IF_STMT
-
-        end
-      end
-    end
-  end
-  ;
-  (UIScroll.SetButtonSize)(_uiListScroll, KNOWLEDGE_TEXT_COUNT, count)
 end
 
 ManufactureKnowledge_ShowList = function(isShow)
-  -- function num : 0_52 , upvalues : KNOWLEDGE_TEXT_COUNT, _uiListText, _uiListScroll, _uiListScrollOriginPosX, _defaultMSG1, _defaultMSG2, _uiListBG, _uiListSelect, _uiKnowledgeIcon, _uiKnowledgeDesc, _frameDescScroll, _frameContent
-  for index = 0, KNOWLEDGE_TEXT_COUNT - 1 do
-    (_uiListText[index]):SetText("")
-    ;
-    (_uiListText[index]):SetShow(false)
-  end
+  -- function num : 0_51 , upvalues : _defaultMSG1, _defaultMSG2, _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
   if isShow then
-    _uiListScroll:SetPosX(_uiListScrollOriginPosX)
     _defaultMSG1:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_1"))
     _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_2"))
     _defaultMSG1:SetShow(true)
     _defaultMSG2:SetShow(true)
   end
-  _uiListBG:SetShow(isShow)
-  _uiListScroll:SetShow(isShow)
-  _uiListBG:ComputePos()
-  _uiListScroll:ComputePos()
-  _uiListSelect:ComputePos()
   _uiKnowledgeIcon:ComputePos()
   _uiKnowledgeIcon:ReleaseTexture()
   _uiKnowledgeIcon:SetShow(isShow)
   _uiKnowledgeDesc:SetText("")
   _uiKnowledgeDesc:SetShow(isShow)
-  _frameDescScroll:SetShow(false)
   _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
-  _uiListSelect:SetShow(false)
   ;
   ((UI.getChildControl)(Panel_Manufacture, "Button_Close")):ComputePos()
   ;
@@ -2284,24 +2131,16 @@ ManufactureKnowledge_ShowList = function(isShow)
 end
 
 ManufactureKnowledge_ClearList = function()
-  -- function num : 0_53 , upvalues : KNOWLEDGE_TEXT_COUNT, _uiListText, _uiListBG, _uiListScroll, _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent, _uiListSelect
-  for index = 0, KNOWLEDGE_TEXT_COUNT - 1 do
-    (_uiListText[index]):SetText("")
-    ;
-    (_uiListText[index]):SetShow(false)
-  end
-  _uiListBG:SetShow(true)
-  _uiListScroll:SetShow(false)
+  -- function num : 0_52 , upvalues : _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
   _uiKnowledgeIcon:ReleaseTexture()
   _uiKnowledgeIcon:SetShow(true)
   _uiKnowledgeDesc:SetText("")
   _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
   _uiKnowledgeDesc:SetShow(true)
-  _uiListSelect:SetShow(false)
 end
 
 Note_Mouse_LUp = function()
-  -- function num : 0_54
+  -- function num : 0_53
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2309,14 +2148,14 @@ Note_Mouse_LUp = function()
 end
 
 Note_Mouse_On = function()
-  -- function num : 0_55
+  -- function num : 0_54
   audioPostEvent_SystemUi(1, 13)
 end
 
 ManufactureControlInit()
 Manufacture_Reset_ContinueGrindJewel()
 Material_Update = function(slotCount)
-  -- function num : 0_56 , upvalues : _materialSlotNoList, _slotList
+  -- function num : 0_55 , upvalues : _materialSlotNoList, _slotList
   local inventory = ((getSelfPlayer()):get()):getInventory()
   local invenSize = inventory:size()
   for ii = 0, slotCount - 1 do
@@ -2331,7 +2170,7 @@ Material_Update = function(slotCount)
 end
 
 Manufacture_Notify.Init = function(self)
-  -- function num : 0_57
+  -- function num : 0_56
   for key,value in pairs(self._templat) do
     value:SetShow(false)
   end
@@ -2344,7 +2183,7 @@ end
 
 Manufacture_Notify:Init()
 Manufacture_Notify.createResultControl = function(self, index)
-  -- function num : 0_58
+  -- function num : 0_57
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
 
   if (self._item_Result)[index] == nil or (self._icon_ResultBG)[index] == nil or (self._icon_Result)[index] == nil then
@@ -2374,7 +2213,7 @@ Manufacture_Notify.createResultControl = function(self, index)
 end
 
 Manufacture_Notify.createResourceControl = function(self, index)
-  -- function num : 0_59
+  -- function num : 0_58
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
 
   if (self._item_Resource)[index] == nil or (self._icon_ResourceBG)[index] == nil or (self._icon_Resource)[index] == nil then
@@ -2404,7 +2243,7 @@ Manufacture_Notify.createResourceControl = function(self, index)
 end
 
 Manufacture_Notify.clear = function(self)
-  -- function num : 0_60 , upvalues : Manufacture_Notify
+  -- function num : 0_59 , upvalues : Manufacture_Notify
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
   Manufacture_Notify._data_Resource = {}
@@ -2436,13 +2275,13 @@ Manufacture_Notify.clear = function(self)
 end
 
 Manufacture_Notify.SetPos = function(self)
-  -- function num : 0_61
+  -- function num : 0_60
   local gapCnt = #self._data_Resource
   Panel_Manufacture_Notify:SetSpanSize((Panel_Manufacture_Notify:GetSpanSize()).x, self._defalutSpanY + self._gapY * gapCnt)
 end
 
 Manufacture_Progress_Update = function(materialItemWhereType)
-  -- function num : 0_62 , upvalues : Manufacture_Notify
+  -- function num : 0_61 , upvalues : Manufacture_Notify
   local progressRate = 0
   local currentInventoryType = Inventory_GetCurrentInventoryType()
   for key,value in pairs(Manufacture_Notify._data_Resource) do
@@ -2513,7 +2352,7 @@ Manufacture_Progress_Update = function(materialItemWhereType)
 end
 
 Manufacture_Tooltip_Item_Show = function(index, isResult)
-  -- function num : 0_63 , upvalues : Manufacture_Notify
+  -- function num : 0_62 , upvalues : Manufacture_Notify
   local itemKey, uiBase = nil
   if isResult then
     itemKey = ((Manufacture_Notify._data_Result)[index])._key
@@ -2532,7 +2371,7 @@ Manufacture_Tooltip_Item_Show = function(index, isResult)
 end
 
 IsManufacture_Chk = function(variableName, value)
-  -- function num : 0_64 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType, IM
+  -- function num : 0_63 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType, IM
   if variableName == "IsManufactureChk" then
     if value == 0 then
       Panel_Manufacture_Notify:SetShow(false)
@@ -2561,14 +2400,14 @@ IsManufacture_Chk = function(variableName, value)
 end
 
 Manufacture_Notify_Check = function()
-  -- function num : 0_65 , upvalues : Manufacture_Notify
+  -- function num : 0_64 , upvalues : Manufacture_Notify
   if Panel_Manufacture_Notify:GetShow() == true and #Manufacture_Notify._data_Resource == 0 then
     Panel_Manufacture_Notify:SetShow(false)
   end
 end
 
 ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
-  -- function num : 0_66 , upvalues : _actionIndex, _listAction
+  -- function num : 0_65 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
@@ -2593,7 +2432,7 @@ ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
 end
 
 ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
-  -- function num : 0_67 , upvalues : _actionIndex, _listAction
+  -- function num : 0_66 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
@@ -2623,7 +2462,7 @@ ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
 end
 
 manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2)
-  -- function num : 0_68
+  -- function num : 0_67
   local x1, y1, x2, y2 = setTextureUV_Func(uiBase, x1, y1, x2, y2)
   ;
   (uiBase:getBaseTexture()):setUV(x1, y1, x2, y2)
@@ -2632,7 +2471,7 @@ manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2)
 end
 
 manufacture_ShowIconToolTip = function(isShow, idx)
-  -- function num : 0_69 , upvalues : isEnableMsg, _listAction
+  -- function num : 0_68 , upvalues : isEnableMsg, _listAction
   local name, desc = nil
   if isShow == true then
     audioPostEvent_SystemUi(1, 13)
@@ -2711,14 +2550,14 @@ manufacture_ShowIconToolTip = function(isShow, idx)
 end
 
 noneStackItemCheckBT = function()
-  -- function num : 0_70 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
+  -- function num : 0_69 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
   if Panel_Manufacture:GetShow() then
     noneStackItemCheck = noneStackItem_ChkBtn:IsCheck()
   end
 end
 
 Manufacture_RepeatAction = function()
-  -- function num : 0_71 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem
+  -- function num : 0_70 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2734,7 +2573,7 @@ Manufacture_RepeatAction = function()
 end
 
 registEventHandler = function()
-  -- function num : 0_72 , upvalues : MAX_ACTION_BTN, _listAction
+  -- function num : 0_71 , upvalues : MAX_ACTION_BTN, _listAction
   for i = 0, MAX_ACTION_BTN - 1 do
     ((_listAction[i])._radioBtn):addInputEvent("Mouse_On", "manufacture_ShowIconToolTip( true, " .. i .. " )")
     ;
@@ -2743,7 +2582,7 @@ registEventHandler = function()
 end
 
 FontSize_SetPos = function()
-  -- function num : 0_73 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
+  -- function num : 0_72 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
   if getUiFontSize() ~= 0 then
     _currentActionIcon:SetPosY(iconPosY - 5)
     _textDesc:SetPosY(textDescPosY - 8)
@@ -2757,8 +2596,41 @@ FontSize_SetPos = function()
   end
 end
 
+Manufacture_ListControlCreate = function(content, key)
+  -- function num : 0_73 , upvalues : selectIndex, UI_color
+  local index = Int64toInt32(key)
+  local recipe = (UI.getChildControl)(content, "StaticText_List2_AlchemyRecipe")
+  local selectList = (UI.getChildControl)(content, "Static_List2_SelectList")
+  local mentalCardStaticWrapper = getAlchemyKnowledge(index)
+  if selectIndex == index then
+    selectList:SetShow(true)
+  else
+    selectList:SetShow(false)
+  end
+  if mentalCardStaticWrapper ~= nil then
+    local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
+    if isLearn == true then
+      recipe:SetFontColor(UI_color.C_FF84FFF5)
+      recipe:SetText(mentalCardStaticWrapper:getName())
+    else
+      recipe:SetFontColor(UI_color.C_FF888888)
+      recipe:SetText("??? ( " .. mentalCardStaticWrapper:getKeyword() .. " )")
+    end
+    recipe:SetShow(true)
+    recipe:SetPosY(6)
+    recipe:addInputEvent("Mouse_LUp", "Manufacture_KnowledgeList_SelectKnowledge( " .. index .. " )")
+  else
+    do
+      recipe:SetShow(false)
+    end
+  end
+end
+
 registerEvent("onScreenResize", "manufacture_Repos")
 registerEvent("EventChangedSelfPlayerActionVariable", "IsManufacture_Chk")
+list2:changeAnimationSpeed(10)
+list2:registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "Manufacture_ListControlCreate")
+list2:createChildContent((CppEnums.PAUIList2ElementManagerType).list)
 Panel_Manufacture_Notify:RegisterUpdateFunc("Manufacture_Notify_Check")
 registEventHandler()
 

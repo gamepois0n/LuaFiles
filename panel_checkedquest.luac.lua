@@ -1098,6 +1098,9 @@ HandleClicked_QuestShowCheck = function(groupId, questId)
   -- function num : 0_41
   ToClient_ToggleCheckShow(groupId, questId)
   if Panel_CheckedQuestInfo:GetShow() == true then
+    if Panel_CheckedQuestInfo:IsUISubApp() then
+      Panel_CheckedQuestInfo:CloseUISubApp()
+    end
     Panel_CheckedQuestInfo:SetShow(false)
   end
   HandleMouseOver_HelpPop(false, 0, "hide", 0)
@@ -1879,7 +1882,7 @@ PaGlobal_CheckedQuest.setNaviButtonInfo = function(self, idx, uiQuestInfo)
   local uiNaviBtnPosY = (self._uiNormalQuestGroup):GetPosY() + uiGroupBG:GetPosY() + uiNaviBtn:GetPosY()
   local conditionCheck = nil
   if uiQuestInfo:isSatisfied() == true then
-    conditionCheck = QuestConditionCheckType.eQuestConditionCheckType_NotAccept
+    conditionCheck = QuestConditionCheckType.eQuestConditionCheckType_Complete
   else
     conditionCheck = QuestConditionCheckType.eQuestConditionCheckType_Progress
   end
@@ -1911,19 +1914,19 @@ PaGlobal_CheckedQuest.setNaviButtonInfo = function(self, idx, uiQuestInfo)
   end
   local questStaticStatus = questList_getQuestStatic(questGroupId, questId)
   local posCount = questStaticStatus:getQuestPositionCount()
-  do
-    local enable = uiQuestInfo:isSatisfied() == false and posCount ~= 0
-    if enable == true then
-      uiAutoNaviBtn:SetShow(widgetMouseOn)
-      uiNaviBtn:SetShow(widgetMouseOn)
-    end
-    uiAutoNaviBtn:SetEnable(enable)
-    uiNaviBtn:SetEnable(enable)
-    if uiQuestInfo:isSatisfied() == true and uiQuestInfo:isCompleteBlackSpirit() then
-      uiAutoNaviBtn:addInputEvent("Mouse_LUp", "HandleClicked_CallBlackSpirit()")
-      uiNaviBtn:addInputEvent("Mouse_LUp", "HandleClicked_CallBlackSpirit()")
-    end
-    -- DECOMPILER ERROR: 3 unprocessed JMP targets
+  local enable = true
+  if uiQuestInfo:isSatisfied() == false and posCount == 0 then
+    enable = false
+  end
+  if enable == true then
+    uiAutoNaviBtn:SetShow(widgetMouseOn)
+    uiNaviBtn:SetShow(widgetMouseOn)
+  end
+  uiAutoNaviBtn:SetEnable(enable)
+  uiNaviBtn:SetEnable(enable)
+  if uiQuestInfo:isSatisfied() == true and uiQuestInfo:isCompleteBlackSpirit() then
+    uiAutoNaviBtn:addInputEvent("Mouse_LUp", "HandleClicked_CallBlackSpirit()")
+    uiNaviBtn:addInputEvent("Mouse_LUp", "HandleClicked_CallBlackSpirit()")
   end
 end
 
@@ -2788,6 +2791,9 @@ QuestWidget_QuestGiveUp_Confirm = function()
   local groupId, questId = FGlobal_PassGroupIdQuestId()
   ToClient_GiveupQuest(groupId, questId)
   if Panel_CheckedQuestInfo:GetShow() == true then
+    if Panel_CheckedQuestInfo:IsUISubApp() then
+      Panel_CheckedQuestInfo:CloseUISubApp()
+    end
     Panel_CheckedQuestInfo:SetShow(false)
   end
 end
@@ -3347,15 +3353,23 @@ FromClient_questWidget_ResetPosition = function()
     end
   end
   do
-    do
+    if CppDefine.ChangeUIAndResolution == true then
+      if Panel_CheckedQuest:GetRelativePosX() == 0 and Panel_CheckedQuest:GetRelativePosY() == 0 then
+        Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20)
+        Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + Panel_MainQuest:GetSizeY() + 20 + newEquipGap)
+      else
+        Panel_CheckedQuest:SetPosX(getScreenSizeX() * Panel_CheckedQuest:GetRelativePosX() - Panel_CheckedQuest:GetSizeX() / 2)
+        Panel_CheckedQuest:SetPosY(getScreenSizeY() * Panel_CheckedQuest:GetRelativePosY() - Panel_CheckedQuest:GetSizeY() / 2)
+      end
+    else
       local haveServerPosotion = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_CheckedQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0
       if not haveServerPosotion then
         Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20)
         Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap)
       end
       changePositionBySever(Panel_CheckedQuest, (CppEnums.PAGameUIType).PAGameUIPanel_CheckedQuest, false, true, false)
-      -- DECOMPILER ERROR: 2 unprocessed JMP targets
     end
+    -- DECOMPILER ERROR: 3 unprocessed JMP targets
   end
 end
 

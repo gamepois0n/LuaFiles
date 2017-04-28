@@ -126,7 +126,20 @@ Panel_KeyViewer_ScreenRePosition = function()
   -- function num : 0_0 , upvalues : ui
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
-  changePositionBySever(Panel_Movie_KeyViewer, (CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, true, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_Movie_KeyViewer:GetRelativePosX() == 0 and Panel_Movie_KeyViewer:GetRelativePosY() == 0 then
+      Panel_Movie_KeyViewer:SetPosX(Panel_Movie_KeyViewer:GetSizeX() / 3)
+      Panel_Movie_KeyViewer:SetPosY(Panel_Movie_KeyViewer:GetSizeY() * 2.3)
+    else
+      Panel_Movie_KeyViewer:SetPosX(scrX * Panel_Movie_KeyViewer:GetRelativePosX() - Panel_Movie_KeyViewer:GetSizeX() / 2)
+      Panel_Movie_KeyViewer:SetPosY(scrY * Panel_Movie_KeyViewer:GetRelativePosY() - Panel_Movie_KeyViewer:GetSizeY() / 2)
+    end
+    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+      Panel_Movie_KeyViewer:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+    end
+  else
+    changePositionBySever(Panel_Movie_KeyViewer, (CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, true, true, false)
+  end
   if scrX < Panel_Movie_KeyViewer:GetPosX() + Panel_Movie_KeyViewer:GetSizeX() then
     Panel_Movie_KeyViewer:SetPosX(scrX - Panel_Movie_KeyViewer:GetSizeX())
   end

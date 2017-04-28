@@ -10,6 +10,7 @@ local u64_minute = toUint64(0, 60)
 local UI_color = Defines.Color
 local UI_RewardType = CppEnums.RewardType
 local isGrowthContents = ToClient_IsContentsGroupOpen("35")
+local isTotemContents = ToClient_IsContentsGroupOpen("44")
 local isExtractionCommon = ToClient_IsContentsGroupOpen("1006")
 local isExtractionJapan = ToClient_IsContentsGroupOpen("1007")
 local isItemLock = ToClient_IsContentsGroupOpen("219")
@@ -26,7 +27,7 @@ soketEffect = {}
 cronStoneGradeValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Grade1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Grade2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Grade3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Grade4")}
 , 
 cronStoneCountValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Count1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Count2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Count3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Count4")}
-, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_CronStackDesc")}
+, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_CronStackDesc"), enchantDifficulty = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_EnchantDifficulty")}
 local equippedTooltip = {equippedTag = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_nowEquiped_tag"), mainPanel = Panel_Tooltip_Item_equipped, itemName = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_Name"), itemIcon = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_Icon"), enchantLevel = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_Enchant_value"), itemType = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_Type"), dying = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Dying"), isEnchantable = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_isEnchantable"), isSealed = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_isSealed"), bindType = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_BindType"), balksExtraction = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_Balks"), cronsExtraction = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_Cron"), useDyeColorTitle = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_DyeColorInfo"), 
 useDyeColorIcon_Part = {(UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part2"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part3"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part4"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part5"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part6"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part7"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part8"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part9"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part10"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part11"), (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part12"); [0] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_DyeColorIcon_Part1")}
 , useLimit_category = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_category"), useLimit_panel = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_panel"), useLimit_level = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_level"), useLimit_level_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_level_value"), useLimit_extendedslot = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_extendedslot"), useLimit_extendedslot_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_extendedslot_value"), useLimit_class = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_class"), useLimit_class_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_class_value"), useLimit_Exp = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_Exp"), useLimit_Exp_gage = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_Exp_gage"), useLimit_Exp_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Progress_UseLimit_Exp_gage_value"), useLimit_Exp_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_Exp_value"), useLimit_endurance = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_endurance"), useLimit_endurance_gage = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_endurance_gage"), useLimit_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Progress_UseLimit_endurance_gage_value"), useLimit_dynamic_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Progress2_MaxEndurance"), useLimit_endurance_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_endurance_value"), remainTime = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_remainTime"), remainTime_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_UseLimit_remainTime_value"), expireIcon_white = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_Expire_Icon1"), expireIcon_red = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_Expire_Icon2"), expireIcon_end = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Static_Expire_Icon3"), defaultEffect_category = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_category"), defaultEffect_panel = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_panel"), attack = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_attack"), attack_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_attack_value"), attack_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_attackDiff_value"), isMeleeAttack = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_attack_isMeleeAttack"), isRangeAttack = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_attack_isRangeAttack"), isMagicAttack = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_attack_isMagicAttack"), defense = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_defense"), defense_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_defense_value"), defense_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_defenseDiff_value"), weight = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_weight"), weight_value = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_DefaultEffect_weight_value"), weight_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_DefaultEffect_weightDiff_value"), soketOption_panel = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "Tooltip_Item_SoketOption_panel"), 
@@ -39,7 +40,7 @@ soketEffect = {}
 cronStoneGradeValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Grade1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Grade2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Grade3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Grade4")}
 , 
 cronStoneCountValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Count1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Count2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Count3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_Count4")}
-, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_CronStackDesc")}
+, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_CronStackDesc"), enchantDifficulty = (UI.getChildControl)(Panel_Tooltip_Item_equipped, "StaticText_EnchantDifficulty")}
 local chattingLinkedItemTooltip = {mainPanel = Panel_Tooltip_Item_chattingLinkedItem, itemName = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_Name"), itemIcon = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_Icon"), closeBtn = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Button_Win_Close"), enchantLevel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_Enchant_value"), itemType = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_Type"), dying = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Dying"), isEnchantable = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_isEnchantable"), isSealed = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_isSealed"), bindType = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_BindType"), balksExtraction = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_Balks"), cronsExtraction = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_Cron"), useDyeColorTitle = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_DyeColorInfo"), 
 useDyeColorIcon_Part = {(UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part2"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part3"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part4"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part5"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part6"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part7"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part8"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part9"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part10"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part11"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part12"); [0] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_DyeColorIcon_Part1")}
 , useLimit_category = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_category"), useLimit_panel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_panel"), useLimit_level = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_level"), useLimit_level_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_level_value"), useLimit_extendedslot = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_extendedslot"), useLimit_extendedslot_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_extendedslot_value"), useLimit_class = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_class"), useLimit_class_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_class_value"), useLimit_Exp = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_Exp"), useLimit_Exp_gage = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_Exp_gage"), useLimit_Exp_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Progress_UseLimit_Exp_gage_value"), useLimit_Exp_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_Exp_value"), useLimit_endurance = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_endurance"), useLimit_endurance_gage = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_endurance_gage"), useLimit_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Progress_UseLimit_endurance_gage_value"), useLimit_dynamic_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Progress2_MaxEndurance"), useLimit_endurance_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_endurance_value"), remainTime = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_remainTime"), remainTime_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_UseLimit_remainTime_value"), expireIcon_white = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_Expire_Icon1"), expireIcon_red = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_Expire_Icon2"), expireIcon_end = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Static_Expire_Icon3"), defaultEffect_category = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_category"), defaultEffect_panel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_panel"), attack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_attack"), attack_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_attack_value"), attack_diffValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_attackDiff_value"), isMeleeAttack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_attack_isMeleeAttack"), isRangeAttack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_attack_isRangeAttack"), isMagicAttack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_attack_isMagicAttack"), defense = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_defense"), defense_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_defense_value"), defense_diffValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_defenseDiff_value"), weight = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_weight"), weight_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_DefaultEffect_weight_value"), weight_diffValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_DefaultEffect_weightDiff_value"), soketOption_panel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "Tooltip_Item_SoketOption_panel"), 
@@ -52,7 +53,7 @@ soketEffect = {}
 cronStoneGradeValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Grade1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Grade2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Grade3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Grade4")}
 , 
 cronStoneCountValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Count1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Count2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Count3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_Count4")}
-, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_CronStackDesc")}
+, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_CronStackDesc"), enchantDifficulty = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItem, "StaticText_EnchantDifficulty")}
 local chattingLinkedItemClickTooltip = {mainPanel = Panel_Tooltip_Item_chattingLinkedItemClick, itemName = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_Name"), itemIcon = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_Icon"), closeBtn = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Button_Win_Close"), enchantLevel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_Enchant_value"), itemType = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_Type"), dying = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Dying"), isEnchantable = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_isEnchantable"), isSealed = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_isSealed"), bindType = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_BindType"), balksExtraction = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_Balks"), cronsExtraction = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_Cron"), useDyeColorTitle = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_DyeColorInfo"), 
 useDyeColorIcon_Part = {(UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part2"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part3"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part4"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part5"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part6"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part7"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part8"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part9"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part10"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part11"), (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part12"); [0] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_DyeColorIcon_Part1")}
 , useLimit_category = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_category"), useLimit_panel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_panel"), useLimit_level = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_level"), useLimit_level_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_level_value"), useLimit_extendedslot = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_extendedslot"), useLimit_extendedslot_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_extendedslot_value"), useLimit_class = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_class"), useLimit_class_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_class_value"), useLimit_Exp = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_Exp"), useLimit_Exp_gage = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_Exp_gage"), useLimit_Exp_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Progress_UseLimit_Exp_gage_value"), useLimit_Exp_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_Exp_value"), useLimit_endurance = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_endurance"), useLimit_endurance_gage = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_endurance_gage"), useLimit_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Progress_UseLimit_endurance_gage_value"), useLimit_dynamic_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Progress2_MaxEndurance"), useLimit_endurance_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_endurance_value"), remainTime = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_remainTime"), remainTime_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_UseLimit_remainTime_value"), expireIcon_white = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_Expire_Icon1"), expireIcon_red = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_Expire_Icon2"), expireIcon_end = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Static_Expire_Icon3"), defaultEffect_category = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_category"), defaultEffect_panel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_panel"), attack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_attack"), attack_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_attack_value"), attack_diffValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_attackDiff_value"), isMeleeAttack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_attack_isMeleeAttack"), isRangeAttack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_attack_isRangeAttack"), isMagicAttack = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_attack_isMagicAttack"), defense = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_defense"), defense_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_defense_value"), defense_diffValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_defenseDiff_value"), weight = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_weight"), weight_value = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_DefaultEffect_weight_value"), weight_diffValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_DefaultEffect_weightDiff_value"), soketOption_panel = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "Tooltip_Item_SoketOption_panel"), 
@@ -65,7 +66,7 @@ soketEffect = {}
 cronStoneGradeValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Grade1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Grade2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Grade3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Grade4")}
 , 
 cronStoneCountValue = {[0] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Count1"), [1] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Count2"), [2] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Count3"), [3] = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_Count4")}
-, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_CronStackDesc")}
+, cronStoneValue = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_CronStackDesc"), enchantDifficulty = (UI.getChildControl)(Panel_Tooltip_Item_chattingLinkedItemClick, "StaticText_EnchantDifficulty")}
 local Panel_Tooltip_Item_DataObject = {
 slotData = {}
 , currentSlotNo = -1, currentSlotType = "", index = -1, isNormal = false, isSkill = false, itemMarket = false, inventory = false, equip = false, isTooltipClickOpen = false}
@@ -1102,7 +1103,7 @@ Panel_Tooltip_Item_Set_Position_UISubApp = function(positionData, parent, inven)
     if parent and inven then
       posX = (positionData:getParent()):GetSizeX() + posX
     else
-      posX = posX + positionData:GetSizeX()
+      posX = posX + (positionData:getParent()):GetSizeX() + positionData:GetSizeX()
     end
   end
   if Panel_Tooltip_Item:GetShow() then
@@ -1334,7 +1335,7 @@ _toolTip_ChangeDyeInfoTexture = function(target, bEmpty, dyeingPart_Index, dyein
 end
 
 Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper, chattingLinkedItem, index, isNextEnchantInfo, invenSlotNo)
-  -- function num : 0_18 , upvalues : equippedTooltip, clothBagSlotNo, normalTooltip, UI_color, UI_TM, isExtractionCommon, isExtractionJapan, Panel_Tooltip_Item_DataObject, isItemLock, EquipItem_Lock, isGrowthContents, chattingLinkedItemTooltip, chattingLinkedItemClickTooltip, GetBottomPos
+  -- function num : 0_18 , upvalues : equippedTooltip, clothBagSlotNo, normalTooltip, UI_color, UI_TM, isExtractionCommon, isExtractionJapan, Panel_Tooltip_Item_DataObject, isItemLock, EquipItem_Lock, isGrowthContents, isTotemContents, chattingLinkedItemTooltip, chattingLinkedItemClickTooltip, GetBottomPos
   (target.expireIcon_white):SetShow(false)
   ;
   (target.expireIcon_red):SetShow(false)
@@ -2620,7 +2621,7 @@ extendedSlotInfoArray = {}
                                                                       (target.useLimit_Exp_gage_value):SetShow(false)
                                                                       ;
                                                                       (target.useLimit_Exp_value):SetShow(false)
-                                                                      if isGrowthContents and nil ~= itemWrapper and (32 == (itemSSW:get()):getContentsEventType() or 37 == (itemSSW:get()):getContentsEventType()) then
+                                                                      if (isGrowthContents or isTotemContents) and nil ~= itemWrapper and (32 == (itemSSW:get()):getContentsEventType() or 37 == (itemSSW:get()):getContentsEventType()) then
                                                                         local alchemyStoneType = ((itemWrapper:getStaticStatus()):get())._contentsEventParam1
                                                                         if alchemyStoneType < 3 then
                                                                           local alchemystoneExp = itemWrapper:getExperience() / 10000
@@ -2751,470 +2752,491 @@ extendedSlotInfoArray = {}
                                                                         end
                                                                       end
                                                                       ;
-                                                                      (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), target.panelSize - 30 * (6 - soketCount - 1))
-                                                                      ;
-                                                                      (target.soketOption_panel):SetSize((target.soketOption_panel):GetSizeX(), target.socketSize - 30 * (6 - soketCount))
-                                                                      ;
-                                                                      (target.itemProducedPlace):ComputePos()
-                                                                      ;
-                                                                      (target.itemDescription):ComputePos()
-                                                                      ;
-                                                                      (target.itemPrice_panel):ComputePos()
-                                                                      ;
-                                                                      (target.itemPrice_transportBuy):ComputePos()
-                                                                      ;
-                                                                      (target.itemPrice_transportBuy_value):ComputePos()
-                                                                      ;
-                                                                      (target.itemPrice_storeSell):ComputePos()
-                                                                      ;
-                                                                      (target.itemPrice_storeSell_value):ComputePos()
-                                                                      if true == (itemSSW:get()):isForJustTrade() and not isSSW then
-                                                                        local nodeLevel = ToClient_GetNodeLevel(itemWrapper:getProductionRegionKey())
-                                                                        if 1 <= nodeLevel then
-                                                                          (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_LINK") .. ")")
+                                                                      (target.enchantDifficulty):SetShow(false)
+                                                                      do
+                                                                        if nil ~= itemSSW then
+                                                                          local enchantDifficulty = (itemSSW:get()):getEnchantDifficulty()
+                                                                          if 0 < enchantDifficulty then
+                                                                            (target.enchantDifficulty):SetShow(true)
+                                                                            if 1 == enchantDifficulty then
+                                                                              (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_EASY"))
+                                                                            elseif 2 == enchantDifficulty then
+                                                                              (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_NORMAL"))
+                                                                            elseif 3 == enchantDifficulty then
+                                                                              (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_HARD"))
+                                                                            end
+                                                                          end
+                                                                        end
+                                                                        ;
+                                                                        (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), target.panelSize - 30 * (6 - soketCount - 1))
+                                                                        ;
+                                                                        (target.soketOption_panel):SetSize((target.soketOption_panel):GetSizeX(), target.socketSize - 30 * (6 - soketCount))
+                                                                        ;
+                                                                        (target.itemProducedPlace):ComputePos()
+                                                                        ;
+                                                                        (target.itemDescription):ComputePos()
+                                                                        ;
+                                                                        (target.itemPrice_panel):ComputePos()
+                                                                        ;
+                                                                        (target.itemPrice_transportBuy):ComputePos()
+                                                                        ;
+                                                                        (target.itemPrice_transportBuy_value):ComputePos()
+                                                                        ;
+                                                                        (target.itemPrice_storeSell):ComputePos()
+                                                                        ;
+                                                                        (target.itemPrice_storeSell_value):ComputePos()
+                                                                        if true == (itemSSW:get()):isForJustTrade() and not isSSW then
+                                                                          local nodeLevel = ToClient_GetNodeLevel(itemWrapper:getProductionRegionKey())
+                                                                          if 1 <= nodeLevel then
+                                                                            (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_LINK") .. ")")
+                                                                          else
+                                                                            (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOLINK") .. ")")
+                                                                          end
                                                                         else
-                                                                          (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOLINK") .. ")")
+                                                                          (target.itemProducedPlace):SetText("")
                                                                         end
-                                                                      else
-                                                                        (target.itemProducedPlace):SetText("")
-                                                                      end
-                                                                      ;
-                                                                      (target.itemDescription):SetTextMode(UI_TM.eTextMode_AutoWrap)
-                                                                      ;
-                                                                      (target.itemDescription):SetAutoResize(true)
-                                                                      local _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TITLE") .. " " .. itemSSW:getDescription()
-                                                                      if item_type == 2 and true == (itemSSW:get()):isForJustTrade() then
-                                                                        _desc = _desc .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TRADEITEM")
-                                                                      end
-                                                                      if itemSSW:getEnchantDescription() ~= "" then
-                                                                        _desc = _desc .. "\n\n- " .. itemSSW:getEnchantDescription()
-                                                                      end
-                                                                      ;
-                                                                      (target.itemDescription):SetText(_desc)
-                                                                      local isExchangeItem = itemSSW:isExchangeItem()
-                                                                      local exchangeDesc = ""
-                                                                      if isExchangeItem then
-                                                                        (target.exchangeTitle):SetShow(true)
                                                                         ;
-                                                                        (target.exchangeDesc):SetShow(true)
+                                                                        (target.itemDescription):SetTextMode(UI_TM.eTextMode_AutoWrap)
                                                                         ;
-                                                                        (target.exchangeDesc):SetText(itemSSW:getExchangeDescription())
-                                                                      else
-                                                                        (target.exchangeTitle):SetShow(false)
+                                                                        (target.itemDescription):SetAutoResize(true)
+                                                                        local _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TITLE") .. " " .. itemSSW:getDescription()
+                                                                        if item_type == 2 and true == (itemSSW:get()):isForJustTrade() then
+                                                                          _desc = _desc .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TRADEITEM")
+                                                                        end
+                                                                        if itemSSW:getEnchantDescription() ~= "" then
+                                                                          _desc = _desc .. "\n\n- " .. itemSSW:getEnchantDescription()
+                                                                        end
                                                                         ;
-                                                                        (target.exchangeDesc):SetShow(false)
-                                                                        ;
-                                                                        (target.exchangeDesc):SetText("")
-                                                                      end
-                                                                      local _const = Defines.s64_const
-                                                                      local isTradeItem = itemSSW:isTradeAble()
-                                                                      if isTradeItem == true and not isSSW then
-                                                                        if _const.s64_0 < item:getBuyingPrice_s64() then
-                                                                          (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(item:getBuyingPrice_s64())))
+                                                                        (target.itemDescription):SetText(_desc)
+                                                                        local isExchangeItem = itemSSW:isExchangeItem()
+                                                                        local exchangeDesc = ""
+                                                                        if isExchangeItem then
+                                                                          (target.exchangeTitle):SetShow(true)
+                                                                          ;
+                                                                          (target.exchangeDesc):SetShow(true)
+                                                                          ;
+                                                                          (target.exchangeDesc):SetText(itemSSW:getExchangeDescription())
                                                                         else
-                                                                          (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOTHING"))
-                                                                        end
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_BUY_PRICE") .. " : ")
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy):SetFontColor(4287137928)
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy):SetShow(true)
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy_value):SetShow(true)
-                                                                        ;
-                                                                        (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 50)
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
-                                                                      else
-                                                                        (target.itemPrice_transportBuy):SetText("")
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy):SetFontColor(4290733156)
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy):SetShow(true)
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy_value):SetShow(false)
-                                                                        ;
-                                                                        (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 25)
-                                                                        ;
-                                                                        (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
-                                                                      end
-                                                                      local s64_originalPrice = (itemSSW:get())._originalPrice_s64
-                                                                      local s64_sellPrice = (itemSSW:get())._sellPriceToNpc_s64
-                                                                      if isTradeItem then
-                                                                        (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ORIGINAL_PRICE") .. ":")
-                                                                        if _const.s64_0 < s64_originalPrice and 0 == enchantLevel then
-                                                                          (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_originalPrice)))
+                                                                          (target.exchangeTitle):SetShow(false)
                                                                           ;
-                                                                          (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                          (target.exchangeDesc):SetShow(false)
+                                                                          ;
+                                                                          (target.exchangeDesc):SetText("")
+                                                                        end
+                                                                        local _const = Defines.s64_const
+                                                                        local isTradeItem = itemSSW:isTradeAble()
+                                                                        if isTradeItem == true and not isSSW then
+                                                                          if _const.s64_0 < item:getBuyingPrice_s64() then
+                                                                            (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(item:getBuyingPrice_s64())))
+                                                                          else
+                                                                            (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOTHING"))
+                                                                          end
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_BUY_PRICE") .. " : ")
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy):SetFontColor(4287137928)
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy):SetShow(true)
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy_value):SetShow(true)
+                                                                          ;
+                                                                          (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 50)
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
                                                                         else
-                                                                          (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
+                                                                          (target.itemPrice_transportBuy):SetText("")
                                                                           ;
-                                                                          (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                          (target.itemPrice_transportBuy):SetFontColor(4290733156)
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy):SetShow(true)
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy_value):SetShow(false)
+                                                                          ;
+                                                                          (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 25)
+                                                                          ;
+                                                                          (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
                                                                         end
-                                                                      else
-                                                                        (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SELL_PRICE") .. " : ")
-                                                                        if _const.s64_0 < s64_sellPrice and 0 == enchantLevel then
-                                                                          (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_sellPrice)))
-                                                                          ;
-                                                                          (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                        local s64_originalPrice = (itemSSW:get())._originalPrice_s64
+                                                                        local s64_sellPrice = (itemSSW:get())._sellPriceToNpc_s64
+                                                                        if isTradeItem then
+                                                                          (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ORIGINAL_PRICE") .. ":")
+                                                                          if _const.s64_0 < s64_originalPrice and 0 == enchantLevel then
+                                                                            (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_originalPrice)))
+                                                                            ;
+                                                                            (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                          else
+                                                                            (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
+                                                                            ;
+                                                                            (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                          end
                                                                         else
-                                                                          (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
-                                                                          ;
-                                                                          (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                          (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SELL_PRICE") .. " : ")
+                                                                          if _const.s64_0 < s64_sellPrice and 0 == enchantLevel then
+                                                                            (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_sellPrice)))
+                                                                            ;
+                                                                            (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                          else
+                                                                            (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
+                                                                            ;
+                                                                            (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                          end
                                                                         end
-                                                                      end
-                                                                      ;
-                                                                      (target.itemPrice_storeSell_value):SetSpanSize((target.itemPrice_storeSell):GetTextSizeX() + 20, 0)
-                                                                      local elementBiggap = 10
-                                                                      local elementgap = 2
-                                                                      local TooltipYPos = 10
-                                                                      if target.mainPanel == Panel_Tooltip_Item_equipped then
-                                                                        (target.itemIcon):SetPosY(30 + (changeItemNamePos))
                                                                         ;
-                                                                        (target.itemType):SetPosY(8)
-                                                                        ;
-                                                                        (chattingLinkedItemTooltip.itemType):SetPosX(175)
-                                                                        ;
-                                                                        (chattingLinkedItemClickTooltip.itemType):SetPosX(175)
-                                                                        ;
-                                                                        (target.dying):SetPosY(50 + (changeItemNamePos))
-                                                                        local iconPosY = (target.itemIcon):GetPosY()
-                                                                        local iconSizeY = (target.itemIcon):GetSizeY()
-                                                                        if attackShow == true and defenseShow == false then
-                                                                          (target.attack):SetPosY(31 + (changeItemNamePos))
+                                                                        (target.itemPrice_storeSell_value):SetSpanSize((target.itemPrice_storeSell):GetTextSizeX() + 20, 0)
+                                                                        local elementBiggap = 10
+                                                                        local elementgap = 2
+                                                                        local TooltipYPos = 10
+                                                                        if target.mainPanel == Panel_Tooltip_Item_equipped then
+                                                                          (target.itemIcon):SetPosY(30 + (changeItemNamePos))
                                                                           ;
-                                                                          (target.attack_value):SetPosY(22 + (changeItemNamePos))
+                                                                          (target.itemType):SetPosY(8)
                                                                           ;
-                                                                          (target.attack_value):SetAutoResize(true)
-                                                                          TooltipYPos = GetBottomPos(target.attack) + elementgap
+                                                                          (chattingLinkedItemTooltip.itemType):SetPosX(175)
                                                                           ;
-                                                                          (target.weight):SetPosY(TooltipYPos)
+                                                                          (chattingLinkedItemClickTooltip.itemType):SetPosX(175)
                                                                           ;
-                                                                          (target.weight_value):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.weight_value) + elementgap
-                                                                        elseif defenseShow == true and attackShow == true then
-                                                                          (target.attack):SetPosY(31 + (changeItemNamePos))
-                                                                          ;
-                                                                          (target.attack_value):SetPosY(22 + (changeItemNamePos))
-                                                                          ;
-                                                                          (target.defense):SetPosY(53 + (changeItemNamePos))
-                                                                          ;
-                                                                          (target.defense_value):SetPosY(45 + (changeItemNamePos))
-                                                                          TooltipYPos = GetBottomPos(target.defense) + elementgap
-                                                                          ;
-                                                                          (target.weight):SetPosY(TooltipYPos)
-                                                                          ;
-                                                                          (target.weight_value):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.weight_value) + elementgap
-                                                                        elseif defenseShow == true and attackShow == false then
-                                                                          (target.defense):SetPosY(31 + (changeItemNamePos))
-                                                                          ;
-                                                                          (target.defense_value):SetPosY(22 + (changeItemNamePos))
-                                                                          TooltipYPos = GetBottomPos(target.defense) + elementgap
-                                                                          ;
-                                                                          (target.weight):SetPosY(TooltipYPos)
-                                                                          ;
-                                                                          (target.weight_value):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.weight_value) + elementgap
-                                                                        elseif attackShow == false and defenseShow == false then
-                                                                          (target.weight):SetPosY(iconPosY + iconSizeY - 15)
-                                                                          ;
-                                                                          (target.weight_value):SetPosY(iconPosY + iconSizeY - 15)
-                                                                          TooltipYPos = GetBottomPos(target.weight_value) + elementgap
-                                                                        end
-                                                                        if (normalTooltip.attack_diffValue):GetShow() then
-                                                                          (normalTooltip.attack_diffValue):SetPosX((normalTooltip.attack_value):GetPosX() + (normalTooltip.attack_value):GetTextSizeX() + 10)
-                                                                          ;
-                                                                          (normalTooltip.attack_diffValue):SetPosY((normalTooltip.attack_value):GetPosY() + 7)
-                                                                        end
-                                                                        if (normalTooltip.defense_diffValue):GetShow() then
-                                                                          (normalTooltip.defense_diffValue):SetPosX((normalTooltip.defense_value):GetPosX() + (normalTooltip.defense_value):GetTextSizeX() + 10)
-                                                                          ;
-                                                                          (normalTooltip.defense_diffValue):SetPosY((normalTooltip.defense_value):GetPosY() + 7)
-                                                                        end
-                                                                        if (normalTooltip.weight_diffValue):GetShow() then
-                                                                          (normalTooltip.weight_diffValue):SetPosX((normalTooltip.weight_value):GetPosX() + (normalTooltip.weight_value):GetTextSizeX() + 10)
-                                                                          ;
-                                                                          (normalTooltip.weight_diffValue):SetPosY((normalTooltip.weight_value):GetPosY())
-                                                                        end
-                                                                        if (target.isEnchantable):GetShow() then
-                                                                          (target.isEnchantable):SetPosY(TooltipYPos + 5)
-                                                                          TooltipYPos = GetBottomPos(target.isEnchantable) + elementgap
-                                                                        end
-                                                                        if (target.isSealed):GetShow() then
-                                                                          (target.isSealed):SetPosY(TooltipYPos + 5)
-                                                                          TooltipYPos = GetBottomPos(target.isSealed) + elementgap
-                                                                        end
-                                                                        if (target.bindType):GetShow() then
-                                                                          (target.bindType):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.bindType) + elementgap
-                                                                        end
-                                                                        if (target.cronStoneEnchant):GetShow() then
-                                                                          (target.cronStoneEnchant):SetPosY(TooltipYPos + 5)
-                                                                          TooltipYPos = GetBottomPos(target.cronStoneEnchant)
-                                                                          ;
-                                                                          (target.cronStoneGrade):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.cronStoneGrade)
-                                                                          ;
-                                                                          (target.cronStoneValue):SetPosY(TooltipYPos + 5)
-                                                                          TooltipYPos = GetBottomPos(target.cronStoneValue)
-                                                                          ;
-                                                                          (target.cronStoneProgressBg):SetPosY(TooltipYPos + 13)
-                                                                          ;
-                                                                          (target.cronStoneProgress):SetPosY(TooltipYPos + 19)
-                                                                          ;
-                                                                          ((target.cronStoneGradeValue)[0]):SetPosY(TooltipYPos + 5)
-                                                                          ;
-                                                                          ((target.cronStoneGradeValue)[1]):SetPosY(TooltipYPos + 5)
-                                                                          ;
-                                                                          ((target.cronStoneGradeValue)[2]):SetPosY(TooltipYPos + 5)
-                                                                          ;
-                                                                          ((target.cronStoneGradeValue)[3]):SetPosY(TooltipYPos + 5)
-                                                                          ;
-                                                                          ((target.cronStoneCountValue)[0]):SetPosY(TooltipYPos + 25)
-                                                                          ;
-                                                                          ((target.cronStoneCountValue)[1]):SetPosY(TooltipYPos + 25)
-                                                                          ;
-                                                                          ((target.cronStoneCountValue)[2]):SetPosY(TooltipYPos + 25)
-                                                                          ;
-                                                                          ((target.cronStoneCountValue)[3]):SetPosY(TooltipYPos + 25)
-                                                                          TooltipYPos = GetBottomPos((target.cronStoneCountValue)[0]) + elementgap
-                                                                        end
-                                                                        if (target.personalTrade):GetShow() then
-                                                                          (target.personalTrade):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.personalTrade) + elementgap
-                                                                        end
-                                                                        if (target.itemLock):GetShow() then
-                                                                          (target.itemLock):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.itemLock) + elementgap
-                                                                        end
-                                                                        if (target.tradeInfo_Panel):GetShow() then
-                                                                          (target.tradeInfo_Panel):SetPosY(TooltipYPos)
-                                                                          ;
-                                                                          (target.tradeInfo_Title):SetPosY(TooltipYPos + 5)
-                                                                          ;
-                                                                          (target.tradeInfo_Value):SetPosY(TooltipYPos + (target.tradeInfo_Title):GetSizeY() + 5)
-                                                                          TooltipYPos = GetBottomPos(target.tradeInfo_Panel) + elementgap
-                                                                        end
-                                                                        if (target.balksExtraction):GetShow() then
-                                                                          (target.balksExtraction):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.balksExtraction) + elementgap
-                                                                        end
-                                                                        if (target.cronsExtraction):GetShow() then
-                                                                          (target.cronsExtraction):SetPosY(TooltipYPos - 5)
-                                                                          TooltipYPos = GetBottomPos(target.cronsExtraction) + elementgap
-                                                                        end
-                                                                        if (target.useDyeColorTitle):GetShow() then
-                                                                          (target.useDyeColorTitle):SetPosY(TooltipYPos)
-                                                                          TooltipYPos = GetBottomPos(target.useDyeColorTitle) + elementgap
-                                                                        end
-                                                                        do
+                                                                          (target.dying):SetPosY(50 + (changeItemNamePos))
+                                                                          local iconPosY = (target.itemIcon):GetPosY()
+                                                                          local iconSizeY = (target.itemIcon):GetSizeY()
+                                                                          if attackShow == true and defenseShow == false then
+                                                                            (target.attack):SetPosY(31 + (changeItemNamePos))
+                                                                            ;
+                                                                            (target.attack_value):SetPosY(22 + (changeItemNamePos))
+                                                                            ;
+                                                                            (target.attack_value):SetAutoResize(true)
+                                                                            TooltipYPos = GetBottomPos(target.attack) + elementgap
+                                                                            ;
+                                                                            (target.weight):SetPosY(TooltipYPos)
+                                                                            ;
+                                                                            (target.weight_value):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.weight_value) + elementgap
+                                                                          elseif defenseShow == true and attackShow == true then
+                                                                            (target.attack):SetPosY(31 + (changeItemNamePos))
+                                                                            ;
+                                                                            (target.attack_value):SetPosY(22 + (changeItemNamePos))
+                                                                            ;
+                                                                            (target.defense):SetPosY(53 + (changeItemNamePos))
+                                                                            ;
+                                                                            (target.defense_value):SetPosY(45 + (changeItemNamePos))
+                                                                            TooltipYPos = GetBottomPos(target.defense) + elementgap
+                                                                            ;
+                                                                            (target.weight):SetPosY(TooltipYPos)
+                                                                            ;
+                                                                            (target.weight_value):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.weight_value) + elementgap
+                                                                          elseif defenseShow == true and attackShow == false then
+                                                                            (target.defense):SetPosY(31 + (changeItemNamePos))
+                                                                            ;
+                                                                            (target.defense_value):SetPosY(22 + (changeItemNamePos))
+                                                                            TooltipYPos = GetBottomPos(target.defense) + elementgap
+                                                                            ;
+                                                                            (target.weight):SetPosY(TooltipYPos)
+                                                                            ;
+                                                                            (target.weight_value):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.weight_value) + elementgap
+                                                                          elseif attackShow == false and defenseShow == false then
+                                                                            (target.weight):SetPosY(iconPosY + iconSizeY - 15)
+                                                                            ;
+                                                                            (target.weight_value):SetPosY(iconPosY + iconSizeY - 15)
+                                                                            TooltipYPos = GetBottomPos(target.weight_value) + elementgap
+                                                                          end
+                                                                          if (normalTooltip.attack_diffValue):GetShow() then
+                                                                            (normalTooltip.attack_diffValue):SetPosX((normalTooltip.attack_value):GetPosX() + (normalTooltip.attack_value):GetTextSizeX() + 10)
+                                                                            ;
+                                                                            (normalTooltip.attack_diffValue):SetPosY((normalTooltip.attack_value):GetPosY() + 7)
+                                                                          end
+                                                                          if (normalTooltip.defense_diffValue):GetShow() then
+                                                                            (normalTooltip.defense_diffValue):SetPosX((normalTooltip.defense_value):GetPosX() + (normalTooltip.defense_value):GetTextSizeX() + 10)
+                                                                            ;
+                                                                            (normalTooltip.defense_diffValue):SetPosY((normalTooltip.defense_value):GetPosY() + 7)
+                                                                          end
+                                                                          if (normalTooltip.weight_diffValue):GetShow() then
+                                                                            (normalTooltip.weight_diffValue):SetPosX((normalTooltip.weight_value):GetPosX() + (normalTooltip.weight_value):GetTextSizeX() + 10)
+                                                                            ;
+                                                                            (normalTooltip.weight_diffValue):SetPosY((normalTooltip.weight_value):GetPosY())
+                                                                          end
+                                                                          if (target.isEnchantable):GetShow() then
+                                                                            (target.isEnchantable):SetPosY(TooltipYPos + 5)
+                                                                            TooltipYPos = GetBottomPos(target.isEnchantable) + elementgap
+                                                                          end
+                                                                          if (target.isSealed):GetShow() then
+                                                                            (target.isSealed):SetPosY(TooltipYPos + 5)
+                                                                            TooltipYPos = GetBottomPos(target.isSealed) + elementgap
+                                                                          end
+                                                                          if (target.bindType):GetShow() then
+                                                                            (target.bindType):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.bindType) + elementgap
+                                                                          end
+                                                                          if (target.cronStoneEnchant):GetShow() then
+                                                                            (target.cronStoneEnchant):SetPosY(TooltipYPos + 5)
+                                                                            TooltipYPos = GetBottomPos(target.cronStoneEnchant)
+                                                                            ;
+                                                                            (target.cronStoneGrade):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.cronStoneGrade)
+                                                                            ;
+                                                                            (target.cronStoneValue):SetPosY(TooltipYPos + 5)
+                                                                            TooltipYPos = GetBottomPos(target.cronStoneValue)
+                                                                            ;
+                                                                            (target.cronStoneProgressBg):SetPosY(TooltipYPos + 13)
+                                                                            ;
+                                                                            (target.cronStoneProgress):SetPosY(TooltipYPos + 19)
+                                                                            ;
+                                                                            ((target.cronStoneGradeValue)[0]):SetPosY(TooltipYPos + 5)
+                                                                            ;
+                                                                            ((target.cronStoneGradeValue)[1]):SetPosY(TooltipYPos + 5)
+                                                                            ;
+                                                                            ((target.cronStoneGradeValue)[2]):SetPosY(TooltipYPos + 5)
+                                                                            ;
+                                                                            ((target.cronStoneGradeValue)[3]):SetPosY(TooltipYPos + 5)
+                                                                            ;
+                                                                            ((target.cronStoneCountValue)[0]):SetPosY(TooltipYPos + 25)
+                                                                            ;
+                                                                            ((target.cronStoneCountValue)[1]):SetPosY(TooltipYPos + 25)
+                                                                            ;
+                                                                            ((target.cronStoneCountValue)[2]):SetPosY(TooltipYPos + 25)
+                                                                            ;
+                                                                            ((target.cronStoneCountValue)[3]):SetPosY(TooltipYPos + 25)
+                                                                            TooltipYPos = GetBottomPos((target.cronStoneCountValue)[0]) + elementgap
+                                                                          end
+                                                                          if (target.personalTrade):GetShow() then
+                                                                            (target.personalTrade):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.personalTrade) + elementgap
+                                                                          end
+                                                                          if (target.enchantDifficulty):GetShow() then
+                                                                            (target.enchantDifficulty):SetPosY(TooltipYPos + 10)
+                                                                            TooltipYPos = GetBottomPos(target.enchantDifficulty) + elementBiggap
+                                                                          end
+                                                                          if (target.itemLock):GetShow() then
+                                                                            (target.itemLock):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.itemLock) + elementgap
+                                                                          end
+                                                                          if (target.tradeInfo_Panel):GetShow() then
+                                                                            (target.tradeInfo_Panel):SetPosY(TooltipYPos)
+                                                                            ;
+                                                                            (target.tradeInfo_Title):SetPosY(TooltipYPos + 5)
+                                                                            ;
+                                                                            (target.tradeInfo_Value):SetPosY(TooltipYPos + (target.tradeInfo_Title):GetSizeY() + 5)
+                                                                            TooltipYPos = GetBottomPos(target.tradeInfo_Panel) + elementgap
+                                                                          end
+                                                                          if (target.balksExtraction):GetShow() then
+                                                                            (target.balksExtraction):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.balksExtraction) + elementgap
+                                                                          end
+                                                                          if (target.cronsExtraction):GetShow() then
+                                                                            (target.cronsExtraction):SetPosY(TooltipYPos - 5)
+                                                                            TooltipYPos = GetBottomPos(target.cronsExtraction) + elementgap
+                                                                          end
+                                                                          if (target.useDyeColorTitle):GetShow() then
+                                                                            (target.useDyeColorTitle):SetPosY(TooltipYPos)
+                                                                            TooltipYPos = GetBottomPos(target.useDyeColorTitle) + elementgap
+                                                                          end
                                                                           do
-                                                                            if itemSSW:isEquipable() and itemSSW:isDyeable() then
-                                                                              local dyeingPartCount = 0
-                                                                              if nil ~= itemWrapper then
-                                                                                dyeingPartCount = itemWrapper:getDyeingPartCount()
-                                                                              elseif nil ~= chattingLinkedItem then
-                                                                                dyeingPartCount = chattingLinkedItem:getDyeingPartCount()
-                                                                              end
-                                                                              if 0 < dyeingPartCount then
-                                                                                for dyeingPart_Index = 0, dyeingPartCount - 1 do
-                                                                                  ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetPosY(TooltipYPos)
-                                                                                  if 0 == dyeingPart_Index then
-                                                                                    ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetPosX(15)
-                                                                                  else
-                                                                                    ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetPosX(((target.useDyeColorIcon_Part)[dyeingPart_Index - 1]):GetPosX() + ((target.useDyeColorIcon_Part)[dyeingPart_Index]):GetSizeX() + 6)
-                                                                                  end
+                                                                            do
+                                                                              if itemSSW:isEquipable() and itemSSW:isDyeable() then
+                                                                                local dyeingPartCount = 0
+                                                                                if nil ~= itemWrapper then
+                                                                                  dyeingPartCount = itemWrapper:getDyeingPartCount()
+                                                                                elseif nil ~= chattingLinkedItem then
+                                                                                  dyeingPartCount = chattingLinkedItem:getDyeingPartCount()
                                                                                 end
-                                                                                TooltipYPos = GetBottomPos((target.useDyeColorIcon_Part)[0]) + elementgap + 10
+                                                                                if 0 < dyeingPartCount then
+                                                                                  for dyeingPart_Index = 0, dyeingPartCount - 1 do
+                                                                                    ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetPosY(TooltipYPos)
+                                                                                    if 0 == dyeingPart_Index then
+                                                                                      ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetPosX(15)
+                                                                                    else
+                                                                                      ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetPosX(((target.useDyeColorIcon_Part)[dyeingPart_Index - 1]):GetPosX() + ((target.useDyeColorIcon_Part)[dyeingPart_Index]):GetSizeX() + 6)
+                                                                                    end
+                                                                                  end
+                                                                                  TooltipYPos = GetBottomPos((target.useDyeColorIcon_Part)[0]) + elementgap + 10
+                                                                                end
                                                                               end
-                                                                            end
-                                                                            if useLimitShow == true then
-                                                                              (target.useLimit_category):SetShow(true)
-                                                                              if (target.useLimit_category):GetShow() then
-                                                                                (target.useLimit_panel):SetPosY(TooltipYPos)
-                                                                                ;
-                                                                                (target.useLimit_category):SetPosY(TooltipYPos)
+                                                                              if useLimitShow == true then
+                                                                                (target.useLimit_category):SetShow(true)
+                                                                                if (target.useLimit_category):GetShow() then
+                                                                                  (target.useLimit_panel):SetPosY(TooltipYPos)
+                                                                                  ;
+                                                                                  (target.useLimit_category):SetPosY(TooltipYPos)
+                                                                                  TooltipYPos = TooltipYPos + elementgap
+                                                                                  if (target.useLimit_class_value):GetShow() then
+                                                                                    (target.useLimit_class_value):SetPosY(TooltipYPos + 4)
+                                                                                    TooltipYPos = GetBottomPos(target.useLimit_class_value) + elementgap
+                                                                                  end
+                                                                                  if (target.useLimit_level_value):GetShow() then
+                                                                                    (target.useLimit_level_value):SetPosY(TooltipYPos + 4)
+                                                                                    TooltipYPos = GetBottomPos(target.useLimit_level_value) + elementgap
+                                                                                  end
+                                                                                  if (target.useLimit_extendedslot_value):GetShow() then
+                                                                                    (target.useLimit_extendedslot_value):SetPosY(TooltipYPos)
+                                                                                    TooltipYPos = GetBottomPos(target.useLimit_extendedslot_value) + elementgap
+                                                                                  end
+                                                                                  if (target.remainTime):GetShow() then
+                                                                                    (target.remainTime):SetPosY(TooltipYPos)
+                                                                                    ;
+                                                                                    (target.remainTime_value):SetPosY(TooltipYPos)
+                                                                                    TooltipYPos = GetBottomPos(target.remainTime_value) + elementgap
+                                                                                    local s64_remainingTime = getLeftSecond_s64(item:getExpirationDate())
+                                                                                    if (Defines.s64_const).s64_0 == s64_remainingTime then
+                                                                                      (target.expireIcon_end):SetShow(true)
+                                                                                      ;
+                                                                                      (target.expireIcon_end):SetPosX((target.remainTime_value):GetPosX() - 15)
+                                                                                      ;
+                                                                                      (target.expireIcon_end):SetPosY(TooltipYPos - 17)
+                                                                                    elseif Int64toInt32(s64_remainingTime) <= 7200 then
+                                                                                      (target.expireIcon_red):SetShow(true)
+                                                                                      ;
+                                                                                      (target.expireIcon_red):SetPosX((target.remainTime_value):GetPosX() - 15)
+                                                                                      ;
+                                                                                      (target.expireIcon_red):SetPosY(TooltipYPos - 17)
+                                                                                    else
+                                                                                      (target.expireIcon_white):SetShow(true)
+                                                                                      ;
+                                                                                      (target.expireIcon_white):SetPosX((target.remainTime_value):GetPosX() - 15)
+                                                                                      ;
+                                                                                      (target.expireIcon_white):SetPosY(TooltipYPos - 17)
+                                                                                    end
+                                                                                  else
+                                                                                    (target.expireIcon_white):SetShow(false)
+                                                                                    ;
+                                                                                    (target.expireIcon_red):SetShow(false)
+                                                                                    ;
+                                                                                    (target.expireIcon_end):SetShow(false)
+                                                                                  end
+                                                                                  ;
+                                                                                  (target.useLimit_panel):SetSize((target.useLimit_panel):GetSizeX(), TooltipYPos - (target.useLimit_panel):GetPosY() + elementBiggap / 2)
+                                                                                  TooltipYPos = GetBottomPos(target.useLimit_panel) + elementBiggap / 2
+                                                                                end
+                                                                              end
+                                                                              if (target.soketOption_panel):GetShow() then
+                                                                                (target.soketOption_panel):SetPosY(TooltipYPos)
                                                                                 TooltipYPos = TooltipYPos + elementgap
-                                                                                if (target.useLimit_class_value):GetShow() then
-                                                                                  (target.useLimit_class_value):SetPosY(TooltipYPos + 4)
-                                                                                  TooltipYPos = GetBottomPos(target.useLimit_class_value) + elementgap
-                                                                                end
-                                                                                if (target.useLimit_level_value):GetShow() then
-                                                                                  (target.useLimit_level_value):SetPosY(TooltipYPos + 4)
-                                                                                  TooltipYPos = GetBottomPos(target.useLimit_level_value) + elementgap
-                                                                                end
-                                                                                if (target.useLimit_extendedslot_value):GetShow() then
-                                                                                  (target.useLimit_extendedslot_value):SetPosY(TooltipYPos)
-                                                                                  TooltipYPos = GetBottomPos(target.useLimit_extendedslot_value) + elementgap
-                                                                                end
-                                                                                if (target.remainTime):GetShow() then
-                                                                                  (target.remainTime):SetPosY(TooltipYPos)
-                                                                                  ;
-                                                                                  (target.remainTime_value):SetPosY(TooltipYPos)
-                                                                                  TooltipYPos = GetBottomPos(target.remainTime_value) + elementgap
-                                                                                  local s64_remainingTime = getLeftSecond_s64(item:getExpirationDate())
-                                                                                  if (Defines.s64_const).s64_0 == s64_remainingTime then
-                                                                                    (target.expireIcon_end):SetShow(true)
+                                                                                for idx = 1, 6 do
+                                                                                  if ((target.soketSlot)[idx]):GetShow() then
+                                                                                    ((target.soketSlot)[idx]):SetPosY(TooltipYPos + 1)
                                                                                     ;
-                                                                                    (target.expireIcon_end):SetPosX((target.remainTime_value):GetPosX() - 15)
+                                                                                    ((target.soketName)[idx]):SetPosY(TooltipYPos)
+                                                                                    TooltipYPos = GetBottomPos((target.soketName)[idx]) + elementgap
                                                                                     ;
-                                                                                    (target.expireIcon_end):SetPosY(TooltipYPos - 17)
-                                                                                  elseif Int64toInt32(s64_remainingTime) <= 7200 then
-                                                                                    (target.expireIcon_red):SetShow(true)
-                                                                                    ;
-                                                                                    (target.expireIcon_red):SetPosX((target.remainTime_value):GetPosX() - 15)
-                                                                                    ;
-                                                                                    (target.expireIcon_red):SetPosY(TooltipYPos - 17)
-                                                                                  else
-                                                                                    (target.expireIcon_white):SetShow(true)
-                                                                                    ;
-                                                                                    (target.expireIcon_white):SetPosX((target.remainTime_value):GetPosX() - 15)
-                                                                                    ;
-                                                                                    (target.expireIcon_white):SetPosY(TooltipYPos - 17)
+                                                                                    ((target.soketEffect)[idx]):SetPosY(TooltipYPos)
+                                                                                    TooltipYPos = GetBottomPos((target.soketEffect)[idx]) + elementgap
+                                                                                    TooltipYPos = TooltipYPos + elementBiggap
                                                                                   end
-                                                                                else
-                                                                                  (target.expireIcon_white):SetShow(false)
-                                                                                  ;
-                                                                                  (target.expireIcon_red):SetShow(false)
-                                                                                  ;
-                                                                                  (target.expireIcon_end):SetShow(false)
                                                                                 end
                                                                                 ;
-                                                                                (target.useLimit_panel):SetSize((target.useLimit_panel):GetSizeX(), TooltipYPos - (target.useLimit_panel):GetPosY() + elementBiggap / 2)
-                                                                                TooltipYPos = GetBottomPos(target.useLimit_panel) + elementBiggap / 2
+                                                                                (target.soketOption_panel):SetSize((target.soketOption_panel):GetSizeX(), TooltipYPos - (target.soketOption_panel):GetPosY() - elementBiggap / 2)
+                                                                                TooltipYPos = GetBottomPos(target.soketOption_panel) + elementBiggap
                                                                               end
-                                                                            end
-                                                                            if (target.soketOption_panel):GetShow() then
-                                                                              (target.soketOption_panel):SetPosY(TooltipYPos)
-                                                                              TooltipYPos = TooltipYPos + elementgap
-                                                                              for idx = 1, 6 do
-                                                                                if ((target.soketSlot)[idx]):GetShow() then
-                                                                                  ((target.soketSlot)[idx]):SetPosY(TooltipYPos + 1)
-                                                                                  ;
-                                                                                  ((target.soketName)[idx]):SetPosY(TooltipYPos)
-                                                                                  TooltipYPos = GetBottomPos((target.soketName)[idx]) + elementgap
-                                                                                  ;
-                                                                                  ((target.soketEffect)[idx]):SetPosY(TooltipYPos)
-                                                                                  TooltipYPos = GetBottomPos((target.soketEffect)[idx]) + elementgap
-                                                                                  TooltipYPos = TooltipYPos + elementBiggap
+                                                                              if true == (itemSSW:get()):isForJustTrade() and not isSSW then
+                                                                                (target.itemProducedPlace):SetPosY(TooltipYPos)
+                                                                                TooltipYPos = GetBottomPos(target.itemProducedPlace) + elementBiggap
+                                                                              end
+                                                                              if normalTooltip == target and (target.bagSize):GetShow() then
+                                                                                (target.bagSize):SetPosY(TooltipYPos)
+                                                                                TooltipYPos = GetBottomPos(target.bagSize)
+                                                                                if (target.equipmentInBag):GetShow() then
+                                                                                  (target.equipmentInBag):SetPosY(TooltipYPos)
+                                                                                  TooltipYPos = GetBottomPos(target.equipmentInBag) + elementBiggap
                                                                                 end
                                                                               end
                                                                               ;
-                                                                              (target.soketOption_panel):SetSize((target.soketOption_panel):GetSizeX(), TooltipYPos - (target.soketOption_panel):GetPosY() - elementBiggap / 2)
-                                                                              TooltipYPos = GetBottomPos(target.soketOption_panel) + elementBiggap
-                                                                            end
-                                                                            if true == (itemSSW:get()):isForJustTrade() and not isSSW then
-                                                                              (target.itemProducedPlace):SetPosY(TooltipYPos)
-                                                                              TooltipYPos = GetBottomPos(target.itemProducedPlace) + elementBiggap
-                                                                            end
-                                                                            if normalTooltip == target and (target.bagSize):GetShow() then
-                                                                              (target.bagSize):SetPosY(TooltipYPos)
-                                                                              TooltipYPos = GetBottomPos(target.bagSize)
-                                                                              if (target.equipmentInBag):GetShow() then
-                                                                                (target.equipmentInBag):SetPosY(TooltipYPos)
-                                                                                TooltipYPos = GetBottomPos(target.equipmentInBag) + elementBiggap
+                                                                              (target.itemDescription):SetPosY(TooltipYPos + 10)
+                                                                              TooltipYPos = GetBottomPos(target.itemDescription) + elementgap
+                                                                              if (target.exchangeTitle):GetShow() then
+                                                                                (target.exchangeTitle):SetPosY(TooltipYPos + 10)
+                                                                                TooltipYPos = GetBottomPos(target.exchangeTitle) + elementgap
+                                                                                ;
+                                                                                (target.exchangeDesc):SetPosY(TooltipYPos)
+                                                                                TooltipYPos = GetBottomPos(target.exchangeDesc) + elementgap
                                                                               end
-                                                                            end
-                                                                            ;
-                                                                            (target.itemDescription):SetPosY(TooltipYPos + 10)
-                                                                            TooltipYPos = GetBottomPos(target.itemDescription) + elementgap
-                                                                            if (target.exchangeTitle):GetShow() then
-                                                                              (target.exchangeTitle):SetPosY(TooltipYPos + 10)
-                                                                              TooltipYPos = GetBottomPos(target.exchangeTitle) + elementgap
+                                                                              if (target.equipSlotName):GetShow() then
+                                                                                (target.equipSlotName):SetPosY(TooltipYPos)
+                                                                                TooltipYPos = GetBottomPos(target.equipSlotName) + elementgap
+                                                                              end
                                                                               ;
-                                                                              (target.exchangeDesc):SetPosY(TooltipYPos)
-                                                                              TooltipYPos = GetBottomPos(target.exchangeDesc) + elementgap
-                                                                            end
-                                                                            if (target.equipSlotName):GetShow() then
-                                                                              (target.equipSlotName):SetPosY(TooltipYPos)
-                                                                              TooltipYPos = GetBottomPos(target.equipSlotName) + elementgap
-                                                                            end
-                                                                            ;
-                                                                            (target.itemPrice_panel):SetPosY(TooltipYPos)
-                                                                            TooltipYPos = TooltipYPos + elementgap * 2
-                                                                            ;
-                                                                            (target.itemPrice_transportBuy):SetPosY(TooltipYPos + 20)
-                                                                            ;
-                                                                            (target.itemPrice_transportBuy_value):SetPosY(TooltipYPos + 20)
-                                                                            ;
-                                                                            (target.itemPrice_storeSell):SetPosY(TooltipYPos)
-                                                                            ;
-                                                                            (target.itemPrice_storeSell_value):SetPosY(TooltipYPos)
-                                                                            TooltipYPos = GetBottomPos(target.itemPrice_storeSell_value) + elementBiggap
-                                                                            TooltipYPos = GetBottomPos(target.itemPrice_panel) + elementBiggap / 2
-                                                                            if (target.useLimit_Exp):GetShow() then
-                                                                              (target.useLimit_Exp):SetPosY(TooltipYPos + elementgap)
+                                                                              (target.itemPrice_panel):SetPosY(TooltipYPos)
+                                                                              TooltipYPos = TooltipYPos + elementgap * 2
                                                                               ;
-                                                                              (target.useLimit_Exp_gage):SetPosY(TooltipYPos + 15)
+                                                                              (target.itemPrice_transportBuy):SetPosY(TooltipYPos + 20)
                                                                               ;
-                                                                              (target.useLimit_Exp_gage_value):SetPosY(TooltipYPos + 20)
+                                                                              (target.itemPrice_transportBuy_value):SetPosY(TooltipYPos + 20)
                                                                               ;
-                                                                              (target.useLimit_Exp_value):SetPosY(TooltipYPos + 15 + ((target.useLimit_Exp_gage):GetSizeY() - (target.useLimit_Exp_value):GetSizeY()) / 2)
-                                                                              TooltipYPos = GetBottomPos(target.useLimit_Exp) + elementBiggap
-                                                                            end
-                                                                            if (target.useLimit_endurance):GetShow() then
-                                                                              (target.useLimit_endurance):SetPosY(TooltipYPos + elementgap)
+                                                                              (target.itemPrice_storeSell):SetPosY(TooltipYPos)
                                                                               ;
-                                                                              (target.useLimit_endurance_gage):SetPosY(TooltipYPos + 15)
+                                                                              (target.itemPrice_storeSell_value):SetPosY(TooltipYPos)
+                                                                              TooltipYPos = GetBottomPos(target.itemPrice_storeSell_value) + elementBiggap
+                                                                              TooltipYPos = GetBottomPos(target.itemPrice_panel) + elementBiggap / 2
+                                                                              if (target.useLimit_Exp):GetShow() then
+                                                                                (target.useLimit_Exp):SetPosY(TooltipYPos + elementgap)
+                                                                                ;
+                                                                                (target.useLimit_Exp_gage):SetPosY(TooltipYPos + 15)
+                                                                                ;
+                                                                                (target.useLimit_Exp_gage_value):SetPosY(TooltipYPos + 20)
+                                                                                ;
+                                                                                (target.useLimit_Exp_value):SetPosY(TooltipYPos + 15 + ((target.useLimit_Exp_gage):GetSizeY() - (target.useLimit_Exp_value):GetSizeY()) / 2)
+                                                                                TooltipYPos = GetBottomPos(target.useLimit_Exp) + elementBiggap
+                                                                              end
+                                                                              if (target.useLimit_endurance):GetShow() then
+                                                                                (target.useLimit_endurance):SetPosY(TooltipYPos + elementgap)
+                                                                                ;
+                                                                                (target.useLimit_endurance_gage):SetPosY(TooltipYPos + 15)
+                                                                                ;
+                                                                                (target.useLimit_endurance_value):SetPosY(TooltipYPos + 15)
+                                                                                ;
+                                                                                (target.useLimit_endurance_gage_value):SetPosY(TooltipYPos + 15 + ((target.useLimit_endurance_gage):GetSizeY() - (target.useLimit_endurance_gage_value):GetSizeY()) / 2)
+                                                                                ;
+                                                                                (target.useLimit_dynamic_endurance_gage_value):SetPosY(TooltipYPos + 15 + ((target.useLimit_endurance_gage):GetSizeY() - (target.useLimit_dynamic_endurance_gage_value):GetSizeY()) / 2)
+                                                                                TooltipYPos = GetBottomPos(target.useLimit_endurance) + elementBiggap
+                                                                              end
                                                                               ;
-                                                                              (target.useLimit_endurance_value):SetPosY(TooltipYPos + 15)
-                                                                              ;
-                                                                              (target.useLimit_endurance_gage_value):SetPosY(TooltipYPos + 15 + ((target.useLimit_endurance_gage):GetSizeY() - (target.useLimit_endurance_gage_value):GetSizeY()) / 2)
-                                                                              ;
-                                                                              (target.useLimit_dynamic_endurance_gage_value):SetPosY(TooltipYPos + 15 + ((target.useLimit_endurance_gage):GetSizeY() - (target.useLimit_dynamic_endurance_gage_value):GetSizeY()) / 2)
-                                                                              TooltipYPos = GetBottomPos(target.useLimit_endurance) + elementBiggap
-                                                                            end
-                                                                            ;
-                                                                            (target.itemLockNotify):SetShow(false)
-                                                                            if normalTooltip == target and true == Panel_Tooltip_Item_DataObject.inventory then
-                                                                              if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan()) and getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
-                                                                                if false == (itemSSW:get()):isCash() then
-                                                                                  (target.productNotify):SetShow(true)
+                                                                              (target.itemLockNotify):SetShow(false)
+                                                                              if normalTooltip == target and true == Panel_Tooltip_Item_DataObject.inventory then
+                                                                                if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan()) and getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
+                                                                                  if false == (itemSSW:get()):isCash() then
+                                                                                    (target.productNotify):SetShow(true)
+                                                                                  else
+                                                                                    (target.productNotify):SetShow(false)
+                                                                                  end
                                                                                 else
                                                                                   (target.productNotify):SetShow(false)
+                                                                                end
+                                                                                if true == isItemLock and not (itemSSW:get()):isCash() then
+                                                                                  (target.itemLockNotify):SetShow(false)
+                                                                                  if false == (itemWrapper:getStaticStatus()):isStackable() then
+                                                                                    if ToClient_Inventory_CheckItemLock(Inventory_GetToolTipItemSlotNo()) then
+                                                                                      if false == ((itemWrapper:getStaticStatus()):get())._hideFromNote then
+                                                                                        (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_UNLOCK"))
+                                                                                      else
+                                                                                        (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_UNLOCK"))
+                                                                                      end
+                                                                                    elseif false == ((itemWrapper:getStaticStatus()):get())._hideFromNote then
+                                                                                      (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_LOCK"))
+                                                                                    else
+                                                                                      (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_LOCK"))
+                                                                                    end
+                                                                                  elseif false == ((itemWrapper:getStaticStatus()):get())._hideFromNote then
+                                                                                    (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK"))
+                                                                                  else
+                                                                                    (target.productNotify):SetShow(false)
+                                                                                  end
                                                                                 end
                                                                               else
                                                                                 (target.productNotify):SetShow(false)
-                                                                              end
-                                                                              if true == isItemLock and not (itemSSW:get()):isCash() then
+                                                                                ;
                                                                                 (target.itemLockNotify):SetShow(false)
-                                                                                if false == (itemWrapper:getStaticStatus()):isStackable() then
-                                                                                  if ToClient_Inventory_CheckItemLock(Inventory_GetToolTipItemSlotNo()) then
-                                                                                    if false == ((itemWrapper:getStaticStatus()):get())._hideFromNote then
-                                                                                      (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_UNLOCK"))
-                                                                                    else
-                                                                                      (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_UNLOCK"))
-                                                                                    end
-                                                                                  elseif false == ((itemWrapper:getStaticStatus()):get())._hideFromNote then
-                                                                                    (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_LOCK"))
-                                                                                  else
-                                                                                    (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_LOCK"))
-                                                                                  end
-                                                                                elseif false == ((itemWrapper:getStaticStatus()):get())._hideFromNote then
-                                                                                  (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK"))
-                                                                                else
-                                                                                  (target.productNotify):SetShow(false)
-                                                                                end
                                                                               end
-                                                                            else
-                                                                              (target.productNotify):SetShow(false)
+                                                                              if not itemSSW:isStackable() or (target.productNotify):GetShow() then
+                                                                                (target.productNotify):SetPosY(TooltipYPos + elementgap)
+                                                                                TooltipYPos = GetBottomPos(target.productNotify) + elementgap
+                                                                              end
+                                                                              if (target.itemLockNotify):GetShow() then
+                                                                                (target.itemLockNotify):SetPosY(TooltipYPos + elementgap)
+                                                                                TooltipYPos = GetBottomPos(target.itemLockNotify) + elementgap
+                                                                              end
                                                                               ;
-                                                                              (target.itemLockNotify):SetShow(false)
+                                                                              (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), TooltipYPos + elementBiggap / 2)
+                                                                              do return item_type == 1, itemSSW:isUsableServant() end
+                                                                              -- DECOMPILER ERROR: 86 unprocessed JMP targets
                                                                             end
-                                                                            if not itemSSW:isStackable() or (target.productNotify):GetShow() then
-                                                                              (target.productNotify):SetPosY(TooltipYPos + elementgap)
-                                                                              TooltipYPos = GetBottomPos(target.productNotify) + elementgap
-                                                                            end
-                                                                            if (target.itemLockNotify):GetShow() then
-                                                                              (target.itemLockNotify):SetPosY(TooltipYPos + elementgap)
-                                                                              TooltipYPos = GetBottomPos(target.itemLockNotify) + elementgap
-                                                                            end
-                                                                            ;
-                                                                            (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), TooltipYPos + elementBiggap / 2)
-                                                                            do return item_type == 1, itemSSW:isUsableServant() end
-                                                                            -- DECOMPILER ERROR: 81 unprocessed JMP targets
                                                                           end
                                                                         end
                                                                       end

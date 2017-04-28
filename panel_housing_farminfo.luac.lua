@@ -491,9 +491,13 @@ FarmInfo_Change_Texture = function(isChange)
   -- function num : 0_18 , upvalues : farmInfo, UI_TM
   local self = farmInfo._ui
   if not isGameTypeKorea() then
-    (self.staticText_CropsIcon_PruningDesc):SetTextMode(UI_TM.eTextMode_LimitText)
+    (self.staticText_CropsIcon_PruningDesc):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
     ;
-    (self.staticText_CropsIcon_InsectDamegeDesc):SetTextMode(UI_TM.eTextMode_LimitText)
+    (self.staticText_CropsIcon_InsectDamegeDesc):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
+    ;
+    (self.staticText_CropsIcon_PruningDesc):setLineCountByLimitAutoWrap(2)
+    ;
+    (self.staticText_CropsIcon_InsectDamegeDesc):setLineCountByLimitAutoWrap(2)
   end
   if isChange then
     (self.staticText_Compost):SetShow(false)
@@ -507,7 +511,7 @@ FarmInfo_Change_Texture = function(isChange)
     (self.staticText_CropsIcon_PruningDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FARMINFO_NEEDFEEDING"))
     ;
     (self.staticText_CropsIcon_InsectDamegeDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_FARMINFO_NEEDKILLBUG"))
-    -- DECOMPILER ERROR at PC69: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC77: Confused about usage of register: R2 in 'UnsetPending'
 
     ;
     (farmInfo._uiIconUV).static_CropsIcon_Pruning = {
@@ -515,7 +519,7 @@ FarmInfo_Change_Texture = function(isChange)
 , 
 [false] = {x0 = 193, x1 = 235, y0 = 5, y1 = 47}
 }
-    -- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC93: Confused about usage of register: R2 in 'UnsetPending'
 
     ;
     (farmInfo._uiIconUV).static_CropsIcon_InsectDamege = {
@@ -536,7 +540,7 @@ FarmInfo_Change_Texture = function(isChange)
     (self.staticText_CropsIcon_PruningDesc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_HOUSEING_FARMINFO_NEW_PRUNINGDESC"))
     ;
     (self.staticText_CropsIcon_InsectDamegeDesc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_HOUSEING_FARMINFO_NEW_INSECTDAMEGEDESC"))
-    -- DECOMPILER ERROR at PC138: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC146: Confused about usage of register: R2 in 'UnsetPending'
 
     ;
     (farmInfo._uiIconUV).static_CropsIcon_Pruning = {
@@ -544,7 +548,7 @@ FarmInfo_Change_Texture = function(isChange)
 , 
 [false] = {x0 = 12, x1 = 54, y0 = 123, y1 = 165}
 }
-    -- DECOMPILER ERROR at PC154: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC162: Confused about usage of register: R2 in 'UnsetPending'
 
     ;
     (farmInfo._uiIconUV).static_CropsIcon_InsectDamege = {

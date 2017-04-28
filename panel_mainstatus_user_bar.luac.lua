@@ -538,9 +538,22 @@ Panel_MainStatus_User_Bar_Onresize = function()
   Panel_Danger:SetPosX(0)
   _alertDanger:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_MainStatus_User_Bar:ComputePos()
-  Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
-  Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
-  changePositionBySever(Panel_MainStatus_User_Bar, (CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, true, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_MainStatus_User_Bar:GetRelativePosX() == 0 and Panel_MainStatus_User_Bar:GetRelativePosY() == 0 then
+      Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+      Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
+    else
+      Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() * Panel_MainStatus_User_Bar:GetRelativePosX() - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+      Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() * Panel_MainStatus_User_Bar:GetRelativePosY() - Panel_MainStatus_User_Bar:GetSizeY() / 2)
+    end
+    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+      Panel_MainStatus_User_Bar:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+    end
+  else
+    Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+    Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
+    changePositionBySever(Panel_MainStatus_User_Bar, (CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, true, true, false)
+  end
   if getScreenSizeX() < Panel_MainStatus_User_Bar:GetPosX() or getScreenSizeY() < Panel_MainStatus_User_Bar:GetPosY() then
     Panel_MainStatus_User_Bar:ComputePos()
     Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)

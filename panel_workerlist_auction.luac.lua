@@ -252,6 +252,9 @@ MyworkerList_Close = function()
   Panel_WorkerList_Auction:SetShow(false)
   Panel_WorkerResist_Auction:SetShow(false)
   Panel_Worker_Tooltip:SetShow(false)
+  if Panel_WorkerManager:IsUISubApp() then
+    Panel_Worker_Tooltip:CloseUISubApp()
+  end
 end
 
 HandleClicked_MyWorkerList_ResistToAuction = function(worker_Index)

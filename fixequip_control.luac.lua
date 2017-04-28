@@ -10,110 +10,142 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
   if itemWrapper == nil then
     return 
   end
+  ;
+  (self._enduranceGauge):SetShow(true)
+  ;
+  (self._enduranceMax):SetShow(true)
+  ;
+  (self._enduranceGaugeValue):SetShow(true)
+  ;
+  (self._enduranceValue):SetShow(true)
   if (self._slotMain).empty then
     (self._slotMain):setItem(itemWrapper)
-    -- DECOMPILER ERROR at PC17: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC33: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).empty = false
-    -- DECOMPILER ERROR at PC19: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC35: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).whereType = inventoryType
-    -- DECOMPILER ERROR at PC21: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC37: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).slotNo = slotNo
-    -- DECOMPILER ERROR at PC27: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC43: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).itemKey = (itemWrapper:get()):getKey()
+    local maxEndurance = ((itemWrapper:getStaticStatus()):get()):getMaxEndurance()
+    local dynamicMaxEndurance = (itemWrapper:get()):getMaxEndurance()
+    local endurance = (itemWrapper:get()):getEndurance()
+    self._memoryFlagRecoveryCount = ((itemWrapper:getStaticStatus()):get())._repairEnduranceCount
+    ;
+    (self._enduranceGaugeValue):SetAniSpeed(0)
+    ;
+    (self._enduranceMax):SetAniSpeed(0)
+    ;
+    (self._enduranceGaugeValue):SetProgressRate(endurance / maxEndurance * 100)
+    ;
+    (self._enduranceMax):SetProgressRate(dynamicMaxEndurance / maxEndurance * 100)
+    ;
+    (self._enduranceValue):SetText(endurance .. " / " .. dynamicMaxEndurance .. "  [" .. maxEndurance .. "]")
     Inventory_SetFunctor(FixEquip_InvenFiler_SubItem, Panel_FixEquip_InteractortionFromInventory, FixEquip_Close, nil)
     ;
     (self._uiEquipPrice):SetShow(false)
   else
-    if (self._slotSub).empty then
-      (self._slotSub):setItem(itemWrapper)
-      -- DECOMPILER ERROR at PC48: Confused about usage of register: R6 in 'UnsetPending'
+    do
+      if (self._slotSub).empty then
+        (self._slotSub):setItem(itemWrapper)
+        ;
+        (self._enduranceText):SetShow(true)
+        -- DECOMPILER ERROR at PC116: Confused about usage of register: R6 in 'UnsetPending'
 
-      ;
-      (self._slotSub).empty = false
-      -- DECOMPILER ERROR at PC50: Confused about usage of register: R6 in 'UnsetPending'
+        ;
+        (self._slotSub).empty = false
+        -- DECOMPILER ERROR at PC118: Confused about usage of register: R6 in 'UnsetPending'
 
-      ;
-      (self._slotSub).whereType = inventoryType
-      -- DECOMPILER ERROR at PC52: Confused about usage of register: R6 in 'UnsetPending'
+        ;
+        (self._slotSub).whereType = inventoryType
+        -- DECOMPILER ERROR at PC120: Confused about usage of register: R6 in 'UnsetPending'
 
-      ;
-      (self._slotSub).slotNo = slotNo
-      -- DECOMPILER ERROR at PC60: Confused about usage of register: R6 in 'UnsetPending'
+        ;
+        (self._slotSub).slotNo = slotNo
+        -- DECOMPILER ERROR at PC128: Confused about usage of register: R6 in 'UnsetPending'
 
-      ;
-      (self._slotSub).itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-      if self._moneyItemCheck then
-        local fixEquipPrice = itemWrapper:getMoneyToRepairItemMaxEndurance((self._slotMain).itemKey)
-        if toInt64(0, 0) < fixEquipPrice then
-          (self._uiEquipPrice):SetShow(true)
-          ;
-          (self._uiEquipPrice):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_NEEDMONEY", "fixEquipPrice", makeDotMoney(fixEquipPrice)))
+        ;
+        (self._slotSub).itemKey = ((itemWrapper:get()):getKey()):getItemKey()
+        if (self._slotSub).itemKey == 44195 then
+          (self._enduranceText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_RECOVERYCOUNT", "count", tostring(self._memoryFlagRecoveryCount)))
         else
           ;
-          (self._uiEquipPrice):SetShow(false)
+          (self._enduranceText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_RECOVERYCOUNT", "count", tostring(10)))
         end
-      else
-        do
-          ;
-          (self._uiEquipPrice):SetShow(false)
-          ;
-          (UI.ASSERT)(false, "Client data, UI data is Mismatch!!!!!")
-          do return  end
-          ;
-          (self._uiButtonApplyCash):EraseAllEffect()
-          ;
-          (self._uiButtonApplyCash):SetMonoTone(true)
-          ;
-          (self._uiButtonApplyCash):SetAlpha(0.85)
-          ;
-          (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
-          local isReady = PaGlobal_FixEquip:isReadyToReapirMaxEndurance()
-          if isReady == true then
-            (self._uiButtonApply):AddEffect("UI_Equip_Repair", true, 0, 0)
+        if self._moneyItemCheck then
+          local fixEquipPrice = itemWrapper:getMoneyToRepairItemMaxEndurance((self._slotMain).itemKey)
+          if toInt64(0, 0) < fixEquipPrice then
+            (self._uiEquipPrice):SetShow(true)
             ;
-            (self._uiButtonApply):SetIgnore(false)
-            ;
-            (self._uiButtonApply):SetMonoTone(false)
-            ;
-            (self._uiButtonApply):SetEnable(true)
-            ;
-            (self._uiButtonApply):SetAlpha(1)
-            ;
-            (self._uiButtonApply):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( false )")
-            local hasCashItem = doHaveContentsItem(27, 0, false)
-            if hasCashItem == true then
-              (self._uiButtonApplyCash):AddEffect("UI_Equip_Repair", true, 0, 0)
-              ;
-              (self._uiButtonApplyCash):SetMonoTone(false)
-              ;
-              (self._uiButtonApplyCash):SetAlpha(1)
-              ;
-              (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")
-            end
-            PaGlobal_FixEquip:fixEquip_clearDataStreamRecovery(true, "Panel_FixEquip_InteractortionFromInventory")
+            (self._uiEquipPrice):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_FIXEQUIP_NEEDMONEY", "fixEquipPrice", makeDotMoney(fixEquipPrice)))
           else
-            do
+            ;
+            (self._uiEquipPrice):SetShow(false)
+          end
+        else
+          do
+            ;
+            (self._uiEquipPrice):SetShow(false)
+            ;
+            (UI.ASSERT)(false, "Client data, UI data is Mismatch!!!!!")
+            do return  end
+            ;
+            (self._uiButtonApplyCash):EraseAllEffect()
+            ;
+            (self._uiButtonApplyCash):SetMonoTone(true)
+            ;
+            (self._uiButtonApplyCash):SetAlpha(0.85)
+            ;
+            (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
+            local isReady = PaGlobal_FixEquip:isReadyToReapirMaxEndurance()
+            if isReady == true then
+              (self._uiButtonApply):AddEffect("UI_Equip_Repair", true, 0, 0)
               ;
-              (self._uiButtonApply):EraseAllEffect()
+              (self._uiButtonApply):SetIgnore(false)
               ;
-              (self._uiButtonApply):SetIgnore(true)
+              (self._uiButtonApply):SetMonoTone(false)
               ;
-              (self._uiButtonApply):SetMonoTone(true)
+              (self._uiButtonApply):SetEnable(true)
               ;
-              (self._uiButtonApply):SetEnable(false)
+              (self._uiButtonApply):SetAlpha(1)
               ;
-              (self._uiButtonApply):SetAlpha(0.85)
-              ;
-              (self._uiButtonApply):addInputEvent("Mouse_LUp", "")
-              PaGlobal_FixEquip:fixEquip_MouseEvent_OutSlots_Done(true)
+              (self._uiButtonApply):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( false )")
+              local hasCashItem = doHaveContentsItem(27, 0, false)
+              if hasCashItem == true then
+                (self._uiButtonApplyCash):AddEffect("UI_Equip_Repair", true, 0, 0)
+                ;
+                (self._uiButtonApplyCash):SetMonoTone(false)
+                ;
+                (self._uiButtonApplyCash):SetAlpha(1)
+                ;
+                (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")
+              end
+              PaGlobal_FixEquip:fixEquip_clearDataStreamRecovery(true, "Panel_FixEquip_InteractortionFromInventory")
+            else
+              do
+                ;
+                (self._uiButtonApply):EraseAllEffect()
+                ;
+                (self._uiButtonApply):SetIgnore(true)
+                ;
+                (self._uiButtonApply):SetMonoTone(true)
+                ;
+                (self._uiButtonApply):SetEnable(false)
+                ;
+                (self._uiButtonApply):SetAlpha(0.85)
+                ;
+                (self._uiButtonApply):addInputEvent("Mouse_LUp", "")
+                PaGlobal_FixEquip:fixEquip_MouseEvent_OutSlots_Done(true)
+              end
             end
           end
         end
@@ -135,6 +167,30 @@ PaGlobal_FixEquip.fixEquipMoneyUpdate = function(self)
   (PaGlobal_FixEquip._uiTxtInven):SetText(makeDotMoney(invenMoney))
   ;
   (PaGlobal_FixEquip._uiTxtWarehouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  local itemWrapper = getInventoryItemByType((self._slotMain).whereType, (self._slotMain).slotNo)
+  if itemWrapper == nil then
+    return 
+  end
+  local maxEndurance = ((itemWrapper:getStaticStatus()):get()):getMaxEndurance()
+  local dynamicMaxEndurance = (itemWrapper:get()):getMaxEndurance()
+  local endurance = (itemWrapper:get()):getEndurance()
+  ;
+  (self._enduranceMax):SetAniSpeed(1)
+  ;
+  (self._enduranceMax):SetProgressRate(dynamicMaxEndurance / maxEndurance * 100)
+  ;
+  (self._enduranceValue):SetText(endurance .. " / " .. dynamicMaxEndurance .. "  [" .. maxEndurance .. "]")
+  if maxEndurance <= dynamicMaxEndurance then
+    (self._enduranceText):SetShow(false)
+    ;
+    (self._enduranceGauge):SetShow(false)
+    ;
+    (self._enduranceMax):SetShow(false)
+    ;
+    (self._enduranceGaugeValue):SetShow(false)
+    ;
+    (self._enduranceValue):SetShow(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC7: Confused about usage of register: R0 in 'UnsetPending'
@@ -320,12 +376,24 @@ PaGlobal_FixEquip.fixEquip_OutSlots = function(self, outSlotType)
   if outSlotType == true then
     PaGlobal_FixEquip:fixEquip_clearData()
     Inventory_SetFunctor(FixEquip_InvenFiler_MainItem, Panel_FixEquip_InteractortionFromInventory, FixEquip_CloseButton, nil)
+    ;
+    (self._enduranceText):SetShow(false)
+    ;
+    (self._enduranceGauge):SetShow(false)
+    ;
+    (self._enduranceMax):SetShow(false)
+    ;
+    (self._enduranceGaugeValue):SetShow(false)
+    ;
+    (self._enduranceValue):SetShow(false)
   else
     PaGlobal_FixEquip:fixEquip_clearDataOnlySub()
   end
   ;
   (self._uiEquipPrice):SetShow(false)
   PaGlobal_FixEquip:fixEquip_clearDataStreamRecovery(false, "fixEquip_OutSlots")
+  ;
+  (self._enduranceText):SetShow(false)
 end
 
 -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
@@ -410,6 +478,20 @@ PaGlobal_FixEquip.handleMClickedFixEquipItemButton = function(self)
     (self._uiEquipPrice):SetShow(false)
     PaGlobal_FixEquip:fixEquip_Show()
   end
+  ;
+  (self._enduranceText):SetShow(false)
+  ;
+  (self._enduranceGauge):SetShow(false)
+  ;
+  (self._enduranceMax):SetShow(false)
+  ;
+  (self._enduranceGaugeValue):SetShow(false)
+  ;
+  (self._enduranceValue):SetShow(false)
+  ;
+  (self._enduranceMax):SetAniSpeed(0)
+  ;
+  (self._enduranceGaugeValue):SetAniSpeed(0)
 end
 
 

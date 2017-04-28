@@ -1527,6 +1527,7 @@ Panel_Window_QuestNew_PopUp = function()
   else
     Panel_Window_Quest_New:CloseUISubApp()
   end
+  TooltipSimple_Hide()
 end
 
 HandleClick_QuestWindow_Update = function()
@@ -1870,6 +1871,10 @@ QuestWindow.registEventHandler = function(self)
   ;
   ((self.ui).checkPopUp):addInputEvent("Mouse_LUp", "Panel_Window_QuestNew_PopUp()")
   ;
+  ((self.ui).checkPopUp):addInputEvent("Mouse_On", "Panel_Window_QuestNew_PopUp_ShowIconToolTip(true)")
+  ;
+  ((self.ui).checkPopUp):addInputEvent("Mouse_Out", "Panel_Window_QuestNew_PopUp_ShowIconToolTip(false)")
+  ;
   ((self.ui).btn_Question):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelQuestHistory\" )")
   ;
   ((self.ui).btn_Question):addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelQuestHistory\", \"true\")")
@@ -1903,6 +1908,25 @@ QuestWindow.registMessageHandler = function(self)
   -- function num : 0_36
   registerEvent("FromClient_UpdateQuestList", "FromClient_QuestWindow_Update")
   registerEvent("onScreenResize", "Panel_Window_QuestNew_OnScreenResize")
+end
+
+Panel_Window_QuestNew_PopUp_ShowIconToolTip = function(isShow)
+  -- function num : 0_37 , upvalues : QuestWindow
+  if isShow then
+    local self = QuestWindow
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
+    local desc = ""
+    if ((self.ui).checkPopUp):IsCheck() then
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
+    else
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
+    end
+    TooltipSimple_Show((self.ui).checkPopUp, name, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
+  end
 end
 
 QuestWindow:init()

@@ -36,7 +36,7 @@ for ii = 0, eInteractionTypeMax - 1 do
 
   INETRACTION_BUTTON_TEXT[ii] = PAGetString(Defines.StringSheet_GAME, "INTERACTION_MENU" .. tostring(ii))
 end
-local BUTTON_ID = {"Button_CharInfo", "Button_Exchange", "Button_Party_Invite", "Button_Dialog", "Button_Ride", "Button_Control", "Button_Looting", "Button_Collect", "Button_OpenDoor", "Button_OpenWarehouseInTent", "Button_ReBuildTent", "Button_InstallationMode", "Button_ViewHouseInfo", "Button_Havest", "Button_ParkingHorse", "Button_EquipInstallation", "Button_UnequipInstallation", "Button_OpenInventory", "Button_HorseInfo", "Button_Bussiness", "Button_Guild_Invite", "Button_Guild_Alliance_Invite", "Button_UseItem", "Button_UnbuildPersonalTent", "Button_Manufacture", "Button_Greet", "Button_Steal", "Button_Lottery", "Button_HarvestSeed", "Button_TopHouse", "Button_HouseRank", "Button_Lop", "Button_KillBug", "Button_UninstallTrap", "Button_Sympathetic", "Button_Observe", "Button_HarvestInformation", "Button_Clan_Invite", "Button_SiegeGateOpen", "Button_UnbuildKingOrLordTent", "Button_Eavesdrop", "Button_WaitComment", "Button_TakedownCannon", "Button_OpenWindow", "Button_ChangeLook", "Button_ChangeName", "Button_RepairKingOrLordTent", "Button_UserIntroduction", "Button_FollowActor", "Button_BuildingUpgrade", "Button_PvPBattle", "Button_SiegeObjectStart", "Button_SiegeObjectFinish", "Button_GateOpen", "Button_GateClose", "Button_UninstallBarricade", "Button_ServantRepair", "Button_LanternOn", "Button_LanternOff", "Button_Escape"; [0] = "Button_GamePlay"}
+local BUTTON_ID = {"Button_CharInfo", "Button_Exchange", "Button_Party_Invite", "Button_Dialog", "Button_Ride", "Button_Control", "Button_Looting", "Button_Collect", "Button_OpenDoor", "Button_OpenWarehouseInTent", "Button_ReBuildTent", "Button_InstallationMode", "Button_ViewHouseInfo", "Button_Havest", "Button_ParkingHorse", "Button_EquipInstallation", "Button_UnequipInstallation", "Button_OpenInventory", "Button_HorseInfo", "Button_Bussiness", "Button_Guild_Invite", "Button_Guild_Alliance_Invite", "Button_UseItem", "Button_UnbuildPersonalTent", "Button_Manufacture", "Button_Greet", "Button_Steal", "Button_Lottery", "Button_HarvestSeed", "Button_TopHouse", "Button_HouseRank", "Button_Lop", "Button_KillBug", "Button_UninstallTrap", "Button_Sympathetic", "Button_Observe", "Button_HarvestInformation", "Button_Clan_Invite", "Button_SiegeGateOpen", "Button_UnbuildKingOrLordTent", "Button_Eavesdrop", "Button_WaitComment", "Button_TakedownCannon", "Button_OpenWindow", "Button_ChangeLook", "Button_ChangeName", "Button_RepairKingOrLordTent", "Button_UserIntroduction", "Button_FollowActor", "Button_BuildingUpgrade", "Button_PvPBattle", "Button_SiegeObjectStart", "Button_SiegeObjectFinish", "Button_GateOpen", "Button_GateClose", "Button_UninstallBarricade", "Button_ServantRepair", "Button_LanternOn", "Button_LanternOff", "Button_Escape", "Button_Awake"; [0] = "Button_GamePlay"}
 local UI_BUTTON = {}
 for ii = 0, #BUTTON_ID do
   UI_BUTTON[ii] = (UI.getChildControl)(Panel_Interaction, BUTTON_ID[ii])
@@ -338,37 +338,42 @@ Interaction_Show = function(actor)
                 end
               end
               do
-                do
-                  local shortcuts = SHOW_BUTTON_COUNT
-                  if SHOW_BUTTON_COUNT == 0 then
-                    if (CppEnums.InteractionType).InteractionType_InvitedParty == ii or (CppEnums.InteractionType).InteractionType_GuildInvite == ii or (CppEnums.InteractionType).InteractionType_ExchangeItem == ii then
-                      (interactionTargetUIList[ii]):SetText(interactionTargetTextList[ii])
-                    else
-                      if (CppEnums.InteractionType).InteractionType_Talk == ii and ((actor:getCharacterStaticStatusWrapper()):get()):isSummonedCharacterBySiegeObject() then
-                        (interactionTargetUIList[ii]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INTERACTION_USE") .. " <PAColor0xFFFFD543>(" .. keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction) .. ")<PAOldColor>")
-                      else
-                        ;
-                        (interactionTargetUIList[ii]):SetText(interactionTargetTextList[ii] .. " <PAColor0xFFFFD543>(" .. keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction) .. ")<PAOldColor>")
-                      end
-                    end
-                    ;
-                    (interactionTargetUIList[ii]):SetFontColor(UI_Color.C_FFEFEFEF)
+                local shortcuts = SHOW_BUTTON_COUNT
+                if SHOW_BUTTON_COUNT == 0 then
+                  if (CppEnums.InteractionType).InteractionType_InvitedParty == ii or (CppEnums.InteractionType).InteractionType_GuildInvite == ii or (CppEnums.InteractionType).InteractionType_ExchangeItem == ii then
+                    (interactionTargetUIList[ii]):SetText(interactionTargetTextList[ii])
                   else
-                    ;
-                    (interactionTargetUIList[ii]):SetText(interactionTargetTextList[ii] .. " <PAColor0xFFFFD543>(F" .. shortcuts + 4 .. ")<PAOldColor>")
-                    ;
-                    (interactionTargetUIList[ii]):SetFontColor(UI_Color.C_FF999999)
+                    if (CppEnums.InteractionType).InteractionType_Talk == ii and ((actor:getCharacterStaticStatusWrapper()):get()):isSummonedCharacterBySiegeObject() then
+                      (interactionTargetUIList[ii]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INTERACTION_USE") .. " <PAColor0xFFFFD543>(" .. keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction) .. ")<PAOldColor>")
+                    else
+                      ;
+                      (interactionTargetUIList[ii]):SetText(interactionTargetTextList[ii] .. " <PAColor0xFFFFD543>(" .. keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction) .. ")<PAOldColor>")
+                    end
                   end
-                  -- DECOMPILER ERROR at PC320: Confused about usage of register: R13 in 'UnsetPending'
+                  ;
+                  (interactionTargetUIList[ii]):SetFontColor(UI_Color.C_FFEFEFEF)
+                else
+                  local _string = Interaction_ChangeString(SHOW_BUTTON_COUNT)
+                  ;
+                  (interactionTargetUIList[ii]):SetText(interactionTargetTextList[ii] .. " <PAColor0xFFFFD543>(" .. _string .. ")<PAOldColor>")
+                  ;
+                  (interactionTargetUIList[ii]):SetFontColor(UI_Color.C_FF999999)
+                end
+                do
+                  do
+                    -- DECOMPILER ERROR at PC323: Confused about usage of register: R13 in 'UnsetPending'
 
-                  linkButtonAction[SHOW_BUTTON_COUNT] = ii
-                  SHOW_BUTTON_COUNT = SHOW_BUTTON_COUNT + 1
-                  -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
+                    linkButtonAction[SHOW_BUTTON_COUNT] = ii
+                    SHOW_BUTTON_COUNT = SHOW_BUTTON_COUNT + 1
+                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
+                    -- DECOMPILER ERROR at PC327: LeaveBlock: unexpected jumping out IF_STMT
+
+                  end
                 end
               end
             end
@@ -415,28 +420,53 @@ Interaction_Show = function(actor)
   end
 end
 
+Interaction_ChangeString = function(index)
+  -- function num : 0_13
+  local _string = "F6"
+  if index == 1 then
+    _string = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_Interaction_1)
+  else
+    if index == 2 then
+      _string = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_Interaction_2)
+    else
+      if index == 3 then
+        _string = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_Interaction_3)
+      else
+        if index == 4 then
+          _string = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_Interaction_4)
+        else
+          if index == 5 then
+            _string = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_Interaction_5)
+          end
+        end
+      end
+    end
+  end
+  return _string
+end
+
 FGlobal_InteractionButtonCount = function()
-  -- function num : 0_13 , upvalues : SHOW_BUTTON_COUNT
+  -- function num : 0_14 , upvalues : SHOW_BUTTON_COUNT
   return SHOW_BUTTON_COUNT
 end
 
 FGlobal_InteractionButtonActionRun = function(keyIdx)
-  -- function num : 0_14 , upvalues : linkButtonAction
+  -- function num : 0_15 , upvalues : linkButtonAction
   Interaction_ButtonPushed(linkButtonAction[keyIdx])
 end
 
 Panel_Interaction_GetGlobalGuidePosX = function()
-  -- function num : 0_15 , upvalues : _globalGuide
+  -- function num : 0_16 , upvalues : _globalGuide
   return Panel_Interaction:GetPosX() + _globalGuide:GetPosX()
 end
 
 Panel_Interaction_GetGlobalGuidePosY = function()
-  -- function num : 0_16 , upvalues : _globalGuide
+  -- function num : 0_17 , upvalues : _globalGuide
   return Panel_Interaction:GetPosY() + _globalGuide:GetPosY()
 end
 
 Interaction_Close = function()
-  -- function num : 0_17 , upvalues : INTERACTABLE_ACTOR_KEY, INTERACTABLE_FRAG, _globalGuide
+  -- function num : 0_18 , upvalues : INTERACTABLE_ACTOR_KEY, INTERACTABLE_FRAG, _globalGuide
   if Panel_Interaction:IsShow() or Panel_Interaction_House:IsShow() then
     Panel_Interaction:SetShow(false)
     Panel_Interaction_House:SetShow(false)
@@ -450,7 +480,7 @@ Interaction_Close = function()
 end
 
 Interaction_PositionUpdate = function(actor)
-  -- function num : 0_18
+  -- function num : 0_19
   local pos2d = actor:get2DPosForInterAction()
   if pos2d.x < 0 and pos2d.y < 0 then
     if Panel_Interaction_House:IsShow() then
@@ -470,7 +500,7 @@ Interaction_PositionUpdate = function(actor)
 end
 
 Interaction_ButtonPositionUpdate = function(deltaTime)
-  -- function num : 0_19 , upvalues : isTargetNpc, _background, UI_NAME, BUTTON_UPDATE_TIME, ANIMATING_BUTTON, interactionTargetUIList, SHOW_BUTTON_COUNT, _needCollectTool
+  -- function num : 0_20 , upvalues : isTargetNpc, _background, UI_NAME, BUTTON_UPDATE_TIME, ANIMATING_BUTTON, interactionTargetUIList, SHOW_BUTTON_COUNT, _needCollectTool
   local ANIMATION_TIME = 0.35
   local BUTTON_OFFSET_X = 0
   local BUTTON_OFFSET_Y = 0
@@ -536,16 +566,16 @@ Interaction_ButtonPositionUpdate = function(deltaTime)
 end
 
 Interaction_Reset = function()
-  -- function num : 0_20 , upvalues : INTERACTABLE_ACTOR_KEY
+  -- function num : 0_21 , upvalues : INTERACTABLE_ACTOR_KEY
   INTERACTABLE_ACTOR_KEY = 0
 end
 
 Interaction_ButtonPushed = function(interactionType)
-  -- function num : 0_21 , upvalues : preUIMode
+  -- function num : 0_22 , upvalues : preUIMode
   preUIMode = GetUIMode()
   local isTakedownCannon = false
   local isTakedownCannonFuncPass = function()
-    -- function num : 0_21_0 , upvalues : interactionType
+    -- function num : 0_22_0 , upvalues : interactionType
     interaction_processInteraction(interactionType)
   end
 
@@ -599,7 +629,7 @@ Interaction_ButtonPushed = function(interactionType)
 end
 
 FromClient_InteractionFail = function()
-  -- function num : 0_22 , upvalues : preUIMode
+  -- function num : 0_23 , upvalues : preUIMode
   if preUIMode == nil then
     return 
   end
@@ -607,7 +637,7 @@ FromClient_InteractionFail = function()
 end
 
 Interaction_ButtonOver = function(interactionType, isOver)
-  -- function num : 0_23 , upvalues : interactionTargetUIList, UI_Color, isFocusInteractionType, focusInteractionType, basicInteractionType
+  -- function num : 0_24 , upvalues : interactionTargetUIList, UI_Color, isFocusInteractionType, focusInteractionType, basicInteractionType
   local button = interactionTargetUIList[interactionType]
   button:ResetVertexAni()
   button:SetColor(UI_Color.C_FFFFFFFF)
@@ -633,7 +663,7 @@ Interaction_ButtonOver = function(interactionType, isOver)
 end
 
 Interaction_UpdatePerFrame_Desc = function()
-  -- function num : 0_24 , upvalues : focusInteractionType, interactionTargetUIList, isFocusInteractionType, basicInteractionType
+  -- function num : 0_25 , upvalues : focusInteractionType, interactionTargetUIList, isFocusInteractionType, basicInteractionType
   if focusInteractionType == (CppEnums.InteractionType).InteractionType_Sympathetic then
     Interaction_UpdateDesc(focusInteractionType)
   else
@@ -662,7 +692,7 @@ Interaction_UpdatePerFrame_Desc = function()
 end
 
 Interaction_UpdateDesc = function(indteractionType)
-  -- function num : 0_25 , upvalues : basicInteractionType, interactionTargetTextList, DESC_TEXT, _needCollectTool, interactionTargetUIList, _globalGuide
+  -- function num : 0_26 , upvalues : basicInteractionType, interactionTargetTextList, DESC_TEXT, _needCollectTool, interactionTargetUIList, _globalGuide
   local actor = interaction_getInteractable()
   if actor == nil then
     return 
@@ -672,7 +702,11 @@ Interaction_UpdateDesc = function(indteractionType)
   end
   local interactionDesc = nil
   if indteractionType == basicInteractionType and (not (actor:get()):isPlayer() or (actor:get()):isSelfPlayer()) then
-    interactionDesc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTERACTION_PURPOSE_0", "interactionkey", keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction), "interaction", interactionTargetTextList[indteractionType])
+    if indteractionType ~= 61 then
+      interactionDesc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTERACTION_PURPOSE_0", "interactionkey", keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction), "interaction", interactionTargetTextList[indteractionType])
+    else
+      interactionDesc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTERACTION_PURPOSE_2", "interactionkey", keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction), "interaction", interactionTargetTextList[indteractionType])
+    end
   else
     interactionDesc = DESC_TEXT[indteractionType]
   end
@@ -740,7 +774,7 @@ Interaction_UpdateDesc = function(indteractionType)
 end
 
 FromClient_NotifyObserverModeEnd = function()
-  -- function num : 0_26
+  -- function num : 0_27
   Panel_WatchingMode:SetShow(false)
   local selfPlayer = getSelfPlayer()
   if selfPlayer:isDead() then
@@ -749,7 +783,7 @@ FromClient_NotifyObserverModeEnd = function()
 end
 
 FromClient_ConfirmInstallationBuff = function(currentEndurance)
-  -- function num : 0_27 , upvalues : UI_PP
+  -- function num : 0_28 , upvalues : UI_PP
   if (MessageBox.isPopUp)() then
     return 
   end
@@ -760,7 +794,7 @@ FromClient_ConfirmInstallationBuff = function(currentEndurance)
 end
 
 Interaction_InstallationBuff = function()
-  -- function num : 0_28
+  -- function num : 0_29
   toClient_RequestInstallationBuff()
 end
 
@@ -770,7 +804,7 @@ registerEvent("FromClient_InteractionFail", "FromClient_InteractionFail")
 registerEvent("FromClient_NotifyObserverModeEnd", "FromClient_NotifyObserverModeEnd")
 local isReloadState = true
 local interactionReload = function()
-  -- function num : 0_29 , upvalues : isReloadState, INTERACTABLE_ACTOR_KEY, INTERACTABLE_FRAG, _globalGuide, interactionShowableCheck
+  -- function num : 0_30 , upvalues : isReloadState, INTERACTABLE_ACTOR_KEY, INTERACTABLE_FRAG, _globalGuide, interactionShowableCheck
   if isReloadState == false then
     Interaction_Close()
     return 
@@ -795,7 +829,7 @@ local interactionReload = function()
 end
 
 renderModeChange_interactionReload = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_30 , upvalues : interactionReload
+  -- function num : 0_31 , upvalues : interactionReload
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -804,7 +838,7 @@ end
 
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_interactionReload")
 Interaction_SetReloadState = function()
-  -- function num : 0_31 , upvalues : isReloadState, interactionReload
+  -- function num : 0_32 , upvalues : isReloadState, interactionReload
   isReloadState = true
   if isFlushedUI() == false then
     interactionReload()
@@ -812,18 +846,18 @@ Interaction_SetReloadState = function()
 end
 
 FromClient_InteractionHarvest = function()
-  -- function num : 0_32
+  -- function num : 0_33
   interaction_setInteractingState((CppEnums.InteractionType).InteractionType_Havest)
 end
 
 FromClient_InteractionSeedHarvest = function()
-  -- function num : 0_33
+  -- function num : 0_34
   interaction_setInteractingState((CppEnums.InteractionType).InteractionType_SeedHavest)
 end
 
 local _buildingUpgradeActoKeyRaw = 0
 FromClient_InteractionBuildingUpgrade = function(actorKeyRaw)
-  -- function num : 0_34 , upvalues : _buildingUpgradeActoKeyRaw, UI_PP
+  -- function num : 0_35 , upvalues : _buildingUpgradeActoKeyRaw, UI_PP
   local actorProxy = getActor(actorKeyRaw)
   if actorProxy == nil then
     return 
@@ -858,12 +892,12 @@ FromClient_InteractionBuildingUpgrade = function(actorKeyRaw)
 end
 
 InteractionBuildingUpgrade_Confirm = function()
-  -- function num : 0_35 , upvalues : _buildingUpgradeActoKeyRaw
+  -- function num : 0_36 , upvalues : _buildingUpgradeActoKeyRaw
   toClient_RequestBuildingUpgrade(_buildingUpgradeActoKeyRaw)
 end
 
 FromClient_InteractionSiegeObject = function(actorKeyRaw, funcState)
-  -- function num : 0_36 , upvalues : _buildingUpgradeActoKeyRaw, UI_PP
+  -- function num : 0_37 , upvalues : _buildingUpgradeActoKeyRaw, UI_PP
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -896,17 +930,17 @@ FromClient_InteractionSiegeObject = function(actorKeyRaw, funcState)
 end
 
 InteractSiegeObjectControlStart_Confirm = function()
-  -- function num : 0_37 , upvalues : _buildingUpgradeActoKeyRaw
+  -- function num : 0_38 , upvalues : _buildingUpgradeActoKeyRaw
   toClient_RequestSiegeObjectControlStart(_buildingUpgradeActoKeyRaw)
 end
 
 InteractSiegeObjectControlFinish_Confirm = function()
-  -- function num : 0_38 , upvalues : _buildingUpgradeActoKeyRaw
+  -- function num : 0_39 , upvalues : _buildingUpgradeActoKeyRaw
   toClient_RequestSiegeObjectControlFinish(_buildingUpgradeActoKeyRaw)
 end
 
 InteractionTooltipResize_ByFontSize = function()
-  -- function num : 0_39 , upvalues : _globalGuide
+  -- function num : 0_40 , upvalues : _globalGuide
   if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
     _globalGuide:SetSize(_globalGuide:GetSizeX(), 30)
   else
@@ -926,7 +960,7 @@ registerEvent("FromClient_luaLoadComplete", "InteractionTooltipResize_ByFontSize
 local myContributeValue = Panel_Expgauge_MyContributeValue
 local buyHouseButton = (UI.getChildControl)(Panel_Interaction_House, "Button_BuyHouse")
 local houseInit = function()
-  -- function num : 0_40 , upvalues : myContributeValue, buyHouseButton, UI_Color, _houseDesc, UI_TM, _houseDescBG, YSize, GetBottomPos
+  -- function num : 0_41 , upvalues : myContributeValue, buyHouseButton, UI_Color, _houseDesc, UI_TM, _houseDescBG, YSize, GetBottomPos
   if myContributeValue == 0 then
     buyHouseButton:SetFontColor(UI_Color.C_FFD20000)
     buyHouseButton:addInputEvent("Mouse_LUp", "")
@@ -948,7 +982,7 @@ local houseInit = function()
 end
 
 Panel_Interaction_House_HelpDesc_Func = function(contribute, isOn)
-  -- function num : 0_41 , upvalues : _contribute_Help, buyHouseButton, UI_Color, UI_TM, myContributeValue
+  -- function num : 0_42 , upvalues : _contribute_Help, buyHouseButton, UI_Color, UI_TM, myContributeValue
   local mouse_posX = getMousePosX()
   local mouse_posY = getMousePosY()
   local panel_posX = Panel_Interaction_House:GetPosX()

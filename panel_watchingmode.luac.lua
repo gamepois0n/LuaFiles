@@ -110,11 +110,15 @@ ShowCommandFunc = function(respawnTime, isMast)
   ;
   (self.key_R):SetText(keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction))
   ;
-  (self.key_Low):SetText("-")
+  (self.key_Low):SetText(keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_CameraSpeedDown))
   ;
-  (self.key_Fast):SetText("=")
+  (self.key_Fast):SetText(keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_CameraSpeedUp))
   ;
   (self.key_Shift):SetText(keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Dash))
+  ;
+  (self.key_Low):SetSize((self.key_Low):GetTextSizeX() + 10, (self.key_Low):GetSizeY())
+  ;
+  (self.key_Fast):SetSize((self.key_Fast):GetTextSizeX() + 10, (self.key_Fast):GetSizeY())
   if respawnTime ~= nil or resurrectionTime ~= nil then
     if respawnTime ~= nil then
       resurrectionTime = respawnTime

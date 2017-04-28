@@ -3267,6 +3267,9 @@ end
   if not (getIngameCashMall()):show() then
     return 
   end
+  if Panel_IngameCashShop_Coupon:GetShow() then
+    IngameCashShopCoupon_Close(false)
+  end
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end

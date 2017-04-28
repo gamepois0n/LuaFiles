@@ -3,6 +3,7 @@
 
 -- params : ...
 -- function num : 0
+local UI_PD = CppEnums.Padding
 Panel_ServerSelect:SetShow(true, false)
 Panel_ServerSelect:SetSize(getScreenSizeX(), getScreenSizeY())
 local FRAME_SERVERLIST = (UI.getChildControl)(Panel_ServerSelect, "FrameServerList")
@@ -23,11 +24,20 @@ local CHANNEL_MAINICON_STATIC = (UI.getChildControl)(Panel_ServerSelect, "Static
 local CHANNEL_STATUS_TEXT = (UI.getChildControl)(Panel_ServerSelect, "Static_ChannelStatus")
 local CHANNEL_ENTER_BTN = (UI.getChildControl)(Panel_ServerSelect, "Button_Channel")
 local CHANNEL_MAINSERVER = (UI.getChildControl)(Panel_ServerSelect, "RadioButton_MainServer")
+local CHANNEL_MAINSERVERSQ = (UI.getChildControl)(Panel_ServerSelect, "Static_MainServerSq")
 local CHANNEL_CHANGE_TEXT = (UI.getChildControl)(Panel_ServerSelect, "MultilineText_ChangeChannel")
+local channel_WarIcon = (UI.getChildControl)(Panel_ServerSelect, "Static_WarIcon")
 local mainServerBg = (UI.getChildControl)(Panel_ServerSelect, "Static_MainServerBg")
 local mainServerText = (UI.getChildControl)(mainServerBg, "StaticText_MainServerDesc")
 local btn_SetMainServer = (UI.getChildControl)(mainServerBg, "Button_SetMainServer")
 local btn_EnterMainServer = (UI.getChildControl)(mainServerBg, "Button_EnterMainServer")
+local btn_EnterLastJoinServer = (UI.getChildControl)(mainServerBg, "Button_LastJoinServer")
+local txt_EnterLastJoinServer = (UI.getChildControl)(mainServerBg, "MultilineText_LastJoinServer")
+local btn_RandomJoinServer = (UI.getChildControl)(mainServerBg, "Button_RandomJoinServer")
+mainServerText:setPadding(UI_PD.ePadding_Left, 10)
+mainServerText:setPadding(UI_PD.ePadding_Top, 5)
+mainServerText:setPadding(UI_PD.ePadding_Right, 10)
+mainServerText:setPadding(UI_PD.ePadding_Bottom, 5)
 local isRadioBtnShow = false
 local isSpeedServer = {}
 local isNotSpeedServer = {}
@@ -250,6 +260,7 @@ CHANNEL_STATUS_TEXT:SetShow(false)
 CHANNEL_ENTER_BTN:SetShow(false)
 CHANNEL_CHANGE_TEXT:SetShow(false)
 CHANNEL_MAINSERVER:SetShow(false)
+CHANNEL_MAINSERVERSQ:SetShow(false)
 FRAME_SERVERLIST:SetShow(true)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
@@ -311,7 +322,7 @@ for v,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_ServerSelect:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC580: Confused about usage of register: R50 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC626: Confused about usage of register: R56 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex
@@ -324,7 +335,7 @@ tempBg:SetShow(false)
 local bgStartIndex = getRandomValue(startIndex, endIndex)
 local _selectWorldIndex = -1
 local _worldServerCount = 0
-local _channelCtrl = {_bgStatic, _nameText, _statusText, _enterBtn, _changeChannel}
+local _channelCtrl = {_bgStatic, _nameText, _warIcon, _statusText, _enterBtn, _changeChannel}
 local _worldServerCtrl = {_bgButton, _nameText, _countText, _statusText, _channelCount, _channelCtrls}
 local _worldServerCtrls = {}
 local serverStatusTexture = {
@@ -495,7 +506,7 @@ StartUp_Panel_SelectServer = function()
 end
 
 Panel_SelectServer_ReCreateChannelCtrl = function(worldIndex)
-  -- function num : 0_6 , upvalues : _worldServerCtrls, isSpeedServer, isNotSpeedServer, FRAME_SERVERLIST, CHANNEL_BG_STATIC, CHANNEL_MAINSERVER, CHANNEL_NAME_TEXT, CHANNEL_MAINICON_STATIC, CHANNEL_STATUS_TEXT, WORLD_SPEED_SERVER_IMG, CHANNEL_ENTER_BTN, CHANNEL_CHANGE_TEXT
+  -- function num : 0_6 , upvalues : _worldServerCtrls, isSpeedServer, isNotSpeedServer, FRAME_SERVERLIST, CHANNEL_BG_STATIC, CHANNEL_MAINSERVER, CHANNEL_MAINSERVERSQ, CHANNEL_NAME_TEXT, channel_WarIcon, CHANNEL_MAINICON_STATIC, CHANNEL_STATUS_TEXT, WORLD_SPEED_SERVER_IMG, CHANNEL_ENTER_BTN, CHANNEL_CHANGE_TEXT
   local worldServerData = getGameWorldServerDataByIndex(worldIndex)
   local restrictedServerNo = worldServerData._restrictedServerNo
   local changeChannelTime = getChannelMoveableRemainTime(worldServerData._worldNo)
@@ -543,11 +554,23 @@ Panel_SelectServer_ReCreateChannelCtrl = function(worldIndex)
     tempBG:SetIgnore(false)
     local tempCheckMainServer = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON, tempBG, "ChannelRadioBtn_" .. tostring(worldIndex) .. "_" .. tostring(idx))
     CopyBaseProperty(CHANNEL_MAINSERVER, tempCheckMainServer)
+    tempCheckMainServer:SetPosX(270)
+    tempCheckMainServer:SetPosY(7)
     tempCheckMainServer:SetShow(false)
+    tempCheckMainServer:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SELECT"))
+    local tempCheckMainServerSQ = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempBG, "ChannelSequense_" .. tostring(worldIndex) .. "_" .. tostring(idx))
+    CopyBaseProperty(CHANNEL_MAINSERVERSQ, tempCheckMainServerSQ)
+    tempCheckMainServerSQ:SetPosX(270)
+    tempCheckMainServerSQ:SetPosY(7)
+    tempCheckMainServerSQ:SetShow(false)
     local tempName = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, tempBG, "ChannelName_" .. tostring(worldIndex) .. "_" .. tostring(idx))
     CopyBaseProperty(CHANNEL_NAME_TEXT, tempName)
     tempName:SetShow(true)
     tempName:ActiveMouseEventEffect(true)
+    local tempWar = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempBG, "ChannelWar_" .. tostring(worldIndex) .. "_" .. tostring(idx))
+    CopyBaseProperty(channel_WarIcon, tempWar)
+    tempWar:SetShow(false)
+    tempWar:ActiveMouseEventEffect(true)
     local tempMainIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempBG, "ChannelMainIcon_" .. tostring(worldIndex) .. "_" .. tostring(idx))
     CopyBaseProperty(CHANNEL_MAINICON_STATIC, tempMainIcon)
     tempMainIcon:SetShow(false)
@@ -649,7 +672,7 @@ Panel_SelectServer_ReCreateChannelCtrl = function(worldIndex)
     end
     if serverData._isSpeedChannel then
       tempUnableCreate:SetShow(true)
-      -- DECOMPILER ERROR at PC541: Confused about usage of register: R27 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC609: Confused about usage of register: R29 in 'UnsetPending'
 
       ;
       (isSpeedServer[worldIndex])[index1] = idx
@@ -657,43 +680,51 @@ Panel_SelectServer_ReCreateChannelCtrl = function(worldIndex)
       index1 = index1 + 1
     else
       tempUnableCreate:SetShow(false)
-      -- DECOMPILER ERROR at PC552: Confused about usage of register: R27 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC620: Confused about usage of register: R29 in 'UnsetPending'
 
       ;
       (isNotSpeedServer[worldIndex])[index2] = idx
       index2 = index2 + 1
     end
-    -- DECOMPILER ERROR at PC558: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC626: Confused about usage of register: R29 in 'UnsetPending'
 
     ;
     ((_worldServerCtrls[worldIndex])._channelCtrls)[idx] = {}
-    -- DECOMPILER ERROR at PC563: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC631: Confused about usage of register: R29 in 'UnsetPending'
 
     ;
     (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._bgStatic = tempBG
-    -- DECOMPILER ERROR at PC568: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC636: Confused about usage of register: R29 in 'UnsetPending'
 
     ;
     (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._nameText = tempName
-    -- DECOMPILER ERROR at PC573: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC641: Confused about usage of register: R29 in 'UnsetPending'
+
+    ;
+    (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._warIcon = tempWar
+    -- DECOMPILER ERROR at PC646: Confused about usage of register: R29 in 'UnsetPending'
 
     ;
     (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._statusText = tempStatus
-    -- DECOMPILER ERROR at PC578: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC651: Confused about usage of register: R29 in 'UnsetPending'
 
     ;
     (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._enterBtn = tempBtn
-    -- DECOMPILER ERROR at PC583: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC656: Confused about usage of register: R29 in 'UnsetPending'
 
     ;
     (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._changeChannel = tempChgChannel
-    -- DECOMPILER ERROR at PC588: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC661: Confused about usage of register: R29 in 'UnsetPending'
 
     ;
     (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._radioBtnMain = tempCheckMainServer
+    -- DECOMPILER ERROR at PC666: Confused about usage of register: R29 in 'UnsetPending'
+
+    ;
+    (((_worldServerCtrls[worldIndex])._channelCtrls)[idx])._mainServerSQ = tempCheckMainServerSQ
   end
   for idx = 0, index2 - 1 do
-    -- DECOMPILER ERROR at PC600: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC678: Confused about usage of register: R13 in 'UnsetPending'
 
     (isSpeedServer[worldIndex])[index1 + idx] = (isNotSpeedServer[worldIndex])[idx]
   end
@@ -703,15 +734,16 @@ end
 local delayTime = 1
 local serverSelectDeltaTime = 0
 Panel_SelectServer_Delta = function(deltaTime)
-  -- function num : 0_7 , upvalues : serverSelectDeltaTime, delayTime, mainServerText, _worldServerCtrls, isRadioBtnShow
+  -- function num : 0_7 , upvalues : serverSelectDeltaTime, delayTime, mainServerText, txt_EnterLastJoinServer, _worldServerCtrls, isRadioBtnShow
   serverSelectDeltaTime = serverSelectDeltaTime + deltaTime
   if delayTime <= serverSelectDeltaTime then
     local serverCount = getGameWorldServerDataCount()
     local temporaryWrapper = getTemporaryInformationWrapper()
     mainServerText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_NOMAINSERVER"))
+    txt_EnterLastJoinServer:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_BTN_LASTJOINSERVER"))
     for index = 0, serverCount - 1 do
-      local worldServerData = getGameWorldServerDataByIndex(R8_PC25)
-      R8_PC25 = worldServerData._restrictedServerNo
+      local worldServerData = getGameWorldServerDataByIndex(R8_PC33)
+      R8_PC33 = worldServerData._restrictedServerNo
       local restrictedServerNo = nil
       local changeChannelTime = getChannelMoveableRemainTime(worldServerData._worldNo)
       changeChannelTime = changeChannelTime - toInt64(0, 20)
@@ -719,11 +751,11 @@ Panel_SelectServer_Delta = function(deltaTime)
       local changeRealChannelTime = convertStringFromDatetime(changeChannelTime)
       local changeMoveChannelTime = convertStringFromDatetime(changeMoveChannel)
       for idx = 0, (_worldServerCtrls[index])._channelCount - 1 do
-        local serverData = getGameChannelServerDataByIndex(R18_PC54, idx)
+        local serverData = getGameChannelServerDataByIndex(R18_PC62, idx)
         if serverData == nil then
           break
         end
-        R18_PC54 = serverData._isSiegeBeing
+        R18_PC62 = serverData._isSiegeBeing
         local isBeingWar = nil
         local isVillageStart = serverData._isVillageSiege
         local isAdmission = true
@@ -771,20 +803,39 @@ Panel_SelectServer_Delta = function(deltaTime)
           channelName = channelName .. " " .. getDotIp(serverData) .. admissionDesc
         elseif isBeingWar then
           if isVillageStart then
-            channelName = channelName .. " " .. admissionDesc .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_SERVERSELECT_LOCALWAR_BEING")
+            channelName = channelName .. " " .. admissionDesc
+            ;
+            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_On", "ServerSelect_Simpletooltip(true, 0, " .. R29_PC195 .. ", " .. idx .. ")")
+            ;
+            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_Out", "ServerSelect_Simpletooltip(false)")
           else
-            channelName = channelName .. " " .. admissionDesc .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_SERVERSELECT_TERRITORYWAR_BEING")
+            channelName = channelName .. " " .. admissionDesc
+            ;
+            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_On", "ServerSelect_Simpletooltip(true, 1, " .. R29_PC195 .. ", " .. idx .. ")")
+            ;
+            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_Out", "ServerSelect_Simpletooltip(false)")
           end
+          ;
+          ((((_worldServerCtrls[index])._channelCtrls)[idx])._warIcon):SetShow(true)
         else
+          ((((_worldServerCtrls[index])._channelCtrls)[idx])._warIcon):SetShow(false)
           channelName = channelName .. " " .. admissionDesc
+          ;
+          ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_On", "")
         end
         ;
         ((((_worldServerCtrls[index])._channelCtrls)[idx])._nameText):SetText(channelName)
+        ;
+        ((((_worldServerCtrls[index])._channelCtrls)[idx])._warIcon):SetPosX(235)
+        ;
+        ((((_worldServerCtrls[index])._channelCtrls)[idx])._warIcon):SetPosY(((((_worldServerCtrls[index])._channelCtrls)[idx])._nameText):GetPosY())
         if isLoginIDShow() == true then
           if isAdmission then
             ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
             ;
             ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isAdmission or isRadioBtnShow)
+            ;
+            ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isAdmission or isRadioBtnShow)
             if serverData._isSpeedChannel then
               if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
                 if isTempShow then
@@ -792,51 +843,98 @@ Panel_SelectServer_Delta = function(deltaTime)
                   ;
                   ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isTempShow or isRadioBtnShow)
                   ;
+                  ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isTempShow or isRadioBtnShow)
+                  ;
                   ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(false)
                   ;
                   ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(false)
-                  if isTempShow then
-                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
-                    ;
-                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isTempShow or isRadioBtnShow)
-                    ;
-                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(not isTempShow)
-                    if busyState == 0 then
-                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(false)
-                    end
-                    ;
-                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_CHANGECHANNEL", "changeRealChannelTime", changeRealChannelTime))
-                    do
-                      local mainServerNo = isMainServerCheck()
-                      if mainServerNo and serverData._serverNo == mainServerNo then
-                        mainServerText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SETMAINSERVER", "serverName", tostring(getChannelName(worldServerData._worldNo, serverData._serverNo))))
+                  ;
+                  ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(false)
+                  if serverData._isBalanceChannel then
+                    if ToClient_isAccessableBalanceChannel() then
+                      if isTempShow then
+                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
+                        ;
+                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isTempShow or isRadioBtnShow)
+                        ;
+                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isTempShow or isRadioBtnShow)
+                        ;
+                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(false)
+                        ;
+                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(false)
+                        ;
+                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(false)
+                        if isTempShow then
+                          ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
+                          ;
+                          ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isTempShow or isRadioBtnShow)
+                          ;
+                          ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isTempShow or isRadioBtnShow)
+                          ;
+                          ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(not isTempShow)
+                          if busyState == 0 then
+                            ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(false)
+                          end
+                          -- DECOMPILER ERROR at PC516: Overwrote pending register: R29 in 'AssignReg'
+
+                          ;
+                          ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetText(PAGetStringParam1(Defines.StringSheet_GAME, R29_PC195, "changeRealChannelTime", changeRealChannelTime))
+                          local mainServerNo = isMainServerCheck()
+                          -- DECOMPILER ERROR at PC531: Overwrote pending register: R29 in 'AssignReg'
+
+                          -- DECOMPILER ERROR at PC532: Overwrote pending register: R29 in 'AssignReg'
+
+                          if mainServerNo and serverData._serverNo == mainServerNo then
+                            mainServerText:SetText(PAGetStringParam1(R29_PC195, "LUA_SERVERSELECT_SETMAINSERVER", "serverName", tostring(getChannelName(worldServerData._worldNo, serverData._serverNo))))
+                          end
+                          do
+                            local lastServerNo = temporaryWrapper:getLastServerNo()
+                            if getChannelName(worldServerData._worldNo, lastServerNo) == nil then
+                              txt_EnterLastJoinServer:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_BTN_LASTJOINSERVER"))
+                            else
+                              txt_EnterLastJoinServer:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_LASTJOINSERVER_NUMBER", "lastJoinServer", tostring(getChannelName(worldServerData._worldNo, lastServerNo))))
+                            end
+                            ;
+                            ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):addInputEvent("Mouse_LUp", "ServerList_SetMainServer(" .. R31_PC587 .. "," .. idx .. ")")
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                            -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out IF_STMT
+
+                          end
+                        end
                       end
-                      ;
-                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):addInputEvent("Mouse_LUp", "ServerList_SetMainServer(" .. R30_PC364 .. "," .. idx .. ")")
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                      -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_STMT
-
                     end
                   end
                 end
@@ -848,7 +946,7 @@ Panel_SelectServer_Delta = function(deltaTime)
     end
     serverSelectDeltaTime = 0
   end
-  -- DECOMPILER ERROR: 22 unprocessed JMP targets
+  -- DECOMPILER ERROR: 33 unprocessed JMP targets
 end
 
 Panel_SelectServer_ShowChannelCtrls = function(worldIndex)
@@ -884,7 +982,7 @@ Panel_SelectServer_RePositioningCtrls = function()
     posY = posY + varyY
     SELECT_SERVER_BG_TEXT:SetSize(SELECT_SERVER_BG_TEXT:GetSizeX(), getScreenSizeY() - 20)
   end
-  FRAME_SERVERLIST:SetSize(SELECT_SERVER_BG_TEXT:GetSizeX() - 40, SELECT_SERVER_BG_TEXT:GetSizeY() - 60 - 110)
+  FRAME_SERVERLIST:SetSize(SELECT_SERVER_BG_TEXT:GetSizeX() - 40, SELECT_SERVER_BG_TEXT:GetSizeY() - 60 - 130)
   FRAMEContents_SERVERLIST:SetSize(SELECT_SERVER_BG_TEXT:GetSizeX() - 40, posY)
   FRAME_Scroll:SetSize(FRAME_Scroll:GetSizeX(), SELECT_SERVER_BG_TEXT:GetSizeY() - 60 - 110)
   FRAME_SERVERLIST:UpdateContentScroll()
@@ -1155,8 +1253,28 @@ ServerList_SetMainServer = function(worldIndex, serverIndex)
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
+ServerSelect_Simpletooltip = function(isShow, tipType, index, idx)
+  -- function num : 0_29 , upvalues : _worldServerCtrls
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  local warName = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_LOCALWAR")
+  if tipType == 0 then
+    warName = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_LOCALWAR")
+  else
+    if tipType == 1 then
+      warName = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_TERRITORYWAR")
+    end
+  end
+  name = warName
+  control = (((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic
+  TooltipSimple_Show(control, name, desc)
+end
+
 ServerList_EnterMainServer = function()
-  -- function num : 0_29 , upvalues : _selectWorldIndex, _worldServerCtrls
+  -- function num : 0_30 , upvalues : _selectWorldIndex, _worldServerCtrls
   if not isMainServerCheck() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_MAINSERVERALERT"))
     return 
@@ -1175,8 +1293,36 @@ ServerList_EnterMainServer = function()
   end
 end
 
+ServerList_LastJoinServer = function()
+  -- function num : 0_31 , upvalues : _selectWorldIndex, _worldServerCtrls
+  local tempWrapper = getTemporaryInformationWrapper()
+  local lastJoinServerNo = tempWrapper:getLastServerNo()
+  if lastJoinServerNo == 1 then
+    return 
+  end
+  local worldServerData = getGameWorldServerDataByIndex(_selectWorldIndex)
+  local channelCount = getGameChannelServerDataCount(worldServerData._worldNo)
+  for idx = 0, (_worldServerCtrls[_selectWorldIndex])._channelCount - 1 do
+    local serverData = getGameChannelServerDataByIndex(_selectWorldIndex, idx)
+    if serverData == nil then
+      break
+    end
+    if serverData._serverNo == lastJoinServerNo then
+      Panel_Lobby_function_EnterChannel(idx)
+      break
+    end
+  end
+end
+
+ServerList_RandomServerJoin = function()
+  -- function num : 0_32 , upvalues : _selectWorldIndex
+  selectRandomServer(_selectWorldIndex)
+end
+
 btn_SetMainServer:addInputEvent("Mouse_LUp", "ServerList_ToggleRadioBtn()")
 btn_EnterMainServer:addInputEvent("Mouse_LUp", "ServerList_EnterMainServer()")
+btn_EnterLastJoinServer:addInputEvent("Mouse_LUp", "ServerList_LastJoinServer()")
+btn_RandomJoinServer:addInputEvent("Mouse_LUp", "ServerList_RandomServerJoin()")
 registerEvent("EventChangeLobbyStageToServerSelect", "StartUp_Panel_SelectServer")
 registerEvent("EventUpdateServerInformationForServerSelect", "EventUpdateServerInformation_SelectServer")
 Panel_ServerSelect:RegisterUpdateFunc("Panel_ServerSelect_Update")

@@ -58,19 +58,25 @@ Panel_SkillTooltip_Hide = function()
   -- function num : 0_1 , upvalues : ToolTipSkillUI, currMovieName, currentTooltip, ToolTipSkillUI_learning
   if Panel_Tooltip_Skill:IsShow() then
     Panel_Tooltip_Skill:SetShow(false, false)
+    if Panel_Tooltip_Skill:IsUISubApp() then
+      Panel_Tooltip_Skill:CloseUISubApp()
+    end
     ;
     (ToolTipSkillUI.skill_Movie):TriggerEvent("StopMovie", "test")
     currMovieName = nil
-    -- DECOMPILER ERROR at PC19: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC27: Confused about usage of register: R0 in 'UnsetPending'
 
     currentTooltip.slotNo = -1
   end
   if Panel_Tooltip_Skill_forLearning:IsShow() then
     Panel_Tooltip_Skill_forLearning:SetShow(false, false)
+    if Panel_Tooltip_Skill_forLearning:IsUISubApp() then
+      Panel_Tooltip_Skill_forLearning:CloseUISubApp()
+    end
     ;
     (ToolTipSkillUI_learning.skill_Movie):TriggerEvent("StopMovie", "test")
     currMovieName = nil
-    -- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
 
     currentTooltip.slotNo = -1
   end
@@ -186,31 +192,52 @@ Panel_SkillTooltip_Show = function(slotNo, isShowNextLevel, SlotType, isReserveS
         posY = posY + yDiff
       end
     end
-    if Panel_Tooltip_Skill:GetShow() then
-      if isLeft then
-        posX = posX - tooltipSize.width
+    local isUISubAppMode = false
+    do
+      if positionData ~= nil then
+        local parentPanel = positionData:GetParentPanel()
+        if parentPanel ~= nil and parentPanel:IsUISubApp() then
+          posX = parentPanel:GetScreenParentPosX()
+          posY = parentPanel:GetScreenParentPosY()
+          tooltipLearningSize.width = Panel_Tooltip_Skill_forLearning:GetSizeX()
+          tooltipLearningSize.height = Panel_Tooltip_Skill_forLearning:GetSizeY()
+          tooltipSize.width = parentPanel:GetSizeX()
+          tooltipSize.height = parentPanel:GetSizeY()
+          isUISubAppMode = true
+        end
       end
-      local yTmp = posY
-      if isTop then
-        yTmp = yTmp - tooltipSize.height
+      if Panel_Tooltip_Skill:GetShow() then
+        if isLeft then
+          posX = posX - tooltipSize.width
+        end
+        local yTmp = posY
+        if isTop then
+          yTmp = yTmp - tooltipSize.height
+        end
+        Panel_Tooltip_Skill:SetPosX(posX)
+        Panel_Tooltip_Skill:SetPosY(yTmp)
+        if isUISubAppMode then
+          Panel_Tooltip_Skill:OpenUISubApp()
+        end
       end
-      Panel_Tooltip_Skill:SetPosX(posX)
-      Panel_Tooltip_Skill:SetPosY(yTmp)
+      if Panel_Tooltip_Skill_forLearning:GetShow() then
+        if isLeft then
+          posX = posX - tooltipLearningSize.width
+        else
+          posX = posX + tooltipSize.width
+        end
+        local yTmp = posY
+        if isTop then
+          yTmp = yTmp - tooltipLearningSize.height
+        end
+        Panel_Tooltip_Skill_forLearning:SetPosX(posX)
+        Panel_Tooltip_Skill_forLearning:SetPosY(yTmp)
+        if isUISubAppMode then
+          Panel_Tooltip_Skill_forLearning:OpenUISubApp()
+        end
+      end
+      -- DECOMPILER ERROR: 20 unprocessed JMP targets
     end
-    if Panel_Tooltip_Skill_forLearning:GetShow() then
-      if isLeft then
-        posX = posX - tooltipLearningSize.width
-      else
-        posX = posX + tooltipSize.width
-      end
-      local yTmp = posY
-      if isTop then
-        yTmp = yTmp - tooltipLearningSize.height
-      end
-      Panel_Tooltip_Skill_forLearning:SetPosX(posX)
-      Panel_Tooltip_Skill_forLearning:SetPosY(yTmp)
-    end
-    -- DECOMPILER ERROR: 19 unprocessed JMP targets
   end
 end
 

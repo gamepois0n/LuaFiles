@@ -13,6 +13,7 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local isContentsStallionEnable = ToClient_IsContentsGroupOpen("243")
 local isContentsNineTierEnable = ToClient_IsContentsGroupOpen("80")
+local isContentsEightTierEnable = ToClient_IsContentsGroupOpen("29")
 StableMarketShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV, UI_color
   local isShow = Panel_Window_StableMarket:IsShow()
@@ -1027,9 +1028,12 @@ StableMarket_Close = function()
 end
 
 StableMarket_CreateFilter = function()
-  -- function num : 0_24 , upvalues : stableMarket, isContentsNineTierEnable, stableServantGen
+  -- function num : 0_24 , upvalues : stableMarket, isContentsEightTierEnable, isContentsNineTierEnable, stableServantGen
   local self = stableMarket
-  local tierCount = 8
+  local tierCount = 7
+  if isContentsEightTierEnable then
+    tierCount = 8
+  end
   if isContentsNineTierEnable then
     tierCount = 9
   end

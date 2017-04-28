@@ -73,38 +73,20 @@ local _uiWindowTitle = (UI.getChildControl)(Panel_Alchemy, "StaticText_Title")
 local _uiCircleName = (UI.getChildControl)(Panel_Alchemy, "StaticText_CircleName")
 local _uiAlchemyIcon = (UI.getChildControl)(Panel_Alchemy, "Static_AlchemyIcon")
 local _frameAlchemy = (UI.getChildControl)(Panel_Alchemy, "Frame_Alchemy")
-local _frameScroll = (UI.getChildControl)(_frameAlchemy, "VerticalScroll")
 local _frameContent = (UI.getChildControl)(_frameAlchemy, "Frame_1_Content")
 local _uiAlchemyDesc = (UI.getChildControl)(_frameContent, "StaticText_AlchemyDesc")
-local _uiListBG = (UI.getChildControl)(Panel_Alchemy, "Static_ListBG")
 local _uiNotice1 = (UI.getChildControl)(Panel_Alchemy, "StaticText_description1")
-local _uiListScroll = (UI.getChildControl)(Panel_Alchemy, "Scroll_Bar")
-;
-(_uiListScroll:GetControlButton()):addInputEvent("Mouse_LPress", "AlchemyList_ScrollEvent()")
-local _uiListSelect = (UI.getChildControl)(Panel_Alchemy, "Static_SelectList")
-_uiListSelect:SetShow(false)
-_uiListSelect:SetIgnore(true)
-local TEPLATE_KNOWLEDGE_TEXT = (UI.getChildControl)(Panel_Alchemy, "StaticText_AlchemyRecipe")
-TEPLATE_KNOWLEDGE_TEXT:SetShow(false)
+local list2 = (UI.getChildControl)(Panel_Alchemy, "List2_AlchemyRecipe")
 local KNOWLEDGE_TEXT_COUNT = 13
 local _uiListText = {}
-for index = 0, KNOWLEDGE_TEXT_COUNT - 1 do
-  local tempText = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, _uiListBG, "StaticText_AlchemyRecipe_" .. index)
-  CopyBaseProperty(TEPLATE_KNOWLEDGE_TEXT, tempText)
-  tempText:SetPosX(15)
-  tempText:SetPosY(15 + index * tempText:GetSizeY())
-  tempText:addInputEvent("Mouse_UpScroll", "AlchemyList_ScrollEvent( true )")
-  tempText:addInputEvent("Mouse_DownScroll", "AlchemyList_ScrollEvent( false )")
-  tempText:addInputEvent("Mouse_LUp", "AlchemyList_SelectKnowledge(" .. index .. ")")
-  tempText:SetIgnore(false)
-  _uiListText[index] = tempText
-end
 local COOK_MENTALTHEMEKEY = 30010
 local COOK_NORMAL_MENTALTHEMEKEY = 28001
 local COOK_SPECIAL_MENTALTHEMEKEY = 28002
 local AlCHEMY_MENTALTHEMEKEY = 31000
 local _currentMentalKey = 0
 local _startKnowledgeIndex = 0
+local prevSelectIndex = -1
+local selectIndex = -1
 AlchemyShowAni = function()
   -- function num : 0_0 , upvalues : IM, _aniSlotParent, UI_ANI_ADV
   (UIAni.fadeInSCR_Down)(Panel_Alchemy)
@@ -166,12 +148,12 @@ AlchemyItemSlotAni = function()
 end
 
 Alchemy_Show = function(_isCook)
-  -- function num : 0_3 , upvalues : _startKnowledgeIndex, _uiListScroll, _frameAlchemy, _uiListSelect, _currentMentalKey, _uiNotice1, UI_TM, _uiAlchemyDesc, _buttonQuestion, _frameScroll, _frameContent
+  -- function num : 0_3 , upvalues : _startKnowledgeIndex, _currentMentalKey, _uiNotice1, UI_TM, _uiAlchemyDesc, _buttonQuestion, _frameContent
+  if Panel_Alchemy:GetShow() then
+    return 
+  end
   Inventory_SetFunctor(Alchemy_InvenFilter, Alchemy_PushItemFromInventory, Alchemy_Close, nil)
   _startKnowledgeIndex = 0
-  _uiListScroll:SetControlPos(0)
-  _frameAlchemy:UpdateContentScroll()
-  _uiListSelect:SetShow(false)
   RequestAlchemy_clear()
   Alchemy_UpdateSlot()
   ReconstructionAlchemyKnowledge(_currentMentalKey)
@@ -202,7 +184,6 @@ Alchemy_Show = function(_isCook)
     audioPostEvent_SystemUi(12, 11)
   end
   RecnetCookSlotClear()
-  _frameScroll:SetShow(false)
   _frameContent:SetSize(_frameContent:GetSizeX(), _uiAlchemyDesc:GetSizeY())
 end
 
@@ -219,15 +200,20 @@ Alchemy_InvenFilter = function(slotNo, itemWrapper)
 end
 
 Alchemy_Close = function()
-  -- function num : 0_5 , upvalues : _slotCount, _slotList
-  if Panel_Alchemy:IsShow() then
-    local slotCount = RequestAlchemy_getSlotCount()
-    for index = 0, _slotCount - 1 do
-      ((_slotList[index]).icon):SetShow(false)
+  -- function num : 0_5 , upvalues : _slotCount, _slotList, list2, selectIndex
+  do
+    if Panel_Alchemy:IsShow() then
+      local slotCount = RequestAlchemy_getSlotCount()
+      for index = 0, _slotCount - 1 do
+        ((_slotList[index]).icon):SetShow(false)
+      end
+      Panel_Alchemy:SetShow(false, true)
+      Panel_Window_Inventory:SetShow(false, true)
+      RecentCookClose()
     end
-    Panel_Alchemy:SetShow(false, true)
-    Panel_Window_Inventory:SetShow(false, true)
-    RecentCookClose()
+    ;
+    (list2:getElementManager()):clearKey()
+    selectIndex = -1
   end
 end
 
@@ -306,90 +292,46 @@ Alchemy_UpdateSlot = function()
 end
 
 Alchemy_UpdateKnowledge = function()
-  -- function num : 0_11 , upvalues : KNOWLEDGE_TEXT_COUNT, _uiListScroll, _startKnowledgeIndex, _uiListText, UI_color
+  -- function num : 0_11 , upvalues : _startKnowledgeIndex, list2
   local count = getCountAlchemyKnowledge()
-  if KNOWLEDGE_TEXT_COUNT < count then
-    _uiListScroll:SetEnable(true)
-    _uiListScroll:SetMonoTone(false)
-  else
-    _uiListScroll:SetEnable(false)
-    _uiListScroll:SetMonoTone(true)
-  end
-  local endIndex = _startKnowledgeIndex + (KNOWLEDGE_TEXT_COUNT - 1)
-  if count - 1 < endIndex then
-    endIndex = count - 1
-  end
-  local ctrlIndex = 0
-  for index = _startKnowledgeIndex, endIndex do
+  for index = _startKnowledgeIndex, count - 1 do
     local mentalCardStaticWrapper = getAlchemyKnowledge(index)
     if mentalCardStaticWrapper ~= nil then
-      local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
-      if isLearn == true then
-        (_uiListText[ctrlIndex]):SetFontColor(UI_color.C_FF84FFF5)
-        ;
-        (_uiListText[ctrlIndex]):SetText(mentalCardStaticWrapper:getName())
-      else
-        ;
-        (_uiListText[ctrlIndex]):SetFontColor(UI_color.C_FF888888)
-        ;
-        (_uiListText[ctrlIndex]):SetText("??? ( " .. mentalCardStaticWrapper:getKeyword() .. " )")
-      end
-      ;
-      (_uiListText[ctrlIndex]):SetShow(true)
-    else
-      do
-        do
-          ;
-          (_uiListText[ctrlIndex]):SetShow(false)
-          ctrlIndex = ctrlIndex + 1
-          -- DECOMPILER ERROR at PC86: LeaveBlock: unexpected jumping out DO_STMT
-
-          -- DECOMPILER ERROR at PC86: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-          -- DECOMPILER ERROR at PC86: LeaveBlock: unexpected jumping out IF_STMT
-
-        end
-      end
+      (list2:getElementManager()):pushKey(toInt64(0, index))
     end
   end
 end
 
 AlchemyList_SelectKnowledge = function(index)
-  -- function num : 0_12 , upvalues : _uiListBG, _uiListText, _uiListSelect, _startKnowledgeIndex, _uiAlchemyDesc, _uiAlchemyIcon, _frameScroll, _frameContent, UI_TM
-  local posX = _uiListBG:GetPosX() + (_uiListText[index]):GetPosX()
-  local posY = _uiListBG:GetPosY() + (_uiListText[index]):GetPosY()
-  _uiListSelect:SetPosX(posX - 15)
-  _uiListSelect:SetPosY(posY - 4)
-  _uiListSelect:SetShow(true)
+  -- function num : 0_12 , upvalues : _startKnowledgeIndex, _uiAlchemyDesc, _uiAlchemyIcon, _frameContent, UI_TM, selectIndex, list2
   local knowledgeIndex = _startKnowledgeIndex + index
   local mentalCardStaticWrapper = getAlchemyKnowledge(knowledgeIndex)
-  if mentalCardStaticWrapper ~= nil then
-    local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
-    if isLearn == true then
-      _uiAlchemyDesc:SetText(mentalCardStaticWrapper:getDesc())
-      _uiAlchemyIcon:ChangeTextureInfoName(mentalCardStaticWrapper:getImagePath())
-      if _uiAlchemyDesc:GetSizeY() > 110 then
-        _frameScroll:SetShow(true)
+  do
+    if mentalCardStaticWrapper ~= nil then
+      local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
+      if isLearn == true then
+        _uiAlchemyDesc:SetText(mentalCardStaticWrapper:getDesc())
+        _uiAlchemyIcon:ChangeTextureInfoName(mentalCardStaticWrapper:getImagePath())
+        _frameContent:SetSize(_frameContent:GetSizeX(), _uiAlchemyDesc:GetSizeY())
+        alchemy_RequestRecord(knowledgeIndex)
+        Panel_RecentCook:SetShow(true)
+        Panel_RecentCook:SetPosX(Panel_Alchemy:GetSizeX() + Panel_Alchemy:GetPosX() - 25)
+        Panel_RecentCook:SetPosY(Panel_Alchemy:GetPosY() + 25)
+        Panel_RecentCook:ComputePos()
+        RecnetCookSlotClear()
       else
-        _frameScroll:SetShow(false)
+        _uiAlchemyDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+        _uiAlchemyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_THISKNOWLEDGE_NOT_YET"))
+        _uiAlchemyIcon:ChangeTextureInfoName("UI_Artwork/Unkown_Intelligence.dds")
+        _frameContent:SetSize(_frameContent:GetSizeX(), _uiAlchemyDesc:GetSizeY())
+        Panel_RecentCook:SetShow(false)
+        RecnetCookSlotClear()
       end
-      _frameScroll:SetControlPos(0)
-      _frameContent:SetSize(_frameContent:GetSizeX(), _uiAlchemyDesc:GetSizeY())
-      alchemy_RequestRecord(knowledgeIndex)
-      Panel_RecentCook:SetShow(true)
-      Panel_RecentCook:SetPosX(Panel_Alchemy:GetSizeX() + Panel_Alchemy:GetPosX() - 25)
-      Panel_RecentCook:SetPosY(Panel_Alchemy:GetPosY() + 25)
-      Panel_RecentCook:ComputePos()
-      RecnetCookSlotClear()
-    else
-      _uiAlchemyDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-      _uiAlchemyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_THISKNOWLEDGE_NOT_YET"))
-      _uiAlchemyIcon:ChangeTextureInfoName("UI_Artwork/Unkown_Intelligence.dds")
-      _frameScroll:SetShow(false)
-      _frameContent:SetSize(_frameContent:GetSizeX(), _uiAlchemyDesc:GetSizeY())
-      Panel_RecentCook:SetShow(false)
-      RecnetCookSlotClear()
     end
+    local prevSelectIndex = selectIndex
+    selectIndex = index
+    list2:requestUpdateByKey(toInt64(0, index))
+    list2:requestUpdateByKey(toInt64(0, prevSelectIndex))
   end
 end
 
@@ -400,46 +342,9 @@ Alchemy_MaterialSlot_Mouse_RUp = function(index)
   Panel_Tooltip_Item_hideTooltip()
 end
 
-AlchemyList_ScrollEvent = function(isUp)
-  -- function num : 0_14 , upvalues : _uiListScroll, KNOWLEDGE_TEXT_COUNT, _startKnowledgeIndex
-  if _uiListScroll:IsEnable() == false then
-    return 
-  end
-  local count = getCountAlchemyKnowledge()
-  if count == 0 or count <= KNOWLEDGE_TEXT_COUNT then
-    return 
-  end
-  local maxStartSlotCount = count - KNOWLEDGE_TEXT_COUNT
-  local divideScroll = 1 / maxStartSlotCount
-  if isUp ~= nil then
-    if isUp == true then
-      _startKnowledgeIndex = _startKnowledgeIndex - 1
-      _uiListScroll:ControlButtonUp()
-    else
-      _startKnowledgeIndex = _startKnowledgeIndex + 1
-      _uiListScroll:ControlButtonDown()
-    end
-    if _startKnowledgeIndex < 0 then
-      _startKnowledgeIndex = 0
-    end
-    if maxStartSlotCount < _startKnowledgeIndex then
-      _startKnowledgeIndex = maxStartSlotCount
-    end
-  else
-    local currentScrollPos = _uiListScroll:GetControlPos()
-    local startSlotIndexString = (string.format)("%.0f", currentScrollPos / divideScroll)
-    _startKnowledgeIndex = tonumber(startSlotIndexString)
-  end
-  do
-    _uiListScroll:SetControlPos(divideScroll * _startKnowledgeIndex)
-    AlchemyKnowledge_ClearList()
-    Alchemy_UpdateKnowledge()
-  end
-end
-
 local _isCook = false
 ResponseShowAlchemy = function(isCook, usingInstallationType)
-  -- function num : 0_15 , upvalues : _isCook, _aniItemSlot, _cookBG_Back, _cookBG_Front, _alchemyBG_Back, _alchemyBG_Front, _aniSlotParent, recentCookTitle, _uiButtonStartAlchemy, _currentMentalKey, AlCHEMY_MENTALTHEMEKEY, COOK_MENTALTHEMEKEY, _slotConfig
+  -- function num : 0_14 , upvalues : _isCook, _aniItemSlot, _cookBG_Back, _cookBG_Front, _alchemyBG_Back, _alchemyBG_Front, _aniSlotParent, recentCookTitle, _uiButtonStartAlchemy, _currentMentalKey, AlCHEMY_MENTALTHEMEKEY, COOK_MENTALTHEMEKEY, _slotConfig
   _isCook = isCook
   if _aniItemSlot ~= nil then
     _aniItemSlot:destroyChild()
@@ -480,7 +385,7 @@ ResponseShowAlchemy = function(isCook, usingInstallationType)
 end
 
 ResponseAlchemyResultList = function(itemDynamicListWrapper)
-  -- function num : 0_16
+  -- function num : 0_15
   local size = itemDynamicListWrapper:getSize()
   for index = 0, size - 1 do
     local itemDynamicInformationWrapper = itemDynamicListWrapper:getElement(index)
@@ -490,7 +395,7 @@ ResponseAlchemyResultList = function(itemDynamicListWrapper)
 end
 
 FromClient_AlchemyFail = function(hint, alchemyType, strErr, bShowMessageBox)
-  -- function num : 0_17 , upvalues : IM
+  -- function num : 0_16 , upvalues : IM
   if hint == 1 then
     local msg = {main = PAGetString(Defines.StringSheet_GAME, "ALCHEMYFAIL_REASON_1"), sub = ""}
     if alchemyType == 0 then
@@ -553,7 +458,7 @@ FromClient_AlchemyFail = function(hint, alchemyType, strErr, bShowMessageBox)
 end
 
 MassProduction_Continue = function()
-  -- function num : 0_18 , upvalues : _isCook, IM
+  -- function num : 0_17 , upvalues : _isCook, IM
   local s64_doAlchemyCount = ToClient_GetDoingAlchemyCount()
   RequestAlchemy_AlchemyStart(_isCook, s64_doAlchemyCount)
   if getSelfPlayer() == nil then
@@ -576,14 +481,14 @@ MassProduction_Continue = function()
 end
 
 MassProduction_Cancel = function()
-  -- function num : 0_19 , upvalues : IM
+  -- function num : 0_18 , upvalues : IM
   ToClient_CancelAlchemy()
   ;
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 Alchemy_Start = function()
-  -- function num : 0_20 , upvalues : _isCook
+  -- function num : 0_19 , upvalues : _isCook
   local slotCount = RequestAlchemy_getSlotCount()
   if slotCount <= 0 then
     return 
@@ -608,7 +513,7 @@ Alchemy_Start = function()
 end
 
 Alchemy_MassProductionMSG = function()
-  -- function num : 0_21 , upvalues : _isCook
+  -- function num : 0_20 , upvalues : _isCook
   local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
   if _isCook then
     messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MSGBOX_COOK_SEQUENCE_MSG")
@@ -622,7 +527,7 @@ end
 
 local s64_maxCount = (Defines.s64_const).s64_0
 Alchemy_MassProduction = function()
-  -- function num : 0_22 , upvalues : s64_maxCount
+  -- function num : 0_21 , upvalues : s64_maxCount
   local slotCount = RequestAlchemy_getSlotCount()
   if slotCount <= 0 then
     return 
@@ -641,7 +546,7 @@ Alchemy_MassProduction = function()
 end
 
 Alchemy_MassProductionNumberPad_ConfirmBtn = function(inputNumber)
-  -- function num : 0_23 , upvalues : s64_maxCount, _isCook
+  -- function num : 0_22 , upvalues : s64_maxCount, _isCook
   if s64_maxCount < inputNumber then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_STREAMMAKECANTCOUNT"))
     return 
@@ -676,7 +581,7 @@ Alchemy_MassProductionNumberPad_ConfirmBtn = function(inputNumber)
 end
 
 Alchemy_Do = function()
-  -- function num : 0_24
+  -- function num : 0_23
   if checkAlchemyAction() == false then
     return 
   end
@@ -684,13 +589,12 @@ Alchemy_Do = function()
 end
 
 AlchemyKnowledge_ClearList = function()
-  -- function num : 0_25 , upvalues : KNOWLEDGE_TEXT_COUNT, _uiListText, _uiListBG, _uiAlchemyIcon, _isCook, _uiAlchemyDesc, _frameScroll, _frameContent, _uiListSelect
+  -- function num : 0_24 , upvalues : KNOWLEDGE_TEXT_COUNT, _uiListText, _uiAlchemyIcon, _isCook, _uiAlchemyDesc, _frameContent
   for index = 0, KNOWLEDGE_TEXT_COUNT - 1 do
     (_uiListText[index]):SetText("")
     ;
     (_uiListText[index]):SetShow(false)
   end
-  _uiListBG:SetShow(true)
   _uiAlchemyIcon:ReleaseTexture()
   _uiAlchemyIcon:SetShow(true)
   if _isCook then
@@ -698,15 +602,13 @@ AlchemyKnowledge_ClearList = function()
   else
     _uiAlchemyDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_WANTMORE_SELECT_ALCHEMYKNOWLEDGE"))
   end
-  _frameScroll:SetShow(false)
   _frameContent:SetSize(_frameContent:GetSizeX(), _uiAlchemyDesc:GetSizeY())
   _uiAlchemyDesc:SetShow(true)
-  _uiListSelect:SetShow(false)
 end
 
 local _tooltip_Index = nil
 Alchemy_Tooltip_Item_Show = function(index)
-  -- function num : 0_26 , upvalues : _tooltip_Index, _slotItemKey, _slotList
+  -- function num : 0_25 , upvalues : _tooltip_Index, _slotItemKey, _slotList
   _tooltip_Index = index
   local itemKey = _slotItemKey[index]
   if itemKey == nil then
@@ -718,7 +620,7 @@ Alchemy_Tooltip_Item_Show = function(index)
 end
 
 Alchemy_Tooltip_Item_Hide = function(index)
-  -- function num : 0_27 , upvalues : _tooltip_Index
+  -- function num : 0_26 , upvalues : _tooltip_Index
   if _tooltip_Index ~= index then
     return 
   end
@@ -728,7 +630,7 @@ end
 
 local _slotIconList = {}
 RecentCookInit = function()
-  -- function num : 0_28 , upvalues : RecentCook, _slotConfig
+  -- function num : 0_27 , upvalues : RecentCook, _slotConfig
   local self = RecentCook
   for listIdx = 0, self.recentCookCount - 1 do
     local recentCookList = {}
@@ -807,7 +709,7 @@ RecentCookInit = function()
 end
 
 RecnetCookSlotClear = function()
-  -- function num : 0_29 , upvalues : RecentCook
+  -- function num : 0_28 , upvalues : RecentCook
   local self = RecentCook
   for listIdx = 0, self.recentCookCount - 1 do
     local list = (self._listPool)[listIdx]
@@ -831,7 +733,7 @@ RecnetCookSlotClear = function()
 end
 
 RecentCookUpdate = function(mentalcardKey)
-  -- function num : 0_30 , upvalues : RecentCook
+  -- function num : 0_29 , upvalues : RecentCook
   local self = RecentCook
   for listIdx = 0, self.recentCookCount - 1 do
     local list = (self._listPool)[listIdx]
@@ -895,11 +797,11 @@ RecentCookUpdate = function(mentalcardKey)
 end
 
 RecentCookSetup = function(recipeCountIndex)
-  -- function num : 0_31 , upvalues : RecentCook, _slotList
+  -- function num : 0_30 , upvalues : RecentCook, _slotList
   local self = RecentCook
   local slotCount = RequestAlchemy_getSlotCount()
   local resetSlot = function()
-    -- function num : 0_31_0 , upvalues : slotCount, _slotList
+    -- function num : 0_30_0 , upvalues : slotCount, _slotList
     for index = slotCount - 1, 0, -1 do
       ((_slotList[index]).icon):SetShow(false)
       RequestAlchemy_PopMaterial(index)
@@ -955,7 +857,7 @@ RecentCookSetup = function(recipeCountIndex)
 end
 
 RecentCookItemToolTipShow = function(itemIndex, index)
-  -- function num : 0_32 , upvalues : RecentCook
+  -- function num : 0_31 , upvalues : RecentCook
   local self = RecentCook
   local AlchemyRecordWrapper = alchemy_GetRecord(index)
   local list = (self._listPool)[index]
@@ -966,23 +868,56 @@ RecentCookItemToolTipShow = function(itemIndex, index)
 end
 
 RecentCookItemToolTipHide = function()
-  -- function num : 0_33
+  -- function num : 0_32
   Panel_Tooltip_Item_hideTooltip()
 end
 
 RecentCookClose = function()
-  -- function num : 0_34
+  -- function num : 0_33
   Panel_RecentCook:SetShow(false)
   Panel_Tooltip_Item_hideTooltip()
 end
 
 RecentCook_registEventHandler = function()
-  -- function num : 0_35 , upvalues : recentCookClose
+  -- function num : 0_34 , upvalues : recentCookClose
   recentCookClose:addInputEvent("Mouse_LUp", "RecentCookClose()")
 end
 
+Alchemy_ListControlCreate = function(content, key)
+  -- function num : 0_35 , upvalues : selectIndex, UI_color
+  local index = Int64toInt32(key)
+  local recipe = (UI.getChildControl)(content, "StaticText_List2_AlchemyRecipe")
+  local selectList = (UI.getChildControl)(content, "Static_List2_SelectList")
+  local mentalCardStaticWrapper = getAlchemyKnowledge(index)
+  if selectIndex == index then
+    selectList:SetShow(true)
+  else
+    selectList:SetShow(false)
+  end
+  if mentalCardStaticWrapper ~= nil then
+    local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
+    if isLearn == true then
+      recipe:SetFontColor(UI_color.C_FF84FFF5)
+      recipe:SetText(mentalCardStaticWrapper:getName())
+    else
+      recipe:SetFontColor(UI_color.C_FF888888)
+      recipe:SetText("??? ( " .. mentalCardStaticWrapper:getKeyword() .. " )")
+    end
+    recipe:SetShow(true)
+    recipe:SetPosY(6)
+    recipe:addInputEvent("Mouse_LUp", "AlchemyList_SelectKnowledge( " .. index .. " )")
+  else
+    do
+      recipe:SetShow(false)
+    end
+  end
+end
+
 RecentCook_registMessageHandler = function()
-  -- function num : 0_36
+  -- function num : 0_36 , upvalues : list2
+  list2:changeAnimationSpeed(10)
+  list2:registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "Alchemy_ListControlCreate")
+  list2:createChildContent((CppEnums.PAUIList2ElementManagerType).list)
 end
 
 RecentCookInit()

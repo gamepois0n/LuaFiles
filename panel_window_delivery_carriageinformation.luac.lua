@@ -46,7 +46,6 @@ config = {slotCount = 4, slotStartX = 7, slotStartY = 37, slotGapY = 65, slotIco
 , 
 const = {deliveryProgressTypeRequest = 0, deliveryProgressTypeIng = 1, deliveryProgressTypeComplete = 2}
 , panel_Background = (UI.getChildControl)(Panel_Window_Delivery_CarriageInformation, "Static_Bakcground"), button_Close = (UI.getChildControl)(Panel_Window_Delivery_CarriageInformation, "Button_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_Delivery_CarriageInformation, "Button_Question"), empty_List = (UI.getChildControl)(Panel_Window_Delivery_CarriageInformation, "StaticText_Empty_List"), scroll = (UI.getChildControl)(Panel_Window_Delivery_CarriageInformation, "Scroll_1"), slots = (Array.new)(), startSlotNo = 0}
-local _slide = (UI.getChildControl)(Panel_Window_Delivery_Information, "Scroll_1")
 deliveryCarriageInformation.registMessageHandler = function(self)
   -- function num : 0_2
 end
@@ -226,7 +225,7 @@ DeliveryCarriageInformation_ScrollEvent = function(isScrollUp)
 end
 
 DeliveryCarriageInformationWindow_Open = function(objectID)
-  -- function num : 0_7 , upvalues : deliveryCarriageInformation, _slide
+  -- function num : 0_7 , upvalues : deliveryCarriageInformation
   if Panel_Window_Delivery_CarriageInformation:GetShow() then
     return 
   end
@@ -241,7 +240,6 @@ DeliveryCarriageInformationWindow_Open = function(objectID)
   self.startSlotNo = 0
   self.objectID = objectID
   self:updateSlot()
-  _slide:SetControlPos(0)
 end
 
 DeliveryCarriageInformationWindow_Close = function()

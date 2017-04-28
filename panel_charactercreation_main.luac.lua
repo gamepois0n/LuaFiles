@@ -46,6 +46,7 @@ local Button_Back = (UI.getChildControl)(Panel_CustomizationMain, "Button_Back")
 local Static_CharName = (UI.getChildControl)(Panel_CustomizationMain, "StaticText_CharacterName")
 local Edit_CharName = (UI.getChildControl)(Panel_CustomizationMain, "Edit_CharacterName")
 local btn_CharacterNameCreateRule = (UI.getChildControl)(Panel_CustomizationMain, "Button_CharacterNameCreateRule")
+local btn_RandomBeauty = (UI.getChildControl)(Panel_CustomizationMain, "Button_RandomBeauty")
 local Button_SaveCustomization = (UI.getChildControl)(Panel_CustomizationMain, "Button_SaveCustomization")
 local Button_LoadCustomization = (UI.getChildControl)(Panel_CustomizationMain, "Button_LoadCustomization")
 local Button_CustomizingAlbum = (UI.getChildControl)(Panel_CustomizationMain, "Button_CustomizingAlbum")
@@ -110,6 +111,7 @@ StaticText_CustomizationInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_
 StaticText_AuthorTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONMAIN_CUSTOMIZING_AUTHOR"))
 Line_Template:SetSize(Line_Template:GetSizeX(), 28)
 Panel_CustomizationMain:RegisterUpdateFunc("MainPanel_UpdatePerFrame")
+local _web_RandomBeauty = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_CustomizationMain, "WebControl_RandomCustomization")
 local preview_Main = true
 local UI_TM = CppEnums.TextMode
 local mainButtonNum = 5
@@ -123,6 +125,7 @@ Button_Char:addInputEvent("Mouse_LUp", "Panel_CharacterCreateOK_NewCustomization
 Button_SelectClass:addInputEvent("Mouse_LUp", "HandleClicked_CustomizationMain_SelectClass()")
 Button_Back:addInputEvent("Mouse_LUp", "HandleClicked_CustomizationMain_Back()")
 btn_CharacterNameCreateRule:addInputEvent("Mouse_LUp", "HandleClicked_RuleShow()")
+btn_RandomBeauty:addInputEvent("Mouse_LUp", "HandleClicked_RandomBeautyMSG()")
 Button_SaveCustomization:addInputEvent("Mouse_LUp", "HandleClicked_saveCustomizationData()")
 Button_LoadCustomization:addInputEvent("Mouse_LUp", "HandleClicked_loadCustomizationData()")
 Button_CustomizingAlbum:addInputEvent("Mouse_LUp", "FGlobal_CustomizingAlbum_Show(true, CppEnums.ClientSceneState.eClientSceneStateType_Customization)")
@@ -169,7 +172,7 @@ local rotationPointNormalize = function(x, y, angle)
 end
 
 local updateComputePos = function()
-  -- function num : 0_1 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, StaticText_Zodiac, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacImage, Button_ApplyDefaultCustomization, Button_Char, Button_Back, Button_SelectClass, Edit_CharName, Static_CharName, Button_SaveCustomization, Button_LoadCustomization, Button_CustomizingAlbum, btn_CharacterNameCreateRule, StaticText_CustomizationInfo, StaticText_AuthorTitle, StaticText_AuthorName, Button_SaveHistory, StaticText_FamilyNameTitle, StaticText_FamilyName, StaticText_CustomizationMessage, link1, link2, japanEventBanner
+  -- function num : 0_1 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, StaticText_Zodiac, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacImage, Button_ApplyDefaultCustomization, Button_Char, Button_Back, Button_SelectClass, Edit_CharName, Static_CharName, Button_SaveCustomization, Button_LoadCustomization, Button_CustomizingAlbum, btn_CharacterNameCreateRule, btn_RandomBeauty, StaticText_CustomizationInfo, StaticText_AuthorTitle, StaticText_AuthorName, Button_SaveHistory, StaticText_FamilyNameTitle, StaticText_FamilyName, StaticText_CustomizationMessage, link1, link2, japanEventBanner
   CheckButton_CameraLook:ComputePos()
   CheckButton_ToggleUi:ComputePos()
   CheckButton_ImagePreset:ComputePos()
@@ -189,6 +192,7 @@ local updateComputePos = function()
   Button_LoadCustomization:ComputePos()
   Button_CustomizingAlbum:ComputePos()
   btn_CharacterNameCreateRule:ComputePos()
+  btn_RandomBeauty:ComputePos()
   StaticText_CustomizationInfo:ComputePos()
   StaticText_AuthorTitle:ComputePos()
   StaticText_AuthorName:ComputePos()
@@ -1150,7 +1154,7 @@ CloseCharacterCustomization = function()
 end
 
 ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
-  -- function num : 0_52 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
+  -- function num : 0_52 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, btn_RandomBeauty, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
   closeCustomizationMode = false
   InGameMode = isInGame
   _classIndex = classIndex
@@ -1160,6 +1164,7 @@ ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
     Button_SelectClass:SetShow(false)
     Button_Back:SetShow(false)
     btn_CharacterNameCreateRule:SetShow(false)
+    btn_RandomBeauty:SetShow(true)
     Static_CharName:SetShow(false)
     Edit_CharName:SetShow(false)
     ;
@@ -1183,6 +1188,7 @@ ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
     Button_SelectClass:SetShow(true)
     Button_Back:SetShow(true)
     btn_CharacterNameCreateRule:SetShow(true)
+    btn_RandomBeauty:SetShow(true)
     Static_CharName:SetShow(true)
     Edit_CharName:SetShow(true)
     StaticText_Zodiac:SetShow(true)
@@ -1210,11 +1216,11 @@ ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
           ;
           (japanEventBanner:getOnTexture()):setUV(x1, y1, x2, y2)
           japanEventBanner:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Customize_EventBanner_" .. classIndex .. ".dds")
-          -- DECOMPILER ERROR at PC294: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC302: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC295: Overwrote pending register: R6 in 'AssignReg'
+          -- DECOMPILER ERROR at PC303: Overwrote pending register: R6 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC296: Overwrote pending register: R5 in 'AssignReg'
+          -- DECOMPILER ERROR at PC304: Overwrote pending register: R5 in 'AssignReg'
 
           x1 = setTextureUV_Func(japanEventBanner, 2, 320, 342, 476)
           ;
@@ -1223,7 +1229,7 @@ ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
         else
           do
             do
-              -- DECOMPILER ERROR at PC313: Overwrote pending register: R5 in 'AssignReg'
+              -- DECOMPILER ERROR at PC321: Overwrote pending register: R5 in 'AssignReg'
 
               japanEventBanner:SetShow(false)
               if (isGameTypeEnglish() or isGameTypeTaiwan()) and not isInGame then
@@ -1323,23 +1329,117 @@ HandleClicked_RuleShow = function()
   (MessageBox.showMessageBox)(messageBoxData, "top")
 end
 
-HandleClicked_loadCustomizationData = function()
+HandleClicked_RandomBeautyMSG = function()
   -- function num : 0_63
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MAIN_RANDOMBEAUTY_MSG")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = HandleClicked_RandomBeauty, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
+end
+
+HandleClicked_RandomBeauty = function()
+  -- function num : 0_64 , upvalues : _web_RandomBeauty
+  local sizeX = getScreenSizeX()
+  local sizeY = getScreenSizeY()
+  _web_RandomBeauty:SetIgnore(true)
+  _web_RandomBeauty:SetPosX(-1500)
+  _web_RandomBeauty:SetPosY(-1500)
+  _web_RandomBeauty:SetSize(1, 1)
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  local url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_DEV")
+  if (CppEnums.CountryType).DEV == getGameServiceType() then
+    url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_DEV")
+  else
+    if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
+      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_ALPHA")
+    else
+      if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
+        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_REAL")
+      else
+        if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
+          if getServiceNationType() == 0 then
+            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_ALPHA_NA", "port", worldNo)
+          else
+            if getServiceNationType() == 1 then
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_ALPHA_EU", "port", worldNo)
+            end
+          end
+        else
+          if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
+            if getServiceNationType() == 0 then
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_REAL_NA", "port", worldNo)
+            else
+              if getServiceNationType() == 1 then
+                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_REAL_EU", "port", worldNo)
+              end
+            end
+          else
+            if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
+              url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_JP_ALPHA")
+            else
+              if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
+                url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_JP_REAL")
+              else
+                if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
+                  url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_ALPHA")
+                else
+                  if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
+                    if isServerFixedCharge() then
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_REAL_P2P")
+                    else
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_REAL_F2P")
+                    end
+                  else
+                    if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_ALPHA")
+                    else
+                      if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
+                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_REAL")
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  local userNo = 0
+  local userNickName = ""
+  local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
+  local classType = (getSelfPlayer()):getClassType()
+  local isGm = ToClient_SelfPlayerIsGM()
+  if ToClient_isLobbyProcessor() then
+    userNickName = getFamilyName()
+    userNo = getUserNoByLobby()
+  else
+    userNickName = (getSelfPlayer()):getUserNickname()
+    userNo = ((getSelfPlayer()):get()):getUserNo()
+  end
+  url = url .. "?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true) .. "&isGm=" .. tostring(isGm) .. "&isRandom=" .. tostring(true)
+  _web_RandomBeauty:SetUrl(1, 1, url, false, true)
+end
+
+HandleClicked_loadCustomizationData = function()
+  -- function num : 0_65
   OpenExplorerLoadCustomizing()
 end
 
 CustomizationAuthorName = function(authorName)
-  -- function num : 0_64 , upvalues : StaticText_AuthorName
+  -- function num : 0_66 , upvalues : StaticText_AuthorName
   StaticText_AuthorName:SetText(authorName)
 end
 
 isShowCustomizationMain = function()
-  -- function num : 0_65
+  -- function num : 0_67
   return Panel_CustomizationMain:GetShow()
 end
 
 CustomizationMain_PanelResize_ByFontSize = function()
-  -- function num : 0_66 , upvalues : StaticText_CustomizationInfo, Button_SaveHistory, UI_TM, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
+  -- function num : 0_68 , upvalues : StaticText_CustomizationInfo, Button_SaveHistory, UI_TM, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
   StaticText_CustomizationInfo:SetSize((math.max)(210, StaticText_CustomizationInfo:GetTextSizeX() + 10), StaticText_CustomizationInfo:GetSizeY())
   Button_SaveHistory:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
   Button_SaveCustomization:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
@@ -1360,7 +1460,7 @@ CustomizationMain_PanelResize_ByFontSize = function()
 end
 
 CustomizationMain_ButtonTooltip = function(_type)
-  -- function num : 0_67 , upvalues : Button_SaveHistory, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
+  -- function num : 0_69 , upvalues : Button_SaveHistory, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
   if _type == nil then
     TooltipSimple_Hide()
     return 

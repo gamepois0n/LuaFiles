@@ -63,6 +63,7 @@ recommendSkill[UI_classType.ClassType_NinjaMan] = {[0] = 949, [1] = 950, [2] = 9
 recommendSkill[UI_classType.ClassType_DarkElf] = {[0] = 2269, [1] = 2270, [2] = 2271, [3] = 2272, [4] = 2273, [5] = 2267, [6] = 2338, [7] = 2362, [8] = 2268, [9] = 2340, [10] = 2363, [11] = 2263, [12] = 2264, [13] = 2265, [14] = 2361, [15] = 2266, [16] = 2296, [17] = 2297, [18] = 2379, [19] = 2352, [20] = 2353, [21] = 2354, [22] = 2355, [23] = 2356, [24] = 2359, [25] = 2367, [26] = 2368, [27] = 2369, [28] = 2370}
 recommendSkill[UI_classType.ClassType_Angle] = {}
 recommendSkill[UI_classType.ClassType_Combattant] = {}
+recommendSkill[UI_classType.ClassType_CombattantWomen] = {}
 recommendSkill[22] = {}
 EnableSkill_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV

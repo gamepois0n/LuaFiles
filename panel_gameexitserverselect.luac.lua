@@ -21,7 +21,7 @@ channelSelectUIPool = {}
 channelSelect._mainDescBg = (UI.getChildControl)(channelSelect._mainDesc, "Static_ChannelSelectDescBG")
 local channelGroupCount = {}
 if isGameTypeKorea() then
-  channelGroupCount = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3; [0] = 5}
+  channelGroupCount = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1; [0] = 5}
 else
   if isGameTypeJapan() then
     channelGroupCount = {4, 4, 4, 4, 4, 2; [0] = 4}
@@ -409,93 +409,107 @@ ChannelSelect_Update = function()
           end
         end
       end
-      local isAdmission = true
-      local isSiegeBeing = deadMessage_isSiegeBeingMyChannel()
-      local isInSiegeBattle = deadMessage_isInSiegeBattle()
-      if isSiegeBeing == true and isInSiegeBattle == false then
-        isAdmission = true
-      else
-        if restrictedServerNo ~= 0 and toInt64(0, 0) ~= channelMoveableGlobalTime then
-          if restrictedServerNo == tempChannel._serverNo then
+      if _serverData._isBalanceChannel then
+        if ((getSelfPlayer()):get()):getLevel() > 49 and ToClient_isAccessableBalanceChannel() then
+          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
+          local isAdmission = true
+          local isSiegeBeing = deadMessage_isSiegeBeingMyChannel()
+          local isInSiegeBattle = deadMessage_isInSiegeBattle()
+          if isSiegeBeing == true and isInSiegeBattle == false then
             isAdmission = true
           else
-            if toInt64(0, 0) < channelMoveableRemainTime then
-              isAdmission = false
-            else
-              isAdmission = true
+            if restrictedServerNo ~= 0 and toInt64(0, 0) ~= channelMoveableGlobalTime then
+              if restrictedServerNo == tempChannel._serverNo then
+                isAdmission = true
+              else
+                if toInt64(0, 0) < channelMoveableRemainTime then
+                  isAdmission = false
+                else
+                  isAdmission = true
+                end
+              end
             end
           end
-        end
-      end
-      ;
-      (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetShow(not isAdmission)
-      local channelName = getChannelName(tempChannel._worldNo, tempChannel._serverNo)
-      if channelName == nil then
-        channelName = ""
-      end
-      ;
-      (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "HandleClicked_ChannelSelect( " .. chIndex .. " )")
-      ;
-      (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(false)
-      if curChannelData._worldNo == tempChannel._worldNo and curChannelData._serverNo == tempChannel._serverNo then
-        (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(true)
-        ;
-        (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
-      end
-      if isGameServiceTypeDev() then
-        (((self.channelSelectUIPool)[chIndex]).channelSelectedBg):SetShow(false)
-        if tempChannel._isMain then
-          (((self.channelSelectUIPool)[chIndex]).channelName):SetText(channelName)
           ;
-          (((self.channelSelectUIPool)[chIndex]).channelStatus):SetText(tempStr)
-          local basePosX = (((self.channelSelectUIPool)[chIndex]).channelName):GetPosX() + (((self.channelSelectUIPool)[chIndex]).channelName):GetTextSizeX() + 20
-          if (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetShow() then
-            (((self.channelSelectUIPool)[chIndex]).channelWaricon):SetPosX(basePosX)
-            basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetSizeX() + 5
+          (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetShow(not isAdmission)
+          local channelName = getChannelName(tempChannel._worldNo, tempChannel._serverNo)
+          if channelName == nil then
+            channelName = ""
           end
-          if (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetShow() then
-            (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetPosX(basePosX)
-            basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetSizeX() + 5
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "HandleClicked_ChannelSelect( " .. chIndex .. " )")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(false)
+          if curChannelData._worldNo == tempChannel._worldNo and curChannelData._serverNo == tempChannel._serverNo then
+            (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(true)
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
           end
-          if (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetShow() then
-            (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):SetPosX(basePosX)
-            basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetSizeX() + 5
-          end
-          if (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetShow() then
-            (((self.channelSelectUIPool)[chIndex]).channelExpIcon):SetPosX(basePosX)
-            basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetSizeX() + 5
-          end
-          do
-            local channelBgSizeX = (((self.channelSelectUIPool)[chIndex]).channelStatus):GetTextSizeX() + (basePosX) + 50
-            channelSizeX = (math.max)(channelSizeX, channelBgSizeX)
+          if isGameServiceTypeDev() then
+            (((self.channelSelectUIPool)[chIndex]).channelSelectedBg):SetShow(false)
+            if not tempChannel._isMain or isGameServiceTypeDev() then
+              (((self.channelSelectUIPool)[chIndex]).channelName):SetText(channelName .. "(" .. tempWarName .. ")")
+            else
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelName):SetText(channelName)
+            end
             ;
-            (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 0 .. "," .. chIndex .. ")")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 1 .. "," .. chIndex .. ")")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 2 .. "," .. chIndex .. ")")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 3 .. "," .. chIndex .. ")")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-            -- DECOMPILER ERROR at PC522: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            (((self.channelSelectUIPool)[chIndex]).channelStatus):SetText(tempStr)
+            local basePosX = (((self.channelSelectUIPool)[chIndex]).channelName):GetPosX() + (((self.channelSelectUIPool)[chIndex]).channelName):GetTextSizeX() + 20
+            if (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetShow() then
+              (((self.channelSelectUIPool)[chIndex]).channelWaricon):SetPosX(basePosX)
+              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetSizeX() + 5
+            end
+            if (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetShow() then
+              (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetPosX(basePosX)
+              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetSizeX() + 5
+            end
+            if (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetShow() then
+              (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):SetPosX(basePosX)
+              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetSizeX() + 5
+            end
+            if (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetShow() then
+              (((self.channelSelectUIPool)[chIndex]).channelExpIcon):SetPosX(basePosX)
+              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetSizeX() + 5
+            end
+            do
+              local channelBgSizeX = (((self.channelSelectUIPool)[chIndex]).channelStatus):GetTextSizeX() + (basePosX) + 50
+              channelSizeX = (math.max)(channelSizeX, channelBgSizeX)
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 0 .. "," .. chIndex .. ")")
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 1 .. "," .. chIndex .. ")")
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 2 .. "," .. chIndex .. ")")
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 3 .. "," .. chIndex .. ")")
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC522: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC522: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC522: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC522: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC522: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
 
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
           end
         end
       end

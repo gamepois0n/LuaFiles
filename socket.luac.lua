@@ -403,7 +403,15 @@ local Socket_InvenFiler_EquipItem = function(slotNo, itemWrapper)
   if itemWrapper == nil then
     return true
   end
-  return not ((itemWrapper:getStaticStatus()):get()):doHaveSocket()
+  local itemSSW = itemWrapper:getStaticStatus()
+  if (itemSSW:get()):doHaveSocket() == true then
+    if itemSSW:getEquipType() == 22 and (itemWrapper:get()):isVested() == false then
+      return true
+    else
+      return false
+    end
+  end
+  return true
 end
 
 local Socket_InvenFiler_Jewel = function(slotNo, itemWrapper, whereType)

@@ -1192,6 +1192,12 @@ QuickSlot_UpdateData = function()
     Panel_QuickSlot:SetShow(false, false)
     return 
   end
+  -- DECOMPILER ERROR at PC37: Unhandled construct in 'MakeBoolean' P1
+
+  if CppDefine.ChangeUIAndResolution == true and (Panel_QuickSlot:GetRelativePosX() ~= 0 or Panel_QuickSlot:GetRelativePosY() ~= 0) then
+    Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
+    Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
+  end
   changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
   if not Panel_QuickSlot:GetShow() then
     Panel_QuickSlot:SetShow(true, true)
@@ -1541,9 +1547,19 @@ end
 
 QuickSlot_OnscreenResize = function()
   -- function num : 0_40
-  Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
-  Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
-  changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
+      Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
+      Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+    else
+      Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
+      Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
+    end
+  else
+    Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
+    Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+    changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
+  end
 end
 
 registerEvent("onScreenResize", "QuickSlot_OnscreenResize")

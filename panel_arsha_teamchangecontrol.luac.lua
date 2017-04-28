@@ -13,7 +13,7 @@ ArshaPvP_TeamChangeControl_Init = function()
   ;
   (self._txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self._txt_Desc):SetText("모험�\128�\152 �\128�\132 설정�\160 �\152 있습니다.\n아래 그룹 중에�\156 선택해주세요.")
+  (self._txt_Desc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_TEAMCHANGECONTROL_DESC"))
   ;
   (self._btn_Set):addInputEvent("Mouse_LUp", "ArshaPvP_TeamChangeControl_Confirm()")
   ;

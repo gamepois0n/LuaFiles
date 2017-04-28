@@ -11,6 +11,7 @@ local IM = CppEnums.EProcessorInputMode
 Panel_Arsha_TeamWidget:SetShow(false)
 local arshaPvPWidget = {roundWing = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_RoundWing"), freeWing = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_FreeWing"), roundCenter = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_RoundCenter"), freeCenter = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_FreeCenter")}
 arshaPvPWidget.roundTime = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_RoundTime")
+arshaPvPWidget.roundCount = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_RoundCount")
 arshaPvPWidget.leftPoint = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_LeftPoint")
 arshaPvPWidget.rightPoint = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_RightPoint")
 arshaPvPWidget.leftParty = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_LeftParty")
@@ -55,6 +56,8 @@ ArshaPvP_Widget_Init = function()
   (self.leftPoint):SetText(teamA)
   ;
   (self.rightPoint):SetText(teamB)
+  ;
+  (self.roundCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ARSHA_USER_OPTION_ROUND_FORCOUNT", "targetScore", ToClient_GetTargetScore()))
 end
 
 ArshaPvP_Widget_Show = function()
@@ -141,10 +144,6 @@ ArshaPvP_Widget_Update = function()
       (self.freeWing):SetShow(true)
       ;
       (self.freeCenter):SetShow(true)
-      ;
-      (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 115)
-      ;
-      (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 45)
     else
       ;
       (self.roundWing):SetShow(true)
@@ -162,18 +161,12 @@ ArshaPvP_Widget_Update = function()
       (self.leftParty):SetShow(true)
       ;
       (self.rightParty):SetShow(true)
-      ;
-      (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 115)
-      ;
-      (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 45)
     end
-    CompetitionGame_TeamUi_Create()
     Panel_Arsha_TeamWidget:SetShow(true)
   else
     do
       if (CppEnums.CompetitionFightState).eCompetitionFightState_Done == isFightType then
         Panel_Arsha_TeamWidget:SetShow(true)
-        CompetitionGameTeamUI_Close()
         if ToClient_CompetitionMatchType() == 1 then
           isShowTeamInfo = false
           ;
@@ -184,10 +177,6 @@ ArshaPvP_Widget_Update = function()
           (self.roundWing):SetShow(false)
           ;
           (self.roundCenter):SetShow(false)
-          ;
-          (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 165)
-          ;
-          (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 95)
         else
           ;
           (self.roundWing):SetShow(true)
@@ -205,10 +194,6 @@ ArshaPvP_Widget_Update = function()
           (self.leftParty):SetShow(true)
           ;
           (self.rightParty):SetShow(true)
-          ;
-          (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 165)
-          ;
-          (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 95)
         end
       else
         if (CppEnums.CompetitionFightState).eCompetitionFightState_Wait == isFightType then
@@ -220,10 +205,6 @@ ArshaPvP_Widget_Update = function()
             (self.freeWing):SetShow(true)
             ;
             (self.freeCenter):SetShow(true)
-            ;
-            (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-            ;
-            (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
           else
             ;
             (self.roundWing):SetShow(true)
@@ -241,14 +222,14 @@ ArshaPvP_Widget_Update = function()
             (self.leftParty):SetShow(true)
             ;
             (self.rightParty):SetShow(true)
-            ;
-            (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-            ;
-            (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
           end
           Panel_Arsha_TeamWidget:SetShow(true)
         else
-          Panel_Arsha_TeamWidget:SetShow(false)
+          if ToClient_IsMyselfInArena() then
+            Panel_Arsha_TeamWidget:SetShow(true)
+          else
+            Panel_Arsha_TeamWidget:SetShow(false)
+          end
           if ToClient_CompetitionMatchType() == 1 then
             (self.roundWing):SetShow(false)
             ;
@@ -275,14 +256,6 @@ ArshaPvP_Widget_Update = function()
             ;
             (self.rightParty):SetShow(true)
           end
-          ;
-          (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-          ;
-          (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
-          ;
-          (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-          ;
-          (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
         end
       end
       ;
@@ -293,6 +266,8 @@ ArshaPvP_Widget_Update = function()
       (self.leftPoint):SetText(teamA)
       ;
       (self.rightPoint):SetText(teamB)
+      ;
+      (self.roundCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ARSHA_USER_OPTION_ROUND_FORCOUNT", "targetScore", ToClient_GetTargetScore()))
     end
   end
 end
@@ -374,7 +349,6 @@ ArshaPvP_Widget_Free_Per = function(deltaTime)
     if warTimeSecond < 10 then
       warTimeSecond = "0" .. warTimeSecond
     end
-    Panel_Arsha_TeamWidget:SetSpanSize(0, -50)
     Panel_Arsha_TeamWidget:ComputePos()
     competitionGameDeltaTime = 0
     ;
@@ -401,10 +375,6 @@ FromClient_UpdateFightState = function(isFight)
       (self.freeWing):SetShow(true)
       ;
       (self.freeCenter):SetShow(true)
-      ;
-      (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 115)
-      ;
-      (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 45)
     else
       ;
       (self.roundWing):SetShow(true)
@@ -422,10 +392,6 @@ FromClient_UpdateFightState = function(isFight)
       (self.leftParty):SetShow(true)
       ;
       (self.rightParty):SetShow(true)
-      ;
-      (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 115)
-      ;
-      (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 45)
     end
     CompetitionGame_TeamUi_Create()
     Panel_Arsha_TeamWidget:SetShow(true)
@@ -448,10 +414,6 @@ FromClient_UpdateFightState = function(isFight)
           (self.roundWing):SetShow(false)
           ;
           (self.roundCenter):SetShow(false)
-          ;
-          (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 165)
-          ;
-          (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 95)
         else
           ;
           (self.roundWing):SetShow(true)
@@ -469,10 +431,6 @@ FromClient_UpdateFightState = function(isFight)
           (self.leftParty):SetShow(true)
           ;
           (self.rightParty):SetShow(true)
-          ;
-          (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 165)
-          ;
-          (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 95)
         end
       else
         do
@@ -485,10 +443,6 @@ FromClient_UpdateFightState = function(isFight)
               (self.freeWing):SetShow(true)
               ;
               (self.freeCenter):SetShow(true)
-              ;
-              (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-              ;
-              (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
             else
               ;
               (self.roundWing):SetShow(true)
@@ -506,11 +460,8 @@ FromClient_UpdateFightState = function(isFight)
               (self.leftParty):SetShow(true)
               ;
               (self.rightParty):SetShow(true)
-              ;
-              (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-              ;
-              (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
             end
+            CompetitionGameTeamUI_Close()
             Panel_Arsha_TeamWidget:SetShow(true)
           else
             if ToClient_IsMyselfInArena() then
@@ -544,14 +495,6 @@ FromClient_UpdateFightState = function(isFight)
               ;
               (self.rightParty):SetShow(true)
             end
-            ;
-            (self.freeWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-            ;
-            (self.freeCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
-            ;
-            (self.roundWing):SetSpanSize(((self.roundWing):GetSpanSize()).x, 215)
-            ;
-            (self.roundCenter):SetSpanSize(((self.roundCenter):GetSpanSize()).x, 145)
           end
         end
       end

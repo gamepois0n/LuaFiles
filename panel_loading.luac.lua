@@ -20,7 +20,7 @@ local progressHead = (UI.getChildControl)(progressRate, "Progress2_Bar_Head")
 local staticBack = (UI.getChildControl)(Panel_Loading, "Static_Progress_Back")
 local goblinRun = (UI.getChildControl)(Panel_Loading, "Static_GoblinRun")
 local backGroundEvnetImage = (UI.getChildControl)(Panel_Loading, "Static_BackImage")
-local isBgOpen = true
+local isBgOpen = false
 local bgImageTexture = {}
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 if isBgOpen then
@@ -191,10 +191,10 @@ local LoadingPanel_GetRandomKnowledge = function()
   end
 end
 
-local loadingImageIndex = (math.random)(0, bgImageTexture.count - 1)
 local LoadingPanel_GetBackGroundImage = function()
-  -- function num : 0_6 , upvalues : isBgOpen, loadingImageIndex, bgImageTexture, backGroundEvnetImage
+  -- function num : 0_6 , upvalues : isBgOpen, bgImageTexture, backGroundEvnetImage
   if isBgOpen then
+    local loadingImageIndex = (math.random)(0, bgImageTexture.count - 1)
     loadingImageIndex = (loadingImageIndex + 1) % bgImageTexture.count
     backGroundEvnetImage:ChangeTextureInfoName(bgImageTexture[loadingImageIndex])
   end

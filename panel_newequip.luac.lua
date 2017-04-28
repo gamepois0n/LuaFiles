@@ -35,12 +35,22 @@ partsTooltip:SetShow(false)
 partsTooltip:SetIgnore(true)
 Panel_NewEquip_ScreenResize = function()
   -- function num : 0_2
-  local posY = Panel_VillageSiegeArea:GetPosY() + Panel_VillageSiegeArea:GetSizeY()
-  local posX = Panel_VillageSiegeArea:GetPosX()
   Panel_NewEquip:ComputePos()
-  Panel_NewEquip:SetPosX(posX)
-  Panel_NewEquip:SetPosY(posY)
-  changePositionBySever(Panel_NewEquip, (CppEnums.PAGameUIType).PAGameUIPanel_NewEquipment, false, true, false)
+  local posY = FGlobal_GetPersonalIconPosY(4) + FGlobal_GetPersonalIconSizeY()
+  local posX = FGlobal_GetPersonalIconPosX(4)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_NewEquip:GetRelativePosX() == 0 and Panel_NewEquip:GetRelativePosY() == 0 then
+      Panel_NewEquip:SetPosX(posX)
+      Panel_NewEquip:SetPosY(posY)
+    else
+      Panel_NewEquip:SetPosX(getScreenSizeX() * Panel_NewEquip:GetRelativePosX() - Panel_NewEquip:GetSizeX() / 2)
+      Panel_NewEquip:SetPosY(getScreenSizeY() * Panel_NewEquip:GetRelativePosY() - Panel_NewEquip:GetSizeY() / 2)
+    end
+  else
+    Panel_NewEquip:SetPosX(posX)
+    Panel_NewEquip:SetPosY(posY)
+    changePositionBySever(Panel_NewEquip, (CppEnums.PAGameUIType).PAGameUIPanel_NewEquipment, false, true, false)
+  end
 end
 
 local initialize = function()

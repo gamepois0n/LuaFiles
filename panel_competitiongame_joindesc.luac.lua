@@ -47,7 +47,7 @@ FGlobal_Panel_CompetitionGame_JoinDesc_Join = function(isObserver)
   -- function num : 0_3
   local selfProxy = (getSelfPlayer()):get()
   local inventory = selfProxy:getInventory()
-  local hasItem = inventory:getItemCount_s64(ItemEnchantKey(65012, 1))
+  local hasItem = inventory:getItemCount_s64(ItemEnchantKey(65012, 0))
   if toInt64(0, 0) == hasItem then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_JOINDESC_HASITEM"))
     return 
@@ -55,6 +55,10 @@ FGlobal_Panel_CompetitionGame_JoinDesc_Join = function(isObserver)
   if ToClient_IsCompetitionHost() then
     CompetitionGame_HostIntoCompetition()
   else
+    if ExpirationItemCheck(ItemEnchantKey(65012, 0)) then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_JOINDESC_HASITEM"))
+      return 
+    end
     ToClient_RequestJoinCompetition(isObserver)
   end
 end

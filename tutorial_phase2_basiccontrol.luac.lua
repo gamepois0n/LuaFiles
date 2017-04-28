@@ -84,6 +84,7 @@ end
 
 PaGlobal_TutorialPhase_BasicControl.startPhaseXXX = function(self, stepNo)
   -- function num : 0_4
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_BasicControl:startPhase()")
   self._currentStep = 0

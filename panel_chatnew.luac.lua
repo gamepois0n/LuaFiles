@@ -182,11 +182,8 @@ ChatUIPoolManager.createPanel = function(self, poolIndex, stylePanel)
   panel:addInputEvent("Mouse_DownScroll", "Chatting_ScrollEvent( " .. poolIndex .. ", false )")
   panel:addInputEvent("Mouse_On", "Chatting_PanelTransparency( " .. poolIndex .. ", true )")
   panel:addInputEvent("Mouse_Out", "Chatting_PanelTransparency( " .. poolIndex .. ", false , " .. 9999 .. ")")
-  if poolIndex ~= 0 then
-    panel:SetShow(false)
-  else
-    panel:SetShow(true)
-  end
+  local show = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, poolIndex, (CppEnums.PanelSaveType).PanelSaveType_IsShow)
+  panel:SetShow(show)
   return panel
 end
 
@@ -856,6 +853,15 @@ ChattingViewManager.CreateChattingContent = function(self, chattingMessage, pool
                           else
                             chatting_Icon:SetText("")
                           end
+                        else
+                          if UI_CT.Team == chatType then
+                            chatting_Icon:SetFontColor(msgColor)
+                            if isChatDivision then
+                              chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_TEAM"))
+                            else
+                              chatting_Icon:SetText("")
+                            end
+                          end
                         end
                       end
                     end
@@ -975,15 +981,15 @@ ChattingViewManager.CreateChattingContent = function(self, chattingMessage, pool
                 do
                   msgDataLen = 0
                   currentStaticIndex = currentStaticIndex + 1
-                  -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC766: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC766: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC766: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC766: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC766: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -1309,9 +1315,20 @@ Chatting_OnResize = function()
     local panelSizeY = divisionPanel:getPanelSizeY()
     local panelPosX = divisionPanel:getPositionX()
     local panelPosY = divisionPanel:getPositionY()
-    if panelPosX ~= -1 or panelPosY ~= -1 then
-      panelPosX = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, poolIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionX)
-      panelPosY = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, poolIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionY)
+    if CppDefine.ChangeUIAndResolution == true then
+      if panel:GetRelativePosX() == 0 and panel:GetRelativePosY() == 0 then
+        panelPosX = 0
+        panelPosY = getScreenSizeY() - panelSizeY - Panel_GameTips:GetSizeY()
+      end
+      if panel:GetRelativePosX() > 0 or panel:GetRelativePosY() > 0 then
+        panelPosX = panel:GetRelativePosX() * getScreenSizeX() - panel:GetSizeX() / 2
+        panelPosY = panel:GetRelativePosY() * getScreenSizeY() - panel:GetSizeY() / 2
+      end
+    else
+      if panelPosX ~= -1 or panelPosY ~= -1 then
+        panelPosX = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, poolIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionX)
+        panelPosY = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, poolIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionY)
+      end
     end
     if panelSizeX > 25 and panelSizeY > 50 then
       panel:SetSize(panelSizeX, panelSizeY)
@@ -1350,22 +1367,37 @@ Chatting_OnResize = function()
       ;
       ((chatUI._list_Scroll)[0]):SetControlBottom()
     end
+    local defaultPosY = getScreenSizeY() - panel:GetSizeY() - Panel_GameTips:GetSizeY()
     if panelPosX == -1 and panelPosY == -1 then
       panelPosX = 0
-      panelPosY = getScreenSizeY() - panel:GetSizeY() - 35
+      panelPosY = defaultPosY
     else
       if panelPosX < 0 then
         panelPosX = 0
       else
         if getScreenSizeX() - panel:GetSizeX() < panelPosX then
-          panelPosX = getScreenSizeX() - panel:GetSizeX()
+          panelPosX = getScreenSizeX() - panel:GetSizeX() - Panel_GameTips:GetSizeY()
         end
       end
-      if panelPosY < 0 then
-        panelPosY = 0
+      if CppDefine.ChangeUIAndResolution == true then
+        if panelPosY < 0 then
+          panelPosY = 0
+        else
+          if panelPosY == 0 then
+            panelPosY = defaultPosY
+          else
+            if getScreenSizeY() - panel:GetSizeY() < panelPosY then
+              panelPosY = defaultPosY
+            end
+          end
+        end
       else
-        if getScreenSizeY() - panel:GetSizeY() < panelPosY then
-          panelPosY = getScreenSizeY() - panel:GetSizeY()
+        if panelPosY < 0 then
+          panelPosY = 0
+        else
+          if getScreenSizeY() - panel:GetSizeY() < panelPosY then
+            panelPosY = defaultPosY
+          end
         end
       end
     end

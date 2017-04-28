@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_Hidel_Worker = {_phaseNo = 15, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = true, _isSkippable = true, 
+PaGlobal_TutorialPhase_Hidel_Worker = {_phaseNo = 15, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = false, _isSkippable = true, 
 _regionKeyRawList = {32, 38, 42, 62, 318}
 , 
 _waypointKeyData = {[1] = 323, [2] = 439}
@@ -110,6 +110,7 @@ end
 
 PaGlobal_TutorialPhase_Hidel_Worker.startPhaseXXX = function(self, stepNo)
   -- function num : 0_3
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_Hidel_Worker:startStep() stepNo : " .. tostring(stepNo) .. " typeNo : " .. tostring(typeNo))
   self._currentStep = 0

@@ -110,10 +110,10 @@ carrageInfo_Check = function(carriageNo)
   end
   ;
   (carrageInfo._maxCountValue):SetText(servantInfo:getCurrentLinkCount() .. " / " .. servantInfo:getLinkCount())
-  local servantCount = stable_count()
+  local servantCount = ToClient_getStableCountEx(false)
   local linkedCount = 0
   for index = 0, servantCount - 1 do
-    local sInfo = stable_getServant(index)
+    local sInfo = ToClient_getStableServantEx(index, false)
     if sInfo ~= nil and sInfo:isLink() and carriageNo == sInfo:getOwnerServantNo_s64() then
       for v,control in pairs((carrageInfo.baseSlot)[linkedCount]) do
         control:SetShow(true)

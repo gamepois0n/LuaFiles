@@ -44,6 +44,10 @@ workerManager.registEventHandler = function(self)
   ;
   (self.checkPopUp):addInputEvent("Mouse_LUp", "workerManager_PopUp()")
   ;
+  (self.checkPopUp):addInputEvent("Mouse_On", "workerManager_PopUp_ShowIconToolTip(true)")
+  ;
+  (self.checkPopUp):addInputEvent("Mouse_Out", "workerManager_PopUp_ShowIconToolTip(false)")
+  ;
   (self._btnFire):addInputEvent("Mouse_LUp", "HandleClicked_workerManager_WaitWorkerFire()")
   ;
   (self._btnUpgradeNow):addInputEvent("Mouse_LUp", "HandleClicked_workerManager_WorkerUpgradeNow()")
@@ -1487,6 +1491,9 @@ workerManager_Close = function()
   end
   Panel_WorkerManager:SetShow(false)
   Panel_WorkerRestoreAll:SetShow(false)
+  if Panel_WorkerRestoreAll:IsUISubApp() then
+    Panel_WorkerRestoreAll:CloseUISubApp()
+  end
   FGlobal_HideWorkerTooltip()
   TooltipSimple_Hide()
   if ToClient_WorldMapIsShow() then
@@ -1501,6 +1508,7 @@ workerManager_PopUp = function()
   else
     Panel_WorkerManager:CloseUISubApp()
   end
+  TooltipSimple_Hide()
 end
 
 workerManager_Toggle = function()
@@ -1825,6 +1833,25 @@ end
 
 FromClient_ChangeWorkerSkillNo = function(workerNoRaw)
   -- function num : 0_58
+end
+
+workerManager_PopUp_ShowIconToolTip = function(isShow)
+  -- function num : 0_59 , upvalues : workerManager
+  if isShow then
+    local self = workerManager
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
+    local desc = ""
+    if (self.checkPopUp):IsCheck() then
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
+    else
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
+    end
+    TooltipSimple_Show(self.checkPopUp, name, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
+  end
 end
 
 workerManager_Initiallize()

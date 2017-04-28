@@ -445,9 +445,19 @@ FGlobal_SkillCommand_ResetPosition = function()
   -- function num : 0_16
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
-  Panel_SkillCommand:SetPosX(scrX / 2 * 1.2)
-  Panel_SkillCommand:SetPosY(scrY / 2 * 0.85)
-  changePositionBySever(Panel_SkillCommand, (CppEnums.PAGameUIType).PAGameUIPanel_SkillCommand, false, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_SkillCommand:GetRelativePosX() == 0 and Panel_SkillCommand:GetRelativePosY() == 0 then
+      Panel_SkillCommand:SetPosX(scrX / 2 * 1.2)
+      Panel_SkillCommand:SetPosY(scrY / 2 * 0.85)
+    else
+      Panel_SkillCommand:SetPosX(scrX * Panel_SkillCommand:GetRelativePosX() - Panel_SkillCommand:GetSizeX() / 2)
+      Panel_SkillCommand:SetPosY(scrY * Panel_SkillCommand:GetRelativePosY() - Panel_SkillCommand:GetSizeY() / 2)
+    end
+  else
+    Panel_SkillCommand:SetPosX(scrX / 2 * 1.2)
+    Panel_SkillCommand:SetPosY(scrY / 2 * 0.85)
+    changePositionBySever(Panel_SkillCommand, (CppEnums.PAGameUIType).PAGameUIPanel_SkillCommand, false, true, false)
+  end
 end
 
 ScreenReisze_RePosCommand = function()

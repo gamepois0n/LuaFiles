@@ -815,7 +815,7 @@ Warehouse_PushFromInventoryItem = function(s64_count, whereType, slotNo, fromAct
   -- function num : 0_34 , upvalues : warehouse
   local self = warehouse
   self._targetActorKeyRaw = fromActorKeyRaw
-  Panel_NumberPad_Show(true, s64_count, slotNo, Warehouse_PushFromInventoryItemXXX, nil, whereType)
+  Panel_NumberPad_Show_MaxCount(true, s64_count, slotNo, Warehouse_PushFromInventoryItemXXX, nil, whereType)
 end
 
 Warehouse_PushFromInventoryItemXXX = function(s64_count, slotNo, whereType)

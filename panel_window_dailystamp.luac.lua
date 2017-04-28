@@ -91,9 +91,6 @@ DailyStamp_DescSet = function()
   (dailyStamp.eventDesc):SetText(_desc)
   ;
   (dailyStamp.weekEndDesc):SetText(_weekendDesc)
-  if isGameTypeRussia() then
-    (dailyStamp.weekEndDesc):SetShow(false)
-  end
   do
     if (dailyStamp.eventDesc):GetTextSizeY() > 80 then
       local addSizeY = (dailyStamp.eventDesc):GetTextSizeY() - 80 + 15
@@ -120,7 +117,7 @@ DailyStamp_DescSet = function()
       ;
       (dailyStamp.acceptPeriod):SetPosX(baseSizeX + 10)
     end
-    -- DECOMPILER ERROR at PC247: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC238: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (dailyStamp.goodItemSlotConfig).createBorder = true
@@ -1209,7 +1206,7 @@ DailyStamp_ShowToggle = function(showType)
   end
   local self = dailyStamp
   if Panel_LevelupGuide:IsShow() then
-    HandleClicked_LevelupGuide_Close()
+    FGlobal_LevelupGuide_PowerClose()
   end
   if not Panel_Window_DailyStamp:GetShow() then
     for index = 0, dailyStampCount - 1 do

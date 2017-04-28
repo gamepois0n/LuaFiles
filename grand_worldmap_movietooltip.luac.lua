@@ -19,10 +19,10 @@ Panel_Worldmap_MovieGuide_Init = function()
     _btn_Movie_4:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 27 .. ")")
   else
     if isGameTypeTaiwan() then
-      _btn_Movie_1:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 14 .. ")")
-      _btn_Movie_2:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 15 .. ")")
-      _btn_Movie_3:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 18 .. ")")
-      _btn_Movie_4:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 22 .. ")")
+      _btn_Movie_1:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 15 .. ")")
+      _btn_Movie_2:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 16 .. ")")
+      _btn_Movie_3:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 19 .. ")")
+      _btn_Movie_4:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 23 .. ")")
     end
   end
   _btn_Close:addInputEvent("Mouse_LUp", "Panel_Worldmap_MovieGuide_Toggle()")
@@ -54,11 +54,11 @@ Panel_Worldmap_MovieGuide_Open = function()
     _btn_Movie_4:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 27 .. ")")
   else
     if isGameTypeTaiwan() then
-      Panel_MovieTheater640_GameGuide_Func(14)
-      _btn_Movie_1:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 14 .. ")")
-      _btn_Movie_2:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 15 .. ")")
-      _btn_Movie_3:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 18 .. ")")
-      _btn_Movie_4:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 22 .. ")")
+      Panel_MovieTheater640_GameGuide_Func(15)
+      _btn_Movie_1:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 15 .. ")")
+      _btn_Movie_2:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 16 .. ")")
+      _btn_Movie_3:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 19 .. ")")
+      _btn_Movie_4:addInputEvent("Mouse_LUp", "Panel_MovieTheater640_GameGuide_Func(" .. 23 .. ")")
     end
   end
   Panel_MovieTheater_640:SetPosX(getScreenSizeX() / 2 - Panel_MovieTheater_640:GetSizeX() / 2)

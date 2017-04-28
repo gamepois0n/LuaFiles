@@ -51,23 +51,19 @@ fishingGame_Initialize = function()
 end
 
 setFishingResourcePool_text = function()
-  -- function num : 0_3 , upvalues : fishing_UI, UI_color, UI_TM
+  -- function num : 0_3 , upvalues : fishing_UI, UI_TM
   local fishComment_head = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_HEAD")
   local fishingPercent = (math.floor)(ToClient_CurrentFishingData() * 100)
   if fishingPercent >= 71 and fishingPercent <= 100 then
-    (fishing_UI._fishPercent):SetFontColor(UI_color.C_FF00C0D7)
     fishComment = fishComment_head .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_1")
   else
     if fishingPercent >= 46 and fishingPercent <= 70 then
-      (fishing_UI._fishPercent):SetFontColor(UI_color.C_FFC8FFC8)
       fishComment = fishComment_head .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_2")
     else
       if fishingPercent >= 15 and fishingPercent <= 45 then
-        (fishing_UI._fishPercent):SetFontColor(UI_color.C_FFEE7001)
         fishComment = fishComment_head .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_3")
       else
         if fishingPercent <= 14 and fishingPercent >= 0 then
-          (fishing_UI._fishPercent):SetFontColor(UI_color.C_FFF26A6A)
           fishComment = fishComment_head .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_VALUE_4")
         end
       end
@@ -154,10 +150,10 @@ local FishingGame_Manual_Fishing_Start = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._fish_Icon_Title):SetShow(true)
-    -- DECOMPILER ERROR at PC141: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC142: Confused about usage of register: R3 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Fishing_Start = false
     MiniGame_Manual_Value_FishingStart = true
@@ -194,12 +190,12 @@ local FishingGame_Manual_Fishing_0 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._fish_Icon_Title):SetShow(true)
     ;
     (fishing_UI._fishWpDesc):SetShow(false)
-    -- DECOMPILER ERROR at PC111: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Fishing_0 = false
   end
@@ -249,7 +245,7 @@ local FishingGame_Manual_Fishing_1 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (uiPress._button_Space):SetShow(true)
     ;
@@ -264,7 +260,7 @@ local FishingGame_Manual_Fishing_1 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishWpDesc):SetShow(false)
     ;
     (UIAni.AlphaAnimation)(1, uiPress._button_Space, 0.75, 1)
-    -- DECOMPILER ERROR at PC175: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC176: Confused about usage of register: R5 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Fishing_1 = false
   end
@@ -466,7 +462,7 @@ local MiniGame_Manual_Jaksal_0 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._purposeText):SetShow(true)
     ;
@@ -477,7 +473,7 @@ local MiniGame_Manual_Jaksal_0 = function(actorKeyRaw, isSelf)
     (fishing_UI._fish_Icon_Title):SetShow(true)
     ;
     (uiPress._button_Space):SetShow(true)
-    -- DECOMPILER ERROR at PC113: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC114: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_0 = false
   end
@@ -507,7 +503,7 @@ local MiniGame_Manual_Jaksal_1 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._purposeText):SetShow(true)
     ;
@@ -524,10 +520,10 @@ local MiniGame_Manual_Jaksal_1 = function(actorKeyRaw, isSelf)
     (uiPress._m1):SetShow(true)
     ;
     (fishing_UI._mBody):SetShow(true)
-    -- DECOMPILER ERROR at PC124: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC125: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_0 = true
-    -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC127: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_1 = false
   end
@@ -556,7 +552,7 @@ local MiniGame_Manual_Jaksal_2 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._purposeText):SetShow(true)
     ;
@@ -567,13 +563,13 @@ local MiniGame_Manual_Jaksal_2 = function(actorKeyRaw, isSelf)
     (fishing_UI._fish_Icon_Title):SetShow(true)
     ;
     (uiPress._button_Space):SetShow(true)
-    -- DECOMPILER ERROR at PC109: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC110: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_0 = true
-    -- DECOMPILER ERROR at PC111: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_1 = false
-    -- DECOMPILER ERROR at PC113: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC114: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_2 = false
   end
@@ -602,7 +598,7 @@ local MiniGame_Manual_Jaksal_3 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._purposeText):SetShow(true)
     ;
@@ -613,16 +609,16 @@ local MiniGame_Manual_Jaksal_3 = function(actorKeyRaw, isSelf)
     (fishing_UI._fish_Icon_Title):SetShow(true)
     ;
     (uiPress._button_Space):SetShow(true)
-    -- DECOMPILER ERROR at PC109: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC110: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_0 = true
-    -- DECOMPILER ERROR at PC111: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_1 = false
-    -- DECOMPILER ERROR at PC113: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC114: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_2 = false
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_3 = false
   end
@@ -651,7 +647,7 @@ local MiniGame_Manual_Jaksal_4 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._purposeText):SetShow(true)
     ;
@@ -662,19 +658,19 @@ local MiniGame_Manual_Jaksal_4 = function(actorKeyRaw, isSelf)
     (fishing_UI._fish_Icon_Title):SetShow(true)
     ;
     (uiPress._button_Space):SetShow(true)
-    -- DECOMPILER ERROR at PC109: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC110: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_0 = true
-    -- DECOMPILER ERROR at PC111: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_1 = false
-    -- DECOMPILER ERROR at PC113: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC114: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_2 = false
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_3 = false
-    -- DECOMPILER ERROR at PC117: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC118: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_4 = false
   end
@@ -703,7 +699,7 @@ local MiniGame_Manual_Jaksal_5 = function(actorKeyRaw, isSelf)
     (fishing_UI._fishComment):SetShow(true)
     setFishingResourcePool_text()
     ;
-    (fishing_UI._fishBG):SetSize((fishing_UI._fishBG):GetSizeX(), (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+    (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
     ;
     (fishing_UI._purposeText):SetShow(true)
     ;
@@ -714,22 +710,22 @@ local MiniGame_Manual_Jaksal_5 = function(actorKeyRaw, isSelf)
     (fishing_UI._fish_Icon_Title):SetShow(true)
     ;
     (uiPress._button_Space):SetShow(true)
-    -- DECOMPILER ERROR at PC109: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC110: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_0 = true
-    -- DECOMPILER ERROR at PC111: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_1 = false
-    -- DECOMPILER ERROR at PC113: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC114: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_2 = false
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_3 = false
-    -- DECOMPILER ERROR at PC117: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC118: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_4 = false
-    -- DECOMPILER ERROR at PC119: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC120: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Jaksal_5 = false
   end

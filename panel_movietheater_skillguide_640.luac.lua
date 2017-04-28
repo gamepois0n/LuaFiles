@@ -60,7 +60,7 @@ local wizardText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_W
 local ninjaWomenText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_NINJAWOMENTEXT")
 local ninjaManText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_NINJAMANTEXT")
 local darkelfText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_DARKELFTEXT")
-local comboDesc = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_3"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_16"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_7"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_17"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_9"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_10"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_11"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_18"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_12"), [13] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_13"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_14"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_15"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_19"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_20"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_21"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_22"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_23"), [24] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_24"), [25] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_25"), [26] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_26"), [27] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_27"), [28] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_28"), [29] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_29"), [30] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_30"), [31] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_31"), [32] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_32"), [33] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_33"), [34] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_34"), [35] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_35"), [36] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_36"), [37] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_37"), [38] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_38"), [39] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_39"), [40] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_40"), [41] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_41"), [42] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_42"), [43] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_43"), [44] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_44"), [45] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_40"), [46] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_41"), [47] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_42"), [48] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_43"), [49] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_44"), [50] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [51] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [52] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [53] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_48"), [54] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_49"), [55] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [56] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [57] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [58] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_50"), [59] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_51"), [60] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_55"), [61] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_56"), [62] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_57"), [63] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_58"), [64] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_59"), [65] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_60"), [66] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_61"), [67] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_62"), [68] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_63"), [69] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_64"), [70] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_65"), [71] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_66"), [72] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_67"), [73] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_68"), [74] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_69"), [75] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_70"), [76] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_71"), [77] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_72"), [78] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_73"), [79] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_74"), [80] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_75"), [81] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_76"), [82] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_77"), [83] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_78"), [84] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_79"), [85] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_80")}
+local comboDesc = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_3"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_16"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_7"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_17"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_9"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_10"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_11"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_18"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_12"), [13] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_13"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_14"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_15"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_19"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_20"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_21"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_22"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_23"), [24] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_24"), [25] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_25"), [26] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_26"), [27] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_27"), [28] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_28"), [29] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_29"), [30] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_30"), [31] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_31"), [32] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_32"), [33] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_33"), [34] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_SKILLGUIDE_640_COMBODESC_34"), [35] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_35"), [36] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_36"), [37] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_37"), [38] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_38"), [39] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_39"), [40] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_40"), [41] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_41"), [42] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_42"), [43] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_43"), [44] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_44"), [45] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_40"), [46] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_41"), [47] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_42"), [48] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_43"), [49] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_44"), [50] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [51] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [52] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [53] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_48"), [54] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_49"), [55] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [56] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [57] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [58] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_50"), [59] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_51"), [60] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_55"), [61] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_56"), [62] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_57"), [63] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_58"), [64] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_59"), [65] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_60"), [66] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_61"), [67] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_62"), [68] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_63"), [69] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_64"), [70] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_65"), [71] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_66"), [72] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_67"), [73] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_68"), [74] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_69"), [75] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_70"), [76] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_71"), [77] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_72"), [78] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_73"), [79] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_74"), [80] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_75"), [81] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_76"), [82] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_77"), [83] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_78"), [84] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_79"), [85] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_80"), [86] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_81"), [87] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_82"), [88] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_83"), [89] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_84"), [90] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_85"), [91] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_86"), [92] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_87"), [93] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_88"), [94] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_89")}
 Panel_MovieTheater_SkillGuide_640_JustClose = function()
   -- function num : 0_3
   Panel_MovieTheater_SkillGuide_640:SetShow(false)
@@ -349,21 +349,36 @@ Panel_MovieTheaterSkillGuide640_ShowToggle = function(classNo, titleNo)
             if classNo == 20 then
               if titleNo == 0 then
                 playedNo = 600
-                _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+                if isGameTypeTaiwan() then
+                  _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", bladerText))
+                  _comboList:SetText(comboDesc[86])
+                else
+                  _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+                  _comboList:SetText(comboDesc[25])
+                end
                 _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                _comboList:SetText(comboDesc[25])
               else
                 if titleNo == 1 then
                   playedNo = 601
-                  _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+                  if isGameTypeTaiwan() then
+                    _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", bladerText))
+                    _comboList:SetText(comboDesc[87])
+                  else
+                    _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+                    _comboList:SetText(comboDesc[26])
+                  end
                   _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                  _comboList:SetText(comboDesc[26])
                 else
                   if titleNo == 2 then
                     playedNo = 602
-                    _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+                    if isGameTypeTaiwan() then
+                      _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", bladerText))
+                      _comboList:SetText(comboDesc[88])
+                    else
+                      _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+                      _comboList:SetText(comboDesc[27])
+                    end
                     _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                    _comboList:SetText(comboDesc[27])
                   else
                     if titleNo == 3 then
                       playedNo = 603
@@ -385,21 +400,36 @@ Panel_MovieTheaterSkillGuide640_ShowToggle = function(classNo, titleNo)
               if classNo == 21 then
                 if titleNo == 0 then
                   playedNo = 800
-                  _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+                  if isGameTypeTaiwan() then
+                    _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", bladerWomenText))
+                    _comboList:SetText(comboDesc[89])
+                  else
+                    _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+                    _comboList:SetText(comboDesc[35])
+                  end
                   _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                  _comboList:SetText(comboDesc[35])
                 else
                   if titleNo == 1 then
                     playedNo = 801
-                    _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+                    if isGameTypeTaiwan() then
+                      _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", bladerWomenText))
+                      _comboList:SetText(comboDesc[90])
+                    else
+                      _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+                      _comboList:SetText(comboDesc[36])
+                    end
                     _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                    _comboList:SetText(comboDesc[36])
                   else
                     if titleNo == 2 then
                       playedNo = 802
-                      _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerWomenText))
+                      if isGameTypeTaiwan() then
+                        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", bladerWomenText))
+                        _comboList:SetText(comboDesc[91])
+                      else
+                        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerWomenText))
+                        _comboList:SetText(comboDesc[37])
+                      end
                       _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                      _comboList:SetText(comboDesc[37])
                     else
                       if titleNo == 3 then
                         playedNo = 803
@@ -472,21 +502,36 @@ Panel_MovieTheaterSkillGuide640_ShowToggle = function(classNo, titleNo)
                   if classNo == 25 then
                     if titleNo == 0 then
                       playedNo = 1001
-                      _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+                      if isGameTypeTaiwan() then
+                        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", ninjaWomenText))
+                        _comboList:SetText(comboDesc[92])
+                      else
+                        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+                        _comboList:SetText(comboDesc[50])
+                      end
                       _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                      _comboList:SetText(comboDesc[50])
                     else
                       if titleNo == 1 then
                         playedNo = 1002
-                        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+                        if isGameTypeTaiwan() then
+                          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", ninjaWomenText))
+                          _comboList:SetText(comboDesc[93])
+                        else
+                          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+                          _comboList:SetText(comboDesc[51])
+                        end
                         _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                        _comboList:SetText(comboDesc[51])
                       else
                         if titleNo == 2 then
                           playedNo = 1003
-                          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", ninjaWomenText))
+                          if isGameTypeTaiwan() then
+                            _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", ninjaWomenText))
+                            _comboList:SetText(comboDesc[94])
+                          else
+                            _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", ninjaWomenText))
+                            _comboList:SetText(comboDesc[52])
+                          end
                           _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-                          _comboList:SetText(comboDesc[52])
                         else
                           if titleNo == 3 then
                             playedNo = 1004

@@ -53,14 +53,32 @@ end
 
 FGlobal_NewQuickSlot_InitPos = function(updateByServer)
   -- function num : 0_2 , upvalues : NewQuickSlot, NewQuickSlot_PanelID
-  for panelIdx = 0, (NewQuickSlot.config).maxPanelCount - 1 do
-    local slot = (NewQuickSlot.panelPool)[panelIdx]
-    ;
-    (slot.Panel):SetPosX(getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx)
-    ;
-    (slot.Panel):SetPosY(getScreenSizeY() - (slot.Panel):GetSizeY() - 5)
-    if updateByServer then
-      changePositionBySever(slot.Panel, NewQuickSlot_PanelID[panelIdx], false, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    for panelIdx = 0, (NewQuickSlot.config).maxPanelCount - 1 do
+      local slot = (NewQuickSlot.panelPool)[panelIdx]
+      if (slot.Panel):GetRelativePosX() == 0 and (slot.Panel):GetRelativePosY() == 0 then
+        (slot.Panel):SetPosX(getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx)
+        ;
+        (slot.Panel):SetPosY(getScreenSizeY() - (slot.Panel):GetSizeY() - 5)
+      else
+        ;
+        (slot.Panel):SetPosX(getScreenSizeX() * (slot.Panel):GetRelativePosX() - (slot.Panel):GetSizeX() / 2)
+        ;
+        (slot.Panel):SetPosY(getScreenSizeY() * (slot.Panel):GetRelativePosY() - (slot.Panel):GetSizeY() / 2)
+      end
+    end
+  else
+    do
+      for panelIdx = 0, (NewQuickSlot.config).maxPanelCount - 1 do
+        local slot = (NewQuickSlot.panelPool)[panelIdx]
+        ;
+        (slot.Panel):SetPosX(getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx)
+        ;
+        (slot.Panel):SetPosY(getScreenSizeY() - (slot.Panel):GetSizeY() - 5)
+        if updateByServer then
+          changePositionBySever(slot.Panel, NewQuickSlot_PanelID[panelIdx], false, true, false)
+        end
+      end
     end
   end
 end

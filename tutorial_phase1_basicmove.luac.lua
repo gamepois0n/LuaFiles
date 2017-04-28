@@ -76,6 +76,7 @@ end
 
 PaGlobal_TutorialPhase_BasicMove.startPhaseXXX = function(self, stepNo)
   -- function num : 0_3 , upvalues : classType
+  PaGlobal_TutorialManager:setCurrentPhaseNo(self._phaseNo)
   PaGlobal_TutorialManager:setDoingTutorial(true)
   _PA_LOG("곽민�\176", "PaGlobal_TutorialPhase_BasicMove:startPhase() stepNo : " .. tostring(stepNo))
   self._currentStep = 0
@@ -329,7 +330,7 @@ PaGlobal_TutorialPhase_BasicMove.updateBasicMove = function(self, deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC174: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC183: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicMove._classStringData = {
 [(CppEnums.ClassType).ClassType_Warrior] = {"TUTORIAL_MOVE_WARRIOR_TALK1", "TUTORIAL_MOVE_WARRIOR_TALK2", "TUTORIAL_MOVE_WARRIOR_TALK3"}
@@ -357,5 +358,7 @@ PaGlobal_TutorialPhase_BasicMove._classStringData = {
 [(CppEnums.ClassType).ClassType_NinjaMan] = {"TUTORIAL_MOVE_NINJA_TALK1", "TUTORIAL_MOVE_NINJA_TALK2", "TUTORIAL_MOVE_NINJA_TALK3"}
 , 
 [(CppEnums.ClassType).ClassType_DarkElf] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
+, 
+[(CppEnums.ClassType).ClassType_Combattant] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
 }
 

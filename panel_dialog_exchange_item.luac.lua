@@ -170,40 +170,38 @@ Dialog_ExchangeItem_Update = function()
         (slot._progressArrow):SetShow(true)
         uiIndex = uiIndex + 1
       end
-    else
-      do
-        do
-          Panel_Exchange_Item:SetShow(false, false)
-          -- DECOMPILER ERROR at PC197: LeaveBlock: unexpected jumping out DO_STMT
-
-          -- DECOMPILER ERROR at PC197: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-          -- DECOMPILER ERROR at PC197: LeaveBlock: unexpected jumping out IF_STMT
-
-        end
-      end
     end
   end
-  ;
-  (UIScroll.SetButtonSize)(self._scroll, self._slotMaxCount, self._listCount)
-  if uiIndex < self._listCount then
-    (self._scroll):SetShow(true)
-  else
+  do
+    local realCount = 0
+    for index = 0, self._listCount - 1 do
+      local itemWrapperLua = displayExchangeWrapper:getItemExchangeByNpcStaticStatusWrapperAtIndex(index)
+      if itemWrapperLua ~= nil then
+        realCount = realCount + 1
+      end
+    end
+    self._listCount = realCount
     ;
-    (self._scroll):SetShow(false)
-  end
-  if self._listCount < self._slotMaxCount then
-    local gapCount = self._slotMaxCount - self._listCount
-    Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY - 37 * gapCount)
-    Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
-    ;
-    (self._uiBG):SetSize((self._uiBG):GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
-  else
-    do
-      Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY)
+    (UIScroll.SetButtonSize)(self._scroll, self._slotMaxCount, self._listCount)
+    if uiIndex < self._listCount then
+      (self._scroll):SetShow(true)
+    else
+      ;
+      (self._scroll):SetShow(false)
+    end
+    if self._listCount < self._slotMaxCount then
+      local gapCount = self._slotMaxCount - self._listCount
+      Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY - 37 * gapCount)
       Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
       ;
       (self._uiBG):SetSize((self._uiBG):GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
+    else
+      do
+        Panel_Exchange_Item:SetSize(Panel_Exchange_Item:GetSizeX(), self.panelSizeY)
+        Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
+        ;
+        (self._uiBG):SetSize((self._uiBG):GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
+      end
     end
   end
 end

@@ -1147,9 +1147,14 @@ CharacterSelect_PlayGame = function(index)
   local serverUtc64 = getServerUtc64()
   do
     if ToClient_IsCustomizeOnlyClass(classType) then
-      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET_1") .. PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET_2"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageboxData)
+      return 
+    end
+    local curChannelData = getCurrentChannelServerData()
+    if curChannelData._isBalanceChannel == true and characterData._level <= 49 and ToClient_isAccessableBalanceChannel() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_BALENCECHANNEL_JOIN_LIMIT"))
       return 
     end
     if characterData ~= nil then
