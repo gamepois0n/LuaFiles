@@ -4,48 +4,53 @@
 -- params : ...
 -- function num : 0
 local UI_VT = CppEnums.VehicleType
-Panel_HorseMp:SetShow(false, false)
+local servantMpBar = {_staticBarBG = (UI.getChildControl)(Panel_HorseMp, "Static_3"), _staticBar = (UI.getChildControl)(Panel_HorseMp, "HorseMpBar"), _staticText = (UI.getChildControl)(Panel_HorseMp, "StaticText_Mp"), _actorKeyRaw = 0, _button_AutoCarrot = (UI.getChildControl)(Panel_HorseMp, "CheckButton_AutoCarrot")}
 local staminaAlert = (UI.getChildControl)(Panel_HorseMp, "StaticText_AlertStamina")
 local repair_AutoNavi = (UI.getChildControl)(Panel_HorseMp, "CheckButton_Repair_AutoNavi")
 local repair_Navi = (UI.getChildControl)(Panel_HorseMp, "Checkbox_Repair_Navi")
-staminaAlert:SetShow(false)
-repair_AutoNavi:SetShow(false)
-repair_Navi:SetShow(false)
-local servantMpBar = {_staticBarBG = (UI.getChildControl)(Panel_HorseMp, "Static_3"), _staticBar = (UI.getChildControl)(Panel_HorseMp, "HorseMpBar"), _staticText = (UI.getChildControl)(Panel_HorseMp, "StaticText_Mp"), _actorKeyRaw = 0, _button_AutoCarrot = (UI.getChildControl)(Panel_HorseMp, "CheckButton_AutoCarrot")}
 local horseCarrotItemKey = {[0] = 19945, [1] = 54001, [2] = 54004, [3] = 54005}
 local camelCarrotItemKey = {[0] = 54012, [1] = 54020, [2] = 54021, [3] = 54022}
-repair_AutoNavi:addInputEvent("Mouse_LUp", "HandleClick_Horse_Repair_Navi(true)")
-repair_Navi:addInputEvent("Mouse_LUp", "HandleClick_Horse_Repair_Navi(false)")
-;
-(servantMpBar._button_AutoCarrot):addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 2, nil )")
-;
-(servantMpBar._button_AutoCarrot):setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 2, nil )")
-;
-(servantMpBar._button_AutoCarrot):addInputEvent("Mouse_Out", "HorseMP_SimpleTooltips( false, 2 )")
+registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_HorseMp")
+registerEvent("EventSelfServantUpdate", "HorseMP_Update")
+registerEvent("EventSelfServantUpdateOnlyMp", "HorseMP_Update")
+registerEvent("EventSelfPlayerRideOn", "HorseMP_OpenByInteraction")
+registerEvent("FromClient_RenderModeChangeState", "renderModechange_HorseMP_OpenByInteraction")
+registerEvent("EventSelfPlayerCarrierChanged", "HorseMP_EventSelfPlayerCarrierChanged")
+registerEvent("EventSelfPlayerRideOff", "HorseMP_Close")
+FromClient_luaLoadComplete_HorseMp = function()
+  -- function num : 0_0 , upvalues : staminaAlert, repair_AutoNavi, repair_Navi, servantMpBar
+  HorseMP_init()
+  staminaAlert:SetShow(false)
+  repair_AutoNavi:SetShow(false)
+  repair_Navi:SetShow(false)
+  repair_AutoNavi:addInputEvent("Mouse_LUp", "HandleClick_Horse_Repair_Navi(true)")
+  repair_Navi:addInputEvent("Mouse_LUp", "HandleClick_Horse_Repair_Navi(false)")
+  ;
+  (servantMpBar._button_AutoCarrot):addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 2, nil )")
+  ;
+  (servantMpBar._button_AutoCarrot):setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 2, nil )")
+  ;
+  (servantMpBar._button_AutoCarrot):addInputEvent("Mouse_Out", "HorseMP_SimpleTooltips( false, 2 )")
+end
+
 HorseMP_init = function()
-  -- function num : 0_0 , upvalues : servantMpBar
+  -- function num : 0_1 , upvalues : servantMpBar
+  Panel_HorseMp:SetShow(false, false)
   Panel_HorseMp:ComputePos()
   ;
   (servantMpBar._button_AutoCarrot):SetShow(false)
 end
 
-HorseMP_Update = function()
-  -- function num : 0_1 , upvalues : servantMpBar, UI_VT, staminaAlert, repair_AutoNavi, repair_Navi, horseCarrotItemKey, camelCarrotItemKey
-  local self = servantMpBar
-  local vehicleProxy = getVehicleActor(self._actorKeyRaw)
-  if vehicleProxy == nil then
-    return 
-  end
-  local vehicleType = ((vehicleProxy:get()):getVehicleType())
-  local staminaPercent = nil
+HorseMp_InitStaminaAlertText = function(vehicleType)
+  -- function num : 0_2 , upvalues : staminaAlert
   local alertText = ""
-  if (CppEnums.VehicleType).Type_Carriage == vehicleType or vehicleType == (CppEnums.VehicleType).Type_CowCarriage then
+  if (CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType then
     alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_1")
   else
-    if (CppEnums.VehicleType).Type_Boat == vehicleType or vehicleType == (CppEnums.VehicleType).Type_Raft or vehicleType == (CppEnums.VehicleType).Type_FishingBoat then
+    if (CppEnums.VehicleType).Type_Boat == vehicleType or (CppEnums.VehicleType).Type_Raft == vehicleType or (CppEnums.VehicleType).Type_FishingBoat == vehicleType then
       alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_3")
     else
-      if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_SailingBoat == vehicleType or vehicleType == (CppEnums.VehicleType).Type_TradeShip then
+      if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_TradeShip == vehicleType then
         alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_4")
       else
         alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_2")
@@ -54,9 +59,21 @@ HorseMP_Update = function()
   end
   staminaAlert:SetAutoResize()
   staminaAlert:SetText(alertText)
+end
+
+HorseMP_Update = function()
+  -- function num : 0_3 , upvalues : servantMpBar, repair_AutoNavi, repair_Navi, UI_VT, horseCarrotItemKey, camelCarrotItemKey
+  if Panel_HorseMp:GetShow() == false then
+    return 
+  end
+  local self = servantMpBar
+  local vehicleProxy = getVehicleActor(self._actorKeyRaw)
+  if vehicleProxy == nil then
+    return 
+  end
+  local vehicleType = ((vehicleProxy:get()):getVehicleType())
+  local staminaPercent = nil
   staminaPercent = (vehicleProxy:get()):getMp() / (vehicleProxy:get()):getMaxMp() * 100
-  repair_AutoNavi:SetShow(false)
-  repair_Navi:SetShow(false)
   if (CppEnums.VehicleType).Type_Carriage ~= vehicleType and (CppEnums.VehicleType).Type_CowCarriage ~= vehicleType and (CppEnums.VehicleType).Type_Boat ~= vehicleType and (CppEnums.VehicleType).Type_Raft ~= vehicleType and (CppEnums.VehicleType).Type_FishingBoat ~= vehicleType and (CppEnums.VehicleType).Type_SailingBoat ~= vehicleType and (CppEnums.VehicleType).Type_TradeShip ~= vehicleType and (CppEnums.VehicleType).Type_PersonTradeShip ~= vehicleType then
     if staminaPercent < 10 then
       (self._staticBarBG):EraseAllEffect()
@@ -71,12 +88,8 @@ HorseMP_Update = function()
       repair_Navi:SetShow(false)
     end
   end
-  if UI_VT.Type_Ladder == vehicleType or UI_VT.Type_Cow == vehicleType or UI_VT.Type_Bomb == vehicleType or UI_VT.Type_QuestObjectBox == vehicleType or UI_VT.Type_QuestObjectSack == vehicleType or UI_VT.Type_QuestObjectSheep == vehicleType or UI_VT.Type_QuestObjectCart == vehicleType or UI_VT.Type_QuestObjectOak == vehicleType or UI_VT.Type_QuestObjectBoat == vehicleType or UI_VT.Type_QuestObjectPumpkin == vehicleType or UI_VT.Type_QuestObjectBrokenFrag == vehicleType or UI_VT.Type_QuestObjectHerbalMachines == vehicleType or UI_VT.Type_QuestObjectExtractor == vehicleType then
-    HorseMP_Close()
-    return 
-  end
   ;
-  (self._staticBar):SetProgressRate((vehicleProxy:get()):getMp() / (vehicleProxy:get()):getMaxMp() * 100)
+  (self._staticBar):SetProgressRate(staminaPercent)
   if UI_VT.Type_Horse == vehicleType or UI_VT.Type_Camel == vehicleType or UI_VT.Type_Donkey == vehicleType or UI_VT.Type_MountainGoat == vehicleType then
     (self._staticText):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SERVANT_MPBAR_LIFE", "getMp", makeDotMoney((vehicleProxy:get()):getMp()), "getMaxMp", makeDotMoney((vehicleProxy:get()):getMaxMp())))
     ;
@@ -129,26 +142,26 @@ HorseMP_Update = function()
     else
       ;
       (servantMpBar._button_AutoCarrot):SetShow(true)
+      if staminaPercent <= 10 and (servantMpBar._button_AutoCarrot):IsCheck() == true then
+        if UI_VT.Type_Horse == vehicleType or UI_VT.Type_Donkey == vehicleType or UI_VT.Type_RidableBabyElephant == vehicleType then
+          HorseAutoCarrotFunc(horseCarrotItemKey)
+        else
+          if UI_VT.Type_Camel == vehicleType then
+            HorseAutoCarrotFunc(camelCarrotItemKey)
+          end
+        end
+      end
     end
   else
     ;
     (servantMpBar._button_AutoCarrot):SetShow(false)
   end
-  if staminaPercent <= 10 and (servantMpBar._button_AutoCarrot):IsCheck() == true and (getSelfPlayer()):isNavigationLoop() and (getSelfPlayer()):isNavigationMoving() then
-    if UI_VT.Type_Horse == vehicleType or UI_VT.Type_Donkey == vehicleType or UI_VT.Type_RidableBabyElephant == vehicleType then
-      HorseAutoCarrotFunc(horseCarrotItemKey)
-    else
-      if UI_VT.Type_Camel == vehicleType then
-        HorseAutoCarrotFunc(camelCarrotItemKey)
-      end
-    end
-  end
 end
 
 HorseAutoCarrotFunc = function(carrotItemKey)
-  -- function num : 0_2
+  -- function num : 0_4
   local useAutoCarrot = function(invenSlot)
-    -- function num : 0_2_0
+    -- function num : 0_4_0
     local itemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eInventory, invenSlot)
     local itemStatic = (itemWrapper:getStaticStatus()):get()
     local selfProxy = (getSelfPlayer()):get()
@@ -238,17 +251,17 @@ HorseAutoCarrotFunc = function(carrotItemKey)
 end
 
 HandleOn_HorseMp_Bar = function()
-  -- function num : 0_3 , upvalues : servantMpBar
+  -- function num : 0_5 , upvalues : servantMpBar
   (servantMpBar._staticText):SetShow(true)
 end
 
 HandleOut_HorseMp_Bar = function()
-  -- function num : 0_4 , upvalues : servantMpBar
+  -- function num : 0_6 , upvalues : servantMpBar
   (servantMpBar._staticText):SetShow(false)
 end
 
 HorseMP_OpenByInteraction = function()
-  -- function num : 0_5 , upvalues : servantMpBar, UI_VT
+  -- function num : 0_7 , upvalues : servantMpBar, UI_VT
   local self = servantMpBar
   local selfPlayer = getSelfPlayer()
   local selfProxy = selfPlayer:get()
@@ -267,7 +280,7 @@ HorseMP_OpenByInteraction = function()
 end
 
 HorseMP_SimpleTooltips = function(isShow, servantTooltipType, staminaStatus)
-  -- function num : 0_6 , upvalues : servantMpBar, staminaAlert
+  -- function num : 0_8 , upvalues : servantMpBar, staminaAlert
   local name, desc, uiControl = nil
   if servantTooltipType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_HORSEMP_NAME")
@@ -320,7 +333,7 @@ HorseMP_SimpleTooltips = function(isShow, servantTooltipType, staminaStatus)
 end
 
 HorseMP_Open = function()
-  -- function num : 0_7
+  -- function num : 0_9 , upvalues : servantMpBar, UI_VT, repair_AutoNavi, repair_Navi
   if Panel_HorseMp:GetShow() then
     return 
   end
@@ -331,13 +344,25 @@ HorseMP_Open = function()
   local selfProxy = selfPlayer:get()
   local isDriver = selfProxy:isVehicleDriver()
   if isDriver == false then
+    local self = servantMpBar
+    local vehicleProxy = getVehicleActor(self._actorKeyRaw)
+    if vehicleProxy == nil then
+      return 
+    end
+    local vehicleType = (vehicleProxy:get()):getVehicleType()
+    if UI_VT.Type_Ladder == vehicleType or UI_VT.Type_Cow == vehicleType or UI_VT.Type_Bomb == vehicleType or UI_VT.Type_QuestObjectBox == vehicleType or UI_VT.Type_QuestObjectSack == vehicleType or UI_VT.Type_QuestObjectSheep == vehicleType or UI_VT.Type_QuestObjectCart == vehicleType or UI_VT.Type_QuestObjectOak == vehicleType or UI_VT.Type_QuestObjectBoat == vehicleType or UI_VT.Type_QuestObjectPumpkin == vehicleType or UI_VT.Type_QuestObjectBrokenFrag == vehicleType or UI_VT.Type_QuestObjectHerbalMachines == vehicleType or UI_VT.Type_QuestObjectExtractor == vehicleType then
+      return 
+    end
     Panel_HorseMp:SetShow(true)
+    repair_AutoNavi:SetShow(false)
+    repair_Navi:SetShow(false)
+    HorseMp_InitStaminaAlertText(vehicleType)
     HorseMP_Update()
   end
 end
 
 HorseMP_Close = function()
-  -- function num : 0_8
+  -- function num : 0_10
   if not Panel_HorseMp:GetShow() then
     return 
   end
@@ -345,7 +370,7 @@ HorseMP_Close = function()
 end
 
 HandleClick_Horse_Repair_Navi = function(isAuto)
-  -- function num : 0_9 , upvalues : repair_AutoNavi, repair_Navi
+  -- function num : 0_11 , upvalues : repair_AutoNavi, repair_Navi
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -384,7 +409,7 @@ HandleClick_Horse_Repair_Navi = function(isAuto)
 end
 
 HorseMP_EventSelfPlayerCarrierChanged = function(vehicleActorKeyRaw)
-  -- function num : 0_10 , upvalues : servantMpBar
+  -- function num : 0_12 , upvalues : servantMpBar
   local self = servantMpBar
   local characterActorProxyWrapper = getCharacterActor(vehicleActorKeyRaw)
   if characterActorProxyWrapper == nil then
@@ -396,18 +421,11 @@ HorseMP_EventSelfPlayerCarrierChanged = function(vehicleActorKeyRaw)
 end
 
 renderModechange_HorseMP_OpenByInteraction = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_11
+  -- function num : 0_13
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
   HorseMP_OpenByInteraction()
 end
 
-registerEvent("FromClient_RenderModeChangeState", "renderModechange_HorseMP_OpenByInteraction")
-registerEvent("EventSelfServantUpdate", "HorseMP_Update")
-registerEvent("EventSelfPlayerRideOff", "HorseMP_Close")
-registerEvent("EventSelfPlayerRideOn", "HorseMP_OpenByInteraction")
-registerEvent("EventSelfPlayerCarrierChanged", "HorseMP_EventSelfPlayerCarrierChanged")
-registerEvent("EventSelfServantUpdateOnlyHpMp", "HorseMP_Update")
-HorseMP_init()
 

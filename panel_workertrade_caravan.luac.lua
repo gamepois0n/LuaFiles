@@ -45,7 +45,7 @@ Panel_WorkerTrade_Caravan_HideAni = function()
 end
 
 local workerTradeCaravan = {
-control = {_caravanStatBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_CaravanStatBg"), _workerBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_WorkerBg"), _assetBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_AssetBg"), _itemSetBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_ItemSetBg"), _itemWeight = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "StaticText_WeightIcon"), 
+control = {_closeBtn = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_Close"), _questionBtn = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_Question"), _caravanStatBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_CaravanStatBg"), _workerBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_WorkerBg"), _assetBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_AssetBg"), _itemSetBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_ItemSetBg"), _itemWeight = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "StaticText_WeightIcon"), 
 _routerNode = {_btnStartNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_StartNode"), _btnArrivalNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_ArrivalNode"), 
 _btnRouterNode = {[1] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode1"), [2] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode2"), [3] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode3"), [4] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode4"), [5] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode5")}
 }
@@ -60,15 +60,15 @@ _itemSet = {}
 }
 , 
 _selectedWorker = {[0] = (Defines.u64_const).u64_0, [1] = (Defines.u64_const).u64_0}
-, _caravanIndex = -1, _selectIndex = -1, _selectArrNodeIndex = -1, _routeNodeIndex = 0, _currentSelectRouteNodeCount = 0, 
+, _caravanIndex = -1, _selectIndex = -1, _selectArrNodeIndex = -1, _routeNodeIndex = 0, _selectRouteNodeIndex = 0, _currentSelectRouteNodeCount = 0, 
 _currentSelectRouteNodeList = {}
-, _maxCarriageCount = 5, _minCarriageCount = 1, _maxWorkerCount = 10, _minWorkerCount = 2, _maxGuardCount = 3, _maxFACount = 3, 
+, _allWeight = 0, _allPrice = 0, _maxCarriageCount = 5, _minCarriageCount = 1, _maxWorkerCount = 3, _minWorkerCount = 2, _maxGuardCount = 3, _maxFACount = 3, 
 tradeItemInfo = {}
 }
 workerTradeCaravan.ControlInit = function(self)
   -- function num : 0_2
   local control = self.control
-  control._caravanStat = {_image = (UI.getChildControl)(control._caravanStatBg, "Static_CaravanImage"), _name = (UI.getChildControl)(control._caravanStatBg, "StaticText_CaravanName"), _speed = (UI.getChildControl)(control._caravanStatBg, "StaticText_Speed"), _luck = (UI.getChildControl)(control._caravanStatBg, "StaticText_Luck"), _attack = (UI.getChildControl)(control._caravanStatBg, "StaticText_Attack"), _defence = (UI.getChildControl)(control._caravanStatBg, "StaticText_Deffence")}
+  control._caravanStat = {_image = (UI.getChildControl)(control._caravanStatBg, "Static_CaravanImage"), _name = (UI.getChildControl)(control._caravanStatBg, "StaticText_CaravanName"), _speed = (UI.getChildControl)(control._caravanStatBg, "StaticText_Speed"), _luck = (UI.getChildControl)(control._caravanStatBg, "StaticText_Luck"), _defence = (UI.getChildControl)(control._caravanStatBg, "StaticText_Deffence")}
   control._worker = {
 _image = {[1] = (UI.getChildControl)(control._workerBg, "Static_WorkerImage1"), [2] = (UI.getChildControl)(control._workerBg, "Static_WorkerImage2")}
 }
@@ -89,54 +89,54 @@ _itemSetBg = {
 }
 }
   for index = 1, 5 do
-    -- DECOMPILER ERROR at PC183: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC177: Confused about usage of register: R6 in 'UnsetPending'
 
     (((control._itemSet)._itemSetBg)[index])._itemSlotBg = {}
-    -- DECOMPILER ERROR at PC195: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC189: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[1] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "Static_ItemSlotBg1")
-    -- DECOMPILER ERROR at PC207: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC201: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[2] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "Static_ItemSlotBg2")
-    -- DECOMPILER ERROR at PC212: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC206: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._itemSlot = {}
-    -- DECOMPILER ERROR at PC226: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC220: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlot)[1] = (UI.getChildControl)(((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[1], "Static_Slot")
-    -- DECOMPILER ERROR at PC240: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC234: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlot)[2] = (UI.getChildControl)(((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[2], "Static_Slot")
-    -- DECOMPILER ERROR at PC245: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC239: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._plus = {}
-    -- DECOMPILER ERROR at PC257: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC251: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._plus)[1] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Plus1")
-    -- DECOMPILER ERROR at PC269: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC263: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._plus)[2] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Plus2")
-    -- DECOMPILER ERROR at PC274: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC268: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._count = {}
-    -- DECOMPILER ERROR at PC286: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC280: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._count)[1] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Count1")
-    -- DECOMPILER ERROR at PC298: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC292: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._count)[2] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Count2")
-    -- DECOMPILER ERROR at PC309: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC303: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._noCarriage = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_NoCarriage")
@@ -147,6 +147,9 @@ workerTradeCaravan.Show = function(self, index)
   -- function num : 0_3
   WorldMapPopupManager:increaseLayer(true)
   WorldMapPopupManager:push(Panel_WorkerTrade_Caravan, true)
+  ToClient_RequestClearTempInfo()
+  self._selectArrNodeIndex = -1
+  self._currentSelectRouteNodeList = {}
   self:SetData(index)
 end
 
@@ -157,7 +160,6 @@ workerTradeCaravan.SetData = function(self, index)
     return 
   end
   local control = self.control
-  ToClient_RequestClearTempInfo()
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(index - 1)
   if tradeGroupWrapper == nil then
@@ -170,16 +172,14 @@ workerTradeCaravan.SetData = function(self, index)
   local luck = tradeGroupWrapper:getTradeGroupLuck()
   local deffence = tradeGroupWrapper:getTradeGroupDefense()
   ;
-  (stat._name):SetText("<" .. familyName .. ">�\128문의 상단")
+  (stat._name):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_FAMILY", "name", familyName))
   ;
-  (stat._speed):SetText("이동속도 : " .. tostring(moveSpeed))
+  (stat._speed):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SPEED", "speed", tostring(moveSpeed)))
   ;
-  (stat._luck):SetText("행운 : " .. tostring(luck))
+  (stat._luck):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_LUCK", "luck", tostring(luck)))
   ;
-  (stat._attack):SetText("공격�\165 : 0")
-  ;
-  (stat._defence):SetText("방어�\165 : " .. tostring(deffence))
-  -- DECOMPILER ERROR at PC66: Confused about usage of register: R11 in 'UnsetPending'
+  (stat._defence):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_DEFFENCE", "deffence", tostring(deffence)))
+  -- DECOMPILER ERROR at PC75: Confused about usage of register: R11 in 'UnsetPending'
 
   ;
   (self._selectedWorker)[0] = tradeGroupWrapper:getWorkerNo(0)
@@ -188,6 +188,11 @@ workerTradeCaravan.SetData = function(self, index)
     local workerName = workerWrapper:getName()
     ;
     (((control._worker)._image)[1]):ChangeTextureInfoName(workerWrapper:getWorkerIcon())
+    local x1, y1, x2, y2 = setTextureUV_Func(((control._worker)._image)[1], 14, 0, 294, 280)
+    ;
+    ((((control._worker)._image)[1]):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (((control._worker)._image)[1]):setRenderTexture((((control._worker)._image)[1]):getBaseTexture())
   else
     do
       ;
@@ -198,7 +203,7 @@ workerTradeCaravan.SetData = function(self, index)
         ((((control._worker)._image)[1]):getBaseTexture()):setUV(x1, y1, x2, y2)
         ;
         (((control._worker)._image)[1]):setRenderTexture((((control._worker)._image)[1]):getBaseTexture())
-        -- DECOMPILER ERROR at PC128: Confused about usage of register: R11 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC167: Confused about usage of register: R11 in 'UnsetPending'
 
         ;
         (self._selectedWorker)[1] = tradeGroupWrapper:getWorkerNo(1)
@@ -207,6 +212,11 @@ workerTradeCaravan.SetData = function(self, index)
           local workerName = workerWrapper:getName()
           ;
           (((control._worker)._image)[2]):ChangeTextureInfoName(workerWrapper:getWorkerIcon())
+          local x1, y1, x2, y2 = setTextureUV_Func(((control._worker)._image)[2], 14, 0, 294, 280)
+          ;
+          ((((control._worker)._image)[2]):getBaseTexture()):setUV(x1, y1, x2, y2)
+          ;
+          (((control._worker)._image)[2]):setRenderTexture((((control._worker)._image)[2]):getBaseTexture())
         else
           do
             ;
@@ -218,121 +228,114 @@ workerTradeCaravan.SetData = function(self, index)
               ;
               (((control._worker)._image)[2]):setRenderTexture((((control._worker)._image)[2]):getBaseTexture())
               self:AssetUpdate(index)
-              if tradeGroupWrapper:getState() == 4 then
-                local startRegionInfo = tradeGroupWrapper:getCurrentRegion()
+              local startRegionInfo = tradeGroupWrapper:getStartRegion()
+              ;
+              ((control._routerNode)._btnStartNode):SetText(startRegionInfo:getAreaName())
+              local arrivalRegionInfo = tradeGroupWrapper:getDestinationRegion()
+              ;
+              ((control._routerNode)._btnArrivalNode):SetText(arrivalRegionInfo:getAreaName())
+              local routeNodeCount = tradeGroupWrapper:getEventNodeCount()
+              for rIndex = 1, routeNodeCount do
+                local routeNodeInfo = tradeGroupWrapper:getEventNodeRegion(rIndex - 1)
                 ;
-                ((control._routerNode)._btnStartNode):SetText(startRegionInfo:getAreaName())
-              else
-                do
-                  local startRegionInfo = tradeGroupWrapper:getStartRegion()
-                  ;
-                  ((control._routerNode)._btnStartNode):SetText(startRegionInfo:getAreaName())
-                  local arrivalRegionInfo = tradeGroupWrapper:getDestinationRegion()
-                  local arrivalWayPointKey = ((control._routerNode)._btnArrivalNode):SetText(arrivalRegionInfo:getAreaName())
-                  local routeNodeCount = tradeGroupWrapper:getEventNodeCount()
-                  for rIndex = 1, routeNodeCount do
-                    local routeNodeInfo = tradeGroupWrapper:getEventNodeRegion(rIndex - 1)
-                    ;
-                    (((control._routerNode)._btnRouterNode)[index]):SetText(routeNodeInfo:getAreaName())
-                  end
-                  if routeNodeCount < 5 then
-                    for rIndex = routeNodeCount + 1, 5 do
-                      (((control._routerNode)._btnRouterNode)[index]):SetText("미설�\149")
-                    end
-                  end
-                  do
-                    local startWayPointKey = WorkerTradeCaravan_StartWayPointKey()
-                    local carriageCount = tradeGroupWrapper:getTradeGroupCarriage()
-                    local slotCount, totalWeight = 0, 0
-                    local totalPrice = makeDotMoney(tradeGroupWrapper:getConsumePrice())
-                    for iIndex = 1, 5 do
-                      for slotIndex = 1, 2 do
-                        if carriageCount < iIndex then
-                          (((((control._itemSet)._itemSetBg)[iIndex])._itemSlotBg)[slotIndex]):SetShow(false)
+                (((control._routerNode)._btnRouterNode)[rIndex]):SetText(routeNodeInfo:getAreaName())
+              end
+              if routeNodeCount < 5 then
+                for rIndex = routeNodeCount + 1, 5 do
+                  (((control._routerNode)._btnRouterNode)[rIndex]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERTRADECARAVAN_ROUTENODETITLE_" .. rIndex))
+                end
+              end
+              do
+                local startWayPointKey = WorkerTradeCaravan_StartWayPointKey()
+                local carriageCount = tradeGroupWrapper:getTradeGroupCarriage()
+                local slotCount, totalWeight = 0, 0
+                local totalPrice = makeDotMoney(tradeGroupWrapper:getConsumePrice())
+                for iIndex = 1, 5 do
+                  for slotIndex = 1, 2 do
+                    if carriageCount < iIndex then
+                      (((((control._itemSet)._itemSetBg)[iIndex])._itemSlotBg)[slotIndex]):SetShow(false)
+                      ;
+                      (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):SetShow(false)
+                      ;
+                      (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(false)
+                      ;
+                      (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetShow(false)
+                      ;
+                      ((((control._itemSet)._itemSetBg)[iIndex])._noCarriage):SetShow(true)
+                      ;
+                      (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_LUp", "")
+                    else
+                      ;
+                      (((((control._itemSet)._itemSetBg)[iIndex])._itemSlotBg)[slotIndex]):SetShow(true)
+                      ;
+                      (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):SetShow(true)
+                      ;
+                      ((((control._itemSet)._itemSetBg)[iIndex])._noCarriage):SetShow(false)
+                      local itemIndex = (iIndex - 1) * 2 + (slotIndex - 1)
+                      local tradeItemWrapper = tradeCompanyWrapper:getTempInventoryItem(itemIndex)
+                      if tradeItemWrapper ~= nil then
+                        local itemCount = Int64toInt32(tradeItemWrapper:getCount())
+                        if itemCount > 0 then
+                          (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
                           ;
-                          (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):SetShow(false)
+                          (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetShow(true)
+                          ;
+                          (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetText(itemCount)
                           ;
                           (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(false)
+                          slotCount = slotCount + 1
+                          totalWeight = totalWeight + tradeItemWrapper:getWeight() * itemCount
+                        else
+                          ;
+                          (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):ChangeTextureInfoName("")
                           ;
                           (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetShow(false)
                           ;
-                          ((((control._itemSet)._itemSetBg)[iIndex])._noCarriage):SetShow(true)
-                          ;
-                          (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_LUp", "")
-                        else
-                          ;
-                          (((((control._itemSet)._itemSetBg)[iIndex])._itemSlotBg)[slotIndex]):SetShow(true)
-                          ;
-                          (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):SetShow(true)
-                          ;
-                          ((((control._itemSet)._itemSetBg)[iIndex])._noCarriage):SetShow(false)
-                          local itemIndex = (iIndex - 1) * 2 + (slotIndex - 1)
-                          local tradeItemWrapper = tradeGroupWrapper:getInventoryItem(itemIndex)
-                          if tradeItemWrapper ~= nil then
-                            local itemCount = Int64toInt32(tradeItemWrapper:getCount())
-                            if itemCount > 0 then
-                              (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
-                              ;
-                              (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetShow(true)
-                              ;
-                              (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetText(itemCount)
-                              ;
-                              (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(false)
-                              slotCount = slotCount + 1
-                              totalWeight = totalWeight + tradeItemWrapper:getWeight() * itemCount
-                            else
-                              ;
-                              (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):ChangeTextureInfoName("")
-                              ;
-                              (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetShow(false)
-                              ;
-                              (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(true)
-                            end
-                          else
-                            do
-                              do
-                                ;
-                                (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):ChangeTextureInfoName("")
-                                ;
-                                (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetShow(false)
-                                ;
-                                (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(true)
-                                ;
-                                (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SelectItem(" .. itemIndex .. ")")
-                                -- DECOMPILER ERROR at PC457: LeaveBlock: unexpected jumping out DO_STMT
+                          (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(true)
+                        end
+                      else
+                        do
+                          do
+                            ;
+                            (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):ChangeTextureInfoName("")
+                            ;
+                            (((((control._itemSet)._itemSetBg)[iIndex])._count)[slotIndex]):SetShow(false)
+                            ;
+                            (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(true)
+                            ;
+                            (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SelectItem(" .. itemIndex .. ")")
+                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out DO_STMT
 
-                                -- DECOMPILER ERROR at PC457: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                -- DECOMPILER ERROR at PC457: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_STMT
 
-                                -- DECOMPILER ERROR at PC457: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                -- DECOMPILER ERROR at PC457: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_STMT
 
-                              end
-                            end
                           end
                         end
                       end
                     end
-                    local maxWeight = tradeGroupWrapper:getTradeGroupTransportCapacity()
-                    ;
-                    (control._itemWeight):SetText(makeDotMoney(totalWeight) .. " / " .. makeDotMoney(maxWeight))
-                    ;
-                    (control._tradePrice):SetText(makeDotMoney(totalPrice))
-                    ;
-                    (control._list2TradeWorker):SetShow(false)
-                    ;
-                    (control._list2TradeItem):SetShow(false)
-                    ;
-                    (control._list2ArrivalNode):SetShow(false)
-                    ;
-                    (control._list2RouteNode):SetShow(false)
-                    self._currentSelectRouteNodeCount = ToClient_GetWorkerTradeEventNodeCount(startWayPointKey)
-                    self._routeNodeIndex = 0
-                    self._currentSelectRouteNodeList = {}
                   end
                 end
+                local maxWeight = tradeGroupWrapper:getTradeGroupTransportCapacity()
+                ;
+                (control._itemWeight):SetText(makeDotMoney(totalWeight) .. " / " .. makeDotMoney(maxWeight))
+                ;
+                (control._tradePrice):SetText(makeDotMoney(totalPrice))
+                ;
+                (control._list2TradeWorker):SetShow(false)
+                ;
+                (control._list2TradeItem):SetShow(false)
+                ;
+                (control._list2ArrivalNode):SetShow(false)
+                ;
+                (control._list2RouteNode):SetShow(false)
+                self._currentSelectRouteNodeCount = ToClient_GetWorkerTradeEventNodeCount(startWayPointKey)
+                self._routeNodeIndex = 0
+                self._currentSelectRouteNodeList = {}
               end
             end
           end
@@ -359,13 +362,13 @@ workerTradeCaravan.AssetUpdate = function(self, index)
   local amuletCount = tradeGroupWrapper:getTradeGroupAmulet()
   local control = self.control
   ;
-  ((control._asset)._carriage):SetText("마차 : " .. groupCarriageCount)
+  ((control._asset)._carriage):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_CARRIAGE", "count", groupCarriageCount))
   ;
-  ((control._asset)._worker):SetText("짐꾼 : " .. groupPorterCount)
+  ((control._asset)._worker):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_PORTER", "count", groupPorterCount))
   ;
-  ((control._asset)._guard):SetText("호위 : " .. groupGuardCount)
+  ((control._asset)._guard):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_GUARD", "count", groupGuardCount))
   ;
-  ((control._asset)._FA):SetText("행운�\128�\129 : " .. groupAmuletCount)
+  ((control._asset)._FA):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_FA", "count", groupAmuletCount))
   ;
   ((control._asset)._carriageCount):SetText(carriageCount)
   ;
@@ -399,15 +402,15 @@ WorkerTrade_SetAsset = function(assetType, increaseCount)
   if assetType == 0 then
     carriageCount = carriageCount + increaseCount
     if carriageCount < 0 and increaseCount == -1 then
-      Proc_ShowMessage_Ack("�\148 이상 회수�\160 마차�\128 없습니다.")
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_1"))
       return 
     end
     if self._maxCarriageCount < carriageCount then
-      Proc_ShowMessage_Ack("�\148 이상 마차�\188 배치�\160 �\152 없습니다.")
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_2"))
       return 
     end
     if groupCarriageCount == 0 and increaseCount == 1 then
-      Proc_ShowMessage_Ack("�\148 이상 배치�\160 마차�\128 없습니다.")
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_3"))
       return 
     end
     ToClient_RequestSetCarriageInTradeGroup(self._selectIndex, carriageCount)
@@ -415,15 +418,15 @@ WorkerTrade_SetAsset = function(assetType, increaseCount)
     if assetType == 1 then
       porterCount = porterCount + increaseCount
       if porterCount < 0 and increaseCount == -1 then
-        Proc_ShowMessage_Ack("�\148 이상 회수�\160 짐꾼�\180 없습니다.")
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_4"))
         return 
       end
       if (carriageCount) * self._maxWorkerCount < porterCount then
-        Proc_ShowMessage_Ack("마차�\128 �\128족해 �\148 이상 짐꾼�\132 배치�\160 �\152 없습니다.")
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_5"))
         return 
       end
       if groupPorterCount == 0 and increaseCount == 1 then
-        Proc_ShowMessage_Ack("�\148 이상 배치�\160 짐꾼�\180 없습니다.")
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_6"))
         return 
       end
       ToClient_RequestSetPorterInTradeGroup(self._selectIndex, porterCount)
@@ -431,15 +434,15 @@ WorkerTrade_SetAsset = function(assetType, increaseCount)
       if assetType == 2 then
         guardCount = guardCount + increaseCount
         if guardCount < 0 and increaseCount == -1 then
-          Proc_ShowMessage_Ack("�\148 이상 회수�\160 호위�\128 없습니다.")
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_7"))
           return 
         end
         if self._maxGuardCount < guardCount then
-          Proc_ShowMessage_Ack("�\148 이상 호위�\188 배치�\160 �\152 없습니다.")
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_8"))
           return 
         end
         if groupGuardCount == 0 and increaseCount == 1 then
-          Proc_ShowMessage_Ack("�\148 이상 배치�\160 호위�\128 없습니다.")
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_9"))
           return 
         end
         ToClient_RequestSetGuardInTradeGroup(self._selectIndex, guardCount)
@@ -447,15 +450,15 @@ WorkerTrade_SetAsset = function(assetType, increaseCount)
         if assetType == 3 then
           amuletCount = amuletCount + increaseCount
           if amuletCount < 0 and increaseCount == -1 then
-            Proc_ShowMessage_Ack("�\148 이상 회수�\160 행운�\128적이 없습니다.")
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_10"))
             return 
           end
           if self._maxFACount < amuletCount then
-            Proc_ShowMessage_Ack("�\148 이상 행운�\128적을 배치�\160 �\152 없습니다.")
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_11"))
             return 
           end
           if groupAmuletCount == 0 and increaseCount == 1 then
-            Proc_ShowMessage_Ack("�\148 이상 배치�\160 행운�\128적이 없습니다.")
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_12"))
             return 
           end
           ToClient_RequestSetAmuletInTradeGroup(self._selectIndex, amuletCount)
@@ -495,17 +498,22 @@ WorkerTradeCaravan_Set = function(index)
 end
 
 local clickedWorkerIndex = 0
+local setableWorkerCount = 0
 WorkerTradeCaravan_SetWorker = function(index)
-  -- function num : 0_12 , upvalues : workerTradeCaravan, clickedWorkerIndex
+  -- function num : 0_12 , upvalues : workerTradeCaravan, setableWorkerCount, clickedWorkerIndex
+  if ((workerTradeCaravan.control)._list2TradeWorker):GetShow() then
+    ((workerTradeCaravan.control)._list2TradeWorker):SetShow(false)
+    return 
+  end
   if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 일꾼�\132 �\128경할 �\152 있습니다.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_WORKERALERT_1"))
     return 
   end
   local self = workerTradeCaravan
   local control = self.control
   local plantConut = ToCleint_getHomePlantKeyListCount()
   local startWayPointKey = 1101
-  local workerCount = 0
+  setableWorkerCount = 0
   ;
   ((control._list2TradeWorker):getElementManager()):clearKey()
   for plantIdx = 0, plantConut - 1 do
@@ -518,14 +526,20 @@ WorkerTradeCaravan_SetWorker = function(index)
         local workerNoRaw = ToClient_getPlantWaitWorkerNoRawByIndex(plantKey, workerIndex)
         if (self._selectedWorker)[0] ~= workerNoRaw and (self._selectedWorker)[1] ~= workerNoRaw then
           ((control._list2TradeWorker):getElementManager()):pushKey(toInt64(0, workerIndex))
-          workerCount = workerCount + 1
         end
+        setableWorkerCount = setableWorkerCount + 1
       end
     end
   end
-  if workerCount == 0 then
-    Proc_ShowMessage_Ack("상단�\144 배치�\160 일꾼�\180 없습니다.")
-    return 
+  if Int64toInt32((self._selectedWorker)[index]) > 0 then
+    setableWorkerCount = setableWorkerCount + 1
+    ;
+    ((control._list2TradeWorker):getElementManager()):pushKey(toInt64(0, setableWorkerCount))
+  else
+    if setableWorkerCount == 0 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_WORKERALERT_2"))
+      return 
+    end
   end
   ;
   (control._list2TradeWorker):SetShow(true)
@@ -538,8 +552,9 @@ WorkerTradeCaravan_SetWorker = function(index)
   clickedWorkerIndex = index
 end
 
+local tempWorkerNo = {}
 TradeWorkerListControlCreate = function(content, key)
-  -- function num : 0_13 , upvalues : workerTradeCaravan
+  -- function num : 0_13 , upvalues : workerTradeCaravan, tempWorkerNo, setableWorkerCount, clickedWorkerIndex
   local workerListBg = (UI.getChildControl)(content, "List2_OptionList_Bg")
   local tradeWorkerName = (UI.getChildControl)(content, "List2_OptionList_Desc")
   local self = workerTradeCaravan
@@ -553,26 +568,44 @@ TradeWorkerListControlCreate = function(content, key)
       local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(plantKey, 0)
       local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(plantKey)
       for workerIndex = 0, waitWorkerCount - 1 do
-        if _key == workerIndex then
+        if (self._selectedWorker)[0] ~= workerNoRaw and (self._selectedWorker)[1] ~= workerNoRaw and _key == workerIndex then
           local workerNoRaw = ToClient_getPlantWaitWorkerNoRawByIndex(plantKey, workerIndex)
-          if (self._selectedWorker)[0] ~= workerNoRaw and (self._selectedWorker)[1] ~= workerNoRaw then
-            local workerWrapperLua = getWorkerWrapper(workerNoRaw, true)
-            tradeWorkerName:SetText(tostring(workerWrapperLua:getName()))
-            workerListBg:addInputEvent("Mouse_LUp", "TradeWorker_SetWorker(" .. tostring(workerNoRaw) .. ")")
-            break
+          local workerWrapperLua = getWorkerWrapper(workerNoRaw, true)
+          tradeWorkerName:SetText(tostring(workerWrapperLua:getName()))
+          -- DECOMPILER ERROR at PC68: Confused about usage of register: R22 in 'UnsetPending'
+
+          tempWorkerNo[workerIndex] = {}
+          -- DECOMPILER ERROR at PC70: Confused about usage of register: R22 in 'UnsetPending'
+
+          tempWorkerNo[workerIndex] = workerNoRaw
+          workerListBg:addInputEvent("Mouse_LUp", "TradeWorker_SetWorker(" .. tostring(workerIndex) .. ")")
+          break
+        end
+      end
+      do
+        do
+          if _key == setableWorkerCount then
+            tradeWorkerName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_BUTTONFIRE"))
+            workerListBg:addInputEvent("Mouse_LUp", "TradeWorker_FireWorker(" .. clickedWorkerIndex .. ")")
           end
+          -- DECOMPILER ERROR at PC99: LeaveBlock: unexpected jumping out DO_STMT
+
+          -- DECOMPILER ERROR at PC99: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC99: LeaveBlock: unexpected jumping out IF_STMT
+
         end
       end
     end
   end
 end
 
-TradeWorker_SetWorker = function(workerNo)
-  -- function num : 0_14 , upvalues : workerTradeCaravan, clickedWorkerIndex
+TradeWorker_SetWorker = function(workerIndex)
+  -- function num : 0_14 , upvalues : workerTradeCaravan, clickedWorkerIndex, tempWorkerNo
   local self = workerTradeCaravan
-  ToClient_RequestSetWorker(self._selectIndex, clickedWorkerIndex, workerNo)
+  ToClient_RequestSetWorker(self._selectIndex, clickedWorkerIndex, tempWorkerNo[workerIndex])
   ;
-  ((self.control).list2_TradeWorkerList):SetShow(false)
+  ((self.control)._list2TradeWorker):SetShow(false)
 end
 
 TradeWorker_FireWorker = function(index)
@@ -583,8 +616,12 @@ end
 
 WorkerTradeCaravan_ShowArrivalNodeList = function()
   -- function num : 0_16 , upvalues : workerTradeCaravan
+  if ((workerTradeCaravan.control)._list2ArrivalNode):GetShow() then
+    ((workerTradeCaravan.control)._list2ArrivalNode):SetShow(false)
+    return 
+  end
   if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 목적�\128�\188 설정�\160 �\152 있습니다.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ARRIVALALERT_1"))
     return 
   end
   local self = workerTradeCaravan
@@ -602,7 +639,7 @@ WorkerTradeCaravan_ShowArrivalNodeList = function()
     end
   end
   if count == 0 then
-    Proc_ShowMessage_Ack("연결�\156 목적�\128�\128 없습니다.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ARRIVALALERT_2"))
     return 
   end
   ;
@@ -649,10 +686,14 @@ ArrivalNodeListControlCreate = function(content, key)
   end
 end
 
-WorkerTradeCaravan_RouteNodeSet = function()
+WorkerTradeCaravan_RouteNodeSet = function(nodeIndex)
   -- function num : 0_19 , upvalues : workerTradeCaravan
+  if ((workerTradeCaravan.control)._list2RouteNode):GetShow() then
+    ((workerTradeCaravan.control)._list2RouteNode):SetShow(false)
+    return 
+  end
   if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 경유�\128�\188 설정�\160 �\152 있습니다.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ROUTEALERT_1"))
     return 
   end
   local self = workerTradeCaravan
@@ -670,9 +711,10 @@ WorkerTradeCaravan_RouteNodeSet = function()
     end
   end
   if count == 0 then
-    Proc_ShowMessage_Ack("�\148 이상 연결�\156 거점�\180 없어 설정�\160 �\152 없습니다.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ROUTEALERT_2"))
     return 
   end
+  self._selectRouteNodeIndex = nodeIndex
   ;
   (control._list2TradeWorker):SetShow(false)
   ;
@@ -683,21 +725,33 @@ WorkerTradeCaravan_RouteNodeSet = function()
   (control._list2TradeItem):SetShow(false)
 end
 
-RouteNodeList_Set = function(index, currentRouteNodeIndex)
+RouteNodeList_Set = function(index)
   -- function num : 0_20 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   local control = self.control
   local startWayPointKey = WorkerTradeCaravan_StartWayPointKey()
   local regionInfo = ToClient_GetWorkerTradeEventNodeByIndex(startWayPointKey, index)
-  if currentRouteNodeIndex == nil then
+  if self._routeNodeIndex < self._selectRouteNodeIndex then
     self._routeNodeIndex = self._routeNodeIndex + 1
     ;
     (((control._routerNode)._btnRouterNode)[self._routeNodeIndex]):SetText(regionInfo:getAreaName())
     ;
     (control._list2RouteNode):SetShow(false)
+    -- DECOMPILER ERROR at PC31: Confused about usage of register: R5 in 'UnsetPending'
+
     ;
-    (table.insert)(self._currentSelectRouteNodeList, regionInfo:getAreaName())
+    (self._currentSelectRouteNodeList)[self._routeNodeIndex] = regionInfo:getAreaName()
     ToClient_RequestSetEventNode(self._routeNodeIndex - 1, regionInfo:getExplorationKey())
+  else
+    ;
+    (((control._routerNode)._btnRouterNode)[self._selectRouteNodeIndex]):SetText(regionInfo:getAreaName())
+    ;
+    (control._list2RouteNode):SetShow(false)
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R5 in 'UnsetPending'
+
+    ;
+    (self._currentSelectRouteNodeList)[self._selectRouteNodeIndex] = regionInfo:getAreaName()
+    ToClient_RequestSetEventNode(self._selectRouteNodeIndex - 1, regionInfo:getExplorationKey())
   end
 end
 
@@ -740,15 +794,19 @@ local _slotIndex = nil
 WorkerTradeCaravan_SelectItem = function(slotIndex)
   -- function num : 0_23 , upvalues : _slotIndex
   if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 무역품을 구입�\160 �\152 있습니다.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ITEMALERT"))
     return 
   end
   _slotIndex = slotIndex
-  ToClient_RequestOpenWorkerTrade()
+  ToClient_RequestOpenWorkerTradeList()
 end
 
-FromClient_OpenWorkerTrade = function()
+FromClient_OpenWorkerTradeItemList = function()
   -- function num : 0_24 , upvalues : workerTradeCaravan, _slotIndex
+  if ((workerTradeCaravan.control)._list2TradeItem):GetShow() then
+    ((workerTradeCaravan.control)._list2TradeItem):SetShow(false)
+    return 
+  end
   local self = workerTradeCaravan
   local control = self.control
   local startWayPointKey = (WorkerTradeCaravan_StartWayPointKey())
@@ -821,14 +879,12 @@ TradeItemListControlCreate = function(content, key)
         if tradeItemWrapper ~= nil then
           slot:ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
           itemName:SetText(tradeItemWrapper:getName())
-          sellPrice:SetText("구입 : " .. makeDotMoney(tradeItemWrapper:getBuyPrice()) .. "코인")
-          weight:SetText("무게 : " .. makeDotMoney(tradeItemWrapper:getWeight()) .. "LT")
+          priceRate:SetText("시세 : " .. makeDotMoney(tradeItemWrapper:getPriceRate() + 100) .. "%")
+          sellPrice:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_BUYPRICE", "price", makeDotMoney(tradeItemWrapper:getBuyPrice())))
+          weight:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_WEIGHT", "weight", makeDotMoney(tradeItemWrapper:getWeight())))
           btnPlus:addInputEvent("Mouse_LUp", "WorkerTradeCaravan_BuyItem(" .. index .. "," .. 1 .. ")")
-          btnPlus:addInputEvent("Mouse_LUp", "WorkerTradeCaravan_BuyItem(" .. index .. "," .. -1 .. ")")
+          btnMinus:addInputEvent("Mouse_LUp", "WorkerTradeCaravan_BuyItem(" .. index .. "," .. -1 .. ")")
           local arrivalNode_TradeItemWrapper = ToClient_RequestWorkerTradeItemMaster(destWayPointKey, index)
-          if arrivalNode_TradeItemWrapper ~= nil then
-            sellPrice:SetText("구매 : " .. makeDotMoney(arrivalNode_TradeItemWrapper:getContractedPrice()) .. "코인")
-          end
           break
         end
       end
@@ -859,44 +915,60 @@ WorkerTradeCaravan_BuyItem = function(index, addCount)
     if _slotIndex == nil then
       return 
     end
-    local slotIndex = (math.floor)((_slotIndex - 1) / 2) + 1
-    local uiIndex = (math.floor)((_slotIndex - 1) % 2) + 1
+    local slotIndex = (math.floor)(_slotIndex / 2) + 1
+    local uiIndex = (math.floor)(_slotIndex % 2) + 1
     local itemKey = tradeItemWrapper:getKey()
     local maxWeight = tradeGroupWrapper:getTradeGroupTransportCapacity()
-    canBuyItem = ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex - 1, itemKey, inputNumber, startWayPointKey, destWayPointKey)
+    canBuyItem = ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, inputNumber, startWayPointKey, destWayPointKey)
     if canBuyItem == true then
       local control = self.control
-      ;
-      (((((control._itemSet)._itemSetBg)[slotIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
-      ;
-      (((((control._itemSet)._itemSetBg)[slotIndex])._count)[uiIndex]):SetShow(true)
-      ;
-      (((((control._itemSet)._itemSetBg)[slotIndex])._count)[uiIndex]):SetText(tostring(inputNumber))
-      -- DECOMPILER ERROR at PC74: Confused about usage of register: R6 in 'UnsetPending'
+      if toInt64(0, 0) < inputNumber then
+        (((((control._itemSet)._itemSetBg)[slotIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
+        ;
+        (((((control._itemSet)._itemSetBg)[slotIndex])._count)[uiIndex]):SetShow(true)
+        ;
+        (((((control._itemSet)._itemSetBg)[slotIndex])._count)[uiIndex]):SetText(tostring(inputNumber))
+        ;
+        (((((control._itemSet)._itemSetBg)[slotIndex])._plus)[uiIndex]):SetShow(false)
+        -- DECOMPILER ERROR at PC85: Confused about usage of register: R6 in 'UnsetPending'
 
-      ;
-      (self.tradeItemInfo)[_slotIndex] = index
-      local slotCount = 0
-      for sIndex = 1, #self.itemSlot do
-        if (self.tradeItemInfo)[sIndex] ~= nil then
-          slotCount = slotCount + 1
-        end
+        ;
+        (self.tradeItemInfo)[_slotIndex] = index
+      else
+        ;
+        (((((control._itemSet)._itemSetBg)[slotIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("")
+        ;
+        (((((control._itemSet)._itemSetBg)[slotIndex])._count)[uiIndex]):SetShow(false)
+        ;
+        (((((control._itemSet)._itemSetBg)[slotIndex])._plus)[uiIndex]):SetShow(true)
+        -- DECOMPILER ERROR at PC114: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        (self.tradeItemInfo)[_slotIndex] = nil
       end
       local totalPrice = tradeCompanyWrapper:getTempTotalPrice()
       local totalWeight = tradeCompanyWrapper:getTempTotalWeight()
+      ;
+      (control._itemWeight):SetText(makeDotMoney(totalWeight) .. " / " .. makeDotMoney(maxWeight))
+      ;
+      (control._tradePrice):SetText(makeDotMoney(totalPrice))
       ;
       (control._list2TradeItem):SetShow(false)
     end
   end
 
-    Panel_NumberPad_Show(true, toInt64(0, maxCount), 0, setTradeItem)
+    if addCount > 0 then
+      Panel_NumberPad_Show(true, toInt64(0, maxCount), 0, setTradeItem)
+    else
+      setTradeItem(toInt64(0, 0))
+    end
   end
 end
 
 WorkerTradeCaravan_Go = function()
   -- function num : 0_28 , upvalues : workerTradeCaravan
   if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 출발�\160 �\152 있습니다..")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_STARTALERT_1"))
     return 
   end
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
@@ -907,11 +979,11 @@ WorkerTradeCaravan_Go = function()
   local carriageCount = tradeGroupWrapper:getTradeGroupCarriage()
   local porterCount = tradeGroupWrapper:getTradeGroupPorter()
   if carriageCount == 0 then
-    Proc_ShowMessage_Ack("배치�\156 마차�\128 없어 출발�\160 �\152 없습니다.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_STARTALERT_2"))
     return 
   end
-  if porterCount < carriageCount * workerTradeCaravan.minWorkerCount then
-    Proc_ShowMessage_Ack("배치�\156 짐꾼�\180 �\128족해 출발�\160 �\152 없습니다.")
+  if porterCount < carriageCount * workerTradeCaravan._minWorkerCount then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_STARTALERT_3"))
     return 
   end
   ToClient_RequestStartTradeGroup(workerTradeCaravan._selectIndex)
@@ -930,132 +1002,8 @@ WorkerTradeCaravan_StartWayPointKey = function()
   return startWayPointKey
 end
 
-WorkerTradeCarava_SetPorter = function()
-  -- function num : 0_30 , upvalues : workerTradeCaravan
-  if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 짐꾼�\132 배치�\160 �\152 있습니다.")
-    return 
-  end
-  local self = workerTradeCaravan
-  local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
-  local maxHaveCount = tradeCompanyWrapper:getTradeCompanyPorter()
-  local hiredCount = 0
-  for index = 0, 4 do
-    local tradeGroupWrapper = tradeCompanyWrapper:getGroup(index)
-    if tradeGroupWrapper ~= nil then
-      hiredCount = hiredCount + tradeGroupWrapper:getTradeGroupPorter()
-    end
-  end
-  local tradeGroupWrapper = tradeCompanyWrapper:getGroup(self._selectIndex)
-  local carriageCount = tradeGroupWrapper:getTradeGroupCarriage()
-  local hirableCount = maxHaveCount - (hiredCount)
-  hirableCount = (math.min)(hirableCount, carriageCount * self.maxWorkerCount)
-  local setPorter = function(inputNumber)
-    -- function num : 0_30_0 , upvalues : self
-    ToClient_RequestSetPorterInTradeGroup(self._selectIndex, Int64toInt32(inputNumber))
-  end
-
-  if hirableCount > 0 then
-    Panel_NumberPad_Show(true, toInt64(0, hirableCount), 0, setPorter)
-  else
-    Proc_ShowMessage_Ack("고용�\160 �\152 있는 짐꾼�\180 없습니다.")
-  end
-end
-
-WorkerTradeCarava_SetGuard = function()
-  -- function num : 0_31 , upvalues : workerTradeCaravan
-  if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 호위�\188 배치�\160 �\152 있습니다.")
-    return 
-  end
-  local self = workerTradeCaravan
-  local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
-  local maxHaveCount = tradeCompanyWrapper:getTradeCompanyGuard()
-  local hiredCount = 0
-  for index = 0, 4 do
-    local tradeGroupWrapper = tradeCompanyWrapper:getGroup(index)
-    if tradeGroupWrapper ~= nil then
-      hiredCount = hiredCount + tradeGroupWrapper:getTradeGroupGuard()
-    end
-  end
-  local tradeGroupWrapper = tradeCompanyWrapper:getGroup(self._selectIndex)
-  local carriageCount = tradeGroupWrapper:getTradeGroupCarriage()
-  local hirableCount = maxHaveCount - (hiredCount)
-  hirableCount = (math.min)(hirableCount, carriageCount)
-  local setGuard = function(inputNumber)
-    -- function num : 0_31_0 , upvalues : self
-    ToClient_RequestSetGuardInTradeGroup(self._selectIndex, Int64toInt32(inputNumber))
-  end
-
-  if hirableCount > 0 then
-    Panel_NumberPad_Show(true, toInt64(0, hirableCount), 0, setGuard)
-  else
-    Proc_ShowMessage_Ack("고용�\160 �\152 있는 호위�\128 없습니다.")
-  end
-end
-
-WorkerTradeCarava_SetCarriage = function()
-  -- function num : 0_32 , upvalues : workerTradeCaravan
-  if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 마차�\188 배치�\160 �\152 있습니다.")
-    return 
-  end
-  local self = workerTradeCaravan
-  local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
-  local maxHaveCount = tradeCompanyWrapper:getTradeCompanyCarriage()
-  local hiredCount = 0
-  for index = 0, 4 do
-    local tradeGroupWrapper = tradeCompanyWrapper:getGroup(index)
-    if tradeGroupWrapper ~= nil then
-      hiredCount = hiredCount + tradeGroupWrapper:getTradeGroupCarriage()
-    end
-  end
-  local hirableCount = maxHaveCount
-  hirableCount = (math.min)(hirableCount, self.maxCarriageCount)
-  local setCarriage = function(inputNumber)
-    -- function num : 0_32_0 , upvalues : self
-    ToClient_RequestSetCarriageInTradeGroup(self._selectIndex, Int64toInt32(inputNumber))
-  end
-
-  if hirableCount > 0 then
-    Panel_NumberPad_Show(true, toInt64(0, hirableCount), 0, setCarriage)
-  else
-    Proc_ShowMessage_Ack("고용�\160 �\152 있는 마차�\128 없습니다.")
-  end
-end
-
-WorkerTradeCarava_SetAmulet = function()
-  -- function num : 0_33 , upvalues : workerTradeCaravan
-  if not isChangeableState() then
-    Proc_ShowMessage_Ack("상단�\180 �\128기중�\188 때만 행운 �\128적을 적재 �\160 �\152 있습니다.")
-    return 
-  end
-  local self = workerTradeCaravan
-  local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
-  local maxHaveCount = tradeCompanyWrapper:getTradeCompanyAmulet()
-  local hiredCount = 0
-  for index = 0, 4 do
-    local tradeGroupWrapper = tradeCompanyWrapper:getGroup(index)
-    if tradeGroupWrapper ~= nil then
-      hiredCount = hiredCount + tradeGroupWrapper:getTradeGroupAmulet()
-    end
-  end
-  local hirableCount = maxHaveCount - (hiredCount)
-  hirableCount = (math.min)(hirableCount, self.maxFortuneCharm)
-  local setAmulet = function(inputNumber)
-    -- function num : 0_33_0 , upvalues : self
-    ToClient_RequestSetAmuletInTradeGroup(self._selectIndex, Int64toInt32(inputNumber))
-  end
-
-  if hirableCount > 0 then
-    Panel_NumberPad_Show(true, toInt64(0, hirableCount), 0, setAmulet)
-  else
-    Proc_ShowMessage_Ack("적재�\160 �\152 있는 행운 �\128적이 없습니다.")
-  end
-end
-
 isChangeableState = function()
-  -- function num : 0_34 , upvalues : workerTradeCaravan
+  -- function num : 0_30 , upvalues : workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(workerTradeCaravan._selectIndex)
   local currentState = tradeGroupWrapper:getState()
@@ -1067,7 +1015,7 @@ isChangeableState = function()
 end
 
 FGlobal_WorkerTradeCaraven_Open = function(index)
-  -- function num : 0_35 , upvalues : workerTradeCaravan
+  -- function num : 0_31 , upvalues : workerTradeCaravan
   if Panel_WorkerTrade_Caravan:GetShow() then
     workerTradeCaravan:Hide()
   else
@@ -1078,29 +1026,34 @@ FGlobal_WorkerTradeCaraven_Open = function(index)
   end
 end
 
+WorkerTradeCaravan_Close = function()
+  -- function num : 0_32 , upvalues : workerTradeCaravan
+  workerTradeCaravan:Hide()
+end
+
 workerTradeCaravan.registerEvent = function(self)
-  -- function num : 0_36
+  -- function num : 0_33
   local control = self.control
   ;
   (((control._worker)._image)[1]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SetWorker(" .. 0 .. ")")
   ;
   (((control._worker)._image)[2]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SetWorker(" .. 1 .. ")")
   ;
-  ((control._asset)._btnCarriage):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 0 .. "," .. -1 .. ")")
+  ((control._asset)._btnCarriage):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 0 .. "," .. 1 .. ")")
   ;
-  ((control._asset)._btnCarriage):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 0 .. "," .. 1 .. ")")
+  ((control._asset)._btnCarriage):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 0 .. "," .. -1 .. ")")
   ;
-  ((control._asset)._btnWorker):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 1 .. "," .. -1 .. ")")
+  ((control._asset)._btnWorker):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 1 .. "," .. 1 .. ")")
   ;
-  ((control._asset)._btnWorker):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 1 .. "," .. 1 .. ")")
+  ((control._asset)._btnWorker):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 1 .. "," .. -1 .. ")")
   ;
-  ((control._asset)._btnGuard):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 2 .. "," .. -1 .. ")")
+  ((control._asset)._btnGuard):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 2 .. "," .. 1 .. ")")
   ;
-  ((control._asset)._btnGuard):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 2 .. "," .. 1 .. ")")
+  ((control._asset)._btnGuard):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 2 .. "," .. -1 .. ")")
   ;
-  ((control._asset)._btnFA):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 3 .. "," .. -1 .. ")")
+  ((control._asset)._btnFA):addInputEvent("Mouse_LUp", "WorkerTrade_SetAsset(" .. 3 .. "," .. 1 .. ")")
   ;
-  ((control._asset)._btnFA):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 3 .. "," .. 1 .. ")")
+  ((control._asset)._btnFA):addInputEvent("Mouse_RUp", "WorkerTrade_SetAsset(" .. 3 .. "," .. -1 .. ")")
   ;
   (control._list2TradeWorker):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "TradeWorkerListControlCreate")
   ;
@@ -1112,7 +1065,7 @@ workerTradeCaravan.registerEvent = function(self)
   ;
   (control._list2ArrivalNode):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
   for index = 1, 5 do
-    (((control._routerNode)._btnRouterNode)[index]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_RouteNodeSet()")
+    (((control._routerNode)._btnRouterNode)[index]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_RouteNodeSet(" .. index .. ")")
   end
   ;
   (control._list2RouteNode):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "RouteNodeListControlCreate")
@@ -1122,7 +1075,15 @@ workerTradeCaravan.registerEvent = function(self)
   (control._list2TradeItem):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "TradeItemListControlCreate")
   ;
   (control._list2TradeItem):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
-  registerEvent("FromClient_OpenWorkerTrade", "FromClient_OpenWorkerTrade")
+  ;
+  (control._btnTradeStart):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_Go()")
+  registerEvent("FromClient_OpenWorkerTradeItemList", "FromClient_OpenWorkerTradeItemList")
+  ;
+  (control._closeBtn):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_Close()")
+  ;
+  (control._questionBtn):addInputEvent("Mouse_LUp", "")
+  ;
+  (control._questionBtn):SetShow(false)
 end
 
 workerTradeCaravan:ControlInit()

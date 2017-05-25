@@ -339,7 +339,7 @@ nodeStableInfo.update = function(self)
           ;
           (linkedHorse.icon):ChangeTextureInfoName(sInfo:getIconPath1())
           ;
-          (linkedHorse.level):SetText("Lv." .. tostring(sInfo:getLevel()))
+          (linkedHorse.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(sInfo:getLevel()))
           ;
           (linkedHorse.tear):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", sInfo:getTier()))
           ;

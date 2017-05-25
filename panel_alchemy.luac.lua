@@ -75,8 +75,16 @@ local _uiAlchemyIcon = (UI.getChildControl)(Panel_Alchemy, "Static_AlchemyIcon")
 local _frameAlchemy = (UI.getChildControl)(Panel_Alchemy, "Frame_Alchemy")
 local _frameContent = (UI.getChildControl)(_frameAlchemy, "Frame_1_Content")
 local _uiAlchemyDesc = (UI.getChildControl)(_frameContent, "StaticText_AlchemyDesc")
-local _uiNotice1 = (UI.getChildControl)(Panel_Alchemy, "StaticText_description1")
 local list2 = (UI.getChildControl)(Panel_Alchemy, "List2_AlchemyRecipe")
+local _uiNotice1 = (UI.getChildControl)(Panel_Alchemy, "Static_description1")
+local _frameAlchemyDesc = (UI.getChildControl)(Panel_Alchemy, "Frame_AlchemyDesc")
+local _frameDescContent = (UI.getChildControl)(_frameAlchemyDesc, "Frame_1_Content")
+local _alchemyDesc = (UI.getChildControl)(_frameDescContent, "StaticText_AlchemyDesc")
+local _scroll = (UI.getChildControl)(_frameAlchemyDesc, "VerticalScroll")
+local _scrollCtrlBtn = (UI.getChildControl)(_scroll, "VerticalScroll_CtrlButton")
+local _scrollIndex = 0
+local _scrollSizeY = 0
+local _scrollBGSizeY = 0
 local KNOWLEDGE_TEXT_COUNT = 13
 local _uiListText = {}
 local COOK_MENTALTHEMEKEY = 30010
@@ -148,7 +156,7 @@ AlchemyItemSlotAni = function()
 end
 
 Alchemy_Show = function(_isCook)
-  -- function num : 0_3 , upvalues : _startKnowledgeIndex, _currentMentalKey, _uiNotice1, UI_TM, _uiAlchemyDesc, _buttonQuestion, _frameContent
+  -- function num : 0_3 , upvalues : _startKnowledgeIndex, _currentMentalKey, _uiAlchemyDesc, UI_TM, _buttonQuestion, _frameContent
   if Panel_Alchemy:GetShow() then
     return 
   end
@@ -163,9 +171,6 @@ Alchemy_Show = function(_isCook)
     Panel_Alchemy:SetPosX(getScreenSizeX() - Panel_Window_Inventory:GetSizeX() - Panel_Alchemy:GetSizeX() + 20)
   end
   FGlobal_SetInventoryDragNoUse(Panel_Alchemy)
-  _uiNotice1:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  _uiNotice1:SetAutoResize(true)
-  _uiNotice1:SetText(PAGetString(Defines.StringSheet_RESOURCE, "ALCHEMY_COOK_TEXT_DESCRPITION"))
   _uiAlchemyDesc:SetAutoResize(true)
   _uiAlchemyDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
   if _isCook == true then
@@ -200,7 +205,7 @@ Alchemy_InvenFilter = function(slotNo, itemWrapper)
 end
 
 Alchemy_Close = function()
-  -- function num : 0_5 , upvalues : _slotCount, _slotList, list2, selectIndex
+  -- function num : 0_5 , upvalues : _slotCount, _slotList, list2, selectIndex, _scrollCtrlBtn
   do
     if Panel_Alchemy:IsShow() then
       local slotCount = RequestAlchemy_getSlotCount()
@@ -214,6 +219,7 @@ Alchemy_Close = function()
     ;
     (list2:getElementManager()):clearKey()
     selectIndex = -1
+    _scrollCtrlBtn:SetPosY(0)
   end
 end
 
@@ -630,7 +636,7 @@ end
 
 local _slotIconList = {}
 RecentCookInit = function()
-  -- function num : 0_27 , upvalues : RecentCook, _slotConfig
+  -- function num : 0_27 , upvalues : RecentCook, _slotConfig, _alchemyDesc, _scrollBGSizeY, _uiNotice1, _scrollSizeY, _frameAlchemyDesc, _scroll, _frameDescContent
   local self = RecentCook
   for listIdx = 0, self.recentCookCount - 1 do
     local recentCookList = {}
@@ -705,6 +711,35 @@ RecentCookInit = function()
 
     ;
     (self._listPool)[listIdx] = recentCookList
+  end
+  local beforeSizeY = _alchemyDesc:GetSizeY()
+  _alchemyDesc:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  _alchemyDesc:SetText(PAGetString(Defines.StringSheet_RESOURCE, "ALCHEMY_COOK_TEXT_DESCRPITION"))
+  _scrollBGSizeY = _uiNotice1:GetSizeY()
+  _scrollSizeY = _alchemyDesc:GetTextSizeY()
+  if _scrollBGSizeY < _scrollSizeY then
+    local sizeY1 = _scrollSizeY % 21
+    local sizeY2 = _scrollSizeY % 20
+    if sizeY1 == 0 then
+      _frameAlchemyDesc:SetSize(_frameAlchemyDesc:GetSizeX(), _frameAlchemyDesc:GetSizeY() - 6)
+    else
+      if sizeY2 == 0 then
+        _frameAlchemyDesc:SetSize(_frameAlchemyDesc:GetSizeX(), _frameAlchemyDesc:GetSizeY() - 8)
+      else
+        _frameAlchemyDesc:SetSize(_frameAlchemyDesc:GetSizeX(), _frameAlchemyDesc:GetSizeY() - 6)
+      end
+    end
+    _scroll:SetShow(true)
+  else
+    do
+      _scroll:SetShow(false)
+      do
+        local sizeY = (_scrollBGSizeY - _scrollSizeY) / 2
+        _frameAlchemyDesc:SetPosY(_frameAlchemyDesc:GetPosY() + sizeY)
+        _frameDescContent:SetSize(_frameDescContent:GetSizeX(), _alchemyDesc:GetTextSizeY())
+        _uiNotice1:SetShow(true)
+      end
+    end
   end
 end
 

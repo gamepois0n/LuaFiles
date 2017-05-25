@@ -120,7 +120,7 @@ FGlobal_LevelupGuide_Open = function(isLevelUp)
   if isFlushedUI() then
     return 
   end
-  if Panel_Window_DailyStamp:GetShow() then
+  if Panel_Window_DailyStamp:GetShow() and not isGameTypeEnglish() then
     FGlobal_LevelupGuide_PowerClose()
     return 
   end

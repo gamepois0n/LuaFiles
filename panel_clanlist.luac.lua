@@ -97,25 +97,25 @@ clanList.Initialize = function(self)
     local Created_MemberGrade = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, self.frameContent, "ClanList_MemberGrade_" .. memberIdx)
     CopyBaseProperty(Template.memberGrade, Created_MemberGrade)
     Created_MemberGrade:SetPosY(memberList_PosY)
-    Created_MemberGrade:SetText("클랜�\144" .. memberIdx)
+    Created_MemberGrade:SetText(memberIdx)
     Created_MemberGrade:SetShow(false)
     temSlot.MemberGrade = Created_MemberGrade
     local Created_MemberLevel = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, Created_MemberGrade, "ClanList_MemberLevel_" .. memberIdx)
     CopyBaseProperty(Template.memberLevel, Created_MemberLevel)
     Created_MemberLevel:SetPosY(0)
-    Created_MemberLevel:SetText("Lv." .. memberIdx)
+    Created_MemberLevel:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. memberIdx)
     Created_MemberLevel:SetShow(true)
     temSlot.MemberLevel = Created_MemberLevel
     local Created_MemberClass = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, Created_MemberGrade, "ClanList_MemberClass_" .. memberIdx)
     CopyBaseProperty(Template.memberClass, Created_MemberClass)
     Created_MemberClass:SetPosY(0)
-    Created_MemberClass:SetText("자이언트")
+    Created_MemberClass:SetText("")
     Created_MemberClass:SetShow(true)
     temSlot.MemberClass = Created_MemberClass
     local Created_MemberName = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, Created_MemberGrade, "ClanList_MemberName_" .. memberIdx)
     CopyBaseProperty(Template.memberName, Created_MemberName)
     Created_MemberName:SetPosY(0)
-    Created_MemberName:SetText("멤버들이름이나옵니다(�\128문명이나오는곳입�\136)")
+    Created_MemberName:SetText("")
     Created_MemberName:SetShow(true)
     temSlot.MemberName = Created_MemberName
     local Created_PartLine = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Created_MemberGrade, "ClanList_PartLine_" .. memberIdx)
@@ -124,7 +124,7 @@ clanList.Initialize = function(self)
     Created_PartLine:SetPosY(22)
     Created_PartLine:SetShow(true)
     temSlot.PartLine = Created_PartLine
-    -- DECOMPILER ERROR at PC235: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC238: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (self.listPool)[memberIdx] = temSlot
@@ -205,32 +205,36 @@ clanList.Update = function(self)
             if memberClass == 16 then
               (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_TAMER"))
             else
-              if memberClass == 20 then
-                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER"))
+              if memberClass == 19 then
+                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER"))
               else
-                if memberClass == 21 then
-                  (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN"))
+                if memberClass == 20 then
+                  (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER"))
                 else
-                  if memberClass == 24 then
-                    (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE"))
+                  if memberClass == 21 then
+                    (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN"))
                   else
-                    if memberClass == 25 then
-                      (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN"))
+                    if memberClass == 24 then
+                      (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE"))
                     else
-                      if memberClass == 26 then
-                        (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN"))
+                      if memberClass == 25 then
+                        (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN"))
                       else
-                        if memberClass == 27 then
-                          (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF"))
+                        if memberClass == 26 then
+                          (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN"))
                         else
-                          if memberClass == 28 then
-                            (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD"))
+                          if memberClass == 27 then
+                            (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF"))
                           else
-                            if memberClass == 30 then
-                              (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI"))
+                            if memberClass == 28 then
+                              (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD"))
                             else
-                              if memberClass == 31 then
-                                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN"))
+                              if memberClass == 30 then
+                                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI"))
+                              else
+                                if memberClass == 31 then
+                                  (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN"))
+                                end
                               end
                             end
                           end

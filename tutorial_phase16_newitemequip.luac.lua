@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_NewItemEquip = {_phaseNo = 16, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _updateTime = 0, _isPhaseOpen = false, _isSkippable = false}
+PaGlobal_TutorialPhase_NewItemEquip = {_phaseNo = 16, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _updateTime = 0, _isPhaseOpen = true, _isSkippable = false}
 -- DECOMPILER ERROR at PC11: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_NewItemEquip.checkPossibleForPhaseStart = function(self, stepNo)

@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 Panel_Window_PetInfoNew:SetShow(false)
-local PetInfo = {BTN_Close = (UI.getChildControl)(Panel_Window_PetInfoNew, "Button_Win_Close"), petInfoBg = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_BG"), iconPet = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_IconPet"), petName = (UI.getChildControl)(Panel_Window_PetInfoNew, "StaticText_PetName"), progress_EXP = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_EXP"), level_Value = (UI.getChildControl)(Panel_Window_PetInfoNew, "StaticText_Level_Value"), progress_Hungry = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_Hungry"), icon_Lovely = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_LovelyIcon"), bg_Lovely = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_Lovely_BG"), progress_Lovely = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_Lovely"), 
+local PetInfo = {BTN_Close = (UI.getChildControl)(Panel_Window_PetInfoNew, "Button_Win_Close"), petInfoBg = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_BG"), iconPet = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_IconPet"), petName = (UI.getChildControl)(Panel_Window_PetInfoNew, "StaticText_PetName"), progress_EXP = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_EXP"), level_Title = (UI.getChildControl)(Panel_Window_PetInfoNew, "StaticText_Level_Title"), level_Value = (UI.getChildControl)(Panel_Window_PetInfoNew, "StaticText_Level_Value"), progress_Hungry = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_Hungry"), icon_Lovely = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_LovelyIcon"), bg_Lovely = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_Lovely_BG"), progress_Lovely = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Progress_Lovely"), 
 action = {(UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_2"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_3"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_4"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_5"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_6"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_7"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_8"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_9"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_10"); [0] = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_Specificity_1")}
 , 
 actionSlot = {(UI.getChildControl)(Panel_Window_PetInfoNew, "Static_2"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_3"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_4"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_5"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_6"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_7"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_8"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_9"), (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_10"); [0] = (UI.getChildControl)(Panel_Window_PetInfoNew, "Static_1")}
@@ -27,43 +27,54 @@ PetInfo.Update = function(self, isSealed)
     local skillParam = PcPetData:getSkillParam(param)
     local paramText = ""
     if skillParam._type == 1 then
-      paramText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_ITEMGETTIME", "itemGetTime", (string.format)("%.1f", skillParam:getParam(0) / 1000))
-    else
-      if skillParam._type == 2 then
-        paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDGATHER")
+      local petLootingType = PcPetData:getPetLootingType()
+      local variableCount = 1
+      if petLootingType == 0 then
+        variableCount = 1.1
       else
-        if skillParam._type == 3 then
-          paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDPK")
+        if petLootingType == 2 then
+          variableCount = 0.9
+        end
+      end
+      paramText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_ITEMGETTIME", "itemGetTime", (string.format)("%.1f", skillParam:getParam(0) * variableCount / 1000))
+    else
+      do
+        if skillParam._type == 2 then
+          paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDGATHER")
         else
-          if skillParam._type == 4 then
-            paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDPLACE")
+          if skillParam._type == 3 then
+            paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDPK")
           else
-            if skillParam._type == 5 then
-              paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_MOBAGGRO")
+            if skillParam._type == 4 then
+              paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDPLACE")
             else
-              if skillParam._type == 6 then
-                paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDRAREMONSTER")
+              if skillParam._type == 5 then
+                paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_MOBAGGRO")
               else
-                if skillParam._type == 7 then
-                  paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_REDUCEAUTOFISHINGTIME")
+                if skillParam._type == 6 then
+                  paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_FINDRAREMONSTER")
                 else
-                  if skillParam._type == 8 then
-                    paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_REGISTILL")
+                  if skillParam._type == 7 then
+                    paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_REDUCEAUTOFISHINGTIME")
                   else
-                    if skillParam._type == 9 then
-                      paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_AUTOGETHERING")
+                    if skillParam._type == 8 then
+                      paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_REGISTILL")
                     else
-                      if skillParam._type == 10 then
-                        paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_GETHERINGINCREASE")
+                      if skillParam._type == 9 then
+                        paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_AUTOGETHERING")
                       else
-                        if param == 0 then
-                          (self.baseSkill_1):SetShow(false)
+                        if skillParam._type == 10 then
+                          paramText = PAGetString(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_GETHERINGINCREASE")
                         else
-                          if param == 1 then
-                            (self.baseSkill_2):SetShow(false)
+                          if param == 0 then
+                            (self.baseSkill_1):SetShow(false)
+                          else
+                            if param == 1 then
+                              (self.baseSkill_2):SetShow(false)
+                            end
                           end
+                          return 
                         end
-                        return 
                       end
                     end
                   end
@@ -72,17 +83,17 @@ PetInfo.Update = function(self, isSealed)
             end
           end
         end
-      end
-    end
-    if param == 0 then
-      (self.baseSkill_1):SetShow(true)
-      ;
-      (self.baseSkill_1):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_BASESKILL", "paramText", paramText))
-    else
-      if param == 1 then
-        (self.baseSkill_2):SetShow(true)
-        ;
-        (self.baseSkill_2):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_SPECIALSKILL", "paramText", paramText))
+        if param == 0 then
+          (self.baseSkill_1):SetShow(true)
+          ;
+          (self.baseSkill_1):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_BASESKILL", "paramText", paramText))
+        else
+          if param == 1 then
+            (self.baseSkill_2):SetShow(true)
+            ;
+            (self.baseSkill_2):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_SPECIALSKILL", "paramText", paramText))
+          end
+        end
       end
     end
   end
@@ -170,7 +181,7 @@ PetInfo.Update = function(self, isSealed)
         ;
         (self.petName):SetText(patName .. " (" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", petTier) .. ")")
         ;
-        (self.level_Value):SetText(petLevel)
+        (self.level_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. petLevel)
         ;
         (self.progress_Hungry):SetProgressRate(petHungryPercent)
         ;
@@ -287,11 +298,11 @@ PetInfo.Update = function(self, isSealed)
                         Panel_SkillTooltip_SetPosition(skillNo, (self.skillSlot)[uiIdx], "PetSkill")
                       end
                       uiIdx = uiIdx + 1
-                      -- DECOMPILER ERROR at PC513: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC520: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC513: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC520: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC513: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC520: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end
@@ -307,7 +318,7 @@ PetInfo.Update = function(self, isSealed)
                 (self.petInfoBg):SetSize((self.petInfoBg):GetSizeX(), 280)
                 PetInfo_SkillSlot_Show(false)
               end
-              -- DECOMPILER ERROR at PC553: Confused about usage of register: R33 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC560: Confused about usage of register: R33 in 'UnsetPending'
 
               if (self.currentPetLv)[petNum_S32] == nil then
                 (self.currentPetLv)[petNum_S32] = petLevel
@@ -316,7 +327,7 @@ PetInfo.Update = function(self, isSealed)
                 if petLevel ~= 0 and petLevel ~= 1 and (self.currentPetLv)[petNum_S32] ~= 0 and (self.currentPetLv)[petNum_S32] ~= 1 then
                   Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_PETLEVELUP_ACK", "patName", patName))
                 end
-                -- DECOMPILER ERROR at PC584: Confused about usage of register: R33 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC591: Confused about usage of register: R33 in 'UnsetPending'
 
                 ;
                 (self.currentPetLv)[petNum_S32] = petLevel
@@ -328,7 +339,9 @@ PetInfo.Update = function(self, isSealed)
               ;
               (self.progress_EXP):SetProgressRate(petExpPercent)
               ;
-              (self.level_Value):SetText(petLevel)
+              (self.level_Title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. petLevel)
+              ;
+              (self.level_Value):SetText((string.format)("%.1f", petExpPercent) .. "%")
               ;
               (self.progress_Hungry):SetProgressRate(petHungryPercent)
               ;
@@ -339,11 +352,11 @@ PetInfo.Update = function(self, isSealed)
               (self.bg_Lovely):SetShow(false)
               ;
               (self.progress_Lovely):SetShow(false)
-              -- DECOMPILER ERROR at PC631: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC655: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC631: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC655: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC631: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC655: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -446,9 +459,15 @@ FGlobal_PetInfoNew_Close = function()
   end
 end
 
+PetInfo_Update = function()
+  -- function num : 0_11 , upvalues : PetInfo
+  PetInfo:Update()
+end
+
 PetInfo.registEventHandler = function(self)
-  -- function num : 0_11
+  -- function num : 0_12
   (self.BTN_Close):addInputEvent("Mouse_LUp", "FGlobal_PetInfoNew_Close()")
+  registerEvent("FromClient_PetInfoChanged", "PetInfo_Update")
 end
 
 PetInfo:registEventHandler()

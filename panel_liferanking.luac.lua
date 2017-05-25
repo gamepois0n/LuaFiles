@@ -286,7 +286,7 @@ LifeRanking.Update = function(self)
             if LifeRanking._selectedTabIdx == 11 then
               local levelFlot = levelFlotFunc(lifeRanker)
               ;
-              ((LifeRanking._topGrade)[1]):SetText("Lv " .. tostring(lifeRankerLv) .. tostring(levelFlot))
+              ((LifeRanking._topGrade)[1]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. " " .. tostring(lifeRankerLv) .. tostring(levelFlot))
             else
               do
                 if LifeRanking._selectedTabIdx == 12 then
@@ -333,7 +333,7 @@ LifeRanking.Update = function(self)
                       if LifeRanking._selectedTabIdx == 11 then
                         local levelFlot = levelFlotFunc(lifeRanker)
                         ;
-                        ((LifeRanking._topGrade)[2]):SetText("Lv " .. tostring(lifeRankerLv) .. tostring(levelFlot))
+                        ((LifeRanking._topGrade)[2]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. " " .. tostring(lifeRankerLv) .. tostring(levelFlot))
                       else
                         do
                           if LifeRanking._selectedTabIdx == 12 then
@@ -380,7 +380,7 @@ LifeRanking.Update = function(self)
                                 if LifeRanking._selectedTabIdx == 11 then
                                   local levelFlot = levelFlotFunc(lifeRanker)
                                   ;
-                                  ((LifeRanking._topGrade)[3]):SetText("Lv " .. tostring(lifeRankerLv) .. tostring(levelFlot))
+                                  ((LifeRanking._topGrade)[3]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. " " .. tostring(lifeRankerLv) .. tostring(levelFlot))
                                 else
                                   do
                                     if LifeRanking._selectedTabIdx == 12 then
@@ -435,7 +435,7 @@ LifeRanking.Update = function(self)
                                         if LifeRanking._selectedTabIdx == 11 then
                                           local levelFlot = levelFlotFunc(lifeRanker)
                                           ;
-                                          (list.grade):SetText("Lv " .. tostring(lifeRankerLv) .. tostring(levelFlot))
+                                          (list.grade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. " " .. tostring(lifeRankerLv) .. tostring(levelFlot))
                                         else
                                           do
                                             do
@@ -453,77 +453,77 @@ LifeRanking.Update = function(self)
                                               ;
                                               (list.name):addInputEvent("Mouse_Out", "LifeRanking_Tooltip()")
                                               count = count + 1
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC927: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
                                             end
                                           end

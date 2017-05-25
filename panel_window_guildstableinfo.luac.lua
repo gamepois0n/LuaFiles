@@ -136,7 +136,7 @@ guildStableInfo.update = function(self)
   ;
   (self._staticName):SetText(servantInfo:getName())
   ;
-  (self._staticLevel):SetText("Lv." .. tostring(servantInfo:getLevel()))
+  (self._staticLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel()))
   ;
   (self._staticLevel):SetShow(false)
   ;

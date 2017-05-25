@@ -62,7 +62,7 @@ recommendSkill[UI_classType.ClassType_NinjaWomen] = {[0] = 949, [1] = 950, [2] =
 recommendSkill[UI_classType.ClassType_NinjaMan] = {[0] = 949, [1] = 950, [2] = 951, [3] = 1624, [4] = 1625, [5] = 958, [6] = 959, [7] = 960, [8] = 961, [9] = 966, [10] = 967, [11] = 968, [12] = 969, [13] = 970, [14] = 972, [15] = 973, [16] = 974, [17] = 1698, [18] = 1699, [19] = 1700}
 recommendSkill[UI_classType.ClassType_DarkElf] = {[0] = 2269, [1] = 2270, [2] = 2271, [3] = 2272, [4] = 2273, [5] = 2267, [6] = 2338, [7] = 2362, [8] = 2268, [9] = 2340, [10] = 2363, [11] = 2263, [12] = 2264, [13] = 2265, [14] = 2361, [15] = 2266, [16] = 2296, [17] = 2297, [18] = 2379, [19] = 2352, [20] = 2353, [21] = 2354, [22] = 2355, [23] = 2356, [24] = 2359, [25] = 2367, [26] = 2368, [27] = 2369, [28] = 2370}
 recommendSkill[UI_classType.ClassType_Angle] = {}
-recommendSkill[UI_classType.ClassType_Combattant] = {}
+recommendSkill[UI_classType.ClassType_Combattant] = {[0] = 2449, [1] = 2450, [2] = 2451, [3] = 2501, [4] = 2502, [5] = 2503, [6] = 2504, [7] = 2508, [8] = 2509, [9] = 2510, [10] = 2511, [11] = 2519, [12] = 2520, [13] = 2521, [14] = 2532, [15] = 2533, [16] = 2534, [17] = 2535, [18] = 2536, [19] = 2443, [20] = 2444, [21] = 2445, [22] = 2446, [23] = 2447, [24] = 2448}
 recommendSkill[UI_classType.ClassType_CombattantWomen] = {}
 recommendSkill[22] = {}
 EnableSkill_ShowAni = function()
@@ -574,7 +574,7 @@ end
 
 FromClient_UseSkillAskFromOtherPlayer = function(fromName)
   -- function num : 0_16
-  local messageboxMemo = "[<PAColor0xFFE49800>" .. fromName .. PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_QUESTTION")
+  local messageboxMemo = "[<PAColor0xFFE49800>" .. fromName .. "<PAOldColor>" .. PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_QUESTTION")
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = UseSkillFromOtherPlayer_Yes, functionCancel = UseSkillFromOtherPlayer_No, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)

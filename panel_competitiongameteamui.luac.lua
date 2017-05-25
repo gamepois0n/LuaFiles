@@ -12,7 +12,7 @@ local teamMemberUi = {}
 for index = 0, (CppEnums.CompetitionFreeForAll).eFreeForAllTeamLimit - 1 do
   teamMemberUi[index] = {}
 end
-local teamMember = {_classIcon = (UI.getChildControl)(teamMemberBg, "Static_ClassIcon"), _gaugeBlackBG = (UI.getChildControl)(teamMemberBg, "Static_BlackSpiritBG"), _gaugeBlack = (UI.getChildControl)(teamMemberBg, "BlackSpirtGauge"), _level = (UI.getChildControl)(teamMemberBg, "StaticText_Level"), _progressBg = (UI.getChildControl)(teamMemberBg, "Static_Hp_ProgressBg"), _hpProgress = (UI.getChildControl)(teamMemberBg, "Static_Hp_Progress"), _name = (UI.getChildControl)(teamMemberBg, "StaticText_CharacterName"), _myBorder = (UI.getChildControl)(teamMemberBg, "Static_MyInfoBorder"), _leftUserCount = (UI.getChildControl)(teamMemberBg, "StaticText_LeftCount"), _skillIcon1 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon1"), _skillIcon2 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon2"), _skillIcon3 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon3"), _skillIcon4 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon4"), _skillIcon5 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon5"), _gaugeRate = (UI.getChildControl)(teamMemberBg, "StaticText_ProgressRateText")}
+local teamMember = {_classIcon = (UI.getChildControl)(teamMemberBg, "Static_ClassIcon"), _gaugeBlackBG = (UI.getChildControl)(teamMemberBg, "Static_BlackSpiritBG"), _gaugeBlack = (UI.getChildControl)(teamMemberBg, "BlackSpirtGauge"), _level = (UI.getChildControl)(teamMemberBg, "StaticText_Level"), _progressBg = (UI.getChildControl)(teamMemberBg, "Static_Hp_ProgressBg"), _hpProgress = (UI.getChildControl)(teamMemberBg, "Static_Hp_Progress"), _name = (UI.getChildControl)(teamMemberBg, "StaticText_CharacterName"), _myBorder = (UI.getChildControl)(teamMemberBg, "Static_MyInfoBorder"), _leftUserCount = (UI.getChildControl)(teamMemberBg, "StaticText_LeftCount"), _skillIcon1 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon1"), _skillIcon2 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon2"), _skillIcon3 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon3"), _skillIcon4 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon4"), _skillIcon5 = (UI.getChildControl)(teamMemberBg, "StaticText_SkillIcon5"), _gaugeRate = (UI.getChildControl)(teamMemberBg, "StaticText_ProgressRateText"), _hpNumber = (UI.getChildControl)(teamMemberBg, "StaticText_HpNumber")}
 local controlTexture = {path = "New_UI_Common_ForLua/Window/Pvp/pvp_etc.dds", path2 = "New_UI_Common_ForLua/Default/Default_Gauges_01.dds", path3 = "New_UI_Common_ForLua/Window/Pvp/PvP_etc_01.dds", 
 classIcon = {
 [team1] = {
@@ -41,6 +41,8 @@ classIcon = {
 [(CppEnums.ClassType).ClassType_WizardWomen] = {163, 251, 192, 280}
 , 
 [(CppEnums.ClassType).ClassType_DarkElf] = {387, 251, 416, 280}
+, 
+[(CppEnums.ClassType).ClassType_Combattant] = {419, 219, 448, 248}
 }
 , 
 [team2] = {
@@ -69,6 +71,8 @@ classIcon = {
 [(CppEnums.ClassType).ClassType_WizardWomen] = {163, 219, 192, 248}
 , 
 [(CppEnums.ClassType).ClassType_DarkElf] = {387, 219, 416, 248}
+, 
+[(CppEnums.ClassType).ClassType_Combattant] = {419, 251, 448, 280}
 }
 }
 , 
@@ -169,6 +173,8 @@ CompetitionGame_TeamUi_Round = function()
   (teamMember._level):SetShow(true)
   ;
   (teamMember._hpProgress):SetShow(true)
+  ;
+  (teamMember._hpNumber):SetShow(true)
   teamMemberBg:SetShow(true)
   ;
   (teamMember._progressBg):SetShow(true)
@@ -244,6 +250,8 @@ CompetitionGame_TeamUi_Round = function()
       ((temp._progress):getBaseTexture()):setUV(x1, y1, x2, y2)
       ;
       (temp._progress):setRenderTexture((temp._progress):getBaseTexture())
+      temp._hpNumber = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_HPNumber_" .. Index .. "_" .. userIndex)
+      CopyBaseProperty(teamMember._hpNumber, temp._hpNumber)
       temp._level = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_TeamClassLevel_" .. Index .. "_" .. userIndex)
       CopyBaseProperty(teamMember._level, temp._level)
       temp._name = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_TeamClassName_" .. Index .. "_" .. userIndex)
@@ -271,7 +279,7 @@ CompetitionGame_TeamUi_Round = function()
       ((temp._border):getBaseTexture()):setUV(x1, y1, x2, y2)
       ;
       (temp._border):setRenderTexture((temp._border):getBaseTexture())
-      -- DECOMPILER ERROR at PC574: Confused about usage of register: R32 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC597: Confused about usage of register: R32 in 'UnsetPending'
 
       ;
       (teamMemberUi[teamNo - 1])[userIndex] = temp
@@ -286,6 +294,8 @@ CompetitionGame_TeamUi_Round = function()
   (teamMember._level):SetShow(false)
   ;
   (teamMember._hpProgress):SetShow(false)
+  ;
+  (teamMember._hpNumber):SetShow(false)
   teamMemberBg:SetShow(false)
   ;
   (teamMember._progressBg):SetShow(false)
@@ -325,6 +335,8 @@ CompetitionGame_TeamUi_FreeForAll = function()
   (teamMember._level):SetShow(true)
   ;
   (teamMember._hpProgress):SetShow(true)
+  ;
+  (teamMember._hpNumber):SetShow(true)
   teamMemberBg:SetShow(true)
   ;
   (teamMember._progressBg):SetShow(true)
@@ -392,6 +404,8 @@ CompetitionGame_TeamUi_FreeForAll = function()
     ((temp._progress):getBaseTexture()):setUV(x1, y1, x2, y2)
     ;
     (temp._progress):setRenderTexture((temp._progress):getBaseTexture())
+    temp._hpNumber = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_HPNumber_" .. teamIndex)
+    CopyBaseProperty(teamMember._hpNumber, temp._hpNumber)
     temp._level = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_TeamClassLevel_" .. teamIndex)
     CopyBaseProperty(teamMember._level, temp._level)
     temp._name = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, temp._teamBg, "CompetitionGame_TeamClassName_" .. teamIndex)
@@ -419,7 +433,7 @@ CompetitionGame_TeamUi_FreeForAll = function()
     ((temp._border):getBaseTexture()):setUV(x1, y1, x2, y2)
     ;
     (temp._border):setRenderTexture((temp._border):getBaseTexture())
-    -- DECOMPILER ERROR at PC523: Confused about usage of register: R27 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC544: Confused about usage of register: R27 in 'UnsetPending'
 
     ;
     (teamMemberUi[0])[teamNo - 1] = temp
@@ -433,6 +447,8 @@ CompetitionGame_TeamUi_FreeForAll = function()
   (teamMember._level):SetShow(false)
   ;
   (teamMember._hpProgress):SetShow(false)
+  ;
+  (teamMember._hpNumber):SetShow(false)
   teamMemberBg:SetShow(false)
   ;
   (teamMember._progressBg):SetShow(false)
@@ -513,6 +529,8 @@ CompetitionGame_TeamUI_Setting_Round = function(teamNo, userCount)
       ;
       (userSlot._progress):SetProgressRate(hpPercent)
       ;
+      (userSlot._hpNumber):SetText((string.format)("%d", (math.floor)(hpPercent)) .. "%")
+      ;
       (userSlot._name):SetText(userInfo:getCharacterName())
       ;
       (userSlot._name):SetFontColor(UI_color.C_FFEFEFEF)
@@ -556,6 +574,8 @@ CompetitionGame_TeamUI_Setting_Round = function(teamNo, userCount)
         ;
         (userSlot._border):SetShow(false)
       end
+      ;
+      (userSlot._teamBg):addInputEvent("Mouse_LUp", "CompetitionGame_CameraControl(" .. tostring(userInfo:getUserNo()) .. ")")
     end
   end
 end
@@ -596,7 +616,9 @@ CompetitionGame_TeamUI_Setting_FreeForAll = function(teamNo)
     ;
     (userSlot._progress):SetProgressRate(hpPercent)
     ;
-    (userSlot._name):SetText("Team. " .. leaderInfo:getCharacterName())
+    (userSlot._hpNumber):SetText((string.format)("%d", (math.floor)(hpPercent)) .. "%")
+    ;
+    (userSlot._name):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ARSHA_TEAMUI_NAMETEXT", "name", leaderInfo:getCharacterName()))
     ;
     (userSlot._name):SetFontColor(UI_color.C_FFEFEFEF)
     ;
@@ -646,6 +668,10 @@ FromClient_UpdateUserHP_Round = function()
         hpPercent = userInfo:getHP() / userInfo:getMaxHP() * 100
         ;
         (userSlot._progress):SetProgressRate(hpPercent)
+        ;
+        (userSlot._hpNumber):SetText((string.format)("%d", (math.floor)(hpPercent)) .. "%")
+        ;
+        (userSlot._name):SetText(userInfo:getCharacterName())
         if hpPercent <= 0 then
           (userSlot._name):SetFontColor(UI_color.C_FFC4BEBE)
         end
@@ -742,6 +768,8 @@ FromClient_UpdateUserHP_Round = function()
             (userSlot._skillIcon5):SetPosY(37)
           end
         end
+        ;
+        (userSlot._teamBg):addInputEvent("Mouse_LUp", "CompetitionGame_CameraControl(" .. tostring(userInfo:getUserNo()) .. ")")
       end
     end
   end
@@ -785,6 +813,8 @@ FromClient_UpdateUserHP_FreeForAll = function()
     end
     if userSlot ~= nil then
       (userSlot._progress):SetProgressRate(hpPercent)
+      ;
+      (userSlot._hpNumber):SetText((string.format)("%d", (math.floor)(hpPercent)) .. "%")
       if hpPercent <= 0 then
         (userSlot._name):SetFontColor(UI_color.C_FFC4BEBE)
       end
@@ -850,8 +880,13 @@ CompetitionGameTeamUI_StatSlotClose_FreeForAll = function()
   end
 end
 
-CompetitionGameTeamUI_Open = function()
+CompetitionGame_CameraControl = function(teamNo)
   -- function num : 0_13
+  ToClient_ForceChangeScreenModeActor(toInt64(0, teamNo))
+end
+
+CompetitionGameTeamUI_Open = function()
+  -- function num : 0_14
   Panel_CompetitionGame_TeamUi:SetShow(true)
   local selfActorKeyRaw = (getSelfPlayer()):getActorKey()
   if (getSelfPlayer()):isPartyMemberActorKey(selfActorKeyRaw) == true then
@@ -860,7 +895,7 @@ CompetitionGameTeamUI_Open = function()
 end
 
 CompetitionGameTeamUI_Close = function()
-  -- function num : 0_14
+  -- function num : 0_15
   Panel_CompetitionGame_TeamUi:SetShow(false)
   local selfActorKeyRaw = (getSelfPlayer()):getActorKey()
   if (getSelfPlayer()):isPartyMemberActorKey(selfActorKeyRaw) == true then

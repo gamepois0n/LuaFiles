@@ -10,7 +10,7 @@ Panel_SavageDefenceInfo:SetShow(false)
 Panel_SavageDefenceInfo:setMaskingChild(true)
 Panel_SavageDefenceInfo:ActiveMouseEventEffect(true)
 Panel_SavageDefenceInfo:setGlassBackground(true)
-local SavegeDefenceInfo = {_blackBG = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BlackBG"), _txtTitle = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Title"), _btnClose = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Win_Close"), _btnHelp = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Question"), _listBg = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_SavageDefenceListBG"), _scroll = (UI.getChildControl)(Panel_SavageDefenceInfo, "Scroll_SavageDefenceList"), _txtRule = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RuleContent"), _txtReward = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RewardContent"), _txtInfo = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_InfoContent"), _btnInmy = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_InmyChannel"), _list2 = (UI.getChildControl)(Panel_SavageDefenceInfo, "List2_SavageDefenceList"), _desc_Rule_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Rule"), _desc_rule = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_1"), 
+local PaGlobal_SavegeDefenceInfo = {_blackBG = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BlackBG"), _txtTitle = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Title"), _btnClose = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Win_Close"), _btnHelp = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Question"), _listBg = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_SavageDefenceListBG"), _scroll = (UI.getChildControl)(Panel_SavageDefenceInfo, "Scroll_SavageDefenceList"), _txtRule = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RuleContent"), _txtReward = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RewardContent"), _txtInfo = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_InfoContent"), _btnInmy = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_InmyChannel"), _list2 = (UI.getChildControl)(Panel_SavageDefenceInfo, "List2_SavageDefenceList"), _desc_Rule_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Rule"), _desc_rule = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_1"), 
 desc_Rule = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_6"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_7"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_8"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_9"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_10"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_11"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_12"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1")}
 , 
 desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_6"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_7"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_8"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_9"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_10"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_12"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_1")}
@@ -27,13 +27,13 @@ _listPool = {}
 , _openDesc = -1, _maxDescRuleSize = 40, _maxDescRewardSize = 20, _maxDescExplanationSize = 30, 
 _posConfig = {_listStartPosY = 25, _iconStartPosY = 88, _listPosYGap = 31}
 }
-SavageDefenceInfo_Initionalize = function()
-  -- function num : 0_0 , upvalues : SavegeDefenceInfo, UI_TM
-  local self = SavegeDefenceInfo
+FGlobal_SavegeDefenceInfo_Initionalize = function()
+  -- function num : 0_0 , upvalues : PaGlobal_SavegeDefenceInfo, UI_TM
+  local self = PaGlobal_SavegeDefenceInfo
   ;
   (self._list2):changeAnimationSpeed(10)
   ;
-  (self._list2):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "SavageDefenceInfo_ListUpdate")
+  (self._list2):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "FGlobal_SavegeDefenceInfo_ListUpdate")
   ;
   (self._list2):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
   ;
@@ -155,9 +155,9 @@ SavageDefenceInfo_Initionalize = function()
   (self._btnClose):addInputEvent("Mouse_LUp", "FGlobal_SavageDefenceInfo_Close()")
 end
 
-SavageDefenceInfo_ListUpdate = function(contents, key)
-  -- function num : 0_1 , upvalues : SavegeDefenceInfo
-  local self = SavegeDefenceInfo
+FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
+  -- function num : 0_1 , upvalues : PaGlobal_SavegeDefenceInfo
+  local self = PaGlobal_SavegeDefenceInfo
   local idx = Int64toInt32(key)
   local savageDefenceListBG = (UI.getChildControl)(contents, "StaticText_ListBG")
   savageDefenceListBG:SetShow(true)
@@ -173,10 +173,8 @@ SavageDefenceInfo_ListUpdate = function(contents, key)
   savageDefenceListJoinBtn:SetShow(true)
   local curChannelData = getCurrentChannelServerData()
   if curChannelData ~= nil then
-    _PA_LOG("정태�\164", "idx : " .. tostring(idx))
-    local savageDefenceStatusData = ToClient_getSavageDefenceStatusData(1)
+    local savageDefenceStatusData = ToClient_getSavageDefenceStatusData(idx)
     local getServerNo = savageDefenceStatusData:getServerNo()
-    _PA_LOG("정태�\164", "getServerNo : " .. tostring(getServerNo))
     local getJoinMemberCount = savageDefenceStatusData:getTotalJoinCount()
     local getCurrentState = savageDefenceStatusData:getState()
     local getWave = savageDefenceStatusData:getWave()
@@ -195,14 +193,14 @@ SavageDefenceInfo_ListUpdate = function(contents, key)
         isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ING")
         isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
         savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FF3B8BBE)
-        savageDefenceListJoinBtn:SetText("게임�\145")
+        savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GAMING"))
         savageDefenceListJoinBtn:SetIgnore(false)
       else
         if getCurrentState == 2 then
           isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_SOONFINISH")
           isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
           savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
-          savageDefenceListJoinBtn:SetText("게임�\145")
+          savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GAMING"))
           savageDefenceListJoinBtn:SetIgnore(true)
         else
           if getCurrentState == 3 then
@@ -219,11 +217,11 @@ SavageDefenceInfo_ListUpdate = function(contents, key)
     savageDefenceListJoinMember:SetText(getJoinMemberCount)
     savageDefenceListStatus:SetText(isCurrentState)
     savageDefenceListWave:SetText(getWave)
-    savageDefenceListJoinBtn:addInputEvent("Mouse_LUp", "SavegeDefenceInfo_join()")
+    savageDefenceListJoinBtn:addInputEvent("Mouse_LUp", "FGlobal_SavegeDefenceInfo_join(" .. idx .. ")")
   end
 end
 
-SavegeDefenceInfo.update = function(self)
+PaGlobal_SavegeDefenceInfo.update = function(self)
   -- function num : 0_2
   local serverCount = ToClient_SavageDefenceStatusCount()
   ;
@@ -233,34 +231,40 @@ SavegeDefenceInfo.update = function(self)
   end
 end
 
-SavegeDefenceInfo_join = function()
+FGlobal_SavegeDefenceInfo_join = function(idx)
   -- function num : 0_3
-  ToClient_SavageDefenceJoin()
+  local savageDefenceStatusData = ToClient_getSavageDefenceStatusData(idx)
+  local getServerNo = savageDefenceStatusData:getServerNo()
+  local curChannelData = getCurrentChannelServerData()
+  if curChannelData == nil then
+    return 
+  end
+  local curServerNo = curChannelData._serverNo
+  if curServerNo == getServerNo then
+    ToClient_SavageDefenceJoin(idx)
+  else
+    ToClient_RequestSavageDefenceJoinToAnotherChannel(getServerNo)
+  end
 end
 
-SavegeDefenceInfo_tossCoin = function(coin)
+FGlobal_SavegeDefenceInfo_tossCoin = function(index, coin)
   -- function num : 0_4
-  ToClient_SavageDefenceCoinToss(coin)
+  ToClient_SavageDefenceCoinToss(index, coin)
 end
 
-SavegeDefenceInfo_testitem = function(index)
+FGlobal_SavegeDefenceInfo_unjoin = function()
   -- function num : 0_5
-  ToClient_SavageDefenceBuyItem(index)
-end
-
-SavegeDefenceInfo_unjoin = function()
-  -- function num : 0_6
   ToClient_SavageDefenceUnJoin()
 end
 
 FGlobal_SavageDefenceInfo_Open = function()
-  -- function num : 0_7
+  -- function num : 0_6
   ToClient_SavageDefenceStatusRefreshReq()
 end
 
 FGlobal_SavageDefenceInfo_Close = function()
-  -- function num : 0_8 , upvalues : SavegeDefenceInfo
-  local self = SavegeDefenceInfo
+  -- function num : 0_7 , upvalues : PaGlobal_SavegeDefenceInfo
+  local self = PaGlobal_SavegeDefenceInfo
   self._openDesc = -1
   ;
   (self._desc_Rule_Title):SetCheck(false)
@@ -284,9 +288,9 @@ FGlobal_SavageDefenceInfo_Close = function()
   TooltipSimple_Hide()
 end
 
-SavageDefenceInfo_Repos = function()
-  -- function num : 0_9 , upvalues : SavegeDefenceInfo
-  local self = SavegeDefenceInfo
+FGlobal_SavageDefenceInfo_Repos = function()
+  -- function num : 0_8 , upvalues : PaGlobal_SavegeDefenceInfo
+  local self = PaGlobal_SavegeDefenceInfo
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
   Panel_SavageDefenceInfo:SetPosX((screenSizeX - Panel_SavageDefenceInfo:GetSizeX()) / 2)
@@ -302,9 +306,9 @@ end
 
 local rule_ani_SpeedTime = 5
 local _desc_Rule_TitleSize = 0
-SavageDefenceInfo_InformationOpen = function(deltaTime)
-  -- function num : 0_10 , upvalues : SavegeDefenceInfo, rule_ani_SpeedTime
-  local self = SavegeDefenceInfo
+FGlobal_SavegeDefenceInfo_InformationOpen = function(deltaTime)
+  -- function num : 0_9 , upvalues : PaGlobal_SavegeDefenceInfo, rule_ani_SpeedTime
+  local self = PaGlobal_SavegeDefenceInfo
   if (self._desc_Rule_Title):IsCheck() then
     local value = (self._desc_rule):GetSizeY() + (self._maxDescRuleSize - (self._desc_rule):GetSizeY()) * deltaTime * rule_ani_SpeedTime
     if value < 10 then
@@ -407,20 +411,9 @@ SavageDefenceInfo_InformationOpen = function(deltaTime)
   end
 end
 
-FromClient_refreshSavageDefencePlayer = function(count)
-  -- function num : 0_11
-  for idx = 0, count do
-    local key = ToClient_getSavageDefencePlayerkey(idx)
-    local coin = ToClient_getSavageDefencePlayerCoin(idx)
-    if key == (getSelfPlayer()):getActorKey() then
-      PaGlobal_SavageDefenceShop_SetCoin(coin)
-    end
-  end
-end
-
 FromClient_UpdateSavageDefenceStatus = function()
-  -- function num : 0_12 , upvalues : SavegeDefenceInfo
-  local self = SavegeDefenceInfo
+  -- function num : 0_10 , upvalues : PaGlobal_SavegeDefenceInfo
+  local self = PaGlobal_SavegeDefenceInfo
   Panel_SavageDefenceInfo:SetShow(true)
   ;
   (self._desc_Rule_Title):SetCheck(true)
@@ -444,12 +437,12 @@ FromClient_UpdateSavageDefenceStatus = function()
 end
 
 FromClient_luaLoadComplete_SavageDefence = function()
-  -- function num : 0_13
-  SavageDefenceInfo_Initionalize()
+  -- function num : 0_11
+  FGlobal_SavegeDefenceInfo_Initionalize()
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_SavageDefence")
 registerEvent("FromClient_UpdateSavageDefenceStatus", "FromClient_UpdateSavageDefenceStatus")
 registerEvent("FromClient_refreshSavageDefencePlayer", "FromClient_refreshSavageDefencePlayer")
-Panel_SavageDefenceInfo:RegisterUpdateFunc("SavageDefenceInfo_InformationOpen")
+Panel_SavageDefenceInfo:RegisterUpdateFunc("FGlobal_SavegeDefenceInfo_InformationOpen")
 

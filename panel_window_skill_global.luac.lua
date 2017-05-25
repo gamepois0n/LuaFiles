@@ -106,6 +106,9 @@ PaGlobal_Skill.initControl = function(self)
     ;
     (self._btn_MovieToolTipDesc):SetShow(true)
   end
+  if isGameTypeKR2() then
+    (self._btn_MovieToolTip):SetShow(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC535: Confused about usage of register: R2 in 'UnsetPending'
@@ -351,9 +354,6 @@ PaGlobal_Skill.SkillWindowEffect = function(self, row, col, skillNo, isOn)
         ((((self.slots)[self.combatTabIndex])[beforSkillNo]).mouseOverButton):SetShow(false)
       end
       if isOn == true then
-        _PA_LOG("정태�\164", "self.combatTabIndex : " .. tostring(self.combatTabIndex))
-        _PA_LOG("정태�\164", "skillNo : " .. tostring(skillNo))
-        ;
         ((((self.slots)[self.combatTabIndex])[skillNo]).mouseOverButton):EraseAllEffect()
         ;
         ((((self.slots)[self.combatTabIndex])[skillNo]).mouseOverButton):SetShow(true)

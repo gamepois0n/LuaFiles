@@ -100,9 +100,8 @@ PaGlobal_TutorialPhase_InventoryAndQuickSlot.startPhaseXXX = function(self, step
   GameTips_Reposition()
   FGlobal_NewQuickSlot_Update()
   Panel_MainStatus_User_Bar:SetShow(true, false)
-  Panel_ClassResource:SetShow((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType())
+  FGlobal_ClassResource_SetShowControl(true)
   Panel_Tutorial:SetShow(true, true)
-  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC33: Confused about usage of register: R3 in 'UnsetPending'

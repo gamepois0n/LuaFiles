@@ -102,7 +102,11 @@ WorkerTrade_CaravanCheck = function(index)
     end
   else
     do
-      WorkerTrade_CaravanImageChange(2, index)
+      if index < 4 then
+        WorkerTrade_CaravanImageChange(2, index)
+      else
+        WorkerTrade_CaravanImageChange(3, index)
+      end
     end
   end
 end
@@ -117,35 +121,51 @@ WorkerTrade_CaravanImageChange = function(index, uiIndex)
   if index == 0 then
     x1 = setTextureUV_Func((control._caravanImage)[uiIndex], 86, 107, 170, 150)
     ;
-    ((control._caravanImage)[uiIndex]):SetText("�\128기중")
+    ((control._caravanImage)[uiIndex]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEMAIN_WAIT"))
     ;
     ((control._caravan)[uiIndex]):addInputEvent("Mouse_LUp", "FGlobal_WorkerTradeCaraven_Open(" .. uiIndex .. ")")
   else
-    -- DECOMPILER ERROR at PC47: Overwrote pending register: R7 in 'AssignReg'
+    -- DECOMPILER ERROR at PC51: Overwrote pending register: R7 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC48: Overwrote pending register: R6 in 'AssignReg'
+    -- DECOMPILER ERROR at PC52: Overwrote pending register: R6 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC49: Overwrote pending register: R5 in 'AssignReg'
+    -- DECOMPILER ERROR at PC53: Overwrote pending register: R5 in 'AssignReg'
 
     if index == 1 then
       x1 = setTextureUV_Func((control._caravanImage)[uiIndex], 1, 107, 85, 150)
       ;
-      ((control._caravanImage)[uiIndex]):SetText("무역�\145")
+      ((control._caravanImage)[uiIndex]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEMAIN_TRADE"))
       ;
       ((control._caravan)[uiIndex]):addInputEvent("Mouse_LUp", "")
     else
-      -- DECOMPILER ERROR at PC73: Overwrote pending register: R7 in 'AssignReg'
+      -- DECOMPILER ERROR at PC81: Overwrote pending register: R7 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC74: Overwrote pending register: R6 in 'AssignReg'
+      -- DECOMPILER ERROR at PC82: Overwrote pending register: R6 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC75: Overwrote pending register: R5 in 'AssignReg'
+      -- DECOMPILER ERROR at PC83: Overwrote pending register: R5 in 'AssignReg'
 
       if index == 2 then
         x1 = setTextureUV_Func((control._caravanImage)[uiIndex], 171, 107, 255, 150)
         ;
-        ((control._caravanImage)[uiIndex]):SetText("미계�\189")
+        ((control._caravanImage)[uiIndex]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEMAIN_NOCONTRACT"))
         ;
         ((control._caravan)[uiIndex]):addInputEvent("Mouse_LUp", "WorkerTrade_CreateCaravan()")
+      else
+        -- DECOMPILER ERROR at PC111: Overwrote pending register: R7 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC112: Overwrote pending register: R6 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC113: Overwrote pending register: R5 in 'AssignReg'
+
+        if index == 3 then
+          x1 = setTextureUV_Func((control._caravanImage)[uiIndex], 86, 107, 170, 150)
+          ;
+          ((control._caravanImage)[uiIndex]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEMAIN_DISABLECONTRACT"))
+          ;
+          ((control._caravan)[uiIndex]):addInputEvent("Mouse_LUp", "")
+          ;
+          ((control._caravanImage)[uiIndex]):SetMonoTone(true)
+        end
       end
     end
   end
@@ -165,9 +185,9 @@ WorkerTrade_CreateCaravan = function()
     ToClient_RequestCreateTradeGroup(createIndex)
   end
 
-  local msgTitle = "신규 상단 계약"
+  local msgTitle = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEMAIN_MSGTITLE")
   local needCoin = ToClient_GetTradeGroupCreatePrice()
-  local msgContent = "새로�\180 상단 계약에는 알티노바 주화 <" .. tostring(needCoin) .. ">개가 필요합니�\164. 계속하시겠습니까?"
+  local msgContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADEMAIN_MSGCONTENT", "coin", tostring(needCoin))
   messageBoxData = {title = msgTitle, content = msgContent, functionYes = requestCreateCaravan, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageBoxData)
@@ -180,6 +200,8 @@ workerTrade.registerEvent = function(self)
   (control._btnClose):addInputEvent("Mouse_LUp", "WorkerTrade_Close()")
   ;
   (control._btnQuestion):addInputEvent("Mouse_LUp", "")
+  ;
+  (control._btnQuestion):SetShow(false)
   ;
   (control._treasureBox):addInputEvent("Mouse_LUp", "FGlobal_WorkerTradeTreasure_ShowToggle()")
   ;

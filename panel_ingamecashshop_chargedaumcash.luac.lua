@@ -83,11 +83,17 @@ end
       url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
     else
       if isGameTypeEnglish() then
-        if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == getGameServiceType() then
-          url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_TEST", "langType", langType)
+        if isSteamClient() then
+          url = "https://www.blackdesertonline.com/steam/DaumCash.html?appId=582660&steamTicket=" .. getSteamAuthSessionTicket() .. "&lang=" .. langType
+          steamOverlayToWebPage(url)
+          return 
         else
-          if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == getGameServiceType() then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_REAL", "langType", langType)
+          if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == getGameServiceType() then
+            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_TEST", "langType", langType)
+          else
+            if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == getGameServiceType() then
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_REAL", "langType", langType)
+            end
           end
         end
       else

@@ -799,28 +799,28 @@ end
 
 -- DECOMPILER ERROR at PC296: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialManager.handleClickExtractionEnchantStoneButton = function(self)
+PaGlobal_TutorialManager.handleClickExtractionEnchantStoneButton = function(self, isShow)
   -- function num : 0_85
   if self:isDoingTutorial() == true and self:getCurrentPhase() ~= nil and (self:getCurrentPhase()).handleClickExtractionEnchantStoneButton ~= nil then
-    (self:getCurrentPhase()):handleClickExtractionEnchantStoneButton()
+    (self:getCurrentPhase()):handleClickExtractionEnchantStoneButton(isShow)
   end
 end
 
 -- DECOMPILER ERROR at PC299: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialManager.handleClickExtractionCrystalButton = function(self)
+PaGlobal_TutorialManager.handleClickExtractionCrystalButton = function(self, isShow)
   -- function num : 0_86
   if self:isDoingTutorial() == true and self:getCurrentPhase() ~= nil and (self:getCurrentPhase()).handleClickExtractionCrystalButton ~= nil then
-    (self:getCurrentPhase()):handleClickExtractionCrystalButton()
+    (self:getCurrentPhase()):handleClickExtractionCrystalButton(isShow)
   end
 end
 
 -- DECOMPILER ERROR at PC302: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialManager.handleClickExtractionClothButton = function(self)
+PaGlobal_TutorialManager.handleClickExtractionClothButton = function(self, isShow)
   -- function num : 0_87
   if self:isDoingTutorial() == true and self:getCurrentPhase() ~= nil and (self:getCurrentPhase()).handleClickExtractionClothButton ~= nil then
-    (self:getCurrentPhase()):handleClickExtractionClothButton()
+    (self:getCurrentPhase()):handleClickExtractionClothButton(isShow)
   end
 end
 

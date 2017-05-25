@@ -1227,11 +1227,18 @@ DailStamp_Hide = function()
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local isEventBeforShow = temporaryPCRoomWrapper:isEventBeforeShow()
-  if isPremiumPcRoom and temporaryPCRoomWrapper:isPcRoomBeforeShow() and not isEventBeforShow then
+  if isPremiumPcRoom then
+    if isGameTypeEnglish() then
+      FGlobal_LevelupGuide_Open(false)
+    else
+      if temporaryPCRoomWrapper:isPcRoomBeforeShow() and not isEventBeforShow then
+        EventNotify_Open()
+      end
+    end
+    PcRoomNotify_FirstUsePearl_Open()
+  else
     EventNotify_Open()
   end
-  PcRoomNotify_FirstUsePearl_Open()
-  EventNotify_Open()
 end
 
 Panel_Window_DailyStamp_RePos = function()

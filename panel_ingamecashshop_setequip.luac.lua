@@ -301,77 +301,82 @@ FGlobal_CashShop_SetEquip_Update = function(productNoRaw)
       ;
       (((self.SlotUIPool)[value]).ItemName):SetFontColor(UI_color.C_FFFFFFFF)
     end
-    do
-      if (hasEquipment ~= true or hasLantern ~= false) and hasUsableServant == true then
-        self.beforSetClass = self.nowSetClass
-        self.nowSetClass = checkClass
-        local cartProductKeyList = (Array.new)()
-        local cartListCount = (getIngameCashMall()):getViewListCount()
-        for equipItem_Idx = 0, cartListCount - 1 do
-          local iGCSelectedItem = (getIngameCashMall()):getViewItemByIndex(equipItem_Idx)
-          local CPSSW = iGCSelectedItem:getCashProductStaticStatus()
-          cartProductKeyList:push_back(CPSSW:getNoRaw())
-        end
-        for key,noRaw in pairs(cartProductKeyList) do
-          local CPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(noRaw)
-          local itemCount = CPSSW:getInnerItemListCount()
-          for itemIdx = 0, itemCount - 1 do
-            local itemSSW = CPSSW:getInnerItemByIndex(itemIdx)
-            if self:Return_ServantType(itemSSW, self.hasServantType) == false then
-              (getIngameCashMall()):popProductInEquipCart(noRaw)
-              break
-            end
+    if CPSSW:isShowWindowItemKey() then
+      self.nowSetClass = -1
+      CashShopController_ForceOffAllButton()
+      ;
+      (getIngameCashMall()):changeViewCharacter(productNoRaw)
+      return 
+    end
+    if (hasEquipment ~= true or hasLantern ~= false) and hasUsableServant == true then
+      self.beforSetClass = self.nowSetClass
+      self.nowSetClass = checkClass
+      local cartProductKeyList = (Array.new)()
+      local cartListCount = (getIngameCashMall()):getViewListCount()
+      for equipItem_Idx = 0, cartListCount - 1 do
+        local iGCSelectedItem = (getIngameCashMall()):getViewItemByIndex(equipItem_Idx)
+        local CPSSW = iGCSelectedItem:getCashProductStaticStatus()
+        cartProductKeyList:push_back(CPSSW:getNoRaw())
+      end
+      for key,noRaw in pairs(cartProductKeyList) do
+        local CPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(noRaw)
+        local itemCount = CPSSW:getInnerItemListCount()
+        for itemIdx = 0, itemCount - 1 do
+          local itemSSW = CPSSW:getInnerItemByIndex(itemIdx)
+          if self:Return_ServantType(itemSSW, self.hasServantType) == false then
+            (getIngameCashMall()):popProductInEquipCart(noRaw)
+            break
           end
         end
-        self.nowSetClass = -1
-        local characterKeyRaw = (getIngameCashMall()):getDelegateServantKey(self.hasServantType)
-        CashShopController_ForceOffAllButton()
-        ;
-        (getIngameCashMall()):changeViewVehicleCharacter(characterKeyRaw)
-        ;
-        (getIngameCashMall()):pushProductInEquipCart(productNoRaw)
-      else
-        do
-          if hasEquipment == true and hasLantern == false then
-            self.beforSetClass = self.nowSetClass
-            self.nowSetClass = checkClass
-            if self.beforSetClass == self.nowSetClass then
-              local cartProductKeyList = (Array.new)()
-              local cartListCount = (getIngameCashMall()):getViewListCount()
-              for equipItem_Idx = 0, cartListCount - 1 do
-                local iGCSelectedItem = (getIngameCashMall()):getViewItemByIndex(equipItem_Idx)
-                local CPSSW = iGCSelectedItem:getCashProductStaticStatus()
-                cartProductKeyList:push_back(CPSSW:getNoRaw())
-              end
-              for key,noRaw in pairs(cartProductKeyList) do
-                local CPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(noRaw)
-                local itemCount = CPSSW:getInnerItemListCount()
-                for itemIdx = 0, itemCount - 1 do
-                  local itemSSW = CPSSW:getInnerItemByIndex(itemIdx)
-                  if itemSSW:isEquipable() and ((itemSSW:get())._usableClassType):isOn(self.nowSetClass) == false then
-                    (getIngameCashMall()):popProductInEquipCart(noRaw)
-                    break
-                  end
+      end
+      self.nowSetClass = -1
+      local characterKeyRaw = (getIngameCashMall()):getDelegateServantKey(self.hasServantType)
+      CashShopController_ForceOffAllButton()
+      ;
+      (getIngameCashMall()):changeViewVehicleCharacter(characterKeyRaw)
+      ;
+      (getIngameCashMall()):pushProductInEquipCart(productNoRaw)
+    else
+      do
+        if hasEquipment == true and hasLantern == false then
+          self.beforSetClass = self.nowSetClass
+          self.nowSetClass = checkClass
+          if self.beforSetClass == self.nowSetClass then
+            local cartProductKeyList = (Array.new)()
+            local cartListCount = (getIngameCashMall()):getViewListCount()
+            for equipItem_Idx = 0, cartListCount - 1 do
+              local iGCSelectedItem = (getIngameCashMall()):getViewItemByIndex(equipItem_Idx)
+              local CPSSW = iGCSelectedItem:getCashProductStaticStatus()
+              cartProductKeyList:push_back(CPSSW:getNoRaw())
+            end
+            for key,noRaw in pairs(cartProductKeyList) do
+              local CPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(noRaw)
+              local itemCount = CPSSW:getInnerItemListCount()
+              for itemIdx = 0, itemCount - 1 do
+                local itemSSW = CPSSW:getInnerItemByIndex(itemIdx)
+                if itemSSW:isEquipable() and ((itemSSW:get())._usableClassType):isOn(self.nowSetClass) == false then
+                  (getIngameCashMall()):popProductInEquipCart(noRaw)
+                  break
                 end
               end
-              if myClass == self.nowSetClass then
-                (getIngameCashMall()):changeViewMyCharacter()
-              else
-                local characterSSW = getCharacterStaticStatusWrapperByClassType(self.nowSetClass)
-                local characterKeyRaw = characterSSW:getCharacterKey()
-                ;
-                (getIngameCashMall()):changeViewPlayerCharacter(characterKeyRaw)
-              end
-              do
-                CashShop_SetEquip_AutoUnderWearShow(productNoRaw)
-                CashShop_SetEquip_AutoUpHair(productNoRaw)
-                ;
-                (getIngameCashMall()):pushProductInEquipCart(productNoRaw)
-                self.nowSetClass = -1
-                CashShopController_ForceOffAllButton()
-                ;
-                (getIngameCashMall()):changeViewCharacter(productNoRaw)
-              end
+            end
+            if myClass == self.nowSetClass then
+              (getIngameCashMall()):changeViewMyCharacter()
+            else
+              local characterSSW = getCharacterStaticStatusWrapperByClassType(self.nowSetClass)
+              local characterKeyRaw = characterSSW:getCharacterKey()
+              ;
+              (getIngameCashMall()):changeViewPlayerCharacter(characterKeyRaw)
+            end
+            do
+              CashShop_SetEquip_AutoUnderWearShow(productNoRaw)
+              CashShop_SetEquip_AutoUpHair(productNoRaw)
+              ;
+              (getIngameCashMall()):pushProductInEquipCart(productNoRaw)
+              self.nowSetClass = -1
+              CashShopController_ForceOffAllButton()
+              ;
+              (getIngameCashMall()):changeViewCharacter(productNoRaw)
             end
           end
         end
@@ -666,6 +671,31 @@ CashShopController.Initialize = function(self)
   local _btn_TextSizeX = _btn_SizeX - _btn_SizeX / 2 - (self.btn_Coupon):GetTextSizeX() / 2
   ;
   (self.btn_Coupon):SetTextSpan(_btn_TextSizeX, 4)
+  if isGameTypeKR2() then
+    (self.static_SetOptionEnduranceBG):SetShow(false)
+    ;
+    (self.txt_Endurance):SetShow(false)
+    ;
+    (self.Slider_Endurance):SetShow(false)
+    ;
+    (self.static_SetOptionBG):SetSize((self.static_SetOptionBG):GetSizeX(), 60)
+    ;
+    (self.btn_AllDoff):SetPosY(15)
+    ;
+    (self.btn_ShowUnderwear):SetPosY(15)
+    ;
+    (self.btn_HideAvatar):SetPosY(15)
+    ;
+    (self.btn_HideHair):SetPosY(15)
+    ;
+    (self.btn_HideHelm):SetPosY(15)
+    ;
+    (self.btn_OpenHelm):SetPosY(15)
+    ;
+    (self.btn_AwakenWeapon):SetPosY(15)
+    ;
+    (self.btn_WarStance):SetPosY(15)
+  end
 end
 
 FGlobal_CashShop_SetEquip_CouponEffectCheck = function()
@@ -817,46 +847,44 @@ FGlobal_CashShop_SetEquip_SelectedItem = function(productNoRaw)
   local self = CashShopController
   local isMainCategory = cashProduct:getMainCategory()
   local isMiddleCategory = cashProduct:getMiddleCategory()
-  if isMainCategory == 7 and isMiddleCategory == 1 then
-    (self.cameraControlBG):SetSpanSize(17, 60)
-    if self.savedTabType == 4 then
-      (self.static_SetOptionBG):SetShow(true)
+  if self.savedTabType ~= 4 then
+    if isMainCategory == 7 and isMiddleCategory == 1 then
+      (self.petLookBG):SetShow(true)
       ;
-      (self.petLookBG):SetShow(false)
+      (self.static_SetOptionBG):SetShow(false)
       ;
-      (self.cameraControlBG):SetSpanSize(17, 150)
+      (self.cameraControlBG):SetSpanSize(17, 130)
     else
-      if self.savedTabType == 7 then
-        (self.petLookBG):SetShow(true)
-        ;
-        (self.static_SetOptionBG):SetShow(false)
-        ;
-        (self.cameraControlBG):SetSpanSize(17, 130)
-      else
-        ;
-        (self.cameraControlBG):SetSpanSize(17, 60)
+      if isMainCategory == 4 then
+        (self.static_SetOptionBG):SetShow(true)
         ;
         (self.petLookBG):SetShow(false)
         ;
-        (self.static_SetOptionBG):SetShow(false)
+        (self.cameraControlBG):SetSpanSize(17, 150)
+      else
+        if isMainCategory == 9 and isGameTypeEnglish() then
+          (self.static_SetOptionBG):SetShow(true)
+          ;
+          (self.petLookBG):SetShow(false)
+          ;
+          (self.cameraControlBG):SetSpanSize(17, 150)
+        else
+          ;
+          (self.cameraControlBG):SetSpanSize(17, 60)
+          ;
+          (self.petLookBG):SetShow(false)
+          ;
+          (self.static_SetOptionBG):SetShow(false)
+        end
       end
     end
   else
-    if isMainCategory == 7 and isMiddleCategory == 2 then
-      (self.cameraControlBG):SetSpanSize(17, 60)
-      ;
-      (self.petLookBG):SetShow(false)
-      ;
-      (self.static_SetOptionBG):SetShow(false)
-    else
-      if isMainCategory == 7 and isMiddleCategory == 3 then
-        (self.cameraControlBG):SetSpanSize(17, 60)
-        ;
-        (self.petLookBG):SetShow(false)
-        ;
-        (self.static_SetOptionBG):SetShow(false)
-      end
-    end
+    ;
+    (self.static_SetOptionBG):SetShow(true)
+    ;
+    (self.petLookBG):SetShow(false)
+    ;
+    (self.cameraControlBG):SetSpanSize(17, 150)
   end
   ;
   (self.txt_petLookNameMain):SetTextMode(UI_TM.eTextMode_AutoWrap)

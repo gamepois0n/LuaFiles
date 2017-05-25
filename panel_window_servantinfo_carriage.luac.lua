@@ -53,16 +53,41 @@ _slotText = {[3] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Carria
 , 
 _skill = {startX = 0, startY = 0, startIconX = 10, startIconY = 5, startNameX = 64, startNameY = 5, startDecX = 64, startDecY = 27, startExpBGX = 7, startExpBGY = 47, startExpX = 12, startExpY = 50, gapY = 52, count = 4}
 }
-, _buttonClose = (UI.getChildControl)(Panel_CarriageInfo, "close_button"), _buttonQuestion = (UI.getChildControl)(Panel_CarriageInfo, "Button_Question"), _staticName = (UI.getChildControl)(Panel_CarriageInfo, "name_value"), _staticLevelTitle = (UI.getChildControl)(Panel_CarriageInfo, "Lv"), _staticLevel = (UI.getChildControl)(Panel_CarriageInfo, "Level_value"), _staticGaugeBar_Hp = (UI.getChildControl)(Panel_CarriageInfo, "HP_GaugeBar"), _staticTextValue_Hp = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_HP_Value"), _staticGaugeBar_Mp = (UI.getChildControl)(Panel_CarriageInfo, "MP_GaugeBar"), _staticTextValue_Mp = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_MP_Value"), _staticTextTitle_Sus = (UI.getChildControl)(Panel_CarriageInfo, "Sus"), _staticTextValue_Sus = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_Sus_Value"), _staticGaugeBar_Weight = (UI.getChildControl)(Panel_CarriageInfo, "Weight_Gauge"), _staticTextValue_Weight = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_Weight_Value"), _staticText_MaxMoveSpeedValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_MaxMoveSpeedValue"), _staticText_AccelerationValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_AccelerationValue"), _staticText_CorneringSpeedValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_CorneringSpeedValue"), _staticText_BrakeSpeedValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_BrakeSpeedValue"), _staticText_Value_Def = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_DefenceValue"), _deadCountValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_DeadCountValue"), _carriageHorseBg = (UI.getChildControl)(Panel_CarriageInfo, "Static_CarriageHorseBg"), _carriageHorseSlot = (UI.getChildControl)(Panel_CarriageInfo, "Static_CarriageHorseSlot"), _carriageHorse_Name = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_CarriageHorse_Name"), _btn_Skill = (UI.getChildControl)(Panel_CarriageInfo, "Button_Skill"), _horse_Level = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_Horse_Level"), _EXP_CountData = (UI.getChildControl)(Panel_CarriageInfo, "Horse_EXP_CountData"), _EXP_Bg = (UI.getChildControl)(Panel_CarriageInfo, "Horse_EXP_Bg"), _EXP_GaugeBar = (UI.getChildControl)(Panel_CarriageInfo, "Horse_EXP_GaugeBar"), _maxCountValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_MaxCountValue"), _skillBg = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_SkillBg"), _skillIcon = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_SkillIcon"), _skillCondition = (UI.getChildControl)(Panel_LinkedHorse_Skill, "StaticText_SkillCondition"), _skillName = (UI.getChildControl)(Panel_LinkedHorse_Skill, "StaticText_SkillName"), _skillPercent = (UI.getChildControl)(Panel_LinkedHorse_Skill, "StaticText_LearningPercent"), _skillGaugeBg = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_Texture_Learn_Background"), _skillGauge = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Progress2_SkillLearn_Gauge"), _skillScroll = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Scroll_Skill"), _staticSkillBG = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_skillInfoBg"), _btnClose = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Button_Close"), 
+, _buttonClose = (UI.getChildControl)(Panel_CarriageInfo, "close_button"), _buttonQuestion = (UI.getChildControl)(Panel_CarriageInfo, "Button_Question"), _staticName = (UI.getChildControl)(Panel_CarriageInfo, "name_value"), _staticLevelTitle = (UI.getChildControl)(Panel_CarriageInfo, "Lv"), _staticLevel = (UI.getChildControl)(Panel_CarriageInfo, "Level_value"), _staticGaugeBar_Hp = (UI.getChildControl)(Panel_CarriageInfo, "HP_GaugeBar"), _staticTextValue_Hp = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_HP_Value"), _staticGaugeBar_Mp = (UI.getChildControl)(Panel_CarriageInfo, "MP_GaugeBar"), _staticTextValue_Mp = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_MP_Value"), _staticTextTitle_Sus = (UI.getChildControl)(Panel_CarriageInfo, "Sus"), _staticTextValue_Sus = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_Sus_Value"), _staticGaugeBar_Weight = (UI.getChildControl)(Panel_CarriageInfo, "Weight_Gauge"), _staticTextValue_Weight = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_Weight_Value"), _staticText_MaxMoveSpeedValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_MaxMoveSpeedValue"), _staticText_AccelerationValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_AccelerationValue"), _staticText_CorneringSpeedValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_CorneringSpeedValue"), _staticText_BrakeSpeedValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_BrakeSpeedValue"), _staticText_Value_Def = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_DefenceValue"), _deadCountValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_DeadCountValue"), _carriageHorseBg = (UI.getChildControl)(Panel_CarriageInfo, "Static_CarriageHorseBg"), _carriageHorseSlot = (UI.getChildControl)(Panel_CarriageInfo, "Static_CarriageHorseSlot"), _carriageHorse_Name = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_CarriageHorse_Name"), _btn_Skill = (UI.getChildControl)(Panel_CarriageInfo, "Button_Skill"), _horse_Level = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_Horse_Level"), _EXP_CountData = (UI.getChildControl)(Panel_CarriageInfo, "Horse_EXP_CountData"), _EXP_Bg = (UI.getChildControl)(Panel_CarriageInfo, "Horse_EXP_Bg"), _EXP_GaugeBar = (UI.getChildControl)(Panel_CarriageInfo, "Horse_EXP_GaugeBar"), _horseTier = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_LinkedHorse_Tier"), _maxCountValue = (UI.getChildControl)(Panel_CarriageInfo, "StaticText_MaxCountValue"), _skillBg = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_SkillBg"), _skillIcon = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_SkillIcon"), _skillCondition = (UI.getChildControl)(Panel_LinkedHorse_Skill, "StaticText_SkillCondition"), _skillName = (UI.getChildControl)(Panel_LinkedHorse_Skill, "StaticText_SkillName"), _skillPercent = (UI.getChildControl)(Panel_LinkedHorse_Skill, "StaticText_LearningPercent"), _skillGaugeBg = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_Texture_Learn_Background"), _skillGauge = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Progress2_SkillLearn_Gauge"), _skillScroll = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Scroll_Skill"), _staticSkillBG = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_skillInfoBg"), 
+_linkedHorseEquip = {
+_slotNo = {3, 4, 5, 6, 12, 14, 15, 16, 17}
+, 
+_slotBg = {[3] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_EquipSlot_1"), [4] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_EquipSlot_2"), [5] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_EquipSlot_3"), [6] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_EquipSlot_4"), [12] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_EquipSlot_5"), [14] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_AvatarSlot_1"), [15] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_AvatarSlot_2"), [16] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_AvatarSlot_3"), [17] = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Static_AvatarSlot_4")}
+}
+, _btnClose = (UI.getChildControl)(Panel_LinkedHorse_Skill, "Button_Close"), 
 _linkedHorse = {}
 , 
 _linkedHorse_Skill = {}
-, _gapY = 55, _skillStart = 0, _skillCount = 0, _actorKeyRaw = nil, _armorName = (Array.new)(), _itemSlots = (Array.new)(), _skillSlots = (Array.new)()}
+, _gapY = 55, _skillStart = 0, _skillCount = 0, _actorKeyRaw = nil, _armorName = (Array.new)(), _itemSlots = (Array.new)(), _skillSlots = (Array.new)(), 
+_linkedHorseEquipSlot = {}
+}
 local noLink = (UI.getChildControl)(Panel_CarriageInfo, "MultilineText_NoLink")
 local noEquip = (UI.getChildControl)(Panel_CarriageInfo, "MultilineText_NoEquip")
 local noAvator = (UI.getChildControl)(Panel_CarriageInfo, "MultilineText_NoAvator")
+local _extendedSlotNoId = {}
+local extendedSlotCheck = function(itemWrapper)
+  -- function num : 0_2 , upvalues : _extendedSlotNoId, carriageInfo
+  local itemSSW = itemWrapper:getStaticStatus()
+  local slotNoMax = itemSSW:getExtendedSlotCount()
+  for i = 1, slotNoMax do
+    local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
+    if slotNoMax ~= extendSlotNo then
+      (table.insert)(_extendedSlotNoId, extendSlotNo)
+      ;
+      ((carriageInfo._itemSlots)[extendSlotNo]):setItem(itemWrapper)
+      ;
+      (((carriageInfo._itemSlots)[extendSlotNo]).icon):SetMonoTone(true)
+    end
+  end
+end
+
 carriageInfo.init = function(self)
-  -- function num : 0_2 , upvalues : noLink, noEquip, noAvator
+  -- function num : 0_3 , upvalues : noLink, noEquip, noAvator
   for index,value in pairs((self._config)._slotNo) do
     local slot = {}
     slot.icon = (UI.getChildControl)(Panel_CarriageInfo, ((self._config)._slotID)[value])
@@ -123,7 +148,11 @@ carriageInfo.init = function(self)
     CopyBaseProperty(self._EXP_GaugeBar, temp._EXP_GaugeBar)
     ;
     (temp._EXP_GaugeBar):SetPosY((self._EXP_GaugeBar):GetPosY() + self._gapY * idx)
-    -- DECOMPILER ERROR at PC283: Confused about usage of register: R6 in 'UnsetPending'
+    temp._tier = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_CarriageInfo, "Static_HorseTier_" .. idx)
+    CopyBaseProperty(self._horseTier, temp._tier)
+    ;
+    (temp._tier):SetPosY((self._carriageHorseBg):GetPosY() + self._gapY * idx + 30)
+    -- DECOMPILER ERROR at PC308: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._linkedHorse)[idx] = temp
@@ -133,7 +162,7 @@ carriageInfo.init = function(self)
     tempSkill._skillBg = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_LinkedHorse_Skill, "Static_SkillBg_" .. idx)
     CopyBaseProperty(self._skillBg, tempSkill._skillBg)
     ;
-    (tempSkill._skillBg):SetPosY((self._skillBg):GetPosY() + self._gapY * idx)
+    (tempSkill._skillBg):SetPosY((self._skillBg):GetPosY() + self._gapY * idx + 30)
     tempSkill._skillIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempSkill._skillBg, "Static_SkillIcon_" .. idx)
     CopyBaseProperty(self._skillIcon, tempSkill._skillIcon)
     ;
@@ -180,18 +209,60 @@ carriageInfo.init = function(self)
     (tempSkill._skillGauge):SetPosY(48)
     ;
     (tempSkill._skillGauge):SetShow(true)
-    -- DECOMPILER ERROR at PC479: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC505: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._linkedHorse_Skill)[idx] = tempSkill
+  end
+  for index,value in pairs((self._linkedHorseEquip)._slotNo) do
+    local temp = {}
+    ;
+    (SlotItem.new)(temp, "LinkedHorse_EquipSlot_" .. value, value, ((self._linkedHorseEquip)._slotBg)[value], (self._config)._itemSlot)
+    temp:createChild()
+    ;
+    (temp.icon):SetPosX(4)
+    ;
+    (temp.icon):SetPosY(4)
+    ;
+    (temp.icon):addInputEvent("Mouse_On", "LinkedHorse_EquipItem_ShowTooltip(" .. value .. ")")
+    ;
+    (temp.icon):addInputEvent("Mouse_Out", "LinkedHorse_EquipItem_HideTooltip()")
+    -- DECOMPILER ERROR at PC550: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    (self._linkedHorseEquipSlot)[value] = temp
   end
   noLink:SetShow(false)
   noEquip:SetShow(false)
   noAvator:SetShow(false)
 end
 
+carriageInfo.updateHp = function(self)
+  -- function num : 0_4
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Hp):SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  ;
+  (self._staticTextValue_Hp):SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
+end
+
+carriageInfo.updateMp = function(self)
+  -- function num : 0_5
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Mp):SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 4)
+  ;
+  (self._staticTextValue_Mp):SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
+end
+
 carriageInfo.update = function(self)
-  -- function num : 0_3 , upvalues : carriageInfo, UI_VT, noLink
+  -- function num : 0_6 , upvalues : _extendedSlotNoId, carriageInfo, extendedSlotCheck, UI_VT, noLink
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if servantWrapper == nil then
     return 
@@ -242,6 +313,7 @@ carriageInfo.update = function(self)
   (self._staticText_BrakeSpeedValue):SetText((string.format)("%.1f", servantWrapper:getStat((CppEnums.ServantStatType).Type_BrakeSpeed) / 10000) .. "%")
   ;
   (self._staticText_Value_Def):SetText(((vehicleInfo:get()):getEquipment()):getDefense())
+  _extendedSlotNoId = {}
   for index,value in pairs((self._config)._slotNo) do
     local slot = (self._itemSlots)[value]
     local slotText = (self._armorName)[value]
@@ -249,10 +321,23 @@ carriageInfo.update = function(self)
     if itemWrapper ~= nil then
       (((carriageInfo._config)._slotEmptyBG)[value]):SetShow(false)
       slot:setItem(itemWrapper)
-    else
-      slot:clearItem()
       ;
-      (((carriageInfo._config)._slotEmptyBG)[value]):SetShow(true)
+      (slot.icon):SetMonoTone(false)
+      extendedSlotCheck(itemWrapper)
+    else
+      local isExtendedSlot = false
+      for _,index in pairs(_extendedSlotNoId) do
+        if value == index then
+          isExtendedSlot = true
+        end
+      end
+      if isExtendedSlot then
+        (((carriageInfo._config)._slotEmptyBG)[value]):SetShow(false)
+      else
+        slot:clearItem()
+        ;
+        (((carriageInfo._config)._slotEmptyBG)[value]):SetShow(true)
+      end
     end
   end
   ;
@@ -286,9 +371,11 @@ carriageInfo.update = function(self)
         ;
         (linkedHorse._carriageHorse_Name):SetText(sInfo:getName())
         ;
-        (linkedHorse._horse_Level):SetText("Lv." .. tostring(sInfo:getLevel()))
+        (linkedHorse._horse_Level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(sInfo:getLevel()))
         ;
         (linkedHorse._EXP_CountData):SetText(makeDotMoney(sInfo:getExp_s64()) .. " / " .. makeDotMoney(sInfo:getNeedExp_s64()))
+        ;
+        (linkedHorse._tier):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", sInfo:getTier()))
         local s64_exp = sInfo:getExp_s64()
         local s64_needexp = sInfo:getNeedExp_s64()
         local s64_exp_percent = (Defines.s64_const).s64_0
@@ -301,7 +388,7 @@ carriageInfo.update = function(self)
         if skillCount > 0 then
           (linkedHorse._btn_Skill):SetShow(true)
           ;
-          (linkedHorse._btn_Skill):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_SKILL"))
+          (linkedHorse._btn_Skill):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LINKEDHORSE_INFOBUTTON"))
           ;
           (linkedHorse._btn_Skill):SetSize((linkedHorse._btn_Skill):GetTextSizeX() + 15, (linkedHorse._btn_Skill):GetSizeY())
           ;
@@ -321,7 +408,7 @@ carriageInfo.update = function(self)
 end
 
 carriageInfo.registEventHandler = function(self)
-  -- function num : 0_4
+  -- function num : 0_7
   (self._buttonClose):addInputEvent("Mouse_LUp", "CarriageInfo_Close()")
   ;
   (self._btnClose):addInputEvent("Mouse_LUp", "Panel_LinkedHorse_Skill_Close()")
@@ -340,14 +427,16 @@ carriageInfo.registEventHandler = function(self)
 end
 
 carriageInfo.registMessageHandler = function(self)
-  -- function num : 0_5
+  -- function num : 0_8
   registerEvent("EventSelfServantUpdate", "CarriageInfo_Update()")
+  registerEvent("EventSelfServantUpdateOnlyHp", "CarriageInfo_UpdateHp")
+  registerEvent("EventSelfServantUpdateOnlyMp", "CarriageInfo_UpdateHp")
   registerEvent("EventServantEquipmentUpdate", "CarriageInfo_Update()")
   registerEvent("EventServantEquipItem", "CarriageInfo_ChangeEquipItem")
 end
 
 CarriageInfo_ChangeEquipItem = function(slotNo)
-  -- function num : 0_6 , upvalues : carriageInfo, UI_VT
+  -- function num : 0_9 , upvalues : carriageInfo, UI_VT
   local self = carriageInfo
   local slot = (self._itemSlots)[slotNo]
   if self._actorKeyRaw == nil then
@@ -378,7 +467,7 @@ CarriageInfo_ChangeEquipItem = function(slotNo)
 end
 
 CarriageInfo_RClick = function(slotNo)
-  -- function num : 0_7 , upvalues : carriageInfo
+  -- function num : 0_10 , upvalues : carriageInfo
   local self = carriageInfo
   local temporaryWrapper = getTemporaryInformationWrapper()
   if not temporaryWrapper:isSelfVehicle() then
@@ -396,7 +485,7 @@ CarriageInfo_RClick = function(slotNo)
 end
 
 CarriageInfo_LClick = function(slotNo)
-  -- function num : 0_8
+  -- function num : 0_11
   if DragManager.dragStartPanel == Panel_Window_Inventory then
     Inventory_SlotRClick(DragManager.dragSlotInfo)
     ;
@@ -405,17 +494,30 @@ CarriageInfo_LClick = function(slotNo)
 end
 
 CarriageInfo_EquipItem_MouseOn = function(slotNo, isOn)
-  -- function num : 0_9 , upvalues : carriageInfo
+  -- function num : 0_12 , upvalues : carriageInfo
   local self = carriageInfo
   local slot = (self._itemSlots)[slotNo]
   Panel_Tooltip_Item_SetPosition(slotNo, slot, "ServantEquipment")
   Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "ServantEquipment", isOn)
 end
 
+LinkedHorse_EquipItem_ShowTooltip = function(slotNo)
+  -- function num : 0_13 , upvalues : carriageInfo
+  local self = carriageInfo
+  local slot = (self._linkedHorseEquipSlot)[slotNo]
+  Panel_Tooltip_Item_SetPosition(slotNo, slot, "LinkedHorseEquip")
+  Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "LinkedHorseEquip", true)
+end
+
+LinkedHorse_EquipItem_HideTooltip = function()
+  -- function num : 0_14
+  Panel_Tooltip_Item_hideTooltip()
+end
+
 local prevIndex = -1
 local currentIndex = nil
 HandleClicked_LinkedServant_SkillShow = function(index, isShow)
-  -- function num : 0_10 , upvalues : carriageInfo, prevIndex
+  -- function num : 0_15 , upvalues : carriageInfo, prevIndex
   local self = carriageInfo
   local carriageWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if carriageWrapper == nil then
@@ -493,51 +595,65 @@ HandleClicked_LinkedServant_SkillShow = function(index, isShow)
   if self._skillStart == 0 then
     (self._skillScroll):SetControlPos(0)
   end
+  for index,value in pairs((self._linkedHorseEquip)._slotNo) do
+    local slot = (self._linkedHorseEquipSlot)[value]
+    local itemWrapper = servantInfo:getEquipItem(value)
+    if itemWrapper ~= nil then
+      slot:setItem(itemWrapper)
+    else
+      slot:clearItem()
+    end
+  end
 end
 
 Skill_Update = function()
-  -- function num : 0_11 , upvalues : prevIndex
+  -- function num : 0_16 , upvalues : prevIndex
   HandleClicked_LinkedServant_SkillShow(prevIndex)
 end
 
+FGlobal_LinkedHorse_SelectedIndex = function()
+  -- function num : 0_17 , upvalues : prevIndex
+  return prevIndex
+end
+
 CarriageInfo_ScrollEvent = function(isScrollUp)
-  -- function num : 0_12 , upvalues : carriageInfo
+  -- function num : 0_18 , upvalues : carriageInfo
   local self = carriageInfo
   self._skillStart = (UIScroll.ScrollEvent)(self._skillScroll, isScrollUp, ((self._config)._skill).count, self._skillCount, self._skillStart, 1)
   CarriageInfo_Update()
 end
 
 Panel_LinkedHorse_Skill_Open = function()
-  -- function num : 0_13
+  -- function num : 0_19
   if Panel_LinkedHorse_Skill:GetShow() then
     return 
   end
   Panel_LinkedHorse_Skill:SetShow(true)
-  Panel_LinkedHorse_Skill:SetPosX(Panel_CarriageInfo:GetPosX() + Panel_CarriageInfo:GetSizeX() - 50)
-  Panel_LinkedHorse_Skill:SetPosY(Panel_CarriageInfo:GetPosY() + Panel_CarriageInfo:GetSizeY() - Panel_LinkedHorse_Skill:GetSizeX() - 10)
+  Panel_LinkedHorse_Skill:SetPosX(Panel_CarriageInfo:GetPosX() + Panel_CarriageInfo:GetSizeX())
+  Panel_LinkedHorse_Skill:SetPosY(Panel_CarriageInfo:GetPosY())
 end
 
 Panel_LinkedHorse_Skill_Close = function()
-  -- function num : 0_14 , upvalues : prevIndex
+  -- function num : 0_20 , upvalues : prevIndex
   Panel_LinkedHorse_Skill:SetShow(false)
   prevIndex = -1
 end
 
 CarriageInfo_OpenByActorKeyRaw = function(actorKeyRaw)
-  -- function num : 0_15 , upvalues : carriageInfo
+  -- function num : 0_21 , upvalues : carriageInfo
   local self = carriageInfo
   self._actorKeyRaw = actorKeyRaw
   CarriageInfo_Open()
 end
 
 CarriageInfo_GetActorKey = function()
-  -- function num : 0_16 , upvalues : carriageInfo
+  -- function num : 0_22 , upvalues : carriageInfo
   local self = carriageInfo
   return self._actorKeyRaw
 end
 
 CarriageInfo_Update = function()
-  -- function num : 0_17 , upvalues : carriageInfo
+  -- function num : 0_23 , upvalues : carriageInfo
   if not Panel_CarriageInfo:GetShow() then
     return 
   end
@@ -545,8 +661,26 @@ CarriageInfo_Update = function()
   self:update()
 end
 
+CarriageInfo_UpdateHp = function()
+  -- function num : 0_24 , upvalues : carriageInfo
+  if Panel_CarriageInfo:GetShow() == false then
+    return 
+  end
+  local self = carriageInfo
+  self:updateHp()
+end
+
+CarriageInfo_UpdateMp = function()
+  -- function num : 0_25 , upvalues : carriageInfo
+  if Panel_CarriageInfo:GetShow() == false then
+    return 
+  end
+  local self = carriageInfo
+  self:updateMp()
+end
+
 CarriageInfo_Open = function()
-  -- function num : 0_18 , upvalues : carriageInfo, UI_VT
+  -- function num : 0_26 , upvalues : carriageInfo, UI_VT
   carriageInfo:update()
   if Panel_CarriageInfo:GetShow() then
     return 
@@ -575,7 +709,7 @@ CarriageInfo_Open = function()
 end
 
 CarriageInfo_Close = function()
-  -- function num : 0_19
+  -- function num : 0_27
   if not Panel_CarriageInfo:GetShow() then
     return 
   end

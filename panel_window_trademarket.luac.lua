@@ -550,9 +550,9 @@ send_doBuy = function(fromWhere, toWhere)
       local itemCount = ((npcTradeShop._slotBuyAmount)[slotIndex])._itemCount
       local itemCount32 = Int64toInt32(itemCount)
       for count = 0, itemCount32 - 1 do
-        npcShop_doBuy(((npcTradeShop._slotBuyAmount)[slotIndex])._slotIndex, 1, fromWhere, toWhere)
+        npcShop_doBuy(((npcTradeShop._slotBuyAmount)[slotIndex])._slotIndex, 1, fromWhere, toWhere, false)
       end
-      -- DECOMPILER ERROR at PC44: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC45: Confused about usage of register: R10 in 'UnsetPending'
 
       npcTradeShop._buyRequest = true
     end

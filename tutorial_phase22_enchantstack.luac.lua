@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_EnchantStack = {_phaseNo = 22, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = false, _isSkippable = false, 
+PaGlobal_TutorialPhase_EnchantStack = {_phaseNo = 22, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = true, _isSkippable = false, 
 _talkerCharacterKeyData = {[1] = 0}
 , 
 _questData = {
@@ -135,6 +135,11 @@ end
 
 PaGlobal_TutorialPhase_EnchantStack.toNextProgress = function(self)
   -- function num : 0_7
+  if self._currentProgress == 4 then
+    self._currentProgress = 9
+  else
+    self._currentProgress = self._currentProgress + 1
+  end
   self._currentProgress = self._currentProgress + 1
   self:handleChangeStep(self._currentStep)
 end
@@ -144,6 +149,11 @@ end
 PaGlobal_TutorialPhase_EnchantStack.toNextStep = function(self)
   -- function num : 0_8
   self._currentProgress = 1
+  if self._nextStep == 4 then
+    self._nextStep = 9
+  else
+    self._nextStep = self._nextStep + 1
+  end
   self._nextStep = self._nextStep + 1
 end
 
@@ -179,6 +189,12 @@ end
 
 PaGlobal_TutorialPhase_EnchantStack.changeStep1 = function(self)
   -- function num : 0_11
+  local westString1 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_115"
+  local westString2 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_116"
+  if isGameTypeEnglish() then
+    westString1 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_119"
+    westString2 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_120"
+  end
   if self._currentProgress == 1 then
     self:setEffectDialogButtonByType((CppEnums.ContentsType).Contents_Enchant)
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
@@ -263,8 +279,8 @@ PaGlobal_TutorialPhase_EnchantStack.changeStep1 = function(self)
                   else
                     if self._currentProgress == 9 then
                       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_11_8
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_115"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_116"), true, Panel_Window_Enchant:GetPosX() + Panel_Window_Enchant:GetSizeX() * 1.1, Panel_Window_Enchant:GetPosY() - Panel_Window_Enchant:GetSizeY() * 0.025, false)
+    -- function num : 0_11_8 , upvalues : westString1, westString2
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, westString1), PAGetString(Defines.StringSheet_GAME, westString2), true, Panel_Window_Enchant:GetPosX() + Panel_Window_Enchant:GetSizeX() * 1.1, Panel_Window_Enchant:GetPosY() - Panel_Window_Enchant:GetSizeY() * 0.025, false)
   end
 )
                     end
@@ -314,7 +330,9 @@ end
 
 PaGlobal_TutorialPhase_EnchantStack.eventCallStep1CloseEnchantWindow = function(self)
   -- function num : 0_15
-  self:endPhase()
+  if self._currentProgress > 2 then
+    self:endPhase()
+  end
 end
 
 -- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'

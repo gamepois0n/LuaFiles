@@ -127,6 +127,7 @@ end
 
 ScreenshotAlbum_Close = function()
   -- function num : 0_4 , upvalues : _screenshotAlbumWeb
+  FGlobal_ClearCandidate()
   _screenshotAlbumWeb:ResetUrl()
   Panel_ScreenShotAlbum:SetShow(false, false)
 end

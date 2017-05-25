@@ -155,7 +155,7 @@ FromClient_ChangeWorkerSkillNoOne = function(workerNoRaw)
   local workerWrapperLua = getWorkerWrapper(workerNoRaw, true)
   local worker_Lev = workerWrapperLua:getLevel()
   local worker_Name = workerWrapperLua:getName()
-  local name = "Lv." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>"
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>"
   Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERCHANGESKILL_WORKERCHANGESKILL", "name", name))
 end
 
@@ -164,7 +164,7 @@ FromClient_ChangeWorkerSkillNo = function(workerNoRaw)
   local workerWrapperLua = getWorkerWrapper(workerNoRaw, true)
   local worker_Lev = workerWrapperLua:getLevel()
   local worker_Name = workerWrapperLua:getName()
-  local name = "Lv." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>"
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>"
   Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERCHANGESKILL_WORKERCHANGESKILL", "name", name))
 end
 

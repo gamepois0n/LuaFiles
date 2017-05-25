@@ -18,6 +18,11 @@ local UI_TT = CppEnums.PAUI_TEXTURE_TYPE
 local skillLog_Icon = (UI.getChildControl)(Panel_Widget_SkillLog, "Static_C_SkillIcon")
 local skillLog = (UI.getChildControl)(Panel_Widget_SkillLog, "StaticText_UsedSkill")
 local notifySkillMsg = {}
+local panelPosX = Panel_Widget_SkillLog:GetPosX()
+local panelPosY = Panel_Widget_SkillLog:GetPosY()
+local iconSizeX = skillLog_Icon:GetSizeX()
+local iconSizeY = skillLog_Icon:GetSizeY()
+local logPosX = skillLog:GetPosX()
 notifySkillMsg[0] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_Widget_SkillLog, "StaticText_SkillMsg_1")
 CopyBaseProperty(skillLog, notifySkillMsg[0])
 notifySkillMsg[1] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_Widget_SkillLog, "StaticText_SkillMsg_2")
@@ -79,7 +84,30 @@ SkillLog_Init = function()
 end
 
 FromClient_EventSelfPlayerUsedSkill = function()
-  -- function num : 0_3 , upvalues : prevIndex1, notifySkillMsg, prevIndex2, skillLog_Icon, index, _displayRunningTime
+  -- function num : 0_3 , upvalues : skillLog_Icon, notifySkillMsg, iconSizeX, iconSizeY, logPosX, prevIndex1, prevIndex2, index, _displayRunningTime
+  local autoUIPosY = 0
+  if ToClient_getIsSetSelfAI() then
+    Panel_Widget_SkillLog:SetPosX(Panel_Movie_KeyViewer:GetPosX() + 50)
+    Panel_Widget_SkillLog:SetPosY(Panel_Movie_KeyViewer:GetPosY() - 100)
+    skillLog_Icon:SetSize(70, 70)
+    ;
+    (notifySkillMsg[0]):SetPosX(90)
+    ;
+    (notifySkillMsg[1]):SetPosX(90)
+    ;
+    (notifySkillMsg[2]):SetPosX(90)
+    autoUIPosY = 32
+  else
+    Panel_Widget_SkillLog:SetPosX(getScreenSizeX() / 2 - Panel_Widget_SkillLog:GetSizeX() * 1.3)
+    Panel_Widget_SkillLog:SetPosY(getScreenSizeY() / 2 + Panel_Widget_SkillLog:GetSizeY() / 2)
+    skillLog_Icon:SetSize(iconSizeX, iconSizeY)
+    ;
+    (notifySkillMsg[0]):SetPosX(logPosX)
+    ;
+    (notifySkillMsg[1]):SetPosX(logPosX)
+    ;
+    (notifySkillMsg[2]):SetPosX(logPosX)
+  end
   if FGlobal_IsChecked_SkillCommand() == false then
     Panel_Widget_SkillLog:SetShow(false)
     local skillWrapper = selfPlayerUsedSkillFront()
@@ -91,14 +119,14 @@ FromClient_EventSelfPlayerUsedSkill = function()
   do
     Panel_Widget_SkillLog:SetShow(true, true)
     if prevIndex1 ~= nil and (notifySkillMsg[prevIndex1]):GetText() ~= "" then
-      SkillName_MovAni(notifySkillMsg[prevIndex1], 58, 30)
+      SkillName_MovAni(notifySkillMsg[prevIndex1], 58, 30 + autoUIPosY)
       if prevIndex1 == 0 then
         prevIndex2 = 2
       else
         prevIndex2 = prevIndex1 - 1
       end
       if (notifySkillMsg[prevIndex2]):GetText() ~= "" then
-        SkillName_MovAni(notifySkillMsg[prevIndex2], 30, 2)
+        SkillName_MovAni(notifySkillMsg[prevIndex2], 30, 2 + autoUIPosY)
       end
     end
     local skillWrapper = selfPlayerUsedSkillFront()
@@ -113,7 +141,7 @@ FromClient_EventSelfPlayerUsedSkill = function()
       ;
       (notifySkillMsg[index]):SetShow(true)
       ;
-      (notifySkillMsg[index]):SetPosY(58)
+      (notifySkillMsg[index]):SetPosY(58 + autoUIPosY)
       selfPlayerUsedSkillPopFront()
       prevIndex1 = index
       index = (index + 1) % 3

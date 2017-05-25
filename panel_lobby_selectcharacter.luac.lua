@@ -13,8 +13,11 @@ local UCT_BUTTON = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON
 local UCT_RADIOBUTTON = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON
 local UCT_STATICTEXT = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT
 local UCT_STATIC = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC
+local isSpecialCharacterOpen = ToClient_IsContentsGroupOpen("267")
+local CharacterListIndex = 0
+local SpecialCharacterListIndex = 1
 Panel_CharacterSelectNew:SetShow(false)
-local SelectCharacter = {panelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharacterSelect"), btn_EmptySlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CreateSlot"), btn_CharacterSlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Character0"), static_CharacterState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_Character0"), static_ConnectionState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_UserCount"), static_CharacterLevel = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharLevel"), btn_Create = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterCreate"), btn_Delete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDelete"), btn_StartGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Start"), static_PenelBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_BG"), static_FamilyName = (UI.getChildControl)(Panel_CharacterSelectNew, "FamilyName"), btn_ServerSelect = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_BackServerSelect"), btn_EndGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_EndGame"), btn_ChangeLocate = (UI.getChildControl)(Panel_CharacterSelectNew, "CheckButton_CharacterLocateChange"), static_DeleteCancelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteTitle"), static_DeleteCancelDate = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteDate"), btn_DeleteCancel = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDeleteCancel"), static_DeleteBox = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_DeleteBox"), static_CharacterInfoBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_BG"), btn_ChaInfoStart = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_StartCharacter"), btn_ChaInfoDelete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_DeleteCharacter"), static_ChaInfoName = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Name"), static_ChaInfoProgressBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_GaugeBG"), static_ChaInfoProgress = (UI.getChildControl)(Panel_CharacterSelectNew, "Progress2_CharInfo_Gauge"), static_ChaInfoProgressText = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Do"), static_ChaInfo_DoRemainTime = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_RemainTime"), static_ChaInfoNowLoc = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_NowPos"), static_ChaInfoNowLocValue = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Where"), static_ticketNoByRegion = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_TicketNoByRegion"), _scroll = (UI.getChildControl)(Panel_CharacterSelectNew, "Scroll_SlotList"), btn_Link1 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link1"), btn_Link2 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link2"), block_BG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_block_BG")}
+local SelectCharacter = {panelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharacterSelect"), btn_EmptySlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CreateSlot"), btn_CharacterSlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Character0"), static_CharacterState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_Character0"), static_ConnectionState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_UserCount"), static_CharacterLevel = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharLevel"), btn_Create = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterCreate"), btn_Delete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDelete"), btn_StartGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Start"), static_PenelBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_BG"), static_FamilyName = (UI.getChildControl)(Panel_CharacterSelectNew, "FamilyName"), btn_ServerSelect = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_BackServerSelect"), btn_EndGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_EndGame"), btn_ChangeLocate = (UI.getChildControl)(Panel_CharacterSelectNew, "CheckButton_CharacterLocateChange"), static_DeleteCancelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteTitle"), static_DeleteCancelDate = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteDate"), btn_DeleteCancel = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDeleteCancel"), static_DeleteBox = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_DeleteBox"), static_CharacterInfoBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_BG"), btn_ChaInfoStart = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_StartCharacter"), btn_ChaInfoDelete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_DeleteCharacter"), static_ChaInfoName = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Name"), static_ChaInfoProgressBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_GaugeBG"), static_ChaInfoProgress = (UI.getChildControl)(Panel_CharacterSelectNew, "Progress2_CharInfo_Gauge"), static_ChaInfoProgressText = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Do"), static_ChaInfo_DoRemainTime = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_RemainTime"), static_ChaInfoNowLoc = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_NowPos"), static_ChaInfoNowLocValue = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Where"), static_ticketNoByRegion = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_TicketNoByRegion"), _scroll = (UI.getChildControl)(Panel_CharacterSelectNew, "Scroll_SlotList"), btn_Link1 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link1"), btn_Link2 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link2"), block_BG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_block_BG"), radioBtn_CharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_CharacterList"), radioBtn_SpecialCharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_SpecialCharacterList")}
 SelectCharacter._ScrollBtn = (UI.getChildControl)(SelectCharacter._scroll, "Scroll_CtrlButton")
 local btn_SaveCustomization = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_LoadCustomization")
 btn_SaveCustomization:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERCREATION_MAIN_BUTTON_SAVECUSTOMIZATION"))
@@ -22,31 +25,31 @@ btn_SaveCustomization:addInputEvent("Mouse_LUp", "HandleClicked_SaveCustomizatio
 local configData = {maxSlot = 0, maxCountSlot = 0, maxScrollCount = 0, freeCount = 0, haveCount = 0, useAbleCount = 0, _startIndex = 0, _listCount = 9, _initList = 12, selectCaracterIdx = -1, isWaitLine = false, 
 slotUiPool = {}
 }
-local getCharacterMaxSlotData = function()
+local getCharacterMaxSlotData = function(isCharacterSpecial)
   -- function num : 0_0
   local maxcount = 0
-  if getCharacterDataCount() <= getCharacterSlotMaxCount() then
-    maxcount = getCharacterSlotLimit() + 1
+  if getCharacterDataCount(isCharacterSpecial) <= getCharacterSlotMaxCount(isCharacterSpecial) then
+    maxcount = getCharacterSlotLimit(isCharacterSpecial) + 1
   else
-    maxcount = getCharacterDataCount()
+    maxcount = getCharacterDataCount(isCharacterSpecial)
   end
   return maxcount
 end
 
-local getMaxCharacsterCount = function()
+local getMaxCharacsterCount = function(isCharacterSpecial)
   -- function num : 0_1
   local characterMaxCount = 0
   local scrSizeY = getScreenSizeY()
-  if getCharacterDataCount() < getCharacterSlotMaxCount() then
-    characterMaxCount = getCharacterSlotMaxCount()
+  if getCharacterDataCount(isCharacterSpecial) < getCharacterSlotMaxCount(isCharacterSpecial) then
+    characterMaxCount = getCharacterSlotMaxCount(isCharacterSpecial)
   else
-    characterMaxCount = getCharacterDataCount()
+    characterMaxCount = getCharacterDataCount(isCharacterSpecial)
   end
   return characterMaxCount
 end
 
 local SelectCharacter_Init = function()
-  -- function num : 0_2 , upvalues : btn_SaveCustomization, SelectCharacter, configData
+  -- function num : 0_2 , upvalues : btn_SaveCustomization, SelectCharacter, configData, isSpecialCharacterOpen
   setShowBlockBG(false)
   Panel_CharacterSelectNew:SetShow(true)
   Panel_CharacterSelectNew:SetSize(getScreenSizeX(), getScreenSizeY())
@@ -55,6 +58,10 @@ local SelectCharacter_Init = function()
   else
     btn_SaveCustomization:SetShow(false)
   end
+  ;
+  (SelectCharacter.radioBtn_CharacterList):addInputEvent("Mouse_LUp", "RadioButton_Click( 0 )")
+  ;
+  (SelectCharacter.radioBtn_SpecialCharacterList):addInputEvent("Mouse_LUp", "RadioButton_Click( 1 )")
   ;
   (SelectCharacter.static_PenelBG):AddChild(SelectCharacter.btn_ServerSelect)
   ;
@@ -154,7 +161,7 @@ local SelectCharacter_Init = function()
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   ;
   (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount)
-  -- DECOMPILER ERROR at PC376: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC388: Confused about usage of register: R4 in 'UnsetPending'
 
   configData._listCount = _btnCount
   local self = SelectCharacter
@@ -221,7 +228,7 @@ local SelectCharacter_Init = function()
     (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC595: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC607: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (configData.slotUiPool)[slotIdx] = slot
@@ -253,77 +260,104 @@ local SelectCharacter_Init = function()
   (UIScroll.InputEvent)(SelectCharacter._scroll, "SelectCharacter_ScrollEvent")
   ;
   (UIScroll.InputEventByControl)(SelectCharacter._scroll, "SelectCharacter_ScrollEvent")
+  local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
+  local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
+  if isSpecialCharacterOpen == true then
+    if isPremiumPcRoom then
+      (SelectCharacter.radioBtn_CharacterList):SetShow(true)
+      ;
+      (SelectCharacter.radioBtn_CharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() - (SelectCharacter.radioBtn_CharacterList):GetSizeX())
+      ;
+      (SelectCharacter.radioBtn_CharacterList):SetPosY(50)
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(true)
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() - (SelectCharacter.radioBtn_SpecialCharacterList):GetSizeX())
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetPosY((SelectCharacter.radioBtn_CharacterList):GetPosY() + (SelectCharacter.radioBtn_CharacterList):GetSizeY() + 10)
+    else
+      ;
+      (SelectCharacter.radioBtn_CharacterList):SetShow(false)
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
+    end
+  else
+    ;
+    (SelectCharacter.radioBtn_CharacterList):SetShow(false)
+    ;
+    (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
+  end
 end
 
-local CharacterView = function(index, classType)
+local CharacterView = function(index, classType, isSpecialCharacter)
   -- function num : 0_3 , upvalues : UI_Class
   if classType == UI_Class.ClassType_Warrior then
-    viewCharacter(index, -50, -40, -65, 0.15)
+    viewCharacter(index, -50, -40, -65, 0.15, isSpecialCharacter)
     viewCharacterPitchRoll(0, 0)
     viewCharacterFov(0.75)
     setWeatherTime(8, 1)
   else
     if classType == UI_Class.ClassType_Ranger then
-      viewCharacter(index, -40, -10, -40, 0.45)
+      viewCharacter(index, -40, -10, -40, 0.45, isSpecialCharacter)
       viewCharacterPitchRoll(-0.05, 0)
       viewCharacterFov(0.55)
       setWeatherTime(8, 0)
     else
       if classType == UI_Class.ClassType_Sorcerer then
-        viewCharacter(index, -40, -30, -75, 0.55)
+        viewCharacter(index, -40, -30, -75, 0.55, isSpecialCharacter)
         viewCharacterPitchRoll(0, 0)
         setWeatherTime(8, 9)
         viewCharacterFov(0.55)
       else
         if classType == UI_Class.ClassType_Giant then
-          viewCharacter(index, -50, -25, -94, -0.6)
+          viewCharacter(index, -50, -25, -94, -0.6, isSpecialCharacter)
           viewCharacterPitchRoll(0.2, 0)
           setWeatherTime(8, 3)
         else
           if classType == UI_Class.ClassType_Tamer then
-            viewCharacter(index, -30, -50, -94, -0.1)
+            viewCharacter(index, -30, -50, -94, -0.1, isSpecialCharacter)
             viewCharacterPitchRoll(0, 0)
             setWeatherTime(8, 17)
             viewCharacterFov(0.55)
           else
             if classType == UI_Class.ClassType_BladeMaster then
-              viewCharacter(index, -20, -45, -94, -0.1)
+              viewCharacter(index, -20, -45, -94, -0.1, isSpecialCharacter)
               viewCharacterPitchRoll(0, 0)
               setWeatherTime(8, 21)
               viewCharacterFov(0.75)
             else
               if classType == UI_Class.ClassType_BladeMasterWomen then
-                viewCharacter(index, -20, -25, -114, -0.1)
+                viewCharacter(index, -20, -25, -114, -0.1, isSpecialCharacter)
                 viewCharacterPitchRoll(0, 0)
                 setWeatherTime(8, 23)
                 viewCharacterFov(0.75)
               else
                 if classType == UI_Class.ClassType_Valkyrie then
-                  viewCharacter(index, -20, -20, -94, 1.1)
+                  viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter)
                   viewCharacterPitchRoll(0, 0)
                   viewCharacterFov(0.65)
                   setWeatherTime(8, 20)
                 else
                   if classType == UI_Class.ClassType_Wizard then
-                    viewCharacter(index, -20, -20, -94, 1.1)
+                    viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter)
                     viewCharacterPitchRoll(0, 0)
                     setWeatherTime(8, 19)
                     viewCharacterFov(0.55)
                   else
                     if classType == UI_Class.ClassType_WizardWomen then
-                      viewCharacter(index, -20, -20, -94, 1.1)
+                      viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter)
                       viewCharacterPitchRoll(0, 0)
                       setWeatherTime(8, 21)
                       viewCharacterFov(0.55)
                     else
                       if classType == UI_Class.ClassType_NinjaWomen then
-                        viewCharacter(index, -25, -25, -94, 1.1)
+                        viewCharacter(index, -25, -25, -94, 1.1, isSpecialCharacter)
                         viewCharacterPitchRoll(0, 0)
                         setWeatherTime(8, 18)
                         viewCharacterFov(0.55)
                       else
                         if classType == UI_Class.ClassType_NinjaMan then
-                          viewCharacter(index, -20, -20, -100, 1.1)
+                          viewCharacter(index, -20, -20, -100, 1.1, isSpecialCharacter)
                           viewCharacterPitchRoll(0, 0)
                           setWeatherTime(8, 18)
                           viewCharacterFov(0.55)
@@ -341,20 +375,27 @@ local CharacterView = function(index, classType)
     end
   end
   if (classType == UI_Class.ClassType_ShyWomen and classType ~= UI_Class.ClassType_Shy) or classType == UI_Class.ClassType_Temp then
-    viewCharacter(index, -20, -45, -114, -0.1)
+    viewCharacter(index, -20, -45, -114, -0.1, isSpecialCharacter)
     viewCharacterPitchRoll(0, 0)
     setWeatherTime(8, 23)
     viewCharacterFov(0.75)
   else
   end
   if classType ~= UI_Class.ClassType_Kunoichi or classType == UI_Class.ClassType_DarkElf then
-    viewCharacter(index, -20, -45, -114, -0.1)
+    viewCharacter(index, -20, -45, -114, -0.1, isSpecialCharacter)
     viewCharacterPitchRoll(0, 0)
     setWeatherTime(7, 7)
     viewCharacterFov(0.75)
   else
-    viewCharacter(index, 0, 0, 0, 0)
-    viewCharacterPitchRoll(3.14, 0)
+    if classType == UI_Class.ClassType_Combattant then
+      viewCharacter(index, -50, -40, -65, 0.15, isSpecialCharacter)
+      viewCharacterPitchRoll(0, 0)
+      viewCharacterFov(0.75)
+      setWeatherTime(7, 16)
+    else
+      viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter)
+      viewCharacterPitchRoll(3.14, 0)
+    end
   end
 end
 
@@ -568,19 +609,37 @@ local ChangeTexture_Class = function(control, classType)
                                                     (control:getClickTexture()):setUV(x1, y1, x2, y2)
                                                   else
                                                     do
-                                                      control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
-                                                      ;
-                                                      (control:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                      control:setRenderTexture(control:getBaseTexture())
-                                                      control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
-                                                      ;
-                                                      (control:getOnTexture()):setUV(x1, y1, x2, y2)
-                                                      control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
-                                                      ;
-                                                      (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                      if classType == UI_Class.ClassType_Combattant then
+                                                        control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_07.dds")
+                                                        local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                        ;
+                                                        (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                        control:setRenderTexture(control:getBaseTexture())
+                                                        control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_07.dds")
+                                                        local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 428, 458, 488)
+                                                        ;
+                                                        (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                        control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                        local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 1, 458, 61)
+                                                        ;
+                                                        (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                      else
+                                                        do
+                                                          control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
+                                                          ;
+                                                          (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                          control:setRenderTexture(control:getBaseTexture())
+                                                          control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
+                                                          ;
+                                                          (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                          control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                          ;
+                                                          (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                        end
+                                                      end
                                                     end
                                                   end
                                                 end
@@ -644,14 +703,14 @@ local ChangeTexture_Slot = function(isFree, control)
   end
 end
 
-local What_R_U_Doing_Now = function()
+local What_R_U_Doing_Now = function(isSpecialCharacter)
   -- function num : 0_6 , upvalues : configData, SelectCharacter, ePcWorkingType
-  local characterData = getCharacterDataByIndex(configData.selectCaracterIdx)
+  local characterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
   local workName = "-"
   local progressRate = 0
   if characterData ~= nil then
     local characterName = getCharacterName(characterData)
-    local removeTime = getCharacterDataRemoveTime(configData.selectCaracterIdx)
+    local removeTime = getCharacterDataRemoveTime(configData.selectCaracterIdx, isSpecialCharacter)
     local pcDeliveryRegionKey = characterData._arrivalRegionKey
     local serverUtc64 = getServerUtc64()
     local whereIs = "-"
@@ -782,15 +841,42 @@ local CharacterCustomization_Close = function()
   Panel_CustomizationCloth:SetShow(false, false)
 end
 
-local getMaxCharacsterScrollCount = function()
+local getMaxCharacsterScrollCount = function(isSpecialCharacter)
   -- function num : 0_8 , upvalues : SelectCharacter, configData
   local scrSizeY = getScreenSizeY()
   local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25
   local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
-  local characterCount = getCharacterDataCount()
-  local useableSlotCount = getCharacterSlotLimit()
-  local maxSlotCount = getCharacterSlotMaxCount()
+  local characterCount = getCharacterDataCount(isSpecialCharacter)
+  local useableSlotCount = getCharacterSlotLimit(isSpecialCharacter)
+  local maxSlotCount = getCharacterSlotMaxCount(isSpecialCharacter)
+  local scrollCount = 0
+  scrollCount = scrollCount + characterCount
+  if characterCount < useableSlotCount then
+    scrollCount = scrollCount + 1
+  end
+  if characterCount + 1 < useableSlotCount then
+    scrollCount = scrollCount + (useableSlotCount - (characterCount + 1))
+  end
+  if characterCount < maxSlotCount and useableSlotCount < maxSlotCount then
+    scrollCount = scrollCount + 1
+  end
+  scrollCount = scrollCount - configData._startIndex
+  if _btnCount < scrollCount then
+    scrollCount = _btnCount
+  end
+  return scrollCount
+end
+
+local getMaxSPCharacsterScrollCount = function()
+  -- function num : 0_9 , upvalues : SelectCharacter, configData
+  local scrSizeY = getScreenSizeY()
+  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25
+  local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
+  local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
+  local characterCount = getSpecialCharacterDataCount()
+  local useableSlotCount = getSpecialCharacterSlotLimit()
+  local maxSlotCount = getSpecialCharacterSlotMaxCount()
   local scrollCount = 0
   scrollCount = scrollCount + characterCount
   if characterCount < useableSlotCount then
@@ -810,10 +896,14 @@ local getMaxCharacsterScrollCount = function()
 end
 
 scrollTotalCount = function()
-  -- function num : 0_9
-  local characterCount = getCharacterDataCount()
-  local useableSlotCount = getCharacterSlotLimit()
-  local maxSlotCount = getCharacterSlotMaxCount()
+  -- function num : 0_10 , upvalues : SelectCharacter
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
+  local characterCount = getCharacterDataCount(isSpecialCharacter)
+  local useableSlotCount = getCharacterSlotLimit(isSpecialCharacter)
+  local maxSlotCount = getCharacterSlotMaxCount(isSpecialCharacter)
   local maxCount = characterCount
   if characterCount < useableSlotCount then
     maxCount = maxCount + (useableSlotCount - characterCount)
@@ -825,25 +915,29 @@ scrollTotalCount = function()
 end
 
 local CharacterList_Update = function()
-  -- function num : 0_10 , upvalues : configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, SelectCharacter, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
+  -- function num : 0_11 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
 
-  configData.maxSlot = getCharacterMaxSlotData()
-  -- DECOMPILER ERROR at PC7: Confused about usage of register: R0 in 'UnsetPending'
+  configData.maxSlot = getCharacterMaxSlotData(isSpecialCharacter)
+  -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
 
-  configData.maxCountSlot = getMaxCharacsterCount()
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R0 in 'UnsetPending'
+  configData.maxCountSlot = getMaxCharacsterCount(isSpecialCharacter)
+  -- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
 
-  configData.maxScrollCount = getMaxCharacsterScrollCount()
-  -- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
+  configData.maxScrollCount = getMaxCharacsterScrollCount(isSpecialCharacter)
+  -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
 
-  configData.freeCount = getCharacterSlotDefaultCount()
-  -- DECOMPILER ERROR at PC19: Confused about usage of register: R0 in 'UnsetPending'
+  configData.freeCount = getCharacterSlotDefaultCount(isSpecialCharacter)
+  -- DECOMPILER ERROR at PC32: Confused about usage of register: R1 in 'UnsetPending'
 
-  configData.haveCount = getCharacterDataCount()
-  -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
+  configData.haveCount = getCharacterDataCount(isSpecialCharacter)
+  -- DECOMPILER ERROR at PC37: Confused about usage of register: R1 in 'UnsetPending'
 
-  configData.useAbleCount = getCharacterSlotLimit()
+  configData.useAbleCount = getCharacterSlotLimit(isSpecialCharacter)
   for slotIdx = 0, configData._listCount - 1 do
     local slot = (configData.slotUiPool)[slotIdx]
     ;
@@ -865,10 +959,14 @@ local CharacterList_Update = function()
     ;
     (slot._centerBg):SetShow(false)
     ;
+    (slot._btn_Slot):SetMonoTone(false)
+    ;
     (slot._btn_Slot):SetIgnore(false)
+    ;
+    (slot._btn_Slot):SetEnable(true)
   end
   ;
-  (SelectCharacter.static_ChaInfoName):SetText("Lv. 0")
+  (SelectCharacter.static_ChaInfoName):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. ". 0")
   ;
   (SelectCharacter.static_ChaInfoProgressText):SetText("-")
   ;
@@ -877,13 +975,13 @@ local CharacterList_Update = function()
   (SelectCharacter.static_ticketNoByRegion):SetText("")
   ;
   (SelectCharacter.static_FamilyName):SetText(getFamilyName())
-  -- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC133: Confused about usage of register: R1 in 'UnsetPending'
 
   if configData.selectCaracterIdx == -1 then
     configData.selectCaracterIdx = 0
   end
   local scrollListIndex = 0
-  local maxCharacter = getMaxCharacsterScrollCount()
+  local maxCharacter = getMaxCharacsterScrollCount(isSpecialCharacter)
   local iii = 0
   for slotIdx = configData._startIndex, maxCharacter + configData._startIndex - 1 do
     local slot = (configData.slotUiPool)[iii]
@@ -904,12 +1002,12 @@ local CharacterList_Update = function()
       end
     end
     if slotIdx < configData.haveCount then
-      local characterData = getCharacterDataByIndex(slotIdx)
+      local characterData = getCharacterDataByIndex(slotIdx, isSpecialCharacter)
       local characterName = getCharacterName(characterData)
       local classType = getCharacterClassType(characterData)
-      local characterLevel = ((string.format)("Lv. %d", characterData._level))
+      local characterLevel = ((string.format)("%d", characterData._level))
       local regionInfo = nil
-      local removeTime = getCharacterDataRemoveTime(slotIdx)
+      local removeTime = getCharacterDataRemoveTime(slotIdx, isSpecialCharacter)
       if removeTime ~= nil then
         characterName = characterName .. " " .. PAGetString(Defines.StringSheet_GAME, "CHARACTER_DELETING")
       end
@@ -917,9 +1015,9 @@ local CharacterList_Update = function()
       ;
       (slot._btn_Slot):SetText(characterName)
       ;
-      (slot._ChaLev):SetText(characterLevel)
+      (slot._ChaLev):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. characterLevel)
       if configData.selectCaracterIdx == slotIdx then
-        CharacterView(configData.selectCaracterIdx, classType)
+        CharacterView(configData.selectCaracterIdx, classType, isSpecialCharacter)
         ;
         (slot._btn_Slot):SetCheck(true)
       else
@@ -1092,11 +1190,11 @@ local CharacterList_Update = function()
             (slot._btnCreate):SetShow(false)
           end
           scrollListIndex = scrollListIndex + 1
-          -- DECOMPILER ERROR at PC586: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC625: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC586: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC625: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC586: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC625: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1104,15 +1202,15 @@ local CharacterList_Update = function()
   end
   ;
   (UIScroll.SetButtonSize)(SelectCharacter._scroll, configData.maxScrollCount, scrollTotalCount())
-  What_R_U_Doing_Now()
-  local selectedCharacterData = getCharacterDataByIndex(configData.selectCaracterIdx)
+  What_R_U_Doing_Now(isSpecialCharacter)
+  local selectedCharacterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
   if selectedCharacterData ~= nil then
     CharacterSelect_setUpdateTicketNo(selectedCharacterData)
   end
 end
 
 CharacterSelect_ChangeLocate = function()
-  -- function num : 0_11 , upvalues : SelectCharacter, CharacterList_Update
+  -- function num : 0_12 , upvalues : SelectCharacter, CharacterList_Update
   if not (SelectCharacter.btn_ChangeLocate):IsCheck() then
     ToClient_SaveClientCacheData()
   end
@@ -1120,7 +1218,7 @@ CharacterSelect_ChangeLocate = function()
 end
 
 SelectCharacter_ScrollEvent = function(isUp)
-  -- function num : 0_12 , upvalues : SelectCharacter, configData, CharacterList_Update
+  -- function num : 0_13 , upvalues : SelectCharacter, configData, CharacterList_Update
   local self = SelectCharacter
   -- DECOMPILER ERROR at PC14: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -1129,7 +1227,7 @@ SelectCharacter_ScrollEvent = function(isUp)
 end
 
 CharacterSelect_selected = function(index)
-  -- function num : 0_13 , upvalues : configData, CharacterList_Update
+  -- function num : 0_14 , upvalues : configData, CharacterList_Update
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   configData.selectCaracterIdx = index
@@ -1137,11 +1235,15 @@ CharacterSelect_selected = function(index)
 end
 
 CharacterSelect_PlayGame = function(index)
-  -- function num : 0_14 , upvalues : configData, ePcWorkingType
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
+  -- function num : 0_15 , upvalues : SelectCharacter, configData, ePcWorkingType
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
+  -- DECOMPILER ERROR at PC9: Confused about usage of register: R2 in 'UnsetPending'
 
   configData.selectCaracterIdx = index
-  local characterData = getCharacterDataByIndex(index)
+  local characterData = getCharacterDataByIndex(index, isSpecialCharacter)
   local classType = getCharacterClassType(characterData)
   local characterCount = getCharacterDataCount()
   local serverUtc64 = getServerUtc64()
@@ -1150,11 +1252,6 @@ CharacterSelect_PlayGame = function(index)
       local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageboxData)
-      return 
-    end
-    local curChannelData = getCurrentChannelServerData()
-    if curChannelData._isBalanceChannel == true and characterData._level <= 49 and ToClient_isAccessableBalanceChannel() then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_BALENCECHANNEL_JOIN_LIMIT"))
       return 
     end
     if characterData ~= nil then
@@ -1187,7 +1284,7 @@ CharacterSelect_PlayGame = function(index)
               else
                 do
                   do
-                    selectCharacter(configData.selectCaracterIdx)
+                    selectCharacter(configData.selectCaracterIdx, isSpecialCharacter)
                     local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
                     local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
                     ;
@@ -1204,7 +1301,7 @@ CharacterSelect_PlayGame = function(index)
 end
 
 CharacterSelect_ChangeCharacterPosition = function(index, isUp)
-  -- function num : 0_15 , upvalues : CharacterList_Update
+  -- function num : 0_16 , upvalues : CharacterList_Update
   if index == nil and isUp == nil then
     return 
   end
@@ -1214,8 +1311,12 @@ CharacterSelect_ChangeCharacterPosition = function(index, isUp)
 end
 
 CharacterSelect_SelectEnterToGame = function()
-  -- function num : 0_16 , upvalues : configData
-  local characterData = getCharacterDataByIndex(configData.selectCaracterIdx)
+  -- function num : 0_17 , upvalues : SelectCharacter, configData
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
+  local characterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
   local classType = getCharacterClassType(characterData)
   if characterData ~= nil then
     if ToClient_IsCustomizeOnlyClass(classType) then
@@ -1224,40 +1325,45 @@ CharacterSelect_SelectEnterToGame = function()
       (MessageBox.showMessageBox)(messageboxData)
     else
       do
-        selectCharacter(configData.selectCaracterIdx)
+        selectCharacter(configData.selectCaracterIdx, isSpecialCharacter)
       end
     end
   end
 end
 
 CharacterSelect_Open = function(characterIndex)
-  -- function num : 0_17 , upvalues : configData, CharacterCustomization_Close, SelectCharacter, CharacterList_Update
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
+  -- function num : 0_18 , upvalues : configData, CharacterCustomization_Close, SelectCharacter, CharacterList_Update
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
-  if characterIndex == -1 then
+  if characterIndex == -1 or configData.haveCount <= characterIndex then
     configData.selectCaracterIdx = 0
   else
-    -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
 
     if characterIndex == -2 then
       configData.selectCaracterIdx = configData.selectCaracterIdx
     else
-      -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
 
       configData.selectCaracterIdx = characterIndex
     end
   end
   CharacterCustomization_Close()
+  -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
+
+  configData._startIndex = 0
   ;
   (SelectCharacter.btn_ChangeLocate):SetCheck(false)
   CharacterList_Update()
+  ;
+  (SelectCharacter._scroll):SetControlPos(0)
   Panel_CharacterSelectNew:SetShow(true)
 end
 
 CharacterSelect_ExitGame = function()
-  -- function num : 0_18
+  -- function num : 0_19
   local do_Exit = function()
-    -- function num : 0_18_0
+    -- function num : 0_19_0
     disConnectToGame()
     GlobalExitGameClient()
   end
@@ -1268,24 +1374,28 @@ CharacterSelect_ExitGame = function()
 end
 
 CharacterSelect_Back = function()
-  -- function num : 0_19
+  -- function num : 0_20
   Panel_CharacterSelectNew:SetShow(false)
   backServerSelect()
 end
 
 CharacterSelect_DeleteCharacter = function()
-  -- function num : 0_20 , upvalues : configData
+  -- function num : 0_21 , upvalues : SelectCharacter, configData
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
   if configData.selectCaracterIdx ~= -1 then
     local do_Delete = function()
-    -- function num : 0_20_0 , upvalues : configData
-    deleteCharacter(configData.selectCaracterIdx)
+    -- function num : 0_21_0 , upvalues : configData, isSpecialCharacter
+    deleteCharacter(configData.selectCaracterIdx, isSpecialCharacter)
   end
 
-    local characterData = getCharacterDataByIndex(configData.selectCaracterIdx)
+    local characterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
     if characterData == nil then
       return 
     end
-    local characterData = getCharacterDataByIndex(configData.selectCaracterIdx)
+    local characterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
     local removeTimeCheckLevel = (getCharacterRemoveTimeCheckLevel())
     local removeTime = nil
     if characterData._level < removeTimeCheckLevel then
@@ -1303,25 +1413,34 @@ CharacterSelect_DeleteCharacter = function()
 end
 
 CharacterSelect_DeleteCancelCharacter = function()
-  -- function num : 0_21 , upvalues : configData
+  -- function num : 0_22 , upvalues : SelectCharacter, configData
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
   if configData.selectCaracterIdx ~= -1 then
-    deleteCancelCharacter(configData.selectCaracterIdx)
+    deleteCancelCharacter(configData.selectCaracterIdx, isSpecialCharacter)
   end
 end
 
 FGlobal_CharacterSelect_Close = function()
-  -- function num : 0_22
+  -- function num : 0_23
   Panel_CharacterSelectNew:SetShow(false)
 end
 
 CharacterSelect_CreateNewCharacter = function()
-  -- function num : 0_23
+  -- function num : 0_24 , upvalues : SelectCharacter
   if Panel_Win_System:GetShow() then
     return 
   end
   local do_Create = function()
-    -- function num : 0_23_0
-    changeCreateCharacterMode_SelectClass()
+    -- function num : 0_24_0 , upvalues : SelectCharacter
+    local isSpecialCharacter = false
+    if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+      isSpecialCharacter = true
+    end
+    changeCreateCharacterMode_SelectClass(isSpecialCharacter)
+    SetSpecialCharacter(isSpecialCharacter)
   end
 
   local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERSELECT_CREATENEWCHARACTER_NOTIFY")
@@ -1331,7 +1450,7 @@ CharacterSelect_CreateNewCharacter = function()
 end
 
 CharacterSelect_setUpdateTicketNo = function(characterData)
-  -- function num : 0_24 , upvalues : const_64, SelectCharacter
+  -- function num : 0_25 , upvalues : const_64, SelectCharacter
   local firstTicketNo = getFirstTicketNoByAll()
   local currentTicketNo = getCurrentTicketNo()
   local ticketCountByRegion = characterData._lastTicketNoByRegion
@@ -1358,7 +1477,7 @@ CharacterSelect_setUpdateTicketNo = function(characterData)
 end
 
 cancelEnterWaitingLine = function()
-  -- function num : 0_25 , upvalues : configData
+  -- function num : 0_26 , upvalues : configData
   setShowBlockBG(false)
   if configData.isWaitLine == true then
     MessageBox_HideAni()
@@ -1369,11 +1488,15 @@ cancelEnterWaitingLine = function()
 end
 
 makeEnterWaitingUserMsg = function(receiveTicketNoMyRegion)
-  -- function num : 0_26 , upvalues : configData, const_64
+  -- function num : 0_27 , upvalues : SelectCharacter, configData, const_64
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
   local ticketCountByRegion = receiveTicketNoMyRegion
   local waitingLineCancelCount = getCancelCount()
   if ticketCountByRegion == -1 then
-    local selectedCharacterData = getCharacterDataByIndex(configData.selectCaracterIdx)
+    local selectedCharacterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
     local regionInfo = getRegionInfoByPosition(selectedCharacterData._currentPosition)
     local regionGroupKey = 1
     if regionInfo ~= nil then
@@ -1414,7 +1537,7 @@ makeEnterWaitingUserMsg = function(receiveTicketNoMyRegion)
 end
 
 setShowBlockBG = function(isShow)
-  -- function num : 0_27 , upvalues : SelectCharacter
+  -- function num : 0_28 , upvalues : SelectCharacter
   (SelectCharacter.block_BG):SetShow(isShow)
   ;
   (SelectCharacter.block_BG):SetSize(getScreenSizeX() + 200, getScreenSizeY() + 200)
@@ -1425,11 +1548,15 @@ setShowBlockBG = function(isShow)
 end
 
 receiveEnterWaiting = function()
-  -- function num : 0_28 , upvalues : configData, SelectCharacter
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+  -- function num : 0_29 , upvalues : SelectCharacter, configData
+  local isSpecialCharacter = false
+  if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
+    isSpecialCharacter = true
+  end
+  -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
 
   configData.isWaitLine = true
-  local characterData = getCharacterDataByIndex(configData.selectCaracterIdx)
+  local characterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
   if characterData == nil then
     (UI.ASSERT)(false, "캐릭�\176 선택�\180 되지 않았�\152...?")
     return 
@@ -1446,7 +1573,7 @@ receiveEnterWaiting = function()
 end
 
 setEnterWaitingUserCount = function()
-  -- function num : 0_29 , upvalues : configData
+  -- function num : 0_30 , upvalues : configData
   if configData.isWaitLine == false then
     return 
   end
@@ -1462,7 +1589,7 @@ setEnterWaitingUserCount = function()
 end
 
 click_EnterWaitingCancel = function()
-  -- function num : 0_30 , upvalues : configData
+  -- function num : 0_31 , upvalues : configData
   setShowBlockBG(false)
   allClearMessageData()
   if configData.isWaitLine == true then
@@ -1471,7 +1598,7 @@ click_EnterWaitingCancel = function()
 end
 
 HandleClicked_PreOrderAndEvent = function(linkType)
-  -- function num : 0_31
+  -- function num : 0_32
   local linkURL = ""
   if linkType == 0 then
     linkURL = "https://www.blackdesertonline.com/preorder/?trcode=CCM001"
@@ -1484,8 +1611,39 @@ HandleClicked_PreOrderAndEvent = function(linkType)
 end
 
 HandleClicked_SaveCustomizationFile = function()
-  -- function num : 0_32
+  -- function num : 0_33
   OpenExplorerSaveCustomizing()
+end
+
+RadioButton_Click = function(radioIndex)
+  -- function num : 0_34 , upvalues : CharacterListIndex, SelectCharacter, SpecialCharacterListIndex, configData, CharacterList_Update
+  if radioIndex == CharacterListIndex then
+    (SelectCharacter.radioBtn_CharacterList):SetCheck(true)
+    ;
+    (SelectCharacter.radioBtn_SpecialCharacterList):SetCheck(false)
+    ;
+    (SelectCharacter.btn_ChangeLocate):SetShow(true)
+  else
+    if radioIndex == SpecialCharacterListIndex then
+      (SelectCharacter.radioBtn_CharacterList):SetCheck(false)
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetCheck(true)
+      ;
+      (SelectCharacter.btn_ChangeLocate):SetShow(false)
+      if (SelectCharacter.btn_ChangeLocate):IsCheck() then
+        (SelectCharacter.btn_ChangeLocate):SetCheck(false)
+      end
+    end
+  end
+  -- DECOMPILER ERROR at PC49: Confused about usage of register: R1 in 'UnsetPending'
+
+  configData.selectCaracterIdx = 0
+  -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
+
+  configData._startIndex = 0
+  ;
+  (SelectCharacter._scroll):SetControlPos(0)
+  CharacterList_Update()
 end
 
 SelectCharacter_Init()

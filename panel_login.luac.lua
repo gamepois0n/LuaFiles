@@ -28,7 +28,7 @@ Button_GameOption:SetEnable(true)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
-local bgItem = {"base", "calpeon", "media", "valencia", "sea", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "kamasilvia"}
+local bgItem = {"base", "calpeon", "media", "valencia", "sea", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only", "kamasilvia"}
 local bgIndex = {}
 for k,v in pairs(bgItem) do
   bgIndex[v] = k
@@ -66,6 +66,8 @@ local bgManager = {
 [bgIndex.NaOnly] = {isOpen = not isGameTypeEnglish() or false, imageCount = 4, iconPath = "bgNAOnly_"}
 , 
 [bgIndex.TaiwanOnly] = {isOpen = not isGameTypeTaiwan() or false, imageCount = 0, iconPath = "bgTaiwanOnly_"}
+, 
+[bgIndex.KR2Only] = {isOpen = not isGameTypeKR2() or false, imageCount = 0, iconPath = "bgKR2Only_"}
 }
 local totalBG = 0
 local imageIndex = 1
@@ -85,7 +87,7 @@ for _,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_Login:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC352: Confused about usage of register: R35 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC364: Confused about usage of register: R35 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex
@@ -114,7 +116,7 @@ FGlobal_Panel_Login_Enter = function()
 end
 
 LogInPanel_Resize = function()
-  -- function num : 0_2 , upvalues : _loginBG, _buttonBG, _txt_Guide, Button_Login, Button_Exit, Button_GameOption, Edit_ID, totalBG, Static_Blackline_up, Static_Blackline_down, Static_DaumCI, Static_CI, StaticEventBG, Static_BI
+  -- function num : 0_2 , upvalues : _loginBG, _buttonBG, _txt_Guide, Button_Login, Button_Exit, Button_GameOption, Edit_ID, Static_BI, totalBG, Static_Blackline_up, Static_Blackline_down, Static_DaumCI, Static_CI, StaticEventBG
   Panel_Login:SetSize(getScreenSizeX(), getScreenSizeY())
   _loginBG:ComputePos()
   _buttonBG:ComputePos()
@@ -124,6 +126,9 @@ LogInPanel_Resize = function()
   Button_Exit:ComputePos()
   Button_GameOption:ComputePos()
   Edit_ID:ComputePos()
+  if isGameTypeKR2() then
+    Static_BI:SetShow(false)
+  end
   for ii = 1, totalBG do
     (Static_Back[ii]):SetSize(getScreenSizeX(), getScreenSizeY())
   end
@@ -163,28 +168,40 @@ LogInPanel_Resize = function()
                 Static_DaumCI:SetShow(false)
                 Static_CI:SetSpanSize(10, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
               else
-                Static_DaumCI:SetSize(144, 26)
-                Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
-                local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 144, 26)
-                ;
-                (Static_DaumCI:getBaseTexture()):setUV(x1, y1, x2, y2)
-                Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
-                Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
-              end
-              do
-                Static_DaumCI:SetSpanSize(20, (Static_Blackline_down:GetSizeY() - Static_DaumCI:GetSizeY()) / 2)
-                StaticEventBG:SetShow(false)
-                local isXmas = ToClient_isEventOn("x-mas")
-                if isXmas then
-                  StaticEventBG:SetShow(true)
+                if isGameTypeSA() then
+                  Static_DaumCI:SetSize(136, 50)
+                  Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
+                  local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 136, 50)
+                  ;
+                  (Static_DaumCI:getBaseTexture()):setUV(x1, y1, x2, y2)
+                  Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
+                  Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
+                else
+                  do
+                    Static_DaumCI:SetSize(144, 26)
+                    Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
+                    do
+                      local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 144, 26)
+                      ;
+                      (Static_DaumCI:getBaseTexture()):setUV(x1, y1, x2, y2)
+                      Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
+                      Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
+                      Static_DaumCI:SetSpanSize(20, (Static_Blackline_down:GetSizeY() - Static_DaumCI:GetSizeY()) / 2)
+                      StaticEventBG:SetShow(false)
+                      local isXmas = ToClient_isEventOn("x-mas")
+                      if isXmas then
+                        StaticEventBG:SetShow(true)
+                      end
+                      StaticEventBG:ComputePos()
+                      Static_BI:ComputePos()
+                      Static_Blackline_up:ComputePos()
+                      Static_Blackline_down:ComputePos()
+                      Static_CI:ComputePos()
+                      Static_DaumCI:ComputePos()
+                      Static_BI:SetPosY(getScreenSizeY() * 0.14)
+                    end
+                  end
                 end
-                StaticEventBG:ComputePos()
-                Static_BI:ComputePos()
-                Static_Blackline_up:ComputePos()
-                Static_Blackline_down:ComputePos()
-                Static_CI:ComputePos()
-                Static_DaumCI:ComputePos()
-                Static_BI:SetPosY(getScreenSizeY() * 0.14)
               end
             end
           end

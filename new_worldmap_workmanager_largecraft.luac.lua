@@ -1134,12 +1134,12 @@ Worker_List._setData = function(self)
         local isWorkable = (ToClient_getWorkerWorkerableHouse(houseInfoSS, Index - 1))
         local name = nil
         if isWorkable then
-          name = "Lv." .. npcWaitingWorker:getLevel() .. " " .. getWorkerName(npcWaitingWorkerSS) .. "(<PAColor0xff868686>" .. workerRegionWrapper:getAreaName() .. "<PAOldColor>)"
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. npcWaitingWorker:getLevel() .. " " .. getWorkerName(npcWaitingWorkerSS) .. "(<PAColor0xff868686>" .. workerRegionWrapper:getAreaName() .. "<PAOldColor>)"
         else
-          name = "Lv." .. npcWaitingWorker:getLevel() .. " " .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_WORKMANAGER_HOUSE_NOTFINDNODE", "npcWaitingWorkerSS", getWorkerName(npcWaitingWorkerSS), "getAreaName", workerRegionWrapper:getAreaName())
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. npcWaitingWorker:getLevel() .. " " .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_WORKMANAGER_HOUSE_NOTFINDNODE", "npcWaitingWorkerSS", getWorkerName(npcWaitingWorkerSS), "getAreaName", workerRegionWrapper:getAreaName())
         end
         local workerGrade = ((npcWaitingWorkerSS:getCharacterStaticStatus())._gradeType):get()
-        -- DECOMPILER ERROR at PC180: Confused about usage of register: R31 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC190: Confused about usage of register: R31 in 'UnsetPending'
 
         ;
         (self._data_Table)[_Idx] = {_workerNo = workerNo, _workerNo_s64 = workerNoChar, _workerNoChar = Int64toInt32(workerNoChar), _name = name, _workSpeed = workSpeed / 1000000, _moveSpeed = moveSpeed, _maxPoint = maxPoint, _currentPoint = currentPoint, _homeWaypoint = homeWaypoint, _isWorkable = isWorkable, _workerGrade = workerGrade}

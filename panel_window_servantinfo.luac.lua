@@ -153,9 +153,51 @@ servantInfo.clear = function(self)
   self._skillCount = 0
 end
 
+ServantInfo_UpdateHp = function()
+  -- function num : 0_4 , upvalues : servantInfo
+  if Panel_Window_ServantInfo:GetShow() == false then
+    return 
+  end
+  local self = servantInfo
+  self:updateHp()
+end
+
+ServantInfo_UpdateMp = function()
+  -- function num : 0_5 , upvalues : servantInfo
+  if Panel_Window_ServantInfo:GetShow() == false then
+    return 
+  end
+  local self = servantInfo
+  self:updateMp()
+end
+
+servantInfo.updateHp = function(self)
+  -- function num : 0_6
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Hp):SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  ;
+  (self._staticTextValue_Hp):SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
+end
+
+servantInfo.updateMp = function(self)
+  -- function num : 0_7
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Mp):SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 5)
+  ;
+  (self._staticTextValue_Mp):SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
+end
+
 local stallionIconPosX = (servantInfo._iconStallion):GetPosX()
 servantInfo.update = function(self)
-  -- function num : 0_4 , upvalues : isContentsStallionEnable, stallionIconPosX, servantInfo
+  -- function num : 0_8 , upvalues : isContentsStallionEnable, stallionIconPosX, servantInfo
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if servantWrapper == nil then
     return 
@@ -437,7 +479,7 @@ servantInfo.update = function(self)
 end
 
 ServantInfoGradeTooltip = function(isShow)
-  -- function num : 0_5 , upvalues : servantInfo
+  -- function num : 0_9 , upvalues : servantInfo
   local self = servantInfo
   local name, desc, control = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_GRADEINFO_TOOLTIP_TITLE")
@@ -451,7 +493,7 @@ ServantInfoGradeTooltip = function(isShow)
 end
 
 servantInfo.registEventHandler = function(self)
-  -- function num : 0_6
+  -- function num : 0_10
   (self._buttonClose):addInputEvent("Mouse_LUp", "ServantInfo_Close()")
   ;
   (self._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelServantinfo\" )")
@@ -472,20 +514,22 @@ servantInfo.registEventHandler = function(self)
 end
 
 servantInfo.registMessageHandler = function(self)
-  -- function num : 0_7
+  -- function num : 0_11
   registerEvent("FromClient_OpenServantInformation", "ServantInfo_BeforOpenByActorKeyRaw")
   registerEvent("EventSelfServantUpdate", "ServantInfo_Update")
+  registerEvent("EventSelfServantUpdateOnlyHp", "ServantInfo_UpdateHp")
+  registerEvent("EventSelfServantUpdateOnlyMp", "ServantInfo_UpdateMp")
   registerEvent("EventServantEquipmentUpdate", "ServantInfo_Update")
   registerEvent("EventServantEquipItem", "ServantInfo_ChangeEquipItem")
   registerEvent("FromClient_SelfVehicleLevelUp", "FromClient_SelfVehicleLevelUp")
 end
 
 FromClient_SelfVehicleLevelUp = function(variedHp, variedMp, variedWeight_s64, variedAcceleration, variedSpeed, variedCornering, variedBrake)
-  -- function num : 0_8
+  -- function num : 0_12
 end
 
 ServantInfo_ChangeEquipItem = function(slotNo)
-  -- function num : 0_9 , upvalues : servantInfo
+  -- function num : 0_13 , upvalues : servantInfo
   local self = servantInfo
   local slot = (self._itemSlots)[slotNo]
   if self._actorKeyRaw == nil then
@@ -513,17 +557,17 @@ end
 
 local isNowEquip = false
 IsNowEquipCheck = function()
-  -- function num : 0_10 , upvalues : isNowEquip
+  -- function num : 0_14 , upvalues : isNowEquip
   return isNowEquip
 end
 
 IsNowEquipReset = function()
-  -- function num : 0_11 , upvalues : isNowEquip
+  -- function num : 0_15 , upvalues : isNowEquip
   isNowEquip = false
 end
 
 ServantInfo_RClick = function(slotNo)
-  -- function num : 0_12 , upvalues : servantInfo, isNowEquip
+  -- function num : 0_16 , upvalues : servantInfo, isNowEquip
   local self = servantInfo
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if servantWrapper == nil then
@@ -538,7 +582,7 @@ ServantInfo_RClick = function(slotNo)
 end
 
 ServantInfo_LClick = function(slotNo)
-  -- function num : 0_13
+  -- function num : 0_17
   if DragManager.dragStartPanel == Panel_Window_Inventory then
     Inventory_SlotRClick(DragManager.dragSlotInfo)
     ;
@@ -547,7 +591,7 @@ ServantInfo_LClick = function(slotNo)
 end
 
 ServantInfo_EquipItem_MouseOn = function(slotNo, isOn)
-  -- function num : 0_14 , upvalues : servantInfo
+  -- function num : 0_18 , upvalues : servantInfo
   local self = servantInfo
   local slot = (self._itemSlots)[slotNo]
   Panel_Tooltip_Item_SetPosition(slotNo, slot, "ServantEquipment")
@@ -555,20 +599,20 @@ ServantInfo_EquipItem_MouseOn = function(slotNo, isOn)
 end
 
 ServantInfo_CheckSlot = function(slotNo)
-  -- function num : 0_15 , upvalues : servantInfo
+  -- function num : 0_19 , upvalues : servantInfo
   local self = servantInfo
   local checkButton = (self._checkButton)[slotNo]
 end
 
 ServantInfo_ScrollEvent = function(isScrollUp)
-  -- function num : 0_16 , upvalues : servantInfo
+  -- function num : 0_20 , upvalues : servantInfo
   local self = servantInfo
   self._skillStart = (UIScroll.ScrollEvent)(self._skillScroll, isScrollUp, ((self._config)._skill).count, self._skillCount, self._skillStart, 1)
   self:update()
 end
 
 ServantInfo_BeforOpenByActorKeyRaw = function(actorKeyRaw)
-  -- function num : 0_17 , upvalues : servantInfo, UI_VT
+  -- function num : 0_21 , upvalues : servantInfo, UI_VT
   local self = servantInfo
   local servantWrapper = getServantInfoFromActorKey(actorKeyRaw)
   if servantWrapper == nil then
@@ -606,14 +650,14 @@ ServantInfo_BeforOpenByActorKeyRaw = function(actorKeyRaw)
 end
 
 ServantInfo_OpenByActorKeyRaw = function(actorKeyRaw, vehicleType)
-  -- function num : 0_18 , upvalues : servantInfo
+  -- function num : 0_22 , upvalues : servantInfo
   local self = servantInfo
   self._actorKeyRaw = actorKeyRaw
   ServantInfo_Open()
 end
 
 ServantInfo_Update = function()
-  -- function num : 0_19 , upvalues : servantInfo
+  -- function num : 0_23 , upvalues : servantInfo
   if not Panel_Window_ServantInfo:GetShow() then
     return 
   end
@@ -622,7 +666,7 @@ ServantInfo_Update = function()
 end
 
 ServantInfo_Open = function()
-  -- function num : 0_20 , upvalues : servantInfo, UI_VT
+  -- function num : 0_24 , upvalues : servantInfo, UI_VT
   local self = servantInfo
   self:clear()
   self:update()
@@ -655,7 +699,7 @@ ServantInfo_Open = function()
 end
 
 ServantInfo_Close = function()
-  -- function num : 0_21
+  -- function num : 0_25
   if not Panel_Window_ServantInfo:GetShow() then
     return 
   end
@@ -663,7 +707,7 @@ ServantInfo_Close = function()
 end
 
 ServantInfo_VehicleEquipSlot_LClick = function(slotNo)
-  -- function num : 0_22 , upvalues : servantInfo
+  -- function num : 0_26 , upvalues : servantInfo
   local self = servantInfo
   local isChecked = ((self._checkButton)[slotNo]):IsCheck()
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
@@ -679,20 +723,20 @@ ServantInfo_VehicleEquipSlot_LClick = function(slotNo)
 end
 
 ServantInfo_GetActorKey = function()
-  -- function num : 0_23 , upvalues : servantInfo
+  -- function num : 0_27 , upvalues : servantInfo
   local self = servantInfo
   return self._actorKeyRaw
 end
 
 Servant_GetActorKeyFromItemToolTip = function()
-  -- function num : 0_24 , upvalues : servantInfo
+  -- function num : 0_28 , upvalues : servantInfo
   local self = servantInfo
   return (self._functionGet)()
 end
 
 local elapseTime = 0
 ServantInfoUpdate = function(deltaTime)
-  -- function num : 0_25 , upvalues : elapseTime, servantInfo
+  -- function num : 0_29 , upvalues : elapseTime, servantInfo
   if not Panel_Window_ServantInfo:GetShow() then
     return 
   end
@@ -723,7 +767,7 @@ ServantInfoUpdate = function(deltaTime)
 end
 
 ServantInfo_BabyElephantWarning = function(isShow)
-  -- function num : 0_26 , upvalues : servantInfo
+  -- function num : 0_30 , upvalues : servantInfo
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -735,7 +779,7 @@ ServantInfo_BabyElephantWarning = function(isShow)
 end
 
 ServantInfo_StallionToolTip = function(isOn)
-  -- function num : 0_27 , upvalues : servantInfo, isContentsStallionEnable, isContentsNineTierEnable
+  -- function num : 0_31 , upvalues : servantInfo, isContentsStallionEnable, isContentsNineTierEnable
   local self = servantInfo
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if servantWrapper == nil then

@@ -14,14 +14,15 @@ local WorkerList_Btn = (UI.getChildControl)(Panel_WorldMap, "BottomMenu_WorkerLi
 local HelpMenu_Btn = (UI.getChildControl)(Panel_WorldMap, "BottomMenu_HelpMovie")
 local Exit_Btn = (UI.getChildControl)(Panel_WorldMap, "BottomMenu_Exit")
 local WorkerTrade_Btn = (UI.getChildControl)(Panel_WorldMap, "BottomMenu_WorkerTrade")
+local StableMarket_Btn = (UI.getChildControl)(Panel_WorldMap, "BottomMenu_StableMarket")
 local isWorkerTradeOpen = (ToClient_IsContentsGroupOpen("209"))
 local currentNodeKey = nil
-local popupType = {stable = 0, wareHouse = 1, quest = 2, transport = 3, itemMarket = 4, workerList = 5, helpMovie = 6, workerTrade = 7, workerTradeCaravan = 8}
-local popupTypeCount = 9
+local popupType = {stable = 0, wareHouse = 1, quest = 2, transport = 3, itemMarket = 4, workerList = 5, helpMovie = 6, workerTrade = 7, workerTradeCaravan = 8, stableMarket = 9}
+local popupTypeCount = 10
 local popupPanelList = {}
 Panel_WorldMap:SetShow(false, false)
 local worldMap_Init = function()
-  -- function num : 0_0 , upvalues : Exit_Btn, HelpMenu_Btn, WorkerList_Btn, ItemMarket_Btn, Transport_Btn, Quest_Btn, WareHouse_Btn, ServantStable_Btn, WorkerTrade_Btn, transportAlert
+  -- function num : 0_0 , upvalues : Exit_Btn, HelpMenu_Btn, WorkerList_Btn, ItemMarket_Btn, Transport_Btn, Quest_Btn, WareHouse_Btn, ServantStable_Btn, WorkerTrade_Btn, StableMarket_Btn, transportAlert
   Exit_Btn:SetSize(44, 44)
   HelpMenu_Btn:SetSize(44, 44)
   WorkerList_Btn:SetSize(44, 44)
@@ -31,6 +32,7 @@ local worldMap_Init = function()
   WareHouse_Btn:SetSize(44, 44)
   ServantStable_Btn:SetSize(44, 44)
   WorkerTrade_Btn:SetSize(44, 44)
+  StableMarket_Btn:SetSize(44, 44)
   transportAlert:SetShow(false)
   Exit_Btn:SetSpanSize(5, 5)
   HelpMenu_Btn:SetSpanSize((Exit_Btn:GetSpanSize()).x + Exit_Btn:GetSizeX() + 3, 5)
@@ -41,7 +43,8 @@ local worldMap_Init = function()
   Quest_Btn:SetSpanSize((Transport_Btn:GetSpanSize()).x + Transport_Btn:GetSizeX() + 3, 5)
   WareHouse_Btn:SetSpanSize((Quest_Btn:GetSpanSize()).x + Quest_Btn:GetSizeX() + 3, 5)
   ServantStable_Btn:SetSpanSize((WareHouse_Btn:GetSpanSize()).x + WareHouse_Btn:GetSizeX() + 3, 5)
-  WorkerTrade_Btn:SetSpanSize((ServantStable_Btn:GetSpanSize()).x + ServantStable_Btn:GetSizeX() + 3, 5)
+  StableMarket_Btn:SetSpanSize((ServantStable_Btn:GetSpanSize()).x + ServantStable_Btn:GetSizeX() + 3, 5)
+  WorkerTrade_Btn:SetSpanSize((StableMarket_Btn:GetSpanSize()).x + StableMarket_Btn:GetSizeX() + 3, 5)
   ServantStable_Btn:addInputEvent("Mouse_LUp", "BtnEvent_ServantStable()")
   WareHouse_Btn:addInputEvent("Mouse_LUp", "BtnEvent_WareHouse()")
   Quest_Btn:addInputEvent("Mouse_LUp", "BtnEvent_Quest()")
@@ -50,6 +53,7 @@ local worldMap_Init = function()
   WorkerList_Btn:addInputEvent("Mouse_LUp", "BtnEvent_WorkerList()")
   HelpMenu_Btn:addInputEvent("Mouse_LUp", "BtnEvent_HelpMovie()")
   Exit_Btn:addInputEvent("Mouse_LUp", "BtnEvent_Exit()")
+  StableMarket_Btn:addInputEvent("Mouse_LUp", "BtnEvent_StableMarket()")
   WorkerTrade_Btn:addInputEvent("Mouse_LUp", "BtnEvent_WorkerTrade()")
   ServantStable_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 0 .. " )")
   ServantStable_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 0 .. " )")
@@ -78,6 +82,9 @@ local worldMap_Init = function()
   WorkerTrade_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 8 .. " )")
   WorkerTrade_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 8 .. " )")
   WorkerTrade_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 8 .. " )")
+  StableMarket_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 9 .. " )")
+  StableMarket_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 9 .. " )")
+  StableMarket_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 9 .. " )")
 end
 
 GrandWorldMap_CheckPopup = function(openPanel)
@@ -105,8 +112,22 @@ BtnEvent_ServantStable = function()
   end
 end
 
-BtnEvent_WorkerTrade = function()
+BtnEvent_StableMarket = function()
   -- function num : 0_3 , upvalues : popupType
+  if Panel_Window_StableMarket:GetShow() == true then
+    StableMarket_Close()
+  else
+    GrandWorldMap_CheckPopup(popupType.stableMarket)
+    StableMarket_Open()
+  end
+end
+
+BtnEvent_WorkerTrade = function()
+  -- function num : 0_4 , upvalues : popupType
+  if not ToClient_IsActiveWorkerTrade() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_WORKERTRADEALERT"))
+    return 
+  end
   if Panel_WorkerTrade:GetShow() then
     WorkerTrade_Close()
   else
@@ -118,7 +139,7 @@ BtnEvent_WorkerTrade = function()
 end
 
 BtnEvent_WareHouse = function()
-  -- function num : 0_4 , upvalues : currentNodeKey, popupType
+  -- function num : 0_5 , upvalues : currentNodeKey, popupType
   if Panel_Window_Warehouse:GetShow() then
     Warehouse_Close()
   else
@@ -130,7 +151,7 @@ BtnEvent_WareHouse = function()
 end
 
 BtnEvent_Quest = function()
-  -- function num : 0_5 , upvalues : popupType
+  -- function num : 0_6 , upvalues : popupType
   if Panel_CheckedQuest:GetShow() then
     FGlobal_QuestWidget_Close()
   else
@@ -140,7 +161,7 @@ BtnEvent_Quest = function()
 end
 
 BtnEvent_Transport = function()
-  -- function num : 0_6 , upvalues : popupType
+  -- function num : 0_7 , upvalues : popupType
   if Panel_Window_Delivery_InformationView:GetShow() then
     DeliveryInformationView_Close()
   else
@@ -150,7 +171,7 @@ BtnEvent_Transport = function()
 end
 
 BtnEvent_ItemMarket = function()
-  -- function num : 0_7 , upvalues : popupType
+  -- function num : 0_8 , upvalues : popupType
   if Panel_Window_ItemMarket:IsShow() then
     FGolbal_ItemMarketNew_Close()
   else
@@ -160,7 +181,7 @@ BtnEvent_ItemMarket = function()
 end
 
 BtnEvent_WorkerList = function()
-  -- function num : 0_8 , upvalues : popupType, currentNodeKey
+  -- function num : 0_9 , upvalues : popupType, currentNodeKey
   if Panel_WorkerManager:GetShow() then
     workerManager_Close()
   else
@@ -174,7 +195,7 @@ BtnEvent_WorkerList = function()
 end
 
 BtnEvent_HelpMovie = function()
-  -- function num : 0_9 , upvalues : popupType
+  -- function num : 0_10 , upvalues : popupType
   if Panel_WorldMap_MovieGuide:GetShow() == true then
     Panel_Worldmap_MovieGuide_Close()
   else
@@ -184,12 +205,12 @@ BtnEvent_HelpMovie = function()
 end
 
 BtnEvent_Exit = function()
-  -- function num : 0_10
+  -- function num : 0_11
   FGlobal_CloseWorldmapForLuaKeyHandling()
 end
 
 local makePopupPanelList = function()
-  -- function num : 0_11 , upvalues : popupPanelList, popupType
+  -- function num : 0_12 , upvalues : popupPanelList, popupType
   popupPanelList = {
 [popupType.stable] = {panelname = Panel_NodeStable, closeFunc = StableClose_FromWorldMap}
 , 
@@ -208,11 +229,13 @@ local makePopupPanelList = function()
 [popupType.workerTrade] = {panelname = Panel_WorkerTrade, closeFunc = WorkerTrade_Close}
 , 
 [popupType.workerTradeCaravan] = {panelname = Panel_WorkerTrade_Caravan, closeFunc = FGlobal_WorkerTradeCaravan_Hide}
+, 
+[popupType.stableMarket] = {panelname = Panel_Window_StableMarket, closeFunc = StableMarket_Close}
 }
 end
 
 FGlobal_WorldMapOpenForMenu = function()
-  -- function num : 0_12 , upvalues : ServantStable_Btn, WareHouse_Btn, Quest_Btn, Transport_Btn, ItemMarket_Btn, WorkerList_Btn, HelpMenu_Btn, Exit_Btn, WorkerTrade_Btn, isWorkerTradeOpen, makePopupPanelList
+  -- function num : 0_13 , upvalues : ServantStable_Btn, WareHouse_Btn, Quest_Btn, Transport_Btn, ItemMarket_Btn, WorkerList_Btn, HelpMenu_Btn, Exit_Btn, WorkerTrade_Btn, isWorkerTradeOpen, StableMarket_Btn, makePopupPanelList
   ServantStable_Btn:SetShow(true, false)
   WareHouse_Btn:SetShow(true, false)
   Quest_Btn:SetShow(true, false)
@@ -222,13 +245,18 @@ FGlobal_WorldMapOpenForMenu = function()
   HelpMenu_Btn:SetShow(true, false)
   Exit_Btn:SetShow(true, false)
   WorkerTrade_Btn:SetShow(isWorkerTradeOpen, false)
+  StableMarket_Btn:SetShow(true, false)
   makePopupPanelList()
   Panel_WorldMap:SetShow(true, false)
   Panel_Worldmap_MovieGuide_Init()
+  if isGameTypeKR2() then
+    HelpMenu_Btn:SetIgnore(true)
+    HelpMenu_Btn:SetMonoTone(true)
+  end
 end
 
 WorldmapGrand_setAlpha = function(boolValue)
-  -- function num : 0_13
+  -- function num : 0_14
   local returnValue = ""
   if boolValue == true then
     returnValue = 1
@@ -239,7 +267,7 @@ WorldmapGrand_setAlpha = function(boolValue)
 end
 
 HandleOnOut_WorldmapGrand_MenuButtonTooltip = function(isShow, buttonType)
-  -- function num : 0_14 , upvalues : ServantStable_Btn, WareHouse_Btn, Quest_Btn, Transport_Btn, ItemMarket_Btn, WorkerList_Btn, HelpMenu_Btn, Exit_Btn, WorkerTrade_Btn
+  -- function num : 0_15 , upvalues : ServantStable_Btn, WareHouse_Btn, Quest_Btn, Transport_Btn, ItemMarket_Btn, WorkerList_Btn, HelpMenu_Btn, Exit_Btn, WorkerTrade_Btn, StableMarket_Btn
   if isShow then
     local control = nil
     local name = ""
@@ -278,7 +306,12 @@ HandleOnOut_WorldmapGrand_MenuButtonTooltip = function(isShow, buttonType)
                   else
                     if buttonType == 8 then
                       control = WorkerTrade_Btn
-                      name = "일꾼 무역"
+                      name = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPWORKERTRADE")
+                    else
+                      if buttonType == 9 then
+                        control = StableMarket_Btn
+                        name = PAGetString(Defines.StringSheet_RESOURCE, "STABLE_FUNCTION_BTN_MARKET")
+                      end
                     end
                   end
                 end
@@ -298,7 +331,7 @@ HandleOnOut_WorldmapGrand_MenuButtonTooltip = function(isShow, buttonType)
 end
 
 FGlobal_WorldmapGrand_Bottom_MenuSet = function(waypointKey)
-  -- function num : 0_15 , upvalues : currentNodeKey, ServantStable_Btn, WareHouse_Btn, WorkerTrade_Btn, isWorkerTradeOpen
+  -- function num : 0_16 , upvalues : currentNodeKey, ServantStable_Btn, WareHouse_Btn, WorkerTrade_Btn, isWorkerTradeOpen
   if waypointKey ~= nil then
     currentNodeKey = waypointKey
     local isStableOpen = false
@@ -328,7 +361,7 @@ FGlobal_WorldmapGrand_Bottom_MenuSet = function(waypointKey)
 end
 
 worldmapGrand_Base_OnScreenResize = function()
-  -- function num : 0_16 , upvalues : ServantStable_Btn, WareHouse_Btn, Quest_Btn, Transport_Btn, ItemMarket_Btn, WorkerList_Btn, HelpMenu_Btn, Exit_Btn, WorkerTrade_Btn, transportAlert
+  -- function num : 0_17 , upvalues : ServantStable_Btn, WareHouse_Btn, Quest_Btn, Transport_Btn, ItemMarket_Btn, WorkerList_Btn, HelpMenu_Btn, Exit_Btn, WorkerTrade_Btn, StableMarket_Btn, transportAlert
   Panel_WorldMap:SetSize(getScreenSizeX(), getScreenSizeY())
   ServantStable_Btn:ComputePos()
   WareHouse_Btn:ComputePos()
@@ -339,11 +372,12 @@ worldmapGrand_Base_OnScreenResize = function()
   HelpMenu_Btn:ComputePos()
   Exit_Btn:ComputePos()
   WorkerTrade_Btn:ComputePos()
+  StableMarket_Btn:ComputePos()
   transportAlert:ComputePos()
 end
 
 FromClient_isCompletedTransport = function(isComplete)
-  -- function num : 0_17
+  -- function num : 0_18
   if isComplete == nil then
     return 
   end

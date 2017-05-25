@@ -8,6 +8,7 @@ local IM = CppEnums.EProcessorInputMode
 local UI_color = Defines.Color
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_TM = CppEnums.TextMode
+local UI_PD = CppEnums.Padding
 Panel_Window_CharInfo_Status:SetShow(false)
 Panel_Window_CharInfo_Status:setMaskingChild(true)
 Panel_Window_CharInfo_Status:ActiveMouseEventEffect(true)
@@ -69,8 +70,6 @@ CopyBaseProperty(CharacterInfo._potenHelp, potenTooltip)
 potenTooltip:SetColor(UI_color.C_FFFFFFFF)
 potenTooltip:SetAlpha(1)
 potenTooltip:SetFontColor(UI_color.C_FFFFFFFF)
-potenTooltip:SetAutoResize(true)
-potenTooltip:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 potenTooltip:SetShow(false)
 potenTooltip:SetNotAbleMasking(true)
 local potenCheck = false
@@ -787,7 +786,7 @@ SelfCharacterInfo_UpdateMainStatus = function()
     (CharacterInfo._progress2_mp):setRenderTexture((CharacterInfo._progress2_mp):getBaseTexture())
   else
     do
-      if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() then
+      if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() or UI_classType.ClassType_Combattant == player:getClassType() then
         (CharacterInfo._mpTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_FP"))
         ;
         (CharacterInfo._progress2_mp):ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges.dds")
@@ -915,7 +914,7 @@ SelfCharacterInfo_UpdateMainStatusRegen = function()
       if UI_classType.ClassType_Valkyrie == player:getClassType() then
         (CharacterInfo._mpRegen):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_BPREGEN") .. " : " .. tostring(playerGet:getRegenMp()))
       else
-        if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() then
+        if UI_classType.ClassType_Warrior == player:getClassType() or UI_classType.ClassType_Giant == player:getClassType() or UI_classType.ClassType_BladeMaster == player:getClassType() or UI_classType.ClassType_BladeMasterWomen == player:getClassType() or UI_classType.ClassType_NinjaWomen == player:getClassType() or UI_classType.ClassType_NinjaMan == player:getClassType() or UI_classType.ClassType_Combattant == player:getClassType() then
           (CharacterInfo._mpRegen):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_FPREGEN") .. " : " .. tostring(playerGet:getRegenMp()))
         end
       end
@@ -1682,7 +1681,7 @@ Fitness_MouseOverEvent = function(_type)
 end
 
 Poten_MouseOverEvent = function(sourceType, isOn)
-  -- function num : 0_28 , upvalues : potenTooltip, CharacterInfo
+  -- function num : 0_28 , upvalues : potenTooltip, CharacterInfo, UI_PD
   if isOn == true then
     if sourceType == 0 then
       potenTooltip:SetPosX(((CharacterInfo.attackspeed):GetSpanSize()).x + 70)
@@ -1727,13 +1726,18 @@ Poten_MouseOverEvent = function(sourceType, isOn)
     end
     registTooltipControl(potenTooltip, Panel_Window_CharInfo_BasicStatus)
     potenTooltip:SetShow(true)
+    potenTooltip:SetSize(potenTooltip:GetTextSizeX() + 20, potenTooltip:GetTextSizeY() + 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Left, 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Top, 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Right, 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Bottom, 5)
   else
     potenTooltip:SetShow(false)
   end
 end
 
 Craft_MouseOverEvent = function(sourceType, isOn)
-  -- function num : 0_29 , upvalues : potenTooltip, CharacterInfo
+  -- function num : 0_29 , upvalues : potenTooltip, CharacterInfo, UI_PD
   if isOn == true then
     if sourceType == 0 then
       potenTooltip:SetPosX((CharacterInfo._gatherTitle):GetPosX() + 40)
@@ -1796,6 +1800,11 @@ Craft_MouseOverEvent = function(sourceType, isOn)
     end
     registTooltipControl(potenTooltip, Panel_Window_CharInfo_BasicStatus)
     potenTooltip:SetShow(true)
+    potenTooltip:SetSize(potenTooltip:GetTextSizeX() + 20, potenTooltip:GetTextSizeY() + 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Left, 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Top, 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Right, 5)
+    potenTooltip:setPadding(UI_PD.ePadding_Bottom, 5)
   else
     potenTooltip:SetShow(false)
   end

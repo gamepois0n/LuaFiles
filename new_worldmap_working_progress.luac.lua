@@ -197,11 +197,11 @@ WorkingProgressUpdate = function()
         local workerStaticStatus = (workerDATA:get()):getWorkerStaticStatus()
         local workerName = workerDATA:getName()
         local workerGrade = ((workerStaticStatus:getCharacterStaticStatus())._gradeType):get()
-        local workerLev = "Lv." .. (workerDATA:get()):getLevel()
-        -- DECOMPILER ERROR at PC195: Confused about usage of register: R15 in 'UnsetPending'
+        local workerLev = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. (workerDATA:get()):getLevel()
+        -- DECOMPILER ERROR at PC200: Confused about usage of register: R15 in 'UnsetPending'
 
         WorkingProgress._workingProgress = ToClient_getWorkingProgress(workerNo) * 100000
-        -- DECOMPILER ERROR at PC204: Confused about usage of register: R15 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC209: Confused about usage of register: R15 in 'UnsetPending'
 
         WorkingProgress._remainTime = ((Util.Time).timeFormatting)(ToClient_getLeftWorkingTime(workerNo))
         ;
@@ -218,7 +218,7 @@ WorkingProgressUpdate = function()
         (WorkingProgress._workerName):addInputEvent("Mouse_On", "WorkingProgress_WorkerTooltip( true )")
         ;
         (WorkingProgress._workerName):addInputEvent("Mouse_Out", "WorkingProgress_WorkerTooltip( false )")
-        -- DECOMPILER ERROR at PC270: Confused about usage of register: R15 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC275: Confused about usage of register: R15 in 'UnsetPending'
 
         WorkingProgress._saveProgress = WorkingProgress._workingProgress
       end

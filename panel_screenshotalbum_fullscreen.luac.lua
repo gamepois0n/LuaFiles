@@ -128,6 +128,7 @@ end
 
 ScreenshotAlbum_FullScreen_Close = function()
   -- function num : 0_4 , upvalues : _screenshotAlbumWeb
+  FGlobal_ClearCandidate()
   _screenshotAlbumWeb:ResetUrl()
   Panel_ScreenShotAlbum_FullScreen:SetShow(false, false)
   FGlobal_ScreenshotAlbum_ShowByScreenShotFrame()

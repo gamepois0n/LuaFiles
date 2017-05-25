@@ -154,6 +154,7 @@ end
 
 CustomizingAlbum_Close = function()
   -- function num : 0_4 , upvalues : _customizingAlbumWeb
+  FGlobal_ClearCandidate()
   _customizingAlbumWeb:ResetUrl()
   Panel_CustomizingAlbum:SetShow(false, false)
 end

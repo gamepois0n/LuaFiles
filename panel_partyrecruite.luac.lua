@@ -57,7 +57,7 @@ partyListRecruite.Hide = function(self)
   -- function num : 0_3
   Panel_PartyRecruite:SetShow(false, false)
   ClearFocusEdit()
-  FGlobal_MyIntroduceClearFocusEdit()
+  FGlobal_PartyListClearFocusEdit()
 end
 
 FGlobal_PartyListRecruite_Show = function()
@@ -97,11 +97,11 @@ PartyListRecruite_LevelChange = function()
   end
 
   Panel_NumberPad_Show(true, self._maxLevel, 0, setLevel)
-  partyListRecruite:Hide()
 end
 
 PartyListRecruite_Request = function()
   -- function num : 0_8 , upvalues : partyListRecruite
+  Panel_NumberPad_Close()
   local self = partyListRecruite
   local msg = ((self.control)._editText):GetEditText()
   local baseText = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLISTRECRUITE_DEFALUTTEXT")
@@ -113,8 +113,14 @@ PartyListRecruite_Request = function()
   partyListRecruite:Hide()
 end
 
+FGlobal_CheckPartyListRecruiteUiEdit = function(targetUI)
+  -- function num : 0_9 , upvalues : partyListRecruite
+  do return targetUI ~= nil and targetUI:GetKey() == ((partyListRecruite.control)._editText):GetKey() end
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
+end
+
 partyListRecruite.Init = function(self)
-  -- function num : 0_9
+  -- function num : 0_10
   ((self.control)._editText):SetMaxEditLine(2)
   ;
   ((self.control)._editText):SetMaxInput(30)
@@ -126,7 +132,7 @@ partyListRecruite.Init = function(self)
   if selfPlayer == nil then
     return 
   end
-  local minLevel = (selfPlayer:get()):getLevel()
+  local minLevel = (math.min)(60, (selfPlayer:get()):getLevel())
   self._selectLevel = minLevel
   ;
   ((self.control)._levelText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PARTYLISTRECRUITE_MINLEVEL", "level", minLevel))
@@ -136,6 +142,8 @@ partyListRecruite.Init = function(self)
   ((self.control)._btnAdmin):addInputEvent("Mouse_LUp", "PartyListRecruite_Request()")
   ;
   ((self.control)._btnClose):addInputEvent("Mouse_LUp", "PartyListRecruite_Close()")
+  Panel_PartyRecruite:SetPosX(getScreenSizeX() / 2 - Panel_PartyList:GetSizeX() / 2 - Panel_PartyRecruite:GetSizeX() / 2)
+  Panel_PartyRecruite:SetPosY(getScreenSizeY() / 2 - Panel_PartyList:GetSizeY() / 2 - 100)
 end
 
 partyListRecruite:Init()

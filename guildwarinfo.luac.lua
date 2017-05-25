@@ -68,13 +68,14 @@ local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 ;
 ((warInfo_Main.comboBox_Territory):GetListControl()):addInputEvent("Mouse_LUp", "GuildWarInfo_Set_Territory()")
 Panel_GuildWarInfo:SetChildIndex(warInfo_Main.comboBox_Territory, 9999)
-local warInfo_Content = {frame_content = (UI.getChildControl)(warInfo_Main.frame_SiegeInfo, "Frame_1_Content"), _scroll = (UI.getChildControl)(warInfo_Main.frame_SiegeInfo, "VerticalScroll"), contentBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildWarInfoBg"), guildMarkBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildIconBg"), guildMark = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildIcon"), guildName = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_GuildName"), guildMaster = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_GuildMaster"), lordCrownIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_LordIcon"), guildWarIconBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildWarIconBg"), siegeEnduranceIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_SiegeEnduranceIcon"), siegeEnduranceValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SiegeEnduranceValue"), destroySiegeCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_DestroySiegeCountIcon"), destroySiegeCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_DestroySiegeCountValue"), killCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_KillCountIcon"), killCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_KillCountValue"), deathCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_DeathCountIcon"), deathCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_DeathCountValue"), cannonCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_CanonCountIcon"), cannonCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_CanonCountValue"), moraleIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_MoraleIcon"), moraleProgressBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_Morale_ProgressBg"), moraleProgress = (UI.getChildControl)(Panel_GuildWarInfo, "Progress2_Morale"), btn_CurrentInfo = (UI.getChildControl)(Panel_GuildWarInfo, "Button_CurrentInfo"), btn_Cheer = (UI.getChildControl)(Panel_GuildWarInfo, "Button_Cheer"), cheerPoint = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_CheerPoint"), setFree = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SetFree"), setFreeDesc = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SetFreeDesc"), _tooltip = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_Help"), _battleGuildText = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SiegeGuildCount")}
+local warInfo_Content = {frame_content = (UI.getChildControl)(warInfo_Main.frame_SiegeInfo, "Frame_1_Content"), _scroll = (UI.getChildControl)(warInfo_Main.frame_SiegeInfo, "VerticalScroll"), contentBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildWarInfoBg"), guildMarkBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildIconBg"), guildMark = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildIcon"), guildName = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_GuildName"), guildMaster = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_GuildMaster"), lordCrownIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_LordIcon"), guildWarIconBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_GuildWarIconBg"), siegeEnduranceIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_SiegeEnduranceIcon"), siegeEnduranceValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SiegeEnduranceValue"), destroySiegeCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_DestroySiegeCountIcon"), destroySiegeCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_DestroySiegeCountValue"), killCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_KillCountIcon"), killCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_KillCountValue"), deathCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_DeathCountIcon"), deathCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_DeathCountValue"), cannonCountIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_CanonCountIcon"), cannonCountValue = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_CanonCountValue"), descBG = (UI.getChildControl)(Panel_GuildWarInfo, "Static_DescBg"), moraleIcon = (UI.getChildControl)(Panel_GuildWarInfo, "Static_MoraleIcon"), moraleProgressBg = (UI.getChildControl)(Panel_GuildWarInfo, "Static_Morale_ProgressBg"), moraleProgress = (UI.getChildControl)(Panel_GuildWarInfo, "Progress2_Morale"), btn_CurrentInfo = (UI.getChildControl)(Panel_GuildWarInfo, "Button_CurrentInfo"), btn_Cheer = (UI.getChildControl)(Panel_GuildWarInfo, "Button_Cheer"), cheerPoint = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_CheerPoint"), setFree = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SetFree"), setFreeDesc = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SetFreeDesc"), _tooltip = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_Help"), _battleGuildText = (UI.getChildControl)(Panel_GuildWarInfo, "StaticText_SiegeGuildCount")}
 ;
 (warInfo_Content._battleGuildText):SetText("")
 ;
 (warInfo_Content.setFreeDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
 local progressBarHead = (UI.getChildControl)(warInfo_Content.moraleProgress, "Progress2_Morale_Bar_Head")
 progressBarHead:SetShow(false)
+local textSizeY = 0
 for v,control in pairs(warInfo_Content) do
   control:SetShow(false)
 end
@@ -86,6 +87,7 @@ isGuildMasterBg = {}
 }
 ;
 (log_Content._scroll):SetShow(false)
+oneLineTextSizeY = (warInfo_Log.textLog):GetTextSizeY()
 local battleGuildCount = {}
 local warInfoContent = {}
 local guildMpCheck = {}
@@ -95,7 +97,7 @@ for territoryIndex = 0, siegingAreaCount - 1 do
   guildMpCheck[territoryIndex] = {}
 end
 local WarInfoUI_Init = function(territoryKey)
-  -- function num : 0_2 , upvalues : battleGuildCount, warInfoContent, guildMpCheck
+  -- function num : 0_2 , upvalues : battleGuildCount, warInfoContent, guildMpCheck, warInfo_Content
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
 
   if isSiegeBeing(territoryKey) == false then
@@ -124,6 +126,8 @@ local WarInfoUI_Init = function(territoryKey)
       ;
       (guildMpCheck[territoryKey])[index] = 0
     end
+    ;
+    (warInfo_Content.descBG):SetShow(true)
   end
 end
 
@@ -1194,7 +1198,7 @@ end
 
 local _logIndex = 0
 local _logCount = 0
-local viewalbeCount = 9
+local viewalbeCount = 3
 local maxLogCount = 50
 local textGap = 15
 local defaultLogFrameSize = (log_Content.frame_content):GetSizeY()
@@ -1250,22 +1254,22 @@ end
 
 local guildScore = {}
 for territoryIndex = 0, siegingAreaCount - 1 do
-  -- DECOMPILER ERROR at PC568: Confused about usage of register: R39 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC580: Confused about usage of register: R40 in 'UnsetPending'
 
   (guildScore.destroyBuildCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC571: Confused about usage of register: R39 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC583: Confused about usage of register: R40 in 'UnsetPending'
 
   ;
   (guildScore.killPlayerCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC574: Confused about usage of register: R39 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC586: Confused about usage of register: R40 in 'UnsetPending'
 
   ;
   (guildScore.deathCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC577: Confused about usage of register: R39 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC589: Confused about usage of register: R40 in 'UnsetPending'
 
   ;
   (guildScore.killServantCount)[territoryIndex] = {}
-  -- DECOMPILER ERROR at PC580: Confused about usage of register: R39 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC592: Confused about usage of register: R40 in 'UnsetPending'
 
   ;
   (guildScore.guildMp)[territoryIndex] = {}
@@ -1433,7 +1437,7 @@ HandleClicked_Cheer = function(territoryKey, index)
 end
 
 FGlobal_GuildWarInfo_Show = function()
-  -- function num : 0_12 , upvalues : warInfo_Main, guildWarInfo_ShowCheck, controlReGenerate, selectTerritoy
+  -- function num : 0_12 , upvalues : warInfo_Main, guildWarInfo_ShowCheck, controlReGenerate, textSizeY, selectTerritoy
   if Panel_GuildWarInfo:GetShow() then
     Panel_GuildWarInfo:SetShow(false, true)
     Panel_GuildWarInfo:CloseUISubApp()
@@ -1447,6 +1451,7 @@ FGlobal_GuildWarInfo_Show = function()
     guildWarInfo_ShowCheck = true
   end
   controlReGenerate = nil
+  textSizeY = 0
   HandleClicked_Territory()
   GuildWarInfo_Set_Territory(selectTerritoy)
   FromClient_NotifySiegeScoreToLog()
@@ -1463,7 +1468,7 @@ HandleClicked_GuildWarInfo_PopUp = function()
 end
 
 FromClient_NotifySiegeScoreToLog = function()
-  -- function num : 0_14 , upvalues : viewalbeCount, log_Content, defaultLogFrameSize, textGap, UI_PUCT, warInfo_Log, siegeType, UI_TM, oneLineTextSizeY, guildWarInfo_ShowCheck
+  -- function num : 0_14 , upvalues : viewalbeCount, log_Content, defaultLogFrameSize, textGap, UI_PUCT, warInfo_Log, siegeType, UI_TM, textSizeY, oneLineTextSizeY, warInfo_Content, guildWarInfo_ShowCheck
   if Panel_GuildWarInfo:GetShow() == false then
     return 
   end
@@ -1596,18 +1601,17 @@ FromClient_NotifySiegeScoreToLog = function()
                   ;
                   ((log_Content.textLog)[logIndex]):SetTextMode(UI_TM.eTextMode_AutoWrap)
                   ;
-                  ((log_Content.textLog)[logIndex]):SetAutoResize(true)
+                  ((log_Content.textLog)[logIndex]):SetText(msg)
                   ;
                   ((log_Content.textLog)[logIndex]):SetTextVerticalTop()
                   ;
-                  ((log_Content.textLog)[logIndex]):SetTextSpan(0, 2)
-                  ;
-                  ((log_Content.textLog)[logIndex]):SetText(msg)
+                  ((log_Content.textLog)[logIndex]):SetTextSpan(5, 1)
+                  textSizeY = textSizeY + ((log_Content.textLog)[logIndex]):GetTextSizeY()
                   if oneLineTextSizeY < ((log_Content.textLog)[logIndex]):GetTextSizeY() then
                     posYIndex = posYIndex + 1
                   end
                   ;
-                  ((log_Content.textLog)[logIndex]):SetPosY((log_Content.frame_content):GetSizeY() - (posYIndex + 1) * oneLineTextSizeY - 2)
+                  ((log_Content.textLog)[logIndex]):SetPosY((log_Content.frame_content):GetSizeY() - (posYIndex + 1) * (oneLineTextSizeY + 2))
                   ;
                   ((log_Content.textLog)[logIndex]):SetPosX(0)
                   ;
@@ -1617,27 +1621,27 @@ FromClient_NotifySiegeScoreToLog = function()
                   ;
                   ((log_Content.isGuildMasterBg)[logIndex]):SetPosY(((log_Content.textLog)[logIndex]):GetPosY() + 1)
                   ;
-                  ((log_Content.isGuildMasterBg)[logIndex]):SetSize(((log_Content.textLog)[logIndex]):GetTextSizeX() + 5, ((log_Content.textLog)[logIndex]):GetTextSizeY())
+                  ((log_Content.isGuildMasterBg)[logIndex]):SetSize(((log_Content.textLog)[logIndex]):GetSizeX() + 5, ((log_Content.textLog)[logIndex]):GetTextSizeY() + 2)
                   posYIndex = posYIndex + 1
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC495: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC498: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -1647,6 +1651,7 @@ FromClient_NotifySiegeScoreToLog = function()
       end
     end
   end
+  local descBgSize = (warInfo_Content.descBG):GetSizeY()
   ;
   (warInfo_Log.frame_SiegeLog):UpdateContentScroll()
   if guildWarInfo_ShowCheck == true then
@@ -1655,7 +1660,7 @@ FromClient_NotifySiegeScoreToLog = function()
   end
   ;
   (warInfo_Log.frame_SiegeLog):UpdateContentPos()
-  if logCount <= viewalbeCount then
+  if textSizeY <= descBgSize then
     (log_Content._scroll):SetShow(false)
     ;
     (log_Content.frame_content):SetSize((log_Content.frame_content):GetSizeX(), defaultLogFrameSize)

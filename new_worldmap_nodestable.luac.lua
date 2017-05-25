@@ -149,7 +149,7 @@ nodeStableList.update = function(self)
             ;
             (slot.icon):ChangeTextureInfoName(servantInfo:getIconPath1())
             ;
-            (slot.level):SetText("Lv." .. tostring(servantInfo:getLevel()))
+            (slot.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel()))
             ;
             (slot.maleIcon):SetShow(false)
             ;
@@ -229,9 +229,9 @@ nodeStableList.update = function(self)
             slot.index = servantIdx
             uiIdx = uiIdx + 1
           end
-          -- DECOMPILER ERROR at PC325: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC330: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC325: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC330: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

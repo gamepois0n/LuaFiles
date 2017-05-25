@@ -7,18 +7,18 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf = {_phaseNo = 6, _currentType = 0, _cu
 _regionKeyRawList = {88, 349}
 , _startLimitLevel = 15, _totalScoldingCount = 3, _usedSkillCount = 0, _totalSkillCount = 2, _usedComboCount = 0, _totalComboCount = 2, _currentClearCount = 0, _totalClearCount = 2, 
 _skillNoList = {
-[1] = {2277}
+[1] = {2277, 2278, 2279, 2364, 2280}
 , 
-[2] = {2268}
+[2] = {2268, 2340, 2363}
 , 
-[3] = {2263}
+[3] = {2263, 2264, 2265, 2361}
 }
 , 
 _questData = {
 [1] = {_questGroupNo = 650, _questId = 3}
 }
 }
--- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.checkPossibleForPhaseStart = function(self, stepNo)
   -- function num : 0_0
@@ -52,7 +52,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.checkPossibleForPhaseStart = function(
   end
 end
 
--- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.checkSkippablePhase = function(self)
   -- function num : 0_1
@@ -62,7 +62,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.checkSkippablePhase = function(self)
   return false
 end
 
--- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.startPhase = function(self, stepNo, typeNo)
   -- function num : 0_2
@@ -82,7 +82,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.startPhase = function(self, stepNo, ty
 end
 
 local navigationGuideParam = nil
--- DECOMPILER ERROR at PC56: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC65: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.startPhaseXXX = function(self, stepNo, typeNo)
   -- function num : 0_3 , upvalues : navigationGuideParam
@@ -117,7 +117,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.startPhaseXXX = function(self, stepNo,
     Panel_UIMain:SetShow(true, true)
     Panel_SelfPlayerExpGage:SetShow(true, false)
     FGlobal_Panel_MainStatus_User_Bar_Show()
-    Panel_ClassResource:SetShow((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType())
+    FGlobal_ClassResource_SetShowControl(true)
     Panel_CheckedQuest:SetShow(true, false)
     ;
     (PaGlobal_TutorialUiManager:getUiKeyButton()):setShowAll(true)
@@ -126,10 +126,9 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.startPhaseXXX = function(self, stepNo,
   (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):resetShowAll(true)
   PaGlobal_TutorialUiManager:repositionScreen()
   Panel_Tutorial:SetShow(true, true)
-  -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC59: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.endPhase = function(self)
   -- function num : 0_4
@@ -141,7 +140,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.endPhase = function(self)
 end
 
 local result = false
--- DECOMPILER ERROR at PC64: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC73: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.updatePerFrame = function(self, deltaTime)
   -- function num : 0_5 , upvalues : result
@@ -167,7 +166,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.updatePerFrame = function(self, deltaT
   end
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC76: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.handleChangeStep = function(self, currentStep)
   -- function num : 0_6
@@ -190,7 +189,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.handleChangeStep = function(self, curr
   end
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC79: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.showUiScoldingTooManyKeyInput = function(self)
   -- function num : 0_7
@@ -201,7 +200,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.showUiScoldingTooManyKeyInput = functi
 )
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC82: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.changeStepTryBasicSkill = function(self)
   -- function num : 0_8
@@ -268,7 +267,7 @@ local isPressedTab = false
 local isPressedMouseL = false
 local mouseLUpCount = 0
 local isBlackSpiritScolding = false
--- DECOMPILER ERROR at PC84: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.updateTryBasicSkill = function(self, deltaTime)
   -- function num : 0_9 , upvalues : isPressedTab, isPressedMouseL, mouseLUpCount, isBlackSpiritScolding
@@ -363,7 +362,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.updateTryBasicSkill = function(self, d
   return false
 end
 
--- DECOMPILER ERROR at PC87: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC96: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.eventCallUsedSkill_TryBasicSkill = function(self, skillWrapper)
   -- function num : 0_10
@@ -387,7 +386,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.eventCallUsedSkill_TryBasicSkill = fun
   end
 end
 
--- DECOMPILER ERROR at PC90: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.changeStepTrySkillCombo = function(self)
   -- function num : 0_11
@@ -415,7 +414,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.changeStepTrySkillCombo = function(sel
   (PaGlobal_TutorialUiManager:getUiKeyButton()):ButtonToggleAll(true)
 end
 
--- DECOMPILER ERROR at PC93: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.updateTrySkillCombo = function(self, deltaTime)
   -- function num : 0_12
@@ -439,7 +438,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.updateTrySkillCombo = function(self, d
   return false
 end
 
--- DECOMPILER ERROR at PC96: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.eventCallUsedSkill_TrySkillCombo = function(self, skillWrapper)
   -- function num : 0_13
@@ -470,7 +469,7 @@ end
 
 local isAcceptedQuest = false
 local isClearQuest = false
--- DECOMPILER ERROR at PC101: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC110: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.changeStepSuggestCallBlackSpirit = function(self)
   -- function num : 0_14
@@ -480,7 +479,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.changeStepSuggestCallBlackSpirit = fun
   end
 end
 
--- DECOMPILER ERROR at PC105: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.eventCallAcceptBlackSpiritQuest = function(self, isAccept, questGroupNo, questId)
   -- function num : 0_15 , upvalues : isAcceptedQuest
@@ -489,7 +488,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.eventCallAcceptBlackSpiritQuest = func
   end
 end
 
--- DECOMPILER ERROR at PC109: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC118: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.eventCallAfterBlackSpiritDialogClose = function(self)
   -- function num : 0_16 , upvalues : isAcceptedQuest
@@ -503,7 +502,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.eventCallAfterBlackSpiritDialogClose =
   end
 end
 
--- DECOMPILER ERROR at PC112: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC121: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.handleEventQuestUpdateNotify = function(self, isAccept, questNoRaw)
   -- function num : 0_17
@@ -514,7 +513,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.handleEventQuestUpdateNotify = functio
   end
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC124: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.handleAfterAndPopFlush = function(self)
   -- function num : 0_18
@@ -523,7 +522,7 @@ PaGlobal_TutorialPhase_BasicSkill_DarkElf.handleAfterAndPopFlush = function(self
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC127: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_DarkElf.handleEventSelfPlayerUsedSkill = function(self, skillWrapper)
   -- function num : 0_19

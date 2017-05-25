@@ -124,7 +124,7 @@ carrageInfo_Check = function(carriageNo)
       ;
       (linkedHorse._name):SetText(sInfo:getName())
       ;
-      (linkedHorse._level):SetText("Lv." .. tostring(sInfo:getLevel()))
+      (linkedHorse._level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(sInfo:getLevel()))
       ;
       (linkedHorse._expText):SetText(makeDotMoney(sInfo:getExp_s64()) .. " / " .. makeDotMoney(sInfo:getNeedExp_s64()))
       local s64_exp = sInfo:getExp_s64()
@@ -376,7 +376,7 @@ stableInfo.update = function(self, unsealType)
       ;
       (self._staticName):SetText(servantInfo:getName())
       ;
-      (self._staticLevel):SetText("Lv." .. tostring(servantInfo:getLevel()))
+      (self._staticLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(servantInfo:getLevel()))
       ;
       (self._staticHP):SetText(makeDotMoney(servantInfo:getHp()) .. " / " .. makeDotMoney(servantInfo:getMaxHp()))
       ;

@@ -87,23 +87,40 @@ PaGlobal_TutorialUiManager.loadAllUiSavedInfo = function(self)
       key:SetShow(isShow)
       local posX = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionX)
       local posY = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionY)
+      local relativePosX = -1
+      local relativePosY = -1
+      if CppDefine.ChangeUIAndResolution == true then
+        relativePosX = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionX)
+        relativePosY = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionY)
+      end
       if posX ~= -1 or posY ~= -1 then
         key:SetPosX(posX)
         key:SetPosY(posY)
+        if CppDefine.ChangeUIAndResolution == true then
+          key:SetRelativePosX(relativePosX)
+          key:SetRelativePosY(relativePosY)
+          PAGlobal_setIsChangePanelState(value, true, false)
+        end
       end
       checkAndSetPosInScreen(key)
     end
   end
+  Panel_ClassResource:SetShow(true)
   local chattingPanelCount = ToClient_getChattingPanelCount()
   for panelIndex = 0, chattingPanelCount - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIndex)
-    if chatPanel:isOpen() then
-      local chatPanelUI = FGlobal_getChattingPanel(panelIndex)
-      chatPanelUI:SetShow(true)
-      local posX = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, panelIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionX)
-      local posY = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, panelIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionY)
-      chatPanelUI:SetPosX(posX)
-      chatPanelUI:SetPosY(posY)
+    local chatPanelUI = FGlobal_getChattingPanel(panelIndex)
+    chatPanelUI:SetShow(chatPanel:isOpen())
+    local posX = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, panelIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionX)
+    local posY = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, panelIndex, (CppEnums.PanelSaveType).PanelSaveType_PositionY)
+    chatPanelUI:SetPosX(posX)
+    chatPanelUI:SetPosY(posY)
+    if CppDefine.ChangeUIAndResolution == true then
+      local relativePosX = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, panelIndex, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionX)
+      local relativePosY = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ChattingWindow, panelIndex, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionY)
+      chatPanelUI:SetRelativePosX(relativePosX)
+      chatPanelUI:SetRelativePosY(relativePosY)
+      PAGlobal_setIsChangePanelState(panelIndex + chattingPanelCount, true, true)
     end
   end
   Chatting_OnResize()
@@ -155,6 +172,7 @@ PaGlobal_TutorialUiManager.restoreAllUiByUserSetting = function(self)
     FGlobal_PersonalIcon_ButtonPosUpdate()
   end
   self:showConditionalUi()
+  Panel_ClassResource:SetShow(true)
 end
 
 -- DECOMPILER ERROR at PC249: Confused about usage of register: R0 in 'UnsetPending'
@@ -195,21 +213,24 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
   Panel_GameTips:SetShow(isShow)
   Panel_GameTipMask:SetShow(isShow)
   Panel_MainStatus_User_Bar:SetShow(isShow)
-  if (CppEnums.ClassType).ClassType_Sorcerer ~= (getSelfPlayer()):getClassType() then
-    Panel_ClassResource:SetShow(Panel_MainStatus_User_Bar:GetShow() ~= true)
+  if Panel_MainStatus_User_Bar:GetShow() == true then
+    FGlobal_ClassResource_SetShowControl(true)
+  else
     if Panel_MainStatus_User_Bar:GetShow() == false then
-      Panel_ClassResource:SetShow(false)
+      FGlobal_ClassResource_SetShowControl(false)
     end
-    FGlobal_NewQuickSlot_Update()
-    QuickSlot_UpdateData()
-    Panel_UIMain:SetShow(isShow)
-    Panel_SkillCommand:SetShow(isShow)
-    if isShow == true then
-      FGlobal_PersonalIcon_ButtonPosUpdate()
-      FGlobal_MyHouseNavi_Update()
-      Panel_NewEventProduct_Alarm:SetShow(isShow)
-      FGlobal_PetControl_CheckUnSealPet()
-    elseif isShow == false then
+  end
+  FGlobal_NewQuickSlot_Update()
+  QuickSlot_UpdateData()
+  Panel_UIMain:SetShow(isShow)
+  Panel_SkillCommand:SetShow(isShow)
+  if isShow == true then
+    FGlobal_PersonalIcon_ButtonPosUpdate()
+    FGlobal_MyHouseNavi_Update()
+    Panel_NewEventProduct_Alarm:SetShow(isShow)
+    FGlobal_PetControl_CheckUnSealPet()
+  else
+    if isShow == false then
       local navi = FGlobal_GetPersonalIconControl(0)
       local movie = FGlobal_GetPersonalIconControl(1)
       local voiceChat = FGlobal_GetPersonalIconControl(2)
@@ -228,12 +249,13 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
       Panel_ChallengeReward_Alert:SetShow(false)
       Panel_Movie_KeyViewer:SetShow(false)
     end
+  end
+  do
     if isPvpEnable() then
       PvpMode_ShowButton(true)
     else
       PvpMode_ShowButton(false)
     end
-    -- DECOMPILER ERROR: 7 unprocessed JMP targets
   end
 end
 

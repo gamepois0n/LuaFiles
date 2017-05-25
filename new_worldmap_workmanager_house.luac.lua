@@ -986,12 +986,12 @@ Worker_List._setData = function(self)
         local homeWaypoint = npcWaitingWorker:getHomeWaypoint()
         local name = ""
         if isWorkable then
-          name = "Lv." .. npcWaitingWorker:getLevel() .. " " .. getWorkerName(npcWaitingWorkerSS) .. "(<PAColor0xff868686>" .. workerRegionWrapper:getAreaName() .. "<PAOldColor>)"
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. npcWaitingWorker:getLevel() .. " " .. getWorkerName(npcWaitingWorkerSS) .. "(<PAColor0xff868686>" .. workerRegionWrapper:getAreaName() .. "<PAOldColor>)"
         else
-          name = "Lv." .. npcWaitingWorker:getLevel() .. " " .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_WORKMANAGER_HOUSE_NOTFINDNODE", "npcWaitingWorkerSS", getWorkerName(npcWaitingWorkerSS), "getAreaName", workerRegionWrapper:getAreaName())
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. npcWaitingWorker:getLevel() .. " " .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_WORKMANAGER_HOUSE_NOTFINDNODE", "npcWaitingWorkerSS", getWorkerName(npcWaitingWorkerSS), "getAreaName", workerRegionWrapper:getAreaName())
         end
         local workerGrade = ((npcWaitingWorkerSS:getCharacterStaticStatus())._gradeType):get()
-        -- DECOMPILER ERROR at PC176: Confused about usage of register: R30 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC186: Confused about usage of register: R30 in 'UnsetPending'
 
         ;
         (self._data_Table)[_idx] = {_workerNo = workerNo, _workerNo_s64 = workerNoChar, _workerNoChar = Int64toInt32(workerNoChar), _name = name, _workSpeed = workSpeed / 1000000, _moveSpeed = moveSpeed, _maxPoint = maxPoint, _currentPoint = currentPoint, _homeWaypoint = homeWaypoint, _isWorkable = isWorkable, _workerGrade = workerGrade}
@@ -1720,22 +1720,22 @@ Inherit_List._updateSlot = function(self)
           printenchantLevel = "+" .. tostring(enchantLevel)
         else
           if enchantLevel == 15 then
-            printenchantLevel = "I"
+            printenchantLevel = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
           else
             if enchantLevel == 16 then
-              printenchantLevel = "II"
+              printenchantLevel = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
             else
               if enchantLevel == 17 then
-                printenchantLevel = "III"
+                printenchantLevel = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
               else
                 if enchantLevel == 18 then
-                  printenchantLevel = "IV"
+                  printenchantLevel = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
                 else
                   if enchantLevel == 19 then
-                    printenchantLevel = "V"
+                    printenchantLevel = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                   else
                     if enchantLevel >= 20 then
-                      printenchantLevel = "VI"
+                      printenchantLevel = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                     end
                   end
                 end
@@ -1782,23 +1782,23 @@ Inherit_List._updateSlot = function(self)
                   (((defalut_Control._select_Inherit)._Icon_Over)[idx]):SetShow(false)
                   ;
                   (((defalut_Control._select_Inherit)._Icon_Border)[idx]):SetShow(false)
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC234: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end

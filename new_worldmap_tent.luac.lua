@@ -82,7 +82,7 @@ end
 
 local tooltipTentUI = 0
 FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWrapper)
-  -- function num : 0_1 , upvalues : _remainTime, tentInformationMouseOverActorKey, createList, UI_INSTALL, defaultPercentPosX, defaultIconPruningPosX, defaultIconInsectDamegePosX, _workingListBg, _workingText, defaultWorkingListSize, _workingDataBg, defaultWorkingDataSizeWithoutList, defaultWorkingPanelSizeWithoutList, workingRawSizeY, defalutRemainTimePosX, defalutWorkingListBGSizeX, defalutWorkingDataBGSizeX, defalutPanelSizeX, tooltipTentUI
+  -- function num : 0_1 , upvalues : _remainTime, tentInformationMouseOverActorKey, createList, defaultPercentPosX, defaultIconPruningPosX, defaultIconInsectDamegePosX, UI_INSTALL, _workingListBg, _workingText, defaultWorkingListSize, _workingDataBg, defaultWorkingDataSizeWithoutList, defaultWorkingPanelSizeWithoutList, workingRawSizeY, defalutRemainTimePosX, defalutWorkingListBGSizeX, defalutWorkingDataBGSizeX, defalutPanelSizeX, tooltipTentUI
   local expireTime = householdDataWithInstallationWrapper:getSelfTentExpiredTime_s64()
   local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
   _remainTime:SetText(lefttimeText)
@@ -93,15 +93,15 @@ FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWra
   local viewIndex = 0
   for index = 0, maxCount - 1 do
     local dataGroup = createList[viewIndex]
-    if count <= index then
-      for index = 0, viewIndex - 1 do
-        local group = createList[index]
+    if count <= index + 1 then
+      for viewCount = 0, maxCount - 1 do
+        local group = createList[viewCount]
         ;
-        (group._percent):SetPosX((group._percent):GetPosX() + nameSizeX)
+        (group._percent):SetPosX(defaultPercentPosX + nameSizeX)
         ;
-        (group._iconPruning):SetPosX((group._iconPruning):GetPosX() + nameSizeX)
+        (group._iconPruning):SetPosX(defaultIconPruningPosX + nameSizeX)
         ;
-        (group._iconInsectDamege):SetPosX((group._iconInsectDamege):GetPosX() + nameSizeX)
+        (group._iconInsectDamege):SetPosX(defaultIconInsectDamegePosX + nameSizeX)
       end
       break
     end
@@ -196,25 +196,25 @@ FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWra
                     local sizeX = (dataGroup._itemName):GetTextSizeX() + (dataGroup._itemName):GetPosX() - (dataGroup._percent):GetPosX()
                     nameSizeX = sizeX
                     viewIndex = viewIndex + 1
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -357,7 +357,7 @@ Panel_Worldmap_TentInfo_UpdateFrame = function(deltaTime)
 end
 
 FGlobal_TentTooltipShow = function(householdDataWithInstallationWrapper)
-  -- function num : 0_4 , upvalues : _remainTime, tentInformationMouseOverActorKey, createList, UI_INSTALL, defaultPercentPosX, defaultIconPruningPosX, defaultIconInsectDamegePosX, _workingListBg, _workingText, defaultWorkingListSize, _workingDataBg, defaultWorkingDataSizeWithoutList, defaultWorkingPanelSizeWithoutList, workingRawSizeY, defalutRemainTimePosX, defalutWorkingListBGSizeX, defalutWorkingDataBGSizeX, defalutPanelSizeX
+  -- function num : 0_4 , upvalues : _remainTime, tentInformationMouseOverActorKey, createList, defaultPercentPosX, defaultIconPruningPosX, defaultIconInsectDamegePosX, UI_INSTALL, _workingListBg, _workingText, defaultWorkingListSize, _workingDataBg, defaultWorkingDataSizeWithoutList, defaultWorkingPanelSizeWithoutList, workingRawSizeY, defalutRemainTimePosX, defalutWorkingListBGSizeX, defalutWorkingDataBGSizeX, defalutPanelSizeX
   local expireTime = householdDataWithInstallationWrapper:getSelfTentExpiredTime_s64()
   local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
   _remainTime:SetText(lefttimeText)
@@ -368,15 +368,15 @@ FGlobal_TentTooltipShow = function(householdDataWithInstallationWrapper)
   local viewIndex = 0
   for index = 0, maxCount - 1 do
     local dataGroup = createList[viewIndex]
-    if count <= index then
-      for index = 0, viewIndex - 1 do
-        local group = createList[index]
+    if count <= index + 1 then
+      for viewCount = 0, maxCount - 1 do
+        local group = createList[viewCount]
         ;
-        (group._percent):SetPosX((group._percent):GetPosX() + nameSizeX)
+        (group._percent):SetPosX(defaultPercentPosX + nameSizeX)
         ;
-        (group._iconPruning):SetPosX((group._iconPruning):GetPosX() + nameSizeX)
+        (group._iconPruning):SetPosX(defaultIconPruningPosX + nameSizeX)
         ;
-        (group._iconInsectDamege):SetPosX((group._iconInsectDamege):GetPosX() + nameSizeX)
+        (group._iconInsectDamege):SetPosX(defaultIconInsectDamegePosX + nameSizeX)
       end
       break
     end
@@ -468,19 +468,19 @@ FGlobal_TentTooltipShow = function(householdDataWithInstallationWrapper)
                   end
                 end
                 viewIndex = viewIndex + 1
-                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC311: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end

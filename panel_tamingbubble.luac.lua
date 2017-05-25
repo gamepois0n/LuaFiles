@@ -259,7 +259,7 @@ Panel_TamingBubble_Close = function()
   Panel_TamingBubble:SetShow(false)
 end
 
-Panel_RescueShip_doStep = function(deltaTime)
+Panel_TamingBubble_doStep = function(deltaTime)
   -- function num : 0_13 , upvalues : _stepNo, updateDeltaTime_TamingBubble
   if _stepNo == 1 then
     updateDeltaTime_TamingBubble(deltaTime, 1)
@@ -302,7 +302,7 @@ Panel_RescueShip_doStep = function(deltaTime)
   end
 end
 
-RescueShip_ScreenRePosition = function()
+TamingBubble_ScreenRePosition = function()
   -- function num : 0_14 , upvalues : ui
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
@@ -314,8 +314,8 @@ RescueShip_ScreenRePosition = function()
   end
 end
 
-registerEvent("onScreenResize", "RescueShip_ScreenRePosition")
-Panel_TamingBubble:RegisterUpdateFunc("Panel_RescueShip_doStep")
+registerEvent("onScreenResize", "TamingBubble_ScreenRePosition")
+Panel_TamingBubble:RegisterUpdateFunc("Panel_TamingBubble_doStep")
 ActionChartEventBindFunction(1001, Taming_BubbleMessage_1)
 ActionChartEventBindFunction(1002, Taming_BubbleMessage_2)
 ActionChartEventBindFunction(1003, Taming_BubbleMessage_3)

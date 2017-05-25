@@ -7,7 +7,7 @@ local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 Panel_ChannelSelect:SetShow(false)
 Panel_ChannelSelect:RegisterShowEventFunc(true, "Panel_ChannelSelect_ShowAni()")
 Panel_ChannelSelect:RegisterShowEventFunc(false, "Panel_ChannelSelect_HideAni()")
-local channelSelect = {_BlockBG = (UI.getChildControl)(Panel_ChannelSelect, "Static_BlockBG"), _close_btn = (UI.getChildControl)(Panel_ChannelSelect, "Button_Close"), _question_btn = (UI.getChildControl)(Panel_ChannelSelect, "Button_Question"), _allBG = (UI.getChildControl)(Panel_ChannelSelect, "Static_AllBG"), _title = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_Title"), _channelBg = (UI.getChildControl)(Panel_ChannelSelect, "Static_Channel_BG"), _currentChBg = (UI.getChildControl)(Panel_ChannelSelect, "Static_CurrentChannel_BG"), _selectedChBg = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_SelectedChannelBg"), _warIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_WarIcon"), _noEnteranceIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_NoEnterance"), _maintenanceIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_Maintenance"), _expIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_ExpEvent"), _mainDesc = (UI.getChildControl)(Panel_ChannelSelect, "Static_ChannelSelectDescPanel"), 
+local channelSelect = {_BlockBG = (UI.getChildControl)(Panel_ChannelSelect, "Static_BlockBG"), _close_btn = (UI.getChildControl)(Panel_ChannelSelect, "Button_Close"), _question_btn = (UI.getChildControl)(Panel_ChannelSelect, "Button_Question"), _allBG = (UI.getChildControl)(Panel_ChannelSelect, "Static_AllBG"), _title = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_Title"), _channelBg = (UI.getChildControl)(Panel_ChannelSelect, "Static_Channel_BG"), _currentChBg = (UI.getChildControl)(Panel_ChannelSelect, "Static_CurrentChannel_BG"), _selectedChBg = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_SelectedChannelBg"), _warIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_WarIcon"), _noEnteranceIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_NoEnterance"), _maintenanceIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_Maintenance"), _expIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_ExpEvent"), _PremiumIcon = (UI.getChildControl)(Panel_ChannelSelect, "StaticText_Preminum"), _mainDesc = (UI.getChildControl)(Panel_ChannelSelect, "Static_ChannelSelectDescPanel"), 
 channelSelectData = {}
 , 
 isSpeedServer = {}
@@ -41,7 +41,7 @@ else
     end
   end
 end
-local channelChildControl = {_name = (UI.getChildControl)(channelSelect._channelBg, "StaticText_ChannelName"), _status = (UI.getChildControl)(channelSelect._channelBg, "StaticText_Status"), _warIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_WarIcon"), _noEnteranceIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_NoEnterance"), _maintenanceIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_Maintenance"), _expIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_ExpEvent")}
+local channelChildControl = {_name = (UI.getChildControl)(channelSelect._channelBg, "StaticText_ChannelName"), _status = (UI.getChildControl)(channelSelect._channelBg, "StaticText_Status"), _warIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_WarIcon"), _noEnteranceIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_NoEnterance"), _maintenanceIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_Maintenance"), _expIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_ExpEvent"), _premiumIcon = (UI.getChildControl)(channelSelect._channelBg, "Static_Premium")}
 local channelMainDesc = {_serverTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_ChannelSelectTitle"), _serverDesc = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_ChannelSelectDesc"), _speedTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_SpeedTitle"), _speedDesc = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_SpeedDesc"), _siegeTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Channel"), _siegeBalenos = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Balenos"), _siegeSerendia = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Serendia"), _siegeCalpheon = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Calpheon"), _siegeMedia = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Media"), _siegeValencia = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Siege_Valencia"), _scheduleTitle = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Schedule"), _scheduleSiege = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Schedule_Siege"), _scheduleNodeWar = (UI.getChildControl)(channelSelect._mainDescBg, "StaticText_Schedule_Nodewar")}
 Panel_ChannelSelect_ShowAni = function()
   -- function num : 0_0
@@ -107,6 +107,7 @@ ChannelSelect_Init = function()
       channelList.channelnoEnterIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelNoEnterIcon_" .. index)
       channelList.channelMaintenanceIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelMaintenanceIcon_" .. index)
       channelList.channelExpIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelExpIcon_" .. index)
+      channelList.channelPremiumIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelPremiumIcon_" .. index)
       CopyBaseProperty(self._channelBg, channelList.channelBg)
       CopyBaseProperty(self._currentChBg, channelList.channelCurrentBg)
       CopyBaseProperty(self._selectedChBg, channelList.channelSelectedBg)
@@ -116,6 +117,7 @@ ChannelSelect_Init = function()
       CopyBaseProperty(channelChildControl._noEnteranceIcon, channelList.channelnoEnterIcon)
       CopyBaseProperty(channelChildControl._maintenanceIcon, channelList.channelMaintenanceIcon)
       CopyBaseProperty(channelChildControl._expIcon, channelList.channelExpIcon)
+      CopyBaseProperty(channelChildControl._premiumIcon, channelList.channelPremiumIcon)
       ;
       (channelList.channelBg):SetShow(true)
       ;
@@ -134,7 +136,7 @@ ChannelSelect_Init = function()
       (channelList.channelSelectedBg):SetPosX(0)
       ;
       (channelList.channelSelectedBg):SetPosY(0)
-      -- DECOMPILER ERROR at PC276: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC291: Confused about usage of register: R12 in 'UnsetPending'
 
       ;
       (self.channelSelectUIPool)[index] = channelList
@@ -153,6 +155,7 @@ ChannelSelect_Init = function()
         channelList.channelnoEnterIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelNoEnterIcon_" .. index)
         channelList.channelMaintenanceIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelMaintenanceIcon_" .. index)
         channelList.channelExpIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelExpIcon_" .. index)
+        channelList.channelPremiumIcon = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, channelList.channelBg, "create_ChannelPremiumIcon_" .. index)
         CopyBaseProperty(self._channelBg, channelList.channelBg)
         CopyBaseProperty(self._currentChBg, channelList.channelCurrentBg)
         CopyBaseProperty(self._selectedChBg, channelList.channelSelectedBg)
@@ -162,6 +165,7 @@ ChannelSelect_Init = function()
         CopyBaseProperty(channelChildControl._noEnteranceIcon, channelList.channelnoEnterIcon)
         CopyBaseProperty(channelChildControl._maintenanceIcon, channelList.channelMaintenanceIcon)
         CopyBaseProperty(channelChildControl._expIcon, channelList.channelExpIcon)
+        CopyBaseProperty(channelChildControl._premiumIcon, channelList.channelPremiumIcon)
         ;
         (channelList.channelBg):SetShow(true)
         ;
@@ -180,7 +184,7 @@ ChannelSelect_Init = function()
         (channelList.channelSelectedBg):SetPosX(0)
         ;
         (channelList.channelSelectedBg):SetPosY(0)
-        -- DECOMPILER ERROR at PC466: Confused about usage of register: R13 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC496: Confused about usage of register: R13 in 'UnsetPending'
 
         ;
         (self.channelSelectUIPool)[index] = channelList
@@ -243,6 +247,8 @@ ChannelSelect_Init = function()
         (self._maintenanceIcon):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHANNELSELECTE_MAINTENANCEICON"))
         ;
         (self._expIcon):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHANNELSELECTE_EXPEVENTICON"))
+        ;
+        (self._PremiumIcon):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PCROOMSERVER"))
         if isChannelCountLow then
           Panel_ChannelSelect:SetSize(410, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 70)
           ;
@@ -256,6 +262,8 @@ ChannelSelect_Init = function()
           ;
           (self._expIcon):ComputePos()
           ;
+          (self._PremiumIcon):ComputePos()
+          ;
           (self._warIcon):SetPosX(15)
           ;
           (self._warIcon):SetPosY(((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 10)
@@ -267,6 +275,8 @@ ChannelSelect_Init = function()
           (self._maintenanceIcon):SetPosX(15)
           ;
           (self._expIcon):SetPosX((self._maintenanceIcon):GetPosX() + (self._maintenanceIcon):GetSizeX() + (self._maintenanceIcon):GetTextSizeX() + 15)
+          ;
+          (self._PremiumIcon):SetPosX((self._expIcon):GetPosX() + (self._expIcon):GetSizeX() + (self._expIcon):GetTextSizeX() + 15)
         else
           Panel_ChannelSelect:SetSize(796, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 50)
           ;
@@ -280,11 +290,21 @@ ChannelSelect_Init = function()
           ;
           (self._expIcon):ComputePos()
           ;
+          (self._PremiumIcon):ComputePos()
+          ;
           (self._noEnteranceIcon):SetPosX((self._warIcon):GetPosX() + (self._warIcon):GetSizeX() + (self._warIcon):GetTextSizeX() + 15)
           ;
           (self._maintenanceIcon):SetPosX((self._noEnteranceIcon):GetPosX() + (self._noEnteranceIcon):GetSizeX() + (self._noEnteranceIcon):GetTextSizeX() + 15)
           ;
           (self._expIcon):SetPosX((self._maintenanceIcon):GetPosX() + (self._maintenanceIcon):GetSizeX() + (self._maintenanceIcon):GetTextSizeX() + 15)
+          ;
+          (self._PremiumIcon):SetPosX((self._expIcon):GetPosX() + (self._expIcon):GetSizeX() + (self._expIcon):GetTextSizeX() + 15)
+        end
+        if isGameTypeKorea() then
+          (self._PremiumIcon):SetShow(true)
+        else
+          ;
+          (self._PremiumIcon):SetShow(false)
         end
       end
     end
@@ -395,122 +415,141 @@ ChannelSelect_Update = function()
       (((self.channelSelectUIPool)[chIndex]).channelWaricon):SetShow(isBeingWar)
       ;
       (((self.channelSelectUIPool)[chIndex]).channelExpIcon):SetShow(_serverData._isSpeedChannel)
-      if _serverData._isSpeedChannel then
-        if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
-          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_On", "GameChannelMove_NewbieServerJoinDateToolTip( true, " .. chIndex .. " )")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_Out", "GameChannelMove_NewbieServerJoinDateToolTip( false, " .. chIndex .. ")")
+      ;
+      (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):SetShow(_serverData._isPcroomChannel)
+      if _serverData._isSteamChannel then
+        if isSteamClient() == true then
+          (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
         else
-          if ToClient_SelfPlayerIsGM() then
-            (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
-          else
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
+        end
+      else
+        if _serverData._isSpeedChannel then
+          if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
+            (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_On", "GameChannelMove_NewbieServerJoinDateToolTip( true, " .. chIndex .. " )")
             ;
-            (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
+            (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_Out", "GameChannelMove_NewbieServerJoinDateToolTip( false, " .. chIndex .. ")")
+          else
+            if ToClient_SelfPlayerIsGM() then
+              (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
+            else
+              ;
+              (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
+            end
           end
         end
       end
       if _serverData._isBalanceChannel then
-        if ((getSelfPlayer()):get()):getLevel() > 49 and ToClient_isAccessableBalanceChannel() then
+        if ToClient_isAccessableBalanceChannel() then
+          (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
+        else
+          ;
           (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
           ;
           (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
-          local isAdmission = true
-          local isSiegeBeing = deadMessage_isSiegeBeingMyChannel()
-          local isInSiegeBattle = deadMessage_isInSiegeBattle()
-          if isSiegeBeing == true and isInSiegeBattle == false then
+        end
+      end
+      if _serverData._isPcroomChannel and ToClient_isAccessablePcRoomChannel() == false then
+        (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
+        ;
+        (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
+      end
+      local isAdmission = true
+      local isSiegeBeing = deadMessage_isSiegeBeingMyChannel()
+      local isInSiegeBattle = deadMessage_isInSiegeBattle()
+      if isSiegeBeing == true and isInSiegeBattle == false then
+        isAdmission = true
+      else
+        if restrictedServerNo ~= 0 and toInt64(0, 0) ~= channelMoveableGlobalTime then
+          if restrictedServerNo == tempChannel._serverNo then
             isAdmission = true
           else
-            if restrictedServerNo ~= 0 and toInt64(0, 0) ~= channelMoveableGlobalTime then
-              if restrictedServerNo == tempChannel._serverNo then
-                isAdmission = true
-              else
-                if toInt64(0, 0) < channelMoveableRemainTime then
-                  isAdmission = false
-                else
-                  isAdmission = true
-                end
-              end
-            end
-          end
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetShow(not isAdmission)
-          local channelName = getChannelName(tempChannel._worldNo, tempChannel._serverNo)
-          if channelName == nil then
-            channelName = ""
-          end
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "HandleClicked_ChannelSelect( " .. chIndex .. " )")
-          ;
-          (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(false)
-          if curChannelData._worldNo == tempChannel._worldNo and curChannelData._serverNo == tempChannel._serverNo then
-            (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(true)
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
-          end
-          if isGameServiceTypeDev() then
-            (((self.channelSelectUIPool)[chIndex]).channelSelectedBg):SetShow(false)
-            if not tempChannel._isMain or isGameServiceTypeDev() then
-              (((self.channelSelectUIPool)[chIndex]).channelName):SetText(channelName .. "(" .. tempWarName .. ")")
+            if toInt64(0, 0) < channelMoveableRemainTime then
+              isAdmission = false
             else
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelName):SetText(channelName)
-            end
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelStatus):SetText(tempStr)
-            local basePosX = (((self.channelSelectUIPool)[chIndex]).channelName):GetPosX() + (((self.channelSelectUIPool)[chIndex]).channelName):GetTextSizeX() + 20
-            if (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetShow() then
-              (((self.channelSelectUIPool)[chIndex]).channelWaricon):SetPosX(basePosX)
-              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetSizeX() + 5
-            end
-            if (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetShow() then
-              (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetPosX(basePosX)
-              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetSizeX() + 5
-            end
-            if (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetShow() then
-              (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):SetPosX(basePosX)
-              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetSizeX() + 5
-            end
-            if (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetShow() then
-              (((self.channelSelectUIPool)[chIndex]).channelExpIcon):SetPosX(basePosX)
-              basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetSizeX() + 5
-            end
-            do
-              local channelBgSizeX = (((self.channelSelectUIPool)[chIndex]).channelStatus):GetTextSizeX() + (basePosX) + 50
-              channelSizeX = (math.max)(channelSizeX, channelBgSizeX)
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 0 .. "," .. chIndex .. ")")
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 1 .. "," .. chIndex .. ")")
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 2 .. "," .. chIndex .. ")")
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 3 .. "," .. chIndex .. ")")
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
-
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
-
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
-
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-              -- DECOMPILER ERROR at PC566: LeaveBlock: unexpected jumping out IF_STMT
-
+              isAdmission = true
             end
           end
+        end
+      end
+      ;
+      (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetShow(not isAdmission)
+      local channelName = getChannelName(tempChannel._worldNo, tempChannel._serverNo)
+      if channelName == nil then
+        channelName = ""
+      end
+      ;
+      (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "HandleClicked_ChannelSelect( " .. chIndex .. " )")
+      ;
+      (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(false)
+      if curChannelData._worldNo == tempChannel._worldNo and curChannelData._serverNo == tempChannel._serverNo then
+        (((self.channelSelectUIPool)[chIndex]).channelCurrentBg):SetShow(true)
+        ;
+        (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
+      end
+      if isGameServiceTypeDev() then
+        (((self.channelSelectUIPool)[chIndex]).channelSelectedBg):SetShow(false)
+        if not tempChannel._isMain or isGameServiceTypeDev() then
+          (((self.channelSelectUIPool)[chIndex]).channelName):SetText(channelName .. "(" .. tempWarName .. ")")
+        else
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelName):SetText(channelName)
+        end
+        ;
+        (((self.channelSelectUIPool)[chIndex]).channelStatus):SetText(tempStr)
+        local basePosX = (((self.channelSelectUIPool)[chIndex]).channelName):GetPosX() + (((self.channelSelectUIPool)[chIndex]).channelName):GetTextSizeX() + 20
+        if (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetShow() then
+          (((self.channelSelectUIPool)[chIndex]).channelWaricon):SetPosX(basePosX)
+          basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelWaricon):GetSizeX() + 5
+        end
+        if (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetShow() then
+          (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):SetPosX(basePosX)
+          basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):GetSizeX() + 5
+        end
+        if (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetShow() then
+          (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):SetPosX(basePosX)
+          basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):GetSizeX() + 5
+        end
+        if (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetShow() then
+          (((self.channelSelectUIPool)[chIndex]).channelExpIcon):SetPosX(basePosX)
+          basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelExpIcon):GetSizeX() + 5
+        end
+        if (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):GetShow() then
+          (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):SetPosX(basePosX)
+          basePosX = basePosX + (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):GetSizeX() + 5
+        end
+        do
+          local channelBgSizeX = (((self.channelSelectUIPool)[chIndex]).channelStatus):GetTextSizeX() + (basePosX) + 50
+          channelSizeX = (math.max)(channelSizeX, channelBgSizeX)
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 0 .. "," .. chIndex .. ")")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelWaricon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 1 .. "," .. chIndex .. ")")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelnoEnterIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 2 .. "," .. chIndex .. ")")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelMaintenanceIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 3 .. "," .. chIndex .. ")")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelExpIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 4 .. "," .. chIndex .. ")")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
+          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_STMT
+
+          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_STMT
+
         end
       end
     end
@@ -571,6 +610,11 @@ ChannelSelect_IconToolTip = function(iconType, index)
         if iconType == 3 then
           control = ((channelSelect.channelSelectUIPool)[index]).channelExpIcon
           name = PAGetString(Defines.StringSheet_GAME, "LUA_CHANNELSELECTE_EXPEVENTICON")
+        else
+          if iconType == 4 then
+            control = ((channelSelect.channelSelectUIPool)[index]).channelPremiumIcon
+            name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PCROOMSERVER")
+          end
         end
       end
     end
@@ -611,6 +655,10 @@ HandleClicked_ChannelSelect = function(selectChannel)
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXITSERVERSELECT_SAFEREGION"))
         return 
       end
+    end
+    if (getSelfPlayer()):isCompleteTutorial() == false then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoPlayerIsDoingTutorial"))
+      return 
     end
     local curChannelData = getCurrentChannelServerData()
     local curWorldData = getGameWorldServerDataByWorldNo(curChannelData._worldNo)

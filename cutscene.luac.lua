@@ -19,9 +19,20 @@ local Static_SupportVoice = (UI.getChildControl)(Panel_Cutscene, "StaticText_Sup
 local IM = CppEnums.EProcessorInputMode
 local UIMode = Defines.UIMode
 local prevUIMode = UIMode.eUIMode_Default
+local isCutScenePlay = false
+FGlobal_SetIsCutScenePlay = function(isValid)
+  -- function num : 0_0 , upvalues : isCutScenePlay
+  isCutScenePlay = isValid
+end
+
+FGlobal_GetIsCutScenePlay = function()
+  -- function num : 0_1 , upvalues : isCutScenePlay
+  return isCutScenePlay
+end
+
 Panel_Cutscene:RegisterUpdateFunc("Update_Subtitle")
 Update_Subtitle = function(deltaTime)
-  -- function num : 0_0 , upvalues : Multiline_Subtitle
+  -- function num : 0_2 , upvalues : Multiline_Subtitle
   if isSubtitleDelete == false then
     subtitleTimer = subtitleTimer + deltaTime
     if subtitleDeleteTime < subtitleTimer then
@@ -34,10 +45,11 @@ Update_Subtitle = function(deltaTime)
 end
 
 FromClient_PlayCutScene = function(cutSceneName, isFromServer)
-  -- function num : 0_1 , upvalues : prevUIMode, IM, renderMode, Static_FadeScreen, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxLeft, Static_LetterBoxRight, Static_SupportVoice, Multiline_Subtitle
+  -- function num : 0_3 , upvalues : prevUIMode, IM, renderMode, Static_FadeScreen, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxLeft, Static_LetterBoxRight, Static_SupportVoice, Multiline_Subtitle
   ToClient_SaveUiInfo(false)
   crossHair_SetShow(false)
   prevUIMode = GetUIMode()
+  FGlobal_SetIsCutScenePlay(true)
   SetUIMode((Defines.UIMode).eUIMode_Cutscene)
   ;
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
@@ -78,7 +90,7 @@ FromClient_PlayCutScene = function(cutSceneName, isFromServer)
 end
 
 FromClient_StopCutScene = function(cutSceneName)
-  -- function num : 0_2 , upvalues : Multiline_Subtitle, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxRight, Static_LetterBoxLeft, Static_FadeScreen, prevUIMode, renderMode, IM
+  -- function num : 0_4 , upvalues : Multiline_Subtitle, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxRight, Static_LetterBoxLeft, Static_FadeScreen, prevUIMode, renderMode, IM
   Multiline_Subtitle:SetText("")
   Static_LatterBoxTop:SetShow(false)
   Static_LatterBoxBottom:SetShow(false)
@@ -89,6 +101,7 @@ FromClient_StopCutScene = function(cutSceneName)
   if prevUIMode ~= (Defines.UIMode).eUIMode_Cutscene then
     SetUIMode(prevUIMode)
   end
+  FGlobal_SetIsCutScenePlay(false)
   renderMode:reset()
   crossHair_SetShow(true)
   ;
@@ -98,7 +111,7 @@ FromClient_StopCutScene = function(cutSceneName)
 end
 
 FromClient_SetSubtitle = function(subtitle, Time)
-  -- function num : 0_3 , upvalues : Multiline_Subtitle
+  -- function num : 0_5 , upvalues : Multiline_Subtitle
   Multiline_Subtitle:SetText(subtitle)
   subtitleTimer = 0
   subtitleDeleteTime = Time
@@ -106,7 +119,7 @@ FromClient_SetSubtitle = function(subtitle, Time)
 end
 
 FromClient_SetScreenAlpha = function(value)
-  -- function num : 0_4 , upvalues : Static_FadeScreen
+  -- function num : 0_6 , upvalues : Static_FadeScreen
   Static_FadeScreen:SetAlpha(value)
 end
 

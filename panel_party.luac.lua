@@ -591,7 +591,7 @@ ResponseParty_updatePartyList = function()
                       ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
                     else
                       do
-                        if (_partyData[index])._class == 0 or (_partyData[index])._class == 12 or (_partyData[index])._class == 20 or (_partyData[index])._class == 21 or (_partyData[index])._class == 25 then
+                        if (_partyData[index])._class == 0 or (_partyData[index])._class == 12 or (_partyData[index])._class == 20 or (_partyData[index])._class == 21 or (_partyData[index])._class == 25 or (_partyData[index])._class == 19 then
                           classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
                           ;
                           ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
@@ -754,218 +754,237 @@ ResponseParty_updatePartyList = function()
                                                                                 (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                 ;
                                                                                 ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                              end
-                                                                              do
-                                                                                ;
-                                                                                ((_uiPartyMemberList[index])._distance):SetShow(true)
-                                                                                ;
-                                                                                ((_uiPartyMemberList[index])._distance):ChangeTextureInfoName("new_ui_common_forlua/widget/party/party_00.dds")
-                                                                                if (_partyData[index])._distance == 0 then
-                                                                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 152, 1, 174, 23)
-                                                                                  ;
-                                                                                  (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                else
+                                                                              else
+                                                                                do
+                                                                                  if (_partyData[index])._class == UI_Class.ClassType_Combattant then
+                                                                                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
+                                                                                    ;
+                                                                                    ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 222, 31, 252)
+                                                                                    ;
+                                                                                    (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                    ;
+                                                                                    ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                                  end
                                                                                   do
-                                                                                    if (_partyData[index])._distance == 1 then
-                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 176, 1, 198, 23)
+                                                                                    ;
+                                                                                    ((_uiPartyMemberList[index])._distance):SetShow(true)
+                                                                                    ;
+                                                                                    ((_uiPartyMemberList[index])._distance):ChangeTextureInfoName("new_ui_common_forlua/widget/party/party_00.dds")
+                                                                                    if (_partyData[index])._distance == 0 then
+                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 152, 1, 174, 23)
                                                                                       ;
                                                                                       (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                     else
                                                                                       do
-                                                                                        if (_partyData[index])._distance == 2 then
-                                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 200, 1, 222, 23)
+                                                                                        if (_partyData[index])._distance == 1 then
+                                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 176, 1, 198, 23)
                                                                                           ;
                                                                                           (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                         else
                                                                                           do
-                                                                                            do
+                                                                                            if (_partyData[index])._distance == 2 then
+                                                                                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 200, 1, 222, 23)
+                                                                                              ;
+                                                                                              (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                            else
                                                                                               do
-                                                                                                if (_partyData[index])._distance == 3 then
-                                                                                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 224, 1, 246, 23)
-                                                                                                  ;
-                                                                                                  (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                end
-                                                                                                ;
-                                                                                                ((_uiPartyMemberList[index])._distance):setRenderTexture(((_uiPartyMemberList[index])._distance):getBaseTexture())
-                                                                                                ;
-                                                                                                ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_On", "PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                ;
-                                                                                                ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_Out", "PartyPop_SimpleTooltip_Show( false, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                ;
-                                                                                                ((_uiPartyMemberList[index])._distance):setTooltipEventRegistFunc("PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                if (_partyData[index])._nowHp <= 0 then
-                                                                                                  ((_uiPartyMemberList[index])._conditionBG):SetShow(true)
-                                                                                                  ;
-                                                                                                  ((_uiPartyMemberList[index])._conditionTxt):SetShow(true)
-                                                                                                  ;
-                                                                                                  ((_uiPartyMemberList[index])._conditionTxt):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DEATH"))
-                                                                                                else
-                                                                                                  if (_partyData[index])._nowHp >= 1 then
-                                                                                                    ((_uiPartyMemberList[index])._conditionBG):SetShow(false)
+                                                                                                do
+                                                                                                  do
+                                                                                                    if (_partyData[index])._distance == 3 then
+                                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 224, 1, 246, 23)
+                                                                                                      ;
+                                                                                                      (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                    end
                                                                                                     ;
-                                                                                                    ((_uiPartyMemberList[index])._conditionTxt):SetShow(false)
+                                                                                                    ((_uiPartyMemberList[index])._distance):setRenderTexture(((_uiPartyMemberList[index])._distance):getBaseTexture())
                                                                                                     ;
-                                                                                                    ((_uiPartyMemberList[index])._conditionTxt):SetText("")
+                                                                                                    ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_On", "PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
+                                                                                                    ;
+                                                                                                    ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_Out", "PartyPop_SimpleTooltip_Show( false, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
+                                                                                                    ;
+                                                                                                    ((_uiPartyMemberList[index])._distance):setTooltipEventRegistFunc("PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
+                                                                                                    if (_partyData[index])._nowHp <= 0 then
+                                                                                                      ((_uiPartyMemberList[index])._conditionBG):SetShow(true)
+                                                                                                      ;
+                                                                                                      ((_uiPartyMemberList[index])._conditionTxt):SetShow(true)
+                                                                                                      ;
+                                                                                                      ((_uiPartyMemberList[index])._conditionTxt):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DEATH"))
+                                                                                                    else
+                                                                                                      if (_partyData[index])._nowHp >= 1 then
+                                                                                                        ((_uiPartyMemberList[index])._conditionBG):SetShow(false)
+                                                                                                        ;
+                                                                                                        ((_uiPartyMemberList[index])._conditionTxt):SetShow(false)
+                                                                                                        ;
+                                                                                                        ((_uiPartyMemberList[index])._conditionTxt):SetText("")
+                                                                                                      end
+                                                                                                    end
+                                                                                                    if (_partyData[index])._isMaster == true then
+                                                                                                      ((_uiPartyMemberList[index])._leader):SetShow(true)
+                                                                                                    else
+                                                                                                      ;
+                                                                                                      ((_uiPartyMemberList[index])._leader):SetShow(false)
+                                                                                                    end
+                                                                                                    if (_partyData[index])._isSelf then
+                                                                                                      ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(false)
+                                                                                                      ;
+                                                                                                      ((_uiPartyMemberList[index])._distance):SetShow(false)
+                                                                                                      ;
+                                                                                                      ((_uiPartyMemberList[index])._distance):SetSpanSize(-125, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
+                                                                                                    else
+                                                                                                      ;
+                                                                                                      ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(true)
+                                                                                                      if ((_uiPartyMemberList[index])._stylePartyOptionBtn):GetShow() then
+                                                                                                        ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-165, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                      else
+                                                                                                        ;
+                                                                                                        ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                      end
+                                                                                                      ;
+                                                                                                      ((_uiPartyMemberList[index])._distance):SetSpanSize((((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).x + 23, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
+                                                                                                    end
+                                                                                                    ;
+                                                                                                    ((_uiPartyMemberList[index])._base):SetShow(true)
+                                                                                                    ;
+                                                                                                    ((_uiPartyMemberList[index])._base):SetShow(false)
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                                                                                    -- DECOMPILER ERROR at PC1401: LeaveBlock: unexpected jumping out IF_STMT
+
                                                                                                   end
                                                                                                 end
-                                                                                                if (_partyData[index])._isMaster == true then
-                                                                                                  ((_uiPartyMemberList[index])._leader):SetShow(true)
-                                                                                                else
-                                                                                                  ;
-                                                                                                  ((_uiPartyMemberList[index])._leader):SetShow(false)
-                                                                                                end
-                                                                                                if (_partyData[index])._isSelf then
-                                                                                                  ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(false)
-                                                                                                  ;
-                                                                                                  ((_uiPartyMemberList[index])._distance):SetShow(false)
-                                                                                                  ;
-                                                                                                  ((_uiPartyMemberList[index])._distance):SetSpanSize(-125, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
-                                                                                                else
-                                                                                                  ;
-                                                                                                  ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(true)
-                                                                                                  if ((_uiPartyMemberList[index])._stylePartyOptionBtn):GetShow() then
-                                                                                                    ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-165, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
-                                                                                                  else
-                                                                                                    ;
-                                                                                                    ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
-                                                                                                  end
-                                                                                                  ;
-                                                                                                  ((_uiPartyMemberList[index])._distance):SetSpanSize((((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).x + 23, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
-                                                                                                end
-                                                                                                ;
-                                                                                                ((_uiPartyMemberList[index])._base):SetShow(true)
-                                                                                                ;
-                                                                                                ((_uiPartyMemberList[index])._base):SetShow(false)
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                                                                                -- DECOMPILER ERROR at PC1351: LeaveBlock: unexpected jumping out IF_STMT
-
                                                                                               end
                                                                                             end
                                                                                           end
@@ -1394,14 +1413,26 @@ partWidget_OnscreenEvent = function()
     end
     ResponseParty_updatePartyList()
   end
-  -- DECOMPILER ERROR at PC48: Unhandled construct in 'MakeBoolean' P1
-
-  if CppDefine.ChangeUIAndResolution == true and (Panel_Party:GetRelativePosX() ~= 0 or Panel_Party:GetRelativePosY() ~= 0) then
-    Panel_Party:SetPosX(getScreenSizeX() * Panel_Party:GetRelativePosX() - Panel_Party:GetSizeX() / 2)
-    Panel_Party:SetPosY(getScreenSizeY() * Panel_Party:GetRelativePosY() - Panel_Party:GetSizeY() / 2)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_Party:GetRelativePosX() == -1 or Panel_Party:GetRelativePosY() == -1 then
+      local initPosX = 10
+      local initPosY = 200
+      changePositionBySever(Panel_Party, (CppEnums.PAGameUIType).PAGameUIPanel_Party, false, true, false)
+      FGlobal_InitPanelRelativePos(Panel_Party, initPosX, initPosY)
+    else
+      do
+        if Panel_Party:GetRelativePosX() == 0 or Panel_Party:GetRelativePosY() == 0 then
+          Panel_Party:SetPosX(10)
+          Panel_Party:SetPosY(200)
+        else
+          Panel_Party:SetPosX(getScreenSizeX() * Panel_Party:GetRelativePosX() - Panel_Party:GetSizeX() / 2)
+          Panel_Party:SetPosY(getScreenSizeY() * Panel_Party:GetRelativePosY() - Panel_Party:GetSizeY() / 2)
+        end
+        changePositionBySever(Panel_Party, (CppEnums.PAGameUIType).PAGameUIPanel_Party, false, true, false)
+        _uiComboLootingOption:ComputePos()
+      end
+    end
   end
-  changePositionBySever(Panel_Party, (CppEnums.PAGameUIType).PAGameUIPanel_Party, false, true, false)
-  _uiComboLootingOption:ComputePos()
 end
 
 FromClient_NotifyPartyMemberPickupItem = function(userName, itemName)
@@ -1473,6 +1504,7 @@ renderModeChange_Panel_Party = function(prevRenderModeList, nextRenderModeList)
     Panel_Party:SetShow(true)
     ResponseParty_updatePartyList()
   end
+  partWidget_OnscreenEvent()
 end
 
 FGlobal_Party_ConditionalShow = function()

@@ -3166,8 +3166,6 @@ SetDATAByGuildGrade = function()
       ;
       (GuildListInfoPage._btnDeposit):SetShow(false)
       ;
-      (GuildListInfoPage._textBusinessFunds):SetShow(false)
-      ;
       (GuildListInfoPage._textBusinessFundsBG):SetShow(false)
       ;
       (GuildListInfoPage.decoIcon_Guild):SetShow(false)
@@ -3289,8 +3287,6 @@ SetDATAByGuildGrade = function()
       end
       ;
       (GuildListInfoPage._btnPaypal):SetShow(true)
-      ;
-      (GuildListInfoPage._textBusinessFunds):SetShow(true)
       ;
       (GuildListInfoPage._textBusinessFundsBG):SetShow(true)
       ;

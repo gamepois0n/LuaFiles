@@ -19,8 +19,9 @@ Panel_ChatOption:setGlassBackground(true)
 Panel_ChatOption:RegisterShowEventFunc(true, "ChatOption_ShowAni()")
 Panel_ChatOption:RegisterShowEventFunc(false, "ChatOption_HideAni()")
 Panel_ChatOption:RegisterUpdateFunc("RegisterUpdate_ChatOption")
-local localWarIsOpen = ToClient_IsContentsGroupOpen("43")
+local isLocalWarOpen = ToClient_IsContentsGroupOpen("43")
 local isArshaOpen = ToClient_IsContentsGroupOpen("227")
+local isSavageDefenceOpen = ToClient_IsContentsGroupOpen("249")
 if not isGameTypeEnglish() then
   local roleplayTypeOpen = isGameServiceTypeDev()
 end
@@ -33,7 +34,6 @@ local channel_Party = false
 local channel_Guild = false
 local channel_WorldWithItem = false
 local channel_Battle = false
-local channel_LocalWar = false
 local channel_RolePlay = false
 local channel_Arsha = false
 local channel_Team = false
@@ -44,7 +44,6 @@ local color_Private = UI_color.C_FFF601FF
 local color_Party = UI_color.C_FF8EBD00
 local color_Guild = UI_color.C_FF84FFF5
 local color_WorldWithItem = UI_color.C_FF00F3A0
-local color_LocalWar = UI_color.C_FFB97FEF
 local color_RolePlay = UI_color.C_FF00B4FF
 local color_Arsha = UI_color.C_FFFFD237
 local color_Team = UI_color.C_FFB97FEF
@@ -56,7 +55,7 @@ local channel_SystemMarket = false
 local channel_SystemWorker = false
 local channel_SystemHarvest = false
 local _alphaPosX = 0
-local eChatButtonType = {eChatNotice = 0, eChatWorldWithItem = 1, eChatWorld = 2, eChatGuild = 3, eChatLocalWar = 6, eChatParty = 5, eChatBattle = 4, eChatPublic = 7, eChatPrivate = 8, eChatRolePlay = 9, eChatArsha = 10, eChatTeam = 11}
+local eChatButtonType = {eChatNotice = 0, eChatWorldWithItem = 1, eChatWorld = 2, eChatGuild = 3, eChatParty = 5, eChatBattle = 4, eChatPublic = 6, eChatPrivate = 7, eChatRolePlay = 8, eChatArsha = 9, eChatTeam = 10}
 local eChatSystemButtonType = {eChatSystem = 0, eChatSystemUndefine = 1, eChatSystemPrivateItem = 2, eChatSystemPartyItem = 3, eChatSystemMarket = 4, eChatSystemWorker = 5, eChatSystemHarvest = 6}
 local chatOptionData = {makeChatPanelCount = 5, chatFilterCount = 12, chatSystemFilterCount = 7, _slotsCols = 2, slotStartX = 0, slotGapX = 140, slotStartY = 0, slotGapY = 30, slotSystemTypeStartX = 270, slotSystemTypeStartY = 0, slotSystemTypeChildButtonGapX = 20}
 local prevFontSizeType = (CppEnums.ChatFontSizeType).eChatFontSizeType_Normal
@@ -76,12 +75,20 @@ local _button_Cancle = (UI.getChildControl)(Panel_ChatOption, "Button_Cancle")
 local _button_Close = (UI.getChildControl)(Panel_ChatOption, "Button_WinClose")
 local _button_blockList = (UI.getChildControl)(Panel_ChatOption, "Button_BlockList")
 local _button_resetColor = (UI.getChildControl)(Panel_ChatOption, "Button_ResetColor")
+local fontSizeTitleBg = (UI.getChildControl)(Panel_ChatOption, "Static_FontSizeTitleBg")
 local fontSizeBG = (UI.getChildControl)(Panel_ChatOption, "Static_FontSizeBG")
 local rdo_FontSizeSmall = (UI.getChildControl)(Panel_ChatOption, "RadioButton_FontSizeSmall")
 local rdo_FontSizeSmall2 = (UI.getChildControl)(Panel_ChatOption, "RadioButton_FontSizeSmall2")
 local rdo_FontSizeNormal = (UI.getChildControl)(Panel_ChatOption, "RadioButton_FontSizeNormal")
 local rdo_FontSizeNormal2 = (UI.getChildControl)(Panel_ChatOption, "RadioButton_FontSizeNormal2")
 local rdo_FontSizeBig = (UI.getChildControl)(Panel_ChatOption, "RadioButton_FontSizeBig")
+local stringHeadTitleBg = (UI.getChildControl)(Panel_ChatOption, "Static_StringHeadTitleBg")
+local stringHeadBg = (UI.getChildControl)(Panel_ChatOption, "Static_StringHeadBG")
+local rdo_CharacterName = (UI.getChildControl)(stringHeadBg, "RadioButton_CharacterName")
+local rdo_FamilyName = (UI.getChildControl)(stringHeadBg, "RadioButton_FamilyName")
+rdo_CharacterName:addInputEvent("Mouse_LUp", "ChattingOption_SelectNameType( 0 )")
+rdo_FamilyName:addInputEvent("Mouse_LUp", "ChattingOption_SelectNameType( 1 )")
+local preNameType = nil
 local msgFilterBg_SizeY = _msgFilter_BG:GetSizeY()
 local panelSizeY = Panel_ChatOption:GetSizeY()
 local buttonSizeY = _button_Confirm:GetPosY()
@@ -91,6 +98,8 @@ _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"Chatting\
 _buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"Chatting\", \"false\")")
 local _check_Division = (UI.getChildControl)(Panel_ChatOption, "Checkbox_DivisionOption")
 _check_Division:addInputEvent("Mouse_LUp", "HandleClicked_ChattingDivision()")
+local _checkButton_ChatTime = (UI.getChildControl)(Panel_ChatOption, "CheckButton_ChatTime")
+local _prevIsCheckChatTime = {}
 local btnFilter = (Array.new)()
 local btnSystemFilter = (Array.new)()
 local chatPanel = (Array.new)()
@@ -139,50 +148,43 @@ HandleClicked_ChattingTypeFilter_Party = function(panelIdex)
   channel_Party = check
 end
 
-HandleClicked_ChattingTypeFilter_LocalWar = function(panelIndex)
-  -- function num : 0_6 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_LocalWar
-  local self = chatOptionData
-  local check = ((btnFilter[eChatButtonType.eChatLocalWar]).chatFilter):IsCheck()
-  channel_LocalWar = check
-end
-
 HandleClicked_ChattingTypeFilter_Public = function(panelIdex)
-  -- function num : 0_7 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Public
+  -- function num : 0_6 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Public
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatPublic]).chatFilter):IsCheck()
   channel_Public = check
 end
 
 HandleClicked_ChattingTypeFilter_RolePlay = function(panelIndex)
-  -- function num : 0_8 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_RolePlay
+  -- function num : 0_7 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_RolePlay
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatRolePlay]).chatFilter):IsCheck()
   channel_RolePlay = check
 end
 
 HandleClicked_ChattingTypeFilter_Private = function(panelIdex)
-  -- function num : 0_9 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Private
+  -- function num : 0_8 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Private
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatPrivate]).chatFilter):IsCheck()
   channel_Private = check
 end
 
 HandleClicked_ChattingTypeFilter_Arsha = function(panelIdex)
-  -- function num : 0_10 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Arsha
+  -- function num : 0_9 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Arsha
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatArsha]).chatFilter):IsCheck()
   channel_Arsha = check
 end
 
 HandleClicked_ChattingTypeFilter_Team = function(panelIdex)
-  -- function num : 0_11 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Team
+  -- function num : 0_10 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Team
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatTeam]).chatFilter):IsCheck()
   channel_Team = check
 end
 
 HandleClicked_ChattingColor_Notice = function(panelIndex)
-  -- function num : 0_12 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Notice, UI_CT
+  -- function num : 0_11 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Notice, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatNotice]).chatColor):SetColor(UI_color.C_FFFFEF82)
   color_Notice = checkColor
@@ -190,7 +192,7 @@ HandleClicked_ChattingColor_Notice = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_WorldWithItem = function(panelIndex)
-  -- function num : 0_13 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_WorldWithItem, UI_CT
+  -- function num : 0_12 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_WorldWithItem, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatWorldWithItem]).chatColor):SetColor(UI_color.C_FF00F3A0)
   color_WorldWithItem = checkColor
@@ -198,7 +200,7 @@ HandleClicked_ChattingColor_WorldWithItem = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_World = function(panelIndex)
-  -- function num : 0_14 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_World, UI_CT
+  -- function num : 0_13 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_World, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatWorld]).chatColor):SetColor(UI_color.C_FFFF973A)
   color_World = checkColor
@@ -206,7 +208,7 @@ HandleClicked_ChattingColor_World = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_Guild = function(panelIndex)
-  -- function num : 0_15 , upvalues : chatOptionData, UI_CT, color_Guild, eChatButtonType
+  -- function num : 0_14 , upvalues : chatOptionData, UI_CT, color_Guild, eChatButtonType
   local self = chatOptionData
   local chat = ToClient_getChattingPanel(panelIndex)
   local checkColor = chat:getChatColorIndex(UI_CT.Guild)
@@ -215,23 +217,15 @@ HandleClicked_ChattingColor_Guild = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_Party = function(panelIndex)
-  -- function num : 0_16 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Party, UI_CT
+  -- function num : 0_15 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Party, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatParty]).chatColor):SetColor(UI_color.C_FF8EBD00)
   color_Party = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Party, eChatButtonType.eChatParty, false)
 end
 
-HandleClicked_ChattingColor_LocalWar = function(panelIndex)
-  -- function num : 0_17 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_LocalWar, UI_CT
-  local self = chatOptionData
-  local checkColor = ((btnFilter[eChatButtonType.eChatLocalWar]).chatColor):SetColor(UI_color.C_FFB97FEF)
-  color_LocalWar = checkColor
-  FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.LocalWar, eChatButtonType.eChatLocalWar, false)
-end
-
 HandleClicked_ChattingColor_Public = function(panelIndex)
-  -- function num : 0_18 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Public, UI_CT
+  -- function num : 0_16 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Public, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatPublic]).chatColor):SetColor(UI_color.C_FFE7E7E7)
   color_Public = checkColor
@@ -239,7 +233,7 @@ HandleClicked_ChattingColor_Public = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_RolePlay = function(panelIndex)
-  -- function num : 0_19 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_RolePlay, UI_CT
+  -- function num : 0_17 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_RolePlay, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatRolePlay]).chatColor):SetColor(UI_color.C_FF00B4FF)
   color_RolePlay = checkColor
@@ -247,7 +241,7 @@ HandleClicked_ChattingColor_RolePlay = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_Private = function(panelIndex)
-  -- function num : 0_20 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Private, UI_CT
+  -- function num : 0_18 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Private, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatPrivate]).chatColor):SetColor(UI_color.C_FFF601FF)
   color_Private = checkColor
@@ -255,7 +249,7 @@ HandleClicked_ChattingColor_Private = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_Arsha = function(panelIndex)
-  -- function num : 0_21 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Arsha, UI_CT
+  -- function num : 0_19 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Arsha, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatArsha]).chatColor):SetColor(UI_color.C_FFFFD237)
   color_Arsha = checkColor
@@ -263,7 +257,7 @@ HandleClicked_ChattingColor_Arsha = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_Team = function(panelIndex)
-  -- function num : 0_22 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Team, UI_CT
+  -- function num : 0_20 , upvalues : chatOptionData, btnFilter, eChatButtonType, UI_color, color_Team, UI_CT
   local self = chatOptionData
   local checkColor = ((btnFilter[eChatButtonType.eChatTeam]).chatColor):SetColor(UI_color.C_FFB97FEF)
   color_Team = checkColor
@@ -271,16 +265,36 @@ HandleClicked_ChattingColor_Team = function(panelIndex)
 end
 
 HandleClicked_ChattingColor_MainSystem = function(panelIndex)
-  -- function num : 0_23 , upvalues : chatOptionData, UI_CT
+  -- function num : 0_21 , upvalues : chatOptionData, UI_CT
   local self = chatOptionData
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.System, 0, true)
 end
 
 HandleClicked_ChattingDivision = function()
-  -- function num : 0_24 , upvalues : _check_Division
+  -- function num : 0_22 , upvalues : _check_Division
   local isCheck = _check_Division:IsCheck()
   ;
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision, isCheck)
+end
+
+HandleClicked_ChatTime = function(panelIndex)
+  -- function num : 0_23 , upvalues : _checkButton_ChatTime
+  local isCheck = _checkButton_ChatTime:IsCheck()
+  FGlobal_ChatOption_SetIsShowTimeString(panelIndex, isCheck)
+end
+
+FGlobal_ChatOption_HandleChattingOptionInitialize = function(panelIndex)
+  -- function num : 0_24 , upvalues : _checkButton_ChatTime, _prevIsCheckChatTime
+  local currentIsCheckChatTime = FGlobal_ChatOption_GetIsShowTimeString(panelIndex)
+  _checkButton_ChatTime:SetCheck(currentIsCheckChatTime)
+  _checkButton_ChatTime:addInputEvent("Mouse_LUp", "HandleClicked_ChatTime(" .. panelIndex .. ")")
+  _checkButton_ChatTime:SetSpanSize(30, 230)
+  local chatCount = ToClient_getChattingPanelCount()
+  for ii = 0, chatCount - 1 do
+    -- DECOMPILER ERROR at PC30: Confused about usage of register: R7 in 'UnsetPending'
+
+    _prevIsCheckChatTime[ii] = FGlobal_ChatOption_GetIsShowTimeString(ii)
+  end
 end
 
 setEnableSystemChildButton = function(enabled)
@@ -394,7 +408,7 @@ end
 
 local optionCount = 0
 ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPanel)
-  -- function num : 0_35 , upvalues : chatOptionData, _ChatOption_Title, selectColor_btn, onlySystemSelectColor, _msgFilter_BG, chatPanel, msgFilter_Chkbox, eChatButtonType, roleplayTypeOpen, btnFilter, UI_color, UI_CT, isArshaOpen, btnSystemFilter, eChatSystemButtonType, UI_CST, optionCount, panelSizeY, msgFilterBg_SizeY, _button_Confirm, buttonSizeY, _button_Cancle, _button_blockList, _button_resetColor, fontSizeBG, rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, channel_Notice, channel_World, channel_Public, channel_Private, channel_Party, channel_Guild, channel_WorldWithItem, channel_Battle, channel_LocalWar, channel_Arsha, channel_Team, channel_RolePlay, channel_System, channel_SystemUndefine, channel_SystemPrivateItem, channel_SystemPartyItem, channel_SystemMarket, channel_SystemWorker, channel_SystemHarvest, _alphaSlider_ControlBTN, _alphaSlider_Control, _alpha_0, _alpha_50, _alpha_100, _check_Division, _button_Close
+  -- function num : 0_35 , upvalues : chatOptionData, _ChatOption_Title, selectColor_btn, onlySystemSelectColor, _msgFilter_BG, chatPanel, msgFilter_Chkbox, eChatButtonType, roleplayTypeOpen, isArshaOpen, isLocalWarOpen, btnFilter, UI_color, UI_CT, isSavageDefenceOpen, btnSystemFilter, eChatSystemButtonType, UI_CST, optionCount, panelSizeY, msgFilterBg_SizeY, _button_Confirm, buttonSizeY, _button_Cancle, _button_blockList, _button_resetColor, fontSizeTitleBg, fontSizeBG, rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, stringHeadTitleBg, stringHeadBg, channel_Notice, channel_World, channel_Public, channel_Private, channel_Party, channel_Guild, channel_WorldWithItem, channel_Battle, channel_Arsha, channel_Team, channel_RolePlay, channel_System, channel_SystemUndefine, channel_SystemPrivateItem, channel_SystemPartyItem, channel_SystemMarket, channel_SystemWorker, channel_SystemHarvest, _alphaSlider_ControlBTN, _alphaSlider_Control, _alpha_0, _alpha_50, _alpha_100, _check_Division, _button_Close
   local self = chatOptionData
   _ChatOption_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHATTING_OPTION_TITLE", "panel_Index", panelIdex + 1))
   local chat = ToClient_getChattingPanel(panelIdex)
@@ -402,6 +416,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
   onlySystemSelectColor:SetShow(false)
   _msgFilter_BG:AddChild(onlySystemSelectColor)
   Panel_ChatOption:RemoveControl(onlySystemSelectColor)
+  local index = 0
   if not chatPanel[panelIdex] then
     local optionCount = 0
     local idx = 0
@@ -417,10 +432,45 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       (tempBtn.chatColor):SetShow(false)
       local isRoleplay = (eChatButtonType.eChatRolePlay == idx and not roleplayTypeOpen)
       local isOpen = isGameTypeRussia()
-      if (idx > 1 and isOpen) or isRoleplay then
-        index = idx - 1
+      -- DECOMPILER ERROR at PC105: Unhandled construct in 'MakeBoolean' P1
+
+      if (isGameTypeTaiwan() or isGameTypeJapan()) and idx >= 10 then
+        if isArshaOpen then
+          index = idx - 1
+        else
+          index = idx - 2
+        end
       else
         index = idx
+      end
+      if isGameTypeKorea() and not isGameServiceTypeDev() then
+        if idx >= 8 then
+          index = idx - 1
+        else
+          index = idx
+        end
+      elseif isGameServiceTypeDev() or isGameTypeEnglish() then
+        if idx >= 9 then
+          if isLocalWarOpen or isArshaOpen then
+            index = idx
+          else
+            index = idx - 1
+          end
+        else
+          index = idx
+        end
+      else
+        -- DECOMPILER ERROR at PC154: Unhandled construct in 'MakeBoolean' P1
+
+        if isGameTypeRussia() and idx > 1 then
+          if idx > 8 then
+            index = idx - 2
+          else
+            index = idx - 1
+          end
+        else
+          index = idx
+        end
       end
       local row = (math.floor)(index / self._slotsCols)
       local col = index % self._slotsCols
@@ -429,7 +479,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       (tempBtn.chatFilter):SetPosX(self.slotStartX + self.slotGapX * col)
       ;
       (tempBtn.chatFilter):SetPosY(self.slotStartY + self.slotGapY * row)
-      -- DECOMPILER ERROR at PC127: Confused about usage of register: R16 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC182: Confused about usage of register: R17 in 'UnsetPending'
 
       btnFilter[idx] = tempBtn
       if eChatButtonType.eChatNotice == idx then
@@ -475,18 +525,6 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Guild( " .. panelIdex .. " )")
-      elseif eChatButtonType.eChatLocalWar == idx then
-        ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFB97FEF)
-        ;
-        ((btnFilter[idx]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.LocalWar))
-        ;
-        ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_LOCALWAR"))
-        ;
-        ((btnFilter[idx]).chatFilter):SetShow(true)
-        ;
-        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_LocalWar( " .. panelIdex .. " )")
-        ;
-        ((btnFilter[idx]).chatColor):addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_LocalWar( " .. panelIdex .. ")")
       elseif eChatButtonType.eChatParty == idx then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF8EBD00)
         ;
@@ -560,7 +598,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ;
         ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_TEAM"))
         ;
-        ((btnFilter[idx]).chatFilter):SetShow(isArshaOpen)
+        ((btnFilter[idx]).chatFilter):SetShow(isArshaOpen or isLocalWarOpen or isSavageDefenceOpen)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Team( " .. panelIdex .. " )")
         ;
@@ -574,7 +612,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     for idx = 0, self.chatSystemFilterCount - 1 do
       posX = self.slotSystemTypeStartX
       posY = self.slotSystemTypeStartY + idx * self.slotGapY
-      -- DECOMPILER ERROR at PC782: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC786: Confused about usage of register: R14 in 'UnsetPending'
 
       btnSystemFilter[idx] = {}
       if eChatSystemButtonType.eChatSystem == idx then
@@ -626,7 +664,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         _PA_LOG("�\128형욱", "처리되지 않은 eChatSystemButtonType Index : " .. idx)
       end
     end
-    -- DECOMPILER ERROR at PC1131: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1135: Confused about usage of register: R10 in 'UnsetPending'
 
     chatPanel[panelIdex] = true
   end
@@ -697,23 +735,6 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       ((btnFilter[idx]).chatColor):SetPosX(((btnFilter[idx]).chatFilter):GetPosX() + ((btnFilter[idx]).chatFilter):GetSizeX() + ((btnFilter[idx]).chatFilter):GetTextSizeX() + 10)
       ;
       ((btnFilter[idx]).chatColor):addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Guild( " .. panelIdex .. ")")
-      ;
-      ((btnFilter[idx]).chatColor):SetShow(true)
-    elseif eChatButtonType.eChatLocalWar == idx then
-      local chatColorIndex = chat:getChatColorIndex(UI_CT.LocalWar)
-      if chatColorIndex == -1 then
-        ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFB97FEF)
-        ;
-        ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFB97FEF)
-      else
-        ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
-        ;
-        ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
-      end
-      ;
-      ((btnFilter[idx]).chatColor):SetPosX(((btnFilter[idx]).chatFilter):GetPosX() + ((btnFilter[idx]).chatFilter):GetSizeX() + ((btnFilter[idx]).chatFilter):GetTextSizeX() + 10)
-      ;
-      ((btnFilter[idx]).chatColor):addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_LocalWar( " .. panelIdex .. ")")
       ;
       ((btnFilter[idx]).chatColor):SetShow(true)
     elseif eChatButtonType.eChatParty == idx then
@@ -803,7 +824,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       ;
       ((btnFilter[idx]).chatColor):SetShow(true)
     end
-    if eChatButtonType.eChatTeam == idx and isArshaOpen then
+    if eChatButtonType.eChatTeam == idx and (isArshaOpen or isLocalWarOpen or isSavageDefenceOpen) then
       local chatColorIndex = chat:getChatColorIndex(UI_CT.Team)
       if chatColorIndex == -1 then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFB97FEF)
@@ -824,7 +845,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
   end
   local optionLineCount = (math.ceil)(optionCount / self._slotsCols)
   do
-    local lineGapY = 30
+    local lineGapY = 40
     if optionLineCount < self.chatSystemFilterCount then
       optionLineCount = self.chatSystemFilterCount
     end
@@ -837,13 +858,16 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     _button_Cancle:SetPosY(buttonSizeY + (optionLineCount - 5) * lineGapY)
     _button_blockList:SetPosY(buttonSizeY + (optionLineCount - 5) * lineGapY)
     _button_resetColor:SetPosY(buttonSizeY + (optionLineCount - 5) * lineGapY)
-    fontSizeBG:SetSize(fontSizeBG:GetSizeX(), 60)
+    fontSizeTitleBg:ComputePos()
+    fontSizeBG:SetSize(fontSizeBG:GetSizeX(), 35)
     fontSizeBG:ComputePos()
     rdo_FontSizeSmall:ComputePos()
     rdo_FontSizeSmall2:ComputePos()
     rdo_FontSizeNormal:ComputePos()
     rdo_FontSizeNormal2:ComputePos()
     rdo_FontSizeBig:ComputePos()
+    stringHeadTitleBg:ComputePos()
+    stringHeadBg:ComputePos()
     ;
     ((btnFilter[eChatButtonType.eChatNotice]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.Notice))
     ;
@@ -860,8 +884,6 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     ((btnFilter[eChatButtonType.eChatPrivate]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.Private))
     ;
     ((btnFilter[eChatButtonType.eChatBattle]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.Battle))
-    ;
-    ((btnFilter[eChatButtonType.eChatLocalWar]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.LocalWar))
     if isArshaOpen then
       ((btnFilter[eChatButtonType.eChatArsha]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.Arsha))
       ;
@@ -892,7 +914,6 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     channel_Guild = chat:isShowChatType(UI_CT.Guild)
     channel_WorldWithItem = chat:isShowChatType(UI_CT.WorldWithItem)
     channel_Battle = chat:isShowChatType(UI_CT.Battle)
-    channel_LocalWar = chat:isShowChatType(UI_CT.LocalWar)
     channel_Arsha = chat:isShowChatType(UI_CT.Arsha)
     channel_Team = chat:isShowChatType(UI_CT.Team)
     if roleplayTypeOpen then
@@ -932,7 +953,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     else
       _check_Division:SetCheck((ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision))
     end
-    _check_Division:SetSpanSize(30, 135)
+    _check_Division:SetSpanSize(30, 205)
     _button_resetColor:addInputEvent("Mouse_LUp", "HandledClicked_ChattingColorReset(" .. panelIdex .. ")")
     _button_Confirm:addInputEvent("Mouse_LUp", "HandleClicked_ChattingOption_SetFilter( " .. panelIdex .. " )")
     _button_Cancle:addInputEvent("Mouse_LUp", "ChattingOption_Close()")
@@ -943,7 +964,8 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     rdo_FontSizeNormal:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 14 )")
     rdo_FontSizeNormal2:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 18 )")
     rdo_FontSizeBig:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 20 )")
-    -- DECOMPILER ERROR: 73 unprocessed JMP targets
+    FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
+    -- DECOMPILER ERROR: 81 unprocessed JMP targets
   end
 end
 
@@ -958,7 +980,6 @@ HandledClicked_ChattingColorReset = function(panelIndex)
   chat:setChatColor(UI_CT.Party, -1)
   chat:setChatColor(UI_CT.Guild, -1)
   chat:setChatColor(UI_CT.WorldWithItem, -1)
-  chat:setChatColor(UI_CT.LocalWar, -1)
   chat:setChatColor(UI_CT.RolePlay, -1)
   chat:setChatColor(UI_CT.Arsha, -1)
   chat:setChatColor(UI_CT.Team, -1)
@@ -1034,12 +1055,12 @@ HandledClicked_ChattingColorReset = function(panelIndex)
                     end
                   else
                     do
-                      if eChatButtonType.eChatLocalWar == idx then
-                        local chatColorIndex = chat:getChatColorIndex(UI_CT.LocalWar)
+                      if eChatButtonType.eChatParty == idx then
+                        local chatColorIndex = chat:getChatColorIndex(UI_CT.Party)
                         if chatColorIndex == -1 then
-                          ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFB97FEF)
+                          ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF8EBD00)
                           ;
-                          ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFB97FEF)
+                          ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FF8EBD00)
                         else
                           ;
                           ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
@@ -1048,12 +1069,12 @@ HandledClicked_ChattingColorReset = function(panelIndex)
                         end
                       else
                         do
-                          if eChatButtonType.eChatParty == idx then
-                            local chatColorIndex = chat:getChatColorIndex(UI_CT.Party)
+                          if eChatButtonType.eChatPublic == idx then
+                            local chatColorIndex = chat:getChatColorIndex(UI_CT.Public)
                             if chatColorIndex == -1 then
-                              ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF8EBD00)
+                              ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFE7E7E7)
                               ;
-                              ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FF8EBD00)
+                              ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFE7E7E7)
                             else
                               ;
                               ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
@@ -1062,40 +1083,40 @@ HandledClicked_ChattingColorReset = function(panelIndex)
                             end
                           else
                             do
-                              if eChatButtonType.eChatPublic == idx then
-                                local chatColorIndex = chat:getChatColorIndex(UI_CT.Public)
-                                if chatColorIndex == -1 then
-                                  ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFE7E7E7)
-                                  ;
-                                  ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFE7E7E7)
-                                else
-                                  ;
-                                  ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
-                                  ;
-                                  ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
+                              do
+                                if eChatButtonType.eChatRolePlay == idx and roleplayTypeOpen then
+                                  local chatColorIndex = chat:getChatColorIndex(UI_CT.RolePlay)
+                                  if chatColorIndex == -1 then
+                                    ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF00B4FF)
+                                    ;
+                                    ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FF00B4FF)
+                                  else
+                                    ;
+                                    ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
+                                    ;
+                                    ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
+                                  end
                                 end
-                              else
-                                do
+                                if eChatButtonType.eChatPrivate == idx then
+                                  local chatColorIndex = chat:getChatColorIndex(UI_CT.Private)
+                                  if chatColorIndex == -1 then
+                                    ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFF601FF)
+                                    ;
+                                    ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFF601FF)
+                                  else
+                                    ;
+                                    ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
+                                    ;
+                                    ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
+                                  end
+                                else
                                   do
-                                    if eChatButtonType.eChatRolePlay == idx and roleplayTypeOpen then
-                                      local chatColorIndex = chat:getChatColorIndex(UI_CT.RolePlay)
+                                    if eChatButtonType.eChatArsha == idx then
+                                      local chatColorIndex = chat:getChatColorIndex(UI_CT.Arsha)
                                       if chatColorIndex == -1 then
-                                        ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF00B4FF)
+                                        ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFFFD237)
                                         ;
-                                        ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FF00B4FF)
-                                      else
-                                        ;
-                                        ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
-                                        ;
-                                        ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
-                                      end
-                                    end
-                                    if eChatButtonType.eChatPrivate == idx then
-                                      local chatColorIndex = chat:getChatColorIndex(UI_CT.Private)
-                                      if chatColorIndex == -1 then
-                                        ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFF601FF)
-                                        ;
-                                        ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFF601FF)
+                                        ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFFFD237)
                                       else
                                         ;
                                         ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
@@ -1104,92 +1125,70 @@ HandledClicked_ChattingColorReset = function(panelIndex)
                                       end
                                     else
                                       do
-                                        if eChatButtonType.eChatArsha == idx then
-                                          local chatColorIndex = chat:getChatColorIndex(UI_CT.Arsha)
-                                          if chatColorIndex == -1 then
-                                            ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFFFD237)
-                                            ;
-                                            ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFFFD237)
-                                          else
-                                            ;
-                                            ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
-                                            ;
-                                            ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
-                                          end
-                                        else
-                                          do
-                                            do
-                                              if eChatButtonType.eChatTeam == idx then
-                                                local chatColorIndex = chat:getChatColorIndex(UI_CT.Team)
-                                                if chatColorIndex == -1 then
-                                                  ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFB97FEF)
-                                                  ;
-                                                  ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFB97FEF)
-                                                else
-                                                  ;
-                                                  ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
-                                                  ;
-                                                  ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
-                                                end
-                                              end
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out DO_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                              -- DECOMPILER ERROR at PC574: LeaveBlock: unexpected jumping out IF_STMT
-
+                                        do
+                                          if eChatButtonType.eChatTeam == idx then
+                                            local chatColorIndex = chat:getChatColorIndex(UI_CT.Team)
+                                            if chatColorIndex == -1 then
+                                              ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFB97FEF)
+                                              ;
+                                              ((btnFilter[idx]).chatColor):SetColor(UI_color.C_FFB97FEF)
+                                            else
+                                              ;
+                                              ((btnFilter[idx]).chatFilter):SetFontColor(FGlobal_ColorList(chatColorIndex))
+                                              ;
+                                              ((btnFilter[idx]).chatColor):SetColor(FGlobal_ColorList(chatColorIndex))
                                             end
                                           end
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out DO_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                          -- DECOMPILER ERROR at PC527: LeaveBlock: unexpected jumping out IF_STMT
+
                                         end
                                       end
                                     end
@@ -1219,7 +1218,7 @@ HandleClicked_ChattingSetTransparency = function(penelIdex)
 end
 
 HandleClicked_ChattingOption_SetFilter = function(panelIdex)
-  -- function num : 0_38 , upvalues : UI_CT, channel_Notice, channel_System, channel_World, channel_Public, channel_Private, channel_Party, channel_Guild, channel_WorldWithItem, channel_Battle, channel_LocalWar, channel_RolePlay, channel_Arsha, channel_Team, UI_CST, channel_SystemUndefine, channel_SystemPrivateItem, channel_SystemPartyItem, channel_SystemMarket, channel_SystemWorker, channel_SystemHarvest, prevFontSizeType, _alphaSlider_ControlBTN, _alphaSlider_Control
+  -- function num : 0_38 , upvalues : UI_CT, channel_Notice, channel_System, channel_World, channel_Public, channel_Private, channel_Party, channel_Guild, channel_WorldWithItem, channel_Battle, channel_RolePlay, channel_Arsha, channel_Team, UI_CST, channel_SystemUndefine, channel_SystemPrivateItem, channel_SystemPartyItem, channel_SystemMarket, channel_SystemWorker, channel_SystemHarvest, prevFontSizeType, _alphaSlider_ControlBTN, _alphaSlider_Control, _checkButton_ChatTime, _prevIsCheckChatTime
   local chat = ToClient_getChattingPanel(panelIdex)
   chat:setShowChatType(UI_CT.Notice, channel_Notice)
   chat:setShowChatType(UI_CT.System, channel_System)
@@ -1230,7 +1229,6 @@ HandleClicked_ChattingOption_SetFilter = function(panelIdex)
   chat:setShowChatType(UI_CT.Guild, channel_Guild)
   chat:setShowChatType(UI_CT.WorldWithItem, channel_WorldWithItem)
   chat:setShowChatType(UI_CT.Battle, channel_Battle)
-  chat:setShowChatType(UI_CT.LocalWar, channel_LocalWar)
   chat:setShowChatType(UI_CT.RolePlay, channel_RolePlay)
   chat:setShowChatType(UI_CT.Arsha, channel_Arsha)
   chat:setShowChatType(UI_CT.Team, channel_Team)
@@ -1249,6 +1247,10 @@ HandleClicked_ChattingOption_SetFilter = function(panelIdex)
   prevFontSizeType = currentFontSize
   local _transparency = _alphaSlider_ControlBTN:GetPosX() / (_alphaSlider_Control:GetSizeX() - _alphaSlider_ControlBTN:GetSizeX())
   chat:setTransparency(_transparency)
+  FGlobal_ChatOption_SetIsShowTimeString(panelIdex, _checkButton_ChatTime:IsCheck())
+  -- DECOMPILER ERROR at PC138: Confused about usage of register: R5 in 'UnsetPending'
+
+  _prevIsCheckChatTime[panelIdex] = _checkButton_ChatTime:IsCheck()
   ToClient_SaveUiInfo(false)
   Panel_ChatOption:SetShow(false, false)
   Panel_ChatOption:SetIgnore(true)
@@ -1270,7 +1272,7 @@ FGlobal_ChattingOption_SettingColor = function(index, chatType, panelIndex, isSy
 end
 
 ChattingOption_Open = function(penelIdex, drawPanelIndex, isCombinedMainPanel)
-  -- function num : 0_40 , upvalues : rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, prevFontSizeType
+  -- function num : 0_40 , upvalues : rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, preNameType, rdo_CharacterName, rdo_FamilyName, prevFontSizeType
   if Panel_ChatOption:GetShow() == false then
     Panel_ChatOption:SetShow(true, true)
     Panel_ChatOption:SetSpanSize(0, 0)
@@ -1316,24 +1318,41 @@ ChattingOption_Open = function(penelIdex, drawPanelIndex, isCombinedMainPanel)
       end
     end
   end
+  local currentNameType = ToClient_getChatNameType()
+  preNameType = currentNameType
+  if currentNameType == 0 then
+    rdo_CharacterName:SetCheck(true)
+    rdo_FamilyName:SetCheck(false)
+  else
+    if currentNameType == 1 then
+      rdo_CharacterName:SetCheck(false)
+      rdo_FamilyName:SetCheck(true)
+    end
+  end
   prevFontSizeType = ChattingOption_convertFontSizeToChatFontType(thisFontSize)
   local _transparency = FGlobal_Chatting_PanelTransparency_Chk(drawPanelIndex)
   ChattingOption_Initialize(penelIdex, _transparency, isCombinedMainPanel)
 end
 
 ChattingOption_Close = function()
-  -- function num : 0_41 , upvalues : prevFontSizeType
+  -- function num : 0_41 , upvalues : prevFontSizeType, _prevIsCheckChatTime, _checkButton_ChatTime, preNameType
   local chatCount = ToClient_getChattingPanelCount()
+  _PA_LOG("곽민�\176", "chatCount : " .. tostring(chatCount))
   for panelIdex = 0, chatCount - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIdex)
     chatPanel:setChatFontSizeType(prevFontSizeType)
+    if chatPanel:isOpen() == true then
+      FGlobal_ChatOption_SetIsShowTimeString(panelIdex, _prevIsCheckChatTime[panelIdex])
+      _checkButton_ChatTime:SetCheck(_prevIsCheckChatTime[panelIdex])
+    end
   end
   ;
   (ToClient_getFontWrapper("BaseFont_10_Chat")):changeFontSize(ChattingOption_convertChatFontTypeToFontSize(prevFontSizeType))
   ChatPanel_Update()
+  ToClient_setChatNameType(preNameType)
   for panelIdex = 0, chatCount - 1 do
-    Chatting_ScrollEvent(R6_PC30, true)
-    Chatting_ScrollEvent(R6_PC30, false)
+    Chatting_ScrollEvent(R6_PC55, true)
+    Chatting_ScrollEvent(R6_PC55, false)
   end
   FromClient_ChatUpdate()
   Panel_ChatOption:SetShow(false, false)
@@ -1445,8 +1464,31 @@ getPanelChatFontSizeType = function(panelIdx)
   return chatPanel:getChatFontSizeType()
 end
 
+FGlobal_ChatOption_GetIsShowTimeString = function(panelIndex)
+  -- function num : 0_52
+  local chatPanel = ToClient_getChattingPanel(panelIndex)
+  if chatPanel == nil then
+    _PA_ASSERT(false, "없는 번호�\152 채팅 패널입니�\164.(" .. tostring(panelIndex) .. ")")
+    return false
+  end
+  return chatPanel:getIsShowTimeString()
+end
+
+FGlobal_ChatOption_SetIsShowTimeString = function(panelIndex, isShowTimeString)
+  -- function num : 0_53
+  local chatPanel = ToClient_getChattingPanel(panelIndex)
+  if chatPanel == nil then
+    _PA_ASSERT(false, "없는 번호�\152 채팅 패널입니�\164.(" .. tostring(panelIndex) .. ")")
+    return 
+  end
+  if chatPanel:isOpen() == false then
+    return 
+  end
+  chatPanel:setIsShowTimeString(isShowTimeString)
+end
+
 ChatOption_HideAni = function()
-  -- function num : 0_52 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
+  -- function num : 0_54 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
   Panel_ChatOption:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local mailHideAni = Panel_ChatOption:addColorAnimation(0, 0.22, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   mailHideAni:SetStartColor(UI_color.C_FFFFFFFF)
@@ -1460,7 +1502,7 @@ end
 
 local BlockList = {_selectDeleteIndex; _uiBlockList = (UI.getChildControl)(Panel_ChatOption, "Listbox_Block"), _uiBackGround = (UI.getChildControl)(Panel_ChatOption, "Static_OfferWindow"), _uiBlackListTItle = (UI.getChildControl)(Panel_ChatOption, "StaticText_ChatOptionOfferTitle"), _uiClose = (UI.getChildControl)(Panel_ChatOption, "Block_Close"), _uiDelete = (UI.getChildControl)(Panel_ChatOption, "Button_Delete"), _uiAllDelete = (UI.getChildControl)(Panel_ChatOption, "Button_AllDelete"), _uiScroll = nil, _uiScrollCtrlButton = nil, _slotRows = 12}
 BlockList.SetShow = function(self, isShow)
-  -- function num : 0_53 , upvalues : BlockList
+  -- function num : 0_55 , upvalues : BlockList
   (BlockList._uiBlockList):SetShow(isShow)
   ;
   (BlockList._uiBackGround):SetShow(isShow)
@@ -1475,7 +1517,7 @@ BlockList.SetShow = function(self, isShow)
 end
 
 BlockList.initialize = function(self)
-  -- function num : 0_54
+  -- function num : 0_56
   self._uiScroll = (UI.getChildControl)(self._uiBlockList, "Block_Scroll")
   ;
   (self._uiScroll):SetControlTop()
@@ -1492,12 +1534,12 @@ BlockList.initialize = function(self)
 end
 
 clickCloseBlockList = function()
-  -- function num : 0_55
+  -- function num : 0_57
   BlockList_hide()
 end
 
 clickDeleteBlock = function()
-  -- function num : 0_56 , upvalues : BlockList
+  -- function num : 0_58 , upvalues : BlockList
   if BlockList._selectDeleteIndex ~= -1 then
     local deleteName = (BlockList._uiBlockList):GetItemText(BlockList._selectDeleteIndex)
     ToClient_RequestDeleteBlockName(deleteName)
@@ -1505,7 +1547,7 @@ clickDeleteBlock = function()
 end
 
 clickAllDeleteBlock = function()
-  -- function num : 0_57 , upvalues : BlockList
+  -- function num : 0_59 , upvalues : BlockList
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   BlockList._selectDeleteIndex = -1
@@ -1513,14 +1555,14 @@ clickAllDeleteBlock = function()
 end
 
 clickBlockList = function()
-  -- function num : 0_58 , upvalues : BlockList
+  -- function num : 0_60 , upvalues : BlockList
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
 
   BlockList._selectDeleteIndex = (BlockList._uiBlockList):GetSelectIndex()
 end
 
 BlockList.updateList = function(self)
-  -- function num : 0_59 , upvalues : UI_color
+  -- function num : 0_61 , upvalues : UI_color
   local listControl = self._uiBlockList
   listControl:DeleteAll()
   local blockCount = ToClient_RequestBlockCount()
@@ -1535,7 +1577,7 @@ end
 BlockList:initialize()
 registerEvent("FromClient_UpdateBlockList", "FromClient_UpdateBlockList")
 BlockList_show = function()
-  -- function num : 0_60 , upvalues : BlockList
+  -- function num : 0_62 , upvalues : BlockList
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   self._selectDeleteIndex = -1
@@ -1544,22 +1586,31 @@ BlockList_show = function()
 end
 
 BlockList_hide = function()
-  -- function num : 0_61 , upvalues : BlockList
+  -- function num : 0_63 , upvalues : BlockList
   BlockList:SetShow(false)
 end
 
 FromClient_UpdateBlockList = function()
-  -- function num : 0_62 , upvalues : BlockList
+  -- function num : 0_64 , upvalues : BlockList
   BlockList:updateList()
 end
 
 clickRequestShowBlockList = function()
-  -- function num : 0_63 , upvalues : BlockList
+  -- function num : 0_65 , upvalues : BlockList
   if (BlockList._uiBackGround):GetShow() then
     BlockList_hide()
   else
     BlockList_show()
   end
+end
+
+ChattingOption_SelectNameType = function(nameType)
+  -- function num : 0_66
+  if nameType == nil then
+    return 
+  end
+  audioPostEvent_SystemUi(0, 0)
+  ToClient_setChatNameType(nameType)
 end
 
 

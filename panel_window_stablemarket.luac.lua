@@ -69,7 +69,7 @@ button = {startX = 710, startY = 10}
 , slotCount = 4}
 , _mainBG = (UI.getChildControl)(Panel_Window_StableMarket, "Static_MainBG"), _buttonQuestion = (UI.getChildControl)(Panel_Window_StableMarket, "Button_Question"), _buttonClose = (UI.getChildControl)(Panel_Window_StableMarket, "Button_Close"), _staticPageNo = (UI.getChildControl)(Panel_Window_StableMarket, "Static_PageNo"), _buttonNext = (UI.getChildControl)(Panel_Window_StableMarket, "Button_Next"), _buttonPrev = (UI.getChildControl)(Panel_Window_StableMarket, "Button_Prev"), _buttonTabMarket = (UI.getChildControl)(Panel_Window_StableMarket, "RadioButton_List"), _buttonTabMy = (UI.getChildControl)(Panel_Window_StableMarket, "RadioButton_ListMy"), _buttonReload = (UI.getChildControl)(Panel_Window_StableMarket, "RadioButton_Reload"), _buttonBuy = (UI.getChildControl)(Panel_Window_StableMarket, "Button_Buy"), _buttonCancel = (UI.getChildControl)(Panel_Window_StableMarket, "Button_Cancel"), _buttonReceive = (UI.getChildControl)(Panel_Window_StableMarket, "Button_Receive"), _buttonEnd = (UI.getChildControl)(Panel_Window_StableMarket, "Button_End"), _radioInven = (UI.getChildControl)(Panel_Window_StableMarket, "RadioButton_Icon_Money"), _radioWarehouse = (UI.getChildControl)(Panel_Window_StableMarket, "RadioButton_Icon_Money2"), _staticInven = (UI.getChildControl)(Panel_Window_StableMarket, "Static_Text_Money"), _staticWarehouse = (UI.getChildControl)(Panel_Window_StableMarket, "Static_Text_Money2"), _comboGenFilter = (UI.getChildControl)(Panel_Window_StableMarket, "Combobox_FilterGen"), _comboBox_SkillFilter = (UI.getChildControl)(Panel_Window_StableMarket, "Combobox_Skill"), _comboBox_Sex = (UI.getChildControl)(Panel_Window_StableMarket, "Combobox_Sex"), _slots = (Array.new)(), _selectSlotNo = nil, _selectPage = 0, _selectMaxPage = 0, _isTabMy = false, _skillCount = 52, 
 _skillFilterSelectIndex = {}
-}
+, _isFromNpc = true}
 local stableServantGen = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_7"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_GENERATION_FILTER_8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TEXT_TIER9")}
 local sexFilterString = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_SEXFILTER_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_SEXFILTER_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_SEXFILTER_2")}
 ;
@@ -501,6 +501,12 @@ stableMarket.update = function(self, isClear)
     do
       startSlotNo = 0
       endSlotNo = myAuctionInfo:getServantAuctionListCount() - 1
+      if StableMarket_IsTabMy() then
+        (self._staticPageNo):SetText(self._selectPage + 1)
+      else
+        ;
+        (self._staticPageNo):SetText(myAuctionInfo:getCurrentPage() + 1)
+      end
       local slotNo = 0
       do
         for ii = startSlotNo, endSlotNo do
@@ -678,15 +684,15 @@ stableMarket.update = function(self, isClear)
                           end
                           tempIndex = tempIndex + 1
                           slot._learnSkillCount = slot._learnSkillCount + 1
-                          -- DECOMPILER ERROR at PC602: LeaveBlock: unexpected jumping out DO_STMT
+                          -- DECOMPILER ERROR at PC618: LeaveBlock: unexpected jumping out DO_STMT
 
-                          -- DECOMPILER ERROR at PC602: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                          -- DECOMPILER ERROR at PC618: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                          -- DECOMPILER ERROR at PC602: LeaveBlock: unexpected jumping out IF_STMT
+                          -- DECOMPILER ERROR at PC618: LeaveBlock: unexpected jumping out IF_STMT
 
-                          -- DECOMPILER ERROR at PC602: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                          -- DECOMPILER ERROR at PC618: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                          -- DECOMPILER ERROR at PC602: LeaveBlock: unexpected jumping out IF_STMT
+                          -- DECOMPILER ERROR at PC618: LeaveBlock: unexpected jumping out IF_STMT
 
                         end
                       end
@@ -730,64 +736,55 @@ stableMarket.update = function(self, isClear)
                   if expireTime <= toInt64(0, 0) then
                     isAuctionEnd = true
                   end
-                  local servantInfo = stable_getServantByServantNo(auctionServantInfo:getServantNo())
-                  if servantInfo ~= nil then
-                    if (CppEnums.ServantStateType).Type_RegisterMarket == servantInfo:getStateType() then
-                      if isAuctionEnd then
-                        (slot._buttonEnd):SetShow(true)
+                  if self._isFromNpc == true then
+                    local servantInfo = stable_getServantByServantNo(auctionServantInfo:getServantNo())
+                    if servantInfo ~= nil then
+                      if (CppEnums.ServantStateType).Type_RegisterMarket == servantInfo:getStateType() then
+                        if isAuctionEnd then
+                          (slot._buttonEnd):SetShow(true)
+                        else
+                          ;
+                          (slot._buttonCancel):SetShow(true)
+                        end
                       else
                         ;
-                        (slot._buttonCancel):SetShow(true)
+                        (slot._buttonReceive):SetShow(true)
                       end
                     else
                       ;
                       (slot._buttonReceive):SetShow(true)
                     end
-                  else
-                    ;
-                    (slot._buttonReceive):SetShow(true)
                   end
                 else
                   do
                     do
-                      ;
-                      (slot._buttonBuy):SetShow(true)
+                      if self._isFromNpc == true then
+                        (slot._buttonBuy):SetShow(true)
+                      end
                       ;
                       (slot._baseSlot):SetShow(true)
                       slotNo = slotNo + 1
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC743: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC765: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end
                 end
               end
             end
-          end
-        end
-        if StableMarket_IsTabMy() then
-          (self._staticPageNo):SetText(self._selectPage + 1)
-        else
-          do
-            ;
-            (self._staticPageNo):SetText(myAuctionInfo:getCurrentPage() + 1)
-            -- DECOMPILER ERROR at PC760: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-            -- DECOMPILER ERROR at PC760: LeaveBlock: unexpected jumping out IF_STMT
-
           end
         end
       end
@@ -824,8 +821,18 @@ StableMarket_UpdateMoney = function()
   local self = stableMarket
   ;
   (self._staticInven):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
-  ;
-  (self._staticWarehouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  if self._isFromNpc == true then
+    (self._radioWarehouse):SetShow(true)
+    ;
+    (self._staticWarehouse):SetShow(true)
+    ;
+    (self._staticWarehouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  else
+    ;
+    (self._radioWarehouse):SetShow(false)
+    ;
+    (self._staticWarehouse):SetShow(false)
+  end
 end
 
 StableMarket_TabEvent = function(isTabMy)
@@ -844,7 +851,7 @@ StableMarket_TabEventXXX = function(isTabMy)
   self._selectMaxPage = 200
   self._isTabMy = isTabMy
   if StableMarket_IsTabMy() then
-    requestMyServantMarketList()
+    requestMyServantMarketList(self._isFromNpc)
     ;
     (stableMarket._comboBox_SkillFilter):SetShow(false)
     ;
@@ -852,7 +859,7 @@ StableMarket_TabEventXXX = function(isTabMy)
     ;
     (stableMarket._comboBox_Sex):SetShow(false)
   else
-    RequestAuctionListPage((CppEnums.AuctionType).AuctionGoods_ServantMarket)
+    requestServantMarketListPage(self._isFromNpc)
     ;
     (stableMarket._comboBox_SkillFilter):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_FILTER_SKILL"))
     ;
@@ -865,9 +872,9 @@ StableMarket_TabEventXXX = function(isTabMy)
     (stableMarket._comboBox_Sex):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_SEXFILTER"))
     ;
     (stableMarket._comboBox_Sex):SetShow(true)
-    setAuctionServantSkillFilter(0)
-    SetAuctionServantTierFilter(0)
-    setAuctionServantSexFilter(2)
+    setAuctionServantSkillFilter(0, self._isFromNpc)
+    SetAuctionServantTierFilter(0, self._isFromNpc)
+    setAuctionServantSexFilter(2, self._isFromNpc)
   end
 end
 
@@ -882,7 +889,7 @@ StableMarket_NextPage = function()
   if StableMarket_IsTabMy() then
     self:update(true)
   else
-    RequestAuctionNextPage()
+    RequestAuctionNextPage(self._isFromNpc)
   end
 end
 
@@ -896,7 +903,7 @@ StableMarket_PrevPage = function()
   if StableMarket_IsTabMy() then
     self:update(true)
   else
-    RequestAuctionPrevPage()
+    RequestAuctionPrevPage(self._isFromNpc)
   end
 end
 
@@ -972,6 +979,26 @@ StableMarket_Open = function()
   if Panel_Window_StableMarket:GetShow() then
     return 
   end
+  self._isFromNpc = not ToClient_WorldMapIsShow()
+  if self._isFromNpc == false then
+    for ii = 0, (self._config).slotCount - 1 do
+      local slot = (self._slots)[ii]
+      ;
+      (slot._buttonBuy):SetShow(false)
+      ;
+      (slot._buttonCancel):SetShow(false)
+      ;
+      (slot._buttonReceive):SetShow(false)
+      ;
+      (slot._buttonEnd):SetShow(false)
+    end
+    ;
+    (self._radioWarehouse):SetShow(false)
+    ;
+    (self._staticWarehouse):SetShow(false)
+    WorldMapPopupManager:increaseLayer(true)
+    WorldMapPopupManager:push(Panel_Window_StableMarket, true)
+  end
   if Panel_Window_StableMating:GetShow() then
     StableMating_Close()
   end
@@ -1008,10 +1035,10 @@ StableMarket_Open = function()
   (self._buttonTabMy):SetCheck(false)
   ;
   (self._buttonTabMarket):SetCheck(true)
-  setAuctionServantSkillFilter(0)
+  setAuctionServantSkillFilter(0, self._isFromNpc)
   ;
   (stableMarket._comboBox_SkillFilter):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_FILTER_SKILL"))
-  SetAuctionServantTierFilter(0)
+  SetAuctionServantTierFilter(0, self._isFromNpc)
   ;
   (stableMarket._comboGenFilter):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_FILTER_ALL"))
   StableMarket_TabEvent(false)
@@ -1019,12 +1046,18 @@ StableMarket_Open = function()
 end
 
 StableMarket_Close = function()
-  -- function num : 0_23
+  -- function num : 0_23 , upvalues : stableMarket
+  local self = stableMarket
   if not Panel_Window_StableMarket:IsShow() then
     return 
   end
   TooltipSimple_Hide()
-  Panel_Window_StableMarket:SetShow(false)
+  if ToClient_WorldMapIsShow() == true then
+    WorldMapPopupManager:pop()
+  else
+    Panel_Window_StableMarket:SetShow(false)
+  end
+  self._isFromNpc = true
 end
 
 StableMarket_CreateFilter = function()
@@ -1117,7 +1150,7 @@ StableMarket_ToggleFilterGenSelect = function()
       end
     end
   end
-  SetAuctionServantTierFilter(filterGen_id)
+  SetAuctionServantTierFilter(filterGen_id, self._isFromNpc)
   ;
   (self._comboGenFilter):SetSelectItemKey(filterGeneSelectedId)
   StableMarket_ShowGenFilter()
@@ -1150,9 +1183,10 @@ HandleClicked_StableMarket_SkillFilter = function()
     local skillWrapper = getVehicleSkillStaticStatus(index)
     if skillWrapper:isMarketFilter() == true then
       (stableMarket._comboBox_SkillFilter):AddItem(skillWrapper:getName(), index)
-      -- DECOMPILER ERROR at PC35: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC36: Confused about usage of register: R6 in 'UnsetPending'
 
-      _skillFilterSelectIndex[selectIndex] = index
+      ;
+      (stableMarket._skillFilterSelectIndex)[selectIndex] = index
       selectIndex = selectIndex + 1
     end
   end
@@ -1162,16 +1196,17 @@ end
 
 StableMarket_SetSkillFilter = function()
   -- function num : 0_29 , upvalues : stableMarket
+  local self = stableMarket
   local selectSkillIndex = (stableMarket._comboBox_SkillFilter):GetSelectIndex()
   ;
   (stableMarket._comboBox_SkillFilter):ToggleListbox()
-  if selectSkillIndex > 0 then
-    selectSkillIndex = _skillFilterSelectIndex[selectSkillIndex - 1]
-    setAuctionServantSkillFilter(selectSkillIndex)
+  if selectSkillIndex > 0 and #stableMarket._skillFilterSelectIndex > 1 then
+    selectSkillIndex = (stableMarket._skillFilterSelectIndex)[selectSkillIndex - 1]
+    setAuctionServantSkillFilter(selectSkillIndex, self._isFromNpc)
     ;
     (stableMarket._comboBox_SkillFilter):SetText((getVehicleSkillStaticStatus(selectSkillIndex)):getName())
   else
-    setAuctionServantSkillFilter(0)
+    setAuctionServantSkillFilter(0, self._isFromNpc)
     ;
     (stableMarket._comboBox_SkillFilter):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMARKET_FILTER_ALL"))
   end
@@ -1189,12 +1224,13 @@ end
 
 StableMarket_SetSexFilter = function()
   -- function num : 0_31 , upvalues : stableMarket, sexFilterString
+  local self = stableMarket
   local selectSexIndex = (stableMarket._comboBox_Sex):GetSelectIndex()
   ;
   (stableMarket._comboBox_Sex):ToggleListbox()
   ;
   (stableMarket._comboBox_Sex):SetText(sexFilterString[selectSexIndex])
-  setAuctionServantSexFilter(selectSexIndex)
+  setAuctionServantSexFilter(selectSexIndex, self._isFromNpc)
 end
 
 StableMarket_ResponseServantBuyItNowFail = function()
@@ -1210,8 +1246,9 @@ StableMarket_ResponseServantBuyItNowFail = function()
 end
 
 StableMarket_Reload = function()
-  -- function num : 0_33
-  RequestActionReloadPage()
+  -- function num : 0_33 , upvalues : stableMarket
+  local self = stableMarket
+  RequestActionReloadPage(self._isFromNpc)
 end
 
 stableMarket:init()

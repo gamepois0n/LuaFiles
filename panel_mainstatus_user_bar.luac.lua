@@ -288,6 +288,7 @@ renderModeChange_checkHpAlertPostEvent = function(prevRenderModeList, nextRender
   if CheckRenderModebyGameMode(nextRenderModeList) or CheckRenderMode(prevRenderModeList, currentRenderMode) then
     checkHpAlertPostEvent()
   end
+  Panel_MainStatus_User_Bar_Onresize()
 end
 
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_checkHpAlertPostEvent")
@@ -461,7 +462,7 @@ Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate = function()
         checkHpAlert(hp, maxHp, false)
         local effectName = ""
         local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType()
-        local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType()
+        local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType()
         local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
         local isMP_Character = (not isEP_Character and not isFP_Character and not isBP_Character)
         local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
@@ -539,25 +540,35 @@ Panel_MainStatus_User_Bar_Onresize = function()
   _alertDanger:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_MainStatus_User_Bar:ComputePos()
   if CppDefine.ChangeUIAndResolution == true then
-    if Panel_MainStatus_User_Bar:GetRelativePosX() == 0 and Panel_MainStatus_User_Bar:GetRelativePosY() == 0 then
-      Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
-      Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
+    if Panel_MainStatus_User_Bar:GetRelativePosX() == -1 and Panel_MainStatus_User_Bar:GetRelativePosY() == -1 then
+      local initPosX = getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2
+      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY()
+      Panel_MainStatus_User_Bar:SetPosX(initPosX)
+      Panel_MainStatus_User_Bar:SetPosY(initPosY)
+      changePositionBySever(Panel_MainStatus_User_Bar, (CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, true, true, false)
+      FGlobal_InitPanelRelativePos(Panel_MainStatus_User_Bar, initPosX, initPosY)
     else
-      Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() * Panel_MainStatus_User_Bar:GetRelativePosX() - Panel_MainStatus_User_Bar:GetSizeX() / 2)
-      Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() * Panel_MainStatus_User_Bar:GetRelativePosY() - Panel_MainStatus_User_Bar:GetSizeY() / 2)
+      do
+        if Panel_MainStatus_User_Bar:GetRelativePosX() == 0 and Panel_MainStatus_User_Bar:GetRelativePosY() == 0 then
+          Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+          Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
+        else
+          Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() * Panel_MainStatus_User_Bar:GetRelativePosX() - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+          Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() * Panel_MainStatus_User_Bar:GetRelativePosY() - Panel_MainStatus_User_Bar:GetSizeY() / 2)
+        end
+        if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+          Panel_MainStatus_User_Bar:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+        end
+        Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+        Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
+        changePositionBySever(Panel_MainStatus_User_Bar, (CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, true, true, false)
+        if getScreenSizeX() < Panel_MainStatus_User_Bar:GetPosX() or getScreenSizeY() < Panel_MainStatus_User_Bar:GetPosY() then
+          Panel_MainStatus_User_Bar:ComputePos()
+          Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
+          Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
+        end
+      end
     end
-    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
-      Panel_MainStatus_User_Bar:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
-    end
-  else
-    Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
-    Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
-    changePositionBySever(Panel_MainStatus_User_Bar, (CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, true, true, false)
-  end
-  if getScreenSizeX() < Panel_MainStatus_User_Bar:GetPosX() or getScreenSizeY() < Panel_MainStatus_User_Bar:GetPosY() then
-    Panel_MainStatus_User_Bar:ComputePos()
-    Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
-    Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
   end
 end
 

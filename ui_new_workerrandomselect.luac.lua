@@ -199,7 +199,7 @@ Worker_RequestDoBuy = function()
   if _workerWareHouseInventoryMoneyButton:IsCheck() then
     fromWhereType = 2
   end
-  npcShop_doBuy(_selectSlotNo, 1, fromWhereType, 0)
+  npcShop_doBuy(_selectSlotNo, 1, fromWhereType, 0, false)
   Panel_MyHouseNavi_Update(true)
   _selectSlotNo = -1
   Panel_Window_WorkerRandomSelect:SetShow(false)

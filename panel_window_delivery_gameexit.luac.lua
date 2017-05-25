@@ -192,11 +192,6 @@ click_DeliveryForGameExit_GetOn = function()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DELIVERY_PERSON_NOTCHANGE"))
     return 
   end
-  local curChannelData = getCurrentChannelServerData()
-  if curChannelData._isBalanceChannel == true and characterData._level <= 49 and ToClient_isAccessableBalanceChannel() then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_BALENCECHANNEL_JOIN_LIMIT"))
-    return 
-  end
   if characterData._level < 5 then
     NotifyDisplay(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_DONT_CHAGECHARACTER", "iLevel", 4))
     return 

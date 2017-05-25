@@ -66,9 +66,7 @@ end
 
 Competition_UpdatePerFrame = function(delta)
   -- function num : 0_3 , upvalues : posAndRotCount, posAndRot, childControlList, panelList
-  if (CppEnums.CountryType).KOR_REAL == getGameServiceType() or (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-    return 
-  end
+  do return  end
   for value = 1, posAndRotCount do
     local distance = distanceFromCamera((posAndRot[value]).posX, (posAndRot[value]).posY, (posAndRot[value]).posZ)
     if childControlList[value] ~= nil then
@@ -87,9 +85,7 @@ end
 
 FromWeb_WebPageError_Competition = function(url, statusCode)
   -- function num : 0_4 , upvalues : posAndRotCount, posAndRot, childControlList
-  if (CppEnums.CountryType).KOR_REAL == getGameServiceType() or (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-    return 
-  end
+  do return  end
   if statusCode ~= 200 then
     return 
   end
@@ -102,13 +98,11 @@ end
 
 FromClient_luaLoadComplete_Competition = function()
   -- function num : 0_5 , upvalues : posAndRotCount, panelList, childControlList, createNewPanel, posAndRot, width, height
-  if (CppEnums.CountryType).KOR_REAL == getGameServiceType() or (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-    return 
-  end
+  do return  end
   for value = 1, posAndRotCount do
-    -- DECOMPILER ERROR at PC32: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC18: Confused about usage of register: R5 in 'UnsetPending'
 
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC19: Confused about usage of register: R4 in 'UnsetPending'
 
     panelList[value] = createNewPanel("testPanel_" .. tostring(value), posAndRot[value], width, height)
   end
@@ -125,9 +119,7 @@ end
 
 FromClient_UpdateFightState_Competition = function(fightState)
   -- function num : 0_6 , upvalues : posAndRotCount, childControlList
-  if (CppEnums.CountryType).KOR_REAL == getGameServiceType() or (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-    return 
-  end
+  do return  end
   for value = 1, posAndRotCount do
     if (CppEnums.CompetitionFightState).eCompetitionFightState_Fight == fightState then
       (childControlList[value]):TriggerEvent("UpdateFightState_Competition", "true")

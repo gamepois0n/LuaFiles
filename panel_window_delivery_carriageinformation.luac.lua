@@ -240,6 +240,8 @@ DeliveryCarriageInformationWindow_Open = function(objectID)
   self.startSlotNo = 0
   self.objectID = objectID
   self:updateSlot()
+  ;
+  (self.scroll):SetControlPos(0)
 end
 
 DeliveryCarriageInformationWindow_Close = function()

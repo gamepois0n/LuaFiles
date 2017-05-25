@@ -157,8 +157,32 @@ workerShipInfo.clear = function(self)
   self._skillCount = 0
 end
 
+workerShipInfo.updateHp = function(self)
+  -- function num : 0_4
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Hp):SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  ;
+  (self._staticTextValue_Hp):SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
+end
+
+workerShipInfo.updateMp = function(self)
+  -- function num : 0_5
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Mp):SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 5)
+  ;
+  (self._staticTextValue_Mp):SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
+end
+
 workerShipInfo.update = function(self)
-  -- function num : 0_4 , upvalues : UI_VT, skillCondition, skillDescArray
+  -- function num : 0_6 , upvalues : UI_VT, skillCondition, skillDescArray
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if servantWrapper == nil then
     return 
@@ -317,7 +341,7 @@ workerShipInfo.update = function(self)
 end
 
 WorkerShipInfo_Simpletooltip = function(isShow, index, conditionIndex, tipType)
-  -- function num : 0_5 , upvalues : workerShipInfo, skillCondition, skillDescArray
+  -- function num : 0_7 , upvalues : workerShipInfo, skillCondition, skillDescArray
   local self = workerShipInfo
   local name, desc, control = nil, nil, nil
   if tipType == 0 then
@@ -337,7 +361,7 @@ WorkerShipInfo_Simpletooltip = function(isShow, index, conditionIndex, tipType)
 end
 
 workerShipInfo.registEventHandler = function(self)
-  -- function num : 0_6
+  -- function num : 0_8
   (self._buttonClose):addInputEvent("Mouse_LUp", "WorkerShipInfo_Close()")
   ;
   (self._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelServantinfo\" )")
@@ -354,14 +378,16 @@ workerShipInfo.registEventHandler = function(self)
 end
 
 workerShipInfo.registMessageHandler = function(self)
-  -- function num : 0_7
+  -- function num : 0_9
   registerEvent("EventSelfServantUpdate", "WorkerShipInfo_Update()")
+  registerEvent("EventSelfServantUpdateOnlyHp", "WorkerShipInfo_UpdateHp")
+  registerEvent("EventSelfServantUpdateOnlyMp", "WorkerShipInfo_UpdateMp")
   registerEvent("EventServantEquipmentUpdate", "WorkerShipInfo_Update()")
   registerEvent("EventServantEquipItem", "WorkerShipInfo_ChangeEquipItem")
 end
 
 WorkerShipInfo_ChangeEquipItem = function(slotNo)
-  -- function num : 0_8 , upvalues : workerShipInfo, UI_VT
+  -- function num : 0_10 , upvalues : workerShipInfo, UI_VT
   local self = workerShipInfo
   local slot = (self._itemSlots)[slotNo]
   if self._actorKeyRaw == nil then
@@ -392,7 +418,7 @@ WorkerShipInfo_ChangeEquipItem = function(slotNo)
 end
 
 WorkerShipInfo_RClick = function(slotNo)
-  -- function num : 0_9 , upvalues : workerShipInfo
+  -- function num : 0_11 , upvalues : workerShipInfo
   local self = workerShipInfo
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if servantWrapper == nil then
@@ -406,7 +432,7 @@ WorkerShipInfo_RClick = function(slotNo)
 end
 
 WorkerShipInfo_LClick = function(slotNo)
-  -- function num : 0_10
+  -- function num : 0_12
   if DragManager.dragStartPanel == Panel_Window_Inventory then
     Inventory_SlotRClick(DragManager.dragSlotInfo)
     ;
@@ -415,7 +441,7 @@ WorkerShipInfo_LClick = function(slotNo)
 end
 
 WorkerShipInfo_EquipItem_MouseOn = function(slotNo, isOn)
-  -- function num : 0_11 , upvalues : workerShipInfo
+  -- function num : 0_13 , upvalues : workerShipInfo
   local self = workerShipInfo
   local slot = (self._itemSlots)[slotNo]
   Panel_Tooltip_Item_SetPosition(slotNo, slot, "ServantShipEquipment")
@@ -423,7 +449,7 @@ WorkerShipInfo_EquipItem_MouseOn = function(slotNo, isOn)
 end
 
 WorkerShipInfo_ScrollEvent = function(isScrollUp)
-  -- function num : 0_12 , upvalues : workerShipInfo
+  -- function num : 0_14 , upvalues : workerShipInfo
   local self = workerShipInfo
   self._skillStart = (UIScroll.ScrollEvent)(self._skillScroll, isScrollUp, ((self._config)._skill).count, self._skillCount, self._skillStart, 1)
   self:update()
@@ -431,20 +457,20 @@ WorkerShipInfo_ScrollEvent = function(isScrollUp)
 end
 
 WorkerShipInfo_OpenByActorKeyRaw = function(actorKeyRaw)
-  -- function num : 0_13 , upvalues : workerShipInfo
+  -- function num : 0_15 , upvalues : workerShipInfo
   local self = workerShipInfo
   self._actorKeyRaw = actorKeyRaw
   WorkerShipInfo_Open()
 end
 
 WorkerShipInfo_GetActorKey = function()
-  -- function num : 0_14 , upvalues : workerShipInfo
+  -- function num : 0_16 , upvalues : workerShipInfo
   local self = workerShipInfo
   return self._actorKeyRaw
 end
 
 WorkerShipInfo_Update = function()
-  -- function num : 0_15 , upvalues : workerShipInfo
+  -- function num : 0_17 , upvalues : workerShipInfo
   if not Panel_WorkerShipInfo:GetShow() then
     return 
   end
@@ -452,8 +478,26 @@ WorkerShipInfo_Update = function()
   self:update()
 end
 
+WorkerShipInfo_UpdateHp = function()
+  -- function num : 0_18 , upvalues : workerShipInfo
+  if Panel_WorkerShipInfo:GetShow() == false then
+    return 
+  end
+  local self = workerShipInfo
+  self:updateHp()
+end
+
+WorkerShipInfo_UpdateMp = function()
+  -- function num : 0_19 , upvalues : workerShipInfo
+  if Panel_WorkerShipInfo:GetShow() == false then
+    return 
+  end
+  local self = workerShipInfo
+  self:updateMp()
+end
+
 WorkerShipInfo_Open = function()
-  -- function num : 0_16 , upvalues : workerShipInfo, skillCondition, skillDescArray
+  -- function num : 0_20 , upvalues : workerShipInfo, skillCondition, skillDescArray
   local self = workerShipInfo
   self:clear()
   skillCondition = {}
@@ -470,7 +514,7 @@ WorkerShipInfo_Open = function()
 end
 
 WorkerShipInfo_Close = function()
-  -- function num : 0_17
+  -- function num : 0_21
   if not Panel_WorkerShipInfo:GetShow() then
     return 
   end

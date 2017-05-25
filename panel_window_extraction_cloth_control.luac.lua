@@ -147,9 +147,13 @@ PaGlobal_ExtractionCloth.applyReady = function(self)
   end
   local messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EXTRACTION_CLOTH_3", "resultItem", resultItem)
   local messageboxData = {title = PAGetString(Defines.StringSheet_RESOURCE, "UI_WINDOW_EXTRACTION_CLOTH_TITLE"), content = messageContent, functionYes = function()
-    -- function num : 0_5_0
+    -- function num : 0_5_0 , upvalues : self
     ExtractionCloth_Success()
     Panel_Window_Extraction_Cloth:RegisterUpdateFunc("ExtractionCloth_CheckTime")
+    ;
+    (self._radioBtnValks):SetIgnore(self._doExtracting)
+    ;
+    (self._radioBtnCronStone):SetIgnore(self._doExtracting)
     audioPostEvent_SystemUi(5, 10)
   end
 , functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -176,6 +180,10 @@ ExtractionCloth_Success = function()
   local self = PaGlobal_ExtractionCloth
   FGlobal_ExtractionEffect_Init()
   ;
+  (self._radioBtnValks):SetIgnore(self._doExtracting)
+  ;
+  (self._radioBtnCronStone):SetIgnore(self._doExtracting)
+  ;
   (self._extracting_Effect_Step1):EraseAllEffect()
   ;
   (self._balks):EraseAllEffect()
@@ -189,6 +197,10 @@ PaGlobal_ExtractionCloth.successXXX = function(self)
   ToClient_RequestExtracItemFromExtractionCount(self._extraction_TargetWhereType, self._extraction_TargetSlotNo, isValks)
   self._doExtracting = false
   self._currentTime = 0
+  ;
+  (self._radioBtnValks):SetIgnore(self._doExtracting)
+  ;
+  (self._radioBtnCronStone):SetIgnore(self._doExtracting)
   self:clear()
 end
 

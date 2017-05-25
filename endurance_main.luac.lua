@@ -5,8 +5,8 @@
 -- function num : 0
 PaGlobalPlayerEnduranceList = {panel = Panel_Endurance, enduranceTypeCount = 13, 
 enduranceInfo = {}
-, effectBG = (UI.getChildControl)(Panel_Endurance, "Static_Effect"), noticeEndurance = (UI.getChildControl)(Panel_Endurance, "StaticText_NoticeEndurance"), isEffectSound = false, repair_AutoNavi = (UI.getChildControl)(Panel_Endurance, "CheckButton_Repair_AutoNavi"), repair_Navi = (UI.getChildControl)(Panel_Endurance, "Checkbox_Repair_Navi")}
--- DECOMPILER ERROR at PC34: Confused about usage of register: R0 in 'UnsetPending'
+, effectBG = (UI.getChildControl)(Panel_Endurance, "Static_Effect"), noticeEndurance = (UI.getChildControl)(Panel_Endurance, "StaticText_NoticeEndurance"), isEffectSound = false, repair_AutoNavi = (UI.getChildControl)(Panel_Endurance, "CheckButton_Repair_AutoNavi"), repair_Navi = (UI.getChildControl)(Panel_Endurance, "Checkbox_Repair_Navi"), radarSizeX = 0}
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobalPlayerEnduranceList.initialize = function(self)
   -- function num : 0_0
@@ -125,6 +125,7 @@ PaGlobalPlayerEnduranceList.initialize = function(self)
   (self.repair_AutoNavi):addInputEvent("Mouse_LUp", "HandleMLUpRepairNavi(CppEnums.EnduranceType.eEnduranceType_Player, true)")
   ;
   (self.repair_Navi):addInputEvent("Mouse_LUp", "HandleMLUpRepairNavi(CppEnums.EnduranceType.eEnduranceType_Player, false)")
+  self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
 end
 
 HandleMEnduranceNotice = function(enduranceType, isShow)
@@ -214,7 +215,7 @@ Panel_PlayerEndurance_Position = function()
   -- function num : 0_3
   local self = PaGlobalPlayerEnduranceList
   if FGlobal_Panel_Radar_GetShow() then
-    (self.panel):SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - (self.panel):GetSizeX())
+    (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX())
     ;
     (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY())
   else

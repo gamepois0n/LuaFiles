@@ -54,7 +54,7 @@ _static_GraphBaseLine = {}
 _icons = {}
 , _graphInfoText = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "StaticText_GraphInfo"), _staticTitle = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Panel_Title"), _staticRectangle = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "graphFrame"), _staticMiniPanel = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Static_MiniPanel"), _staticGraph = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "graph_panel"), _staticBaseCurrentPoint = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "graph_currentPoint"), _staticBaseHighPoint = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "graph_LowestPoint"), _staticBaseLowPoint = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "graph_highestPoint"), _staticBaseCommerceName = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "item_name"), _staticTextPermission = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "StaticText_Permission"), _staticBasePriceRate = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "item_quotationRate"), _static_BasePriceIcon = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "item_sellPrice_goldIcon"), _static_OriginalPriceIcon = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "item_originalPrice_goldIcon"), _static_SupplyCountText = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "item_supply_count"), _static_ConditionText = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "StaticText_ConditionValue"), _static_BaseLine = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Static_BasePosition"), _scroll = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Scroll_Slot_List"), _currentBar = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "graph_currentPosition"), _button_BuyFromNPC = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Button_BuyFromNPC"), _button_SellToNPC = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Button_SellToNPC"), _staticTradeItemName = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "StaticText_TradeItemName"), _staticText_EnableSupplyCount = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "StaticText_EnableSupplyCount"), _selectTerritory = 0, _territoryCount = 0, 
 _buttonTerritory = {}
-, _buttonGoBackGraph = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Button_Back")}
+, _buttonGoBackGraph = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Button_Back"), _supplyCountPosX = 0}
 ;
 (tradeGraph._staticBaseCommerceName):SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
 ;
@@ -77,7 +77,7 @@ end
 
 local territoryCount = 5
 for countIndex = 1, territoryCount do
-  -- DECOMPILER ERROR at PC458: Confused about usage of register: R10 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC459: Confused about usage of register: R10 in 'UnsetPending'
 
   (tradeGraph._buttonTerritory)[countIndex] = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Button_category_Territory_" .. countIndex - 1)
   ;
@@ -256,6 +256,9 @@ tradeGraph.registUIControl = function(self)
   end
   -- DECOMPILER ERROR at PC555: Confused about usage of register: R15 in 'UnsetPending'
 
+  tradeGraph._supplyCountPosX = ((tradeGraph._static_SupplyCount)[1]):GetPosX()
+  -- DECOMPILER ERROR at PC562: Confused about usage of register: R15 in 'UnsetPending'
+
   tradeGraph._graphBackSizeY = ((tradeGraph._staticCommerceGraphs)[1]):GetSizeY()
   miniPanelPosY = (_miniPanel[1]):GetPosY()
   _graphPosY = ((tradeGraph._staticCommerceGraphs)[1]):GetPosY()
@@ -263,7 +266,7 @@ tradeGraph.registUIControl = function(self)
     local position = {x = 0, y = 0}
     position.x = ((tradeGraph._buttonTradeList)[btnIndex]):GetPosX()
     position.y = ((tradeGraph._buttonTradeList)[btnIndex]):GetPosY()
-    -- DECOMPILER ERROR at PC590: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC597: Confused about usage of register: R20 in 'UnsetPending'
 
     ;
     (tradeGraph._buttonTradePosition)[btnIndex] = position
@@ -764,6 +767,16 @@ tradeGraph.tradeMarket_DrawGraph = function(commerceIndexForGraph, itemKey, UIIn
             ((tradeGraph._static_Condition)[UIIndex]):SetText(buyingConditionValue)
           end
           do
+            local conditionSizeX = ((tradeGraph._static_Condition)[UIIndex]):GetTextSizeX()
+            local conditionPosX = ((tradeGraph._static_Condition)[UIIndex]):GetPosX()
+            local supplySizeX = ((tradeGraph._static_SupplyCount)[UIIndex]):GetTextSizeX()
+            local supplyPosX = ((tradeGraph._static_SupplyCount)[UIIndex]):GetPosX()
+            if tradeGraph._supplyCountPosX < conditionSizeX + conditionPosX + 80 then
+              ((tradeGraph._static_SupplyCount)[UIIndex]):SetPosX(tradeGraph._supplyCountPosX + 10)
+            else
+              ;
+              ((tradeGraph._static_SupplyCount)[UIIndex]):SetPosX(tradeGraph._supplyCountPosX)
+            end
             ;
             ((tradeGraph._static_Condition)[UIIndex]):SetShow(true)
             do

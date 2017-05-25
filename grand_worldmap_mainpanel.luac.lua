@@ -986,9 +986,9 @@ WorldMapCheckListChange = function(checkState)
     if withSave then
       (worldMapCheckStateInMode[_currentRenderMode])[checkState] = (worldMapCheckState[checkState]):IsCheck()
     end
-    -- DECOMPILER ERROR at PC38: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC43: Unhandled construct in 'MakeBoolean' P1
 
-    if (worldMapCheckState[checkState]):IsCheck() == true and eWorldmapState.eWMS_EXPLORE_PLANT == _currentRenderMode then
+    if (CppEnums.WorldMapCheckState).eCheck_Postions == checkState and (worldMapCheckState[checkState]):IsCheck() == true and eWorldmapState.eWMS_EXPLORE_PLANT == _currentRenderMode then
       FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
     end
     FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
@@ -1230,8 +1230,17 @@ FGlobal_WorldMapOpenForMain = function()
       ;
       ((worldmapGrand.ui).comboBox_NodeType):SetShow(true)
     end
+    if state == eWorldmapState.eWMS_EXPLORE_PLANT then
+      if (worldMapCheckState[(CppEnums.WorldMapCheckState).eCheck_Postions]):IsCheck() == true then
+        FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
+      else
+        FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
+      end
+    else
+      FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
+    end
     FGlobal_WorldmapMain_InitTutorialButton()
-    -- DECOMPILER ERROR: 3 unprocessed JMP targets
+    -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
 
@@ -1257,7 +1266,7 @@ FGlobal_WorldMapStateMaintain = function()
 end
 
 WorldMapStateChange = function(state)
-  -- function num : 0_55 , upvalues : guildWar_Filter_Init, productNode_Filter_Init, _currentRenderMode, _isBlackFog, eWorldmapState, _isGuildWarMode, worldmapGrand, CheckStateByChangeMode, worldMapState
+  -- function num : 0_55 , upvalues : guildWar_Filter_Init, productNode_Filter_Init, _currentRenderMode, _isBlackFog, eWorldmapState, _isGuildWarMode, worldmapGrand, CheckStateByChangeMode, worldMapState, worldMapCheckState
   guildWar_Filter_Init()
   productNode_Filter_Init()
   _currentRenderMode = state
@@ -1302,7 +1311,11 @@ WorldMapStateChange = function(state)
   ;
   ((worldmapGrand.ui).filterArrow):SetPosX((worldMapState[state]):GetPosX() + (worldMapState[state]):GetSizeX() / 2 - ((worldmapGrand.ui).filterArrow):GetSizeX() / 2)
   if state == eWorldmapState.eWMS_EXPLORE_PLANT then
-    FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
+    if (worldMapCheckState[(CppEnums.WorldMapCheckState).eCheck_Postions]):IsCheck() == true then
+      FGlobal_ActorTooltip_SetShowPartyMemberIcon(true)
+    else
+      FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
+    end
   else
     FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
   end

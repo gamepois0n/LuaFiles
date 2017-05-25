@@ -46,10 +46,6 @@ changePositionBySever = function(panel, panelId, isShow, isChangePosition, isCha
       if CppDefine.ChangeUIAndResolution == true then
         local relativePosX = ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionX)
         local relativePosY = ToClient_GetUiInfo(panelId, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionY)
-        if relativePosX == -1 or relativePosY == -1 then
-          relativePosX = 0
-          relativePosY = 0
-        end
         panel:SetRelativePosX(relativePosX)
         panel:SetRelativePosY(relativePosY)
       end
@@ -108,6 +104,17 @@ FGlobal_PanelMoveIntoScreen = function(panel)
     if getScreenSizeY() <= panel:GetPosY() + panel:GetSizeY() then
       panel:SetPosY(getScreenSizeY() - panel:GetSizeY())
     end
+  end
+end
+
+FGlobal_InitPanelRelativePos = function(panel, initPosX, initPosY)
+  -- function num : 0_8
+  if initPosX == panel:GetPosX() and initPosY == panel:GetPosY() then
+    panel:SetRelativePosX(0)
+    panel:SetRelativePosY(0)
+  else
+    panel:SetRelativePosX((panel:GetPosX() + panel:GetSizeX() / 2) / getScreenSizeX())
+    panel:SetRelativePosY((panel:GetPosY() + panel:GetSizeY() / 2) / getScreenSizeY())
   end
 end
 

@@ -201,6 +201,9 @@ Dialog_ExchangeItem_Update = function()
         Panel_Exchange_Item:SetPosY(getScreenSizeY() - (Panel_Npc_Dialog:GetSizeY() + Panel_Exchange_Item:GetSizeY() + 10))
         ;
         (self._uiBG):SetSize((self._uiBG):GetSizeX(), Panel_Exchange_Item:GetSizeY() - 70)
+        if self._listCount == 0 then
+          Panel_Exchange_Item_Hide()
+        end
       end
     end
   end

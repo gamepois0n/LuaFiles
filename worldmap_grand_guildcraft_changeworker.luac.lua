@@ -106,7 +106,7 @@ GuildCraft_ChangeWorker.Update = function(self)
     ;
     (list.bg):SetShow(true)
     ;
-    (list.name):SetText("Lv." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor> (" .. workerCurrentAp .. "/" .. workerMaxAp .. ")")
+    (list.name):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor> (" .. workerCurrentAp .. "/" .. workerMaxAp .. ")")
     ;
     (list.homeway):SetText(homeName)
     ;

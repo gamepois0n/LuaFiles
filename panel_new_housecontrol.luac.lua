@@ -2947,6 +2947,10 @@ pos = {345, 44, 387, 86}
 [(CppEnums.eHouseUseType).AssetManagementshop] = {path = "new_ui_common_forlua/Window/HouseInfo/HouseIcon.dds", 
 pos = {388, 259, 430, 301}
 }
+, 
+[(CppEnums.eHouseUseType).PotteryWorkshop] = {path = "new_ui_common_forlua/Window/HouseInfo/HouseIcon.dds", 
+pos = {431, 259, 473, 301}
+}
 }
 Set_HouseUseType_Texture_Icon = function(_Target)
   -- function num : 0_70 , upvalues : houseTextureList

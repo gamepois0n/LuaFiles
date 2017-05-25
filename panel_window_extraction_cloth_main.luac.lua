@@ -131,6 +131,10 @@ ExtractionCloth_WindowOpen = function()
 
   ;
   (self.count)[1] = 0
+  ;
+  (self._radioBtnValks):SetIgnore(self._doExtracting)
+  ;
+  (self._radioBtnCronStone):SetIgnore(self._doExtracting)
 end
 
 ExtractionCloth_WindowClose = function()

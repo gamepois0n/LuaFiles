@@ -25,7 +25,7 @@ local inputGuildDepositNum_s64 = toInt64(0, 0)
 local inputGuildDepositMaxNum_s64 = toInt64(0, 0)
 local notice_title = (UI.getChildControl)(Panel_Window_Guild, "StaticText_NoticeTitle")
 local isVoiceOpen = ToClient_IsContentsGroupOpen("75")
-GuildListInfoPage = {_scrollBar, _textBusinessFunds, _btnGiveIncentive, _btnDeposit, _btnPaypal, decoIcon_Guild, decoIcon_Clan, _frameGuildList, _contentGuildList; _frameDefaultBG = (UI.getChildControl)(Panel_Window_Guild, "Static_Frame_ListBG"), _buttonListBG = (UI.getChildControl)(Panel_Guild_List, "Static_FunctionBG"), 
+GuildListInfoPage = {_scrollBar, _btnGiveIncentive, _btnDeposit, _btnPaypal, decoIcon_Guild, decoIcon_Clan, _frameGuildList, _contentGuildList; _frameDefaultBG = (UI.getChildControl)(Panel_Window_Guild, "Static_Frame_ListBG"), _buttonListBG = (UI.getChildControl)(Panel_Guild_List, "Static_FunctionBG"), 
 _list = {}
 , 
 _buttonList = {}
@@ -206,7 +206,7 @@ GuildLogoutTimeConvert = function(s64_datetime)
   return strDate
 end
 
--- DECOMPILER ERROR at PC451: Confused about usage of register: R55 in 'UnsetPending'
+-- DECOMPILER ERROR at PC450: Confused about usage of register: R55 in 'UnsetPending'
 
 GuildListInfoPage.initialize = function(self)
   -- function num : 0_3 , upvalues : UCT, _constStartY, isVoiceOpen, _constStartButtonX, _constGuildListMaxCount, _UI_Menu_Button, staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, frameSizeY
@@ -229,20 +229,17 @@ GuildListInfoPage.initialize = function(self)
   GuildListInfoPage._textBusinessFundsBG = (UI.getChildControl)(Panel_Guild_List, "StaticText_GuildMoney")
   -- DECOMPILER ERROR at PC85: Confused about usage of register: R13 in 'UnsetPending'
 
-  GuildListInfoPage._textBusinessFunds = (UI.getChildControl)(Panel_Guild_List, "StaticText_GuildMoney_Value")
+  GuildListInfoPage._btnGiveIncentive = (UI.getChildControl)(Panel_Guild_List, "Button_Incentive")
   -- DECOMPILER ERROR at PC92: Confused about usage of register: R13 in 'UnsetPending'
 
-  GuildListInfoPage._btnGiveIncentive = (UI.getChildControl)(Panel_Guild_List, "Button_Incentive")
+  GuildListInfoPage._btnDeposit = (UI.getChildControl)(Panel_Guild_List, "Button_Deposit")
   -- DECOMPILER ERROR at PC99: Confused about usage of register: R13 in 'UnsetPending'
 
-  GuildListInfoPage._btnDeposit = (UI.getChildControl)(Panel_Guild_List, "Button_Deposit")
+  GuildListInfoPage._btnPaypal = (UI.getChildControl)(Panel_Guild_List, "Button_Paypal")
   -- DECOMPILER ERROR at PC106: Confused about usage of register: R13 in 'UnsetPending'
 
-  GuildListInfoPage._btnPaypal = (UI.getChildControl)(Panel_Guild_List, "Button_Paypal")
-  -- DECOMPILER ERROR at PC113: Confused about usage of register: R13 in 'UnsetPending'
-
   GuildListInfoPage.decoIcon_Guild = (UI.getChildControl)(self._contentGuildList, "Static_DecoIcon_Guild")
-  -- DECOMPILER ERROR at PC120: Confused about usage of register: R13 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC113: Confused about usage of register: R13 in 'UnsetPending'
 
   GuildListInfoPage.decoIcon_Clan = (UI.getChildControl)(self._contentGuildList, "Static_DecoIcon_Clan")
   ;
@@ -258,8 +255,6 @@ GuildListInfoPage.initialize = function(self)
   (self._contentGuildList):addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
   ;
   (self._contentGuildList):addInputEvent("Mouse_DownScroll", "GuildListMouseScrollEvent(false)")
-  ;
-  (GuildListInfoPage._textBusinessFunds):SetShow(false)
   createListInfo = function(pIndex)
     -- function num : 0_3_0 , upvalues : UCT, self, _copyGrade, _copyLevel, _copyClass, _copyCharName, _copyContributedTendency, _copyActivity, _copyPartLine, _copyContractButton, _copyGuardHim, _constStartY, isVoiceOpen, _copySaying, _copyListening
     local rtGuildListInfo = {}
@@ -477,12 +472,12 @@ GuildListInfoPage.initialize = function(self)
   ;
   (self._buttonListBG):addInputEvent("Mouse_Out", "MouseOutGuildMenuButton()")
   for index = 0, _constGuildListMaxCount - 1 do
-    -- DECOMPILER ERROR at PC202: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC190: Confused about usage of register: R17 in 'UnsetPending'
 
     (self._list)[index] = createListInfo(index)
   end
   for index = 0, _UI_Menu_Button.Type_Count - 1 do
-    -- DECOMPILER ERROR at PC214: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC202: Confused about usage of register: R17 in 'UnsetPending'
 
     (self._buttonList)[index] = createListInfoButton(index)
     ;
@@ -546,8 +541,6 @@ GuildListInfoPage.initialize = function(self)
   ;
   (UI.deletePanel)(Panel_Guild_List:GetID())
   Panel_Guild_List = nil
-  ;
-  (GuildListInfoPage._textBusinessFunds):SetSpanSize(((GuildListInfoPage._textBusinessFundsBG):GetSpanSize()).x + (GuildListInfoPage._textBusinessFundsBG):GetTextSizeX(), ((GuildListInfoPage._textBusinessFunds):GetSpanSize()).y)
 end
 
 HandleClickedGuildMemberMenuButton = function(index)
@@ -1274,7 +1267,7 @@ GuildListMouseScrollEvent = function(isUpScroll)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC567: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC566: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.TitleLineReset = function(self)
   -- function num : 0_31 , upvalues : staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, staticText_contributedTendency, text_contributedTendency
@@ -1287,7 +1280,7 @@ GuildListInfoPage.TitleLineReset = function(self)
   staticText_contributedTendency:SetText(text_contributedTendency)
 end
 
--- DECOMPILER ERROR at PC571: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC570: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.SetGuildList = function(self)
   -- function num : 0_32 , upvalues : tempGuildList
@@ -1537,7 +1530,7 @@ HandleClicked_GuildListSort = function(sortType)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC612: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC611: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.GuildListSortSet = function(self)
   -- function num : 0_41 , upvalues : staticText_Grade, _listSort, tempGuildList, guildListCompareGrade
@@ -1550,7 +1543,7 @@ GuildListInfoPage.GuildListSortSet = function(self)
   (table.sort)(tempGuildList, guildListCompareGrade)
 end
 
--- DECOMPILER ERROR at PC624: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC623: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.updateSort = function(self)
   -- function num : 0_42 , upvalues : _selectSortType, tempGuildList, guildListCompareGrade, guildListCompareLev, guildListCompareClass, guildListCompareName, guildListCompareAp, guildListCompareExpiration, guildListCompareWp
@@ -1583,7 +1576,7 @@ GuildListInfoPage.updateSort = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC637: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC636: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.UpdateData = function(self)
   -- function num : 0_43 , upvalues : contentSizeY, _constGuildListMaxCount, tempGuildUserNolist, tempGuildList, UI_Class, isVoiceOpen, UI_color, btn_GuildMasterMandate, frameSizeY, notice_title
@@ -1597,8 +1590,6 @@ GuildListInfoPage.UpdateData = function(self)
   local guildGrade = myGuildListInfo:getGuildGrade()
   ;
   (GuildListInfoPage._textBusinessFundsBG):SetText(PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_GUILDMONEY") .. " <PAColor0xffffebbc>" .. makeDotMoney(businessFunds_s64) .. "<PAOldColor>")
-  ;
-  (GuildListInfoPage._textBusinessFunds):SetShow(false)
   local memberCount = myGuildListInfo:getMemberCount()
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
@@ -1660,7 +1651,7 @@ GuildListInfoPage.UpdateData = function(self)
                   ;
                   (((self._list)[index])._grade):addInputEvent("Mouse_Out", "GuildListInfoTooltip_Grade( false, " .. index .. ", " .. gradeType .. " )")
                   local userNo = myGuildMemberInfo:getUserNo()
-                  -- DECOMPILER ERROR at PC279: Confused about usage of register: R15 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC274: Confused about usage of register: R15 in 'UnsetPending'
 
                   tempGuildUserNolist[index] = userNo
                   if myGuildMemberInfo:isSelf() then
@@ -1713,6 +1704,10 @@ GuildListInfoPage.UpdateData = function(self)
                                           else
                                             if UI_Class.ClassType_DarkElf == classType then
                                               (((self._list)[index])._class):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF"))
+                                            else
+                                              if UI_Class.ClassType_Combattant == classType then
+                                                (((self._list)[index])._class):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER"))
+                                              end
                                             end
                                           end
                                         end
@@ -1853,47 +1848,47 @@ GuildListInfoPage.UpdateData = function(self)
                                   end
                                   contentSizeY = contentSizeY + (((self._list)[index])._charName):GetSizeY() + 2
                                   btn_GuildMasterMandate:addInputEvent("Mouse_LUp", "HandleClicked_GuildMasterMandate( " .. index .. " )")
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC966: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC976: LeaveBlock: unexpected jumping out IF_STMT
 
                                 end
                               end
@@ -1964,7 +1959,7 @@ GuildListInfoTooltip_Grade = function(isShow, index, gradeType)
   end
 end
 
--- DECOMPILER ERROR at PC643: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC642: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.UpdateVoiceDataByUserNo = function(self, userNo)
   -- function num : 0_45 , upvalues : tempGuildUserNolist
@@ -2083,7 +2078,7 @@ GuildListControl_ChangeTexture_Expiration = function(control, state)
   end
 end
 
--- DECOMPILER ERROR at PC655: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC654: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.Show = function(self)
   -- function num : 0_49 , upvalues : _selectSortType, listening_Volume
@@ -2102,7 +2097,7 @@ GuildListInfoPage.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC659: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC658: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.Hide = function(self)
   -- function num : 0_50 , upvalues : IM

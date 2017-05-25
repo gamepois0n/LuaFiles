@@ -54,6 +54,10 @@ FGlobal_NewMainQuest_Alarm_Open = function()
     Panel_NewQuest:SetShow(false, false)
     return 
   end
+  if ToClient_getPlayNowSavageDefence() then
+    Panel_NewQuest:SetShow(false, false)
+    return 
+  end
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
   if isRide == false and not Panel_Npc_Dialog:GetShow() then
     _blackStone_CallingTime = _blackStone_CallingTime + 1

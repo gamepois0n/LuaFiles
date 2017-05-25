@@ -1223,6 +1223,7 @@ QuestTooltipForHandle = function(index, controlIdx, IsArrow)
   regeistTooltipInfo(controlIdx, IsArrow)
   ;
   (QuestInfoData.questDescShowWindowForLeft)(index)
+  FGlobal_QuestTooltip_MouseIconOff()
 end
 
 Radar_UpdateQuestList = function()
@@ -1818,6 +1819,8 @@ local partyMemberArrowIcon = function(index, isShow)
     (iconPartyMemberArrow[index]):SetColor((Defines.Color).C_FF00C0D7)
     ;
     (iconPartyMemberArrow[index]):SetEnable(true)
+    ;
+    (iconPartyMemberArrow[index]):SetIgnore(true)
     Panel_Radar:SetChildIndex(iconPartyMemberArrow[index], 9999)
   end
   ;

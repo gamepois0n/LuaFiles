@@ -174,28 +174,28 @@ ItemMarketPreBid_Manager.UpdateSlot = function(self, dataIdx, uiIdx)
     end
     if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
       if enchantLevel == 1 then
-        (ui.level):SetText("I")
+        (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
       elseif enchantLevel == 2 then
-        (ui.level):SetText("II")
+        (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
       elseif enchantLevel == 3 then
-        (ui.level):SetText("III")
+        (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
       elseif enchantLevel == 4 then
-        (ui.level):SetText("IV")
+        (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
       elseif enchantLevel == 5 then
-        (ui.level):SetText("V")
+        (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
       end
     elseif enchantLevel > 0 and enchantLevel < 16 then
       (ui.level):SetText("+" .. tostring(enchantLevel))
     elseif enchantLevel == 16 then
-      (ui.level):SetText("I")
+      (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
     elseif enchantLevel == 17 then
-      (ui.level):SetText("II")
+      (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
     elseif enchantLevel == 18 then
-      (ui.level):SetText("III")
+      (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
     elseif enchantLevel == 19 then
-      (ui.level):SetText("IV")
+      (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
     elseif enchantLevel == 20 then
-      (ui.level):SetText("V")
+      (ui.level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
     end
     ;
     (ui.icon):ChangeTextureInfoName("Icon/" .. iconPath)

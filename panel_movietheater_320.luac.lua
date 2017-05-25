@@ -68,7 +68,8 @@ local wizardText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_W
 local ninjaWomenText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_NINJAWOMENTEXT")
 local ninjaNanText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_NINJAMANTEXT")
 local darkelfText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_DARKELFTEXT")
-local comboDesc = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_3"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_16"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_7"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_17"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_9"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_10"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_11"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_18"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_12"), [13] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_13"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_14"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_15"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_19"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_20"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_21"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_22"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_23"), [24] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_24"), [25] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_25"), [26] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_26"), [27] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_27"), [28] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_28"), [29] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_29"), [30] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_30"), [31] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_31"), [32] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_32"), [33] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_33"), [34] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_34"), [35] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_35"), [36] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_36"), [37] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_37"), [38] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_38"), [39] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_39"), [40] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_40"), [41] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_41"), [42] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_42"), [43] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_43"), [44] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_44"), [45] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [46] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [47] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [48] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_48"), [49] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_49"), [50] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [51] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [52] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [53] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_50"), [54] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_51"), [55] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_55"), [56] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_56"), [57] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_57"), [58] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_58"), [59] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_59")}
+local combattantText = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBATTANT")
+local comboDesc = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_3"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_16"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_7"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_17"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_9"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_10"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_11"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_18"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_12"), [13] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_13"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_14"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_15"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_19"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_20"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_21"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_22"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_23"), [24] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_24"), [25] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_25"), [26] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_26"), [27] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_27"), [28] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_28"), [29] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_29"), [30] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_30"), [31] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_31"), [32] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_32"), [33] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_33"), [34] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_34"), [35] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_35"), [36] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_36"), [37] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_37"), [38] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_38"), [39] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_39"), [40] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_40"), [41] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_41"), [42] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_42"), [43] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_43"), [44] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_44"), [45] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [46] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [47] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [48] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_48"), [49] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_49"), [50] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_45"), [51] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_46"), [52] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_47"), [53] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_50"), [54] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_51"), [55] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_55"), [56] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_56"), [57] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_57"), [58] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_58"), [59] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_59"), [60] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_93"), [61] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_94"), [62] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_95"), [63] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_96"), [64] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_97"), [65] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_60"), [66] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_61"), [67] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_62"), [68] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_63"), [69] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_64"), [70] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_65"), [71] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_66"), [72] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_67"), [73] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_68"), [74] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_69"), [75] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_70"), [76] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_71"), [77] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_72"), [78] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_73"), [79] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_74"), [80] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_75"), [81] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_76"), [82] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_77"), [83] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_78"), [84] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_79"), [85] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_80"), [86] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_81"), [87] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_82"), [88] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_83"), [89] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_84"), [90] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_85"), [91] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_86"), [92] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_87"), [93] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_88"), [94] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_89"), [95] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_90"), [96] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_91"), [97] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMBODESC_92")}
 Panel_MovieTheater320_JustClose = function()
   -- function num : 0_4 , upvalues : _movieTheater_320, isMoviePlay
   Panel_MovieTheater_320:SetShow(false)
@@ -101,6 +102,7 @@ Panel_MovieTheater320_ShowToggle = function()
   local isNinjaWomen = UI_classType.ClassType_NinjaWomen == player:getClassType()
   local isNinjaMan = UI_classType.ClassType_NinjaMan == player:getClassType()
   local isDarkElf = UI_classType.ClassType_DarkElf == player:getClassType()
+  local isCombattant = UI_classType.ClassType_Combattant == player:getClassType()
   local playerGet = player:get()
   local playerLevel = playerGet:getLevel()
   do
@@ -139,6 +141,8 @@ Panel_MovieTheater320_ShowToggle = function()
       helpMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_ISNINJAMAN"))
     elseif isDarkElf == true then
       helpMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_ISDARKELF"))
+    elseif isCombattant == true then
+      helpMsg:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_ISCOMBATTANT"))
     end
     helpBubble:SetSize(helpBubble:GetSizeX(), helpMsg:GetTextSizeY() + 35)
     _movieTheater_320:SetSize(320, 240)
@@ -158,12 +162,12 @@ Panel_MovieTheater320_ShowToggle = function()
     _btn_Replay:addInputEvent("Mouse_LUp", "Panel_MovieTheater320_Replay()")
     _btn_Nomore:SetShow(true)
     isMoviePlay = true
-    -- DECOMPILER ERROR: 30 unprocessed JMP targets
+    -- DECOMPILER ERROR: 32 unprocessed JMP targets
   end
 end
 
 Panel_MovieTheater320_TriggerEvent = function()
-  -- function num : 0_6 , upvalues : helpBubble, helpMsg, _txt_Title, warriorText, _movieTheater_320, _comboList, comboDesc, playedNo, rangerText, sorcererText, giantText, tamerText, bladerText, valkyrieText, bladerWomenText, wizardText, wizardWomenText, ninjaWomenText, darkelfText, _btn_Nomore, _btn_Replay, _btn_Close
+  -- function num : 0_6 , upvalues : helpBubble, helpMsg, _txt_Title, warriorText, _comboList, comboDesc, _movieTheater_320, playedNo, rangerText, sorcererText, giantText, tamerText, bladerText, valkyrieText, bladerWomenText, wizardText, wizardWomenText, ninjaWomenText, darkelfText, combattantText, _btn_Nomore, _btn_Replay, _btn_Close
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -182,6 +186,7 @@ Panel_MovieTheater320_TriggerEvent = function()
   local isNinjaWomen = UI_classType.ClassType_NinjaWomen == player:getClassType()
   local isNinjaMan = UI_classType.ClassType_NinjaMan == player:getClassType()
   local isDarkelf = UI_classType.ClassType_DarkElf == player:getClassType()
+  local isCombattant = UI_classType.ClassType_Combattant == player:getClassType()
   local playerGet = player:get()
   do
     local playerLevel = playerGet:getLevel()
@@ -191,19 +196,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpBubble:SetShow(false)
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", warriorText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", warriorText))
+          _comboList:SetText(comboDesc[65])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", warriorText))
+          _comboList:SetText(comboDesc[0])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/100.webm")
-        _comboList:SetText(comboDesc[0])
         playedNo = 100
       elseif playerLevel >= 16 and playerLevel <= 20 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", warriorText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", warriorText))
+          _comboList:SetText(comboDesc[66])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", warriorText))
+          _comboList:SetText(comboDesc[1])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/101.webm")
-        _comboList:SetText(comboDesc[1])
         playedNo = 101
       elseif playerLevel >= 21 and playerLevel <= 25 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", warriorText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", warriorText))
+          _comboList:SetText(comboDesc[67])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", warriorText))
+          _comboList:SetText(comboDesc[2])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/102.webm")
-        _comboList:SetText(comboDesc[2])
         playedNo = 102
       elseif playerLevel >= 26 and playerLevel <= 30 then
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGHTOP", "getText", warriorText))
@@ -226,19 +246,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpBubble:SetShow(false)
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", rangerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", rangerText))
+          _comboList:SetText(comboDesc[68])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", rangerText))
+          _comboList:SetText(comboDesc[4])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/200.webm")
-        _comboList:SetText(comboDesc[4])
         playedNo = 200
       elseif playerLevel >= 16 and playerLevel <= 20 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", rangerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", rangerText))
+          _comboList:SetText(comboDesc[69])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", rangerText))
+          _comboList:SetText(comboDesc[5])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/201.webm")
-        _comboList:SetText(comboDesc[5])
         playedNo = 201
       elseif playerLevel >= 21 and playerLevel <= 25 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", rangerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", rangerText))
+          _comboList:SetText(comboDesc[70])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", rangerText))
+          _comboList:SetText(comboDesc[6])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/202.webm")
-        _comboList:SetText(comboDesc[6])
         playedNo = 202
       elseif playerLevel >= 26 and playerLevel <= 30 then
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGHTOP", "getText", rangerText))
@@ -261,19 +296,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpBubble:SetShow(false)
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", sorcererText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", sorcererText))
+          _comboList:SetText(comboDesc[71])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", sorcererText))
+          _comboList:SetText(comboDesc[8])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/300.webm")
-        _comboList:SetText(comboDesc[8])
         playedNo = 300
       elseif playerLevel >= 16 and playerLevel <= 20 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", sorcererText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", sorcererText))
+          _comboList:SetText(comboDesc[72])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", sorcererText))
+          _comboList:SetText(comboDesc[9])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/301.webm")
-        _comboList:SetText(comboDesc[9])
         playedNo = 301
       elseif playerLevel >= 21 and playerLevel <= 25 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", sorcererText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", sorcererText))
+          _comboList:SetText(comboDesc[73])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", sorcererText))
+          _comboList:SetText(comboDesc[10])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/302.webm")
-        _comboList:SetText(comboDesc[10])
         playedNo = 302
       elseif playerLevel >= 26 and playerLevel <= 30 then
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGHTOP", "getText", sorcererText))
@@ -296,19 +346,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpBubble:SetShow(false)
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", giantText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", giantText))
+          _comboList:SetText(comboDesc[74])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", giantText))
+          _comboList:SetText(comboDesc[12])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/400.webm")
-        _comboList:SetText(comboDesc[12])
         playedNo = 400
       elseif playerLevel >= 16 and playerLevel <= 20 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", giantText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", giantText))
+          _comboList:SetText(comboDesc[75])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", giantText))
+          _comboList:SetText(comboDesc[13])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/401.webm")
-        _comboList:SetText(comboDesc[13])
         playedNo = 401
       elseif playerLevel >= 21 and playerLevel <= 25 then
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", giantText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", giantText))
+          _comboList:SetText(comboDesc[76])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", giantText))
+          _comboList:SetText(comboDesc[14])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/402.webm")
-        _comboList:SetText(comboDesc[14])
         playedNo = 402
       elseif playerLevel >= 26 and playerLevel <= 30 then
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGHTOP", "getText", giantText))
@@ -332,19 +397,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 500
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", tamerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", tamerText))
+          _comboList:SetText(comboDesc[77])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", tamerText))
+          _comboList:SetText(comboDesc[20])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[20])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 501
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", tamerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", tamerText))
+          _comboList:SetText(comboDesc[78])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", tamerText))
+          _comboList:SetText(comboDesc[21])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[21])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 502
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", tamerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", tamerText))
+          _comboList:SetText(comboDesc[79])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", tamerText))
+          _comboList:SetText(comboDesc[22])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[22])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 503
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGHTOP", "getText", tamerText))
@@ -367,19 +447,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 600
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", bladerText))
+          _comboList:SetText(comboDesc[86])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+          _comboList:SetText(comboDesc[25])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[25])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 601
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", bladerText))
+          _comboList:SetText(comboDesc[87])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+          _comboList:SetText(comboDesc[26])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[26])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 602
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", bladerText))
+          _comboList:SetText(comboDesc[88])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerText))
+          _comboList:SetText(comboDesc[27])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[27])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 603
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", bladerText))
@@ -402,19 +497,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 700
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", valkyrieText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", valkyrieText))
+          _comboList:SetText(comboDesc[83])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", valkyrieText))
+          _comboList:SetText(comboDesc[30])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[30])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 701
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", valkyrieText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", valkyrieText))
+          _comboList:SetText(comboDesc[84])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", valkyrieText))
+          _comboList:SetText(comboDesc[31])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[31])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 702
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", valkyrieText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", valkyrieText))
+          _comboList:SetText(comboDesc[85])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", valkyrieText))
+          _comboList:SetText(comboDesc[32])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[32])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 703
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", valkyrieText))
@@ -437,19 +547,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 800
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", bladerWomenText))
+          _comboList:SetText(comboDesc[89])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+          _comboList:SetText(comboDesc[35])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[35])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 801
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", bladerWomenText))
+          _comboList:SetText(comboDesc[90])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", bladerWomenText))
+          _comboList:SetText(comboDesc[36])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[36])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 802
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", bladerWomenText))
+          _comboList:SetText(comboDesc[91])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", bladerWomenText))
+          _comboList:SetText(comboDesc[37])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[37])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 803
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", bladerWomenText))
@@ -472,19 +597,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 900
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", wizardText))
+          _comboList:SetText(comboDesc[80])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardText))
+          _comboList:SetText(comboDesc[40])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[40])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 901
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", wizardText))
+          _comboList:SetText(comboDesc[81])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardText))
+          _comboList:SetText(comboDesc[41])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[41])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 902
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", wizardText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", wizardText))
+          _comboList:SetText(comboDesc[82])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", wizardText))
+          _comboList:SetText(comboDesc[42])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[42])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 903
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", wizardText))
@@ -507,19 +647,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 900
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", wizardWomenText))
+          _comboList:SetText(comboDesc[80])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardWomenText))
+          _comboList:SetText(comboDesc[40])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[40])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 901
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", wizardWomenText))
+          _comboList:SetText(comboDesc[81])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", wizardWomenText))
+          _comboList:SetText(comboDesc[41])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[41])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 902
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", wizardWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", wizardWomenText))
+          _comboList:SetText(comboDesc[82])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", wizardWomenText))
+          _comboList:SetText(comboDesc[42])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[42])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 903
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", wizardWomenText))
@@ -542,19 +697,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 1001
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", ninjaWomenText))
+          _comboList:SetText(comboDesc[92])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+          _comboList:SetText(comboDesc[45])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[45])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 1002
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", ninjaWomenText))
+          _comboList:SetText(comboDesc[93])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaWomenText))
+          _comboList:SetText(comboDesc[46])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[46])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 1003
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", ninjaWomenText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", ninjaWomenText))
+          _comboList:SetText(comboDesc[94])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", ninjaWomenText))
+          _comboList:SetText(comboDesc[47])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[47])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 1004
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", ninjaWomenText))
@@ -577,19 +747,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 1100
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaManText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", ninjaManText))
+          _comboList:SetText(comboDesc[95])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaManText))
+          _comboList:SetText(comboDesc[50])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[50])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 1101
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaManText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", ninjaManText))
+          _comboList:SetText(comboDesc[96])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", ninjaManText))
+          _comboList:SetText(comboDesc[51])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[51])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 1102
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", ninjaManText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", ninjaManText))
+          _comboList:SetText(comboDesc[97])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", ninjaManText))
+          _comboList:SetText(comboDesc[52])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[52])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 1103
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", ninjaManText))
@@ -612,19 +797,34 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpMsg:SetShow(false)
       elseif playerLevel >= 7 and playerLevel <= 15 then
         playedNo = 1200
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", darkelfText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", darkelfText))
+          _comboList:SetText(comboDesc[55])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", darkelfText))
+          _comboList:SetText(comboDesc[55])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[55])
       elseif playerLevel >= 16 and playerLevel <= 20 then
         playedNo = 1201
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", darkelfText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", darkelfText))
+          _comboList:SetText(comboDesc[56])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", darkelfText))
+          _comboList:SetText(comboDesc[56])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[56])
       elseif playerLevel >= 21 and playerLevel <= 25 then
         playedNo = 1202
-        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", darkelfText))
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", darkelfText))
+          _comboList:SetText(comboDesc[57])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", darkelfText))
+          _comboList:SetText(comboDesc[57])
+        end
         _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
-        _comboList:SetText(comboDesc[57])
       elseif playerLevel >= 26 and playerLevel <= 30 then
         playedNo = 1203
         _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", darkelfText))
@@ -640,6 +840,56 @@ Panel_MovieTheater320_TriggerEvent = function()
         helpBubble:SetShow(false)
         helpMsg:SetShow(false)
       end
+    elseif isCombattant then
+      if playerLevel <= 6 then
+        Panel_MovieTheater_320:SetShow(false, false)
+        helpBubble:SetShow(false)
+        helpMsg:SetShow(false)
+      elseif playerLevel >= 7 and playerLevel <= 15 then
+        playedNo = 1300
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", combattantText))
+          _comboList:SetText(comboDesc[60])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", combattantText))
+          _comboList:SetText(comboDesc[60])
+        end
+        _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+      elseif playerLevel >= 16 and playerLevel <= 20 then
+        playedNo = 1301
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", combattantText))
+          _comboList:SetText(comboDesc[61])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", combattantText))
+          _comboList:SetText(comboDesc[61])
+        end
+        _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+      elseif playerLevel >= 21 and playerLevel <= 25 then
+        playedNo = 1302
+        if isGameTypeTaiwan() then
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", combattantText))
+          _comboList:SetText(comboDesc[62])
+        else
+          _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", combattantText))
+          _comboList:SetText(comboDesc[62])
+        end
+        _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+      elseif playerLevel >= 26 and playerLevel <= 30 then
+        playedNo = 1303
+        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH", "getText", combattantText))
+        _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+        _comboList:SetText(comboDesc[63])
+      elseif playerLevel >= 31 and playerLevel <= 35 then
+        playedNo = 1304
+        _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGHTOP", "getText", combattantText))
+        _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+        _comboList:SetText(comboDesc[64])
+      elseif playerLevel >= 36 then
+        Panel_MovieTheater_320:SetShow(false, false)
+        helpBubble:SetShow(false)
+        helpMsg:SetShow(false)
+      end
     end
     _comboList:SetSize(315, _comboList:GetTextSizeY() + 7)
     Panel_MovieTheater_320:SetSize(Panel_MovieTheater_320:GetSizeX(), _comboList:GetPosY() + _comboList:GetSizeY() + _btn_Nomore:GetSizeY() + 15)
@@ -650,7 +900,7 @@ Panel_MovieTheater320_TriggerEvent = function()
     _txt_Title:SetSize(Panel_MovieTheater_320:GetSizeX(), _txt_Title:GetSizeY())
     _txt_Title:ComputePos()
     _btn_Close:ComputePos()
-    -- DECOMPILER ERROR: 104 unprocessed JMP targets
+    -- DECOMPILER ERROR: 196 unprocessed JMP targets
   end
 end
 
@@ -835,6 +1085,26 @@ Panel_MovieTheater320_Replay = function()
                                                                                                                       else
                                                                                                                         if playedNo == 1204 then
                                                                                                                           _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+                                                                                                                        else
+                                                                                                                          if playedNo == 1300 then
+                                                                                                                            _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+                                                                                                                          else
+                                                                                                                            if playedNo == 1301 then
+                                                                                                                              _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+                                                                                                                            else
+                                                                                                                              if playedNo == 1302 then
+                                                                                                                                _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+                                                                                                                              else
+                                                                                                                                if playedNo == 1303 then
+                                                                                                                                  _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+                                                                                                                                else
+                                                                                                                                  if playedNo == 1204 then
+                                                                                                                                    _movieTheater_320:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
+                                                                                                                                  end
+                                                                                                                                end
+                                                                                                                              end
+                                                                                                                            end
+                                                                                                                          end
                                                                                                                         end
                                                                                                                       end
                                                                                                                     end

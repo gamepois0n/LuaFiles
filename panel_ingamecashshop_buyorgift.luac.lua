@@ -443,7 +443,7 @@ end
           ;
           (self._txt_CouponApplyIcon):SetPosX(couponIconTextPosX)
           ;
-          (self._txt_DiscountDirection):SetPosY(pearlIconPriceByCoupon)
+          (self._txt_DiscountDirection):SetPosY(pearlIconPriceByCoupon + 7)
           do
             do
               local pearIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - (self._txt_PearlIconPrice):GetTextSizeX() / 2 - self.savedCouponDiscountTextSizeX
@@ -945,8 +945,8 @@ end
         if eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
           serviceContry = contry.ru
         else
-          if eCountryType.CHI_ALPHA == gameServiceType or eCountryType.CHI_REAL == gameServiceType then
-            serviceContry = contry.cn
+          if eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+            serviceContry = contry.kr2
           else
             serviceContry = contry.kr
           end

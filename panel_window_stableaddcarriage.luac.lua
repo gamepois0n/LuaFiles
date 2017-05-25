@@ -44,7 +44,7 @@ stableCarriage.update = function(self)
       if servantInfo1 ~= nil then
         (self._staticIcon1):ChangeTextureInfoName(servantInfo1:getIconPath1())
         ;
-        (self._staticInfo1):SetText("Lv." .. servantInfo1:getLevel() .. " " .. servantInfo1:getName())
+        (self._staticInfo1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. servantInfo1:getLevel() .. " " .. servantInfo1:getName())
         ;
         (self._staticInfo1):SetShow(true)
         ;
@@ -57,7 +57,7 @@ stableCarriage.update = function(self)
         if servantInfo2 ~= nil then
           (self._staticIcon2):ChangeTextureInfoName(servantInfo2:getIconPath1())
           ;
-          (self._staticInfo2):SetText("Lv." .. servantInfo2:getLevel() .. " " .. servantInfo2:getName())
+          (self._staticInfo2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. servantInfo2:getLevel() .. " " .. servantInfo2:getName())
           ;
           (self._staticInfo2):SetShow(true)
           ;

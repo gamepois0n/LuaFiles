@@ -34,6 +34,8 @@ local classPicture = {
 [UI_classType.ClassType_NinjaMan] = {97, 291, 192, 435}
 , 
 [UI_classType.ClassType_DarkElf] = {193, 291, 288, 435}
+, 
+[UI_classType.ClassType_Combattant] = {289, 291, 384, 435}
 }
 local tooltip = {_bg = (UI.getChildControl)(Panel_Introduction, "Static_TooltipBG"), _pic = (UI.getChildControl)(Panel_Introduction, "Static_CharacterPic"), _name = (UI.getChildControl)(Panel_Introduction, "StaticText_FamilyName"), _level = (UI.getChildControl)(Panel_Introduction, "StaticText_CharacterLv"), _desc = (UI.getChildControl)(Panel_Introduction, "StaticText_SelfIntro"), _close = (UI.getChildControl)(Panel_Introduction, "Button_Close")}
 ;
@@ -89,6 +91,10 @@ local replaceClassType = function(classNo)
                           else
                             if UI_classType.ClassType_DarkElf == classNo then
                               returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF")
+                            else
+                              if UI_classType.ClassType_Combattant == classNo then
+                                returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
+                              end
                             end
                           end
                         end

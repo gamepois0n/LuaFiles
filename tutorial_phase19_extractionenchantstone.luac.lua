@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_ExtractionEnchantStone = {_phaseNo = 19, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = false, _isSkippable = false, _buttonExtraction_EnchantStone = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_EnchantStone"), _buttonExtraction_Crystal = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Crystal"), _buttonExtraction_Cloth = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Cloth")}
+PaGlobal_TutorialPhase_ExtractionEnchantStone = {_phaseNo = 19, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = true, _isSkippable = false, _buttonExtraction_EnchantStone = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_EnchantStone"), _buttonExtraction_Crystal = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Crystal"), _buttonExtraction_Cloth = (UI.getChildControl)(Panel_Window_Extraction, "Button_Extraction_Cloth")}
 -- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.checkPossibleForPhaseStart = function(self, stepNo)
@@ -155,7 +155,13 @@ end
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.toNextProgress = function(self)
   -- function num : 0_9
-  self._currentProgress = self._currentProgress + 1
+  if isGameTypeEnglish() then
+    if self._currentProgress == 10 then
+      self._currentProgress = 14
+    else
+      self._currentProgress = self._currentProgress + 1
+    end
+  end
   self:handleChangeStep(self._currentStep)
 end
 
@@ -164,7 +170,15 @@ end
 PaGlobal_TutorialPhase_ExtractionEnchantStone.toNextStep = function(self)
   -- function num : 0_10
   self._currentProgress = 1
-  self._nextStep = self._nextStep + 1
+  if isGameTypeEnglish() then
+    if self._nextStep == 10 then
+      self._nextStep = 14
+    else
+      self._nextStep = self._nextStep + 1
+    end
+  else
+    self._nextStep = self._nextStep + 1
+  end
 end
 
 -- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
@@ -211,6 +225,12 @@ end
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.changeStep1 = function(self)
   -- function num : 0_14
+  local westString1 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_69"
+  local westString2 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_70"
+  if isGameTypeEnglish() then
+    westString1 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_117"
+    westString2 = "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_118"
+  end
   if self._currentProgress == 1 then
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_14_0
@@ -314,8 +334,8 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.changeStep1 = function(self)
                           else
                             if self._currentProgress == 14 then
                               PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
-    -- function num : 0_14_13
-    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_69"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_70"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
+    -- function num : 0_14_13 , upvalues : westString1, westString2
+    (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, westString1), PAGetString(Defines.StringSheet_GAME, westString2), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300, false)
   end
 )
                             end
@@ -360,7 +380,7 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickedDialogFuncBut
   if (CppEnums.ContentsType).Contents_Extract ~= funcButtonType then
     self:endPhase()
   end
-  if self._currentProgress == 2 then
+  if self._currentProgress < 3 then
     self._currentProgress = 3
     self:handleChangeStep(self._currentStep)
   end
@@ -377,8 +397,11 @@ end
 
 -- DECOMPILER ERROR at PC87: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionEnchantStoneButton = function(self)
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionEnchantStoneButton = function(self, isShow)
   -- function num : 0_19
+  if isShow == false then
+    return 
+  end
   if self._currentProgress == 3 or self._currentProgress == 4 or self._currentProgress == 5 then
     (PaGlobal_ExtractionEnchantStone:getButtonExtractionApply()):EraseAllEffect()
     ;
@@ -394,8 +417,11 @@ end
 
 -- DECOMPILER ERROR at PC90: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionCrystalButton = function(self)
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionCrystalButton = function(self, isShow)
   -- function num : 0_20
+  if isShow == false then
+    return 
+  end
   if (self._currentProgress ~= 9 and self._currentProgress ~= 10) or self._currentProgress == 8 then
     self._currentProgress = 9
     self:handleChangeStep(self._currentStep)
@@ -404,8 +430,11 @@ end
 
 -- DECOMPILER ERROR at PC93: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionClothButton = function(self)
+PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ClickExtractionClothButton = function(self, isShow)
   -- function num : 0_21
+  if isShow == false then
+    return 
+  end
   if (self._currentProgress ~= 12 and self._currentProgress ~= 13) or self._currentProgress == 11 then
     self._currentProgress = 12
     self:handleChangeStep(self._currentStep)
@@ -414,22 +443,8 @@ end
 
 -- DECOMPILER ERROR at PC96: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1ExtractionEnchantStoneWindowClose = function(self)
-  -- function num : 0_22
-  self:endPhase()
-end
-
--- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1SocketExtractionCrystalWindowClose = function(self)
-  -- function num : 0_23
-  self:endPhase()
-end
-
--- DECOMPILER ERROR at PC102: Confused about usage of register: R0 in 'UnsetPending'
-
 PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1MouseLUpBubble = function(self)
-  -- function num : 0_24
+  -- function num : 0_22
   if self._currentProgress == 14 then
     self:endPhase()
   else
@@ -437,73 +452,73 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.eventCallStep1MouseLUpBubble = fun
   end
 end
 
--- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleShowDialog = function(self, dialogData)
-  -- function num : 0_25
+  -- function num : 0_23
   if self._currentStep == 1 then
     self:eventCallStep1ShowDialog(dialogData)
   end
 end
 
--- DECOMPILER ERROR at PC108: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickedExitButton = function(self, talker)
-  -- function num : 0_26
+  -- function num : 0_24
   if self._currentStep == 1 then
     self:eventCallStep1ClickedExitButton(talker)
   end
 end
 
--- DECOMPILER ERROR at PC111: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickedDialogFuncButton = function(self, funcButtonType)
-  -- function num : 0_27
+  -- function num : 0_25
   if self._currentStep == 1 then
     self:eventCallStep1ClickedDialogFuncButton(funcButtonType)
   end
 end
 
--- DECOMPILER ERROR at PC114: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC108: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleOpenExtractionPanel = function(self, isShow)
-  -- function num : 0_28
+  -- function num : 0_26
   if self._currentStep == 1 then
     self:eventCallStep1OpenExtractionPanel(isShow)
   end
 end
 
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionEnchantStoneButton = function(self, isShow)
+  -- function num : 0_27
+  if self._currentStep == 1 then
+    self:eventCallStep1ClickExtractionEnchantStoneButton(isShow)
+  end
+end
+
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionCrystalButton = function(self, isShow)
+  -- function num : 0_28
+  if self._currentStep == 1 then
+    self:eventCallStep1ClickExtractionCrystalButton(isShow)
+  end
+end
+
 -- DECOMPILER ERROR at PC117: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionEnchantStoneButton = function(self)
+PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionClothButton = function(self, isShow)
   -- function num : 0_29
   if self._currentStep == 1 then
-    self:eventCallStep1ClickExtractionEnchantStoneButton()
+    self:eventCallStep1ClickExtractionClothButton(isShow)
   end
 end
 
 -- DECOMPILER ERROR at PC120: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionCrystalButton = function(self)
-  -- function num : 0_30
-  if self._currentStep == 1 then
-    self:eventCallStep1ClickExtractionCrystalButton()
-  end
-end
-
--- DECOMPILER ERROR at PC123: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_TutorialPhase_ExtractionEnchantStone.handleClickExtractionClothButton = function(self)
-  -- function num : 0_31
-  if self._currentStep == 1 then
-    self:eventCallStep1ClickExtractionClothButton()
-  end
-end
-
--- DECOMPILER ERROR at PC126: Confused about usage of register: R0 in 'UnsetPending'
-
 PaGlobal_TutorialPhase_ExtractionEnchantStone.handleMouseLUpBubble = function(self)
-  -- function num : 0_32
+  -- function num : 0_30
   if self._currentStep == 1 then
     self:eventCallStep1MouseLUpBubble()
   end

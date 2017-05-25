@@ -51,6 +51,10 @@ Panel_Logo_Init = function()
                 else
                   if isGameTypeTaiwan() then
                     staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_TW"))
+                  else
+                    if isGameTypeKR2() then
+                      staticText_Warning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_A"))
+                    end
                   end
                 end
                 static_PearlAbyss:SetShow(false)

@@ -165,13 +165,12 @@ end
 PaGlobal_TutorialPhase_InteractionSupplyBox.changeStepWaitMainStatusUserBarComment = function(self)
   -- function num : 0_7
   FGlobal_Panel_MainStatus_User_Bar_Show()
-  Panel_ClassResource:SetShow((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType())
+  FGlobal_ClassResource_SetShowControl(true)
   PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_7_0
     (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_88"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_89"), true, Panel_MainStatus_User_Bar:GetPosX() + Panel_MainStatus_User_Bar:GetSizeX() * 1.1, Panel_MainStatus_User_Bar:GetPosY() - Panel_MainStatus_User_Bar:GetSizeY())
   end
 )
-  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC47: Confused about usage of register: R5 in 'UnsetPending'

@@ -3,13 +3,17 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_ItemSell = {_phaseNo = 17, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = false, _isSkippable = false}
+PaGlobal_TutorialPhase_ItemSell = {_phaseNo = 17, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = true, _isSkippable = false}
 -- DECOMPILER ERROR at PC12: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ItemSell.checkPossibleForPhaseStart = function(self, stepNo)
   -- function num : 0_0
   if self._isPhaseOpen == false then
     _PA_LOG("곽민�\176", "튜토리얼 Phase�\128 닫혀있으�\128�\156 튜토리얼�\132 시작하지 않습니다. _phaseNo : " .. tostring(self._phaseNo))
+    return false
+  end
+  if PaGlobal_TutorialManager:isDoingTutorial() == true or PaGlobal_ArousalTutorial_Manager:isDoingArousalTutorial() == true or PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
     return false
   end
   local selfPlayer = getSelfPlayer()

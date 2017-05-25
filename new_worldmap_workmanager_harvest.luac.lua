@@ -355,9 +355,9 @@ Worker_List._setData = function(self)
         local homeWaypoint = workerWrapper:getHomeWaypoint()
         local regionInfo = ToClient_getRegionInfoWrapperByWaypoint(homeWaypoint)
         local workerGrade = workerWrapper:getGrade()
-        local name = "Lv." .. workerWrapper:getLevel() .. " " .. workerWrapper:getName()
+        local name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. workerWrapper:getLevel() .. " " .. workerWrapper:getName()
         local regionName = "(<PAColor0xff868686>" .. regionInfo:getAreaName() .. "<PAOldColor>)"
-        -- DECOMPILER ERROR at PC94: Confused about usage of register: R19 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC99: Confused about usage of register: R19 in 'UnsetPending'
 
         ;
         (self._data_Table)[_idx] = {_workerNo = workerNo, _name = name, _regionName = regionName, _moveSpeed = moveSpeed, _luck = luck / 10000, _maxPoint = maxPoint, _currentPoint = currentPoint, _homeWaypoint = homeWaypoint, _workerGrade = workerGrade}
@@ -365,15 +365,15 @@ Worker_List._setData = function(self)
         do
           do
             _PA_LOG("이문�\133", "index == " .. index .. " : 일하는중")
-            -- DECOMPILER ERROR at PC103: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC108: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC103: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC108: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC103: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC108: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC103: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC108: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC103: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC108: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end

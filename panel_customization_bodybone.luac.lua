@@ -40,10 +40,24 @@ Slider_ScaleZ:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
 Button_Slider_ScaleX:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
 Button_Slider_ScaleY:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
 Button_Slider_ScaleZ:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
+if CppDefineCustom.Flag == true then
+  Slider_ScaleX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_ScaleY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_ScaleZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_ScaleX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_ScaleY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_ScaleZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+end
 Slider_Height:addInputEvent("Mouse_LPress", "UpdateBodyHeight()")
 Button_Slider_Height:addInputEvent("Mouse_LPress", "UpdateBodyHeight()")
 Slider_Weight:addInputEvent("Mouse_LPress", "UpdateBodyWeight()")
 Button_Slider_Weight:addInputEvent("Mouse_LPress", "UpdateBodyWeight()")
+if CppDefineCustom.Flag == true then
+  Slider_Height:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_Height:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_Weight:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_Weight:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+end
 Button_All_Reset:addInputEvent("Mouse_LUp", "clearGroupCustomizedBonInfoLua()")
 Button_Part_Reset:addInputEvent("Mouse_LUp", "clearCustomizedBoneInfo()")
 CheckButton_ControlPart:addInputEvent("Mouse_LUp", "ToggleShowBodyBoneControlPart()")
@@ -90,8 +104,18 @@ UpdateBodyWeight = function()
   applyBodyWeight(selectedClassType, Slider_Weight:GetControlPos() * 100)
 end
 
+if CppDefineCustom.Flag == true then
+  historyInit = function()
+  -- function num : 0_5 , upvalues : bonInfoPostFunction, selectedClassType, Slider_Height, Slider_Weight
+  bonInfoPostFunction()
+  selectedClassType = (getSelfPlayer()):getClassType()
+  applyBodyHeight(selectedClassType, Slider_Height:GetControlPos() * 100)
+  applyBodyWeight(selectedClassType, Slider_Weight:GetControlPos() * 100)
+end
+
+end
 UpdateBodyBoneScale = function()
-  -- function num : 0_5 , upvalues : Slider_ScaleX, scaleMin, scaleMax, Slider_ScaleY, Slider_ScaleZ, currentScale, StaticText_CurrValue_ScaleX, StaticText_CurrValue_ScaleY, StaticText_CurrValue_ScaleZ
+  -- function num : 0_6 , upvalues : Slider_ScaleX, scaleMin, scaleMax, Slider_ScaleY, Slider_ScaleZ, currentScale, StaticText_CurrValue_ScaleX, StaticText_CurrValue_ScaleY, StaticText_CurrValue_ScaleZ
   local x = calculateSliderValue(Slider_ScaleX, scaleMin.x, scaleMax.x)
   local y = calculateSliderValue(Slider_ScaleY, scaleMin.y, scaleMax.y)
   local z = calculateSliderValue(Slider_ScaleZ, scaleMin.z, scaleMax.z)
@@ -114,7 +138,7 @@ UpdateBodyBoneScale = function()
 end
 
 OpenBodyShapeUi = function(classType, uiId)
-  -- function num : 0_6 , upvalues : selectedClassType, CheckButton_ControlPart
+  -- function num : 0_7 , upvalues : selectedClassType, CheckButton_ControlPart
   selectedClassType = classType
   startBodyPickingMode()
   EnableBodySlide(false)
@@ -127,13 +151,13 @@ OpenBodyShapeUi = function(classType, uiId)
 end
 
 CloseBodyShapeUi = function()
-  -- function num : 0_7
+  -- function num : 0_8
   endPickingMode()
   ToggleShowPosePreCheck()
 end
 
 ShowBodyBoneEditor = function()
-  -- function num : 0_8 , upvalues : Slider_ScaleX, Slider_ScaleY, Slider_ScaleZ, Slider_Height, Slider_Weight, StaticText_CurrValue_ScaleX, StaticText_CurrValue_ScaleY, StaticText_CurrValue_ScaleZ, RadioButton_Bone_Scale
+  -- function num : 0_9 , upvalues : Slider_ScaleX, Slider_ScaleY, Slider_ScaleZ, Slider_Height, Slider_Weight, StaticText_CurrValue_ScaleX, StaticText_CurrValue_ScaleY, StaticText_CurrValue_ScaleZ, RadioButton_Bone_Scale
   Slider_ScaleX:SetControlPos(50)
   Slider_ScaleY:SetControlPos(50)
   Slider_ScaleZ:SetControlPos(50)
@@ -152,12 +176,12 @@ ShowBodyBoneEditor = function()
 end
 
 ToggleShowBodyBoneControlPart = function()
-  -- function num : 0_9 , upvalues : CheckButton_ControlPart
+  -- function num : 0_10 , upvalues : CheckButton_ControlPart
   showBoneControlPart(CheckButton_ControlPart:IsCheck())
 end
 
 PickingBodyBone = function(customizationData)
-  -- function num : 0_10 , upvalues : scaleMin, scaleMax, currentScale, InitBodyBoneControls
+  -- function num : 0_11 , upvalues : scaleMin, scaleMax, currentScale, InitBodyBoneControls
   scaleMin = customizationData:getSelectedBoneScaleMin()
   scaleMax = customizationData:getSelectedBoneScaleMax()
   currentScale = customizationData:getSelectedBoneScaleValue()
@@ -166,7 +190,7 @@ PickingBodyBone = function(customizationData)
 end
 
 EnableBodySlide = function(enable)
-  -- function num : 0_11 , upvalues : StaticText_ScaleX, StaticText_ScaleY, StaticText_ScaleZ, Slider_ScaleX, Slider_ScaleY, Slider_ScaleZ, Slider_Weight, StaticText_Weight, Slider_Height, StaticText_Height
+  -- function num : 0_12 , upvalues : StaticText_ScaleX, StaticText_ScaleY, StaticText_ScaleZ, Slider_ScaleX, Slider_ScaleY, Slider_ScaleZ, Slider_Weight, StaticText_Weight, Slider_Height, StaticText_Height
   local color = (Defines.Color).C_FF444444
   if enable then
     color = (Defines.Color).C_FFFFFFFF
@@ -193,7 +217,7 @@ EnableBodySlide = function(enable)
 end
 
 AdjustBodyBoneScale = function(scaleX, scaleY, scaleZ)
-  -- function num : 0_12 , upvalues : floatString, Slider_ScaleX, scaleMin, scaleMax, Slider_ScaleY, Slider_ScaleZ, currentScale
+  -- function num : 0_13 , upvalues : floatString, Slider_ScaleX, scaleMin, scaleMax, Slider_ScaleY, Slider_ScaleZ, currentScale
   local self = sculptingBoneSettingUI
   ;
   ((self.EditText)[self.PARAM_SCALEVALX]):SetEditText(floatString(scaleX))

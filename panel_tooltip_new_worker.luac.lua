@@ -223,7 +223,7 @@ FGlobal_ShowWorkerTooltip = function(workerData, uiBase, isRight, isPlant)
       end
       do
         ;
-        (controlWorkerTooltip._levelValue):SetText("Lv " .. workerData:getLevel())
+        (controlWorkerTooltip._levelValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. " " .. workerData:getLevel())
         ;
         (controlWorkerTooltip._expProgress):SetCurrentProgressRate(_tempWorkerExp)
         ;
@@ -265,7 +265,7 @@ FGlobal_ShowWorkerTooltip = function(workerData, uiBase, isRight, isPlant)
           ;
           (((controlWorkerTooltip._skill)[skill_Index]).name):SetFontColor(UI_color.C_FF888888)
           ;
-          (((controlWorkerTooltip._skill)[skill_Index]).name):SetText("Lv." .. skillLev)
+          (((controlWorkerTooltip._skill)[skill_Index]).name):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. skillLev)
           ;
           (((controlWorkerTooltip._skill)[skill_Index]).desc):SetFontColor(UI_color.C_FF888888)
           ;
@@ -424,7 +424,7 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, uiBase, isRight, 
         _tempWorkerExp = (math.ceil)(Int64toInt32(workerEXP) / Int64toInt32(workerMaxEXP) * 100)
       end
       ;
-      (controlWorkerTooltip._levelValue):SetText("Lv " .. workerLev)
+      (controlWorkerTooltip._levelValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. " " .. workerLev)
       ;
       (controlWorkerTooltip._expProgress):SetCurrentProgressRate(_tempWorkerExp)
       ;
@@ -468,7 +468,7 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, uiBase, isRight, 
         ;
         (((controlWorkerTooltip._skill)[skill_Index]).name):SetFontColor(UI_color.C_FF888888)
         ;
-        (((controlWorkerTooltip._skill)[skill_Index]).name):SetText("Lv." .. skillLev)
+        (((controlWorkerTooltip._skill)[skill_Index]).name):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. skillLev)
         ;
         (((controlWorkerTooltip._skill)[skill_Index]).desc):SetFontColor(UI_color.C_FF888888)
         ;

@@ -61,8 +61,8 @@ local changePearIcon = function(pearIconUI, cashProductSSW)
         if eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
           serviceContry = contry.ru
         else
-          if eCountryType.CHI_ALPHA == gameServiceType or eCountryType.CHI_REAL == gameServiceType then
-            serviceContry = contry.cn
+          if eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+            serviceContry = contry.kr2
           else
             serviceContry = contry.kr
           end
@@ -352,8 +352,8 @@ CashShopCart.fillSlots = function(self)
       serviceContry = contry.jp
     elseif eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
       serviceContry = contry.ru
-    elseif eCountryType.CHI_ALPHA == gameServiceType or eCountryType.CHI_REAL == gameServiceType then
-      serviceContry = contry.cn
+    elseif eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+      serviceContry = contry.kr2
     else
       serviceContry = contry.kr
     end

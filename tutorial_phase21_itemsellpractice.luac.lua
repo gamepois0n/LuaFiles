@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_ItemSellPractice = {_phaseNo = 21, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = false, _isSkippable = false, _radioButtonSell = nil, _npcShopSpiritPosX = 0, _npcShopSpiritPosY = 0, _buttonSellAll = nil}
+PaGlobal_TutorialPhase_ItemSellPractice = {_phaseNo = 21, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = true, _isSkippable = false, _radioButtonSell = nil, _npcShopSpiritPosX = 0, _npcShopSpiritPosY = 0, _buttonSellAll = nil}
 -- DECOMPILER ERROR at PC16: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ItemSellPractice.checkPossibleForPhaseStart = function(self, stepNo)
@@ -102,7 +102,7 @@ PaGlobal_TutorialPhase_ItemSellPractice.endPhase = function(self)
     (self._checkButton_Warehouse):EraseAllEffect()
   end
   if self._checkButton_Inventory ~= nil then
-    (self._checkButton_Warehouse):EraseAllEffect()
+    (self._checkButton_Inventory):EraseAllEffect()
   end
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(true)
   PaGlobal_TutorialManager:endTutorial()
@@ -334,7 +334,6 @@ end
 
 PaGlobal_TutorialPhase_ItemSellPractice.eventCallStep1ClickedDialogFuncButton = function(self, funcButtonType)
   -- function num : 0_14
-  _PA_LOG("곽민�\176", "funcButtonType : " .. tostring(funcButtonType))
   if (CppEnums.ContentsType).Contents_Shop ~= funcButtonType then
     self:endPhase()
   end
@@ -348,19 +347,33 @@ end
 
 PaGlobal_TutorialPhase_ItemSellPractice.eventCallStep1NpcShopWindowClose = function(self)
   -- function num : 0_15
-  self:endPhase()
+  if self._currentProgress > 2 then
+    self:endPhase()
+  end
 end
 
 -- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_ItemSellPractice.eventCallStep1NpcShopTabButtonClick = function(self, tabIndex)
   -- function num : 0_16
-  if self._currentProgress == 4 and tabIndex == 1 then
-    if self._radioButtonSell ~= nil then
-      (self._radioButtonSell):EraseAllEffect()
+  if self._currentProgress == 4 then
+    if tabIndex == 1 then
+      if self._radioButtonSell ~= nil then
+        (self._radioButtonSell):EraseAllEffect()
+      end
+      self._currentProgress = 5
+      self:handleChangeStep(self._currentStep)
+    else
+      if self._radioButtonSell ~= nil then
+        (self._radioButtonSell):AddEffect("UI_ArrowMark08", true, 0, 50)
+        ;
+        (self._radioButtonSell):AddEffect("UI_WorldMap_Ping01", true, 0, 0)
+      end
     end
-    self._currentProgress = 5
-    self:handleChangeStep(self._currentStep)
+  else
+    if self._currentProgress >= 5 and tabIndex ~= 1 then
+      self:endPhase()
+    end
   end
 end
 

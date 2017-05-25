@@ -785,8 +785,8 @@ getContryTypeLua = function()
       if eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
         returnValue = (CppEnums.ContryCode).eContryCode_RUS
       else
-        if eCountryType.CHI_ALPHA == gameServiceType or eCountryType.CHI_REAL == gameServiceType then
-          returnValue = (CppEnums.ContryCode).eContryCode_CHI
+        if eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+          returnValue = (CppEnums.ContryCode).eContryCode_KR2
         else
           if eCountryType.NA_ALPHA == gameServiceType or eCountryType.NA_REAL == gameServiceType then
             returnValue = (CppEnums.ContryCode).eContryCode_NA
@@ -830,8 +830,8 @@ getContryDetailTypeLua = function()
       if eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
         returnValue = (CppEnums.ContryCode).eContryCode_RUS
       else
-        if eCountryType.CHI_ALPHA == gameServiceType or eCountryType.CHI_REAL == gameServiceType then
-          returnValue = (CppEnums.ContryCode).eContryCode_CHI
+        if eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+          returnValue = (CppEnums.ContryCode).eContryCode_KR2
         else
           if eCountryType.NA_ALPHA == gameServiceType or eCountryType.NA_REAL == gameServiceType then
             returnValue = (CppEnums.ContryCode).eContryCode_NA
@@ -923,13 +923,18 @@ isGameTypeTaiwan = function()
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TW)
 end
 
-isGameTypeSouthAmerica = function()
+isGameTypeSA = function()
   -- function num : 0_62
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_SA)
 end
 
-isCommonGameType = function()
+isGameTypeKR2 = function()
   -- function num : 0_63
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KR2)
+end
+
+isCommonGameType = function()
+  -- function num : 0_64
   local returnValue = false
   if isGameTypeJapan() then
     returnValue = true
@@ -943,7 +948,15 @@ isCommonGameType = function()
         if isGameTypeTaiwan() then
           returnValue = true
         else
-          returnValue = false
+          if isGameTypeSA() then
+            returnValue = true
+          else
+            if isGameTypeKR2() then
+              returnValue = true
+            else
+              returnValue = false
+            end
+          end
         end
       end
     end
@@ -952,9 +965,9 @@ isCommonGameType = function()
 end
 
 isItemMarketSecureCode = function()
-  -- function num : 0_64
+  -- function num : 0_65
   local isSecureCode = false
-  if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSouthAmerica()) and isSecureCode == true then
+  if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA()) and isSecureCode == true then
     return true
   else
     return false
@@ -966,7 +979,7 @@ local g_TimerNo = 0
 local g_Timerlist = {}
 local g_TimerCount = 0
 luaTimer_UpdatePerFrame = function(fDelta)
-  -- function num : 0_65 , upvalues : g_TimerCount, g_Timerlist
+  -- function num : 0_66 , upvalues : g_TimerCount, g_Timerlist
   if g_TimerCount <= 0 then
     return 
   end
@@ -1007,7 +1020,7 @@ luaTimer_UpdatePerFrame = function(fDelta)
 end
 
 luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
-  -- function num : 0_66 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
+  -- function num : 0_67 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
   g_TimerNo = g_TimerNo + 1
   local tempTimer = {}
   tempTimer._timerNo = g_TimerNo
@@ -1026,7 +1039,7 @@ luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
 end
 
 luaTimer_RemoveEvent = function(timerNo)
-  -- function num : 0_67 , upvalues : g_Timerlist, g_TimerCount
+  -- function num : 0_68 , upvalues : g_Timerlist, g_TimerCount
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
   if g_Timerlist[timerNo] ~= nil then

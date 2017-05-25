@@ -145,11 +145,15 @@ ExtractionEnchantStone_WindowOpen = function()
   InventoryWindow_Show()
   -- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
 
+  PaGlobal_ExtractionEnchantStone._currentTime = 0
+  -- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
+
   PaGlobal_ExtractionEnchantStone._doExtracting = false
 end
 
 ExtractionEnchantStone_WindowClose = function()
   -- function num : 0_4
+  ExtractionEnchant_EffectReset()
   Inventory_SetFunctor(nil)
   Panel_Window_Extraction_EnchantStone:SetShow(false, false)
   PaGlobal_ExtractionEnchantStone:clear()

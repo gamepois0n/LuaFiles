@@ -162,7 +162,7 @@ local defaultShortCut = {
 [shortCutType.ui] = {}
 }
 , 
-[(CppEnums.ContryCode).eContryCode_CHI] = {
+[(CppEnums.ContryCode).eContryCode_KR2] = {
 [shortCutType.action] = {}
 , 
 [shortCutType.ui] = {}

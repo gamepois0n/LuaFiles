@@ -31,8 +31,39 @@ PaGlobal_ExtractionEnchantStone.hideAni = function(self)
 end
 
 local extractingEffect = {_step1 = nil, _step2 = nil, _step3 = nil, _uiEquipItem = nil, _blackStoneWeapon = nil, _blackStoneArmor = nil}
-ExtractionEnchant_CheckTime = function(DeltaTime)
+ExtractionEnchant_EffectReset = function()
   -- function num : 0_2 , upvalues : extractingEffect
+  local self = PaGlobal_ExtractionEnchantStone
+  self._currentTime = 0
+  self._doExtracting = false
+  ;
+  (self._uiEffectStep1):EraseAllEffect()
+  ;
+  (self._uiIconBlackStoneWeapon):EraseAllEffect()
+  ;
+  (self._uiIconBlackStoneArmor):EraseAllEffect()
+  -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
+
+  extractingEffect._step1 = nil
+  -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
+
+  extractingEffect._step2 = nil
+  -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
+
+  extractingEffect._step3 = nil
+  -- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+
+  extractingEffect._uiEquipItem = nil
+  -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
+
+  extractingEffect._blackStoneWeapon = nil
+  -- DECOMPILER ERROR at PC23: Confused about usage of register: R1 in 'UnsetPending'
+
+  extractingEffect._blackStoneArmor = nil
+end
+
+ExtractionEnchant_CheckTime = function(DeltaTime)
+  -- function num : 0_3 , upvalues : extractingEffect
   local self = PaGlobal_ExtractionEnchantStone
   self._currentTime = self._currentTime + DeltaTime
   if self._currentTime > 0 and self._currentTime < 1 and self._doExtracting == true then
@@ -131,12 +162,12 @@ end
 
 local ExtractionEnchantStone_ResultShowTime = 0
 ExtractionEnchantStoneResult_TimerReset = function()
-  -- function num : 0_3 , upvalues : ExtractionEnchantStone_ResultShowTime
+  -- function num : 0_4 , upvalues : ExtractionEnchantStone_ResultShowTime
   ExtractionEnchantStone_ResultShowTime = 0
 end
 
 ExtractionEnchantStone_CheckResultMsgShowTime = function(DeltaTime)
-  -- function num : 0_4 , upvalues : ExtractionEnchantStone_ResultShowTime
+  -- function num : 0_5 , upvalues : ExtractionEnchantStone_ResultShowTime
   ExtractionEnchantStone_ResultShowTime = ExtractionEnchantStone_ResultShowTime + DeltaTime
   if ExtractionEnchantStone_ResultShowTime > 3 and Panel_Window_Extraction_Result:GetShow() == true then
     Panel_Window_Extraction_Result:SetShow(false)
@@ -146,10 +177,10 @@ ExtractionEnchantStone_CheckResultMsgShowTime = function(DeltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC25: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC28: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_ExtractionEnchantStone.resultShow = function(self)
-  -- function num : 0_5
+  -- function num : 0_6
   PaGlobal_ExtractionResult:resetChildControl()
   PaGlobal_ExtractionResult:resetAnimation()
   if PaGlobal_ExtractionResult:getShow() == false then

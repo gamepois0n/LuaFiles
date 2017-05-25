@@ -480,49 +480,49 @@ Worker_Table_Set = function()
 
       ;
       (Worker_Table[workerIndex])._WorkerNo = workerData:getWorkerNo()
-      -- DECOMPILER ERROR at PC70: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC75: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
-      (Worker_Table[workerIndex])._Name = "Lv." .. workerData:getLevel() .. " " .. ConvertFromGradeToColor(workerGrade, true) .. ToClient_getWorkerName(workerStaticStatus) .. "<PAOldColor>"
-      -- DECOMPILER ERROR at PC74: Confused about usage of register: R11 in 'UnsetPending'
-
-      ;
-      (Worker_Table[workerIndex])._MaxPoint = workerStaticStatus._actionPoint
+      (Worker_Table[workerIndex])._Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. workerData:getLevel() .. " " .. ConvertFromGradeToColor(workerGrade, true) .. ToClient_getWorkerName(workerStaticStatus) .. "<PAOldColor>"
       -- DECOMPILER ERROR at PC79: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
+      (Worker_Table[workerIndex])._MaxPoint = workerStaticStatus._actionPoint
+      -- DECOMPILER ERROR at PC84: Confused about usage of register: R11 in 'UnsetPending'
+
+      ;
       (Worker_Table[workerIndex])._CurrentPoint = workerData:getActionPoint()
-      -- DECOMPILER ERROR at PC85: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC90: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
       (Worker_Table[workerIndex])._recoveryActionPoint = workerData:getRecoveryActionPointWithSkill(checkData)
-      -- DECOMPILER ERROR at PC88: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC93: Confused about usage of register: R11 in 'UnsetPending'
 
       ;
       (Worker_Table[workerIndex])._Grade = workerGrade
-      -- DECOMPILER ERROR at PC104: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC109: Confused about usage of register: R11 in 'UnsetPending'
 
       if isWaitWorker(workerData) == true then
         (Worker_Table[workerIndex])._State_Text = "<PAColor0xfffeff99>" .. PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_TOWN_WORKER_RESTORE") .. "<PAOldColor>"
-        -- DECOMPILER ERROR at PC109: Confused about usage of register: R11 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC114: Confused about usage of register: R11 in 'UnsetPending'
 
         ;
         (Worker_Table[workerIndex])._State = eWorkerStateType.waiting
       else
-        -- DECOMPILER ERROR at PC123: Confused about usage of register: R11 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC128: Confused about usage of register: R11 in 'UnsetPending'
 
         if workerData == true then
           (Worker_Table[workerIndex])._State_Text = "<PAColor0xffff8400>" .. PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_TOWN_WORKER_TRANSFERING") .. "<PAOldColor>"
-          -- DECOMPILER ERROR at PC128: Confused about usage of register: R11 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC133: Confused about usage of register: R11 in 'UnsetPending'
 
           ;
           (Worker_Table[workerIndex])._State = eWorkerStateType.transfer
         else
-          -- DECOMPILER ERROR at PC140: Confused about usage of register: R11 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC145: Confused about usage of register: R11 in 'UnsetPending'
 
           ;
           (Worker_Table[workerIndex])._State_Text = "<PAColor0xffde3900>" .. PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_TOWN_WORKER_CANCELWORK") .. "<PAOldColor>"
-          -- DECOMPILER ERROR at PC145: Confused about usage of register: R11 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC150: Confused about usage of register: R11 in 'UnsetPending'
 
           ;
           (Worker_Table[workerIndex])._State = eWorkerStateType.working
@@ -531,15 +531,15 @@ Worker_Table_Set = function()
     else
       do
         do
-          -- DECOMPILER ERROR at PC149: Confused about usage of register: R7 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC154: Confused about usage of register: R7 in 'UnsetPending'
 
           ;
           (Worker_Table[workerIndex])._isEmpty = true
-          -- DECOMPILER ERROR at PC150: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC155: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC150: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC150: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC155: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

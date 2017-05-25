@@ -262,19 +262,19 @@ local txt_BottomDesc = (UI.getChildControl)(_frameBottomDesc, "StaticText_Desc")
 -- DECOMPILER ERROR at PC537: Confused about usage of register: R17 in 'UnsetPending'
 
 ;
-(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Temp1] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp1")
+(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Combattant] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Striker")
 -- DECOMPILER ERROR at PC545: Confused about usage of register: R17 in 'UnsetPending'
 
 ;
-(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Temp2] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp2")
+(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Temp1] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp1")
 -- DECOMPILER ERROR at PC553: Confused about usage of register: R17 in 'UnsetPending'
 
 ;
-(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Angle] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp3")
+(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Temp2] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp2")
 -- DECOMPILER ERROR at PC561: Confused about usage of register: R17 in 'UnsetPending'
 
 ;
-(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Combattant] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp4")
+(Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_Angle] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp3")
 -- DECOMPILER ERROR at PC569: Confused about usage of register: R17 in 'UnsetPending'
 
 ;
@@ -307,8 +307,14 @@ local Panel_Lobby_LDownCheck_ViewControl = {}
 local _headContentImage = {}
 local _hairContentImage = {}
 local characterTicketAbleUI = {}
+local isSpecialCharacter = false
+SetSpecialCharacter = function(isSC)
+  -- function num : 0_0 , upvalues : isSpecialCharacter
+  isSpecialCharacter = isSC
+end
+
 local Panel_Lobby_Function_Initialize = function()
-  -- function num : 0_0 , upvalues : Panel_Lobby_UI, Panel_Lobby_ClassUI, UI_Class, UI_TM, classButtonStartX, classButtonGapX, columnCount, classButtonGapY, rowCount, classNameStartX, classNameGapX, sortCharacterCount, columnCountByRaw
+  -- function num : 0_1 , upvalues : Panel_Lobby_UI, Panel_Lobby_ClassUI, UI_Class, UI_TM, classButtonStartX, classButtonGapX, columnCount, classButtonGapY, rowCount, classNameStartX, classNameGapX, sortCharacterCount, columnCountByRaw
   (UI.ASSERT)(Panel_CharacterCreateSelectClass ~= nil, "createCharacter_SelectClass\tnil")
   ;
   (UI.ASSERT)(Panel_Lobby_UI.CCSC_ClassName ~= nil, "CCSC_ClassName\t\t\t\tnil")
@@ -418,6 +424,8 @@ local Panel_Lobby_Function_Initialize = function()
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_DarkElf]):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
+  ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Combattant]):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp1]):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp2]):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -454,18 +462,20 @@ local Panel_Lobby_Function_Initialize = function()
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_DarkElf]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_CHARACTERCREATE_SELECTCLASS_DARKELF"))
   ;
+  ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Combattant]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_CHARACTERCREATE_SELECTCLASS_STRIKER"))
+  ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp1]):SetText("임시1")
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp2]):SetText("임시2")
   for index = 0, UI_Class.ClassType_Count - 1 do
     if (Panel_Lobby_ClassUI.ClassButtons)[index] ~= nil then
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_LUp", "Panel_Lobby_function_SelectClassType(" .. R8_PC667 .. ", true)")
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_LUp", "Panel_Lobby_function_SelectClassType(" .. R8_PC688 .. ", true)")
       ;
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_On", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC667 .. ", true)")
-      -- DECOMPILER ERROR at PC685: Overwrote pending register: R8 in 'AssignReg'
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_On", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC688 .. ", true)")
+      -- DECOMPILER ERROR at PC706: Overwrote pending register: R8 in 'AssignReg'
 
       ;
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_Out", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC667 .. ", false)")
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_Out", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC688 .. ", false)")
     end
   end
   local count = getPossibleClassCount()
@@ -473,49 +483,49 @@ local Panel_Lobby_Function_Initialize = function()
     local classType = getPossibleClassTypeFromIndex(index)
     local classButton = (Panel_Lobby_ClassUI.ClassButtons)[classType]
     local className = (Panel_Lobby_ClassUI.ClassNames)[classType]
-    -- DECOMPILER ERROR at PC707: Overwrote pending register: R8 in 'AssignReg'
+    -- DECOMPILER ERROR at PC728: Overwrote pending register: R8 in 'AssignReg'
 
     if classButton ~= nil then
-      R8_PC667 = R8_PC667(classButton)
-      if R8_PC667 then
-        R8_PC667(classButton, classButtonStartX + classButton:GetPosX() + (classButton:GetSizeX() + classButtonGapX) * columnCount)
-        -- DECOMPILER ERROR at PC724: Overwrote pending register: R8 in 'AssignReg'
+      R8_PC688 = R8_PC688(classButton)
+      if R8_PC688 then
+        R8_PC688(classButton, classButtonStartX + classButton:GetPosX() + (classButton:GetSizeX() + classButtonGapX) * columnCount)
+        -- DECOMPILER ERROR at PC745: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC667(classButton, classButton:GetPosY() + (classButton:GetSizeY() + classButtonGapY) * rowCount)
-        -- DECOMPILER ERROR at PC735: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC688(classButton, classButton:GetPosY() + (classButton:GetSizeY() + classButtonGapY) * rowCount)
+        -- DECOMPILER ERROR at PC756: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC667(className, classNameStartX + className:GetPosX() + (className:GetSizeX() + classNameGapX) * columnCount)
-        -- DECOMPILER ERROR at PC748: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC688(className, classNameStartX + className:GetPosX() + (className:GetSizeX() + classNameGapX) * columnCount)
+        -- DECOMPILER ERROR at PC769: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC667(className, classButton:GetPosY() + classButton:GetSizeY() - className:GetTextSizeY() - 10)
-        -- DECOMPILER ERROR at PC759: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC688(className, classButton:GetPosY() + classButton:GetSizeY() - className:GetTextSizeY() - 10)
+        -- DECOMPILER ERROR at PC780: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC761: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC782: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC764: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC785: Overwrote pending register: R8 in 'AssignReg'
 
-        if R8_PC667 == 0 then
-          columnCount = R8_PC667
-          -- DECOMPILER ERROR at PC766: Overwrote pending register: R8 in 'AssignReg'
+        if R8_PC688 == 0 then
+          columnCount = R8_PC688
+          -- DECOMPILER ERROR at PC787: Overwrote pending register: R8 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC767: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC788: Overwrote pending register: R8 in 'AssignReg'
 
-          rowCount = R8_PC667
+          rowCount = R8_PC688
         else
-          -- DECOMPILER ERROR at PC770: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC791: Overwrote pending register: R8 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC771: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC792: Overwrote pending register: R8 in 'AssignReg'
 
-          columnCount = R8_PC667
+          columnCount = R8_PC688
         end
-        -- DECOMPILER ERROR at PC773: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC794: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC774: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC795: Overwrote pending register: R8 in 'AssignReg'
 
-        sortCharacterCount = R8_PC667
-        -- DECOMPILER ERROR at PC776: Overwrote pending register: R8 in 'AssignReg'
+        sortCharacterCount = R8_PC688
+        -- DECOMPILER ERROR at PC797: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC667(className, 88, ((Panel_Lobby_ClassUI.ClassNames)[classType]):GetTextSizeY() + 5)
+        R8_PC688(className, 88, ((Panel_Lobby_ClassUI.ClassNames)[classType]):GetTextSizeY() + 5)
       end
     end
   end
@@ -545,7 +555,7 @@ local Panel_Lobby_Function_Initialize = function()
 end
 
 local Panel_Lobby_function_StartUp_CreateCharacter_SelectClass = function()
-  -- function num : 0_1 , upvalues : UI_Class, Panel_Lobby_Global_Variable, _frameContents, Character_Status, Panel_Lobby_UI, bottomFrame, CCSC_Frame, _frameScroll, Panel_Lobby_ClassUI
+  -- function num : 0_2 , upvalues : UI_Class, Panel_Lobby_Global_Variable, _frameContents, Character_Status, Panel_Lobby_UI, bottomFrame, CCSC_Frame, _frameScroll, Panel_Lobby_ClassUI
   Panel_Lobby_function_SelectClassType(UI_Class.ClassType_Warrior)
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
 
@@ -596,7 +606,7 @@ local Panel_Lobby_function_StartUp_CreateCharacter_SelectClass = function()
     end
   end
   local ClassBtn_Show = function(classIndex)
-    -- function num : 0_1_0 , upvalues : Panel_Lobby_ClassUI
+    -- function num : 0_2_0 , upvalues : Panel_Lobby_ClassUI
     local classButton = (Panel_Lobby_ClassUI.ClassButtons)[classIndex]
     local className = (Panel_Lobby_ClassUI.ClassNames)[classIndex]
     if classButton ~= nil then
@@ -615,7 +625,7 @@ local Panel_Lobby_function_StartUp_CreateCharacter_SelectClass = function()
 end
 
 Panel_Lobby_Function_showCharacterCreate_SelectClass = function()
-  -- function num : 0_2 , upvalues : Panel_Lobby_function_StartUp_CreateCharacter_SelectClass
+  -- function num : 0_3 , upvalues : Panel_Lobby_function_StartUp_CreateCharacter_SelectClass
   FGlobal_CharacterSelect_Close()
   Panel_Lobby_function_DeleteButton()
   Panel_Lobby_function_ClearData()
@@ -636,7 +646,7 @@ Panel_Lobby_Function_showCharacterCreate_SelectClass = function()
 end
 
 Panel_Lobby_Function_showCharacterCustomization = function(customizationData)
-  -- function num : 0_3 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable
+  -- function num : 0_4 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable
   Panel_Lobby_function_DeleteButton()
   Panel_CharacterCreateSelectClass:SetShow(false, false)
   ;
@@ -647,7 +657,7 @@ Panel_Lobby_Function_showCharacterCustomization = function(customizationData)
 end
 
 Panel_Lobby_function_ClearData = function()
-  -- function num : 0_4 , upvalues : Panel_Lobby_Global_Variable
+  -- function num : 0_5 , upvalues : Panel_Lobby_Global_Variable
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   Panel_Lobby_Global_Variable.characterSelect = -1
@@ -660,7 +670,7 @@ Panel_Lobby_function_ClearData = function()
 end
 
 Panel_Lobby_function_SelectClassType = function(index, isOn)
-  -- function num : 0_5 , upvalues : UI_Class, Panel_Lobby_ClassUI, Panel_Lobby_UI, Panel_Lobby_Global_Variable, UI_TM, txt_BottomDesc, _frameBottomDesc
+  -- function num : 0_6 , upvalues : UI_Class, Panel_Lobby_ClassUI, Panel_Lobby_UI, Panel_Lobby_Global_Variable, UI_TM, txt_BottomDesc, _frameBottomDesc
   if index < UI_Class.ClassType_Count then
     for key,value in pairs(Panel_Lobby_ClassUI.ClassButtons) do
       value:SetMonoTone(true)
@@ -699,7 +709,7 @@ Panel_Lobby_function_SelectClassType = function(index, isOn)
 end
 
 Panel_Lobby_SelectClass_MouseEvent = function(index, isOn)
-  -- function num : 0_6 , upvalues : Panel_Lobby_ClassUI
+  -- function num : 0_7 , upvalues : Panel_Lobby_ClassUI
   local classButton = (Panel_Lobby_ClassUI.ClassButtons)[index]
   if classButton ~= nil then
     if isOn == true then
@@ -711,16 +721,16 @@ Panel_Lobby_SelectClass_MouseEvent = function(index, isOn)
 end
 
 Panel_CharacterCreateOk = function()
-  -- function num : 0_7 , upvalues : Panel_Lobby_Global_Variable, Panel_Lobby_UI
-  chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, (Panel_Lobby_UI.CC_CharacterNameEdit):GetEditText())
+  -- function num : 0_8 , upvalues : Panel_Lobby_Global_Variable, Panel_Lobby_UI, isSpecialCharacter
+  chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, (Panel_Lobby_UI.CC_CharacterNameEdit):GetEditText(), isSpecialCharacter)
 end
 
 Panel_CharacterCreateOK_NewCustomization = function()
-  -- function num : 0_8 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable
+  -- function num : 0_9 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable, isSpecialCharacter
   local _edit_CharacterName = (Panel_Lobby_UI.CM_Edit_CharacterName):GetEditText()
   local createCharacterFunc = function()
-    -- function num : 0_8_0 , upvalues : Panel_Lobby_Global_Variable, _edit_CharacterName
-    chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, _edit_CharacterName)
+    -- function num : 0_9_0 , upvalues : Panel_Lobby_Global_Variable, _edit_CharacterName, isSpecialCharacter
+    chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, _edit_CharacterName, isSpecialCharacter)
   end
 
   local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
@@ -734,13 +744,13 @@ Panel_CharacterCreateOK_NewCustomization = function()
 end
 
 Panel_CharacterCreateCancel = function()
-  -- function num : 0_9
+  -- function num : 0_10
   Panel_CharacterCreateSelectClass:SetShow(false)
   characterCreateCancel()
 end
 
 Panel_Lobby_function_DeleteButton = function()
-  -- function num : 0_10 , upvalues : Panel_Lobby_Global_Variable
+  -- function num : 0_11 , upvalues : Panel_Lobby_Global_Variable
   if Panel_Lobby_Global_Variable.UiMaker == nil then
     return 
   end

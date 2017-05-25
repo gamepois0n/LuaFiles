@@ -72,7 +72,7 @@ resistWorker.Update = function(self)
   ;
   (self._icon):ChangeTextureInfoName(workerIcon)
   ;
-  (self._workerName):SetText("Lv." .. workerWrapperLua:getLevel() .. " " .. workerWrapperLua:getGradeToColorString() .. workerWrapperLua:getName() .. "<PAOldColor>")
+  (self._workerName):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. workerWrapperLua:getLevel() .. " " .. workerWrapperLua:getGradeToColorString() .. workerWrapperLua:getName() .. "<PAOldColor>")
   ;
   (self._workSpeedValue):SetText((string.format)("%.2f", workSpeedValue / 1000000))
   ;

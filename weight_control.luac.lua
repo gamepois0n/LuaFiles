@@ -48,6 +48,7 @@ FGlobal_Inventory_WeightCheck = function()
     (self.weight):SetAlpha(0.8)
     ;
     (self.weight):SetText(totalWeight .. "%")
+    PaGlobal_TutorialMenu:setShow(PaGlobal_TutorialMenu:checkShowCondition(), true)
     if sumtotalWeight >= 100 then
       (self.weight):SetFontColor((Defines.Color).C_FFF26A6A)
     else
@@ -60,6 +61,7 @@ FGlobal_Inventory_WeightCheck = function()
     (self.weight):SetShow(false)
     ;
     (self.weightText):SetShow(false)
+    PaGlobal_TutorialMenu:setShow(PaGlobal_TutorialMenu:checkShowCondition(), true)
   end
   if sumtotalWeight >= 100 and isOnEffect == false then
     (self.weight):EraseAllEffect()

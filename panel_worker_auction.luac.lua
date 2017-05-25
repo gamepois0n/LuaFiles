@@ -226,7 +226,7 @@ workerAuction.Update = function(self)
               ;
               (slot._workerIcon):ChangeTextureInfoName(workerIcon)
               ;
-              (slot._workerLv):SetText("Lv." .. tostring(workerLv))
+              (slot._workerLv):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(workerLv))
               ;
               (slot._workerName):SetText(workerWrapper:getGradeToColorString() .. workerName .. "<PAColor0xffc4bebe> (" .. workerZoneName .. ")<PAOldColor>")
               ;
@@ -354,15 +354,15 @@ workerAuction.Update = function(self)
                     ;
                     (slot._btnBuy):SetShow(true)
                     uiIdx = uiIdx + 1
-                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC442: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC442: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC442: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC442: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC442: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -474,7 +474,7 @@ WorkerAuction_Buy = function(slotNo)
   local workerName = workerWrapper:getName()
   local workerPrice = auctionInfo:getWorkerAuctionPrice(workerNoRaw)
   local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_BUYCONFIRM")
-  local contentString = workerWrapper:getGradeToColorString() .. PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_BUYCONFIRM_TITLE", "level", tostring(workerLv), "name", workerName, "price", makeDotMoney(workerPrice))
+  local contentString = workerWrapper:getGradeToColorString() .. PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_BUYCONFIRM_TITLE", "level", tostring(workerLv), "name", workerName, "price", makeDotMoney(workerPrice)) .. "<PAOldColor>"
   local messageboxData = {title = titleString, content = contentString, functionYes = WorkerAuction_BuyXXX, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)
@@ -501,7 +501,7 @@ WorkerAuction_Cancel = function(slotNo)
   local workerLv = workerWrapper:getLevel()
   local workerName = workerWrapper:getName()
   local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_CANCELCONFIRM")
-  local contentString = workerWrapper:getGradeToColorString() .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_CANCELCONFIRM_TITLE", "level", tostring(workerLv), "name", workerName)
+  local contentString = workerWrapper:getGradeToColorString() .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORKERAUCTION_CANCELCONFIRM_TITLE", "level", tostring(workerLv), "name", workerName) .. "<PAOldColor>"
   local messageboxData = {title = titleString, content = contentString, functionYes = WorkerAuction_CancelXXX, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)

@@ -103,12 +103,11 @@ PaGlobal_TutorialPhase_FindRequestTarget.startPhaseXXX = function(self, stepNo)
   Panel_UIMain:SetShow(true, true)
   Panel_SelfPlayerExpGage:SetShow(true, false)
   FGlobal_Panel_MainStatus_User_Bar_Show()
-  Panel_ClassResource:SetShow((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType())
+  FGlobal_ClassResource_SetShowControl(true)
   Panel_CheckedQuest:SetShow(true, false)
   Panel_MainQuest:SetShow(false, false)
   PaGlobal_TutorialUiManager:repositionScreen()
   Panel_Tutorial:SetShow(true, true)
-  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'

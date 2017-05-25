@@ -178,7 +178,7 @@ stableShop.updateSlot = function(self)
         ;
         (slot.invenCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "Lua_StableShop_HaveN", "Count", tostring(inventory:getItemCount_s64(((shopItemWrapper:getStaticStatus()):get())._key))))
         ;
-        (slot.price):SetText(makeDotMoney(shopItem.price_s64))
+        (slot.price):SetText(makeDotMoney(shopItem:getItemPriceWithOption()))
         if shopItem.leftCount_s64 < (Defines.s64_const).s64_0 then
           (slot.remainCount):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_StableShop_NoLimits"))
         else
@@ -216,7 +216,7 @@ end
 StableShop_BuyItem = function()
   -- function num : 0_6 , upvalues : stableShop
   local self = stableShop
-  npcShop_doBuy(self.selectSlotNo, 1, 0, 0)
+  npcShop_doBuy(self.selectSlotNo, 1, 0, 0, false)
 end
 
 StableShop_WindowClose = function()

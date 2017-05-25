@@ -102,7 +102,6 @@ FromClient_UseServantRespawnItem = function(fromWhereType, fromSlotNo, contentsE
       deadServantInfoArray[totalDeadServantCount] = servantInfo:getServantNo()
     end
   end
-  _PA_LOG("�\128형욱", " deadServantInfoArray : " .. tostring(deadServantInfoArray[1]) .. " - " .. tostring(deadServantInfoArray[2]))
   if totalDeadServantCount == 1 then
     local servantNo = deadServantInfoArray[totalDeadServantCount]
     ToClient_RequestResurrectionServant(servantNo, fromWhereType, fromSlotNo)

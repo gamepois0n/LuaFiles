@@ -50,8 +50,25 @@ _slotText = {[3] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Ship_A
 _skill = {startX = 0, startY = 0, startIconX = 10, startIconY = 5, startNameX = 64, startNameY = 5, startDecX = 64, startDecY = 27, startExpBGX = 7, startExpBGY = 47, startExpX = 12, startExpY = 50, gapY = 52, count = 4}
 }
 , _buttonClose = (UI.getChildControl)(Panel_ShipInfo, "close_button"), _buttonQuestion = (UI.getChildControl)(Panel_ShipInfo, "Button_Question"), _staticName = (UI.getChildControl)(Panel_ShipInfo, "name_value"), _staticLevel = (UI.getChildControl)(Panel_ShipInfo, "Level_value"), _staticGaugeBar_Hp = (UI.getChildControl)(Panel_ShipInfo, "HP_GaugeBar"), _staticTextValue_Hp = (UI.getChildControl)(Panel_ShipInfo, "StaticText_HP_Value"), _mp = (UI.getChildControl)(Panel_ShipInfo, "MP"), _staticGaugeBar_Mp = (UI.getChildControl)(Panel_ShipInfo, "MP_GaugeBar"), _staticTextValue_Mp = (UI.getChildControl)(Panel_ShipInfo, "StaticText_MP_Value"), _staticTextValue_Sus = (UI.getChildControl)(Panel_ShipInfo, "StaticText_Sus_Value"), _staticGaugeBar_Weight = (UI.getChildControl)(Panel_ShipInfo, "Weight_Gauge"), _staticTextValue_Weight = (UI.getChildControl)(Panel_ShipInfo, "StaticText_Weight_Value"), _staticText_MaxMoveSpeedValue = (UI.getChildControl)(Panel_ShipInfo, "StaticText_MaxMoveSpeedValue"), _staticText_AccelerationValue = (UI.getChildControl)(Panel_ShipInfo, "StaticText_AccelerationValue"), _staticText_CorneringSpeedValue = (UI.getChildControl)(Panel_ShipInfo, "StaticText_CorneringSpeedValue"), _staticText_BrakeSpeedValue = (UI.getChildControl)(Panel_ShipInfo, "StaticText_BrakeSpeedValue"), _staticText_Value_Def = (UI.getChildControl)(Panel_ShipInfo, "StaticText_DefenceValue"), _staticSkillBG = (UI.getChildControl)(Panel_ShipInfo, "panel_skillInfo"), _skillScroll = (UI.getChildControl)(Panel_ShipInfo, "skill_scroll"), _deadCountValue = (UI.getChildControl)(Panel_ShipInfo, "StaticText_DeadCountValue"), _checkBtn_TotemShow = (UI.getChildControl)(Panel_ShipInfo, "CheckButton_EquipSlot_Totem"), _skillStart = 0, _skillCount = 0, _actorKeyRaw = nil, _armorName = (Array.new)(), _itemSlots = (Array.new)(), _skillSlots = (Array.new)()}
+local _extendedSlotNoId = {}
+local extendedSlotCheck = function(itemWrapper)
+  -- function num : 0_2 , upvalues : _extendedSlotNoId, shipInfo
+  local itemSSW = itemWrapper:getStaticStatus()
+  local slotNoMax = itemSSW:getExtendedSlotCount()
+  for i = 1, slotNoMax do
+    local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
+    if slotNoMax ~= extendSlotNo then
+      (table.insert)(_extendedSlotNoId, extendSlotNo)
+      ;
+      ((shipInfo._itemSlots)[extendSlotNo]):setItem(itemWrapper)
+      ;
+      (((shipInfo._itemSlots)[extendSlotNo]).icon):SetMonoTone(true)
+    end
+  end
+end
+
 shipInfo.init = function(self)
-  -- function num : 0_2
+  -- function num : 0_3
   for index,value in pairs((self._config)._slotNo) do
     local slot = {}
     slot.icon = (UI.getChildControl)(Panel_ShipInfo, ((self._config)._slotID)[value])
@@ -74,8 +91,32 @@ shipInfo.init = function(self)
   end
 end
 
+shipInfo.updateHp = function(self)
+  -- function num : 0_4
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Hp):SetSize(1.55 * (servantWrapper:getHp() / servantWrapper:getMaxHp() * 100), 4)
+  ;
+  (self._staticTextValue_Hp):SetText(makeDotMoney(servantWrapper:getHp()) .. " / " .. makeDotMoney(servantWrapper:getMaxHp()))
+end
+
+shipInfo.updateMp = function(self)
+  -- function num : 0_5
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  ;
+  (self._staticGaugeBar_Mp):SetSize(1.55 * (servantWrapper:getMp() / servantWrapper:getMaxMp() * 100), 5)
+  ;
+  (self._staticTextValue_Mp):SetText(makeDotMoney(servantWrapper:getMp()) .. " / " .. makeDotMoney(servantWrapper:getMaxMp()))
+end
+
 shipInfo.update = function(self)
-  -- function num : 0_3 , upvalues : shipInfo
+  -- function num : 0_6 , upvalues : _extendedSlotNoId, shipInfo, extendedSlotCheck
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantWrapper = temporaryWrapper:getUnsealVehicleByActorKeyRaw(self._actorKeyRaw)
   if servantWrapper == nil then
@@ -133,16 +174,30 @@ shipInfo.update = function(self)
   local deadCount = servantWrapper:getDeadCount()
   ;
   (self._deadCountValue):SetText(deadCount)
+  _extendedSlotNoId = {}
   for index,value in pairs((self._config)._slotNo) do
     local slot = (self._itemSlots)[value]
     local itemWrapper = servantWrapper:getEquipItem(value)
     if itemWrapper ~= nil then
       (((shipInfo._config)._slotEmptyBG)[value]):SetShow(false)
       slot:setItem(itemWrapper)
-    else
-      slot:clearItem()
       ;
-      (((shipInfo._config)._slotEmptyBG)[value]):SetShow(true)
+      (slot.icon):SetMonoTone(false)
+      extendedSlotCheck(itemWrapper)
+    else
+      local isExtendedSlot = false
+      for _,index in pairs(_extendedSlotNoId) do
+        if value == index then
+          isExtendedSlot = true
+        end
+      end
+      if isExtendedSlot then
+        (((shipInfo._config)._slotEmptyBG)[value]):SetShow(false)
+      else
+        slot:clearItem()
+        ;
+        (((shipInfo._config)._slotEmptyBG)[value]):SetShow(true)
+      end
     end
   end
   ;
@@ -150,7 +205,7 @@ shipInfo.update = function(self)
 end
 
 shipInfo.registEventHandler = function(self)
-  -- function num : 0_4
+  -- function num : 0_7
   (self._buttonClose):addInputEvent("Mouse_LUp", "ShipInfo_Close()")
   ;
   (self._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelServantinfo\" )")
@@ -169,14 +224,16 @@ shipInfo.registEventHandler = function(self)
 end
 
 shipInfo.registMessageHandler = function(self)
-  -- function num : 0_5
+  -- function num : 0_8
   registerEvent("EventSelfServantUpdate", "ShipInfo_Update()")
+  registerEvent("EventSelfServantUpdateOnlyHp", "ShipInfo_UpdateHp")
+  registerEvent("EventSelfServantUpdateOnlyMp", "ShipInfo_UpdateMp")
   registerEvent("EventServantEquipmentUpdate", "ShipInfo_Update()")
   registerEvent("EventServantEquipItem", "ShipInfo_ChangeEquipItem")
 end
 
 ShipInfo_ChangeEquipItem = function(slotNo)
-  -- function num : 0_6 , upvalues : shipInfo, UI_VT
+  -- function num : 0_9 , upvalues : shipInfo, UI_VT
   ShipInfo_SetShowTotem()
   local self = shipInfo
   local slot = (self._itemSlots)[slotNo]
@@ -209,7 +266,7 @@ ShipInfo_ChangeEquipItem = function(slotNo)
 end
 
 ShipInfo_RClick = function(slotNo)
-  -- function num : 0_7 , upvalues : shipInfo
+  -- function num : 0_10 , upvalues : shipInfo
   local self = shipInfo
   local temporaryWrapper = getTemporaryInformationWrapper()
   if temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship) == nil then
@@ -227,7 +284,7 @@ ShipInfo_RClick = function(slotNo)
 end
 
 ShipInfo_LClick = function(slotNo)
-  -- function num : 0_8
+  -- function num : 0_11
   if DragManager.dragStartPanel == Panel_Window_Inventory then
     Inventory_SlotRClick(DragManager.dragSlotInfo)
     ;
@@ -236,7 +293,7 @@ ShipInfo_LClick = function(slotNo)
 end
 
 ShipInfo_EquipItem_MouseOn = function(slotNo, isOn)
-  -- function num : 0_9 , upvalues : shipInfo
+  -- function num : 0_12 , upvalues : shipInfo
   local self = shipInfo
   local slot = (self._itemSlots)[slotNo]
   Panel_Tooltip_Item_SetPosition(slotNo, slot, "ServantShipEquipment")
@@ -244,7 +301,7 @@ ShipInfo_EquipItem_MouseOn = function(slotNo, isOn)
 end
 
 ShipInfo_SetShowTotem = function()
-  -- function num : 0_10 , upvalues : shipInfo
+  -- function num : 0_13 , upvalues : shipInfo
   local self = shipInfo
   local temporaryWrapper = getTemporaryInformationWrapper()
   local seaVehicleWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
@@ -261,27 +318,27 @@ ShipInfo_SetShowTotem = function()
 end
 
 ShipInfo_ScrollEvent = function(isScrollUp)
-  -- function num : 0_11 , upvalues : shipInfo
+  -- function num : 0_14 , upvalues : shipInfo
   local self = shipInfo
   self._skillStart = (UIScroll.ScrollEvent)(self._skillScroll, isScrollUp, ((self._config)._skill).count, self._skillCount, self._skillStart, 1)
   self:update()
 end
 
 ShipInfo_OpenByActorKeyRaw = function(actorKeyRaw)
-  -- function num : 0_12 , upvalues : shipInfo
+  -- function num : 0_15 , upvalues : shipInfo
   local self = shipInfo
   self._actorKeyRaw = actorKeyRaw
   ShipInfo_Open()
 end
 
 ShipInfo_GetActorKey = function()
-  -- function num : 0_13 , upvalues : shipInfo
+  -- function num : 0_16 , upvalues : shipInfo
   local self = shipInfo
   return self._actorKeyRaw
 end
 
 ShipInfo_Update = function()
-  -- function num : 0_14 , upvalues : shipInfo
+  -- function num : 0_17 , upvalues : shipInfo
   if not Panel_ShipInfo:GetShow() then
     return 
   end
@@ -289,8 +346,26 @@ ShipInfo_Update = function()
   self:update()
 end
 
+ShipInfo_UpdateHp = function()
+  -- function num : 0_18 , upvalues : shipInfo
+  if Panel_ShipInfo:GetShow() == false then
+    return 
+  end
+  local self = shipInfo
+  self:updateHp()
+end
+
+ShipInfo_UpdateMp = function()
+  -- function num : 0_19 , upvalues : shipInfo
+  if Panel_ShipInfo:GetShow() == false then
+    return 
+  end
+  local self = shipInfo
+  self:updateMp()
+end
+
 ShipInfo_Open = function()
-  -- function num : 0_15 , upvalues : shipInfo
+  -- function num : 0_20 , upvalues : shipInfo
   local self = shipInfo
   self:update()
   if Panel_ShipInfo:GetShow() then
@@ -306,7 +381,7 @@ ShipInfo_Open = function()
 end
 
 ShipInfo_Close = function()
-  -- function num : 0_16
+  -- function num : 0_21
   if not Panel_ShipInfo:GetShow() then
     return 
   end

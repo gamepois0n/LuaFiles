@@ -295,11 +295,19 @@ end
 
 init()
 QuestDirect_ReSize()
+FromClient_eventCutsceneStop = function()
+  -- function num : 0_8 , upvalues : ui
+  if Panel_QuestDirect:isPlayAnimation() == false then
+    (ui._backGround):EraseAllEffect()
+  end
+end
+
 registerEvent("onScreenResize", "QuestDirect_ReSize")
+registerEvent("FromClient_eventCutsceneStop", "FromClient_eventCutsceneStop")
 local _guildQuestName = nil
 local _prevCurrentCount = {}
 FromClient_AcquireAcceptGuildQuestDirectUpdate = function()
-  -- function num : 0_8 , upvalues : _prevCurrentCount, ui, _guildQuestName, UI_color, UI_TM, constValue
+  -- function num : 0_9 , upvalues : _prevCurrentCount, ui, _guildQuestName, UI_color, UI_TM, constValue
   if ToClient_isGuildQuestOtherServer() then
     return 
   end
@@ -371,7 +379,7 @@ FromClient_AcquireAcceptGuildQuestDirectUpdate = function()
 end
 
 FromClient_AcquireComplateGuildQuestDirectUpdate = function()
-  -- function num : 0_9 , upvalues : ui, UI_color, UI_TM, constValue
+  -- function num : 0_10 , upvalues : ui, UI_color, UI_TM, constValue
   if ToClient_GetMessageFilter(9) == true then
     return 
   end
@@ -429,7 +437,7 @@ FromClient_AcquireComplateGuildQuestDirectUpdate = function()
 end
 
 AcquireGuildQuestDemand = function(actorName, characterName, currentGuildQuestInfo, isComplete)
-  -- function num : 0_10 , upvalues : ui, UI_TM, UI_color
+  -- function num : 0_11 , upvalues : ui, UI_TM, UI_color
   (ui._backGround):SetShow(false)
   ;
   (ui._countingBG):SetShow(true)
@@ -495,7 +503,7 @@ AcquireGuildQuestDemand = function(actorName, characterName, currentGuildQuestIn
 end
 
 FromClient_AcquireGuildQuestDirectUpdate = function(actorName, characterName)
-  -- function num : 0_11 , upvalues : _prevCurrentCount
+  -- function num : 0_12 , upvalues : _prevCurrentCount
   if ToClient_GetMessageFilter(9) == true then
     return 
   end

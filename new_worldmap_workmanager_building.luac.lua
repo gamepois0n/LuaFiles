@@ -764,10 +764,10 @@ Worker_List._setData = function(self)
       local maxPoint = npcWaitingWorkerSS._actionPoint
       local currentPoint = npcWaitingWorker:getActionPoint()
       local workerRegionWrapper = ToClient_getRegionInfoWrapper(npcWaitingWorker)
-      local name = "Lv." .. npcWaitingWorker:getLevel() .. " " .. ToClient_getWorkerName(npcWaitingWorkerSS) .. "(<PAColor0xff868686>" .. workerRegionWrapper:getAreaName() .. "<PAOldColor>)"
+      local name = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. npcWaitingWorker:getLevel() .. " " .. ToClient_getWorkerName(npcWaitingWorkerSS) .. "(<PAColor0xff868686>" .. workerRegionWrapper:getAreaName() .. "<PAOldColor>)"
       local homeWaypoint = npcWaitingWorker:getHomeWaypoint()
       local workerGrade = ((npcWaitingWorkerSS:getCharacterStaticStatus())._gradeType):get()
-      -- DECOMPILER ERROR at PC149: Confused about usage of register: R29 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC154: Confused about usage of register: R29 in 'UnsetPending'
 
       ;
       (self._data_Table)[_Idx] = {_workerNo = workerNo, _workerNo_s64 = workerNoChar, _workerNoChar = Int64toInt32(workerNoChar), _name = name, _workSpeed = workSpeed / 1000000, _moveSpeed = moveSpeed, _maxPoint = maxPoint, _currentPoint = currentPoint, _homeWaypoint = homeWaypoint, _workerGrade = workerGrade}

@@ -1031,7 +1031,6 @@ StableStallion_SetPos = function()
   local protectTextBGSizeY = ((self.protect)._protectItemDescBG):GetSizeY()
   local stallionSizeY = 0
   local protectSizeY = 0
-  _PA_LOG("임승�\177", "stallion :" .. tostring(stallionTextSizeY) .. "/ bg :" .. tostring(stallionTextBGSizeY) .. " / pro :" .. tostring(protectTextSizeY) .. " / bg :" .. tostring(protectTextBGSizeY))
   if stallionTextBGSizeY < stallionTextSizeY + 10 or protectTextBGSizeY < protectTextSizeY then
     stallionSizeY = stallionTextSizeY - stallionTextBGSizeY
     protectSizeY = protectTextSizeY - protectTextBGSizeY

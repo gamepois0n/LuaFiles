@@ -77,6 +77,20 @@ Slider_RotZ:addInputEvent("Mouse_LPress", "UpdateHairBone(2)")
 Button_Slider_RotX:addInputEvent("Mouse_LPress", "UpdateHairBone(2)")
 Button_Slider_RotY:addInputEvent("Mouse_LPress", "UpdateHairBone(2)")
 Button_Slider_RotZ:addInputEvent("Mouse_LPress", "UpdateHairBone(2)")
+if CppDefineCustom.Flag == true then
+  Slider_TransX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_TransY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_TransZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_TransX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_TransY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_TransZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_RotX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_RotY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Slider_RotZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_RotX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_RotY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  Button_Slider_RotZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+end
 ;
 (SliderArr[1]):addInputEvent("Mouse_LPress", "UpdateHairSlider(0)")
 ;
@@ -97,6 +111,27 @@ Button_Slider_RotZ:addInputEvent("Mouse_LPress", "UpdateHairBone(2)")
 (Button_SliderArr[4]):addInputEvent("Mouse_LPress", "UpdateHairSlider(3)")
 ;
 (Button_SliderArr[5]):addInputEvent("Mouse_LPress", "UpdateHairSlider(4)")
+if CppDefineCustom.Flag == true then
+  (SliderArr[1]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (SliderArr[2]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (SliderArr[3]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (SliderArr[4]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (SliderArr[5]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (Button_SliderArr[1]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (Button_SliderArr[2]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (Button_SliderArr[3]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (Button_SliderArr[4]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ;
+  (Button_SliderArr[5]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+end
 Button_All_Reset:addInputEvent("Mouse_LUp", "clearGroupCustomizedBonInfoLua()")
 Button_Part_Reset:addInputEvent("Mouse_LUp", "clearCustomizedBoneInfo()")
 CheckButton_ControlPart:addInputEvent("Mouse_LUp", "ToggleShowHairBoneControlPart()")
@@ -370,6 +405,8 @@ OpenHairShapeUi = function(classType, uiId)
       paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
       local sliderParam = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
       setSliderValue(SliderArr[luaSliderIndex], sliderParam, paramMin[luaSliderIndex], paramMax[luaSliderIndex])
+      ;
+      (SliderArr[luaSliderIndex]):SetInterval(100)
     end
   end
   do

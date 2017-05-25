@@ -3,7 +3,7 @@
 
 -- params : ...
 -- function num : 0
-PaGlobal_TutorialPhase_Enchant = {_phaseNo = 18, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = false, _isSkippable = false, 
+PaGlobal_TutorialPhase_Enchant = {_phaseNo = 18, _currentStep = 0, _nextStep = 0, _currentProgress = 0, _prevProgress = 1, _updateTime = 0, _isPhaseOpen = true, _isSkippable = false, 
 _talkerCharacterKeyData = {[1] = 0}
 , 
 _questData = {
@@ -363,7 +363,9 @@ end
 
 PaGlobal_TutorialPhase_Enchant.eventCallStep1CloseEnchantWindow = function(self)
   -- function num : 0_15
-  self:endPhase()
+  if self._currentProgress > 2 then
+    self:endPhase()
+  end
 end
 
 -- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'

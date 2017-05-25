@@ -204,8 +204,27 @@ end
 end
 
   local hideTimeType = {overHeadUI = 0, preemptiveStrike = 1, bubbleBox = 2, murdererEnd = 3}
-  local settingName = function(actorKeyRaw, targetPanel, actorProxyWrapper)
+  local myMilitiaTeamNo = function()
   -- function num : 0_7
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return -1
+  end
+  local selfProxy = selfPlayer:get()
+  local myTeamNo = selfProxy:getLiberationTeamNoForLua()
+  if myTeamNo >= 1000 then
+    return 1
+  else
+    if myTeamNo >= 100 then
+      return 0
+    else
+      return -1
+    end
+  end
+end
+
+  local settingName = function(actorKeyRaw, targetPanel, actorProxyWrapper)
+  -- function num : 0_8 , upvalues : myMilitiaTeamNo
   local nameTag = nil
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
@@ -235,103 +254,176 @@ end
     nameTag:SetShow(false)
     return 
   end
-  if actorProxy:isHouseHold() then
-    local houseActorWarpper = getHouseHoldActor(actorKeyRaw)
-    local isMine = (houseActorWarpper:get()):isOwnedBySelfPlayer()
-    local isMyGuild = (houseActorWarpper:get()):isOwnedBySelfPlayerGuild()
-    local isPersonalTent = (houseActorWarpper:get()):isPersonalTent()
-    local isSiegeTent = (houseActorWarpper:get()):isKingOrLordTent()
-    if isMine and isPersonalTent then
-      local tentWrapper = (getTemporaryInformationWrapper()):getSelfTentWrapperByActorKeyRaw(actorKeyRaw)
-      if tentWrapper ~= nil then
-        local expireTime = tentWrapper:getSelfTentExpiredTime_s64()
-        local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
-        textName = getHouseHoldName(actorProxy)
-        targetPanel:Set3DRotationY(actorProxy:getRotation())
-      end
-    else
-      do
-        if isMyGuild and isSiegeTent then
-          local expireTime = (houseActorWarpper:get()):getExpiredTime()
-          local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
-          local builddingInfo = ToClient_getBuildingInfo(actorKeyRaw)
-          local buildProgress = builddingInfo:getBuildingProgress()
-          textName = getHouseHoldName(actorProxy)
-          targetPanel:Set3DRotationY(actorProxy:getRotation())
-        else
-          do
+  if actorProxy:isPlayer() then
+    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    -- DECOMPILER ERROR at PC105: Unhandled construct in 'MakeBoolean' P1
+
+    if militiaTeamNo >= 1000 and playerActorProxyWrapper ~= nil then
+      local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+      if isMilitia then
+        local militiaIcon = (UI.getChildControl)(targetPanel, "Static_MilitiaIcon")
+        militiaIcon:SetShow(true)
+        militiaIcon:ChangeTextureInfoName("New_UI_Common_forLua/Window/PvP/Militia_01.dds")
+        if deadMessage_isInSiegeBattle() then
+          if myMilitiaTeamNo() == 0 then
+            local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 160, 193, 195, 235)
+            ;
+            (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+          else
             do
-              textName = getHouseHoldName(actorProxy)
-              targetPanel:Set3DRotationY(actorProxy:getRotation())
-              if actorProxy:isInstallationActor() then
-                textName = actorProxy:getStaticStatusName()
-                local installationActorWrapper = getInstallationActor(actorKeyRaw)
-                if toInt64(0, 0) ~= installationActorWrapper:getOwnerHouseholdNo_s64() and installationActorWrapper:isHavestInstallation() then
-                  local rate = installationActorWrapper:getHarvestTotalGrowRate() * 100
-                  if rate < 0 then
-                    rate = 0
-                  end
-                  textName = (installationActorWrapper:get()):getStaticStatusName() .. " - (<PAColor0xFFffd429>" .. tostring((math.floor)(rate)) .. "%<PAOldColor>)"
-                end
-              else
+              do
+                local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 88, 193, 123, 235)
+                ;
+                (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
                 do
-                  if isNpcWorker(actorProxy) then
-                    textName = getNpcWorkerOwnerName(actorProxy)
-                  else
-                    if actorProxy:isSelfPlayer() then
-                      local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                      if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-                        nameTag:SetMonoTone(true)
-                      else
-                        if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
-                          nameTag:SetMonoTone(true)
-                        else
-                          nameTag:SetMonoTone(false)
-                        end
-                      end
-                      local level = (playerActorProxyWrapper:get()):getLevel()
-                      textName = playerActorProxyWrapper:getName()
-                    else
-                      do
-                        if actorProxy:isPlayer() then
-                          local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                          if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-                            nameTag:SetMonoTone(true)
+                  do
+                    local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 88, 193, 123, 235)
+                    ;
+                    (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                    militiaIcon:setRenderTexture(militiaIcon:getBaseTexture())
+                    nameTag:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_MILITIADEFFENCE"))
+                    nameTag:SetShow(true)
+                    do return  end
+                    if militiaTeamNo >= 100 and playerActorProxyWrapper ~= nil then
+                      local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+                      if isMilitia then
+                        local militiaIcon = (UI.getChildControl)(targetPanel, "Static_MilitiaIcon")
+                        militiaIcon:SetShow(true)
+                        militiaIcon:ChangeTextureInfoName("New_UI_Common_forLua/Window/PvP/Militia_01.dds")
+                        if deadMessage_isInSiegeBattle() then
+                          if myMilitiaTeamNo() == 0 then
+                            local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 196, 193, 231, 235)
+                            ;
+                            (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
                           else
-                            if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
-                              nameTag:SetMonoTone(true)
-                            else
-                              nameTag:SetMonoTone(false)
-                            end
-                          end
-                          local level = (playerActorProxyWrapper:get()):getLevel()
-                          local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
-                          textName = actorProxyWrapper:getName()
-                        else
-                          do
-                            if actorProxy:isInstanceObject() then
-                              if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTrap() then
-                                nameTag:SetShow(false)
-                                return 
-                              end
-                              textName = actorProxyWrapper:getName()
-                            else
-                              if actorProxy:isNpc() then
-                                textName = actorProxyWrapper:getName()
-                                local isFusionCore = (actorProxy:getCharacterStaticStatus()):isFusionCore()
-                                if isFusionCore == true then
-                                  local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
-                                  if npcActorProxyWrapper:getTeamNo_s64() == (getSelfPlayer()):getTeamNo_s64() then
-                                    textName = textName
-                                  else
-                                    textName = ""
-                                  end
-                                end
-                              else
+                            do
+                              do
+                                local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 124, 193, 159, 235)
+                                ;
+                                (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
                                 do
-                                  textName = actorProxyWrapper:getName()
-                                  nameTag:SetText(textName)
-                                  nameTag:SetShow(true)
+                                  do
+                                    local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 124, 193, 159, 235)
+                                    ;
+                                    (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                    militiaIcon:setRenderTexture(militiaIcon:getBaseTexture())
+                                    nameTag:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_MILITIAATTACK"))
+                                    nameTag:SetShow(true)
+                                    do return  end
+                                    if actorProxy:isHouseHold() then
+                                      local houseActorWarpper = getHouseHoldActor(actorKeyRaw)
+                                      local isMine = (houseActorWarpper:get()):isOwnedBySelfPlayer()
+                                      local isMyGuild = (houseActorWarpper:get()):isOwnedBySelfPlayerGuild()
+                                      local isPersonalTent = (houseActorWarpper:get()):isPersonalTent()
+                                      local isSiegeTent = (houseActorWarpper:get()):isKingOrLordTent()
+                                      if isMine and isPersonalTent then
+                                        local tentWrapper = (getTemporaryInformationWrapper()):getSelfTentWrapperByActorKeyRaw(actorKeyRaw)
+                                        if tentWrapper ~= nil then
+                                          local expireTime = tentWrapper:getSelfTentExpiredTime_s64()
+                                          local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
+                                          textName = getHouseHoldName(actorProxy)
+                                          targetPanel:Set3DRotationY(actorProxy:getRotation())
+                                        end
+                                      else
+                                        do
+                                          if isMyGuild and isSiegeTent then
+                                            local expireTime = (houseActorWarpper:get()):getExpiredTime()
+                                            local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
+                                            local builddingInfo = ToClient_getBuildingInfo(actorKeyRaw)
+                                            local buildProgress = builddingInfo:getBuildingProgress()
+                                            textName = getHouseHoldName(actorProxy)
+                                            targetPanel:Set3DRotationY(actorProxy:getRotation())
+                                          else
+                                            do
+                                              do
+                                                textName = getHouseHoldName(actorProxy)
+                                                targetPanel:Set3DRotationY(actorProxy:getRotation())
+                                                if actorProxy:isInstallationActor() then
+                                                  textName = actorProxy:getStaticStatusName()
+                                                  local installationActorWrapper = getInstallationActor(actorKeyRaw)
+                                                  if toInt64(0, 0) ~= installationActorWrapper:getOwnerHouseholdNo_s64() and installationActorWrapper:isHavestInstallation() then
+                                                    local rate = installationActorWrapper:getHarvestTotalGrowRate() * 100
+                                                    if rate < 0 then
+                                                      rate = 0
+                                                    end
+                                                    textName = (installationActorWrapper:get()):getStaticStatusName() .. " - (<PAColor0xFFffd429>" .. tostring((math.floor)(rate)) .. "%<PAOldColor>)"
+                                                  end
+                                                else
+                                                  do
+                                                    if isNpcWorker(actorProxy) then
+                                                      textName = getNpcWorkerOwnerName(actorProxy)
+                                                    else
+                                                      if actorProxy:isSelfPlayer() then
+                                                        local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
+                                                        if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+                                                          nameTag:SetMonoTone(true)
+                                                        else
+                                                          if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
+                                                            nameTag:SetMonoTone(true)
+                                                          else
+                                                            nameTag:SetMonoTone(false)
+                                                          end
+                                                        end
+                                                        local level = (playerActorProxyWrapper:get()):getLevel()
+                                                        textName = playerActorProxyWrapper:getName()
+                                                      else
+                                                        do
+                                                          if actorProxy:isPlayer() then
+                                                            local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
+                                                            if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+                                                              nameTag:SetMonoTone(true)
+                                                            else
+                                                              if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
+                                                                nameTag:SetMonoTone(true)
+                                                              else
+                                                                nameTag:SetMonoTone(false)
+                                                              end
+                                                            end
+                                                            local level = (playerActorProxyWrapper:get()):getLevel()
+                                                            local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
+                                                            textName = actorProxyWrapper:getName()
+                                                          else
+                                                            do
+                                                              if actorProxy:isInstanceObject() then
+                                                                if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTrap() then
+                                                                  nameTag:SetShow(false)
+                                                                  return 
+                                                                end
+                                                                textName = actorProxyWrapper:getName()
+                                                              else
+                                                                if actorProxy:isNpc() then
+                                                                  textName = actorProxyWrapper:getName()
+                                                                  local isFusionCore = (actorProxy:getCharacterStaticStatus()):isFusionCore()
+                                                                  if isFusionCore == true then
+                                                                    local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
+                                                                    if npcActorProxyWrapper:getTeamNo_s64() == (getSelfPlayer()):getTeamNo_s64() then
+                                                                      textName = textName
+                                                                    else
+                                                                      textName = ""
+                                                                    end
+                                                                  end
+                                                                else
+                                                                  do
+                                                                    textName = actorProxyWrapper:getName()
+                                                                    nameTag:SetText(textName)
+                                                                    nameTag:SetShow(true)
+                                                                  end
+                                                                end
+                                                              end
+                                                            end
+                                                          end
+                                                        end
+                                                      end
+                                                    end
+                                                  end
+                                                end
+                                              end
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
+                                  end
                                 end
                               end
                             end
@@ -351,7 +443,7 @@ end
 end
 
   local settingAlias = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_8
+  -- function num : 0_9
   local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
   if playerActorProxyWrapper == nil then
     return 
@@ -365,43 +457,53 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    if playerActorProxyWrapper:checkToTitleKey() then
-      aliasInfo:SetText(playerActorProxyWrapper:getTitleName())
-      if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-        aliasInfo:SetMonoTone(true)
-      else
-        if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
+    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local isMilitia = actorProxy:isValunteer()
+    if militiaTeamNo > 0 and isMilitia == true then
+      aliasInfo:SetShow(false)
+      return 
+    end
+  end
+  do
+    if actorProxy:isPlayer() then
+      if playerActorProxyWrapper:checkToTitleKey() then
+        aliasInfo:SetText(playerActorProxyWrapper:getTitleName())
+        if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
           aliasInfo:SetMonoTone(true)
         else
-          aliasInfo:SetMonoTone(false)
+          if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
+            aliasInfo:SetMonoTone(true)
+          else
+            aliasInfo:SetMonoTone(false)
+          end
         end
-      end
-      local isShowForAlli = false
-      if actorProxy:isHideCharacterName() == true and actorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
-        isShowForAlli = true
-      end
-      if (actorProxy:isHideCharacterName() and actorProxy:isFlashBanged() == false) or isShowForAlli == true then
-        aliasInfo:SetShow(false)
+        local isShowForAlli = false
+        if actorProxy:isHideCharacterName() == true and actorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
+          isShowForAlli = true
+        end
+        if (actorProxy:isHideCharacterName() and actorProxy:isFlashBanged() == false) or isShowForAlli == true then
+          aliasInfo:SetShow(false)
+        else
+          local titleColor = 4282695908
+          if playerActorProxyWrapper:isExistTitleColor() then
+            titleColor = playerActorProxyWrapper:getTitleColorValue()
+          end
+          aliasInfo:SetShow(true)
+          aliasInfo:SetFontColor(titleColor)
+          aliasInfo:useGlowFont(true, "BaseFont_10_Glow", 4278456421)
+        end
       else
-        local titleColor = 4282695908
-        if playerActorProxyWrapper:isExistTitleColor() then
-          titleColor = playerActorProxyWrapper:getTitleColorValue()
+        do
+          aliasInfo:SetShow(false)
+          aliasInfo:SetShow(false)
         end
-        aliasInfo:SetShow(true)
-        aliasInfo:SetFontColor(titleColor)
-        aliasInfo:useGlowFont(true, "BaseFont_10_Glow", 4278456421)
-      end
-    else
-      do
-        aliasInfo:SetShow(false)
-        aliasInfo:SetShow(false)
       end
     end
   end
 end
 
   local settingTitle = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_9
+  -- function num : 0_10
   local actorProxy = actorProxyWrapper:get()
   if actorProxy:isPlayer() == false and actorProxy:isMonster() == false and actorProxy:isNpc() == false then
     return 
@@ -414,6 +516,12 @@ end
   if actorProxy:isPlayer() then
     local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
     if playerActorProxyWrapper == nil then
+      return 
+    end
+    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+    if militiaTeamNo > 0 and isMilitia == true then
+      nickName:SetShow(false)
       return 
     end
     if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
@@ -461,7 +569,7 @@ end
 end
 
   local settingFirstTalk = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_10
+  -- function num : 0_11
   local firstTalk = (UI.getChildControl)(targetPanel, "Static_FirstTalk")
   if firstTalk == nil then
     return 
@@ -475,7 +583,7 @@ end
 end
 
   local settingImportantTalk = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_11
+  -- function num : 0_12
   local importantTalk = (UI.getChildControl)(targetPanel, "Static_ImportantTalk")
   if importantTalk == nil then
     return 
@@ -492,7 +600,7 @@ end
 end
 
   local settingOtherHeadIcon = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_12 , upvalues : getControlProperty
+  -- function num : 0_13 , upvalues : getControlProperty
   local characterKeyRaw = actorProxyWrapper:getCharacterKeyRaw()
   local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
   if npcActorProxyWrapper == nil then
@@ -515,7 +623,7 @@ end
 end
 
   local guildTendencyColor = function(tendency)
-  -- function num : 0_13
+  -- function num : 0_14
   local r, g, b = 0, 0, 0
   local upValue = 300000
   local downValue = -1000000
@@ -539,7 +647,7 @@ end
 end
 
   local nameTendencyColor = function(tendency)
-  -- function num : 0_14
+  -- function num : 0_15
   local r, g, b = 0, 0, 0
   local upValue = 300000
   local downValue = -1000000
@@ -563,7 +671,7 @@ end
 end
 
   local settingGuildInfo = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_15 , upvalues : guildMarkInit
+  -- function num : 0_16 , upvalues : guildMarkInit
   if targetPanel == nil then
     return 
   end
@@ -589,103 +697,119 @@ end
   if playerActorProxy == nil then
     return 
   end
-  local hasGuild = playerActorProxy:isGuildMember() and (playerActorProxy:isHideGuildName() ~= false and playerActorProxy:isFlashBanged())
-  if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-    guildName:SetMonoTone(true)
-    guildMark:SetMonoTone(true)
-    guildBack:SetMonoTone(true)
-  elseif playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
-    guildName:SetMonoTone(true)
-    guildMark:SetMonoTone(true)
-    guildBack:SetMonoTone(true)
-  else
-    guildName:SetMonoTone(false)
-    guildMark:SetMonoTone(false)
-    guildBack:SetMonoTone(false)
+  local actorProxy = actorProxyWrapper:get()
+  if actorProxy == nil then
+    return 
   end
-  do
-    local isShowForAlli = false
-    if (playerActorProxyWrapper:get()):isHideCharacterName() == true and (playerActorProxyWrapper:get()):isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
-      isShowForAlli = true
-    end
-    if hasGuild == false or isShowForAlli == true then
+  if actorProxy:isPlayer() then
+    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local isMilitia = playerActorProxy:isValunteer()
+    if militiaTeamNo > 0 and isMilitia == true then
       guildName:SetShow(false)
       guildMark:SetShow(false)
       guildBack:SetShow(false)
       return 
-    else
-      guildName:SetShow(hasGuild)
-      guildMark:SetShow(hasGuild)
-      guildBack:SetShow(hasGuild)
     end
-    if hasGuild then
-      local guildNameText = playerActorProxyWrapper:getGuildName()
-      guildName:useGlowFont(false)
-      guildName:SetFontColor(4293914607)
-      guildName:useGlowFont(true, "BaseFont_10_Glow", 4279004349)
-      local guildGrade = ToClient_getGuildGrade(playerActorProxyWrapper:getGuildNo_s64())
-      local isbadGuildName = playerActorProxyWrapper:isBadNameFlag(playerActorProxyWrapper:getGuildNo_s64())
-      if (CppEnums.GuildGrade).GuildGrade_Clan == guildGrade then
+  end
+  do
+    local hasGuild = playerActorProxy:isGuildMember() and (playerActorProxy:isHideGuildName() ~= false and playerActorProxy:isFlashBanged())
+    if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+      guildName:SetMonoTone(true)
+      guildMark:SetMonoTone(true)
+      guildBack:SetMonoTone(true)
+    elseif playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
+      guildName:SetMonoTone(true)
+      guildMark:SetMonoTone(true)
+      guildBack:SetMonoTone(true)
+    else
+      guildName:SetMonoTone(false)
+      guildMark:SetMonoTone(false)
+      guildBack:SetMonoTone(false)
+    end
+    do
+      local isShowForAlli = false
+      if (playerActorProxyWrapper:get()):isHideCharacterName() == true and (playerActorProxyWrapper:get()):isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
+        isShowForAlli = true
+      end
+      if hasGuild == false or isShowForAlli == true then
+        guildName:SetShow(false)
         guildMark:SetShow(false)
         guildBack:SetShow(false)
-      end
-      if isbadGuildName == false then
-        guildName:SetText("<" .. guildNameText .. ">")
+        return 
       else
-        guildName:SetText("<" .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_IMPROPERGUILDNAME") .. ">")
+        guildName:SetShow(hasGuild)
+        guildMark:SetShow(hasGuild)
+        guildBack:SetShow(hasGuild)
       end
-      local hasOccupyTerritory = playerActorProxy:isOccupyTerritory()
-      if hasOccupyTerritory then
-        guildOccupyIcon:SetShow(true)
-        guildOccupyIcon:SetMonoTone(false)
-      else
-        local hasSiege = ToClient_hasOccupyingMajorSiege(playerActorProxyWrapper:getGuildNo_s64())
-        if hasSiege == true then
-          guildOccupyIcon:SetShow(true)
-          guildOccupyIcon:SetMonoTone(true)
-        else
-          guildOccupyIcon:SetShow(false)
-          guildOccupyIcon:SetMonoTone(false)
+      if hasGuild then
+        local guildNameText = playerActorProxyWrapper:getGuildName()
+        guildName:useGlowFont(false)
+        guildName:SetFontColor(4293914607)
+        guildName:useGlowFont(true, "BaseFont_10_Glow", 4279004349)
+        local guildGrade = ToClient_getGuildGrade(playerActorProxyWrapper:getGuildNo_s64())
+        local isbadGuildName = playerActorProxyWrapper:isBadNameFlag(playerActorProxyWrapper:getGuildNo_s64())
+        if (CppEnums.GuildGrade).GuildGrade_Clan == guildGrade then
+          guildMark:SetShow(false)
+          guildBack:SetShow(false)
         end
-      end
-      local isSet = setGuildTexture(actorKeyRaw, guildMark)
-      if isSet == false then
+        if isbadGuildName == false then
+          guildName:SetText("<" .. guildNameText .. ">")
+        else
+          guildName:SetText("<" .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_IMPROPERGUILDNAME") .. ">")
+        end
+        local hasOccupyTerritory = playerActorProxy:isOccupyTerritory()
+        if hasOccupyTerritory then
+          guildOccupyIcon:SetShow(true)
+          guildOccupyIcon:SetMonoTone(false)
+        else
+          local hasSiege = ToClient_hasOccupyingMajorSiege(playerActorProxyWrapper:getGuildNo_s64())
+          if hasSiege == true then
+            guildOccupyIcon:SetShow(true)
+            guildOccupyIcon:SetMonoTone(true)
+          else
+            guildOccupyIcon:SetShow(false)
+            guildOccupyIcon:SetMonoTone(false)
+          end
+        end
+        local isSet = setGuildTexture(actorKeyRaw, guildMark)
+        if isSet == false then
+          guildMarkInit(guildMark)
+        else
+          (guildMark:getBaseTexture()):setUV(0, 0, 1, 1)
+          guildMark:setRenderTexture(guildMark:getBaseTexture())
+        end
+        if playerActorProxy:isGuildAllianceChair() then
+          guildBack:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Etc_00.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 1, 1, 43, 43)
+          ;
+          (guildBack:getBaseTexture()):setUV(x1, y1, x2, y2)
+          guildBack:setRenderTexture(guildBack:getBaseTexture())
+        elseif playerActorProxy:isGuildMaster() then
+          guildBack:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Etc_00.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 87, 1, 129, 43)
+          ;
+          (guildBack:getBaseTexture()):setUV(x1, y1, x2, y2)
+          guildBack:setRenderTexture(guildBack:getBaseTexture())
+        elseif playerActorProxy:isGuildSubMaster() then
+          guildBack:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Etc_00.dds")
+          local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 44, 1, 86, 43)
+          ;
+          (guildBack:getBaseTexture()):setUV(x1, y1, x2, y2)
+          guildBack:setRenderTexture(guildBack:getBaseTexture())
+        else
+          guildBack:ChangeTextureInfoName("")
+        end
+      else
+        guildOccupyIcon:SetShow(false)
         guildMarkInit(guildMark)
-      else
-        (guildMark:getBaseTexture()):setUV(0, 0, 1, 1)
-        guildMark:setRenderTexture(guildMark:getBaseTexture())
       end
-      if playerActorProxy:isGuildAllianceChair() then
-        guildBack:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Etc_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 1, 1, 43, 43)
-        ;
-        (guildBack:getBaseTexture()):setUV(x1, y1, x2, y2)
-        guildBack:setRenderTexture(guildBack:getBaseTexture())
-      elseif playerActorProxy:isGuildMaster() then
-        guildBack:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Etc_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 87, 1, 129, 43)
-        ;
-        (guildBack:getBaseTexture()):setUV(x1, y1, x2, y2)
-        guildBack:setRenderTexture(guildBack:getBaseTexture())
-      elseif playerActorProxy:isGuildSubMaster() then
-        guildBack:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Etc_00.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(guildBack, 44, 1, 86, 43)
-        ;
-        (guildBack:getBaseTexture()):setUV(x1, y1, x2, y2)
-        guildBack:setRenderTexture(guildBack:getBaseTexture())
-      else
-        guildBack:ChangeTextureInfoName("")
-      end
-    else
-      guildOccupyIcon:SetShow(false)
-      guildMarkInit(guildMark)
+      -- DECOMPILER ERROR: 22 unprocessed JMP targets
     end
-    -- DECOMPILER ERROR: 22 unprocessed JMP targets
   end
 end
 
   local settingMonsterName = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_16 , upvalues : setMonsterNameColor
+  -- function num : 0_17 , upvalues : setMonsterNameColor
   local nameTag = (UI.getChildControl)(targetPanel, "CharacterName")
   if nameTag == nil then
     return 
@@ -700,7 +824,7 @@ end
 end
 
   local settingLifeRankIcon = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_17 , upvalues : lifeContentCount, lifeContent, lifeRankSetTexture, sortCenterX
+  -- function num : 0_18 , upvalues : lifeContentCount, lifeContent, lifeRankSetTexture, sortCenterX
   if (actorProxyWrapper:get()):isPlayer() == false then
     return 
   end
@@ -730,149 +854,162 @@ end
   if playerActorProxy == nil then
     return 
   end
-  local hasContentRank = 0
-  for lifeContentIndex = 0, lifeContent.sail do
-    local hasRank = (FromClient_GetTopRankListForNameTag()):hasRank(lifeContentIndex, actorKeyRaw)
-    local rankNumer = 0
-    if FGlobal_LifeRanking_CheckEnAble(lifeContentIndex) and hasRank == true and lifeContentIndex < 10 then
-      local rankNumer = (FromClient_GetTopRankListForNameTag()):getRank(lifeContentIndex, actorKeyRaw) + 1
-      -- DECOMPILER ERROR at PC90: Confused about usage of register: R17 in 'UnsetPending'
-
-      ;
-      (lifeContent[lifeContentIndex])[rankNumer] = rankNumer
-      ;
-      (lifeRankIcon[lifeContentIndex]):ChangeTextureInfoName("new_ui_common_forlua/default/RankingIcon_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(lifeRankIcon[lifeContentIndex], ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x2, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y2)
-      ;
-      ((lifeRankIcon[lifeContentIndex]):getBaseTexture()):setUV(x1, y1, x2, y2)
-      ;
-      (lifeRankIcon[lifeContentIndex]):setRenderTexture((lifeRankIcon[lifeContentIndex]):getBaseTexture())
-      if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-        (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
-      else
-        if playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
-          (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
-        else
-          ;
-          (lifeRankIcon[lifeContentIndex]):SetMonoTone(false)
-        end
-      end
-      local isShowForAlli = false
-      if playerActorProxy:isHideCharacterName() == true and playerActorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
-        isShowForAlli = true
-      end
-      if (playerActorProxy:isPlayer() and playerActorProxy:isHideCharacterName() and playerActorProxy:isFlashBanged() == false) or isShowForAlli == true then
-        (lifeRankIcon[lifeContentIndex]):SetShow(false)
-      else
-        ;
-        (lifeRankIcon[lifeContentIndex]):SetShow(true)
-      end
-      insertedArray:push_back(lifeRankIcon[lifeContentIndex])
-    end
+  local actorProxy = actorProxyWrapper:get()
+  if actorProxy == nil then
+    return 
   end
-  local rankerType = 0
-  for lifeContentIndex = lifeContent.combat, lifeContent.battleField do
-    hasContentRank = (FromClient_GetTopRankListForNameTag()):hasContentsRank(rankerType, actorKeyRaw)
-    if FGlobal_LifeRanking_CheckEnAble(lifeContentIndex) and hasContentRank == true and lifeContentIndex >= 10 then
-      local rankNumer = (FromClient_GetTopRankListForNameTag()):getContentsRank(rankerType, actorKeyRaw) + 1
-      -- DECOMPILER ERROR at PC248: Confused about usage of register: R16 in 'UnsetPending'
-
-      ;
-      (lifeContent[lifeContentIndex])[rankNumer] = rankNumer
-      ;
-      (lifeRankIcon[lifeContentIndex]):ChangeTextureInfoName("new_ui_common_forlua/default/RankingIcon_00.dds")
-      local x1, y1, x2, y2 = setTextureUV_Func(lifeRankIcon[lifeContentIndex], ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x2, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y2)
-      ;
-      ((lifeRankIcon[lifeContentIndex]):getBaseTexture()):setUV(x1, y1, x2, y2)
-      ;
-      (lifeRankIcon[lifeContentIndex]):setRenderTexture((lifeRankIcon[lifeContentIndex]):getBaseTexture())
-      if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-        (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
-      else
-        if playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
-          (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
-        else
-          ;
-          (lifeRankIcon[lifeContentIndex]):SetMonoTone(false)
-        end
-      end
-      local isShowForAlli = false
-      if playerActorProxy:isHideCharacterName() == true and playerActorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
-        isShowForAlli = true
-      end
-      if (playerActorProxy:isPlayer() and playerActorProxy:isHideCharacterName() and playerActorProxy:isFlashBanged() == false) or isShowForAlli == true then
-        (lifeRankIcon[lifeContentIndex]):SetShow(false)
-      else
-        ;
-        (lifeRankIcon[lifeContentIndex]):SetShow(true)
-      end
-      insertedArray:push_back(lifeRankIcon[lifeContentIndex])
+  if actorProxy:isPlayer() then
+    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local isMilitia = playerActorProxy:isValunteer()
+    if militiaTeamNo > 0 and isMilitia == true then
+      return 
     end
-    do
-      do
-        rankerType = rankerType + 1
-        -- DECOMPILER ERROR at PC374: LeaveBlock: unexpected jumping out DO_STMT
-
-      end
-    end
-  end
-  local matchType = 0
-  local hasMatchRank = 0
-  local isEnableContentsPvP = ToClient_IsContentsGroupOpen("38")
-  hasMatchRank = (FromClient_GetTopRankListForNameTag()):hasMatchRank(matchType, actorKeyRaw)
-  if hasMatchRank == true and isEnableContentsPvP then
-    local rankNumer = (FromClient_GetTopRankListForNameTag()):getMatchRank(matchType, actorKeyRaw) + 1
-    -- DECOMPILER ERROR at PC402: Confused about usage of register: R15 in 'UnsetPending'
-
-    ;
-    (lifeContent[lifeContent.match])[rankNumer] = rankNumer
-    ;
-    (lifeRankIcon[lifeContent.match]):ChangeTextureInfoName("new_ui_common_forlua/default/RankingIcon_00.dds")
-    local x1, y1, x2, y2 = setTextureUV_Func(lifeRankIcon[lifeContent.match], ((lifeRankSetTexture[lifeContent.match])[rankNumer]).x1, ((lifeRankSetTexture[lifeContent.match])[rankNumer]).y1, ((lifeRankSetTexture[lifeContent.match])[rankNumer]).x2, ((lifeRankSetTexture[lifeContent.match])[rankNumer]).y2)
-    ;
-    ((lifeRankIcon[lifeContent.match]):getBaseTexture()):setUV(x1, y1, x2, y2)
-    ;
-    (lifeRankIcon[lifeContent.match]):setRenderTexture((lifeRankIcon[lifeContent.match]):getBaseTexture())
-    if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-      (lifeRankIcon[lifeContent.match]):SetMonoTone(true)
-    else
-      if playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
-        (lifeRankIcon[lifeContent.match]):SetMonoTone(true)
-      else
-        ;
-        (lifeRankIcon[lifeContent.match]):SetMonoTone(false)
-      end
-    end
-    local isShowForAlli = false
-    if playerActorProxy:isHideCharacterName() == true and playerActorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
-      isShowForAlli = true
-    end
-    if (playerActorProxy:isPlayer() and playerActorProxy:isHideCharacterName() and playerActorProxy:isFlashBanged() == false) or isShowForAlli == true then
-      (lifeRankIcon[lifeContent.match]):SetShow(false)
-    else
-      ;
-      (lifeRankIcon[lifeContent.match]):SetShow(true)
-    end
-    insertedArray:push_back(lifeRankIcon[lifeContent.match])
   end
   do
-    local spanSizeY = 40
+    local hasContentRank = 0
+    for lifeContentIndex = 0, lifeContent.sail do
+      local hasRank = (FromClient_GetTopRankListForNameTag()):hasRank(lifeContentIndex, actorKeyRaw)
+      local rankNumer = 0
+      if FGlobal_LifeRanking_CheckEnAble(lifeContentIndex) and hasRank == true and lifeContentIndex < 10 then
+        local rankNumer = (FromClient_GetTopRankListForNameTag()):getRank(lifeContentIndex, actorKeyRaw) + 1
+        -- DECOMPILER ERROR at PC108: Confused about usage of register: R18 in 'UnsetPending'
+
+        ;
+        (lifeContent[lifeContentIndex])[rankNumer] = rankNumer
+        ;
+        (lifeRankIcon[lifeContentIndex]):ChangeTextureInfoName("new_ui_common_forlua/default/RankingIcon_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(lifeRankIcon[lifeContentIndex], ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x2, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y2)
+        ;
+        ((lifeRankIcon[lifeContentIndex]):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (lifeRankIcon[lifeContentIndex]):setRenderTexture((lifeRankIcon[lifeContentIndex]):getBaseTexture())
+        if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+          (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
+        else
+          if playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
+            (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
+          else
+            ;
+            (lifeRankIcon[lifeContentIndex]):SetMonoTone(false)
+          end
+        end
+        local isShowForAlli = false
+        if playerActorProxy:isHideCharacterName() == true and playerActorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
+          isShowForAlli = true
+        end
+        if (playerActorProxy:isPlayer() and playerActorProxy:isHideCharacterName() and playerActorProxy:isFlashBanged() == false) or isShowForAlli == true then
+          (lifeRankIcon[lifeContentIndex]):SetShow(false)
+        else
+          ;
+          (lifeRankIcon[lifeContentIndex]):SetShow(true)
+        end
+        insertedArray:push_back(lifeRankIcon[lifeContentIndex])
+      end
+    end
+    local rankerType = 0
+    for lifeContentIndex = lifeContent.combat, lifeContent.battleField do
+      hasContentRank = (FromClient_GetTopRankListForNameTag()):hasContentsRank(rankerType, actorKeyRaw)
+      if FGlobal_LifeRanking_CheckEnAble(lifeContentIndex) and hasContentRank == true and lifeContentIndex >= 10 then
+        local rankNumer = (FromClient_GetTopRankListForNameTag()):getContentsRank(rankerType, actorKeyRaw) + 1
+        -- DECOMPILER ERROR at PC266: Confused about usage of register: R17 in 'UnsetPending'
+
+        ;
+        (lifeContent[lifeContentIndex])[rankNumer] = rankNumer
+        ;
+        (lifeRankIcon[lifeContentIndex]):ChangeTextureInfoName("new_ui_common_forlua/default/RankingIcon_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(lifeRankIcon[lifeContentIndex], ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y1, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).x2, ((lifeRankSetTexture[lifeContentIndex])[rankNumer]).y2)
+        ;
+        ((lifeRankIcon[lifeContentIndex]):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (lifeRankIcon[lifeContentIndex]):setRenderTexture((lifeRankIcon[lifeContentIndex]):getBaseTexture())
+        if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+          (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
+        else
+          if playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
+            (lifeRankIcon[lifeContentIndex]):SetMonoTone(true)
+          else
+            ;
+            (lifeRankIcon[lifeContentIndex]):SetMonoTone(false)
+          end
+        end
+        local isShowForAlli = false
+        if playerActorProxy:isHideCharacterName() == true and playerActorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
+          isShowForAlli = true
+        end
+        if (playerActorProxy:isPlayer() and playerActorProxy:isHideCharacterName() and playerActorProxy:isFlashBanged() == false) or isShowForAlli == true then
+          (lifeRankIcon[lifeContentIndex]):SetShow(false)
+        else
+          ;
+          (lifeRankIcon[lifeContentIndex]):SetShow(true)
+        end
+        insertedArray:push_back(lifeRankIcon[lifeContentIndex])
+      end
+      do
+        do
+          rankerType = rankerType + 1
+          -- DECOMPILER ERROR at PC392: LeaveBlock: unexpected jumping out DO_STMT
+
+        end
+      end
+    end
+    local matchType = 0
+    local hasMatchRank = 0
+    local isEnableContentsPvP = ToClient_IsContentsGroupOpen("38")
+    hasMatchRank = (FromClient_GetTopRankListForNameTag()):hasMatchRank(matchType, actorKeyRaw)
+    if hasMatchRank == true and isEnableContentsPvP then
+      local rankNumer = (FromClient_GetTopRankListForNameTag()):getMatchRank(matchType, actorKeyRaw) + 1
+      -- DECOMPILER ERROR at PC420: Confused about usage of register: R16 in 'UnsetPending'
+
+      ;
+      (lifeContent[lifeContent.match])[rankNumer] = rankNumer
+      ;
+      (lifeRankIcon[lifeContent.match]):ChangeTextureInfoName("new_ui_common_forlua/default/RankingIcon_00.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(lifeRankIcon[lifeContent.match], ((lifeRankSetTexture[lifeContent.match])[rankNumer]).x1, ((lifeRankSetTexture[lifeContent.match])[rankNumer]).y1, ((lifeRankSetTexture[lifeContent.match])[rankNumer]).x2, ((lifeRankSetTexture[lifeContent.match])[rankNumer]).y2)
+      ;
+      ((lifeRankIcon[lifeContent.match]):getBaseTexture()):setUV(x1, y1, x2, y2)
+      ;
+      (lifeRankIcon[lifeContent.match]):setRenderTexture((lifeRankIcon[lifeContent.match]):getBaseTexture())
+      if playerActorProxy:isFlashBanged() == false and playerActorProxy:isHideCharacterName() == false and playerActorProxy:isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+        (lifeRankIcon[lifeContent.match]):SetMonoTone(true)
+      else
+        if playerActorProxy:isFlashBanged() == false and playerActorProxy:isConcealCharacter() == true then
+          (lifeRankIcon[lifeContent.match]):SetMonoTone(true)
+        else
+          ;
+          (lifeRankIcon[lifeContent.match]):SetMonoTone(false)
+        end
+      end
+      local isShowForAlli = false
+      if playerActorProxy:isHideCharacterName() == true and playerActorProxy:isShowNameWhenCamouflage() == true and (getSelfPlayer()):getActorKey() ~= playerActorProxyWrapper:getActorKey() then
+        isShowForAlli = true
+      end
+      if (playerActorProxy:isPlayer() and playerActorProxy:isHideCharacterName() and playerActorProxy:isFlashBanged() == false) or isShowForAlli == true then
+        (lifeRankIcon[lifeContent.match]):SetShow(false)
+      else
+        ;
+        (lifeRankIcon[lifeContent.match]):SetShow(true)
+      end
+      insertedArray:push_back(lifeRankIcon[lifeContent.match])
+    end
     do
-      local hasGuild = playerActorProxy:isGuildMember() and (playerActorProxy:isHideGuildName() ~= false and playerActorProxy:isFlashBanged())
-      if hasGuild then
-        spanSizeY = spanSizeY + 20
+      local spanSizeY = 40
+      do
+        local hasGuild = playerActorProxy:isGuildMember() and (playerActorProxy:isHideGuildName() ~= false and playerActorProxy:isFlashBanged())
+        if hasGuild then
+          spanSizeY = spanSizeY + 20
+        end
+        if playerActorProxy:isPlayer() and playerActorProxyWrapper:checkToTitleKey() then
+          spanSizeY = spanSizeY + 20
+        end
+        sortCenterX(insertedArray)
+        -- DECOMPILER ERROR: 4 unprocessed JMP targets
       end
-      if playerActorProxy:isPlayer() and playerActorProxyWrapper:checkToTitleKey() then
-        spanSizeY = spanSizeY + 20
-      end
-      sortCenterX(insertedArray)
-      -- DECOMPILER ERROR: 4 unprocessed JMP targets
     end
   end
 end
 
   local settingPlayerName = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_18 , upvalues : nameTendencyColor
+  -- function num : 0_19 , upvalues : nameTendencyColor
   local nameTag = (UI.getChildControl)(targetPanel, "CharacterName")
   if nameTag == nil then
     return 
@@ -895,7 +1032,7 @@ end
 end
 
   isShowInstallationEnduranceType = function(installationType)
-  -- function num : 0_19
+  -- function num : 0_20
   if installationType == (CppEnums.InstallationType).eType_Mortar or installationType == (CppEnums.InstallationType).eType_Anvil or installationType == (CppEnums.InstallationType).eType_Stump or installationType == (CppEnums.InstallationType).eType_FireBowl or installationType == (CppEnums.InstallationType).eType_Buff or installationType == (CppEnums.InstallationType).eType_Alchemy or installationType == (CppEnums.InstallationType).eType_Havest or installationType == (CppEnums.InstallationType).eType_Bookcase or installationType == (CppEnums.InstallationType).eType_Cooking or installationType == (CppEnums.InstallationType).eType_Bed or installationType == (CppEnums.InstallationType).eType_LivestockHarvest then
     return true
   else
@@ -907,7 +1044,7 @@ end
   local isTwenty = false
   local furnitureCheck = false
   ShowUseTab_Func = function()
-  -- function num : 0_20
+  -- function num : 0_21
   if getSelfPlayer() == nil then
     return 
   end
@@ -924,7 +1061,7 @@ end
 end
 
   HideUseTab_Func = function()
-  -- function num : 0_21
+  -- function num : 0_22
   local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
   if targetPanel == nil then
     return 
@@ -934,7 +1071,7 @@ end
 end
 
   FGlobal_ShowUseLantern = function(param)
-  -- function num : 0_22
+  -- function num : 0_23
   local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
   if targetPanel == nil then
     return 
@@ -948,7 +1085,7 @@ end
 end
 
   local settingHpBarInitState = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_23
+  -- function num : 0_24
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -987,7 +1124,7 @@ end
 end
 
   local settingHpBar = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_24 , upvalues : furnitureCheck, hideTimeType
+  -- function num : 0_25 , upvalues : furnitureCheck, hideTimeType
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1427,10 +1564,10 @@ end
                               local playerActorProxyWrapper = getPlayerActor(y1)
                               -- DECOMPILER ERROR at PC1029: Overwrote pending register: R13 in 'AssignReg'
 
-                              if not (playerActorProxyWrapper:get()):isArenaAreaRegion() then
-                                local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isArenaZoneRegion()
+                              if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() then
+                                local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isCompetitionDefined()
                               end
-                              -- DECOMPILER ERROR at PC1039: Overwrote pending register: R14 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1045: Overwrote pending register: R14 in 'AssignReg'
 
                               local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
                               if hpRate < prevRate then
@@ -1452,11 +1589,11 @@ end
                               hpLater:SetShow(isShow)
                               hpMain:SetShow(isShow)
                               local x1, y1, x2, y2 = nil, nil, nil, nil
-                              -- DECOMPILER ERROR at PC1103: Overwrote pending register: R20 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1109: Overwrote pending register: R20 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC1103: Overwrote pending register: R19 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1109: Overwrote pending register: R19 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC1104: Overwrote pending register: R21 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1110: Overwrote pending register: R21 in 'AssignReg'
 
                               if isParty then
                                 y1(x2, y2)
@@ -1464,29 +1601,29 @@ end
                               else
                                 if isColorBlindMode == 0 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/default_gauges.dds")
-                                  -- DECOMPILER ERROR at PC1130: Overwrote pending register: R18 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1136: Overwrote pending register: R18 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1131: Overwrote pending register: R17 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1137: Overwrote pending register: R17 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1132: Overwrote pending register: R16 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1138: Overwrote pending register: R16 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                                 elseif isColorBlindMode == 1 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC1147: Overwrote pending register: R18 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1153: Overwrote pending register: R18 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1148: Overwrote pending register: R17 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1154: Overwrote pending register: R17 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1149: Overwrote pending register: R16 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1155: Overwrote pending register: R16 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 elseif isColorBlindMode == 2 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC1164: Overwrote pending register: R18 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1170: Overwrote pending register: R18 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1165: Overwrote pending register: R17 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1171: Overwrote pending register: R17 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1166: Overwrote pending register: R16 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1172: Overwrote pending register: R16 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 end
@@ -1554,7 +1691,7 @@ end
                                     hpLater:SetShow(true)
                                     hpMain:SetShow(true)
                                   elseif actorProxy:isInstanceObject() then
-                                    if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isHealingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isObservatory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isElephantBarn() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isRepairingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isMineFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBombFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDistributor() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDefenceTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isAdvancedBaseTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTankFactory() then
+                                    if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isHealingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isObservatory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isElephantBarn() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isRepairingTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isMineFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isBombFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDistributor() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isDefenceTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isLargeSiegeTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isAdvancedBaseTower() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTankFactory() or ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isSavageDefenceObject() then
                                       local prevRate = hpMain:GetProgressRate()
                                       local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
                                       hpMain:SetProgressRate(hpRate)
@@ -1629,7 +1766,7 @@ end
 end
 
   local settingMpBar = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_25 , upvalues : UI_classType
+  -- function num : 0_26 , upvalues : UI_classType
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1649,7 +1786,7 @@ end
     mpMain:SetProgressRate(mpRate)
     mpMain:SetCurrentProgressRate(mpRate)
     local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType()
-    local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType()
+    local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType()
     local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
     local isOnlyDarkelf = UI_classType.ClassType_DarkElf == playerWrapper:getClassType()
     local isMP_Character = (not isEP_Character and not isFP_Character and not isBP_Character and not isOnlyDarkelf)
@@ -1697,7 +1834,7 @@ end
     mpBack:SetShow(true)
     mpMain:SetShow(true)
   elseif actorProxy:isInstanceObject() then
-    if instanceObject:isBarricade() or instanceObject:isHealingTower() or instanceObject:isObservatory() or instanceObject:isElephantBarn() or instanceObject:isRepairingTower() or instanceObject:isMineFactory() or instanceObject:isBombFactory() or instanceObject:isDistributor() or instanceObject:isSiegeTower() or instanceObject:isLargeSiegeTower() or instanceObject:isDefenceTower() or instanceObject:isAdvancedBaseTower() or instanceObject:isTankFactory() then
+    if instanceObject:isBarricade() or instanceObject:isHealingTower() or instanceObject:isObservatory() or instanceObject:isElephantBarn() or instanceObject:isRepairingTower() or instanceObject:isMineFactory() or instanceObject:isBombFactory() or instanceObject:isDistributor() or instanceObject:isSiegeTower() or instanceObject:isLargeSiegeTower() or instanceObject:isDefenceTower() or instanceObject:isAdvancedBaseTower() or instanceObject:isTankFactory() or instanceObject:isSavageDefenceObject() then
       local isShowMp = false
       local instanceObjectActorWrapper = getInstanceObjectActor(actorKeyRaw)
       do
@@ -1769,7 +1906,7 @@ end
 end
 
   local settingLocalWarCombatPoint = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_26 , upvalues : UI_color, settingLifeRankIcon
+  -- function num : 0_27 , upvalues : UI_color, settingLifeRankIcon
   if actorProxyWrapper == nil then
     return 
   end
@@ -1895,7 +2032,7 @@ end
 end
 
   FGlobal_SettingMpBarTemp = function()
-  -- function num : 0_27 , upvalues : settingMpBar
+  -- function num : 0_28 , upvalues : settingMpBar
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -1907,7 +2044,7 @@ end
 end
 
   local settingStun = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_28
+  -- function num : 0_29
   local stunBack = (UI.getChildControl)(targetPanel, "ProgressBack_Stun")
   local stunProgress = (UI.getChildControl)(targetPanel, "CharacterStunGageProgress")
   if stunBack == nil or stunProgress == nil then
@@ -1938,7 +2075,7 @@ end
 end
 
   local settingGuildMarkAndPreemptiveStrike = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_29
+  -- function num : 0_30
   if targetPanel == nil then
     return 
   end
@@ -2026,7 +2163,7 @@ end
 [3] = {x1 = 103, y1 = 391, x2 = 135, y2 = 423}
 }
   local settingPreemptiveStrike = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_30 , upvalues : hideTimeType, preemptiveIconTexture, pvpIconTexture, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_31 , upvalues : hideTimeType, preemptiveIconTexture, pvpIconTexture, settingGuildMarkAndPreemptiveStrike
   local preemptiveStrikeBeing = (UI.getChildControl)(targetPanel, "Static_PreemptiveStrikeBeing")
   if preemptiveStrikeBeing == nil then
     return 
@@ -2062,7 +2199,7 @@ end
 end
 
   PvpIconColorByTendency = function(actorKeyRaw)
-  -- function num : 0_31
+  -- function num : 0_32
   local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
   if playerActorProxyWrapper == nil then
     return 
@@ -2086,7 +2223,7 @@ end
 end
 
   local settingMurderer = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_32 , upvalues : hideTimeType, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_33 , upvalues : hideTimeType, settingGuildMarkAndPreemptiveStrike
   local murdererMark = (UI.getChildControl)(targetPanel, "Static_MurdererMark")
   if murdererMark == nil then
     return 
@@ -2104,7 +2241,7 @@ end
 end
 
   local settingGuildTextForAlias = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_33 , upvalues : lifeContentCount
+  -- function num : 0_34 , upvalues : lifeContentCount
   if targetPanel == nil then
     return 
   end
@@ -2153,7 +2290,7 @@ end
 end
 
   local settingQuestMark = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_34
+  -- function num : 0_35
   local questMark = (UI.getChildControl)(targetPanel, "Static_Quest_Mark")
   if questMark == nil then
     return 
@@ -2166,7 +2303,7 @@ end
 end
 
   local settingQuestMarkForce = function(isShow, targetPanel, actorProxyWrapper)
-  -- function num : 0_35
+  -- function num : 0_36
   local questMark = (UI.getChildControl)(targetPanel, "Static_Quest_Mark")
   if questMark == nil then
     return 
@@ -2175,7 +2312,7 @@ end
 end
 
   questIconOverTooltip = function(show, actorKeyRaw)
-  -- function num : 0_36
+  -- function num : 0_37
   local actorProxyWrapper = getActor(actorKeyRaw)
   local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
   local panel = (actorProxyWrapper:get()):getUIPanel()
@@ -2204,7 +2341,7 @@ end
 
   local currentTypeChangeCheck = {}
   local settingQuestUI = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_37 , upvalues : currentTypeChangeCheck
+  -- function num : 0_38 , upvalues : currentTypeChangeCheck
   local questIcon = (UI.getChildControl)(targetPanel, "Static_QuestIcon")
   local questBorder = (UI.getChildControl)(targetPanel, "Static_QuestIconBorder")
   local questClear = (UI.getChildControl)(targetPanel, "Static_QuestClear")
@@ -2291,11 +2428,11 @@ end
     end
     questBorder:SetAlpha(prevAlpha)
     local aControl = {questIcon = questIcon, questBorder = questBorder, questClear = questClear, lookAtMe = lookAtMe, lookAtMe2 = lookAtMe2, questType = questType, GetSizeX = function()
-    -- function num : 0_37_0 , upvalues : questBorder
+    -- function num : 0_38_0 , upvalues : questBorder
     return questBorder:GetSizeX()
   end
 , SetScale = function(self, x, y)
-    -- function num : 0_37_1 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
+    -- function num : 0_38_1 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
     questBorder:SetScale(x, y)
     questIcon:SetScale(x, y)
     questClear:SetScale(x, y)
@@ -2304,7 +2441,7 @@ end
     questType:SetScale(x, y)
   end
 , SetSpanSize = function(self, x, y)
-    -- function num : 0_37_2 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
+    -- function num : 0_38_2 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
     questBorder:SetSpanSize(x, y)
     questIcon:SetSpanSize(x, y + 8)
     questClear:SetSpanSize(x, y + 10)
@@ -2313,15 +2450,15 @@ end
     questType:SetSpanSize(x, y + 40)
   end
 , GetSpanSize = function()
-    -- function num : 0_37_3 , upvalues : questBorder
+    -- function num : 0_38_3 , upvalues : questBorder
     return questBorder:GetSpanSize()
   end
 , GetScale = function()
-    -- function num : 0_37_4 , upvalues : questBorder
+    -- function num : 0_38_4 , upvalues : questBorder
     return questBorder:GetScale()
   end
 , GetShow = function()
-    -- function num : 0_37_5 , upvalues : questBorder
+    -- function num : 0_38_5 , upvalues : questBorder
     return questBorder:GetShow()
   end
 }
@@ -2346,7 +2483,7 @@ end
 end
 
   local settingBillBoardMode = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_38
+  -- function num : 0_39
   houseHoldActorWrapper = getHouseHoldActor(actorKeyRaw)
   if houseHoldActorWrapper ~= nil and (houseHoldActorWrapper:get()):isTent() == false and ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() == false then
     targetPanel:Set3DRenderType(2)
@@ -2355,7 +2492,7 @@ end
 end
 
   local settingBubbleBox = function(actorKeyRaw, targetPanel, actorProxyWrapper, message)
-  -- function num : 0_39 , upvalues : hideTimeType
+  -- function num : 0_40 , upvalues : hideTimeType
   local targetStatic = (UI.getChildControl)(targetPanel, "StaticText_BubbleBox")
   local targetStaticBG = (UI.getChildControl)(targetPanel, "Static_BubbleBox")
   -- DECOMPILER ERROR at PC11: Confused about usage of register: R6 in 'UnsetPending'
@@ -2406,7 +2543,7 @@ end
 end
 
   local settingBubbleBoxShow = function(actorKeyRaw, targetPanel, actorProxyWrapper, isShow)
-  -- function num : 0_40
+  -- function num : 0_41
   local targetStatic = (UI.getChildControl)(targetPanel, "StaticText_BubbleBox")
   local targetStaticBG = (UI.getChildControl)(targetPanel, "Static_BubbleBox")
   targetStatic:SetShow(isShow)
@@ -2414,7 +2551,7 @@ end
 end
 
   local settingWaitCommentLaunch = function(isShow)
-  -- function num : 0_41
+  -- function num : 0_42
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local panel = selfPlayer:getWaitCommentPanel()
@@ -2472,7 +2609,7 @@ end
 end
 
   settingWaitCommentReady = function()
-  -- function num : 0_42
+  -- function num : 0_43
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local panel = selfPlayer:getWaitCommentPanel()
@@ -2518,7 +2655,7 @@ end
 end
 
   settingWaitCommentConfirmReload = function()
-  -- function num : 0_43
+  -- function num : 0_44
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   if selfPlayer:isShowWaitComment() == false then
@@ -2534,7 +2671,7 @@ end
 end
 
   settingWaitCommentConfirm = function()
-  -- function num : 0_44
+  -- function num : 0_45
   (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
   ClearFocusEdit()
   local selfPlayerWrapper = getSelfPlayer()
@@ -2601,7 +2738,7 @@ end
 end
 
   WaitComment_CheckCurrentUiEdit = function(targetUI)
-  -- function num : 0_45
+  -- function num : 0_46
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
     return false
@@ -2619,7 +2756,7 @@ end
 end
 
   local settingWaitComment = function(actorKeyRaw, panel, actorProxyWrapper, isShow, isforce)
-  -- function num : 0_46
+  -- function num : 0_47
   local selfPlayer = getSelfPlayer()
   local selfActorKeyRaw = selfPlayer:getActorKey()
   if actorKeyRaw == selfActorKeyRaw and isforce ~= true then
@@ -2691,12 +2828,12 @@ end
 end
 
   local settingSelfPlayerNameHelpText = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_47
+  -- function num : 0_48
 end
 
   local furnitureActorKeyRaw = nil
   Furniture_Check = function(actorKeyRaw)
-  -- function num : 0_48 , upvalues : furnitureActorKeyRaw, furnitureCheck, settingHpBar
+  -- function num : 0_49 , upvalues : furnitureActorKeyRaw, furnitureCheck, settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   local actorProxy = actorProxyWrapper:get()
   local characterStaticStatus = actorProxy:getCharacterStaticStatus()
@@ -2729,7 +2866,7 @@ end
 end
 
   Funiture_Endurance_Hide = function()
-  -- function num : 0_49 , upvalues : furnitureCheck, furnitureActorKeyRaw, settingHpBar
+  -- function num : 0_50 , upvalues : furnitureCheck, furnitureActorKeyRaw, settingHpBar
   if furnitureCheck == true and furnitureActorKeyRaw ~= nil then
     local actorProxyWrapper = getActor(furnitureActorKeyRaw)
     if actorProxyWrapper ~= nil then
@@ -2759,15 +2896,15 @@ end
 end
 
   local TypeByLoadData = {[ActorProxyType.isActorProxy] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_50 , upvalues : settingName
-  settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
-end
-, [ActorProxyType.isCharacter] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
   -- function num : 0_51 , upvalues : settingName
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
+, [ActorProxyType.isCharacter] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
+  -- function num : 0_52 , upvalues : settingName
+  settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
+end
 , [ActorProxyType.isPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_52 , upvalues : settingName, settingPlayerName, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_53 , upvalues : settingName, settingPlayerName, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2784,7 +2921,7 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isSelfPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_53 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingSelfPlayerNameHelpText, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_54 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingSelfPlayerNameHelpText, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2804,7 +2941,7 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isOtherPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_54 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingWaitComment, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_55 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingWaitComment, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2823,11 +2960,11 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isAlterego] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_55 , upvalues : settingName
+  -- function num : 0_56 , upvalues : settingName
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isMonster] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_56 , upvalues : settingName, settingMonsterName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingStun
+  -- function num : 0_57 , upvalues : settingName, settingMonsterName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingStun
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingMonsterName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingTitle(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2837,7 +2974,7 @@ end
   settingStun(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isNpc] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_57 , upvalues : settingName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_58 , upvalues : settingName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingTitle(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2851,10 +2988,10 @@ end
   sortCenterX(insertedArray)
 end
 , [ActorProxyType.isDeadBody] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_58
+  -- function num : 0_59
 end
 , [ActorProxyType.isVehicle] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_59 , upvalues : settingName, settingQuestMark, settingHpBarInitState, settingHpBar, settingMpBar
+  -- function num : 0_60 , upvalues : settingName, settingQuestMark, settingHpBarInitState, settingHpBar, settingMpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingQuestMark(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2862,26 +2999,26 @@ end
   settingMpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isGate] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_60
+  -- function num : 0_61
 end
 , [ActorProxyType.isHouseHold] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_61 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingBillBoardMode
+  -- function num : 0_62 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingBillBoardMode
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingBillBoardMode(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isInstallationActor] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_62 , upvalues : settingName, settingHpBarInitState, settingHpBar
+  -- function num : 0_63 , upvalues : settingName, settingHpBarInitState, settingHpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isCollect] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_63
+  -- function num : 0_64
 end
 , [ActorProxyType.isInstanceObject] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_64 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingMpBar
+  -- function num : 0_65 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingMpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2889,14 +3026,14 @@ end
 end
 }
   EventActorCreated_NameTag = function(actorKeyRaw, targetPanel, actorProxyType, actorProxyWrapper)
-  -- function num : 0_65 , upvalues : TypeByLoadData
+  -- function num : 0_66 , upvalues : TypeByLoadData
   if TypeByLoadData[actorProxyType] ~= nil then
     (TypeByLoadData[actorProxyType])(actorKeyRaw, targetPanel, actorProxyWrapper)
   end
 end
 
   FromClient_ChangeTopRankUser = function(actorKeyRaw)
-  -- function num : 0_66 , upvalues : settingLifeRankIcon, settingGuildTextForAlias
+  -- function num : 0_67 , upvalues : settingLifeRankIcon, settingGuildTextForAlias
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -2911,7 +3048,7 @@ end
 end
 
   FromClient_NameTag_TendencyChanged = function(actorKeyRaw, tendencyValue)
-  -- function num : 0_67 , upvalues : settingPlayerName, settingGuildMarkAndPreemptiveStrike, settingPreemptiveStrike
+  -- function num : 0_68 , upvalues : settingPlayerName, settingGuildMarkAndPreemptiveStrike, settingPreemptiveStrike
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -2926,24 +3063,6 @@ end
 end
 
   EventActorFirsttalk = function(actorKeyRaw, isFirsttalkOn)
-  -- function num : 0_68 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
-  local actorProxyWrapper = getActor(actorKeyRaw)
-  if actorProxyWrapper == nil then
-    return 
-  end
-  local panel = (actorProxyWrapper:get()):getUIPanel()
-  if panel == nil then
-    return 
-  end
-  local insertedArray = (Array.new)()
-  settingQuestUI(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  settingFirstTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  settingImportantTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  settingOtherHeadIcon(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  sortCenterX(insertedArray)
-end
-
-  EventActorImportantTalk = function(actorKeyRaw, isImportantTalk)
   -- function num : 0_69 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
@@ -2961,8 +3080,26 @@ end
   sortCenterX(insertedArray)
 end
 
+  EventActorImportantTalk = function(actorKeyRaw, isImportantTalk)
+  -- function num : 0_70 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  local actorProxyWrapper = getActor(actorKeyRaw)
+  if actorProxyWrapper == nil then
+    return 
+  end
+  local panel = (actorProxyWrapper:get()):getUIPanel()
+  if panel == nil then
+    return 
+  end
+  local insertedArray = (Array.new)()
+  settingQuestUI(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  settingFirstTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  settingImportantTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  settingOtherHeadIcon(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  sortCenterX(insertedArray)
+end
+
   EventActorChangeGuildInfo = function(actorKeyRaw, guildName)
-  -- function num : 0_70 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
+  -- function num : 0_71 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -2980,7 +3117,7 @@ end
 end
 
   FromClient_EventActorUpdateTitleKey = function(actorKeyRaw)
-  -- function num : 0_71 , upvalues : settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
+  -- function num : 0_72 , upvalues : settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -2998,7 +3135,7 @@ end
 end
 
   FromClient_EventActorChangeGuildInfo_HaveLand = function(actorProxyWrapper, Panel, isoccupyTerritory)
-  -- function num : 0_72 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_73 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
   local targetPanel = Panel
   if actorProxyWrapper == nil or isoccupyTerritory == nil then
     return 
@@ -3009,7 +3146,7 @@ end
 end
 
   EventActorPvpModeChange = function(actorKeyRaw)
-  -- function num : 0_73 , upvalues : settingPreemptiveStrike
+  -- function num : 0_74 , upvalues : settingPreemptiveStrike
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3024,7 +3161,7 @@ end
 end
 
   EventActorChangeLevel = function(actorKeyRaw)
-  -- function num : 0_74 , upvalues : settingMonsterName, settingPlayerName
+  -- function num : 0_75 , upvalues : settingMonsterName, settingPlayerName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3043,7 +3180,7 @@ end
 end
 
   EventActorHpChanged = function(actorKeyRaw, hp, maxHp)
-  -- function num : 0_75 , upvalues : settingHpBar
+  -- function num : 0_76 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3056,7 +3193,7 @@ end
 end
 
   EventChangeCharacterName = function(actorKeyRaw, characterName)
-  -- function num : 0_76 , upvalues : settingName, settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint
+  -- function num : 0_77 , upvalues : settingName, settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3077,7 +3214,7 @@ end
 end
 
   FGlobal_ReSet_SiegeBuildingName = function(actorKeyRaw)
-  -- function num : 0_77 , upvalues : settingName
+  -- function num : 0_78 , upvalues : settingName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3090,7 +3227,7 @@ end
 end
 
   insertPartyMemberGage = function(actorKeyRaw)
-  -- function num : 0_78 , upvalues : settingHpBar
+  -- function num : 0_79 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3107,7 +3244,7 @@ end
 end
 
   removePartyMemberGage = function(actorKeyRaw)
-  -- function num : 0_79 , upvalues : settingHpBar
+  -- function num : 0_80 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3120,14 +3257,14 @@ end
 end
 
   EventActorAddDamage = function(actorKeyRaw, variedPoint, attackResult_IntValue, additionalDamageType, position)
-  -- function num : 0_80 , upvalues : hideTimeType
+  -- function num : 0_81 , upvalues : hideTimeType
   if attackResult_IntValue == 0 or attackResult_IntValue == 1 or attackResult_IntValue == 2 or attackResult_IntValue == 3 or attackResult_IntValue == 4 or attackResult_IntValue == 5 then
     ActorInsertShowTime(actorKeyRaw, hideTimeType.overHeadUI, 0)
   end
 end
 
   EventShowProgressBar = function(actorKeyRaw, aHideTimeType)
-  -- function num : 0_81 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
+  -- function num : 0_82 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3172,7 +3309,7 @@ end
 end
 
   EventHideProgressBar = function(actorKeyRaw, aHideTimeType)
-  -- function num : 0_82 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
+  -- function num : 0_83 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3217,7 +3354,7 @@ end
 end
 
   update_Changed_StunGage = function(actorKeyRaw, curStun, maxStun)
-  -- function num : 0_83 , upvalues : settingStun
+  -- function num : 0_84 , upvalues : settingStun
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3234,7 +3371,7 @@ end
 end
 
   EventActor_QuestUpdateInserted = function(actorKeyRaw)
-  -- function num : 0_84 , upvalues : settingQuestMarkForce
+  -- function num : 0_85 , upvalues : settingQuestMarkForce
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3247,7 +3384,7 @@ end
 end
 
   EventActor_QuestUpdateDeleted = function(actorKeyRaw)
-  -- function num : 0_85 , upvalues : settingQuestMarkForce
+  -- function num : 0_86 , upvalues : settingQuestMarkForce
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3260,12 +3397,12 @@ end
 end
 
   FromClient_preemptiveStrikeTimeChanged = function(targetActorKeyRaw)
-  -- function num : 0_86 , upvalues : hideTimeType
+  -- function num : 0_87 , upvalues : hideTimeType
   ActorInsertShowTime(attackerActorKey, hideTimeType.preemptiveStrike, 0)
 end
 
   EventActor_QuestUI_UpdateData = function(actorKeyRaw, currentType, iconPath)
-  -- function num : 0_87 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_88 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3283,7 +3420,7 @@ end
 end
 
   EventActor_EnduranceUpdate = function(actorKeyRaw)
-  -- function num : 0_88 , upvalues : settingName, settingHpBar
+  -- function num : 0_89 , upvalues : settingName, settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3297,7 +3434,7 @@ end
 end
 
   EventActor_HouseHoldNearestDoorChanged = function(actorKeyRaw)
-  -- function num : 0_89 , upvalues : settingName
+  -- function num : 0_90 , upvalues : settingName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3310,7 +3447,7 @@ end
 end
 
   EventActor_OnChatMessageUpdate = function()
-  -- function num : 0_90 , upvalues : settingBubbleBox
+  -- function num : 0_91 , upvalues : settingBubbleBox
   local msg = nil
   local totalSize = getNewChatMessageCount()
   for index = 0, totalSize - 1 do
@@ -3328,7 +3465,7 @@ end
 end
 
   EventSelfPlayerWaitCommentLaunch = function()
-  -- function num : 0_91 , upvalues : settingWaitCommentLaunch
+  -- function num : 0_92 , upvalues : settingWaitCommentLaunch
   if ((getSelfPlayer()):get()):getWaitCommentPanel() == nil then
     return 
   end
@@ -3338,7 +3475,7 @@ end
 end
 
   EventSelfPlayerWaitCommentClose = function()
-  -- function num : 0_92 , upvalues : settingWaitCommentLaunch
+  -- function num : 0_93 , upvalues : settingWaitCommentLaunch
   if ((getSelfPlayer()):get()):getWaitCommentPanel() == nil then
     return 
   end
@@ -3351,7 +3488,7 @@ end
 end
 
   EventOtherPlayerWaitCommentUpdate = function(actorKeyRaw)
-  -- function num : 0_93 , upvalues : settingWaitComment
+  -- function num : 0_94 , upvalues : settingWaitComment
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3364,7 +3501,7 @@ end
 end
 
   EventOtherPlayerWaitCommentClose = function(actorKeyRaw)
-  -- function num : 0_94 , upvalues : settingWaitComment
+  -- function num : 0_95 , upvalues : settingWaitComment
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3377,17 +3514,17 @@ end
 end
 
   FromClient_OverHeadUIShowChanged = function(actorKeyRaw, panel, actorProxyWrapper, isShow)
-  -- function num : 0_95
+  -- function num : 0_96
 end
 
   FromClient_GuildMemberGradeChanged = function(actorKeyRaw, panel, actorProxyWrapper, guildGrade)
-  -- function num : 0_96 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_97 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
   settingGuildInfo(actorKeyRaw, panel, actorProxyWrapper)
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, panel, actorProxyWrapper)
 end
 
   EventPlayerNicknameUpdate = function(actorKeyRaw)
-  -- function num : 0_97 , upvalues : settingTitle
+  -- function num : 0_98 , upvalues : settingTitle
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3400,7 +3537,7 @@ end
 end
 
   FromClient_NameTag_SelfPlayerLevelUp = function()
-  -- function num : 0_98 , upvalues : settingName
+  -- function num : 0_99 , upvalues : settingName
   local actorProxyWrapper = getSelfPlayer()
   if actorProxyWrapper == nil then
     return 
@@ -3413,7 +3550,7 @@ end
 end
 
   FromClient_ActorInformationChanged = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_99 , upvalues : settingName
+  -- function num : 0_100 , upvalues : settingName
   if panel == nil then
     return 
   end
@@ -3424,7 +3561,7 @@ end
 end
 
   FromClient_NotifyChangeGuildTendency = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_100 , upvalues : settingGuildInfo
+  -- function num : 0_101 , upvalues : settingGuildInfo
   if panel == nil then
     return 
   end
@@ -3435,7 +3572,7 @@ end
 end
 
   FromClient_ChangeArenaAreaAndZoneState = function(actorProxyWrapper, panel, isStateOn)
-  -- function num : 0_101 , upvalues : settingHpBar
+  -- function num : 0_102 , upvalues : settingHpBar
   if actorProxyWrapper == nil or isStateOn == nil or panel == nil then
     return 
   end
@@ -3444,7 +3581,7 @@ end
 end
 
   FromClient_InstallationInfoWarningNameTag = function(warningType, tentPosition, characterSSW, progressingInfo, actorWrapper, addtionalValue1)
-  -- function num : 0_102 , upvalues : settingHpBar
+  -- function num : 0_103 , upvalues : settingHpBar
   if actorWrapper == nil then
     return 
   end
@@ -3457,22 +3594,6 @@ end
 end
 
   FromClient_LocalWarCombatPoint = function(actorkeyRaw)
-  -- function num : 0_103 , upvalues : settingLocalWarCombatPoint
-  if actorkeyRaw == nil then
-    return 
-  end
-  local playerActorWrapper = getPlayerActor(actorkeyRaw)
-  if playerActorWrapper == nil then
-    return 
-  end
-  local panel = (playerActorWrapper:get()):getUIPanel()
-  if panel == nil then
-    return 
-  end
-  settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
-end
-
-  FromClient_EntryTeamChanged = function(actorkeyRaw)
   -- function num : 0_104 , upvalues : settingLocalWarCombatPoint
   if actorkeyRaw == nil then
     return 
@@ -3488,8 +3609,24 @@ end
   settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
 end
 
+  FromClient_EntryTeamChanged = function(actorkeyRaw)
+  -- function num : 0_105 , upvalues : settingLocalWarCombatPoint
+  if actorkeyRaw == nil then
+    return 
+  end
+  local playerActorWrapper = getPlayerActor(actorkeyRaw)
+  if playerActorWrapper == nil then
+    return 
+  end
+  local panel = (playerActorWrapper:get()):getUIPanel()
+  if panel == nil then
+    return 
+  end
+  settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
+end
+
   FromClient_ObjectInstanceMpChanged = function(actorKeyRaw, panel)
-  -- function num : 0_105 , upvalues : settingMpBar
+  -- function num : 0_106 , upvalues : settingMpBar
   if actorKeyRaw == nil then
     return 
   end
@@ -3504,7 +3641,7 @@ end
 end
 
   FromClient_FlashBangStateChanged = function(actorKeyRaw, isFlashBangOn)
-  -- function num : 0_106 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
+  -- function num : 0_107 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
   if actorKeyRaw == nil then
     return 
   end
@@ -3527,6 +3664,27 @@ end
     settingLocalWarCombatPoint(actorKeyRaw, panel, actorProxyWrapper)
   end
   settingTitle(actorKeyRaw, panel, actorProxyWrapper)
+end
+
+  FromClient_ChangeMilitiaNameTag = function(actorKeyRaw)
+  -- function num : 0_108 , upvalues : settingName, settingAlias, settingTitle, settingLifeRankIcon, settingGuildInfo
+  if actorKeyRaw == nil then
+    return 
+  end
+  local actorProxyWrapper = getActor(actorKeyRaw)
+  if actorProxyWrapper == nil then
+    return 
+  end
+  local panel = (actorProxyWrapper:get()):getUIPanel()
+  if panel == nil then
+    return 
+  end
+  local insertedArray = (Array.new)()
+  settingName(actorKeyRaw, panel, actorProxyWrapper)
+  settingAlias(actorKeyRaw, panel, actorProxyWrapper)
+  settingTitle(actorKeyRaw, panel, actorProxyWrapper)
+  settingLifeRankIcon(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  settingGuildInfo(actorKeyRaw, panel, actorProxyWrapper)
 end
 
   registerEvent("EventActorCreated", "EventActorCreated_NameTag")
@@ -3571,5 +3729,6 @@ end
   registerEvent("FromClient_FlashBangStateChanged", "FromClient_FlashBangStateChanged")
   registerEvent("EventPvPModeChanged", "EventActorPvpModeChange")
   registerEvent("FromClient_ObjectInstanceMpChanged", "FromClient_ObjectInstanceMpChanged")
+  registerEvent("FromClient_ChangeMilitiaNameTag", "FromClient_ChangeMilitiaNameTag")
 end
 

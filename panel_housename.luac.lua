@@ -114,6 +114,10 @@ end
 
 HouseName_Click_InstallationMode = function()
   -- function num : 0_1
+  if getInputMode() == (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOT_ENTER_HOUSINGMODE_CHATMODE"))
+    return 
+  end
   HouseName_ButtonTooltip(false)
   FGlobal_House_InstallationMode_Open()
   local isShow = housing_getIsHideMaidActors()
@@ -282,6 +286,9 @@ EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, is
   end
   if Panel_Interaction_HouseRank:GetShow() then
     Panel_Interaction_HouseRanke_Close()
+  end
+  if isGameTypeKR2() then
+    (ui._btnSetUnderWear):SetShow(false)
   end
   Panel_HouseName:SetShow(isShow, true)
 end

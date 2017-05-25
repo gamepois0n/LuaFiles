@@ -372,6 +372,9 @@ FGlobal_ShowRewardList = function(isVisible, isManualClick)
       Panel_Npc_Quest_Reward:SetShow(true)
     else
       Panel_Npc_Quest_Reward:SetShow(false)
+      if Panel_Npc_Quest_Reward:IsUISubApp() == true then
+        Panel_Npc_Quest_Reward:CloseUISubApp()
+      end
     end
   else
     if isFlushedUI() and ((getSelfPlayer()):get()):getLevel() < 11 and isManualClick ~= nil and isManualClick == 0 then
@@ -379,6 +382,9 @@ FGlobal_ShowRewardList = function(isVisible, isManualClick)
       return 
     end
     Panel_Npc_Quest_Reward:SetShow(false)
+    if Panel_Npc_Quest_Reward:IsUISubApp() == true then
+      Panel_Npc_Quest_Reward:CloseUISubApp()
+    end
   end
 end
 

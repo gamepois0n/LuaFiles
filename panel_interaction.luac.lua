@@ -572,6 +572,9 @@ end
 
 Interaction_ButtonPushed = function(interactionType)
   -- function num : 0_22 , upvalues : preUIMode
+  if FGlobal_GetIsCutScenePlay() == true then
+    return 
+  end
   preUIMode = GetUIMode()
   local isTakedownCannon = false
   local isTakedownCannonFuncPass = function()
@@ -604,7 +607,7 @@ Interaction_ButtonPushed = function(interactionType)
               if actor == nil then
                 return 
               else
-                local targetCharacterName = actor:getName()
+                local targetCharacterName = actor:getOriginalName()
                 PaGlobal_PvPBattle:notifyRequest(targetCharacterName)
               end
             end

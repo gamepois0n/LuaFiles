@@ -12,7 +12,8 @@ local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
-local gamePanel_Main = {_btn_Display = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Display"), _btn_Sound = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Sound"), _btn_Game = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Game"), _btn_KeyConfig = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Key"), _btn_KeyConfig_UI = (UI.getChildControl)(Panel_Window_Option, "RadioButton_KeyUI"), _btn_Language = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Language"), _txt_Comment = (UI.getChildControl)(Panel_Window_Option, "StaticText_OptionComment"), _btn_Reset = (UI.getChildControl)(Panel_Window_Option, "Button_Reset"), _btn_Apply = (UI.getChildControl)(Panel_Window_Option, "Button_Apply"), _btn_Confirm = (UI.getChildControl)(Panel_Window_Option, "Button_Confirm"), _btn_Cancel = (UI.getChildControl)(Panel_Window_Option, "Button_Cancel"), _btn_Close = (UI.getChildControl)(Panel_Window_Option, "Button_Win_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_Option, "Button_Question")}
+local isSaveSetting = ToClient_IsContentsGroupOpen("258")
+local gamePanel_Main = {_btn_Display = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Display"), _btn_Sound = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Sound"), _btn_Game = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Game"), _btn_KeyConfig = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Key"), _btn_KeyConfig_UI = (UI.getChildControl)(Panel_Window_Option, "RadioButton_KeyUI"), _btn_Language = (UI.getChildControl)(Panel_Window_Option, "RadioButton_Language"), _txt_Comment = (UI.getChildControl)(Panel_Window_Option, "StaticText_OptionComment"), _btn_Reset = (UI.getChildControl)(Panel_Window_Option, "Button_Reset"), _btn_SaveSetting = (UI.getChildControl)(Panel_Window_Option, "Button_SaveSetting"), _btn_Apply = (UI.getChildControl)(Panel_Window_Option, "Button_Apply"), _btn_Confirm = (UI.getChildControl)(Panel_Window_Option, "Button_Confirm"), _btn_Cancel = (UI.getChildControl)(Panel_Window_Option, "Button_Cancel"), _btn_Close = (UI.getChildControl)(Panel_Window_Option, "Button_Win_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_Option, "Button_Question")}
 local _frame_Display = (UI.getChildControl)(Panel_GameOption_Display, "Frame_Display")
 local _frameContent_Display = (UI.getChildControl)(_frame_Display, "Frame_1_Content")
 local _frame_Sound = (UI.getChildControl)(Panel_GameOption_Sound, "Frame_Sound")
@@ -54,14 +55,16 @@ local _keyConfigUI_sld_btn = (UI.getChildControl)(_keyConfigUI_sld, "Frame_1_Ver
 local _Language_sld_btn = (UI.getChildControl)(_Language_sld, "Frame_1_VerticalScroll_CtrlButton")
 local frame_Display = {
 _btn_ScreenMode = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_FullScreen"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_FullWindow"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Window")}
-, _btn_ScrSize = (UI.getChildControl)(_frameContent_Display, "Button_ScreenSize"), _btn_ScrSize_L = (UI.getChildControl)(_frameContent_Display, "Button_ScrSize_L"), _btn_ScrSize_R = (UI.getChildControl)(_frameContent_Display, "Button_ScrSize_R"), _btn_Trxt = (UI.getChildControl)(_frameContent_Display, "Button_TexQuality"), _btn_Trxt_L = (UI.getChildControl)(_frameContent_Display, "Button_Txtr_L"), _btn_Trxt_R = (UI.getChildControl)(_frameContent_Display, "Button_Txtr_R"), _btn_Rndr = (UI.getChildControl)(_frameContent_Display, "Button_RenderQuality"), _btn_Rndr_L = (UI.getChildControl)(_frameContent_Display, "Button_Rndr_L"), _btn_Rndr_R = (UI.getChildControl)(_frameContent_Display, "Button_Rndr_R"), _btn_LUT = (UI.getChildControl)(_frameContent_Display, "Button_LUT"), _btn_LUT_L = (UI.getChildControl)(_frameContent_Display, "Button_LUT_L"), _btn_LUT_R = (UI.getChildControl)(_frameContent_Display, "Button_LUT_R"), _btn_LUT_Reset = (UI.getChildControl)(_frameContent_Display, "Button_LUT_Reset"), _btn_LUT_Reset2 = (UI.getChildControl)(_frameContent_Display, "Button_LUT_Reset2"), _btn_DOF = (UI.getChildControl)(_frameContent_Display, "CheckButton_DOF"), _btn_AntiAlli = (UI.getChildControl)(_frameContent_Display, "CheckButton_Anti"), _btn_Ultra = (UI.getChildControl)(_frameContent_Display, "CheckButton_Ultra"), _btn_LensBlood = (UI.getChildControl)(_frameContent_Display, "CheckButton_LensBlood"), _btn_BloodEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_BloodEffect"), _btn_Represent = (UI.getChildControl)(_frameContent_Display, "CheckButton_Representativepartmodel"), _btn_SnowPoolOnlyInSafeZone = (UI.getChildControl)(_frameContent_Display, "CheckButton_SnowPoolOnlyInSafeZone"), _btn_SSAO = (UI.getChildControl)(_frameContent_Display, "CheckButton_SSAO"), _btn_Tessellation = (UI.getChildControl)(_frameContent_Display, "CheckButton_Tessellation"), _btn_PostFilter = (UI.getChildControl)(_frameContent_Display, "CheckButton_PostFilter"), _btn_CharacterEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_CharacterEffect"), _txt_FPS = (UI.getChildControl)(_frameContent_Display, "StaticText_FPS"), _txt_Gamma = (UI.getChildControl)(_frameContent_Display, "StaticText_GammaControl"), _slide_Gamma = (UI.getChildControl)(_frameContent_Display, "Slider_GammaControl"), _txt_Contrast = (UI.getChildControl)(_frameContent_Display, "StaticText_ContrastControl"), _slide_Contrast = (UI.getChildControl)(_frameContent_Display, "Slider_ContrastControl"), _txt_UIScale = (UI.getChildControl)(_frameContent_Display, "StaticText_UISize"), _txt_UIScaleLow = (UI.getChildControl)(_frameContent_Display, "StaticText_UI_LOW"), _txt_UIScaleMidle = (UI.getChildControl)(_frameContent_Display, "StaticText_UI_MID"), _txt_UIScaleHigh = (UI.getChildControl)(_frameContent_Display, "StaticText_UI_HIGH"), _slide_UIScale = (UI.getChildControl)(_frameContent_Display, "Slider_UI_Scaling"), _txt_CameraMaster = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraMaster"), _slide_CameraMaster = (UI.getChildControl)(_frameContent_Display, "Slider_CameraMasterControl"), _txt_CameraShake = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraShake"), _slide_CameraShake = (UI.getChildControl)(_frameContent_Display, "Slider_CameraShakeControl"), _txt_MotionBlur = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraBlur"), _slide_MotionBlur = (UI.getChildControl)(_frameContent_Display, "Slider_CameraBlurControl"), _txt_CameraPos = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraPos"), _slide_CameraPos = (UI.getChildControl)(_frameContent_Display, "Slider_CameraPos"), _txt_CameraFov = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraFov"), _slide_CameraFov = (UI.getChildControl)(_frameContent_Display, "Slider_CameraFov"), _txt_OptimizationKing = (UI.getChildControl)(_frameContent_Display, "CheckButton_OptimizationKing"), _tooltip = (UI.getChildControl)(_frameContent_Display, "StaticText_ControlTooltip"), _optimizationDesc = (UI.getChildControl)(_frameContent_Display, "StaticText_OptimizeTip"), _txt_Fov = (UI.getChildControl)(_frameContent_Display, "StaticText_FovControl"), _slide_Fov = (UI.getChildControl)(_frameContent_Display, "Slider_FovControl"), _btn_Reset = (UI.getChildControl)(_frameContent_Display, "Button_Reset"), 
+, _btn_ScrSize = (UI.getChildControl)(_frameContent_Display, "Button_ScreenSize"), _btn_ScrSize_L = (UI.getChildControl)(_frameContent_Display, "Button_ScrSize_L"), _btn_ScrSize_R = (UI.getChildControl)(_frameContent_Display, "Button_ScrSize_R"), _btn_Trxt = (UI.getChildControl)(_frameContent_Display, "Button_TexQuality"), _btn_Trxt_L = (UI.getChildControl)(_frameContent_Display, "Button_Txtr_L"), _btn_Trxt_R = (UI.getChildControl)(_frameContent_Display, "Button_Txtr_R"), _btn_Rndr = (UI.getChildControl)(_frameContent_Display, "Button_RenderQuality"), _btn_Rndr_L = (UI.getChildControl)(_frameContent_Display, "Button_Rndr_L"), _btn_Rndr_R = (UI.getChildControl)(_frameContent_Display, "Button_Rndr_R"), _btn_LUT = (UI.getChildControl)(_frameContent_Display, "Button_LUT"), _btn_LUT_L = (UI.getChildControl)(_frameContent_Display, "Button_LUT_L"), _btn_LUT_R = (UI.getChildControl)(_frameContent_Display, "Button_LUT_R"), _btn_LUT_Reset = (UI.getChildControl)(_frameContent_Display, "Button_LUT_Reset"), _btn_LUT_Reset2 = (UI.getChildControl)(_frameContent_Display, "Button_LUT_Reset2"), _btn_DOF = (UI.getChildControl)(_frameContent_Display, "CheckButton_DOF"), _btn_AntiAlli = (UI.getChildControl)(_frameContent_Display, "CheckButton_Anti"), _btn_Ultra = (UI.getChildControl)(_frameContent_Display, "CheckButton_Ultra"), _btn_LensBlood = (UI.getChildControl)(_frameContent_Display, "CheckButton_LensBlood"), _btn_BloodEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_BloodEffect"), _btn_Represent = (UI.getChildControl)(_frameContent_Display, "CheckButton_Representativepartmodel"), _btn_SnowPoolOnlyInSafeZone = (UI.getChildControl)(_frameContent_Display, "CheckButton_SnowPoolOnlyInSafeZone"), _btn_SSAO = (UI.getChildControl)(_frameContent_Display, "CheckButton_SSAO"), _btn_Tessellation = (UI.getChildControl)(_frameContent_Display, "CheckButton_Tessellation"), _btn_PostFilter = (UI.getChildControl)(_frameContent_Display, "CheckButton_PostFilter"), _btn_CharacterEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_CharacterEffect"), _txt_FPS = (UI.getChildControl)(_frameContent_Display, "StaticText_FPS"), _txt_Gamma = (UI.getChildControl)(_frameContent_Display, "StaticText_GammaControl"), _slide_Gamma = (UI.getChildControl)(_frameContent_Display, "Slider_GammaControl"), _txt_Contrast = (UI.getChildControl)(_frameContent_Display, "StaticText_ContrastControl"), _slide_Contrast = (UI.getChildControl)(_frameContent_Display, "Slider_ContrastControl"), _txt_EffectAlpha = (UI.getChildControl)(_frameContent_Display, "StaticText_EffectAlpha"), _slide_EffectAlpha = (UI.getChildControl)(_frameContent_Display, "Slider_EffectAlpha_Value"), _txt_ColorByPass = (UI.getChildControl)(_frameContent_Display, "StaticText_ColorByPass"), _slide_ColorByPass = (UI.getChildControl)(_frameContent_Display, "Slider_ColorByPass"), _txt_UIScale = (UI.getChildControl)(_frameContent_Display, "StaticText_UISize"), _txt_UIScaleLow = (UI.getChildControl)(_frameContent_Display, "StaticText_UI_LOW"), _txt_UIScaleMidle = (UI.getChildControl)(_frameContent_Display, "StaticText_UI_MID"), _txt_UIScaleHigh = (UI.getChildControl)(_frameContent_Display, "StaticText_UI_HIGH"), _slide_UIScale = (UI.getChildControl)(_frameContent_Display, "Slider_UI_Scaling"), _txt_CameraMaster = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraMaster"), _slide_CameraMaster = (UI.getChildControl)(_frameContent_Display, "Slider_CameraMasterControl"), _txt_CameraShake = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraShake"), _slide_CameraShake = (UI.getChildControl)(_frameContent_Display, "Slider_CameraShakeControl"), _txt_MotionBlur = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraBlur"), _slide_MotionBlur = (UI.getChildControl)(_frameContent_Display, "Slider_CameraBlurControl"), _txt_CameraPos = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraPos"), _slide_CameraPos = (UI.getChildControl)(_frameContent_Display, "Slider_CameraPos"), _txt_CameraFov = (UI.getChildControl)(_frameContent_Display, "StaticText_CameraFov"), _slide_CameraFov = (UI.getChildControl)(_frameContent_Display, "Slider_CameraFov"), _txt_OptimizationKing = (UI.getChildControl)(_frameContent_Display, "CheckButton_OptimizationKing"), _tooltip = (UI.getChildControl)(_frameContent_Display, "StaticText_ControlTooltip"), _optimizationDesc = (UI.getChildControl)(_frameContent_Display, "StaticText_OptimizeTip"), _txt_Fov = (UI.getChildControl)(_frameContent_Display, "StaticText_FovControl"), _slide_Fov = (UI.getChildControl)(_frameContent_Display, "Slider_FovControl"), _btn_Reset = (UI.getChildControl)(_frameContent_Display, "Button_Reset"), 
 _btn_ScreenShotFormat = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotFormat_BMP"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotFormat_JPG"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotFormat_PNG")}
 , 
 _btn_ColorBlind = {[0] = (UI.getChildControl)(_frameContent_Display, "Radiobutton_ColorBlindNone"), [1] = (UI.getChildControl)(_frameContent_Display, "Radiobutton_ColorBlind_Protanopia"), [2] = (UI.getChildControl)(_frameContent_Display, "Radiobutton_ColorBlind_Deuteranopia")}
+, 
+_btn_ScreenShotSize = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotSize_Default"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotSize_4K"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotSize_8K")}
 , _btn_NearestPlayerOnlyEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserEffect"), _btn_SelfPlayerOnlyEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserEffectAll"), _btn_SelfPlayerOnlyLantern = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserLantern"), _btn_LowPower = (UI.getChildControl)(_frameContent_Display, "CheckButton_LowPower"), _btn_UpscaleEnable = (UI.getChildControl)(_frameContent_Display, "CheckButton_Upscale"), _btn_CropModeEnable = (UI.getChildControl)(_frameContent_Display, "CheckButton_CropMode"), _slide_CropModeScaleX = (UI.getChildControl)(_frameContent_Display, "Slider_CropModeX"), _slide_CropModeScaleY = (UI.getChildControl)(_frameContent_Display, "Slider_CropModeY"), _btn_WorkerVisible = (UI.getChildControl)(_frameContent_Display, "CheckButton_WorkerVisible"), _btn_AutoOptimization = (UI.getChildControl)(_frameContent_Display, "CheckButton_AutoOptimization"), _slide_AutoOptimization = (UI.getChildControl)(_frameContent_Display, "Slider_AutoOptimization"), _slideText_FrameRate = (UI.getChildControl)(_frameContent_Display, "StaticText_FPS_MID"), _slide_WatermarkAlpha = (UI.getChildControl)(_frameContent_Display, "Slider_AlphaControl"), 
 _btn_WatermarkPosition = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_LeftTop"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_RightTop"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_LeftBotton"), [3] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_RightBottom")}
 , 
-_btn_WatermarkService = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Kor"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Jap"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Na"), [3] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Rus"), [4] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Tw")}
+_btn_WatermarkService = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Kor"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Jap"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Na"), [3] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Rus"), [4] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Tw"), [5] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Sa"), [6] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_None")}
 , 
 _btn_WatermarkScale = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_AlphaSmall"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_AlphaNormal"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_AlphaBig")}
 , 
@@ -70,8 +73,10 @@ _pictureTooltip = {[0] = (UI.getChildControl)(_frameContent_Display, "Static_trx
 local isDev = ToClient_IsDevelopment()
 local _btn_Gamma = (UI.getChildControl)(frame_Display._slide_Gamma, "Slider_GammaControl_Button")
 local _btn_Contrast = (UI.getChildControl)(frame_Display._slide_Contrast, "Slider_ContrastControl_Button")
+local _btn_EffectAlpha = (UI.getChildControl)(frame_Display._slide_EffectAlpha, "Slider_EffectAlpha_Button")
 local _btn_UIScale = (UI.getChildControl)(frame_Display._slide_UIScale, "Slider_UI_Scaling_Button")
 local _btn_CameraMaster = (UI.getChildControl)(frame_Display._slide_CameraMaster, "Slider_CameraMaster_Button")
+local _btn_ColorByPass = (UI.getChildControl)(frame_Display._slide_ColorByPass, "Slider_ColorByPass_Button")
 local _btn_CameraShake = (UI.getChildControl)(frame_Display._slide_CameraShake, "Slider_CameraShake_Button")
 local _btn_MotionBlur = (UI.getChildControl)(frame_Display._slide_MotionBlur, "Slider_CameraBlur_Button")
 local _btn_CameraPos = (UI.getChildControl)(frame_Display._slide_CameraPos, "Slider_CameraPos_Button")
@@ -90,7 +95,7 @@ local _btn_VoiceVol = (UI.getChildControl)(frame_Sound._slide_VoiceVol, "Slider_
 local _btn_hitFxVolume = (UI.getChildControl)(frame_Sound._slide_hitFxVolume, "Slider_VoiceVolume_Button")
 local _btn_hitFxWeightVolume = (UI.getChildControl)(frame_Sound._slide_hitFxWeightVolume, "Slider_VoiceVolume_Button")
 local _btn_otherPlayerVolume = (UI.getChildControl)(frame_Sound._slide_otherPlayerVolume, "Slider_VoiceVolume_Button")
-local frame_Game = {_btn_ShowTag = (UI.getChildControl)(_frameContent_Game, "Checkbox_ShowCharTag"), _btn_AutoAim = (UI.getChildControl)(_frameContent_Game, "CheckButton_AutoAim"), _btn_RejectInvitation = (UI.getChildControl)(_frameContent_Game, "Checkbox_RejectInvitation"), _btn_HideWindow = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideUIWindow"), _btn_EnableSimpleUI = (UI.getChildControl)(_frameContent_Game, "Checkbox_SimpleUI"), _btn_SpiritGuide = (UI.getChildControl)(_frameContent_Game, "Checkbox_SpiritGuide"), _btn_MouseMove = (UI.getChildControl)(_frameContent_Game, "CheckBox_MoveMouse"), _btn_MiniMapRotation = (UI.getChildControl)(_frameContent_Game, "CheckBox_Minimap"), _btn_ShowAttackEffect = (UI.getChildControl)(_frameContent_Game, "CheckBox_ShowAttackEffect"), _btn_Alert_BlackSpirit = (UI.getChildControl)(_frameContent_Game, "CheckButton_BlackSpirit_Alert"), _btn_UseNewQuickSlot = (UI.getChildControl)(_frameContent_Game, "CheckButton_NewQuickSlot"), _btn_UseChattingFilter = (UI.getChildControl)(_frameContent_Game, "CheckButton_UseChattingFilter"), _btn_IsOnScreenSaver = (UI.getChildControl)(_frameContent_Game, "CheckButton_ScreenSaver"), _btn_UIModeMouseLock = (UI.getChildControl)(_frameContent_Game, "CheckButton_UIModeMouseLock"), _btn_PvpRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_PvpRefuse"), _btn_HideMast = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideMast"), _btn_ShowCashAlert = (UI.getChildControl)(_frameContent_Game, "CheckButton_ShowCashAlert"), _btn_EnableOVR = (UI.getChildControl)(_frameContent_Game, "Checkbox_SupportOculus"), _btn_MouseX = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseX"), _btn_MouseY = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseY"), _btn_UsePad = (UI.getChildControl)(_frameContent_Game, "Checkbox_UsePad"), _btn_UseVibe = (UI.getChildControl)(_frameContent_Game, "Checkbox_UseVibe"), _btn_PadX = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadX"), _btn_PadY = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadY"), _btn_SelfNameShowAllways = (UI.getChildControl)(_frameContent_Game, "CheckButton_SelfPlayer"), _btn_SelfNameShowNoShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_MyCharacterNickNameShow"), _btn_SelfNameShowImportant = (UI.getChildControl)(_frameContent_Game, "Checkbox_AttackNameShow"), _btn_PetAll = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualAll"), _btn_PetMine = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualMine"), _btn_PetHide = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualHide"), _title_FontResize = (UI.getChildControl)(_frameContent_Game, "StaticText_FontResize"), _btn_FontResizeDefault = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeDefault"), _btn_FontResizeBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeBig"), _btn_FontResizeMoreBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeMoreBig"), _btn_NavGuideNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideNone"), _btn_NavGuideArrow = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideArrow"), _btn_NavGuideEffect = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideEffect"), _btn_NavGuideFairy = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideFairy"), _btn_WorldMapOpenByWestMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByWestMaintain"), _btn_WorldMapOpenByCharacterToWest = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterToWest"), _btn_WorldMapOpenByCharacterMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterMaintain"), _btn_WorldMapOpenByNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByNone"), _btn_WorldMapCameraAngle = (UI.getChildControl)(_frameContent_Game, "StaticText_WorldMapOpenAngle"), _btn_WorldMapCameraDefaultAngle = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDefaultAngle"), _btn_WorldMapCameraDegree30 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree30"), _btn_WorldMapCameraDegree90 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree90"), _btn_OtherNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_AnotherCharacterNickNameShow"), _btn_PartyNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyNickName"), _btn_GuildNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_GuildAndClanCharacterNickName"), _btn_GuideLineHumanRelation = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_HumanRelation"), _btn_GuideLineQuestObject = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_QuestObjectLine"), _btn_GuideLineZoneChange = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_ZoneChange"), _btn_GuideLineWarAlly = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_WarAlly"), _btn_GuideLineGuild = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Guild"), _btn_GuideLineParty = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Party"), _btn_GuideLineEnemy = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Enemy"), _btn_GuideLineNonWarPlayer = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_NonWarPlayer"), _btn_GuideLinePartyEffect = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyAttackEffect"), _btn_Alert_Region = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_Region"), _btn_Alert_TerritoryTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryTrade"), _btn_Alert_RoyalTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_RoyalTrade"), _btn_Alert_Fitness = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_FitnessLevelUp"), _btn_Alert_TerritoryWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryWar"), _btn_Alert_GuildWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildWarStart"), _btn_Alert_PlayerGotItem = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_AnotherPlayerGotItem"), _btn_Alert_ItemMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ItemMarket"), _btn_Alert_LifeLevUp = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_LifeLevUp"), _btn_Alert_GuildQuest = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildQuest"), _btn_Alert_NearMonster = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_NearMonster"), _btn_Alert_ServantMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ServantMarket"), _btn_GuildLogin = (UI.getChildControl)(_frameContent_Game, "CheckButton_GuildLogin"), _txt_MouXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseXSen"), _slide_MouXSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseXSenControl"), _txt_MouYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseYSen"), _slide_MouYSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseYSenControl"), _txt_PadXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen"), _slide_PadXSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadXSenControl"), _txt_PadYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen"), _slide_PadYSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadYSenControl"), _btn_Reset = (UI.getChildControl)(_frameContent_Game, "Button_Reset")}
+local frame_Game = {_btn_ShowTag = (UI.getChildControl)(_frameContent_Game, "Checkbox_ShowCharTag"), _btn_AutoAim = (UI.getChildControl)(_frameContent_Game, "CheckButton_AutoAim"), _btn_RejectInvitation = (UI.getChildControl)(_frameContent_Game, "Checkbox_RejectInvitation"), _btn_HideWindow = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideUIWindow"), _btn_EnableSimpleUI = (UI.getChildControl)(_frameContent_Game, "Checkbox_SimpleUI"), _btn_SpiritGuide = (UI.getChildControl)(_frameContent_Game, "Checkbox_SpiritGuide"), _btn_MouseMove = (UI.getChildControl)(_frameContent_Game, "CheckBox_MoveMouse"), _btn_MiniMapRotation = (UI.getChildControl)(_frameContent_Game, "CheckBox_Minimap"), _btn_ShowAttackEffect = (UI.getChildControl)(_frameContent_Game, "CheckBox_ShowAttackEffect"), _btn_Alert_BlackSpirit = (UI.getChildControl)(_frameContent_Game, "CheckButton_BlackSpirit_Alert"), _btn_UseNewQuickSlot = (UI.getChildControl)(_frameContent_Game, "CheckButton_NewQuickSlot"), _btn_UseChattingFilter = (UI.getChildControl)(_frameContent_Game, "CheckButton_UseChattingFilter"), _btn_IsOnScreenSaver = (UI.getChildControl)(_frameContent_Game, "CheckButton_ScreenSaver"), _btn_UIModeMouseLock = (UI.getChildControl)(_frameContent_Game, "CheckButton_UIModeMouseLock"), _btn_PvpRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_PvpRefuse"), _btn_ExchangeRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_ExchangeRefuse"), _btn_HideMast = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideMast"), _btn_ShowCashAlert = (UI.getChildControl)(_frameContent_Game, "CheckButton_ShowCashAlert"), _btn_EnableOVR = (UI.getChildControl)(_frameContent_Game, "Checkbox_SupportOculus"), _btn_MouseX = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseX"), _btn_MouseY = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseY"), _btn_UsePad = (UI.getChildControl)(_frameContent_Game, "Checkbox_UsePad"), _btn_UseVibe = (UI.getChildControl)(_frameContent_Game, "Checkbox_UseVibe"), _btn_PadX = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadX"), _btn_PadY = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadY"), _btn_SelfNameShowAllways = (UI.getChildControl)(_frameContent_Game, "CheckButton_SelfPlayer"), _btn_SelfNameShowNoShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_MyCharacterNickNameShow"), _btn_SelfNameShowImportant = (UI.getChildControl)(_frameContent_Game, "Checkbox_AttackNameShow"), _btn_PetAll = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualAll"), _btn_PetMine = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualMine"), _btn_PetHide = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualHide"), _title_FontResize = (UI.getChildControl)(_frameContent_Game, "StaticText_FontResize"), _btn_FontResizeDefault = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeDefault"), _btn_FontResizeBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeBig"), _btn_FontResizeMoreBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeMoreBig"), _btn_NavGuideNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideNone"), _btn_NavGuideArrow = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideArrow"), _btn_NavGuideEffect = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideEffect"), _btn_NavGuideFairy = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideFairy"), _btn_WorldMapOpenByWestMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByWestMaintain"), _btn_WorldMapOpenByCharacterToWest = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterToWest"), _btn_WorldMapOpenByCharacterMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterMaintain"), _btn_WorldMapOpenByNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByNone"), _btn_WorldMapCameraAngle = (UI.getChildControl)(_frameContent_Game, "StaticText_WorldMapOpenAngle"), _btn_WorldMapCameraDefaultAngle = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDefaultAngle"), _btn_WorldMapCameraDegree30 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree30"), _btn_WorldMapCameraDegree90 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree90"), _btn_OtherNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_AnotherCharacterNickNameShow"), _btn_PartyNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyNickName"), _btn_GuildNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_GuildAndClanCharacterNickName"), _btn_GuideLineHumanRelation = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_HumanRelation"), _btn_GuideLineQuestObject = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_QuestObjectLine"), _btn_GuideLineZoneChange = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_ZoneChange"), _btn_GuideLineWarAlly = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_WarAlly"), _btn_GuideLineGuild = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Guild"), _btn_GuideLineParty = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Party"), _btn_GuideLineEnemy = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Enemy"), _btn_GuideLineNonWarPlayer = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_NonWarPlayer"), _btn_GuideLinePartyEffect = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyAttackEffect"), _btn_Alert_Region = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_Region"), _btn_Alert_TerritoryTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryTrade"), _btn_Alert_RoyalTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_RoyalTrade"), _btn_Alert_Fitness = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_FitnessLevelUp"), _btn_Alert_TerritoryWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryWar"), _btn_Alert_GuildWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildWarStart"), _btn_Alert_PlayerGotItem = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_AnotherPlayerGotItem"), _btn_Alert_ItemMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ItemMarket"), _btn_Alert_LifeLevUp = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_LifeLevUp"), _btn_Alert_GuildQuest = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildQuest"), _btn_Alert_NearMonster = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_NearMonster"), _btn_Alert_ServantMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ServantMarket"), _btn_GuildLogin = (UI.getChildControl)(_frameContent_Game, "CheckButton_GuildLogin"), _txt_MouXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseXSen"), _slide_MouXSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseXSenControl"), _txt_MouYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseYSen"), _slide_MouYSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseYSenControl"), _txt_PadXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen"), _slide_PadXSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadXSenControl"), _txt_PadYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen"), _slide_PadYSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadYSenControl"), _btn_Reset = (UI.getChildControl)(_frameContent_Game, "Button_Reset")}
 local randerPlayerColorStr = {zoneChange = "ZoneChange", warAlly = "WarAlly", guild = "Guild", party = "Party", enemy = "Enemy", nonWarPlayer = "NonWarPlayer"}
 value_GameOption_Check_ComboGuide = frame_Game._btn_SpiritGuide
 value_GameOption_Check_ComboGuide:SetCheck(true)
@@ -109,7 +114,7 @@ local isKeyConfig_UI_Open = false
 local isAutoAim = true
 local chk_Option = {SCREEN_RESOLUTION_COUNT; FULL_SCREEN_IDX = 0, FULL_SCREEN_WINDOWED_IDX = 1, WINDOWED_IDX = 2, SCREEN_MODE_COUNT = 3, 
 screenResolutionList = {}
-, SCREENSHOT_BMP = 0, SCREENSHOT_JPG = 1, SCREENSHOT_PNG = 2, WATERMARK_ALPHA = 0, WATERMARK_BOLD = 1, WATERMARK_NONE = 2, WATERMARK_SERVICE_KR = 0, WATERMARK_SERVICE_JP = 1, WATERMARK_SERVICE_NA = 2, WATERMARK_SERVICE_RU = 3, WATERMARK_SERVICE_TW = 4, WATERMARK_POSITION_LT = 0, WATERMARK_POSITION_RT = 1, WATERMARK_POSITION_LB = 2, WATERMARK_POSITION_RB = 3, WATERMARK_SCALE_SMALL = 0, WATERMARK_SCALE_REGULAR = 1, WATERMARK_SCALE_LARGE = 2, COLORBLIND_NONE = 0, COLORBLIND_PROTANOPIA = 1, COLORBLIND_DEUTERANOP = 2, TEXTURE_QUALITY_HIGH = 0, TEXTURE_QUALITY_NORMAL = 1, TEXTURE_QUALITY_LOW = 2, TEXTURE_QUALITY_COUNT = 3, GRAPHIC_OPTION_HIGH0 = 0, GRAPHIC_OPTION_HIGH1 = 1, GRAPHIC_OPTION_NORMAL0 = 2, GRAPHIC_OPTION_NORMAL1 = 3, GRAPHIC_OPTION_LOW0 = 4, GRAPHIC_OPTION_LOW1 = 5, GRAPHIC_OPTION_VERYLOW = 6, GRAPHIC_OPTION_COUNT = 7, RESOLUTION_WIDTH = 1280, RESOLUTION_HEIGHT = 720, currentScreenModeIdx = 0, currentScreenShotFormat = 0, currentColorBlind = 0, currentSelfPlayerOnlyEffect = false, currentSelfPlayerOnlyLantern = false, currentNearestPlayerOnlyEffect = false, currentLowPower = false, currentUpscaleEnable = false, currentCropModeEnable = false, currentCropModeScaleX = 0, currentCropModeScaleY = 0, currentLUT = 0, currentAutoOptimization = true, currentOptimizationFrame = 20, currentScreenResolutionIdx = 0, currentTextureQualityIdx = 0, currentGraphicOptionIdx = 0, currentGammaValue = 0, currentContrastValue = 0, currentCheckDof = true, currentCheckAA = true, currentCheckUltra = false, currentCheckLensBlood = true, currentCheckBloodEffect = true, currentCheckSSAO = true, currentCheckTessellation = true, currentCheckPostFilter = true, currentCheckCharacterEffect = true, currentCheckUIScale = 1, currentCheckRepresent = true, currentCheckSnowPoolOnlyInSafeZone = false, currentCheckWorkerVisible = true, currentMaster = 0, currentMusic = 0, currentFxSound = 0, currentEnvSound = 0, currentDlgSound = 0, currentHitFxWeight = 0, currentPlayerVolume = 0, currentCheckMusic = true, currentCheckSound = true, currentCheckEnvSound = true, currentCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, currentCheckNpcVoice = getGameServiceResType(), currentCheckRiddingMusic = true, currentCheckWhisperMusic = true, currentCheckTraySoundOnOff = true, currentCheckNameTag = false, currentCheckShowSkillCmd = true, currentCheckShowComboGuide = true, currentCheckAutoAim = true, currentCheckHideWindowByAttacked = true, currentCheckShowGuildLoginMessage = true, currentCheckEnableSimpleUI = true, currentCheckRenderCharacterColor = true, currentCheckEnableOVR = true, currentCheckMiniMapRotation = false, currentCheckRejectInvitation = false, currentCheckCameraMasterPower = 1, currentCheckCameraShakePower = 0.5, currentCheckMotionBlurPower = 0.5, currentCheckCameraPosPower = 0.7, currentCheckCameraFovPower = 0.7, currentCheckMouseMove = false, currentCheckMouseInvertX = false, currentCheckMouseInvertY = false, currentCheckMouseSensitivityX = 1.05, currentCheckMouseSensitivityY = 1.05, currentCheckPadEnable = false, currentCheckPadVibration = false, currentCheckPadInvertX = false, currentCheckPadInvertY = false, currentCheckPadSensitivityX = 1.05, currentCheckPadSensitivityY = 1.05, currentCheckIsHideMast = true, currentCheckShowCashAlert = false, currentSelfPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, currentWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, currentWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, currentServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentFovValue = 50, currentCheckIsUIModeMouseLock = false, currentCheckShowAttackEffect = true, currentCheckBlackSpiritAlert = true, currentCheckIsPvpRefuse = false, currentCheckIsOnScreenSaver = true, currentCheckUseNewQuickSlot = false, currentGuideLineZoneChange = false, currentGuideLineWarAlly = false, currentGuideLineGuild = false, currentGuideLineQuestLine = true, currentGuideLineNonWarPlayer = false, currentGuideLineParty = false, currentGuideLineHumanRelation = true, currentGuideLineEnemy = false, currentGuideLinePartyMemberEffect = false, appliedScreenModeIdx = 0, appliedScreenShotFormat = 0, appliedColorBlind = 0, appliedSelfPlayerOnlyEffect = true, appliedSelfPlayerOnlyLantern = false, appliedLowPower = false, appliedUpscaleEnable = false, appliedCropModeEnable = false, appliedCropModeScaleX = 0, appliedCropModeScaleY = 0, appliedAutoOptimization = true, appliedOptimizationFrame = 20, appliedLUT = 0, appliedScreenResolutionIdx = 0, appliedTextureQualityIdx = 0, appliedGraphicOptionIdx = 0, appliedGammaValue = 0, appliedContrastValue = 0, appliedCheckDof = true, appliedCheckAA = true, appliedCheckUltra = false, appliedCheckLensBlood = true, appliedCheckBloodEffect = true, appliedCheckRepresent = true, appliedCheckSnowPoolOnlyInSafeZone = false, appliedCheckSSAO = true, appliedCheckTessellation = true, appliedCheckPostFilter = true, appliedCheckCharacterEffect = true, appliedCheckUIScale = 1, appliedMaster = 0, appliedMusic = 0, appliedFxSound = 0, appliedEnvSound = 0, appliedDlgSound = 0, appliedHitFxWeight = 0, appliedPlayerVolume = 0, appliedCheckMusic = true, appliedCheckSound = true, appliedCheckEnvSound = true, appliedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, appliedCheckNpcVoice = getGameServiceResType(), appliedCheckRiddingMusic = true, appliedCheckWhisperMusic = true, appliedCheckTraySoundOnOff = true, appliedCheckNameTag = false, appliedCheckShowSkillCmd = true, appliedCheckShowComboGuide = true, appliedCheckAutoAim = true, appliedCheckHideWindowByAttacked = true, appliedCheckShowGuildLoginMessage = true, appliedCheckEnableSimpleUI = true, appliedCheckRenderCharacterColor = true, appliedCheckEnableOVR = true, appliedCheckMiniMapRotation = false, appliedCheckRejectInvitation = false, appliedCheckCameraMasterPower = 1, appliedCheckCameraShakePower = 0.5, appliedCheckMotionBlurPower = 0.5, appliedCheckCameraPosPower = 0.7, appliedCheckCameraFovPower = 0.7, appliedCheckMouseMove = false, appliedCheckMouseInvertX = false, appliedCheckMouseInvertY = false, appliedCheckMouseSensitivityX = 1.05, appliedCheckMouseSensitivityY = 1.05, appliedCheckPadEnable = false, appliedCheckPadVibration = false, appliedCheckPadInvertX = false, appliedCheckPadInvertY = false, appliedCheckPadSensitivityX = 1.05, appliedCheckPadSensitivityY = 1.05, appliedCheckIsHideMast = true, appliedCheckShowCashAlert = false, appliedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, appliedWatermarkPosition = (CppEnums.WatermarkPositionType).eWatermarkPositionType_RightDown, appliedWatermarkScale = (CppEnums.WatermarkScaleType).eWatermarkScaleType_Regular, appliedWatermarkService = (CppEnums.WatermarkServiceType).eWatermarkServiceType_KR, appliedWatermarkAlpha = 0.5, appliedFontResizeType = 0, appliedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, appliedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, appliedWorldMapCameraType = (CppEnums.WorldMapAnimationStyle).eWorldMapCameraPitchType_Default, appliedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedFovValue = 50, appliedCheckWorkerVisible = true, appliedCheckIsUIModeMouseLock = false, appliedCheckShowAttackEffect = true, appliedCheckBlackSpiritAlert = true, appliedCheckIsPvpRefuse = false, appliedCheckIsOnScreenSaver = true, appliedCheckUseNewQuickSlot = false, appliedGuideLineZoneChange = false, appliedGuideLineWarAlly = false, appliedGuideLineGuild = false, appliedGuideLineQuestLine = true, appliedGuideLineNonWarPlayer = false, appliedGuideLineParty = false, appliedGuideLineHumanRelation = true, appliedGuideLineEnemy = false, appliedGuideLinePartyMemberEffect = false, savedScreenModeIdx = 0, savedScreenShotFormat = 0, savedColorBlind = 0, savedSelfPlayerOnlyEffect = true, savedNearestPlayerOnlyEffect = true, savedSelfPlayerOnlyLantern = false, savedLowPower = false, savedUpscaleEnable = false, savedCropModeEnable = false, savedCropModeScaleX = 0, savedCropModeScaleY = 0, savedAutoOptimization = true, savedOptimizationFrame = 20, savedLUT = 0, savedScreenResolutionIdx = 0, savedTextureQualityIdx = 0, savedGraphicOptionIdx = 0, savedGammaValue = 0, savedContrastValue = 0, savedCheckDof = true, savedCheckAA = true, savedCheckUltra = false, savedCheckLensBlood = true, savedCheckBloodEffect = true, savedCheckRepresent = true, savedCheckSnowPoolOnlyInSafeZone = false, savedCheckSSAO = true, savedCheckTessellation = true, savedCheckPostFilter = true, savedCheckCharacterEffect = true, savedCheckUIScale = 1, savedCheckWorkerVisible = true, savedMaster = 0, savedMusic = 0, savedFxSound = 0, savedEnvSound = 0, savedDlgSound = 0, savedHitFxWeight = 0, savedPlayerVolume = 0, savedCheckMusic = true, savedCheckSound = true, savedCheckEnvSound = true, savedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, savedCheckNpcVoice = getGameServiceResType(), savedCheckRiddingMusic = true, savedCheckWhisperMusic = true, savedCheckTraySoundOnOff = true, savedCheckNameTag = false, savedCheckShowSkillCmd = true, savedCheckShowComboGuide = true, savedCheckAutoAim = true, savedCheckHideWindowByAttacked = true, savedCheckShowGuildLoginMessage = true, savedCheckEnableSimpleUI = true, savedCheckRenderCharacterColor = true, savedCheckEnableOVR = true, savedCheckMiniMapRotation = false, savedCheckRejectInvitation = false, savedCheckCameraMasterPower = 1, savedCheckCameraShakePower = 0.5, savedCheckMotionBlurPower = 0.5, savedCheckCameraPosPower = 0.7, savedCheckCameraFovPower = 0.7, savedCheckMouseMove = false, savedCheckMouseInvertX = false, savedCheckMouseInvertY = false, savedCheckMouseSensitivityX = 1.05, savedCheckMouseSensitivityY = 1.05, savedCheckPadEnable = false, savedCheckPadVibration = false, savedCheckPadInvertX = false, savedCheckPadInvertY = false, savedCheckPadSensitivityX = 1.05, savedCheckPadSensitivityY = 1.05, savedCheckIsHideMast = true, savedCheckShowCasheAlert = false, savedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, savedFontResizeType = 0, savedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, savedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, savedWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, savedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedFovValue = 50, savedCheckIsUIModeMouseLock = false, savedCheckShowAttackEffect = true, savedCheckBlackSpiritAlert = true, savedCheckIsPvpRefuse = false, savedCheckIsOnScreenSaver = true, savedCheckUseNewQuickSlot = false, savedCheckGuideLineZoneChange = false, savedCheckGuideLineWarAlly = false, savedCheckGuideLineGuild = false, savedCheckGuideLineQuestLine = true, savedCheckGuideLineNonWarPlayer = false, savedCheckGuideLineParty = false, savedCheckGuideLineHumanRelation = true, savedCheckGuideLineEnemy = false, savedCheckGuideLinePartyMemberEffect = false}
+, SCREENSHOT_BMP = 0, SCREENSHOT_JPG = 1, SCREENSHOT_PNG = 2, SCREENSHOTSIZE_DEFAULT = 0, SCREENSHOTSIZE_4k = 1, SCREENSHOTSIZE_8k = 2, WATERMARK_ALPHA = 0, WATERMARK_BOLD = 1, WATERMARK_NONE = 2, WATERMARK_SERVICE_KR = 0, WATERMARK_SERVICE_JP = 1, WATERMARK_SERVICE_NA = 2, WATERMARK_SERVICE_RU = 3, WATERMARK_SERVICE_TW = 4, WATERMARK_SERVICE_SA = 5, WATERMARK_SERVICE_NONE = 6, WATERMARK_POSITION_LT = 0, WATERMARK_POSITION_RT = 1, WATERMARK_POSITION_LB = 2, WATERMARK_POSITION_RB = 3, WATERMARK_SCALE_SMALL = 0, WATERMARK_SCALE_REGULAR = 1, WATERMARK_SCALE_LARGE = 2, COLORBLIND_NONE = 0, COLORBLIND_PROTANOPIA = 1, COLORBLIND_DEUTERANOP = 2, TEXTURE_QUALITY_HIGH = 0, TEXTURE_QUALITY_NORMAL = 1, TEXTURE_QUALITY_LOW = 2, TEXTURE_QUALITY_COUNT = 3, GRAPHIC_OPTION_HIGH0 = 0, GRAPHIC_OPTION_HIGH1 = 1, GRAPHIC_OPTION_NORMAL0 = 2, GRAPHIC_OPTION_NORMAL1 = 3, GRAPHIC_OPTION_LOW0 = 4, GRAPHIC_OPTION_LOW1 = 5, GRAPHIC_OPTION_VERYLOW = 6, GRAPHIC_OPTION_COUNT = 7, RESOLUTION_WIDTH = 1280, RESOLUTION_HEIGHT = 720, currentScreenModeIdx = 0, currentScreenShotFormat = 0, currentScreenShotSize = 0, currentColorBlind = 0, currentSelfPlayerOnlyEffect = false, currentSelfPlayerOnlyLantern = false, currentNearestPlayerOnlyEffect = false, currentLowPower = false, currentUpscaleEnable = false, currentCropModeEnable = false, currentCropModeScaleX = 0, currentCropModeScaleY = 0, currentLUT = 0, currentAutoOptimization = true, currentOptimizationFrame = 20, currentScreenResolutionIdx = 0, currentTextureQualityIdx = 0, currentGraphicOptionIdx = 0, currentGammaValue = 0, currentContrastValue = 0, currentCheckDof = true, currentCheckAA = true, currentCheckUltra = false, currentCheckLensBlood = true, currentCheckBloodEffect = true, currentCheckSSAO = true, currentCheckTessellation = true, currentCheckPostFilter = true, currentCheckCharacterEffect = true, currentCheckUIScale = 1, currentCheckRepresent = true, currentCheckSnowPoolOnlyInSafeZone = false, currentCheckWorkerVisible = true, currentMaster = 0, currentMusic = 0, currentFxSound = 0, currentEnvSound = 0, currentDlgSound = 0, currentHitFxWeight = 0, currentPlayerVolume = 0, currentCheckMusic = true, currentCheckSound = true, currentCheckEnvSound = true, currentCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, currentCheckNpcVoice = getGameServiceResType(), currentCheckRiddingMusic = true, currentCheckWhisperMusic = true, currentCheckTraySoundOnOff = true, currentCheckNameTag = false, currentCheckShowSkillCmd = true, currentCheckShowComboGuide = true, currentCheckAutoAim = true, currentCheckHideWindowByAttacked = true, currentCheckShowGuildLoginMessage = true, currentCheckEnableSimpleUI = true, currentCheckRenderCharacterColor = true, currentCheckEnableOVR = true, currentCheckMiniMapRotation = false, currentCheckRejectInvitation = false, currentCheckEffectAlpha = 1, currentCheckCameraMasterPower = 1, currentCheckColorByPass = 1, currentCheckCameraShakePower = 0.5, currentCheckMotionBlurPower = 0.5, currentCheckCameraPosPower = 0.7, currentCheckCameraFovPower = 0.7, currentCheckMouseMove = false, currentCheckMouseInvertX = false, currentCheckMouseInvertY = false, currentCheckMouseSensitivityX = 1.05, currentCheckMouseSensitivityY = 1.05, currentCheckPadEnable = false, currentCheckPadVibration = false, currentCheckPadInvertX = false, currentCheckPadInvertY = false, currentCheckPadSensitivityX = 1.05, currentCheckPadSensitivityY = 1.05, currentCheckIsHideMast = true, currentCheckShowCashAlert = false, currentSelfPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, currentWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, currentWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, currentServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentFovValue = 50, currentCheckIsUIModeMouseLock = false, currentCheckShowAttackEffect = true, currentCheckBlackSpiritAlert = true, currentCheckIsPvpRefuse = false, currentCheckIsExchangeRefuse = false, currentCheckIsOnScreenSaver = true, currentCheckUseNewQuickSlot = false, currentGuideLineZoneChange = false, currentGuideLineWarAlly = false, currentGuideLineGuild = false, currentGuideLineQuestLine = true, currentGuideLineNonWarPlayer = false, currentGuideLineParty = false, currentGuideLineHumanRelation = true, currentGuideLineEnemy = false, currentGuideLinePartyMemberEffect = false, appliedScreenModeIdx = 0, appliedScreenShotFormat = 0, appliedScreenShotSize = 0, appliedColorBlind = 0, appliedSelfPlayerOnlyEffect = true, appliedSelfPlayerOnlyLantern = false, appliedLowPower = false, appliedUpscaleEnable = false, appliedCropModeEnable = false, appliedCropModeScaleX = 0, appliedCropModeScaleY = 0, appliedAutoOptimization = true, appliedOptimizationFrame = 20, appliedLUT = 0, appliedScreenResolutionIdx = 0, appliedTextureQualityIdx = 0, appliedGraphicOptionIdx = 0, appliedGammaValue = 0, appliedContrastValue = 0, appliedCheckDof = true, appliedCheckAA = true, appliedCheckUltra = false, appliedCheckLensBlood = true, appliedCheckBloodEffect = true, appliedCheckRepresent = true, appliedCheckSnowPoolOnlyInSafeZone = false, appliedCheckSSAO = true, appliedCheckTessellation = true, appliedCheckPostFilter = true, appliedCheckCharacterEffect = true, appliedCheckUIScale = 1, appliedCheckEffectAlpha = 1, appliedMaster = 0, appliedMusic = 0, appliedFxSound = 0, appliedEnvSound = 0, appliedDlgSound = 0, appliedHitFxWeight = 0, appliedPlayerVolume = 0, appliedCheckMusic = true, appliedCheckSound = true, appliedCheckEnvSound = true, appliedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, appliedCheckNpcVoice = getGameServiceResType(), appliedCheckRiddingMusic = true, appliedCheckWhisperMusic = true, appliedCheckTraySoundOnOff = true, appliedCheckNameTag = false, appliedCheckShowSkillCmd = true, appliedCheckShowComboGuide = true, appliedCheckAutoAim = true, appliedCheckHideWindowByAttacked = true, appliedCheckShowGuildLoginMessage = true, appliedCheckEnableSimpleUI = true, appliedCheckRenderCharacterColor = true, appliedCheckEnableOVR = true, appliedCheckMiniMapRotation = false, appliedCheckRejectInvitation = false, appliedCheckCameraMasterPower = 1, appliedCheckCameraShakePower = 0.5, appliedCheckMotionBlurPower = 0.5, appliedCheckCameraPosPower = 0.7, appliedCheckCameraFovPower = 0.7, appliedCheckMouseMove = false, appliedCheckMouseInvertX = false, appliedCheckMouseInvertY = false, appliedCheckMouseSensitivityX = 1.05, appliedCheckMouseSensitivityY = 1.05, appliedCheckPadEnable = false, appliedCheckPadVibration = false, appliedCheckPadInvertX = false, appliedCheckPadInvertY = false, appliedCheckPadSensitivityX = 1.05, appliedCheckPadSensitivityY = 1.05, appliedCheckIsHideMast = true, appliedCheckShowCashAlert = false, appliedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, appliedWatermarkPosition = (CppEnums.WatermarkPositionType).eWatermarkPositionType_RightDown, appliedWatermarkScale = (CppEnums.WatermarkScaleType).eWatermarkScaleType_Regular, appliedWatermarkService = (CppEnums.WatermarkServiceType).eWatermarkServiceType_KR, appliedWatermarkAlpha = 0.5, appliedFontResizeType = 0, appliedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, appliedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, appliedWorldMapCameraType = (CppEnums.WorldMapAnimationStyle).eWorldMapCameraPitchType_Default, appliedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedFovValue = 50, appliedCheckWorkerVisible = true, appliedCheckIsUIModeMouseLock = false, appliedCheckShowAttackEffect = true, appliedCheckBlackSpiritAlert = true, appliedCheckIsPvpRefuse = false, appliedCheckIsExchangeRefuse = false, appliedCheckIsOnScreenSaver = true, appliedCheckUseNewQuickSlot = false, appliedGuideLineZoneChange = false, appliedGuideLineWarAlly = false, appliedGuideLineGuild = false, appliedGuideLineQuestLine = true, appliedGuideLineNonWarPlayer = false, appliedGuideLineParty = false, appliedGuideLineHumanRelation = true, appliedGuideLineEnemy = false, appliedGuideLinePartyMemberEffect = false, savedScreenModeIdx = 0, savedScreenShotFormat = 0, savedScreenShotSize = 0, savedColorBlind = 0, savedSelfPlayerOnlyEffect = true, savedNearestPlayerOnlyEffect = true, savedSelfPlayerOnlyLantern = false, savedLowPower = false, savedUpscaleEnable = false, savedCropModeEnable = false, savedCropModeScaleX = 0, savedCropModeScaleY = 0, savedAutoOptimization = true, savedOptimizationFrame = 20, savedLUT = 0, savedScreenResolutionIdx = 0, savedTextureQualityIdx = 0, savedGraphicOptionIdx = 0, savedGammaValue = 0, savedContrastValue = 0, savedCheckDof = true, savedCheckAA = true, savedCheckUltra = false, savedCheckLensBlood = true, savedCheckBloodEffect = true, savedCheckRepresent = true, savedCheckSnowPoolOnlyInSafeZone = false, savedCheckSSAO = true, savedCheckTessellation = true, savedCheckPostFilter = true, savedCheckCharacterEffect = true, savedCheckUIScale = 1, savedCheckWorkerVisible = true, savedMaster = 0, savedMusic = 0, savedFxSound = 0, savedEnvSound = 0, savedDlgSound = 0, savedHitFxWeight = 0, savedPlayerVolume = 0, savedCheckMusic = true, savedCheckSound = true, savedCheckEnvSound = true, savedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, savedCheckNpcVoice = getGameServiceResType(), savedCheckRiddingMusic = true, savedCheckWhisperMusic = true, savedCheckTraySoundOnOff = true, savedCheckNameTag = false, savedCheckShowSkillCmd = true, savedCheckShowComboGuide = true, savedCheckAutoAim = true, savedCheckHideWindowByAttacked = true, savedCheckShowGuildLoginMessage = true, savedCheckEnableSimpleUI = true, savedCheckRenderCharacterColor = true, savedCheckEnableOVR = true, savedCheckMiniMapRotation = false, savedCheckRejectInvitation = false, savedCheckCameraMasterPower = 1, savedCheckColorByPass = 1, savedCheckCameraShakePower = 0.5, savedCheckMotionBlurPower = 0.5, savedCheckCameraPosPower = 0.7, savedCheckCameraFovPower = 0.7, savedCheckMouseMove = false, savedCheckMouseInvertX = false, savedCheckMouseInvertY = false, savedCheckMouseSensitivityX = 1.05, savedCheckMouseSensitivityY = 1.05, savedCheckPadEnable = false, savedCheckPadVibration = false, savedCheckPadInvertX = false, savedCheckPadInvertY = false, savedCheckPadSensitivityX = 1.05, savedCheckPadSensitivityY = 1.05, savedCheckIsHideMast = true, savedCheckShowCasheAlert = false, savedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, savedFontResizeType = 0, savedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, savedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, savedWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, savedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedFovValue = 50, savedCheckIsUIModeMouseLock = false, savedCheckShowAttackEffect = true, savedCheckBlackSpiritAlert = true, savedCheckIsPvpRefuse = false, savedCheckIsExchangeRefuse = false, savedCheckIsOnScreenSaver = true, savedCheckUseNewQuickSlot = false, savedCheckGuideLineZoneChange = false, savedCheckGuideLineWarAlly = false, savedCheckGuideLineGuild = false, savedCheckGuideLineQuestLine = true, savedCheckGuideLineNonWarPlayer = false, savedCheckGuideLineParty = false, savedCheckGuideLineHumanRelation = true, savedCheckGuideLineEnemy = false, savedCheckGuideLinePartyMemberEffect = false}
 local isVoiceOpen = ToClient_IsContentsGroupOpen("75")
 local INPUT_COUNT_START = 0
 local INPUT_COUNT_END = isVoiceOpen and 49 or 48
@@ -198,12 +203,12 @@ local updateKeyConfig = function()
 end
 
 local INPUT_COUNT_START_UI = 0
-local INPUT_COUNT_END_UI = 35
+local INPUT_COUNT_END_UI = 37
 local STATIC_INPUT_TITLE_UI = {}
 local BUTTON_KEY_UI = {}
 local BUTTON_PAD_UI = {}
 local INPUT_TYPE_UI = nil
-local keyConfigListShowCount_UI = 36
+local keyConfigListShowCount_UI = 38
 local configDataIndex_UI = 0
 local keyConfigData_UI = {}
 local getKeyConfigData_UI = function(index)
@@ -284,7 +289,7 @@ local updateKeyConfig_UI = function()
   end
 end
 
-local GetStr_Option = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_DISPLAY_HELP"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_SOUND_HELP"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_GAME_HELP"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_KEY_HELP"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_GAMMA"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_INTERFACE"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_MASTERVOLUME"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_BGMVOLUME"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FXVOLUME"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ENVVOLUME"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DIALOGVOLUME"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERASHAKE"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_MOUSESENSEX"), [13] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_MOUSESENSEY"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PADSENSEX"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PADSENSEY"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_KEYUI_HELP"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERABLUR"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_HITFXVOLUME"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_HITFXWEIGHT"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_OTHERUSERVOLUME"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CONTRAST"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERAPOS"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERAFOV"), [24] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FOV"), [25] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERAMASTER"), [26] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_LANGUAGE_HELP")}
+local GetStr_Option = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_DISPLAY_HELP"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_SOUND_HELP"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_GAME_HELP"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_KEY_HELP"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_GAMMA"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_INTERFACE"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_MASTERVOLUME"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_BGMVOLUME"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FXVOLUME"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ENVVOLUME"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DIALOGVOLUME"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERASHAKE"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_MOUSESENSEX"), [13] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_MOUSESENSEY"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PADSENSEX"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PADSENSEY"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_KEYUI_HELP"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERABLUR"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_HITFXVOLUME"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_HITFXWEIGHT"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_OTHERUSERVOLUME"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CONTRAST"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERAPOS"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERAFOV"), [24] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FOV"), [25] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CAMERAMASTER"), [26] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_LANGUAGE_HELP"), [27] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_EFFECTALPHA"), [28] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TXT_COLORBYPASS")}
 local _volumeParam = SoundVolumeParam()
 Panel_Window_Option:AddChild(_frame_Display)
 Panel_GameOption_Display:RemoveControl(_frame_Display)
@@ -352,7 +357,7 @@ Panel_GameOption_Language:RemoveControl(_frame_Language)
 (gamePanel_Main._btn_Language):addInputEvent("Mouse_On", "GameOption_SimpleToolTips( true, 6 )")
 ;
 (gamePanel_Main._btn_Language):addInputEvent("Mouse_Out", "GameOption_SimpleToolTips( false )")
-local simpleToolTipIdx = {_btn_ScreenMode0 = 0, _btn_ScreenMode1 = 1, _btn_ScreenMode2 = 2, _btn_ScrSize = 3, _btn_Trxt = 4, _btn_Rndr = 5, _btn_AntiAlli = 6, _btn_SSAO = 7, _btn_PostFilter = 8, _btn_DOF = 9, _btn_Tessellation = 10, _btn_Ultra = 11, _btn_BloodEffect = 12, _btn_LensBlood = 13, _btn_CharacterEffect = 14, _btn_SelfPlayerOnlyEffect = 15, _btn_SelfPlayerOnlyLantern = 16, _btn_CropModeEnable = 17, _btn_CropModeScaleX = 18, _btn_CropModeScaleY = 19, _btn_UpscaleEnable = 20, _btn_UIScale = 21, _btn_CameraMaster = 22, _btn_CameraShake = 23, _btn_MotionBlur = 24, _btn_CameraPos = 25, _btn_CameraFov = 26, _btn_LUT = 27, _btn_LUT_Reset = 28, _btn_Gamma = 29, _btn_Contrast = 30, _btn_Fov = 31, _btn_MusicOnOff = 32, _btn_FXOnOff = 33, _btn_EnvFXOnOff = 34, _btn_TotalVol = 35, _btn_MusicVol = 36, _btn_FxVol = 37, _btn_EnvFxVol = 38, _btn_VoiceVol = 39, _btn_hitFxVolume = 40, _btn_hitFxWeightVolume = 41, _btn_otherPlayerVolume = 42, _btn_AutoAim = 43, _btn_HideWindow = 44, _btn_GuildLogin = 45, _btn_RejectInvitation = 46, _btn_EnableSimpleUI = 47, _btn_SpiritGuide = 48, _btn_MouseMove = 49, _btn_EnableOVR = 50, _btn_SelfNameShowAllways = 51, _btn_SelfNameShowImportant = 52, _btn_SelfNameShowNoShow = 53, _btn_OtherNameShow = 54, _btn_PartyNameShow = 55, _btn_GuildNameShow = 56, _btn_Alert_Region = 57, _btn_Alert_TerritoryTrade = 58, _btn_Alert_RoyalTrade = 59, _btn_Alert_Fitness = 60, _btn_Alert_TerritoryWar = 61, _btn_Alert_GuildWar = 62, _btn_Alert_PlayerGotItem = 63, _btn_Alert_ItemMarket = 64, _btn_Alert_LifeLevUp = 65, _btn_Alert_GuildQuest = 66, _btn_MouseX = 67, _btn_MouseY = 68, _btn_MouXSen = 69, _btn_MouYSen = 70, _btn_UsePad = 71, _btn_UseVibe = 72, _btn_PadX = 73, _btn_PadY = 74, _btn_PadXSen = 75, _btn_PadYSen = 76, _btn_MiniMapRotation = 77, _btn_NearestPlayerOnlyEffect = 78, _btn_PetAll = 79, _btn_PetMine = 80, _btn_PetHide = 81, _btn_NavGuideNone = 82, _btn_NavGuideArrow = 83, _btn_NavGuideEffect = 84, _btn_NavGuideFairy = 85, _btn_ShowAttackEffect = 86, _btn_Alert_BlackSpirit = 87, _btn_RiddingOnOff = 88, _btn_CombatAllwaysOn = 89, _btn_CombatAllwaysOff = 90, _btn_CombatAllwaysLowOff = 91, _btn_UseNewQuickSlot = 92, _btn_UseChattingFilter = 93, _btn_GuideLineHumanRelation = 94, _btn_GuideLineZoneChange = 95, _btn_GuideLineWarAlly = 96, _btn_GuideLineGuild = 97, _btn_GuideLineParty = 98, _btn_GuideLineEnemy = 99, _btn_GuideLineNonWarPlayer = 100, _btn_GuideLineQuestObject = 101, _btn_IsOnScreenSaver = 102, _btn_WhisperOnOff = 103, _btn_UIModeMouseLock = 104, _btn_PvpRefuse = 105, _btn_TraySoundOnOff = 106, _btn_ColorBlind_None = 107, _btn_ColorBlind_Red = 108, _btn_ColorBlind_Green = 109, _btn_WorldMapOpenByWestMaintain = 110, _btn_WorldMapOpenByCharacterToWest = 111, _btn_WorldMapOpenByCharacterMaintain = 112, _btn_WorldMapOpenByNone = 113, _btn_WorldMapCameraAngle = 114, _btn_WorldMapCameraDefaultAngle = 115, _btn_WorldMapCameraDegree30 = 116, _btn_WorldMapCameraDegree90 = 117, _btn_Alert_NearMonster = 118, _btn_GuideLinePartyEffect = 119, _btn_WorkerVisible = 120, _btn_AutoOptimization = 121, _btn_AutoOptimizationSlide = 122, _btn_HideMast = 123, _btn_ShowCashAlert = 124, _btn_FontResizeDefault = 125, _btn_FontResizeBig = 126, _btn_FontResizeMoreBig = 127, _btn_SnowPoolOnlyInSafeZone = 128, _btn_Alert_ServantMarket = 129, _btn_LowPower = 130}
+local simpleToolTipIdx = {_btn_ScreenMode0 = 0, _btn_ScreenMode1 = 1, _btn_ScreenMode2 = 2, _btn_ScrSize = 3, _btn_Trxt = 4, _btn_Rndr = 5, _btn_AntiAlli = 6, _btn_SSAO = 7, _btn_PostFilter = 8, _btn_DOF = 9, _btn_Tessellation = 10, _btn_Ultra = 11, _btn_BloodEffect = 12, _btn_LensBlood = 13, _btn_CharacterEffect = 14, _btn_SelfPlayerOnlyEffect = 15, _btn_SelfPlayerOnlyLantern = 16, _btn_CropModeEnable = 17, _btn_CropModeScaleX = 18, _btn_CropModeScaleY = 19, _btn_UpscaleEnable = 20, _btn_UIScale = 21, _btn_CameraMaster = 22, _btn_CameraShake = 23, _btn_MotionBlur = 24, _btn_CameraPos = 25, _btn_CameraFov = 26, _btn_LUT = 27, _btn_LUT_Reset = 28, _btn_Gamma = 29, _btn_Contrast = 30, _btn_Fov = 31, _btn_MusicOnOff = 32, _btn_FXOnOff = 33, _btn_EnvFXOnOff = 34, _btn_TotalVol = 35, _btn_MusicVol = 36, _btn_FxVol = 37, _btn_EnvFxVol = 38, _btn_VoiceVol = 39, _btn_hitFxVolume = 40, _btn_hitFxWeightVolume = 41, _btn_otherPlayerVolume = 42, _btn_AutoAim = 43, _btn_HideWindow = 44, _btn_GuildLogin = 45, _btn_RejectInvitation = 46, _btn_EnableSimpleUI = 47, _btn_SpiritGuide = 48, _btn_MouseMove = 49, _btn_EnableOVR = 50, _btn_SelfNameShowAllways = 51, _btn_SelfNameShowImportant = 52, _btn_SelfNameShowNoShow = 53, _btn_OtherNameShow = 54, _btn_PartyNameShow = 55, _btn_GuildNameShow = 56, _btn_Alert_Region = 57, _btn_Alert_TerritoryTrade = 58, _btn_Alert_RoyalTrade = 59, _btn_Alert_Fitness = 60, _btn_Alert_TerritoryWar = 61, _btn_Alert_GuildWar = 62, _btn_Alert_PlayerGotItem = 63, _btn_Alert_ItemMarket = 64, _btn_Alert_LifeLevUp = 65, _btn_Alert_GuildQuest = 66, _btn_MouseX = 67, _btn_MouseY = 68, _btn_MouXSen = 69, _btn_MouYSen = 70, _btn_UsePad = 71, _btn_UseVibe = 72, _btn_PadX = 73, _btn_PadY = 74, _btn_PadXSen = 75, _btn_PadYSen = 76, _btn_MiniMapRotation = 77, _btn_NearestPlayerOnlyEffect = 78, _btn_PetAll = 79, _btn_PetMine = 80, _btn_PetHide = 81, _btn_NavGuideNone = 82, _btn_NavGuideArrow = 83, _btn_NavGuideEffect = 84, _btn_NavGuideFairy = 85, _btn_ShowAttackEffect = 86, _btn_Alert_BlackSpirit = 87, _btn_RiddingOnOff = 88, _btn_CombatAllwaysOn = 89, _btn_CombatAllwaysOff = 90, _btn_CombatAllwaysLowOff = 91, _btn_UseNewQuickSlot = 92, _btn_UseChattingFilter = 93, _btn_GuideLineHumanRelation = 94, _btn_GuideLineZoneChange = 95, _btn_GuideLineWarAlly = 96, _btn_GuideLineGuild = 97, _btn_GuideLineParty = 98, _btn_GuideLineEnemy = 99, _btn_GuideLineNonWarPlayer = 100, _btn_GuideLineQuestObject = 101, _btn_IsOnScreenSaver = 102, _btn_WhisperOnOff = 103, _btn_UIModeMouseLock = 104, _btn_PvpRefuse = 105, _btn_TraySoundOnOff = 106, _btn_ColorBlind_None = 107, _btn_ColorBlind_Red = 108, _btn_ColorBlind_Green = 109, _btn_WorldMapOpenByWestMaintain = 110, _btn_WorldMapOpenByCharacterToWest = 111, _btn_WorldMapOpenByCharacterMaintain = 112, _btn_WorldMapOpenByNone = 113, _btn_WorldMapCameraAngle = 114, _btn_WorldMapCameraDefaultAngle = 115, _btn_WorldMapCameraDegree30 = 116, _btn_WorldMapCameraDegree90 = 117, _btn_Alert_NearMonster = 118, _btn_GuideLinePartyEffect = 119, _btn_WorkerVisible = 120, _btn_AutoOptimization = 121, _btn_AutoOptimizationSlide = 122, _btn_HideMast = 123, _btn_ShowCashAlert = 124, _btn_FontResizeDefault = 125, _btn_FontResizeBig = 126, _btn_FontResizeMoreBig = 127, _btn_SnowPoolOnlyInSafeZone = 128, _btn_Alert_ServantMarket = 129, _btn_LowPower = 130, _btn_ScreenShotSize_4k = 131, _btn_ScreenShotSize_8k = 132, _btn_EffectAlpha = 133, _btn_ExchangeRefuse = 134, _btn_ScreenShotSize_Default = 135}
 local toolTipIdxValue = {
 [simpleToolTipIdx._btn_ScreenMode0] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_SCREENMODE0"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_SCREENMODE0"), control = (frame_Display._btn_ScreenMode)[0]}
 , 
@@ -405,6 +410,8 @@ local toolTipIdxValue = {
 [simpleToolTipIdx._btn_UpscaleEnable] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_UPSCALE"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_UPSCALE"), control = frame_Display._btn_UpscaleEnable}
 , 
 [simpleToolTipIdx._btn_UIScale] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_UISCALE"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_UISCALE"), control = _btn_UIScale}
+, 
+[simpleToolTipIdx._btn_EffectAlpha] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_EFFECTALPHA"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_EFFECTALPHA"), control = _btn_EffectAlpha}
 , 
 [simpleToolTipIdx._btn_CameraMaster] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_CAMERAMASTER"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_CAMERAMASTER"), control = _btn_CameraMaster}
 , 
@@ -590,6 +597,8 @@ local toolTipIdxValue = {
 , 
 [simpleToolTipIdx._btn_PvpRefuse] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_PVPREFUSE"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_PVPREFUSEDESC"), control = frame_Game._btn_PvpRefuse}
 , 
+[simpleToolTipIdx._btn_ExchangeRefuse] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_REJECTEXCHANGE"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_DESC_REJECTEXCHANGE"), control = frame_Game._btn_ExchangeRefuse}
+, 
 [simpleToolTipIdx._btn_HideMast] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_HIDEMAST"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_HIDEMAST_DESC"), control = frame_Game._btn_HideMast}
 , 
 [simpleToolTipIdx._btn_ShowCashAlert] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_CASHALERT"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_CASHALERT_DESC"), control = frame_Game._btn_ShowCashAlert}
@@ -611,22 +620,47 @@ local toolTipIdxValue = {
 [simpleToolTipIdx._btn_GuideLinePartyEffect] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_PARTYMEMBEREFFECT_TOOLTIP_NAME"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_PARTYMEMBEREFFECT_TOOLTIP_DESC"), control = frame_Game._btn_GuideLinePartyEffect}
 , 
 [simpleToolTipIdx._btn_LowPower] = {name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_LOWPOWER"), desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_LOWPOWER_TOOLTIP_DESC"), control = frame_Display._btn_LowPower}
+, 
+[simpleToolTipIdx._btn_ScreenShotSize_4k] = {name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_4K_NAME"), desc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_4K_DESC"), control = (frame_Display._btn_ScreenShotSize)[1]}
+, 
+[simpleToolTipIdx._btn_ScreenShotSize_8k] = {name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_8K_NAME"), desc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_8K_DESC"), control = (frame_Display._btn_ScreenShotSize)[2]}
+, 
+[simpleToolTipIdx._btn_ScreenShotSize_Default] = {name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_DEFAULT_NAME"), desc = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_DEFAULT_DESC"), control = (frame_Display._btn_ScreenShotSize)[0]}
 }
-local minScaleValue = 50
-local maxScaleValue = 120
-local minScaleHeight = 720
-local midleScaleHeight = 900
-local HighScaleHeight = 1080
-local MaxScaleHeight = 1600
+local scaleRangeTable = {minScaleValue = 50, maxScaleValue = 120, minScaleHeight = 720, midleScaleHeight = 900, HighScaleHeight = 1080, MaxScaleHeight = 1600}
+local effectAlphaRangeTable = {minAlphaValue = 30, maxAlphaValue = 100}
 local const_UiScaleValue = {50, 90, 100, 120, 140, 200}
+local isFindScreenResolution = true
+local screenResolutionIndex = 1
+local currentResolutionX = 0
+local currentResolutionY = 0
 if false == isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR) then
   const_LowMaxScaleValue = 100
 end
 Panel_GameOption_Initialize = function()
-  -- function num : 0_12 , upvalues : gamePanel_Main, UI_TM, GetStr_Option, frame_Display, frame_Game, frame_Sound
+  -- function num : 0_12 , upvalues : chk_Option, gamePanel_Main, isSaveSetting, UI_TM, GetStr_Option, frame_Display, frame_Game, frame_Sound, isDev
   HideAllFrame_Func()
   getFrameSize_SetSlideSize()
-  GameOption_UIScale_Change()
+  -- DECOMPILER ERROR at PC13: Confused about usage of register: R0 in 'UnsetPending'
+
+  if chk_Option.currentCheckUIScale ~= chk_Option.appliedCheckUIScale then
+    chk_Option.appliedCheckUIScale = chk_Option.currentCheckUIScale
+    GameOption_UIScale_Change()
+  end
+  if Panel_Login ~= nil and Panel_Login:GetShow() then
+    (gamePanel_Main._buttonQuestion):SetShow(false)
+    ;
+    (gamePanel_Main._btn_SaveSetting):SetShow(false)
+  else
+    ;
+    (gamePanel_Main._buttonQuestion):SetShow(true)
+    if isSaveSetting then
+      (gamePanel_Main._btn_SaveSetting):SetShow(true)
+    else
+      ;
+      (gamePanel_Main._btn_SaveSetting):SetShow(false)
+    end
+  end
   ;
   (gamePanel_Main._txt_Comment):SetTextMode(UI_TM.eTextMode_AutoWrap)
   if isGameTypeKorea() then
@@ -983,6 +1017,10 @@ Panel_GameOption_Initialize = function()
   ;
   (frame_Game._btn_PvpRefuse):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_GAME_PVPREFUSE"))
   ;
+  (frame_Game._btn_ExchangeRefuse):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (frame_Game._btn_ExchangeRefuse):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_NAME_REJECTEXCHANGE"))
+  ;
   (frame_Game._btn_HideMast):SetTextMode(UI_TM.eTextMode_LimitText)
   ;
   (frame_Game._btn_HideMast):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_GAME_HIDEMAST"))
@@ -1095,6 +1133,18 @@ Panel_GameOption_Initialize = function()
   ;
   (frame_Display._btn_WorkerVisible):SetText(PAGetString(Defines.StringSheet_RESOURCE, "OPTION_TEXT_WORKERVISIBLE"))
   ;
+  ((frame_Display._btn_ScreenShotSize)[1]):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  ((frame_Display._btn_ScreenShotSize)[1]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_4K_NAME"))
+  ;
+  ((frame_Display._btn_ScreenShotSize)[2]):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  ((frame_Display._btn_ScreenShotSize)[2]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_8K_NAME"))
+  ;
+  ((frame_Display._btn_ScreenShotSize)[0]):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  ((frame_Display._btn_ScreenShotSize)[0]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_DISPLAY_SCREENSHOTSIZE_DEFAULT_NAME"))
+  ;
   (frame_Sound._btn_MusicOnOff):SetTextMode(UI_TM.eTextMode_LimitText)
   ;
   (frame_Sound._btn_MusicOnOff):SetText(PAGetString(Defines.StringSheet_RESOURCE, "OPTION_TXT_BGMTOGGLE"))
@@ -1150,7 +1200,13 @@ Panel_GameOption_Initialize = function()
     ;
     (frame_Game._btn_FontResizeMoreBig):SetShow(false)
   end
-  if isGameTypeRussia() or isGameTypeEnglish() then
+  if isDev == true or isUsePcExchangeInLocalizingValue() == true then
+    (frame_Game._btn_ExchangeRefuse):SetShow(true)
+  else
+    ;
+    (frame_Game._btn_ExchangeRefuse):SetShow(false)
+  end
+  if isGameTypeRussia() or isGameTypeEnglish() or isGameTypeSA() or isGameTypeKR2() then
     (frame_Sound._txt_NpcVoiceTitle):SetShow(false)
     ;
     (frame_Sound._btn_NpcVoice1):SetShow(false)
@@ -1719,8 +1775,22 @@ Option_RegistMessageHandler = function()
   registerEvent("EventGameOptionDefault", "GameOption_DefaultOption")
 end
 
+local serviceType = getGameServiceType()
+local TYPE = CppEnums.CountryType
+if isGameTypeSA() or isGameServiceTypeDev() then
+  ((frame_Display._btn_WatermarkService)[5]):SetShow(true)
+else
+  ;
+  ((frame_Display._btn_WatermarkService)[5]):SetShow(false)
+end
+if isGameServiceTypeDev() then
+  ((frame_Display._btn_WatermarkService)[6]):SetShow(true)
+else
+  ;
+  ((frame_Display._btn_WatermarkService)[6]):SetShow(false)
+end
 Option_RegistEventHandler = function()
-  -- function num : 0_28 , upvalues : gamePanel_Main, frame_Display, chk_Option, _btn_CropModeScaleX, _btn_CropModeScaleY, _btn_AutoOptimizationSlide, _btn_Gamma, _btn_WatermarkAlpha, _btn_Contrast, _btn_UIScale, _btn_Fov, frame_Sound, _btn_TotalVol, _btn_MusicVol, _btn_FxVol, _btn_EnvFxVol, _btn_VoiceVol, _btn_hitFxWeightVolume, _btn_otherPlayerVolume, frame_Game, randerPlayerColorStr, _btn_CameraMaster, _btn_CameraShake, _btn_MotionBlur, _btn_CameraPos, _btn_CameraFov, _btn_MouXSen, _btn_MouYSen, _btn_PadXSen, _btn_PadYSen, _btn_hitFxVolume, _static_ResetKeyConfig, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, simpleToolTipIdx
+  -- function num : 0_28 , upvalues : gamePanel_Main, frame_Display, chk_Option, _btn_CropModeScaleX, _btn_CropModeScaleY, _btn_AutoOptimizationSlide, _btn_Gamma, _btn_WatermarkAlpha, _btn_Contrast, _btn_UIScale, _btn_Fov, frame_Sound, _btn_TotalVol, _btn_MusicVol, _btn_FxVol, _btn_EnvFxVol, _btn_VoiceVol, _btn_hitFxWeightVolume, _btn_otherPlayerVolume, frame_Game, randerPlayerColorStr, _btn_EffectAlpha, _btn_CameraMaster, _btn_ColorByPass, _btn_CameraShake, _btn_MotionBlur, _btn_CameraPos, _btn_CameraFov, _btn_MouXSen, _btn_MouYSen, _btn_PadXSen, _btn_PadYSen, _btn_hitFxVolume, _static_ResetKeyConfig, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, simpleToolTipIdx
   (gamePanel_Main._btn_Close):addInputEvent("Mouse_LUp", "Option_Hide()")
   ;
   (gamePanel_Main._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"UIGameOption\" )")
@@ -1730,6 +1800,8 @@ Option_RegistEventHandler = function()
   (gamePanel_Main._buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"UIGameOption\", \"false\")")
   ;
   (gamePanel_Main._btn_Apply):addInputEvent("Mouse_LUp", "GameOption_Apply()")
+  ;
+  (gamePanel_Main._btn_SaveSetting):addInputEvent("Mouse_LUp", "GameOption_SaveSetting()")
   ;
   (gamePanel_Main._btn_Confirm):addInputEvent("Mouse_LUp", "GameOption_Confirm()")
   ;
@@ -1747,6 +1819,12 @@ Option_RegistEventHandler = function()
   ;
   ((frame_Display._btn_ScreenShotFormat)[chk_Option.SCREENSHOT_PNG]):addInputEvent("Mouse_LUp", "GameOption_CheckScreenShotPNG()")
   ;
+  ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_4k]):addInputEvent("Mouse_LUp", "GameOption_CheckScreenShotSize_4k()")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_8k]):addInputEvent("Mouse_LUp", "GameOption_CheckScreenShotSize_8k()")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_DEFAULT]):addInputEvent("Mouse_LUp", "GameOption_CheckScreenShotSize_Default()")
+  ;
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_KR]):addInputEvent("Mouse_LUp", "GameOption_CheckWatermarkService(0)")
   ;
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_JP]):addInputEvent("Mouse_LUp", "GameOption_CheckWatermarkService(1)")
@@ -1756,6 +1834,10 @@ Option_RegistEventHandler = function()
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_RU]):addInputEvent("Mouse_LUp", "GameOption_CheckWatermarkService(3)")
   ;
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_TW]):addInputEvent("Mouse_LUp", "GameOption_CheckWatermarkService(4)")
+  ;
+  ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_SA]):addInputEvent("Mouse_LUp", "GameOption_CheckWatermarkService(5)")
+  ;
+  ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_NONE]):addInputEvent("Mouse_LUp", "GameOption_CheckWatermarkService(6)")
   ;
   ((frame_Display._btn_WatermarkPosition)[chk_Option.WATERMARK_POSITION_LT]):addInputEvent("Mouse_LUp", "GameOption_CheckWatermarkPosition(0)")
   ;
@@ -1818,6 +1900,10 @@ Option_RegistEventHandler = function()
   (frame_Display._btn_LUT_Reset):addInputEvent("Mouse_LUp", "GameOption_SetRecommandationLUT()")
   ;
   (frame_Display._btn_LUT_Reset2):addInputEvent("Mouse_LUp", "GameOption_SetRecommandationLUT2()")
+  ;
+  (frame_Display._slide_EffectAlpha):addInputEvent("Mouse_LPress", "GameOption_EffectAlpha_slider()")
+  ;
+  (frame_Display._slide_ColorByPass):addInputEvent("Mouse_LPress", "GameOption_ColorByPass_slider()")
   ;
   (frame_Display._slide_CameraMaster):addInputEvent("Mouse_LPress", "GameOption_CameraMasterPower_slider()")
   ;
@@ -1957,6 +2043,8 @@ Option_RegistEventHandler = function()
   ;
   (frame_Game._btn_PvpRefuse):addInputEvent("Mouse_LUp", "GameOption_CheckPvpRefuse()")
   ;
+  (frame_Game._btn_ExchangeRefuse):addInputEvent("Mouse_LUp", "GameOption_CheckExchangeRefuse()")
+  ;
   (frame_Game._btn_HideMast):addInputEvent("Mouse_LUp", "GameOption_CheckHideMast()")
   ;
   (frame_Game._btn_ShowCashAlert):addInputEvent("Mouse_LUp", "GameOption_CheckCashAlert()")
@@ -2070,7 +2158,9 @@ Option_RegistEventHandler = function()
   (frame_Game._btn_GuideLineNonWarPlayer):addInputEvent("Mouse_LUp", "GameOption_CheckGuideLine_RanderColor( \"" .. randerPlayerColorStr.nonWarPlayer .. "\" )")
   ;
   (frame_Game._btn_GuideLinePartyEffect):addInputEvent("Mouse_LUp", "GameOption_CheckGuideLine_PartyMemberEffect()")
+  _btn_EffectAlpha:addInputEvent("Mouse_LPress", "GameOption_EffectAlpha_button()")
   _btn_CameraMaster:addInputEvent("Mouse_LPress", "GameOption_CameraMasterPower_button()")
+  _btn_ColorByPass:addInputEvent("Mouse_LPress", "GameOption_ColorByPass_button()")
   _btn_CameraShake:addInputEvent("Mouse_LPress", "GameOption_CameraShakePower_button()")
   _btn_MotionBlur:addInputEvent("Mouse_LPress", "GameOption_MotionBlurPower_button()")
   _btn_CameraPos:addInputEvent("Mouse_LPress", "GameOption_CameraPosPower_button()")
@@ -2230,6 +2320,9 @@ Option_RegistEventHandler = function()
   _btn_CropModeScaleY:addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_CropModeScaleY .. ")")
   _btn_CropModeScaleY:setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_CropModeScaleY .. ")")
   _btn_CropModeScaleY:addInputEvent("Mouse_Out", "Button_Simpletooltips( false )")
+  _btn_EffectAlpha:addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_EffectAlpha .. ")")
+  _btn_EffectAlpha:setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_EffectAlpha .. ")")
+  _btn_EffectAlpha:addInputEvent("Mouse_Out", "Button_Simpletooltips( false )")
   _btn_UIScale:addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_UIScale .. ")")
   _btn_UIScale:setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_UIScale .. ")")
   _btn_UIScale:addInputEvent("Mouse_Out", "Button_Simpletooltips( false )")
@@ -2287,6 +2380,24 @@ Option_RegistEventHandler = function()
   (frame_Display._btn_WorkerVisible):setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_WorkerVisible .. ")")
   ;
   (frame_Display._btn_WorkerVisible):addInputEvent("Mouse_Out", "Button_Simpletooltips( false )")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[1]):addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ScreenShotSize_4k .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[1]):addInputEvent("Mouse_Out", "Button_Simpletooltips( false, " .. simpleToolTipIdx._btn_ScreenShotSize_4k .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[1]):setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ScreenShotSize_4k .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[2]):addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ScreenShotSize_8k .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[2]):addInputEvent("Mouse_Out", "Button_Simpletooltips( false, " .. simpleToolTipIdx._btn_ScreenShotSize_8k .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[2]):setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ScreenShotSize_8k .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[0]):addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ScreenShotSize_Default .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[0]):addInputEvent("Mouse_Out", "Button_Simpletooltips( false, " .. simpleToolTipIdx._btn_ScreenShotSize_Default .. ")")
+  ;
+  ((frame_Display._btn_ScreenShotSize)[0]):setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ScreenShotSize_Default .. ")")
   ;
   (frame_Sound._btn_MusicOnOff):addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_MusicOnOff .. ")")
   ;
@@ -2467,6 +2578,12 @@ Option_RegistEventHandler = function()
   (frame_Game._btn_PvpRefuse):setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_PvpRefuse .. ")")
   ;
   (frame_Game._btn_PvpRefuse):addInputEvent("Mouse_Out", "Button_Simpletooltips( false )")
+  ;
+  (frame_Game._btn_ExchangeRefuse):addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ExchangeRefuse .. ")")
+  ;
+  (frame_Game._btn_ExchangeRefuse):setTooltipEventRegistFunc("Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_ExchangeRefuse .. ")")
+  ;
+  (frame_Game._btn_ExchangeRefuse):addInputEvent("Mouse_Out", "Button_Simpletooltips( false )")
   ;
   (frame_Game._btn_HideMast):addInputEvent("Mouse_On", "Button_Simpletooltips( true, " .. simpleToolTipIdx._btn_HideMast .. ")")
   ;
@@ -2800,13 +2917,15 @@ Option_RegistEventHandler = function()
 end
 
 InitGraphicOptionAll = function(gameOptionSetting, optionType)
-  -- function num : 0_29 , upvalues : chk_Option
+  -- function num : 0_29 , upvalues : chk_Option, currentResolutionX, currentResolutionY
   local screenModeIdx = gameOptionSetting:getScreenMode()
   GameOption_InitScreenMode(screenModeIdx)
   GameOption_SetScreenModeButtons(chk_Option.currentScreenModeIdx)
   local screenWidth = gameOptionSetting:getScreenResolutionWidth()
   local screenHeight = gameOptionSetting:getScreenResolutionHeight()
   local screenResolutionIdx = GameOption_FindScreenResolutionIdx(screenWidth, screenHeight)
+  currentResolutionX = screenWidth
+  currentResolutionY = screenHeight
   if screenResolutionIdx == 0 then
     GameOption_InitScreenResolution(0)
     GameOption_SetScreenResolutionText_exception(screenWidth, screenHeight)
@@ -2819,6 +2938,9 @@ InitGraphicOptionAll = function(gameOptionSetting, optionType)
   local ScreenShotFormat = gameOptionSetting:getScreenShotFormat()
   GameOption_InitScreenShotFormat(ScreenShotFormat)
   GameOption_CheckScreenShotFormat(ScreenShotFormat)
+  local ScreenShotSize = gameOptionSetting:getScreenShotQuality()
+  GameOption_InitScreenShotSize(ScreenShotSize)
+  GameOption_CheckScreenShotSize(ScreenShotSize)
   local WatermarkService = gameOptionSetting:getWatermarkService()
   GameOption_InitWatermarkService(WatermarkService)
   GameOption_CheckWatermarkService(WatermarkService)
@@ -2881,7 +3003,11 @@ InitGraphicOptionAll = function(gameOptionSetting, optionType)
   GameOption_SetFovValueText(fovValue)
   local uiScale = gameOptionSetting:getUIScale()
   uiScale = (uiScale + 0.005) * 100 / 100
-  uiScale = GameOption_InitScale(uiScale, screenHeight)
+  if CppDefine.ChangeUIAndResolution == true then
+    uiScale = GameOption_InitScale_50_200(uiScale)
+  else
+    uiScale = GameOption_InitScale(uiScale, screenHeight)
+  end
   GameOption_SetUIMode(uiScale)
   setUIScale(uiScale)
   local workerVisible = gameOptionSetting:getWorkerVisible()
@@ -3119,47 +3245,88 @@ GameOption_SetScreenModeButtons = function(screenModeIdx)
 end
 
 GameOption_InitScale = function(uiScale, screenHeight)
-  -- function num : 0_38 , upvalues : minScaleHeight, minScaleValue, const_UiScaleValue, maxScaleValue, midleScaleHeight, HighScaleHeight, MaxScaleHeight, chk_Option
-  if screenHeight <= minScaleHeight then
-    minScaleValue = const_UiScaleValue[1]
-    maxScaleValue = const_UiScaleValue[2]
+  -- function num : 0_38 , upvalues : scaleRangeTable, const_UiScaleValue, chk_Option
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R2 in 'UnsetPending'
+
+  if screenHeight <= scaleRangeTable.minScaleHeight then
+    scaleRangeTable.minScaleValue = const_UiScaleValue[1]
+    -- DECOMPILER ERROR at PC11: Confused about usage of register: R2 in 'UnsetPending'
+
+    scaleRangeTable.maxScaleValue = const_UiScaleValue[2]
   else
-    if minScaleHeight < screenHeight and screenHeight <= midleScaleHeight then
-      minScaleValue = const_UiScaleValue[1]
-      maxScaleValue = const_UiScaleValue[3]
+    -- DECOMPILER ERROR at PC24: Confused about usage of register: R2 in 'UnsetPending'
+
+    if scaleRangeTable.minScaleHeight < screenHeight and screenHeight <= scaleRangeTable.midleScaleHeight then
+      scaleRangeTable.minScaleValue = const_UiScaleValue[1]
+      -- DECOMPILER ERROR at PC28: Confused about usage of register: R2 in 'UnsetPending'
+
+      scaleRangeTable.maxScaleValue = const_UiScaleValue[3]
     else
-      if midleScaleHeight < screenHeight and screenHeight <= HighScaleHeight then
-        minScaleValue = const_UiScaleValue[1]
-        maxScaleValue = const_UiScaleValue[4]
+      -- DECOMPILER ERROR at PC41: Confused about usage of register: R2 in 'UnsetPending'
+
+      if scaleRangeTable.midleScaleHeight < screenHeight and screenHeight <= scaleRangeTable.HighScaleHeight then
+        scaleRangeTable.minScaleValue = const_UiScaleValue[1]
+        -- DECOMPILER ERROR at PC45: Confused about usage of register: R2 in 'UnsetPending'
+
+        scaleRangeTable.maxScaleValue = const_UiScaleValue[4]
       else
-        if HighScaleHeight < screenHeight and screenHeight <= MaxScaleHeight then
-          minScaleValue = const_UiScaleValue[1]
-          maxScaleValue = const_UiScaleValue[5]
+        -- DECOMPILER ERROR at PC58: Confused about usage of register: R2 in 'UnsetPending'
+
+        if scaleRangeTable.HighScaleHeight < screenHeight and screenHeight <= scaleRangeTable.MaxScaleHeight then
+          scaleRangeTable.minScaleValue = const_UiScaleValue[1]
+          -- DECOMPILER ERROR at PC62: Confused about usage of register: R2 in 'UnsetPending'
+
+          scaleRangeTable.maxScaleValue = const_UiScaleValue[5]
         else
-          minScaleValue = const_UiScaleValue[5]
-          maxScaleValue = const_UiScaleValue[6]
+          -- DECOMPILER ERROR at PC67: Confused about usage of register: R2 in 'UnsetPending'
+
+          scaleRangeTable.minScaleValue = const_UiScaleValue[5]
+          -- DECOMPILER ERROR at PC71: Confused about usage of register: R2 in 'UnsetPending'
+
+          scaleRangeTable.maxScaleValue = const_UiScaleValue[6]
         end
       end
     end
   end
   uiScale = (math.floor)(uiScale * 100) / 100
-  if maxScaleValue < uiScale * 100 then
+  if scaleRangeTable.maxScaleValue < uiScale * 100 then
     uiScale = 0.8
   end
-  -- DECOMPILER ERROR at PC66: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC84: Confused about usage of register: R2 in 'UnsetPending'
 
   chk_Option.appliedCheckUIScale = uiScale
-  -- DECOMPILER ERROR at PC68: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC86: Confused about usage of register: R2 in 'UnsetPending'
 
   chk_Option.savedCheckUIScale = uiScale
-  -- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
+
+  chk_Option.currentCheckUIScale = uiScale
+  return uiScale
+end
+
+GameOption_InitScale_50_200 = function(uiScale)
+  -- function num : 0_39 , upvalues : scaleRangeTable, const_UiScaleValue, chk_Option
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
+
+  scaleRangeTable.minScaleValue = const_UiScaleValue[1]
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
+
+  scaleRangeTable.maxScaleValue = const_UiScaleValue[6]
+  uiScale = (math.floor)(uiScale * 100) / 100
+  -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
+
+  chk_Option.appliedCheckUIScale = uiScale
+  -- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
+
+  chk_Option.savedCheckUIScale = uiScale
+  -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentCheckUIScale = uiScale
   return uiScale
 end
 
 GameOption_InitScreenShotFormat = function(Format)
-  -- function num : 0_39 , upvalues : chk_Option
+  -- function num : 0_40 , upvalues : chk_Option
   local self = chk_Option
   self.currentScreenShotFormat = Format
   self.savedScreenShotFormat = Format
@@ -3167,8 +3334,17 @@ GameOption_InitScreenShotFormat = function(Format)
   GameOption_UpdateOptionChanged()
 end
 
+GameOption_InitScreenShotSize = function(isSize)
+  -- function num : 0_41 , upvalues : chk_Option
+  local self = chk_Option
+  self.currentScreenShotSize = isSize
+  self.savedScreenShotSize = isSize
+  self.appliedScreenShotSize = isSize
+  GameOption_UpdateOptionChanged()
+end
+
 GameOption_InitWatermarkService = function(Format)
-  -- function num : 0_40 , upvalues : chk_Option
+  -- function num : 0_42 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkService = Format
   self.savedWatermarkService = Format
@@ -3177,7 +3353,7 @@ GameOption_InitWatermarkService = function(Format)
 end
 
 GameOption_InitWatermarkPosition = function(Format)
-  -- function num : 0_41 , upvalues : chk_Option
+  -- function num : 0_43 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkPosition = Format
   self.savedWatermarkPosition = Format
@@ -3186,7 +3362,7 @@ GameOption_InitWatermarkPosition = function(Format)
 end
 
 GameOption_InitWatermarkScale = function(Format)
-  -- function num : 0_42 , upvalues : chk_Option
+  -- function num : 0_44 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkScale = Format
   self.savedWatermarkScale = Format
@@ -3195,7 +3371,7 @@ GameOption_InitWatermarkScale = function(Format)
 end
 
 GameOption_InitColorBlindMode = function(Format)
-  -- function num : 0_43 , upvalues : chk_Option
+  -- function num : 0_45 , upvalues : chk_Option
   local self = chk_Option
   self.currentColorBlind = Format
   self.savedColorBlind = Format
@@ -3204,7 +3380,7 @@ GameOption_InitColorBlindMode = function(Format)
 end
 
 GameOption_InitSelfPlayerOnlyEffect = function(isSelfPlayerOnlyEffect)
-  -- function num : 0_44 , upvalues : chk_Option, frame_Display
+  -- function num : 0_46 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isSelfPlayerOnlyEffect
   ;
@@ -3216,7 +3392,7 @@ GameOption_InitSelfPlayerOnlyEffect = function(isSelfPlayerOnlyEffect)
 end
 
 GameOption_InitNearestPlayerOnlyEffect = function(isNearestPlayerOnlyEffect)
-  -- function num : 0_45 , upvalues : chk_Option, frame_Display
+  -- function num : 0_47 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isNearestPlayerOnlyEffect
   ;
@@ -3228,7 +3404,7 @@ GameOption_InitNearestPlayerOnlyEffect = function(isNearestPlayerOnlyEffect)
 end
 
 GameOption_InitWorkerVisible = function(isWorkerVisible)
-  -- function num : 0_46 , upvalues : chk_Option, frame_Display
+  -- function num : 0_48 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isWorkerVisible
   ;
@@ -3240,7 +3416,7 @@ GameOption_InitWorkerVisible = function(isWorkerVisible)
 end
 
 GameOption_InitSelfPlayerOnlyLantern = function(isSelfPlayerOnlyLantern)
-  -- function num : 0_47 , upvalues : chk_Option, frame_Display
+  -- function num : 0_49 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isSelfPlayerOnlyLantern
   ;
@@ -3252,7 +3428,7 @@ GameOption_InitSelfPlayerOnlyLantern = function(isSelfPlayerOnlyLantern)
 end
 
 GameOption_InitLowPower = function(isLowPower)
-  -- function num : 0_48 , upvalues : chk_Option, frame_Display
+  -- function num : 0_50 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isLowPower
   ;
@@ -3264,25 +3440,43 @@ GameOption_InitLowPower = function(isLowPower)
 end
 
 GameOption_CheckScreenShotBMP = function()
-  -- function num : 0_49 , upvalues : chk_Option
+  -- function num : 0_51 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotFormat(self.SCREENSHOT_BMP)
 end
 
 GameOption_CheckScreenShotJPG = function()
-  -- function num : 0_50 , upvalues : chk_Option
+  -- function num : 0_52 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotFormat(self.SCREENSHOT_JPG)
 end
 
 GameOption_CheckScreenShotPNG = function()
-  -- function num : 0_51 , upvalues : chk_Option
+  -- function num : 0_53 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotFormat(self.SCREENSHOT_PNG)
 end
 
+GameOption_CheckScreenShotSize_4k = function()
+  -- function num : 0_54 , upvalues : chk_Option
+  local self = chk_Option
+  GameOption_SetScreenShotSize(self.SCREENSHOTSIZE_4k)
+end
+
+GameOption_CheckScreenShotSize_8k = function()
+  -- function num : 0_55 , upvalues : chk_Option
+  local self = chk_Option
+  GameOption_SetScreenShotSize(self.SCREENSHOTSIZE_8k)
+end
+
+GameOption_CheckScreenShotSize_Default = function()
+  -- function num : 0_56 , upvalues : chk_Option
+  local self = chk_Option
+  GameOption_SetScreenShotSize(self.SCREENSHOTSIZE_DEFAULT)
+end
+
 GameOption_SetScreenShotFormat = function(Format)
-  -- function num : 0_52 , upvalues : chk_Option
+  -- function num : 0_57 , upvalues : chk_Option
   local self = chk_Option
   if self.currentScreenShotFormat ~= Format then
     self.currentScreenShotFormat = Format
@@ -3291,26 +3485,36 @@ GameOption_SetScreenShotFormat = function(Format)
   GameOption_UpdateOptionChanged()
 end
 
+GameOption_SetScreenShotSize = function(isSize)
+  -- function num : 0_58 , upvalues : chk_Option
+  local self = chk_Option
+  if self.currentScreenShotSize ~= isSize then
+    self.currentScreenShotSize = isSize
+    GameOption_CheckScreenShotSize(isSize)
+  end
+  GameOption_UpdateOptionChanged()
+end
+
 GameOption_CheckColorBlindNONE = function()
-  -- function num : 0_53 , upvalues : chk_Option
+  -- function num : 0_59 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetColorBlindMode(self.COLORBLIND_NONE)
 end
 
 GameOption_CheckColorBlindPROTANOPIA = function()
-  -- function num : 0_54 , upvalues : chk_Option
+  -- function num : 0_60 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetColorBlindMode(self.COLORBLIND_PROTANOPIA)
 end
 
 GameOption_CheckColorBlindEDUTERANOP = function()
-  -- function num : 0_55 , upvalues : chk_Option
+  -- function num : 0_61 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetColorBlindMode(self.COLORBLIND_DEUTERANOP)
 end
 
 GameOption_SetColorBlindMode = function(Format)
-  -- function num : 0_56 , upvalues : chk_Option
+  -- function num : 0_62 , upvalues : chk_Option
   local self = chk_Option
   if self.currentColorBlind ~= Format then
     self.currentColorBlind = Format
@@ -3320,7 +3524,7 @@ GameOption_SetColorBlindMode = function(Format)
 end
 
 GameOption_CheckScreenShotFormat = function(Format)
-  -- function num : 0_57 , upvalues : frame_Display, chk_Option
+  -- function num : 0_63 , upvalues : frame_Display, chk_Option
   if Format == 0 then
     ((frame_Display._btn_ScreenShotFormat)[chk_Option.SCREENSHOT_BMP]):SetCheck(true)
     ;
@@ -3346,8 +3550,35 @@ GameOption_CheckScreenShotFormat = function(Format)
   end
 end
 
+GameOption_CheckScreenShotSize = function(isSize)
+  -- function num : 0_64 , upvalues : frame_Display, chk_Option
+  if isSize == 0 then
+    ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_DEFAULT]):SetCheck(true)
+    ;
+    ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_4k]):SetCheck(false)
+    ;
+    ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_8k]):SetCheck(false)
+  else
+    if isSize == 1 then
+      ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_DEFAULT]):SetCheck(false)
+      ;
+      ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_4k]):SetCheck(true)
+      ;
+      ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_8k]):SetCheck(false)
+    else
+      if isSize == 2 then
+        ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_DEFAULT]):SetCheck(false)
+        ;
+        ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_4k]):SetCheck(false)
+        ;
+        ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_8k]):SetCheck(true)
+      end
+    end
+  end
+end
+
 GameOption_CheckColorBlind = function(Format)
-  -- function num : 0_58 , upvalues : frame_Display, chk_Option
+  -- function num : 0_65 , upvalues : frame_Display, chk_Option
   if Format == 0 then
     ((frame_Display._btn_ColorBlind)[chk_Option.COLORBLIND_NONE]):SetCheck(true)
     ;
@@ -3374,25 +3605,25 @@ GameOption_CheckColorBlind = function(Format)
 end
 
 GameOption_CheckFullScreen = function()
-  -- function num : 0_59 , upvalues : chk_Option
+  -- function num : 0_66 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetCurrentScreenMode(self.FULL_SCREEN_IDX)
 end
 
 GameOption_CheckFullScreenWindowed = function()
-  -- function num : 0_60 , upvalues : chk_Option
+  -- function num : 0_67 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetCurrentScreenMode(self.FULL_SCREEN_WINDOWED_IDX)
 end
 
 GameOption_CheckWindowed = function()
-  -- function num : 0_61 , upvalues : chk_Option
+  -- function num : 0_68 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetCurrentScreenMode(self.WINDOWED_IDX)
 end
 
 GameOption_CheckWatermarkService = function(watermark_type)
-  -- function num : 0_62 , upvalues : frame_Display, chk_Option
+  -- function num : 0_69 , upvalues : frame_Display, chk_Option
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_KR]):SetCheck(false)
   ;
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_JP]):SetCheck(false)
@@ -3403,6 +3634,10 @@ GameOption_CheckWatermarkService = function(watermark_type)
   ;
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_TW]):SetCheck(false)
   ;
+  ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_SA]):SetCheck(false)
+  ;
+  ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_NONE]):SetCheck(false)
+  ;
   ((frame_Display._btn_WatermarkService)[watermark_type]):SetCheck(true)
   local self = chk_Option
   if self.currentWatermarkService ~= watermark_type then
@@ -3412,7 +3647,7 @@ GameOption_CheckWatermarkService = function(watermark_type)
 end
 
 GameOption_CheckWatermarkPosition = function(watermark_type)
-  -- function num : 0_63 , upvalues : frame_Display, chk_Option
+  -- function num : 0_70 , upvalues : frame_Display, chk_Option
   ((frame_Display._btn_WatermarkPosition)[chk_Option.WATERMARK_POSITION_LT]):SetCheck(false)
   ;
   ((frame_Display._btn_WatermarkPosition)[chk_Option.WATERMARK_POSITION_RT]):SetCheck(false)
@@ -3430,7 +3665,7 @@ GameOption_CheckWatermarkPosition = function(watermark_type)
 end
 
 GameOption_CheckWatermarkScale = function(watermark_type)
-  -- function num : 0_64 , upvalues : frame_Display, chk_Option
+  -- function num : 0_71 , upvalues : frame_Display, chk_Option
   ((frame_Display._btn_WatermarkScale)[chk_Option.WATERMARK_SCALE_SMALL]):SetCheck(false)
   ;
   ((frame_Display._btn_WatermarkScale)[chk_Option.WATERMARK_SCALE_REGULAR]):SetCheck(false)
@@ -3446,7 +3681,7 @@ GameOption_CheckWatermarkScale = function(watermark_type)
 end
 
 GameOption_InitWatermarkAlpha = function(watermarkAlpha)
-  -- function num : 0_65 , upvalues : chk_Option, frame_Display
+  -- function num : 0_72 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentWatermarkAlpha = watermarkAlpha
   self.savedWatermarkAlpha = watermarkAlpha
@@ -3456,7 +3691,7 @@ GameOption_InitWatermarkAlpha = function(watermarkAlpha)
 end
 
 GameOption_SetWatermarkAlpha = function(watermarkAlpha)
-  -- function num : 0_66 , upvalues : chk_Option
+  -- function num : 0_73 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkAlpha = watermarkAlpha
   setWatermarkAlpha(watermarkAlpha)
@@ -3464,19 +3699,19 @@ GameOption_SetWatermarkAlpha = function(watermarkAlpha)
 end
 
 GameOption_ChangeWatermarkAlpha_slider = function()
-  -- function num : 0_67 , upvalues : frame_Display
+  -- function num : 0_74 , upvalues : frame_Display
   local ratio = (frame_Display._slide_WatermarkAlpha):GetControlPos()
   GameOption_SetWatermarkAlpha(ratio)
 end
 
 GameOption_ChangeWatermarkAlpha_button = function()
-  -- function num : 0_68 , upvalues : _btn_WatermarkAlpha, frame_Display
+  -- function num : 0_75 , upvalues : _btn_WatermarkAlpha, frame_Display
   local ratio = _btn_WatermarkAlpha:GetPosX() / ((frame_Display._slide_WatermarkAlpha):GetSizeX() - _btn_WatermarkAlpha:GetSizeX())
   GameOption_SetWatermarkAlpha(ratio)
 end
 
 GameOption_InitScreenResolution = function(screenResolutionIdx)
-  -- function num : 0_69 , upvalues : chk_Option
+  -- function num : 0_76 , upvalues : chk_Option
   local self = chk_Option
   if screenResolutionIdx >= 0 and screenResolutionIdx <= self.SCREEN_RESOLUTION_COUNT then
     self.currentScreenResolutionIdx = screenResolutionIdx
@@ -3486,7 +3721,7 @@ GameOption_InitScreenResolution = function(screenResolutionIdx)
 end
 
 GameOption_SetCurrentScreenResolution = function(screenResolutionIdx)
-  -- function num : 0_70 , upvalues : chk_Option
+  -- function num : 0_77 , upvalues : chk_Option
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   if screenResolutionIdx > 0 and screenResolutionIdx <= chk_Option.SCREEN_RESOLUTION_COUNT then
@@ -3497,34 +3732,18 @@ GameOption_SetCurrentScreenResolution = function(screenResolutionIdx)
 end
 
 GameOption_SetScreenResolutionText = function(screenResolutionIdx)
-  -- function num : 0_71 , upvalues : chk_Option, frame_Display, minScaleHeight, minScaleValue, const_UiScaleValue, maxScaleValue, midleScaleHeight, HighScaleHeight, MaxScaleHeight
+  -- function num : 0_78 , upvalues : chk_Option, frame_Display, scaleRangeTable, const_UiScaleValue
   local self = chk_Option
   if screenResolutionIdx > 0 and screenResolutionIdx <= self.SCREEN_RESOLUTION_COUNT then
     local screenResolution = (self.screenResolutionList)[screenResolutionIdx]
     ;
     (frame_Display._btn_ScrSize):SetText(tostring(screenResolution.width .. " x " .. screenResolution.height))
-    if screenResolution.height <= minScaleHeight then
-      minScaleValue = const_UiScaleValue[1]
-      maxScaleValue = const_UiScaleValue[2]
-    else
-      if screenResolution.height <= midleScaleHeight then
-        minScaleValue = const_UiScaleValue[1]
-        maxScaleValue = const_UiScaleValue[3]
-      else
-        if screenResolution.height <= HighScaleHeight then
-          minScaleValue = const_UiScaleValue[1]
-          maxScaleValue = const_UiScaleValue[4]
-        else
-          if screenResolution.height <= MaxScaleHeight then
-            minScaleValue = const_UiScaleValue[1]
-            maxScaleValue = const_UiScaleValue[5]
-          else
-            minScaleValue = const_UiScaleValue[5]
-            maxScaleValue = const_UiScaleValue[6]
-          end
-        end
-      end
-    end
+    -- DECOMPILER ERROR at PC21: Confused about usage of register: R3 in 'UnsetPending'
+
+    scaleRangeTable.minScaleValue = const_UiScaleValue[1]
+    -- DECOMPILER ERROR at PC25: Confused about usage of register: R3 in 'UnsetPending'
+
+    scaleRangeTable.maxScaleValue = const_UiScaleValue[6]
     if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR) then
       GameOption_UIScale_Change()
     end
@@ -3535,29 +3754,107 @@ GameOption_SetScreenResolutionText = function(screenResolutionIdx)
 end
 
 GameOption_Fix_UiScale = function()
-  -- function num : 0_72 , upvalues : chk_Option
+  -- function num : 0_79 , upvalues : chk_Option
   GameOption_SetUIMode(chk_Option.currentCheckUIScale)
 end
 
 GameOption_SetScreenResolutionText_exception = function(screenWidth, screenHeight)
-  -- function num : 0_73 , upvalues : frame_Display
+  -- function num : 0_80 , upvalues : frame_Display
   (frame_Display._btn_ScrSize):SetText(tostring(screenWidth .. " x " .. screenHeight))
 end
 
 GameOption_FindScreenResolutionIdx = function(screenWidth, screenHeight)
-  -- function num : 0_74 , upvalues : chk_Option
+  -- function num : 0_81 , upvalues : chk_Option, isFindScreenResolution, screenResolutionIndex
   local self = chk_Option
   local screenResolutionList = self.screenResolutionList
   for ii = 1, self.SCREEN_RESOLUTION_COUNT do
     if (screenResolutionList[ii]).width == screenWidth and (screenResolutionList[ii]).height == screenHeight then
+      isFindScreenResolution = true
       return ii
     end
   end
+  isFindScreenResolution = false
+  local searchIndex = 0
+  local minHeight = 0
+  local searchHeight = 0
+  local minWidth = 0
+  local searchWidth = 0
+  for ii = 1, self.SCREEN_RESOLUTION_COUNT do
+    for jj = 1, self.SCREEN_RESOLUTION_COUNT do
+      if (screenResolutionList[ii]).width == screenWidth and (screenResolutionList[ii]).width == (screenResolutionList[jj]).width then
+        searchHeight = (math.abs)((screenResolutionList[jj]).height - screenHeight)
+        if minHeight == 0 then
+          minHeight = searchHeight
+          searchIndex = jj
+        else
+          if searchHeight < minHeight then
+            minHeight = searchHeight
+            searchIndex = jj
+          end
+        end
+      end
+    end
+  end
+  if searchIndex ~= 0 then
+    screenResolutionIndex = searchIndex
+    return 0
+  end
+  for ii = 1, self.SCREEN_RESOLUTION_COUNT do
+    for jj = 1, self.SCREEN_RESOLUTION_COUNT do
+      if (screenResolutionList[ii]).height == screenHeight and (screenResolutionList[ii]).height == (screenResolutionList[jj]).height then
+        searchWidth = (math.abs)((screenResolutionList[jj]).width - screenWidth)
+        if minWidth == 0 then
+          minWidth = searchWidth
+          searchIndex = jj
+        else
+          if searchWidth < minWidth then
+            minWidth = searchWidth
+            searchIndex = jj
+          end
+        end
+      end
+    end
+  end
+  if searchIndex ~= 0 then
+    screenResolutionIndex = searchIndex
+    return 0
+  end
+  for ii = 1, self.SCREEN_RESOLUTION_COUNT do
+    for jj = 1, self.SCREEN_RESOLUTION_COUNT do
+      if (screenResolutionList[ii]).width ~= screenWidth then
+        searchWidth = (math.abs)((screenResolutionList[jj]).width - screenWidth)
+        if minWidth == 0 then
+          minWidth = searchWidth
+          searchIndex = jj
+        else
+          if searchWidth < minWidth then
+            minWidth = searchWidth
+            searchIndex = jj
+          end
+        end
+      end
+    end
+    for jj = 1, self.SCREEN_RESOLUTION_COUNT do
+      if (screenResolutionList[searchIndex]).width == (screenResolutionList[jj]).width then
+        searchHeight = (math.abs)((screenResolutionList[jj]).height - screenHeight)
+        if minHeight == 0 then
+          minHeight = searchHeight
+          searchIndex = jj
+        else
+          if searchHeight < minHeight then
+            minHeight = searchHeight
+            searchIndex = jj
+          end
+        end
+      end
+    end
+  end
+  screenResolutionIndex = searchIndex
   return 0
 end
 
 GameOption_ScreenResolutionIncrease = function()
-  -- function num : 0_75 , upvalues : frame_Display, chk_Option
+  -- function num : 0_82 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -3577,7 +3874,7 @@ GameOption_ScreenResolutionIncrease = function()
 end
 
 GameOption_ScreenResolutionDecrease = function()
-  -- function num : 0_76 , upvalues : frame_Display, chk_Option
+  -- function num : 0_83 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -3601,7 +3898,7 @@ local LUTRecommandation2 = -1
 local LUTRecommandationName = "Vibrance"
 local LUTRecommandationName2 = "NonContrast"
 GameOption_InitLUT = function(LUT)
-  -- function num : 0_77 , upvalues : chk_Option
+  -- function num : 0_84 , upvalues : chk_Option
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentLUT = LUT
@@ -3615,7 +3912,7 @@ GameOption_InitLUT = function(LUT)
 end
 
 GameOption_SetRecommandationLUT = function()
-  -- function num : 0_78 , upvalues : LUTRecommandation, LUTRecommandationName, frame_Display
+  -- function num : 0_85 , upvalues : LUTRecommandation, LUTRecommandationName, frame_Display
   if LUTRecommandation == -1 then
     for idx = 0, 30 do
       if getCameraLUTFilterName(idx) == LUTRecommandationName then
@@ -3636,7 +3933,7 @@ GameOption_SetRecommandationLUT = function()
 end
 
 GameOption_SetRecommandationLUT2 = function()
-  -- function num : 0_79 , upvalues : LUTRecommandation2, LUTRecommandationName2, frame_Display
+  -- function num : 0_86 , upvalues : LUTRecommandation2, LUTRecommandationName2, frame_Display
   if LUTRecommandation2 == -1 then
     for idx = 0, 30 do
       if getCameraLUTFilterName(idx) == LUTRecommandationName2 then
@@ -3657,7 +3954,7 @@ GameOption_SetRecommandationLUT2 = function()
 end
 
 GameOption_SetCurrentLUT = function(LUT)
-  -- function num : 0_80 , upvalues : chk_Option, currentLUT
+  -- function num : 0_87 , upvalues : chk_Option, currentLUT
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentLUT = LUT
@@ -3667,7 +3964,7 @@ GameOption_SetCurrentLUT = function(LUT)
 end
 
 GameOption_SetLUTText = function(LUT)
-  -- function num : 0_81 , upvalues : LUTRecommandationName, LUTRecommandationName2, frame_Display
+  -- function num : 0_88 , upvalues : LUTRecommandationName, LUTRecommandationName2, frame_Display
   local filterName = getCameraLUTFilterName(LUT)
   if filterName == LUTRecommandationName or filterName == LUTRecommandationName2 then
     (frame_Display._btn_LUT):SetText(filterName .. "  <PAColor0xffffce22>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_RECOMMANDATION") .. "]<PAOldColor>")
@@ -3678,7 +3975,7 @@ GameOption_SetLUTText = function(LUT)
 end
 
 GameOption_LUTIncrease = function()
-  -- function num : 0_82 , upvalues : frame_Display, chk_Option
+  -- function num : 0_89 , upvalues : frame_Display, chk_Option
   (frame_Display._btn_LUT):EraseAllEffect()
   ;
   (frame_Display._btn_LUT):AddEffect("UI_ButtonLineRight_White", false, 0, 0)
@@ -3688,7 +3985,7 @@ GameOption_LUTIncrease = function()
 end
 
 GameOption_LUTDecrease = function()
-  -- function num : 0_83 , upvalues : frame_Display, chk_Option
+  -- function num : 0_90 , upvalues : frame_Display, chk_Option
   (frame_Display._btn_LUT):EraseAllEffect()
   ;
   (frame_Display._btn_LUT):AddEffect("UI_ButtonLineLeft_White", false, 0, 0)
@@ -3698,7 +3995,7 @@ GameOption_LUTDecrease = function()
 end
 
 GameOption_InitTextureQuality = function(textureQualityIdx)
-  -- function num : 0_84 , upvalues : chk_Option
+  -- function num : 0_91 , upvalues : chk_Option
   local self = chk_Option
   if textureQualityIdx >= 0 and textureQualityIdx < self.TEXTURE_QUALITY_COUNT then
     self.currentTextureQualityIdx = textureQualityIdx
@@ -3708,7 +4005,7 @@ GameOption_InitTextureQuality = function(textureQualityIdx)
 end
 
 GameOption_SetCurrentTextureQuality = function(textureQualityIdx)
-  -- function num : 0_85 , upvalues : chk_Option
+  -- function num : 0_92 , upvalues : chk_Option
   local self = chk_Option
   if textureQualityIdx >= 0 and textureQualityIdx < self.TEXTURE_QUALITY_COUNT then
     self.currentTextureQualityIdx = textureQualityIdx
@@ -3718,7 +4015,7 @@ GameOption_SetCurrentTextureQuality = function(textureQualityIdx)
 end
 
 GameOption_SetTextureQualityText = function(textureQualityIdx)
-  -- function num : 0_86 , upvalues : chk_Option, frame_Display
+  -- function num : 0_93 , upvalues : chk_Option, frame_Display
   if textureQualityIdx == chk_Option.TEXTURE_QUALITY_HIGH then
     (frame_Display._btn_Trxt):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_OPTION_HIGH"))
   else
@@ -3733,7 +4030,7 @@ GameOption_SetTextureQualityText = function(textureQualityIdx)
 end
 
 GameOption_TextureQualityIncrease = function()
-  -- function num : 0_87 , upvalues : frame_Display, chk_Option
+  -- function num : 0_94 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -3763,7 +4060,7 @@ GameOption_TextureQualityIncrease = function()
 end
 
 GameOption_TextureQualityDecrease = function()
-  -- function num : 0_88 , upvalues : frame_Display, chk_Option
+  -- function num : 0_95 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -3784,14 +4081,14 @@ GameOption_TextureQualityDecrease = function()
 end
 
 GameOption_TextureQualityApply = function()
-  -- function num : 0_89 , upvalues : chk_Option
+  -- function num : 0_96 , upvalues : chk_Option
   local self = chk_Option
   local texQuality = self.currentTextureQualityIdx - 1
   GameOption_SetCurrentTextureQuality(texQuality)
 end
 
 MessageBox_TextureQualityAlert = function()
-  -- function num : 0_90
+  -- function num : 0_97
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TEXTUREQUALITYALERT_MEMO")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = messageBoxMemo, functionYes = GameOption_TextureQualityApply, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -3799,7 +4096,7 @@ MessageBox_TextureQualityAlert = function()
 end
 
 GameOption_InitGraphicOption = function(graphicOptionIdx)
-  -- function num : 0_91 , upvalues : chk_Option
+  -- function num : 0_98 , upvalues : chk_Option
   local self = chk_Option
   if graphicOptionIdx >= 0 and graphicOptionIdx < self.GRAPHIC_OPTION_COUNT then
     self.currentGraphicOptionIdx = graphicOptionIdx
@@ -3809,7 +4106,7 @@ GameOption_InitGraphicOption = function(graphicOptionIdx)
 end
 
 GameOption_SetCurrentGraphicOption = function(graphicOptionIdx)
-  -- function num : 0_92 , upvalues : chk_Option
+  -- function num : 0_99 , upvalues : chk_Option
   local self = chk_Option
   if graphicOptionIdx >= 0 and graphicOptionIdx < self.GRAPHIC_OPTION_COUNT then
     self.currentGraphicOptionIdx = graphicOptionIdx
@@ -3820,7 +4117,7 @@ GameOption_SetCurrentGraphicOption = function(graphicOptionIdx)
 end
 
 GameOption_SetGraphicOptionText = function(graphicOptionIdx)
-  -- function num : 0_93 , upvalues : chk_Option, frame_Display
+  -- function num : 0_100 , upvalues : chk_Option, frame_Display
   if graphicOptionIdx == chk_Option.GRAPHIC_OPTION_HIGH0 then
     (frame_Display._btn_Rndr):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_OPTION_VERYHIGH"))
   else
@@ -3851,7 +4148,7 @@ GameOption_SetGraphicOptionText = function(graphicOptionIdx)
 end
 
 GameOption_GraphicOptionIncrease = function()
-  -- function num : 0_94 , upvalues : chk_Option, frame_Display
+  -- function num : 0_101 , upvalues : chk_Option, frame_Display
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -3891,7 +4188,7 @@ GameOption_GraphicOptionIncrease = function()
 end
 
 GameOption_GraphicOptionDecrease = function()
-  -- function num : 0_95 , upvalues : chk_Option, frame_Display
+  -- function num : 0_102 , upvalues : chk_Option, frame_Display
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -3931,7 +4228,7 @@ GameOption_GraphicOptionDecrease = function()
 end
 
 GameOption_InitGraphicCustomOption = function(gameOptionSetting)
-  -- function num : 0_96 , upvalues : chk_Option
+  -- function num : 0_103 , upvalues : chk_Option
   local self = chk_Option
   local dof = gameOptionSetting:getDof()
   self.currentCheckDof = dof
@@ -3983,7 +4280,7 @@ GameOption_InitGraphicCustomOption = function(gameOptionSetting)
 end
 
 GameOption_GraphicChanged = function()
-  -- function num : 0_97 , upvalues : chk_Option, frame_Display
+  -- function num : 0_104 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   if self.currentCheckUltra then
     GameOption_SetGraphicOptionText(chk_Option.GRAPHIC_OPTION_HIGH0)
@@ -4037,7 +4334,7 @@ GameOption_GraphicChanged = function()
 end
 
 GameOption_SetGraphicCustomOption = function()
-  -- function num : 0_98 , upvalues : chk_Option, frame_Display
+  -- function num : 0_105 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   ;
   (frame_Display._btn_DOF):SetCheck(self.currentCheckDof)
@@ -4065,7 +4362,7 @@ GameOption_SetGraphicCustomOption = function()
 end
 
 GameOption_CheckDof = function()
-  -- function num : 0_99 , upvalues : chk_Option, frame_Display
+  -- function num : 0_106 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_DOF):IsCheck()
   self.currentCheckDof = check
@@ -4073,7 +4370,7 @@ GameOption_CheckDof = function()
 end
 
 GameOption_CheckSelfPlayerOnlyEffect = function()
-  -- function num : 0_100 , upvalues : chk_Option, frame_Display
+  -- function num : 0_107 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_SelfPlayerOnlyEffect):IsCheck()
   self.currentSelfPlayerOnlyEffect = check
@@ -4081,7 +4378,7 @@ GameOption_CheckSelfPlayerOnlyEffect = function()
 end
 
 GameOption_CheckNearestPlayerOnlyEffect = function()
-  -- function num : 0_101 , upvalues : chk_Option, frame_Display
+  -- function num : 0_108 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_NearestPlayerOnlyEffect):IsCheck()
   self.currentNearestPlayerOnlyEffect = check
@@ -4089,7 +4386,7 @@ GameOption_CheckNearestPlayerOnlyEffect = function()
 end
 
 GameOption_CheckSelfPlayerOnlyLantern = function()
-  -- function num : 0_102 , upvalues : chk_Option, frame_Display
+  -- function num : 0_109 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_SelfPlayerOnlyLantern):IsCheck()
   self.currentSelfPlayerOnlyLantern = check
@@ -4097,7 +4394,7 @@ GameOption_CheckSelfPlayerOnlyLantern = function()
 end
 
 GameOption_CheckLowPower = function()
-  -- function num : 0_103 , upvalues : chk_Option, frame_Display
+  -- function num : 0_110 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_LowPower):IsCheck()
   self.currentLowPower = check
@@ -4105,7 +4402,7 @@ GameOption_CheckLowPower = function()
 end
 
 GameOption_CheckAA = function()
-  -- function num : 0_104 , upvalues : chk_Option, frame_Display
+  -- function num : 0_111 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_AntiAlli):IsCheck()
   self.currentCheckAA = check
@@ -4113,7 +4410,7 @@ GameOption_CheckAA = function()
 end
 
 GameOption_CheckSSAO = function()
-  -- function num : 0_105 , upvalues : chk_Option, frame_Display
+  -- function num : 0_112 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_SSAO):IsCheck()
   self.currentCheckSSAO = check
@@ -4121,7 +4418,7 @@ GameOption_CheckSSAO = function()
 end
 
 GameOption_CheckTessellation = function()
-  -- function num : 0_106 , upvalues : chk_Option, frame_Display
+  -- function num : 0_113 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_Tessellation):IsCheck()
   self.currentCheckTessellation = check
@@ -4129,7 +4426,7 @@ GameOption_CheckTessellation = function()
 end
 
 GameOption_CheckPostFilter = function()
-  -- function num : 0_107 , upvalues : chk_Option, frame_Display
+  -- function num : 0_114 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_PostFilter):IsCheck()
   self.currentCheckPostFilter = check
@@ -4137,7 +4434,7 @@ GameOption_CheckPostFilter = function()
 end
 
 GameOption_CheckCharacterEffect = function()
-  -- function num : 0_108 , upvalues : chk_Option, frame_Display
+  -- function num : 0_115 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_CharacterEffect):IsCheck()
   self.currentCheckCharacterEffect = check
@@ -4145,7 +4442,7 @@ GameOption_CheckCharacterEffect = function()
 end
 
 GameOption_CheckUltra = function()
-  -- function num : 0_109 , upvalues : chk_Option, frame_Display
+  -- function num : 0_116 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_Ultra):IsCheck()
   self.currentCheckUltra = check
@@ -4154,7 +4451,7 @@ GameOption_CheckUltra = function()
 end
 
 GameOption_CheckLensBlood = function()
-  -- function num : 0_110 , upvalues : chk_Option, frame_Display
+  -- function num : 0_117 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_LensBlood):IsCheck()
   self.currentCheckLensBlood = check
@@ -4162,7 +4459,7 @@ GameOption_CheckLensBlood = function()
 end
 
 GameOption_CheckBloodEffect = function()
-  -- function num : 0_111 , upvalues : chk_Option, frame_Display
+  -- function num : 0_118 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_BloodEffect):IsCheck()
   self.currentCheckBloodEffect = check
@@ -4170,7 +4467,7 @@ GameOption_CheckBloodEffect = function()
 end
 
 GameOption_CheckRepresent = function()
-  -- function num : 0_112 , upvalues : chk_Option, frame_Display
+  -- function num : 0_119 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_Represent):IsCheck()
   self.currentCheckRepresent = check
@@ -4178,7 +4475,7 @@ GameOption_CheckRepresent = function()
 end
 
 GameOption_CheckSnowPoolOnlyInSafeZone = function()
-  -- function num : 0_113 , upvalues : chk_Option, frame_Display
+  -- function num : 0_120 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_SnowPoolOnlyInSafeZone):IsCheck()
   self.currentCheckSnowPoolOnlyInSafeZone = check
@@ -4186,8 +4483,8 @@ GameOption_CheckSnowPoolOnlyInSafeZone = function()
 end
 
 GameOption_RefreshFPSText = function()
-  -- function num : 0_114 , upvalues : frame_Display
-  local value = (math.floor)(getFPS())
+  -- function num : 0_121 , upvalues : frame_Display
+  local value = (math.floor)(ToClient_getFPS())
   if value < 20 then
     (frame_Display._txt_FPS):SetText("FPS: " .. "<PAColor0xfff25221>" .. tostring(value) .. "<PAOldColor>")
   else
@@ -4197,7 +4494,7 @@ GameOption_RefreshFPSText = function()
 end
 
 GameOption_CheckWorkerVisible = function()
-  -- function num : 0_115 , upvalues : chk_Option, frame_Display
+  -- function num : 0_122 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_WorkerVisible):IsCheck()
   self.currentCheckWorkerVisible = check
@@ -4205,7 +4502,7 @@ GameOption_CheckWorkerVisible = function()
 end
 
 GameOption_InitUpscale = function(isUpscaleEnable)
-  -- function num : 0_116 , upvalues : chk_Option, frame_Display
+  -- function num : 0_123 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isUpscaleEnable
   ;
@@ -4217,7 +4514,7 @@ GameOption_InitUpscale = function(isUpscaleEnable)
 end
 
 GameOption_CheckUpscale = function()
-  -- function num : 0_117 , upvalues : chk_Option, frame_Display
+  -- function num : 0_124 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_UpscaleEnable):IsCheck()
   self.currentUpscaleEnable = check
@@ -4225,7 +4522,7 @@ GameOption_CheckUpscale = function()
 end
 
 GameOption_InitCropMode = function(isEnable, scaleX, scaleY)
-  -- function num : 0_118 , upvalues : chk_Option, frame_Display
+  -- function num : 0_125 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   ;
   (frame_Display._btn_CropModeEnable):SetCheck(isEnable)
@@ -4246,7 +4543,7 @@ GameOption_InitCropMode = function(isEnable, scaleX, scaleY)
 end
 
 GameOption_CheckCropMode = function()
-  -- function num : 0_119 , upvalues : chk_Option, frame_Display
+  -- function num : 0_126 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_CropModeEnable):IsCheck()
   self.currentCropModeEnable = check
@@ -4254,7 +4551,7 @@ GameOption_CheckCropMode = function()
 end
 
 GameOption_SetCropModeScaleX = function(scale)
-  -- function num : 0_120 , upvalues : chk_Option
+  -- function num : 0_127 , upvalues : chk_Option
   local self = chk_Option
   local convertedScale = 0.5 + scale * 0.5
   self.currentCropModeScaleX = convertedScale
@@ -4263,19 +4560,19 @@ GameOption_SetCropModeScaleX = function(scale)
 end
 
 GameOption_CropModeScaleX_slider = function()
-  -- function num : 0_121 , upvalues : frame_Display
+  -- function num : 0_128 , upvalues : frame_Display
   local ratio = (frame_Display._slide_CropModeScaleX):GetControlPos()
   GameOption_SetCropModeScaleX(ratio)
 end
 
 GameOption_CropModeScaleX_button = function()
-  -- function num : 0_122 , upvalues : _btn_CropModeScaleX, frame_Display
+  -- function num : 0_129 , upvalues : _btn_CropModeScaleX, frame_Display
   local ratio = _btn_CropModeScaleX:GetPosX() / ((frame_Display._slide_CropModeScaleX):GetSizeX() - _btn_CropModeScaleX:GetSizeX())
   GameOption_SetCropModeScaleX(ratio)
 end
 
 GameOption_SetCropModeScaleY = function(scale)
-  -- function num : 0_123 , upvalues : chk_Option
+  -- function num : 0_130 , upvalues : chk_Option
   local self = chk_Option
   local convertedScale = 0.5 + scale * 0.5
   self.currentCropModeScaleY = convertedScale
@@ -4284,19 +4581,19 @@ GameOption_SetCropModeScaleY = function(scale)
 end
 
 GameOption_CropModeScaleY_slider = function()
-  -- function num : 0_124 , upvalues : frame_Display
+  -- function num : 0_131 , upvalues : frame_Display
   local ratio = (frame_Display._slide_CropModeScaleY):GetControlPos()
   GameOption_SetCropModeScaleY(ratio)
 end
 
 GameOption_CropModeScaleY_button = function()
-  -- function num : 0_125 , upvalues : _btn_CropModeScaleY, frame_Display
+  -- function num : 0_132 , upvalues : _btn_CropModeScaleY, frame_Display
   local ratio = _btn_CropModeScaleY:GetPosX() / ((frame_Display._slide_CropModeScaleY):GetSizeX() - _btn_CropModeScaleY:GetSizeX())
   GameOption_SetCropModeScaleY(ratio)
 end
 
 GameOption_InitAutoOptimization = function(isEnable, frame)
-  -- function num : 0_126 , upvalues : chk_Option, frame_Display
+  -- function num : 0_133 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   ;
   (frame_Display._btn_AutoOptimization):SetCheck(isEnable)
@@ -4314,7 +4611,7 @@ GameOption_InitAutoOptimization = function(isEnable, frame)
 end
 
 GameOption_CheckAutoOptimization = function()
-  -- function num : 0_127 , upvalues : chk_Option, frame_Display
+  -- function num : 0_134 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_AutoOptimization):IsCheck()
   self.currentAutoOptimization = check
@@ -4322,7 +4619,7 @@ GameOption_CheckAutoOptimization = function()
 end
 
 GameOption_AutoOptimizationSetFrame = function(ratio)
-  -- function num : 0_128 , upvalues : chk_Option, frame_Display
+  -- function num : 0_135 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local convertedFrame = (math.ceil)(ratio * 60)
   ;
@@ -4335,13 +4632,13 @@ GameOption_AutoOptimizationSetFrame = function(ratio)
 end
 
 GameOption_AutoOptimization_slider = function()
-  -- function num : 0_129 , upvalues : frame_Display
+  -- function num : 0_136 , upvalues : frame_Display
   local ratio = (frame_Display._slide_AutoOptimization):GetControlPos()
   GameOption_AutoOptimizationSetFrame(ratio)
 end
 
 GameOption_InitCameraPos = function(posPowerValue)
-  -- function num : 0_130 , upvalues : chk_Option, frame_Display
+  -- function num : 0_137 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentCheckCameraPosPower = posPowerValue
   self.savedCheckCameraPosPower = posPowerValue
@@ -4351,14 +4648,14 @@ GameOption_InitCameraPos = function(posPowerValue)
 end
 
 GameOption_SetCameraPosValueText = function(posPowerValue)
-  -- function num : 0_131 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_138 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(posPowerValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_CameraPos):SetText(GetStr_Option[22] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
 GameOption_InitCameraFov = function(fovPowerValue)
-  -- function num : 0_132 , upvalues : chk_Option, frame_Display
+  -- function num : 0_139 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentCheckCameraFovPower = fovPowerValue
   self.savedCheckCameraFovPower = fovPowerValue
@@ -4368,14 +4665,14 @@ GameOption_InitCameraFov = function(fovPowerValue)
 end
 
 GameOption_SetCameraFovValueText = function(fovPowerValue)
-  -- function num : 0_133 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_140 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(posPowerValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_CameraFov):SetText(GetStr_Option[23] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
 GameOption_InitGamma = function(gammaValue)
-  -- function num : 0_134 , upvalues : chk_Option, frame_Display
+  -- function num : 0_141 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentGammaValue = gammaValue
   self.savedGammaValue = gammaValue
@@ -4385,14 +4682,14 @@ GameOption_InitGamma = function(gammaValue)
 end
 
 GameOption_SetGammaValueText = function(gammaValue)
-  -- function num : 0_135 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_142 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(gammaValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_Gamma):SetText(GetStr_Option[4] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
 GameOption_SetGamma = function(gammaValue)
-  -- function num : 0_136 , upvalues : chk_Option
+  -- function num : 0_143 , upvalues : chk_Option
   local self = chk_Option
   self.currentGammaValue = gammaValue
   GameOption_SetGammaValueText(gammaValue)
@@ -4401,19 +4698,19 @@ GameOption_SetGamma = function(gammaValue)
 end
 
 GameOption_ChangeGamma_slider = function()
-  -- function num : 0_137 , upvalues : frame_Display
+  -- function num : 0_144 , upvalues : frame_Display
   local ratio = (frame_Display._slide_Gamma):GetControlPos()
   GameOption_SetGamma(ratio)
 end
 
 GameOption_ChangeGamma_button = function()
-  -- function num : 0_138 , upvalues : _btn_Gamma, frame_Display
+  -- function num : 0_145 , upvalues : _btn_Gamma, frame_Display
   local ratio = _btn_Gamma:GetPosX() / ((frame_Display._slide_Gamma):GetSizeX() - _btn_Gamma:GetSizeX())
   GameOption_SetGamma(ratio)
 end
 
 GameOption_InitContrast = function(contrastValue)
-  -- function num : 0_139 , upvalues : chk_Option, frame_Display
+  -- function num : 0_146 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentContrastValue = contrastValue
   self.savedContrastValue = contrastValue
@@ -4423,14 +4720,14 @@ GameOption_InitContrast = function(contrastValue)
 end
 
 GameOption_SetContrastValueText = function(contrastValue)
-  -- function num : 0_140 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_147 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(contrastValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_Contrast):SetText(GetStr_Option[21] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
 GameOption_SetContrast = function(contrastValue)
-  -- function num : 0_141 , upvalues : chk_Option
+  -- function num : 0_148 , upvalues : chk_Option
   local self = chk_Option
   self.currentContrastValue = contrastValue
   GameOption_SetContrastValueText(contrastValue)
@@ -4439,19 +4736,19 @@ GameOption_SetContrast = function(contrastValue)
 end
 
 GameOption_ChangeContrast_slider = function()
-  -- function num : 0_142 , upvalues : frame_Display
+  -- function num : 0_149 , upvalues : frame_Display
   local ratio = (frame_Display._slide_Contrast):GetControlPos()
   GameOption_SetContrast(ratio)
 end
 
 GameOption_ChangeContrast_button = function()
-  -- function num : 0_143 , upvalues : _btn_Contrast, frame_Display
+  -- function num : 0_150 , upvalues : _btn_Contrast, frame_Display
   local ratio = _btn_Contrast:GetPosX() / ((frame_Display._slide_Contrast):GetSizeX() - _btn_Contrast:GetSizeX())
   GameOption_SetContrast(ratio)
 end
 
 GameOption_InitFov = function(fovValue)
-  -- function num : 0_144 , upvalues : chk_Option, frame_Display
+  -- function num : 0_151 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentFovValue = fovValue
   self.savedFovValue = fovValue
@@ -4469,14 +4766,14 @@ GameOption_InitFov = function(fovValue)
 end
 
 GameOption_SetFovValueText = function(fovValue)
-  -- function num : 0_145 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_152 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(fovValue + 0.5)
   ;
   (frame_Display._txt_Fov):SetText(GetStr_Option[24] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. " <PAOldColor>) ")
 end
 
 GameOption_SetFov = function(fovValue)
-  -- function num : 0_146 , upvalues : chk_Option
+  -- function num : 0_153 , upvalues : chk_Option
   local self = chk_Option
   self.currentFovValue = fovValue
   GameOption_SetFovValueText(fovValue)
@@ -4485,43 +4782,43 @@ GameOption_SetFov = function(fovValue)
 end
 
 GameOption_ChangeFov_slider = function()
-  -- function num : 0_147 , upvalues : frame_Display
+  -- function num : 0_154 , upvalues : frame_Display
   local fov = 40 + 30 * (frame_Display._slide_Fov):GetControlPos()
   GameOption_SetFov(fov)
 end
 
 GameOption_ChangeFov_button = function()
-  -- function num : 0_148 , upvalues : _btn_Fov, frame_Display
+  -- function num : 0_155 , upvalues : _btn_Fov, frame_Display
   local ratio = _btn_Fov:GetPosX() / ((frame_Display._slide_Fov):GetSizeX() - _btn_Fov:GetSizeX())
   local fov = 40 + 30 * ratio
   GameOption_SetFov(fov)
 end
 
 GameOption_SetUIMode = function(uiScale)
-  -- function num : 0_149 , upvalues : maxScaleValue, minScaleValue, frame_Display, GetStr_Option
+  -- function num : 0_156 , upvalues : scaleRangeTable, frame_Display, GetStr_Option
   local uiScale_Slider = uiScale
   local uiScale_Percent = uiScale * 100
-  local interval = maxScaleValue - minScaleValue
+  local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
   ;
-  (frame_Display._slide_UIScale):SetControlPos((uiScale_Percent - minScaleValue) / interval * 100)
+  (frame_Display._slide_UIScale):SetControlPos((uiScale_Percent - scaleRangeTable.minScaleValue) / interval * 100)
   ;
   (frame_Display._txt_UIScale):SetText(GetStr_Option[5] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", uiScale_Percent) .. "% <PAOldColor>)")
 end
 
 GameOption_UIScale_Change = function()
-  -- function num : 0_150 , upvalues : frame_Display, maxScaleValue, minScaleValue, chk_Option, GetStr_Option
+  -- function num : 0_157 , upvalues : frame_Display, scaleRangeTable, chk_Option, GetStr_Option
   local slide_posX = (frame_Display._slide_UIScale):GetControlPos()
-  local interval = maxScaleValue - minScaleValue
+  local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
   ;
-  (frame_Display._txt_UIScaleLow):SetText(tostring(minScaleValue))
+  (frame_Display._txt_UIScaleLow):SetText(tostring(scaleRangeTable.minScaleValue))
   ;
-  (frame_Display._txt_UIScaleMidle):SetText(tostring(minScaleValue + interval * 0.5))
+  (frame_Display._txt_UIScaleMidle):SetText(tostring(scaleRangeTable.minScaleValue + interval * 0.5))
   ;
-  (frame_Display._txt_UIScaleHigh):SetText(tostring(maxScaleValue))
-  -- DECOMPILER ERROR at PC35: Confused about usage of register: R2 in 'UnsetPending'
+  (frame_Display._txt_UIScaleHigh):SetText(tostring(scaleRangeTable.maxScaleValue))
+  -- DECOMPILER ERROR at PC41: Confused about usage of register: R2 in 'UnsetPending'
 
-  chk_Option.currentCheckUIScale = (minScaleValue + interval * slide_posX) * 0.01
-  -- DECOMPILER ERROR at PC45: Confused about usage of register: R2 in 'UnsetPending'
+  chk_Option.currentCheckUIScale = (scaleRangeTable.minScaleValue + interval * slide_posX) * 0.01
+  -- DECOMPILER ERROR at PC51: Confused about usage of register: R2 in 'UnsetPending'
 
   chk_Option.currentCheckUIScale = (math.floor)((chk_Option.currentCheckUIScale + 0.005) * 100) / 100
   ;
@@ -4529,7 +4826,7 @@ GameOption_UIScale_Change = function()
 end
 
 GameOption_InitSystemNotify = function()
-  -- function num : 0_151 , upvalues : frame_Game
+  -- function num : 0_158 , upvalues : frame_Game
   (frame_Game._btn_Alert_Region):SetCheck(ToClient_GetMessageFilter(0))
   ;
   (frame_Game._btn_Alert_TerritoryTrade):SetCheck(ToClient_GetMessageFilter(1))
@@ -4556,7 +4853,7 @@ GameOption_InitSystemNotify = function()
 end
 
 GameOption_InitSound = function(enableMusic, enableSound, enableEnvSound, hitFxType, masterVolume, fxVolume, dlgVolume, envVolume, musicVolume, hitFxWeight, otherPlayerVolume, riddingMusic, combatMusic, whisperMusic, TraySound, npcVoiceType)
-  -- function num : 0_152 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_159 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   self.currentMaster = masterVolume
   self.appliedMaster = masterVolume
@@ -4670,7 +4967,7 @@ GameOption_InitSound = function(enableMusic, enableSound, enableEnvSound, hitFxT
 end
 
 GameOption_SetVolumeText = function(masterVolume, fxVolume, dlgVolume, envVolume, musicVolume, hitFxVolume, hitFxWeight, otherplayerVolume)
-  -- function num : 0_153 , upvalues : frame_Sound, GetStr_Option
+  -- function num : 0_160 , upvalues : frame_Sound, GetStr_Option
   local master = (math.floor)(masterVolume + 0.5)
   local music = (math.floor)(musicVolume + 0.5)
   local fx = (math.floor)(fxVolume + 0.5)
@@ -4698,7 +4995,7 @@ GameOption_SetVolumeText = function(masterVolume, fxVolume, dlgVolume, envVolume
 end
 
 GameOption_SetVolume = function(masterVolume, fxVolume, dlgVolume, envVolume, musicVolume, hitFxVolume, hitFxWeight, otherVolume)
-  -- function num : 0_154 , upvalues : chk_Option, _volumeParam
+  -- function num : 0_161 , upvalues : chk_Option, _volumeParam
   local self = chk_Option
   self.currentMaster = masterVolume
   self.currentMusic = musicVolume
@@ -4738,7 +5035,7 @@ GameOption_SetVolume = function(masterVolume, fxVolume, dlgVolume, envVolume, mu
 end
 
 GameOption_SetEnableSound = function(enableMusic, enableSound, enableEnvSound, hitFxType)
-  -- function num : 0_155 , upvalues : chk_Option
+  -- function num : 0_162 , upvalues : chk_Option
   local self = chk_Option
   self.currentCheckMusic = enableMusic
   self.currentCheckSound = enableSound
@@ -4748,77 +5045,77 @@ GameOption_SetEnableSound = function(enableMusic, enableSound, enableEnvSound, h
 end
 
 GameOption_Master_slider = function()
-  -- function num : 0_156 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_163 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_TotalVol):GetControlPos() * 100
   GameOption_SetVolume(volume, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_Master_button = function()
-  -- function num : 0_157 , upvalues : chk_Option, _btn_TotalVol, frame_Sound
+  -- function num : 0_164 , upvalues : chk_Option, _btn_TotalVol, frame_Sound
   local self = chk_Option
   local volume = _btn_TotalVol:GetPosX() / ((frame_Sound._slide_TotalVol):GetSizeX() - _btn_TotalVol:GetSizeX()) * 100
   GameOption_SetVolume(volume, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_Music_slider = function()
-  -- function num : 0_158 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_165 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_MusicVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, volume, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_Music_button = function()
-  -- function num : 0_159 , upvalues : chk_Option, _btn_MusicVol, frame_Sound
+  -- function num : 0_166 , upvalues : chk_Option, _btn_MusicVol, frame_Sound
   local self = chk_Option
   local volume = _btn_MusicVol:GetPosX() / ((frame_Sound._slide_MusicVol):GetSizeX() - _btn_MusicVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, volume, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_FxSound_slider = function()
-  -- function num : 0_160 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_167 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_FxVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, volume, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_FxSound_button = function()
-  -- function num : 0_161 , upvalues : chk_Option, _btn_FxVol, frame_Sound
+  -- function num : 0_168 , upvalues : chk_Option, _btn_FxVol, frame_Sound
   local self = chk_Option
   local volume = _btn_FxVol:GetPosX() / ((frame_Sound._slide_FxVol):GetSizeX() - _btn_FxVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, volume, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_EnvSound_slider = function()
-  -- function num : 0_162 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_169 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_EnvFxVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, volume, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_EnvSound_button = function()
-  -- function num : 0_163 , upvalues : chk_Option, _btn_EnvFxVol, frame_Sound
+  -- function num : 0_170 , upvalues : chk_Option, _btn_EnvFxVol, frame_Sound
   local self = chk_Option
   local volume = _btn_EnvFxVol:GetPosX() / ((frame_Sound._slide_EnvFxVol):GetSizeX() - _btn_EnvFxVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, volume, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_DlgSound_slider = function()
-  -- function num : 0_164 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_171 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_VoiceVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, volume, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_DlgSound_button = function()
-  -- function num : 0_165 , upvalues : chk_Option, _btn_VoiceVol, frame_Sound
+  -- function num : 0_172 , upvalues : chk_Option, _btn_VoiceVol, frame_Sound
   local self = chk_Option
   local volume = _btn_VoiceVol:GetPosX() / ((frame_Sound._slide_VoiceVol):GetSizeX() - _btn_VoiceVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, volume, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
 GameOption_CheckMusic = function()
-  -- function num : 0_166 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_173 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_MusicOnOff):IsCheck()
   self.currentCheckMusic = check
@@ -4826,7 +5123,7 @@ GameOption_CheckMusic = function()
 end
 
 GameOption_CheckSound = function()
-  -- function num : 0_167 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_174 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_FXOnOff):IsCheck()
   self.currentCheckSound = check
@@ -4834,7 +5131,7 @@ GameOption_CheckSound = function()
 end
 
 GameOption_CheckEnvSound = function()
-  -- function num : 0_168 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_175 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_EnvFXOnOff):IsCheck()
   self.currentCheckEnvSound = check
@@ -4842,7 +5139,7 @@ GameOption_CheckEnvSound = function()
 end
 
 GameOption_CheckRiddingMusic = function()
-  -- function num : 0_169 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_176 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_RiddingOnOff):IsCheck()
   self.currentCheckRiddingMusic = check
@@ -4850,7 +5147,7 @@ GameOption_CheckRiddingMusic = function()
 end
 
 GameOption_CheckWhisperMusic = function()
-  -- function num : 0_170 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_177 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_WhisperOnOff):IsCheck()
   self.currentCheckWhisperMusic = check
@@ -4858,7 +5155,7 @@ GameOption_CheckWhisperMusic = function()
 end
 
 GameOption_CheckTraySound = function()
-  -- function num : 0_171 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_178 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_TraySoundOnOff):IsCheck()
   self.currentCheckTraySoundOnOff = check
@@ -4866,7 +5163,7 @@ GameOption_CheckTraySound = function()
 end
 
 GameOption_CheckCombatSound = function()
-  -- function num : 0_172 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_179 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local combatOffCheck = (frame_Sound._btn_CombatAllwaysOff):IsCheck()
   local combatOnCheck = (frame_Sound._btn_CombatAllwaysOn):IsCheck()
@@ -4884,7 +5181,7 @@ GameOption_CheckCombatSound = function()
 end
 
 GameOption_CheckNpcVoice = function()
-  -- function num : 0_173 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_180 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local voice1Check = (frame_Sound._btn_NpcVoice1):IsCheck()
   local voice2Check = (frame_Sound._btn_NpcVoice2):IsCheck()
@@ -4951,39 +5248,39 @@ GameOption_CheckNpcVoice = function()
 end
 
 GameOption_CheckHitFxType = function()
-  -- function num : 0_174
+  -- function num : 0_181
 end
 
 GameOption_HitFxWeight_slider = function()
-  -- function num : 0_175 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_182 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_hitFxWeightVolume):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, volume, self.currentPlayerVolume)
 end
 
 GameOption_HitFxWeight_button = function()
-  -- function num : 0_176 , upvalues : chk_Option, _btn_hitFxWeightVolume, frame_Sound
+  -- function num : 0_183 , upvalues : chk_Option, _btn_hitFxWeightVolume, frame_Sound
   local self = chk_Option
   local volume = _btn_hitFxWeightVolume:GetPosX() / ((frame_Sound._slide_hitFxWeightVolume):GetSizeX() - _btn_hitFxWeightVolume:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, volume, self.currentPlayerVolume)
 end
 
 GameOption_OtherPlayer_slider = function()
-  -- function num : 0_177 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_184 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_otherPlayerVolume):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, volume)
 end
 
 GameOption_OtherPlayer_button = function()
-  -- function num : 0_178 , upvalues : chk_Option, _btn_otherPlayerVolume, frame_Sound
+  -- function num : 0_185 , upvalues : chk_Option, _btn_otherPlayerVolume, frame_Sound
   local self = chk_Option
   local volume = _btn_otherPlayerVolume:GetPosX() / ((frame_Sound._slide_otherPlayerVolume):GetSizeX() - _btn_otherPlayerVolume:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, volume)
 end
 
 GameOption_SetGameMode = function(gameOptionSetting)
-  -- function num : 0_179 , upvalues : randerPlayerColorStr, serviceResCount, serviceResEnumsNumber, ChatChannelEnumsNumber, chk_Option, frame_Game, _btn_ServiceResourceType, _btn_ChatLanguageType, frame_Display, frame_Sound, GetStr_Option
+  -- function num : 0_186 , upvalues : randerPlayerColorStr, serviceResCount, serviceResEnumsNumber, ChatChannelEnumsNumber, chk_Option, frame_Game, _btn_ServiceResourceType, _btn_ChatLanguageType, frame_Display, frame_Sound, effectAlphaRangeTable, GetStr_Option
   local showSkillCmd = gameOptionSetting:getShowSkillCmd()
   local showComboGuide = gameOptionSetting:getShowComboGuide()
   local mouseMove = gameOptionSetting:getGameMouseMode()
@@ -4995,6 +5292,7 @@ GameOption_SetGameMode = function(gameOptionSetting)
   local isOnScreenSaver = gameOptionSetting:getIsOnScreenSaver()
   local isUIModeMouseLock = gameOptionSetting:getUIModeMouseLock()
   local isPvpRefuse = gameOptionSetting:getPvpRefuse()
+  local isExchangeRefuse = gameOptionSetting:getIsExchangeRefuse()
   local isHideMast = gameOptionSetting:getHideMastOnCarrier()
   local showCashAlert = gameOptionSetting:getCashAlert()
   local autoAim = gameOptionSetting:getAimAssist()
@@ -5010,6 +5308,8 @@ GameOption_SetGameMode = function(gameOptionSetting)
   local padInvertY = gameOptionSetting:getGamePadInvertY()
   local padSensitivityX = gameOptionSetting:getGamePadSensitivityX()
   local padSensitivityY = gameOptionSetting:getGamePadSensitivityY()
+  local effectAlpha = gameOptionSetting:getEffectAlpha()
+  local colorByPassValue = gameOptionSetting:getSkillPostEffect()
   local cameraMasterPower = gameOptionSetting:getCameraMasterPower()
   local cameraShakePower = gameOptionSetting:getCameraShakePower()
   local motionBlurPower = gameOptionSetting:getMotionBlurPower()
@@ -5104,6 +5404,9 @@ GameOption_SetGameMode = function(gameOptionSetting)
       self.currentCheckIsPvpRefuse = isPvpRefuse
       self.appliedCheckIsPvpRefuse = isPvpRefuse
       self.savedCheckisPvpRefuse = isPvpRefuse
+      self.currentCheckIsExchangeRefuse = isExchangeRefuse
+      self.appliedCheckIsExchangeRefuse = isExchangeRefuse
+      self.savedCheckIsExchangeRefuse = isExchangeRefuse
       self.currentCheckIsHideMast = isHideMast
       self.appliedCheckIsHideMast = isHideMast
       self.savedCheckIsHideMast = isHideMast
@@ -5234,6 +5537,8 @@ GameOption_SetGameMode = function(gameOptionSetting)
       ;
       (frame_Game._btn_PvpRefuse):SetCheck(isPvpRefuse)
       ;
+      (frame_Game._btn_ExchangeRefuse):SetCheck(isExchangeRefuse)
+      ;
       (frame_Game._btn_HideMast):SetCheck(isHideMast)
       ;
       (frame_Game._btn_ShowCashAlert):SetCheck(showCashAlert)
@@ -5327,9 +5632,9 @@ GameOption_SetGameMode = function(gameOptionSetting)
           if ChatChannelEnumsNumber[index] ~= ChatChannelType then
             do
               (_btn_ChatLanguageType[index]):SetCheck(nil == _btn_ChatLanguageType[index])
-              -- DECOMPILER ERROR at PC813: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC813: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -5344,28 +5649,41 @@ GameOption_SetGameMode = function(gameOptionSetting)
       local mouseSensitivityY_Percent = (mouseSensitivityY - 0.1) / 1.9 * 100
       local padSensitivityX_Percent = (padSensitivityX - 0.1) / 1.9 * 100
       local padSensitivityY_Percent = (padSensitivityY - 0.1) / 1.9 * 100
+      local effectAlpha_Percent = effectAlpha * 100
+      local colorByPass_Percent = colorByPassValue * 100
       local cameraMasterPower_Percent = cameraMasterPower * 100
       local cameraShakePower_Percent = cameraShakePower * 100
       local motionBlurPower_Percent = motionBlurPower * 100
       local CameraPosPower_Percent = CameraPosPower * 100
+      local CameraFovPower_Percent = CameraFovPower * 100
+      ;
+      (frame_Display._slide_EffectAlpha):SetControlPos(effectAlpha_Percent)
+      ;
+      (frame_Display._slide_ColorByPass):SetControlPos(colorByPass_Percent)
+      ;
+      (frame_Display._slide_CameraMaster):SetControlPos(cameraMasterPower_Percent)
+      ;
+      (frame_Display._slide_CameraShake):SetControlPos(cameraShakePower_Percent)
+      ;
+      (frame_Display._slide_MotionBlur):SetControlPos(motionBlurPower_Percent)
+      ;
+      (frame_Game._slide_MouXSen):SetControlPos(mouseSensitivityX_Percent)
+      ;
+      (frame_Game._slide_MouYSen):SetControlPos(mouseSensitivityY_Percent)
+      ;
+      (frame_Game._slide_PadXSen):SetControlPos(padSensitivityX_Percent)
+      ;
+      (frame_Game._slide_PadYSen):SetControlPos(padSensitivityY_Percent)
+      ;
+      (frame_Sound._slide_hitFxVolume):SetControlPos(hitFxVolume)
       do
-        local CameraFovPower_Percent = CameraFovPower * 100
+        local interval = effectAlphaRangeTable.maxAlphaValue - effectAlphaRangeTable.minAlphaValue
         ;
-        (frame_Display._slide_CameraMaster):SetControlPos(cameraMasterPower_Percent)
+        (frame_Display._slide_EffectAlpha):SetControlPos((effectAlpha_Percent - effectAlphaRangeTable.minAlphaValue) / interval * 100)
         ;
-        (frame_Display._slide_CameraShake):SetControlPos(cameraShakePower_Percent)
+        (frame_Display._txt_EffectAlpha):SetText(GetStr_Option[27] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(effectAlpha_Percent, 100)) .. "% <PAOldColor>) ")
         ;
-        (frame_Display._slide_MotionBlur):SetControlPos(motionBlurPower_Percent)
-        ;
-        (frame_Game._slide_MouXSen):SetControlPos(mouseSensitivityX_Percent)
-        ;
-        (frame_Game._slide_MouYSen):SetControlPos(mouseSensitivityY_Percent)
-        ;
-        (frame_Game._slide_PadXSen):SetControlPos(padSensitivityX_Percent)
-        ;
-        (frame_Game._slide_PadYSen):SetControlPos(padSensitivityY_Percent)
-        ;
-        (frame_Sound._slide_hitFxVolume):SetControlPos(hitFxVolume)
+        (frame_Display._txt_ColorByPass):SetText(GetStr_Option[28] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(colorByPass_Percent, 100)) .. "% <PAOldColor>) ")
         ;
         (frame_Display._txt_CameraMaster):SetText(GetStr_Option[25] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(cameraMasterPower_Percent, 100)) .. "% <PAOldColor>) ")
         ;
@@ -5402,12 +5720,12 @@ GameOption_SetGameMode = function(gameOptionSetting)
 end
 
 FGlobal_IsChecked_SkillCommand = function()
-  -- function num : 0_180
+  -- function num : 0_187
   return isChecked_SkillCommand
 end
 
 FGlobal_SkillCommand_LevelCheck = function()
-  -- function num : 0_181
+  -- function num : 0_188
   if ((getSelfPlayer()):get()):getLevel() >= 50 then
     setShowSkillCmd(false)
     GameOption_UpdateOptionChanged()
@@ -5417,7 +5735,7 @@ FGlobal_SkillCommand_LevelCheck = function()
 end
 
 GameOption_ShowComboGuide = function()
-  -- function num : 0_182 , upvalues : chk_Option
+  -- function num : 0_189 , upvalues : chk_Option
   local self = chk_Option
   local check = value_GameOption_Check_ComboGuide:IsCheck()
   self.currentCheckShowComboGuide = check
@@ -5425,7 +5743,7 @@ GameOption_ShowComboGuide = function()
 end
 
 GameOption_AutoAim = function()
-  -- function num : 0_183 , upvalues : chk_Option, frame_Game
+  -- function num : 0_190 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_AutoAim):IsCheck()
   self.currentCheckAutoAim = check
@@ -5433,7 +5751,7 @@ GameOption_AutoAim = function()
 end
 
 GameOption_CheckHideWindow = function()
-  -- function num : 0_184 , upvalues : chk_Option, frame_Game
+  -- function num : 0_191 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_HideWindow):IsCheck()
   self.currentCheckHideWindowByAttacked = check
@@ -5441,13 +5759,13 @@ GameOption_CheckHideWindow = function()
 end
 
 GameOption_GetHideWindow = function()
-  -- function num : 0_185 , upvalues : chk_Option
+  -- function num : 0_192 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckHideWindowByAttacked
 end
 
 SimpleUI_EnableCheck = function(simpleUI_Check)
-  -- function num : 0_186 , upvalues : frame_Game
+  -- function num : 0_193 , upvalues : frame_Game
   local selfPlayer = getSelfPlayer()
   if selfPlayer ~= nil and (selfPlayer:get()):getLevel() == 6 then
     (frame_Game._btn_EnableSimpleUI):SetCheck(simpleUI_Check)
@@ -5456,7 +5774,7 @@ SimpleUI_EnableCheck = function(simpleUI_Check)
 end
 
 GameOption_CheckSimpleUI = function()
-  -- function num : 0_187 , upvalues : chk_Option, frame_Game
+  -- function num : 0_194 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_EnableSimpleUI):IsCheck()
   self.currentCheckEnableSimpleUI = check
@@ -5464,13 +5782,13 @@ GameOption_CheckSimpleUI = function()
 end
 
 GameOption_GetEnableSimpleUI = function()
-  -- function num : 0_188 , upvalues : chk_Option
+  -- function num : 0_195 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckEnableSimpleUI
 end
 
 GameOption_CheckEnableOVR = function()
-  -- function num : 0_189 , upvalues : chk_Option, frame_Game
+  -- function num : 0_196 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_EnableOVR):IsCheck()
   self.currentCheckEnableOVR = check
@@ -5478,13 +5796,13 @@ GameOption_CheckEnableOVR = function()
 end
 
 GameOption_GetEnableOVR = function()
-  -- function num : 0_190 , upvalues : chk_Option
+  -- function num : 0_197 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckEnableOVR
 end
 
 Panel_KeyViewer_MainFunc = function()
-  -- function num : 0_191 , upvalues : isChecked_KeyViewer
+  -- function num : 0_198 , upvalues : isChecked_KeyViewer
   if isChecked_KeyViewer == false then
     FGlobal_KeyViewer_Show()
     isChecked_KeyViewer = true
@@ -5497,7 +5815,7 @@ Panel_KeyViewer_MainFunc = function()
 end
 
 Panel_GuildLogin_MainFunc = function()
-  -- function num : 0_192 , upvalues : chk_Option, frame_Game
+  -- function num : 0_199 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local GuildLoginState = (frame_Game._btn_GuildLogin):IsCheck()
   self.currentCheckShowGuildLoginMessage = GuildLoginState
@@ -5505,13 +5823,13 @@ Panel_GuildLogin_MainFunc = function()
 end
 
 GameOption_ShowGuildLoginMessage = function()
-  -- function num : 0_193 , upvalues : chk_Option
+  -- function num : 0_200 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckShowGuildLoginMessage
 end
 
 Panel_RejectInvitation_MainFunc = function()
-  -- function num : 0_194 , upvalues : chk_Option, frame_Game
+  -- function num : 0_201 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_RejectInvitation):IsCheck()
   self.currentCheckRejectInvitation = check
@@ -5519,12 +5837,85 @@ Panel_RejectInvitation_MainFunc = function()
 end
 
 GameOption_SpiritGuide_ShowFunc = function()
-  -- function num : 0_195 , upvalues : frame_Game
+  -- function num : 0_202 , upvalues : frame_Game
   local tempCheck = (frame_Game._btn_SpiritGuide):IsCheck()
 end
 
+GameOption_EffectAlpha_slider = function()
+  -- function num : 0_203 , upvalues : chk_Option, frame_Display, effectAlphaRangeTable, GetStr_Option
+  local self = chk_Option
+  local volume = (frame_Display._slide_EffectAlpha):GetControlPos()
+  local interval = effectAlphaRangeTable.maxAlphaValue - effectAlphaRangeTable.minAlphaValue
+  volume = (effectAlphaRangeTable.minAlphaValue + interval * volume) / 100
+  self.currentCheckEffectAlpha = volume
+  setEffectAlpha(self.currentCheckEffectAlpha)
+  ;
+  (frame_Display._txt_EffectAlpha):SetText(GetStr_Option[27] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(volume * 100, 100)) .. "% <PAOldColor>)")
+  GameOption_UpdateOptionChanged()
+end
+
+GameOption_EffectAlpha_button = function()
+  -- function num : 0_204 , upvalues : chk_Option, _btn_EffectAlpha, frame_Display, effectAlphaRangeTable, GetStr_Option
+  local self = chk_Option
+  local volume = _btn_EffectAlpha:GetPosX() / ((frame_Display._slide_EffectAlpha):GetSizeX() - _btn_EffectAlpha:GetSizeX())
+  local interval = effectAlphaRangeTable.maxAlphaValue - effectAlphaRangeTable.minAlphaValue
+  volume = (effectAlphaRangeTable.minAlphaValue + interval * volume) / 100
+  self.currentCheckEffectAlpha = volume
+  setEffectAlpha(self.currentCheckEffectAlpha)
+  ;
+  (frame_Display._slide_EffectAlpha):SetControlPos(self.currentCheckEffectAlpha)
+  ;
+  (frame_Display._txt_EffectAlpha):SetText(GetStr_Option[27] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(volume * 100, 100)) .. "% <PAOldColor>)")
+  GameOption_UpdateOptionChanged()
+end
+
+GameOption_SetEffectAlpha = function()
+  -- function num : 0_205 , upvalues : chk_Option, frame_Display, GetStr_Option
+  local self = chk_Option
+  local currentCheckEffectAlpha = self.currentCheckEffectAlpha * 100
+  ;
+  (frame_Display._slide_EffectAlpha):SetControlPos(currentCheckEffectAlpha)
+  setEffectAlpha(self.currentCheckEffectAlpha)
+  ;
+  (frame_Display._txt_EffectAlpha):SetText(GetStr_Option[27] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(currentCheckEffectAlpha, 100)) .. "% <PAOldColor>)")
+  GameOption_UpdateOptionChanged()
+end
+
+GameOption_ColorByPass_slider = function()
+  -- function num : 0_206 , upvalues : chk_Option, frame_Display, GetStr_Option
+  local self = chk_Option
+  local volume = (frame_Display._slide_ColorByPass):GetControlPos()
+  self.currentCheckCameraMasterPower = volume
+  setSkillPostEffect(self.currentCheckCameraMasterPower)
+  ;
+  (frame_Display._txt_ColorByPass):SetText(GetStr_Option[28] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(volume * 100, 100)) .. "% <PAOldColor>)")
+  GameOption_UpdateOptionChanged()
+end
+
+GameOption_ColorByPass_button = function()
+  -- function num : 0_207 , upvalues : chk_Option, _btn_ColorByPass, frame_Display, GetStr_Option
+  local self = chk_Option
+  local volume = _btn_ColorByPass:GetPosX() / ((frame_Display._slide_ColorByPass):GetSizeX() - _btn_ColorByPass:GetSizeX())
+  self.currentCheckColorByPass = volume
+  setSkillPostEffect(self.currentCheckColorByPass)
+  ;
+  (frame_Display._txt_ColorByPass):SetText(GetStr_Option[28] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(volume * 100, 100)) .. "% <PAOldColor>)")
+  GameOption_UpdateOptionChanged()
+end
+
+GameOption_SetColorByPass = function()
+  -- function num : 0_208 , upvalues : chk_Option, frame_Display, GetStr_Option
+  local colorByPass_Percent = chk_Option.currentCheckColorByPass * 100
+  ;
+  (frame_Display._slide_ColorByPass):SetControlPos(colorByPass_Percent)
+  setSkillPostEffect(chk_Option.currentCheckColorByPass)
+  ;
+  (frame_Display._txt_ColorByPass):SetText(GetStr_Option[28] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(colorByPass_Percent, 100)) .. "% <PAOldColor>)")
+  GameOption_UpdateOptionChanged()
+end
+
 GameOption_CameraMasterPower_slider = function()
-  -- function num : 0_196 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_209 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_CameraMaster):GetControlPos()
   self.currentCheckCameraMasterPower = volume
@@ -5535,7 +5926,7 @@ GameOption_CameraMasterPower_slider = function()
 end
 
 GameOption_CameraMasterPower_button = function()
-  -- function num : 0_197 , upvalues : chk_Option, _btn_CameraMaster, frame_Display, GetStr_Option
+  -- function num : 0_210 , upvalues : chk_Option, _btn_CameraMaster, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = _btn_CameraMaster:GetPosX() / ((frame_Display._slide_CameraMaster):GetSizeX() - _btn_CameraMaster:GetSizeX())
   self.currentCheckCameraMasterPower = volume
@@ -5546,7 +5937,7 @@ GameOption_CameraMasterPower_button = function()
 end
 
 GameOption_SetCameraMasterPower = function()
-  -- function num : 0_198 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_211 , upvalues : chk_Option, frame_Display, GetStr_Option
   local cameraMasterPower_Percent = chk_Option.currentCheckCameraMasterPower * 100
   ;
   (frame_Display._slide_CameraMaster):SetControlPos(cameraMasterPower_Percent)
@@ -5557,7 +5948,7 @@ GameOption_SetCameraMasterPower = function()
 end
 
 GameOption_CameraShakePower_slider = function()
-  -- function num : 0_199 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_212 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_CameraShake):GetControlPos()
   self.currentCheckCameraShakePower = volume
@@ -5568,7 +5959,7 @@ GameOption_CameraShakePower_slider = function()
 end
 
 GameOption_CameraShakePower_button = function()
-  -- function num : 0_200 , upvalues : chk_Option, _btn_CameraShake, frame_Display, GetStr_Option
+  -- function num : 0_213 , upvalues : chk_Option, _btn_CameraShake, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = _btn_CameraShake:GetPosX() / ((frame_Display._slide_CameraShake):GetSizeX() - _btn_CameraShake:GetSizeX())
   self.currentCheckCameraShakePower = volume
@@ -5579,7 +5970,7 @@ GameOption_CameraShakePower_button = function()
 end
 
 GameOption_SetCameraShakePower = function()
-  -- function num : 0_201 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_214 , upvalues : chk_Option, frame_Display, GetStr_Option
   local cameraShakePower_Percent = chk_Option.currentCheckCameraShakePower * 100
   ;
   (frame_Display._slide_CameraShake):SetControlPos(cameraShakePower_Percent)
@@ -5589,7 +5980,7 @@ GameOption_SetCameraShakePower = function()
 end
 
 GameOption_MotionBlurPower_slider = function()
-  -- function num : 0_202 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_215 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_MotionBlur):GetControlPos()
   self.currentCheckMotionBlurPower = volume
@@ -5600,7 +5991,7 @@ GameOption_MotionBlurPower_slider = function()
 end
 
 GameOption_MotionBlurPower_button = function()
-  -- function num : 0_203 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_216 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_MotionBlur):GetControlPos()
   self.currentCheckMotionBlurPower = volume
@@ -5611,7 +6002,7 @@ GameOption_MotionBlurPower_button = function()
 end
 
 GameOption_SetMotionBlurPower = function()
-  -- function num : 0_204 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_217 , upvalues : chk_Option, frame_Display, GetStr_Option
   local motionBlurPower_Percent = chk_Option.currentCheckMotionBlurPower * 100
   ;
   (frame_Display._slide_MotionBlur):SetControlPos(motionBlurPower_Percent)
@@ -5621,7 +6012,7 @@ GameOption_SetMotionBlurPower = function()
 end
 
 GameOption_CameraPosPower_slider = function()
-  -- function num : 0_205 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_218 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_CameraPos):GetControlPos()
   self.currentCheckCameraPosPower = volume
@@ -5632,7 +6023,7 @@ GameOption_CameraPosPower_slider = function()
 end
 
 GameOption_CameraPosPower_button = function()
-  -- function num : 0_206 , upvalues : chk_Option, _btn_CameraPos, frame_Display, GetStr_Option
+  -- function num : 0_219 , upvalues : chk_Option, _btn_CameraPos, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = _btn_CameraPos:GetPosX() / ((frame_Display._slide_CameraPos):GetSizeX() - _btn_CameraPos:GetSizeX())
   self.currentCheckCameraPosPower = volume
@@ -5643,7 +6034,7 @@ GameOption_CameraPosPower_button = function()
 end
 
 GameOption_SetCameraPosPower = function()
-  -- function num : 0_207 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_220 , upvalues : chk_Option, frame_Display, GetStr_Option
   local CameraPosPower_Percent = chk_Option.currentCheckCameraPosPower * 100
   ;
   (frame_Display._slide_CameraPos):SetControlPos(CameraPosPower_Percent)
@@ -5653,7 +6044,7 @@ GameOption_SetCameraPosPower = function()
 end
 
 GameOption_CameraFovPower_slider = function()
-  -- function num : 0_208 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_221 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_CameraFov):GetControlPos()
   self.currentCheckCameraFovPower = volume
@@ -5664,7 +6055,7 @@ GameOption_CameraFovPower_slider = function()
 end
 
 GameOption_CameraFovPower_button = function()
-  -- function num : 0_209 , upvalues : chk_Option, _btn_CameraFov, frame_Display, GetStr_Option
+  -- function num : 0_222 , upvalues : chk_Option, _btn_CameraFov, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = _btn_CameraFov:GetPosX() / ((frame_Display._slide_CameraFov):GetSizeX() - _btn_CameraFov:GetSizeX())
   self.currentCheckCameraFovPower = volume
@@ -5675,7 +6066,7 @@ GameOption_CameraFovPower_button = function()
 end
 
 GameOption_SetCameraFovPower = function()
-  -- function num : 0_210 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_223 , upvalues : chk_Option, frame_Display, GetStr_Option
   local CameraFovPower_Percent = chk_Option.currentCheckCameraFovPower * 100
   ;
   (frame_Display._slide_CameraFov):SetControlPos(CameraFovPower_Percent)
@@ -5685,7 +6076,7 @@ GameOption_SetCameraFovPower = function()
 end
 
 GameOption_CheckMouseMove = function()
-  -- function num : 0_211 , upvalues : chk_Option, frame_Game
+  -- function num : 0_224 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MouseMove):IsCheck()
   self.currentCheckMouseMove = check
@@ -5693,7 +6084,7 @@ GameOption_CheckMouseMove = function()
 end
 
 GameOption_CheckMiniMapRotation = function()
-  -- function num : 0_212 , upvalues : chk_Option, frame_Game
+  -- function num : 0_225 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MiniMapRotation):IsCheck()
   self.currentCheckMiniMapRotation = check
@@ -5701,7 +6092,7 @@ GameOption_CheckMiniMapRotation = function()
 end
 
 GameOption_CheckShowAttackEffect = function()
-  -- function num : 0_213 , upvalues : chk_Option, frame_Game
+  -- function num : 0_226 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_ShowAttackEffect):IsCheck()
   self.currentCheckShowAttackEffect = check
@@ -5709,7 +6100,7 @@ GameOption_CheckShowAttackEffect = function()
 end
 
 GameOption_CheckBlackSpiritAlert = function()
-  -- function num : 0_214 , upvalues : chk_Option, frame_Game
+  -- function num : 0_227 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_Alert_BlackSpirit):IsCheck()
   self.currentCheckBlackSpiritAlert = check
@@ -5717,7 +6108,7 @@ GameOption_CheckBlackSpiritAlert = function()
 end
 
 GameOption_CheckUseNewQuickSlot = function()
-  -- function num : 0_215 , upvalues : chk_Option, frame_Game
+  -- function num : 0_228 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UseNewQuickSlot):IsCheck()
   self.currentCheckUseNewQuickSlot = check
@@ -5725,7 +6116,7 @@ GameOption_CheckUseNewQuickSlot = function()
 end
 
 GameOption_CheckUseChattingFilter = function()
-  -- function num : 0_216 , upvalues : chk_Option, frame_Game
+  -- function num : 0_229 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UseChattingFilter):IsCheck()
   self.currentCheckUseChattingFilter = check
@@ -5733,7 +6124,7 @@ GameOption_CheckUseChattingFilter = function()
 end
 
 GameOption_CheckIsOnScreenSaver = function()
-  -- function num : 0_217 , upvalues : chk_Option, frame_Game
+  -- function num : 0_230 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_IsOnScreenSaver):IsCheck()
   self.currentCheckIsOnScreenSaver = check
@@ -5741,7 +6132,7 @@ GameOption_CheckIsOnScreenSaver = function()
 end
 
 GameOption_CheckUIModeMouseLock = function()
-  -- function num : 0_218 , upvalues : chk_Option, frame_Game
+  -- function num : 0_231 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UIModeMouseLock):IsCheck()
   self.currentCheckIsUIModeMouseLock = check
@@ -5749,15 +6140,23 @@ GameOption_CheckUIModeMouseLock = function()
 end
 
 GameOption_CheckPvpRefuse = function()
-  -- function num : 0_219 , upvalues : chk_Option, frame_Game
+  -- function num : 0_232 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_PvpRefuse):IsCheck()
   self.currentCheckIsPvpRefuse = check
   GameOption_UpdateOptionChanged()
 end
 
+GameOption_CheckExchangeRefuse = function()
+  -- function num : 0_233 , upvalues : chk_Option, frame_Game
+  local self = chk_Option
+  local check = (frame_Game._btn_ExchangeRefuse):IsCheck()
+  self.currentCheckIsExchangeRefuse = check
+  GameOption_UpdateOptionChanged()
+end
+
 GameOption_CheckHideMast = function()
-  -- function num : 0_220 , upvalues : chk_Option, frame_Game
+  -- function num : 0_234 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_HideMast):IsCheck()
   self.currentCheckIsHideMast = check
@@ -5765,7 +6164,7 @@ GameOption_CheckHideMast = function()
 end
 
 GameOption_CheckCashAlert = function()
-  -- function num : 0_221 , upvalues : chk_Option, frame_Game
+  -- function num : 0_235 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_ShowCashAlert):IsCheck()
   self.currentCheckShowCashAlert = check
@@ -5773,7 +6172,7 @@ GameOption_CheckCashAlert = function()
 end
 
 GameOption_CheckMouseInvertX = function()
-  -- function num : 0_222 , upvalues : chk_Option, frame_Game
+  -- function num : 0_236 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MouseX):IsCheck()
   self.currentCheckMouseInvertX = check
@@ -5781,7 +6180,7 @@ GameOption_CheckMouseInvertX = function()
 end
 
 GameOption_CheckMouseInvertY = function()
-  -- function num : 0_223 , upvalues : chk_Option, frame_Game
+  -- function num : 0_237 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MouseY):IsCheck()
   self.currentCheckMouseInvertY = check
@@ -5789,7 +6188,7 @@ GameOption_CheckMouseInvertY = function()
 end
 
 GameOption_MouseSensitivityX_slider = function()
-  -- function num : 0_224 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_238 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_MouXSen):GetControlPos()
   self.currentCheckMouseSensitivityX = volume * 1.9 + 0.1
@@ -5799,7 +6198,7 @@ GameOption_MouseSensitivityX_slider = function()
 end
 
 GameOption_MouseSensitivityX_button = function()
-  -- function num : 0_225 , upvalues : chk_Option, _btn_MouXSen, frame_Game, GetStr_Option
+  -- function num : 0_239 , upvalues : chk_Option, _btn_MouXSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_MouXSen:GetPosX() / ((frame_Game._slide_MouXSen):GetSizeX() - _btn_MouXSen:GetSizeX())
   self.currentCheckMouseSensitivityX = volume * 1.9 + 0.1
@@ -5809,7 +6208,7 @@ GameOption_MouseSensitivityX_button = function()
 end
 
 GameOption_MouseSensitivityY_slider = function()
-  -- function num : 0_226 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_240 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_MouYSen):GetControlPos()
   self.currentCheckMouseSensitivityY = volume * 1.9 + 0.1
@@ -5819,7 +6218,7 @@ GameOption_MouseSensitivityY_slider = function()
 end
 
 GameOption_MouseSensitivityY_button = function()
-  -- function num : 0_227 , upvalues : chk_Option, _btn_MouYSen, frame_Game, GetStr_Option
+  -- function num : 0_241 , upvalues : chk_Option, _btn_MouYSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_MouYSen:GetPosX() / ((frame_Game._slide_MouYSen):GetSizeX() - _btn_MouYSen:GetSizeX())
   self.currentCheckMouseSensitivityY = volume * 1.9 + 0.1
@@ -5829,7 +6228,7 @@ GameOption_MouseSensitivityY_button = function()
 end
 
 GameOption_hitFxVolume_slider = function()
-  -- function num : 0_228 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
+  -- function num : 0_242 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
   local self = chk_Option
   local volume = _btn_hitFxVolume:GetPosX() / ((frame_Sound._slide_hitFxVolume):GetSizeX() - _btn_hitFxVolume:GetSizeX())
   self.currentHitFxVolume = volume * 100
@@ -5864,7 +6263,7 @@ GameOption_hitFxVolume_slider = function()
 end
 
 GameOption_CheckPadEnable = function()
-  -- function num : 0_229 , upvalues : chk_Option, frame_Game
+  -- function num : 0_243 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UsePad):IsCheck()
   self.currentCheckPadEnable = check
@@ -5872,7 +6271,7 @@ GameOption_CheckPadEnable = function()
 end
 
 GameOption_CheckSelfPlayerNameTagVisible = function()
-  -- function num : 0_230 , upvalues : chk_Option, frame_Game
+  -- function num : 0_244 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_SelfNameShowAllways):IsCheck() then
     self.currentSelfPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -5887,7 +6286,7 @@ GameOption_CheckSelfPlayerNameTagVisible = function()
 end
 
 GameOption_CheckPetObjectShow = function()
-  -- function num : 0_231 , upvalues : chk_Option, frame_Game
+  -- function num : 0_245 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_PetAll):IsCheck() then
     self.currentPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All
@@ -5902,7 +6301,7 @@ GameOption_CheckPetObjectShow = function()
 end
 
 GameOption_CheckFontResize = function()
-  -- function num : 0_232 , upvalues : chk_Option, frame_Game
+  -- function num : 0_246 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_FontResizeDefault):IsCheck() then
     self.currentFontResizeType = (CppEnums.UIFontSizeType).eUIFontSizeType_Normal
@@ -5917,7 +6316,7 @@ GameOption_CheckFontResize = function()
 end
 
 GameOption_CheckNavGuidType = function()
-  -- function num : 0_233 , upvalues : chk_Option, frame_Game
+  -- function num : 0_247 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_NavGuideNone):IsCheck() then
     self.currentNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_None
@@ -5936,7 +6335,7 @@ GameOption_CheckNavGuidType = function()
 end
 
 GameOption_CheckWorldMapOpenType = function()
-  -- function num : 0_234 , upvalues : chk_Option, frame_Game
+  -- function num : 0_248 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_WorldMapOpenByWestMaintain):IsCheck() then
     self.currentWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).afterSpinNorth
@@ -5959,7 +6358,7 @@ GameOption_CheckWorldMapOpenType = function()
 end
 
 GameOption_WorldMapAngle = function()
-  -- function num : 0_235 , upvalues : chk_Option, frame_Game
+  -- function num : 0_249 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_WorldMapCameraDefaultAngle):IsCheck() then
     self.currentWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default
@@ -5978,7 +6377,7 @@ GameOption_WorldMapAngle = function()
 end
 
 GameOption_ServiceResourceTypeFunc = function()
-  -- function num : 0_236 , upvalues : chk_Option, serviceResCount, _btn_ServiceResourceType, serviceResEnumsNumber, _btn_ChatLanguageType, ChatChannelEnumsNumber
+  -- function num : 0_250 , upvalues : chk_Option, serviceResCount, _btn_ServiceResourceType, serviceResEnumsNumber, _btn_ChatLanguageType, ChatChannelEnumsNumber
   local self = chk_Option
   for index = 0, serviceResCount - 1 do
     if (_btn_ServiceResourceType[index]):IsCheck() then
@@ -6000,7 +6399,7 @@ GameOption_ServiceResourceTypeFunc = function()
 end
 
 ChatChannelOption = function()
-  -- function num : 0_237 , upvalues : chk_Option, serviceResCount, _btn_ChatLanguageType, ChatChannelEnumsNumber
+  -- function num : 0_251 , upvalues : chk_Option, serviceResCount, _btn_ChatLanguageType, ChatChannelEnumsNumber
   local self = chk_Option
   for index = 0, serviceResCount do
     if (_btn_ChatLanguageType[index]):IsCheck() then
@@ -6017,7 +6416,7 @@ ChatChannelOption = function()
 end
 
 GameOption_CheckOtherPlayerNameTagVisible = function()
-  -- function num : 0_238 , upvalues : chk_Option, frame_Game
+  -- function num : 0_252 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_OtherNameShow):IsCheck() then
     self.currentOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -6028,7 +6427,7 @@ GameOption_CheckOtherPlayerNameTagVisible = function()
 end
 
 GameOption_CheckPartyPlayerNameTagVisible = function()
-  -- function num : 0_239 , upvalues : chk_Option, frame_Game
+  -- function num : 0_253 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_PartyNameShow):IsCheck() then
     self.currentPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -6039,7 +6438,7 @@ GameOption_CheckPartyPlayerNameTagVisible = function()
 end
 
 GameOption_CheckGuildPlayerNameTagVisible = function()
-  -- function num : 0_240 , upvalues : chk_Option, frame_Game
+  -- function num : 0_254 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_GuildNameShow):IsCheck() then
     self.currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -6050,7 +6449,7 @@ GameOption_CheckGuildPlayerNameTagVisible = function()
 end
 
 GameOption_CheckGuildPlayerNameTagVisible = function()
-  -- function num : 0_241 , upvalues : chk_Option, frame_Game
+  -- function num : 0_255 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_GuildNameShow):IsCheck() then
     self.currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -6061,28 +6460,28 @@ GameOption_CheckGuildPlayerNameTagVisible = function()
 end
 
 GameOption_CheckGuideLine_HumanRelation = function()
-  -- function num : 0_242 , upvalues : chk_Option, frame_Game
+  -- function num : 0_256 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   self.currentGuideLineHumanRelation = (frame_Game._btn_GuideLineHumanRelation):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
 GameOption_CheckGuideLine_QuestLine = function()
-  -- function num : 0_243 , upvalues : chk_Option, frame_Game
+  -- function num : 0_257 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   self.currentGuideLineQuestLine = (frame_Game._btn_GuideLineQuestObject):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
 GameOption_CheckGuideLine_PartyMemberEffect = function()
-  -- function num : 0_244 , upvalues : chk_Option, frame_Game
+  -- function num : 0_258 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   self.currentGuideLinePartyMemberEffect = (frame_Game._btn_GuideLinePartyEffect):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
 GameOption_CheckGuideLine_RanderColor = function(renderColorType)
-  -- function num : 0_245 , upvalues : randerPlayerColorStr, chk_Option, frame_Game
+  -- function num : 0_259 , upvalues : randerPlayerColorStr, chk_Option, frame_Game
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
 
   if randerPlayerColorStr.zoneChange == renderColorType then
@@ -6122,7 +6521,7 @@ GameOption_CheckGuideLine_RanderColor = function(renderColorType)
 end
 
 GameOption_CheckPadVibration = function()
-  -- function num : 0_246 , upvalues : chk_Option, frame_Game
+  -- function num : 0_260 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UseVibe):IsCheck()
   self.currentCheckPadVibration = check
@@ -6130,7 +6529,7 @@ GameOption_CheckPadVibration = function()
 end
 
 GameOption_CheckPadInvertX = function()
-  -- function num : 0_247 , upvalues : chk_Option, frame_Game
+  -- function num : 0_261 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_PadX):IsCheck()
   self.currentCheckPadInvertX = check
@@ -6138,7 +6537,7 @@ GameOption_CheckPadInvertX = function()
 end
 
 GameOption_CheckPadInvertY = function()
-  -- function num : 0_248 , upvalues : chk_Option, frame_Game
+  -- function num : 0_262 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_PadY):IsCheck()
   self.currentCheckPadInvertY = check
@@ -6146,7 +6545,7 @@ GameOption_CheckPadInvertY = function()
 end
 
 GameOption_CheckAlertMSG = function(alertType)
-  -- function num : 0_249 , upvalues : frame_Game
+  -- function num : 0_263 , upvalues : frame_Game
   if alertType == 0 then
     bCheck = (frame_Game._btn_Alert_Region):IsCheck()
   else
@@ -6198,7 +6597,7 @@ GameOption_CheckAlertMSG = function(alertType)
 end
 
 GameOption_PadSensitivityX_slider = function()
-  -- function num : 0_250 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_264 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_PadXSen):GetControlPos()
   self.currentCheckPadSensitivityX = volume * 1.9 + 0.1
@@ -6208,7 +6607,7 @@ GameOption_PadSensitivityX_slider = function()
 end
 
 GameOption_PadSensitivityX_button = function()
-  -- function num : 0_251 , upvalues : chk_Option, _btn_PadXSen, frame_Game, GetStr_Option
+  -- function num : 0_265 , upvalues : chk_Option, _btn_PadXSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_PadXSen:GetPosX() / ((frame_Game._slide_PadXSen):GetSizeX() - _btn_PadXSen:GetSizeX())
   self.currentCheckPadSensitivityX = volume * 1.9 + 0.1
@@ -6218,7 +6617,7 @@ GameOption_PadSensitivityX_button = function()
 end
 
 GameOption_PadSensitivityY_slider = function()
-  -- function num : 0_252 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_266 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_PadYSen):GetControlPos()
   self.currentCheckPadSensitivityY = volume * 1.9 + 0.1
@@ -6228,7 +6627,7 @@ GameOption_PadSensitivityY_slider = function()
 end
 
 GameOption_PadSensitivityY_button = function()
-  -- function num : 0_253 , upvalues : chk_Option, _btn_PadYSen, frame_Game, GetStr_Option
+  -- function num : 0_267 , upvalues : chk_Option, _btn_PadYSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_PadYSen:GetPosX() / ((frame_Game._slide_PadYSen):GetSizeX() - _btn_PadYSen:GetSizeX())
   self.currentCheckPadSensitivityY = volume * 1.9 + 0.1
@@ -6238,7 +6637,7 @@ GameOption_PadSensitivityY_button = function()
 end
 
 GameOption_hitFxVolume_button = function()
-  -- function num : 0_254 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
+  -- function num : 0_268 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
   local self = chk_Option
   local volume = _btn_hitFxVolume:GetPosX() / ((frame_Sound._slide_hitFxVolume):GetSizeX() - _btn_hitFxVolume:GetSizeX())
   self.currentHitFxVolume = volume * 100
@@ -6273,7 +6672,7 @@ GameOption_hitFxVolume_button = function()
 end
 
 KeyCustom_Action_ButtonPushed_Key = function(inputTypeIndex)
-  -- function num : 0_255 , upvalues : configDataIndex, INPUT_TYPE
+  -- function num : 0_269 , upvalues : configDataIndex, INPUT_TYPE
   local inputType = configDataIndex + inputTypeIndex - 2
   if inputType >= 0 then
     INPUT_TYPE = inputType
@@ -6283,7 +6682,7 @@ KeyCustom_Action_ButtonPushed_Key = function(inputTypeIndex)
 end
 
 KeyCustom_Action_ButtonPushed_Pad = function(inputTypeIndex)
-  -- function num : 0_256 , upvalues : configDataIndex, INPUT_TYPE
+  -- function num : 0_270 , upvalues : configDataIndex, INPUT_TYPE
   local inputType = configDataIndex + inputTypeIndex - 2
   if inputType >= 0 then
     INPUT_TYPE = inputType
@@ -6299,19 +6698,19 @@ KeyCustom_Action_ButtonPushed_Pad = function(inputTypeIndex)
 end
 
 KeyCustom_Action_ButtonPushed_PadFunc1 = function()
-  -- function num : 0_257
+  -- function num : 0_271
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_ActionPadFunc1)
   setKeyCustomizing(true)
 end
 
 KeyCustom_Action_ButtonPushed_PadFunc2 = function()
-  -- function num : 0_258
+  -- function num : 0_272
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_ActionPadFunc2)
   setKeyCustomizing(true)
 end
 
 KeyCustom_Action_UpdateButtonText_Key = function()
-  -- function num : 0_259 , upvalues : INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigButton, updateKeyConfig
+  -- function num : 0_273 , upvalues : INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigButton, updateKeyConfig
   for ii = INPUT_COUNT_START, INPUT_COUNT_END do
     setKeyConfigDataConfigButton(ii, keyCustom_GetString_ActionKey(ii))
   end
@@ -6319,7 +6718,7 @@ KeyCustom_Action_UpdateButtonText_Key = function()
 end
 
 KeyCustom_Action_UpdateButtonText_Pad = function()
-  -- function num : 0_260 , upvalues : keyConfigData, INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigPad, updateKeyConfig
+  -- function num : 0_274 , upvalues : keyConfigData, INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigPad, updateKeyConfig
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R0 in 'UnsetPending'
 
   (keyConfigData[-2]).padKeyText = keyCustom_GetString_ActionPadFunc1()
@@ -6334,27 +6733,27 @@ KeyCustom_Action_UpdateButtonText_Pad = function()
 end
 
 KeyCustom_Action_GetInputType = function()
-  -- function num : 0_261 , upvalues : INPUT_TYPE
+  -- function num : 0_275 , upvalues : INPUT_TYPE
   return INPUT_TYPE
 end
 
 KeyCustom_Action_KeyButtonCheckReset = function(inputType)
-  -- function num : 0_262 , upvalues : BUTTON_KEY
+  -- function num : 0_276 , upvalues : BUTTON_KEY
   (BUTTON_KEY[inputType + 2]):SetCheck(false)
 end
 
 KeyCustom_Action_PadButtonCheckReset = function(inputType)
-  -- function num : 0_263 , upvalues : BUTTON_PAD
+  -- function num : 0_277 , upvalues : BUTTON_PAD
   (BUTTON_PAD[inputType + 2]):SetCheck(false)
 end
 
 KeyCustom_Action_FuncPadButtonCheckReset = function(inputType)
-  -- function num : 0_264 , upvalues : BUTTON_PAD
+  -- function num : 0_278 , upvalues : BUTTON_PAD
   (BUTTON_PAD[inputType]):SetCheck(false)
 end
 
 ResetKeyCustombyAttacked = function()
-  -- function num : 0_265 , upvalues : INPUT_TYPE, INPUT_TYPE_UI
+  -- function num : 0_279 , upvalues : INPUT_TYPE, INPUT_TYPE_UI
   if Panel_Window_Option:GetShow() then
     setKeyCustomizing(false)
     if INPUT_TYPE ~= nil then
@@ -6370,7 +6769,7 @@ ResetKeyCustombyAttacked = function()
 end
 
 KeyCustom_UI_ButtonPushed_Key = function(inputTypeIndex)
-  -- function num : 0_266 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
+  -- function num : 0_280 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
   local inputType = configDataIndex_UI + inputTypeIndex
   INPUT_TYPE_UI = inputType
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_UiKey)
@@ -6378,7 +6777,7 @@ KeyCustom_UI_ButtonPushed_Key = function(inputTypeIndex)
 end
 
 KeyCustom_UI_ButtonPushed_Pad = function(inputTypeIndex)
-  -- function num : 0_267 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
+  -- function num : 0_281 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
   local inputType = configDataIndex_UI + inputTypeIndex
   INPUT_TYPE_UI = inputType
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_UiPad)
@@ -6386,7 +6785,7 @@ KeyCustom_UI_ButtonPushed_Pad = function(inputTypeIndex)
 end
 
 KeyCustom_Ui_UpdateButtonText_Key = function()
-  -- function num : 0_268 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigButton, updateKeyConfig_UI
+  -- function num : 0_282 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigButton, updateKeyConfig_UI
   for ii = INPUT_COUNT_START_UI, INPUT_COUNT_END_UI do
     setKeyConfigData_UIConfigButton(ii, keyCustom_GetString_UiKey(ii))
   end
@@ -6394,7 +6793,7 @@ KeyCustom_Ui_UpdateButtonText_Key = function()
 end
 
 KeyCustom_Ui_UpdateButtonText_Pad = function()
-  -- function num : 0_269 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigPad, updateKeyConfig_UI
+  -- function num : 0_283 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigPad, updateKeyConfig_UI
   for ii = INPUT_COUNT_START_UI, INPUT_COUNT_END_UI do
     setKeyConfigData_UIConfigPad(ii, keyCustom_GetString_UiPad(ii))
   end
@@ -6402,24 +6801,24 @@ KeyCustom_Ui_UpdateButtonText_Pad = function()
 end
 
 KeyCustom_Ui_GetInputType = function()
-  -- function num : 0_270 , upvalues : INPUT_TYPE_UI
+  -- function num : 0_284 , upvalues : INPUT_TYPE_UI
   return INPUT_TYPE_UI
 end
 
 KeyCustom_Ui_KeyButtonCheckReset = function(inputType)
-  -- function num : 0_271 , upvalues : BUTTON_KEY_UI
+  -- function num : 0_285 , upvalues : BUTTON_KEY_UI
   (BUTTON_KEY_UI[inputType]):SetCheck(false)
 end
 
 KeyCustom_Ui_PadButtonCheckReset = function(inputType)
-  -- function num : 0_272 , upvalues : BUTTON_PAD_UI
+  -- function num : 0_286 , upvalues : BUTTON_PAD_UI
   (BUTTON_PAD_UI[inputType]):SetCheck(false)
 end
 
 GameOption_UpdateOptionChanged = function()
-  -- function num : 0_273 , upvalues : chk_Option, gamePanel_Main
+  -- function num : 0_287 , upvalues : chk_Option, gamePanel_Main
   local self = chk_Option
-  if self.currentScreenModeIdx == self.appliedScreenModeIdx and self.currentScreenResolutionIdx == self.appliedScreenModeIdx and self.currentScreenShotFormat == self.appliedScreenShotFormat and self.currentWatermarkService == self.appliedWatermarkService and self.currentWatermarkPosition == self.appliedWatermarkPosition and self.currentWatermarkScale == self.appliedWatermarkScale and self.currentWatermarkAlpha == self.appliedWatermarkAlpha and self.currentColorBlind == self.appliedColorBlind and self.currentSelfPlayerOnlyEffect == self.appliedSelfPlayerOnlyEffect and self.currentNearestPlayerOnlyEffect == self.appliedNearestPlayerOnlyEffect and self.currentSelfPlayerOnlyLantern == self.appliedSelfPlayerOnlyLantern and self.currentLowPower == self.appliedLowPower and self.currentUpscaleEnable == self.appliedUpscaleEnable and self.currentCropModeEnable == self.appliedCropModeEnable and self.currentCropModeScaleX == self.appliedCropModeScaleX and self.currentCropModeScaleY == self.appliedCropModeScaleY and self.currentAutoOptimization == self.appliedAutoOptimization and self.currentOptimizationFrame == self.appliedOptimizationFrame and self.currentTextureQualityIdx == self.appliedTextureQualityIdx and self.currentGraphicOptionIdx == self.appliedGraphicOptionIdx and self.currentGammaValue == self.appliedGammaValue and self.currentContrastValue == self.appliedContrastValue and self.currentCheckDof == self.appliedCheckDof and self.currentCheckAA == self.appliedCheckAA and self.currentCheckUltra == self.appliedCheckUltra and self.currentCheckLensBlood == self.appliedCheckLensBlood and self.currentCheckBloodEffect == self.appliedCheckBloodEffect and self.currentCheckRepresent == self.appliedCheckRepresent and self.currentCheckSnowPoolOnlyInSafeZone == self.appliedCheckSnowPoolOnlyInSafeZone and self.currentCheckSSAO == self.appliedCheckSSAO and self.currentCheckTessellation == self.appliedCheckTessellation and self.currentCheckPostFilter == self.appliedCheckPostFilter and self.currentCheckCharacterEffect == self.appliedCheckCharacterEffect and self.currentMaster == self.appliedMaster and self.currentMusic == self.appliedMusic and self.currentFxSound == self.appliedFxSound and self.currentEnvSound == self.appliedEnvSound and self.currentDlgSound == self.appliedDlgSound and self.currentCheckMusic == self.appliedCheckMusic and self.currentCheckSound == self.appliedCheckSound and self.currentCheckEnvSound == self.appliedCheckEnvSound and self.currentCheckCombatMusic == self.appliedCheckCombatMusic and self.currentCheckNpcVoice == self.appliedCheckNpcVoice and self.currentCheckRiddingMusic == self.appliedCheckRiddingMusic and self.currentCheckWhisperMusic == self.appliedCheckWhisperMusic and self.currentCheckTraySoundOnOff == self.appliedCheckTraySoundOnOff and self.currentCheckShowSkillCmd == self.appliedCheckShowSkillCmd and self.currentCheckAutoAim == self.appliedCheckAutoAim and self.currentCheckHideWindowByAttacked == self.appliedCheckHideWindowByAttacked and self.currentCheckShowGuildLoginMessage == self.appliedCheckShowGuildLoginMessage and self.currentCheckEnableSimpleUI == self.appliedCheckEnableSimpleUI and self.currentCheckRenderCharacterColor == self.appliedCheckRenderCharacterColor and self.currentCheckMouseMove == self.appliedCheckMouseMove and self.currentCheckEnableOVR == self.appliedCheckEnableOVR and self.currentCheckMouseInvertX == self.appliedCheckMouseInvertX and self.currentCheckMouseInvertY == self.appliedCheckMouseInvertY and self.currentCheckMouseSensitivityX == self.appliedCheckMouseSensitivityX and self.currentCheckMouseSensitivityY == self.appliedCheckMouseSensitivityY and self.currentCheckPadEnable == self.appliedCheckPadEnable and self.currentCheckPadVibration == self.appliedCheckPadVibration and self.currentCheckPadInvertX == self.appliedCheckPadInvertX and self.currentCheckPadInvertY == self.appliedCheckPadInvertY and self.currentCheckPadSensitivityX == self.appliedCheckPadSensitivityX and self.currentCheckPadSensitivityY == self.appliedCheckPadSensitivityY and self.currentCheckCameraMasterPower == self.appliedCheckCameraMasterPower and self.currentCheckCameraShakePower == self.appliedCheckCameraShakePower and self.currentCheckMotionBlurPower == self.appliedCheckMotionBlurPower and self.currentCheckCameraPosPower == self.appliedCheckCameraPosPower and self.currentCheckCameraFovPower == self.appliedCheckCameraFovPower and self.currentCheckUIScale == self.appliedCheckUIScale and self.currentSelfPlayerNameTagVisible == self.appliedSelfPlayerNameTagVisible and self.currentOtherPlayerNameTagVisible == self.appliedOtherPlayerNameTagVisible and self.currentPartyPlayerNameTagVisible == self.appliedPartyPlayerNameTagVisible and self.currentGuildPlayerNameTagVisible == self.appliedGuildPlayerNameTagVisible and self.currentPetObjectShow == self.appliedPetObjectShow and self.currentFontResizeType == self.appliedFontResizeType and self.currentNavPathEffectType == self.appliedNavPathEffectType and self.currentWorldMapOpenType == self.appliedWorldMapOpenType and self.currentWorldMapCameraType == self.appliedWorldMapCamreraType and self.currentHitFxWeight == self.appliedHitFxWeight and self.currentPlayerVolume == self.appliedPlayerVolume and self.currentFovValue == self.appliedFovValue and self.currentServiceResourceType == self.appliedServiceResourceType and self.currentChatChannelType == self.appliedChatChannelType and self.currentCheckIsUIModeMouseLock == self.appliedCheckIsUIModeMouseLock and self.currentCheckIsPvpRefuse == self.appliedCheckIsPvpRefuse and self.currentCheckIsHideMast == self.appliedCheckIsHideMast and self.currentCheckWorkerVisible == self.appliedCheckWorkerVisible and self.currentCheckShowCashAlert == self.appliedCheckShowCashAlert then
+  if self.currentScreenModeIdx == self.appliedScreenModeIdx and self.currentScreenResolutionIdx == self.appliedScreenModeIdx and self.currentScreenShotFormat == self.appliedScreenShotFormat and self.currentScreenShotSize == self.appliedScreenShotSize and self.currentWatermarkService == self.appliedWatermarkService and self.currentWatermarkPosition == self.appliedWatermarkPosition and self.currentWatermarkScale == self.appliedWatermarkScale and self.currentWatermarkAlpha == self.appliedWatermarkAlpha and self.currentColorBlind == self.appliedColorBlind and self.currentSelfPlayerOnlyEffect == self.appliedSelfPlayerOnlyEffect and self.currentNearestPlayerOnlyEffect == self.appliedNearestPlayerOnlyEffect and self.currentSelfPlayerOnlyLantern == self.appliedSelfPlayerOnlyLantern and self.currentLowPower == self.appliedLowPower and self.currentUpscaleEnable == self.appliedUpscaleEnable and self.currentCropModeEnable == self.appliedCropModeEnable and self.currentCropModeScaleX == self.appliedCropModeScaleX and self.currentCropModeScaleY == self.appliedCropModeScaleY and self.currentAutoOptimization == self.appliedAutoOptimization and self.currentOptimizationFrame == self.appliedOptimizationFrame and self.currentTextureQualityIdx == self.appliedTextureQualityIdx and self.currentGraphicOptionIdx == self.appliedGraphicOptionIdx and self.currentGammaValue == self.appliedGammaValue and self.currentContrastValue == self.appliedContrastValue and self.currentCheckDof == self.appliedCheckDof and self.currentCheckAA == self.appliedCheckAA and self.currentCheckUltra == self.appliedCheckUltra and self.currentCheckLensBlood == self.appliedCheckLensBlood and self.currentCheckBloodEffect == self.appliedCheckBloodEffect and self.currentCheckRepresent == self.appliedCheckRepresent and self.currentCheckSnowPoolOnlyInSafeZone == self.appliedCheckSnowPoolOnlyInSafeZone and self.currentCheckSSAO == self.appliedCheckSSAO and self.currentCheckTessellation == self.appliedCheckTessellation and self.currentCheckPostFilter == self.appliedCheckPostFilter and self.currentCheckCharacterEffect == self.appliedCheckCharacterEffect and self.currentMaster == self.appliedMaster and self.currentMusic == self.appliedMusic and self.currentFxSound == self.appliedFxSound and self.currentEnvSound == self.appliedEnvSound and self.currentDlgSound == self.appliedDlgSound and self.currentCheckMusic == self.appliedCheckMusic and self.currentCheckSound == self.appliedCheckSound and self.currentCheckEnvSound == self.appliedCheckEnvSound and self.currentCheckCombatMusic == self.appliedCheckCombatMusic and self.currentCheckNpcVoice == self.appliedCheckNpcVoice and self.currentCheckRiddingMusic == self.appliedCheckRiddingMusic and self.currentCheckWhisperMusic == self.appliedCheckWhisperMusic and self.currentCheckTraySoundOnOff == self.appliedCheckTraySoundOnOff and self.currentCheckShowSkillCmd == self.appliedCheckShowSkillCmd and self.currentCheckAutoAim == self.appliedCheckAutoAim and self.currentCheckHideWindowByAttacked == self.appliedCheckHideWindowByAttacked and self.currentCheckShowGuildLoginMessage == self.appliedCheckShowGuildLoginMessage and self.currentCheckEnableSimpleUI == self.appliedCheckEnableSimpleUI and self.currentCheckRenderCharacterColor == self.appliedCheckRenderCharacterColor and self.currentCheckMouseMove == self.appliedCheckMouseMove and self.currentCheckEnableOVR == self.appliedCheckEnableOVR and self.currentCheckMouseInvertX == self.appliedCheckMouseInvertX and self.currentCheckMouseInvertY == self.appliedCheckMouseInvertY and self.currentCheckMouseSensitivityX == self.appliedCheckMouseSensitivityX and self.currentCheckMouseSensitivityY == self.appliedCheckMouseSensitivityY and self.currentCheckPadEnable == self.appliedCheckPadEnable and self.currentCheckPadVibration == self.appliedCheckPadVibration and self.currentCheckPadInvertX == self.appliedCheckPadInvertX and self.currentCheckPadInvertY == self.appliedCheckPadInvertY and self.currentCheckPadSensitivityX == self.appliedCheckPadSensitivityX and self.currentCheckPadSensitivityY == self.appliedCheckPadSensitivityY and self.currentCheckCameraMasterPower == self.appliedCheckCameraMasterPower and self.currentCheckColorByPass == self.appliedCheckColorByPass and self.currentCheckCameraShakePower == self.appliedCheckCameraShakePower and self.currentCheckMotionBlurPower == self.appliedCheckMotionBlurPower and self.currentCheckCameraPosPower == self.appliedCheckCameraPosPower and self.currentCheckCameraFovPower == self.appliedCheckCameraFovPower and self.currentCheckUIScale == self.appliedCheckUIScale and self.currentSelfPlayerNameTagVisible == self.appliedSelfPlayerNameTagVisible and self.currentOtherPlayerNameTagVisible == self.appliedOtherPlayerNameTagVisible and self.currentPartyPlayerNameTagVisible == self.appliedPartyPlayerNameTagVisible and self.currentGuildPlayerNameTagVisible == self.appliedGuildPlayerNameTagVisible and self.currentPetObjectShow == self.appliedPetObjectShow and self.currentFontResizeType == self.appliedFontResizeType and self.currentNavPathEffectType == self.appliedNavPathEffectType and self.currentWorldMapOpenType == self.appliedWorldMapOpenType and self.currentWorldMapCameraType == self.appliedWorldMapCamreraType and self.currentHitFxWeight == self.appliedHitFxWeight and self.currentPlayerVolume == self.appliedPlayerVolume and self.currentFovValue == self.appliedFovValue and self.currentServiceResourceType == self.appliedServiceResourceType and self.currentChatChannelType == self.appliedChatChannelType and self.currentCheckIsUIModeMouseLock == self.appliedCheckIsUIModeMouseLock and self.currentCheckIsPvpRefuse == self.appliedCheckIsPvpRefuse and self.currentCheckIsExchangeRefuse == self.appliedCheckIsExchangeRefuse and self.currentCheckIsHideMast == self.appliedCheckIsHideMast and self.currentCheckWorkerVisible == self.appliedCheckWorkerVisible and self.currentCheckShowCashAlert == self.appliedCheckShowCashAlert then
     (gamePanel_Main._btn_Apply):SetEnable(false)
   else
     ;
@@ -6428,7 +6827,7 @@ GameOption_UpdateOptionChanged = function()
 end
 
 GameOption_InitDisplayModeList = function(availableScreenResolution)
-  -- function num : 0_274 , upvalues : chk_Option
+  -- function num : 0_288 , upvalues : chk_Option
   local self = chk_Option
   local screenResolutionList = self.screenResolutionList
   self.SCREEN_RESOLUTION_COUNT = availableScreenResolution:getDisplayModeListSize()
@@ -6441,7 +6840,7 @@ GameOption_InitDisplayModeList = function(availableScreenResolution)
 end
 
 GameOption_TogglePanel = function()
-  -- function num : 0_275 , upvalues : gamePanel_Main, frame_Game, isKeyConfig_Open, isKeyConfig_UI_Open
+  -- function num : 0_289 , upvalues : gamePanel_Main, frame_Game, isKeyConfig_Open, isKeyConfig_UI_Open
   if (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == (UI.Get_ProcessorInputMode)() then
     return 
   end
@@ -6500,13 +6899,16 @@ GameOption_TogglePanel = function()
 end
 
 GameOption_Cancel = function()
-  -- function num : 0_276 , upvalues : chk_Option, currentLUT, _volumeParam, gamePanel_Main
+  -- function num : 0_290 , upvalues : chk_Option, currentLUT, isFindScreenResolution, _volumeParam, gamePanel_Main
   local self = chk_Option
   if self.appliedScreenModeIdx ~= self.currentScreenModeIdx then
     setScreenMode(self.appliedScreenModeIdx)
   end
   if self.appliedScreenShotFormat ~= self.currentScreenShotFormat then
     setScreenShotFormat(self.appliedScreenShotFormat)
+  end
+  if self.appliedScreenShotSize ~= self.currentScreenShotSize then
+    setScreenShotQuality(self.appliedScreenShotSize)
   end
   if self.currentWatermarkPosition ~= self.appliedWatermarkPosition then
     self.appliedWatermarkPosition = self.currentWatermarkPosition
@@ -6566,11 +6968,15 @@ GameOption_Cancel = function()
     setCameraLUTFilter(self.appliedLUT)
     currentLUT = self.appliedLUT
   end
-  do
-    if self.appliedScreenResolutionIdx ~= self.currentScreenResolutionIdx then
-      local index = self.appliedScreenResolutionIdx
-      setScreenResolution(((self.screenResolutionList)[index]).width, ((self.screenResolutionList)[index]).height)
+  if self.appliedScreenResolutionIdx ~= self.currentScreenResolutionIdx and isFindScreenResolution == true then
+    local index = self.appliedScreenResolutionIdx
+    local screenDataSize = #self.screenResolutionList
+    if screenDataSize < index then
+      index = screenDataSize
     end
+    setScreenResolution(((self.screenResolutionList)[index]).width, ((self.screenResolutionList)[index]).height)
+  end
+  do
     if self.appliedTextureQualityIdx ~= self.currentTextureQualityIdx then
       setTextureQuality(self.appliedTextureQualityIdx)
     end
@@ -6627,29 +7033,29 @@ GameOption_Cancel = function()
     if self.appliedFovValue ~= self.currentFovValue then
       setFov(self.appliedFovValue)
     end
-    -- DECOMPILER ERROR at PC326: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC341: Confused about usage of register: R1 in 'UnsetPending'
 
     if self.appliedMaster ~= self.currentMaster or self.appliedMusic ~= self.currentMusic or self.appliedFxSound ~= self.currentFxSound or self.appliedEnvSound ~= self.currentEnvSound or self.appliedDlgSound ~= self.currentDlgSound or self.appliedHitFxVolume ~= self.currentHitFxVolume or self.appliedHitFxWeight ~= self.currentHitFxWeight or self.appliedPlayerVolume ~= self.currentPlayerVolume then
       _volumeParam.master = self.appliedMaster
-      -- DECOMPILER ERROR at PC329: Confused about usage of register: R1 in 'UnsetPending'
-
-      _volumeParam.fx = self.appliedFxSound
-      -- DECOMPILER ERROR at PC332: Confused about usage of register: R1 in 'UnsetPending'
-
-      _volumeParam.dlg = self.appliedDlgSound
-      -- DECOMPILER ERROR at PC335: Confused about usage of register: R1 in 'UnsetPending'
-
-      _volumeParam.env = self.appliedEnvSound
-      -- DECOMPILER ERROR at PC338: Confused about usage of register: R1 in 'UnsetPending'
-
-      _volumeParam.music = self.appliedMusic
-      -- DECOMPILER ERROR at PC341: Confused about usage of register: R1 in 'UnsetPending'
-
-      _volumeParam.hitFx = self.appliedHitFxVolume
       -- DECOMPILER ERROR at PC344: Confused about usage of register: R1 in 'UnsetPending'
 
-      _volumeParam.otherPlayerVolume = self.appliedPlayerVolume
+      _volumeParam.fx = self.appliedFxSound
       -- DECOMPILER ERROR at PC347: Confused about usage of register: R1 in 'UnsetPending'
+
+      _volumeParam.dlg = self.appliedDlgSound
+      -- DECOMPILER ERROR at PC350: Confused about usage of register: R1 in 'UnsetPending'
+
+      _volumeParam.env = self.appliedEnvSound
+      -- DECOMPILER ERROR at PC353: Confused about usage of register: R1 in 'UnsetPending'
+
+      _volumeParam.music = self.appliedMusic
+      -- DECOMPILER ERROR at PC356: Confused about usage of register: R1 in 'UnsetPending'
+
+      _volumeParam.hitFx = self.appliedHitFxVolume
+      -- DECOMPILER ERROR at PC359: Confused about usage of register: R1 in 'UnsetPending'
+
+      _volumeParam.otherPlayerVolume = self.appliedPlayerVolume
+      -- DECOMPILER ERROR at PC362: Confused about usage of register: R1 in 'UnsetPending'
 
       _volumeParam.hitFxWeight = self.appliedHitFxWeight
       setVolumeParam(_volumeParam)
@@ -6726,6 +7132,9 @@ GameOption_Cancel = function()
     if self.appliedCheckCameraMasterPower ~= self.currentCheckCameraMasterPower then
       setCameraMasterPower(self.appliedCheckCameraMasterPower)
     end
+    if self.appliedCheckColorByPass ~= self.currentCheckColorByPass then
+      setSkillPostEffect(self.appliedCheckColorByPass)
+    end
     if self.appliedCheckCameraShakePower ~= self.currentCheckCameraShakePower then
       setCameraShakePower(self.appliedCheckCameraShakePower)
     end
@@ -6769,7 +7178,7 @@ GameOption_Cancel = function()
 end
 
 GameOption_Confirm = function()
-  -- function num : 0_277
+  -- function num : 0_291
   if isNeedGameOptionFromServer() == true then
     FGlobal_QuestWindowRateSetting()
     Panel_UIControl_SetShow(false)
@@ -6779,8 +7188,13 @@ GameOption_Confirm = function()
   audioPostEvent_SystemUi(1, 0)
 end
 
+GameOption_SaveSetting = function()
+  -- function num : 0_292
+  PaGlobal_Panel_SaveSetting_Show()
+end
+
 GameOption_Apply = function()
-  -- function num : 0_278 , upvalues : chk_Option, frame_Display, _volumeParam, frame_Game, randerPlayerColorStr, gamePanel_Main
+  -- function num : 0_293 , upvalues : chk_Option, frame_Display, _volumeParam, frame_Game, randerPlayerColorStr, gamePanel_Main
   local isChangedDisplay = false
   local isResetUI = false
   local self = chk_Option
@@ -6795,6 +7209,14 @@ GameOption_Apply = function()
   if self.currentScreenShotFormat ~= self.appliedScreenShotFormat then
     self.appliedScreenShotFormat = self.currentScreenShotFormat
     setScreenShotFormat(self.appliedScreenShotFormat)
+  end
+  if self.currentScreenShotSize ~= self.appliedScreenShotSize then
+    self.appliedScreenShotSize = self.currentScreenShotSize
+    setScreenShotQuality(self.appliedScreenShotSize)
+  end
+  if self.currentCheckEffectAlpha ~= self.appliedCheckEffectAlpha then
+    self.appliedCheckEffectAlpha = self.currentCheckEffectAlpha
+    setEffectAlpha(self.appliedCheckEffectAlpha)
   end
   if self.currentWatermarkPosition ~= self.appliedWatermarkPosition then
     self.appliedWatermarkPosition = self.currentWatermarkPosition
@@ -6869,6 +7291,10 @@ GameOption_Apply = function()
   if self.currentScreenResolutionIdx ~= self.appliedScreenResolutionIdx then
     self.appliedScreenResolutionIdx = self.currentScreenResolutionIdx
     local index = self.appliedScreenResolutionIdx
+    local screenDataSize = #self.screenResolutionList
+    if screenDataSize < index then
+      index = screenDataSize
+    end
     setScreenResolution(((self.screenResolutionList)[index]).width, ((self.screenResolutionList)[index]).height)
     isChangedDisplay = true
     if close_force_WindowPanelList ~= nil then
@@ -6957,28 +7383,28 @@ GameOption_Apply = function()
       self.appliedHitFxVolume = self.currentHitFxVolume
       self.appliedHitFxWeight = self.currentHitFxWeight
       self.appliedPlayerVolume = self.currentPlayerVolume
-      -- DECOMPILER ERROR at PC424: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC447: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.master = self.appliedMaster
-      -- DECOMPILER ERROR at PC427: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC450: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.fx = self.appliedFxSound
-      -- DECOMPILER ERROR at PC430: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC453: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.dlg = self.appliedDlgSound
-      -- DECOMPILER ERROR at PC433: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC456: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.env = self.appliedEnvSound
-      -- DECOMPILER ERROR at PC436: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC459: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.music = self.appliedMusic
-      -- DECOMPILER ERROR at PC439: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC462: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.hitFx = self.appliedHitFxVolume
-      -- DECOMPILER ERROR at PC442: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC465: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.otherPlayerVolume = self.appliedPlayerVolume
-      -- DECOMPILER ERROR at PC445: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC468: Confused about usage of register: R3 in 'UnsetPending'
 
       _volumeParam.hitFxWeight = self.appliedHitFxWeight
       setVolumeParam(_volumeParam)
@@ -7078,6 +7504,10 @@ GameOption_Apply = function()
       if self.currentCheckCameraMasterPower ~= self.appliedCheckCameraMasterPower then
         self.appliedCheckCameraMasterPower = self.currentCheckCameraMasterPower
         GameOption_CameraMasterPower_button()
+      end
+      if self.currentCheckColorByPass ~= self.appliedCheckColorByPass then
+        self.appliedCheckColorByPass = self.currentCheckColorByPass
+        GameOption_ColorByPass_button()
       end
       if self.currentCheckCameraShakePower ~= self.appliedCheckCameraShakePower then
         self.appliedCheckCameraShakePower = self.currentCheckCameraShakePower
@@ -7215,6 +7645,10 @@ GameOption_Apply = function()
         self.appliedCheckIsPvpRefuse = self.currentCheckIsPvpRefuse
         setIsPvpRefuse(self.appliedCheckIsPvpRefuse)
       end
+      if self.currentCheckIsExchangeRefuse ~= self.appliedCheckIsExchangeRefuse then
+        self.appliedCheckIsExchangeRefuse = self.currentCheckIsExchangeRefuse
+        setIsExchangeRefuse(self.appliedCheckIsExchangeRefuse)
+      end
       if self.currentCheckIsHideMast ~= self.appliedCheckIsHideMast then
         self.appliedCheckIsHideMast = self.currentCheckIsHideMast
         setHideMastOnCarrier(self.appliedCheckIsHideMast)
@@ -7271,7 +7705,11 @@ GameOption_Apply = function()
       local uiScale = self.currentCheckUIScale
       uiScale = (uiScale + 0.005) * 100 / 100
       local screenHeight = (ToClient_getGameOptionControllerWrapper()):getScreenResolutionHeight()
-      uiScale = GameOption_InitScale(uiScale, screenHeight)
+      if CppDefine.ChangeUIAndResolution == true then
+        uiScale = GameOption_InitScale_50_200(uiScale)
+      else
+        uiScale = GameOption_InitScale(uiScale, screenHeight)
+      end
       GameOption_SetUIMode(uiScale)
       setUIScale(uiScale)
       ;
@@ -7302,12 +7740,12 @@ GameOption_Apply = function()
 end
 
 FGlobal_SpiritGuide_IsShow = function()
-  -- function num : 0_279
+  -- function num : 0_294
   return _currentSpiritGuideCheck
 end
 
 GameOption_ChangeDisplayApply = function()
-  -- function num : 0_280 , upvalues : chk_Option
+  -- function num : 0_295 , upvalues : chk_Option
   if isNeedGameOptionFromServer() == true then
     FGlobal_QuestWindowRateSetting()
   end
@@ -7315,6 +7753,7 @@ GameOption_ChangeDisplayApply = function()
   local self = chk_Option
   self.savedScreenModeIdx = self.appliedScreenModeIdx
   self.savedScreenShotFormat = self.appliedScreenShotFormat
+  self.savedScreenShotSize = self.appliedScreenShotSize
   self.savedWatermarkPosition = self.appliedWatermarkPosition
   self.savedWatermarkScale = self.appliedWatermarkScale
   self.savedWatermarkService = self.appliedWatermarkService
@@ -7380,6 +7819,7 @@ GameOption_ChangeDisplayApply = function()
   self.savedCheckPadSensitivityX = self.appliedCheckPadSensitivityX
   self.savedCheckPadSensitivityY = self.appliedCheckPadSensitivityY
   self.savedCheckCameraMasterPower = self.appliedCheckCameraMasterPower
+  self.savedCheckColorByPass = self.appliedCheckColorByPass
   self.savedCheckCameraShakePower = self.appliedCheckCameraShakePower
   self.savedCheckMotionBlurPower = self.appliedCheckMotionBlurPower
   self.savedCheckCameraPosPower = self.appliedCheckCameraPosPower
@@ -7398,22 +7838,30 @@ GameOption_ChangeDisplayApply = function()
 end
 
 GameOption_ChangeDisplayCancel = function()
-  -- function num : 0_281 , upvalues : chk_Option, minScaleValue, maxScaleValue
+  -- function num : 0_296 , upvalues : chk_Option, currentResolutionX, currentResolutionY, screenResolutionIndex, scaleRangeTable
   local self = chk_Option
   if self.appliedScreenModeIdx ~= self.savedScreenModeIdx then
     self.appliedScreenModeIdx = self.savedScreenModeIdx
     GameOption_SetCurrentScreenMode(self.savedScreenModeIdx)
     setScreenMode(self.savedScreenModeIdx)
   end
-  do
-    if self.appliedScreenResolutionIdx ~= self.savedScreenResolutionIdx then
-      local index = self.savedScreenResolutionIdx
-      self.appliedScreenResolutionIdx = index
-      GameOption_SetCurrentScreenResolution(index)
-      setScreenResolution(((self.screenResolutionList)[index]).width, ((self.screenResolutionList)[index]).height)
+  if self.appliedScreenResolutionIdx ~= self.savedScreenResolutionIdx then
+    local index = self.savedScreenResolutionIdx
+    local screenDataSize = #self.screenResolutionList
+    if screenDataSize < index then
+      index = screenDataSize
     end
+    index = GameOption_FindScreenResolutionIdx(currentResolutionX, currentResolutionY)
+    if index == 0 then
+      index = screenResolutionIndex
+    end
+    self.appliedScreenResolutionIdx = index
+    GameOption_SetCurrentScreenResolution(index)
+    setScreenResolution(((self.screenResolutionList)[index]).width, ((self.screenResolutionList)[index]).height)
+  end
+  do
     if self.appliedCheckUIScale ~= self.savedCheckUIScale then
-      self.savedCheckUIScale = (math.min)((math.max)(minScaleValue * 0.01, self.savedCheckUIScale), maxScaleValue * 0.01)
+      self.savedCheckUIScale = (math.min)((math.max)(scaleRangeTable.minScaleValue * 0.01, self.savedCheckUIScale), scaleRangeTable.maxScaleValue * 0.01)
       self.savedCheckUIScale = (math.ceil)(self.savedCheckUIScale * 100) / 100
       setUIScale(self.savedCheckUIScale)
       self.appliedCheckUIScale = self.savedCheckUIScale
@@ -7423,26 +7871,26 @@ GameOption_ChangeDisplayCancel = function()
 end
 
 GameOption_ChangeDisplayTimeOut = function()
-  -- function num : 0_282
+  -- function num : 0_297
   if (MessageBox.isPopUp)() == true then
     messageBox_CancelButtonUp()
   end
 end
 
 GameExitOpen = function()
-  -- function num : 0_283
+  -- function num : 0_298
   GameExitShowToggle()
   GameOption_Cancel()
 end
 
 GameUIRepos = function()
-  -- function num : 0_284
+  -- function num : 0_299
   Panel_UIControl_SetShow(true)
   GameOption_Cancel()
 end
 
 GameOption_ReSetKeyConfig = function(target)
-  -- function num : 0_285
+  -- function num : 0_300
   if target == 0 then
     keyCustom_SetDefaultAction()
     KeyCustom_Action_UpdateButtonText_Key()
@@ -7461,7 +7909,7 @@ GameOption_ReSetKeyConfig = function(target)
 end
 
 GameOption_ResetAllOption = function()
-  -- function num : 0_286
+  -- function num : 0_301
   GameOption_ResetDisplayOption()
   GameOption_ResetSoundOption()
   GameOption_ResetGameOption()
@@ -7475,7 +7923,7 @@ GameOption_ResetAllOption = function()
 end
 
 GameOption_DefaultOption = function(gameOptionSetting, optionType)
-  -- function num : 0_287 , upvalues : chk_Option, randerPlayerColorStr, frame_Game
+  -- function num : 0_302 , upvalues : chk_Option, randerPlayerColorStr, frame_Game
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
   if optionType == 1 then
@@ -7491,317 +7939,326 @@ GameOption_DefaultOption = function(gameOptionSetting, optionType)
     chk_Option.currentScreenShotFormat = gameOptionSetting:getScreenShotFormat()
     -- DECOMPILER ERROR at PC21: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWatermarkPosition = gameOptionSetting:getWatermarkPosition()
+    chk_Option.currentScreenShotSize = gameOptionSetting:getScreenShotQuality()
     -- DECOMPILER ERROR at PC25: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWatermarkService = gameOptionSetting:getWatermarkService()
+    chk_Option.currentWatermarkPosition = gameOptionSetting:getWatermarkPosition()
     -- DECOMPILER ERROR at PC29: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWatermarkScale = gameOptionSetting:getWatermarkScale()
+    chk_Option.currentWatermarkService = gameOptionSetting:getWatermarkService()
     -- DECOMPILER ERROR at PC33: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWatermarkAlpha = gameOptionSetting:getWatermarkAlpha()
-    -- DECOMPILER ERROR at PC42: Confused about usage of register: R2 in 'UnsetPending'
+    chk_Option.currentWatermarkScale = gameOptionSetting:getWatermarkScale()
+    -- DECOMPILER ERROR at PC37: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentColorBlind = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
+    chk_Option.currentWatermarkAlpha = gameOptionSetting:getWatermarkAlpha()
     -- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentSelfPlayerOnlyEffect = gameOptionSetting:getSelfPlayerOnlyEffect()
+    chk_Option.currentColorBlind = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
     -- DECOMPILER ERROR at PC50: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentNearestPlayerOnlyEffect = gameOptionSetting:getNearestPlayerOnlyEffect()
+    chk_Option.currentSelfPlayerOnlyEffect = gameOptionSetting:getSelfPlayerOnlyEffect()
     -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentSelfPlayerOnlyLantern = gameOptionSetting:getSelfPlayerOnlyLantern()
+    chk_Option.currentNearestPlayerOnlyEffect = gameOptionSetting:getNearestPlayerOnlyEffect()
     -- DECOMPILER ERROR at PC58: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentLowPower = gameOptionSetting:getPresentLock()
+    chk_Option.currentSelfPlayerOnlyLantern = gameOptionSetting:getSelfPlayerOnlyLantern()
     -- DECOMPILER ERROR at PC62: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentUpscaleEnable = gameOptionSetting:getUpscaleEnable()
+    chk_Option.currentLowPower = gameOptionSetting:getPresentLock()
     -- DECOMPILER ERROR at PC66: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCropModeEnable = gameOptionSetting:getCropModeEnable()
+    chk_Option.currentUpscaleEnable = gameOptionSetting:getUpscaleEnable()
     -- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCropModeScaleX = gameOptionSetting:getCropModeScaleX()
+    chk_Option.currentCropModeEnable = gameOptionSetting:getCropModeEnable()
     -- DECOMPILER ERROR at PC74: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCropModeScaleY = gameOptionSetting:getCropModeScaleY()
+    chk_Option.currentCropModeScaleX = gameOptionSetting:getCropModeScaleX()
     -- DECOMPILER ERROR at PC78: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentAutoOptimization = gameOptionSetting:getAutoOptimization()
+    chk_Option.currentCropModeScaleY = gameOptionSetting:getCropModeScaleY()
     -- DECOMPILER ERROR at PC82: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentOptimizationFrame = gameOptionSetting:getAutoOptimizationFrameLimit()
+    chk_Option.currentAutoOptimization = gameOptionSetting:getAutoOptimization()
     -- DECOMPILER ERROR at PC86: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentLUT = gameOptionSetting:getCameraLUTFilter()
-    -- DECOMPILER ERROR at PC94: Confused about usage of register: R2 in 'UnsetPending'
+    chk_Option.currentOptimizationFrame = gameOptionSetting:getAutoOptimizationFrameLimit()
+    -- DECOMPILER ERROR at PC90: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentScreenResolutionIdx = GameOption_FindScreenResolutionIdx(chk_Option.RESOLUTION_WIDTH, chk_Option.RESOLUTION_HEIGHT)
+    chk_Option.currentLUT = gameOptionSetting:getCameraLUTFilter()
     -- DECOMPILER ERROR at PC98: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentTextureQualityIdx = gameOptionSetting:getTextureQuality()
+    chk_Option.currentScreenResolutionIdx = GameOption_FindScreenResolutionIdx(chk_Option.RESOLUTION_WIDTH, chk_Option.RESOLUTION_HEIGHT)
     -- DECOMPILER ERROR at PC102: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentGraphicOptionIdx = gameOptionSetting:getGraphicOption()
+    chk_Option.currentTextureQualityIdx = gameOptionSetting:getTextureQuality()
     -- DECOMPILER ERROR at PC106: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentGammaValue = gameOptionSetting:getGammaValue()
+    chk_Option.currentGraphicOptionIdx = gameOptionSetting:getGraphicOption()
     -- DECOMPILER ERROR at PC110: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentContrastValue = gameOptionSetting:getContrastValue()
+    chk_Option.currentGammaValue = gameOptionSetting:getGammaValue()
     -- DECOMPILER ERROR at PC114: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckDof = gameOptionSetting:getDof()
+    chk_Option.currentContrastValue = gameOptionSetting:getContrastValue()
     -- DECOMPILER ERROR at PC118: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckAA = gameOptionSetting:getAntiAliasing()
+    chk_Option.currentCheckDof = gameOptionSetting:getDof()
     -- DECOMPILER ERROR at PC122: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckUltra = gameOptionSetting:getGraphicUltra()
+    chk_Option.currentCheckAA = gameOptionSetting:getAntiAliasing()
     -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckLensBlood = gameOptionSetting:getLensBlood()
-    -- DECOMPILER ERROR at PC134: Confused about usage of register: R2 in 'UnsetPending'
+    chk_Option.currentCheckUltra = gameOptionSetting:getGraphicUltra()
+    -- DECOMPILER ERROR at PC130: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckBloodEffect = gameOptionSetting:getBloodEffect() ~= 0
+    chk_Option.currentCheckLensBlood = gameOptionSetting:getLensBlood()
     -- DECOMPILER ERROR at PC138: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckRepresent = gameOptionSetting:getRepresentative()
+    chk_Option.currentCheckBloodEffect = gameOptionSetting:getBloodEffect() ~= 0
     -- DECOMPILER ERROR at PC142: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckSnowPoolOnlyInSafeZone = gameOptionSetting:getSnowPoolOnlyInSafeZone()
+    chk_Option.currentCheckRepresent = gameOptionSetting:getRepresentative()
     -- DECOMPILER ERROR at PC146: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckSSAO = gameOptionSetting:getSSAO()
+    chk_Option.currentCheckSnowPoolOnlyInSafeZone = gameOptionSetting:getSnowPoolOnlyInSafeZone()
     -- DECOMPILER ERROR at PC150: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckTessellation = gameOptionSetting:getTessellation()
-    -- DECOMPILER ERROR at PC158: Confused about usage of register: R2 in 'UnsetPending'
+    chk_Option.currentCheckSSAO = gameOptionSetting:getSSAO()
+    -- DECOMPILER ERROR at PC154: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPostFilter = gameOptionSetting:getPostFilter() ~= 0
+    chk_Option.currentCheckTessellation = gameOptionSetting:getTessellation()
     -- DECOMPILER ERROR at PC162: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCharacterEffect = gameOptionSetting:getCharacterEffect()
-    -- DECOMPILER ERROR at PC164: Confused about usage of register: R2 in 'UnsetPending'
+    chk_Option.currentCheckPostFilter = gameOptionSetting:getPostFilter() ~= 0
+    -- DECOMPILER ERROR at PC166: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckUIScale = 1
+    chk_Option.currentCheckCharacterEffect = gameOptionSetting:getCharacterEffect()
     -- DECOMPILER ERROR at PC168: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentFovValue = gameOptionSetting:getFov()
+    chk_Option.currentCheckUIScale = 1
     -- DECOMPILER ERROR at PC172: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCameraMasterPower = gameOptionSetting:getCameraMasterPower()
+    chk_Option.currentFovValue = gameOptionSetting:getFov()
     -- DECOMPILER ERROR at PC176: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCameraShakePower = gameOptionSetting:getCameraShakePower()
+    chk_Option.currentCheckCameraMasterPower = gameOptionSetting:getCameraMasterPower()
     -- DECOMPILER ERROR at PC180: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMotionBlurPower = gameOptionSetting:getMotionBlurPower()
+    chk_Option.currentCheckColorByPass = gameOptionSetting:getSkillPostEffect()
     -- DECOMPILER ERROR at PC184: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCameraPosPower = gameOptionSetting:getCameraTranslatePower()
+    chk_Option.currentCheckCameraShakePower = gameOptionSetting:getCameraShakePower()
     -- DECOMPILER ERROR at PC188: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckMotionBlurPower = gameOptionSetting:getMotionBlurPower()
+    -- DECOMPILER ERROR at PC192: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckCameraPosPower = gameOptionSetting:getCameraTranslatePower()
+    -- DECOMPILER ERROR at PC196: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckCameraFovPower = gameOptionSetting:getCameraFovPower()
   end
-  -- DECOMPILER ERROR at PC194: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC202: Confused about usage of register: R2 in 'UnsetPending'
 
   if optionType == 2 then
     chk_Option.currentMaster = gameOptionSetting:getMasterVolume()
-    -- DECOMPILER ERROR at PC198: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentMusic = gameOptionSetting:getMusicVolume()
-    -- DECOMPILER ERROR at PC202: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentFxSound = gameOptionSetting:getFxVolume()
     -- DECOMPILER ERROR at PC206: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentEnvSound = gameOptionSetting:getEnvSoundVolume()
+    chk_Option.currentMusic = gameOptionSetting:getMusicVolume()
     -- DECOMPILER ERROR at PC210: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCombatMusic = gameOptionSetting:getEnableBattleSoundType()
+    chk_Option.currentFxSound = gameOptionSetting:getFxVolume()
     -- DECOMPILER ERROR at PC214: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckNpcVoice = gameOptionSetting:getAudioResourceType()
+    chk_Option.currentEnvSound = gameOptionSetting:getEnvSoundVolume()
     -- DECOMPILER ERROR at PC218: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentDlgSound = gameOptionSetting:getDialogueVolume()
+    chk_Option.currentCheckCombatMusic = gameOptionSetting:getEnableBattleSoundType()
     -- DECOMPILER ERROR at PC222: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentHitFxVolume = gameOptionSetting:getHitFxVolume()
+    chk_Option.currentCheckNpcVoice = gameOptionSetting:getAudioResourceType()
     -- DECOMPILER ERROR at PC226: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentHitFxWeight = gameOptionSetting:getHitFxWeight()
+    chk_Option.currentDlgSound = gameOptionSetting:getDialogueVolume()
     -- DECOMPILER ERROR at PC230: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentPlayerVolume = gameOptionSetting:getOtherPlayerVolume()
+    chk_Option.currentHitFxVolume = gameOptionSetting:getHitFxVolume()
     -- DECOMPILER ERROR at PC234: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMusic = gameOptionSetting:getEnableMusic()
+    chk_Option.currentHitFxWeight = gameOptionSetting:getHitFxWeight()
     -- DECOMPILER ERROR at PC238: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckSound = gameOptionSetting:getEnableSound()
+    chk_Option.currentPlayerVolume = gameOptionSetting:getOtherPlayerVolume()
     -- DECOMPILER ERROR at PC242: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckEnvSound = gameOptionSetting:getEnableEnvSound()
+    chk_Option.currentCheckMusic = gameOptionSetting:getEnableMusic()
     -- DECOMPILER ERROR at PC246: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckRiddingMusic = gameOptionSetting:getEnableRidingSound()
+    chk_Option.currentCheckSound = gameOptionSetting:getEnableSound()
     -- DECOMPILER ERROR at PC250: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckWhisperMusic = gameOptionSetting:getEnableWhisperSound()
+    chk_Option.currentCheckEnvSound = gameOptionSetting:getEnableEnvSound()
     -- DECOMPILER ERROR at PC254: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckRiddingMusic = gameOptionSetting:getEnableRidingSound()
+    -- DECOMPILER ERROR at PC258: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckWhisperMusic = gameOptionSetting:getEnableWhisperSound()
+    -- DECOMPILER ERROR at PC262: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckTraySoundOnOff = gameOptionSetting:getEnableTraySound()
   end
-  -- DECOMPILER ERROR at PC260: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC268: Confused about usage of register: R2 in 'UnsetPending'
 
   if optionType == 3 then
     chk_Option.currentCheckShowSkillCmd = gameOptionSetting:getShowSkillCmd()
-    -- DECOMPILER ERROR at PC264: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentCheckShowComboGuide = gameOptionSetting:getShowComboGuide()
-    -- DECOMPILER ERROR at PC268: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentCheckAutoAim = gameOptionSetting:getAimAssist()
     -- DECOMPILER ERROR at PC272: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckHideWindowByAttacked = gameOptionSetting:getHideWindowByAttacked()
+    chk_Option.currentCheckShowComboGuide = gameOptionSetting:getShowComboGuide()
     -- DECOMPILER ERROR at PC276: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckShowGuildLoginMessage = gameOptionSetting:getShowGuildLoginMessage()
+    chk_Option.currentCheckAutoAim = gameOptionSetting:getAimAssist()
     -- DECOMPILER ERROR at PC280: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckEnableSimpleUI = gameOptionSetting:getEnableSimpleUI()
+    chk_Option.currentCheckHideWindowByAttacked = gameOptionSetting:getHideWindowByAttacked()
     -- DECOMPILER ERROR at PC284: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseMove = gameOptionSetting:getGameMouseMode()
+    chk_Option.currentCheckShowGuildLoginMessage = gameOptionSetting:getShowGuildLoginMessage()
     -- DECOMPILER ERROR at PC288: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckEnableOVR = gameOptionSetting:getEnableOVR()
+    chk_Option.currentCheckEnableSimpleUI = gameOptionSetting:getEnableSimpleUI()
     -- DECOMPILER ERROR at PC292: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseInvertX = gameOptionSetting:getMouseInvertX()
+    chk_Option.currentCheckMouseMove = gameOptionSetting:getGameMouseMode()
     -- DECOMPILER ERROR at PC296: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseInvertY = gameOptionSetting:getMouseInvertY()
+    chk_Option.currentCheckEnableOVR = gameOptionSetting:getEnableOVR()
     -- DECOMPILER ERROR at PC300: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseSensitivityX = gameOptionSetting:getMouseSensitivityX()
+    chk_Option.currentCheckMouseInvertX = gameOptionSetting:getMouseInvertX()
     -- DECOMPILER ERROR at PC304: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseSensitivityY = gameOptionSetting:getMouseSensitivityY()
+    chk_Option.currentCheckMouseInvertY = gameOptionSetting:getMouseInvertY()
     -- DECOMPILER ERROR at PC308: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadEnable = gameOptionSetting:getGamePadEnable()
+    chk_Option.currentCheckMouseSensitivityX = gameOptionSetting:getMouseSensitivityX()
     -- DECOMPILER ERROR at PC312: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadVibration = gameOptionSetting:getGamePadVibration()
+    chk_Option.currentCheckMouseSensitivityY = gameOptionSetting:getMouseSensitivityY()
     -- DECOMPILER ERROR at PC316: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadInvertX = gameOptionSetting:getGamePadInvertX()
+    chk_Option.currentCheckPadEnable = gameOptionSetting:getGamePadEnable()
     -- DECOMPILER ERROR at PC320: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadInvertY = gameOptionSetting:getGamePadInvertY()
+    chk_Option.currentCheckPadVibration = gameOptionSetting:getGamePadVibration()
     -- DECOMPILER ERROR at PC324: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadSensitivityX = gameOptionSetting:getGamePadSensitivityX()
+    chk_Option.currentCheckPadInvertX = gameOptionSetting:getGamePadInvertX()
     -- DECOMPILER ERROR at PC328: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadSensitivityY = gameOptionSetting:getGamePadSensitivityY()
+    chk_Option.currentCheckPadInvertY = gameOptionSetting:getGamePadInvertY()
     -- DECOMPILER ERROR at PC332: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckIsHideMast = gameOptionSetting:getHideMastOnCarrier()
+    chk_Option.currentCheckPadSensitivityX = gameOptionSetting:getGamePadSensitivityX()
     -- DECOMPILER ERROR at PC336: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_option.currentCheckShowCashAlert = gameOptionSetting:getCashAlert()
+    chk_Option.currentCheckPadSensitivityY = gameOptionSetting:getGamePadSensitivityY()
     -- DECOMPILER ERROR at PC340: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentSelfPlayerNameTagVisible = gameOptionSetting:getSelfPlayerNameTagVisible()
+    chk_Option.currentCheckIsHideMast = gameOptionSetting:getHideMastOnCarrier()
     -- DECOMPILER ERROR at PC344: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentOtherPlayerNameTagVisible = gameOptionSetting:getOtherPlayerNameTagVisible()
+    chk_option.currentCheckShowCashAlert = gameOptionSetting:getCashAlert()
     -- DECOMPILER ERROR at PC348: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentPartyPlayerNameTagVisible = gameOptionSetting:getPartyPlayerNameTagVisible()
+    chk_Option.currentSelfPlayerNameTagVisible = gameOptionSetting:getSelfPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC352: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentGuildPlayerNameTagVisible = gameOptionSetting:getGuildPlayerNameTagVisible()
+    chk_Option.currentOtherPlayerNameTagVisible = gameOptionSetting:getOtherPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC356: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentPetObjectShow = gameOptionSetting:getPetRender()
+    chk_Option.currentPartyPlayerNameTagVisible = gameOptionSetting:getPartyPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC360: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentFontResizeType = gameOptionSetting:getUIFontSizeType()
+    chk_Option.currentGuildPlayerNameTagVisible = gameOptionSetting:getGuildPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC364: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentNavPathEffectType = gameOptionSetting:getShowNavPathEffectType()
+    chk_Option.currentPetObjectShow = gameOptionSetting:getPetRender()
     -- DECOMPILER ERROR at PC368: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWorldMapOpenType = gameOptionSetting:getWorldmapOpenType()
+    chk_Option.currentFontResizeType = gameOptionSetting:getUIFontSizeType()
     -- DECOMPILER ERROR at PC372: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWorldMapCameraType = gameOptionSetting:getWorldMapCameraPitchType()
+    chk_Option.currentNavPathEffectType = gameOptionSetting:getShowNavPathEffectType()
     -- DECOMPILER ERROR at PC376: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentServiceResourceType = gameOptionSetting:getServiceResType()
+    chk_Option.currentWorldMapOpenType = gameOptionSetting:getWorldmapOpenType()
     -- DECOMPILER ERROR at PC380: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentChatChannelType = gameOptionSetting:getChatLanguageType()
+    chk_Option.currentWorldMapCameraType = gameOptionSetting:getWorldMapCameraPitchType()
     -- DECOMPILER ERROR at PC384: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckIsUIModeMouseLock = gameOptionSetting:getUIModeMouseLock()
+    chk_Option.currentServiceResourceType = gameOptionSetting:getServiceResType()
     -- DECOMPILER ERROR at PC388: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckRejectInvitation = gameOptionSetting:getRefuseRequests()
+    chk_Option.currentChatChannelType = gameOptionSetting:getChatLanguageType()
     -- DECOMPILER ERROR at PC392: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMiniMapRotation = gameOptionSetting:getRadarRotateMode()
+    chk_Option.currentCheckIsUIModeMouseLock = gameOptionSetting:getUIModeMouseLock()
     -- DECOMPILER ERROR at PC396: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckShowAttackEffect = gameOptionSetting:getRenderHitEffect()
+    chk_Option.currentCheckRejectInvitation = gameOptionSetting:getRefuseRequests()
     -- DECOMPILER ERROR at PC400: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckBlackSpiritAlert = gameOptionSetting:getBlackSpiritNotice()
+    chk_Option.currentCheckMiniMapRotation = gameOptionSetting:getRadarRotateMode()
     -- DECOMPILER ERROR at PC404: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckIsPvpRefuse = gameOptionSetting:getPvpRefuse()
+    chk_Option.currentCheckShowAttackEffect = gameOptionSetting:getRenderHitEffect()
     -- DECOMPILER ERROR at PC408: Confused about usage of register: R2 in 'UnsetPending'
 
+    chk_Option.currentCheckBlackSpiritAlert = gameOptionSetting:getBlackSpiritNotice()
+    -- DECOMPILER ERROR at PC412: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckIsPvpRefuse = gameOptionSetting:getPvpRefuse()
+    -- DECOMPILER ERROR at PC416: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckIsExchangeRefuse = gameOptionSetting:getIsExchangeRefuse()
+    -- DECOMPILER ERROR at PC420: Confused about usage of register: R2 in 'UnsetPending'
+
     chk_Option.currentCheckIsOnScreenSaver = gameOptionSetting:getIsOnScreenSaver()
-    -- DECOMPILER ERROR at PC410: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC422: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckUseNewQuickSlot = false
     ;
     (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).NewQuickSlot, chk_Option.currentCheckUseNewQuickSlot)
-    -- DECOMPILER ERROR at PC425: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineZoneChange = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.zoneChange)
-    -- DECOMPILER ERROR at PC431: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineWarAlly = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.warAlly)
     -- DECOMPILER ERROR at PC437: Confused about usage of register: R2 in 'UnsetPending'
 
+    chk_Option.currentGuideLineZoneChange = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.zoneChange)
+    -- DECOMPILER ERROR at PC443: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentGuideLineWarAlly = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.warAlly)
+    -- DECOMPILER ERROR at PC449: Confused about usage of register: R2 in 'UnsetPending'
+
     chk_Option.currentGuideLineGuild = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.guild)
-    -- DECOMPILER ERROR at PC441: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineQuestLine = gameOptionSetting:getShowQuestActorColor()
-    -- DECOMPILER ERROR at PC447: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineNonWarPlayer = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.nonWarPlayer)
     -- DECOMPILER ERROR at PC453: Confused about usage of register: R2 in 'UnsetPending'
 
+    chk_Option.currentGuideLineQuestLine = gameOptionSetting:getShowQuestActorColor()
+    -- DECOMPILER ERROR at PC459: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentGuideLineNonWarPlayer = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.nonWarPlayer)
+    -- DECOMPILER ERROR at PC465: Confused about usage of register: R2 in 'UnsetPending'
+
     chk_Option.currentGuideLineParty = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.party)
-    -- DECOMPILER ERROR at PC457: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC469: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineHumanRelation = gameOptionSetting:getShowHumanRelation()
-    -- DECOMPILER ERROR at PC463: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC475: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineEnemy = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.enemy)
-    -- DECOMPILER ERROR at PC467: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC479: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLinePartyMemberEffect = gameOptionSetting:getRenderHitEffectParty()
     ;
@@ -7833,7 +8290,7 @@ GameOption_DefaultOption = function(gameOptionSetting, optionType)
 end
 
 GameOption_ResetDisplayOption = function()
-  -- function num : 0_288 , upvalues : chk_Option, minScaleValue, maxScaleValue, frame_Display, GetStr_Option, gamePanel_Main
+  -- function num : 0_303 , upvalues : chk_Option, scaleRangeTable, frame_Display, GetStr_Option, gamePanel_Main
   resetDisplayOption()
   GameOption_SetScreenModeButtons(chk_Option.currentScreenModeIdx)
   if chk_Option.currentScreenResolutionIdx == 0 then
@@ -7843,12 +8300,14 @@ GameOption_ResetDisplayOption = function()
   end
   GameOption_SetCurrentLUT(chk_Option.currentLUT)
   local uiScale_Percent = 100
-  local pos = (uiScale_Percent - minScaleValue) / (maxScaleValue - minScaleValue) * 100
+  local pos = (uiScale_Percent - scaleRangeTable.minScaleValue) / (scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue) * 100
   ;
   (frame_Display._slide_UIScale):SetControlPos(pos)
   ;
   (frame_Display._txt_UIScale):SetText(GetStr_Option[5] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", uiScale_Percent) .. "% <PAOldColor>)")
+  GameOption_SetEffectAlpha()
   GameOption_SetCameraMasterPower()
+  GameOption_SetColorByPass()
   GameOption_SetCameraShakePower()
   GameOption_SetMotionBlurPower()
   GameOption_SetCameraPosPower()
@@ -7863,6 +8322,7 @@ GameOption_ResetDisplayOption = function()
   (frame_Display._slide_Contrast):SetControlPos(chk_Option.currentContrastValue * 100)
   GameOption_SetContrastValueText(chk_Option.currentContrastValue)
   GameOption_CheckScreenShotFormat(chk_Option.currentScreenShotFormat)
+  GameOption_CheckScreenShotSize(chk_Option.currentScreenShotSize)
   GameOption_CheckWatermarkService(chk_Option.currentWatermarkService)
   GameOption_CheckWatermarkPosition(chk_Option.currentWatermarkPosition)
   GameOption_CheckWatermarkScale(chk_Option.currentWatermarkScale)
@@ -7908,7 +8368,7 @@ GameOption_ResetDisplayOption = function()
 end
 
 GameOption_ResetSoundOption = function()
-  -- function num : 0_289 , upvalues : frame_Sound, chk_Option, gamePanel_Main
+  -- function num : 0_304 , upvalues : frame_Sound, chk_Option, gamePanel_Main
   resetSoundOption()
   ;
   (frame_Sound._btn_MusicOnOff):SetCheck(chk_Option.currentCheckMusic)
@@ -7978,7 +8438,7 @@ GameOption_ResetSoundOption = function()
 end
 
 GameOption_ResetGameOption = function()
-  -- function num : 0_290 , upvalues : chk_Option, frame_Game, GetStr_Option, gamePanel_Main
+  -- function num : 0_305 , upvalues : chk_Option, frame_Game, GetStr_Option, gamePanel_Main
   resetGameOption()
   local mouseSensitivityX_Percent = (chk_Option.currentCheckMouseSensitivityX - 0.1) / 1.9 * 100
   local mouseSensitivityY_Percent = (chk_Option.currentCheckMouseSensitivityY - 0.1) / 1.9 * 100
@@ -8068,6 +8528,8 @@ GameOption_ResetGameOption = function()
     ;
     (frame_Game._btn_PvpRefuse):SetCheck(chk_Option.currentCheckIsPvpRefuse)
     ;
+    (frame_Game._btn_ExchangeRefuse):SetCheck(chk_Option.currentCheckIsExchangeRefuse)
+    ;
     (frame_Game._btn_HideMast):SetCheck(chk_Option.currentCheckIsHideMast)
     ;
     (frame_Game._btn_ShowCashAlert):SetCheck(chk_option.currentCheckShowCashAlert)
@@ -8108,11 +8570,11 @@ GameOption_ResetGameOption = function()
 end
 
 GameOption_UIPositon_Reset = function()
-  -- function num : 0_291
+  -- function num : 0_306
 end
 
 GameOption_SimpleToolTips = function(isShow, optionType)
-  -- function num : 0_292 , upvalues : gamePanel_Main, frame_Sound
+  -- function num : 0_307 , upvalues : gamePanel_Main, frame_Sound
   if optionType == 1 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TOOLTIP_DISPLAY_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TOOLTIP_DISPLAY_DESC")
@@ -8240,7 +8702,7 @@ GameOption_SimpleToolTips = function(isShow, optionType)
 end
 
 Button_Simpletooltips = function(isShow, targetNo)
-  -- function num : 0_293 , upvalues : toolTipIdxValue
+  -- function num : 0_308 , upvalues : toolTipIdxValue
   if isShow == true then
     registTooltipControl((toolTipIdxValue[targetNo]).control, Panel_Tooltip_SimpleText)
     TooltipSimple_Show((toolTipIdxValue[targetNo]).control, (toolTipIdxValue[targetNo]).name, (toolTipIdxValue[targetNo]).desc)
@@ -8250,7 +8712,7 @@ Button_Simpletooltips = function(isShow, targetNo)
 end
 
 Show_PictureTooltips = function(isShow, tooltipType)
-  -- function num : 0_294 , upvalues : frame_Display
+  -- function num : 0_309 , upvalues : frame_Display
   for index = 0, #frame_Display._pictureTooltip do
     ((frame_Display._pictureTooltip)[index]):SetShow(false)
   end
@@ -8310,20 +8772,20 @@ Show_PictureTooltips = function(isShow, tooltipType)
 end
 
 FGlobal_getUIScale = function()
-  -- function num : 0_295 , upvalues : minScaleValue, maxScaleValue
+  -- function num : 0_310 , upvalues : scaleRangeTable
   local uiScale = {}
-  uiScale.min = minScaleValue
-  uiScale.max = maxScaleValue
+  uiScale.min = scaleRangeTable.minScaleValue
+  uiScale.max = scaleRangeTable.maxScaleValue
   return uiScale
 end
 
 FGlobal_returnUIScale = function()
-  -- function num : 0_296 , upvalues : chk_Option
+  -- function num : 0_311 , upvalues : chk_Option
   return chk_Option.currentCheckUIScale
 end
 
 FGlobal_saveUIScale = function(scale)
-  -- function num : 0_297 , upvalues : chk_Option
+  -- function num : 0_312 , upvalues : chk_Option
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentCheckUIScale = scale / 100
@@ -8336,26 +8798,26 @@ FGlobal_saveUIScale = function(scale)
 end
 
 FGlobal_ApplyUIScale = function(scalePercent)
-  -- function num : 0_298 , upvalues : maxScaleValue, minScaleValue, chk_Option, frame_Display, GetStr_Option
-  local interval = maxScaleValue - minScaleValue
+  -- function num : 0_313 , upvalues : scaleRangeTable, chk_Option, frame_Display, GetStr_Option
+  local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
   local uiScale_Percent = scalePercent
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC13: Confused about usage of register: R3 in 'UnsetPending'
 
   chk_Option.currentCheckUIScale = (math.floor)(scalePercent / 100 * 100) / 100
   ;
   (frame_Display._txt_UIScale):SetText(GetStr_Option[5] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", chk_Option.currentCheckUIScale * 100) .. "% <PAOldColor>)")
   ;
-  (frame_Display._txt_UIScaleLow):SetText(tostring(minScaleValue))
+  (frame_Display._txt_UIScaleLow):SetText(tostring(scaleRangeTable.minScaleValue))
   ;
-  (frame_Display._txt_UIScaleMidle):SetText(tostring(minScaleValue + interval * 0.5))
+  (frame_Display._txt_UIScaleMidle):SetText(tostring(scaleRangeTable.minScaleValue + interval * 0.5))
   ;
-  (frame_Display._txt_UIScaleHigh):SetText(tostring(maxScaleValue))
+  (frame_Display._txt_UIScaleHigh):SetText(tostring(scaleRangeTable.maxScaleValue))
   ;
-  (frame_Display._slide_UIScale):SetControlPos((uiScale_Percent - minScaleValue) / interval * 100)
-  -- DECOMPILER ERROR at PC62: Confused about usage of register: R3 in 'UnsetPending'
+  (frame_Display._slide_UIScale):SetControlPos((uiScale_Percent - scaleRangeTable.minScaleValue) / interval * 100)
+  -- DECOMPILER ERROR at PC68: Confused about usage of register: R3 in 'UnsetPending'
 
   chk_Option.appliedCheckUIScale = chk_Option.currentCheckUIScale
-  -- DECOMPILER ERROR at PC66: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC72: Confused about usage of register: R3 in 'UnsetPending'
 
   chk_Option.savedCheckUIScale = chk_Option.currentCheckUIScale
   setUIScale(chk_Option.savedCheckUIScale)
@@ -8368,7 +8830,7 @@ Panel_Window_Option:RegisterUpdateFunc("Option_Update")
 ToClient_initGameOption()
 gameOption_SetEnableArea_Func()
 GameOption_FontResizeCheckFontType = function(fontRaiseSize)
-  -- function num : 0_299
+  -- function num : 0_314
   local addFontSize = convertUIFontTypeToUIFontSize(fontRaiseSize)
   ;
   (ToClient_getFontWrapper("BaseFont_10")):changeCurrentFontSizeBeMore(addFontSize)
@@ -8425,7 +8887,7 @@ GameOption_FontResizeCheckFontType = function(fontRaiseSize)
 end
 
 getUiFontSize = function()
-  -- function num : 0_300 , upvalues : frame_Game
+  -- function num : 0_315 , upvalues : frame_Game
   if (frame_Game._btn_FontResizeDefault):IsCheck() then
     return 0
   else
@@ -8441,13 +8903,13 @@ end
 
 local simpleUI_Check = (frame_Game._btn_EnableSimpleUI):IsCheck()
 SimpleUI_Check = function()
-  -- function num : 0_301 , upvalues : simpleUI_Check
+  -- function num : 0_316 , upvalues : simpleUI_Check
   SimpleUI_EnableCheck(simpleUI_Check)
 end
 
 SimpleUI_EnableCheck(simpleUI_Check)
 FromClient_ChangeScreenMode = function()
-  -- function num : 0_302
+  -- function num : 0_317
   reloadGameUI()
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_CHANGESCREENMODE_FULL")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = messageBoxMemo, functionYes = ToClient_ChangePreScreenMode, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -8456,7 +8918,7 @@ FromClient_ChangeScreenMode = function()
 end
 
 GameOption_SimpleTipOnce = function(isShow)
-  -- function num : 0_303 , upvalues : frame_Display
+  -- function num : 0_318 , upvalues : frame_Display
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -8469,7 +8931,7 @@ GameOption_SimpleTipOnce = function(isShow)
 end
 
 GameOption_UIKeySetting_Simpletooltip = function(isShow, index, keyType)
-  -- function num : 0_304 , upvalues : getKeyConfigData, STATIC_INPUT_TITLE, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI
+  -- function num : 0_319 , upvalues : getKeyConfigData, STATIC_INPUT_TITLE, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -8494,7 +8956,7 @@ GameOption_UIKeySetting_Simpletooltip = function(isShow, index, keyType)
 end
 
 GameOption_UIKeySetting_PadKey_Simpletooltip = function(isShow, index, keyType)
-  -- function num : 0_305 , upvalues : getKeyConfigData, BUTTON_PAD, getKeyConfigData_UI, BUTTON_PAD_UI
+  -- function num : 0_320 , upvalues : getKeyConfigData, BUTTON_PAD, getKeyConfigData_UI, BUTTON_PAD_UI
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -8519,15 +8981,20 @@ GameOption_UIKeySetting_PadKey_Simpletooltip = function(isShow, index, keyType)
 end
 
 GameOption_Repos = function()
-  -- function num : 0_306
+  -- function num : 0_321 , upvalues : chk_Option
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
   Panel_Window_Option:SetPosX((screenSizeX - Panel_Window_Option:GetSizeX()) / 2)
   Panel_Window_Option:SetPosY((screenSizeY - Panel_Window_Option:GetSizeY()) / 2)
+  if CppDefine.ChangeUIAndResolution == true then
+    local uiScale = chk_Option.currentCheckUIScale
+    uiScale = (uiScale + 0.005) * 100 / 100
+    GameOption_InitScale_50_200(uiScale)
+  end
 end
 
 isNearMonsterAlert = function()
-  -- function num : 0_307 , upvalues : frame_Game
+  -- function num : 0_322 , upvalues : frame_Game
   return (frame_Game._btn_Alert_NearMonster):IsCheck()
 end
 

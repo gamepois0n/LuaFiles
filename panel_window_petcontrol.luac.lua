@@ -7,7 +7,8 @@ Panel_Window_PetControl:SetShow(false, false)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
-local PetControl = {Btn_PetInfo = (UI.getChildControl)(Panel_Window_PetControl, "Button_PetInfo"), Btn_Follow = (UI.getChildControl)(Panel_Window_PetControl, "Button_Follow"), Btn_Wait = (UI.getChildControl)(Panel_Window_PetControl, "Button_Wait"), Btn_Find = (UI.getChildControl)(Panel_Window_PetControl, "Button_Find"), Btn_GetItem = (UI.getChildControl)(Panel_Window_PetControl, "Button_GetItem"), Btn_Seal = (UI.getChildControl)(Panel_Window_PetControl, "Button_Seal"), Dot_RedIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_RedDotIcon"), Dot_GreenIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_GreenDotIcon"), Dot_YellowIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_YellowDotIcon"), Dot_PurpleIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_PurpleDotIcon"), Dot_GrayIcon1 = (UI.getChildControl)(Panel_Window_PetControl, "Static_GrayDotIcon1"), Dot_GrayIcon2 = (UI.getChildControl)(Panel_Window_PetControl, "Static_GrayDotIcon2"), Btn_IconPet = (UI.getChildControl)(Panel_Window_PetControl, "Button_IconPet"), Stc_IconPetBg = (UI.getChildControl)(Panel_Window_PetControl, "Static_IconPetBG"), Stc_HungryBG = (UI.getChildControl)(Panel_Window_PetControl, "Static_HungryBG"), Progrss_Hungry = (UI.getChildControl)(Panel_Window_PetControl, "Progress2_Hungry"), Txt_HungryAlert = (UI.getChildControl)(Panel_Window_PetIcon, "StaticText_HungryAlert"), Btn_AllSeal = (UI.getChildControl)(Panel_Window_PetControl, "Button_Allseal")}
+local isPlayOpen = ToClient_IsContentsGroupOpen("256")
+local PetControl = {Btn_PetInfo = (UI.getChildControl)(Panel_Window_PetControl, "Button_PetInfo"), Btn_Follow = (UI.getChildControl)(Panel_Window_PetControl, "Button_Follow"), Btn_Wait = (UI.getChildControl)(Panel_Window_PetControl, "Button_Wait"), Btn_Find = (UI.getChildControl)(Panel_Window_PetControl, "Button_Find"), Btn_GetItem = (UI.getChildControl)(Panel_Window_PetControl, "Button_GetItem"), Btn_Play = (UI.getChildControl)(Panel_Window_PetControl, "CheckButton_Play"), Btn_Seal = (UI.getChildControl)(Panel_Window_PetControl, "Button_Seal"), Dot_RedIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_RedDotIcon"), Dot_GreenIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_GreenDotIcon"), Dot_YellowIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_YellowDotIcon"), Dot_PurpleIcon = (UI.getChildControl)(Panel_Window_PetControl, "Static_PurpleDotIcon"), Dot_GrayIcon1 = (UI.getChildControl)(Panel_Window_PetControl, "Static_GrayDotIcon1"), Dot_GrayIcon2 = (UI.getChildControl)(Panel_Window_PetControl, "Static_GrayDotIcon2"), Btn_IconPet = (UI.getChildControl)(Panel_Window_PetControl, "Button_IconPet"), Stc_IconPetBg = (UI.getChildControl)(Panel_Window_PetControl, "Static_IconPetBG"), Stc_HungryBG = (UI.getChildControl)(Panel_Window_PetControl, "Static_HungryBG"), Progrss_Hungry = (UI.getChildControl)(Panel_Window_PetControl, "Progress2_Hungry"), Txt_HungryAlert = (UI.getChildControl)(Panel_Window_PetIcon, "StaticText_HungryAlert"), Btn_AllSeal = (UI.getChildControl)(Panel_Window_PetControl, "Button_Allseal")}
 local btnPetIcon = (UI.getChildControl)(Panel_Window_PetIcon, "Button_PetIcon")
 for v,control in pairs(PetControl) do
   control:SetShow(false)
@@ -77,6 +78,14 @@ PetControl.Init = function(self)
     _getItem:setTooltipEventRegistFunc("petControl_Button_Tooltip( true, " .. 2 .. " )")
     _getItem:SetCheck(true)
     temp._getItem = _getItem
+    local _getPlay = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_CHECKBUTTON, Panel_Window_PetControl, "Button_Play_" .. index)
+    CopyBaseProperty(self.Btn_Play, _getPlay)
+    _getPlay:addInputEvent("Mouse_LUp", "PetControl_WithPlay(" .. index .. ")")
+    _getPlay:addInputEvent("Mouse_On", "petControl_Button_Tooltip( true," .. 5 .. ", " .. index .. ")")
+    _getPlay:addInputEvent("Mouse_Out", "petControl_Button_Tooltip( false )")
+    _getPlay:setTooltipEventRegistFunc("petControl_Button_Tooltip( true, " .. 5 .. " )")
+    _getPlay:SetCheck(true)
+    temp._withPlay = _getPlay
     local _seal = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_CHECKBUTTON, Panel_Window_PetControl, "Button_Seal_" .. index)
     CopyBaseProperty(self.Btn_Seal, _seal)
     _seal:addInputEvent("Mouse_LUp", "HandleClicked_petControl_Seal(" .. index .. ")")
@@ -122,59 +131,59 @@ PetControl.Init = function(self)
       control:SetPosX(control:GetPosX() + (posX + 13) * index)
       control:SetShow(false)
     end
-    -- DECOMPILER ERROR at PC439: Confused about usage of register: R22 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC482: Confused about usage of register: R23 in 'UnsetPending'
 
     petIcon[index] = temp
-    -- DECOMPILER ERROR at PC447: Confused about usage of register: R22 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC490: Confused about usage of register: R23 in 'UnsetPending'
 
     ;
     (petIconPosX[index])._petInfo = ((petIcon[index])._petInfo):GetPosX()
-    -- DECOMPILER ERROR at PC455: Confused about usage of register: R22 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC498: Confused about usage of register: R23 in 'UnsetPending'
 
     ;
     (petIconPosX[index])._seal = ((petIcon[index])._seal):GetPosX()
-    -- DECOMPILER ERROR at PC463: Confused about usage of register: R22 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC506: Confused about usage of register: R23 in 'UnsetPending'
 
     ;
     (petIconPosX[index])._follow = ((petIcon[index])._follow):GetPosX()
-    -- DECOMPILER ERROR at PC471: Confused about usage of register: R22 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC514: Confused about usage of register: R23 in 'UnsetPending'
 
     ;
     (petIconPosX[index])._find = ((petIcon[index])._find):GetPosX()
-    -- DECOMPILER ERROR at PC479: Confused about usage of register: R22 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC522: Confused about usage of register: R23 in 'UnsetPending'
 
     ;
     (petIconPosX[index])._getItem = ((petIcon[index])._getItem):GetPosX()
-  end
-  do
-    local isAsia = (CppEnums.ContryCode).eContryCode_KOR == getContryTypeLua() or (CppEnums.ContryCode).eContryCode_JAP == getContryTypeLua()
-    if isAsia == false then
-      for index = 0, maxPetControlCount - 1 do
-        ((petIcon[index])._petInfo):SetText("")
-        ;
-        ((petIcon[index])._follow):SetText("")
-        ;
-        ((petIcon[index])._wait):SetText("")
-        ;
-        ((petIcon[index])._find):SetText("")
-        ;
-        ((petIcon[index])._getItem):SetText("")
-        ;
-        ((petIcon[index])._seal):SetText("")
-      end
-    end
+    -- DECOMPILER ERROR at PC530: Confused about usage of register: R23 in 'UnsetPending'
+
     ;
-    (self.Btn_AllSeal):addInputEvent("Mouse_LUp", "HandleClicked_petControl_AllUnSeal()")
-    btnPetIcon:addInputEvent("Mouse_LUp", "FGlobal_PetListNew_Toggle()")
-    btnPetIcon:addInputEvent("Mouse_RUp", "Panel_Window_PetControl_ShowToggle()")
-    btnPetIcon:addInputEvent("Mouse_On", "petControl_Button_Tooltip( true, 99 )")
-    btnPetIcon:addInputEvent("Mouse_Out", "petControl_Button_Tooltip( false )")
-    btnPetIcon:setTooltipEventRegistFunc("petControl_Button_Tooltip( true, " .. 99 .. " )")
-    btnPetIcon:ActiveMouseEventEffect(true)
-    ;
-    (self.Btn_AllSeal):SetShow(false)
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+    (petIconPosX[index])._withPlay = ((petIcon[index])._withPlay):GetPosX()
   end
+  for index = 0, maxPetControlCount - 1 do
+    ((petIcon[index])._petInfo):SetText("")
+    ;
+    ((petIcon[index])._follow):SetText("")
+    ;
+    ((petIcon[index])._wait):SetText("")
+    ;
+    ((petIcon[index])._find):SetText("")
+    ;
+    ((petIcon[index])._getItem):SetText("")
+    ;
+    ((petIcon[index])._withPlay):SetText("")
+    ;
+    ((petIcon[index])._seal):SetText("")
+  end
+  ;
+  (self.Btn_AllSeal):addInputEvent("Mouse_LUp", "HandleClicked_petControl_AllUnSeal()")
+  btnPetIcon:addInputEvent("Mouse_LUp", "FGlobal_PetListNew_Toggle()")
+  btnPetIcon:addInputEvent("Mouse_RUp", "Panel_Window_PetControl_ShowToggle()")
+  btnPetIcon:addInputEvent("Mouse_On", "petControl_Button_Tooltip( true, 99 )")
+  btnPetIcon:addInputEvent("Mouse_Out", "petControl_Button_Tooltip( false )")
+  btnPetIcon:setTooltipEventRegistFunc("petControl_Button_Tooltip( true, " .. 99 .. " )")
+  btnPetIcon:ActiveMouseEventEffect(true)
+  ;
+  (self.Btn_AllSeal):SetShow(false)
 end
 
 local _havePetCount = 0
@@ -307,7 +316,7 @@ local PetControl_CurrentButtonTooltipType = -1
 ;
 (PetControl.Btn_Wait):ActiveMouseEventEffect(true)
 PetControl.ButtonShow = function(self, isShow, index)
-  -- function num : 0_4 , upvalues : petIcon
+  -- function num : 0_4 , upvalues : petIcon, isPlayOpen
   ((petIcon[index])._petInfo):SetShow(isShow)
   ;
   ((petIcon[index])._follow):SetShow(isShow)
@@ -317,6 +326,8 @@ PetControl.ButtonShow = function(self, isShow, index)
   ((petIcon[index])._find):SetShow(isShow)
   ;
   ((petIcon[index])._getItem):SetShow(isShow)
+  ;
+  ((petIcon[index])._withPlay):SetShow(not isShow or isPlayOpen)
   ;
   ((petIcon[index])._seal):SetShow(isShow)
 end
@@ -397,6 +408,37 @@ FGlobal_PetControl_CheckUnSealPet = function(petNo_s64)
         (self._purpleDotIcon):SetShow(isGetItem)
         ;
         (self._grayDotIcon2):SetShow(not isGetItem)
+        local petLootingType = PetUnSealData:getPetLootingType()
+        ;
+        (self._withPlay):ChangeTextureInfoName("new_ui_common_forlua/window/servant/pet_00.dds")
+        local x1, y1, x2, y2 = nil, nil, nil, nil
+        if petLootingType == 0 then
+          x1 = setTextureUV_Func(self._withPlay, 140, 280, 172, 312)
+        else
+          -- DECOMPILER ERROR at PC196: Overwrote pending register: R18 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC197: Overwrote pending register: R17 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC198: Overwrote pending register: R16 in 'AssignReg'
+
+          if petLootingType == 1 then
+            x1 = setTextureUV_Func(self._withPlay, 104, 280, 136, 312)
+          else
+            -- DECOMPILER ERROR at PC210: Overwrote pending register: R18 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC211: Overwrote pending register: R17 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC212: Overwrote pending register: R16 in 'AssignReg'
+
+            if petLootingType == 2 then
+              x1 = setTextureUV_Func(self._withPlay, 176, 280, 208, 312)
+            end
+          end
+        end
+        ;
+        ((self._withPlay):getBaseTexture()):setUV(x1, y1, x2, y2)
+        ;
+        (self._withPlay):setRenderTexture((self._withPlay):getBaseTexture())
         if Panel_Window_PetIcon:GetShow() then
           ((petIcon[index])._progress):SetShow(true)
           ;
@@ -414,11 +456,11 @@ FGlobal_PetControl_CheckUnSealPet = function(petNo_s64)
             control:SetShow(false)
           end
           do
-            -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -446,6 +488,7 @@ end
 
 PetInfoNew_Open = function(index)
   -- function num : 0_8
+  TooltipSimple_Hide()
   local petCount = ToClient_getPetUnsealedList()
   if petCount == 0 then
     return 
@@ -456,11 +499,13 @@ end
 
 PetControl_Follow = function(index)
   -- function num : 0_9
+  TooltipSimple_Hide()
   PetControl_BTNCheckedUpdate(index)
 end
 
 PetControl_Wait = function(index)
   -- function num : 0_10
+  TooltipSimple_Hide()
   PetControl_BTNCheckedUpdate(index)
 end
 
@@ -493,14 +538,26 @@ PetControl_BTNCheckedUpdate = function(index, isByPetListUpdate)
   FGlobal_PetList_PetOrder(index)
 end
 
+PetControl_WithPlay = function(index)
+  -- function num : 0_12
+  TooltipSimple_Hide()
+  local PetUnSealData = ToClient_getPetUnsealedDataByIndex(index)
+  if PetUnSealData ~= nil then
+    local petNo = PetUnSealData:getPcPetNo()
+    local petLootingType = (PetUnSealData:getPetLootingType() + 1) % 3
+    ToClient_requestChangePetLootingType(petNo, petLootingType)
+  end
+end
+
 PetControl_GetItem = function(index, isByPetListUpdate)
-  -- function num : 0_12 , upvalues : petCond, petOrderList
+  -- function num : 0_13 , upvalues : petCond, petOrderList
+  TooltipSimple_Hide()
   local petCount = ToClient_getPetUnsealedList()
   if petCount == 0 then
     return 
   end
   local petNo = (ToClient_getPetUnsealedDataByIndex(index)):getPcPetNo()
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC18: Confused about usage of register: R4 in 'UnsetPending'
 
   ;
   (petCond[index])._getItem = not (petCond[index])._getItem
@@ -510,7 +567,7 @@ PetControl_GetItem = function(index, isByPetListUpdate)
   else
     ToClient_callHandlerToPetNo("handlePetGetItemOff", petNo)
   end
-  -- DECOMPILER ERROR at PC36: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC38: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (petOrderList._getItem)[tostring(petNo)] = isGetItem
@@ -519,7 +576,8 @@ PetControl_GetItem = function(index, isByPetListUpdate)
 end
 
 PetControl_Find = function(index, isByPetListUpdate)
-  -- function num : 0_13 , upvalues : petIcon, petCond, petOrderList
+  -- function num : 0_14 , upvalues : petIcon, petCond, petOrderList
+  TooltipSimple_Hide()
   if PetTalentCheck(index) then
     ((petIcon[index])._find):SetCheck(true)
     ;
@@ -533,7 +591,7 @@ PetControl_Find = function(index, isByPetListUpdate)
     return 
   end
   local petNo = (ToClient_getPetUnsealedDataByIndex(index)):getPcPetNo()
-  -- DECOMPILER ERROR at PC40: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC42: Confused about usage of register: R4 in 'UnsetPending'
 
   ;
   (petCond[index])._find = not (petCond[index])._find
@@ -543,7 +601,7 @@ PetControl_Find = function(index, isByPetListUpdate)
   else
     ToClient_callHandlerToPetNo("handlePetFindThatOff", petNo)
   end
-  -- DECOMPILER ERROR at PC60: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC62: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (petOrderList._find)[tostring(petNo)] = isFind
@@ -552,7 +610,7 @@ PetControl_Find = function(index, isByPetListUpdate)
 end
 
 PetTalentCheck = function(index)
-  -- function num : 0_14
+  -- function num : 0_15
   local petCount = ToClient_getPetUnsealedList()
   if petCount == 0 then
     return false
@@ -566,7 +624,7 @@ PetTalentCheck = function(index)
 end
 
 FGlobal_PetControl_OrderList = function(orderType, index)
-  -- function num : 0_15
+  -- function num : 0_16
   local petCount = ToClient_getPetUnsealedList()
   if petCount == 0 then
     return 
@@ -586,7 +644,7 @@ FGlobal_PetControl_OrderList = function(orderType, index)
 end
 
 FGlobal_PetControl_SealPet = function(index)
-  -- function num : 0_16 , upvalues : petIcon, maxUnsealCount, PetControl
+  -- function num : 0_17 , upvalues : petIcon, maxUnsealCount, PetControl
   local self = petIcon[index]
   local unsealedPetList = ToClient_getPetUnsealedList()
   if unsealedPetList > 0 then
@@ -616,7 +674,7 @@ FGlobal_PetControl_SealPet = function(index)
 end
 
 FGlobal_PetControl_RestoreUI = function()
-  -- function num : 0_17 , upvalues : PetControl
+  -- function num : 0_18 , upvalues : PetControl
   local self = PetControl
   TooltipSimple_Hide()
   local unsealedCount = ToClient_getPetUnsealedList()
@@ -629,7 +687,7 @@ FGlobal_PetControl_RestoreUI = function()
 end
 
 HandleClicked_petControl_IconShow = function(index)
-  -- function num : 0_18 , upvalues : maxUnsealCount, petIcon
+  -- function num : 0_19 , upvalues : maxUnsealCount, petIcon
   for i = 0, maxUnsealCount - 1 do
     if ((petIcon[i])._petInfo):GetShow() == true then
       PetControl_ButtonHide(i)
@@ -640,7 +698,8 @@ HandleClicked_petControl_IconShow = function(index)
 end
 
 HandleClicked_petControl_Seal = function(index)
-  -- function num : 0_19 , upvalues : petIcon
+  -- function num : 0_20 , upvalues : petIcon
+  TooltipSimple_Hide()
   local self = petIcon[index]
   local unSealPetInfo = ToClient_getPetUnsealedList()
   local PetUnSealData = ToClient_getPetUnsealedDataByIndex(index)
@@ -654,7 +713,7 @@ HandleClicked_petControl_Seal = function(index)
 end
 
 HandleClicked_petControl_AllUnSeal = function()
-  -- function num : 0_20 , upvalues : maxUnsealCount, petIcon
+  -- function num : 0_21 , upvalues : maxUnsealCount, petIcon
   for index = 0, maxUnsealCount - 1 do
     local self = petIcon[index]
     local unSealPetInfo = ToClient_getPetUnsealedList()
@@ -667,13 +726,13 @@ HandleClicked_petControl_AllUnSeal = function()
 end
 
 FGlobal_HandleClicked_petControl_AllUnSeal = function()
-  -- function num : 0_21
+  -- function num : 0_22
   HandleClicked_petControl_AllUnSeal()
 end
 
 local unSealPetCounting = 0
 FGlobal_AllSealButtonPosition = function(sealCount, sealType)
-  -- function num : 0_22 , upvalues : PetControl, unSealPetCounting
+  -- function num : 0_23 , upvalues : PetControl, unSealPetCounting
   local self = PetControl
   if sealCount == nil then
     unSealPetCounting = ToClient_getPetUnsealedList()
@@ -689,7 +748,7 @@ FGlobal_AllSealButtonPosition = function(sealCount, sealType)
 end
 
 PetControl_ButtonShow = function(index)
-  -- function num : 0_23 , upvalues : petIcon, UI_ANI_ADV, petIconPosX
+  -- function num : 0_24 , upvalues : petIcon, UI_ANI_ADV, petIconPosX, isPlayOpen
   local self = petIcon[index]
   local endTime = 0.08
   local MoveAni1 = (self._petInfo):addMoveAnimation(0, endTime, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
@@ -728,16 +787,21 @@ PetControl_ButtonShow = function(index)
   MoveAni6:SetEndPosition((petIconPosX[index])._getItem, (self._getItem):GetPosY())
   ;
   (self._getItem):SetShow(true)
+  local MoveAni7 = (self._withPlay):addMoveAnimation(0, endTime, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  MoveAni7:SetStartPosition((petIconPosX[index])._petInfo, (self._withPlay):GetPosY())
+  MoveAni7:SetEndPosition((petIconPosX[index])._withPlay, (self._withPlay):GetPosY())
+  ;
+  (self._withPlay):SetShow(isPlayOpen)
 end
 
 PetControl_ButtonHide = function(index)
-  -- function num : 0_24 , upvalues : petIcon, PetControl
+  -- function num : 0_25 , upvalues : petIcon, PetControl
   local self = petIcon[index]
   PetControl:ButtonShow(false, index)
 end
 
 Panel_Window_PetControl_ShowToggle = function()
-  -- function num : 0_25 , upvalues : PetControl
+  -- function num : 0_26 , upvalues : PetControl
   if Panel_Window_PetControl:GetShow() then
     Panel_Window_PetControl:SetShow(false)
   else
@@ -774,7 +838,7 @@ Panel_Window_PetControl_ShowToggle = function()
 end
 
 PetControl_RePos = function()
-  -- function num : 0_26
+  -- function num : 0_27
   local posX = Panel_Window_PetIcon:GetPosX()
   local posY = Panel_Window_PetIcon:GetPosY()
   local screenX = getScreenSizeX()
@@ -795,7 +859,7 @@ PetControl_RePos = function()
 end
 
 petControl_Button_Tooltip = function(isShow, buttonType, index)
-  -- function num : 0_27 , upvalues : PetControl, petIcon
+  -- function num : 0_28 , upvalues : PetControl, petIcon
   if isShow == false then
     TooltipSimple_Hide()
     ;
@@ -859,15 +923,42 @@ petControl_Button_Tooltip = function(isShow, buttonType, index)
               name = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETINFO_NAME")
               desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETINFO_DESC")
             else
-              if buttonType == 97 then
-                uiControl = self._seal
-                name = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETSEAL_NAME")
-                desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETSEAL_DESC")
+              if buttonType == 5 then
+                local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
+                if pcPetData == nil then
+                  return 
+                end
+                local petLootingType = pcPetData:getPetLootingType()
+                local lootingTypeString = ""
+                if petLootingType == 0 then
+                  lootingTypeString = PAGetString(Defines.StringSheet_GAME, "LUA_IPETCONTROL_TOOLTIP_LOOTINGTYPE_0")
+                else
+                  if petLootingType == 1 then
+                    lootingTypeString = PAGetString(Defines.StringSheet_GAME, "LUA_IPETCONTROL_TOOLTIP_LOOTINGTYPE_1")
+                  else
+                    if petLootingType == 2 then
+                      lootingTypeString = PAGetString(Defines.StringSheet_GAME, "LUA_IPETCONTROL_TOOLTIP_LOOTINGTYPE_2")
+                    end
+                  end
+                end
+                uiControl = self._withPlay
+                name = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PLAY_NAME") .. lootingTypeString
+                desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PLAY_DESC")
               else
-                if buttonType == 98 then
-                  uiControl = self._iconPet
-                  name = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETCONTROL_NAME")
-                  desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETCONTROL_DESC")
+                do
+                  if buttonType == 97 then
+                    uiControl = self._seal
+                    name = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETSEAL_NAME")
+                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETSEAL_DESC")
+                  else
+                    if buttonType == 98 then
+                      uiControl = self._iconPet
+                      name = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETCONTROL_NAME")
+                      desc = PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_TOOLTIP_PETCONTROL_DESC")
+                    end
+                  end
+                  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
+                  TooltipSimple_Show(uiControl, name, desc)
                 end
               end
             end
@@ -875,13 +966,11 @@ petControl_Button_Tooltip = function(isShow, buttonType, index)
         end
       end
     end
-    registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-    TooltipSimple_Show(uiControl, name, desc)
   end
 end
 
 FGlobal_PetContorl_HungryGaugeUpdate = function(petNo_s64)
-  -- function num : 0_28 , upvalues : petIcon
+  -- function num : 0_29 , upvalues : petIcon
   if isFlushedUI() then
     return 
   end
@@ -911,7 +1000,7 @@ end
 
 local hungryCheck = false
 FGlobal_PetHungryAlert = function(petHungryCheck)
-  -- function num : 0_29 , upvalues : btnPetIcon, hungryCheck
+  -- function num : 0_30 , upvalues : btnPetIcon, hungryCheck
   if isFlushedUI() then
     return 
   end
@@ -923,12 +1012,12 @@ FGlobal_PetHungryAlert = function(petHungryCheck)
 end
 
 PetHungryConditionCheck = function()
-  -- function num : 0_30 , upvalues : hungryCheck
+  -- function num : 0_31 , upvalues : hungryCheck
   return hungryCheck
 end
 
 PetControl_registMessageHandler = function()
-  -- function num : 0_31
+  -- function num : 0_32
   registerEvent("FromClient_PetAddList", "FGlobal_PetContorl_HungryGaugeUpdate")
   registerEvent("FromClient_PetInfoChanged", "FGlobal_PetContorl_HungryGaugeUpdate")
   registerEvent("FromClient_UpdateControlIconInfo", "UpdateControlIconInfo")
@@ -936,7 +1025,7 @@ end
 
 local petIndex = 0
 UpdateControlIconInfo = function(petNo64, followAndWait, isFind, isGetItem)
-  -- function num : 0_32 , upvalues : petCond, petIndex, petIcon, petOrderList, _unSealPetCount
+  -- function num : 0_33 , upvalues : petCond, petIndex, petIcon, petOrderList, _unSealPetCount
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R4 in 'UnsetPending'
 
   (petCond[petIndex])._petNo = petNo64
@@ -1004,7 +1093,7 @@ UpdateControlIconInfo = function(petNo64, followAndWait, isFind, isGetItem)
 end
 
 PetControl_UnsealPetOrderInfo = function(petNo64)
-  -- function num : 0_33 , upvalues : petOrderList, petCond
+  -- function num : 0_34 , upvalues : petOrderList, petCond
   if (petOrderList._follow)[tostring(petNo64)] == nil then
     for index = 0, ToClient_getPetUnsealedList() - 1 do
       local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
@@ -1068,7 +1157,7 @@ end
 PetControl:Init()
 PetControl_registMessageHandler()
 renderModeChange_PetControl_RestoreUI = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_34
+  -- function num : 0_35
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end

@@ -24,7 +24,7 @@ local isBgOpen = false
 local bgImageTexture = {}
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 if isBgOpen then
-  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/Arsha_01.dds", [1] = "New_UI_Common_ForLua/Window/Loading/Arsha_02.dds", [2] = "New_UI_Common_ForLua/Window/Loading/Arsha_03.dds", [3] = "New_UI_Common_ForLua/Window/Loading/Arsha_04.dds", count = 4}
+  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/User_01.dds", count = 1}
 end
 if isGameTypeJapan() then
   isBgOpen = false
@@ -40,6 +40,26 @@ if isGameTypeEnglish() then
   isBgOpen = false
   bgImageTexture = {}
   bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_1.dds", [1] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_2.dds", [2] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_3.dds", [3] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_4.dds", count = 4}
+end
+if isGameTypeJapan() then
+  isBgOpen = false
+  bgImageTexture = {}
+  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_1.dds", [1] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_2.dds", [2] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_3.dds", [3] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_4.dds", count = 4}
+end
+if isGameTypeTaiwan() then
+  isBgOpen = false
+  bgImageTexture = {}
+  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_1.dds", [1] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_2.dds", [2] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_3.dds", [3] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_4.dds", count = 4}
+end
+if isGameTypeSA() then
+  isBgOpen = false
+  bgImageTexture = {}
+  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_1.dds", [1] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_2.dds", [2] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_3.dds", [3] = "New_UI_Common_ForLua/Window/Loading/bgNAOnly_4.dds", count = 4}
+end
+if isGameTypeKR2() then
+  isBgOpen = false
+  bgImageTexture = {}
+  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/bgKR2Only_1.dds", count = 1}
 end
 local UI_color = Defines.Color
 progressRate:SetCurrentProgressRate(0)

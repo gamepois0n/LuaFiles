@@ -95,8 +95,8 @@ PackageIconPosition = function()
   if selfPlayer == nil then
     return 
   end
-  local iconPosX = Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX()
-  local iconPosY = 15
+  local iconPosX = 0
+  local iconPosY = 9
   local iconGapX = 5
   local iconBackPosX = nil
   local player = selfPlayer:get()
@@ -157,17 +157,18 @@ PackageIconPosition = function()
   end
   if _btn_NewSkill:GetShow() then
     _btn_NewSkill:SetPosX(iconPosX)
+    _btn_NewSkill:SetPosY(iconPosY - 4)
     iconPosX = iconPosX + _btn_NewSkill:GetSizeX() + iconGapX
   end
   if _txt_NewSkill:GetShow() then
     _txt_NewSkill:SetPosX(_btn_NewSkill:GetPosX() + _btn_NewSkill:GetSizeX() - _txt_NewSkill:GetSizeX() + 2)
   end
   if Panel_NormalKnowledge:GetShow() then
-    Panel_NormalKnowledge:SetPosX(iconPosX)
+    Panel_NormalKnowledge:SetPosX(iconPosX + Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX())
     iconPosX = iconPosX + Panel_NormalKnowledge:GetSizeX() + iconGapX
   end
   if Panel_ImportantKnowledge:GetShow() then
-    Panel_ImportantKnowledge:SetPosX(iconPosX)
+    Panel_ImportantKnowledge:SetPosX(iconPosX + Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX())
     iconPosX = iconPosX + Panel_ImportantKnowledge:GetSizeX() + iconGapX
   end
   if _NodeLvBuffIcon:GetShow() then
@@ -238,6 +239,9 @@ PackageIconPosition = function()
     _pcRoomUserHomeBuff:SetPosY(iconPosY)
     iconPosX = iconPosX + _pcRoomUserHomeBuff:GetSizeX() + iconGapX
   end
+  Panel_PersonalIcon_Left:SetPosX(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX())
+  Panel_PersonalIcon_Left:SetPosY(5)
+  Panel_PersonalIcon_Left:SetSize(iconPosX, Panel_PersonalIcon_Left:GetSizeY())
   _buffIconPosX = iconPosX
 end
 
@@ -740,7 +744,6 @@ FromClient_ResponseGoldenbellItemInfo = function(goldenbellPercent, goldenbellEx
   if selfPlayer == nil then
     return 
   end
-  _PA_LOG("임승�\177", "time :" .. tostring(goldenbellExpirationTime_s64))
   _goldenBell:SetShow(false)
   if goldenbellExpirationTime_s64 <= toInt64(0, 0) then
     _goldenBell:SetShow(false)

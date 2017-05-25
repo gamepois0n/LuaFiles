@@ -61,61 +61,101 @@ local Panel_MyHouseNavi_Init = function()
   end
   local servantIconCount = FGlobal_ServantIconCount()
   if CppDefine.ChangeUIAndResolution == true then
-    if Panel_MyHouseNavi:GetRelativePosX() == 0 and Panel_MyHouseNavi:GetRelativePosY() == 0 then
-      if Panel_Window_Servant:GetShow() then
-        Panel_MyHouseNavi:SetPosX(posX)
-        Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
-      else
-        Panel_MyHouseNavi:SetPosX(10)
-        Panel_MyHouseNavi:SetPosY(posY)
-      end
-    else
-      if Panel_Window_Servant:GetShow() then
-        local x1 = Panel_Window_Servant:GetPosX()
-        local y1 = Panel_Window_Servant:GetPosY()
-        local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
-        local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
-        Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
-        Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
-        for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
-          -- DECOMPILER ERROR at PC196: Unhandled construct in 'MakeBoolean' P3
-
-          if (y1 <= Panel_MyHouseNavi:GetPosY() and Panel_MyHouseNavi:GetPosY() <= y2) or y1 > Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() <= y2 then
-            Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
-            Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
-          end
+    if Panel_MyHouseNavi:GetRelativePosX() == -1 and Panel_MyHouseNavi:GetRelativePosY() == -1 then
+      local isChangePosition = changePositionBySever(Panel_MyHouseNavi, (CppEnums.PAGameUIType).PAGameUIPanel_MyHouseNavi, false, true, false)
+      if not isChangePosition then
+        if Panel_Window_Servant:GetShow() then
+          Panel_MyHouseNavi:SetPosX(posX)
+          Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
+        else
+          Panel_MyHouseNavi:SetPosX(10)
+          Panel_MyHouseNavi:SetPosY(posY)
         end
       else
-        do
-          Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
-          Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
-          if not changePositionBySever(Panel_MyHouseNavi, (CppEnums.PAGameUIType).PAGameUIPanel_MyHouseNavi, false, true, false) then
-            if Panel_Window_Servant:GetShow() then
-              Panel_MyHouseNavi:SetPosX(posX)
-              Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
-            else
-              Panel_MyHouseNavi:SetPosX(10)
-              Panel_MyHouseNavi:SetPosY(posY)
-            end
-          else
-            if Panel_Window_Servant:GetShow() then
-              local x1 = Panel_Window_Servant:GetPosX()
-              local y1 = Panel_Window_Servant:GetPosY()
-              local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
-              local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
-              for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
-                -- DECOMPILER ERROR at PC370: Unhandled construct in 'MakeBoolean' P3
+        if Panel_Window_Servant:GetShow() then
+          local x1 = Panel_Window_Servant:GetPosX()
+          local y1 = Panel_Window_Servant:GetPosY()
+          local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
+          local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
+          for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
+            -- DECOMPILER ERROR at PC179: Unhandled construct in 'MakeBoolean' P3
 
-                if (y1 <= Panel_MyHouseNavi:GetPosY() and Panel_MyHouseNavi:GetPosY() <= y2) or y1 > Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() <= y2 then
-                  Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
+            if (y1 <= Panel_MyHouseNavi:GetPosY() and Panel_MyHouseNavi:GetPosY() <= y2) or y1 > Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() <= y2 then
+              Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
+              Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
+            end
+          end
+        else
+          do
+            do
+              local lPanel = Panel_MyHouseNavi
+              if not isChangePosition then
+                lPanel:SetRelativePosX(0)
+                lPanel:SetRelativePosY(0)
+              else
+                lPanel:SetRelativePosX((lPanel:GetPosX() + lPanel:GetSizeX() / 2) / getScreenSizeX())
+                lPanel:SetRelativePosY((lPanel:GetPosY() + lPanel:GetSizeY() / 2) / getScreenSizeY())
+              end
+              if Panel_MyHouseNavi:GetRelativePosX() == 0 and Panel_MyHouseNavi:GetRelativePosY() == 0 then
+                if Panel_Window_Servant:GetShow() then
+                  Panel_MyHouseNavi:SetPosX(posX)
                   Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
+                else
+                  Panel_MyHouseNavi:SetPosX(10)
+                  Panel_MyHouseNavi:SetPosY(posY)
+                end
+              else
+                if Panel_Window_Servant:GetShow() then
+                  local x1 = Panel_Window_Servant:GetPosX()
+                  local y1 = Panel_Window_Servant:GetPosY()
+                  local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
+                  local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
+                  Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
+                  Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
+                  for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
+                    -- DECOMPILER ERROR at PC384: Unhandled construct in 'MakeBoolean' P3
+
+                    if (y1 <= Panel_MyHouseNavi:GetPosY() and Panel_MyHouseNavi:GetPosY() <= y2) or y1 > Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() <= y2 then
+                      Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
+                      Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
+                    end
+                  end
+                else
+                  do
+                    Panel_MyHouseNavi:SetPosX(getScreenSizeX() * Panel_MyHouseNavi:GetRelativePosX() - Panel_MyHouseNavi:GetSizeX() / 2)
+                    Panel_MyHouseNavi:SetPosY(getScreenSizeY() * Panel_MyHouseNavi:GetRelativePosY() - Panel_MyHouseNavi:GetSizeY() / 2)
+                    if not changePositionBySever(Panel_MyHouseNavi, (CppEnums.PAGameUIType).PAGameUIPanel_MyHouseNavi, false, true, false) then
+                      if Panel_Window_Servant:GetShow() then
+                        Panel_MyHouseNavi:SetPosX(posX)
+                        Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
+                      else
+                        Panel_MyHouseNavi:SetPosX(10)
+                        Panel_MyHouseNavi:SetPosY(posY)
+                      end
+                    else
+                      if Panel_Window_Servant:GetShow() then
+                        local x1 = Panel_Window_Servant:GetPosX()
+                        local y1 = Panel_Window_Servant:GetPosY()
+                        local x2 = Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX()
+                        local y2 = Panel_Window_Servant:GetPosY() + Panel_Window_Servant:GetSizeY()
+                        for index = 0, Panel_MyHouseNavi:GetSizeX(), 10 do
+                          -- DECOMPILER ERROR at PC558: Unhandled construct in 'MakeBoolean' P3
+
+                          if (y1 <= Panel_MyHouseNavi:GetPosY() and Panel_MyHouseNavi:GetPosY() <= y2) or y1 > Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() / 2 or y1 <= Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() and Panel_MyHouseNavi:GetPosY() + Panel_MyHouseNavi:GetSizeY() <= y2 then
+                            Panel_MyHouseNavi:SetPosX(Panel_Window_Servant:GetPosX() + Panel_Window_Servant:GetSizeX())
+                            Panel_MyHouseNavi:SetPosY(Panel_Window_Servant:GetPosY())
+                          end
+                        end
+                      end
+                    end
+                    do
+                      FGlobal_PetListNew_NoPet()
+                      checkAndSetPosInScreen(Panel_MyHouseNavi)
+                    end
+                  end
                 end
               end
             end
-          end
-          do
-            FGlobal_PetListNew_NoPet()
-            checkAndSetPosInScreen(Panel_MyHouseNavi)
           end
         end
       end
@@ -454,6 +494,7 @@ renderModeChange_MyHouseNavi_Update = function(prevRenderModeList, nextRenderMod
   if CheckRenderMode(prevRenderModeList, currentRenderMode) or CheckRenderModebyGameMode(nextRenderModeList) then
     Panel_MyHouseNavi_Update()
   end
+  Panel_MyHouseNavi_PositionReset()
 end
 
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_MyHouseNavi_Update")

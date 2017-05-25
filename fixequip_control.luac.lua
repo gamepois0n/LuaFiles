@@ -59,19 +59,21 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
         (self._slotSub):setItem(itemWrapper)
         ;
         (self._enduranceText):SetShow(true)
-        -- DECOMPILER ERROR at PC116: Confused about usage of register: R6 in 'UnsetPending'
-
         ;
-        (self._slotSub).empty = false
-        -- DECOMPILER ERROR at PC118: Confused about usage of register: R6 in 'UnsetPending'
-
-        ;
-        (self._slotSub).whereType = inventoryType
+        (self._enduranceIcon):SetShow(true)
         -- DECOMPILER ERROR at PC120: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
+        (self._slotSub).empty = false
+        -- DECOMPILER ERROR at PC122: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
+        (self._slotSub).whereType = inventoryType
+        -- DECOMPILER ERROR at PC124: Confused about usage of register: R6 in 'UnsetPending'
+
+        ;
         (self._slotSub).slotNo = slotNo
-        -- DECOMPILER ERROR at PC128: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC132: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
         (self._slotSub).itemKey = ((itemWrapper:get()):getKey()):getItemKey()
@@ -162,6 +164,9 @@ PaGlobal_FixEquip.fixEquipMoneyUpdate = function(self)
   if selfPlayer == nil then
     return 
   end
+  if not Panel_FixEquip:IsShow() then
+    return 
+  end
   local invenMoney = ((selfPlayer:get()):getInventory()):getMoney_s64()
   ;
   (PaGlobal_FixEquip._uiTxtInven):SetText(makeDotMoney(invenMoney))
@@ -169,6 +174,17 @@ PaGlobal_FixEquip.fixEquipMoneyUpdate = function(self)
   (PaGlobal_FixEquip._uiTxtWarehouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
   local itemWrapper = getInventoryItemByType((self._slotMain).whereType, (self._slotMain).slotNo)
   if itemWrapper == nil then
+    (self._enduranceText):SetShow(false)
+    ;
+    (self._enduranceGauge):SetShow(false)
+    ;
+    (self._enduranceMax):SetShow(false)
+    ;
+    (self._enduranceGaugeValue):SetShow(false)
+    ;
+    (self._enduranceValue):SetShow(false)
+    ;
+    (self._enduranceIcon):SetShow(false)
     return 
   end
   local maxEndurance = ((itemWrapper:getStaticStatus()):get()):getMaxEndurance()
@@ -178,6 +194,10 @@ PaGlobal_FixEquip.fixEquipMoneyUpdate = function(self)
   (self._enduranceMax):SetAniSpeed(1)
   ;
   (self._enduranceMax):SetProgressRate(dynamicMaxEndurance / maxEndurance * 100)
+  ;
+  (self._enduranceGaugeValue):SetAniSpeed(1)
+  ;
+  (self._enduranceGaugeValue):SetProgressRate(endurance / maxEndurance * 100)
   ;
   (self._enduranceValue):SetText(endurance .. " / " .. dynamicMaxEndurance .. "  [" .. maxEndurance .. "]")
   if maxEndurance <= dynamicMaxEndurance then
@@ -190,6 +210,8 @@ PaGlobal_FixEquip.fixEquipMoneyUpdate = function(self)
     (self._enduranceGaugeValue):SetShow(false)
     ;
     (self._enduranceValue):SetShow(false)
+    ;
+    (self._enduranceIcon):SetShow(false)
   end
 end
 
@@ -386,6 +408,8 @@ PaGlobal_FixEquip.fixEquip_OutSlots = function(self, outSlotType)
     (self._enduranceGaugeValue):SetShow(false)
     ;
     (self._enduranceValue):SetShow(false)
+    ;
+    (self._enduranceIcon):SetShow(false)
   else
     PaGlobal_FixEquip:fixEquip_clearDataOnlySub()
   end
@@ -394,6 +418,8 @@ PaGlobal_FixEquip.fixEquip_OutSlots = function(self, outSlotType)
   PaGlobal_FixEquip:fixEquip_clearDataStreamRecovery(false, "fixEquip_OutSlots")
   ;
   (self._enduranceText):SetShow(false)
+  ;
+  (self._enduranceIcon):SetShow(false)
 end
 
 -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
@@ -488,6 +514,8 @@ PaGlobal_FixEquip.handleMClickedFixEquipItemButton = function(self)
   (self._enduranceGaugeValue):SetShow(false)
   ;
   (self._enduranceValue):SetShow(false)
+  ;
+  (self._enduranceIcon):SetShow(false)
   ;
   (self._enduranceMax):SetAniSpeed(0)
   ;

@@ -162,7 +162,7 @@ PaGlobal_Extraction.button_ExtractionCrystal_Click = function(self)
     InventoryWindow_Close()
     EquipmentWindow_Close()
   end
-  PaGlobal_TutorialManager:handleClickExtractionCrystalButton()
+  PaGlobal_TutorialManager:handleClickExtractionCrystalButton(Panel_Window_Extraction_Crystal:GetShow())
 end
 
 -- DECOMPILER ERROR at PC94: Confused about usage of register: R2 in 'UnsetPending'
@@ -179,7 +179,7 @@ PaGlobal_Extraction.button_ExtractionEnchantStone_Click = function(self)
     InventoryWindow_Close()
     EquipmentWindow_Close()
   end
-  PaGlobal_TutorialManager:handleClickExtractionEnchantStoneButton()
+  PaGlobal_TutorialManager:handleClickExtractionEnchantStoneButton(Panel_Window_Extraction_EnchantStone:GetShow())
 end
 
 -- DECOMPILER ERROR at PC97: Confused about usage of register: R2 in 'UnsetPending'
@@ -196,7 +196,7 @@ PaGlobal_Extraction.button_ExtractionCloth_Click = function(self)
     InventoryWindow_Close()
     EquipmentWindow_Close()
   end
-  PaGlobal_TutorialManager:handleClickExtractionClothButton()
+  PaGlobal_TutorialManager:handleClickExtractionClothButton(PaGlobal_ExtractionCloth:getShow())
 end
 
 PaGlobal_Extraction:initialize()

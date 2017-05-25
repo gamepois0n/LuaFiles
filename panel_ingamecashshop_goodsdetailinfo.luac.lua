@@ -538,7 +538,7 @@ end
 
   if cashProduct:doHaveDisplayClass() and not cashProduct:isClassTypeUsable((getSelfPlayer()):getClassType()) then
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_ALERT")
-    local messageBoxMemo = "<PAColor0xffd0ee68>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_MATHCLASS") .. "]\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_CART_MEMO", "getName", cashProduct:getName())
+    local messageBoxMemo = "<PAColor0xffd0ee68>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_MATHCLASS") .. "]\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_CART_MEMO", "getName", cashProduct:getName()) .. "<PAOldColor>"
     messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = doAnotherClassItem, functionNo = _InGameShopBuy_Confirm_Cancel, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)
@@ -604,8 +604,8 @@ end
         if eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
           serviceContry = contry.ru
         else
-          if eCountryType.CHI_ALPHA == gameServiceType or eCountryType.CHI_REAL == gameServiceType then
-            serviceContry = contry.cn
+          if eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+            serviceContry = contry.kr2
           else
             serviceContry = contry.kr
           end
@@ -667,7 +667,11 @@ end
       returnValue = returnValue .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_EQUIPBIND")
     end
     if itemCount > 1 and (getBindCount > 0 or equippBindCount > 0) then
-      returnValue = returnValue .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_INCLUSION")
+      if isGameTypeTaiwan() then
+        returnValue = returnValue .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_INCLUSION")
+      else
+        returnValue = returnValue .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_INCLUSION")
+      end
     end
     if returnValue == "- " then
       returnValue = nil
@@ -785,6 +789,15 @@ end
     end
     if cashProduct:isClassTypeUsable((CppEnums.ClassType).ClassType_NinjaMan) then
       valueString = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_NINJA"))
+      if returnString ~= nil then
+        returnString = tostring(returnString) .. ", " .. valueString
+      else
+        returnString = valueString
+      end
+      totalClassCount = totalClassCount + 1
+    end
+    if cashProduct:isClassTypeUsable((CppEnums.ClassType).ClassType_Combattant) then
+      valueString = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_COMBATTANT"))
       if returnString ~= nil then
         returnString = tostring(returnString) .. ", " .. valueString
       else

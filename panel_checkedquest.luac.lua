@@ -475,8 +475,24 @@ end
 
 -- DECOMPILER ERROR at PC197: Confused about usage of register: R9 in 'UnsetPending'
 
-PaGlobal_CheckedQuest.findShownIndexInCheckedQuest = function(self, questGroupNo, questId)
+PaGlobal_CheckedQuest.findShownQuestUiInCheckedQuestIndex = function(self, questGroupNo, questId)
   -- function num : 0_7
+  local shownIndex = -1
+  shownIndex = PaGlobal_LatestQuest:findShownIndexInLatestQuest(questGroupNo, questId)
+  if shownIndex ~= -1 then
+    return shownIndex
+  end
+  shownIndex = PaGlobal_CheckedQuest:findShownIndexInCheckedQuest(questGroupNo, questId)
+  if shownIndex ~= -1 then
+    return shownIndex
+  end
+  return nil
+end
+
+-- DECOMPILER ERROR at PC200: Confused about usage of register: R9 in 'UnsetPending'
+
+PaGlobal_CheckedQuest.findShownIndexInCheckedQuest = function(self, questGroupNo, questId)
+  -- function num : 0_8
   local checkedQuestIndex = self:findQuestUiIndexInCheckedQuest(questGroupNo, questId)
   if checkedQuestIndex == -1 then
     return -1
@@ -493,10 +509,10 @@ PaGlobal_CheckedQuest.findShownIndexInCheckedQuest = function(self, questGroupNo
   end
 end
 
--- DECOMPILER ERROR at PC200: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC203: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.isExistProgressingQuestInCheckedGroup = function(self, checkedQuestGroupInfo)
-  -- function num : 0_8
+  -- function num : 0_9
   if checkedQuestGroupInfo:isGroupQuest() == false then
     return true
   end
@@ -510,10 +526,10 @@ PaGlobal_CheckedQuest.isExistProgressingQuestInCheckedGroup = function(self, che
   return false
 end
 
--- DECOMPILER ERROR at PC203: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC206: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.addEffectQuestFindNaviButtonForTutorial = function(self, questUiInfoInPanelCheckedQuest)
-  -- function num : 0_9
+  -- function num : 0_10
   if questUiInfoInPanelCheckedQuest[2] ~= nil then
     self._refUiQuestNaviButton = (questUiInfoInPanelCheckedQuest[2])._uiNaviBtn
     self._refUiQuestTitle = (questUiInfoInPanelCheckedQuest[2])._uiQuestTitle
@@ -547,10 +563,10 @@ PaGlobal_CheckedQuest.addEffectQuestFindNaviButtonForTutorial = function(self, q
   end
 end
 
--- DECOMPILER ERROR at PC206: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC209: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.eraseEffectQuestNaviButtonForTutorial = function(self)
-  -- function num : 0_10
+  -- function num : 0_11
   if self._refUiQuestNaviButton ~= nil then
     (self._refUiQuestNaviButton):EraseAllEffect()
     ;
@@ -562,10 +578,10 @@ PaGlobal_CheckedQuest.eraseEffectQuestNaviButtonForTutorial = function(self)
   (PaGlobal_TutorialUiManager:getUiMasking()):hideQuestMasking()
 end
 
--- DECOMPILER ERROR at PC209: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC212: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.findQuestUiIndexInCheckedQuest = function(self, questGruopNo, questId)
-  -- function num : 0_11
+  -- function num : 0_12
   for ii = 0, self._maxQuestListCnt - 1 do
     local questNo = ((self._uiList)[ii])._questNo
     if questNo._groupId == questGruopNo and questNo._questId == questId then
@@ -575,25 +591,34 @@ PaGlobal_CheckedQuest.findQuestUiIndexInCheckedQuest = function(self, questGruop
   return -1
 end
 
+FGlobal_CheckedQuestGetQuestUiButtonPosition = function(questGroupNo, questId)
+  -- function num : 0_13
+  local index = PaGlobal_CheckedQuest:findShownQuestUiInCheckedQuestIndex(questGroupNo, questId)
+  if index == -1 then
+    return -1
+  end
+  return index
+end
+
 HandleClicked_QuestWidget_OptionButton = function()
-  -- function num : 0_12
+  -- function num : 0_14
   FGlobal_CheckedQuestOptionOpen()
 end
 
 ShowTooltip_QuestWidget_OptionButton = function()
-  -- function num : 0_13
+  -- function num : 0_15
   local name = PAGetString(Defines.StringSheet_GAME, "LUA_CHECKEDQUEST_OPTIONBUTTON_TOOLTIPTITLE")
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHECKEDQUEST_OPTIONBUTTON_TOOLTIPDESC")
   TooltipSimple_Show(PaGlobal_CheckedQuest._uiOptionButton, name, desc)
 end
 
 HideTooltip_QuestWidget_OptionButton = function()
-  -- function num : 0_14
+  -- function num : 0_16
   TooltipSimple_Hide()
 end
 
 QuestWidget_SelectQuestFavorType = function(selectType)
-  -- function num : 0_15
+  -- function num : 0_17
   if ((getSelfPlayer()):get()):getLevel() >= 20 then
     if selectType == 0 then
       _update_QuestWidgetSetCheckAll()
@@ -609,7 +634,7 @@ QuestWidget_SelectQuestFavorType = function(selectType)
 end
 
 LvFivty_SetQuestFavorateType = function()
-  -- function num : 0_16
+  -- function num : 0_18
   if ((getSelfPlayer()):get()):getLevel() ~= 50 then
     return 
   end
@@ -622,7 +647,7 @@ end
 
 registerEvent("ToClient_SelfPlayerLevelUp", "LvFivty_SetQuestFavorateType")
 QuestWidget_FavorTypeTooltip = function(isShow, buttonNo)
-  -- function num : 0_17
+  -- function num : 0_19
   local control, name, desc = nil
   if isShow == true then
     control = (PaGlobal_CheckedQuest._uiQuestFavorType)[buttonNo]
@@ -663,7 +688,7 @@ QuestWidget_FavorTypeTooltip = function(isShow, buttonNo)
 end
 
 QuestWidget_ShowSelectQuestFavorType = function(selectType)
-  -- function num : 0_18 , upvalues : MAX_QUEST_FAVOR_TYPE
+  -- function num : 0_20 , upvalues : MAX_QUEST_FAVOR_TYPE
   if selectType == 0 then
     local QuestListInfo = ToClient_GetQuestList()
     for ii = 0, MAX_QUEST_FAVOR_TYPE - 1 do
@@ -694,7 +719,7 @@ QuestWidget_ShowSelectQuestFavorType = function(selectType)
 end
 
 _update_QuestWidgetSetCheckAll = function()
-  -- function num : 0_19 , upvalues : MAX_QUEST_FAVOR_TYPE
+  -- function num : 0_21 , upvalues : MAX_QUEST_FAVOR_TYPE
   local isCheck = ((PaGlobal_CheckedQuest._uiQuestFavorType)[0]):IsCheck()
   for i = 1, MAX_QUEST_FAVOR_TYPE - 1 do
     if isCheck == not ((PaGlobal_CheckedQuest._uiQuestFavorType)[i]):IsCheck() then
@@ -705,10 +730,10 @@ _update_QuestWidgetSetCheckAll = function()
   end
 end
 
--- DECOMPILER ERROR at PC234: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC239: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateFavorType = function(self)
-  -- function num : 0_20
+  -- function num : 0_22
   if isLuaLoadingComplete then
     if isQuest160524_chk() then
       FGlobal_QuestWindow_favorTypeUpdate()
@@ -720,7 +745,7 @@ PaGlobal_CheckedQuest.updateFavorType = function(self)
 end
 
 FGlobal_UpdateQuestFavorType = function()
-  -- function num : 0_21
+  -- function num : 0_23
   if isQuest160524_chk() then
     FGlobal_QuestWindow_favorTypeUpdate()
   else
@@ -730,10 +755,10 @@ FGlobal_UpdateQuestFavorType = function()
   UIMain_QuestUpdate()
 end
 
--- DECOMPILER ERROR at PC240: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC245: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateQuestWidgetFavorType = function(self)
-  -- function num : 0_22 , upvalues : MAX_QUEST_FAVOR_TYPE
+  -- function num : 0_24 , upvalues : MAX_QUEST_FAVOR_TYPE
   local allButtonCheck = true
   local QuestListInfo = ToClient_GetQuestList()
   for ii = 1, MAX_QUEST_FAVOR_TYPE - 1 do
@@ -764,12 +789,12 @@ PaGlobal_CheckedQuest.updateQuestWidgetFavorType = function(self)
 end
 
 checkedquestIcon = function(favorIndex)
-  -- function num : 0_23
+  -- function num : 0_25
   ToClient_ToggleQuestSelectType(favorIndex)
 end
 
 QuestWidget_NationalCheck = function()
-  -- function num : 0_24
+  -- function num : 0_26
   if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_RUS) then
     _update_QuestWidgetSetCheckAll()
   end
@@ -790,7 +815,7 @@ local battleTutorial = {
 }
 local widgetMouseOn = false
 HandleClieked_GuildQuestWidget_Giveup = function()
-  -- function num : 0_25
+  -- function num : 0_27
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if not isGuildMaster and not isGuildSubMaster then
@@ -803,7 +828,7 @@ HandleClieked_GuildQuestWidget_Giveup = function()
 end
 
 FindGuild_Button_Simpletooltips = function(isShow)
-  -- function num : 0_26
+  -- function num : 0_28
   local name, desc, control = nil
   if isShow == true then
     control = (UI.getChildControl)(Panel_CheckedQuest, "Button_WantGuild")
@@ -816,7 +841,7 @@ FindGuild_Button_Simpletooltips = function(isShow)
 end
 
 checkedQuestPanel_Init = function()
-  -- function num : 0_27
+  -- function num : 0_29
   local haveServerPosotion = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_CheckedQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0
   if not haveServerPosotion then
     Panel_CheckedQuest:SetSize(305, 350)
@@ -859,7 +884,7 @@ local _positionList = {}
 local _isAutoRun = false
 local _autoNaviGuide = {groupKey = 0, questKey = 0}
 QuestListShowAni = function()
-  -- function num : 0_28 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
+  -- function num : 0_30 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
   Panel_CheckedQuest:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_IN)
   local QuestListOpen_Alpha = Panel_CheckedQuest:addColorAnimation(0, 0.35, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   QuestListOpen_Alpha:SetStartColor(UI_color.C_00FFFFFF)
@@ -868,7 +893,7 @@ QuestListShowAni = function()
 end
 
 QuestListHideAni = function()
-  -- function num : 0_29 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
+  -- function num : 0_31 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
   Panel_CheckedQuest:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local QuestListClose_Alpha = Panel_CheckedQuest:addColorAnimation(0, 0.25, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   QuestListClose_Alpha:SetStartColor(UI_color.C_FFFFFFFF)
@@ -879,7 +904,7 @@ QuestListHideAni = function()
 end
 
 QuestWidget_ScrollEvent = function(UpDown)
-  -- function num : 0_30 , upvalues : _startPosition, _isDontDownScroll
+  -- function num : 0_32 , upvalues : _startPosition, _isDontDownScroll
   local prevPos = _startPosition
   if UpDown == true then
     if _isDontDownScroll == true then
@@ -901,7 +926,7 @@ end
 
 local _maxscrollBarPos = 0
 QuestWidget_ScrollLPress = function()
-  -- function num : 0_31 , upvalues : _startPosition, _isDontDownScroll
+  -- function num : 0_33 , upvalues : _startPosition, _isDontDownScroll
   local prevPos = _startPosition
   local totalCount = PaGlobal_CheckedQuest:getTotalListCount()
   local currentPos = (math.floor)((PaGlobal_CheckedQuest._uiScrollBar):GetControlPos() * (totalCount - 1) + 0.5)
@@ -914,10 +939,10 @@ QuestWidget_ScrollLPress = function()
   end
 end
 
--- DECOMPILER ERROR at PC328: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC333: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateScrollButtonSize = function(self)
-  -- function num : 0_32 , upvalues : _startPosition, widgetMouseOn, _hasGuildQuest
+  -- function num : 0_34 , upvalues : _startPosition, widgetMouseOn, _hasGuildQuest
   local pageSize = (self._uiTransBG):GetSizeY() - (self._uiNormalQuestGroup):GetPosY()
   if _startPosition == 0 and (self._uiNormalQuestGroup):GetSizeY() < pageSize then
     (self._uiScrollBar):SetShow(false)
@@ -954,19 +979,19 @@ PaGlobal_CheckedQuest.updateScrollButtonSize = function(self)
   ((self._uiScrollBar):GetControlButton()):SetSize(((self._uiScrollBar):GetControlButton()):GetSizeX(), button_sizeY)
 end
 
--- DECOMPILER ERROR at PC331: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC336: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.isAlreadyShown = function(self, questNo)
-  -- function num : 0_33
+  -- function num : 0_35
   if not PaGlobal_LatestQuest:isShownQuest(questNo) then
     return PaGlobal_MainQuest:isShownQuest(questNo)
   end
 end
 
--- DECOMPILER ERROR at PC334: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC339: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getTotalListCount = function(self)
-  -- function num : 0_34
+  -- function num : 0_36
   local totalCount = 0
   local questListInfo = ToClient_GetQuestList()
   local questGroupCount = questListInfo:getQuestCheckedGroupCount()
@@ -1004,10 +1029,10 @@ PaGlobal_CheckedQuest.getTotalListCount = function(self)
   return totalCount
 end
 
--- DECOMPILER ERROR at PC338: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC343: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateScrollPosition = function(self)
-  -- function num : 0_35 , upvalues : _startPosition
+  -- function num : 0_37 , upvalues : _startPosition
   local totalListCount = self:getTotalListCount()
   local posY = (self._uiScrollBar):GetSizeY() * (_startPosition / totalListCount)
   local maxPosY = (self._uiScrollBar):GetSizeY() - ((self._uiScrollBar):GetControlButton()):GetSizeY()
@@ -1019,10 +1044,10 @@ PaGlobal_CheckedQuest.updateScrollPosition = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC343: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC348: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.checkShowScrollbar = function(self)
-  -- function num : 0_36 , upvalues : _startPosition, widgetMouseOn
+  -- function num : 0_38 , upvalues : _startPosition, widgetMouseOn
   local scrollSizeY = (self._uiTransBG):GetSizeY() - (self._uiNormalQuestGroup):GetPosY()
   if _startPosition == 0 and (self._uiNormalQuestGroup):GetSizeY() < scrollSizeY then
     (self._uiScrollBar):SetShow(false)
@@ -1033,18 +1058,18 @@ PaGlobal_CheckedQuest.checkShowScrollbar = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC346: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC351: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getScollPageSize = function(self)
-  -- function num : 0_37
+  -- function num : 0_39
   local pageSize = (self._uiTransBG):GetSizeY() - (self._uiNormalQuestGroup):GetPosY()
   return pageSize
 end
 
--- DECOMPILER ERROR at PC349: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC354: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getLastShownGroupIndex = function(self)
-  -- function num : 0_38
+  -- function num : 0_40
   local index = -1
   for ii = 0, self._maxQuestListCnt - 1 do
     local uiElem = (self._uiList)[ii]
@@ -1056,7 +1081,7 @@ PaGlobal_CheckedQuest.getLastShownGroupIndex = function(self)
 end
 
 FromClient_QuestWidget_Update = function()
-  -- function num : 0_39 , upvalues : _startPosition
+  -- function num : 0_41 , upvalues : _startPosition
   PaGlobal_CheckedQuest:updateFavorType()
   FGlobal_MainQuest_Update()
   FGlobal_LatestQuest_UpdateList()
@@ -1070,7 +1095,7 @@ FromClient_QuestWidget_Update = function()
 end
 
 GuideButton_MouseOnOut = function(isOut)
-  -- function num : 0_40
+  -- function num : 0_42
   if not getEnableSimpleUI() then
     return 
   end
@@ -1095,7 +1120,7 @@ GuideButton_MouseOnOut = function(isOut)
 end
 
 HandleClicked_QuestShowCheck = function(groupId, questId)
-  -- function num : 0_41
+  -- function num : 0_43
   ToClient_ToggleCheckShow(groupId, questId)
   if Panel_CheckedQuestInfo:GetShow() == true then
     if Panel_CheckedQuestInfo:IsUISubApp() then
@@ -1109,19 +1134,18 @@ end
 local questNoSaveForTutorial = {_questGroupIndex, _questGroupIdx}
 local welcomeToTheWorld = true
 FGlobal_CheckedQuest_SetWelcomeToTheWorld = function(isFirst)
-  -- function num : 0_42 , upvalues : welcomeToTheWorld
+  -- function num : 0_44 , upvalues : welcomeToTheWorld
   welcomeToTheWorld = isFirst
 end
 
--- DECOMPILER ERROR at PC375: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC380: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateQuestList = function(self, startPosition)
-  -- function num : 0_43 , upvalues : _maxscrollBarPos, _nextPosY, _shownListCount, _questGroupCount, _scrollBarStartPosition, CheckedQuest_SizeY, _isDontDownScroll, widgetMouseOn
+  -- function num : 0_45 , upvalues : _maxscrollBarPos, _nextPosY, _shownListCount, _questGroupCount, _scrollBarStartPosition, CheckedQuest_SizeY, _isDontDownScroll, widgetMouseOn
   if _maxscrollBarPos ~= 0 and _maxscrollBarPos < startPosition then
     startPosition = _maxscrollBarPos
   end
   startPosition = (math.max)((math.min)(startPosition, self._maxQuestListCnt - 1), 0)
-  self:checkPosition()
   self:clear()
   self:doGuideQuest()
   self:doReleaseCheckForTutorial()
@@ -1189,7 +1213,7 @@ PaGlobal_CheckedQuest.updateQuestList = function(self, startPosition)
             _maxscrollBarPos = startPosition
             _isDontDownScroll = true
           end
-          -- DECOMPILER ERROR at PC191: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC189: LeaveBlock: unexpected jumping out DO_STMT
 
         end
       end
@@ -1214,10 +1238,10 @@ PaGlobal_CheckedQuest.updateQuestList = function(self, startPosition)
   end
 end
 
--- DECOMPILER ERROR at PC378: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC383: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getGroupCount = function(self)
-  -- function num : 0_44
+  -- function num : 0_46
   local groupCount = 0
   for ii = 0, self._maxQuestListCnt - 1 do
     if (((self._uiList)[ii])._questNo)._groupId ~= 0 and (((self._uiList)[ii])._questNo)._questId ~= 0 then
@@ -1228,7 +1252,7 @@ PaGlobal_CheckedQuest.getGroupCount = function(self)
 end
 
 isEmptyNormalQuestGroup = function()
-  -- function num : 0_45
+  -- function num : 0_47
   local count = PaGlobal_CheckedQuest:getGroupCount()
   if count == 0 then
     return true
@@ -1236,10 +1260,10 @@ isEmptyNormalQuestGroup = function()
   return false
 end
 
--- DECOMPILER ERROR at PC383: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC388: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.doGuideQuest = function(self)
-  -- function num : 0_46
+  -- function num : 0_48
   local doGuideQuestCount = questList_getDoGuideQuestCount()
   if doGuideQuestCount > 0 then
     (self._uiGuideButton):SetTextHorizonCenter()
@@ -1286,10 +1310,10 @@ PaGlobal_CheckedQuest.doGuideQuest = function(self)
   (self._uiResizeButton):SetPosY((self._uiHistoryButton):GetPosY())
 end
 
--- DECOMPILER ERROR at PC388: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC393: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.doReleaseCheckForTutorial = function(self)
-  -- function num : 0_47 , upvalues : welcomeToTheWorld, questNoSaveForTutorial
+  -- function num : 0_49 , upvalues : welcomeToTheWorld, questNoSaveForTutorial
   local questListInfo = ToClient_GetQuestList()
   local temp_questGroupCount = questListInfo:getQuestCheckedGroupCount()
   local temp_progressCount = 0
@@ -1360,10 +1384,10 @@ PaGlobal_CheckedQuest.doReleaseCheckForTutorial = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC394: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC399: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.QuestWidget_ProgressingGuildQuest = function(self, _nextPosY)
-  -- function num : 0_48 , upvalues : _hasGuildQuest, UI_color, _shownListCount
+  -- function num : 0_50 , upvalues : _hasGuildQuest, UI_color, _shownListCount
   if PaGlobal_TutorialManager:isDoingTutorial() then
     ((self._guildQuest)._ControlBG):SetShow(false)
     _hasGuildQuest = false
@@ -1482,7 +1506,7 @@ end
 
 local elapsedTime = 0
 QuestWidget_ProgressingGuildQuest_UpdateRemainTime = function(deltaTime)
-  -- function num : 0_49 , upvalues : elapsedTime
+  -- function num : 0_51 , upvalues : elapsedTime
   elapsedTime = elapsedTime + deltaTime
   if elapsedTime < 5 then
     return 
@@ -1502,10 +1526,10 @@ QuestWidget_ProgressingGuildQuest_UpdateRemainTime = function(deltaTime)
 end
 
 Panel_CheckedQuest:RegisterUpdateFunc("QuestWidget_ProgressingGuildQuest_UpdateRemainTime")
--- DECOMPILER ERROR at PC405: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC410: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.groupQuestInfo = function(self, questGroupInfo, _nextPosY, questGroupIndex)
-  -- function num : 0_50
+  -- function num : 0_52
   local tmp_next_GroupPosY = _nextPosY + 2
   local questGroupTitle = questGroupInfo:getTitle()
   local questGroupCount = questGroupInfo:getTotalQuestCount()
@@ -1521,10 +1545,10 @@ PaGlobal_CheckedQuest.groupQuestInfo = function(self, questGroupInfo, _nextPosY,
   return tmp_next_GroupPosY
 end
 
--- DECOMPILER ERROR at PC408: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC413: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.questInfo = function(self, questGroupInfo, uiQuestInfo, _nextPosY, isSingle, questGroupIndex, questIndex, groupTitle, questGroupCount)
-  -- function num : 0_51
+  -- function num : 0_53
   local tmp_nextPosY = _nextPosY + 2
   local questGroupId = (uiQuestInfo:getQuestNo())._group
   local questId = (uiQuestInfo:getQuestNo())._quest
@@ -1534,10 +1558,10 @@ PaGlobal_CheckedQuest.questInfo = function(self, questGroupInfo, uiQuestInfo, _n
   return tmp_nextPosY
 end
 
--- DECOMPILER ERROR at PC412: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC417: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.ProgressQuest = function(self, questGroupInfo, uiQuestInfo, tmp_nextPosY, isSingle, groupTitle, questGroupCount, questGroupIndex)
-  -- function num : 0_52 , upvalues : _shownListCount
+  -- function num : 0_54 , upvalues : _shownListCount
   if getSelfPlayer() == nil then
     return tmp_nextPosY
   end
@@ -1576,10 +1600,10 @@ PaGlobal_CheckedQuest.ProgressQuest = function(self, questGroupInfo, uiQuestInfo
   return tmp_nextPosY
 end
 
--- DECOMPILER ERROR at PC415: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC420: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestGroupPos = function(self, idx, uiQuestInfo, questGroupId, questId, questGroupCount, groupTitle, posY)
-  -- function num : 0_53
+  -- function num : 0_55
   if idx < 0 or PaGlobal_CheckedQuest._maxQuestListCnt <= idx then
     _PA_LOG("�\128병호", "===================error==================")
     _PA_LOG("�\128병호", "setQuestGroupPos : idx == " .. tostring(idx))
@@ -1629,10 +1653,10 @@ PaGlobal_CheckedQuest.setQuestGroupPos = function(self, idx, uiQuestInfo, questG
   end
 end
 
--- DECOMPILER ERROR at PC418: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC423: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestTypeIcon = function(self, idx, uiQuestInfo)
-  -- function num : 0_54
+  -- function num : 0_56
   if uiQuestInfo == nil or PaGlobal_CheckedQuest._maxQuestListCnt <= idx then
     return 
   end
@@ -1645,10 +1669,10 @@ PaGlobal_CheckedQuest.setQuestTypeIcon = function(self, idx, uiQuestInfo)
   FGlobal_ChangeOnTextureForDialogQuestIcon(uiQuestIcon, uiQuestInfo:getQuestType())
 end
 
--- DECOMPILER ERROR at PC422: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC427: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestTitle = function(self, idx, uiQuestInfo)
-  -- function num : 0_55 , upvalues : UI_color
+  -- function num : 0_57 , upvalues : UI_color
   if uiQuestInfo == nil or self._maxQuestListCnt <= idx then
     return 
   end
@@ -1669,10 +1693,10 @@ PaGlobal_CheckedQuest.setQuestTitle = function(self, idx, uiQuestInfo)
   uiQuestTitle:useGlowFont(true, "BaseFont_8_Glow", 4287655978)
 end
 
--- DECOMPILER ERROR at PC426: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC431: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestGroupTitle = function(self, idx, isSingle, groupTitle, questId, questGroupCount)
-  -- function num : 0_56 , upvalues : UI_color
+  -- function num : 0_58 , upvalues : UI_color
   if self._maxQuestListCnt <= idx then
     return 
   end
@@ -1700,10 +1724,10 @@ PaGlobal_CheckedQuest.setQuestGroupTitle = function(self, idx, isSingle, groupTi
   end
 end
 
--- DECOMPILER ERROR at PC430: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC435: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestCondition = function(self, idx, uiQuestInfo, questNo, posY)
-  -- function num : 0_57 , upvalues : UI_color
+  -- function num : 0_59 , upvalues : UI_color
   if self._maxQuestListCnt <= idx then
     return 
   end
@@ -1779,10 +1803,10 @@ PaGlobal_CheckedQuest.setQuestCondition = function(self, idx, uiQuestInfo, quest
   end
 end
 
--- DECOMPILER ERROR at PC434: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC439: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setVisibleConvenienceButton = function(self, show)
-  -- function num : 0_58 , upvalues : widgetMouseOn
+  -- function num : 0_60 , upvalues : widgetMouseOn
   local selfLevel = ((getSelfPlayer()):get()):getLevel()
   for idx = 0, self._maxQuestListCnt - 1 do
     local uiElem = (self._uiList)[idx]
@@ -1810,10 +1834,10 @@ PaGlobal_CheckedQuest.setVisibleConvenienceButton = function(self, show)
   end
 end
 
--- DECOMPILER ERROR at PC437: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC442: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.resizingConvenienceButtons = function(self, idx, isMouseOn)
-  -- function num : 0_59
+  -- function num : 0_61
   if idx < 0 or self._maxQuestListCnt <= idx then
     _PA_LOG("�\128병호", "==================error====================")
     _PA_LOG("�\128병호", "resizingConvenienceButtons : idx == " .. tostring(idx))
@@ -1862,10 +1886,10 @@ PaGlobal_CheckedQuest.resizingConvenienceButtons = function(self, idx, isMouseOn
   (uiElem._uiHideBtn):SetSize(sizeX, sizeY)
 end
 
--- DECOMPILER ERROR at PC444: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC449: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setNaviButtonInfo = function(self, idx, uiQuestInfo)
-  -- function num : 0_60 , upvalues : _questGroupId, _questId, _naviInfoAgain, widgetMouseOn
+  -- function num : 0_62 , upvalues : _questGroupId, _questId, _naviInfoAgain, widgetMouseOn
   if idx < 0 or self._maxQuestListCnt <= idx then
     _PA_LOG("�\128병호", "====================error=================" .. tostring(idx))
     _PA_LOG("�\128병호", "setNaviButtonInfo : idx == \t\t\t\t" .. tostring(idx))
@@ -1930,10 +1954,10 @@ PaGlobal_CheckedQuest.setNaviButtonInfo = function(self, idx, uiQuestInfo)
   end
 end
 
--- DECOMPILER ERROR at PC448: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC453: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setGiveupButtonInfo = function(self, idx, uiQuestInfo)
-  -- function num : 0_61 , upvalues : widgetMouseOn
+  -- function num : 0_63 , upvalues : widgetMouseOn
   if self._maxQuestListCnt <= idx then
     _PA_LOG("�\128병호", "=================error==================" .. tostring(idx))
     _PA_LOG("�\128병호", "setGiveupButtonInfo : idx == " .. tostring(idx))
@@ -1961,10 +1985,10 @@ PaGlobal_CheckedQuest.setGiveupButtonInfo = function(self, idx, uiQuestInfo)
   end
 end
 
--- DECOMPILER ERROR at PC452: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC457: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setHideButtonInfo = function(self, idx, questNo, isSingle)
-  -- function num : 0_62 , upvalues : widgetMouseOn
+  -- function num : 0_64 , upvalues : widgetMouseOn
   if idx < 0 or self._maxQuestListCnt <= idx then
     _PA_LOG("�\128병호", "====================error=================" .. tostring(idx))
     _PA_LOG("�\128병호", "setHideButtonInfo : idx == \t\t\t\t" .. tostring(idx))
@@ -1991,10 +2015,10 @@ PaGlobal_CheckedQuest.setHideButtonInfo = function(self, idx, questNo, isSingle)
   uiHideBtn:addInputEvent("Mouse_Out", "HandleMouseOver_HelpPop( false," .. uiHideBtnPosY .. ", \"hide\", " .. idx .. "  )")
 end
 
--- DECOMPILER ERROR at PC455: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC460: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.isHitTestQuestGroup = function(self, groupControl)
-  -- function num : 0_63
+  -- function num : 0_65
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local panel = Panel_CheckedQuest
@@ -2010,10 +2034,10 @@ PaGlobal_CheckedQuest.isHitTestQuestGroup = function(self, groupControl)
   return false
 end
 
--- DECOMPILER ERROR at PC458: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC463: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getQuestTitle = function(self, groupId, questId)
-  -- function num : 0_64
+  -- function num : 0_66
   local questTitle, questLevel = nil, nil
   local uiQuestInfo = ToClient_GetQuestInfo(groupId, questId)
   if uiQuestInfo ~= nil then
@@ -2032,7 +2056,7 @@ local blackQuestTexture = {
 {197, 197, 250, 250}
 }
 _questWidget_ChangeTextureForBlackSpirit = function(isBlack, control)
-  -- function num : 0_65 , upvalues : blackQuestTexture
+  -- function num : 0_67 , upvalues : blackQuestTexture
   control:ChangeTextureInfoName("New_ui_common_forlua/default/blackpanel_series.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, (blackQuestTexture[isBlack])[1], (blackQuestTexture[isBlack])[2], (blackQuestTexture[isBlack])[3], (blackQuestTexture[isBlack])[4])
   ;
@@ -2041,7 +2065,7 @@ _questWidget_ChangeTextureForBlackSpirit = function(isBlack, control)
 end
 
 haveQuestCheck = function(questGroupId, questId)
-  -- function num : 0_66 , upvalues : questNoSaveForTutorial
+  -- function num : 0_68 , upvalues : questNoSaveForTutorial
   local questListInfo = ToClient_GetQuestList()
   local temp_questGroupCount = questListInfo:getQuestGroupCount()
   local haveQuest = false
@@ -2054,7 +2078,7 @@ haveQuestCheck = function(questGroupId, questId)
 end
 
 HandleMouseOver_HelpPop = function(show, posY, target, idx)
-  -- function num : 0_67
+  -- function num : 0_69
   Panel_CheckedQuest:SetChildIndex(PaGlobal_CheckedQuest._uiHelpWidget, 9999)
   if show == true then
     if target == "navi" then
@@ -2084,7 +2108,7 @@ HandleMouseOver_HelpPop = function(show, posY, target, idx)
 end
 
 _questWidgetBubblePos = function(posY)
-  -- function num : 0_68
+  -- function num : 0_70
   local screenY = getScreenSizeY()
   local panelPosY = Panel_CheckedQuest:GetPosY()
   local _uiHelpWidgetSizeY = (PaGlobal_CheckedQuest._uiHelpWidget):GetSizeY()
@@ -2100,10 +2124,10 @@ _questWidgetBubblePos = function(posY)
 end
 
 local IM = CppEnums.EProcessorInputMode
--- DECOMPILER ERROR at PC488: Confused about usage of register: R34 in 'UnsetPending'
+-- DECOMPILER ERROR at PC493: Confused about usage of register: R34 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.Common_WidgetMouseOut = function(self)
-  -- function num : 0_69 , upvalues : IM
+  -- function num : 0_71 , upvalues : IM
   if IM.eProcessorInputMode_GameMode ~= (UI.Get_ProcessorInputMode)() then
     local panelPosX = Panel_CheckedQuest:GetPosX()
     local panelPosY = Panel_CheckedQuest:GetPosY()
@@ -2121,7 +2145,7 @@ PaGlobal_CheckedQuest.Common_WidgetMouseOut = function(self)
 end
 
 FGlobal_QuestWidget_MouseOver = function(show)
-  -- function num : 0_70 , upvalues : widgetMouseOn
+  -- function num : 0_72 , upvalues : widgetMouseOn
   if show == true then
     (PaGlobal_CheckedQuest._uiTransBG):SetShow(true)
     if isEmptyNormalQuestGroup() == false then
@@ -2158,7 +2182,7 @@ FGlobal_QuestWidget_MouseOver = function(show)
 end
 
 FGlobal_ChangeWidgetType = function()
-  -- function num : 0_71
+  -- function num : 0_73
   local widgetType = FGlobal_GetSelectedWidgetType()
   if (CppEnums.QuestWidgetType).eQuestWidgetType_Simple == widgetType then
     (PaGlobal_CheckedQuest._uiNormalQuestGroup):SetShow(false)
@@ -2168,10 +2192,10 @@ FGlobal_ChangeWidgetType = function()
   end
 end
 
--- DECOMPILER ERROR at PC496: Confused about usage of register: R34 in 'UnsetPending'
+-- DECOMPILER ERROR at PC501: Confused about usage of register: R34 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.tooltipReposition = function(self)
-  -- function num : 0_72
+  -- function num : 0_74
   if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
     (self._uiTooltipBG):SetSize(120, 68)
   else
@@ -2191,10 +2215,10 @@ PaGlobal_CheckedQuest.tooltipReposition = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC499: Confused about usage of register: R34 in 'UnsetPending'
+-- DECOMPILER ERROR at PC504: Confused about usage of register: R34 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setShowFunctionButtons = function(self, isMouseOver)
-  -- function num : 0_73
+  -- function num : 0_75
   if isMouseOver == true then
     (PaGlobal_CheckedQuest._uiResizeButton):SetShow(true)
     if questList_getDoGuideQuestCount() > 0 then
@@ -2227,14 +2251,14 @@ PaGlobal_CheckedQuest.setShowFunctionButtons = function(self, isMouseOver)
 end
 
 questWidget_ShowTooptip = function(questGroupId, questId, isMouseShow)
-  -- function num : 0_74
+  -- function num : 0_76
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   questInfo_TooltipShow(true, questGroupId, questId, mousePosX, mousePosY, isMouseShow)
 end
 
 HandleMouseOver_CheckedQuestGroup = function(show, bgIndex, naviBtnShow)
-  -- function num : 0_75
+  -- function num : 0_77
   if bgIndex < 0 or PaGlobal_CheckedQuest._maxQuestListCnt <= bgIndex then
     _PA_LOG("�\128병호", "=================error=================")
     _PA_LOG("�\128병호", "HandleMouseOver_CheckedQuestGroup: bgIndex == " .. tostring(bgIndex))
@@ -2266,37 +2290,37 @@ HandleMouseOver_CheckedQuestGroup = function(show, bgIndex, naviBtnShow)
 end
 
 FGlobal_QuestWidgetGetStartPosition = function()
-  -- function num : 0_76 , upvalues : _startPosition
+  -- function num : 0_78 , upvalues : _startPosition
   return _startPosition
 end
 
 FGlobal_QuestWidget_UpdateList = function()
-  -- function num : 0_77 , upvalues : _startPosition
+  -- function num : 0_79 , upvalues : _startPosition
   PaGlobal_CheckedQuest:updateQuestList(_startPosition)
 end
 
 FGlobal_QuestWidget_CalcScrollButtonSize = function()
-  -- function num : 0_78
+  -- function num : 0_80
   PaGlobal_CheckedQuest:updateScrollButtonSize()
 end
 
 FGlobal_QuestWidget_GetSelectedNaviInfo = function()
-  -- function num : 0_79 , upvalues : _questGroupId, _questId, _naviInfoAgain
+  -- function num : 0_81 , upvalues : _questGroupId, _questId, _naviInfoAgain
   return _questGroupId, _questId, _naviInfoAgain
 end
 
 FGlobal_QuestWidget_IsMouseOn = function()
-  -- function num : 0_80 , upvalues : widgetMouseOn
+  -- function num : 0_82 , upvalues : widgetMouseOn
   return widgetMouseOn
 end
 
 FGlobal_QuestWidget_GetPositionList = function()
-  -- function num : 0_81 , upvalues : _positionList
+  -- function num : 0_83 , upvalues : _positionList
   return _positionList
 end
 
 FGlobal_QuestWidget_AutoReleaseNavi = function(uiQuestInfo)
-  -- function num : 0_82 , upvalues : _positionList, _questGroupId, _questId
+  -- function num : 0_84 , upvalues : _positionList, _questGroupId, _questId
   local questNo = uiQuestInfo:getQuestNo()
   if questNo._group == _positionList._questGroupId and questNo._quest == _positionList._questId then
     _positionList = {}
@@ -2309,7 +2333,7 @@ FGlobal_QuestWidget_AutoReleaseNavi = function(uiQuestInfo)
 end
 
 HandleClicked_QuestWidget_Show = function()
-  -- function num : 0_83
+  -- function num : 0_85
   if Panel_CheckedQuest:GetShow() then
     Panel_CheckedQuest:SetShow(false, false)
   else
@@ -2318,7 +2342,7 @@ HandleClicked_QuestWidget_Show = function()
 end
 
 FGlobal_QuestWidget_Open = function()
-  -- function num : 0_84
+  -- function num : 0_86
   Panel_CheckedQuest:SetShow(true, true)
   Panel_MainQuest:SetShow(true, false)
   if ToClient_WorldMapIsShow() then
@@ -2328,7 +2352,7 @@ FGlobal_QuestWidget_Open = function()
 end
 
 FGlobal_QuestWidget_Close = function()
-  -- function num : 0_85
+  -- function num : 0_87
   Panel_CheckedQuest:SetShow(false, false)
   Panel_MainQuest:SetShow(false, false)
   questInfo_TooltipShow(false)
@@ -2338,7 +2362,7 @@ FGlobal_QuestWidget_Close = function()
 end
 
 HandleClicked_ShowQuestInfo = function(questGroupId, questId, questCondition_Chk, groupTitle, questGroupCount)
-  -- function num : 0_86
+  -- function num : 0_88
   local fromQuestWidget = true
   if isQuest160524_chk() then
     FGlobal_QuestWindow_SetProgress()
@@ -2348,7 +2372,7 @@ HandleClicked_ShowQuestInfo = function(questGroupId, questId, questCondition_Chk
 end
 
 QuestNpcNavi_ClearCheckBox = function()
-  -- function num : 0_87
+  -- function num : 0_89
   for naviIndex = 0, PaGlobal_CheckedQuest._maxQuestListCnt - 1 do
     local elem = (PaGlobal_CheckedQuest._uiList)[nabiIndex]
     ;
@@ -2363,7 +2387,7 @@ QuestNpcNavi_ClearCheckBox = function()
 end
 
 HandleClicked_QuestWidget_FindTarget = function(questGroupId, questId, condition, isAuto)
-  -- function num : 0_88 , upvalues : _questGroupId, _questId, _naviInfoAgain, _isAutoRun
+  -- function num : 0_90 , upvalues : _questGroupId, _questId, _naviInfoAgain, _isAutoRun
   PaGlobal_TutorialManager:handleClickedQuestWidgetFindTarget(questGroupId, questId, condition, isAuto)
   if _questGroupId == questGroupId and _questId == questId then
     if _naviInfoAgain == false then
@@ -2392,7 +2416,7 @@ HandleClicked_QuestWidget_FindTarget = function(questGroupId, questId, condition
 end
 
 _QuestWidget_FindTarget_Auto = function(questGroupId, questId, condition, _isAutoRun, bgIdx)
-  -- function num : 0_89 , upvalues : _autoNaviGuide, _questGroupId, _questId, _naviInfoAgain
+  -- function num : 0_91 , upvalues : _autoNaviGuide, _questGroupId, _questId, _naviInfoAgain
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R5 in 'UnsetPending'
 
   _autoNaviGuide.groupKey = questGroupId
@@ -2413,7 +2437,7 @@ end
 
 local navigationGuideParam = NavigationGuideParam()
 _QuestWidget_FindTarget_DrawMapPath = function(questGroupId, questId, condition, isAuto)
-  -- function num : 0_90 , upvalues : navigationGuideParam, _positionList
+  -- function num : 0_92 , upvalues : navigationGuideParam, _positionList
   ToClient_DeleteNaviGuideByGroup(0)
   ;
   (PaGlobal_CheckedQuest._uiGuideButton):SetCheck(false)
@@ -2530,7 +2554,7 @@ end
 local questConditionType = {eQuestProgressingState_yetAccept = 0, eQuestProgressingState_Accept = 1, eQuestProgressingState_Complete = 2, eQuestProgressingState_AlreadyComplete = 3, eQuestProgressingState_Count = 4}
 local convertQuestConditionToNaviFindType = {[questConditionType.eQuestProgressingState_yetAccept] = 99, [questConditionType.eQuestProgressingState_Accept] = 1, [questConditionType.eQuestProgressingState_Complete] = 0, [questConditionType.eQuestProgressingState_AlreadyComplete] = 99}
 FromClient_SetQuestNavigationByServer = function(questGroupId, questId, condition)
-  -- function num : 0_91 , upvalues : convertQuestConditionToNaviFindType
+  -- function num : 0_93 , upvalues : convertQuestConditionToNaviFindType
   local questCondition = convertQuestConditionToNaviFindType[condition]
   if questCondition == nil then
     return 
@@ -2539,7 +2563,7 @@ FromClient_SetQuestNavigationByServer = function(questGroupId, questId, conditio
 end
 
 _askAutoRun_FromNaviClick = function()
-  -- function num : 0_92
+  -- function num : 0_94
   local messageboxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
   local messageboxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTWIDGET_ASKAUTORUN_MSG")
   local messageboxData = {title = messageboxTitle, content = messageboxMemo, functionYes = _doAutoRun_FromNaviClick, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -2548,16 +2572,16 @@ _askAutoRun_FromNaviClick = function()
 end
 
 _doAutoRun_FromNaviClick = function()
-  -- function num : 0_93
+  -- function num : 0_95
 end
 
 _QuestWidget_ReturnQuestState = function()
-  -- function num : 0_94 , upvalues : _questGroupId, _questId, _naviInfoAgain
+  -- function num : 0_96 , upvalues : _questGroupId, _questId, _naviInfoAgain
   return _questGroupId, _questId, _naviInfoAgain
 end
 
 HandleClicked_CallBlackSpirit = function()
-  -- function num : 0_95
+  -- function num : 0_97
   if Panel_Window_Exchange:GetShow() == false then
     if not IsSelfPlayerWaitAction() then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_SUMMON_BLACKSPIRIT"))
@@ -2568,7 +2592,7 @@ HandleClicked_CallBlackSpirit = function()
 end
 
 HandleClicked_QuestWidget_GuideQuest_MouseOver = function(isOn)
-  -- function num : 0_96
+  -- function num : 0_98
   (PaGlobal_CheckedQuest._uiGuideButton_Desc):SetPosX((PaGlobal_CheckedQuest._uiGuideButton):GetPosX() - (PaGlobal_CheckedQuest._uiGuideButton_Desc):GetSizeX() + 35)
   ;
   (PaGlobal_CheckedQuest._uiGuideButton_Desc):SetPosY((PaGlobal_CheckedQuest._uiGuideButton):GetPosY() + 35)
@@ -2594,7 +2618,7 @@ HandleClicked_QuestWidget_GuideQuest_MouseOver = function(isOn)
 end
 
 HandleClicked_QuestNew_MouseOver = function(isOn)
-  -- function num : 0_97
+  -- function num : 0_99
   (PaGlobal_CheckedQuest._uiHistoryButton_Desc):SetPosX((PaGlobal_CheckedQuest._uiHistoryButton):GetPosX() - (PaGlobal_CheckedQuest._uiHistoryButton_Desc):GetSizeX() + 35)
   ;
   (PaGlobal_CheckedQuest._uiHistoryButton_Desc):SetPosY((PaGlobal_CheckedQuest._uiHistoryButton):GetPosY() + 35)
@@ -2620,7 +2644,7 @@ HandleClicked_QuestNew_MouseOver = function(isOn)
 end
 
 HandleClicked_QuestWidget_GuideQuest = function()
-  -- function num : 0_98 , upvalues : _guideQuestChechk
+  -- function num : 0_100 , upvalues : _guideQuestChechk
   if GlobalKeyBinder_CheckProgress_chk() then
     return 
   end
@@ -2672,17 +2696,17 @@ HandleClicked_QuestWidget_GuideQuest = function()
 end
 
 _QuestWidget_QuestToolTipShow = function(questGroupIndex, questIndex)
-  -- function num : 0_99
+  -- function num : 0_101
   (QuestInfoData.questCheckDescShowWindow2)(questGroupIndex, questIndex)
 end
 
 _QuestWidget_QuestToolTipHide = function()
-  -- function num : 0_100
+  -- function num : 0_102
   (QuestInfoData.questDescHideWindow)()
 end
 
 guildQuestWidget_MouseOn = function(isShow)
-  -- function num : 0_101
+  -- function num : 0_103
   local control = (PaGlobal_CheckedQuest._guildQuest)._ControlBG
   if isShow == true then
     (QuestInfoData.guildQuestDescShowWindow)()
@@ -2710,7 +2734,7 @@ local orgMouseY = 0
 local orgPanelSizeY = 0
 local orgPanelPosY = 0
 HandleClicked_QuestWidgetPanelSize = function()
-  -- function num : 0_102 , upvalues : orgMouseY, orgPanelPosY, orgPanelSizeY
+  -- function num : 0_104 , upvalues : orgMouseY, orgPanelPosY, orgPanelSizeY
   local panel = Panel_CheckedQuest
   orgMouseY = getMousePosY()
   orgPanelPosY = panel:GetPosY()
@@ -2718,7 +2742,7 @@ HandleClicked_QuestWidgetPanelSize = function()
 end
 
 HandleClicked_QuestWidgetPanelResize = function()
-  -- function num : 0_103 , upvalues : orgMouseY, orgPanelSizeY, CheckedQuest_SizeY, _startPosition
+  -- function num : 0_105 , upvalues : orgMouseY, orgPanelSizeY, CheckedQuest_SizeY, _startPosition
   local panel = Panel_CheckedQuest
   local currentY = getMousePosY()
   local deltaY = currentY - orgMouseY
@@ -2752,18 +2776,18 @@ HandleClicked_QuestWidgetPanelResize = function()
 end
 
 HandleClicked_QuestWidgetSaveResize = function()
-  -- function num : 0_104
+  -- function num : 0_106
   ToClient_SaveUiInfo(false)
 end
 
 HandleOn_QuestWidgetPanelResize = function(isShow)
-  -- function num : 0_105
+  -- function num : 0_107
   FGlobal_QuestWidget_MouseOver(isShow)
 end
 
 local _tmpGroupId, _tmpQuestId = nil, nil
 FGlobal_PassGroupIdQuestId = function(groupId, questId)
-  -- function num : 0_106 , upvalues : _tmpGroupId, _tmpQuestId
+  -- function num : 0_108 , upvalues : _tmpGroupId, _tmpQuestId
   if groupId == nil and questId == nil then
     return _tmpGroupId, _tmpQuestId
   else
@@ -2773,7 +2797,7 @@ FGlobal_PassGroupIdQuestId = function(groupId, questId)
 end
 
 HandleClicked_QuestWidget_QuestGiveUp = function(groupId, questId)
-  -- function num : 0_107
+  -- function num : 0_109
   if PaGlobal_TutorialManager:isBeginnerTutorialQuest(groupId, questId) == true and PaGlobal_TutorialManager:isDoingTutorial() == true then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
     return 
@@ -2787,7 +2811,7 @@ HandleClicked_QuestWidget_QuestGiveUp = function(groupId, questId)
 end
 
 QuestWidget_QuestGiveUp_Confirm = function()
-  -- function num : 0_108
+  -- function num : 0_110
   local groupId, questId = FGlobal_PassGroupIdQuestId()
   ToClient_GiveupQuest(groupId, questId)
   if Panel_CheckedQuestInfo:GetShow() == true then
@@ -2799,7 +2823,7 @@ QuestWidget_QuestGiveUp_Confirm = function()
 end
 
 HandleClicked_QuestReward_Show = function(groupId, questId, window)
-  -- function num : 0_109
+  -- function num : 0_111
   local questReward = questList_getQuestStatic(groupId, questId)
   local baseCount = questReward:getQuestBaseRewardCount()
   local selectCount = questReward:getQuestSelectRewardCount()
@@ -2912,11 +2936,14 @@ HandleClicked_QuestReward_Show = function(groupId, questId, window)
   Panel_Npc_Quest_Reward:SetPosX(getMousePosX() - Panel_Npc_Quest_Reward:GetSizeX() - 10)
   Panel_Npc_Quest_Reward:SetPosY(getMousePosY())
   FGlobal_ShowRewardList(true)
+  if Panel_Window_Quest_New:IsUISubApp() == true then
+    Panel_Npc_Quest_Reward:OpenUISubApp()
+  end
 end
 
 local darkSpiritFirstTime = true
 FromClient_Panel_updateBlackSpirit = function()
-  -- function num : 0_110 , upvalues : darkSpiritFirstTime, UI_TM
+  -- function num : 0_112 , upvalues : darkSpiritFirstTime, UI_TM
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   if darkSpiritFirstTime == true and isClearedQuest == true then
     (PaGlobal_CheckedQuest._uiDarkSpirit):EraseAllEffect()
@@ -2952,7 +2979,7 @@ end
 
 registerEvent("EventCharacterInfoUpdate", "FromClient_Panel_updateBlackSpirit")
 QuestAutoNpcNavi_Over = function(isNpcNaviShow)
-  -- function num : 0_111 , upvalues : UI_TM, darkSpiritFirstTime
+  -- function num : 0_113 , upvalues : UI_TM, darkSpiritFirstTime
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   if playerLevel >= 4 then
     if isNpcNaviShow == true then
@@ -3019,7 +3046,7 @@ QuestAutoNpcNavi_Over = function(isNpcNaviShow)
 end
 
 QuestNpcNavi_Over = function(isNpcNaviShow)
-  -- function num : 0_112 , upvalues : UI_TM, darkSpiritFirstTime
+  -- function num : 0_114 , upvalues : UI_TM, darkSpiritFirstTime
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   if playerLevel >= 4 then
     if Panel_Help:GetShow() then
@@ -3093,7 +3120,7 @@ QuestNpcNavi_Over = function(isNpcNaviShow)
 end
 
 questGiveUp_Over = function(isGiveShow)
-  -- function num : 0_113 , upvalues : UI_TM, darkSpiritFirstTime
+  -- function num : 0_115 , upvalues : UI_TM, darkSpiritFirstTime
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   if playerLevel >= 4 then
     if isGiveShow == true then
@@ -3162,7 +3189,7 @@ questGiveUp_Over = function(isGiveShow)
 end
 
 QuestReward_Over = function(isRewardShow)
-  -- function num : 0_114 , upvalues : UI_TM, darkSpiritFirstTime
+  -- function num : 0_116 , upvalues : UI_TM, darkSpiritFirstTime
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   if playerLevel >= 4 then
     if isRewardShow == true then
@@ -3229,13 +3256,13 @@ QuestReward_Over = function(isRewardShow)
 end
 
 FromClient_SetQuestType = function(questType)
-  -- function num : 0_115
+  -- function num : 0_117
   local QuestListInfo = ToClient_GetQuestList()
   QuestListInfo:setQuestSelectType(questType, true)
 end
 
 HandleClieked_CheckedQuest_WantJoinGuild = function()
-  -- function num : 0_116
+  -- function num : 0_118
   if (PaGlobal_CheckedQuest._uiFindGuild):IsCheck() then
     ToClient_SetJoinedMode(0)
   else
@@ -3244,12 +3271,12 @@ HandleClieked_CheckedQuest_WantJoinGuild = function()
 end
 
 HandleOn_CheckedQuest_WantJoinGuild = function(isShow)
-  -- function num : 0_117
+  -- function num : 0_119
   FGlobal_QuestWidget_MouseOver(isShow)
 end
 
 EventRadingOnQuest = function(questStaticWrapper, index)
-  -- function num : 0_118
+  -- function num : 0_120
   if questStaticWrapper == nil then
     return 
   end
@@ -3261,7 +3288,7 @@ EventRadingOnQuest = function(questStaticWrapper, index)
 end
 
 EventUnradingOnQuest = function(questStaticWrapper, index)
-  -- function num : 0_119
+  -- function num : 0_121
   audioPostEvent_SystemUi(0, 15)
   ToClient_DeleteNaviGuideByGroup(0)
 end
@@ -3271,7 +3298,7 @@ registerEvent("EventUnradingOnQuest", "EventUnradingOnQuest")
 local checkQuest_posX = 0
 local checkQuest_posY = 0
 FromClient_UpdateQuestSetPos = function()
-  -- function num : 0_120 , upvalues : _startPosition
+  -- function num : 0_122 , upvalues : _startPosition
   PaGlobal_CheckedQuest:updateQuestList(_startPosition)
   local newEquipGap = 0
   if Panel_NewEquip:GetShow() == true then
@@ -3309,7 +3336,7 @@ FromClient_UpdateQuestSetPos = function()
 end
 
 QuestListChecked_EnableSimpleUI = function()
-  -- function num : 0_121 , upvalues : _startPosition
+  -- function num : 0_123 , upvalues : _startPosition
   PaGlobal_CheckedQuest:updateQuestList(_startPosition)
 end
 
@@ -3317,7 +3344,7 @@ registerEvent("EventSimpleUIEnable", "QuestListChecked_EnableSimpleUI")
 registerEvent("EventSimpleUIDisable", "QuestListChecked_EnableSimpleUI")
 local rateValue = nil
 FGlobal_QuestWindowRateSetting = function()
-  -- function num : 0_122 , upvalues : rateValue
+  -- function num : 0_124 , upvalues : rateValue
   rateValue = {}
   local sizeWithOutPanelX = getScreenSizeX() - Panel_CheckedQuest:GetSizeX()
   local sizeWithOutPanelY = getScreenSizeY() - Panel_CheckedQuest:GetSizeY()
@@ -3330,7 +3357,7 @@ FGlobal_QuestWindowRateSetting = function()
 end
 
 FromClient_questWidget_ResetPosition = function()
-  -- function num : 0_123
+  -- function num : 0_125
   local newEquipGap = 0
   if Panel_NewEquip:GetShow() == true then
     newEquipGap = Panel_NewEquip:GetSizeY()
@@ -3354,7 +3381,17 @@ FromClient_questWidget_ResetPosition = function()
   end
   do
     if CppDefine.ChangeUIAndResolution == true then
-      if Panel_CheckedQuest:GetRelativePosX() == 0 and Panel_CheckedQuest:GetRelativePosY() == 0 then
+      if Panel_CheckedQuest:GetRelativePosX() == -1 and Panel_CheckedQuest:GetRelativePosY() == -1 then
+        local initPosX = getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20
+        local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 130 + newEquipGap
+        local haveServerPosotion = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_CheckedQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0
+        if not haveServerPosotion then
+          Panel_CheckedQuest:SetPosX(initPosX)
+          Panel_CheckedQuest:SetPosY(initPosY)
+        end
+        changePositionBySever(Panel_CheckedQuest, (CppEnums.PAGameUIType).PAGameUIPanel_CheckedQuest, false, true, false)
+        FGlobal_InitPanelRelativePos(Panel_CheckedQuest, initPosX, initPosY)
+      elseif Panel_CheckedQuest:GetRelativePosX() == 0 and Panel_CheckedQuest:GetRelativePosY() == 0 then
         Panel_CheckedQuest:SetPosX(getScreenSizeX() - Panel_CheckedQuest:GetSizeX() - 20)
         Panel_CheckedQuest:SetPosY(FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + Panel_MainQuest:GetSizeY() + 20 + newEquipGap)
       else
@@ -3369,12 +3406,12 @@ FromClient_questWidget_ResetPosition = function()
       end
       changePositionBySever(Panel_CheckedQuest, (CppEnums.PAGameUIType).PAGameUIPanel_CheckedQuest, false, true, false)
     end
-    -- DECOMPILER ERROR: 3 unprocessed JMP targets
+    -- DECOMPILER ERROR: 8 unprocessed JMP targets
   end
 end
 
 renderModeChange_FromClient_questWidget_ResetPosition = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_124
+  -- function num : 0_126
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -3383,7 +3420,7 @@ end
 
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_FromClient_questWidget_ResetPosition")
 TutorialQuestCompleteCheck = function()
-  -- function num : 0_125
+  -- function num : 0_127
   do return questList_isClearQuest(104, 1) or ((getSelfPlayer()):get()):getLevel() >= 15 end
   -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
@@ -3398,12 +3435,12 @@ registerEvent("FromClient_UpdateQuestSortType", "QuestWidget_DefaultTextureFunct
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_CheckedQuest")
 registerEvent("FromClient_ChangeQuestWidgetType", "FromClient_ChangeQuestWidgetType")
 FromClient_ChangeQuestWidgetType = function()
-  -- function num : 0_126
+  -- function num : 0_128
   FromClient_QuestWidget_Update()
 end
 
 FromClient_luaLoadComplete_CheckedQuest = function()
-  -- function num : 0_127 , upvalues : MAX_QUEST_FAVOR_TYPE
+  -- function num : 0_129 , upvalues : MAX_QUEST_FAVOR_TYPE
   QuestWidget_NationalCheck()
   do
     if CheckTutorialEnd() == false then
@@ -3424,7 +3461,7 @@ FromClient_luaLoadComplete_CheckedQuest = function()
 end
 
 FromClient_StartQuestNavigationGuide = function(questNoRaw)
-  -- function num : 0_128 , upvalues : _questGroupId, _questId
+  -- function num : 0_130 , upvalues : _questGroupId, _questId
   local questInfoWrapper = questList_getQuestInfo(questNoRaw)
   if questInfoWrapper ~= nil then
     _questGroupId = 0

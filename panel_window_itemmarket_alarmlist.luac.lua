@@ -155,27 +155,27 @@ ItemMarketAlarm.Update = function(self)
         end
       else
         if enchantLevel == 16 then
-          (slot.enchantLevel):SetText("I")
+          (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
           ;
           (slot.enchantLevel):SetShow(true)
         else
           if enchantLevel == 17 then
-            (slot.enchantLevel):SetText("II")
+            (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
             ;
             (slot.enchantLevel):SetShow(true)
           else
             if enchantLevel == 18 then
-              (slot.enchantLevel):SetText("III")
+              (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
               ;
               (slot.enchantLevel):SetShow(true)
             else
               if enchantLevel == 19 then
-                (slot.enchantLevel):SetText("IV")
+                (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
                 ;
                 (slot.enchantLevel):SetShow(true)
               else
                 if enchantLevel == 20 then
-                  (slot.enchantLevel):SetText("V")
+                  (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
                   ;
                   (slot.enchantLevel):SetShow(true)
                 end
@@ -186,27 +186,27 @@ ItemMarketAlarm.Update = function(self)
       end
       if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
         if enchantLevel == 1 then
-          (slot.enchantLevel):SetText("I")
+          (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
           ;
           (slot.enchantLevel):SetShow(true)
         else
           if enchantLevel == 2 then
-            (slot.enchantLevel):SetText("II")
+            (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
             ;
             (slot.enchantLevel):SetShow(true)
           else
             if enchantLevel == 3 then
-              (slot.enchantLevel):SetText("III")
+              (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
               ;
               (slot.enchantLevel):SetShow(true)
             else
               if enchantLevel == 4 then
-                (slot.enchantLevel):SetText("IV")
+                (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
                 ;
                 (slot.enchantLevel):SetShow(true)
               else
                 if enchantLevel == 5 then
-                  (slot.enchantLevel):SetText("V")
+                  (slot.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
                   ;
                   (slot.enchantLevel):SetShow(true)
                 end

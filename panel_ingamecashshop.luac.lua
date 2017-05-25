@@ -35,7 +35,7 @@ desc = {_static_ItemNameCombo = nil, _staticText_Title = nil, _static_SlotBG = n
 _promotionTab = {}
 , 
 _myCartTab = {}
-, _tabCount = getCashMainCategorySize(), _slotCount = 30, _sortCount = 3, _slots = (Array.new)(), _tabs = (Array.new)(), _subTapSelect = nil, _list = (Array.new)(), _listCount = 1, _currentTab = nil, _currentSubTab = nil, _previousTab = nil, _currentClass = nil, _search = nil, _currentSort = nil, _currentSubFilter = nil, _openByEventAlarm = false, _currentPos = 0, _position = 0, _maxDescSize = 200, _checkTab = false}
+, _tabCount = getCashMainCategorySize(), _slotCount = 30, _sortCount = 3, _slots = (Array.new)(), _tabs = (Array.new)(), _subTapSelect = nil, _list = (Array.new)(), _listCount = 1, _currentTab = nil, _currentSubTab = nil, _previousTab = nil, _currentClass = nil, _search = nil, _currentSort = nil, _currentSubFilter = nil, _openByEventAlarm = false, _currentPos = 0, _position = 0, _maxDescSize = 200, _checkTab = false, _pricePosX = 0, _currentIndex = 0, _isClick = false, _isSubItemClick = false, _categoryProductKeyRaw = -1, _currentProductKeyRaw = -1}
 inGameShop._scrollBTN_IngameCash = (UI.getChildControl)(inGameShop._scroll_IngameCash, "Scroll_CtrlButton")
 inGameShop._combo_ClassList = (UI.getChildControl)(inGameShop._combo_Class, "Combobox_List")
 inGameShop._combo_SubFilterList = (UI.getChildControl)(inGameShop._combo_SubFilter, "Combobox_List")
@@ -65,7 +65,7 @@ local tagTexture = {
 ; 
 [0] = {0, 0, 0, 0}
 }
-local contry = {kr = 0, jp = 1, ru = 2, cn = 3, tw = 4}
+local contry = {kr = 0, jp = 1, ru = 2, kr2 = 3, tw = 4}
 local cashIconType = {cash = 0, pearl = 1, mileage = 2, silver = 3}
 local cashIconTexture = {
 [cashIconType.cash] = {
@@ -351,6 +351,7 @@ inGameShop.init = function(self)
     slot.discount = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "TemplateList_StaticText_DiscountPeriod", slot.static, "InGameShop_Slot_DiscountPeriod_" .. ii)
     slot.pearlIcon = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "TemplateList_Static_PearlIcon", slot.static, "InGameShop_Slot_PearlIcon_" .. ii)
     slot.originalPrice = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "TemplateList_StaticText_ItemOriginalPrice", slot.pearlIcon, "InGameShop_Slot_OriginalPrice_" .. ii)
+    slot.priceArrow = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "TemplateList_StaticText_ItemPriceArrow", slot.originalPrice, "InGameShop_Slot_PriceArrow_" .. ii)
     slot.price = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "TemplateList_StaticText_ItemPrice", slot.static, "InGameShop_Slot_Price_" .. ii)
     slot.buttonBuy = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "TemplateList_Button_Buy", slot.static, "InGameShop_Slot_Buy_" .. ii)
     slot.buttonGift = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "TemplateList_Button_Gift", slot.static, "InGameShop_Slot_Gift_" .. ii)
@@ -392,14 +393,17 @@ inGameShop.init = function(self)
     ;
     (slot.price):SetSpanSize(10, 8)
     ;
+    (slot.priceArrow):SetPosY((slot.originalPrice):GetPosY() + 7)
+    ;
     (slot.tag):SetShow(true)
     ;
     (slot.static):SetShow(false)
-    -- DECOMPILER ERROR at PC669: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC686: Confused about usage of register: R16 in 'UnsetPending'
 
     ;
     (self._slots)[ii] = slot
   end
+  self._pricePosX = (((self._slots)[0]).price):GetPosX()
   local myCartTab = {}
   myCartTab.static = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "RadioButton_CartTab", Panel_IngameCashShop, "InGameShop_MyCartTab")
   myCartTab.icon = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "Static_ButtonIcon_0", myCartTab.static, "InGameShop_MyCartTab_Icon")
@@ -464,7 +468,7 @@ inGameShop.init = function(self)
         cashIcon_changeTexture(self._nowCash, contry.ru)
       else
         if gameServiceType == 9 or gameServiceType == 10 then
-          cashIcon_changeTexture(self._nowCash, contry.cn)
+          cashIcon_changeTexture(self._nowCash, contry.kr2)
         else
           if isGameTypeTaiwan() then
             cashIcon_changeTexture(self._nowCash, contry.tw)
@@ -605,7 +609,11 @@ inGameShop.setElement = function(self, index, productNoRaw, slot)
     ;
     (slot.price):SetText(makeDotMoney(cashProduct:getPrice()))
     ;
+    (slot.price):SetPosX(self._pricePosX + 3, (slot.price):GetPosY())
+    ;
     (slot.originalPrice):SetShow(false)
+    ;
+    (slot.priceArrow):SetShow(false)
     ;
     (slot.discount):SetText(cashProduct:getDescription())
     if cashProduct:isApplyDiscount() then
@@ -623,9 +631,13 @@ inGameShop.setElement = function(self, index, productNoRaw, slot)
       ;
       (slot.discount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_DISCOUNT", "endDiscountTime", countryKind))
       ;
-      (slot.originalPrice):SetText(makeDotMoney(cashProduct:getOriginalPrice()) .. " <PAColor0xffefefef>" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_ARROW") .. "<PAOldColor> ")
+      (slot.originalPrice):SetText(makeDotMoney(cashProduct:getOriginalPrice()))
       ;
       (slot.originalPrice):SetShow(true)
+      ;
+      (slot.priceArrow):SetPosX((slot.originalPrice):GetTextSizeX() + 3)
+      ;
+      (slot.priceArrow):SetShow(true)
     end
     do
       ;
@@ -764,9 +776,6 @@ inGameShop.setElement = function(self, index, productNoRaw, slot)
                   end
                   if self:getMaxPosition() <= self._currentPos then
                     (self._static_GradationBottom):SetShow(false)
-                  else
-                    ;
-                    (self._static_GradationBottom):SetShow(true)
                   end
                   return true
                 end
@@ -805,12 +814,12 @@ inGameShop.updateSlot = function(self)
     end
     if self:isSelectProductGroup(productNoRaw) then
       (self._goodDescBG):SetShow(false)
-      if (self._goodDescBG):GetSizeY() < self._maxDescSize and self._position + areaSizeY < pos + (slot.static):GetSizeY() + (self._goodDescBG):GetSizeY() then
+      if (self._goodDescBG):GetSizeY() < self._maxDescSize and self._position + areaSizeY < pos + (slot.static):GetSizeY() + (self._goodDescBG):GetSizeY() and (self._goodDescBG):GetSizeY() > 1 then
         self._position = pos + (slot.static):GetSizeY() + (self._goodDescBG):GetSizeY() - areaSizeY
         ;
         (self._scroll_IngameCash):SetControlPos(self._position / self:getMaxPosition())
       end
-      if self._currentPos < pos + (slot.static):GetSizeY() + (self._goodDescBG):GetSizeY() and pos + (slot.static):GetSizeY() < self._currentPos + areaSizeY then
+      if self._currentPos < pos + (slot.static):GetSizeY() + (self._goodDescBG):GetSizeY() and pos + (slot.static):GetSizeY() < self._currentPos + areaSizeY and (self._goodDescBG):GetSizeY() > 1 then
         (self._goodDescBG):SetPosY(pos - self._currentPos + (slot.static):GetSizeY())
         ;
         (self._goodDescBG):SetShow(true)
@@ -1094,6 +1103,8 @@ InGameShop_TabEvent = function(tab)
   end
   self._currentSubTab = 0
   _AllBG:SetShow(false)
+  ClearFocusEdit()
+  makeSubTab(tab)
   self._currentPos = 0
   self._position = 0
   ;
@@ -1106,8 +1117,6 @@ InGameShop_TabEvent = function(tab)
   (self._combo_Class):SetSelectItemIndex(0)
   ;
   (self._combo_Sort):SetSelectItemIndex(0)
-  ClearFocusEdit()
-  makeSubTab(tab)
   if UI_CCC.eCashProductCategory_Costumes == (tabIndexList[tab])[5] then
     local classCount = getCharacterClassCount()
     local selfClassType = (getSelfPlayer()):getClassType()
@@ -1572,8 +1581,8 @@ InGameShop_ProductListContent_ChangeMoneyIconTexture = function(slot, categoryId
       if eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
         serviceContry = contry.ru
       else
-        if eCountryType.CHI_ALPHA == gameServiceType or eCountryType.CHI_REAL == gameServiceType then
-          serviceContry = contry.cn
+        if eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+          serviceContry = contry.kr2
         else
           serviceContry = contry.kr
         end
@@ -1938,17 +1947,17 @@ IngameCashShop_DescUpdate = function()
   local descConfig = (inGameShop._config)._desc
   local subConfig = (inGameShop._config)._subButton
   ;
-  (self._static_VestedDesc):SetShow(false)
+  (self._static_VestedDesc):SetText("")
   ;
-  (self._static_TradeDesc):SetShow(false)
+  (self._static_TradeDesc):SetText("")
   ;
-  (self._static_ClassDesc):SetShow(false)
+  (self._static_ClassDesc):SetText("")
   ;
-  (self._static_WarningDesc):SetShow(false)
+  (self._static_WarningDesc):SetText("")
   ;
-  (self._static_DiscountPeriodDesc):SetShow(false)
+  (self._static_DiscountPeriodDesc):SetText("")
   ;
-  (self._static_PearOriginalPrice):SetShow(false)
+  (self._static_PearOriginalPrice):SetText("")
   ;
   (self._static_Slot):ChangeTextureInfoName("Icon/" .. cashProduct:getIconPath())
   ;
@@ -1957,9 +1966,9 @@ IngameCashShop_DescUpdate = function()
     (self._static_PearOriginalPrice):SetFontColor(UI_color.C_FF626262)
     ;
     (self._static_PearOriginalPrice):SetText(makeDotMoney(cashProduct:getOriginalPrice()) .. " <PAColor0xffefefef>" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_ARROW") .. "<PAOldColor> ")
-    ;
-    (self._static_PearOriginalPrice):SetShow(true)
   end
+  ;
+  (self._static_PearlPrice):SetShow(true)
   ;
   (self._static_PearlPrice):SetText(makeDotMoney(cashProduct:getPrice()))
   ;
@@ -1972,22 +1981,16 @@ IngameCashShop_DescUpdate = function()
   end
   local optionDesc_PosY = subConfig._startY + buttonSizeY
   ;
-  (self._staticText_ProductInfo_Title):SetShow(true)
-  ;
   (self._staticText_ProductInfo_Title):SetPosY(optionDesc_PosY - 35)
   ;
-  (self._static_SlotBG):SetShow(true)
-  ;
   (self._static_SlotBG):SetPosY(optionDesc_PosY - 10)
-  ;
-  (self._static_Slot):SetShow(true)
   ;
   (self._static_Slot):SetPosY(optionDesc_PosY - 10)
   ;
   (self._static_Desc):SetPosY(optionDesc_PosY - 10)
   optionDesc_PosY = optionDesc_PosY + (self._static_Desc):GetTextSizeY() + 35
   ;
-  (self._staticText_PurchaseLimit):SetShow(false)
+  (self._staticText_PurchaseLimit):SetText("")
   local limitType = cashProduct:getCashPurchaseLimitType()
   if UI_PLT.None ~= limitType then
     local limitCount = cashProduct:getCashPurchaseCount()
@@ -2005,8 +2008,6 @@ IngameCashShop_DescUpdate = function()
     ;
     (self._staticText_PurchaseLimit):SetFontColor(UI_color.C_FFF26A6A)
     ;
-    (self._staticText_PurchaseLimit):SetShow(true)
-    ;
     (self._staticText_PurchaseLimit):SetPosY(optionDesc_PosY + descConfig._gapY * descCount)
     descCount = descCount + 1
   end
@@ -2015,8 +2016,6 @@ IngameCashShop_DescUpdate = function()
     if vestedDesc ~= nil then
       (self._static_VestedDesc):SetText(vestedDesc)
       ;
-      (self._static_VestedDesc):SetShow(true)
-      ;
       (self._static_VestedDesc):SetPosY(optionDesc_PosY + descConfig._gapY * (descCount))
       descCount = descCount + 1
     end
@@ -2024,16 +2023,12 @@ IngameCashShop_DescUpdate = function()
     if tradeDesc ~= nil then
       (self._static_TradeDesc):SetText(tradeDesc)
       ;
-      (self._static_TradeDesc):SetShow(true)
-      ;
       (self._static_TradeDesc):SetPosY(optionDesc_PosY + descConfig._gapY * (descCount))
       descCount = descCount + 1
     end
     local classDesc = IngameShopDetailInfo_ConvertFromCategoryToClassDesc(cashProduct)
     if classDesc ~= nil then
       (self._static_ClassDesc):SetText(classDesc)
-      ;
-      (self._static_ClassDesc):SetShow(true)
       ;
       (self._static_ClassDesc):SetPosY(optionDesc_PosY + descConfig._gapY * (descCount))
       descCount = descCount + 1
@@ -2051,8 +2046,6 @@ IngameCashShop_DescUpdate = function()
       ;
       (self._static_DiscountPeriodDesc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_DISCOUNTPERIODDESC", "endDiscountTime", endDiscountTime))
       ;
-      (self._static_DiscountPeriodDesc):SetShow(true)
-      ;
       (self._static_DiscountPeriodDesc):SetPosY(optionDesc_PosY + descConfig._gapY * (descCount))
       descCount = descCount + 1
     end
@@ -2061,10 +2054,10 @@ IngameCashShop_DescUpdate = function()
       (self._static_ItemListTitle):SetPosY(optionDesc_PosY + descConfig._gapY * (descCount))
       descCount = descCount + 1
       optionDesc_PosY = optionDesc_PosY + (((inGameShop._items)[0]).iconBG):GetSizeY() + 20
-      -- DECOMPILER ERROR at PC529: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC497: Confused about usage of register: R13 in 'UnsetPending'
 
       inGameShop.itemDescDetailSize = optionDesc_PosY + descConfig._gapY * (descCount)
-      -- DECOMPILER ERROR at PC533: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC501: Confused about usage of register: R13 in 'UnsetPending'
 
       inGameShop._maxDescSize = inGameShop.itemDescDetailSize
       local limitType = cashProduct:getCashPurchaseLimitType()
@@ -2518,8 +2511,22 @@ IngameCashShop_SelectedItem = function(index)
   -- function num : 0_64 , upvalues : inGameShop
   local self = inGameShop
   local slot = (self._slots)[index]
+  self._currentProductKeyRaw = slot.productNoRaw
   local prevIndex = -1
-  if self._openProductKeyRaw == slot.productNoRaw then
+  if self._openProductKeyRaw == slot.productNoRaw and index == self._currentIndex then
+    self._isClick = true
+  else
+    if self._isSubItemClick and self._currentProductKeyRaw == self._categoryProductKeyRaw then
+      self._isClick = true
+    else
+      self._isClick = false
+    end
+  end
+  if self._currentProductKeyRaw ~= self._categoryProductKeyRaw then
+    self._isSubItemClick = false
+  end
+  self._currentIndex = index
+  if self._openProductKeyRaw == slot.productNoRaw or self._isSubItemClick then
     return 
   end
   audioPostEvent_SystemUi(1, 0)
@@ -2619,7 +2626,9 @@ end
 InGameShop_subItemEvent = function(index)
   -- function num : 0_66 , upvalues : inGameShop
   local self = inGameShop
-  -- DECOMPILER ERROR at PC19: Confused about usage of register: R2 in 'UnsetPending'
+  self._isSubItemClick = true
+  self._categoryProductKeyRaw = self._currentProductKeyRaw
+  -- DECOMPILER ERROR at PC22: Confused about usage of register: R2 in 'UnsetPending'
 
   if index > 0 and index < self._listComboCount + self._skipCount and ((inGameShop._subItemButton)[index]).productNo ~= 0 then
     inGameShop._openProductKeyRaw = ((inGameShop._subItemButton)[index]).productNo
@@ -2696,7 +2705,7 @@ IngameCashShop_CartItem = function(index)
 
   if cashProduct:doHaveDisplayClass() and not cashProduct:isClassTypeUsable((getSelfPlayer()):getClassType()) then
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_ALERT")
-    local messageBoxMemo = "<PAColor0xffd0ee68>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_MATHCLASS") .. "]\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CARTITEM_MSGMEMO", "getName", productName)
+    local messageBoxMemo = "<PAColor0xffd0ee68>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_MATHCLASS") .. "]\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CARTITEM_MSGMEMO", "getName", productName) .. "<PAOldColor>"
     messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = doAnotherClassItem, functionNo = _InGameShopBuy_Confirm_Cancel, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)
@@ -2745,7 +2754,7 @@ IngameCashShop_DescSelectedCartItem = function(productKeyRaw)
 
   if cashProduct:doHaveDisplayClass() and not cashProduct:isClassTypeUsable((getSelfPlayer()):getClassType()) then
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_ALERT")
-    local messageBoxMemo = "<PAColor0xffd0ee68>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_MATHCLASS") .. "]\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CARTITEM_MSGMEMO", "getName", productName)
+    local messageBoxMemo = "<PAColor0xffd0ee68>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_MATHCLASS") .. "]\n" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CARTITEM_MSGMEMO", "getName", productName) .. "<PAOldColor>"
     messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = doAnotherClassItem, functionNo = _InGameShopBuy_Confirm_Cancel, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)
@@ -3160,6 +3169,10 @@ InGameShop_Resize = function()
   ;
   (self._static_GradationBottom):SetPosY((self._static_ScrollArea):GetSizeY() + (self._static_ScrollArea):GetPosY() - (self._static_GradationBottom):GetSizeY())
   Panel_IngameCashShop:SetChildIndex(self._promotionWeb, 9900)
+  local _btn_SizeX = (self._btn_HowUsePearl):GetSizeX() + 23
+  local _btn_TextSizeX = _btn_SizeX - _btn_SizeX / 2 - (self._btn_HowUsePearl):GetTextSizeX() / 2
+  ;
+  (self._btn_HowUsePearl):SetTextSpan(_btn_TextSizeX, 4)
 end
 
 _ingameCashShop_SetViewListCount = function()
@@ -3213,27 +3226,58 @@ end
 
   InGameCashshopDescUpdate = function(deltaTime)
   -- function num : 0_89 , upvalues : inGameShop
-  do
-    local self = inGameShop
-    if self._position == self._currentPos and self._maxDescSize == (self._goodDescBG):GetSizeY() then
-      return 
+  local self = inGameShop
+  if self._position == self._currentPos and self._maxDescSize == (self._goodDescBG):GetSizeY() and self:getMaxPosition() < self._position + 2 then
+    (self._static_GradationBottom):SetShow(false)
+  else
+    ;
+    (self._static_GradationBottom):SetShow(true)
+  end
+  self._currentPos = self._currentPos + (self._position - self._currentPos) * deltaTime * 15
+  if (math.abs)(self._position - self._currentPos) < 1 then
+    self._currentPos = self._position
+  end
+  -- DECOMPILER ERROR at PC66: Unhandled construct in 'MakeBoolean' P1
+
+  if self._isClick == false and self._openProductKeyRaw ~= -1 then
+    (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), (self._goodDescBG):GetSizeY() + (self._maxDescSize - (self._goodDescBG):GetSizeY()) * deltaTime * 3)
+    if self._maxDescSize - (self._goodDescBG):GetSizeY() < 1 then
+      (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), self._maxDescSize)
     end
-    self._currentPos = self._currentPos + (self._position - self._currentPos) * deltaTime * 15
-    if (math.abs)(self._position - self._currentPos) < 1 then
-      self._currentPos = self._position
-    end
-    if self._openProductKeyRaw ~= -1 then
-      (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), (self._goodDescBG):GetSizeY() + (self._maxDescSize - (self._goodDescBG):GetSizeY()) * deltaTime * 3)
-      if self._maxDescSize - (self._goodDescBG):GetSizeY() < 1 then
-        (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), self._maxDescSize)
+  end
+  if self._isClick then
+    if (self._goodDescBG):GetSizeY() > 1.5 then
+      (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), (self._goodDescBG):GetSizeY() - (self._goodDescBG):GetSizeY() * deltaTime * 3)
+      if self:getMaxPosition() - self._position < ((self._config)._slot)._gapY and (self._scroll_IngameCash):GetShow() then
+        self._position = self._position - (self._goodDescBG):GetSizeY() * deltaTime * 3
+      end
+    else
+      ;
+      (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), 1)
+      if self._isSubItemClick then
+        InGameShop_subItemEvent(1)
+        self._isSubItemClick = false
+        for ii = 1, inGameShop._subItemCount do
+          if ii == 1 then
+            (((inGameShop._subItemButton)[ii]).static):SetCheck(true)
+          else
+            ;
+            (((inGameShop._subItemButton)[ii]).static):SetCheck(false)
+          end
+        end
       end
     end
-    for _,control in pairs(inGameShop.desc) do
-      control:SetShow(control:GetPosY() + control:GetSizeY() > 0 and control:GetPosY() + control:GetSizeY() < (self._goodDescBG):GetSizeY())
-      IngameCashShop_DescUpdate()
+    do
+      do
+        self._currentIndex = nil
+        for _,control in pairs(inGameShop.desc) do
+          control:SetShow(control:GetPosY() + control:GetSizeY() > 0 and control:GetPosY() + control:GetSizeY() < (self._goodDescBG):GetSizeY())
+          IngameCashShop_DescUpdate()
+        end
+        self:updateSlot()
+        -- DECOMPILER ERROR: 2 unprocessed JMP targets
+      end
     end
-    self:updateSlot()
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
   end
 end
 

@@ -141,7 +141,7 @@ local FishingGame_Manual_Fishing_Start = function(actorKeyRaw, isSelf)
     ;
     (uiPress._button_Space):SetText(actionString)
     ;
-    (uiPress._button_Space):SetPosY(150)
+    (uiPress._button_Space):SetPosY(160)
     ;
     (fishing_UI._fishBG):SetShow(true)
     ;
@@ -255,7 +255,7 @@ local FishingGame_Manual_Fishing_1 = function(actorKeyRaw, isSelf)
     ;
     (uiPress._button_Space):SetFontAlpha(0)
     ;
-    (uiPress._button_Space):SetPosY(150)
+    (uiPress._button_Space):SetPosY(160)
     ;
     (fishing_UI._fishWpDesc):SetShow(false)
     ;
@@ -374,7 +374,7 @@ local FishingGame_Manual_Fishing_3 = function(actorKeyRaw, isSelf)
     ;
     (uiPress._button_Space):SetFontAlpha(0)
     ;
-    (uiPress._button_Space):SetPosY(150)
+    (uiPress._button_Space):SetPosY(160)
     if autoFishingEnalbe then
       (fishing_UI._fishWpDesc):SetShow(true)
       ;

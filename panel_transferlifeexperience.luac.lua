@@ -283,19 +283,37 @@ local ChangeTexture_Class = function(control, classType)
                                                     (control:getClickTexture()):setUV(x1, y1, x2, y2)
                                                   else
                                                     do
-                                                      control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
-                                                      ;
-                                                      (control:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                      control:setRenderTexture(control:getBaseTexture())
-                                                      control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
-                                                      ;
-                                                      (control:getOnTexture()):setUV(x1, y1, x2, y2)
-                                                      control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                      local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
-                                                      ;
-                                                      (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                      if classType == UI_Class.ClassType_Combattant then
+                                                        control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_07.dds")
+                                                        local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                        ;
+                                                        (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                        control:setRenderTexture(control:getBaseTexture())
+                                                        control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_07.dds")
+                                                        local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 428, 458, 488)
+                                                        ;
+                                                        (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                        control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                        local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 1, 458, 61)
+                                                        ;
+                                                        (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                      else
+                                                        do
+                                                          control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
+                                                          ;
+                                                          (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                          control:setRenderTexture(control:getBaseTexture())
+                                                          control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
+                                                          ;
+                                                          (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                          control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                          ;
+                                                          (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                        end
+                                                      end
                                                     end
                                                   end
                                                 end
@@ -349,13 +367,13 @@ local TransferLife_Update = function()
     local characterData = getCharacterDataByIndex(slotIdx)
     local characterName = getCharacterName(characterData)
     local classType = getCharacterClassType(characterData)
-    local characterLevel = (string.format)("Lv.%d", characterData._level)
+    local characterLevel = (string.format)("%d", characterData._level)
     if self.characterNo_64 == characterData._characterNo_s64 then
       characterName = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRANSFERLIFEEXPERIENCE_CHARACTERNAME", "characterName", characterName)
       slotBtn:SetMonoTone(true)
       slotBtn:SetEnable(false)
     end
-    slotBtn:SetText(characterLevel .. " " .. characterName)
+    slotBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. characterLevel .. " " .. characterName)
     slotBtn:addInputEvent("Mouse_LUp", "TransferLife_SelectedCharacter(" .. slotIdx .. ")")
     ChangeTexture_Class(slotBtn, classType)
     slotBtn:SetShow(true)

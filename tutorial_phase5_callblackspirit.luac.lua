@@ -110,14 +110,13 @@ PaGlobal_TutorialPhase_CallBlackSpirit.startPhaseXXX = function(self, stepNo)
   FGlobal_NewQuickSlot_Update()
   QuickSlot_UpdateData()
   Panel_MainStatus_User_Bar:SetShow(true, false)
-  Panel_ClassResource:SetShow((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType())
+  FGlobal_ClassResource_SetShowControl(true)
   Panel_UIMain:SetShow(true, true)
   if stepNo ~= 1 then
     Panel_CheckedQuest:SetShow(true, false)
   end
   PaGlobal_TutorialUiManager:repositionScreen()
   Panel_Tutorial:SetShow(true, true)
-  -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC67: Confused about usage of register: R3 in 'UnsetPending'

@@ -47,7 +47,7 @@ FromClient_OpenExplorer_CustomizingCharacter = function(title, defaultName, para
   local paramCount = 0
   local subNameStringBDC = ""
   for key,value in pairs(paramList) do
-    if (string.sub)(value, 1, 4) ~= ".bdc" then
+    if (string.sub)(value, 1, 5) == ".bdcp" or (string.sub)(value, 1, 4) ~= ".bdc" then
       return 
     end
     subNameStringBDC = (string.sub)(value, 5, -2)

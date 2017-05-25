@@ -56,28 +56,50 @@ FGlobal_NewQuickSlot_InitPos = function(updateByServer)
   if CppDefine.ChangeUIAndResolution == true then
     for panelIdx = 0, (NewQuickSlot.config).maxPanelCount - 1 do
       local slot = (NewQuickSlot.panelPool)[panelIdx]
-      if (slot.Panel):GetRelativePosX() == 0 and (slot.Panel):GetRelativePosY() == 0 then
-        (slot.Panel):SetPosX(getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx)
-        ;
-        (slot.Panel):SetPosY(getScreenSizeY() - (slot.Panel):GetSizeY() - 5)
-      else
-        ;
-        (slot.Panel):SetPosX(getScreenSizeX() * (slot.Panel):GetRelativePosX() - (slot.Panel):GetSizeX() / 2)
-        ;
-        (slot.Panel):SetPosY(getScreenSizeY() * (slot.Panel):GetRelativePosY() - (slot.Panel):GetSizeY() / 2)
-      end
-    end
-  else
-    do
-      for panelIdx = 0, (NewQuickSlot.config).maxPanelCount - 1 do
+      if (slot.Panel):GetRelativePosX() == -1 and (slot.Panel):GetRelativePosY() == -1 then
         local slot = (NewQuickSlot.panelPool)[panelIdx]
+        local initPosX = getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx
+        local initPosY = getScreenSizeY() - (slot.Panel):GetSizeY() - 5
         ;
-        (slot.Panel):SetPosX(getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx)
+        (slot.Panel):SetPosX(initPosX)
         ;
-        (slot.Panel):SetPosY(getScreenSizeY() - (slot.Panel):GetSizeY() - 5)
+        (slot.Panel):SetPosY(initPosY)
         if updateByServer then
           changePositionBySever(slot.Panel, NewQuickSlot_PanelID[panelIdx], false, true, false)
         end
+        FGlobal_InitPanelRelativePos(slot.Panel, initPosX, initPosY)
+      else
+        do
+          do
+            if (slot.Panel):GetRelativePosX() == 0 and (slot.Panel):GetRelativePosY() == 0 then
+              (slot.Panel):SetPosX(getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx)
+              ;
+              (slot.Panel):SetPosY(getScreenSizeY() - (slot.Panel):GetSizeY() - 5)
+            else
+              ;
+              (slot.Panel):SetPosX(getScreenSizeX() * (slot.Panel):GetRelativePosX() - (slot.Panel):GetSizeX() / 2)
+              ;
+              (slot.Panel):SetPosY(getScreenSizeY() * (slot.Panel):GetRelativePosY() - (slot.Panel):GetSizeY() / 2)
+            end
+            -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out DO_STMT
+
+            -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+            -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_STMT
+
+          end
+        end
+      end
+    end
+  else
+    for panelIdx = 0, (NewQuickSlot.config).maxPanelCount - 1 do
+      local slot = (NewQuickSlot.panelPool)[panelIdx]
+      ;
+      (slot.Panel):SetPosX(getScreenSizeX() * 0.35 + ((slot.Panel):GetSizeX() + 5) * panelIdx)
+      ;
+      (slot.Panel):SetPosY(getScreenSizeY() - (slot.Panel):GetSizeY() - 5)
+      if updateByServer then
+        changePositionBySever(slot.Panel, NewQuickSlot_PanelID[panelIdx], false, true, false)
       end
     end
   end
@@ -504,10 +526,16 @@ end
 
 HandleClicked_NewQuickSlot_Use = function(panelIdx)
   -- function num : 0_19 , upvalues : NewQuickSlot
+  if panelIdx == nil then
+    return 
+  end
   local slot = (NewQuickSlot.panelPool)[panelIdx]
   local quickSlotKey = panelIdx
   local quickSlotInfo = (getQuickSlotItem(quickSlotKey))
   local tempDragInfo = nil
+  if quickSlotInfo == nil then
+    return 
+  end
   do
     if DragManager.dragStartPanel ~= nil then
       local isAutoSetup = false
@@ -909,4 +937,5 @@ end
 registerEvent("refreshQuickSlot_ack", "FromClient_NewQuickSlot_Update")
 registerEvent("FromClient_InventoryUpdate", "FromClient_NewQuickSlot_Update")
 registerEvent("onScreenResize", "Panel_NewQuickSlot_PositionReset")
+registerEvent("FromClient_RenderModeChangeState", "Panel_NewQuickSlot_PositionReset")
 

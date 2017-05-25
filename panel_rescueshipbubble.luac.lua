@@ -98,6 +98,8 @@ local updateDeltaTime_RescueShip = function(deltaTime, index)
             _updateTime = 0
           end
         end
+      else
+        Panel_RescueShip_Close()
       end
     end
   end

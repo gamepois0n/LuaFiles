@@ -17,7 +17,7 @@ local classType = (getSelfPlayer()):getClassType()
 local awakenWeaponContentsOpen = awakenWeapon[classType]
 local DyeNew = {panelTitle = (UI.getChildControl)(Panel_Dye_New, "StaticText_Title"), leftBG = (UI.getChildControl)(Panel_Dye_New, "Static_BG"), scroll = (UI.getChildControl)(Panel_Dye_New, "Scroll_DyeNew"), _buttonQuestion = (UI.getChildControl)(Panel_Dye_New, "Button_Question"), 
 targetCharacter = {(UI.getChildControl)(Panel_Dye_New, "RadioButton_CharacterType_1"), (UI.getChildControl)(Panel_Dye_New, "RadioButton_CharacterType_2"), (UI.getChildControl)(Panel_Dye_New, "RadioButton_CharacterType_3"), (UI.getChildControl)(Panel_Dye_New, "RadioButton_CharacterType_4"), (UI.getChildControl)(Panel_Dye_New, "RadioButton_CharacterType_5"), (UI.getChildControl)(Panel_Dye_New, "RadioButton_CharacterType_6"); [0] = (UI.getChildControl)(Panel_Dye_New, "RadioButton_CharacterType_0")}
-, btn_Dodye = (UI.getChildControl)(Panel_Dye_New, "Button_DoDye"), static_SetOptionBG = (UI.getChildControl)(Panel_Dye_New, "Static_SetOptionBG"), txt_Endurance = (UI.getChildControl)(Panel_Dye_New, "StaticText_Endurance"), btn_ShowUnderwear = (UI.getChildControl)(Panel_Dye_New, "CheckButton_ShowUnderWear"), btn_HideAvatar = (UI.getChildControl)(Panel_Dye_New, "CheckButton_HideAvatar"), btn_HairHide = (UI.getChildControl)(Panel_Dye_New, "CheckButton_HideHair"), btn_HelmHide = (UI.getChildControl)(Panel_Dye_New, "CheckButton_HideHelm"), btn_OpenHelm = (UI.getChildControl)(Panel_Dye_New, "CheckButton_OpenHelm"), btn_WarStance = (UI.getChildControl)(Panel_Dye_New, "CheckButton_WarStance"), btn_AwakenWeapon = (UI.getChildControl)(Panel_Dye_New, "CheckButton_AwakenWeapon"), Slider_Endurance = (UI.getChildControl)(Panel_Dye_New, "Slider_Endurance"), 
+, btn_Dodye = (UI.getChildControl)(Panel_Dye_New, "Button_DoDye"), static_SetOptionBG = (UI.getChildControl)(Panel_Dye_New, "Static_SetOptionBG"), txt_Endurance = (UI.getChildControl)(Panel_Dye_New, "StaticText_Endurance"), btn_ShowUnderwear = (UI.getChildControl)(Panel_Dye_New, "CheckButton_ShowUnderWear"), btn_HideAvatar = (UI.getChildControl)(Panel_Dye_New, "CheckButton_HideAvatar"), btn_HairHide = (UI.getChildControl)(Panel_Dye_New, "CheckButton_HideHair"), btn_HelmHide = (UI.getChildControl)(Panel_Dye_New, "CheckButton_HideHelm"), btn_OpenHelm = (UI.getChildControl)(Panel_Dye_New, "CheckButton_OpenHelm"), btn_WarStance = (UI.getChildControl)(Panel_Dye_New, "CheckButton_WarStance"), btn_AwakenWeapon = (UI.getChildControl)(Panel_Dye_New, "CheckButton_AwakenWeapon"), Slider_Endurance = (UI.getChildControl)(Panel_Dye_New, "Slider_Endurance"), _dyeAlertText = (UI.getChildControl)(Panel_Dye_New, "StaticText_DyeAlert"), 
 titleLineUIPool = {}
 , 
 titleLineSting = {PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_TITLELINESTRING_ITEMSELECT"), PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_TITLELINESTRING_ITEMPARTSSELECT"), PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_TITLELINESTRING_DYESELECT"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_TITLELINESTRING_DESTINATION")}
@@ -25,7 +25,7 @@ titleLineSting = {PAGetString(Defines.StringSheet_GAME, "LUA_DYE_NEW_TITLELINEST
 characterTypeUIPoll = {}
 , selected_characterType = 0, targetEuipSlotCount = 19, 
 equipSlotUIPoll = {}
-, selectedEquipSlotNo = 0, isSelectedEquipSlot = false, partSlotMaxCount = 8, partIdxMaxCount = 3, partClientCount = 14, 
+, selectedEquipSlotNo = 0, isSelectedEquipSlot = false, partSlotMaxCount = 8, partIdxMaxCount = 3, partClientCount = 15, 
 partSlotUIPoll = {}
 , isPartClick = false, 
 selectedPart = {slotId = -1, partId = -1, uiIdx = -1}
@@ -323,6 +323,14 @@ local equipSlotDyeInfo = {
 }
 }
 local partSlotno = {
+{
+{slotNo = -1, uiIdx = -1}
+, 
+{slotNo = -1, uiIdx = -1}
+; 
+[0] = {slotNo = -1, uiIdx = -1}
+}
+, 
 {
 {slotNo = -1, uiIdx = -1}
 , 
@@ -723,6 +731,10 @@ DyeNew.Initialize = function(self)
   (self.panelTitle):ComputePos()
   ;
   (self.Slider_Endurance):SetInterval(99)
+  ;
+  (self._dyeAlertText):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  (self._dyeAlertText):SetText("현재 의상�\132 착용�\156 상태에서�\148 해당 장비�\152 외형�\180 보이�\128 않습니다. ")
 end
 
 DyeNew.UpdatePosition = function(self)
@@ -1135,6 +1147,8 @@ DyeNew.SetPosition = function(self)
   ;
   (self.static_SetOptionBG):SetSize(Panel_Dye_New:GetSizeX() - 50, (self.static_SetOptionBG):GetSizeY())
   Panel_Dye_New:SetSize(Panel_Dye_New:GetSizeX(), (self.leftBG):GetSizeY() + 200)
+  ;
+  (self._dyeAlertText):ComputePos()
 end
 
 DyeNew.Open = function(self)
@@ -1210,6 +1224,8 @@ DyeNew.Open = function(self)
   audioPostEvent_SystemUi(1, 23)
   Panel_Tooltip_Item_hideTooltip()
   selectedDyePart = {}
+  ;
+  (self._dyeAlertText):SetShow(false)
 end
 
 DyeNew.Close = function(self)
@@ -1292,6 +1308,14 @@ end
 dye_resetPartSlotNoArray = function()
   -- function num : 0_14 , upvalues : partSlotno
   partSlotno = {
+{
+{slotNo = -1, uiIdx = -1}
+, 
+{slotNo = -1, uiIdx = -1}
+; 
+[0] = {slotNo = -1, uiIdx = -1}
+}
+, 
 {
 {slotNo = -1, uiIdx = -1}
 , 
@@ -1561,7 +1585,7 @@ FromClient_NotifySelectedEquipSlotNo = function(equipSlotNo)
 end
 
 dye_New_SelectEquipItem = function(equipSlotNos)
-  -- function num : 0_18 , upvalues : DyeNew
+  -- function num : 0_18 , upvalues : DyeNew, CT, classType
   local self = DyeNew
   self.selectedEquipSlotNo = equipSlotNos
   self.isPartClick = false
@@ -1595,6 +1619,14 @@ dye_New_SelectEquipItem = function(equipSlotNos)
   end
   ToClient_RequestSelectedEquipItem(equipSlotNos)
   dye_New_SelectPart(0, 0, 0)
+  local msgOpen = false
+  if CT.ClassType_Combattant == classType then
+    msgOpen = true
+    ;
+    (self._dyeAlertText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DYE_MESHOFF_ALERT"))
+  end
+  ;
+  (self._dyeAlertText):SetShow(msgOpen)
 end
 
 dye_New_ClearEquipItem = function(equipSlotNo)

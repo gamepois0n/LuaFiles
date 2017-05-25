@@ -124,7 +124,7 @@ petLookChange_Update = function()
         ;
         ((petList[index])._icon):ChangeTextureInfoName(iconPath)
         ;
-        ((petList[index])._level):SetText("Lv." .. petLevel)
+        ((petList[index])._level):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. petLevel)
         ;
         ((petList[index])._name):SetText(petName)
         if ((petList[index])._name):IsLimitText() then
@@ -166,23 +166,23 @@ petLookChange_Update = function()
                   (petGeneral._selectBg):SetShow(false)
                   ;
                   ((petList[index])._bg):SetShow(false)
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC215: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end

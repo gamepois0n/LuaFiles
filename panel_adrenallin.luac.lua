@@ -76,9 +76,29 @@ FromClient_ChangeAdrenalinMode = function()
       return 
     end
   end
-  changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
-  if (getSelfPlayer()):isEnableAdrenalin() then
-    Panel_Adrenallin:SetShow(not isRecordMode)
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_Adrenallin:GetRelativePosX() == -1 and Panel_Adrenallin:GetRelativePosY() == -1 then
+      local initPosX = getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225
+      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76
+      Panel_Adrenallin:SetPosX(initPosX)
+      Panel_Adrenallin:SetPosY(initPosY)
+      changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
+      FGlobal_InitPanelRelativePos(Panel_Adrenallin, initPosX, initPosY)
+    else
+      do
+        if Panel_Adrenallin:GetRelativePosX() == 0 and Panel_Adrenallin:GetRelativePosY() == 0 then
+          Panel_Adrenallin:SetPosX(getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225)
+          Panel_Adrenallin:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76)
+        else
+          Panel_Adrenallin:SetPosX(getScreenSizeX() * Panel_Adrenallin:GetRelativePosX() - Panel_Adrenallin:GetSizeX() / 2)
+          Panel_Adrenallin:SetPosY(getScreenSizeY() * Panel_Adrenallin:GetRelativePosY() - Panel_Adrenallin:GetSizeY() / 2)
+        end
+        changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
+        if (getSelfPlayer()):isEnableAdrenalin() then
+          Panel_Adrenallin:SetShow(not isRecordMode)
+        end
+      end
+    end
   end
 end
 
@@ -123,20 +143,30 @@ registerEvent("FromClient_RenderModeChangeState", "check_Adrenallin_PostEvent")
 Panel_Adrenallin_OnSreenResize = function()
   -- function num : 0_11
   if CppDefine.ChangeUIAndResolution == true then
-    if Panel_Adrenallin:GetRelativePosX() == 0 and Panel_Adrenallin:GetRelativePosY() == 0 then
-      Panel_Adrenallin:SetPosX(getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225)
-      Panel_Adrenallin:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76)
+    if Panel_Adrenallin:GetRelativePosX() == -1 and Panel_Adrenallin:GetRelativePosY() == -1 then
+      local initPosX = getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225
+      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76
+      Panel_Adrenallin:SetPosX(initPosX)
+      Panel_Adrenallin:SetPosY(initPosY)
+      changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
+      FGlobal_InitPanelRelativePos(Panel_Adrenallin, initPosX, initPosY)
     else
-      Panel_Adrenallin:SetPosX(getScreenSizeX() * Panel_Adrenallin:GetRelativePosX() - Panel_Adrenallin:GetSizeX() / 2)
-      Panel_Adrenallin:SetPosY(getScreenSizeY() * Panel_Adrenallin:GetRelativePosY() - Panel_Adrenallin:GetSizeY() / 2)
+      do
+        if Panel_Adrenallin:GetRelativePosX() == 0 and Panel_Adrenallin:GetRelativePosY() == 0 then
+          Panel_Adrenallin:SetPosX(getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225)
+          Panel_Adrenallin:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76)
+        else
+          Panel_Adrenallin:SetPosX(getScreenSizeX() * Panel_Adrenallin:GetRelativePosX() - Panel_Adrenallin:GetSizeX() / 2)
+          Panel_Adrenallin:SetPosY(getScreenSizeY() * Panel_Adrenallin:GetRelativePosY() - Panel_Adrenallin:GetSizeY() / 2)
+        end
+        Panel_Adrenallin:SetPosX(getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225)
+        Panel_Adrenallin:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76)
+        changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
+        if (getSelfPlayer()):isEnableAdrenalin() then
+          Panel_Adrenallin:SetShow(not isRecordMode)
+        end
+      end
     end
-  else
-    Panel_Adrenallin:SetPosX(getScreenSizeX() / 2 - Panel_Adrenallin:GetSizeX() / 2 + 225)
-    Panel_Adrenallin:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - 76)
-    changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
-  end
-  if (getSelfPlayer()):isEnableAdrenalin() then
-    Panel_Adrenallin:SetShow(not isRecordMode)
   end
 end
 
@@ -150,6 +180,7 @@ Panel_Adrenallin:setTooltipEventRegistFunc("Adrenallin_ShowSimpleToolTip( true )
 registerEvent("FromClient_UpdateAdrenalin", "FromClient_UpdateAdrenalin")
 registerEvent("FromClient_ChangeAdrenalinMode", "FromClient_ChangeAdrenalinMode")
 registerEvent("onScreenResize", "Panel_Adrenallin_OnSreenResize")
+registerEvent("FromClient_RenderModeChangeState", "Panel_Adrenallin_OnSreenResize")
 Panel_Adrenallin_InitShow = function()
   -- function num : 0_12
   changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)

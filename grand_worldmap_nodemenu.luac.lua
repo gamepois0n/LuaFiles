@@ -600,7 +600,7 @@ NodeLevelGroup.SetNodeLevel = function(self, nodeKey)
   local nodeExpMax = Int64toInt32(ToClient_GetNeedExperienceToNextNodeLevel_s64(nodeKey))
   local nodeExpPercent = nodeExp / nodeExpMax * 100
   ;
-  (self.Txt_NodeLevel):SetText("Lv. " .. tostring(nodeLv))
+  (self.Txt_NodeLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. ". " .. tostring(nodeLv))
   if isProgressReset then
     (self.Progress_NodeLevel):SetProgressRate(0)
     isProgressReset = false
@@ -864,7 +864,7 @@ FromClient_CreateNodeIcon = function(nodeBtn)
     local territoryKeyRaw = nodeBtn:FromClient_getTerritoryKey()
     if wayPointKey == 301 or wayPointKey == 1 or wayPointKey == 601 or wayPointKey == 1101 or wayPointKey == 1301 then
       tradeIcon:SetSpanSize(-10, 20)
-      tradeIcon:SetShow(true)
+      tradeIcon:SetShow(false)
       -- DECOMPILER ERROR at PC72: Confused about usage of register: R6 in 'UnsetPending'
 
       nodeBtnArray[wayPointKey] = nodeBtn

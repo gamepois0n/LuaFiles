@@ -1305,6 +1305,9 @@ Panel_Knowledge_SelectAnotherCard = function(cardKeyRaw)
   -- function num : 0_44 , upvalues : settingForNextTheme, updateMainUI
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local childCard = knowledge:getCardByKeyRaw(cardKeyRaw)
+  if childCard == nil then
+    return 
+  end
   local theme = childCard:getParents()
   ;
   (uiConst.list_Tree):SetSelectItemByKey(-theme:getKey())

@@ -727,7 +727,8 @@ HouseInstallation.Open_ItemInstallMode = function(self, isShow)
     local isSiegeTower = objectStaticWrapper:isSiegeTower()
     local isLargeSiegeTower = objectStaticWrapper:isLargeSiegeTower()
     local isAdvanceBaseTower = objectStaticWrapper:isAdvancedBaseTower()
-    local isMinorWarOpen = isHealingTower or isObservatory or isElephantBarn or isCatapultFactory or isFlameFactory or isBarricade or isDistributor or isBarricadeGate or isWoodenFence or isDefenceTower or isSiegeTower or isLargeSiegeTower or isAdvanceBaseTower
+    local isSavageDefenceObject = objectStaticWrapper:isSavageDefenceObject()
+    local isMinorWarOpen = isHealingTower or isObservatory or isElephantBarn or isCatapultFactory or isFlameFactory or isBarricade or isDistributor or isBarricadeGate or isWoodenFence or isDefenceTower or isSiegeTower or isLargeSiegeTower or isAdvanceBaseTower or isSavageDefenceObject
     if isMinorWarOpen then
       FGlobal_HouseInstallation_MinorWar_Open()
     else

@@ -2565,19 +2565,19 @@ HandleClicked_ItemMarket_SetAlarm = function(itemEnchantKeyRaw, uiPoolIdx)
     if enchantLevel >= 16 then
       local enchantString = ""
       if enchantLevel == 16 then
-        enchantString = "I"
+        enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
       else
         if enchantLevel == 17 then
-          enchantString = "II"
+          enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
         else
           if enchantLevel == 18 then
-            enchantString = "III"
+            enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
           else
             if enchantLevel == 19 then
-              enchantString = "IV"
+              enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
             else
               if enchantLevel == 20 then
-                enchantString = "V"
+                enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
               end
             end
           end
@@ -2596,19 +2596,19 @@ HandleClicked_ItemMarket_SetAlarm = function(itemEnchantKeyRaw, uiPoolIdx)
           if clickItem_SSW:getItemClassify() == 4 then
             local enchantString = ""
             if enchantLevel == 1 then
-              enchantString = "I"
+              enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
             else
               if enchantLevel == 2 then
-                enchantString = "II"
+                enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
               else
                 if enchantLevel == 3 then
-                  enchantString = "III"
+                  enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
                 else
                   if enchantLevel == 4 then
-                    enchantString = "IV"
+                    enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
                   else
                     if enchantLevel == 5 then
-                      enchantString = "V"
+                      enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                     end
                   end
                 end
@@ -2913,19 +2913,19 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
       if enchantLevel >= 16 then
         local enchantString = ""
         if enchantLevel == 16 then
-          enchantString = "I"
+          enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
         else
           if enchantLevel == 17 then
-            enchantString = "II"
+            enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
           else
             if enchantLevel == 18 then
-              enchantString = "III"
+              enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
             else
               if enchantLevel == 19 then
-                enchantString = "IV"
+                enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
               else
                 if enchantLevel == 20 then
-                  enchantString = "V"
+                  enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                 end
               end
             end
@@ -2944,19 +2944,19 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
             if issw:getItemClassify() == 4 then
               local enchantString = ""
               if enchantLevel == 1 then
-                enchantString = "I"
+                enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
               else
                 if enchantLevel == 2 then
-                  enchantString = "II"
+                  enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
                 else
                   if enchantLevel == 3 then
-                    enchantString = "III"
+                    enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
                   else
                     if enchantLevel == 4 then
-                      enchantString = "IV"
+                      enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
                     else
                       if enchantLevel == 5 then
-                        enchantString = "V"
+                        enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                       end
                     end
                   end
@@ -3020,19 +3020,19 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
                                 if enchantLevel >= 16 then
                                   local enchantString = ""
                                   if enchantLevel == 16 then
-                                    enchantString = "I"
+                                    enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
                                   else
                                     if enchantLevel == 17 then
-                                      enchantString = "II"
+                                      enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
                                     else
                                       if enchantLevel == 18 then
-                                        enchantString = "III"
+                                        enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
                                       else
                                         if enchantLevel == 19 then
-                                          enchantString = "IV"
+                                          enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
                                         else
                                           if enchantLevel == 20 then
-                                            enchantString = "V"
+                                            enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                                           end
                                         end
                                       end
@@ -3051,19 +3051,19 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
                                       if issw:getItemClassify() == 4 then
                                         local enchantString = ""
                                         if enchantLevel == 1 then
-                                          enchantString = "I"
+                                          enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
                                         else
                                           if enchantLevel == 2 then
-                                            enchantString = "II"
+                                            enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
                                           else
                                             if enchantLevel == 3 then
-                                              enchantString = "III"
+                                              enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
                                             else
                                               if enchantLevel == 4 then
-                                                enchantString = "IV"
+                                                enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
                                               else
                                                 if enchantLevel == 5 then
-                                                  enchantString = "V"
+                                                  enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                                                 end
                                               end
                                             end
@@ -3109,19 +3109,19 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
                                                     if enchantLevel >= 16 then
                                                       local enchantString = ""
                                                       if enchantLevel == 16 then
-                                                        enchantString = "I"
+                                                        enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
                                                       else
                                                         if enchantLevel == 17 then
-                                                          enchantString = "II"
+                                                          enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
                                                         else
                                                           if enchantLevel == 18 then
-                                                            enchantString = "III"
+                                                            enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
                                                           else
                                                             if enchantLevel == 19 then
-                                                              enchantString = "IV"
+                                                              enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
                                                             else
                                                               if enchantLevel == 20 then
-                                                                enchantString = "V"
+                                                                enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                                                               end
                                                             end
                                                           end
@@ -3140,19 +3140,19 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
                                                           if issw:getItemClassify() == 4 then
                                                             local enchantString = ""
                                                             if enchantLevel == 1 then
-                                                              enchantString = "I"
+                                                              enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1")
                                                             else
                                                               if enchantLevel == 2 then
-                                                                enchantString = "II"
+                                                                enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2")
                                                               else
                                                                 if enchantLevel == 3 then
-                                                                  enchantString = "III"
+                                                                  enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3")
                                                                 else
                                                                   if enchantLevel == 4 then
-                                                                    enchantString = "IV"
+                                                                    enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4")
                                                                   else
                                                                     if enchantLevel == 5 then
-                                                                      enchantString = "V"
+                                                                      enchantString = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5")
                                                                     end
                                                                   end
                                                                 end
@@ -3954,6 +3954,7 @@ FGolbal_ItemMarketNew_Close = function()
   end
   Panel_ItemMarket_BidDesc_Hide()
   FGlobal_ItemMarket_FavoriteItem_Close()
+  toClient_requestCloseItemMarket()
 end
 
 Update_ItemMarketMasterInfo = function()

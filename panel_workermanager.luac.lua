@@ -10,11 +10,12 @@ local UI_TM = CppEnums.TextMode
 local UI_PP = CppEnums.PAUIMB_PRIORITY
 local UI_Color = Defines.Color
 local UI_PD = CppEnums.Padding
+local isContentOpen = ToClient_IsContentsGroupOpen("259")
 Panel_WorkerManager:RegisterShowEventFunc(true, "WorkerManager_ShowAni()")
 Panel_WorkerManager:RegisterShowEventFunc(false, "WorkerManager_HideAni()")
 local workerManager = {plantKey = nil, slotFixMaxCount = 6, slotMaxCount = 6, 
 slot = {}
-, startPosY = 5, _startIndex = 1, _listCount = 0, penelTitle = (UI.getChildControl)(Panel_WorkerManager, "titlebar_manageWorker"), workerListBg = (UI.getChildControl)(Panel_WorkerManager, "Static_WorkerList_BG"), _scroll = (UI.getChildControl)(Panel_WorkerManager, "WorkerList_ScrollBar"), _btnClose = (UI.getChildControl)(Panel_WorkerManager, "Button_Close"), checkPopUp = (UI.getChildControl)(Panel_WorkerManager, "CheckButton_PopUp"), _btnFire = (UI.getChildControl)(Panel_WorkerManager, "button_doWorkerFire"), _btnUpgradeNow = (UI.getChildControl)(Panel_WorkerManager, "button_UpgradeNow"), _restoreAll = (UI.getChildControl)(Panel_WorkerManager, "Button_Restore_All"), _reDoAll = (UI.getChildControl)(Panel_WorkerManager, "Button_ReDo_All"), restoreItemMaxCount = 5, restoreItemHasCount = 0, 
+, startPosY = 5, _startIndex = 1, _listCount = 0, penelTitle = (UI.getChildControl)(Panel_WorkerManager, "titlebar_manageWorker"), workerListBg = (UI.getChildControl)(Panel_WorkerManager, "Static_WorkerList_BG"), _scroll = (UI.getChildControl)(Panel_WorkerManager, "WorkerList_ScrollBar"), _btnClose = (UI.getChildControl)(Panel_WorkerManager, "Button_Close"), checkPopUp = (UI.getChildControl)(Panel_WorkerManager, "CheckButton_PopUp"), _btnFire = (UI.getChildControl)(Panel_WorkerManager, "button_doWorkerFire"), _btnUpgradeNow = (UI.getChildControl)(Panel_WorkerManager, "button_UpgradeNow"), _restoreAll = (UI.getChildControl)(Panel_WorkerManager, "Button_Restore_All"), _reDoAll = (UI.getChildControl)(Panel_WorkerManager, "Button_ReDo_All"), _resetUpgradeCount = (UI.getChildControl)(Panel_WorkerManager, "Button_ResetUpgradeCount"), restoreItemMaxCount = 5, restoreItemHasCount = 0, 
 restoreItemSlot = {}
 , selectedRestoreWorkerIdx = 0, selectedUiIndex = -1, sliderStartIdx = 0, upgradeWokerNoRaw = -1, restoreItemBG = (UI.getChildControl)(Panel_WorkerManager, "Static_Restore_Item_BG"), btn_restoreItemClose = (UI.getChildControl)(Panel_WorkerManager, "Button_Close_Item"), _slider = (UI.getChildControl)(Panel_WorkerManager, "Slider_Restore_Item"), guideRestoreAll = (UI.getChildControl)(Panel_WorkerManager, "StaticText_Guide_RestoreAll"), desc = (UI.getChildControl)(Panel_WorkerManager, "StaticText_Description"), 
 slotConfig = {createIcon = true, createBorder = false, createCount = true, createCash = true}
@@ -63,6 +64,8 @@ workerManager.registEventHandler = function(self)
   (self.restoreItemBG):addInputEvent("Mouse_DownScroll", "workerManager_SliderScroll( false )")
   ;
   (self._slider):addInputEvent("Mouse_LUp", "HandleLPress_WorkerManager_RestoreItemSlider()")
+  ;
+  (self._resetUpgradeCount):addInputEvent("Mouse_LUp", "HandleClicked_UpgradeCountReset_Show()")
   Panel_WorkerManager:RegisterUpdateFunc("workerManager_FrameUpdate")
 end
 
@@ -81,6 +84,7 @@ workerManager.registMessageHandler = function(self)
   registerEvent("FromClient_ReceiveReturnHouse", "FromClient_WorkerDataAllUpdate")
   registerEvent("FromClient_ChangeWorkerSkillNoOne", "FromClient_ChangeWorkerSkillNoOne")
   registerEvent("FromClient_ChangeWorkerSkillNo", "FromClient_ChangeWorkerSkillNo")
+  registerEvent("FromClient_ClearWorkerUpgradePoint", "FromClient_ClearWorkerUpgradePoint")
 end
 
 local workedWorker = {}
@@ -89,7 +93,7 @@ local workType = {_HouseCraft = 0, _LargeCraft = 1, _PlantWork = 2, _Building = 
 local restoreWorkerNo = nil
 local workerGrade = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_WORKERGRADE_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_WORKERGRADE_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_WORKERGRADE_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_WORKERGRADE_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_WORKERGRADE_4")}
 local workerManager_Initiallize = function()
-  -- function num : 0_4 , upvalues : workerManager, UI_TM, UI_PD
+  -- function num : 0_4 , upvalues : workerManager, UI_TM, UI_PD, isContentOpen
   local self = workerManager
   for slotIdx = 0, self.slotMaxCount - 1 do
     local tempSlot = {}
@@ -110,6 +114,7 @@ local workerManager_Initiallize = function()
     tempSlot.btn_Stop = (UI.createAndCopyBasePropertyControl)(Panel_WorkerManager, "Button_WorkStop", tempSlot.bg, "workerManager_WorkerSlot_BTN_WorkStop_" .. slotIdx)
     tempSlot.btn_Repeat = (UI.createAndCopyBasePropertyControl)(Panel_WorkerManager, "Button_RepeatWork", tempSlot.bg, "workerManager_WorkerSlot_BTN_WorkRepeat_" .. slotIdx)
     tempSlot.btn_UnRepeat = (UI.createAndCopyBasePropertyControl)(Panel_WorkerManager, "Button_UnRepeatWork", tempSlot.bg, "workerManager_WorkerSlot_BTN_WorkUnRepeat_" .. slotIdx)
+    tempSlot.btn_resetCount = (UI.createAndCopyBasePropertyControl)(Panel_WorkerManager, "Button_ResetCount", tempSlot.bg, "workerManager_WorkerSlot_BTN_UpgradeResetCount_" .. slotIdx)
     ;
     (tempSlot.bg):SetPosX(5)
     ;
@@ -177,6 +182,8 @@ local workerManager_Initiallize = function()
     ;
     (tempSlot.btn_Upgrade):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
     ;
+    (tempSlot.btn_resetCount):ComputePos()
+    ;
     (tempSlot.btn_ChangeSkill):SetPosX((tempSlot.btn_Upgrade):GetPosX() + (tempSlot.btn_Upgrade):GetSizeX() + 2)
     ;
     (tempSlot.btn_ChangeSkill):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
@@ -204,7 +211,7 @@ local workerManager_Initiallize = function()
     (tempSlot.picture):addInputEvent("Mouse_UpScroll", "workerManager_ScrollEvent( true )")
     ;
     (tempSlot.picture):addInputEvent("Mouse_DownScroll", "workerManager_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC492: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC505: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self.slot)[slotIdx] = tempSlot
@@ -241,7 +248,7 @@ local workerManager_Initiallize = function()
     (tempItemSlot.slotIcon):addInputEvent("Mouse_UpScroll", "workerManager_SliderScroll( true )")
     ;
     (tempItemSlot.slotIcon):addInputEvent("Mouse_DownScroll", "workerManager_SliderScroll( false )")
-    -- DECOMPILER ERROR at PC609: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC622: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self.restoreItemSlot)[resIdx] = tempItemSlot
@@ -275,6 +282,52 @@ local workerManager_Initiallize = function()
   (self.desc):setPadding(UI_PD.ePadding_Left, 10)
   ;
   (self.desc):setPadding(UI_PD.ePadding_Right, 10)
+  if isContentOpen then
+    (self._restoreAll):SetSize(130, 30)
+    ;
+    (self._reDoAll):SetSize(130, 30)
+    ;
+    (self._resetUpgradeCount):SetSize(130, 30)
+    ;
+    (self._btnUpgradeNow):SetSize(130, 30)
+    ;
+    (self._btnFire):SetSize(130, 65)
+    ;
+    (self._restoreAll):SetSpanSize(30, 40)
+    ;
+    (self._reDoAll):SetSpanSize(0, 40)
+    ;
+    (self._resetUpgradeCount):SetSpanSize(30, 5)
+    ;
+    (self._btnUpgradeNow):SetSpanSize(0, 5)
+    ;
+    (self._btnFire):SetSpanSize(30, 5)
+    ;
+    (self.desc):SetSpanSize(0, 75)
+  else
+    ;
+    (self._restoreAll):SetSize(80, 30)
+    ;
+    (self._reDoAll):SetSize(80, 30)
+    ;
+    (self._btnUpgradeNow):SetSize(120, 30)
+    ;
+    (self._btnFire):SetSize(120, 30)
+    ;
+    (self._restoreAll):SetSpanSize(10, 5)
+    ;
+    (self._reDoAll):SetSpanSize(-100, 5)
+    ;
+    (self._btnUpgradeNow):SetSpanSize(0, 5)
+    ;
+    (self._btnFire):SetSpanSize(10, 5)
+    ;
+    (self.desc):SetSpanSize(0, 40)
+  end
+  ;
+  (self._resetUpgradeCount):SetShow(isContentOpen)
+  ;
+  (self._btnUpgradeNow):SetShow(isContentOpen)
 end
 
 local comboBox = {town = (UI.getChildControl)(Panel_WorkerManager, "Combobox_Town"), grade = (UI.getChildControl)(Panel_WorkerManager, "Combobox_Grade")}
@@ -299,8 +352,9 @@ local gradeSort = {}
 local filteredArray = {}
 local selectHomeWayPointIndex = -1
 local selectWorkerGrade = -1
+local checkUpgradeResetCount = false
 local workerManager_UpdateMain = function()
-  -- function num : 0_5 , upvalues : workerManager, workerArray, townSort, gradeSort, filteredArray, selectHomeWayPointIndex, selectWorkerGrade, restoreWorkerNo, workerCheckList
+  -- function num : 0_5 , upvalues : workerManager, workerArray, townSort, gradeSort, filteredArray, selectHomeWayPointIndex, selectWorkerGrade, restoreWorkerNo, workerCheckList, checkUpgradeResetCount
   local self = workerManager
   local plantArray = (Array.new)()
   workerArray = (Array.new)()
@@ -326,20 +380,24 @@ local workerManager_UpdateMain = function()
     (table.sort)(plantArray, plantSort_do)
     local totalWorkerCount = 0
     local totalWorkerCapacity = 0
-    do
-      for plantRawIdx = 1, #plantArray do
+    for plantRawIdx = 1, #plantArray do
+      do
         local plantKey = plantArray[plantRawIdx]
-        local plantWorkerCount = ToClient_getPlantWaitWorkerListCount(plantKey, 0)
-        local workerHouseCount = ToClient_getTownWorkerMaxCapacity(plantKey)
-        if workerHouseCount < plantWorkerCount then
-          plantWorkerCount = workerHouseCount
+        do
+          local plantWorkerCount = ToClient_getPlantWaitWorkerListCount(plantKey, 0)
+          local workerHouseCount = ToClient_getTownWorkerMaxCapacity(plantKey)
+          if workerHouseCount < plantWorkerCount then
+            plantWorkerCount = workerHouseCount
+          end
+          for workerIdx = 0, plantWorkerCount - 1 do
+            local workerNoRaw = ToClient_getPlantWaitWorkerNoRawByIndex(plantKey, workerIdx)
+            workerArray:push_back(workerNoRaw)
+          end
+          totalWorkerCapacity = totalWorkerCapacity + workerHouseCount
+          totalWorkerCount = totalWorkerCount + plantWorkerCount
         end
-        for workerIdx = 0, plantWorkerCount - 1 do
-          local workerNoRaw = ToClient_getPlantWaitWorkerNoRawByIndex(plantKey, workerIdx)
-          workerArray:push_back(workerNoRaw)
-        end
-        totalWorkerCapacity = totalWorkerCapacity + workerHouseCount
-        totalWorkerCount = totalWorkerCount + plantWorkerCount
+        -- DECOMPILER ERROR at PC73: LeaveBlock: unexpected jumping out DO_STMT
+
       end
     end
     local title = ""
@@ -410,43 +468,61 @@ local workerManager_UpdateMain = function()
     ;
     (table.sort)(gradeSort, gradeSort_do)
     ;
-    (self._btnUpgradeNow):SetShow(false)
+    (self._btnUpgradeNow):SetIgnore(true)
+    ;
+    (self._btnUpgradeNow):SetMonoTone(true)
     local count = 0
     filteredArray = {}
     for worker_Index = 1, #workerArray do
       local workerWrapperLua = getWorkerWrapper(workerArray[worker_Index], false)
-      -- DECOMPILER ERROR at PC250: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC254: Unhandled construct in 'MakeBoolean' P1
 
-      -- DECOMPILER ERROR at PC250: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC254: Unhandled construct in 'MakeBoolean' P1
 
-      -- DECOMPILER ERROR at PC250: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC254: Unhandled construct in 'MakeBoolean' P1
 
-      -- DECOMPILER ERROR at PC250: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC254: Unhandled construct in 'MakeBoolean' P1
 
       if workerWrapperLua ~= nil and selectHomeWayPointIndex > 0 and workerWrapperLua:getHomeWaypoint() == townSort[selectHomeWayPointIndex] and selectWorkerGrade >= 0 and workerWrapperLua:getGrade() == selectWorkerGrade then
         count = count + 1
-        -- DECOMPILER ERROR at PC254: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC258: Confused about usage of register: R14 in 'UnsetPending'
 
         filteredArray[count] = workerArray[worker_Index]
       end
       count = count + 1
-      -- DECOMPILER ERROR at PC260: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC264: Confused about usage of register: R14 in 'UnsetPending'
 
       filteredArray[count] = workerArray[worker_Index]
-      -- DECOMPILER ERROR at PC270: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC274: Unhandled construct in 'MakeBoolean' P1
 
       if selectWorkerGrade >= 0 and workerWrapperLua:getGrade() == selectWorkerGrade then
         count = count + 1
-        -- DECOMPILER ERROR at PC274: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC278: Confused about usage of register: R14 in 'UnsetPending'
 
         filteredArray[count] = workerArray[worker_Index]
       end
       count = count + 1
-      -- DECOMPILER ERROR at PC280: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC284: Confused about usage of register: R14 in 'UnsetPending'
 
       filteredArray[count] = workerArray[worker_Index]
     end
+    local checkUpgradableWorker = function()
+    -- function num : 0_5_2 , upvalues : filteredArray, hasUpgradeWoker
+    for index = 1, #filteredArray do
+      local workerWrapperLua = getWorkerWrapper(filteredArray[index], false)
+      local workerNoRaw = filteredArray[index]
+      local worker_Lev = workerWrapperLua:getLevel()
+      local maxUpgradeCount = (math.floor)(worker_Lev / 10)
+      local currentUpgradableCount = workerWrapperLua:getUpgradePoint()
+      if not workerWrapperLua:isWorking() and not hasUpgradeWoker and currentUpgradableCount < maxUpgradeCount then
+        return true
+      end
+    end
+    return false
+  end
+
     local limitCount = 0
+    local resetUpgradableCount = 0
     for worker_Index = self._startIndex, #filteredArray do
       if self.slotMaxCount <= limitCount then
         break
@@ -471,6 +547,8 @@ local workerManager_UpdateMain = function()
       ;
       (slot.btn_ChangeSkill):SetMonoTone(true)
       ;
+      (slot.btn_resetCount):SetShow(false)
+      ;
       (slot.btn_Repeat):addInputEvent("Mouse_LUp", "")
       ;
       (slot.btn_UnRepeat):addInputEvent("Mouse_LUp", "")
@@ -482,6 +560,8 @@ local workerManager_UpdateMain = function()
       (slot.btn_Upgrade):addInputEvent("Mouse_LUp", "")
       ;
       (slot.btn_ChangeSkill):addInputEvent("Mouse_LUp", "")
+      ;
+      (slot.btn_resetCount):addInputEvent("Mouse_LUp", "")
       ;
       (slot.btn_Restore):addInputEvent("Mouse_On", "WorkerManager_ButtonSimpleToolTip( true, " .. limitCount .. ", 0 )")
       ;
@@ -509,7 +589,18 @@ local workerManager_UpdateMain = function()
       local workerWrapperLua = getWorkerWrapper(filteredArray[worker_Index], false)
       local workerNoRaw = filteredArray[worker_Index]
       local setWorker = function()
-    -- function num : 0_5_2 , upvalues : workerWrapperLua, slot, worker_Index, workerNoRaw, limitCount, restoreWorkerNo, workerCheckList, hasUpgradeWoker, self
+    -- function num : 0_5_3 , upvalues : slot, workerWrapperLua, worker_Index, workerNoRaw, limitCount, restoreWorkerNo, workerCheckList, hasUpgradeWoker, self, checkUpgradeResetCount, resetUpgradableCount
+    (slot.btn_Restore):SetShow(true)
+    ;
+    (slot.btn_Upgrade):SetShow(true)
+    ;
+    (slot.btn_Repeat):SetShow(true)
+    ;
+    (slot.btn_UnRepeat):SetShow(true)
+    ;
+    (slot.btn_Stop):SetShow(true)
+    ;
+    (slot.btn_ChangeSkill):SetShow(true)
     local workerUpgradeCount = workerWrapperLua:getUpgradePoint()
     local worker_Name = ""
     if workerUpgradeCount > 0 and workerWrapperLua:isUpgradable() then
@@ -661,7 +752,7 @@ local workerManager_UpdateMain = function()
           (slot.workerRestorePT):SetProgressRate(actionPointPer)
           ;
           (slot.workerCurrentPT):SetProgressRate(actionPointPer)
-          -- DECOMPILER ERROR at PC440: Confused about usage of register: R6 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC470: Confused about usage of register: R6 in 'UnsetPending'
 
           if workerCheckList[Int64toInt32(workerNo_64)] == nil then
             workerCheckList[Int64toInt32(workerNo_64)] = false
@@ -670,7 +761,7 @@ local workerManager_UpdateMain = function()
           ;
           (slot.workerCheck):SetCheck(isCheck)
           ;
-          (slot.workerName):SetText("Lv." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>")
+          (slot.workerName):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>")
           ;
           (slot.workerNodeName):SetText(workerWrapperLua:getWorkingNodeDesc())
           ;
@@ -687,7 +778,14 @@ local workerManager_UpdateMain = function()
           (slot.workingName):SetShow(true)
           if hasUpgradeWoker == true then
             if isGameTypeKorea() or isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP) then
+              (self._btnUpgradeNow):SetIgnore(false)
+              ;
+              (self._btnUpgradeNow):SetMonoTone(false)
+              ;
               (self._btnUpgradeNow):SetShow(true)
+            else
+              ;
+              (self._btnUpgradeNow):SetShow(false)
             end
             ;
             (slot.btn_Upgrade):SetMonoTone(true)
@@ -730,24 +828,50 @@ local workerManager_UpdateMain = function()
             (slot.btn_Upgrade):addInputEvent("Mouse_LUp", "")
           end
           limitCount = limitCount + 1
+          if checkUpgradeResetCount then
+            (slot.btn_Restore):SetShow(false)
+            ;
+            (slot.btn_Upgrade):SetShow(false)
+            ;
+            (slot.btn_Repeat):SetShow(false)
+            ;
+            (slot.btn_UnRepeat):SetShow(false)
+            ;
+            (slot.btn_Stop):SetShow(false)
+            ;
+            (slot.btn_ChangeSkill):SetShow(false)
+            local enableReset = false
+            local maxUpgradeCount = (math.floor)(worker_Lev / 10)
+            local currentUpgradableCount = workerWrapperLua:getUpgradePoint()
+            if not workerWrapperLua:isWorking() and not hasUpgradeWoker then
+              if currentUpgradableCount < maxUpgradeCount then
+                (slot.btn_resetCount):SetShow(true)
+                ;
+                (slot.btn_resetCount):SetEnable(true)
+                resetUpgradableCount = resetUpgradableCount + 1
+              end
+              ;
+              (slot.btn_resetCount):addInputEvent("Mouse_LUp", "HandleClicked_ResetUpgradeCount(" .. worker_Index .. ")")
+            end
+          end
         end
       end
     end
   end
 
-      -- DECOMPILER ERROR at PC494: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC513: Unhandled construct in 'MakeBoolean' P1
 
-      -- DECOMPILER ERROR at PC494: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC513: Unhandled construct in 'MakeBoolean' P1
 
-      -- DECOMPILER ERROR at PC494: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC513: Unhandled construct in 'MakeBoolean' P1
 
-      -- DECOMPILER ERROR at PC494: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC513: Unhandled construct in 'MakeBoolean' P1
 
       if workerWrapperLua ~= nil and selectHomeWayPointIndex > 0 and workerWrapperLua:getHomeWaypoint() == townSort[selectHomeWayPointIndex] and selectWorkerGrade >= 0 and workerWrapperLua:getGrade() == selectWorkerGrade then
         setWorker()
       end
       setWorker()
-      -- DECOMPILER ERROR at PC508: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC527: Unhandled construct in 'MakeBoolean' P1
 
       if selectWorkerGrade >= 0 and workerWrapperLua:getGrade() == selectWorkerGrade then
         setWorker()
@@ -755,6 +879,10 @@ local workerManager_UpdateMain = function()
       setWorker()
     end
     do
+      if checkUpgradeResetCount and not checkUpgradableWorker() then
+        HandleClicked_UpgradeCountReset_Show()
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_NOWORKER"))
+      end
       self._listCount = count
       ;
       (UIScroll.SetButtonSize)(self._scroll, self.slotMaxCount, self._listCount)
@@ -792,6 +920,8 @@ local workerManager_Update = function()
   (self._reDoAll):ComputePos()
   ;
   (self._btnUpgradeNow):ComputePos()
+  ;
+  (self._resetUpgradeCount):ComputePos()
   ;
   (self.desc):ComputePos()
   ;
@@ -1163,8 +1293,49 @@ HandleClicked_workerManager_WorkerUpgradeNow = function()
   (MessageBox.showMessageBox)(messageboxData, "middle")
 end
 
+HandleClicked_ResetUpgradeCount = function(workerIndex)
+  -- function num : 0_21 , upvalues : workerManager, filteredArray
+  local self = workerManager
+  local workerWrapperLua = getWorkerWrapper(filteredArray[workerIndex], false)
+  local workerNoRaw = filteredArray[workerIndex]
+  local workerUpgradeCount = workerWrapperLua:getUpgradePoint()
+  local worker_Lev = workerWrapperLua:getLevel()
+  local maxUpgradePoint = (math.floor)(worker_Lev / 10)
+  local upgradableCount = maxUpgradePoint - workerUpgradeCount
+  local worker_Name = workerWrapperLua:getName()
+  local doReset = function()
+    -- function num : 0_21_0 , upvalues : workerNoRaw
+    ToClient_requestClearWorkerUpgradePoint(workerNoRaw)
+  end
+
+  if upgradableCount > 0 then
+    local title = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_MSGTITLE")
+    local msg = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. worker_Lev .. " " .. workerWrapperLua:getGradeToColorString() .. worker_Name .. "<PAOldColor>"
+    local content = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_MSGCONTENT", "msg", msg, "count", upgradableCount, "maxCount", maxUpgradePoint)
+    local messageBoxData = {title = title, content = content, functionYes = doReset, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+  end
+end
+
+HandleClicked_UpgradeCountReset_Show = function()
+  -- function num : 0_22 , upvalues : checkUpgradeResetCount, workerManager_UpdateMain
+  if ToClient_doHaveClearWorkerUpgradeItem() then
+    checkUpgradeResetCount = not checkUpgradeResetCount
+    workerManager_UpdateMain()
+  else
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_NOITEMALERT"))
+  end
+end
+
+FromClient_ClearWorkerUpgradePoint = function()
+  -- function num : 0_23 , upvalues : checkUpgradeResetCount, workerManager_UpdateMain
+  checkUpgradeResetCount = false
+  workerManager_UpdateMain()
+end
+
 WorkerManager_WorkerCheck_Init = function()
-  -- function num : 0_21 , upvalues : workerManager, filteredArray, workerCheckList
+  -- function num : 0_24 , upvalues : workerManager, filteredArray, workerCheckList
   local self = workerManager
   for index = 1, #filteredArray do
     local workerNoRaw = filteredArray[index]
@@ -1175,7 +1346,7 @@ WorkerManager_WorkerCheck_Init = function()
 end
 
 HandleClicked_workerManager_CheckWorker = function(workerNo_64)
-  -- function num : 0_22 , upvalues : workerCheckList, workerManager_UpdateMain
+  -- function num : 0_25 , upvalues : workerCheckList, workerManager_UpdateMain
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
 
   if workerCheckList[workerNo_64] == nil or workerCheckList[workerNo_64] == false then
@@ -1189,10 +1360,10 @@ HandleClicked_workerManager_CheckWorker = function(workerNo_64)
 end
 
 HandleClicked_workerManager_WaitWorkerFire = function()
-  -- function num : 0_23 , upvalues : workerManager, filteredArray, workerCheckList, comboBox, townSort, workerGrade, gradeSort, UI_PP
+  -- function num : 0_26 , upvalues : workerManager, filteredArray, workerCheckList, comboBox, townSort, workerGrade, gradeSort, UI_PP
   local self = workerManager
   local do_CheckedWorker_Fire = function()
-    -- function num : 0_23_0 , upvalues : self, filteredArray, workerCheckList
+    -- function num : 0_26_0 , upvalues : self, filteredArray, workerCheckList
     for idx = 1, self._listCount do
       local workerNoRaw = filteredArray[idx]
       if workerCheckList[Int64toInt32(workerNoRaw)] then
@@ -1241,7 +1412,7 @@ HandleClicked_workerManager_WaitWorkerFire = function()
 end
 
 HandleClicked_workerManager_RestoreAll = function()
-  -- function num : 0_24 , upvalues : workerManager, filteredArray
+  -- function num : 0_27 , upvalues : workerManager, filteredArray
   local self = workerManager
   local restoreItemCount = ToClient_getNpcRecoveryItemList()
   if restoreItemCount <= 0 then
@@ -1252,7 +1423,7 @@ HandleClicked_workerManager_RestoreAll = function()
 end
 
 HandleClicked_workerManager_ReDoAll = function()
-  -- function num : 0_25 , upvalues : workerManager, filteredArray
+  -- function num : 0_28 , upvalues : workerManager, filteredArray
   local self = workerManager
   for worker_Index = 1, #filteredArray do
     HandleClicked_ReDoWork(worker_Index)
@@ -1261,7 +1432,7 @@ end
 
 local elapsedTime = 0
 workerManager_FrameUpdate = function(deltaTime)
-  -- function num : 0_26 , upvalues : elapsedTime, workerManager, workerManager_UpdateMain
+  -- function num : 0_29 , upvalues : elapsedTime, workerManager, workerManager_UpdateMain
   elapsedTime = elapsedTime + deltaTime
   if elapsedTime > 1 then
     local self = workerManager
@@ -1284,7 +1455,7 @@ workerManager_FrameUpdate = function(deltaTime)
 end
 
 workerManager_ScrollEvent = function(isUp)
-  -- function num : 0_27 , upvalues : workerManager, workerManager_Update
+  -- function num : 0_30 , upvalues : workerManager, workerManager_Update
   local self = workerManager
   self._startIndex = (UIScroll.ScrollEvent)(self._scroll, isUp, self.slotMaxCount, self._listCount, self._startIndex - 1, 1) + 1
   if (self.restoreItemBG):GetShow() then
@@ -1294,7 +1465,7 @@ workerManager_ScrollEvent = function(isUp)
 end
 
 workerManager_CheckWorkingOtherChannel = function()
-  -- function num : 0_28
+  -- function num : 0_31
   if getSelfPlayer() == nil then
     return 
   end
@@ -1306,7 +1477,7 @@ workerManager_CheckWorkingOtherChannel = function()
 end
 
 workerManager_getWorkingOtherChannelMsg = function()
-  -- function num : 0_29
+  -- function num : 0_32
   if workerManager_CheckWorkingOtherChannel() then
     local workingServerNo = ((getSelfPlayer()):get()):getWorkerWorkingServerNo()
     local temporaryWrapper = getTemporaryInformationWrapper()
@@ -1321,7 +1492,7 @@ workerManager_getWorkingOtherChannelMsg = function()
 end
 
 workerManager_CheckWorkingOtherChannelAndMsg = function()
-  -- function num : 0_30
+  -- function num : 0_33
   if workerManager_CheckWorkingOtherChannel() then
     Proc_ShowMessage_Ack((workerManager_getWorkingOtherChannelMsg()), nil, (CppEnums.ChatType).System, (CppEnums.ChatSystemType).Undefine)
     return true
@@ -1331,7 +1502,7 @@ workerManager_CheckWorkingOtherChannelAndMsg = function()
 end
 
 FGlobal_WorkerManger_ShowToggle = function()
-  -- function num : 0_31
+  -- function num : 0_34
   if Panel_WorkerManager:GetShow() then
     workerManager_Close()
     return 
@@ -1343,7 +1514,7 @@ FGlobal_WorkerManger_ShowToggle = function()
 end
 
 workerManager_Open = function()
-  -- function num : 0_32 , upvalues : workerManager, workerManager_Update
+  -- function num : 0_35 , upvalues : workerManager, checkUpgradeResetCount, workerManager_Update
   if workerManager_CheckWorkingOtherChannel() then
     local workingServerNo = ((getSelfPlayer()):get()):getWorkerWorkingServerNo()
     local temporaryWrapper = getTemporaryInformationWrapper()
@@ -1366,6 +1537,7 @@ workerManager_Open = function()
     -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
     workerManager.plantKey = nil
+    checkUpgradeResetCount = false
     audioPostEvent_SystemUi(1, 28)
     Panel_WorkerManager:SetShow(true, true)
     workerManager_ResetPos()
@@ -1381,7 +1553,7 @@ workerManager_Open = function()
 end
 
 FGlobal_workerManager_OpenWorldMap = function()
-  -- function num : 0_33 , upvalues : workerManager, workerManager_Update
+  -- function num : 0_36 , upvalues : workerManager, workerManager_Update
   if workerManager_CheckWorkingOtherChannel() then
     local workingServerNo = ((getSelfPlayer()):get()):getWorkerWorkingServerNo()
     local temporaryWrapper = getTemporaryInformationWrapper()
@@ -1419,7 +1591,7 @@ FGlobal_workerManager_OpenWorldMap = function()
 end
 
 FGlobal_workerManager_UpdateNode = function(plantKey)
-  -- function num : 0_34 , upvalues : workerManager, workerManager_Update
+  -- function num : 0_37 , upvalues : workerManager, workerManager_Update
   if workerManager_CheckWorkingOtherChannel() then
     return 
   end
@@ -1454,7 +1626,7 @@ FGlobal_workerManager_UpdateNode = function(plantKey)
 end
 
 FGlobal_workerManager_ResetPlantKey = function()
-  -- function num : 0_35 , upvalues : workerManager, workerManager_Update
+  -- function num : 0_38 , upvalues : workerManager, workerManager_Update
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   workerManager.plantKey = nil
@@ -1472,12 +1644,12 @@ FGlobal_workerManager_ResetPlantKey = function()
 end
 
 FGlobal_WorkerManager_GetWorkerNoRaw = function(worker_Index)
-  -- function num : 0_36 , upvalues : filteredArray
+  -- function num : 0_39 , upvalues : filteredArray
   return filteredArray[worker_Index]
 end
 
 HandleClicked_WorkerManager_Close = function()
-  -- function num : 0_37 , upvalues : workerManager
+  -- function num : 0_40 , upvalues : workerManager
   Panel_WorkerManager:CloseUISubApp()
   ;
   (workerManager.checkPopUp):SetCheck(false)
@@ -1485,7 +1657,7 @@ HandleClicked_WorkerManager_Close = function()
 end
 
 workerManager_Close = function()
-  -- function num : 0_38
+  -- function num : 0_41
   if Panel_WorkerManager:IsUISubApp() then
     return 
   end
@@ -1502,7 +1674,7 @@ workerManager_Close = function()
 end
 
 workerManager_PopUp = function()
-  -- function num : 0_39 , upvalues : workerManager
+  -- function num : 0_42 , upvalues : workerManager
   if (workerManager.checkPopUp):IsCheck() then
     Panel_WorkerManager:OpenUISubApp()
   else
@@ -1512,7 +1684,7 @@ workerManager_PopUp = function()
 end
 
 workerManager_Toggle = function()
-  -- function num : 0_40
+  -- function num : 0_43
   if Panel_WorkerManager:GetShow() then
     workerManager_Close()
   else
@@ -1521,7 +1693,7 @@ workerManager_Toggle = function()
 end
 
 workerManager_ResetPos = function(isWorldMap)
-  -- function num : 0_41
+  -- function num : 0_44
   local posX = 0
   local posY = 0
   if isWorldMap ~= nil then
@@ -1529,14 +1701,14 @@ workerManager_ResetPos = function(isWorldMap)
     posY = 50
   else
     posX = getScreenSizeX() - Panel_WorkerManager:GetSizeX() - 10
-    posY = FGlobal_Panel_Radar_GetSizeY()
+    posY = 100
   end
   Panel_WorkerManager:SetPosX(posX)
   Panel_WorkerManager:SetPosY(posY)
 end
 
 workerManager_ResetPos_WorldMapClose = function()
-  -- function num : 0_42 , upvalues : workerManager, workerManager_Update
+  -- function num : 0_45 , upvalues : workerManager, workerManager_Update
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
 
   if not Panel_WorldMap:GetShow() then
@@ -1549,7 +1721,7 @@ end
 
 registerEvent("FromClient_RenderModeChangeState", "workerManager_ResetPos_WorldMapClose")
 FGlobal_RedoWork = function(_workType, _houseInfoSS, _selectedWorker, _plantKey, _workKey, _selectedSubwork, _workingCount, _itemNoRaw, _houseHoldNo, _homeWaypoint)
-  -- function num : 0_43 , upvalues : workedWorker
+  -- function num : 0_46 , upvalues : workedWorker
   local plantKey = ToClient_convertWaypointKeyToPlantKey(_homeWaypoint)
   local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(plantKey, 0)
   local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(plantKey)
@@ -1559,7 +1731,7 @@ FGlobal_RedoWork = function(_workType, _houseInfoSS, _selectedWorker, _plantKey,
 end
 
 HandleClicked_ReDoWork = function(workerIndex)
-  -- function num : 0_44 , upvalues : filteredArray
+  -- function num : 0_47 , upvalues : filteredArray
   local workerWrapperLua = getWorkerWrapper(filteredArray[workerIndex], false)
   local workerNoRaw = filteredArray[workerIndex]
   local currentActionPoint = workerWrapperLua:getActionPoint()
@@ -1580,11 +1752,11 @@ HandleClicked_ReDoWork = function(workerIndex)
 end
 
 HandleClicked_UnReDoWork = function(workerIndex)
-  -- function num : 0_45 , upvalues : filteredArray, workerManager_Update, UI_PP
+  -- function num : 0_48 , upvalues : filteredArray, workerManager_Update, UI_PP
   local workerWrapperLua = getWorkerWrapper(filteredArray[workerIndex], false)
   local workerNoRaw = filteredArray[workerIndex]
   local doUnRepeatWork = function()
-    -- function num : 0_45_0 , upvalues : workerNoRaw, workerManager_Update
+    -- function num : 0_48_0 , upvalues : workerNoRaw, workerManager_Update
     ToClient_requestEraseRepeat(WorkerNo(workerNoRaw))
     workerManager_Update()
   end
@@ -1595,7 +1767,7 @@ HandleClicked_UnReDoWork = function(workerIndex)
 end
 
 workerManager_ToolTip = function(isShow, workerIndex, uiIndex)
-  -- function num : 0_46 , upvalues : workerManager, filteredArray
+  -- function num : 0_49 , upvalues : workerManager, filteredArray
   local self = workerManager
   if isShow then
     local slot = (self.slot)[uiIndex]
@@ -1614,7 +1786,7 @@ workerManager_ToolTip = function(isShow, workerIndex, uiIndex)
 end
 
 FromClient_WorkerDataAllUpdate = function()
-  -- function num : 0_47 , upvalues : workerManager_Update, restoreItem_update
+  -- function num : 0_50 , upvalues : workerManager_Update, restoreItem_update
   workerManager_Update()
   restoreItem_update()
   if Panel_WorkerRestoreAll:GetShow() then
@@ -1623,7 +1795,7 @@ FromClient_WorkerDataAllUpdate = function()
 end
 
 Push_Work_Start_Message = function(workerNo, _workType, buildingInfoSS)
-  -- function num : 0_48 , upvalues : workType
+  -- function num : 0_51 , upvalues : workType
   if _workType == workType._HouseCraft then
     local esSSW = ToClient_getItemExchangeSourceStaticStatusWrapperByWorker(workerNo)
     if esSSW:isSet() then
@@ -1681,7 +1853,7 @@ Push_Work_Start_Message = function(workerNo, _workType, buildingInfoSS)
 end
 
 Push_Worker_StopWork_Message = function(workerNo, isUserRequest, working)
-  -- function num : 0_49
+  -- function num : 0_52
   local npcWorkerWrapper = ToClient_getNpcWorkerByWorkerNo(workerNo)
   local workerName = npcWorkerWrapper:getName()
   local workingArea = working:getWorkingNodeName()
@@ -1700,7 +1872,7 @@ Push_Worker_StopWork_Message = function(workerNo, isUserRequest, working)
 end
 
 Push_Work_ResultItem_Message = function(WorkerNoRaw)
-  -- function num : 0_50
+  -- function num : 0_53
   local result_Count = ToClient_getLastestWorkingResultCount(WorkerNoRaw)
   for idx = 1, result_Count do
     local itemWrapper = ToClient_getLastestWorkingResult(WorkerNoRaw, idx - 1)
@@ -1714,7 +1886,7 @@ Push_Work_ResultItem_Message = function(WorkerNoRaw)
 end
 
 WorkerManager_ButtonSimpleToolTip = function(isShow, limitCount, tipType)
-  -- function num : 0_51 , upvalues : workerManager
+  -- function num : 0_54 , upvalues : workerManager
   local self = workerManager
   local name, desc, control = nil, nil, nil
   local slot = (self.slot)[limitCount]
@@ -1766,7 +1938,7 @@ WorkerManager_ButtonSimpleToolTip = function(isShow, limitCount, tipType)
 end
 
 FromClient_WorkerDataUpdate_HeadingPlant = function(ExplorationNode, workerNo)
-  -- function num : 0_52 , upvalues : workType, workerManager_UpdateMain
+  -- function num : 0_55 , upvalues : workType, workerManager_UpdateMain
   if Int64toInt32(workerNo) ~= 0 and ((ExplorationNode:getStaticStatus()):getRegion()):isMainOrMinorTown() == false then
     Push_Work_Start_Message(workerNo, workType._PlantWork)
   end
@@ -1784,7 +1956,7 @@ FromClient_WorkerDataUpdate_HeadingPlant = function(ExplorationNode, workerNo)
 end
 
 FromClient_WorkerDataUpdate_HeadingHouse = function(rentHouseWrapper, workerNo)
-  -- function num : 0_53 , upvalues : workType, workerManager_UpdateMain
+  -- function num : 0_56 , upvalues : workType, workerManager_UpdateMain
   do
     if Int64toInt32(workerNo) ~= 0 then
       local UseGroupType = rentHouseWrapper:getHouseUseType()
@@ -1804,7 +1976,7 @@ FromClient_WorkerDataUpdate_HeadingHouse = function(rentHouseWrapper, workerNo)
 end
 
 FromClient_WorkerDataUpdate_HeadingBuilding = function(buildingInfoSS, workerNo)
-  -- function num : 0_54 , upvalues : workType, workerManager_UpdateMain
+  -- function num : 0_57 , upvalues : workType, workerManager_UpdateMain
   if Int64toInt32(workerNo) ~= 0 then
     Push_Work_Start_Message(workerNo, workType._Building, buildingInfoSS)
   end
@@ -1816,7 +1988,7 @@ FromClient_WorkerDataUpdate_HeadingBuilding = function(buildingInfoSS, workerNo)
 end
 
 FromClient_WorkerDataUpdate_HeadingRegionManaging = function(regionGroupInfo, workerNo)
-  -- function num : 0_55 , upvalues : workType, workerManager_UpdateMain
+  -- function num : 0_58 , upvalues : workType, workerManager_UpdateMain
   if Int64toInt32(workerNo) ~= 0 then
     Push_Work_Start_Message(workerNo, workType._RegionWork)
   end
@@ -1824,19 +1996,19 @@ FromClient_WorkerDataUpdate_HeadingRegionManaging = function(regionGroupInfo, wo
 end
 
 FromClient_changeLeftWorking = function(workerNo)
-  -- function num : 0_56
+  -- function num : 0_59
 end
 
 FromClient_ChangeWorkerSkillNoOne = function(workerNoRaw)
-  -- function num : 0_57
+  -- function num : 0_60
 end
 
 FromClient_ChangeWorkerSkillNo = function(workerNoRaw)
-  -- function num : 0_58
+  -- function num : 0_61
 end
 
 workerManager_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_59 , upvalues : workerManager
+  -- function num : 0_62 , upvalues : workerManager
   if isShow then
     local self = workerManager
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")

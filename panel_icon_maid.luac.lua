@@ -322,13 +322,27 @@ local dontGoMaid = -1
 local maidType = -1
 FGlobal_WarehouseOpenByMaid = function(index)
   -- function num : 0_8 , upvalues : dontGoMaid, maidType, IM
+  local selfProxy = getSelfPlayer()
+  if selfProxy == nil then
+    return 
+  end
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
   if regionInfo == nil then
     return 
   end
+  local isFreeBattle = (selfProxy:get()):isBattleGroundDefine()
+  local isArshaJoin = ToClient_IsMyselfInArena()
   local localWarTeam = ToClient_GetMyTeamNoLocalWar()
   if localWarTeam ~= 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_SUMMON_LOCALWAR"))
+    return 
+  end
+  if isFreeBattle then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_FREEBATTLE"))
+    return 
+  end
+  if isArshaJoin then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_ARSHA"))
     return 
   end
   if selfplayerIsInHorseRace() then

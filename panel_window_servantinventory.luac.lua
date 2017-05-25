@@ -441,6 +441,15 @@ ServantInventoryOpenWithInventory = function(actorKeyRaw)
   -- function num : 0_17 , upvalues : servantInventory, UI_VT
   local self = servantInventory
   self:clearActorKey()
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local isFreeBattle = (selfPlayer:get()):isBattleGroundDefine()
+  if isFreeBattle == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_FREEBATTLE_NOT_USE"))
+    return 
+  end
   local vehicleActorWrapper = getVehicleActor(actorKeyRaw)
   if vehicleActorWrapper == nil then
     return 
@@ -450,14 +459,14 @@ ServantInventoryOpenWithInventory = function(actorKeyRaw)
     return 
   end
   local vehicleType = vehicleActor:getVehicleType()
-  if not vehicleActor:isCannon() and not vehicleActor:isSiegeInstanceObject() and vehicleType ~= UI_VT.Type_Train then
+  if not vehicleActor:isCannon() and not vehicleActor:isSiegeInstanceObject() and vehicleType ~= UI_VT.Type_Train and vehicleType ~= UI_VT.Type_CampingTent then
     ServantInventory_OpenAll()
   else
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC56: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._inventory)[0])._actorKeyRaw = actorKeyRaw
-    -- DECOMPILER ERROR at PC39: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC62: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._inventory)[0])._type = (CppEnums.MoveItemToType).Type_Vehicle

@@ -273,9 +273,92 @@ servantIcon.init = function(self)
   -- DECOMPILER ERROR: 9 unprocessed JMP targets
 end
 
+servantIcon.updateHp = function(self)
+  -- function num : 0_10 , upvalues : servantIcon
+  local self = servantIcon
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local landVehicleWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+  if landVehicleWrapper ~= nil and (((self._slots)[0]).icon):GetShow() == true then
+    (((self._slots)[0]).hp):SetProgressRate(landVehicleWrapper:getHp() / landVehicleWrapper:getMaxHp() * 100)
+    local servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+    local regionInfo = getRegionInfoByPosition(servantInfo:getPosition())
+    if (regionInfo:get()):isSafeZone() == false then
+      Servant_HP_Chk(landVehicleWrapper:getHp(), landVehicleWrapper:getMaxHp(), landVehicleWrapper:getVehicleType())
+    end
+  end
+  do
+    local seaVehicleWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+    if seaVehicleWrapper ~= nil then
+      (((self._slots)[1]).hp):SetProgressRate(seaVehicleWrapper:getHp() / seaVehicleWrapper:getMaxHp() * 100)
+    end
+    local summonCount = (getSelfPlayer()):getSummonListCount()
+    for summon_idx = 0, summonCount - 1 do
+      local summonInfo = (getSelfPlayer()):getSummonDataByIndex(summon_idx)
+      local characterKey = summonInfo:getCharacterKey()
+      local slotNo = -1
+      if (characterKey >= 60028 and characterKey <= 60037) or characterKey == 60068 then
+        slotNo = 2
+      else
+        if characterKey == 60134 or characterKey == 60137 or characterKey == 60136 or characterKey == 60135 then
+          slotNo = 4
+        end
+      end
+      if slotNo ~= -1 then
+        local summonWrapper = summonInfo:getActor()
+        if summonWrapper ~= nil then
+          local hpRate = 100
+          local hp = (summonWrapper:get()):getHp()
+          local maxHp = (summonWrapper:get()):getMaxHp()
+          hpRate = hp / maxHp * 100
+          ;
+          (((self._slots)[slotNo]).hp):SetProgressRate(hpRate)
+        end
+      end
+    end
+  end
+end
+
+servantIcon.updateMp = function(self)
+  -- function num : 0_11 , upvalues : servantIcon
+  local self = servantIcon
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local landVehicleWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+  if landVehicleWrapper ~= nil and (((self._slots)[0]).icon):GetShow() == true then
+    (((self._slots)[0]).mp):SetProgressRate(landVehicleWrapper:getMp() / landVehicleWrapper:getMaxMp() * 100)
+  end
+  local seaVehicleWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+  if seaVehicleWrapper ~= nil then
+    (((self._slots)[1]).mp):SetProgressRate(seaVehicleWrapper:getMp() / seaVehicleWrapper:getMaxMp() * 100)
+  end
+  local summonCount = (getSelfPlayer()):getSummonListCount()
+  for summon_idx = 0, summonCount - 1 do
+    local summonInfo = (getSelfPlayer()):getSummonDataByIndex(summon_idx)
+    local characterKey = summonInfo:getCharacterKey()
+    local slotNo = -1
+    if (characterKey >= 60028 and characterKey <= 60037) or characterKey == 60068 then
+      slotNo = 2
+    else
+      if characterKey == 60134 or characterKey == 60137 or characterKey == 60136 or characterKey == 60135 then
+        slotNo = 4
+      end
+    end
+    if slotNo ~= -1 then
+      local summonWrapper = summonInfo:getActor()
+      if summonWrapper ~= nil then
+        local mpRate = 100
+        local mp = (summonWrapper:get()):getMp()
+        local maxMp = (summonWrapper:get()):getMaxMp()
+        mpRate = mp / maxMp * 100
+        ;
+        (((self._slots)[slotNo]).mp):SetProgressRate(mpRate)
+      end
+    end
+  end
+end
+
 local servantIconCount = 0
 servantIcon.update = function(self)
-  -- function num : 0_10 , upvalues : horseRace, UI_VT, isContentsEnable, servantIconCount
+  -- function num : 0_12 , upvalues : horseRace, UI_VT, isContentsEnable, servantIconCount
   if isFlushedUI() then
     return 
   end
@@ -631,13 +714,25 @@ servantIcon.update = function(self)
 end
 
 FGlobal_ServantIconCount = function()
-  -- function num : 0_11 , upvalues : servantIconCount
+  -- function num : 0_13 , upvalues : servantIconCount
   return servantIconCount
 end
 
+registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_ServantIcon")
+servantIcon:init()
+FromClient_luaLoadComplete_ServantIcon = function()
+  -- function num : 0_14 , upvalues : servantIcon
+  servantIcon:registEventHandler()
+  servantIcon:registMessageHandler()
+  FGlobal_Window_Servant_ColorBlindUpdate()
+  ServantIcon_Resize()
+end
+
 servantIcon.registMessageHandler = function(self)
-  -- function num : 0_12
+  -- function num : 0_15
   registerEvent("EventSelfServantUpdate", "Panel_Window_Servant_Update")
+  registerEvent("EventSelfServantUpdateOnlyHp", "Panel_Window_Servant_UpdateHp")
+  registerEvent("EventSelfServantUpdateOnlyMp", "Panel_Window_Servant_UpdateMp")
   registerEvent("FromClient_SummonChanged", "Panel_Window_Servant_Update")
   registerEvent("FromClient_SummonAddList", "Panel_Window_Servant_Update")
   registerEvent("FromClient_SummonDelList", "Panel_Window_Servant_Update")
@@ -647,7 +742,7 @@ servantIcon.registMessageHandler = function(self)
 end
 
 servantIcon.registEventHandler = function(self)
-  -- function num : 0_13
+  -- function num : 0_16
   Panel_Window_Servant:addInputEvent("Mouse_On", "Servant_ChangeTexture_On()")
   Panel_Window_Servant:addInputEvent("Mouse_Out", "Servant_ChangeTexture_Off()")
   Panel_Window_Servant:addInputEvent("Mouse_PressMove", "PanelWindowServant_RefreshPosition()")
@@ -655,25 +750,36 @@ servantIcon.registEventHandler = function(self)
 end
 
 ServantIcon_Resize = function()
-  -- function num : 0_14 , upvalues : servantIcon
+  -- function num : 0_17 , upvalues : servantIcon
   local self = servantIcon
   screenX = getScreenSizeX()
   screenY = getScreenSizeY()
   if CppDefine.ChangeUIAndResolution == true then
-    if Panel_Window_Servant:GetRelativePosX() == 0 and Panel_Window_Servant:GetRelativePosY() == 0 then
-      Panel_Window_Servant:SetPosX(10)
-      Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
+    if Panel_Window_Servant:GetRelativePosX() == -1 and Panel_Window_Servant:GetRelativePosY() == -1 then
+      local initPosX = 10
+      local initPoxY = Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15
+      if not changePositionBySever(Panel_Window_Servant, (CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, true, true, false) then
+        Panel_Window_Servant:SetPosX(initPosX)
+        Panel_Window_Servant:SetPosY(initPosY)
+      end
+      FGlobal_InitPanelRelativePos(Panel_Window_Servant, initPosX, initPosY)
     else
-      Panel_Window_Servant:SetPosX(getScreenSizeX() * Panel_Window_Servant:GetRelativePosX() - Panel_Window_Servant:GetSizeX() / 2)
-      Panel_Window_Servant:SetPosY(getScreenSizeY() * Panel_Window_Servant:GetRelativePosY() - Panel_Window_Servant:GetSizeY() / 2)
-    end
-    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
-      Panel_Window_Servant:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
-    end
-  else
-    if not changePositionBySever(Panel_Window_Servant, (CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, true, true, false) then
-      Panel_Window_Servant:SetPosX(10)
-      Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
+      do
+        if Panel_Window_Servant:GetRelativePosX() == 0 and Panel_Window_Servant:GetRelativePosY() == 0 then
+          Panel_Window_Servant:SetPosX(10)
+          Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
+        else
+          Panel_Window_Servant:SetPosX(getScreenSizeX() * Panel_Window_Servant:GetRelativePosX() - Panel_Window_Servant:GetSizeX() / 2)
+          Panel_Window_Servant:SetPosY(getScreenSizeY() * Panel_Window_Servant:GetRelativePosY() - Panel_Window_Servant:GetSizeY() / 2)
+        end
+        if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+          Panel_Window_Servant:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+        end
+        if not changePositionBySever(Panel_Window_Servant, (CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, true, true, false) then
+          Panel_Window_Servant:SetPosX(10)
+          Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
+        end
+      end
     end
   end
 end
@@ -682,7 +788,7 @@ local isCheckLandNavi = false
 local isCheckSeaNavi = false
 local isCheckPetNavi = false
 Servant_Call = function(index)
-  -- function num : 0_15 , upvalues : servantIcon
+  -- function num : 0_18 , upvalues : servantIcon
   if Panel_UIControl:GetShow() then
     return 
   end
@@ -708,7 +814,7 @@ Servant_Call = function(index)
 end
 
 Servant_Navi = function(index)
-  -- function num : 0_16 , upvalues : servantIcon, isCheckSeaNavi, isCheckLandNavi, isCheckPetNavi
+  -- function num : 0_19 , upvalues : servantIcon, isCheckSeaNavi, isCheckLandNavi, isCheckPetNavi
   if Panel_UIControl:GetShow() then
     return 
   end
@@ -790,7 +896,7 @@ Servant_Navi = function(index)
 end
 
 HandleClicked_Servant_VehicleInfoToggle = function(servantType)
-  -- function num : 0_17 , upvalues : UI_VT
+  -- function num : 0_20 , upvalues : UI_VT
   local temporaryWrapper = getTemporaryInformationWrapper()
   local vehicleWrapper = temporaryWrapper:getUnsealVehicle(servantType)
   if vehicleWrapper == nil then
@@ -819,7 +925,7 @@ HandleClicked_Servant_VehicleInfoToggle = function(servantType)
 end
 
 PanelWindowServant_RefreshPosition = function()
-  -- function num : 0_18 , upvalues : servantIcon
+  -- function num : 0_21 , upvalues : servantIcon
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R0 in 'UnsetPending'
 
   servantIcon.posX = Panel_Window_Servant:GetPosX()
@@ -829,7 +935,7 @@ PanelWindowServant_RefreshPosition = function()
 end
 
 Panel_Window_Servant_ShowToggle = function()
-  -- function num : 0_19
+  -- function num : 0_22
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
   local seaVehicleWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
@@ -844,28 +950,41 @@ Panel_Window_Servant_ShowToggle = function()
 end
 
 Panel_Window_Servant_Update = function()
-  -- function num : 0_20 , upvalues : servantIcon
+  -- function num : 0_23 , upvalues : servantIcon
   local self = servantIcon
   self:update()
 end
 
+Panel_Window_Servant_UpdateHp = function()
+  -- function num : 0_24 , upvalues : servantIcon
+  local self = servantIcon
+  self:updateHp()
+end
+
+Panel_Window_Servant_UpdateMp = function()
+  -- function num : 0_25 , upvalues : servantIcon
+  local self = servantIcon
+  self:updateMp()
+end
+
 renderModeChange_Servant_Update = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_21
+  -- function num : 0_26
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
   Panel_Window_Servant_Update()
+  ServantIcon_Resize()
 end
 
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Servant_Update")
 FGlobal_Window_Servant_Update = function()
-  -- function num : 0_22 , upvalues : servantIcon
+  -- function num : 0_27 , upvalues : servantIcon
   local self = servantIcon
   self:update()
 end
 
 FGlobal_Window_Servant_ColorBlindUpdate = function()
-  -- function num : 0_23 , upvalues : servantIcon, UI_color
+  -- function num : 0_28 , upvalues : servantIcon, UI_color
   local self = servantIcon
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
   for index = 0, self._servant_SummonCount - 1 do
@@ -924,13 +1043,13 @@ FGlobal_Window_Servant_ColorBlindUpdate = function()
 end
 
 reset_ServantHP = function(BeforHP)
-  -- function num : 0_24 , upvalues : servantIcon
+  -- function num : 0_29 , upvalues : servantIcon
   local self = servantIcon
   self._servant_BeforHP = BeforHP
 end
 
 Servant_HP_Chk = function(currentHp, currentMaxHp, vehicleType)
-  -- function num : 0_25 , upvalues : servantIcon
+  -- function num : 0_30 , upvalues : servantIcon
   local self = servantIcon
   local isNowEquipCheck = IsNowEquipCheck()
   IsNowEquipCheck()
@@ -982,7 +1101,7 @@ Servant_HP_Chk = function(currentHp, currentMaxHp, vehicleType)
 end
 
 FGlobal_ServantIcon_IsNearMonster_Effect = function(_addEffect)
-  -- function num : 0_26 , upvalues : servantIcon
+  -- function num : 0_31 , upvalues : servantIcon
   if (((servantIcon._slots)[0]).icon):GetShow() then
     if _addEffect == true then
       (((servantIcon._slots)[0]).icon):EraseAllEffect()
@@ -996,7 +1115,7 @@ FGlobal_ServantIcon_IsNearMonster_Effect = function(_addEffect)
 end
 
 Servant_CallHelp = function(posX, posY, slotNo)
-  -- function num : 0_27 , upvalues : servantIcon, UI_TM
+  -- function num : 0_32 , upvalues : servantIcon, UI_TM
   if slotNo == 0 then
     (servantIcon._statictext_Help):SetShow(true)
     ;
@@ -1014,7 +1133,7 @@ Servant_CallHelp = function(posX, posY, slotNo)
 end
 
 Servant_CallHelpout = function()
-  -- function num : 0_28 , upvalues : servantIcon
+  -- function num : 0_33 , upvalues : servantIcon
   (servantIcon._statictext_Help):SetShow(false)
   if getEnableSimpleUI() then
     Servant_UpdateSimpleUI(false)
@@ -1022,7 +1141,7 @@ Servant_CallHelpout = function()
 end
 
 Servant_SimpleTooltip = function(isShow, tipType)
-  -- function num : 0_29 , upvalues : UI_VT, servantIcon
+  -- function num : 0_34 , upvalues : UI_VT, servantIcon
   local temporaryWrapper = getTemporaryInformationWrapper()
   if temporaryWrapper == nil then
     return TooltipSimple_Hide()
@@ -1068,7 +1187,7 @@ end
 
 local _servantSimpleUIAlpha = 0.7
 Servant_UpdateSimpleUI = function(isOver)
-  -- function num : 0_30 , upvalues : _servantSimpleUIAlpha
+  -- function num : 0_35 , upvalues : _servantSimpleUIAlpha
   _servantSimpleUIAlpha = 0.7
   if isOver then
     _servantSimpleUIAlpha = 1
@@ -1076,12 +1195,12 @@ Servant_UpdateSimpleUI = function(isOver)
 end
 
 Servant_UpdateSimpleUI_Force_Out = function()
-  -- function num : 0_31
+  -- function num : 0_36
   Servant_UpdateSimpleUI(false)
 end
 
 Servant_UpdateSimpleUI_Force_Over = function()
-  -- function num : 0_32 , upvalues : servantIcon
+  -- function num : 0_37 , upvalues : servantIcon
   Servant_UpdateSimpleUI(true)
   for ii = 0, (servantIcon.config).slotCount do
     if (((servantIcon._slots)[ii]).icon):GetShow() then
@@ -1101,7 +1220,7 @@ end
 registerEvent("EventSimpleUIEnable", "Servant_UpdateSimpleUI_Force_Out")
 registerEvent("EventSimpleUIDisable", "Servant_UpdateSimpleUI_Force_Over")
 Servant_SimpleUIUpdatePerFrame = function(deltaTime)
-  -- function num : 0_33 , upvalues : servantIcon, _servantSimpleUIAlpha
+  -- function num : 0_38 , upvalues : servantIcon, _servantSimpleUIAlpha
   for ii = 0, (servantIcon.config).slotCount do
     if (((servantIcon._slots)[ii]).icon):GetShow() then
       (UIAni.perFrameAlphaAnimation)(_servantSimpleUIAlpha, ((servantIcon._slots)[ii]).icon, 2.8 * deltaTime)
@@ -1119,7 +1238,7 @@ end
 
 registerEvent("SimpleUI_UpdatePerFrame", "Servant_SimpleUIUpdatePerFrame")
 Servant_ChangeTexture_On = function()
-  -- function num : 0_34 , upvalues : servantIcon
+  -- function num : 0_39 , upvalues : servantIcon
   local self = servantIcon
   Panel_Window_Servant:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_empty.dds")
   ;
@@ -1127,7 +1246,7 @@ Servant_ChangeTexture_On = function()
 end
 
 Servant_ChangeTexture_Off = function()
-  -- function num : 0_35 , upvalues : servantIcon
+  -- function num : 0_40 , upvalues : servantIcon
   local self = servantIcon
   if Panel_UIControl:GetShow() then
     Panel_Window_Servant:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_isWidget.dds")
@@ -1139,7 +1258,7 @@ Servant_ChangeTexture_Off = function()
 end
 
 ServantIcon_TamingSuccess = function(isTaming)
-  -- function num : 0_36 , upvalues : servantIcon
+  -- function num : 0_41 , upvalues : servantIcon
   local self = servantIcon
   self._isTaming = isTaming
   if isTaming then
@@ -1151,19 +1270,19 @@ ServantIcon_TamingSuccess = function(isTaming)
 end
 
 ServantIcon_TamingNotify = function()
-  -- function num : 0_37
+  -- function num : 0_42
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TAMING_NOTIFY"))
 end
 
 ServantIcon_TamingServant_Registed = function()
-  -- function num : 0_38 , upvalues : servantIcon
+  -- function num : 0_43 , upvalues : servantIcon
   local self = servantIcon
   _isTaming = false
   Panel_FrameLoop_Widget:SetShow(false)
 end
 
 TamingServant_Time = function(DeltaTime)
-  -- function num : 0_39 , upvalues : servantIcon
+  -- function num : 0_44 , upvalues : servantIcon
   local self = servantIcon
   if not self._tamingSuccess then
     return 
@@ -1176,7 +1295,7 @@ TamingServant_Time = function(DeltaTime)
 end
 
 ServantIcon_Open = function()
-  -- function num : 0_40 , upvalues : servantIcon
+  -- function num : 0_45 , upvalues : servantIcon
   if (Defines.UIMode).eUIMode_NpcDialog == GetUIMode() then
     return 
   end
@@ -1191,7 +1310,7 @@ ServantIcon_Open = function()
 end
 
 ServantIcon_Close = function()
-  -- function num : 0_41 , upvalues : servantIcon
+  -- function num : 0_46 , upvalues : servantIcon
   local temporaryWrapper = getTemporaryInformationWrapper()
   local isShow = false
   if temporaryWrapper ~= nil then
@@ -1212,11 +1331,6 @@ ServantIcon_Close = function()
   end
 end
 
-servantIcon:init()
-servantIcon:registEventHandler()
-servantIcon:registMessageHandler()
-FGlobal_Window_Servant_ColorBlindUpdate()
-ServantIcon_Resize()
 changePositionBySever(Panel_Window_Servant, (CppEnums.PAGameUIType).PAGameUIPanel_ServantWindow, true, true, false)
 FGlobal_PanelMove(Panel_Window_Servant, true)
 Panel_FrameLoop_Widget:RegisterUpdateFunc("TamingServant_Time")

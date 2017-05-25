@@ -79,7 +79,7 @@ stableMix.update = function(self)
       do
         do
           ;
-          (self._staticInfo1):SetText("Lv." .. servantInfo1:getLevel() .. " " .. servantInfo1:getName())
+          (self._staticInfo1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. servantInfo1:getLevel() .. " " .. servantInfo1:getName())
           ;
           (self._staticInfo1):SetShow(true)
           ;
@@ -101,7 +101,7 @@ stableMix.update = function(self)
               do
                 do
                   ;
-                  (self._staticInfo2):SetText("Lv." .. servantInfo2:getLevel() .. " " .. servantInfo2:getName())
+                  (self._staticInfo2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. servantInfo2:getLevel() .. " " .. servantInfo2:getName())
                   ;
                   (self._staticInfo2):SetShow(true)
                   ;

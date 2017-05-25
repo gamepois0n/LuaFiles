@@ -2096,6 +2096,22 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
                             offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                             equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
                             matchEquip = true
+                          else
+                            -- DECOMPILER ERROR at PC753: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC753: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC753: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC753: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC753: Unhandled construct in 'MakeBoolean' P3
+
+                            if (enum_class.ClassType_Combattant == classType and equipType == 65) or not isAwakenWeaponContentsOpen or equipType == 12 then
+                              offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
+                              equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+                              matchEquip = true
+                            end
                           end
                         end
                       end
@@ -2106,142 +2122,158 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
             end
           end
         else
-          -- DECOMPILER ERROR at PC756: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC756: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC756: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC756: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC756: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
 
           if ((enum_class.ClassType_Warrior == classType or enum_class.ClassType_Valkyrie == classType) and equipType == 1) or not isAwakenWeaponContentsOpen or equipType == 12 then
             offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
             defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
             matchEquip = true
           else
-            -- DECOMPILER ERROR at PC795: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC852: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC795: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC852: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC795: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC852: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC795: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC852: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC795: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC852: Unhandled construct in 'MakeBoolean' P3
 
             if (enum_class.ClassType_Giant == classType and equipType == 29) or not isAwakenWeaponContentsOpen or equipType == 12 then
               offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
               defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
               matchEquip = true
             else
-              -- DECOMPILER ERROR at PC834: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC891: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC834: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC891: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC834: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC891: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC834: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC891: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC834: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC891: Unhandled construct in 'MakeBoolean' P3
 
               if (enum_class.ClassType_Ranger == classType and equipType == 31) or not isAwakenWeaponContentsOpen or equipType == 12 then
                 offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(1) + (itemWrapper:getStaticStatus()):getMaxDamage(1)) / 2
                 defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                 matchEquip = true
               else
-                -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC930: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC930: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC930: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC930: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC930: Unhandled construct in 'MakeBoolean' P3
 
                 if (enum_class.ClassType_Sorcerer == classType and equipType == 28) or not isAwakenWeaponContentsOpen or equipType == 12 then
                   offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                   defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                   matchEquip = true
                 else
-                  -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC969: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC969: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC969: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC969: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC969: Unhandled construct in 'MakeBoolean' P3
 
                   if (enum_class.ClassType_Tamer == classType and equipType == 2) or not isAwakenWeaponContentsOpen or equipType == 12 then
                     offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                     defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                     matchEquip = true
                   else
-                    -- DECOMPILER ERROR at PC956: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1013: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC956: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1013: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC956: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1013: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC956: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1013: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC956: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1013: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC956: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1013: Unhandled construct in 'MakeBoolean' P3
 
                     if ((enum_class.ClassType_NinjaWomen == classType or enum_class.ClassType_NinjaMan == classType) and equipType == 2) or not isAwakenWeaponContentsOpen or equipType == 12 then
                       offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
                       defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                       matchEquip = true
                     else
-                      -- DECOMPILER ERROR at PC998: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1055: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC998: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1055: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC998: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1055: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC998: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1055: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC998: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1055: Unhandled construct in 'MakeBoolean' P3
 
                       if ((enum_class.ClassType_BladeMaster == classType or enum_class.ClassType_BladeMasterWomen == classType) and equipType == 3) or not isAwakenWeaponContentsOpen or equipType == 12 then
                         offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
                         defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                         matchEquip = true
                       else
-                        -- DECOMPILER ERROR at PC1040: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1097: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1040: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1097: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1040: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1097: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1040: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1097: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1040: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1097: Unhandled construct in 'MakeBoolean' P3
 
                         if ((enum_class.ClassType_Wizard == classType or enum_class.ClassType_WizardWomen == classType) and equipType == 6) or not isAwakenWeaponContentsOpen or equipType == 12 then
                           offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                           defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                           matchEquip = true
                         else
-                          -- DECOMPILER ERROR at PC1079: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1136: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1079: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1136: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1079: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1136: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1079: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1136: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1079: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1136: Unhandled construct in 'MakeBoolean' P3
 
                           if (enum_class.ClassType_DarkElf == classType and equipType == 63) or not isAwakenWeaponContentsOpen or equipType == 12 then
                             offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                             defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                             matchEquip = true
+                          else
+                            -- DECOMPILER ERROR at PC1175: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC1175: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC1175: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC1175: Unhandled construct in 'MakeBoolean' P3
+
+                            -- DECOMPILER ERROR at PC1175: Unhandled construct in 'MakeBoolean' P3
+
+                            if (enum_class.ClassType_Combattant == classType and equipType == 65) or not isAwakenWeaponContentsOpen or equipType == 12 then
+                              offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
+                              defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
+                              matchEquip = true
+                            end
                           end
                         end
                       end
@@ -2791,7 +2823,7 @@ end
 
 UseItemAskFromOtherPlayer = function(fromName)
   -- function num : 0_101
-  local messageboxMemo = "[<PAColor0xFFE49800>" .. fromName .. PAGetString(Defines.StringSheet_GAME, "LUA_USEITEM_MESSAGEBOX_REQUEST")
+  local messageboxMemo = "[<PAColor0xFFE49800>" .. fromName .. "<PAOldColor>" .. PAGetString(Defines.StringSheet_GAME, "LUA_USEITEM_MESSAGEBOX_REQUEST")
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_USEITEM_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = UseItemFromOtherPlayer_Yes, functionCancel = UseItemFromOtherPlayer_No, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)
@@ -2950,6 +2982,9 @@ end
 
 Global_GetInventorySlotNoByNotSorted = function(fromSlotNo)
   -- function num : 0_112 , upvalues : inven
+  if fromSlotNo == nil then
+    return 
+  end
   local self = inven
   local toSlotNo = ((self.slots)[fromSlotNo])._slotNo
   return toSlotNo

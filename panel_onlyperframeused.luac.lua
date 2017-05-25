@@ -32,18 +32,26 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   if WorldMap_NaviButton_RePos ~= nil then
     WorldMap_NaviButton_RePos()
   end
-  if FGlobal_AlchemyStonCheck() ~= nil then
-    local cooltime = FGlobal_AlchemyStonCheck()
-    if cooltime > 0 then
-      if alchemyStoneTimeCheck == 0 then
-        FGlobal_AlchemyStone_Use()
-      end
-      alchemyStoneTimeCheck = alchemyStoneTimeCheck + deltaTime
-      if cooltime < alchemyStoneTimeCheck then
+  do
+    if FGlobal_AlchemyStonCheck() ~= nil then
+      local cooltime = FGlobal_AlchemyStonCheck()
+      if cooltime > 0 then
+        if alchemyStoneTimeCheck == 0 then
+          FGlobal_AlchemyStone_Use()
+        end
+        alchemyStoneTimeCheck = alchemyStoneTimeCheck + deltaTime
+        if cooltime < alchemyStoneTimeCheck then
+          alchemyStoneTimeCheck = 0
+        end
+      else
         alchemyStoneTimeCheck = 0
       end
-    else
-      alchemyStoneTimeCheck = 0
+    end
+    if AutoQuestManager_UpdatePerFrame ~= nil then
+      AutoQuestManager_UpdatePerFrame(deltaTime)
+    end
+    if AutoFrameCheckManager_UpdatePerFrame ~= nil then
+      AutoFrameCheckManager_UpdatePerFrame()
     end
   end
 end

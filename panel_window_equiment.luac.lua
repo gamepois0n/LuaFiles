@@ -18,7 +18,8 @@ local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
 local CT = CppEnums.ClassType
 local isContentsEnable = ToClient_IsContentsGroupOpen("35")
-local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [CT.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914")}
+local isKR2ContentsEnable = isGameTypeKR2()
+local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [CT.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914"), [CT.ClassType_CombattantWomen] = ToClient_IsContentsGroupOpen("918")}
 local classType = (getSelfPlayer()):getClassType()
 local awakenWeaponContentsOpen = awakenWeapon[classType]
 local equip = {
@@ -73,7 +74,7 @@ equip_checkUseableSlot = function(index)
 end
 
 equip.initControl = function(self)
-  -- function num : 0_2 , upvalues : EquipNoMin, EquipNoMax, awakenWeaponContentsOpen, equip
+  -- function num : 0_2 , upvalues : EquipNoMin, EquipNoMax, awakenWeaponContentsOpen, equip, isKR2ContentsEnable
   for v = EquipNoMin, EquipNoMax do
     if equip_checkUseableSlot(v) == true then
       local slotBG = (UI.getChildControl)(Panel_Equipment, (self.slotNoId)[v] .. "_BG")
@@ -222,7 +223,7 @@ equip.initControl = function(self)
   ;
   (self.enchantText):SetShow(false)
   ;
-  (self.checkUnderwear):SetShow(true)
+  (self.checkUnderwear):SetShow(not isKR2ContentsEnable)
   ;
   (self.checkCamouflage):SetShow(true)
   local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
@@ -244,6 +245,7 @@ equip.initControl = function(self)
   selfPlayerShowBattleHelmet(ToClient_IsShowBattleHelm())
   ;
   (self.btn_PetList):SetShow(true)
+  Equipment_RePosition()
   ;
   (self.checkHelm):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 0 )")
   ;
@@ -444,6 +446,9 @@ end
 Equipment_SetShow = function(isShow)
   -- function num : 0_14 , upvalues : equip, EquipNoMin, EquipNoMax, alchemyStoneQuickKey
   local self = equip
+  if Panel_Window_Camp:GetShow() then
+    return 
+  end
   if isShow == true then
     if GetUIMode() == (Defines.UIMode).eUIMode_NpcDialog then
       Panel_Equipment:SetShow(false, false)
@@ -486,10 +491,14 @@ FGlobal_Equipment_SetHide = function(isShow)
 end
 
 FGlobal_Equipment_SetFunctionButtonHide = function(isShow)
-  -- function num : 0_16 , upvalues : equip
+  -- function num : 0_16 , upvalues : equip, isKR2ContentsEnable
   (equip.btn_PetList):SetShow(isShow)
-  ;
-  (equip.checkUnderwear):SetShow(isShow)
+  if isKR2ContentsEnable then
+    (equip.checkUnderwear):SetShow(false)
+  else
+    ;
+    (equip.checkUnderwear):SetShow(isShow)
+  end
   ;
   (equip.checkCamouflage):SetShow(isShow)
   ;
@@ -560,27 +569,27 @@ local setItemInfoUseWrapper = function(slot, itemWrapper, isMono, isExtended, sl
     (slot.enchantText):SetShow(true)
   else
     if enchantCount == 16 and isExtended == false then
-      (slot.enchantText):SetText("I")
+      (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
       ;
       (slot.enchantText):SetShow(true)
     else
       if enchantCount == 17 and isExtended == false then
-        (slot.enchantText):SetText("II")
+        (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
         ;
         (slot.enchantText):SetShow(true)
       else
         if enchantCount == 18 and isExtended == false then
-          (slot.enchantText):SetText("III")
+          (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
           ;
           (slot.enchantText):SetShow(true)
         else
           if enchantCount == 19 and isExtended == false then
-            (slot.enchantText):SetText("IV")
+            (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
             ;
             (slot.enchantText):SetShow(true)
           else
             if enchantCount == 20 and isExtended == false then
-              (slot.enchantText):SetText("V")
+              (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
               ;
               (slot.enchantText):SetShow(true)
             else
@@ -597,27 +606,27 @@ local setItemInfoUseWrapper = function(slot, itemWrapper, isMono, isExtended, sl
   end
   if (CppEnums.ItemClassifyType).eItemClassify_Accessory == (itemWrapper:getStaticStatus()):getItemClassify() then
     if enchantCount == 1 and isExtended == false then
-      (slot.enchantText):SetText("I")
+      (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
       ;
       (slot.enchantText):SetShow(true)
     else
       if enchantCount == 2 and isExtended == false then
-        (slot.enchantText):SetText("II")
+        (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
         ;
         (slot.enchantText):SetShow(true)
       else
         if enchantCount == 3 and isExtended == false then
-          (slot.enchantText):SetText("III")
+          (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
           ;
           (slot.enchantText):SetShow(true)
         else
           if enchantCount == 4 and isExtended == false then
-            (slot.enchantText):SetText("IV")
+            (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
             ;
             (slot.enchantText):SetShow(true)
           else
             if enchantCount == 5 and isExtended == false then
-              (slot.enchantText):SetText("V")
+              (slot.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
               ;
               (slot.enchantText):SetShow(true)
             end
@@ -981,12 +990,21 @@ end
 
 HandleClicked_ServantInventoryOpen = function()
   -- function num : 0_32
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local isFreeBattle = (selfPlayer:get()):isBattleGroundDefine()
   if GetUIMode() == (Defines.UIMode).eUIMode_Repair then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_REPAIRMODENOOPENINVENTORY"))
     return 
   end
   if selfplayerIsInHorseRace() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_OPEN_SERVENTINVENTORY"))
+    return 
+  end
+  if isFreeBattle == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_FREEBATTLE_NOT_USE"))
     return 
   end
   Panel_Window_ServantInventory:SetPosX(getScreenSizeX() - Panel_Equipment:GetSizeX() - Panel_Equipment:GetPosX())
@@ -1101,8 +1119,42 @@ FGlobal_AccSlotNo = function(itemWrapper, isChange)
   return acc
 end
 
+local posXDefault = 345
+Equipment_RePosition = function()
+  -- function num : 0_36 , upvalues : equip, posXDefault
+  local self = equip
+  if (self.checkCloak):GetShow() then
+    (self.checkCloak):SetPosX(posXDefault)
+    posXDefault = posXDefault - 30
+  end
+  if (self.checkHelm):GetShow() then
+    (self.checkHelm):SetPosX(posXDefault)
+    posXDefault = posXDefault - 30
+  end
+  if (self.checkHelmOpen):GetShow() then
+    (self.checkHelmOpen):SetPosX(posXDefault)
+    posXDefault = posXDefault - 30
+  end
+  if (self.btn_PetList):GetShow() then
+    (self.btn_PetList):SetPosX(posXDefault)
+    posXDefault = posXDefault - 30
+  end
+  if (self.checkUnderwear):GetShow() then
+    (self.checkUnderwear):SetPosX(posXDefault)
+    posXDefault = posXDefault - 30
+  end
+  if (self.checkCamouflage):GetShow() then
+    (self.checkCamouflage):SetPosX(posXDefault)
+    posXDefault = posXDefault - 30
+  end
+  if (self.btn_ServantInventory):GetShow() then
+    (self.btn_ServantInventory):SetPosX(posXDefault)
+    posXDefault = posXDefault - 30
+  end
+end
+
 Equipment_Checkbutton = function(index, isShow, controlBtn)
-  -- function num : 0_36 , upvalues : equip
+  -- function num : 0_37 , upvalues : equip
   if index ~= 20 then
     return 
   end
@@ -1127,7 +1179,7 @@ Equipment_Checkbutton = function(index, isShow, controlBtn)
 end
 
 Equipment__PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_37 , upvalues : equip
+  -- function num : 0_38 , upvalues : equip
   if isShow then
     local self = equip
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")

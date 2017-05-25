@@ -127,38 +127,111 @@ Panel_KeyViewer_ScreenRePosition = function()
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
   if CppDefine.ChangeUIAndResolution == true then
-    if Panel_Movie_KeyViewer:GetRelativePosX() == 0 and Panel_Movie_KeyViewer:GetRelativePosY() == 0 then
-      Panel_Movie_KeyViewer:SetPosX(Panel_Movie_KeyViewer:GetSizeX() / 3)
-      Panel_Movie_KeyViewer:SetPosY(Panel_Movie_KeyViewer:GetSizeY() * 2.3)
+    if Panel_Movie_KeyViewer:GetRelativePosX() == -1 and Panel_Movie_KeyViewer:GetRelativePosY() == -1 then
+      local initPosX = Panel_Movie_KeyViewer:GetSizeX() / 3
+      local initPosY = Panel_Movie_KeyViewer:GetSizeY() * 2.3
+      Panel_Movie_KeyViewer:SetPosX(initPosX)
+      Panel_Movie_KeyViewer:SetPosY(initPosY)
+      changePositionBySever(Panel_Movie_KeyViewer, (CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, true, true, false)
+      FGlobal_InitPanelRelativePos(Panel_Movie_KeyViewer, initPosX, initPosY)
     else
-      Panel_Movie_KeyViewer:SetPosX(scrX * Panel_Movie_KeyViewer:GetRelativePosX() - Panel_Movie_KeyViewer:GetSizeX() / 2)
-      Panel_Movie_KeyViewer:SetPosY(scrY * Panel_Movie_KeyViewer:GetRelativePosY() - Panel_Movie_KeyViewer:GetSizeY() / 2)
+      do
+        if Panel_Movie_KeyViewer:GetRelativePosX() == 0 and Panel_Movie_KeyViewer:GetRelativePosY() == 0 then
+          Panel_Movie_KeyViewer:SetPosX(Panel_Movie_KeyViewer:GetSizeX() / 3)
+          Panel_Movie_KeyViewer:SetPosY(Panel_Movie_KeyViewer:GetSizeY() * 2.3)
+        else
+          Panel_Movie_KeyViewer:SetPosX(scrX * Panel_Movie_KeyViewer:GetRelativePosX() - Panel_Movie_KeyViewer:GetSizeX() / 2)
+          Panel_Movie_KeyViewer:SetPosY(scrY * Panel_Movie_KeyViewer:GetRelativePosY() - Panel_Movie_KeyViewer:GetSizeY() / 2)
+        end
+        if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
+          Panel_Movie_KeyViewer:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+        end
+        changePositionBySever(Panel_Movie_KeyViewer, (CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, true, true, false)
+        if scrX < Panel_Movie_KeyViewer:GetPosX() + Panel_Movie_KeyViewer:GetSizeX() then
+          Panel_Movie_KeyViewer:SetPosX(scrX - Panel_Movie_KeyViewer:GetSizeX())
+        end
+        if Panel_Movie_KeyViewer:GetPosX() < 0 then
+          Panel_Movie_KeyViewer:SetPosX(0)
+        end
+        if scrY < Panel_Movie_KeyViewer:GetPosY() + Panel_Movie_KeyViewer:GetSizeY() then
+          Panel_Movie_KeyViewer:SetPosX(scrY - Panel_Movie_KeyViewer:GetSizeY())
+        end
+        if Panel_Movie_KeyViewer:GetPosY() < 0 then
+          Panel_Movie_KeyViewer:SetPosY(0)
+        end
+        for key,value in pairs(ui) do
+          value:ComputePos()
+        end
+      end
     end
-    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
-      Panel_Movie_KeyViewer:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
+  end
+end
+
+registerEvent("ButtonToggle", "invokeButtonToggle")
+invokeButtonToggle = function(key, isOn)
+  -- function num : 0_1
+  local keyValueToIndex = {"_button_Q", "_button_W", "_button_E", "_button_R", "_button_T", "_button_A", "_button_S", "_button_D", "_button_F", "_button_Z", "_button_X", "_button_C", "_button_V", "_button_Tab", "_button_Shift", "", "_button_Space", "_m0", "_m1"}
+  if (table.getn)(keyValueToIndex) <= key then
+    return 
+  end
+  if keyValueToIndex[key + 1] == nil or keyValueToIndex[key + 1] == "" then
+    return 
+  end
+  ButtonToggle_AI(keyValueToIndex[key + 1], isOn)
+end
+
+ButtonToggle_AI = function(key, isOn)
+  -- function num : 0_2 , upvalues : ui, ui_2, UI_color, keyIsUpdate, keyIndexSet
+  local aUI = ui[key]
+  local aUI2 = ui_2[key]
+  local keyName = "on"
+  if isOn == true then
+    keyName = "click"
+    aUI2:SetFontColor(UI_color.C_FFFFCE22)
+    aUI:SetShow(false)
+    aUI2:SetShow(true)
+    -- DECOMPILER ERROR at PC23: Confused about usage of register: R5 in 'UnsetPending'
+
+    if keyIsUpdate[key] ~= "click" then
+      keyIsUpdate[key] = "click"
+      aUI:SetAlpha(0)
+      aUI2:SetAlpha(1)
     end
   else
-    changePositionBySever(Panel_Movie_KeyViewer, (CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, true, true, false)
+    aUI:SetShow(true)
+    -- DECOMPILER ERROR at PC39: Confused about usage of register: R5 in 'UnsetPending'
+
+    if keyIsUpdate[key] ~= "on" then
+      keyIsUpdate[key] = "on"
+      aUI:SetShow(true)
+      aUI:SetAlpha(1)
+      aUI2:SetAlpha(0)
+    end
   end
-  if scrX < Panel_Movie_KeyViewer:GetPosX() + Panel_Movie_KeyViewer:GetSizeX() then
-    Panel_Movie_KeyViewer:SetPosX(scrX - Panel_Movie_KeyViewer:GetSizeX())
-  end
-  if Panel_Movie_KeyViewer:GetPosX() < 0 then
-    Panel_Movie_KeyViewer:SetPosX(0)
-  end
-  if scrY < Panel_Movie_KeyViewer:GetPosY() + Panel_Movie_KeyViewer:GetSizeY() then
-    Panel_Movie_KeyViewer:SetPosX(scrY - Panel_Movie_KeyViewer:GetSizeY())
-  end
-  if Panel_Movie_KeyViewer:GetPosY() < 0 then
-    Panel_Movie_KeyViewer:SetPosY(0)
-  end
-  for key,value in pairs(ui) do
-    value:ComputePos()
+  if isOn then
+    if key == "_m0" then
+      aUI:SetText("L")
+      aUI2:SetText("L")
+    else
+      if key == "_m1" then
+        aUI:SetText("R")
+        aUI2:SetText("R")
+      else
+        local actionString = ""
+        if getGamePadEnable() then
+          actionString = keyCustom_GetString_ActionPad(keyIndexSet[key])
+        else
+          actionString = keyCustom_GetString_ActionKey(keyIndexSet[key])
+        end
+        aUI:SetText(actionString)
+        aUI2:SetText(actionString)
+      end
+    end
   end
 end
 
 local ButtonToggle = function(key, isOn)
-  -- function num : 0_1 , upvalues : ui, ui_2, UI_color, keyIsUpdate, keyToVirtualKey, keyIndexSet
+  -- function num : 0_3 , upvalues : ui, ui_2, UI_color, keyIsUpdate, keyToVirtualKey, keyIndexSet
   local aUI = ui[key]
   local aUI2 = ui_2[key]
   local keyName = "on"
@@ -225,36 +298,38 @@ local ButtonToggle = function(key, isOn)
 end
 
 local ButtonToggleAll = function(isOn)
-  -- function num : 0_2 , upvalues : uvSet, ButtonToggle
-  for key,value in pairs(uvSet) do
-    ButtonToggle(key, isOn)
+  -- function num : 0_4 , upvalues : uvSet, ButtonToggle
+  if ToClient_getIsSetSelfAI() == false then
+    for key,value in pairs(uvSet) do
+      ButtonToggle(key, isOn)
+    end
   end
 end
 
 FGlobal_KeyViewer_Show = function()
-  -- function num : 0_3
-  Panel_Movie_KeyViewer:SetShow(true)
-  Panel_KeyViewer_KeyUpdate()
-end
-
-FGlobal_KeyViewer_Hide = function()
-  -- function num : 0_4
-  Panel_Movie_KeyViewer:SetShow(false)
-end
-
-Panel_KeyViewer_Show = function()
   -- function num : 0_5
   Panel_Movie_KeyViewer:SetShow(true)
   Panel_KeyViewer_KeyUpdate()
 end
 
-Panel_KeyViewer_Hide = function()
+FGlobal_KeyViewer_Hide = function()
   -- function num : 0_6
   Panel_Movie_KeyViewer:SetShow(false)
 end
 
+Panel_KeyViewer_Show = function()
+  -- function num : 0_7
+  Panel_Movie_KeyViewer:SetShow(true)
+  Panel_KeyViewer_KeyUpdate()
+end
+
+Panel_KeyViewer_Hide = function()
+  -- function num : 0_8
+  Panel_Movie_KeyViewer:SetShow(false)
+end
+
 Panel_KeyViewer_KeyUpdate = function()
-  -- function num : 0_7 , upvalues : ui, ButtonToggleAll
+  -- function num : 0_9 , upvalues : ui, ButtonToggleAll
   (ui._m0):SetText("L")
   ;
   (ui._m1):SetText("R")
@@ -263,7 +338,7 @@ end
 
 do
   local forMovieRecord = function()
-  -- function num : 0_8
+  -- function num : 0_10
   Panel_MainStatus_User_Bar:SetShow(false)
   Panel_SelfPlayerExpGage:SetShow(false)
   Panel_Chat0:SetShow(false)
@@ -278,7 +353,7 @@ do
 end
 
   PanelMovieKeyViewer_RestorePosition = function()
-  -- function num : 0_9 , upvalues : panelKeyViewerPosX, panelKeyViewerPosY
+  -- function num : 0_11 , upvalues : panelKeyViewerPosX, panelKeyViewerPosY
   Panel_Movie_KeyViewer:SetPosX(panelKeyViewerPosX)
   Panel_Movie_KeyViewer:SetPosY(panelKeyViewerPosY)
 end

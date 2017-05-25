@@ -28,8 +28,8 @@ local InitPartyMemberTooltipTable = function()
   local Level = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "StaticText_PartyLevel")
   local Tail = (UI.getChildControl)(Panel_WorldMap_PartyMemberTail, "Static_PartyTail")
   for ii = 1, MAX_PARTY_MEMBER do
-    local panel = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberIcon" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_WorldMap_Popups + ii, RenderModeWorldMapBitSet)
-    local panelTail = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberTail" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_WorldMap_Popups + ii, RenderModeWorldMapBitSet)
+    local panel = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberIcon" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_Party + ii, RenderModeWorldMapBitSet)
+    local panelTail = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberTail" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_Party + ii, RenderModeWorldMapBitSet)
     CopyBaseProperty(Panel_WorldMap_PartyMemberIcon, panel)
     CopyBaseProperty(Panel_WorldMap_PartyMemberTail, panelTail)
     panel:setMaskingChild(true)
@@ -822,40 +822,53 @@ FromClient_PartyIcon = function(partyMemberIcon, partyMemberProxy, index, isVali
                                                     (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                     ;
                                                     ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
-                                                  end
-                                                  do
-                                                    ;
-                                                    ((partyMember[partyCount]).ClassIconBG):SetShow(false)
-                                                    ;
-                                                    ((partyMember[partyCount]).ClassIcon):SetShow(true)
-                                                    ;
-                                                    ((partyMember[partyCount]).Name):SetShow(true)
-                                                    ;
-                                                    ((partyMember[partyCount]).Level):SetShow(true)
-                                                    ;
-                                                    ((partyMember[partyCount]).Name):SetAutoResize(true)
-                                                    ;
-                                                    ((partyMember[partyCount]).Name):SetText(partyActorName)
-                                                    ;
-                                                    ((partyMember[partyCount]).Level):SetText(partyActorLevel)
-                                                    ;
-                                                    ((partyMember[partyCount]).ClassIcon):SetPosX(((partyMember[partyCount]).Name):GetPosX() - ((partyMember[partyCount]).ClassIcon):GetSizeX() * 1.5)
-                                                    ;
-                                                    ((partyMember[partyCount]).ClassIcon):SetPosY(((partyMember[partyCount]).Name):GetPosY() - 2)
-                                                    ;
-                                                    ((partyMember[partyCount]).Level):SetPosX(((partyMember[partyCount]).ClassIcon):GetPosX() + ((partyMember[partyCount]).ClassIcon):GetSizeX() - ((partyMember[partyCount]).Level):GetSizeX() / 2)
-                                                    ;
-                                                    ((partyMember[partyCount]).Level):SetPosY(((partyMember[partyCount]).ClassIcon):GetPosY() + ((partyMember[partyCount]).ClassIcon):GetSizeY() - ((partyMember[partyCount]).Level):GetSizeY())
-                                                    ;
-                                                    (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetSize(((partyMember[partyCount]).ClassIcon):GetSizeX() + ((partyMember[partyCount]).Name):GetTextSizeX() + (((partyMember[partyCount]).Name):GetSpanSize()).x, (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY())
-                                                    ;
-                                                    (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetPosX(partyMemberIcon:GetPosX() + partyMemberIcon:GetSizeX() / 2 - (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX() / 2)
-                                                    ;
-                                                    (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetPosY(partyMemberIcon:GetPosY())
-                                                    ;
-                                                    ((partyMember[partyCount]).Tail):SetPosX((Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetPosX() + (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX() / 2 - ((partyMember[partyCount]).Tail):GetSizeX() / 2)
-                                                    ;
-                                                    ((partyMember[partyCount]).Tail):SetPosY((Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetPosY() + (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY() - 2)
+                                                  else
+                                                    do
+                                                      if partyMemberProxy:classType() == UI_Class.ClassType_Combattant then
+                                                        classTypeTexture = "new_ui_common_forlua/widget/worldmap/worldmap_etc_06.dds"
+                                                        ;
+                                                        ((partyMember[partyCount]).ClassIcon):ChangeTextureInfoName(classTypeTexture)
+                                                        local x1, y1, x2, y2 = setTextureUV_Func((partyMember[partyCount]).ClassIcon, 33, 174, 62, 203)
+                                                        ;
+                                                        (((partyMember[partyCount]).ClassIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                        ;
+                                                        ((partyMember[partyCount]).ClassIcon):setRenderTexture(((partyMember[partyCount]).ClassIcon):getBaseTexture())
+                                                      end
+                                                      do
+                                                        ;
+                                                        ((partyMember[partyCount]).ClassIconBG):SetShow(false)
+                                                        ;
+                                                        ((partyMember[partyCount]).ClassIcon):SetShow(true)
+                                                        ;
+                                                        ((partyMember[partyCount]).Name):SetShow(true)
+                                                        ;
+                                                        ((partyMember[partyCount]).Level):SetShow(true)
+                                                        ;
+                                                        ((partyMember[partyCount]).Name):SetAutoResize(true)
+                                                        ;
+                                                        ((partyMember[partyCount]).Name):SetText(partyActorName)
+                                                        ;
+                                                        ((partyMember[partyCount]).Level):SetText(partyActorLevel)
+                                                        ;
+                                                        ((partyMember[partyCount]).ClassIcon):SetPosX(((partyMember[partyCount]).Name):GetPosX() - ((partyMember[partyCount]).ClassIcon):GetSizeX() * 1.5)
+                                                        ;
+                                                        ((partyMember[partyCount]).ClassIcon):SetPosY(((partyMember[partyCount]).Name):GetPosY() - 2)
+                                                        ;
+                                                        ((partyMember[partyCount]).Level):SetPosX(((partyMember[partyCount]).ClassIcon):GetPosX() + ((partyMember[partyCount]).ClassIcon):GetSizeX() - ((partyMember[partyCount]).Level):GetSizeX() / 2)
+                                                        ;
+                                                        ((partyMember[partyCount]).Level):SetPosY(((partyMember[partyCount]).ClassIcon):GetPosY() + ((partyMember[partyCount]).ClassIcon):GetSizeY() - ((partyMember[partyCount]).Level):GetSizeY())
+                                                        ;
+                                                        (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetSize(((partyMember[partyCount]).ClassIcon):GetSizeX() + ((partyMember[partyCount]).Name):GetTextSizeX() + (((partyMember[partyCount]).Name):GetSpanSize()).x, (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY())
+                                                        ;
+                                                        (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetPosX(partyMemberIcon:GetPosX() + partyMemberIcon:GetSizeX() / 2 - (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX() / 2)
+                                                        ;
+                                                        (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetPosY(partyMemberIcon:GetPosY())
+                                                        ;
+                                                        ((partyMember[partyCount]).Tail):SetPosX((Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetPosX() + (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX() / 2 - ((partyMember[partyCount]).Tail):GetSizeX() / 2)
+                                                        ;
+                                                        ((partyMember[partyCount]).Tail):SetPosY((Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetPosY() + (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY() - 2)
+                                                      end
+                                                    end
                                                   end
                                                 end
                                               end

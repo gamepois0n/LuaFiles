@@ -45,7 +45,7 @@ Panel_WorkerTrade_HireOffice_HideAni = function()
 end
 
 local hireOffice = {
-control = {_haveMoney = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "StaticText_CoinIcon"), 
+control = {_closeBtn = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Button_Close"), _questionBtn = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Button_Question"), _haveMoney = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "StaticText_CoinIcon"), 
 _buySlotBg = {[1] = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Static_BuySlotBg1"), [2] = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Static_BuySlotBg3"), [3] = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Static_BuySlotBg2"), [4] = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Static_BuySlotBg4"), [5] = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Static_BuySlotBg5"), [6] = (UI.getChildControl)(Panel_WorkerTrade_HireOffice, "Static_BuySlotBg6")}
 , 
 _price = {}
@@ -62,6 +62,8 @@ _btnBuy = {}
 _assetPrice = {}
 , 
 _assetSetCount = {}
+, 
+_assetName = {}
 }
 hireOffice.ControlInit = function(self)
   -- function num : 0_2
@@ -93,6 +95,7 @@ hireOffice:ControlInit()
 hireOffice.DataInit = function(self)
   -- function num : 0_3
   self._assetPrice = {[1] = ToClient_GetCarriagePrice(), [2] = ToClient_GetPorterPrice(), [3] = ToClient_GetGuardPrice(), [4] = ToClient_GetAmuletPrice(), [5] = nil, [6] = nil}
+  self._assetName = {[1] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERTRADEHIRE_CARRIAGE"), [2] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERTRADEHIRE_PORTER"), [3] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERTRADEHIRE_GUARD"), [4] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERTRADEHIRE_FA"), [5] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERTRADEHIRE_CAMEL"), [6] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WORKERTRADEHIRE_SHIP")}
   local control = self.control
   for index = 1, self._buySlotCount do
     ((control._assetCount)[index]):SetText("0")
@@ -102,7 +105,9 @@ hireOffice.DataInit = function(self)
     ((control._btnMinus)[index]):addInputEvent("Mouse_LUp", "WorkerTrade_HireOffice_SetAssetCount(" .. index .. ", " .. -1 .. ")")
     ;
     ((control._btnBuy)[index]):addInputEvent("Mouse_LUp", "WorkerTrade_HireOffice_BuyAsset(" .. index .. ")")
-    -- DECOMPILER ERROR at PC58: Confused about usage of register: R6 in 'UnsetPending'
+    ;
+    ((control._assetCount)[index]):addInputEvent("Mouse_LUp", "WorkerTrade_HireOffice_SetAssetCount(" .. index .. ", " .. 0 .. ")")
+    -- DECOMPILER ERROR at PC107: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._assetSetCount)[index] = 0
@@ -152,28 +157,52 @@ WorkerTrade_HireOffice_SetAssetCount = function(index, increaseCount)
     return 
   end
   local haveMoney = Int64toInt32(tradeCompanyWrapper:getTradeCompanyMoney())
-  for uiIndex = 1, self._buySlotCount do
-    -- DECOMPILER ERROR at PC21: Confused about usage of register: R10 in 'UnsetPending'
+  if increaseCount == 0 then
+    local maxCount = tradeCompanyWrapper:getTradeCompanyMoney() / (self._assetPrice)[index]
+    local setAssetCount = function(inputNumber)
+    -- function num : 0_5_0 , upvalues : self, control, index
+    for uiIndex = 1, self._buySlotCount do
+      -- DECOMPILER ERROR at PC7: Confused about usage of register: R5 in 'UnsetPending'
 
-    if index == uiIndex then
-      (self._assetSetCount)[uiIndex] = (self._assetSetCount)[uiIndex] + increaseCount
-      -- DECOMPILER ERROR at PC29: Confused about usage of register: R10 in 'UnsetPending'
-
-      ;
-      (self._assetSetCount)[uiIndex] = (math.max)(0, (self._assetSetCount)[uiIndex])
-      -- DECOMPILER ERROR at PC43: Confused about usage of register: R10 in 'UnsetPending'
-
-      if haveMoney < (self._assetSetCount)[uiIndex] * Int64toInt32((self._assetPrice)[uiIndex]) then
-        (self._assetSetCount)[uiIndex] = (self._assetSetCount)[uiIndex] - 1
-      end
-    else
-      -- DECOMPILER ERROR at PC46: Confused about usage of register: R10 in 'UnsetPending'
-
-      ;
       (self._assetSetCount)[uiIndex] = 0
+      ;
+      ((control._assetCount)[uiIndex]):SetText((self._assetSetCount)[uiIndex])
     end
+    -- DECOMPILER ERROR at PC23: Confused about usage of register: R1 in 'UnsetPending'
+
     ;
-    ((control._assetCount)[uiIndex]):SetText((self._assetSetCount)[uiIndex])
+    (self._assetSetCount)[index] = Int64toInt32(inputNumber)
+    ;
+    ((control._assetCount)[index]):SetText((self._assetSetCount)[index])
+  end
+
+    Panel_NumberPad_Show(true, maxCount, 0, setAssetCount)
+    return 
+  end
+  do
+    for uiIndex = 1, self._buySlotCount do
+      -- DECOMPILER ERROR at PC39: Confused about usage of register: R10 in 'UnsetPending'
+
+      if index == uiIndex then
+        (self._assetSetCount)[uiIndex] = (self._assetSetCount)[uiIndex] + increaseCount
+        -- DECOMPILER ERROR at PC47: Confused about usage of register: R10 in 'UnsetPending'
+
+        ;
+        (self._assetSetCount)[uiIndex] = (math.max)(0, (self._assetSetCount)[uiIndex])
+        -- DECOMPILER ERROR at PC61: Confused about usage of register: R10 in 'UnsetPending'
+
+        if haveMoney < (self._assetSetCount)[uiIndex] * Int64toInt32((self._assetPrice)[uiIndex]) then
+          (self._assetSetCount)[uiIndex] = (self._assetSetCount)[uiIndex] - 1
+        end
+      else
+        -- DECOMPILER ERROR at PC64: Confused about usage of register: R10 in 'UnsetPending'
+
+        ;
+        (self._assetSetCount)[uiIndex] = 0
+      end
+      ;
+      ((control._assetCount)[uiIndex]):SetText((self._assetSetCount)[uiIndex])
+    end
   end
 end
 
@@ -181,7 +210,12 @@ WorkerTrade_HireOffice_BuyAsset = function(index)
   -- function num : 0_6 , upvalues : hireOffice
   local self = hireOffice
   local count = (self._assetSetCount)[index]
-  if count > 0 then
+  if count <= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEHIRE_ALERT"))
+    return 
+  end
+  local sellConfirm = function()
+    -- function num : 0_6_0 , upvalues : index, count
     if index == 1 then
       ToClient_RequestEmployCarriage(count)
     else
@@ -197,9 +231,15 @@ WorkerTrade_HireOffice_BuyAsset = function(index)
         end
       end
     end
-  else
-    Proc_ShowMessage_Ack("먼저 수량�\132 결정해주세요.")
   end
+
+  local assetName = (self._assetName)[index]
+  local price = Int64toInt32((self._assetPrice)[index])
+  local msgTitle = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADEHIRE_MSGTITLE")
+  local msgContent = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_WORKERTRADEHIRE_MSGCONTENT", "name", assetName, "count", count, "coinCount", makeDotMoney(toInt64(0, count * price)))
+  local messageBoxData = {title = msgTitle, content = msgContent, functionYes = sellConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
 end
 
 hireOffice.Show = function(self)
@@ -230,4 +270,16 @@ FGlbal_WorkerTradeHire_Update = function()
   hireOffice:DataInit()
 end
 
+hireOffice.registerEvent = function(self)
+  -- function num : 0_11
+  local control = self.control
+  ;
+  (control._closeBtn):addInputEvent("Mouse_LUp", "FGlobal_WorkerTradeHire_ShowToggle()")
+  ;
+  (control._questionBtn):addInputEvent("Mouse_LUp", "")
+  ;
+  (control._questionBtn):SetShow(false)
+end
+
+hireOffice:registerEvent()
 

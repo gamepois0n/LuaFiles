@@ -33,11 +33,12 @@ HideBuffTooltip = function(buffIndex, isDebuff)
   TooltipCommon_Hide(tooltipIndex)
 end
 
+local sumCount = 0
 local default_uiBackBuffPosX = (PaGlobalAppliedBuffList._uiBackBuff):GetPosX()
--- DECOMPILER ERROR at PC11: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC13: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobalAppliedBuffList.updateBuff = function(self, isDebuff)
-  -- function num : 0_2 , upvalues : default_uiBackBuffPosX
+  -- function num : 0_2 , upvalues : sumCount, default_uiBackBuffPosX
   local uiBuffList = self._uiDeBuffList
   local uiBackBuff = self._uiBackDeBuff
   if isDebuff == false then
@@ -68,6 +69,7 @@ PaGlobalAppliedBuffList.updateBuff = function(self, isDebuff)
     else
       uiBackBuff:SetShow(false)
     end
+    sumCount = sumCount + (buffIndex)
     while buffIndex < self._maxBuffCount do
       buffIndex = buffIndex + 1
       ;
@@ -84,12 +86,16 @@ PaGlobalAppliedBuffList.updateBuff = function(self, isDebuff)
   end
 end
 
--- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC17: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobalAppliedBuffList.updateBuffList = function(self)
-  -- function num : 0_3
+  -- function num : 0_3 , upvalues : sumCount
+  sumCount = 0
   PaGlobalAppliedBuffList:updateBuff(true)
   PaGlobalAppliedBuffList:updateBuff(false)
+  if sumCount == 0 then
+    TooltipCommon_Hide(TooltipCommon_getCurrentIndex())
+  end
 end
 
 local _cumulateTime = 0

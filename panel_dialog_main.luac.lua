@@ -198,11 +198,39 @@ FGlobal_Dialog_CheckConditionTutorialMenuButton = function()
     return 
   end
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
-  return false
+  if playerLevel >= 10 and playerLevel <= 40 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Shop) ~= -1 then
+    local talker = dialog_getTalker()
+    if talker == nil then
+      return false
+    end
+    local actorProxyWrapper = getNpcActor(talker:getActorKey())
+    if actorProxyWrapper == nil then
+      return false
+    end
+    local characterSSW = actorProxyWrapper:getCharacterStaticStatusWrapper()
+    if characterSSW == nil then
+      return false
+    end
+    if characterSSW:isSellingNormalShop() == true then
+      return true
+    end
+  end
+  do
+    if playerLevel >= 25 and playerLevel <= 53 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Enchant) ~= -1 then
+      return true
+    end
+    if playerLevel >= 40 and playerLevel <= 56 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Extract) ~= -1 then
+      return true
+    end
+    if playerLevel >= 50 and playerLevel <= 56 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Enchant) ~= -1 then
+      return true
+    end
+    return false
+  end
 end
 
 FGlobal_Dialog_ShowTutorialStartButtonList = function()
-  -- function num : 0_10 , upvalues : _tutorialMenuButtonMarginSize, UI_ANI_ADV
+  -- function num : 0_10 , upvalues : _tutorialMenuButtonMarginSize, UI_ANI_ADV, _tutorialStartButtonList
   FGlobal_Dialog_HideTutorialStartButtonList()
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
@@ -229,7 +257,39 @@ FGlobal_Dialog_ShowTutorialStartButtonList = function()
     lastButtonPosY = endPosY
   end
 
-  FGlobal_Dialog_UnfoldTutorialMenu(lastButtonPosY, marginSize)
+  if playerLevel >= 10 and playerLevel <= 40 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Shop) ~= -1 then
+    local talker = dialog_getTalker()
+    if talker == nil then
+      return false
+    end
+    local actorProxyWrapper = getNpcActor(talker:getActorKey())
+    if actorProxyWrapper == nil then
+      return false
+    end
+    local characterSSW = actorProxyWrapper:getCharacterStaticStatusWrapper()
+    if characterSSW == nil then
+      return false
+    end
+    if characterSSW:isSellingNormalShop() == true then
+      placePos(_tutorialStartButtonList[1], orderNum)
+      orderNum = orderNum + 1
+    end
+  end
+  do
+    if playerLevel >= 25 and playerLevel <= 53 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Enchant) ~= -1 then
+      placePos(_tutorialStartButtonList[2], orderNum)
+      orderNum = orderNum + 1
+    end
+    if playerLevel >= 40 and playerLevel <= 56 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Extract) ~= -1 then
+      placePos(_tutorialStartButtonList[3], orderNum)
+      orderNum = orderNum + 1
+    end
+    if playerLevel >= 50 and playerLevel <= 56 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Enchant) ~= -1 then
+      placePos(_tutorialStartButtonList[4], orderNum)
+      orderNum = orderNum + 1
+    end
+    FGlobal_Dialog_UnfoldTutorialMenu(lastButtonPosY, marginSize)
+  end
 end
 
 FGlobal_Dialog_UnfoldTutorialMenu = function(lastButtonPosY, marginSize)
@@ -3030,6 +3090,9 @@ HandleClickedFuncButton = function(index)
   if Panel_SkillAwaken:GetShow() then
     SkillAwaken_Close()
   end
+  if Panel_Masterpiece_Auction:GetShow() then
+    MasterpieceAuction_Close()
+  end
   local count = 0
   local targetWindowList = {}
   audioPostEvent_SystemUi(0, 0)
@@ -3392,7 +3455,7 @@ _doConfirmNo = function()
 end
 
 HandleClickedDialogButtonReal = function(index)
-  -- function num : 0_38 , upvalues : _dialogIndex, handleClickedQuestComplete, UI_BTN_TYPE
+  -- function num : 0_38 , upvalues : _dialogIndex, handleClickedQuestComplete, UI_BTN_TYPE, UI_DS
   local dialogData = ToClient_GetCurrentDialogData()
   local dlgBtnCnt = dialogData:getDialogButtonCount()
   if dlgBtnCnt <= 0 then
@@ -3484,6 +3547,11 @@ HandleClickedDialogButtonReal = function(index)
             end
             do
               clickDialogButtonReq()
+            end
+            local dialogButton = dialogData:getDialogButtonAt(index)
+            local linkType = dialogButton._linkType
+            if UI_BTN_TYPE.eDialogButton_CutScene == dialogButton._dialogButtonType and UI_DS.eDialogState_Talk == tostring(linkType) then
+              FGlobal_SetIsCutScenePlay(true)
             end
             HandleClickedDialogButton_ShowData(index)
           end
@@ -3770,18 +3838,71 @@ FGlobal_Dialog_FindFuncButtonIndexByType = function(targetFuncButtonType)
   return -1
 end
 
+FGlobal_Dialog_GetPositionByIndex = function(ii)
+  -- function num : 0_53 , upvalues : _uiDialogButton
+  local Position = {_Return = false, _PosX = -1, _PosY = -1}
+  if ii < 0 then
+    return Position
+  end
+  Position._Return = true
+  Position._PosX = (_uiDialogButton[ii]):GetPosX()
+  Position._PosY = (_uiDialogButton[ii]):GetPosY()
+  return Position
+end
+
+FGlobal_Dialog_GetFuncPositionNewQuestButton = function()
+  -- function num : 0_54 , upvalues : _uiFuncButton
+  local Position = {_Return = false, _PosX = -1, _PosY = -1}
+  local Index = FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_NewQuest)
+  if Index == -1 then
+    return Position
+  end
+  Position._Return = true
+  Position._PosX = (_uiFuncButton[Index]):GetPosX()
+  Position._PosY = (_uiFuncButton[Index]):GetPosY()
+  return Position
+end
+
+FGlobal_Dialog_FindDialogButtonIndexByType = function(targetFuncButtonType)
+  -- function num : 0_55
+  local dialogData = ToClient_GetCurrentDialogData()
+  if dialogData == nil then
+    return -1
+  end
+  local dialogButtonCount = dialogData:getDialogButtonCount()
+  for index = 0, dialogButtonCount - 1 do
+    local dialogButton = dialogData:getDialogButtonAt(index)
+    local dialogButtonType = tonumber(funcButton._param)
+    if targetFuncButtonType == funcButtonType then
+      return index
+    end
+  end
+  return -1
+end
+
+FGlobal_Dialog_GetDialogButtonPositionByIndex = function(ii)
+  -- function num : 0_56 , upvalues : _uiFuncButton
+  if ii < 0 then
+    return nil
+  end
+  local Position = {_PosX = -1, _PosY = -1}
+  Position._posX = (_uiFuncButton[ii]):GetPosX()
+  Position._posY = (_uiFuncButton[ii]):GetPosY()
+  return Position
+end
+
 FGlobal_AddEffect_ExitButton = function(effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
-  -- function num : 0_53 , upvalues : _uiButtonExit
+  -- function num : 0_57 , upvalues : _uiButtonExit
   _uiButtonExit:AddEffect(effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
 end
 
 FGlobal_EraseAllEffect_ExitButton = function()
-  -- function num : 0_54 , upvalues : _uiButtonExit
+  -- function num : 0_58 , upvalues : _uiButtonExit
   _uiButtonExit:EraseAllEffect()
 end
 
 FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
-  -- function num : 0_55 , upvalues : _uiFuncButton
+  -- function num : 0_59 , upvalues : _uiFuncButton
   if buttonNo == -1 or buttonNo == nil then
     return 
   end
@@ -3790,7 +3911,7 @@ FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEf
 end
 
 FGlobal_EraseAllEffect_DialogButton = function(buttonNo)
-  -- function num : 0_56 , upvalues : _uiFuncButton
+  -- function num : 0_60 , upvalues : _uiFuncButton
   if buttonNo == -1 or buttonNo == nil then
     return 
   end
@@ -3799,7 +3920,7 @@ FGlobal_EraseAllEffect_DialogButton = function(buttonNo)
 end
 
 FromClient_Dialog_onScreenResize = function()
-  -- function num : 0_57 , upvalues : _uiNpcDialog, _scrollControl, _uiHalfLine, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _SpacebarIcon, _uiNextButton, _uiButtonExit, _uiButtonBack, _prevPageButton, _nextPageButton, _pageValue, _rBtnPosX, _rBtnPosY
+  -- function num : 0_61 , upvalues : _uiNpcDialog, _scrollControl, _uiHalfLine, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _SpacebarIcon, _uiNextButton, _uiButtonExit, _uiButtonBack, _prevPageButton, _nextPageButton, _pageValue, _rBtnPosX, _rBtnPosY
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   Panel_Npc_Dialog:SetSize(sizeX, Panel_Npc_Dialog:GetSizeY())
@@ -3837,7 +3958,7 @@ FromClient_Dialog_onScreenResize = function()
 end
 
 Panel_Dialog_EnchantHelp_Func = function(isOn)
-  -- function num : 0_58 , upvalues : _txt_EnchantHelp, _txt_EnchantHelp_Desc, UI_TM
+  -- function num : 0_62 , upvalues : _txt_EnchantHelp, _txt_EnchantHelp_Desc, UI_TM
   local mouse_posX = getMousePosX()
   local mouse_posY = getMousePosY()
   local panel_posX = Panel_Npc_Dialog:GetPosX()
@@ -3862,7 +3983,7 @@ Panel_Dialog_EnchantHelp_Func = function(isOn)
 end
 
 Panel_Dialog_SocketHelp_Func = function(isOn)
-  -- function num : 0_59 , upvalues : _txt_SocketHelp, _txt_SocketHelp_Desc, UI_TM
+  -- function num : 0_63 , upvalues : _txt_SocketHelp, _txt_SocketHelp_Desc, UI_TM
   local mouse_posX = getMousePosX()
   local mouse_posY = getMousePosY()
   local panel_posX = Panel_Npc_Dialog:GetPosX()
@@ -3887,7 +4008,7 @@ Panel_Dialog_SocketHelp_Func = function(isOn)
 end
 
 wpHelp_Func = function(isOn)
-  -- function num : 0_60 , upvalues : _wpHelp, UI_TM, isFirstShowTooltip
+  -- function num : 0_64 , upvalues : _wpHelp, UI_TM, isFirstShowTooltip
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -3920,12 +4041,12 @@ wpHelp_Func = function(isOn)
 end
 
 getAuctionState = function()
-  -- function num : 0_61 , upvalues : isAuctionDialog
+  -- function num : 0_65 , upvalues : isAuctionDialog
   return isAuctionDialog
 end
 
 FromClient_CloseAllPanelWhenNpcGoHome = function()
-  -- function num : 0_62
+  -- function num : 0_66
   if GetUIMode() == (Defines.UIMode).eUIMode_Stable then
     StableFunction_Close()
   end
@@ -3947,7 +4068,7 @@ FromClient_CloseAllPanelWhenNpcGoHome = function()
 end
 
 Dialog_MouseToolTips = function(isShow, tipType, index)
-  -- function num : 0_63 , upvalues : _uiFuncButton
+  -- function num : 0_67 , upvalues : _uiFuncButton
   local name, desc, control = nil, nil, nil
   local Wp = 0
   local playerLevel = 0
@@ -4133,7 +4254,7 @@ Dialog_MouseToolTips = function(isShow, tipType, index)
 end
 
 Dialog_EtcButtonToolTips = function(isShow, tipType)
-  -- function num : 0_64 , upvalues : _uiButtonExit, _uiButtonBack
+  -- function num : 0_68 , upvalues : _uiButtonExit, _uiButtonBack
   local name, desc, control = nil
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_RESOURCE, "DIALOGUE_BTN_EXIT")
@@ -4153,7 +4274,7 @@ Dialog_EtcButtonToolTips = function(isShow, tipType)
 end
 
 extraction_Open = function()
-  -- function num : 0_65
+  -- function num : 0_69
   if Panel_Window_Extraction:GetShow() == false then
     PaGlobal_Extraction:openPanel(true)
   else
@@ -4162,33 +4283,33 @@ extraction_Open = function()
 end
 
 isShowReContactDialog = function()
-  -- function num : 0_66 , upvalues : isReContactDialog
+  -- function num : 0_70 , upvalues : isReContactDialog
   return isReContactDialog
 end
 
 isShowDialogFunctionQuest = function()
-  -- function num : 0_67 , upvalues : isDialogFunctionQuest
+  -- function num : 0_71 , upvalues : isDialogFunctionQuest
   return isDialogFunctionQuest
 end
 
 questDialogIndex = function()
-  -- function num : 0_68 , upvalues : _questDialogButtonIndex
+  -- function num : 0_72 , upvalues : _questDialogButtonIndex
   return _questDialogButtonIndex
 end
 
 isCheckExchangeItemButton = function(index)
-  -- function num : 0_69 , upvalues : isExchangeButtonIndex
+  -- function num : 0_73 , upvalues : isExchangeButtonIndex
   return isExchangeButtonIndex[index]
 end
 
 exchangalbeButtonIndex = function()
-  -- function num : 0_70 , upvalues : _exchangalbeButtonIndex
+  -- function num : 0_74 , upvalues : _exchangalbeButtonIndex
   return _exchangalbeButtonIndex
 end
 
 local _blackSpiritButtonPos = {eBlackSpiritButtonType_Quest = 0, eBlackSpiritButtonType_Enchant = 1, eBlackSpiritButtonType_Socket = 2, eBlackSpiritButtonType_Improve = 3, eBlackSpiritButtonType_Count = 4}
 ExecuteAfterDialogLoad = function()
-  -- function num : 0_71 , upvalues : _blackSpiritButtonPos
+  -- function num : 0_75 , upvalues : _blackSpiritButtonPos
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return 
@@ -4231,7 +4352,7 @@ ExecuteAfterDialogLoad = function()
 end
 
 FGlobal_CloseNpcDialogForDetail = function()
-  -- function num : 0_72
+  -- function num : 0_76
   if Panel_Npc_Trade_Market:IsShow() then
     closeNpcTrade_Basket()
     return true
@@ -4240,7 +4361,7 @@ FGlobal_CloseNpcDialogForDetail = function()
     StableFunction_Close()
     return true
   end
-  if Panel_Window_Repair:IsShow() then
+  if Panel_Window_Repair:IsShow() and Panel_Window_Camp:GetShow() == false then
     Panel_FixEquip:SetShow(false)
     PaGlobal_Repair:repair_OpenPanel(false)
     return true
@@ -4292,19 +4413,19 @@ registerEvent("FromClient_CloseNpcTradeMarketTalkForDead", "FGlobal_CloseNpcDial
 registerEvent("FromClient_CloseAllPanelWhenNpcGoHome", "FromClient_CloseAllPanelWhenNpcGoHome")
 registerEvent("onScreenResize", "FromClient_Dialog_onScreenResize")
 RenderMode_DialogListClose = function()
-  -- function num : 0_73
+  -- function num : 0_77
   FGlobal_CloseNpcDialogForDetail()
   Panel_Npc_Dialog:SetShow(true)
   FGlobal_HideDialog(true)
 end
 
 proRenderModeSet = function()
-  -- function num : 0_74 , upvalues : dialogShowCheck_Once
+  -- function num : 0_78 , upvalues : dialogShowCheck_Once
   dialogShowCheck_Once = true
 end
 
 FromClient_CloseDialogByAttacked = function()
-  -- function num : 0_75
+  -- function num : 0_79
   FGlobal_Dialog_renderMode:reset()
 end
 

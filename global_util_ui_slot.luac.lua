@@ -441,7 +441,13 @@ SlotItem.setItem = function(self, itemWrapper, slotNo, equipment)
       isBroken = true
     end
     local isCash = itemWrapper:isCash()
-    self:setItemByStaticStatus(itemWrapper:getStaticStatus(), (itemWrapper:get()):getCount_s64(), expirationIndex, isBroken, isCash)
+    local isSoulCollecTor = (itemWrapper:isSoulCollector())
+    local soulCount, soulMax = nil, nil
+    if isSoulCollecTor == true then
+      soulCount = itemWrapper:getSoulCollectorCount()
+      soulMax = itemWrapper:getSoulCollectorMaxCount()
+    end
+    self:setItemByStaticStatus(itemWrapper:getStaticStatus(), (itemWrapper:get()):getCount_s64(), expirationIndex, isBroken, isCash, isSoulCollecTor, soulCount, soulMax)
     local isAble = requestIsRegisterItemForItemMarket((itemWrapper:get()):getKey())
     if self.isCash ~= nil and isCash and itemWrapper:isSealed() and not (itemWrapper:get()):isVested() and isAble and not (itemWrapper:getStaticStatus()):isStackable() then
       (self.isCash):ChangeTextureInfoName("new_ui_common_forlua/window/ingamecashshop/tax.dds")
@@ -539,7 +545,7 @@ end
 
 -- DECOMPILER ERROR at PC127: Confused about usage of register: R2 in 'UnsetPending'
 
-SlotItem.setItemByStaticStatus = function(self, itemStaticWrapper, s64_stackCount, expirationIndex, isBroken, isCash)
+SlotItem.setItemByStaticStatus = function(self, itemStaticWrapper, s64_stackCount, expirationIndex, isBroken, isCash, isSoulCollecTor, soulCount, soulMax)
   -- function num : 0_5
   if not s64_stackCount then
     s64_stackCount = toInt64(0, 0)
@@ -570,10 +576,21 @@ SlotItem.setItemByStaticStatus = function(self, itemStaticWrapper, s64_stackCoun
           do
             if self.count ~= nil then
               local itemStatic = itemStaticWrapper:get()
-              if itemStatic and itemStatic._isStack then
-                (self.count):SetText(tostring(s64_stackCount))
-                ;
-                (self.count):SetShow(true)
+              if itemStatic then
+                if itemStatic._isStack then
+                  (self.count):SetText(tostring(s64_stackCount))
+                  ;
+                  (self.count):SetShow(true)
+                else
+                  if isSoulCollecTor == true then
+                    (self.count):SetText(tostring(soulCount) .. "/" .. tostring(soulMax))
+                    ;
+                    (self.count):SetShow(true)
+                  else
+                    ;
+                    (self.count):SetText("")
+                  end
+                end
               else
                 ;
                 (self.count):SetText("")
@@ -600,27 +617,27 @@ SlotItem.setItemByStaticStatus = function(self, itemStaticWrapper, s64_stackCoun
                     (self.enchantText):SetShow(true)
                   else
                     if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 16 then
-                      (self.enchantText):SetText("I")
+                      (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
                       ;
                       (self.enchantText):SetShow(true)
                     else
                       if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 17 then
-                        (self.enchantText):SetText("II")
+                        (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
                         ;
                         (self.enchantText):SetShow(true)
                       else
                         if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 18 then
-                          (self.enchantText):SetText("III")
+                          (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
                           ;
                           (self.enchantText):SetShow(true)
                         else
                           if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 19 then
-                            (self.enchantText):SetText("IV")
+                            (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
                             ;
                             (self.enchantText):SetShow(true)
                           else
                             if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 20 then
-                              (self.enchantText):SetText("V")
+                              (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
                               ;
                               (self.enchantText):SetShow(true)
                             else
@@ -634,27 +651,27 @@ SlotItem.setItemByStaticStatus = function(self, itemStaticWrapper, s64_stackCoun
                   end
                   if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemStaticWrapper:getItemClassify() then
                     if (itemStatic._key):getEnchantLevel() == 1 then
-                      (self.enchantText):SetText("I")
+                      (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
                       ;
                       (self.enchantText):SetShow(true)
                     else
                       if (itemStatic._key):getEnchantLevel() == 2 then
-                        (self.enchantText):SetText("II")
+                        (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
                         ;
                         (self.enchantText):SetShow(true)
                       else
                         if (itemStatic._key):getEnchantLevel() == 3 then
-                          (self.enchantText):SetText("III")
+                          (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
                           ;
                           (self.enchantText):SetShow(true)
                         else
                           if (itemStatic._key):getEnchantLevel() == 4 then
-                            (self.enchantText):SetText("IV")
+                            (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
                             ;
                             (self.enchantText):SetShow(true)
                           else
                             if (itemStatic._key):getEnchantLevel() == 5 then
-                              (self.enchantText):SetText("V")
+                              (self.enchantText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
                               ;
                               (self.enchantText):SetShow(true)
                             end

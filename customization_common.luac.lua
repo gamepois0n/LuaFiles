@@ -43,4 +43,11 @@ clearGroupCustomizedBonInfoLua = function()
   end
 end
 
+add_CurrentHistory = function()
+  -- function num : 0_4
+  if CppDefineCustom.Flag == true then
+    ToClient_addHistory()
+  end
+end
+
 

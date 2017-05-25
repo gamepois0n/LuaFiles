@@ -7,18 +7,18 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer = {_phaseNo = 6, _currentType = 0, _curr
 _regionKeyRawList = {88, 349}
 , _startLimitLevel = 15, _totalScoldingCount = 3, _usedSkillCount = 0, _totalSkillCount = 2, _usedComboCount = 0, _totalComboCount = 2, _currentClearCount = 0, _totalClearCount = 2, 
 _skillNoList = {
-[1] = {1067}
+[1] = {1067, 1224, 1225, 1226}
 , 
-[2] = {129}
+[2] = {129, 130, 131, 132, 205}
 , 
-[3] = {1308}
+[3] = {1308, 1309, 1310, 1311}
 }
 , 
 _questData = {
 [1] = {_questGroupNo = 650, _questId = 3}
 }
 }
--- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.checkPossibleForPhaseStart = function(self, stepNo)
   -- function num : 0_0
@@ -52,7 +52,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.checkPossibleForPhaseStart = function(se
   end
 end
 
--- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.checkSkippablePhase = function(self)
   -- function num : 0_1
@@ -62,7 +62,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.checkSkippablePhase = function(self)
   return false
 end
 
--- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.startPhase = function(self, stepNo, typeNo)
   -- function num : 0_2
@@ -82,7 +82,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.startPhase = function(self, stepNo, type
 end
 
 local navigationGuideParam = nil
--- DECOMPILER ERROR at PC56: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.startPhaseXXX = function(self, stepNo, typeNo)
   -- function num : 0_3 , upvalues : navigationGuideParam
@@ -117,7 +117,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.startPhaseXXX = function(self, stepNo, t
     Panel_UIMain:SetShow(true, true)
     Panel_SelfPlayerExpGage:SetShow(true, false)
     FGlobal_Panel_MainStatus_User_Bar_Show()
-    Panel_ClassResource:SetShow((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType())
+    FGlobal_ClassResource_SetShowControl(true)
     Panel_CheckedQuest:SetShow(true, false)
     ;
     (PaGlobal_TutorialUiManager:getUiKeyButton()):setShowAll(true)
@@ -126,10 +126,9 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.startPhaseXXX = function(self, stepNo, t
   (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):resetShowAll(true)
   PaGlobal_TutorialUiManager:repositionScreen()
   Panel_Tutorial:SetShow(true, true)
-  -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC59: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.endPhase = function(self)
   -- function num : 0_4
@@ -141,7 +140,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.endPhase = function(self)
 end
 
 local result = false
--- DECOMPILER ERROR at PC64: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.updatePerFrame = function(self, deltaTime)
   -- function num : 0_5 , upvalues : result
@@ -167,7 +166,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.updatePerFrame = function(self, deltaTim
   end
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.handleChangeStep = function(self, currentStep)
   -- function num : 0_6
@@ -190,7 +189,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.handleChangeStep = function(self, curren
   end
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.showUiScoldingTooManyKeyInput = function(self)
   -- function num : 0_7
@@ -201,7 +200,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.showUiScoldingTooManyKeyInput = function
 )
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.changeStepTryBasicSkill = function(self)
   -- function num : 0_8
@@ -272,7 +271,7 @@ local isPressedTab = false
 local isPressedMouseL = false
 local mouseLUpCount = 0
 local isBlackSpiritScolding = false
--- DECOMPILER ERROR at PC84: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC94: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.updateTryBasicSkill = function(self, deltaTime)
   -- function num : 0_9 , upvalues : isPressedTab, isPressedMouseL, mouseLUpCount, isBlackSpiritScolding
@@ -367,7 +366,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.updateTryBasicSkill = function(self, del
   return false
 end
 
--- DECOMPILER ERROR at PC87: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC97: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.eventCallUsedSkill_TryBasicSkill = function(self, skillWrapper)
   -- function num : 0_10
@@ -391,7 +390,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.eventCallUsedSkill_TryBasicSkill = funct
   end
 end
 
--- DECOMPILER ERROR at PC90: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC100: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.changeStepTrySkillCombo = function(self)
   -- function num : 0_11
@@ -419,7 +418,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.changeStepTrySkillCombo = function(self)
   (PaGlobal_TutorialUiManager:getUiKeyButton()):ButtonToggleAll(true)
 end
 
--- DECOMPILER ERROR at PC93: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC103: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.updateTrySkillCombo = function(self, deltaTime)
   -- function num : 0_12
@@ -443,7 +442,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.updateTrySkillCombo = function(self, del
   return false
 end
 
--- DECOMPILER ERROR at PC96: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC106: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.eventCallUsedSkill_TrySkillCombo = function(self, skillWrapper)
   -- function num : 0_13
@@ -474,7 +473,7 @@ end
 
 local isAcceptedQuest = false
 local isClearQuest = false
--- DECOMPILER ERROR at PC101: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.changeStepSuggestCallBlackSpirit = function(self)
   -- function num : 0_14
@@ -484,7 +483,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.changeStepSuggestCallBlackSpirit = funct
   end
 end
 
--- DECOMPILER ERROR at PC105: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC115: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.eventCallAcceptBlackSpiritQuest = function(self, isAccept, questGroupNo, questId)
   -- function num : 0_15 , upvalues : isAcceptedQuest
@@ -493,7 +492,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.eventCallAcceptBlackSpiritQuest = functi
   end
 end
 
--- DECOMPILER ERROR at PC109: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC119: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.eventCallAfterBlackSpiritDialogClose = function(self)
   -- function num : 0_16 , upvalues : isAcceptedQuest
@@ -507,7 +506,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.eventCallAfterBlackSpiritDialogClose = f
   end
 end
 
--- DECOMPILER ERROR at PC112: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC122: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.handleEventQuestUpdateNotify = function(self, isAccept, questNoRaw)
   -- function num : 0_17
@@ -518,7 +517,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.handleEventQuestUpdateNotify = function(
   end
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC125: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.handleAfterAndPopFlush = function(self)
   -- function num : 0_18
@@ -527,7 +526,7 @@ PaGlobal_TutorialPhase_BasicSkill_Tamer.handleAfterAndPopFlush = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC128: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_Tamer.handleEventSelfPlayerUsedSkill = function(self, skillWrapper)
   -- function num : 0_19

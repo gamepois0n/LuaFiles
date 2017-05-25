@@ -202,4 +202,9 @@ BlackSpirit_PopUp_ShowIconToolTip = function(isShow)
   end
 end
 
+Web_BlackSpirit_DiceSound = function()
+  -- function num : 0_8
+  audioPostEvent_SystemUi(11, 16)
+end
+
 

@@ -10,7 +10,7 @@ _btn_AutoTraining:SetShow(false)
 _btn_AutoTraining:ActiveMouseEventEffect(true)
 _btn_AutoTraining:setGlassBackground(true)
 _trainingText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_9"))
-local autoTrain = false
+local autoTrain = ToClient_IsAutoLevelUp()
 local autoTraining_Init = function()
   -- function num : 0_0 , upvalues : autoTrain, _trainingText, _btn_AutoTraining
   if not ToClient_IsContentsGroupOpen("57") then
@@ -19,14 +19,13 @@ local autoTraining_Init = function()
   if autoTrain then
     ToClient_RequestSetAutoLevelUp(false)
   end
-  autoTrain = false
   _trainingText:SetShow(autoTrain)
   _btn_AutoTraining:EraseAllEffect()
   FGlobal_PersonalIcon_ButtonPosUpdate()
 end
 
 AutoTraining_Set = function()
-  -- function num : 0_1 , upvalues : IM, autoTrain, _trainingText, _btn_AutoTraining
+  -- function num : 0_1 , upvalues : IM, autoTrain
   if Panel_Global_Manual:GetShow() then
     Proc_ShowMessage_Ack("미니게임 중에�\148 흑정령의 수련�\132 이용�\160 �\152 없습니다.")
     return 
@@ -79,23 +78,12 @@ AutoTraining_Set = function()
   local expRate = currentexp * 100 / needExp
   local e1 = 10000
   local msg = ""
-  if ToClient_RequestSetAutoLevelUp(not autoTrain) then
-    autoTrain = not autoTrain
-    _trainingText:SetShow(autoTrain)
-    if autoTrain then
-      msg = PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_3")
-      _btn_AutoTraining:AddEffect("fUI_Soul_Training01", true, 0, 0)
-    else
-      msg = PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_4")
-      _btn_AutoTraining:EraseAllEffect()
-    end
-    Proc_ShowMessage_Ack(msg)
-  end
+  ToClient_RequestSetAutoLevelUp(not autoTrain)
 end
 
 AutoTraining_Stop = function()
   -- function num : 0_2 , upvalues : autoTrain, _btn_AutoTraining, _trainingText
-  autoTrain = false
+  autoTrain = ToClient_IsAutoLevelUp()
   _btn_AutoTraining:EraseAllEffect()
   _trainingText:SetShow(autoTrain)
 end
@@ -106,8 +94,9 @@ AutoTraining_ToolTip = function(isShow)
     TooltipSimple_Hide()
     return 
   end
+  local currentLevel = ((getSelfPlayer()):get()):getLevel()
   local name, desc, uiControl = (PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_8")), nil, _btn_AutoTraining
-  local maxExpPercent = ToClient_GetAutoLevelUpMaxExpPercent() / 10000
+  local maxExpPercent = ToClient_GetAutoLevelUpMaxExpPercent(currentLevel) / 10000
   if autoTrain then
     desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_6", "percent", maxExpPercent)
   else
@@ -127,7 +116,22 @@ isAutoTraining = function()
   return autoTrain
 end
 
+FromClient_SetAutoLevelUp = function(isAuto)
+  -- function num : 0_6 , upvalues : autoTrain, _trainingText, _btn_AutoTraining
+  autoTrain = isAuto
+  _trainingText:SetShow(autoTrain)
+  if autoTrain then
+    msg = PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_3")
+    _btn_AutoTraining:AddEffect("fUI_Soul_Training01", true, 0, 0)
+  else
+    msg = PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_4")
+    _btn_AutoTraining:EraseAllEffect()
+  end
+  Proc_ShowMessage_Ack(msg)
+end
+
 registerEvent("EventSelfPlayerLevelUp", "Init_AutoTraining")
 registerEvent("FromClient_CantIncreaseExpWithAutoLevelUp", "AutoTraining_Stop")
 registerEvent("FromClient_InActivateTrainingBtn", "AutoTraining_Stop")
+registerEvent("FromClient_SetAutoLevelUp", "FromClient_SetAutoLevelUp")
 

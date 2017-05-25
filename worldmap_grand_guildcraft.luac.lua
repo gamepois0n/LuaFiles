@@ -808,7 +808,7 @@ GuildCraft_Right.SelectDefaultWorker = function(self)
     local workerName = workerWrapperLua:getName()
     local workerCurrentAp = workerWrapperLua:getActionPoint()
     local workerMaxAp = workerWrapperLua:getMaxActionPoint()
-    local string = "Lv." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor> (" .. workerCurrentAp .. "/" .. workerMaxAp .. ")"
+    local string = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor> (" .. workerCurrentAp .. "/" .. workerMaxAp .. ")"
     ;
     (GuildCraft_Right._partsDetail_WaitWorker_Value):SetText(string)
     ;
@@ -819,7 +819,7 @@ GuildCraft_Right.SelectDefaultWorker = function(self)
     (GuildCraft_Right._partsDetail_MoveSpeed_Value):SetText(": " .. (string.format)("%.2f", moveSpeed))
   else
     do
-      -- DECOMPILER ERROR at PC110: Confused about usage of register: R3 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC115: Confused about usage of register: R3 in 'UnsetPending'
 
       GuildCraft_Right._SelectedWorkerNoRaw = nil
       ;
@@ -886,7 +886,7 @@ GuildCraft_Right.Update_WorkingWorker = function(self, page)
         local workerGradeColor = workerWrapperLua:getGradeToColorString()
         local workerHomeWayPoint = workerWrapperLua:getHomeWaypoint()
         local homeName = ToClient_GetNodeNameByWaypointKey(workerHomeWayPoint)
-        local string = "Lv." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor>(" .. homeName .. ")"
+        local string = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor>(" .. homeName .. ")"
         local progressRate = ToClient_getWorkingProgress(workerNoRaw) * 100000
         local leftWorkCount = ToClient_getNpcWorkerWorkingCount(workerNoRaw)
         local leftCount_Str = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_WORKMANAGER_BUILDING_ONGOING", "workerNo", leftWorkCount)
@@ -1004,7 +1004,7 @@ GuildCraft_Right.Update_Worker = function(self)
     local workerMaxAp = workerWrapperLua:getMaxActionPoint()
     local workerHomeWayPoint = workerWrapperLua:getHomeWaypoint()
     local homeName = ToClient_GetNodeNameByWaypointKey(workerHomeWayPoint)
-    local string = "Lv." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor> (" .. workerCurrentAp .. "/" .. workerMaxAp .. ")"
+    local string = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. workerLev .. " " .. workerGradeColor .. workerName .. "<PAOldColor> (" .. workerCurrentAp .. "/" .. workerMaxAp .. ")"
     ;
     (self._partsDetail_WaitWorker_Value):SetText(string)
     local workSpeed = workerWrapperLua:getWorkEfficienceWithSkill(workingType, houseUseType, 0, productCategory) / 1000000

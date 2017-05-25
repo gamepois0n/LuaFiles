@@ -794,7 +794,13 @@ end
 
 QuickSlot_Click = function(slotIndex)
   -- function num : 0_12 , upvalues : quickSlot
+  if slotIndex == nil then
+    return 
+  end
   local quickSlotInfo = getQuickSlotItem(slotIndex)
+  if quickSlotInfo == nil then
+    return 
+  end
   local itemKey = (quickSlotInfo._itemKey):getItemKey()
   local itemSlot = (quickSlot.slots)[slotIndex + 1]
   PaGlobal_TutorialManager:handleQuickSlotClick(itemKey)
@@ -1192,48 +1198,60 @@ QuickSlot_UpdateData = function()
     Panel_QuickSlot:SetShow(false, false)
     return 
   end
-  -- DECOMPILER ERROR at PC37: Unhandled construct in 'MakeBoolean' P1
-
-  if CppDefine.ChangeUIAndResolution == true and (Panel_QuickSlot:GetRelativePosX() ~= 0 or Panel_QuickSlot:GetRelativePosY() ~= 0) then
-    Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
-    Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
-  end
-  changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
-  if not Panel_QuickSlot:GetShow() then
-    Panel_QuickSlot:SetShow(true, true)
-  end
-  local self = quickSlot
-  for idx,slot in ipairs(self.slots) do
-    local quickSlotKey = idx - 1
-    local quickSlotInfo = getQuickSlotItem(quickSlotKey)
-    if (CppEnums.QuickSlotType).eItem == quickSlotInfo._type or (CppEnums.QuickSlotType).eCashItem == quickSlotInfo._type then
-      slot:setItem(quickSlotKey, quickSlotInfo)
-      if slot.icon ~= nil then
-        (slot.icon):SetEnable(true)
-      end
+  if CppDefine.ChangeUIAndResolution == true then
+    if Panel_QuickSlot:GetRelativePosX() == -1 and Panel_QuickSlot:GetRelativePosY() == -1 then
+      local initPosX = (getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2
+      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY()
+      changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
+      FGlobal_InitPanelRelativePos(Panel_QuickSlot, initPosX, initPosY)
     else
-      if (CppEnums.QuickSlotType).eSkill == quickSlotInfo._type then
-        slot:setSkill(quickSlotKey, quickSlotInfo)
-        if slot.icon ~= nil then
-          (slot.icon):SetEnable(true)
+      do
+        if Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
+          Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
+          Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+        else
+          Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
+          Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
         end
-      else
-        slot:setEmpty()
-        if slot.icon ~= nil then
-          (slot.icon):SetEnable(false)
+        changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
+        if not Panel_QuickSlot:GetShow() then
+          Panel_QuickSlot:SetShow(true, true)
+        end
+        local self = quickSlot
+        for idx,slot in ipairs(self.slots) do
+          local quickSlotKey = idx - 1
+          local quickSlotInfo = getQuickSlotItem(quickSlotKey)
+          if (CppEnums.QuickSlotType).eItem == quickSlotInfo._type or (CppEnums.QuickSlotType).eCashItem == quickSlotInfo._type then
+            slot:setItem(quickSlotKey, quickSlotInfo)
+            if slot.icon ~= nil then
+              (slot.icon):SetEnable(true)
+            end
+          else
+            if (CppEnums.QuickSlotType).eSkill == quickSlotInfo._type then
+              slot:setSkill(quickSlotKey, quickSlotInfo)
+              if slot.icon ~= nil then
+                (slot.icon):SetEnable(true)
+              end
+            else
+              slot:setEmpty()
+              if slot.icon ~= nil then
+                (slot.icon):SetEnable(false)
+              end
+            end
+          end
+        end
+        if Panel_Tooltip_Item_GetCurrentSlotType() == "QuickSlot" then
+          Panel_Tooltip_Item_Refresh()
+        end
+        if Panel_SkillTooltip_GetCurrentSlotType() == "QuickSlot" then
+          Panel_SkillTooltip_Refresh()
+        end
+        self.quickSlotInit = true
+        if ((getSelfPlayer()):get()):getLevel() > 2 and ((getSelfPlayer()):get()):getLevel() < 40 then
+          NoPotion_Alert()
         end
       end
     end
-  end
-  if Panel_Tooltip_Item_GetCurrentSlotType() == "QuickSlot" then
-    Panel_Tooltip_Item_Refresh()
-  end
-  if Panel_SkillTooltip_GetCurrentSlotType() == "QuickSlot" then
-    Panel_SkillTooltip_Refresh()
-  end
-  self.quickSlotInit = true
-  if ((getSelfPlayer()):get()):getLevel() > 2 and ((getSelfPlayer()):get()):getLevel() < 40 then
-    NoPotion_Alert()
   end
 end
 
@@ -1548,17 +1566,27 @@ end
 QuickSlot_OnscreenResize = function()
   -- function num : 0_40
   if CppDefine.ChangeUIAndResolution == true then
-    if Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
+    if Panel_QuickSlot:GetRelativePosX() == -1 and Panel_QuickSlot:GetRelativePosY() == -1 then
+      local initPosX = (getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2
+      local initPosY = getScreenSizeY() - Panel_QuickSlot:GetSizeY()
       Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
       Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+      changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
+      FGlobal_InitPanelRelativePos(Panel_QuickSlot, initPosX, initPosY)
     else
-      Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
-      Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
+      do
+        if Panel_QuickSlot:GetRelativePosX() == 0 and Panel_QuickSlot:GetRelativePosY() == 0 then
+          Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
+          Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+        else
+          Panel_QuickSlot:SetPosX(getScreenSizeX() * Panel_QuickSlot:GetRelativePosX() - Panel_QuickSlot:GetSizeX() / 2)
+          Panel_QuickSlot:SetPosY(getScreenSizeY() * Panel_QuickSlot:GetRelativePosY() - Panel_QuickSlot:GetSizeY() / 2)
+        end
+        Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
+        Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
+        changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
+      end
     end
-  else
-    Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
-    Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
-    changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
   end
 end
 

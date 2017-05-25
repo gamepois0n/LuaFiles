@@ -449,6 +449,15 @@ QuestInfoData.questDescHideWindow = function()
   isQuestDescShow = false
 end
 
+FGlobal_QuestTooltip_MouseIconOff = function()
+  -- function num : 0_13 , upvalues : _questMouseHelpBG, _questMouseHelpLeftIcon, _questMouseHelpLeft, _questMouseHelpRightIcon, _questMouseHelpRight
+  _questMouseHelpBG:SetShow(false)
+  _questMouseHelpLeftIcon:SetShow(false)
+  _questMouseHelpLeft:SetShow(false)
+  _questMouseHelpRightIcon:SetShow(false)
+  _questMouseHelpRight:SetShow(false)
+end
+
 questInfoWidget_Init()
 registerEvent("FromClient_OnWorldMapQuestInfo", "FromClient_OnWorldMapQuestInfo")
 registerEvent("FromClient_OutWorldMapQuestInfo", "FromClient_OutWorldMapQuestInfo")

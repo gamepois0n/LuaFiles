@@ -305,6 +305,11 @@ UpdateDecorationContents = function(contentsIndex)
       (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
       ;
       (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
+      if CppDefineCustom.Flag == true then
+        (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+        ;
+        (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+      end
       local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       ;
       (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
@@ -349,6 +354,8 @@ UpdateDecorationContents = function(contentsIndex)
         (SliderControlArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
         local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
         setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
+        ;
+        (SliderControlArr[luaSliderIndex]):SetInterval(100)
       end
     end
     do
@@ -392,7 +399,11 @@ UpdateDecorationListMessage = function(paramType, paramIndex, itemIndex)
   if isTattooMode then
     fp = UpdateTattooAtlasList
   else
-    fp = UpdateDecorationList
+    if CppDefineCustom.Flag == true then
+      fp = UpdateDecorationPose
+    else
+      fp = UpdateDecorationList
+    end
   end
   if Panel_Win_System:GetShow() then
     MessageBox_Empty_function()
@@ -419,6 +430,9 @@ UpdateDecorationListMessage = function(paramType, paramIndex, itemIndex)
         EnableDecorationSlide(slideEnable)
       end
       UpdateDecorationList()
+      if CppDefineCustom.Flag == true then
+        add_CurrentHistory()
+      end
     end
   end
 end
@@ -431,14 +445,23 @@ UpdateTattooAtlasList = function()
   UpdateMarkPosition(selectedItemIndex)
 end
 
-UpdateDecorationList = function()
+if CppDefineCustom.Flag == true then
+  UpdateDecorationPose = function()
   -- function num : 0_9 , upvalues : selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex, UpdateMarkPosition
+  setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
+  UpdateMarkPosition(selectedItemIndex)
+  add_CurrentHistory()
+end
+
+end
+UpdateDecorationList = function()
+  -- function num : 0_10 , upvalues : selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex, UpdateMarkPosition
   setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
   UpdateMarkPosition(selectedItemIndex)
 end
 
 UpdateDecorationSlider = function(sliderIndex)
-  -- function num : 0_10 , upvalues : SliderControlArr, sliderParamMin, sliderParamMax, selectedClassType, sliderParamType, sliderParamIndex, SliderValueArr
+  -- function num : 0_11 , upvalues : SliderControlArr, sliderParamMin, sliderParamMax, selectedClassType, sliderParamType, sliderParamIndex, SliderValueArr
   local luaSliderIndex = sliderIndex + 1
   local value = getSliderValue(SliderControlArr[luaSliderIndex], sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
   setParam(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex], value)
@@ -447,11 +470,11 @@ UpdateDecorationSlider = function(sliderIndex)
 end
 
 UpdateHairDecorationSlider = function(sliderIndex)
-  -- function num : 0_11
+  -- function num : 0_12
 end
 
 OpenEyeDecorationUi = function(classType, uiId)
-  -- function num : 0_12 , upvalues : clearRadioButtons, CheckControlArr, CheckTextArr, contentsStartY, controlOffset, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
+  -- function num : 0_13 , upvalues : clearRadioButtons, CheckControlArr, CheckTextArr, contentsStartY, controlOffset, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
   clearRadioButtons()
   ;
   (CheckControlArr[1]):SetShow(true)
@@ -480,9 +503,9 @@ OpenEyeDecorationUi = function(classType, uiId)
       tempRadioButton:SetText(PAGetString(Defines.StringSheet_GAME, contentsDesc))
       tempRadioButton:SetPosX(radioButtonStartX + contentsIndex % radioButtonColumnNum * radioButtonColumnWidth)
       tempRadioButton:SetPosY(contentsStartY + radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
-      tempRadioButton:addInputEvent("Mouse_LUp", "UpdateEyeDecorationContents(" .. contentsIndex .. ")")
+      tempRadioButton:addInputEvent("Mouse_LUp", "UpdateEyeDecorationContents(" .. contentsIndex .. ", " .. 0 .. ")")
       tempRadioButton:SetShow(true)
-      -- DECOMPILER ERROR at PC122: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC124: Confused about usage of register: R10 in 'UnsetPending'
 
       RadioButtonGroup[luaContentsIndex] = tempRadioButton
     end
@@ -494,13 +517,13 @@ OpenEyeDecorationUi = function(classType, uiId)
       if contentsCount > 1 then
         (RadioButtonGroup[1]):SetCheck(true)
       end
-      UpdateEyeDecorationContents(0)
+      UpdateEyeDecorationContents(0, 0)
     end
   end
 end
 
-UpdateEyeDecorationContents = function(contentsIndex)
-  -- function num : 0_13 , upvalues : clearContents, contentsStartY, selectedClassType, selectedUiId, FrameTemplate, Frame_Content, Frame_ContentImage, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, UpdateMarkPosition, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamIndex2, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, CheckControlArr, Frame_Scroll
+UpdateEyeDecorationContents = function(contentsIndex, addHistory)
+  -- function num : 0_14 , upvalues : clearContents, contentsStartY, selectedClassType, selectedUiId, FrameTemplate, Frame_Content, Frame_ContentImage, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, UpdateMarkPosition, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamIndex2, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, CheckControlArr, Frame_Scroll
   clearContents()
   local texSize = 48.25
   local controlPosY = contentsStartY
@@ -534,7 +557,7 @@ UpdateEyeDecorationContents = function(contentsIndex)
       tempContentImage:SetPosY((math.floor)(itemIndex / listColumCount) * listColumnHeight + listStartY)
       tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
       tempContentImage:SetShow(true)
-      -- DECOMPILER ERROR at PC146: Confused about usage of register: R24 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC146: Confused about usage of register: R25 in 'UnsetPending'
 
       ContentImage[luaShapeIdx] = tempContentImage
     end
@@ -553,28 +576,31 @@ UpdateEyeDecorationContents = function(contentsIndex)
     local sliderValueBasePosX = 0
     for sliderIndex = 0, sliderCount - 1 do
       local luaSliderIndex = sliderIndex + 1
-      -- DECOMPILER ERROR at PC203: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC203: Confused about usage of register: R12 in 'UnsetPending'
 
       sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC211: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC211: Confused about usage of register: R12 in 'UnsetPending'
 
       sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC219: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC219: Confused about usage of register: R12 in 'UnsetPending'
 
       sliderParamIndex2[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex + 3, sliderIndex)
       local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC234: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC234: Confused about usage of register: R13 in 'UnsetPending'
 
       sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC243: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC243: Confused about usage of register: R13 in 'UnsetPending'
 
       sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC252: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC252: Confused about usage of register: R13 in 'UnsetPending'
 
       sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
       setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
       ;
       (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateEyeDecorationSlider(" .. sliderIndex .. ")")
+      if CppDefineCustom.Flag == true then
+        (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+      end
       local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       ;
       (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
@@ -611,6 +637,8 @@ UpdateEyeDecorationContents = function(contentsIndex)
         (SliderControlArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
         local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
         setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
+        ;
+        (SliderControlArr[luaSliderIndex]):SetInterval(100)
       end
     end
     do
@@ -640,6 +668,9 @@ UpdateEyeDecorationContents = function(contentsIndex)
           FrameTemplate:UpdateContentScroll()
           Frame_Scroll:SetControlTop()
           FrameTemplate:UpdateContentPos()
+          if CppDefineCustom.Flag == true and addHistory == 1 then
+            add_CurrentHistory()
+          end
         end
       end
     end
@@ -647,18 +678,21 @@ UpdateEyeDecorationContents = function(contentsIndex)
 end
 
 UpdateEyeDecorationList = function(paramType, paramIndex, paramIndex2, itemIndex)
-  -- function num : 0_14 , upvalues : CheckControlArr, selectedClassType, UpdateMarkPosition
+  -- function num : 0_15 , upvalues : CheckControlArr, selectedClassType, UpdateMarkPosition
   if (CheckControlArr[1]):IsCheck() == true then
     setParam(selectedClassType, paramType, paramIndex, itemIndex)
   end
   if (CheckControlArr[2]):IsCheck() == true then
     setParam(selectedClassType, paramType, paramIndex2, itemIndex)
   end
+  if CppDefineCustom.Flag == true then
+    add_CurrentHistory()
+  end
   UpdateMarkPosition(itemIndex)
 end
 
 UpdateEyeDecorationSlider = function(sliderIndex)
-  -- function num : 0_15 , upvalues : SliderControlArr, sliderParamMin, sliderParamMax, CheckControlArr, selectedClassType, sliderParamType, sliderParamIndex, sliderParamIndex2, SliderValueArr
+  -- function num : 0_16 , upvalues : SliderControlArr, sliderParamMin, sliderParamMax, CheckControlArr, selectedClassType, sliderParamType, sliderParamIndex, sliderParamIndex2, SliderValueArr
   local luaSliderIndex = sliderIndex + 1
   local value = getSliderValue(SliderControlArr[luaSliderIndex], sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
   if (CheckControlArr[1]):IsCheck() == true then
@@ -672,7 +706,7 @@ UpdateEyeDecorationSlider = function(sliderIndex)
 end
 
 EnableDecorationSlide = function(enable)
-  -- function num : 0_16 , upvalues : SliderButtonArr, SliderControlArr, SliderTextArr, SliderValueArr
+  -- function num : 0_17 , upvalues : SliderButtonArr, SliderControlArr, SliderTextArr, SliderValueArr
   (SliderButtonArr[1]):SetMonoTone(not enable)
   ;
   (SliderButtonArr[2]):SetMonoTone(not enable)
@@ -719,7 +753,7 @@ EnableDecorationSlide = function(enable)
 end
 
 OpenTattooDecorationUi = function(classType, uiId)
-  -- function num : 0_17 , upvalues : isTattooMode, selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex
+  -- function num : 0_18 , upvalues : isTattooMode, selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex
   isTattooMode = true
   OpenCommonDecorationUi(classType, uiId)
   if isTattooMode then
@@ -729,26 +763,26 @@ OpenTattooDecorationUi = function(classType, uiId)
 end
 
 CloseTattooDecorationUi = function()
-  -- function num : 0_18 , upvalues : isTattooMode
+  -- function num : 0_19 , upvalues : isTattooMode
   isTattooMode = false
   EnableDecorationSlide(true)
   CloseCommonDecorationUi()
 end
 
 OpenCommonExpressionUi = function(classType, uiId)
-  -- function num : 0_19
+  -- function num : 0_20
   SetExpression()
   OpenCommonDecorationUi(classType, uiId)
 end
 
 CloseCommonExpressionUi = function()
-  -- function num : 0_20
+  -- function num : 0_21
   applyExpression(-1, 1)
   CloseCommonDecorationUi()
 end
 
 SetExpression = function()
-  -- function num : 0_21
+  -- function num : 0_22
   local expressionIndex = getParam(4, 0)
   local expressionWeight = getParam(4, 1)
   applyExpression(expressionIndex, expressionWeight)
