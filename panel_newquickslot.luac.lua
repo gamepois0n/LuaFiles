@@ -81,11 +81,12 @@ FGlobal_NewQuickSlot_InitPos = function(updateByServer)
               ;
               (slot.Panel):SetPosY(getScreenSizeY() * (slot.Panel):GetRelativePosY() - (slot.Panel):GetSizeY() / 2)
             end
-            -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out DO_STMT
+            FGlobal_PanelRepostionbyScreenOut(slot.Panel)
+            -- DECOMPILER ERROR at PC131: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC131: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC128: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC131: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end

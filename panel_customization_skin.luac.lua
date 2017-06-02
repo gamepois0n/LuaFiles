@@ -57,10 +57,8 @@ OpenSkinUi = function(classType, uiId)
       setSliderValue(SliderControl, sliderParam, sliderParamMin, sliderParamMax)
       SliderControl:addInputEvent("Mouse_LPress", "UpdateSkinSlider()")
       Button_Slider:addInputEvent("Mouse_LPress", "UpdateSkinSlider()")
-      if CppDefineCustom.Flag == true then
-        Button_Slider:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-        SliderControl:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      end
+      Button_Slider:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+      SliderControl:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
       local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       SliderText:SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
       SliderText:SetPosY(controlPosY)

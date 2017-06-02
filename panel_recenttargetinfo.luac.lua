@@ -549,113 +549,124 @@ panel_Update_Monster_Info = function(actorKey)
     end
   end
   appliedBuff_Idx = 0
-  lua_TargetInfo_Name:SetText(targetActor:getName())
-  local curHP = (targetActor:get()):getHp()
-  local maxHP = (targetActor:get()):getMaxHp()
-  local nowHP = curHP * 100 / maxHP
-  if curHP < 1 then
-    Panel_Monster_Bar:SetShow(false, false)
-    monsterList = {}
-    FGlobal_DangerAlert_Show(false)
-  end
-  if (targetActor:get()):isMonster() then
-    targetHpInfo_Update_Monster(actorKey, nowHP)
-    _recentTargetInfo_TendencyOnDead_MSG(targetActor, actorKey)
-  else
-    if (targetActor:get()):isPlayer() then
-      targetHpInfo_Update_Player(actorKey, nowHP)
+  if (targetActor:get()):isPlayer() then
+    local playerActorProxyWrapper = getPlayerActor(actorKey)
+    if (playerActorProxyWrapper:get()):isValunteer() then
+      lua_TargetInfo_Name:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA"))
     else
-      targetHpInfo_Update_Other(actorKey, nowHP)
-      _recentTargetInfo_TendencyOnDead_MSG(targetActor, actorKey)
+      lua_TargetInfo_Name:SetText(targetActor:getName())
     end
-  end
-  if ((targetActor:get()):getCharacterStaticStatus())._isHiddenHp then
-    lua_TargetInfo_NormalEnemyGauge:SetShow(false)
-    lua_TargetInfo_NormalHpRate:SetShow(false)
-    lua_TargetInfo_NormalHpRate_Later:SetShow(false)
-    lua_TargetInfo_StunRate_Back:SetShow(false)
-    lua_TargetInfo_StunRate:SetShow(false)
-    _darkSpirit:SetShow(false)
-    _helpBubble:SetShow(false)
-    _helpMsg:SetShow(false)
   else
-    if (targetActor:get()):isMonster() then
-      if targetActor:getCharacterGradeType() == 4 then
-        lua_TargetInfo_BossEnemyGauge:SetShow(true)
-        lua_TargetInfo_BossHpRate:SetShow(true)
-        lua_TargetInfo_BossHpRate_Later:SetShow(true)
-      else
-        lua_TargetInfo_NormalEnemyGauge:SetShow(true)
-        lua_TargetInfo_NormalHpRate:SetShow(true)
-        lua_TargetInfo_NormalHpRate_Later:SetShow(true)
+    do
+      lua_TargetInfo_Name:SetText(targetActor:getName())
+      local curHP = (targetActor:get()):getHp()
+      local maxHP = (targetActor:get()):getMaxHp()
+      local nowHP = curHP * 100 / maxHP
+      if curHP < 1 then
+        Panel_Monster_Bar:SetShow(false, false)
+        monsterList = {}
+        FGlobal_DangerAlert_Show(false)
       end
-    else
-      if (targetActor:get()):isPlayer() then
-        lua_TargetInfo_PlayerEnemyGauge:SetShow(true)
-        lua_TargetInfo_PlayerHpRate:SetShow(true)
-        lua_TargetInfo_PlayerHpRate_Later:SetShow(true)
+      if (targetActor:get()):isMonster() then
+        targetHpInfo_Update_Monster(actorKey, nowHP)
+        _recentTargetInfo_TendencyOnDead_MSG(targetActor, actorKey)
       else
-        lua_TargetInfo_NormalEnemyGauge:SetShow(true)
-        lua_TargetInfo_NormalHpRate:SetShow(true)
-        lua_TargetInfo_NormalHpRate_Later:SetShow(true)
-      end
-    end
-  end
-  lua_EnemyTypeIcon:SetShow(false)
-  lua_EnemyTypeText:SetShow(false)
-  if (targetActor:get()):isMonster() then
-    lua_EnemyTypeText:SetShow(true)
-    lua_EnemyTypeText:SetPosX(lua_EnemyTypeIcon:GetPosX() / 2 + 27)
-    lua_EnemyTypeText:SetPosY(lua_EnemyTypeIcon:GetPosY() + 11)
-    local monsterType = ""
-    local checkMonsterType = (targetActor:getCharacterStaticStatusWrapper()):getTribeType()
-    if (CppEnums.TribeType).eTribe_Human == checkMonsterType then
-      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/human.dds")
-      lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUMAN"))
-    else
-      if (CppEnums.TribeType).eTribe_Ain == checkMonsterType then
-        lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/ain.dds")
-        lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_AIN"))
-      else
-        if (CppEnums.TribeType).eTribe_ETC == checkMonsterType then
-          lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/animal.dds")
-          lua_EnemyTypeText:SetText("")
+        if (targetActor:get()):isPlayer() then
+          targetHpInfo_Update_Player(actorKey, nowHP)
         else
-          if (CppEnums.TribeType).eTribe_Boss == checkMonsterType then
-            lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/KamasylviaMonster.dds")
-            lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNDEAD"))
+          targetHpInfo_Update_Other(actorKey, nowHP)
+          _recentTargetInfo_TendencyOnDead_MSG(targetActor, actorKey)
+        end
+      end
+      if ((targetActor:get()):getCharacterStaticStatus())._isHiddenHp then
+        lua_TargetInfo_NormalEnemyGauge:SetShow(false)
+        lua_TargetInfo_NormalHpRate:SetShow(false)
+        lua_TargetInfo_NormalHpRate_Later:SetShow(false)
+        lua_TargetInfo_StunRate_Back:SetShow(false)
+        lua_TargetInfo_StunRate:SetShow(false)
+        _darkSpirit:SetShow(false)
+        _helpBubble:SetShow(false)
+        _helpMsg:SetShow(false)
+      else
+        if (targetActor:get()):isMonster() then
+          if targetActor:getCharacterGradeType() == 4 then
+            lua_TargetInfo_BossEnemyGauge:SetShow(true)
+            lua_TargetInfo_BossHpRate:SetShow(true)
+            lua_TargetInfo_BossHpRate_Later:SetShow(true)
           else
-            if (CppEnums.TribeType).eTribe_Reptile == checkMonsterType then
-              lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/Violent.dds")
-              lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_ETRIBEREPTILE"))
+            lua_TargetInfo_NormalEnemyGauge:SetShow(true)
+            lua_TargetInfo_NormalHpRate:SetShow(true)
+            lua_TargetInfo_NormalHpRate_Later:SetShow(true)
+          end
+        else
+          if (targetActor:get()):isPlayer() then
+            lua_TargetInfo_PlayerEnemyGauge:SetShow(true)
+            lua_TargetInfo_PlayerHpRate:SetShow(true)
+            lua_TargetInfo_PlayerHpRate_Later:SetShow(true)
+          else
+            lua_TargetInfo_NormalEnemyGauge:SetShow(true)
+            lua_TargetInfo_NormalHpRate:SetShow(true)
+            lua_TargetInfo_NormalHpRate_Later:SetShow(true)
+          end
+        end
+      end
+      lua_EnemyTypeIcon:SetShow(false)
+      lua_EnemyTypeText:SetShow(false)
+      if (targetActor:get()):isMonster() then
+        lua_EnemyTypeText:SetShow(true)
+        lua_EnemyTypeText:SetPosX(lua_EnemyTypeIcon:GetPosX() / 2 + 27)
+        lua_EnemyTypeText:SetPosY(lua_EnemyTypeIcon:GetPosY() + 11)
+        local monsterType = ""
+        local checkMonsterType = (targetActor:getCharacterStaticStatusWrapper()):getTribeType()
+        if (CppEnums.TribeType).eTribe_Human == checkMonsterType then
+          lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/human.dds")
+          lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUMAN"))
+        else
+          if (CppEnums.TribeType).eTribe_Ain == checkMonsterType then
+            lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/ain.dds")
+            lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_AIN"))
+          else
+            if (CppEnums.TribeType).eTribe_ETC == checkMonsterType then
+              lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/animal.dds")
+              lua_EnemyTypeText:SetText("")
             else
-              if (CppEnums.TribeType).eTribe_Untribe == checkMonsterType then
-                lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/etc.dds")
-                lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNTRIBE"))
+              if (CppEnums.TribeType).eTribe_Boss == checkMonsterType then
+                lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/KamasylviaMonster.dds")
+                lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNDEAD"))
               else
-                if (CppEnums.TribeType).eTribe_Hunting == checkMonsterType then
-                  lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/hunt.dds")
-                  lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUNT"))
+                if (CppEnums.TribeType).eTribe_Reptile == checkMonsterType then
+                  lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/Violent.dds")
+                  lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_ETRIBEREPTILE"))
+                else
+                  if (CppEnums.TribeType).eTribe_Untribe == checkMonsterType then
+                    lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/etc.dds")
+                    lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_UNTRIBE"))
+                  else
+                    if (CppEnums.TribeType).eTribe_Hunting == checkMonsterType then
+                      lua_EnemyTypeIcon:ChangeTextureInfoName("New_UI_Common_forLua/Widget/EnemyGauge/hunt.dds")
+                      lua_EnemyTypeText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_HUNT"))
+                    end
+                  end
                 end
               end
             end
           end
         end
+        lua_EnemyTypeText:SetText("")
+        local x1, y1, x2, y2 = setTextureUV_Func(lua_EnemyTypeIcon, 0, 0, 32, 32)
+        ;
+        (lua_EnemyTypeIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+        lua_EnemyTypeIcon:setRenderTexture(lua_EnemyTypeIcon:getBaseTexture())
+        lua_EnemyTypeIcon:SetShow(true)
+        local hour = (math.floor)(getIngameTime_minute() / 60)
+        local darkNightPowerUp = ((targetActor:get()):getCharacterStaticStatus())._isPowerUpInNight
+        if (hour == 22 or hour == 0 or hour == 1) and darkNightPowerUp then
+          lua_EnemyTypeIcon:EraseAllEffect()
+          lua_EnemyTypeIcon:AddEffect("UI_Monster_Emergency", true, 0, 0)
+        else
+          lua_EnemyTypeIcon:EraseAllEffect()
+        end
       end
-    end
-    lua_EnemyTypeText:SetText("")
-    local x1, y1, x2, y2 = setTextureUV_Func(lua_EnemyTypeIcon, 0, 0, 32, 32)
-    ;
-    (lua_EnemyTypeIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-    lua_EnemyTypeIcon:setRenderTexture(lua_EnemyTypeIcon:getBaseTexture())
-    lua_EnemyTypeIcon:SetShow(true)
-    local hour = (math.floor)(getIngameTime_minute() / 60)
-    local darkNightPowerUp = ((targetActor:get()):getCharacterStaticStatus())._isPowerUpInNight
-    if (hour == 22 or hour == 0 or hour == 1) and darkNightPowerUp then
-      lua_EnemyTypeIcon:EraseAllEffect()
-      lua_EnemyTypeIcon:AddEffect("UI_Monster_Emergency", true, 0, 0)
-    else
-      lua_EnemyTypeIcon:EraseAllEffect()
     end
   end
 end

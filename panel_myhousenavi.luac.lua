@@ -149,6 +149,7 @@ local Panel_MyHouseNavi_Init = function()
                       end
                     end
                     do
+                      FGlobal_PanelRepostionbyScreenOut(Panel_MyHouseNavi)
                       FGlobal_PetListNew_NoPet()
                       checkAndSetPosInScreen(Panel_MyHouseNavi)
                     end

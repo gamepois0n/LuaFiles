@@ -260,8 +260,13 @@ CashCustomization.Update = function(self)
   end
 end
 
+FGlobal_CashCustom_CashBgSizeY = function()
+  -- function num : 0_2 , upvalues : CashCustomization
+  return (CashCustomization.myProduct_panelBG):GetSizeY()
+end
+
 CashCumaBuy.Update = function(self, applyType)
-  -- function num : 0_2 , upvalues : CashCustomizationData, CashCustomizationDataCount, CashCumaBuy, UI_PUCT, TemplateBuyPanelUI, UI_color
+  -- function num : 0_3 , upvalues : CashCustomizationData, CashCustomizationDataCount, CashCumaBuy, UI_PUCT, TemplateBuyPanelUI, UI_color
   CashCustomizationData = {}
   for idx,itemUi in pairs(self.ItemUiPOOL) do
     (itemUi.ItemBG):SetShow(false)
@@ -524,7 +529,7 @@ CashCumaBuy.Update = function(self, applyType)
 end
 
 CashCustomization_SetPosition = function()
-  -- function num : 0_3 , upvalues : CashCustomization, TemplateUI
+  -- function num : 0_4 , upvalues : CashCustomization, TemplateUI
   local self = CashCustomization
   local scrSizeX = getScreenSizeX()
   local scrSizeY = getScreenSizeY()
@@ -554,7 +559,7 @@ CashCustomization_SetPosition = function()
 end
 
 CashCustomizationBuy_SetPosition = function()
-  -- function num : 0_4 , upvalues : CashCumaBuy, TemplateBuyPanelUI
+  -- function num : 0_5 , upvalues : CashCumaBuy, TemplateBuyPanelUI
   local self = CashCumaBuy
   local scrSizeX = getScreenSizeX()
   local scrSizeY = getScreenSizeY()
@@ -570,7 +575,7 @@ CashCustomizationBuy_SetPosition = function()
 end
 
 _ingameCustomization_CheckBuff = function()
-  -- function num : 0_5 , upvalues : CashCustomization, UI_BUFFTYPE
+  -- function num : 0_6 , upvalues : CashCustomization, UI_BUFFTYPE
   local self = CashCustomization
   local selfPlayer = getSelfPlayer()
   local customizationPackageTime = (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_CustomizationPackage)
@@ -583,7 +588,7 @@ _ingameCustomization_CheckBuff = function()
 end
 
 _ingameCustomization_BuffTooltip = function(isShow)
-  -- function num : 0_6 , upvalues : CashCustomization, UI_BUFFTYPE
+  -- function num : 0_7 , upvalues : CashCustomization, UI_BUFFTYPE
   local self = CashCustomization
   if isShow == true then
     local selfPlayer = getSelfPlayer()
@@ -600,7 +605,7 @@ _ingameCustomization_BuffTooltip = function(isShow)
 end
 
 CashCustomization_Open = function()
-  -- function num : 0_7 , upvalues : CashCustomization
+  -- function num : 0_8 , upvalues : CashCustomization
   local self = CashCustomization
   _ingameCustomization_CheckBuff()
   self:Update()
@@ -613,10 +618,11 @@ CashCustomization_Open = function()
   (self.PearlValue):SetText(makeDotMoney(myInvenMoney))
   ;
   (UIAni.AlphaAnimation)(1, Panel_Cash_Customization, 0, 0.2)
+  FGlobal_CustomHistroyButton_Repos()
 end
 
 CashCumaBuy_Open = function(applyType)
-  -- function num : 0_8 , upvalues : CashCumaBuy
+  -- function num : 0_9 , upvalues : CashCumaBuy
   local self = CashCumaBuy
   self:Update(applyType)
   CashCustomizationBuy_SetPosition()
@@ -624,16 +630,16 @@ CashCumaBuy_Open = function(applyType)
 end
 
 CashCumaBuy_Close = function()
-  -- function num : 0_9
+  -- function num : 0_10
   Panel_Cash_Customization_BuyItem:SetShow(false)
 end
 
 HandleClicked_CashCustomization_Buy = function(itemId)
-  -- function num : 0_10
+  -- function num : 0_11
 end
 
 HandleClicked_CashCustomization_Apply = function()
-  -- function num : 0_11 , upvalues : CashCumaBuy, UI_BUFFTYPE
+  -- function num : 0_12 , upvalues : CashCumaBuy, UI_BUFFTYPE
   local self = CashCumaBuy
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
@@ -662,7 +668,7 @@ HandleClicked_CashCustomization_Apply = function()
 end
 
 HandleClicked_CashCustomization_SelectItem = function(itemId)
-  -- function num : 0_12 , upvalues : CashCumaBuy
+  -- function num : 0_13 , upvalues : CashCumaBuy
   local self = CashCumaBuy
   self.SelectedItemNo = itemId
   for idx = 0, self.ItemUiMaxCount - 1 do
@@ -676,7 +682,7 @@ HandleClicked_CashCustomization_SelectItem = function(itemId)
 end
 
 HandleClicked_CashCumaBuy_Confirm = function()
-  -- function num : 0_13 , upvalues : CashCumaBuy, CashCustomizationData
+  -- function num : 0_14 , upvalues : CashCumaBuy, CashCustomizationData
   local self = CashCumaBuy
   if self.SelectedItemNo == -1 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASH_CUSTOMIZATION_NOSELECT"))
@@ -695,7 +701,7 @@ HandleClicked_CashCumaBuy_Confirm = function()
 end
 
 ToClient_CashCumaBuy_Confirm_Do = function()
-  -- function num : 0_14 , upvalues : CashCumaBuy, CashCustomizationData
+  -- function num : 0_15 , upvalues : CashCumaBuy, CashCustomizationData
   local self = CashCumaBuy
   if CashCumaBuy.ApplyType == "inven" then
     ToClient_InGameSaveCustomizationData(false, (CashCustomizationData[self.SelectedItemNo]).slotNo, (CashCustomizationData[self.SelectedItemNo]).itemWhereType)
@@ -714,7 +720,7 @@ ToClient_CashCumaBuy_Confirm_Do = function()
 end
 
 CashCustomization.registEventHandler = function(self)
-  -- function num : 0_15
+  -- function num : 0_16
   (self.BTN_Apply):addInputEvent("Mouse_LUp", "HandleClicked_CashCustomization_Apply()")
   ;
   (self.BTN_Close):addInputEvent("Mouse_LUp", "IngameCustomize_Hide()")
@@ -729,18 +735,18 @@ CashCustomization.registEventHandler = function(self)
 end
 
 CashCustomization.registMessageHandler = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
 end
 
 CashCumaBuy.registEventHandler = function(self)
-  -- function num : 0_17
+  -- function num : 0_18
   (self.BTN_Confirm):addInputEvent("Mouse_LUp", "HandleClicked_CashCumaBuy_Confirm()")
   ;
   (self.BTN_Cancle):addInputEvent("Mouse_LUp", "CashCumaBuy_Close()")
 end
 
 CashCumaBuy.registMessageHandler = function(self)
-  -- function num : 0_18
+  -- function num : 0_19
 end
 
 CashCustomization:Initialize()
@@ -749,7 +755,7 @@ CashCustomization:registMessageHandler()
 CashCumaBuy:registEventHandler()
 CashCumaBuy:registMessageHandler()
 FromClient_NotifyCustomizingChange = function()
-  -- function num : 0_19 , upvalues : CashCustomization
+  -- function num : 0_20 , upvalues : CashCustomization
   local self = CashCustomization
   self:Update()
   CashCustomization_SetPosition()

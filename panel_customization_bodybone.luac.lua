@@ -40,24 +40,20 @@ Slider_ScaleZ:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
 Button_Slider_ScaleX:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
 Button_Slider_ScaleY:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
 Button_Slider_ScaleZ:addInputEvent("Mouse_LPress", "UpdateBodyBoneScale()")
-if CppDefineCustom.Flag == true then
-  Slider_ScaleX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Slider_ScaleY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Slider_ScaleZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Button_Slider_ScaleX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Button_Slider_ScaleY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Button_Slider_ScaleZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-end
+Slider_ScaleX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Slider_ScaleY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Slider_ScaleZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Button_Slider_ScaleX:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Button_Slider_ScaleY:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Button_Slider_ScaleZ:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
 Slider_Height:addInputEvent("Mouse_LPress", "UpdateBodyHeight()")
 Button_Slider_Height:addInputEvent("Mouse_LPress", "UpdateBodyHeight()")
 Slider_Weight:addInputEvent("Mouse_LPress", "UpdateBodyWeight()")
 Button_Slider_Weight:addInputEvent("Mouse_LPress", "UpdateBodyWeight()")
-if CppDefineCustom.Flag == true then
-  Slider_Height:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Button_Slider_Height:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Slider_Weight:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  Button_Slider_Weight:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-end
+Slider_Height:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Button_Slider_Height:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Slider_Weight:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+Button_Slider_Weight:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
 Button_All_Reset:addInputEvent("Mouse_LUp", "clearGroupCustomizedBonInfoLua()")
 Button_Part_Reset:addInputEvent("Mouse_LUp", "clearCustomizedBoneInfo()")
 CheckButton_ControlPart:addInputEvent("Mouse_LUp", "ToggleShowBodyBoneControlPart()")
@@ -104,8 +100,7 @@ UpdateBodyWeight = function()
   applyBodyWeight(selectedClassType, Slider_Weight:GetControlPos() * 100)
 end
 
-if CppDefineCustom.Flag == true then
-  historyInit = function()
+historyInit = function()
   -- function num : 0_5 , upvalues : bonInfoPostFunction, selectedClassType, Slider_Height, Slider_Weight
   bonInfoPostFunction()
   selectedClassType = (getSelfPlayer()):getClassType()
@@ -113,7 +108,6 @@ if CppDefineCustom.Flag == true then
   applyBodyWeight(selectedClassType, Slider_Weight:GetControlPos() * 100)
 end
 
-end
 UpdateBodyBoneScale = function()
   -- function num : 0_6 , upvalues : Slider_ScaleX, scaleMin, scaleMax, Slider_ScaleY, Slider_ScaleZ, currentScale, StaticText_CurrValue_ScaleX, StaticText_CurrValue_ScaleY, StaticText_CurrValue_ScaleZ
   local x = calculateSliderValue(Slider_ScaleX, scaleMin.x, scaleMax.x)

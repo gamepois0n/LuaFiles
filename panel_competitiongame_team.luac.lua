@@ -94,8 +94,20 @@ CompetitionGameTeam_Update = function()
   if saveBScore < teamB then
     saveBScore = teamB
   end
-  _txt_CompetitionGameTeamA:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM"))
-  _txt_CompetitionGameTeamB:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM"))
+  local teamA_Info = ToClient_GetTeamListAt(0)
+  local teamB_Info = ToClient_GetTeamListAt(1)
+  local teamA_Name = ""
+  local teamB_Name = ""
+  if teamA_Info ~= nil and teamB_Info ~= nil then
+    teamA_Name = teamA_Info:getTeamName()
+    teamB_Name = teamB_Info:getTeamName()
+  end
+  if teamA_Name == "" or teamB_Name == "" then
+    teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
+    teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+  end
+  _txt_CompetitionGameTeamA:SetText(teamA_Name)
+  _txt_CompetitionGameTeamB:SetText(teamB_Name)
   _txt_ScoreTeamA:SetText(teamA)
   _txt_ScoreTeamB:SetText(teamB)
 end

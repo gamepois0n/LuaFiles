@@ -3002,7 +3002,7 @@ InitGraphicOptionAll = function(gameOptionSetting, optionType)
   GameOption_InitFov(fovValue)
   GameOption_SetFovValueText(fovValue)
   local uiScale = gameOptionSetting:getUIScale()
-  uiScale = (uiScale + 0.005) * 100 / 100
+  uiScale = (uiScale + 0.002) * 100 / 100
   if CppDefine.ChangeUIAndResolution == true then
     uiScale = GameOption_InitScale_50_200(uiScale)
   else
@@ -4794,10 +4794,12 @@ GameOption_ChangeFov_button = function()
   GameOption_SetFov(fov)
 end
 
+;
+(frame_Display._slide_UIScale):SetInterval(150)
 GameOption_SetUIMode = function(uiScale)
   -- function num : 0_156 , upvalues : scaleRangeTable, frame_Display, GetStr_Option
   local uiScale_Slider = uiScale
-  local uiScale_Percent = uiScale * 100
+  local uiScale_Percent = (math.floor)(uiScale * 100)
   local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
   ;
   (frame_Display._slide_UIScale):SetControlPos((uiScale_Percent - scaleRangeTable.minScaleValue) / interval * 100)
@@ -4820,7 +4822,7 @@ GameOption_UIScale_Change = function()
   chk_Option.currentCheckUIScale = (scaleRangeTable.minScaleValue + interval * slide_posX) * 0.01
   -- DECOMPILER ERROR at PC51: Confused about usage of register: R2 in 'UnsetPending'
 
-  chk_Option.currentCheckUIScale = (math.floor)((chk_Option.currentCheckUIScale + 0.005) * 100) / 100
+  chk_Option.currentCheckUIScale = (math.floor)((chk_Option.currentCheckUIScale + 0.002) * 100) / 100
   ;
   (frame_Display._txt_UIScale):SetText(GetStr_Option[5] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", chk_Option.currentCheckUIScale * 100) .. "% <PAOldColor>)")
 end
@@ -7703,7 +7705,7 @@ GameOption_Apply = function()
         setUIScale(self.currentCheckUIScale)
       end
       local uiScale = self.currentCheckUIScale
-      uiScale = (uiScale + 0.005) * 100 / 100
+      uiScale = (uiScale + 0.002) * 100 / 100
       local screenHeight = (ToClient_getGameOptionControllerWrapper()):getScreenResolutionHeight()
       if CppDefine.ChangeUIAndResolution == true then
         uiScale = GameOption_InitScale_50_200(uiScale)
@@ -8988,7 +8990,7 @@ GameOption_Repos = function()
   Panel_Window_Option:SetPosY((screenSizeY - Panel_Window_Option:GetSizeY()) / 2)
   if CppDefine.ChangeUIAndResolution == true then
     local uiScale = chk_Option.currentCheckUIScale
-    uiScale = (uiScale + 0.005) * 100 / 100
+    uiScale = uiScale + 0.002
     GameOption_InitScale_50_200(uiScale)
   end
 end

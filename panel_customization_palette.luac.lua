@@ -68,10 +68,8 @@ CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType,
     local colorTemp = getPaletteColor(PaletteIndex, colorIndex)
     tempStatic:SetColor(Int64toInt32(colorTemp))
     tempStatic:addInputEvent("Mouse_PressMove", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
-    if CppDefineCustom.Flag == true then
-      tempStatic:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-    end
-    -- DECOMPILER ERROR at PC119: Confused about usage of register: R17 in 'UnsetPending'
+    tempStatic:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+    -- DECOMPILER ERROR at PC115: Confused about usage of register: R17 in 'UnsetPending'
 
     colorStatic[luaColorIndex] = tempStatic
   end
@@ -79,9 +77,7 @@ CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType,
   ;
   (ftCollision:getBaseTexture()):setUV(0, 0, 1, 1)
   ftCollision:addInputEvent("Mouse_LPress", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
-  if CppDefineCustom.Flag == true then
-    ftCollision:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-  end
+  ftCollision:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
   ftCollision:SetShow(true)
   ftCollision:SetPosX(FrameTemplate:GetPosX())
   ftCollision:SetPosY(FrameTemplate:GetPosY())
@@ -170,9 +166,7 @@ UpdateEyePalette = function(classType, paramType, paramIndex, paramIndex2)
         setParam(classType, paramType, paramIndex2, colorIndex)
       end
       UpdatePaletteMarkPosition(colorIndex)
-      if CppDefineCustom.Flag == true then
-        add_CurrentHistory()
-      end
+      add_CurrentHistory()
       return 
     end
   end

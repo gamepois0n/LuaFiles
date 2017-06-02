@@ -42,7 +42,7 @@ uiPool = {}
 , 
 _currentWaveBoss = {}
 , _currentWaveMaxCount = 0, _currentBossActorProxy = nil, 
-_name = {[0] = "숲의 성물", [1] = "하늘�\152 성물", [2] = "�\128�\128�\152 성물", [3] = "죽음�\152 성물", [4] = "유적�\152 성물"}
+_name = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSWAVE_NAME_0"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSWAVE_NAME_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSWAVE_NAME_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSWAVE_NAME_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_BOSSWAVE_NAME_4")}
 , resetCheck = false}
 bossWave.Init = function(self)
   -- function num : 0_0

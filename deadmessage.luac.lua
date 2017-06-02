@@ -650,7 +650,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
     local isMyChannelSiegeBeing = deadMessage_isSiegeBeingMyChannel()
     buttonAbleTime = -1
     isUseButtonAbleTime = false
-    if isSiegeBeingInDead and deadMessage_isInSiegeBattle() then
+    if (isSiegeBeingInDead and deadMessage_isInSiegeBattle()) or (selfProxy:get()):getValunteerTeamNoForLua() ~= 0 then
       respawnTime = respawnTime / 1000
       local buttonDelayTime = respawnTime
       if buttonDelayTime ~= 0 then

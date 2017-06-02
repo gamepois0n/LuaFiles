@@ -118,5 +118,29 @@ FGlobal_InitPanelRelativePos = function(panel, initPosX, initPosY)
   end
 end
 
+FGlobal_PanelRepostionbyScreenOut = function(panel)
+  -- function num : 0_9
+  local posX = panel:GetPosX()
+  local posY = panel:GetPosY()
+  local sizeX = panel:GetSizeX()
+  local sizeY = panel:GetSizeY()
+  local screenSizeX = getScreenSizeX()
+  local screenSizeY = getScreenSizeY()
+  if screenSizeX < posX + sizeX then
+    panel:SetPosX(screenSizeX - panel:GetSizeX())
+  else
+    if posX < 0 then
+      panel:SetPosX(1)
+    end
+  end
+  if screenSizeY < posY + sizeY then
+    panel:SetPosY(screenSizeY - panel:GetSizeY())
+  else
+    if posY < 0 then
+      panel:SetPosY(1)
+    end
+  end
+end
+
 registerEvent("FromClient_SetGameUIMode", "FromClient_SetGameUIMode")
 

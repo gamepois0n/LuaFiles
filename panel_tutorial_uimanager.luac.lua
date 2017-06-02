@@ -101,6 +101,7 @@ PaGlobal_TutorialUiManager.loadAllUiSavedInfo = function(self)
           key:SetRelativePosY(relativePosY)
           PAGlobal_setIsChangePanelState(value, true, false)
         end
+        onReSizePanel(key)
       end
       checkAndSetPosInScreen(key)
     end
@@ -126,15 +127,58 @@ PaGlobal_TutorialUiManager.loadAllUiSavedInfo = function(self)
   Chatting_OnResize()
 end
 
-FromClient_TutorialScreenReposition = function()
+onReSizePanel = function(key)
   -- function num : 0_6
+  if key == Panel_NewEquip then
+    Panel_NewEquip_ScreenResize()
+  else
+    if key == Panel_MainStatus_User_Bar then
+      Panel_MainStatus_User_Bar_Onresize()
+    else
+      if key == Panel_MainQuest then
+        FromClient_MainQuestWidget_ResetPosition()
+      else
+        if key == Panel_SkillCommand then
+          FGlobal_SkillCommand_ResetPosition()
+        else
+          if key == Panel_PvpMode then
+            PvpMode_Resize()
+          else
+            if key == Panel_Party then
+              partWidget_OnscreenEvent()
+            else
+              if key == Panel_Movie_KeyViewer then
+                Panel_KeyViewer_ScreenRePosition()
+              else
+                if key == Panel_CheckedQuest then
+                  FromClient_questWidget_ResetPosition()
+                else
+                  if key == Panel_Adrenallin then
+                    Panel_Adrenallin_OnSreenResize()
+                  else
+                    if key == Panel_QuickSlot then
+                      QuickSlot_OnscreenResize()
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+FromClient_TutorialScreenReposition = function()
+  -- function num : 0_7
   PaGlobal_TutorialUiManager:repositionScreen()
 end
 
--- DECOMPILER ERROR at PC240: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC242: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.repositionScreen = function(self)
-  -- function num : 0_7
+  -- function num : 0_8
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
   Panel_Tutorial:SetSize(scrX, scrY)
@@ -147,10 +191,10 @@ PaGlobal_TutorialUiManager.repositionScreen = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC243: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC245: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.closeAllWindow = function(self)
-  -- function num : 0_8
+  -- function num : 0_9
   if check_ShowWindow() then
     close_WindowPanelList()
   else
@@ -158,10 +202,10 @@ PaGlobal_TutorialUiManager.closeAllWindow = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC246: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC248: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.restoreAllUiByUserSetting = function(self)
-  -- function num : 0_9
+  -- function num : 0_10
   if CheckTutorialEnd() then
     self:loadAllUiSavedInfo()
     if Panel_WorldMap:GetShow() == true and Panel_CheckedQuest:GetShow() then
@@ -175,10 +219,10 @@ PaGlobal_TutorialUiManager.restoreAllUiByUserSetting = function(self)
   Panel_ClassResource:SetShow(true)
 end
 
--- DECOMPILER ERROR at PC249: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC251: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.showConditionalUi = function(self)
-  -- function num : 0_10
+  -- function num : 0_11
   FGlobal_MyHouseNavi_Update()
   FGlobal_PersonalIcon_ButtonPosUpdate()
   Panel_Widget_TownNpcNavi:SetShow(true, true)
@@ -196,10 +240,10 @@ PaGlobal_TutorialUiManager.showConditionalUi = function(self)
   FGlobal_ResetRadarUI()
 end
 
--- DECOMPILER ERROR at PC252: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC254: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
-  -- function num : 0_11
+  -- function num : 0_12
   Panel_SelfPlayerExpGage:SetShow(isShow)
   Panel_PersonalIcon:SetShow(isShow)
   Panel_PersonalIcon_Left:SetShow(isShow)
@@ -259,10 +303,10 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC255: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC257: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.hideAllTutorialUi = function(self)
-  -- function num : 0_12
+  -- function num : 0_13
   for _,v in pairs(self._uiList) do
     for __,vv in pairs(v._ui) do
       vv:SetShow(false)
@@ -270,10 +314,10 @@ PaGlobal_TutorialUiManager.hideAllTutorialUi = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC258: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC260: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.setShowChattingPanel = function(self, isShow)
-  -- function num : 0_13
+  -- function num : 0_14
   local chattingPanelCount = ToClient_getChattingPanelCount()
   for panelIndex = 0, chattingPanelCount - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIndex)
@@ -289,42 +333,42 @@ PaGlobal_TutorialUiManager.setShowChattingPanel = function(self, isShow)
 end
 
 FromClient_luaLoadComplete_TutorialUiManager = function()
-  -- function num : 0_14
+  -- function num : 0_15
   PaGlobal_TutorialUiManager:initialize()
 end
 
 FromClient_EventSelfPlayerLevelUp_TutorialUiManager = function()
-  -- function num : 0_15
+  -- function num : 0_16
   if CheckTutorialEnd() then
     PaGlobal_TutorialUiManager:restoreAllUiByUserSetting()
   end
 end
 
--- DECOMPILER ERROR at PC265: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC267: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.getUiBlackSpirit = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
   return (self._uiList)._uiBlackSpirit
 end
 
--- DECOMPILER ERROR at PC268: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC270: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.getUiKeyButton = function(self)
-  -- function num : 0_17
+  -- function num : 0_18
   return (self._uiList)._uiKeyButton
 end
 
--- DECOMPILER ERROR at PC271: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC273: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.getUiHeadlineMessage = function(self)
-  -- function num : 0_18
+  -- function num : 0_19
   return (self._uiList)._uiHeadlineMessage
 end
 
--- DECOMPILER ERROR at PC274: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC276: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiManager.getUiMasking = function(self)
-  -- function num : 0_19
+  -- function num : 0_20
   return (self._uiList)._uiMasking
 end
 

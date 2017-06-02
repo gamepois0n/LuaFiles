@@ -18,7 +18,8 @@ Panel_Window_CharInfo_Status:RegisterShowEventFunc(true, "CharInfoStatusShowAni(
 Panel_Window_CharInfo_Status:RegisterShowEventFunc(false, "CharInfoStatusHideAni()")
 Panel_Window_CharInfo_BasicStatus:SetShow(false)
 local isFamilyPoint = ToClient_IsContentsGroupOpen("212")
-local CharacterInfo = {_frameDefaultBG_Basic = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_BasicInfo"), _frameDefaultBG_Title = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_TitleInfo"), _frameDefaultBG_History = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_HistoryInfo"), _frameDefaultBG_Challenge = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_ChallengeInfo"), BTN_Tab_Basic = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_CharacterInfo"), BTN_Tab_Title = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_CharacterTitle"), BTN_Tab_History = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_CharacterHistory"), BTN_Tab_Challenge = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_Challenge"), txt_BaseInfo_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Title_Base_Title"), txt_CharinfoDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_CharinfoDesc"), txt_TitleDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_TitleDesc"), txt_HistoryDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_HistoryDesc"), txt_ChallengeDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_ChallengeDesc"), _familyname = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyName_Value"), _charactername = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CharacterName_Value"), _zodiac = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Zodiac_Value"), _tendency = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Tendency_Value"), _mental = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Mental_Value"), _contribution = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Contribution_Value"), _characterlevel = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_BattleLevel_Value"), _progress2_characterlevel = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_BattleLevel_Gauge"), _hpTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HP_Title"), _hpvalue = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HP_Value"), _progress2_hp = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_HP_Gauge"), _mpTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_MP_Title"), _mpvalue = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_MP_value"), _progress2_mp = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_MP_Gauge"), _weightTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Weight_Title"), _weightvalue = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Weight_Value"), _progress2_weightvalue_Money = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Weight_Money"), _progress2_weightvalue_Equip = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Weight_Equip"), _progress2_weightvalue_Inventory = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Weight_Inventory"), _attackTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AttackPower_Title"), _attack = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AttackPower_Value"), _awakenAttackTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AwakenAttackPower_Title"), _awakenAttack = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AwakenAttackPower_Value"), _defenceTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Defence_Title"), _defence = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Defence_Value"), _staminaTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Stamina_Title"), _stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Stamina_Value"), _stunTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistStun_Title"), _downTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistDown_Title"), _captureTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistCapture_Title"), _knockBackTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistKnockback_Title"), _stunPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistStun_Percent"), _downPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistDown_Percent"), _capturePercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistCapture_Percent"), _knockBackPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistKnockBack_Percent"), _gatherTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GatheringLevel_Title"), _gather = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GatheringLevel_Value"), _gatherPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GatheringPercent_Value"), _progress2_gather = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_GatheringLevel_Gauge"), _manufactureTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ManufactureLevel_Title"), _manufacture = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ManufactureLevel_Value"), _manufacturePercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ManufacturePercent_Value"), _progress2_manufacture = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ManufactureLevel_Gauge"), _cookingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CookingLevel_Title"), _cooking = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CookingLevel_Value"), _cookingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CookingPercent_Value"), _progress2_cooking = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_CookingLevel_Gauge"), _alchemyTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AlchemyLevel_Title"), _alchemy = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AlchemyLevel_Value"), _alchemyPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AlchemyPercent_Value"), _progress2_alchemy = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_AlchemyLevel_Gauge"), _fishingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishingLevel_Title"), _fishing = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishingLevel_Value"), _fishingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishingPercent_Value"), _progress2_fishing = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_FishingLevel_Gauge"), _huntingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HuntingLevel_Title"), _hunting = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HuntingLevel_Value"), _huntingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HuntingPercent_Value"), _progress2_hunting = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_HuntingLevel_Gauge"), _trainingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TrainingLevel_Title"), _training = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TrainingLevel_Value"), _trainingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TrainingPercent_Value"), _progress2_training = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_TrainingLevel_Gauge"), _tradeTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Trade"), _trade = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Trade_Value"), _tradePercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TradePercent_Value"), _progress2_trade = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Trade"), _growthTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GrowthLevel_Title"), _growth = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GrowthLevel_Value"), _growthPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GrowthPercent_Value"), _progress2_growth = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_GrowthLevel_Gauge"), _sailTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SailLevel_Title"), _sail = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SailLevel_Value"), _sailPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SailPercent_Value"), _progress2_sail = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_SailLevel_Gauge"), sailProgressBG = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_SailLevel_GaugeBG"), sailIcon = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_Icon_Sail"), attackspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_AttackSpeed_Title"), _asttackspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_AttackSpeed_Value"), castspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_CastingSpeed_Title"), _castspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_CastingSpeed_Value"), movespeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_MoveSpeed_Title"), _movespeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_MoveSpeed_Value"), critical = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_Critical_Title"), _critical = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_Critical_Value"), fishTime = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_FishTime"), _fishTime = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishTime_Grade"), product = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_Product"), _product = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Product_Grade"), dropChance = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_DropChance"), _dropChance = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_DropChance_Grade"), _potentialSlot = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_PotentialSlot"), _potentialMinusSlot = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_PotentialMinusSlot"), _potentialSlotBG = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_PotentialSlotBG"), _title_stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Stamina_Title"), _title_strength = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Strength_Title"), _title_health = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Health_Title"), _progress2_stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Fitness_Stamina_Gauge"), _progress2_strength = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Fitness_Strength_Gauge"), _progress2_health = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Fitness_Health_Gauge"), _value_stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Stamina_Value"), _value_strength = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Strength_Value"), _value_health = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Health_Value"), _progress2_resiststun = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistStun_Gauge"), _progress2_resistdown = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistDown_Gauge"), _progress2_resistcapture = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistCapture_Gauge"), _progress2_resistknockback = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistKnockback_Gauge"), _hpRegen = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HpRegen"), _mpRegen = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_MpRegen"), _weightTooltip = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Weight_Tooltip"), _potenHelp = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_Help"), _buttonClose = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Button_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Button_Question"), checkPopUp = (UI.getChildControl)(Panel_Window_CharInfo_Status, "CheckButton_PopUp"), _selfTimer = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SelfTimer"), _PcRoomTimer = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_PCRoomTimer"), _todayPlayTime = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_TodayPlayTime"), _selfTimerIcon = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_SelfTimerIcon"), _lifeTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CraftLevel_Title"), _ranker = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Button_Ranker"), _btnIntroduce = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Button_Introduce"), 
+local profileOpen = ToClient_IsContentsGroupOpen("271")
+local CharacterInfo = {_frameDefaultBG_Basic = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_BasicInfo"), _frameDefaultBG_Title = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_TitleInfo"), _frameDefaultBG_History = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_HistoryInfo"), _frameDefaultBG_Challenge = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_ChallengeInfo"), _frameDefaultBG_Profile = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Static_ProfileInfo"), BTN_Tab_Basic = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_CharacterInfo"), BTN_Tab_Title = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_CharacterTitle"), BTN_Tab_History = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_CharacterHistory"), BTN_Tab_Challenge = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_Challenge"), BTN_Tab_Profile = (UI.getChildControl)(Panel_Window_CharInfo_Status, "RadioButton_Tab_Profile"), txt_BaseInfo_Title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Title_Base_Title"), txt_CharinfoDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_CharinfoDesc"), txt_TitleDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_TitleDesc"), txt_HistoryDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_HistoryDesc"), txt_ChallengeDesc = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_ChallengeDesc"), _familyname = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyName_Value"), _charactername = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CharacterName_Value"), _zodiac = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Zodiac_Value"), _tendency = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Tendency_Value"), _mental = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Mental_Value"), _contribution = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Contribution_Value"), _characterlevel = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_BattleLevel_Value"), _progress2_characterlevel = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_BattleLevel_Gauge"), _hpTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HP_Title"), _hpvalue = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HP_Value"), _progress2_hp = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_HP_Gauge"), _mpTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_MP_Title"), _mpvalue = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_MP_value"), _progress2_mp = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_MP_Gauge"), _weightTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Weight_Title"), _weightvalue = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Weight_Value"), _progress2_weightvalue_Money = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Weight_Money"), _progress2_weightvalue_Equip = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Weight_Equip"), _progress2_weightvalue_Inventory = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Weight_Inventory"), _attackTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AttackPower_Title"), _attack = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AttackPower_Value"), _awakenAttackTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AwakenAttackPower_Title"), _awakenAttack = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AwakenAttackPower_Value"), _defenceTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Defence_Title"), _defence = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Defence_Value"), _staminaTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Stamina_Title"), _stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Stamina_Value"), _stunTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistStun_Title"), _downTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistDown_Title"), _captureTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistCapture_Title"), _knockBackTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ResistKnockback_Title"), _stunPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistStun_Percent"), _downPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistDown_Percent"), _capturePercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistCapture_Percent"), _knockBackPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RegistKnockBack_Percent"), _gatherTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GatheringLevel_Title"), _gather = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GatheringLevel_Value"), _gatherPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GatheringPercent_Value"), _progress2_gather = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_GatheringLevel_Gauge"), _manufactureTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ManufactureLevel_Title"), _manufacture = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ManufactureLevel_Value"), _manufacturePercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_ManufacturePercent_Value"), _progress2_manufacture = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ManufactureLevel_Gauge"), _cookingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CookingLevel_Title"), _cooking = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CookingLevel_Value"), _cookingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CookingPercent_Value"), _progress2_cooking = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_CookingLevel_Gauge"), _alchemyTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AlchemyLevel_Title"), _alchemy = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AlchemyLevel_Value"), _alchemyPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_AlchemyPercent_Value"), _progress2_alchemy = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_AlchemyLevel_Gauge"), _fishingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishingLevel_Title"), _fishing = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishingLevel_Value"), _fishingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishingPercent_Value"), _progress2_fishing = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_FishingLevel_Gauge"), _huntingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HuntingLevel_Title"), _hunting = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HuntingLevel_Value"), _huntingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HuntingPercent_Value"), _progress2_hunting = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_HuntingLevel_Gauge"), _trainingTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TrainingLevel_Title"), _training = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TrainingLevel_Value"), _trainingPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TrainingPercent_Value"), _progress2_training = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_TrainingLevel_Gauge"), _tradeTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Trade"), _trade = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Trade_Value"), _tradePercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_TradePercent_Value"), _progress2_trade = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Trade"), _growthTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GrowthLevel_Title"), _growth = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GrowthLevel_Value"), _growthPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_GrowthPercent_Value"), _progress2_growth = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_GrowthLevel_Gauge"), _sailTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SailLevel_Title"), _sail = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SailLevel_Value"), _sailPercent = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SailPercent_Value"), _progress2_sail = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_SailLevel_Gauge"), sailProgressBG = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_SailLevel_GaugeBG"), sailIcon = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_Icon_Sail"), attackspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_AttackSpeed_Title"), _asttackspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_AttackSpeed_Value"), castspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_CastingSpeed_Title"), _castspeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_CastingSpeed_Value"), movespeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_MoveSpeed_Title"), _movespeed = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_MoveSpeed_Value"), critical = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_Critical_Title"), _critical = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_Critical_Value"), fishTime = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_FishTime"), _fishTime = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FishTime_Grade"), product = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_Product"), _product = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Product_Grade"), dropChance = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_DropChance"), _dropChance = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_DropChance_Grade"), _potentialSlot = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_PotentialSlot"), _potentialMinusSlot = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_PotentialMinusSlot"), _potentialSlotBG = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_PotentialSlotBG"), _title_stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Stamina_Title"), _title_strength = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Strength_Title"), _title_health = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Health_Title"), _progress2_stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Fitness_Stamina_Gauge"), _progress2_strength = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Fitness_Strength_Gauge"), _progress2_health = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_Fitness_Health_Gauge"), _value_stamina = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Stamina_Value"), _value_strength = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Strength_Value"), _value_health = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_Health_Value"), _progress2_resiststun = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistStun_Gauge"), _progress2_resistdown = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistDown_Gauge"), _progress2_resistcapture = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistCapture_Gauge"), _progress2_resistknockback = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Progress2_ResistKnockback_Gauge"), _hpRegen = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_HpRegen"), _mpRegen = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_MpRegen"), _weightTooltip = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Weight_Tooltip"), _potenHelp = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Poten_Help"), _buttonClose = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Button_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Button_Question"), checkPopUp = (UI.getChildControl)(Panel_Window_CharInfo_Status, "CheckButton_PopUp"), _selfTimer = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_SelfTimer"), _PcRoomTimer = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_PCRoomTimer"), _todayPlayTime = (UI.getChildControl)(Panel_Window_CharInfo_Status, "StaticText_TodayPlayTime"), _selfTimerIcon = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_SelfTimerIcon"), _lifeTitle = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_CraftLevel_Title"), _ranker = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Button_Ranker"), _btnIntroduce = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Button_Introduce"), 
 _introduce = {_bg = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_IntroduceBg"), _title = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Title_Introduce"), _textBg = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_MultilineTextBg"), _editText = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "MultilineEdit_Introduce"), _btnSetIntro = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Button_SetIntroduce"), _btnResetIntro = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Button_ResetIntroduce"), _closeIntro = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Button_CloseIntroduce")}
 , familyPoints = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyPoint"), familyCombatPoints = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyCombatPoint"), familyLifePoints = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyLifePoint"), familyEtcPoints = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyEtcPoint"), familyLeftBracket = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_LeftBracket"), familyRightBracket = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_RightBracket"), 
 attackspeed_SlotBG = {}
@@ -122,7 +123,7 @@ FGlobal_CharInfoStatusShowAni = function()
 end
 
 CharacterInfo.Init = function(self)
-  -- function num : 0_3 , upvalues : isFamilyPoint, CharacterInfo
+  -- function num : 0_3 , upvalues : profileOpen, CharacterInfo, isFamilyPoint
   (self._frameDefaultBG_Basic):MoveChilds((self._frameDefaultBG_Basic):GetID(), Panel_Window_CharInfo_BasicStatus)
   ;
   (UI.deletePanel)(Panel_Window_CharInfo_BasicStatus:GetID())
@@ -138,6 +139,16 @@ CharacterInfo.Init = function(self)
   (self._frameDefaultBG_Challenge):MoveChilds((self._frameDefaultBG_Challenge):GetID(), Panel_Window_Challenge)
   ;
   (UI.deletePanel)(Panel_Window_Challenge:GetID())
+  if profileOpen then
+    (self._frameDefaultBG_Profile):MoveChilds((self._frameDefaultBG_Profile):GetID(), Panel_Window_Profile)
+    ;
+    (UI.deletePanel)(Panel_Window_Profile:GetID())
+    ;
+    (CharacterInfo.BTN_Tab_Profile):SetShow(true)
+  else
+    ;
+    (CharacterInfo.BTN_Tab_Profile):SetShow(false)
+  end
   ;
   (self._gatherTitle):SetIgnore(false)
   ;
@@ -163,7 +174,7 @@ CharacterInfo.Init = function(self)
   ;
   (self._potentialSlot):SetSize(44, (self._potentialSlot):GetSizeY())
   for idx = 0, 6 do
-    -- DECOMPILER ERROR at PC129: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC156: Confused about usage of register: R5 in 'UnsetPending'
 
     (self.attackspeed_SlotBG)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.attackspeed, "attackSpeed_SlotBG_" .. idx)
     CopyBaseProperty(self._potentialSlotBG, (self.attackspeed_SlotBG)[idx])
@@ -177,7 +188,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.attackspeed_SlotBG)[idx]):SetPosY(21)
-    -- DECOMPILER ERROR at PC179: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC206: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.attackspeed_Slot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.attackspeed, "attackSpeed_Slot_" .. idx)
@@ -192,7 +203,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.attackspeed_Slot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC230: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC257: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.attackspeed_MinusSlot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.attackspeed, "attackSpeed_MinusSlot_" .. idx)
@@ -207,7 +218,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.attackspeed_MinusSlot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC281: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC308: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.castspeed_SlotBG)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.castspeed, "castspeed_SlotBG_" .. idx)
@@ -222,7 +233,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.castspeed_SlotBG)[idx]):SetPosY(21)
-    -- DECOMPILER ERROR at PC331: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC358: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.castspeed_Slot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.castspeed, "castspeed_Slot_" .. idx)
@@ -237,7 +248,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.castspeed_Slot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC382: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC409: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.castspeed_MinusSlot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.castspeed, "castspeed_MinusSlot_" .. idx)
@@ -252,7 +263,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.castspeed_MinusSlot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC433: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC460: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.movespeed_SlotBG)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.movespeed, "movespeed_SlotBG_" .. idx)
@@ -267,7 +278,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.movespeed_SlotBG)[idx]):SetPosY(21)
-    -- DECOMPILER ERROR at PC483: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC510: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.movespeed_Slot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.movespeed, "movespeed_Slot_" .. idx)
@@ -282,7 +293,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.movespeed_Slot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC534: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC561: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.movespeed_MinusSlot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.movespeed, "movespeed_MinusSlot_" .. idx)
@@ -297,7 +308,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.movespeed_MinusSlot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC585: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC612: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.critical_SlotBG)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.critical, "critical_SlotBG_" .. idx)
@@ -312,7 +323,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.critical_SlotBG)[idx]):SetPosY(21)
-    -- DECOMPILER ERROR at PC635: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC662: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.critical_Slot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.critical, "critical_Slot_" .. idx)
@@ -327,7 +338,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.critical_Slot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC686: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC713: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.critical_MinusSlot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.critical, "critical_MinusSlot_" .. idx)
@@ -342,7 +353,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.critical_MinusSlot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC737: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC764: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.fishTime_SlotBG)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.fishTime, "fishTime_SlotBG_" .. idx)
@@ -357,7 +368,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.fishTime_SlotBG)[idx]):SetPosY(21)
-    -- DECOMPILER ERROR at PC787: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC814: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.fishTime_Slot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.fishTime, "fishTime_Slot_" .. idx)
@@ -372,7 +383,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.fishTime_Slot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC838: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC865: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.fishTime_MinusSlot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.fishTime, "fishTime_MinusSlot_" .. idx)
@@ -387,7 +398,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.fishTime_MinusSlot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC889: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC916: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.product_SlotBG)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.product, "product_SlotBG_" .. idx)
@@ -402,7 +413,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.product_SlotBG)[idx]):SetPosY(21)
-    -- DECOMPILER ERROR at PC939: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC966: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.product_Slot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.product, "product_Slot_" .. idx)
@@ -417,7 +428,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.product_Slot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC990: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1017: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.product_MinusSlot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.product, "product_MinusSlot_" .. idx)
@@ -432,7 +443,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.product_MinusSlot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC1041: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1068: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.dropChance_SlotBG)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.dropChance, "dropChance_SlotBG_" .. idx)
@@ -447,7 +458,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.dropChance_SlotBG)[idx]):SetPosY(21)
-    -- DECOMPILER ERROR at PC1091: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1118: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.dropChance_Slot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.dropChance, "dropChance_Slot_" .. idx)
@@ -462,7 +473,7 @@ CharacterInfo.Init = function(self)
     end
     ;
     ((self.dropChance_Slot)[idx]):SetPosY(22)
-    -- DECOMPILER ERROR at PC1142: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1169: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self.dropChance_MinusSlot)[idx] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, self.dropChance, "dropChance_MinusSlot_" .. idx)
@@ -761,7 +772,7 @@ SelfCharacterInfo_UpdateFamilyPoints = function()
 end
 
 SelfCharacterInfo_UpdateMainStatus = function()
-  -- function num : 0_13 , upvalues : CharacterInfo
+  -- function num : 0_13 , upvalues : CharacterInfo, profileOpen
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -873,6 +884,15 @@ SelfCharacterInfo_UpdateMainStatus = function()
                     (CharacterInfo._PcRoomTimer):SetPosX((CharacterInfo._todayPlayTime):GetPosX() + (CharacterInfo._todayPlayTime):GetTextSizeX() + 20)
                     ;
                     (CharacterInfo._PcRoomTimer):SetPosY(60)
+                    if profileOpen then
+                      (CharacterInfo._selfTimer):SetShow(false)
+                      ;
+                      (CharacterInfo._selfTimerIcon):SetShow(false)
+                      ;
+                      (CharacterInfo._PcRoomTimer):SetShow(false)
+                      ;
+                      (CharacterInfo._todayPlayTime):SetShow(false)
+                    end
                   end
                 end
               end
@@ -1464,6 +1484,8 @@ HandleClicked_CharacterInfo_Tab = function(index)
   ;
   (self._frameDefaultBG_Challenge):SetShow(false)
   ;
+  (self._frameDefaultBG_Profile):SetShow(false)
+  ;
   (CharacterInfo.BTN_Tab_Basic):SetCheck(false)
   ;
   (CharacterInfo.BTN_Tab_Title):SetCheck(false)
@@ -1471,6 +1493,8 @@ HandleClicked_CharacterInfo_Tab = function(index)
   (CharacterInfo.BTN_Tab_History):SetCheck(false)
   ;
   (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
+  ;
+  (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
   if index == 0 then
     (self._frameDefaultBG_Basic):SetShow(true)
     ;
@@ -1481,6 +1505,8 @@ HandleClicked_CharacterInfo_Tab = function(index)
     (CharacterInfo.BTN_Tab_History):SetCheck(false)
     ;
     (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
+    ;
+    (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
     FromClientFitnessUp(0, 0, 0, 0)
   else
     if index == 1 then
@@ -1493,6 +1519,8 @@ HandleClicked_CharacterInfo_Tab = function(index)
       (CharacterInfo.BTN_Tab_History):SetCheck(false)
       ;
       (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
+      ;
+      (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
       TitleInfo_Open()
     else
       if index == 2 then
@@ -1505,6 +1533,8 @@ HandleClicked_CharacterInfo_Tab = function(index)
         (CharacterInfo.BTN_Tab_History):SetCheck(true)
         ;
         (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
+        ;
+        (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
         MyHistory_DataUpdate()
       else
         if index == 3 then
@@ -1517,7 +1547,24 @@ HandleClicked_CharacterInfo_Tab = function(index)
           (CharacterInfo.BTN_Tab_History):SetCheck(false)
           ;
           (CharacterInfo.BTN_Tab_Challenge):SetCheck(true)
+          ;
+          (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
           Fglobal_Challenge_UpdateData()
+        else
+          if index == 4 then
+            (self._frameDefaultBG_Profile):SetShow(true)
+            ;
+            (CharacterInfo.BTN_Tab_Basic):SetCheck(false)
+            ;
+            (CharacterInfo.BTN_Tab_Title):SetCheck(false)
+            ;
+            (CharacterInfo.BTN_Tab_History):SetCheck(false)
+            ;
+            (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
+            ;
+            (CharacterInfo.BTN_Tab_Profile):SetCheck(true)
+            FGlobal_Profile_Update()
+          end
         end
       end
     end
@@ -1895,6 +1942,8 @@ CharacterInfoWindow_Show = function()
   (CharacterInfo.BTN_Tab_History):SetCheck(false)
   ;
   (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
+  ;
+  (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
   FromClientFitnessUp(0, 0, 0, 0)
   local msg = ToClient_GetUserIntroduction()
   if msg == nil or msg == "" then
@@ -1916,6 +1965,8 @@ CharacterInfoWindow_Hide = function()
     (CharacterInfo.BTN_Tab_History):SetCheck(false)
     ;
     (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
+    ;
+    (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
     Panel_Window_CharInfo_Status:SetShow(false, false)
     initProgress()
     HelpMessageQuestion_Out()
@@ -1964,6 +2015,8 @@ FGlobal_Challenge_Show = function()
   (CharacterInfo.BTN_Tab_History):SetCheck(false)
   ;
   (CharacterInfo.BTN_Tab_Challenge):SetCheck(true)
+  ;
+  (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
 end
 
 FGlobal_Challenge_Hide = function()
@@ -1978,6 +2031,8 @@ FGlobal_Challenge_Hide = function()
     (CharacterInfo.BTN_Tab_History):SetCheck(false)
     ;
     (CharacterInfo.BTN_Tab_Challenge):SetCheck(true)
+    ;
+    (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
   else
     Panel_Window_CharInfo_Status:SetShow(false, false)
     Panel_Tooltip_Item_hideTooltip()
@@ -2292,6 +2347,8 @@ CharacterInfo.registEventHandler = function(self)
   (self.BTN_Tab_History):addInputEvent("Mouse_LUp", "HandleClicked_CharacterInfo_Tab(" .. 2 .. ")")
   ;
   (self.BTN_Tab_Challenge):addInputEvent("Mouse_LUp", "HandleClicked_CharacterInfo_Tab(" .. 3 .. ")")
+  ;
+  (self.BTN_Tab_Profile):addInputEvent("Mouse_LUp", "HandleClicked_CharacterInfo_Tab(" .. 4 .. ")")
   ;
   (self._btnIntroduce):addInputEvent("Mouse_LUp", "IntroduceMyself_ShowToggle()")
   ;

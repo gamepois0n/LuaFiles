@@ -465,6 +465,7 @@ FGlobal_SkillCommand_ResetPosition = function()
         Panel_SkillCommand:SetPosX(scrX / 2 * 1.2)
         Panel_SkillCommand:SetPosY(scrY / 2 * 0.85)
         changePositionBySever(Panel_SkillCommand, (CppEnums.PAGameUIType).PAGameUIPanel_SkillCommand, false, true, false)
+        FGlobal_PanelRepostionbyScreenOut(Panel_SkillCommand)
       end
     end
   end

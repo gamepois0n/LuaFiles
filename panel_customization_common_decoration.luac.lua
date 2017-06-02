@@ -305,11 +305,10 @@ UpdateDecorationContents = function(contentsIndex)
       (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
       ;
       (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
-      if CppDefineCustom.Flag == true then
-        (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-        ;
-        (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      end
+      ;
+      (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+      ;
+      (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
       local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       ;
       (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
@@ -399,11 +398,7 @@ UpdateDecorationListMessage = function(paramType, paramIndex, itemIndex)
   if isTattooMode then
     fp = UpdateTattooAtlasList
   else
-    if CppDefineCustom.Flag == true then
-      fp = UpdateDecorationPose
-    else
-      fp = UpdateDecorationList
-    end
+    fp = UpdateDecorationPose
   end
   if Panel_Win_System:GetShow() then
     MessageBox_Empty_function()
@@ -430,9 +425,7 @@ UpdateDecorationListMessage = function(paramType, paramIndex, itemIndex)
         EnableDecorationSlide(slideEnable)
       end
       UpdateDecorationList()
-      if CppDefineCustom.Flag == true then
-        add_CurrentHistory()
-      end
+      add_CurrentHistory()
     end
   end
 end
@@ -445,15 +438,13 @@ UpdateTattooAtlasList = function()
   UpdateMarkPosition(selectedItemIndex)
 end
 
-if CppDefineCustom.Flag == true then
-  UpdateDecorationPose = function()
+UpdateDecorationPose = function()
   -- function num : 0_9 , upvalues : selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex, UpdateMarkPosition
   setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
   UpdateMarkPosition(selectedItemIndex)
   add_CurrentHistory()
 end
 
-end
 UpdateDecorationList = function()
   -- function num : 0_10 , upvalues : selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex, UpdateMarkPosition
   setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
@@ -598,9 +589,8 @@ UpdateEyeDecorationContents = function(contentsIndex, addHistory)
       setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
       ;
       (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateEyeDecorationSlider(" .. sliderIndex .. ")")
-      if CppDefineCustom.Flag == true then
-        (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      end
+      ;
+      (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
       local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       ;
       (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
@@ -668,7 +658,7 @@ UpdateEyeDecorationContents = function(contentsIndex, addHistory)
           FrameTemplate:UpdateContentScroll()
           Frame_Scroll:SetControlTop()
           FrameTemplate:UpdateContentPos()
-          if CppDefineCustom.Flag == true and addHistory == 1 then
+          if addHistory == 1 then
             add_CurrentHistory()
           end
         end
@@ -685,9 +675,7 @@ UpdateEyeDecorationList = function(paramType, paramIndex, paramIndex2, itemIndex
   if (CheckControlArr[2]):IsCheck() == true then
     setParam(selectedClassType, paramType, paramIndex2, itemIndex)
   end
-  if CppDefineCustom.Flag == true then
-    add_CurrentHistory()
-  end
+  add_CurrentHistory()
   UpdateMarkPosition(itemIndex)
 end
 

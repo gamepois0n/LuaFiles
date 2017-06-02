@@ -72,6 +72,7 @@ CheckedQuestOptionPanel.Initialize = function(self)
   ((self._sortButton_TimeRecent)[(self._enableSortButton)[_sortType.TimeRecent]]):SetCheck(true)
   ;
   ((self._sortButton_Favor)[(self._enableSortButton)[_sortType.Favor]]):SetCheck(true)
+  ToClient_SetCheckedQuestSort((self._enableSortButton)[_sortType.Favor], (self._enableSortButton)[_sortType.Distance], (self._enableSortButton)[_sortType.TimeRecent])
   local QuestListInfo = ToClient_GetQuestList()
   for ii = 0, _favorType.Count - 1 do
     ((self._favorCheckBoxButton)[ii]):SetCheck(QuestListInfo:isQuestSelectType(ii))

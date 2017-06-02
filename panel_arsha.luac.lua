@@ -35,6 +35,7 @@ arshaPvP.chk_WatchMemberInvite = (UI.getChildControl)(arshaPvP.arshaManagementTi
 arshaPvP.chk_Assistant = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Checkbox_SubMasterInvite")
 arshaPvP.edit_InviteMemberEdit = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Edit_CharacterName")
 arshaPvP.btn_Invite = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Button_Invite")
+arshaPvP.btn_NameChange = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Button_ChangeTeamName")
 arshaPvP.roundMark = (UI.getChildControl)(arshaPvP.roundWing, "Static_RoundMark")
 arshaPvP.txt_RoundMarkCount = (UI.getChildControl)(arshaPvP.roundWing, "StaticText_RoundCount")
 arshaPvP.txt_RoundMarkText = (UI.getChildControl)(arshaPvP.roundWing, "StaticText_RoundText")
@@ -156,6 +157,8 @@ ArshaPvP_init = function()
   (self.rdo_SelectWait):addInputEvent("Mouse_LUp", "HandleClicked_ArshaPvP_WaitAndWatch( 0 )")
   ;
   (self.rdo_SelectWatch):addInputEvent("Mouse_LUp", "HandleClicked_ArshaPvP_WaitAndWatch( 1 )")
+  ;
+  (self.btn_NameChange):addInputEvent("Mouse_LUp", "Team_NameChangeOpen()")
   ;
   (self.edit_InviteMemberEdit):addInputEvent("Mouse_LUp", "HandleClicked_ArshaPvP_EditSetFocus()")
   ;
@@ -512,10 +515,22 @@ ArshaPvP_SelectedUpdate_Round = function()
           end
         end
         do
+          local teamA_Info = ToClient_GetTeamListAt(0)
+          local teamB_Info = ToClient_GetTeamListAt(1)
+          local teamA_Name = ""
+          local teamB_Name = ""
+          if teamA_Info ~= nil and teamB_Info ~= nil then
+            teamA_Name = teamA_Info:getTeamName()
+            teamB_Name = teamB_Info:getTeamName()
+          end
+          if teamA_Name == "" or teamB_Name == "" then
+            teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
+            teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+          end
           ;
-          (self.txt_RoundMarkTeamA):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A"))
+          (self.txt_RoundMarkTeamA):SetText(teamA_Name)
           ;
-          (self.txt_RoundMarkTeamB):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B"))
+          (self.txt_RoundMarkTeamB):SetText(teamB_Name)
         end
       end
     end
@@ -683,6 +698,8 @@ ArshaPvP_RefreshUpdate = function()
     (self.btn_AllResurrection):SetShow(true)
     ;
     (self.btn_InviteList):SetShow(true)
+    ;
+    (self.btn_NameChange):SetShow(true)
   else
     if isSubHost then
       (self.btn_GoA):SetShow(true)
@@ -700,6 +717,8 @@ ArshaPvP_RefreshUpdate = function()
       (self.btn_AllResurrection):SetShow(false)
       ;
       (self.btn_InviteList):SetShow(true)
+      ;
+      (self.btn_NameChange):SetShow(true)
     else
       local isHost = ToClient_IsCompetitionHost()
       local isSubHost = ToClient_IsCompetitionAssistant()
@@ -720,6 +739,8 @@ ArshaPvP_RefreshUpdate = function()
       (self.btn_AllResurrection):SetShow(false)
       ;
       (self.btn_InviteList):SetShow(false)
+      ;
+      (self.btn_NameChange):SetShow(false)
     end
   end
   self._targetScore = ToClient_GetTargetScore()
@@ -1609,6 +1630,7 @@ ArshaPvP_Team_Kick = function(teamNo, isMode)
   if teamNo == nil then
     return 
   end
+  _PA_LOG("추방", "추방 �\128번호 " .. tostring(teamNo))
   if teamNo == 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_ALLKICK_NOWAITMEMBERKICK"))
     return 
@@ -1631,8 +1653,13 @@ ArshaPvP_Team_Kick = function(teamNo, isMode)
   end
 end
 
+Team_NameChangeOpen = function()
+  -- function num : 0_47
+  FGlobal_TeamNameChangeControl_Open()
+end
+
 PaGlobal_Panel_Arsha_PopUp = function()
-  -- function num : 0_47 , upvalues : checkPopUp
+  -- function num : 0_48 , upvalues : checkPopUp
   if checkPopUp:IsCheck() then
     Panel_Window_Arsha:OpenUISubApp()
   else
@@ -1642,7 +1669,7 @@ PaGlobal_Panel_Arsha_PopUp = function()
 end
 
 PaGlobal_Panel_Arsha_ShowIconToolTip = function(isShow)
-  -- function num : 0_48 , upvalues : checkPopUp
+  -- function num : 0_49 , upvalues : checkPopUp
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""
@@ -1660,7 +1687,7 @@ PaGlobal_Panel_Arsha_ShowIconToolTip = function(isShow)
 end
 
 FromClient_UpdateTeamUserList = function()
-  -- function num : 0_49
+  -- function num : 0_50
   if (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Round == ToClient_CompetitionMatchType() then
     ArshaPvP_SelectedUpdate_Round()
   else
@@ -1671,7 +1698,7 @@ FromClient_UpdateTeamUserList = function()
 end
 
 FromClient_ChangeMatchType = function()
-  -- function num : 0_50 , upvalues : arshaPvP
+  -- function num : 0_51 , upvalues : arshaPvP
   local self = arshaPvP
   if not Panel_Window_Arsha:GetShow() then
     return 
@@ -1681,7 +1708,7 @@ FromClient_ChangeMatchType = function()
 end
 
 FromClient_UpdateTeamScore = function(teamNum, scoreValue, round, winTeamHP, loseTeamHP)
-  -- function num : 0_51
+  -- function num : 0_52
   if teamNum == 0 then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAMSCORE_DRAW", "currentRound", round))
   else
@@ -1711,11 +1738,12 @@ FromClient_UpdateTeamScore = function(teamNum, scoreValue, round, winTeamHP, los
 end
 
 FromClient_CompetitionMatchDone = function(teamNo, rank, teamHpPercent)
-  -- function num : 0_52
+  -- function num : 0_53
   if teamNo == 0 then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE_DRAW", "teamNo", teamNo))
     return 
   end
+  _PA_LOG("HP", tostring(teamHpPercent))
   local matchMode = ToClient_CompetitionMatchType()
   if matchMode == 0 then
     local teamAlphabet = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_B")
@@ -1728,7 +1756,7 @@ FromClient_CompetitionMatchDone = function(teamNo, rank, teamHpPercent)
       if matchMode == 1 then
         local leaderInfo = ToClient_GetTeamLeaderInfo(teamNo)
         if leaderInfo ~= nil then
-          Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE_FREEFORALL", "rank", rank, "leaderName", leaderInfo:getCharacterName(), "hpPercent", tostring(teamHpPercent)))
+          Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE_FREEFORALL", "rank", rank, "hpPercent", tostring(teamHpPercent), "leaderName", leaderInfo:getCharacterName()))
         end
       end
     end
@@ -1736,7 +1764,7 @@ FromClient_CompetitionMatchDone = function(teamNo, rank, teamHpPercent)
 end
 
 FromClient_JoinNewPlayer = function(characterName, isEntryUser)
-  -- function num : 0_53
+  -- function num : 0_54
   if isEntryUser then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_JOINNEWPLAYER_ENTRY", "characterName", characterName))
   else
@@ -1745,7 +1773,7 @@ FromClient_JoinNewPlayer = function(characterName, isEntryUser)
 end
 
 FromClient_KillHistory = function(deadUserInfo, attackerUserInfo)
-  -- function num : 0_54
+  -- function num : 0_55
   if attackerUserInfo == nil then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_USERDEAD_SELF", "characterName", deadUserInfo:getCharacterName()))
   else
@@ -1754,7 +1782,7 @@ FromClient_KillHistory = function(deadUserInfo, attackerUserInfo)
 end
 
 FromClient_EntryUserChangeTeam = function(userInfo)
-  -- function num : 0_55
+  -- function num : 0_56
   local matchMode = ToClient_CompetitionMatchType()
   if matchMode ~= 0 or userInfo == nil then
     return 
@@ -1772,7 +1800,7 @@ FromClient_EntryUserChangeTeam = function(userInfo)
 end
 
 FromClient_GetOutUserFromCompetition = function(outUserInfo)
-  -- function num : 0_56
+  -- function num : 0_57
   if outUserInfo == nil then
     return 
   end
@@ -1780,11 +1808,11 @@ FromClient_GetOutUserFromCompetition = function(outUserInfo)
 end
 
 FromClient_ChangeAssistant = function(userInfo)
-  -- function num : 0_57
+  -- function num : 0_58
 end
 
 FromClient_CompetitionOptionChanged = function(isOpen, matchTimeLimit, targetScore, levelLimit, maxPartyMemberCount, maxWaitTime)
-  -- function num : 0_58 , upvalues : arshaPvP
+  -- function num : 0_59 , upvalues : arshaPvP
   local self = arshaPvP
   ;
   (self.chk_ArshaOpen):SetCheck(isOpen)
@@ -1836,18 +1864,25 @@ FromClient_CompetitionOptionChanged = function(isOpen, matchTimeLimit, targetSco
 end
 
 FromClient_NotifyUseSkill = function(userName, skillName)
-  -- function num : 0_59
+  -- function num : 0_60
   local message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ARSHA_NOTIFYUSESKILL_MESSAGE", "userName", userName, "skillName", skillName)
   chatting_sendMessage("", message, (CppEnums.ChatType).System, (CppEnums.ChatSystemType).Undefine)
 end
 
 FromClient_CompetitionUseItemModeChanged = function(isCanUseItemMode)
-  -- function num : 0_60
+  -- function num : 0_61
   if isCanUseItemMode == true then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_CHANGED_CANUSEITEMMODE"))
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_CHANGED_CANNOTUSEITEMMODE"))
   end
+end
+
+FromClient_ChangeTeamName = function()
+  -- function num : 0_62
+  ArshaPvP_SelectedUpdate_Round()
+  ArshaPvP_Widget_Init()
+  ArshaPvP_Widget_Update()
 end
 
 ArshaPvP_init()
@@ -1865,5 +1900,6 @@ registerEvent("FromClient_GetOutUserFromCompetition", "FromClient_GetOutUserFrom
 registerEvent("FromClient_ChangeAssistant", "FromClient_ChangeAssistant")
 registerEvent("FromClient_NotifyUseSkill", "FromClient_NotifyUseSkill")
 registerEvent("FromClient_NotifyUseSkillCoolTime", "FromClient_NotifyUseSkillCoolTime")
+registerEvent("FromClient_ChangeTeamName", "FromClient_ChangeTeamName")
 Panel_Window_Arsha:RegisterUpdateFunc("SkillCooltime_UpdatePerFrame")
 

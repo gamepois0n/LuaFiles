@@ -1353,13 +1353,14 @@ UiSet_ConfrimSetting_Sub = function(isReset)
 end
 
 HandleClicked_UiSet_ConfirmSetting = function(isReset)
-  -- function num : 0_14 , upvalues : renderMode, UiSet
+  -- function num : 0_14 , upvalues : renderMode
   PaGlobal_UiSet_FreeSet_Close()
   SetUIMode((Defines.UIMode).eUIMode_Default)
   renderMode:reset()
   local scale = UiSet_ConfrimSetting_Sub(isReset)
+  Panel_NewEquip_EffectLastUpdate()
   FGlobal_PetListNew_NoPet()
-  FGlobal_saveUIScale(UiSet.currentScale)
+  scale = scale + 0.002
   setUIScale(scale)
   GameOption_SetUIMode(scale)
   saveGameOption(false)
@@ -1394,9 +1395,10 @@ end
 
 HandleClicked_UiSet_ChangeScale = function()
   -- function num : 0_17 , upvalues : UiSet, cachePosX, cachePosY, cacheSizeX, cacheSizeY, cachePreScale, panelID
+  _PA_LOG("광운", "11111111111111111111111111111")
   local nowPercent = (UiSet.slider_UI_Scale):GetControlPos()
   local realPercent = (math.ceil)(UiSet.replaceScale / 100 * (nowPercent * 100) + UiSet.minScale)
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC20: Confused about usage of register: R2 in 'UnsetPending'
 
   UiSet.currentScale = realPercent
   local scaleText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SCALETEXT", "currentScale", realPercent)
@@ -1634,7 +1636,8 @@ UiSet_OnScreenEvent = function()
   ;
   (UiSave.bg_Block):ComputePos()
   local scale = ToClient_GetUIScale()
-  scale = (math.floor)(scale * 100)
+  scale = scale + 0.002
+  scale = (math.floor)((scale) * 100)
   FGlobal_saveUIScale(scale)
 end
 
@@ -1663,7 +1666,7 @@ UiSet_registEventHandler = function()
   ;
   (UiSet.btn_Scale):addInputEvent("Mouse_LPress", "HandleClicked_UiSet_ChangeScale()")
   ;
-  (UiSet.slider_UI_Scale):addInputEvent("Mouse_LUp", "HandleClicked_UiSet_ChangeScale()")
+  (UiSet.slider_UI_Scale):addInputEvent("Mouse_LPress", "HandleClicked_UiSet_ChangeScale()")
   ;
   (UiSet.btn_FieldView):addInputEvent("Mouse_LUp", "HandleClicked_UiSet_FieldViewToggle()")
 end

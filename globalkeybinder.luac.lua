@@ -196,45 +196,59 @@ local _keyBinder_Chatting = function()
                     end
                     return true
                   else
-                    if FGlobal_CheckGuildIntroduceUiEdit(uiEdit) then
+                    if FGlobal_CheckArshaNameUiEdit_A(uiEdit) then
                       if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                        FGlobal_GuildIntroduceClearFocusEdit()
+                        FGlobal_ArshaNameClearFocusEdit_A()
                       end
                       return true
                     else
-                      if FGlobal_CheckMyIntroduceUiEdit(uiEdit) then
+                      if FGlobal_CheckArshaNameUiEdit_B(uiEdit) then
                         if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                          FGlobal_MyIntroduceClearFocusEdit()
+                          FGlobal_ArshaNameClearFocusEdit_B()
                         end
                         return true
                       else
-                        if FGlobal_ChattingFilter_UiEdit(uiEdit) then
+                        if FGlobal_CheckGuildIntroduceUiEdit(uiEdit) then
                           if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                            FGlobal_ChattingFilter_ClearFocusEdit()
+                            FGlobal_GuildIntroduceClearFocusEdit()
                           end
                           return true
                         else
-                          if FGlobal_CheckPartyListUiEdit(uiEdit) then
+                          if FGlobal_CheckMyIntroduceUiEdit(uiEdit) then
                             if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                              FGlobal_PartyListClearFocusEdit()
-                            end
-                            if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-                              FGlobal_PartyListClearFocusEdit()
-                              HandleClicked_PartyList_DoSearch()
+                              FGlobal_MyIntroduceClearFocusEdit()
                             end
                             return true
                           else
-                            if FGlobal_CheckPartyListRecruiteUiEdit(uiEdit) then
+                            if FGlobal_ChattingFilter_UiEdit(uiEdit) then
                               if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                FGlobal_PartyListClearFocusEdit()
+                                FGlobal_ChattingFilter_ClearFocusEdit()
                               end
                               return true
                             else
-                              if Panel_Knowledge_CheckCurrentUiEdit(uiEdit) then
+                              if FGlobal_CheckPartyListUiEdit(uiEdit) then
                                 if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                  Panel_Knowledge_OutInputMode(false)
+                                  FGlobal_PartyListClearFocusEdit()
+                                end
+                                if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
+                                  FGlobal_PartyListClearFocusEdit()
+                                  HandleClicked_PartyList_DoSearch()
                                 end
                                 return true
+                              else
+                                if FGlobal_CheckPartyListRecruiteUiEdit(uiEdit) then
+                                  if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                    FGlobal_PartyListClearFocusEdit()
+                                  end
+                                  return true
+                                else
+                                  if Panel_Knowledge_CheckCurrentUiEdit(uiEdit) then
+                                    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                      Panel_Knowledge_OutInputMode(false)
+                                    end
+                                    return true
+                                  end
+                                end
                               end
                             end
                           end
@@ -697,7 +711,11 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             audioPostEvent_SystemUi(1, 24)
             ;
             (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-            FGlobal_Panel_DyeNew_Show()
+            if ToClient_IsDevelopment() == true then
+              FGlobal_Panel_Dye_ReNew_Open()
+            else
+              FGlobal_Panel_DyeNew_Show()
+            end
           end
           return 
         end
@@ -780,7 +798,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
               return 
             end
-            -- DECOMPILER ERROR at PC1408: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1415: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -797,7 +815,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            -- DECOMPILER ERROR at PC1451: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1458: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -894,7 +912,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               Panel_NaviButton:SetShow(false)
               audioPostEvent_SystemUi(0, 15)
             end
-            -- DECOMPILER ERROR: 129 unprocessed JMP targets
+            -- DECOMPILER ERROR: 130 unprocessed JMP targets
           end
         end
       end
@@ -1269,7 +1287,11 @@ local _keyBinder_UIMode_Dye = function(delataTime)
   -- function num : 0_20 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
   if (not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE)) or GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Dyeing) then
     audioPostEvent_SystemUi(1, 23)
-    FGlobal_Panel_DyeNew_Hide()
+    if ToClient_IsDevelopment() == true then
+      FGlobal_Panel_DyeReNew_Hide()
+    else
+      FGlobal_Panel_DyeNew_Hide()
+    end
     if check_ShowWindow() == false then
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     end

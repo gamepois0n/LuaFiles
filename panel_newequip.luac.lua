@@ -58,6 +58,7 @@ Panel_NewEquip_ScreenResize = function()
     Panel_NewEquip:SetPosY(posY)
     changePositionBySever(Panel_NewEquip, (CppEnums.PAGameUIType).PAGameUIPanel_NewEquipment, false, true, false)
   end
+  FGlobal_PanelRepostionbyScreenOut(Panel_NewEquip)
 end
 
 local initialize = function()

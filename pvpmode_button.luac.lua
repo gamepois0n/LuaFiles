@@ -131,7 +131,7 @@ FromClient_PvpMode_changeMode = function(where, actorKeyRaw)
         end
       end
       FGlobal_MainStatus_FadeIn(5)
-      changePositionBySever(Panel_PvpMode, (CppEnums.PAGameUIType).PAGameUIPanel_PvpMode, false, true, false)
+      PvpMode_Resize()
     else
       PvpMode_ShowButton(false)
     end
@@ -194,6 +194,7 @@ PvpMode_Resize = function()
         Panel_PvpMode:SetPosX(Panel_MainStatus_User_Bar:GetPosX() - 20)
         Panel_PvpMode:SetPosY(Panel_MainStatus_User_Bar:GetPosY() + Panel_MainStatus_User_Bar:GetSizeY() - 47)
         changePositionBySever(Panel_PvpMode, (CppEnums.PAGameUIType).PAGameUIPanel_PvpMode, false, true, false)
+        FGlobal_PanelRepostionbyScreenOut(Panel_PvpMode)
       end
     end
   end

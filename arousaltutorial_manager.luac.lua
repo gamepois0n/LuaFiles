@@ -301,6 +301,22 @@ local SkillComboCheck = {
 [0] = {2269, 2270, 2271, 2272, 2273}
 }
 }
+, 
+[UI_classType.ClassType_Combattant] = {
+[0] = {
+{2558}
+; 
+[0] = {2486, 2487, 2488, 2489}
+}
+, 
+[1] = {
+{2558}
+, 
+{2562, 2563, 2564, 2565}
+; 
+[0] = {2486, 2487, 2488, 2489}
+}
+}
 }
 local questCheck = {
 [UI_classType.ClassType_Warrior] = {
@@ -482,6 +498,20 @@ comboKey = {PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_DarkElf_0_
 combo = {PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_DarkElf_1_Combo_1"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_DarkElf_1_Combo_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_DarkElf_1_Combo_3")}
 , 
 comboKey = {PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_DarkElf_1_ComboKey_1"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_DarkElf_1_ComboKey_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_DarkElf_1_ComboKey_3")}
+}
+}
+, 
+[UI_classType.ClassType_Combattant] = {
+[0] = {questGroup = 342, questId = 8, clearMinigameIndex = 100, purposeText = PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_0_PurposeText"), 
+combo = {PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_0_Combo_1"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_0_Combo_2")}
+, 
+comboKey = {PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_0_ComboKey_1"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_0_ComboKey_2")}
+}
+, 
+[1] = {questGroup = 342, questId = 9, clearMinigameIndex = 101, purposeText = PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_1_PurposeText"), 
+combo = {PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_1_Combo_1"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_1_Combo_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_1_Combo_3")}
+, 
+comboKey = {PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_1_ComboKey_1"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_1_ComboKey_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_COMBO_Combattant_1_ComboKey_3")}
 }
 }
 }
@@ -729,7 +759,7 @@ local updateDeltaTime_ComboTutorial = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC1783: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1921: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
   -- function num : 0_13 , upvalues : questCheck, classType, comboQuestClear, UI_TM, UI_color, baseComboCount, usedSkillKey, usedSkillMatch, _stepNo
@@ -932,7 +962,7 @@ PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
   _stepNo = 101
 end
 
--- DECOMPILER ERROR at PC1789: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1927: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_ArousalTutorial_Manager.updatePerFrame = function(self, deltaTime)
   -- function num : 0_14 , upvalues : _stepNo, updateDeltaTime_ComboTutorial

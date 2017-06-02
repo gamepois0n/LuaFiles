@@ -26,11 +26,17 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   if Competition_UpdatePerFrame ~= nil then
     Competition_UpdatePerFrame(deltaTime)
   end
+  if GameTips_MessageUpdate ~= nil then
+    GameTips_MessageUpdate(deltaTime)
+  end
   if OnlyPerFrame_ProgressBar_Collect_Update ~= nil then
     OnlyPerFrame_ProgressBar_Collect_Update(deltaTime)
   end
   if WorldMap_NaviButton_RePos ~= nil then
     WorldMap_NaviButton_RePos()
+  end
+  if ChattingViewManager_UpdatePerFrame ~= nil then
+    ChattingViewManager_UpdatePerFrame(deltaTime)
   end
   do
     if FGlobal_AlchemyStonCheck() ~= nil then
@@ -47,8 +53,8 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
         alchemyStoneTimeCheck = 0
       end
     end
-    if AutoQuestManager_UpdatePerFrame ~= nil then
-      AutoQuestManager_UpdatePerFrame(deltaTime)
+    if FGlobal_AutoQuestManager_UpdatePerFrame ~= nil then
+      FGlobal_AutoQuestManager_UpdatePerFrame(deltaTime)
     end
     if AutoFrameCheckManager_UpdatePerFrame ~= nil then
       AutoFrameCheckManager_UpdatePerFrame()

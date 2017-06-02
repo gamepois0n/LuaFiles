@@ -648,7 +648,7 @@ FromClient_MainQuestWidget_ResetPosition = function()
       Panel_MainQuest:SetPosX(getScreenSizeX() * Panel_MainQuest:GetRelativePosX() - Panel_MainQuest:GetSizeX() / 2)
       Panel_MainQuest:SetPosY(getScreenSizeY() * Panel_MainQuest:GetRelativePosY() - Panel_MainQuest:GetSizeY() / 2)
     end
-    changePositionBySever(Panel_MainQuest, (CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, true, false, true)
+    FGlobal_PanelRepostionbyScreenOut(Panel_MainQuest)
   else
     local haveServerPosition = ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0
     if not haveServerPosition then

@@ -164,6 +164,7 @@ Panel_Adrenallin_OnSreenResize = function()
         changePositionBySever(Panel_Adrenallin, (CppEnums.PAGameUIType).PAGameUIPanel_Adrenallin, false, true, false)
         if (getSelfPlayer()):isEnableAdrenalin() then
           Panel_Adrenallin:SetShow(not isRecordMode)
+          FGlobal_PanelRepostionbyScreenOut(Panel_Adrenallin)
         end
       end
     end

@@ -84,42 +84,53 @@ end
     else
       if isGameTypeEnglish() then
         if isSteamClient() then
-          url = "https://www.blackdesertonline.com/steam/DaumCash.html?appId=582660&steamTicket=" .. getSteamAuthSessionTicket() .. "&lang=" .. langType
-          steamOverlayToWebPage(url)
-          return 
-        else
-          if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == getGameServiceType() then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_TEST", "langType", langType)
-          else
-            if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == getGameServiceType() then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_REAL", "langType", langType)
-            end
+          if not isSteamInGameOverlayEnabled() then
+            local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STEAM_ALERT")
+            local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+            ;
+            (MessageBox.showMessageBox)(messageBoxData)
+            return 
           end
-        end
-      else
-        if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-          url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TW_TEST")
-        else
-          if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TW_REAL")
-          else
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+          do
+            ToClient_requestCashChargeAuthSessionTicket()
+            do
+              local ticket = getSteamAuthSessionTicket()
+              url = "https://www.blackdesertonline.com/steam/DaumCash.html?appId=582660&steamTicket=" .. ticket .. "&lang=" .. langType
+              steamOverlayToWebPage(url)
+              do return  end
+              if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == getGameServiceType() then
+                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_TEST", "langType", langType)
+              else
+                if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == getGameServiceType() then
+                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_NA_REAL", "langType", langType)
+                end
+              end
+              if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
+                url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TW_TEST")
+              else
+                if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
+                  url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TW_REAL")
+                else
+                  url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+                end
+              end
+              local exeIE = true
+              if isGameTypeKorea() then
+                exeIE = true
+              else
+                exeIE = false
+              end
+              ToClient_OpenChargeWebPage(url, exeIE)
+              local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH")
+              local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = IngameCashShop_ChargeComplete, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              ;
+              (MessageBox.showMessageBox)(messageBoxData)
+            end
           end
         end
       end
     end
   end
-  local exeIE = true
-  if isGameTypeKorea() then
-    exeIE = true
-  else
-    exeIE = false
-  end
-  ToClient_OpenChargeWebPage(url, exeIE)
-  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH")
-  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = IngameCashShop_ChargeComplete, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-  ;
-  (MessageBox.showMessageBox)(messageBoxData)
 end
 
   IngameCashShop_ChargeComplete = function()
@@ -155,8 +166,29 @@ end
   (MessageBox.showMessageBox)(messageboxData)
 end
 
+  FromClient_SteamCashChargeAuthTicketReady = function()
+  -- function num : 0_9 , upvalues : UI_SERVICE_RESOURCE
+  local url = nil
+  local langType = "EN"
+  if UI_SERVICE_RESOURCE.eServiceResourceType_EN == getGameServiceResType() then
+    langType = "EN"
+  else
+    if UI_SERVICE_RESOURCE.eServiceResourceType_FR == getGameServiceResType() then
+      langType = "FR"
+    else
+      if UI_SERVICE_RESOURCE.eServiceResourceType_DE == getGameServiceResType() then
+        langType = "DE"
+      end
+    end
+  end
+  local ticket = getSteamAuthSessionTicket()
+  url = "https://www.blackdesertonline.com/steam/DaumCash.html?appId=582660&steamTicket=" .. ticket .. "&lang=" .. langType
+  steamOverlayToWebPage(url)
+end
+
   _btn_Close:addInputEvent("Mouse_LUp", "HandleClicked_ChargeDaumCash_Close()")
   registerEvent("FromClient_NeedPublishCash", "FromClient_NeedPublishCash")
+  registerEvent("FromClient_SteamCashChargeAuthTicketReady", "FromClient_SteamCashChargeAuthTicketReady")
   -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 

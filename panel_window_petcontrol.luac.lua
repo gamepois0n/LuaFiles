@@ -883,11 +883,6 @@ petControl_Button_Tooltip = function(isShow, buttonType, index)
         end
         if PetHungryConditionCheck() then
           desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETCONTROL_BUTTONTOOLTIP_PETHUNGRY_DESC", "desc", desc)
-          ;
-          (PetControl.Txt_HungryAlert):SetShow(true)
-        else
-          ;
-          (PetControl.Txt_HungryAlert):SetShow(false)
         end
       end
     else

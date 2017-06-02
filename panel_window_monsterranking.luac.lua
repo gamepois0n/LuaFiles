@@ -11,6 +11,11 @@ _ui = {_btn_ListBtn = (UI.getChildControl)(Panel_Window_MonsterRanking, "RadioBu
 
 PaGlobal_MonsterRanking.MonsterRanking_Initialize = function(self)
   -- function num : 0_0
+  local minSize = float2()
+  minSize.x = 100
+  minSize.y = 50
+  ;
+  ((self._ui)._list2):setMinScrollBtnSize(minSize)
 end
 
 FGlobal_MonsterRanking_Open = function()
@@ -19,23 +24,11 @@ FGlobal_MonsterRanking_Open = function()
   Panel_Window_MonsterRanking:SetShow(true)
   PaGlobal_MonsterRanking:MonsterRanking_SetPos()
   self._listIndex = 0
-  local titleInfo = ToClient_GetTimeAttackGroupInfo(self._listIndex)
-  do
-    if titleInfo ~= nil then
-      local isGuild = titleInfo:isGuild()
-      if isGuild then
-        ((self._ui)._nameTitle):SetText("길드�\133")
-      else
-        ;
-        ((self._ui)._nameTitle):SetText("�\128문명")
-      end
-    end
-    local listMaxCount = ToClient_GetTimeAttackListCount()
-    for listCount = 0, listMaxCount - 1 do
-      (((self._ui)._titleList2):getElementManager()):pushKey(toInt64(0, listCount))
-    end
-    PaGlobal_MonsterRanking:MonsterRankingList_Update(self._listIndex)
+  local listMaxCount = ToClient_GetTimeAttackListCount()
+  for listCount = 0, listMaxCount - 1 do
+    (((self._ui)._titleList2):getElementManager()):pushKey(toInt64(0, listCount))
   end
+  PaGlobal_MonsterRanking:MonsterRankingList_Update(self._listIndex)
 end
 
 FGlobal_MonsterRanking_Close = function()
@@ -62,18 +55,17 @@ PaGlobal_MonsterRanking.MonsterRankingList_Update = function(self, listIndex)
   -- function num : 0_4
   self._listIndex = listIndex
   local titleInfo = ToClient_GetTimeAttackGroupInfo(self._listIndex)
-  do
-    if titleInfo ~= nil then
-      local isGuild = titleInfo:isGuild()
-      if isGuild then
-        ((self._ui)._nameTitle):SetText("길드�\133")
-      else
-        ;
-        ((self._ui)._nameTitle):SetText("�\128문명")
-      end
-    end
-    ToClient_RequestTimeAttackRank(self._listIndex)
+  if titleInfo == nil then
+    return 
   end
+  local isGuild = titleInfo:isGuild()
+  if isGuild then
+    ((self._ui)._nameTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BOSSRANKING_GUILDNAME"))
+  else
+    ;
+    ((self._ui)._nameTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_BOSSRANKING_FAMILYNAME"))
+  end
+  ToClient_RequestTimeAttackRank(self._listIndex)
 end
 
 FromClient_updateTimeAttackRank = function()
@@ -167,7 +159,6 @@ PaGlobal_MonsterRanking.MonsterRanking_Rank_ListControlCreate = function(self, c
                 (rank:getBaseTexture()):setUV(x1, y1, x2, y2)
                 rank:setRenderTexture(rank:getBaseTexture())
                 rank:SetText("")
-                rank:SetFontColor((Defines.Color).C_FFA3EF00)
                 name:SetFontColor((Defines.Color).C_FFA3EF00)
                 time:SetFontColor((Defines.Color).C_FFA3EF00)
               else
@@ -179,11 +170,13 @@ PaGlobal_MonsterRanking.MonsterRanking_Rank_ListControlCreate = function(self, c
                     (rank:getBaseTexture()):setUV(x1, y1, x2, y2)
                     rank:setRenderTexture(rank:getBaseTexture())
                     rank:SetText("")
-                    rank:SetFontColor((Defines.Color).C_FF00C0D7)
                     name:SetFontColor((Defines.Color).C_FF00C0D7)
                     time:SetFontColor((Defines.Color).C_FF00C0D7)
                   else
                     do
+                      rank:ChangeTextureInfoName("")
+                      name:SetFontColor((Defines.Color).C_FFFFFFFF)
+                      time:SetFontColor((Defines.Color).C_FFFFFFFF)
                       local highRankInfo = titleInfo:getAt(index - 1)
                       do
                         local highRankTime = highRankInfo:getCompleteTime()

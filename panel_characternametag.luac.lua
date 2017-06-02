@@ -211,7 +211,7 @@ end
     return -1
   end
   local selfProxy = selfPlayer:get()
-  local myTeamNo = selfProxy:getLiberationTeamNoForLua()
+  local myTeamNo = selfProxy:getValunteerTeamNoForLua()
   if myTeamNo >= 1000 then
     return 1
   else
@@ -255,161 +255,151 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
-    -- DECOMPILER ERROR at PC105: Unhandled construct in 'MakeBoolean' P1
+    local militiaIcon = (UI.getChildControl)(targetPanel, "Static_MilitiaIcon")
+    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
+    -- DECOMPILER ERROR at PC110: Unhandled construct in 'MakeBoolean' P1
 
     if militiaTeamNo >= 1000 and playerActorProxyWrapper ~= nil then
       local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
       if isMilitia then
-        local militiaIcon = (UI.getChildControl)(targetPanel, "Static_MilitiaIcon")
         militiaIcon:SetShow(true)
         militiaIcon:ChangeTextureInfoName("New_UI_Common_forLua/Window/PvP/Militia_01.dds")
-        if deadMessage_isInSiegeBattle() then
-          if myMilitiaTeamNo() == 0 then
-            local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 160, 193, 195, 235)
-            ;
-            (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-          else
+        if myMilitiaTeamNo() == 0 then
+          local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 160, 193, 195, 235)
+          ;
+          (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+        else
+          do
             do
               do
                 local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 88, 193, 123, 235)
                 ;
                 (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                do
-                  do
-                    local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 88, 193, 123, 235)
-                    ;
-                    (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                    militiaIcon:setRenderTexture(militiaIcon:getBaseTexture())
-                    nameTag:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_MILITIADEFFENCE"))
-                    nameTag:SetShow(true)
-                    do return  end
-                    if militiaTeamNo >= 100 and playerActorProxyWrapper ~= nil then
-                      local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
-                      if isMilitia then
-                        local militiaIcon = (UI.getChildControl)(targetPanel, "Static_MilitiaIcon")
-                        militiaIcon:SetShow(true)
-                        militiaIcon:ChangeTextureInfoName("New_UI_Common_forLua/Window/PvP/Militia_01.dds")
-                        if deadMessage_isInSiegeBattle() then
-                          if myMilitiaTeamNo() == 0 then
-                            local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 196, 193, 231, 235)
-                            ;
-                            (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                          else
+                militiaIcon:setRenderTexture(militiaIcon:getBaseTexture())
+                nameTag:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_MILITIADEFFENCE"))
+                nameTag:SetShow(true)
+                do return  end
+                -- DECOMPILER ERROR at PC177: Unhandled construct in 'MakeBoolean' P1
+
+                if militiaTeamNo >= 100 and playerActorProxyWrapper ~= nil then
+                  local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+                  if isMilitia then
+                    militiaIcon:SetShow(true)
+                    militiaIcon:ChangeTextureInfoName("New_UI_Common_forLua/Window/PvP/Militia_01.dds")
+                    if myMilitiaTeamNo() == 0 then
+                      local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 196, 193, 231, 235)
+                      ;
+                      (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                    else
+                      do
+                        do
+                          do
                             do
-                              do
-                                local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 124, 193, 159, 235)
-                                ;
-                                (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                do
+                              local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 124, 193, 159, 235)
+                              ;
+                              (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                              militiaIcon:setRenderTexture(militiaIcon:getBaseTexture())
+                              nameTag:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_MILITIAATTACK"))
+                              nameTag:SetShow(true)
+                              do return  end
+                              militiaIcon:SetShow(false)
+                              if actorProxy:isHouseHold() then
+                                local houseActorWarpper = getHouseHoldActor(actorKeyRaw)
+                                local isMine = (houseActorWarpper:get()):isOwnedBySelfPlayer()
+                                local isMyGuild = (houseActorWarpper:get()):isOwnedBySelfPlayerGuild()
+                                local isPersonalTent = (houseActorWarpper:get()):isPersonalTent()
+                                local isSiegeTent = (houseActorWarpper:get()):isKingOrLordTent()
+                                if isMine and isPersonalTent then
+                                  local tentWrapper = (getTemporaryInformationWrapper()):getSelfTentWrapperByActorKeyRaw(actorKeyRaw)
+                                  if tentWrapper ~= nil then
+                                    local expireTime = tentWrapper:getSelfTentExpiredTime_s64()
+                                    local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
+                                    textName = getHouseHoldName(actorProxy)
+                                    targetPanel:Set3DRotationY(actorProxy:getRotation())
+                                  end
+                                else
                                   do
-                                    local x1, y1, x2, y2 = setTextureUV_Func(militiaIcon, 124, 193, 159, 235)
-                                    ;
-                                    (militiaIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                    militiaIcon:setRenderTexture(militiaIcon:getBaseTexture())
-                                    nameTag:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_MILITIAATTACK"))
-                                    nameTag:SetShow(true)
-                                    do return  end
-                                    if actorProxy:isHouseHold() then
-                                      local houseActorWarpper = getHouseHoldActor(actorKeyRaw)
-                                      local isMine = (houseActorWarpper:get()):isOwnedBySelfPlayer()
-                                      local isMyGuild = (houseActorWarpper:get()):isOwnedBySelfPlayerGuild()
-                                      local isPersonalTent = (houseActorWarpper:get()):isPersonalTent()
-                                      local isSiegeTent = (houseActorWarpper:get()):isKingOrLordTent()
-                                      if isMine and isPersonalTent then
-                                        local tentWrapper = (getTemporaryInformationWrapper()):getSelfTentWrapperByActorKeyRaw(actorKeyRaw)
-                                        if tentWrapper ~= nil then
-                                          local expireTime = tentWrapper:getSelfTentExpiredTime_s64()
-                                          local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
+                                    if isMyGuild and isSiegeTent then
+                                      local expireTime = (houseActorWarpper:get()):getExpiredTime()
+                                      local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
+                                      local builddingInfo = ToClient_getBuildingInfo(actorKeyRaw)
+                                      local buildProgress = builddingInfo:getBuildingProgress()
+                                      textName = getHouseHoldName(actorProxy)
+                                      targetPanel:Set3DRotationY(actorProxy:getRotation())
+                                    else
+                                      do
+                                        do
                                           textName = getHouseHoldName(actorProxy)
                                           targetPanel:Set3DRotationY(actorProxy:getRotation())
-                                        end
-                                      else
-                                        do
-                                          if isMyGuild and isSiegeTent then
-                                            local expireTime = (houseActorWarpper:get()):getExpiredTime()
-                                            local lefttimeText = convertStringFromDatetime(getLeftSecond_TTime64(expireTime))
-                                            local builddingInfo = ToClient_getBuildingInfo(actorKeyRaw)
-                                            local buildProgress = builddingInfo:getBuildingProgress()
-                                            textName = getHouseHoldName(actorProxy)
-                                            targetPanel:Set3DRotationY(actorProxy:getRotation())
+                                          if actorProxy:isInstallationActor() then
+                                            textName = actorProxy:getStaticStatusName()
+                                            local installationActorWrapper = getInstallationActor(actorKeyRaw)
+                                            if toInt64(0, 0) ~= installationActorWrapper:getOwnerHouseholdNo_s64() and installationActorWrapper:isHavestInstallation() then
+                                              local rate = installationActorWrapper:getHarvestTotalGrowRate() * 100
+                                              if rate < 0 then
+                                                rate = 0
+                                              end
+                                              textName = (installationActorWrapper:get()):getStaticStatusName() .. " - (<PAColor0xFFffd429>" .. tostring((math.floor)(rate)) .. "%<PAOldColor>)"
+                                            end
                                           else
                                             do
-                                              do
-                                                textName = getHouseHoldName(actorProxy)
-                                                targetPanel:Set3DRotationY(actorProxy:getRotation())
-                                                if actorProxy:isInstallationActor() then
-                                                  textName = actorProxy:getStaticStatusName()
-                                                  local installationActorWrapper = getInstallationActor(actorKeyRaw)
-                                                  if toInt64(0, 0) ~= installationActorWrapper:getOwnerHouseholdNo_s64() and installationActorWrapper:isHavestInstallation() then
-                                                    local rate = installationActorWrapper:getHarvestTotalGrowRate() * 100
-                                                    if rate < 0 then
-                                                      rate = 0
+                                              if isNpcWorker(actorProxy) then
+                                                textName = getNpcWorkerOwnerName(actorProxy)
+                                              else
+                                                if actorProxy:isSelfPlayer() then
+                                                  local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
+                                                  if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+                                                    nameTag:SetMonoTone(true)
+                                                  else
+                                                    if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
+                                                      nameTag:SetMonoTone(true)
+                                                    else
+                                                      nameTag:SetMonoTone(false)
                                                     end
-                                                    textName = (installationActorWrapper:get()):getStaticStatusName() .. " - (<PAColor0xFFffd429>" .. tostring((math.floor)(rate)) .. "%<PAOldColor>)"
                                                   end
+                                                  local level = (playerActorProxyWrapper:get()):getLevel()
+                                                  textName = playerActorProxyWrapper:getName()
                                                 else
                                                   do
-                                                    if isNpcWorker(actorProxy) then
-                                                      textName = getNpcWorkerOwnerName(actorProxy)
-                                                    else
-                                                      if actorProxy:isSelfPlayer() then
-                                                        local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                                                        if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+                                                    if actorProxy:isPlayer() then
+                                                      local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
+                                                      if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
+                                                        nameTag:SetMonoTone(true)
+                                                      else
+                                                        if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
                                                           nameTag:SetMonoTone(true)
                                                         else
-                                                          if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
-                                                            nameTag:SetMonoTone(true)
-                                                          else
-                                                            nameTag:SetMonoTone(false)
-                                                          end
+                                                          nameTag:SetMonoTone(false)
                                                         end
-                                                        local level = (playerActorProxyWrapper:get()):getLevel()
-                                                        textName = playerActorProxyWrapper:getName()
-                                                      else
-                                                        do
-                                                          if actorProxy:isPlayer() then
-                                                            local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
-                                                            if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isHideCharacterName() == false and (playerActorProxyWrapper:get()):isEquipCamouflage() == true and playerActorProxyWrapper:getGuildNo_s64() == (getSelfPlayer()):getGuildNo_s64() then
-                                                              nameTag:SetMonoTone(true)
-                                                            else
-                                                              if (playerActorProxyWrapper:get()):isFlashBanged() == false and (playerActorProxyWrapper:get()):isConcealCharacter() == true then
-                                                                nameTag:SetMonoTone(true)
+                                                      end
+                                                      local level = (playerActorProxyWrapper:get()):getLevel()
+                                                      local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
+                                                      textName = actorProxyWrapper:getName()
+                                                    else
+                                                      do
+                                                        if actorProxy:isInstanceObject() then
+                                                          if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTrap() then
+                                                            nameTag:SetShow(false)
+                                                            return 
+                                                          end
+                                                          textName = actorProxyWrapper:getName()
+                                                        else
+                                                          if actorProxy:isNpc() then
+                                                            textName = actorProxyWrapper:getName()
+                                                            local isFusionCore = (actorProxy:getCharacterStaticStatus()):isFusionCore()
+                                                            if isFusionCore == true then
+                                                              local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
+                                                              if npcActorProxyWrapper:getTeamNo_s64() == (getSelfPlayer()):getTeamNo_s64() then
+                                                                textName = textName
                                                               else
-                                                                nameTag:SetMonoTone(false)
+                                                                textName = ""
                                                               end
                                                             end
-                                                            local level = (playerActorProxyWrapper:get()):getLevel()
-                                                            local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
-                                                            textName = actorProxyWrapper:getName()
                                                           else
                                                             do
-                                                              if actorProxy:isInstanceObject() then
-                                                                if ((actorProxyWrapper:getCharacterStaticStatusWrapper()):getObjectStaticStatus()):isTrap() then
-                                                                  nameTag:SetShow(false)
-                                                                  return 
-                                                                end
-                                                                textName = actorProxyWrapper:getName()
-                                                              else
-                                                                if actorProxy:isNpc() then
-                                                                  textName = actorProxyWrapper:getName()
-                                                                  local isFusionCore = (actorProxy:getCharacterStaticStatus()):isFusionCore()
-                                                                  if isFusionCore == true then
-                                                                    local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
-                                                                    if npcActorProxyWrapper:getTeamNo_s64() == (getSelfPlayer()):getTeamNo_s64() then
-                                                                      textName = textName
-                                                                    else
-                                                                      textName = ""
-                                                                    end
-                                                                  end
-                                                                else
-                                                                  do
-                                                                    textName = actorProxyWrapper:getName()
-                                                                    nameTag:SetText(textName)
-                                                                    nameTag:SetShow(true)
-                                                                  end
-                                                                end
-                                                              end
+                                                              textName = actorProxyWrapper:getName()
+                                                              nameTag:SetText(textName)
+                                                              nameTag:SetShow(true)
                                                             end
                                                           end
                                                         end
@@ -457,7 +447,7 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
     local isMilitia = actorProxy:isValunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       aliasInfo:SetShow(false)
@@ -518,7 +508,7 @@ end
     if playerActorProxyWrapper == nil then
       return 
     end
-    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
     local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       nickName:SetShow(false)
@@ -702,7 +692,7 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
     local isMilitia = playerActorProxy:isValunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       guildName:SetShow(false)
@@ -859,7 +849,7 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    local militiaTeamNo = actorProxy:getLiberationTeamNoForLua()
+    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
     local isMilitia = playerActorProxy:isValunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       return 
@@ -2008,7 +1998,21 @@ end
     txt_WarPoint:ComputePos()
     txt_WarPoint:SetText("")
     if ToClient_CompetitionMatchType() == 0 and competitionTeamNo ~= 0 then
-      if competitionTeamNo == 1 then
+      local teamA_Info = ToClient_GetTeamListAt(0)
+      local teamB_Info = ToClient_GetTeamListAt(1)
+      local teamA_Name = ""
+      local teamB_Name = ""
+      if teamA_Info ~= nil and teamB_Info ~= nil then
+        teamA_Name = teamA_Info:getTeamName()
+        teamB_Name = teamB_Info:getTeamName()
+      end
+      if teamA_Name ~= "" and teamB_Name ~= "" then
+        if competitionTeamNo == 1 then
+          txt_WarPoint:SetText("[ " .. teamA_Name .. " ]")
+        elseif competitionTeamNo == 2 then
+          txt_WarPoint:SetText("[ " .. teamB_Name .. " ]")
+        end
+      elseif competitionTeamNo == 1 then
         txt_WarPoint:SetText("[ " .. PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM") .. " ]")
       elseif competitionTeamNo == 2 then
         txt_WarPoint:SetText("[ " .. PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM") .. " ]")
@@ -2028,7 +2032,7 @@ end
     local insertedArray = (Array.new)()
     settingLifeRankIcon(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
   end
-  -- DECOMPILER ERROR: 27 unprocessed JMP targets
+  -- DECOMPILER ERROR: 30 unprocessed JMP targets
 end
 
   FGlobal_SettingMpBarTemp = function()
@@ -2249,10 +2253,13 @@ end
   local guildName = (UI.getChildControl)(targetPanel, "CharacterGuild")
   local alias = (UI.getChildControl)(targetPanel, "CharacterAlias")
   local lifeRankIcon = {}
-  for i = 0, lifeContentCount - 1 do
-    lifeRankIcon[i] = (UI.getChildControl)(targetPanel, "Static_LifeRankIcon_" .. i)
-    if lifeRankIcon[i] == nil then
-      return 
+  local actorProxy = actorProxyWrapper:get()
+  if actorProxy:isPlayer() then
+    for i = 0, lifeContentCount - 1 do
+      lifeRankIcon[i] = (UI.getChildControl)(targetPanel, "Static_LifeRankIcon_" .. i)
+      if lifeRankIcon[i] == nil then
+        return 
+      end
     end
   end
   do

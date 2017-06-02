@@ -1430,6 +1430,7 @@ partWidget_OnscreenEvent = function()
         end
         changePositionBySever(Panel_Party, (CppEnums.PAGameUIType).PAGameUIPanel_Party, false, true, false)
         _uiComboLootingOption:ComputePos()
+        FGlobal_PanelRepostionbyScreenOut(Panel_Party)
       end
     end
   end

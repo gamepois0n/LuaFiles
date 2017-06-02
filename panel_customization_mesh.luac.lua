@@ -193,9 +193,7 @@ UpdateMeshIndexMessage = function(listParamType, listParamIndex, itemIndex)
   else
     do
       UpdateMeshIndex()
-      if CppDefineCustom.Flag == true then
-        add_CurrentHistory()
-      end
+      add_CurrentHistory()
     end
   end
 end

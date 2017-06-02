@@ -226,7 +226,7 @@ servantInventory.updateByIndex = function(self, index)
   local str_AllWeight = (string.format)("%.1f", Int64toInt32(s64_weightAll_div) / 100)
   local str_MaxWeight = (string.format)("%.0f", Int64toInt32(s64_weightMax_div) / 100)
   ;
-  (data._staticWeight):SetText(str_AllWeight .. " /" .. str_MaxWeight .. " LT")
+  (data._staticWeight):SetText(str_AllWeight .. " /" .. str_MaxWeight .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
   ;
   (data._weightInventory):SetProgressRate(Int64toInt32(s64_weightAll / s64_weightMax_div))
   ;

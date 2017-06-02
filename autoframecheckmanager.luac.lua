@@ -13,6 +13,9 @@ setStandingTime = function(value)
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   enTimeValue.StandingTime = value
+  -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
+
+  enTimeValue.StandingTime_Half = value / 2
 end
 
 setRunningTime = function(value)
@@ -95,53 +98,59 @@ AutoFrameCheckManager.AutoFrameCheck = function(self)
   local Z = ((self._PositionList)[self._index])._goalZ
   local selfPlayer = getSelfPlayer()
   if self:isArriveGoalbyPosition(X, Y, Z) == true then
-    self:RunningStop()
+    ToClient_StopNavi()
     self._index = self._index + 1
     if self._maxIndex <= self._index then
       if self._isRpeat == true then
         self._index = 0
-        _PA_LOG("�\128민혁", "무한반복합니�\164.")
-        return 
       end
       self._isOn = false
-      _PA_LOG("�\128민혁", "자동 프레임체�\172 매니�\128 종료!!!")
       return 
     end
+    local X1 = ((self._PositionList)[self._index])._goalX
+    local Y1 = ((self._PositionList)[self._index])._goalY
+    local Z1 = ((self._PositionList)[self._index])._goalZ
+    local Position = float3(X1, Y1, Z1)
+    ToClient_WorldMapNaviStart(Position, NavigationGuideParam(), false, true)
     self._isStop = true
-    self._prevTick = (os.time)()
-    _PA_LOG("�\128민혁", "다음 좌표�\156 이동합니�\164.")
-    return 
-  end
-  if self._isStop == true and enTimeValue.StandingTime < deltaTick then
-    self._isStop = false
-    local position = float3(X, Y, Z)
-    ToClient_WorldMapNaviStart(position, NavigationGuideParam(), true, true)
     self._prevTick = (os.time)()
     return 
   end
   do
-    if self._isStop == true and deltaTick < enTimeValue.StandingTime then
-      self:FrameCheck()
-      self._cameraYaw = self._cameraYaw + enCameraValue.UpdateCameraYaw
-      _PA_LOG("�\128민혁", "CameraYaw : " .. tostring(self._cameraYaw))
-      selfPlayerSetCameraYaw(self._cameraYaw)
-      if deltaTick < enTimeValue.StandingTime_Half then
-        self._cameraPitch = enCameraValue.SetCameraPich_High
-      else
-        self._cameraPitch = enCameraValue.SetCameraPich_Low
-      end
-      selfPlayerSetCameraPich(self._cameraPitch)
-      self:RunningStop()
+    if self._isStop == true and enTimeValue.StandingTime < deltaTick then
+      self._isStop = false
+      local position = float3(X, Y, Z)
+      ToClient_NaviReStart()
+      selfPlayerSetCameraPich(-0.4)
+      self._prevTick = (os.time)()
       return 
     end
-    if self._isStop == false and enTimeValue.RunningTime < deltaTick then
-      self._isStop = true
-      self._cameraYaw = 0
-      self._cameraPitch = 0
-      self._cameraRoll = 0
-      self._prevTick = (os.time)()
-      self:RunningStop()
-      return 
+    do
+      if self._isStop == true and deltaTick < enTimeValue.StandingTime then
+        if not IsSelfPlayerWaitAction() then
+          ToClient_StopNavi()
+          return 
+        end
+        self:FrameCheck()
+        self._cameraYaw = self._cameraYaw + enCameraValue.UpdateCameraYaw
+        selfPlayerSetCameraYaw(self._cameraYaw)
+        if deltaTick < enTimeValue.StandingTime_Half then
+          self._cameraPitch = enCameraValue.SetCameraPich_High
+        else
+          self._cameraPitch = enCameraValue.SetCameraPich_Low
+        end
+        selfPlayerSetCameraPich(self._cameraPitch)
+        return 
+      end
+      if self._isStop == false and enTimeValue.RunningTime < deltaTick then
+        self._isStop = true
+        self._cameraYaw = 0
+        self._cameraPitch = 0
+        self._cameraRoll = 0
+        self._prevTick = (os.time)()
+        ToClient_StopNavi()
+        return 
+      end
     end
   end
 end
@@ -192,7 +201,12 @@ end
 
 FGlobal_AutoFrameCheck_Start = function()
   -- function num : 0_11 , upvalues : AutoFrameCheckManager
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+  local X = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalX
+  local Y = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalY
+  local Z = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalZ
+  local Position = float3(X, Y, Z)
+  ToClient_WorldMapNaviStart(Position, NavigationGuideParam(), false, true)
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R4 in 'UnsetPending'
 
   AutoFrameCheckManager._isOn = true
 end
@@ -229,30 +243,42 @@ end
 
 testAutoQuestStart = function()
   -- function num : 0_16
-  setRunningTime(10)
-  setStandingTime(5)
-  FGlobal_AutoFrameCheck_setMinFrame(45)
-  FGlobal_AutoFrameCheck_addPositionList(16462, -6425, 76610)
-  FGlobal_AutoFrameCheck_addPositionList(-341143.41, -1757.68, -109075.41)
-  FGlobal_AutoFrameCheck_addPositionList(16462, -6425, 76610)
-  FGlobal_AutoFrameCheck_addPositionList(-341143.41, -1757.68, -109075.41)
-  FGlobal_setAutoFrameCheckRepeat(false)
+  setRunningTime(4)
+  setStandingTime(6)
+  FGlobal_AutoFrameCheck_addPositionList(-377959.53125, 9696.186523, -373333.3125)
+  FGlobal_AutoFrameCheck_addPositionList(-380519.28125, 9422.658203, -374120.9375)
+  FGlobal_AutoFrameCheck_addPositionList(-254953.21875, 14020.24707, -335996.1875)
+  FGlobal_AutoFrameCheck_addPositionList(-388703.28125, 12982.615234, -365806.25)
+  FGlobal_AutoFrameCheck_addPositionList(-386187, 13398.860352, -364142.03125)
+  FGlobal_AutoFrameCheck_addPositionList(-387069.75, 10809.834961, -371190.25)
+  FGlobal_AutoFrameCheck_addPositionList(-380692.375, 9391.583984, -373983)
+  FGlobal_AutoFrameCheck_addPositionList(-376622.75, 9672.875977, -374074.9375)
+  FGlobal_AutoFrameCheck_addPositionList(-309323.09375, 13343.671875, -370570.78125)
+  FGlobal_AutoFrameCheck_addPositionList(-306090.40625, 13897.889648, -366944.25)
+  FGlobal_AutoFrameCheck_addPositionList(-289764.21875, 16052.167969, -363110.46875)
+  FGlobal_AutoFrameCheck_addPositionList(-254953.21875, 14020.24707, -335996.1875)
+  FGlobal_setAutoFrameCheckRepeat(true)
   FGlobal_AutoFrameCheck_Start()
 end
 
-testScreenShot = function()
-  -- function num : 0_17
-  ToClient_Capture()
-end
-
 testAutoQuestEnd = function()
-  -- function num : 0_18
+  -- function num : 0_17
   FGlobal_AutoFrameCheck_resetPositionList()
 end
 
 setYaw = function(value)
-  -- function num : 0_19
+  -- function num : 0_18
   selfPlayerSetCameraYaw(value)
+end
+
+ToClient_StopNavi = function()
+  -- function num : 0_19
+  ToClient_NaviMoveStop(true)
+end
+
+ToClient_ReStartNavi = function()
+  -- function num : 0_20
+  ToClient_NaviReStart()
 end
 
 

@@ -48,10 +48,22 @@ ArshaPvP_Widget_Init = function()
   end
   teamA = ToClient_GetRoundTeamScore(1)
   teamB = ToClient_GetRoundTeamScore(2)
+  local teamA_Info = ToClient_GetTeamListAt(0)
+  local teamB_Info = ToClient_GetTeamListAt(1)
+  local teamA_Name = ""
+  local teamB_Name = ""
+  if teamA_Info ~= nil and teamB_Info ~= nil then
+    teamA_Name = teamA_Info:getTeamName()
+    teamB_Name = teamB_Info:getTeamName()
+  end
+  if teamA_Name == "" or teamB_Name == "" then
+    teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
+    teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+  end
   ;
-  (self.leftParty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM"))
+  (self.leftParty):SetText(teamA_Name)
   ;
-  (self.rightParty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM"))
+  (self.rightParty):SetText(teamB_Name)
   ;
   (self.leftPoint):SetText(teamA)
   ;
@@ -258,10 +270,22 @@ ArshaPvP_Widget_Update = function()
           end
         end
       end
+      local teamA_Info = ToClient_GetTeamListAt(0)
+      local teamB_Info = ToClient_GetTeamListAt(1)
+      local teamA_Name = ""
+      local teamB_Name = ""
+      if teamA_Info ~= nil and teamB_Info ~= nil then
+        teamA_Name = teamA_Info:getTeamName()
+        teamB_Name = teamB_Info:getTeamName()
+      end
+      if teamA_Name == "" or teamB_Name == "" then
+        teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
+        teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+      end
       ;
-      (self.leftParty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM"))
+      (self.leftParty):SetText(teamA_Name)
       ;
-      (self.rightParty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM"))
+      (self.rightParty):SetText(teamB_Name)
       ;
       (self.leftPoint):SetText(teamA)
       ;

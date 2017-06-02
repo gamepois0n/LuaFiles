@@ -459,15 +459,21 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         else
           index = idx
         end
-      else
-        -- DECOMPILER ERROR at PC154: Unhandled construct in 'MakeBoolean' P1
-
-        if isGameTypeRussia() and idx > 1 then
+      elseif isGameTypeRussia() then
+        if idx > 1 then
           if idx > 8 then
             index = idx - 2
           else
             index = idx - 1
           end
+        else
+          index = idx
+        end
+      else
+        -- DECOMPILER ERROR at PC166: Unhandled construct in 'MakeBoolean' P1
+
+        if isGameTypeJapan() and idx >= 8 then
+          index = idx - 1
         else
           index = idx
         end
@@ -479,7 +485,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       (tempBtn.chatFilter):SetPosX(self.slotStartX + self.slotGapX * col)
       ;
       (tempBtn.chatFilter):SetPosY(self.slotStartY + self.slotGapY * row)
-      -- DECOMPILER ERROR at PC182: Confused about usage of register: R17 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC192: Confused about usage of register: R17 in 'UnsetPending'
 
       btnFilter[idx] = tempBtn
       if eChatButtonType.eChatNotice == idx then
@@ -612,7 +618,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     for idx = 0, self.chatSystemFilterCount - 1 do
       posX = self.slotSystemTypeStartX
       posY = self.slotSystemTypeStartY + idx * self.slotGapY
-      -- DECOMPILER ERROR at PC786: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC796: Confused about usage of register: R14 in 'UnsetPending'
 
       btnSystemFilter[idx] = {}
       if eChatSystemButtonType.eChatSystem == idx then
@@ -664,7 +670,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         _PA_LOG("�\128형욱", "처리되지 않은 eChatSystemButtonType Index : " .. idx)
       end
     end
-    -- DECOMPILER ERROR at PC1135: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1145: Confused about usage of register: R10 in 'UnsetPending'
 
     chatPanel[panelIdex] = true
   end
@@ -965,7 +971,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     rdo_FontSizeNormal2:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 18 )")
     rdo_FontSizeBig:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 20 )")
     FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
-    -- DECOMPILER ERROR: 81 unprocessed JMP targets
+    -- DECOMPILER ERROR: 83 unprocessed JMP targets
   end
 end
 

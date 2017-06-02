@@ -1585,6 +1585,7 @@ QuickSlot_OnscreenResize = function()
         Panel_QuickSlot:SetPosX((getScreenSizeX() - Panel_QuickSlot:GetSizeX()) / 2)
         Panel_QuickSlot:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY())
         changePositionBySever(Panel_QuickSlot, (CppEnums.PAGameUIType).PAGameUIPanel_QuickSlot, false, true, false)
+        FGlobal_PanelRepostionbyScreenOut(Panel_QuickSlot)
       end
     end
   end

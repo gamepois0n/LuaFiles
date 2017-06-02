@@ -1215,17 +1215,22 @@ eventResizeSellList = function()
   local bodySizeY = _ItemPanel:GetSizeY()
   local sellPanelSizeY = getScreenSizeY() - Panel_Npc_Trade_Market:GetSizeY() - 80
   local showCount = 0
+  local maxCount = 10
   local itemsSizeY = 0
-  for count = 1, 10 do
+  for count = 1, maxCount do
     if bodySizeY * count + (count - 1) * tradeSellMarket.intervalPanel < sellPanelSizeY then
       showCount = showCount + 1
+      if maxCount == count then
+        itemsSizeY = bodySizeY * count + (count - 1) * tradeSellMarket.intervalPanel
+        break
+      end
     else
       itemsSizeY = bodySizeY * (count - 1) + (count - 2) * tradeSellMarket.intervalPanel
       break
     end
   end
   do
-    -- DECOMPILER ERROR at PC36: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC46: Confused about usage of register: R5 in 'UnsetPending'
 
     tradeSellMarket.maxSellCount = showCount
     Panel_Trade_Market_Sell_ItemList:SetSize(Panel_Trade_Market_Sell_ItemList:GetSizeX(), itemsSizeY + tradeSellMarket.itemsStartPosY + 50)

@@ -21,7 +21,7 @@ local isAlchemyStoneOpen = ToClient_IsContentsGroupOpen("35")
 Panel_Window_ItemMarket:setGlassBackground(true)
 Panel_Window_ItemMarket:ActiveMouseEventEffect(true)
 Panel_Window_ItemMarket:SetShow(false)
-local splitWindow = ToClient_IsContentsGroupOpen("235")
+local splitWindow = ToClient_IsContentsGroupOpen("240")
 local shopType = {eShopType_Potion = 1, eShopType_Weapon = 2, eShopType_Jewel = 3, eShopType_Furniture = 4, eShopType_Collect = 5, eShopType_Cook = 9, eShopType_PC = 10}
 local ItemMarket = {panelTitle = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Title"), panelBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_BG"), btn_Close = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Win_Close"), checkPopUp = (UI.getChildControl)(Panel_Window_ItemMarket, "CheckButton_PopUp"), btn_MyList = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_MyList"), btn_BackPage = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BackPage"), btn_SetAlarm = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetAlarm"), btn_SetPreBid = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetPreBid"), btn_Refresh = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Refresh"), btn_RegistItem = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_RegistItem"), btn_BidDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BidDesc"), selectCategory = 0, selectItemSort = 0, static_ListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_ListHeadSmallBG"), specialListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_SpecialListHeadBG"), 
 selectSingleSlot = {}

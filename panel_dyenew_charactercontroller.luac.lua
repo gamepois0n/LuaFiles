@@ -108,7 +108,11 @@ end
 
 HandleClicked_DeyNew_Exit = function()
   -- function num : 0_7
-  FGlobal_Panel_DyeNew_Hide()
+  if ToClient_IsDevelopment() == true then
+    FGlobal_Panel_DyeReNew_Hide()
+  else
+    FGlobal_Panel_DyeNew_Hide()
+  end
 end
 
 FGlobal_DyeNew_CharacterController_Open = function()
@@ -327,8 +331,12 @@ DyeNewController.registEventHandler = function(self)
   (self.btn_EyeSee):addInputEvent("Mouse_Out", "HandleOver_DyeNew_SimpleTooltips( false, 1 )")
   ;
   (self.btn_EyeSee):setTooltipEventRegistFunc("HandleOver_DyeNew_SimpleTooltips( true, 1 )")
-  ;
-  (self.btn_ShowUI):addInputEvent("Mouse_LUp", "HandleClicked_DeyNew_SetShowUI()")
+  if ToClient_IsDevelopment() == true then
+    (self.btn_ShowUI):addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetShowUI()")
+  else
+    ;
+    (self.btn_ShowUI):addInputEvent("Mouse_LUp", "HandleClicked_DeyNew_SetShowUI()")
+  end
   ;
   (self.btn_ShowUI):addInputEvent("Mouse_On", "HandleOver_DyeNew_SimpleTooltips( true, 2 )")
   ;

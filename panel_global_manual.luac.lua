@@ -6,7 +6,7 @@
 IsChecked_WeaponOut = false
 local UI_TM = CppEnums.TextMode
 local UI_color = Defines.Color
-local ui = {_obsidian = (UI.getChildControl)(Panel_Global_Manual, "Static_Obsidian"), _obsidian_B = (UI.getChildControl)(Panel_Global_Manual, "Static_Obsidian_B"), _obsidian_Text = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Obsidian_B"), _purposeText = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Purpose"), _purposeText2 = (UI.getChildControl)(Panel_Global_Manual, "MultilineText_Purpose"), _button_Q = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Q"), _button_W = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_W"), _button_A = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_A"), _button_S = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_S"), _button_D = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_D"), _button_E = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_E"), _button_F = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_F"), _button_Tab = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Tab"), _button_Shift = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Shift"), _button_Space = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Space"), _m0 = (UI.getChildControl)(Panel_Global_Manual, "StaticText_M0"), _m1 = (UI.getChildControl)(Panel_Global_Manual, "StaticText_M1"), _mBody = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Mouse_Body"), _horse_Icon = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Horse_0"), _horse_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Horse_Title"), _cart_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Cart_Title"), _flute_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Flute_Title"), _steal_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Steal_Title"), _milky_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Milky_Title"), _horseCancel = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Cancel")}
+local ui = {_obsidian = (UI.getChildControl)(Panel_Global_Manual, "Static_Obsidian"), _obsidian_B = (UI.getChildControl)(Panel_Global_Manual, "Static_Obsidian_B"), _obsidian_Text = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Obsidian_B"), _purposeText = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Purpose"), _purposeText2 = (UI.getChildControl)(Panel_Global_Manual, "MultilineText_Purpose"), _button_Q = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Q"), _button_W = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_W"), _button_A = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_A"), _button_S = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_S"), _button_D = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_D"), _button_E = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_E"), _button_F = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_F"), _button_Tab = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Tab"), _button_Shift = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Shift"), _button_Space = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Space"), _m0 = (UI.getChildControl)(Panel_Global_Manual, "StaticText_M0"), _m1 = (UI.getChildControl)(Panel_Global_Manual, "StaticText_M1"), _mBody = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Mouse_Body"), _horse_Icon = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Horse_0"), _horse_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Horse_Title"), _cart_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Cart_Title"), _flute_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Flute_Title"), _steal_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Steal_Title"), _milky_Icon_Title = (UI.getChildControl)(Panel_Global_Manual, "Static_Minigame_Milky_Title"), _horseCancel = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Cancel"), _bulletCount = (UI.getChildControl)(Panel_Global_Manual, "StaticText_BulletCount")}
 local uiPress = {_button_Q = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Q_2"), _button_W = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_W_2"), _button_A = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_A_2"), _button_S = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_S_2"), _button_D = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_D_2"), _button_E = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_E_2"), _button_F = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_F_2"), _button_Tab = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Tab_2"), _button_Shift = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Shift_2"), _button_Space = (UI.getChildControl)(Panel_Global_Manual, "StaticText_Btn_Space_2"), _m0 = (UI.getChildControl)(Panel_Global_Manual, "StaticText_M0_2"), _m1 = (UI.getChildControl)(Panel_Global_Manual, "StaticText_M1_2")}
 local gameOptionActionKey = {Forward = 0, Back = 1, Left = 2, Right = 3, Attack = 4, SubAttack = 5, Dash = 6, Jump = 7}
 local ui_Value = {isFirstTime_Manual_Timing_0 = true, isFirstTime_Manual_Timing_1 = true, isFirstTime_Manual_Timing_2 = true, isFirstTime_Manual_Cart_0 = true, isFirstTime_Manual_Horse_Rope_0 = true, isFirstTime_Manual_HorseDrop_0 = true, isFirstTime_Manual_Flute_0 = true, isFirstTime_Manual_Flute_1 = true, isFirstTime_Manual_HerbMachine_0 = true, isFirstTime_Manual_HerbMachine_1 = true, isFirstTime_Manual_HerbMachine_2 = true, isFirstTime_Manual_HerbMachine_3 = true, isFirstTime_Manual_HerbMachine_4 = true, isFirstTime_Manual_HerbMachine_5 = true, isFirstTime_Manual_Milky_0 = true, isFirstTime_Manual_Milky_1 = true, isFirstTime_Manual_Milky_2 = true, isFirstTime_Manual_Milky_3 = true, isFirstTime_Manual_Drum_0 = true, isFirstTime_Manual_Drum_1 = true}
@@ -1058,6 +1058,51 @@ local MiniGame_Manual_Instrument_1 = function(actorKeyRaw, isSelf)
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 
+local MiniGame_BulletCount_0 = function(actorKeyRaw, isSelf)
+  -- function num : 0_37 , upvalues : ui, uiPress
+  for _,v in pairs(ui) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  for _,v in pairs(uiPress) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  Panel_Global_Manual:SetShow(true)
+  Panel_Global_Manual:SetAlpha(0)
+  ;
+  (UIAni.AlphaAnimation)(1, Panel_Global_Manual, 0, 0.22)
+  ;
+  (ui._bulletCount):SetShow(true)
+  ;
+  (ui._bulletCount):SetPosX(Panel_PvpMode:GetPosX() - (ui._bulletCount):GetSizeX() - 20)
+  ;
+  (ui._bulletCount):SetPosY(Panel_PvpMode:GetPosY())
+  local count = selfPlayer:getSubResourcePoint(1)
+  ;
+  (ui._bulletCount):SetText(count)
+end
+
+local MiniGame_BulletCount_0 = function(actorKeyRaw, isSelf)
+  -- function num : 0_38 , upvalues : ui
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local count = selfPlayer:getSubResourcePoint(1)
+  ;
+  (ui._bulletCount):SetText(count)
+end
+
+local MiniGame_BulletCount_0 = function(actorKeyRaw, isSelf)
+  -- function num : 0_39 , upvalues : Panel_Global_Manual_End
+  Panel_Global_Manual_End(actorKeyRaw, isSelf)
+end
+
 ActionChartEventBindFunction(201, MiniGame_Manual_Timing_0)
 ActionChartEventBindFunction(202, MiniGame_Manual_Timing_1)
 ActionChartEventBindFunction(203, MiniGame_Manual_Timing_2)
@@ -1087,6 +1132,9 @@ ActionChartEventBindFunction(291, MiniGame_Manual_Drum_0)
 ActionChartEventBindFunction(292, MiniGame_Manual_Drum_1)
 ActionChartEventBindFunction(293, MiniGame_Manual_Instrument_0)
 ActionChartEventBindFunction(294, MiniGame_Manual_Instrument_1)
+ActionChartEventBindFunction(350, MiniGame_BulletCount_0)
+ActionChartEventBindFunction(351, MiniGame_BulletCount_1)
+ActionChartEventBindFunction(352, MiniGame_BulletCount_2)
 ActionChartEventBindFunction(9998, FromAction_CheckedBasic)
 ActionChartEventBindFunction(9999, Panel_Global_Manual_End)
 Global_Manual_Initialize()

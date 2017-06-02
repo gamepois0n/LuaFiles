@@ -1941,7 +1941,6 @@ RadarMap_UpdatePerFrame = function(deltaTime)
   ToClient_SetRadarCenterPos(float2((radarMap.pcPosBaseControl).x, (radarMap.pcPosBaseControl).y))
   FGlobal_UpdateRadarPin()
   RaderBackground_updatePerFrame(deltaTime)
-  GameTips_MessageUpdate(deltaTime)
   partyMemberIconPerFrame()
   whaleTimeCheck = whaleTimeCheck + deltaTime
   if whaleTimeCheck > 30 then

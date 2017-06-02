@@ -147,18 +147,7 @@ Panel_KeyViewer_ScreenRePosition = function()
           Panel_Movie_KeyViewer:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
         end
         changePositionBySever(Panel_Movie_KeyViewer, (CppEnums.PAGameUIType).PAGameUIPanel_KeyViewer, true, true, false)
-        if scrX < Panel_Movie_KeyViewer:GetPosX() + Panel_Movie_KeyViewer:GetSizeX() then
-          Panel_Movie_KeyViewer:SetPosX(scrX - Panel_Movie_KeyViewer:GetSizeX())
-        end
-        if Panel_Movie_KeyViewer:GetPosX() < 0 then
-          Panel_Movie_KeyViewer:SetPosX(0)
-        end
-        if scrY < Panel_Movie_KeyViewer:GetPosY() + Panel_Movie_KeyViewer:GetSizeY() then
-          Panel_Movie_KeyViewer:SetPosX(scrY - Panel_Movie_KeyViewer:GetSizeY())
-        end
-        if Panel_Movie_KeyViewer:GetPosY() < 0 then
-          Panel_Movie_KeyViewer:SetPosY(0)
-        end
+        FGlobal_PanelRepostionbyScreenOut(Panel_Movie_KeyViewer)
         for key,value in pairs(ui) do
           value:ComputePos()
         end

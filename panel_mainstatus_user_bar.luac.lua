@@ -567,6 +567,7 @@ Panel_MainStatus_User_Bar_Onresize = function()
           Panel_MainStatus_User_Bar:SetPosX(getScreenSizeX() / 2 - Panel_MainStatus_User_Bar:GetSizeX() / 2)
           Panel_MainStatus_User_Bar:SetPosY(getScreenSizeY() - Panel_QuickSlot:GetSizeY() - Panel_MainStatus_User_Bar:GetSizeY())
         end
+        FGlobal_PanelRepostionbyScreenOut(Panel_MainStatus_User_Bar)
       end
     end
   end

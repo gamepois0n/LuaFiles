@@ -139,10 +139,10 @@ PaGlobal_SaveSettingUrlByServiceType = function()
         else
           if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
             if getServiceNationType() == 0 then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_REAL_NA")
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_REAL_NA", "port", worldNo)
             else
               if getServiceNationType() == 1 then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_REAL_EU")
+                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_REAL_EU", "port", worldNo)
               end
             end
           else

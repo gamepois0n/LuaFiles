@@ -52,7 +52,7 @@ local effectScene = {
 newItem = {}
 }
 local inven = {
-slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCooltime = true, createExpiration = true, createExpirationBG = true, createExpiration2h = true, createClassEquipBG = true, createEnduranceIcon = true, createCooltimeText = true, createCash = true, createItemLock = true, createBagIcon = true}
+slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCooltime = true, createExpiration = true, createExpirationBG = true, createExpiration2h = true, createClassEquipBG = true, createEnduranceIcon = true, createCooltimeText = true, createCash = true, createItemLock = true, createBagIcon = true, createSoulComplete = true}
 , 
 config = {slotCount = 64, slotCols = 8, slotRows = 0, slotStartX = 19, slotStartY = 93, slotGapX = 48, slotGapY = 47, slotEnchantX = 13, slotEnchantY = 76}
 , startSlotIndex = 0, _slotsBackground = (Array.new)(), slots = (Array.new)(), 
@@ -85,7 +85,7 @@ FilterRadioTooltip:SetAutoResize(true)
 FilterRadioTooltip:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 FilterRadioTooltip:SetShow(false)
 PaGlobal_Inventory = {_itemKeyForTutorial = nil, _isItemSlotRClickedForTutorial = false}
--- DECOMPILER ERROR at PC461: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC462: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString, isLoop, posX, posY)
   -- function num : 0_1
@@ -94,28 +94,28 @@ PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString,
   (PaGlobal_TutorialUiManager:getUiMasking()):showInventoryMasking((slot.icon):GetPosX(), (slot.icon):GetPosY())
 end
 
--- DECOMPILER ERROR at PC464: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC465: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_Inventory.setItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_2
   self._itemKeyForTutorial = itemKey
 end
 
--- DECOMPILER ERROR at PC467: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC468: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_Inventory.clearItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_3
   self._itemKeyForTutorial = nil
 end
 
--- DECOMPILER ERROR at PC470: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC471: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_Inventory.isItemSlotRClickedForTutorial = function(self)
   -- function num : 0_4
   return self._isItemSlotRClickedForTutorial
 end
 
--- DECOMPILER ERROR at PC473: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC474: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   -- function num : 0_5
@@ -124,7 +124,7 @@ PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   PaGlobal_Inventory._isItemSlotRClickedForTutorial = bool
 end
 
--- DECOMPILER ERROR at PC476: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC477: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_Inventory.findItemWrapper = function(self, itemWhereType, targetItemKey, targetEnchantLevel)
   -- function num : 0_6
@@ -784,7 +784,7 @@ Inventory_SlotRClick = function(index, equipSlotNo)
     if Panel_Npc_Dialog:IsShow() or Panel_Window_ItemMarket_Function:GetShow() or Panel_Window_ItemMarket_RegistItem:GetShow() or Panel_Window_Repair:GetShow() then
       return 
     end
-    if (itemWrapper:getStaticStatus()):isStackable() == false then
+    if (itemWrapper:getStaticStatus()):isStackable() == false and itemWrapper:isSoulCollector() == false then
       if ToClient_Inventory_CheckItemLock(slotNo, whereType) then
         ToClient_Inventory_RemoveItemLock(slotNo)
         Proc_ShowMessage_Ack("[" .. itemName .. "] " .. PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ITEMUNLOCK"))
@@ -3020,7 +3020,7 @@ FGlobal_UpdateInventoryWeight = function()
     (self.weightItem):SetProgressRate(Int64toInt32(s64_allWeight / s64_allWeight_div))
   end
   ;
-  (self.staticWeight):SetText(str_AllWeight .. " / " .. str_MaxWeight .. " LT")
+  (self.staticWeight):SetText(str_AllWeight .. " / " .. str_MaxWeight .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
   _Inventory_updateSlotData_ChangeWeightIcon(s64_allWeight, s64_maxWeight_div)
 end
 

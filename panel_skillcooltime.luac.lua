@@ -152,6 +152,7 @@ SkillCooltime_OnResize = function()
         Panel_SkillCooltime:SetPosX((sizeX) * (self.config).screenPosX)
         Panel_SkillCooltime:SetPosY(sizeY * (self.config).screenPosY)
         changePositionBySever(Panel_SkillCooltime, (CppEnums.PAGameUIType).PAGameUIPanel_SkillCoolTime, true, true, false)
+        FGlobal_PanelRepostionbyScreenOut(Panel_SkillCooltime)
       end
     end
   end

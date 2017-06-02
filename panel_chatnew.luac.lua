@@ -14,6 +14,23 @@ local UI_CST = CppEnums.ChatSystemType
 local currentPoolIndex, clickedMessageIndex, clickedName, clickedUserNickName, clickedMsg, isMouseOnChattingViewIndex = nil, nil, nil, nil, nil, nil
 local isMouseOn = false
 local chattingWindowMaxWidth = 600
+local chattingUpTime = 0
+local premsgCount = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0}
+local issmoothupMessage = false
+local smoothScorllTime = 0
+local deltascrollPosy = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0}
+local issmoothscroll = false
+local preScrollControlPos = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0}
+local ScrollHistroy = {_maxHistoryCount, _maxHistoryCount, _maxHistoryCount, _maxHistoryCount; [0] = _maxHistoryCount}
+local smoothWheelScorllTime = 0
+local issmoothWheelscroll = false
+local isUpDown = false
+local scrollIndex = 0
+local scrollresetSpeed = 0
+local smoothResetScorllTime = 0
+local isResetsmoothscroll = false
+local preDownPosY = 0
+local ismsgin = false
 local isReportGoldSellerOpen = ToClient_IsContentsGroupOpen("89")
 local _scroll_Interval_AddPos = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0}
 local ChatSubMenu = {_mainPanel = Panel_Chat_SubMenu, _uiBg = (UI.getChildControl)(Panel_Chat_SubMenu, "Static_SubMenu"), _uiButtonWhisper = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_Whisper"), _uiButtonAddFriend = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_AddFriend"), _uiButtonInviteParty = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteParty"), _uiButtonInviteGuild = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteGuild"), _uiButtonInviteCompetition = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteCompetition"), _uiButtonBlock = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_Block"), _uiButtonReportGoldSeller = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_ReportGoldSeller"), _uiButtonBlockVote = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_BlockVote"), _uiButtonIntroduce = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_ShowIntroduce"), _uiButtonWinClose = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_WinClose")}
@@ -162,7 +179,7 @@ _listPanel = {}
 _listChatUIPool = {}
 , 
 _listPopupNameMenu = {}
-, _maxListCount = 50}
+, _maxListCount = 100}
 local _currentInitPool = 0
 local ChatRenderMode = PAUIRenderModeBitSet({(Defines.RenderMode).eRenderMode_Default, (Defines.RenderMode).eRenderMode_WorldMap})
 ChatUIPoolManager.createPanel = function(self, poolIndex, stylePanel)
@@ -216,6 +233,8 @@ _list_ChattingContents = {}
 , 
 _list_ChattingLinkedItem = {}
 , 
+_list_ChattingLinkedWebSite = {}
+, 
 _list_Scroll = {}
 , 
 _list_CloseButton = {}
@@ -224,10 +243,12 @@ _list_ScrollReset = {}
 , 
 _list_MoreList = {}
 , 
+_list_Emoticon = {}
+, 
 _list_SenderMessageIndex = {}
 , 
 _list_LinkedItemMessageIndex = {}
-, _count_PanelBG = 0, _maxcount_PanelBG = 5, _count_TitleTab = 0, _maxcount_TitleTab = 5, _count_TitleTabText = 0, _maxcount_TitleTabText = 5, _count_TitleTabConfigButton = 0, _maxcount_TitleTabConfigButton = 5, _count_OtherTab = 0, _maxcount_OtherTab = 4, _count_AddTab = 0, _maxcount_AddTab = 1, _count_PanelDivision = 0, _maxcount_PanelDivision = 5, _count_PanelDelete = 0, _maxcount_PanelDelete = 5, _count_ResizeButton = 0, _maxcount_ResizeButton = 5, _count_ChattingIcon = 0, _maxcount_ChattingIcon = self._maxListCount, _count_ChattingSender = 0, _maxcount_ChattingSender = self._maxListCount, _count_ChattingContents = 0, _maxcount_ChattingContents = self._maxListCount, _count_ChattingLinkedItem = 0, _maxcount_ChattingLinkedItem = self._maxListCount * 2, _count_Scroll = 0, _maxcount_Scroll = 1, _count_CloseButton = 0, _maxcount_CloseButton = 4, _count_ScrollReset = 0, _maxcount_ScrollReset = 4, _count_MoreList = 0, _maxcount_MoreList = 4}
+, _count_PanelBG = 0, _maxcount_PanelBG = 5, _count_TitleTab = 0, _maxcount_TitleTab = 5, _count_TitleTabText = 0, _maxcount_TitleTabText = 5, _count_TitleTabConfigButton = 0, _maxcount_TitleTabConfigButton = 5, _count_OtherTab = 0, _maxcount_OtherTab = 4, _count_AddTab = 0, _maxcount_AddTab = 1, _count_PanelDivision = 0, _maxcount_PanelDivision = 5, _count_PanelDelete = 0, _maxcount_PanelDelete = 5, _count_ResizeButton = 0, _maxcount_ResizeButton = 5, _count_ChattingIcon = 0, _maxcount_ChattingIcon = self._maxListCount, _count_ChattingSender = 0, _maxcount_ChattingSender = self._maxListCount, _count_ChattingContents = 0, _maxcount_ChattingContents = self._maxListCount, _count_ChattingLinkedItem = 0, _maxcount_ChattingLinkedItem = self._maxListCount * 2, _count_ChattingLinkedWebSite = 0, _maxcount_ChattingLinkedWebSite = self._maxListCount * 2, _count_Scroll = 0, _maxcount_Scroll = 1, _count_CloseButton = 0, _maxcount_CloseButton = 4, _count_ScrollReset = 0, _maxcount_ScrollReset = 4, _count_MoreList = 0, _maxcount_MoreList = 4, _count_Emoticon = 0, _maxcount_Emoticon = self._maxListCount * 4}
   ChatUIPool.prepareControl = function(self, Panel, parentControl, createdCotrolList, controlType, controlName, createCount)
     -- function num : 0_6_0
     local styleUI = (UI.getChildControl)(Panel, controlName)
@@ -254,10 +275,12 @@ _list_LinkedItemMessageIndex = {}
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_ChattingSender, UI_PUCT.PA_UI_CONTROL_STATICTEXT, "StaticText_ChatSender", self._maxcount_ChattingSender)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_ChattingContents, UI_PUCT.PA_UI_CONTROL_STATICTEXT, "StaticText_ChatContent", self._maxcount_ChattingContents)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_ChattingLinkedItem, UI_PUCT.PA_UI_CONTROL_STATICTEXT, "StaticText_ChatLinkedItem", self._maxcount_ChattingLinkedItem)
+    ChatUIPool:prepareControl(stylePanel, parentControl, self._list_ChattingLinkedWebSite, UI_PUCT.PA_UI_CONTROL_STATICTEXT, "StaticText_ChatLinkedWebSite", self._maxcount_ChattingLinkedWebSite)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_Scroll, UI_PUCT.PA_UI_CONTROL_SCROLL, "Scroll_Chatting", self._maxcount_Scroll)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_CloseButton, UI_PUCT.PA_UI_CONTROL_BUTTON, "Button_Close", self._maxcount_CloseButton)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_ScrollReset, UI_PUCT.PA_UI_CONTROL_BUTTON, "Button_ScrollReset", self._maxcount_ScrollReset)
     ChatUIPool:prepareControl(stylePanel, parentControl, self._list_MoreList, UI_PUCT.PA_UI_CONTROL_STATIC, "Static_MoreList", self._maxcount_MoreList)
+    ChatUIPool:prepareControl(stylePanel, parentControl, self._list_Emoticon, UI_PUCT.PA_UI_CONTROL_STATIC, "Static_Emoticon", self._maxcount_Emoticon)
     for index = 0, self._maxcount_ChattingLinkedItem do
       ((self._list_ChattingLinkedItem)[index]):addInputEvent("Mouse_On", "HandleOn_ChattingLinkedItem(" .. poolIndex .. ", " .. index .. ", false)")
       ;
@@ -268,6 +291,9 @@ _list_LinkedItemMessageIndex = {}
       ((self._list_ChattingLinkedItem)[index]):addInputEvent("Mouse_RPress", "Chatting_Transparency(" .. poolIndex .. ")")
       ;
       ((self._list_ChattingLinkedItem)[index]):addInputEvent("Mouse_LUp", "HandleOn_ChattingLinkedItem(" .. poolIndex .. ", " .. index .. ", true)")
+    end
+    for index = 0, self._maxcount_ChattingLinkedWebSite do
+      ((self._list_ChattingLinkedWebSite)[index]):addInputEvent("Mouse_LUp", "HandleOn_ChattingLinkedWebSite(" .. poolIndex .. ", " .. index .. ", 2)")
     end
     for index = 0, self._maxcount_ChattingSender do
       ((self._list_ChattingSender)[index]):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSender(" .. poolIndex .. ", " .. index .. ")")
@@ -367,32 +393,78 @@ _list_LinkedItemMessageIndex = {}
     return (self._list_ChattingLinkedItem)[self._count_ChattingLinkedItem - 1]
   end
 
-  ChatUIPool.newScroll = function(self)
+  ChatUIPool.newChattingEmoticon = function(self)
     -- function num : 0_6_15
+    self._count_Emoticon = self._count_Emoticon + 1
+    return (self._list_Emoticon)[self._count_Emoticon - 1]
+  end
+
+  ChatUIPool.newChattingLinkedWebSite = function(self, messageIndex)
+    -- function num : 0_6_16
+    self._count_ChattingLinkedWebSite = self._count_ChattingLinkedWebSite + 1
+    -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
+
+    ;
+    (self._list_LinkedWebSiteMessageIndex)[self._count_ChattingLinkedWebSite - 1] = messageIndex
+    return (self._list_ChattingLinkedWebSite)[self._count_ChattingLinkedWebSite - 1]
+  end
+
+  ChatUIPool.newScroll = function(self)
+    -- function num : 0_6_17
     self._count_Scroll = self._count_Scroll + 1
     return (self._list_Scroll)[self._count_Scroll - 1]
   end
 
   ChatUIPool.newCloseButton = function(self)
-    -- function num : 0_6_16
+    -- function num : 0_6_18
     self._count_CloseButton = self._count_CloseButton + 1
     return (self._list_CloseButton)[self._count_CloseButton - 1]
   end
 
   ChatUIPool.newScrollReset = function(self)
-    -- function num : 0_6_17
+    -- function num : 0_6_19
     self._count_ScrollReset = self._count_ScrollReset + 1
     return (self._list_ScrollReset)[self._count_ScrollReset - 1]
   end
 
   ChatUIPool.newMorelist = function(self)
-    -- function num : 0_6_18
+    -- function num : 0_6_20
     self._count_MoreList = self._count_MoreList + 1
     return (self._list_MoreList)[self._count_MoreList - 1]
   end
 
+  ChatUIPool.clearChattingIcon = function(self)
+    -- function num : 0_6_21
+    self._count_ChattingIcon = 0
+  end
+
+  ChatUIPool.clearChattingSender = function(self, messageIndex)
+    -- function num : 0_6_22
+    self._count_ChattingSender = 0
+  end
+
+  ChatUIPool.clearChattingContents = function(self)
+    -- function num : 0_6_23
+    self._count_ChattingContents = 0
+  end
+
+  ChatUIPool.clearChattingLinkedItem = function(self, messageIndex)
+    -- function num : 0_6_24
+    self._count_ChattingLinkedItem = 0
+  end
+
+  ChatUIPool.clearChattingLinkedwebsite = function(self, messageIndex)
+    -- function num : 0_6_25
+    self._count_ChattingLinkedWebSite = 0
+  end
+
+  ChatUIPool.clearEmoticon = function(self)
+    -- function num : 0_6_26
+    self._count_Emoticon = 0
+  end
+
   ChatUIPool.clear = function(self)
-    -- function num : 0_6_19 , upvalues : ChatUIPool
+    -- function num : 0_6_27 , upvalues : ChatUIPool
     self._count_PanelBG = 0
     self._count_TitleTab = 0
     self._count_TitleTabText = 0
@@ -406,17 +478,35 @@ _list_LinkedItemMessageIndex = {}
     self._count_ChattingSender = 0
     self._count_ChattingContents = 0
     self._count_ChattingLinkedItem = 0
+    self._count_ChattingLinkedWebSite = 0
     self._count_Scroll = 0
     self._count_CloseButton = 0
     self._count_ScrollReset = 0
     self._count_MoreList = 0
+    self._count_Emoticon = 0
     self._list_SenderMessageIndex = {}
     self._list_LinkedItemMessageIndex = {}
+    self._list_LinkedWebSiteMessageIndex = {}
     ChatUIPool:hideNotUse()
   end
 
+  ChatUIPool.drawclear = function(self)
+    -- function num : 0_6_28
+    (self.clearChattingIcon)()
+    ;
+    (self.clearChattingContents)()
+    ;
+    (self.clearChattingSender)()
+    ;
+    (self.clearChattingLinkedItem)()
+    ;
+    (self.clearChattingLinkedwebsite)()
+    ;
+    (self.clearEmoticon)()
+  end
+
   ChatUIPool.hideNotUse = function(self)
-    -- function num : 0_6_20
+    -- function num : 0_6_29
     for index = self._count_PanelBG, self._maxcount_PanelBG do
       ((self._list_PanelBG)[index]):SetShow(false)
     end
@@ -456,6 +546,9 @@ _list_LinkedItemMessageIndex = {}
     for index = self._count_ChattingLinkedItem, self._maxcount_ChattingLinkedItem do
       ((self._list_ChattingLinkedItem)[index]):SetShow(false)
     end
+    for index = self._count_ChattingLinkedWebSite, self._maxcount_ChattingLinkedWebSite do
+      ((self._list_ChattingLinkedWebSite)[index]):SetShow(false)
+    end
     for index = self._count_Scroll, self._maxcount_Scroll do
       ((self._list_Scroll)[index]):SetShow(false)
     end
@@ -467,6 +560,9 @@ _list_LinkedItemMessageIndex = {}
     end
     for index = self._count_MoreList, self._maxcount_MoreList do
       ((self._list_MoreList)[index]):SetShow(false)
+    end
+    for index = self._count_Emoticon, self._maxcount_Emoticon do
+      ((self._list_Emoticon)[index]):SetShow(false)
     end
   end
 
@@ -575,7 +671,7 @@ ChatUIPoolManager:initialize()
 local _tabButton_PosX = 0
 local addChat_PosX = 0
 ChattingViewManager.update = function(self, chatPanel, panelIndex, isShow)
-  -- function num : 0_12 , upvalues : ChatUIPoolManager, isMouseOnChattingViewIndex, isMouseOn, UI_color, _tabButton_PosX, addChat_PosX, _scroll_Interval_AddPos
+  -- function num : 0_12 , upvalues : ChatUIPoolManager, isMouseOnChattingViewIndex, isMouseOn, UI_color, _tabButton_PosX, addChat_PosX, isResetsmoothscroll, issmoothWheelscroll, issmoothscroll, ismsgin, issmoothupMessage, premsgCount, chattingUpTime, deltascrollPosy, _scroll_Interval_AddPos
   if getSelfPlayer() == nil or (getSelfPlayer()):get() == nil then
     return 
   end
@@ -650,6 +746,7 @@ ChattingViewManager.update = function(self, chatPanel, panelIndex, isShow)
   local panel_Scroll = poolCurrentUI:newScroll()
   panel_Scroll:SetShow(isShow)
   panel_Scroll:SetInterval(self._maxHistoryCount)
+  panel_Scroll:SetCtrlWeight(0.1)
   panel_Scroll:SetPosX(panel_Bg:GetSizeX() - panel_Scroll:GetSizeX() - 3)
   panel_Scroll:SetControlPos((self._scroll_BTNPos)[panelIndex])
   panel_Scroll:addInputEvent("Mouse_LUp", "HandleClicked_ScrollBtnPosY( " .. panelIndex .. " )")
@@ -669,443 +766,631 @@ ChattingViewManager.update = function(self, chatPanel, panelIndex, isShow)
       (ToClient_getFontWrapper("BaseFont_10_Chat")):changeFontSize(ChattingOption_convertChatFontTypeToFontSize(fontType))
       ChatPanel_Update()
     end
+    if isResetsmoothscroll == true or issmoothWheelscroll == true or issmoothscroll == true then
+      return 
+    end
+    if ismsgin == false and chatPanel:getPushchattingMsg() and issmoothupMessage == false then
+      if chatPanel:getMessageCount() - premsgCount[panelIndex] < 5 then
+        issmoothupMessage = true
+        chattingUpTime = 0
+        ismsgin = true
+      end
+      -- DECOMPILER ERROR at PC365: Confused about usage of register: R15 in 'UnsetPending'
+
+      premsgCount[panelIndex] = chatPanel:getMessageCount()
+    end
+    if issmoothupMessage == true then
+      return 
+    end
     local messageIndex = (self._srollPosition)[panelIndex]
     local chattingMessage = chatPanel:beginMessage(messageIndex)
     do
       local chatting_content_PosY = currentPanel:GetSizeY() - 10
+      poolCurrentUI:drawclear()
       while 1 do
         while 1 do
           if chattingMessage ~= nil then
-            chatting_content_PosY = self:CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex)
+            chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
           end
         end
         if chatting_content_PosY < 45 then
           chattingMessage = chatPanel:nextMessage()
           messageIndex = messageIndex + 1
-          -- DECOMPILER ERROR at PC352: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC402: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC352: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC402: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
-      -- DECOMPILER ERROR at PC365: Confused about usage of register: R18 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC415: Confused about usage of register: R18 in 'UnsetPending'
 
       if chatPanel:isChattingPanelFreeze() and chatPanel:isFreezingMsgUpdatedValue() then
         (self._srollPosition)[panelIndex] = _scroll_Interval_AddPos[panelIndex] + 1
-        -- DECOMPILER ERROR at PC369: Confused about usage of register: R18 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC419: Confused about usage of register: R18 in 'UnsetPending'
 
         _scroll_Interval_AddPos[panelIndex] = (self._srollPosition)[panelIndex]
       end
       chatPanel:setFreezingMsgUpdated(false)
-      -- DECOMPILER ERROR: 12 unprocessed JMP targets
+      -- DECOMPILER ERROR: 17 unprocessed JMP targets
     end
   end
 end
 
-ChattingViewManager.CreateChattingContent = function(self, chattingMessage, poolCurrentUI, PosY, messageIndex, panelIndex)
-  -- function num : 0_13 , upvalues : UI_CT, UI_CST, UI_color, UI_TM, ChattingViewManager
-  local panelSizeX = ((poolCurrentUI._list_PanelBG)[0]):GetSizeX() - 20
-  local panelSizeY = ((poolCurrentUI._list_PanelBG)[0]):GetSizeY()
-  local nameType = chattingMessage.chatNameType
-  local sender = chattingMessage:getSender(ToClient_getChatNameType())
-  local chatType = chattingMessage.chatType
-  local noticeType = chattingMessage.noticeType
-  local isMe = chattingMessage.isMe
-  local isGameManager = chattingMessage.isGameManager
-  local msgColor = (Chatting_MessageColor(chatType, noticeType, panelIndex))
-  local msg, msgData = nil, nil
-  local isLinkedItem = chattingMessage:isLinkedItem()
-  local chatting_Icon = poolCurrentUI:newChattingIcon()
-  local chatting_sender = poolCurrentUI:newChattingSender(messageIndex)
-  local isDev = ToClient_IsDevelopment()
-  local chatting_contents = {}
-  local chatSystemType = chattingMessage.chatSystemType
-  local isChatDivision = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision)
-  if isGameManager == true and not isDev then
-    msgColor = 4282515258
+ChattingViewManager_UpdatePerFrame = function(deltaTime)
+  -- function num : 0_13 , upvalues : isResetsmoothscroll, smoothResetScorllTime, ChattingViewManager, issmoothWheelscroll, smoothWheelScorllTime, issmoothscroll, smoothScorllTime, issmoothupMessage, chattingUpTime
+  if isResetsmoothscroll then
+    smoothResetScorllTime = smoothResetScorllTime + deltaTime / 2
+    FromClient_ChatUpdate(true)
+    ChattingViewManager:UpdateSmoothResetScrollContent(smoothResetScorllTime)
+    return 
   end
-  chatting_Icon:SetShow(true)
-  if chatType == (CppEnums.ChatType).Private and chattingMessage.isMe == false then
-    ChatInput_SetLastWhispersUserId(sender)
-    if Int64toInt32(getUtc64() - chattingMessage._time_s64) < 1 then
-      local isSoundAlert = true
-      if ChatInput_GetLastWhispersUserId() == sender then
-        if getTickCount32() - ChatInput_GetLastWhispersTick() > 1000 then
-          ChatInput_SetLastWhispersTick()
-        else
-          isSoundAlert = false
-        end
-      else
-        ChatInput_SetLastWhispersTick()
+  if issmoothWheelscroll then
+    FromClient_ChatUpdate(true)
+    smoothWheelScorllTime = smoothWheelScorllTime + deltaTime
+    if smoothWheelScorllTime > 0.2 then
+      issmoothWheelscroll = false
+      smoothWheelScorllTime = 0
+      ChattingViewManager:UpdateSmoothWheelScrollContent(deltaTime)
+      return 
+    end
+    ChattingViewManager:UpdateSmoothWheelScrollContent(deltaTime)
+    return 
+  end
+  if issmoothscroll then
+    smoothScorllTime = smoothScorllTime + deltaTime
+    if smoothScorllTime > 0.01 then
+      issmoothscroll = false
+      smoothScorllTime = 0
+      ChattingViewManager:UpdateSmoothScrollContent()
+      return 
+    end
+    ChattingViewManager:UpdateSmoothScrollContent()
+  else
+    if issmoothupMessage then
+      chattingUpTime = chattingUpTime + deltaTime
+      if chattingUpTime > 0.2 then
+        issmoothupMessage = false
       end
-      if isSoundAlert and isPhotoMode() then
-        audioPostEvent_SystemUi(8, 14)
-      else
-      end
+      ChattingViewManager:UpdateSmoothChattingContent(chattingUpTime)
     end
   end
-  do
-    if (isSoundAlert and isFocusInChatting()) or UI_CT.System == chatType then
-      sender = PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SYSTEM")
-    else
-      if UI_CT.Notice == chatType then
-        sender = PAGetString(Defines.StringSheet_GAME, "CHATTING_NOTICE")
-        chatType = UI_CT.System
+end
+
+ChattingViewManager.UpdateSmoothChattingContent = function(self, chattingUpTime)
+  -- function num : 0_14 , upvalues : ChatUIPoolManager, isMouseOnChattingViewIndex, isMouseOn, UI_color, issmoothupMessage, deltascrollPosy, ismsgin
+  FromClient_ChatUpdate(true, 1000)
+  local count = ToClient_getChattingPanelCount()
+  local checkchattingupTime = 0
+  for panelIndex = 0, count - 1 do
+    local chatPanel = ToClient_getChattingPanel(panelIndex)
+    if chatPanel:isOpen() then
+      if chatPanel:getPushchattingMsg() == false then
+        checkchattingupTime = 0
       else
-        if UI_CT.Battle == chatType then
-          sender = PAGetString(Defines.StringSheet_GAME, "CHATTING_BATTLE")
-        end
+        checkchattingupTime = chattingUpTime
       end
-    end
-    local senderStr = "[" .. sender .. "] : "
-    if UI_CT.Private == chatType then
-      if not isMe then
-        senderStr = "â—\128 " .. senderStr
-      else
-        if nameType == 0 then
-          senderStr = PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_NAMETYPE_0") .. senderStr
-        else
-          if nameType == 1 then
-            senderStr = PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_NAMETYPE_1") .. senderStr
-          end
-        end
+      local isCombinedMainPanel = chatPanel:isCombinedToMainPanel()
+      local drawPanelIndex = panelIndex
+      local bgAlpah = (self._transparency)[drawPanelIndex]
+      if isCombinedMainPanel == true then
+        drawPanelIndex = 0
       end
-    end
-    if FGlobal_ChatOption_GetIsShowTimeString(panelIndex) == true or UI_CT.Private == chatType or UI_CT.System == chatType and UI_CST.Market == chatSystemType then
-      msg = chattingMessage:getContent() .. " (" .. chattingMessage:getTimeString() .. ")"
-    else
-      msg = chattingMessage:getContent()
-    end
-    chatting_Icon:SetText("")
-    chatting_Icon:SetAutoResize(true)
-    if UI_CT.Private == chatType then
-      chatting_Icon:SetFontColor(msgColor)
-      if isChatDivision then
-        chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_WHISPER"))
-      else
-        chatting_Icon:SetText("")
+      local poolCurrentUI = ChatUIPoolManager:getPool(drawPanelIndex)
+      local currentPanel = ChatUIPoolManager:getPanel(drawPanelIndex)
+      local currentPanel = ChatUIPoolManager:getPanel(drawPanelIndex)
+      local poolCurrentUI = ChatUIPoolManager:getPool(drawPanelIndex)
+      self._currentPoolIndex = drawPanelIndex
+      local IsMouseOver = (UI.checkIsInMouseAndEventPanel)(currentPanel)
+      if isShow == nil then
+        isShow = false
       end
-    else
-      if UI_CT.System == chatType then
-        chatting_Icon:SetFontColor(msgColor)
-        chatting_Icon:SetText("")
-      else
-        if UI_CT.World == chatType then
-          chatting_Icon:SetFontColor(msgColor)
-          if isChatDivision then
-            chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_CHANNEL"))
-          else
-            chatting_Icon:SetText("")
-          end
-        else
-          if UI_CT.Public == chatType then
-            chatting_Icon:SetFontColor(msgColor)
-            if isChatDivision then
-              chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_NORMAL"))
-            else
-              chatting_Icon:SetText("")
-            end
-          else
-            if UI_CT.Party == chatType then
-              chatting_Icon:SetFontColor(msgColor)
-              if isChatDivision then
-                chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_PARTY"))
-              else
-                chatting_Icon:SetText("")
-              end
-            else
-              if UI_CT.Guild == chatType then
-                chatting_Icon:SetFontColor(msgColor)
-                if isChatDivision then
-                  chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_GUILD"))
-                else
-                  chatting_Icon:SetText("")
-                end
-              else
-                if UI_CT.WorldWithItem == chatType then
-                  chatting_Icon:SetFontColor(msgColor)
-                  if isChatDivision then
-                    chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_WORLD"))
-                  else
-                    chatting_Icon:SetText("")
-                  end
-                else
-                  if UI_CT.Battle == chatType then
-                    chatting_Icon:SetFontColor(msgColor)
-                    if isChatDivision then
-                      chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_COMBAT"))
-                      if PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_COMBAT") == "[" .. sender .. "]" then
-                        senderStr = ": "
-                      end
-                    else
-                      chatting_Icon:SetText("")
-                    end
-                  else
-                    if UI_CT.LocalWar == chatType then
-                      chatting_Icon:SetFontColor(msgColor)
-                      if isChatDivision then
-                        chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_LOCALWAR"))
-                      else
-                        chatting_Icon:SetText("")
-                      end
-                    else
-                      if UI_CT.RolePlay == chatType then
-                        chatting_Icon:SetFontColor(msgColor)
-                        if isChatDivision then
-                          chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_ROLEPLAY"))
-                        else
-                          chatting_Icon:SetText("")
-                        end
-                      else
-                        if UI_CT.Arsha == chatType then
-                          chatting_Icon:SetFontColor(msgColor)
-                          if isChatDivision then
-                            chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_ARSHA"))
-                          else
-                            chatting_Icon:SetText("")
-                          end
-                        else
-                          if UI_CT.Team == chatType then
-                            chatting_Icon:SetFontColor(msgColor)
-                            if isChatDivision then
-                              chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_TEAM"))
-                            else
-                              chatting_Icon:SetText("")
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    chatting_Icon:SetSize(chatting_Icon:GetTextSizeX(), chatting_Icon:GetTextSizeY())
-    if isLinkedItem and (UI_CT.World == chatType or UI_CT.Guild == chatType or UI_CT.System == chatType or UI_CT.Public == chatType or UI_CT.Party == chatType or UI_CT.WorldWithItem == chatType or UI_CT.Private == chatType) then
-      local fontType = getPanelChatFontSizeType(panelIndex)
-      chatting_Icon:SetPosX(10)
-      chatting_sender:SetTextHorizonRight()
-      chatting_sender:SetText(senderStr)
-      chatting_sender:SetFontColor(msgColor)
-      chatting_sender:SetSize(chatting_sender:GetTextSizeX(), chatting_sender:GetTextSizeY())
-      chatting_sender:SetShow(true)
-      local chat_contentAddPosX = 0
-      if chatting_Icon:GetTextSizeX() ~= 0 then
-        chat_contentAddPosX = 15
-        chatting_sender:SetPosX(chatting_Icon:GetTextSizeX() + chat_contentAddPosX)
-      else
-        chat_contentAddPosX = 10
-        chatting_sender:SetPosX(chat_contentAddPosX)
-      end
-      if isMe == false then
-        chatting_sender:SetIgnore(false)
-      else
-        chatting_sender:SetIgnore(true)
-      end
-      if UI_CT.Public == chatType then
-        chatting_sender:SetOverFontColor(UI_color.C_FFC4BEBE)
-      else
-        chatting_sender:SetOverFontColor(UI_color.C_FFFFFFFF)
-      end
-      local linkedMsgSplit = {}
-      local linkedMsgCount = 0
-      local linkedItemIndex = 0
-      local startIndex = chattingMessage:getLinkedItemStartIndex()
-      local endIndex = chattingMessage:getLinkedItemEndIndex()
-      if startIndex > 0 then
-        linkedMsgSplit[0] = (string.sub)(msg, 1, startIndex)
-        linkedMsgSplit[1] = (string.sub)(msg, startIndex + 1, endIndex)
-        linkedMsgCount = 2
-        linkedItemIndex = 1
-        if endIndex < (string.len)(msg) then
-          linkedMsgSplit[2] = (string.sub)(msg, endIndex + 1, (string.len)(msg))
-          linkedMsgCount = 3
+      if isMouseOnChattingViewIndex ~= nil and isMouseOnChattingViewIndex == drawPanelIndex then
+        isShow = isMouseOn
+        if isShow then
+          bgAlpah = 1
         end
       else
-        linkedMsgSplit[0] = (string.sub)(msg, 1, endIndex)
-        linkedMsgCount = 1
-        linkedItemIndex = 0
-        if endIndex < (string.len)(msg) then
-          linkedMsgSplit[1] = (string.sub)(msg, endIndex + 1, (string.len)(msg))
-          linkedMsgCount = 2
+        isShow = IsMouseOver
+      end
+      local isActivePanel = panelIndex == self._mainPanelSelectPanelIndex
+      currentPanel:SetColor(UI_color.C_00000000)
+      local messageIndex = (self._srollPosition)[panelIndex]
+      local chattingMessage = chatPanel:beginMessage(messageIndex)
+      local chatting_content_PosY = currentPanel:GetSizeY() - 10
+      -- DECOMPILER ERROR at PC100: Unhandled construct in 'MakeBoolean' P1
+
+      if isCombinedMainPanel and panelIndex ~= 0 then
+        (ChatUIPoolManager:getPanel(panelIndex)):SetShow(false)
+        ;
+        (ChatUIPoolManager:getPanel(panelIndex)):SetIgnore(true)
+      end
+      if isCombinedMainPanel == false and chatPanel:isOpen() == true and (ChatUIPoolManager:getPanel(0)):GetShow() then
+        (ChatUIPoolManager:getPanel(panelIndex)):SetShow(true)
+        ;
+        (ChatUIPoolManager:getPanel(panelIndex)):SetIgnore(false)
+      end
+      if isCombinedMainPanel == false and chatPanel:isOpen() == false then
+        (ChatUIPoolManager:getPanel(panelIndex)):SetShow(false)
+        ;
+        (ChatUIPoolManager:getPanel(panelIndex)):SetIgnore(true)
+      end
+      if CheckTutorialEnd() == false then
+        for ii = 1, ChatUIPoolManager._poolCount - 1 do
+          (ChatUIPoolManager:getPanel(ii)):SetShow(false)
         end
       end
-      chatting_contents[0] = chatting_sender
-      local currentStaticIndex = 1
-      for index = 0, linkedMsgCount - 1 do
-        msgData = linkedMsgSplit[index]
-        local msgDataLen = (string.len)(msgData)
+      while 1 do
         while 1 do
-          if msgDataLen > 0 then
-            if index == linkedItemIndex then
-              chatting_contents[currentStaticIndex] = poolCurrentUI:newChattingLinkedItem(messageIndex)
-              ;
-              (chatting_contents[currentStaticIndex]):SetIgnore(false)
-              ;
-              (chatting_contents[currentStaticIndex]):SetFontColor(UI_color.C_FFFFCF4C)
-            else
-              chatting_contents[currentStaticIndex] = poolCurrentUI:newChattingContents()
-              ;
-              (chatting_contents[currentStaticIndex]):SetIgnore(true)
-              ;
-              (chatting_contents[currentStaticIndex]):SetFontColor(msgColor)
-            end
-            local textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-            local textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
-            local j = 1
-            local isWhile = false
-            while 1 do
-              if currentStaticIndex >= 2 and (chatting_contents[currentStaticIndex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
-                isWhile = true
-                textStaticSizeX = textStaticSizeX - (chatting_contents[currentStaticIndex - j]):GetSizeX()
-                textStaticPosX = textStaticPosX + (chatting_contents[currentStaticIndex - j]):GetSizeX()
-              end
-              if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[currentStaticIndex - j]):GetPosX() then
-                break
-              end
-              j = j + 1
-            end
-            if textStaticSizeX == 0 or isWhile == false then
-              textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-              textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
-            end
-            ;
-            (chatting_contents[currentStaticIndex]):SetSize(textStaticSizeX, chatting_sender:GetSizeY())
-            ;
-            (chatting_contents[currentStaticIndex]):SetPosX(textStaticPosX)
-            msg = (chatting_contents[currentStaticIndex]):GetTextLimitWidth(msgData)
-            if isChangeFontSize() then
-              (chatting_contents[currentStaticIndex]):setChangeFontAfterTransSizeValue(true)
-            end
-            ;
-            (chatting_contents[currentStaticIndex]):SetText(msg)
-            if (string.len)(msg) < (string.len)(msgData) then
-              local msgStr = (string.sub)(msgData, (string.len)(msg) + 1, (string.len)(msgData))
-              msgData = msgStr
-              msgDataLen = (string.len)(msgData)
-            else
-              do
-                do
-                  msgDataLen = 0
-                  currentStaticIndex = currentStaticIndex + 1
-                  -- DECOMPILER ERROR at PC795: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC194: Unhandled construct in 'MakeBoolean' P1
 
-                  -- DECOMPILER ERROR at PC795: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC194: Unhandled construct in 'MakeBoolean' P1
 
-                  -- DECOMPILER ERROR at PC795: LeaveBlock: unexpected jumping out IF_STMT
-
-                  -- DECOMPILER ERROR at PC795: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                  -- DECOMPILER ERROR at PC795: LeaveBlock: unexpected jumping out IF_STMT
-
-                end
-              end
-            end
+          if isCombinedMainPanel == false and issmoothupMessage == false and chattingMessage ~= nil then
+            chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
           end
         end
-        ;
-        (chatting_contents[currentStaticIndex - 1]):SetSize((chatting_contents[currentStaticIndex - 1]):GetTextSizeX(), chatting_sender:GetSizeY())
-      end
-      for index = currentStaticIndex - 1, 1, -1 do
-        (chatting_contents[index]):SetPosY(PosY - (chatting_contents[index]):GetSizeY())
-        ;
-        (chatting_contents[index]):SetShow(true)
-        if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[index]):GetPosX() then
-          PosY = PosY - (chatting_contents[index]):GetSizeY()
-          if index ~= 1 then
-            (chatting_contents[index]):SetPosX(chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX)
-          end
+        if chatting_content_PosY < 45 then
+          chattingMessage = chatPanel:nextMessage()
+          messageIndex = messageIndex + 1
+          -- DECOMPILER ERROR at PC203: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC203: LeaveBlock: unexpected jumping out IF_STMT
+
         end
       end
-      chatting_Icon:SetPosY(PosY)
-      ;
-      (chatting_contents[0]):SetPosY(PosY)
-      PosY = PosY - 3
-    else
-      do
-        chatting_Icon:SetPosX(10)
-        chatting_sender:SetTextHorizonRight()
-        chatting_sender:SetAutoResize(true)
-        chatting_sender:SetFontColor(msgColor)
-        chatting_sender:SetText(senderStr)
-        chatting_sender:SetSize(chatting_sender:GetTextSizeX(), chatting_sender:GetTextSizeY())
-        chatting_sender:SetShow(true)
-        local chat_contentPosX = 0
-        if chatting_Icon:GetTextSizeX() ~= 0 then
-          chat_contentPosX = 15
-          chatting_sender:SetPosX(chatting_Icon:GetTextSizeX() + chat_contentPosX)
+    end
+    while 1 do
+      while 1 do
+        -- DECOMPILER ERROR at PC220: Unhandled construct in 'MakeBoolean' P1
+
+        if messageIndex ~= 0 and chattingMessage ~= nil then
+          chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+        end
+      end
+      if chatting_content_PosY < 45 then
+        chattingMessage = chatPanel:nextMessage()
+        messageIndex = messageIndex + 1
+        -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+        -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_STMT
+
+      end
+    end
+    -- DECOMPILER ERROR at PC232: Confused about usage of register: R21 in 'UnsetPending'
+
+    deltascrollPosy[panelIndex] = 0
+    while 1 do
+      while 1 do
+        if chattingMessage ~= nil then
+          chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, checkchattingupTime)
+        end
+      end
+      if chatting_content_PosY < 45 then
+        chattingMessage = chatPanel:nextMessage()
+        messageIndex = messageIndex + 1
+        -- DECOMPILER ERROR at PC255: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+        -- DECOMPILER ERROR at PC255: LeaveBlock: unexpected jumping out IF_STMT
+
+      end
+    end
+    while 1 do
+      while 1 do
+        -- DECOMPILER ERROR at PC275: Unhandled construct in 'MakeBoolean' P1
+
+        -- DECOMPILER ERROR at PC275: Unhandled construct in 'MakeBoolean' P1
+
+        if isActivePanel and issmoothupMessage == false and chattingMessage ~= nil then
+          chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+        end
+      end
+      if chatting_content_PosY < 45 then
+        chattingMessage = chatPanel:nextMessage()
+        messageIndex = messageIndex + 1
+        -- DECOMPILER ERROR at PC284: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+        -- DECOMPILER ERROR at PC284: LeaveBlock: unexpected jumping out IF_STMT
+
+      end
+    end
+    while 1 do
+      while 1 do
+        -- DECOMPILER ERROR at PC301: Unhandled construct in 'MakeBoolean' P1
+
+        if messageIndex ~= 0 and chattingMessage ~= nil then
+          chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+        end
+      end
+      if chatting_content_PosY < 45 then
+        chattingMessage = chatPanel:nextMessage()
+        messageIndex = messageIndex + 1
+        -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+        -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out IF_STMT
+
+      end
+    end
+    -- DECOMPILER ERROR at PC313: Confused about usage of register: R21 in 'UnsetPending'
+
+    deltascrollPosy[panelIndex] = 0
+    while 1 do
+      while 1 do
+        if chattingMessage ~= nil then
+          chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, checkchattingupTime)
+        end
+      end
+      if chatting_content_PosY < 45 then
+        chattingMessage = chatPanel:nextMessage()
+        messageIndex = messageIndex + 1
+        -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+        -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_STMT
+
+      end
+    end
+  end
+  if chattingUpTime > 0.2 and issmoothupMessage == false then
+    ismsgin = false
+    for panelIndex = 0, count - 1 do
+      local chatPanel = ToClient_getChattingPanel(panelIndex)
+      chatPanel:setPushchattingMsg(false)
+    end
+  end
+  -- DECOMPILER ERROR: 24 unprocessed JMP targets
+end
+
+ChattingViewManager.UpdateSmoothScrollContent = function(self)
+  -- function num : 0_15 , upvalues : ChatUIPoolManager, deltascrollPosy
+  local count = ToClient_getChattingPanelCount()
+  for panelIndex = 0, count - 1 do
+    local chatPanel = ToClient_getChattingPanel(panelIndex)
+    if chatPanel:isOpen() then
+      local poolCurrentUI = ChatUIPoolManager:getPool(panelIndex)
+      local currentPanel = ChatUIPoolManager:getPanel(panelIndex)
+      local messageIndex = (self._srollPosition)[panelIndex]
+      local chattingMessage = chatPanel:beginMessage(messageIndex)
+      local chatting_content_PosY = currentPanel:GetSizeY() - 10
+      poolCurrentUI:drawclear()
+      while 1 do
+        while 1 do
+          if chattingMessage ~= nil then
+            chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+          end
+        end
+        if chatting_content_PosY < 45 then
+          chattingMessage = chatPanel:nextMessage()
+          messageIndex = messageIndex + 1
+          -- DECOMPILER ERROR at PC53: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC53: LeaveBlock: unexpected jumping out IF_STMT
+
+        end
+      end
+    end
+  end
+end
+
+ChattingViewManager.UpdateSmoothResetScrollContent = function(self, chattingScrollingTime)
+  -- function num : 0_16 , upvalues : ChatUIPoolManager, scrollIndex, scrollresetSpeed, preDownPosY, deltascrollPosy, isResetsmoothscroll, smoothResetScorllTime, ChattingViewManager
+  local count = ToClient_getChattingPanelCount()
+  for panelIndex = 0, count - 1 do
+    local chatPanel = ToClient_getChattingPanel(panelIndex)
+    if chatPanel:isOpen() then
+      local poolCurrentUI = ChatUIPoolManager:getPool(panelIndex)
+      local currentPanel = ChatUIPoolManager:getPanel(panelIndex)
+      local messageIndex = (self._srollPosition)[panelIndex]
+      local downIndex = 0
+      local currdownPosY = 0
+      local downPosY = 0
+      if scrollIndex == panelIndex then
+        if scrollresetSpeed < self._maxHistoryCount / 100 then
+          currdownPosY = PaGlobal_AnimationEasingFun_easeOutQuadFragments(chattingScrollingTime, scrollresetSpeed * 3.45)
         else
-          chat_contentPosX = 10
-          chatting_sender:SetPosX(chat_contentPosX)
-        end
-        chatting_Icon:SetPosY()
-        do
-          local remainSizeX = panelSizeX - chatting_sender:GetTextSizeX() - chatting_Icon:GetTextSizeX()
-          chatting_contents[0] = poolCurrentUI:newChattingContents()
-          ;
-          (chatting_contents[0]):SetSize(remainSizeX, chatting_sender:GetSizeY())
-          ;
-          (chatting_contents[0]):SetTextMode(UI_TM.eTextMode_AutoWrap)
-          ;
-          (chatting_contents[0]):SetAutoResize(true)
-          ;
-          (chatting_contents[0]):SetText(msg)
-          ;
-          (chatting_contents[0]):SetShow(true)
-          ;
-          (chatting_contents[0]):SetFontColor(msgColor)
-          chatting_Icon:SetPosY(PosY - (chatting_contents[0]):GetSizeY())
-          chatting_sender:SetPosY(PosY - (chatting_contents[0]):GetSizeY())
-          ;
-          (chatting_contents[0]):SetPosY(chatting_sender:GetPosY())
-          ;
-          (chatting_contents[0]):SetPosX(chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentPosX)
-          PosY = PosY - (chatting_contents[0]):GetSizeY() - 3
-          if UI_CT.System == chatType or UI_CT.Notice == chatType or isMe then
-            chatting_sender:SetIgnore(true)
+          if scrollresetSpeed < self._maxHistoryCount / 10 then
+            currdownPosY = PaGlobal_AnimationEasingFun_easeOutQuadFragments(chattingScrollingTime, scrollresetSpeed * 1.65)
           else
-            chatting_sender:SetIgnore(false)
-          end
-          if UI_CT.Public == chatType then
-            chatting_sender:SetOverFontColor(UI_color.C_FFC4BEBE)
-          else
-            chatting_sender:SetOverFontColor(UI_color.C_FFFFFFFF)
-          end
-          if getEnableSimpleUI() then
-            if ChattingViewManager._cacheSimpleUI then
-              chatting_sender:SetFontAlpha(1)
-              ;
-              (chatting_contents[0]):SetFontAlpha(1)
-              for _,contents in ipairs(chatting_contents) do
-                contents:SetFontAlpha(1)
-              end
+            if scrollresetSpeed < self._maxHistoryCount / 4 then
+              currdownPosY = PaGlobal_AnimationEasingFun_easeOutQuadFragments(chattingScrollingTime, scrollresetSpeed * 1.45)
             else
-              do
-                local alphaRate = (math.pow)((math.max)((math.min)(1 - (panelSizeY - (PosY)) / panelSizeY, 1), 0.01), 0.2)
-                chatting_sender:SetFontAlpha(alphaRate)
-                ;
-                (chatting_contents[0]):SetFontAlpha(alphaRate)
-                for _,contents in ipairs(chatting_contents) do
-                  contents:SetFontAlpha(alphaRate)
-                end
-                do
-                  return PosY - 3
+              if scrollresetSpeed < self._maxHistoryCount / 2 then
+                currdownPosY = PaGlobal_AnimationEasingFun_easeOutQuadFragments(chattingScrollingTime, scrollresetSpeed * 1.35)
+              else
+                if scrollresetSpeed < self._maxHistoryCount / 1.5 then
+                  currdownPosY = PaGlobal_AnimationEasingFun_easeOutQuadFragments(chattingScrollingTime, scrollresetSpeed * 1.3)
+                else
+                  currdownPosY = PaGlobal_AnimationEasingFun_easeOutQuadFragments(chattingScrollingTime, scrollresetSpeed * 1.25)
                 end
               end
+            end
+          end
+        end
+        downPosY = (math.abs)(currdownPosY - preDownPosY)
+        if downPosY > 1 then
+          preDownPosY = currdownPosY
+        end
+        downIndex = (math.floor)(downPosY)
+        -- DECOMPILER ERROR at PC112: Confused about usage of register: R14 in 'UnsetPending'
+
+        deltascrollPosy[panelIndex] = -(downPosY - downIndex)
+        if isResetsmoothscroll == false then
+          smoothResetScorllTime = 0
+          preDownPosY = 0
+          -- DECOMPILER ERROR at PC122: Confused about usage of register: R14 in 'UnsetPending'
+
+          deltascrollPosy[scrollIndex] = 0
+          -- DECOMPILER ERROR at PC124: Confused about usage of register: R14 in 'UnsetPending'
+
+          ;
+          (self._srollPosition)[panelIndex] = 0
+          -- DECOMPILER ERROR at PC127: Confused about usage of register: R14 in 'UnsetPending'
+
+          ;
+          (ChattingViewManager._scroll_BTNPos)[panelIndex] = 1
+          Scroll_IntervalAddPosCalc(panelIndex)
+          FromClient_ChatUpdate(true)
+          break
+        end
+        -- DECOMPILER ERROR at PC139: Confused about usage of register: R14 in 'UnsetPending'
+
+        ;
+        (self._srollPosition)[panelIndex] = (self._srollPosition)[panelIndex] - downIndex
+        if (self._srollPosition)[panelIndex] <= 0 then
+          smoothResetScorllTime = 0
+          preDownPosY = 0
+          -- DECOMPILER ERROR at PC150: Confused about usage of register: R14 in 'UnsetPending'
+
+          deltascrollPosy[scrollIndex] = 0
+          -- DECOMPILER ERROR at PC152: Confused about usage of register: R14 in 'UnsetPending'
+
+          ;
+          (self._srollPosition)[panelIndex] = 0
+          -- DECOMPILER ERROR at PC155: Confused about usage of register: R14 in 'UnsetPending'
+
+          ;
+          (ChattingViewManager._scroll_BTNPos)[panelIndex] = 1
+          Scroll_IntervalAddPosCalc(panelIndex)
+          isResetsmoothscroll = false
+          FromClient_ChatUpdate(true)
+        end
+        ;
+        ((poolCurrentUI._list_Scroll)[0]):SetControlPos(1 - (self._srollPosition)[panelIndex] / (self._maxHistoryCount - 1))
+        Scroll_IntervalAddPosCalc(panelIndex)
+        messageIndex = (self._srollPosition)[panelIndex]
+      end
+      local chattingMessage = chatPanel:beginMessage(messageIndex)
+      local chatting_content_PosY = currentPanel:GetSizeY() - 10
+      poolCurrentUI:drawclear()
+      while 1 do
+        while 1 do
+          if chattingMessage ~= nil then
+            chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+          end
+        end
+        if chatting_content_PosY < 38 then
+          chattingMessage = chatPanel:nextMessage()
+          messageIndex = messageIndex + 1
+          -- DECOMPILER ERROR at PC209: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC209: LeaveBlock: unexpected jumping out IF_STMT
+
+        end
+      end
+    end
+  end
+end
+
+ChattingViewManager.UpdateSmoothWheelScrollContent = function(self, wheelScrollingTime)
+  -- function num : 0_17 , upvalues : ChatUIPoolManager, isMouseOnChattingViewIndex, isMouseOn, UI_color, scrollIndex, issmoothWheelscroll, isUpDown, ChattingViewManager, deltascrollPosy, preScrollControlPos
+  local count = ToClient_getChattingPanelCount()
+  for panelIndex = 0, count - 1 do
+    local chatPanel = ToClient_getChattingPanel(panelIndex)
+    if chatPanel:isOpen() then
+      local isCombinedMainPanel = chatPanel:isCombinedToMainPanel()
+      local drawPanelIndex = panelIndex
+      local bgAlpah = (self._transparency)[drawPanelIndex]
+      if isCombinedMainPanel == true then
+        drawPanelIndex = 0
+      end
+      local currentPanel = ChatUIPoolManager:getPanel(drawPanelIndex)
+      local poolCurrentUI = ChatUIPoolManager:getPool(drawPanelIndex)
+      self._currentPoolIndex = drawPanelIndex
+      local IsMouseOver = (UI.checkIsInMouseAndEventPanel)(currentPanel)
+      if isShow == nil then
+        isShow = false
+      end
+      if isMouseOnChattingViewIndex ~= nil and isMouseOnChattingViewIndex == drawPanelIndex then
+        isShow = isMouseOn
+        if isShow then
+          bgAlpah = 1
+        end
+      else
+        isShow = IsMouseOver
+      end
+      currentPanel:SetColor(UI_color.C_00000000)
+      local isActivePanel = panelIndex == self._mainPanelSelectPanelIndex
+      if isCombinedMainPanel then
+        if panelIndex ~= 0 then
+          (ChatUIPoolManager:getPanel(panelIndex)):SetShow(false)
+          ;
+          (ChatUIPoolManager:getPanel(panelIndex)):SetIgnore(true)
+        end
+      else
+        -- DECOMPILER ERROR at PC103: Unhandled construct in 'MakeBoolean' P1
+
+        if isActivePanel == false and isCombinedMainPanel == false and chatPanel:isOpen() == true and (ChatUIPoolManager:getPanel(0)):GetShow() then
+          (ChatUIPoolManager:getPanel(panelIndex)):SetShow(true)
+          ;
+          (ChatUIPoolManager:getPanel(panelIndex)):SetIgnore(false)
+        end
+      end
+      if isCombinedMainPanel == false and chatPanel:isOpen() == false then
+        (ChatUIPoolManager:getPanel(panelIndex)):SetShow(false)
+        ;
+        (ChatUIPoolManager:getPanel(panelIndex)):SetIgnore(true)
+      end
+      if CheckTutorialEnd() == false then
+        for ii = 1, ChatUIPoolManager._poolCount - 1 do
+          (ChatUIPoolManager:getPanel(ii)):SetShow(false)
+        end
+      end
+      if isCombinedMainPanel == false then
+        if scrollIndex == panelIndex and issmoothWheelscroll then
+          local poolScrollUI = ChatUIPoolManager:getPool(panelIndex)
+          if isUpDown then
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(((poolScrollUI._list_Scroll)[0]):GetControlPos() - 1 / (ChattingViewManager._maxHistoryCount - 1) * wheelScrollingTime * 11.3)
+          else
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(((poolScrollUI._list_Scroll)[0]):GetControlPos() + 1 / (ChattingViewManager._maxHistoryCount - 1) * wheelScrollingTime * 11.3)
+          end
+          if ((poolScrollUI._list_Scroll)[0]):GetControlPos() > 1 then
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(1)
+          end
+          if ((poolScrollUI._list_Scroll)[0]):GetControlPos() < 0 then
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(0)
+          end
+          local index = (math.floor)((1 - ((poolScrollUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1))
+          -- DECOMPILER ERROR at PC243: Confused about usage of register: R17 in 'UnsetPending'
+
+          if index == 0 then
+            deltascrollPosy[panelIndex] = (1 - ((poolScrollUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1) % 1
+          else
+            -- DECOMPILER ERROR at PC257: Confused about usage of register: R17 in 'UnsetPending'
+
+            deltascrollPosy[panelIndex] = ((1 - ((poolScrollUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1) - index) % 1
+          end
+          -- DECOMPILER ERROR at PC263: Confused about usage of register: R17 in 'UnsetPending'
+
+          preScrollControlPos[panelIndex] = ((poolScrollUI._list_Scroll)[0]):GetControlPos()
+          -- DECOMPILER ERROR at PC266: Confused about usage of register: R17 in 'UnsetPending'
+
+          ;
+          (ChattingViewManager._srollPosition)[panelIndex] = index
+          -- DECOMPILER ERROR at PC273: Confused about usage of register: R17 in 'UnsetPending'
+
+          ;
+          (ChattingViewManager._scroll_BTNPos)[panelIndex] = ((poolScrollUI._list_Scroll)[0]):GetControlPos()
+          Scroll_IntervalAddPosCalc(panelIndex)
+          local messageIndex = (self._srollPosition)[panelIndex]
+          local chattingMessage = chatPanel:beginMessage(messageIndex)
+          local chatting_content_PosY = currentPanel:GetSizeY() - 10
+          while 1 do
+            while 1 do
+              if chattingMessage ~= nil then
+                chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+              end
+            end
+            if chatting_content_PosY < 45 then
+              chattingMessage = chatPanel:nextMessage()
+              messageIndex = messageIndex + 1
+              -- DECOMPILER ERROR at PC307: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC307: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
+          end
+        else
+          local messageIndex = (self._srollPosition)[drawPanelIndex]
+          local chattingMessage = chatPanel:beginMessage(messageIndex)
+          local chatting_content_PosY = currentPanel:GetSizeY() - 10
+          poolCurrentUI:drawclear()
+          while 1 do
+            while 1 do
+              if chattingMessage ~= nil then
+                chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, drawPanelIndex, deltascrollPosy[drawPanelIndex], self._cacheSimpleUI, 0)
+              end
+            end
+            if chatting_content_PosY < 45 then
+              chattingMessage = chatPanel:nextMessage()
+              messageIndex = messageIndex + 1
+              -- DECOMPILER ERROR at PC341: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC341: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
+          end
+        end
+      elseif isActivePanel then
+        if scrollIndex == panelIndex and issmoothWheelscroll then
+          local poolScrollUI = ChatUIPoolManager:getPool(panelIndex)
+          if isUpDown then
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(((poolScrollUI._list_Scroll)[0]):GetControlPos() - 1 / (ChattingViewManager._maxHistoryCount - 1) * wheelScrollingTime * 11.3)
+          else
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(((poolScrollUI._list_Scroll)[0]):GetControlPos() + 1 / (ChattingViewManager._maxHistoryCount - 1) * wheelScrollingTime * 11.3)
+          end
+          if ((poolScrollUI._list_Scroll)[0]):GetControlPos() > 1 then
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(1)
+          end
+          if ((poolScrollUI._list_Scroll)[0]):GetControlPos() < 0 then
+            ((poolScrollUI._list_Scroll)[0]):SetControlPos(0)
+          end
+          local index = (math.floor)((1 - ((poolScrollUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1))
+          -- DECOMPILER ERROR at PC436: Confused about usage of register: R17 in 'UnsetPending'
+
+          if index == 0 then
+            deltascrollPosy[panelIndex] = (1 - ((poolScrollUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1) % 1
+          else
+            -- DECOMPILER ERROR at PC450: Confused about usage of register: R17 in 'UnsetPending'
+
+            deltascrollPosy[panelIndex] = ((1 - ((poolScrollUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1) - index) % 1
+          end
+          -- DECOMPILER ERROR at PC456: Confused about usage of register: R17 in 'UnsetPending'
+
+          preScrollControlPos[panelIndex] = ((poolScrollUI._list_Scroll)[0]):GetControlPos()
+          -- DECOMPILER ERROR at PC459: Confused about usage of register: R17 in 'UnsetPending'
+
+          ;
+          (ChattingViewManager._srollPosition)[panelIndex] = index
+          -- DECOMPILER ERROR at PC466: Confused about usage of register: R17 in 'UnsetPending'
+
+          ;
+          (ChattingViewManager._scroll_BTNPos)[panelIndex] = ((poolScrollUI._list_Scroll)[0]):GetControlPos()
+          Scroll_IntervalAddPosCalc(panelIndex)
+          local messageIndex = (self._srollPosition)[panelIndex]
+          local chattingMessage = chatPanel:beginMessage(messageIndex)
+          local chatting_content_PosY = currentPanel:GetSizeY() - 10
+          while 1 do
+            while 1 do
+              if chattingMessage ~= nil then
+                chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+              end
+            end
+            if chatting_content_PosY < 45 then
+              chattingMessage = chatPanel:nextMessage()
+              messageIndex = messageIndex + 1
+              -- DECOMPILER ERROR at PC500: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC500: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
+          end
+        else
+          local messageIndex = (self._srollPosition)[panelIndex]
+          local chattingMessage = chatPanel:beginMessage(messageIndex)
+          local chatting_content_PosY = currentPanel:GetSizeY() - 10
+          poolCurrentUI:drawclear()
+          while 1 do
+            while 1 do
+              if chattingMessage ~= nil then
+                chatting_content_PosY = Chatnew_CreateChattingContent(chattingMessage, poolCurrentUI, chatting_content_PosY, messageIndex, panelIndex, deltascrollPosy[panelIndex], self._cacheSimpleUI, 0)
+              end
+            end
+            if chatting_content_PosY < 45 then
+              chattingMessage = chatPanel:nextMessage()
+              messageIndex = messageIndex + 1
+              -- DECOMPILER ERROR at PC534: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC534: LeaveBlock: unexpected jumping out IF_STMT
+
             end
           end
         end
       end
     end
   end
+  -- DECOMPILER ERROR: 30 unprocessed JMP targets
 end
 
 ChattingViewManager.createTab = function(self, poolCurrentUI, panelIndex, isActivePanel, drawPanelIndex, isCombinedMainPanel, PosX, isShow)
-  -- function num : 0_14 , upvalues : ChattingViewManager, ChatUIPoolManager
+  -- function num : 0_18 , upvalues : ChattingViewManager, ChatUIPoolManager
   if isCombinedMainPanel then
     if isActivePanel then
       local mainTab = poolCurrentUI:newTitleTab()
@@ -1265,40 +1550,34 @@ ChattingViewManager.createTab = function(self, poolCurrentUI, panelIndex, isActi
 end
 
 Chatting_ScrollEvent = function(poolIndex, updown)
-  -- function num : 0_15 , upvalues : ChattingViewManager, ChatUIPoolManager
-  local self = ChattingViewManager
-  local drawPoolIndex = poolIndex
-  if poolIndex == 0 then
-    poolIndex = self._mainPanelSelectPanelIndex
+  -- function num : 0_19 , upvalues : issmoothWheelscroll, ChattingViewManager, isUpDown, scrollIndex
+  if issmoothWheelscroll then
+    return 
   end
-  local poolCurrentUI = ChatUIPoolManager:getPool(drawPoolIndex)
-  if updown == true then
-    ((poolCurrentUI._list_Scroll)[0]):ControlButtonUp()
-    -- DECOMPILER ERROR at PC24: Confused about usage of register: R5 in 'UnsetPending'
-
-    if (self._srollPosition)[poolIndex] < self._maxHistoryCount then
-      (self._srollPosition)[poolIndex] = (self._srollPosition)[poolIndex] + 1
+  local chatPanel = ToClient_getChattingPanel(poolIndex)
+  do
+    local isCombinedMainPanel = chatPanel:isCombinedToMainPanel()
+    if isCombinedMainPanel then
+      local count = ToClient_getChattingPanelCount()
+      for panelIndex = 0, count - 1 do
+        local isActivePanel = panelIndex == ChattingViewManager._mainPanelSelectPanelIndex
+        if isActivePanel then
+          issmoothWheelscroll = true
+          isUpDown = updown
+          scrollIndex = panelIndex
+        end
+      end
+    else
+      issmoothWheelscroll = true
+      isUpDown = updown
+      scrollIndex = poolIndex
     end
-  else
-    ;
-    ((poolCurrentUI._list_Scroll)[0]):ControlButtonDown()
-    -- DECOMPILER ERROR at PC38: Confused about usage of register: R5 in 'UnsetPending'
-
-    if (self._srollPosition)[poolIndex] > 0 then
-      (self._srollPosition)[poolIndex] = (self._srollPosition)[poolIndex] - 1
-    end
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
   end
-  local poolDrawUI = ChatUIPoolManager:getPool(drawPoolIndex)
-  -- DECOMPILER ERROR at PC48: Confused about usage of register: R6 in 'UnsetPending'
-
-  ;
-  (self._scroll_BTNPos)[poolIndex] = ((poolDrawUI._list_Scroll)[0]):GetControlPos()
-  Scroll_IntervalAddPosCalc(poolIndex)
-  FromClient_ChatUpdate(true, poolIndex)
 end
 
 Scroll_IntervalAddPosCalc = function(panelIndex)
-  -- function num : 0_16 , upvalues : ChattingViewManager, _scroll_Interval_AddPos
+  -- function num : 0_20 , upvalues : ChattingViewManager, _scroll_Interval_AddPos
   local self = ChattingViewManager
   local panel = ToClient_getChattingPanel(panelIndex)
   -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
@@ -1312,7 +1591,7 @@ Scroll_IntervalAddPosCalc = function(panelIndex)
 end
 
 Chatting_OnResize = function()
-  -- function num : 0_17 , upvalues : chattingWindowMaxWidth, ChatUIPoolManager
+  -- function num : 0_21 , upvalues : chattingWindowMaxWidth, ChatUIPoolManager
   chattingWindowMaxWidth = getScreenSizeX() * 0.67
   local divisionPanel, panel, chatUI = nil, nil, nil
   for poolIndex = 0, ChatUIPoolManager._poolCount - 1 do
@@ -1443,24 +1722,44 @@ Chatting_OnResize = function()
 end
 
 HandleClicked_ScrollBtnPosY = function(panelIndex)
-  -- function num : 0_18 , upvalues : ChatUIPoolManager, ChattingViewManager
-  local poolCurrentUI = ChatUIPoolManager:getPool(panelIndex)
-  local PosY = ((math.floor)(((poolCurrentUI._list_Scroll)[0]):GetControlPos() * (ChattingViewManager._maxHistoryCount - 1) + 0.5) - (ChattingViewManager._maxHistoryCount - 1)) * -1
-  -- DECOMPILER ERROR at PC28: Confused about usage of register: R3 in 'UnsetPending'
-
-  if PosY ~= (ChattingViewManager._srollPosition)[panelIndex] then
-    (ChattingViewManager._srollPosition)[panelIndex] = PosY
-    -- DECOMPILER ERROR at PC35: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
-    (ChattingViewManager._scroll_BTNPos)[panelIndex] = ((poolCurrentUI._list_Scroll)[0]):GetControlPos()
+  -- function num : 0_22 , upvalues : issmoothscroll, ChatUIPoolManager, scrollIndex, preScrollControlPos, ChattingViewManager, deltascrollPosy
+  if issmoothscroll then
+    return 
   end
+  local poolCurrentUI = ChatUIPoolManager:getPool(panelIndex)
+  issmoothscroll = true
+  scrollIndex = panelIndex
+  if preScrollControlPos[panelIndex] == ((poolCurrentUI._list_Scroll)[0]):GetControlPos() then
+    FromClient_ChatUpdate(true)
+    return 
+  end
+  local index = (math.floor)((1 - ((poolCurrentUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1))
+  -- DECOMPILER ERROR at PC48: Confused about usage of register: R3 in 'UnsetPending'
+
+  if index == 0 then
+    deltascrollPosy[panelIndex] = (1 - ((poolCurrentUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1) % 1
+  else
+    -- DECOMPILER ERROR at PC62: Confused about usage of register: R3 in 'UnsetPending'
+
+    deltascrollPosy[panelIndex] = ((1 - ((poolCurrentUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1) - index) % 1
+  end
+  -- DECOMPILER ERROR at PC68: Confused about usage of register: R3 in 'UnsetPending'
+
+  preScrollControlPos[panelIndex] = ((poolCurrentUI._list_Scroll)[0]):GetControlPos()
+  -- DECOMPILER ERROR at PC71: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (ChattingViewManager._srollPosition)[panelIndex] = index
+  -- DECOMPILER ERROR at PC78: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (ChattingViewManager._scroll_BTNPos)[panelIndex] = ((poolCurrentUI._list_Scroll)[0]):GetControlPos()
   Scroll_IntervalAddPosCalc(panelIndex)
   FromClient_ChatUpdate(true)
 end
 
 HandleClicked_Chatting_AddTab = function()
-  -- function num : 0_19 , upvalues : ChattingViewManager
+  -- function num : 0_23 , upvalues : ChattingViewManager
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   ChattingViewManager._addChattingPreset = false
@@ -1472,7 +1771,7 @@ HandleClicked_Chatting_AddTab = function()
 end
 
 HandleClicked_Chatting_AddTabByIndex = function(panelIndex)
-  -- function num : 0_20 , upvalues : ChattingViewManager
+  -- function num : 0_24 , upvalues : ChattingViewManager
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
 
   ChattingViewManager._addChattingIdx = ToClient_openChattingPanelbyIndex(panelIndex)
@@ -1492,7 +1791,7 @@ HandleClicked_Chatting_AddTabByIndex = function(panelIndex)
 end
 
 HandleClicked_Chatting_ChangeTab = function(panelIndex)
-  -- function num : 0_21 , upvalues : ChattingViewManager
+  -- function num : 0_25 , upvalues : ChattingViewManager
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   ChattingViewManager._mainPanelSelectPanelIndex = panelIndex
@@ -1500,7 +1799,7 @@ HandleClicked_Chatting_ChangeTab = function(panelIndex)
 end
 
 moveChatTab = function(moveTo)
-  -- function num : 0_22
+  -- function num : 0_26
   local isSuccess = false
   local tempValue = 0
   while isSuccess == false and tempValue < 5 do
@@ -1510,7 +1809,7 @@ moveChatTab = function(moveTo)
 end
 
 moveChatTabExec = function(moveTo)
-  -- function num : 0_23 , upvalues : ChattingViewManager
+  -- function num : 0_27 , upvalues : ChattingViewManager
   local isSuccess = false
   local addIndex = 1
   if moveTo == false then
@@ -1533,7 +1832,7 @@ moveChatTabExec = function(moveTo)
 end
 
 HandleClicked_Chatting_Division = function(panelIndex)
-  -- function num : 0_24 , upvalues : ChatUIPoolManager, ChattingViewManager
+  -- function num : 0_28 , upvalues : ChatUIPoolManager, ChattingViewManager
   local divisionPanel = ToClient_getChattingPanel(panelIndex)
   local panel = ChatUIPoolManager:getPanel(panelIndex)
   divisionPanel:setPosition(getScreenSizeX() / 2 - panel:GetSizeX() / 2, getScreenSizeY() / 2 - panel:GetSizeY() / 2, panel:GetSizeX(), panel:GetSizeY())
@@ -1552,7 +1851,7 @@ HandleClicked_Chatting_Division = function(panelIndex)
 end
 
 HandleClicked_Chatting_CombineTab = function(panelIndex)
-  -- function num : 0_25
+  -- function num : 0_29
   local penel = ToClient_getChattingPanel(panelIndex)
   penel:combineToMainPanel()
   FromClient_ChatUpdate(true)
@@ -1560,7 +1859,7 @@ HandleClicked_Chatting_CombineTab = function(panelIndex)
 end
 
 HandleClicked_Chatting_Close = function(panelIndex)
-  -- function num : 0_26 , upvalues : ChattingViewManager
+  -- function num : 0_30 , upvalues : ChattingViewManager
   ToClient_closeChattingPanel(panelIndex)
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -1570,20 +1869,11 @@ HandleClicked_Chatting_Close = function(panelIndex)
 end
 
 HandleClicked_Chatting_ScrollReset = function(panelIndex)
-  -- function num : 0_27 , upvalues : ChatUIPoolManager, ChattingViewManager
-  local chatUI = ChatUIPoolManager:getPool(panelIndex)
-  ;
-  ((chatUI._list_Scroll)[0]):SetControlBottom()
-  -- DECOMPILER ERROR at PC10: Confused about usage of register: R2 in 'UnsetPending'
-
-  ;
-  (ChattingViewManager._srollPosition)[panelIndex] = 0
-  -- DECOMPILER ERROR at PC13: Confused about usage of register: R2 in 'UnsetPending'
-
-  ;
-  (ChattingViewManager._scroll_BTNPos)[panelIndex] = 1
-  Scroll_IntervalAddPosCalc(panelIndex)
-  FromClient_ChatUpdate(true, panelIndex)
+  -- function num : 0_31 , upvalues : isResetsmoothscroll, scrollIndex, ChatUIPoolManager, scrollresetSpeed, ChattingViewManager
+  isResetsmoothscroll = true
+  scrollIndex = panelIndex
+  local poolCurrentUI = ChatUIPoolManager:getPool(panelIndex)
+  scrollresetSpeed = (math.floor)((1 - ((poolCurrentUI._list_Scroll)[0]):GetControlPos()) * (ChattingViewManager._maxHistoryCount - 1)) + 1
 end
 
 local orgMouseX = 0
@@ -1592,7 +1882,7 @@ local orgPanelSizeX = 0
 local orgPanelSizeY = 0
 local orgPanelPosY = 0
 HandleClicked_Chatting_ResizeStartPos = function(drawPanelIndex)
-  -- function num : 0_28 , upvalues : ChatUIPoolManager, orgMouseX, orgMouseY, orgPanelPosY, orgPanelSizeX, orgPanelSizeY
+  -- function num : 0_32 , upvalues : ChatUIPoolManager, orgMouseX, orgMouseY, orgPanelPosY, orgPanelSizeX, orgPanelSizeY
   local panel = ChatUIPoolManager:getPanel(drawPanelIndex)
   orgMouseX = getMousePosX()
   orgMouseY = getMousePosY()
@@ -1603,13 +1893,13 @@ HandleClicked_Chatting_ResizeStartPos = function(drawPanelIndex)
 end
 
 HandleClicked_Chatting_ResizeStartPosEND = function(drawPanelIndex)
-  -- function num : 0_29
+  -- function num : 0_33
   ToClient_SaveUiInfo(false)
   Chatting_PanelTransparency(drawPanelIndex, false)
 end
 
 HandleClicked_Chatting_Resize = function(drawPanelIndex, panelIdx)
-  -- function num : 0_30 , upvalues : ChatUIPoolManager, orgMouseX, orgMouseY, orgPanelSizeX, orgPanelSizeY, chattingWindowMaxWidth, orgPanelPosY
+  -- function num : 0_34 , upvalues : ChatUIPoolManager, orgMouseX, orgMouseY, orgPanelSizeX, orgPanelSizeY, chattingWindowMaxWidth, orgPanelPosY
   local panel = ChatUIPoolManager:getPanel(drawPanelIndex)
   local chatUI = ChatUIPoolManager:getPool(drawPanelIndex)
   local currentX = getMousePosX()
@@ -1652,7 +1942,7 @@ HandleClicked_Chatting_Resize = function(drawPanelIndex, panelIdx)
 end
 
 HandleOn_ChattingLinkedItem = function(poolIndex, LinkedItemStaticIndex, isClicked)
-  -- function num : 0_31 , upvalues : ChattingViewManager, ChatUIPoolManager
+  -- function num : 0_35 , upvalues : ChattingViewManager, ChatUIPoolManager
   FromClient_ChatUpdate()
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R3 in 'UnsetPending'
 
@@ -1676,8 +1966,27 @@ HandleOn_ChattingLinkedItem = function(poolIndex, LinkedItemStaticIndex, isClick
   end
 end
 
+HandleOn_ChattingLinkedWebSite = function(poolIndex, LinkedWebsiteIndex)
+  -- function num : 0_36 , upvalues : ChattingViewManager, ChatUIPoolManager
+  FromClient_ChatUpdate()
+  -- DECOMPILER ERROR at PC4: Confused about usage of register: R2 in 'UnsetPending'
+
+  ChattingViewManager._linkedItemTooltipIsClicked = isClicked
+  local paramIndex = poolIndex
+  if poolIndex == 0 then
+    paramIndex = ChattingViewManager._mainPanelSelectPanelIndex
+  end
+  local chatPanel = ToClient_getChattingPanel(paramIndex)
+  local poolCurrentUI = ChatUIPoolManager:getPool(poolIndex)
+  local messageIndex = (poolCurrentUI._list_LinkedWebSiteMessageIndex)[LinkedWebsiteIndex]
+  local chattingMessage = chatPanel:getChattingMessageByIndex(messageIndex)
+  if chattingMessage:isLinkedWebsite() then
+    ToClient_OpenChargeWebPage(chattingMessage:getLinkedWebsite(), false)
+  end
+end
+
 HandleClicked_ChattingSender = function(poolIndex, senderStaticIndex)
-  -- function num : 0_32 , upvalues : ChattingViewManager, ChatUIPoolManager, clickedName, clickedUserNickName, clickedMsg, currentPoolIndex, clickedMessageIndex, ChatSubMenu
+  -- function num : 0_37 , upvalues : ChattingViewManager, ChatUIPoolManager, clickedName, clickedUserNickName, clickedMsg, currentPoolIndex, clickedMessageIndex, ChatSubMenu
   FromClient_ChatUpdate()
   local paramIndex = poolIndex
   if poolIndex == 0 then
@@ -1715,7 +2024,7 @@ HandleClicked_ChattingSender = function(poolIndex, senderStaticIndex)
 end
 
 isInviteParty = function(chatType, isSameChannel)
-  -- function num : 0_33 , upvalues : UI_CT
+  -- function num : 0_38 , upvalues : UI_CT
   local selfPlayer = getSelfPlayer()
   local selfActorKeyRaw = selfPlayer:getActorKey()
   do
@@ -1726,7 +2035,7 @@ isInviteParty = function(chatType, isSameChannel)
 end
 
 isInviteGuild = function(chatType, isSameChannel)
-  -- function num : 0_34 , upvalues : UI_CT
+  -- function num : 0_39 , upvalues : UI_CT
   local selfPlayer = getSelfPlayer()
   do
     local selfActorKeyRaw = selfPlayer:getActorKey()
@@ -1736,7 +2045,7 @@ isInviteGuild = function(chatType, isSameChannel)
 end
 
 isInviteCompetition = function(isSameChannel)
-  -- function num : 0_35
+  -- function num : 0_40
   local selfPlayer = getSelfPlayer()
   local selfActorKeyRaw = selfPlayer:getActorKey()
   if isSameChannel then
@@ -1745,7 +2054,7 @@ isInviteCompetition = function(isSameChannel)
 end
 
 HandleClicked_ChatSubMenu_SendWhisper = function()
-  -- function num : 0_36 , upvalues : clickedName, clickedUserNickName, ChatSubMenu, clickedMsg, currentPoolIndex, clickedMessageIndex
+  -- function num : 0_41 , upvalues : clickedName, clickedUserNickName, ChatSubMenu, clickedMsg, currentPoolIndex, clickedMessageIndex
   if clickedName ~= nil and clickedUserNickName ~= nil then
     local nameType = ToClient_getChatNameType()
     if nameType == 0 then
@@ -1765,7 +2074,7 @@ HandleClicked_ChatSubMenu_SendWhisper = function()
 end
 
 HandleClicked_ChatSubMenu_AddFriend = function()
-  -- function num : 0_37 , upvalues : clickedName, clickedUserNickName, ChatSubMenu, clickedMsg, currentPoolIndex, clickedMessageIndex
+  -- function num : 0_42 , upvalues : clickedName, clickedUserNickName, ChatSubMenu, clickedMsg, currentPoolIndex, clickedMessageIndex
   if clickedName ~= nil and clickedUserNickName ~= nil then
     local nameType = ToClient_getChatNameType()
     if nameType == 0 then
@@ -1785,7 +2094,7 @@ HandleClicked_ChatSubMenu_AddFriend = function()
 end
 
 HandleClicked_ChatSubMenu_InviteParty = function()
-  -- function num : 0_38 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu, clickedUserNickName, clickedMsg
+  -- function num : 0_43 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu, clickedUserNickName, clickedMsg
   if currentPoolIndex ~= nil and clickedMessageIndex ~= nil then
     ToClient_RequestInvitePartyByChatSubMenu(currentPoolIndex, clickedName)
     ChatSubMenu:SetShow(false)
@@ -1813,7 +2122,7 @@ HandleClicked_ChatSubMenu_InviteParty = function()
 end
 
 HandleClicked_ChatSubMenu_InviteGuild = function()
-  -- function num : 0_39 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu
+  -- function num : 0_44 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu
   if currentPoolIndex ~= nil and clickedMessageIndex ~= nil then
     ToClient_RequestInviteGuildByChatSubMenu(currentPoolIndex, clickedName)
     ChatSubMenu:SetShow(false)
@@ -1821,7 +2130,7 @@ HandleClicked_ChatSubMenu_InviteGuild = function()
 end
 
 HandleClicked_ChatSubMenu_InviteCompetition = function()
-  -- function num : 0_40 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu
+  -- function num : 0_45 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu
   if currentPoolIndex ~= nil and clickedMessageIndex ~= nil then
     ToClient_RequestInviteCompetitionByChatSubMenu(clickedName, false)
     ChatSubMenu:SetShow(false)
@@ -1829,7 +2138,7 @@ HandleClicked_ChatSubMenu_InviteCompetition = function()
 end
 
 FromClient_requestInviteGuildByChatSubMenu = function(actorKeyRaw)
-  -- function num : 0_41 , upvalues : clickedName, clickedUserNickName, clickedMsg, currentPoolIndex, clickedMessageIndex
+  -- function num : 0_46 , upvalues : clickedName, clickedUserNickName, clickedMsg, currentPoolIndex, clickedMessageIndex
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildInfo == nil then
     return 
@@ -1848,10 +2157,10 @@ FromClient_requestInviteGuildByChatSubMenu = function(actorKeyRaw)
 end
 
 HandleClicked_ChatSubMenu_Block = function()
-  -- function num : 0_42 , upvalues : currentPoolIndex, clickedMessageIndex, clickedUserNickName, ChatSubMenu, clickedName, clickedMsg
+  -- function num : 0_47 , upvalues : currentPoolIndex, clickedMessageIndex, clickedUserNickName, ChatSubMenu, clickedName, clickedMsg
   if currentPoolIndex ~= nil and clickedMessageIndex ~= nil then
     local chatBlock = function()
-    -- function num : 0_42_0 , upvalues : currentPoolIndex, clickedUserNickName, ChatSubMenu, clickedName, clickedMsg, clickedMessageIndex
+    -- function num : 0_47_0 , upvalues : currentPoolIndex, clickedUserNickName, ChatSubMenu, clickedName, clickedMsg, clickedMessageIndex
     ToClient_RequestBlockCharacter(currentPoolIndex, clickedUserNickName)
     ChatSubMenu:SetShow(false)
     clickedName = nil
@@ -1869,7 +2178,7 @@ HandleClicked_ChatSubMenu_Block = function()
 end
 
 HandleClicked_ChatSubMenu_ReportGoldSeller = function()
-  -- function num : 0_43 , upvalues : currentPoolIndex, clickedMessageIndex, clickedMsg, clickedName
+  -- function num : 0_48 , upvalues : currentPoolIndex, clickedMessageIndex, clickedMsg, clickedName
   local selfProxy = (getSelfPlayer()):get()
   local inventory = selfProxy:getCashInventory()
   local hasItem = inventory:getItemCount_s64(ItemEnchantKey(65208, 0))
@@ -1888,10 +2197,10 @@ HandleClicked_ChatSubMenu_ReportGoldSeller = function()
 end
 
 HandleClicked_ChatSubMenu_BlockVote = function()
-  -- function num : 0_44 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu, clickedUserNickName, clickedMsg
+  -- function num : 0_49 , upvalues : currentPoolIndex, clickedMessageIndex, clickedName, ChatSubMenu, clickedUserNickName, clickedMsg
   if currentPoolIndex ~= nil and clickedMessageIndex ~= nil then
     local chatBlockVote = function()
-    -- function num : 0_44_0 , upvalues : clickedName, ChatSubMenu, clickedUserNickName, clickedMsg, currentPoolIndex, clickedMessageIndex
+    -- function num : 0_49_0 , upvalues : clickedName, ChatSubMenu, clickedUserNickName, clickedMsg, currentPoolIndex, clickedMessageIndex
     ToClient_RequestBlockChatByUser(clickedName)
     ChatSubMenu:SetShow(false)
     clickedName = nil
@@ -1918,11 +2227,11 @@ HandleClicked_ChatSubMenu_BlockVote = function()
 end
 
 HanldeClicked_ChatSubMenu_Introduce = function()
-  -- function num : 0_45
+  -- function num : 0_50
 end
 
 FGlobal_ChattingPanel_Reset = function()
-  -- function num : 0_46 , upvalues : ChatUIPoolManager
+  -- function num : 0_51 , upvalues : ChatUIPoolManager
   for index = 0, ChatUIPoolManager._poolCount - 1 do
     local panel = ToClient_getChattingPanel(index)
     panel:setPosition(-1, -1, -1, -1)
@@ -1938,7 +2247,7 @@ FGlobal_ChattingPanel_Reset = function()
 end
 
 FGlobal_Chatting_ShowToggle = function()
-  -- function num : 0_47 , upvalues : ChatUIPoolManager
+  -- function num : 0_52 , upvalues : ChatUIPoolManager
   local baseChatPanel = ChatUIPoolManager:getPanel(0)
   if baseChatPanel:GetShow() == true then
     baseChatPanel:SetShow(false)
@@ -1949,7 +2258,7 @@ FGlobal_Chatting_ShowToggle = function()
 end
 
 FGlobal_Chatting_PanelTransparency = function(panelIndex, _transparency)
-  -- function num : 0_48 , upvalues : ChattingViewManager
+  -- function num : 0_53 , upvalues : ChattingViewManager
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
 
   (ChattingViewManager._transparency)[panelIndex] = _transparency
@@ -1959,12 +2268,12 @@ FGlobal_Chatting_PanelTransparency = function(panelIndex, _transparency)
 end
 
 FGlobal_Chatting_PanelTransparency_Chk = function(panelIndex)
-  -- function num : 0_49 , upvalues : ChattingViewManager
+  -- function num : 0_54 , upvalues : ChattingViewManager
   return (ChattingViewManager._transparency)[panelIndex]
 end
 
 Chatting_PanelTransparency = function(panelIndex, transparency, isHideTooltip)
-  -- function num : 0_50 , upvalues : ChatUIPoolManager, isMouseOn, ChattingViewManager, isMouseOnChattingViewIndex
+  -- function num : 0_55 , upvalues : ChatUIPoolManager, isMouseOn, ChattingViewManager, isMouseOnChattingViewIndex
   local currentPanel = ChatUIPoolManager:getPanel(panelIndex)
   local IsMouseOver = (UI.checkIsInMouseAndEventPanel)(currentPanel)
   if isHideTooltip == true and Panel_Tooltip_Item_chattingLinkedItem:GetShow() then
@@ -1991,7 +2300,7 @@ Chatting_PanelTransparency = function(panelIndex, transparency, isHideTooltip)
 end
 
 FGlobal_MainChatPanelUpdate = function()
-  -- function num : 0_51 , upvalues : ChatUIPoolManager, UI_color
+  -- function num : 0_56 , upvalues : ChatUIPoolManager, UI_color
   local chatPanelInfo = ToClient_getChattingPanel(0)
   local targetPanel = ChatUIPoolManager:getPanel(0)
   targetPanel:SetShow(false, false)
@@ -2010,7 +2319,7 @@ FGlobal_MainChatPanelUpdate = function()
 end
 
 ChatPanel_Update = function()
-  -- function num : 0_52 , upvalues : ChatUIPoolManager
+  -- function num : 0_57 , upvalues : ChatUIPoolManager
   local count = ToClient_getChattingPanelCount()
   for panelIndex = 0, count - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIndex)
@@ -2025,7 +2334,7 @@ ChatPanel_Update = function()
 end
 
 FromClient_ChatUpdate = function(isShow, currentPanelIndex)
-  -- function num : 0_53 , upvalues : _tabButton_PosX, addChat_PosX, ChatUIPoolManager, ChattingViewManager, isMouseOn
+  -- function num : 0_58 , upvalues : _tabButton_PosX, addChat_PosX, ChatUIPoolManager, ChattingViewManager, isMouseOn
   _tabButton_PosX = 0
   addChat_PosX = 0
   local openedChattingPanelCount = 0
@@ -2107,23 +2416,23 @@ FromClient_ChatUpdate = function(isShow, currentPanelIndex)
 end
 
 FGlobal_getChattingPanel = function(poolIndex)
-  -- function num : 0_54 , upvalues : ChatUIPoolManager
+  -- function num : 0_59 , upvalues : ChatUIPoolManager
   local panel = ChatUIPoolManager:getPanel(poolIndex)
   return panel
 end
 
 FGlobal_getChattingPanelUIPool = function(panelIndex)
-  -- function num : 0_55 , upvalues : ChatUIPoolManager
+  -- function num : 0_60 , upvalues : ChatUIPoolManager
   return ChatUIPoolManager:getPool(panelIndex)
 end
 
 Chatting_EnableSimpleUI = function()
-  -- function num : 0_56
+  -- function num : 0_61
   FromClient_ChatUpdate()
 end
 
 FGlobal_InputModeChangeForChatting = function()
-  -- function num : 0_57 , upvalues : isMouseOn, ChattingViewManager
+  -- function num : 0_62 , upvalues : isMouseOn, ChattingViewManager
   local IM = CppEnums.EProcessorInputMode
   if ToClient_isLoadingProcessor() == false and IM.eProcessorInputMode_GameMode == getInputMode() then
     isMouseOn = false
@@ -2135,7 +2444,7 @@ local saveWhisperTime = getTime()
 local checkWhistperTime = toUint64(0, 60000)
 local sendPossibleTime = toUint64(0, 0)
 FromClient_PrivateChatMessageUpdate = function()
-  -- function num : 0_58 , upvalues : sendPossibleTime, checkWhistperTime
+  -- function num : 0_63 , upvalues : sendPossibleTime, checkWhistperTime
   if sendPossibleTime <= getTime() then
     audioPostEvent_SystemUi(100, 0)
     sendPossibleTime = getTime() + checkWhistperTime
@@ -2143,7 +2452,7 @@ FromClient_PrivateChatMessageUpdate = function()
 end
 
 Chatting_setIsOpenValue = function(panelIndex, isOpen)
-  -- function num : 0_59
+  -- function num : 0_64
   local chatPanel = ToClient_getChattingPanel(panelIndex)
   chatPanel:setOpenValue(isOpen)
 end

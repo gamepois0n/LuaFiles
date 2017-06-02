@@ -105,7 +105,7 @@ partyInven.Update = function(self)
   end
   local currentWeight = ToClient_GetCurrentWeight()
   ;
-  (self.invenWeightTxt):SetText((string.format)("%.0f", currentWeight / 10000) .. "/50LT")
+  (self.invenWeightTxt):SetText((string.format)("%.0f", currentWeight / 10000) .. "/50" .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
 end
 
 FromClient_ChangePartyInventory = function()
