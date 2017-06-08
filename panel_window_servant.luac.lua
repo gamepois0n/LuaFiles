@@ -779,6 +779,7 @@ ServantIcon_Resize = function()
           Panel_Window_Servant:SetPosX(10)
           Panel_Window_Servant:SetPosY(Panel_SelfPlayerExpGage:GetPosY() + Panel_SelfPlayerExpGage:GetSizeY() + 15)
         end
+        FGlobal_PanelRepostionbyScreenOut(Panel_Window_Servant)
       end
     end
   end

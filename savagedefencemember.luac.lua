@@ -94,7 +94,7 @@ PaGlobal_SavegeDefenceMember_ListUpdate = function(contents, key)
   txt_DeadInfo:SetPosY(5)
   txt_DeadInfo:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEGAME_DEAD"))
   txt_DeadInfo:SetFontColor((Defines.Color).C_FFFF0000)
-  if ToClient_getSavageDefencePlayerDead() then
+  if ToClient_getSavageDefencePlayerDead(idx) then
     txt_DeadInfo:SetShow(true)
     btn_MemberName:SetFontColor((Defines.Color).C_FF888888)
     txt_PointCount:SetFontColor((Defines.Color).C_FF888888)

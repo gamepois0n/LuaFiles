@@ -110,8 +110,20 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   ButtonDoDye:addInputEvent("Mouse_LUp", "HandleClicked_DeyReNew_DoDye()")
 end
 
+HandleReset_DyeReNew_AmpuleTab_BySelectCharacterType = function()
+  -- function num : 0_2
+  local Static_BG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
+  local UIAmpuleTargetBG = (UI.getChildControl)(Static_BG, "Static_AmpuleTartget_BG")
+  local RadioButton_Tab_ALL = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_ALL")
+  local RadioButton_Tab_My = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_My")
+  local RadioButton_Tab_Pearl = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_Pearl")
+  RadioButton_Tab_ALL:SetCheck(false)
+  RadioButton_Tab_My:SetCheck(true)
+  RadioButton_Tab_Pearl:SetCheck(false)
+end
+
 HandleClicked_DyeReNew_SelectCharacterType = function(idx)
-  -- function num : 0_2 , upvalues : enValue
+  -- function num : 0_3 , upvalues : enValue
   local self = FGlobal_DyeReNew_GetInstance()
   local oldSelectedCharacterType = self._selected_CharacterTarget
   local oldSelectEquipSlotNo = self._selected_EquipSlotNo
@@ -128,6 +140,7 @@ HandleClicked_DyeReNew_SelectCharacterType = function(idx)
     ;
     (self._AmpuleScroll):SetControlTop()
     Inventory_SetFunctor(FGlobal_Panel_DyeReNew_InventoryFilter, FGlobal_Panel_DyeReNew_Interaction_FromInventory, nil, nil)
+    HandleReset_DyeReNew_AmpuleTab_BySelectCharacterType()
     self:Change_EquipIcon()
     self:Update_Part()
     self:Update_AmpuleList()
@@ -146,7 +159,7 @@ HandleClicked_DyeReNew_SelectCharacterType = function(idx)
 end
 
 HandleClicked_RUp_ClearEquipItemByEquipSlotNo = function(equipSlotNo, equipSlotIndex)
-  -- function num : 0_3
+  -- function num : 0_4
   local self = FGlobal_DyeReNew_GetInstance()
   Panel_Tooltip_Item_hideTooltip()
   ToClient_RequestClearDyeingTargetSlot(equipSlotNo)
@@ -168,7 +181,7 @@ HandleClicked_RUp_ClearEquipItemByEquipSlotNo = function(equipSlotNo, equipSlotI
 end
 
 HandleClicked_OnOut_ShowEquipItemToolTip = function(isShow, equipSlotNo, slotIdx)
-  -- function num : 0_4
+  -- function num : 0_5
   local self = FGlobal_DyeReNew_GetInstance()
   if isShow == true then
     local itemWrapper = ToClient_RequestGetDyeingTargetItemWrapper(equipSlotNo)
@@ -182,7 +195,7 @@ HandleClicked_OnOut_ShowEquipItemToolTip = function(isShow, equipSlotNo, slotIdx
 end
 
 HandleClicked_LUp_SelectEquipItem = function(equipSlotNo, equipSlotIndex)
-  -- function num : 0_5 , upvalues : enValue
+  -- function num : 0_6 , upvalues : enValue
   local self = FGlobal_DyeReNew_GetInstance()
   for ii = 0, enValue.MaxEquipSlotCount - 1 do
     if ii == equipSlotIndex then
@@ -202,7 +215,7 @@ HandleClicked_LUp_SelectEquipItem = function(equipSlotNo, equipSlotIndex)
 end
 
 HandleClicked_LUp_EquipPartReset = function(equipSlotNo, partId, slotId, uiIdx)
-  -- function num : 0_6
+  -- function num : 0_7
   local self = FGlobal_DyeReNew_GetInstance()
   local resetBtn = (self._arrEquipPartReset)[uiIdx]
   ToClient_RequestClearUsedDyeingPalette(equipSlotNo, partId, slotId)
@@ -213,7 +226,7 @@ HandleClicked_LUp_EquipPartReset = function(equipSlotNo, partId, slotId, uiIdx)
 end
 
 HandleClicked_LUp_SelectEquipPart = function(partID, slotID, UIidx)
-  -- function num : 0_7
+  -- function num : 0_8
   local self = FGlobal_DyeReNew_GetInstance()
   ToClient_RequestSelectedDyeingPartSlot(self._selected_EquipSlotNo, partID, slotID)
   self._nowClickPartId = partID
@@ -221,7 +234,7 @@ HandleClicked_LUp_SelectEquipPart = function(partID, slotID, UIidx)
 end
 
 HandleOnOut_DeyReNew_Ampule_Color = function(isShow, itemEnchantKey, UIIndex)
-  -- function num : 0_8
+  -- function num : 0_9
   local self = FGlobal_DyeReNew_GetInstance()
   local uiControl = (self._arrAmpuleSlotBG)[UIIndex]
   local itemEnchantSSW = getItemEnchantStaticStatus(ItemEnchantKey(itemEnchantKey))
@@ -237,29 +250,32 @@ HandleOnOut_DeyReNew_Ampule_Color = function(isShow, itemEnchantKey, UIIndex)
 end
 
 HandleScroll_DyeReNew_Ampule_ScrollUpdate = function(isScrollUp)
-  -- function num : 0_9
+  -- function num : 0_10
   local self = FGlobal_DyeReNew_GetInstance()
-  self._scrollStartIndex = (UIScroll.ScrollEvent)(self._AmpuleScroll, isScrollUp, 1, self._scrollMaxRow * 7, self._scrollStartIndex, 1)
+  local movingValue = 2
+  self._scrollStartIndex = (UIScroll.ScrollEvent)(self._AmpuleScroll, isScrollUp, movingValue, self._scrollMaxRow, self._scrollStartIndex, 1)
   self:Update_AmpuleList()
 end
 
 HandleClicked_DyeReNew_PressAmpuleScroll = function()
-  -- function num : 0_10
+  -- function num : 0_11
   local self = FGlobal_DyeReNew_GetInstance()
-  self._scrollStartIndex = (math.ceil)(self._scrollMaxRow * (self._AmpuleScroll):GetControlPos())
+  self._scrollStartIndex = (math.ceil)((self._scrollMaxRow - 2) * (self._AmpuleScroll):GetControlPos())
   self:Update_AmpuleList()
 end
 
 HandleClicked_LUp_Ampule_SelectCategory = function(categoryIdx)
-  -- function num : 0_11
+  -- function num : 0_12
   local self = FGlobal_DyeReNew_GetInstance()
   self._nowPaletteCategoryIndex = categoryIdx
   self._scrollStartIndex = 0
+  ;
+  ((UI.getChildControl)(self._AmpuleScroll, "Scroll_CtrlButton")):SetPosY(self._scrollStartIndex)
   self:Update_AmpuleList()
 end
 
 HandleOnOut_DyeReNew_Palette_Category_Tooltip = function(isOn, ButtonIndex)
-  -- function num : 0_12
+  -- function num : 0_13
   local name = ""
   local desc = nil
   if isOn == true then
@@ -278,7 +294,7 @@ HandleOnOut_DyeReNew_Palette_Category_Tooltip = function(isOn, ButtonIndex)
 end
 
 HandleClicked_LUp_Ampule_SelectedType = function(isShowAll, isPearl)
-  -- function num : 0_13 , upvalues : UI_BUFFTYPE
+  -- function num : 0_14 , upvalues : UI_BUFFTYPE
   local self = FGlobal_DyeReNew_GetInstance()
   local selfPlayer = getSelfPlayer()
   do
@@ -297,12 +313,14 @@ HandleClicked_LUp_Ampule_SelectedType = function(isShowAll, isPearl)
     self._scrollStartIndex = 0
     self._selectedCategoryIdx = 0
     self._isPearlPalette = isPearl
+    ;
+    ((UI.getChildControl)(self._AmpuleScroll, "Scroll_CtrlButton")):SetPosY(self._scrollStartIndex)
     self:Update_AmpuleList()
   end
 end
 
 HandleClicked_DeyReNew_Palette_SelectColor = function(dataIdx)
-  -- function num : 0_14
+  -- function num : 0_15
   local self = FGlobal_DyeReNew_GetInstance()
   self._nowPaletteDataIndex = dataIdx
   if self._selected_EquipSlotNo == -1 or self._nowClickPartId == -1 then
@@ -310,17 +328,14 @@ HandleClicked_DeyReNew_Palette_SelectColor = function(dataIdx)
   end
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex, self._paletteShowAll)
   local isDyeUI = false
-  local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteCategoryIndex, isDyeUI)
-  if ampuleCount < toInt64(0, 0) then
-    if self._isPearlPalette == false then
-      self._ampuleCountCheck = false
-    else
-      self._ampuleCountCheck = true
-    end
+  local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteDataIndex, isDyeUI)
+  local convertCount = tostring(ampuleCount)
+  convertCount = tonumber(convertCount)
+  if convertCount >= 1 then
+    self._ampuleCountCheck = false
   else
-    if self._isPearlPalette == false then
-      self._ampuleCountCheck = true
-    else
+    self._ampuleCountCheck = true
+    if self._isPearlPalette == true then
       self._ampuleCountCheck = false
     end
   end
@@ -334,7 +349,7 @@ HandleClicked_DeyReNew_Palette_SelectColor = function(dataIdx)
 end
 
 HandleOpen_RadioButton_AmpuleReset = function()
-  -- function num : 0_15
+  -- function num : 0_16
   local Static_BG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
   local UIAmpuleTargetBG = (UI.getChildControl)(Static_BG, "Static_AmpuleTartget_BG")
   local RadioButton_Tab_ALL = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_ALL")
@@ -346,20 +361,20 @@ HandleOpen_RadioButton_AmpuleReset = function()
 end
 
 HandleClicked_DyeReNew_SetEndurance = function()
-  -- function num : 0_16
+  -- function num : 0_17
   local index = ((UI.getChildControl)(Panel_Dye_ReNew, "Slider_Endurance")):GetSelectIndex()
   ToClient_RequestChangeEndurance(index)
 end
 
 HandleClicked_DyeReNew_SetShowUnderwear = function()
-  -- function num : 0_17
+  -- function num : 0_18
   local self = FGlobal_DyeReNew_GetInstance()
   self._bShowUnderwear = not self._bShowUnderwear
   ToClient_RequestToggleShowUnderwear()
 end
 
 HandleClicked_DyeReNew_SetHideAvartar = function()
-  -- function num : 0_18
+  -- function num : 0_19
   local self = FGlobal_DyeReNew_GetInstance()
   self._bShowAvater = not self._bShowAvater
   ToClient_RequestToggleHideAvatar()
@@ -370,42 +385,42 @@ HandleClicked_DyeReNew_SetHideAvartar = function()
 end
 
 HandleClicked_DyeReNew_ToggleWarStance = function()
-  -- function num : 0_19
+  -- function num : 0_20
   local self = FGlobal_DyeReNew_GetInstance()
   self._bWarStance = not self._bWarStance
   ToClient_RequestSetBattleView(self._bWarStance)
 end
 
 HandleClicked_DyeReNew_SetFaceViewHair = function()
-  -- function num : 0_20
+  -- function num : 0_21
   local self = FGlobal_DyeReNew_GetInstance()
   self._bFaceVeiwHair = not self._bFaceVeiwHair
   ToClient_setFaceViewHair(self._bFaceVeiwHair)
 end
 
 HandleClicked_DyeReNew_SetHideHelmet = function()
-  -- function num : 0_21
+  -- function num : 0_22
   local self = FGlobal_DyeReNew_GetInstance()
   self._bHideHelmet = not self._bHideHelmet
   ToClient_RequestHideHelmet(self._bHideHelmet)
 end
 
 HandleClicked_DyeReNew_SetFaceGuard = function()
-  -- function num : 0_22
+  -- function num : 0_23
   local self = FGlobal_DyeReNew_GetInstance()
   self._bOpenFaceGuard = not self._bOpenFaceGuard
   ToClient_RequestHideBattleHelmet(self._bOpenFaceGuard)
 end
 
 HandleClicked_DyeReNew_SetAwakenWeapon = function()
-  -- function num : 0_23
+  -- function num : 0_24
   local self = FGlobal_DyeReNew_GetInstance()
   self._bShowAwakenWeapon = not self._bShowAwakenWeapon
   ToClient_SetAwakenWeaponShow(self._bShowAwakenWeapon)
 end
 
 HandleOver_DyeReNew_SimpleTooltipCheckbutton = function(isShow, tipType)
-  -- function num : 0_24 , upvalues : enToggleIndex
+  -- function num : 0_25 , upvalues : enToggleIndex
   local name, desc, control = nil, nil, nil
   if enToggleIndex.Underwear == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_SHOWUNDERWEAR")
@@ -450,7 +465,7 @@ HandleOver_DyeReNew_SimpleTooltipCheckbutton = function(isShow, tipType)
 end
 
 HandleClicked_DeyReNew_DoDye = function()
-  -- function num : 0_25 , upvalues : dyePartString
+  -- function num : 0_26 , upvalues : dyePartString
   local self = FGlobal_DyeReNew_GetInstance()
   local _dyePartString = ""
   local equipSlotNo = self._selected_EquipSlotNo
@@ -463,18 +478,18 @@ HandleClicked_DeyReNew_DoDye = function()
     return 
   end
   local noAction = function()
-    -- function num : 0_25_0
+    -- function num : 0_26_0
     return 
   end
 
   local doDye = function()
-    -- function num : 0_25_1 , upvalues : self
+    -- function num : 0_26_1 , upvalues : self
     ToClient_RequestDye(self._isPearlPalette)
     FGlobal_Panel_DyeReNew_Hide()
   end
 
   local askDoDye = function()
-    -- function num : 0_25_2 , upvalues : _dyePartString, doDye, noAction
+    -- function num : 0_26_2 , upvalues : _dyePartString, doDye, noAction
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
     local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_DYENEW_SURE_DYE_THIS_PART", "partString", _dyePartString)
     local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = doDye, functionNo = noAction, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -484,7 +499,7 @@ HandleClicked_DeyReNew_DoDye = function()
   end
 
   local alreadyPearlDye = function()
-    -- function num : 0_25_3 , upvalues : askDoDye, noAction
+    -- function num : 0_26_3 , upvalues : askDoDye, noAction
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_ALREADY_PEARLCOLOR")
     local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = askDoDye, functionNo = noAction, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -533,7 +548,7 @@ HandleClicked_DeyReNew_DoDye = function()
 end
 
 HandleClicked_DyeReNew_SetShowUI = function()
-  -- function num : 0_26
+  -- function num : 0_27
   if Panel_Dye_ReNew:GetShow() then
     Panel_Dye_ReNew:SetShow(false)
     Panel_Window_Inventory:SetShow(false)

@@ -54,6 +54,9 @@ EventNotify_Open = function(isDo, isMenu)
   if not ToClient_IsPopUpToggle() then
     return 
   end
+  if isGameTypeKR2() then
+    return 
+  end
   tempWrapper = getTemporaryInformationWrapper()
   if tempWrapper:isEventBeforeShow() and isDo == nil then
     return 

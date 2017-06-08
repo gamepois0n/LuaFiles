@@ -101,11 +101,9 @@ UpdateBodyWeight = function()
 end
 
 historyInit = function()
-  -- function num : 0_5 , upvalues : bonInfoPostFunction, selectedClassType, Slider_Height, Slider_Weight
+  -- function num : 0_5 , upvalues : bonInfoPostFunction, selectedClassType
   bonInfoPostFunction()
   selectedClassType = (getSelfPlayer()):getClassType()
-  applyBodyHeight(selectedClassType, Slider_Height:GetControlPos() * 100)
-  applyBodyWeight(selectedClassType, Slider_Weight:GetControlPos() * 100)
 end
 
 UpdateBodyBoneScale = function()

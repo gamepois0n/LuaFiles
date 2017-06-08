@@ -122,12 +122,29 @@ else
           aniInfo5.IsChangeChild = true
         else
           do
-            do
-              local aniInfo1 = static_PearlAbyss:addColorAnimation(startAniTime + 4, startAniTime + 15, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
-              aniInfo1:SetStartColor((Defines.Color).C_FFFFFFFF)
-              aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)
-              local updateTime = 0
-              Panel_Logo_Update = function()
+            if isGameTypeKR2() then
+              local aniInfo2 = static_Grade:addColorAnimation(startAniTime + 8, startAniTime + 10, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+              aniInfo2:SetStartColor((Defines.Color).C_00FFFFFF)
+              aniInfo2:SetEndColor((Defines.Color).C_FFFFFFFF)
+              local aniInfo3 = staticText_Warning:addColorAnimation(startAniTime + 8, startAniTime + 10, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+              aniInfo3:SetStartColor((Defines.Color).C_00FFFFFF)
+              aniInfo3:SetEndColor((Defines.Color).C_FFFFFFFF)
+              aniInfo3.IsChangeChild = true
+              local aniInfo4 = static_Grade:addColorAnimation(startAniTime + 13, startAniTime + 15, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+              aniInfo4:SetStartColor((Defines.Color).C_FFFFFFFF)
+              aniInfo4:SetEndColor((Defines.Color).C_00FFFFFF)
+              local aniInfo5 = staticText_Warning:addColorAnimation(startAniTime + 13, startAniTime + 15, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+              aniInfo5:SetStartColor((Defines.Color).C_FFFFFFFF)
+              aniInfo5:SetEndColor((Defines.Color).C_00FFFFFF)
+              aniInfo5.IsChangeChild = true
+            else
+              do
+                do
+                  local aniInfo1 = static_PearlAbyss:addColorAnimation(startAniTime + 4, startAniTime + 15, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+                  aniInfo1:SetStartColor((Defines.Color).C_FFFFFFFF)
+                  aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)
+                  local updateTime = 0
+                  Panel_Logo_Update = function()
   -- function num : 0_1 , upvalues : static_Movie
   static_Movie = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_Logo, "WebControl_Movie")
   local sizeX = getScreenSizeX()
@@ -144,7 +161,7 @@ else
   end
 end
 
-              Panel_Logo_Pause = function(deltaTime)
+                  Panel_Logo_Pause = function(deltaTime)
   -- function num : 0_2 , upvalues : updateTime, static_Movie
   updateTime = updateTime + deltaTime
   if updateTime > 7 then
@@ -152,8 +169,10 @@ end
   end
 end
 
-              Panel_Logo_Update()
-              Panel_Logo:RegisterUpdateFunc("Panel_Logo_Pause")
+                  Panel_Logo_Update()
+                  Panel_Logo:RegisterUpdateFunc("Panel_Logo_Pause")
+                end
+              end
             end
           end
         end

@@ -289,75 +289,75 @@ local SelectCharacter_Init = function()
   end
 end
 
-local CharacterView = function(index, classType, isSpecialCharacter)
+local CharacterView = function(index, classType, isSpecialCharacter, isChangeSpecialTab)
   -- function num : 0_3 , upvalues : UI_Class
   if classType == UI_Class.ClassType_Warrior then
-    viewCharacter(index, -50, -40, -65, 0.15, isSpecialCharacter)
+    viewCharacter(index, -50, -40, -65, 0.15, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(0, 0)
     viewCharacterFov(0.75)
     setWeatherTime(8, 1)
   else
     if classType == UI_Class.ClassType_Ranger then
-      viewCharacter(index, -40, -10, -40, 0.45, isSpecialCharacter)
+      viewCharacter(index, -40, -10, -40, 0.45, isSpecialCharacter, isChangeSpecialTab)
       viewCharacterPitchRoll(-0.05, 0)
       viewCharacterFov(0.55)
       setWeatherTime(8, 0)
     else
       if classType == UI_Class.ClassType_Sorcerer then
-        viewCharacter(index, -40, -30, -75, 0.55, isSpecialCharacter)
+        viewCharacter(index, -40, -30, -75, 0.55, isSpecialCharacter, isChangeSpecialTab)
         viewCharacterPitchRoll(0, 0)
         setWeatherTime(8, 9)
         viewCharacterFov(0.55)
       else
         if classType == UI_Class.ClassType_Giant then
-          viewCharacter(index, -50, -25, -94, -0.6, isSpecialCharacter)
+          viewCharacter(index, -50, -25, -94, -0.6, isSpecialCharacter, isChangeSpecialTab)
           viewCharacterPitchRoll(0.2, 0)
           setWeatherTime(8, 3)
         else
           if classType == UI_Class.ClassType_Tamer then
-            viewCharacter(index, -30, -50, -94, -0.1, isSpecialCharacter)
+            viewCharacter(index, -30, -50, -94, -0.1, isSpecialCharacter, isChangeSpecialTab)
             viewCharacterPitchRoll(0, 0)
             setWeatherTime(8, 17)
             viewCharacterFov(0.55)
           else
             if classType == UI_Class.ClassType_BladeMaster then
-              viewCharacter(index, -20, -45, -94, -0.1, isSpecialCharacter)
+              viewCharacter(index, -20, -45, -94, -0.1, isSpecialCharacter, isChangeSpecialTab)
               viewCharacterPitchRoll(0, 0)
               setWeatherTime(8, 21)
               viewCharacterFov(0.75)
             else
               if classType == UI_Class.ClassType_BladeMasterWomen then
-                viewCharacter(index, -20, -25, -114, -0.1, isSpecialCharacter)
+                viewCharacter(index, -20, -25, -114, -0.1, isSpecialCharacter, isChangeSpecialTab)
                 viewCharacterPitchRoll(0, 0)
                 setWeatherTime(8, 23)
                 viewCharacterFov(0.75)
               else
                 if classType == UI_Class.ClassType_Valkyrie then
-                  viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter)
+                  viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter, isChangeSpecialTab)
                   viewCharacterPitchRoll(0, 0)
                   viewCharacterFov(0.65)
                   setWeatherTime(8, 20)
                 else
                   if classType == UI_Class.ClassType_Wizard then
-                    viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter)
+                    viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter, isChangeSpecialTab)
                     viewCharacterPitchRoll(0, 0)
                     setWeatherTime(8, 19)
                     viewCharacterFov(0.55)
                   else
                     if classType == UI_Class.ClassType_WizardWomen then
-                      viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter)
+                      viewCharacter(index, -20, -20, -94, 1.1, isSpecialCharacter, isChangeSpecialTab)
                       viewCharacterPitchRoll(0, 0)
                       setWeatherTime(8, 21)
                       viewCharacterFov(0.55)
                     else
                       if classType == UI_Class.ClassType_NinjaWomen then
-                        viewCharacter(index, -25, -25, -94, 1.1, isSpecialCharacter)
+                        viewCharacter(index, -25, -25, -94, 1.1, isSpecialCharacter, isChangeSpecialTab)
                         viewCharacterPitchRoll(0, 0)
                         setWeatherTime(8, 18)
                         viewCharacterFov(0.55)
                       else
                         if classType == UI_Class.ClassType_NinjaMan then
-                          viewCharacter(index, -20, -20, -100, 1.1, isSpecialCharacter)
+                          viewCharacter(index, -20, -20, -100, 1.1, isSpecialCharacter, isChangeSpecialTab)
                           viewCharacterPitchRoll(0, 0)
                           setWeatherTime(8, 18)
                           viewCharacterFov(0.55)
@@ -375,25 +375,25 @@ local CharacterView = function(index, classType, isSpecialCharacter)
     end
   end
   if (classType == UI_Class.ClassType_ShyWomen and classType ~= UI_Class.ClassType_Shy) or classType == UI_Class.ClassType_Temp then
-    viewCharacter(index, -20, -45, -114, -0.1, isSpecialCharacter)
+    viewCharacter(index, -20, -45, -114, -0.1, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(0, 0)
     setWeatherTime(8, 23)
     viewCharacterFov(0.75)
   else
   end
   if classType ~= UI_Class.ClassType_Kunoichi or classType == UI_Class.ClassType_DarkElf then
-    viewCharacter(index, -20, -45, -114, -0.1, isSpecialCharacter)
+    viewCharacter(index, -20, -45, -114, -0.1, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(0, 0)
     setWeatherTime(7, 7)
     viewCharacterFov(0.75)
   else
     if classType == UI_Class.ClassType_Combattant then
-      viewCharacter(index, -50, -40, -65, 0.15, isSpecialCharacter)
+      viewCharacter(index, -50, -40, -65, 0.15, isSpecialCharacter, isChangeSpecialTab)
       viewCharacterPitchRoll(0, 0)
       viewCharacterFov(0.75)
       setWeatherTime(7, 16)
     else
-      viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter)
+      viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
       viewCharacterPitchRoll(3.14, 0)
     end
   end
@@ -914,28 +914,28 @@ scrollTotalCount = function()
   return maxCount
 end
 
-local CharacterList_Update = function()
+local CharacterList_Update = function(isChangeSpecialTab)
   -- function num : 0_11 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
   end
-  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R2 in 'UnsetPending'
 
   configData.maxSlot = getCharacterMaxSlotData(isSpecialCharacter)
-  -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC17: Confused about usage of register: R2 in 'UnsetPending'
 
   configData.maxCountSlot = getMaxCharacsterCount(isSpecialCharacter)
-  -- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC22: Confused about usage of register: R2 in 'UnsetPending'
 
   configData.maxScrollCount = getMaxCharacsterScrollCount(isSpecialCharacter)
-  -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC27: Confused about usage of register: R2 in 'UnsetPending'
 
   configData.freeCount = getCharacterSlotDefaultCount(isSpecialCharacter)
-  -- DECOMPILER ERROR at PC32: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC32: Confused about usage of register: R2 in 'UnsetPending'
 
   configData.haveCount = getCharacterDataCount(isSpecialCharacter)
-  -- DECOMPILER ERROR at PC37: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC37: Confused about usage of register: R2 in 'UnsetPending'
 
   configData.useAbleCount = getCharacterSlotLimit(isSpecialCharacter)
   for slotIdx = 0, configData._listCount - 1 do
@@ -975,7 +975,7 @@ local CharacterList_Update = function()
   (SelectCharacter.static_ticketNoByRegion):SetText("")
   ;
   (SelectCharacter.static_FamilyName):SetText(getFamilyName())
-  -- DECOMPILER ERROR at PC133: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC133: Confused about usage of register: R2 in 'UnsetPending'
 
   if configData.selectCaracterIdx == -1 then
     configData.selectCaracterIdx = 0
@@ -1017,7 +1017,7 @@ local CharacterList_Update = function()
       ;
       (slot._ChaLev):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. characterLevel)
       if configData.selectCaracterIdx == slotIdx then
-        CharacterView(configData.selectCaracterIdx, classType, isSpecialCharacter)
+        CharacterView(configData.selectCaracterIdx, classType, isSpecialCharacter, isChangeSpecialTab)
         ;
         (slot._btn_Slot):SetCheck(true)
       else
@@ -1190,11 +1190,11 @@ local CharacterList_Update = function()
             (slot._btnCreate):SetShow(false)
           end
           scrollListIndex = scrollListIndex + 1
-          -- DECOMPILER ERROR at PC625: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC626: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC625: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC626: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC625: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC626: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1214,7 +1214,7 @@ CharacterSelect_ChangeLocate = function()
   if not (SelectCharacter.btn_ChangeLocate):IsCheck() then
     ToClient_SaveClientCacheData()
   end
-  CharacterList_Update()
+  CharacterList_Update(false)
 end
 
 SelectCharacter_ScrollEvent = function(isUp)
@@ -1223,7 +1223,7 @@ SelectCharacter_ScrollEvent = function(isUp)
   -- DECOMPILER ERROR at PC14: Confused about usage of register: R2 in 'UnsetPending'
 
   configData._startIndex = (UIScroll.ScrollEvent)(self._scroll, isUp, configData.maxScrollCount, scrollTotalCount(), configData._startIndex, 1)
-  CharacterList_Update()
+  CharacterList_Update(false)
 end
 
 CharacterSelect_selected = function(index)
@@ -1231,7 +1231,7 @@ CharacterSelect_selected = function(index)
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   configData.selectCaracterIdx = index
-  CharacterList_Update()
+  CharacterList_Update(false)
 end
 
 CharacterSelect_PlayGame = function(index)
@@ -1307,7 +1307,7 @@ CharacterSelect_ChangeCharacterPosition = function(index, isUp)
   end
   ToClient_ChangeCharacterListOrder(index, isUp)
   ToClient_SaveClientCacheData()
-  CharacterList_Update()
+  CharacterList_Update(false)
 end
 
 CharacterSelect_SelectEnterToGame = function()
@@ -1354,7 +1354,7 @@ CharacterSelect_Open = function(characterIndex)
   configData._startIndex = 0
   ;
   (SelectCharacter.btn_ChangeLocate):SetCheck(false)
-  CharacterList_Update()
+  CharacterList_Update(false)
   ;
   (SelectCharacter._scroll):SetControlPos(0)
   Panel_CharacterSelectNew:SetShow(true)
@@ -1643,7 +1643,7 @@ RadioButton_Click = function(radioIndex)
   configData._startIndex = 0
   ;
   (SelectCharacter._scroll):SetControlPos(0)
-  CharacterList_Update()
+  CharacterList_Update(true)
 end
 
 SelectCharacter_Init()

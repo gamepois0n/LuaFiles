@@ -425,18 +425,25 @@ ChannelSelect_Update = function()
           (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
         end
       else
-        if _serverData._isSpeedChannel then
-          if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
-            (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_On", "GameChannelMove_NewbieServerJoinDateToolTip( true, " .. chIndex .. " )")
-            ;
-            (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_Out", "GameChannelMove_NewbieServerJoinDateToolTip( false, " .. chIndex .. ")")
+        -- DECOMPILER ERROR at PC226: Unhandled construct in 'MakeBoolean' P1
+
+        if _serverData._isPremiumChannel and temporaryWrapper:isPremiumChannelPermission() == false then
+          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_LUp", "")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
+        end
+      end
+      if _serverData._isSpeedChannel then
+        if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
+          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_On", "GameChannelMove_NewbieServerJoinDateToolTip( true, " .. chIndex .. " )")
+          ;
+          (((self.channelSelectUIPool)[chIndex]).channelBg):addInputEvent("Mouse_Out", "GameChannelMove_NewbieServerJoinDateToolTip( false, " .. chIndex .. ")")
+        else
+          if ToClient_SelfPlayerIsGM() then
+            (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
           else
-            if ToClient_SelfPlayerIsGM() then
-              (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(false)
-            else
-              ;
-              (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
-            end
+            ;
+            (((self.channelSelectUIPool)[chIndex]).channelBg):SetIgnore(true)
           end
         end
       end
@@ -542,13 +549,13 @@ ChannelSelect_Update = function()
           (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_On", "ChannelSelect_IconToolTip(" .. 4 .. "," .. chIndex .. ")")
           ;
           (((self.channelSelectUIPool)[chIndex]).channelPremiumIcon):addInputEvent("Mouse_Out", "ChannelSelect_IconToolTip()")
-          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC671: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC671: LeaveBlock: unexpected jumping out IF_STMT
 
-          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC671: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC650: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC671: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

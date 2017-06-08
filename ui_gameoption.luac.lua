@@ -114,7 +114,7 @@ local isKeyConfig_UI_Open = false
 local isAutoAim = true
 local chk_Option = {SCREEN_RESOLUTION_COUNT; FULL_SCREEN_IDX = 0, FULL_SCREEN_WINDOWED_IDX = 1, WINDOWED_IDX = 2, SCREEN_MODE_COUNT = 3, 
 screenResolutionList = {}
-, SCREENSHOT_BMP = 0, SCREENSHOT_JPG = 1, SCREENSHOT_PNG = 2, SCREENSHOTSIZE_DEFAULT = 0, SCREENSHOTSIZE_4k = 1, SCREENSHOTSIZE_8k = 2, WATERMARK_ALPHA = 0, WATERMARK_BOLD = 1, WATERMARK_NONE = 2, WATERMARK_SERVICE_KR = 0, WATERMARK_SERVICE_JP = 1, WATERMARK_SERVICE_NA = 2, WATERMARK_SERVICE_RU = 3, WATERMARK_SERVICE_TW = 4, WATERMARK_SERVICE_SA = 5, WATERMARK_SERVICE_NONE = 6, WATERMARK_POSITION_LT = 0, WATERMARK_POSITION_RT = 1, WATERMARK_POSITION_LB = 2, WATERMARK_POSITION_RB = 3, WATERMARK_SCALE_SMALL = 0, WATERMARK_SCALE_REGULAR = 1, WATERMARK_SCALE_LARGE = 2, COLORBLIND_NONE = 0, COLORBLIND_PROTANOPIA = 1, COLORBLIND_DEUTERANOP = 2, TEXTURE_QUALITY_HIGH = 0, TEXTURE_QUALITY_NORMAL = 1, TEXTURE_QUALITY_LOW = 2, TEXTURE_QUALITY_COUNT = 3, GRAPHIC_OPTION_HIGH0 = 0, GRAPHIC_OPTION_HIGH1 = 1, GRAPHIC_OPTION_NORMAL0 = 2, GRAPHIC_OPTION_NORMAL1 = 3, GRAPHIC_OPTION_LOW0 = 4, GRAPHIC_OPTION_LOW1 = 5, GRAPHIC_OPTION_VERYLOW = 6, GRAPHIC_OPTION_COUNT = 7, RESOLUTION_WIDTH = 1280, RESOLUTION_HEIGHT = 720, currentScreenModeIdx = 0, currentScreenShotFormat = 0, currentScreenShotSize = 0, currentColorBlind = 0, currentSelfPlayerOnlyEffect = false, currentSelfPlayerOnlyLantern = false, currentNearestPlayerOnlyEffect = false, currentLowPower = false, currentUpscaleEnable = false, currentCropModeEnable = false, currentCropModeScaleX = 0, currentCropModeScaleY = 0, currentLUT = 0, currentAutoOptimization = true, currentOptimizationFrame = 20, currentScreenResolutionIdx = 0, currentTextureQualityIdx = 0, currentGraphicOptionIdx = 0, currentGammaValue = 0, currentContrastValue = 0, currentCheckDof = true, currentCheckAA = true, currentCheckUltra = false, currentCheckLensBlood = true, currentCheckBloodEffect = true, currentCheckSSAO = true, currentCheckTessellation = true, currentCheckPostFilter = true, currentCheckCharacterEffect = true, currentCheckUIScale = 1, currentCheckRepresent = true, currentCheckSnowPoolOnlyInSafeZone = false, currentCheckWorkerVisible = true, currentMaster = 0, currentMusic = 0, currentFxSound = 0, currentEnvSound = 0, currentDlgSound = 0, currentHitFxWeight = 0, currentPlayerVolume = 0, currentCheckMusic = true, currentCheckSound = true, currentCheckEnvSound = true, currentCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, currentCheckNpcVoice = getGameServiceResType(), currentCheckRiddingMusic = true, currentCheckWhisperMusic = true, currentCheckTraySoundOnOff = true, currentCheckNameTag = false, currentCheckShowSkillCmd = true, currentCheckShowComboGuide = true, currentCheckAutoAim = true, currentCheckHideWindowByAttacked = true, currentCheckShowGuildLoginMessage = true, currentCheckEnableSimpleUI = true, currentCheckRenderCharacterColor = true, currentCheckEnableOVR = true, currentCheckMiniMapRotation = false, currentCheckRejectInvitation = false, currentCheckEffectAlpha = 1, currentCheckCameraMasterPower = 1, currentCheckColorByPass = 1, currentCheckCameraShakePower = 0.5, currentCheckMotionBlurPower = 0.5, currentCheckCameraPosPower = 0.7, currentCheckCameraFovPower = 0.7, currentCheckMouseMove = false, currentCheckMouseInvertX = false, currentCheckMouseInvertY = false, currentCheckMouseSensitivityX = 1.05, currentCheckMouseSensitivityY = 1.05, currentCheckPadEnable = false, currentCheckPadVibration = false, currentCheckPadInvertX = false, currentCheckPadInvertY = false, currentCheckPadSensitivityX = 1.05, currentCheckPadSensitivityY = 1.05, currentCheckIsHideMast = true, currentCheckShowCashAlert = false, currentSelfPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, currentWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, currentWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, currentServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentFovValue = 50, currentCheckIsUIModeMouseLock = false, currentCheckShowAttackEffect = true, currentCheckBlackSpiritAlert = true, currentCheckIsPvpRefuse = false, currentCheckIsExchangeRefuse = false, currentCheckIsOnScreenSaver = true, currentCheckUseNewQuickSlot = false, currentGuideLineZoneChange = false, currentGuideLineWarAlly = false, currentGuideLineGuild = false, currentGuideLineQuestLine = true, currentGuideLineNonWarPlayer = false, currentGuideLineParty = false, currentGuideLineHumanRelation = true, currentGuideLineEnemy = false, currentGuideLinePartyMemberEffect = false, appliedScreenModeIdx = 0, appliedScreenShotFormat = 0, appliedScreenShotSize = 0, appliedColorBlind = 0, appliedSelfPlayerOnlyEffect = true, appliedSelfPlayerOnlyLantern = false, appliedLowPower = false, appliedUpscaleEnable = false, appliedCropModeEnable = false, appliedCropModeScaleX = 0, appliedCropModeScaleY = 0, appliedAutoOptimization = true, appliedOptimizationFrame = 20, appliedLUT = 0, appliedScreenResolutionIdx = 0, appliedTextureQualityIdx = 0, appliedGraphicOptionIdx = 0, appliedGammaValue = 0, appliedContrastValue = 0, appliedCheckDof = true, appliedCheckAA = true, appliedCheckUltra = false, appliedCheckLensBlood = true, appliedCheckBloodEffect = true, appliedCheckRepresent = true, appliedCheckSnowPoolOnlyInSafeZone = false, appliedCheckSSAO = true, appliedCheckTessellation = true, appliedCheckPostFilter = true, appliedCheckCharacterEffect = true, appliedCheckUIScale = 1, appliedCheckEffectAlpha = 1, appliedMaster = 0, appliedMusic = 0, appliedFxSound = 0, appliedEnvSound = 0, appliedDlgSound = 0, appliedHitFxWeight = 0, appliedPlayerVolume = 0, appliedCheckMusic = true, appliedCheckSound = true, appliedCheckEnvSound = true, appliedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, appliedCheckNpcVoice = getGameServiceResType(), appliedCheckRiddingMusic = true, appliedCheckWhisperMusic = true, appliedCheckTraySoundOnOff = true, appliedCheckNameTag = false, appliedCheckShowSkillCmd = true, appliedCheckShowComboGuide = true, appliedCheckAutoAim = true, appliedCheckHideWindowByAttacked = true, appliedCheckShowGuildLoginMessage = true, appliedCheckEnableSimpleUI = true, appliedCheckRenderCharacterColor = true, appliedCheckEnableOVR = true, appliedCheckMiniMapRotation = false, appliedCheckRejectInvitation = false, appliedCheckCameraMasterPower = 1, appliedCheckCameraShakePower = 0.5, appliedCheckMotionBlurPower = 0.5, appliedCheckCameraPosPower = 0.7, appliedCheckCameraFovPower = 0.7, appliedCheckMouseMove = false, appliedCheckMouseInvertX = false, appliedCheckMouseInvertY = false, appliedCheckMouseSensitivityX = 1.05, appliedCheckMouseSensitivityY = 1.05, appliedCheckPadEnable = false, appliedCheckPadVibration = false, appliedCheckPadInvertX = false, appliedCheckPadInvertY = false, appliedCheckPadSensitivityX = 1.05, appliedCheckPadSensitivityY = 1.05, appliedCheckIsHideMast = true, appliedCheckShowCashAlert = false, appliedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, appliedWatermarkPosition = (CppEnums.WatermarkPositionType).eWatermarkPositionType_RightDown, appliedWatermarkScale = (CppEnums.WatermarkScaleType).eWatermarkScaleType_Regular, appliedWatermarkService = (CppEnums.WatermarkServiceType).eWatermarkServiceType_KR, appliedWatermarkAlpha = 0.5, appliedFontResizeType = 0, appliedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, appliedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, appliedWorldMapCameraType = (CppEnums.WorldMapAnimationStyle).eWorldMapCameraPitchType_Default, appliedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedFovValue = 50, appliedCheckWorkerVisible = true, appliedCheckIsUIModeMouseLock = false, appliedCheckShowAttackEffect = true, appliedCheckBlackSpiritAlert = true, appliedCheckIsPvpRefuse = false, appliedCheckIsExchangeRefuse = false, appliedCheckIsOnScreenSaver = true, appliedCheckUseNewQuickSlot = false, appliedGuideLineZoneChange = false, appliedGuideLineWarAlly = false, appliedGuideLineGuild = false, appliedGuideLineQuestLine = true, appliedGuideLineNonWarPlayer = false, appliedGuideLineParty = false, appliedGuideLineHumanRelation = true, appliedGuideLineEnemy = false, appliedGuideLinePartyMemberEffect = false, savedScreenModeIdx = 0, savedScreenShotFormat = 0, savedScreenShotSize = 0, savedColorBlind = 0, savedSelfPlayerOnlyEffect = true, savedNearestPlayerOnlyEffect = true, savedSelfPlayerOnlyLantern = false, savedLowPower = false, savedUpscaleEnable = false, savedCropModeEnable = false, savedCropModeScaleX = 0, savedCropModeScaleY = 0, savedAutoOptimization = true, savedOptimizationFrame = 20, savedLUT = 0, savedScreenResolutionIdx = 0, savedTextureQualityIdx = 0, savedGraphicOptionIdx = 0, savedGammaValue = 0, savedContrastValue = 0, savedCheckDof = true, savedCheckAA = true, savedCheckUltra = false, savedCheckLensBlood = true, savedCheckBloodEffect = true, savedCheckRepresent = true, savedCheckSnowPoolOnlyInSafeZone = false, savedCheckSSAO = true, savedCheckTessellation = true, savedCheckPostFilter = true, savedCheckCharacterEffect = true, savedCheckUIScale = 1, savedCheckWorkerVisible = true, savedMaster = 0, savedMusic = 0, savedFxSound = 0, savedEnvSound = 0, savedDlgSound = 0, savedHitFxWeight = 0, savedPlayerVolume = 0, savedCheckMusic = true, savedCheckSound = true, savedCheckEnvSound = true, savedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, savedCheckNpcVoice = getGameServiceResType(), savedCheckRiddingMusic = true, savedCheckWhisperMusic = true, savedCheckTraySoundOnOff = true, savedCheckNameTag = false, savedCheckShowSkillCmd = true, savedCheckShowComboGuide = true, savedCheckAutoAim = true, savedCheckHideWindowByAttacked = true, savedCheckShowGuildLoginMessage = true, savedCheckEnableSimpleUI = true, savedCheckRenderCharacterColor = true, savedCheckEnableOVR = true, savedCheckMiniMapRotation = false, savedCheckRejectInvitation = false, savedCheckCameraMasterPower = 1, savedCheckColorByPass = 1, savedCheckCameraShakePower = 0.5, savedCheckMotionBlurPower = 0.5, savedCheckCameraPosPower = 0.7, savedCheckCameraFovPower = 0.7, savedCheckMouseMove = false, savedCheckMouseInvertX = false, savedCheckMouseInvertY = false, savedCheckMouseSensitivityX = 1.05, savedCheckMouseSensitivityY = 1.05, savedCheckPadEnable = false, savedCheckPadVibration = false, savedCheckPadInvertX = false, savedCheckPadInvertY = false, savedCheckPadSensitivityX = 1.05, savedCheckPadSensitivityY = 1.05, savedCheckIsHideMast = true, savedCheckShowCasheAlert = false, savedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, savedFontResizeType = 0, savedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, savedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, savedWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, savedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedFovValue = 50, savedCheckIsUIModeMouseLock = false, savedCheckShowAttackEffect = true, savedCheckBlackSpiritAlert = true, savedCheckIsPvpRefuse = false, savedCheckIsExchangeRefuse = false, savedCheckIsOnScreenSaver = true, savedCheckUseNewQuickSlot = false, savedCheckGuideLineZoneChange = false, savedCheckGuideLineWarAlly = false, savedCheckGuideLineGuild = false, savedCheckGuideLineQuestLine = true, savedCheckGuideLineNonWarPlayer = false, savedCheckGuideLineParty = false, savedCheckGuideLineHumanRelation = true, savedCheckGuideLineEnemy = false, savedCheckGuideLinePartyMemberEffect = false}
+, SCREENSHOT_BMP = 0, SCREENSHOT_JPG = 1, SCREENSHOT_PNG = 2, SCREENSHOTSIZE_DEFAULT = 0, SCREENSHOTSIZE_4k = 1, SCREENSHOTSIZE_8k = 2, WATERMARK_ALPHA = 0, WATERMARK_BOLD = 1, WATERMARK_NONE = 2, WATERMARK_SERVICE_KR = 0, WATERMARK_SERVICE_JP = 1, WATERMARK_SERVICE_NA = 2, WATERMARK_SERVICE_RU = 3, WATERMARK_SERVICE_TW = 4, WATERMARK_SERVICE_SA = 5, WATERMARK_SERVICE_NONE = 6, WATERMARK_POSITION_LT = 0, WATERMARK_POSITION_RT = 1, WATERMARK_POSITION_LB = 2, WATERMARK_POSITION_RB = 3, WATERMARK_SCALE_SMALL = 0, WATERMARK_SCALE_REGULAR = 1, WATERMARK_SCALE_LARGE = 2, COLORBLIND_NONE = 0, COLORBLIND_PROTANOPIA = 1, COLORBLIND_DEUTERANOP = 2, TEXTURE_QUALITY_HIGH = 0, TEXTURE_QUALITY_NORMAL = 1, TEXTURE_QUALITY_LOW = 2, TEXTURE_QUALITY_COUNT = 3, GRAPHIC_OPTION_HIGH0 = 0, GRAPHIC_OPTION_HIGH1 = 1, GRAPHIC_OPTION_NORMAL0 = 2, GRAPHIC_OPTION_NORMAL1 = 3, GRAPHIC_OPTION_LOW0 = 4, GRAPHIC_OPTION_LOW1 = 5, GRAPHIC_OPTION_VERYLOW = 6, GRAPHIC_OPTION_COUNT = 7, RESOLUTION_WIDTH = 1280, RESOLUTION_HEIGHT = 720, currentScreenModeIdx = 0, currentScreenShotFormat = 0, currentScreenShotSize = 0, currentColorBlind = 0, currentSelfPlayerOnlyEffect = false, currentSelfPlayerOnlyLantern = false, currentNearestPlayerOnlyEffect = false, currentLowPower = false, currentUpscaleEnable = false, currentCropModeEnable = false, currentCropModeScaleX = 0, currentCropModeScaleY = 0, currentLUT = 0, currentAutoOptimization = true, currentOptimizationFrame = 20, currentScreenResolutionIdx = 0, currentTextureQualityIdx = 0, currentGraphicOptionIdx = 0, currentGammaValue = 0, currentContrastValue = 0, currentCheckDof = true, currentCheckAA = true, currentCheckUltra = false, currentCheckLensBlood = true, currentCheckBloodEffect = true, currentCheckSSAO = true, currentCheckTessellation = true, currentCheckPostFilter = true, currentCheckCharacterEffect = true, currentCheckUIScale = 1, currentCheckRepresent = true, currentCheckSnowPoolOnlyInSafeZone = false, currentCheckWorkerVisible = true, currentMaster = 0, currentMusic = 0, currentFxSound = 0, currentEnvSound = 0, currentDlgSound = 0, currentHitFxWeight = 0, currentPlayerVolume = 0, currentCheckMusic = true, currentCheckSound = true, currentCheckEnvSound = true, currentCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, currentCheckNpcVoice = getGameServiceResType(), currentCheckRiddingMusic = true, currentCheckWhisperMusic = true, currentCheckTraySoundOnOff = true, currentCheckNameTag = false, currentCheckShowSkillCmd = true, currentCheckShowComboGuide = true, currentCheckAutoAim = true, currentCheckHideWindowByAttacked = true, currentCheckShowGuildLoginMessage = true, currentCheckEnableSimpleUI = true, currentCheckRenderCharacterColor = true, currentCheckEnableOVR = true, currentCheckMiniMapRotation = false, currentCheckRejectInvitation = false, currentCheckEffectAlpha = 1, currentCheckCameraMasterPower = 1, currentCheckColorByPass = 1, currentCheckCameraShakePower = 0.5, currentCheckMotionBlurPower = 0.5, currentCheckCameraPosPower = 0.7, currentCheckCameraFovPower = 0.7, currentCheckMouseMove = false, currentCheckMouseInvertX = false, currentCheckMouseInvertY = false, currentCheckMouseSensitivityX = 1.05, currentCheckMouseSensitivityY = 1.05, currentCheckPadEnable = false, currentCheckPadVibration = false, currentCheckPadInvertX = false, currentCheckPadInvertY = false, currentCheckPadSensitivityX = 1.05, currentCheckPadSensitivityY = 1.05, currentCheckIsHideMast = true, currentCheckShowCashAlert = false, currentSelfPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, currentNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, currentWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, currentWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, currentServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, currentFovValue = 50, currentCheckIsUIModeMouseLock = false, currentCheckShowAttackEffect = true, currentCheckBlackSpiritAlert = true, currentCheckIsPvpRefuse = false, currentCheckIsExchangeRefuse = false, currentCheckIsOnScreenSaver = true, currentCheckUseNewQuickSlot = false, currentGuideLineZoneChange = false, currentGuideLineWarAlly = false, currentGuideLineGuild = false, currentGuideLineQuestLine = true, currentGuideLineNonWarPlayer = false, currentGuideLineParty = false, currentGuideLineHumanRelation = true, currentGuideLineEnemy = false, currentGuideLinePartyMemberEffect = false, appliedScreenModeIdx = 0, appliedScreenShotFormat = 0, appliedScreenShotSize = 0, appliedColorBlind = 0, appliedSelfPlayerOnlyEffect = true, appliedSelfPlayerOnlyLantern = false, appliedLowPower = false, appliedUpscaleEnable = false, appliedCropModeEnable = false, appliedCropModeScaleX = 0, appliedCropModeScaleY = 0, appliedAutoOptimization = true, appliedOptimizationFrame = 20, appliedLUT = 0, appliedScreenResolutionIdx = 0, appliedTextureQualityIdx = 0, appliedGraphicOptionIdx = 0, appliedGammaValue = 0, appliedContrastValue = 0, appliedCheckDof = true, appliedCheckAA = true, appliedCheckUltra = false, appliedCheckLensBlood = true, appliedCheckBloodEffect = true, appliedCheckRepresent = true, appliedCheckSnowPoolOnlyInSafeZone = false, appliedCheckSSAO = true, appliedCheckTessellation = true, appliedCheckPostFilter = true, appliedCheckCharacterEffect = true, appliedCheckUIScale = 1, appliedCheckEffectAlpha = 1, appliedMaster = 0, appliedMusic = 0, appliedFxSound = 0, appliedEnvSound = 0, appliedDlgSound = 0, appliedHitFxWeight = 0, appliedPlayerVolume = 0, appliedCheckMusic = true, appliedCheckSound = true, appliedCheckEnvSound = true, appliedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, appliedCheckNpcVoice = getGameServiceResType(), appliedCheckRiddingMusic = true, appliedCheckWhisperMusic = true, appliedCheckTraySoundOnOff = true, appliedCheckNameTag = false, appliedCheckShowSkillCmd = true, appliedCheckShowComboGuide = true, appliedCheckAutoAim = true, appliedCheckHideWindowByAttacked = true, appliedCheckShowGuildLoginMessage = true, appliedCheckEnableSimpleUI = true, appliedCheckRenderCharacterColor = true, appliedCheckEnableOVR = true, appliedCheckMiniMapRotation = false, appliedCheckRejectInvitation = false, appliedCheckCameraMasterPower = 1, appliedCheckCameraShakePower = 0.5, appliedCheckMotionBlurPower = 0.5, appliedCheckCameraPosPower = 0.7, appliedCheckCameraFovPower = 0.7, appliedCheckMouseMove = false, appliedCheckMouseInvertX = false, appliedCheckMouseInvertY = false, appliedCheckMouseSensitivityX = 1.05, appliedCheckMouseSensitivityY = 1.05, appliedCheckPadEnable = false, appliedCheckPadVibration = false, appliedCheckPadInvertX = false, appliedCheckPadInvertY = false, appliedCheckPadSensitivityX = 1.05, appliedCheckPadSensitivityY = 1.05, appliedCheckIsHideMast = true, appliedCheckShowCashAlert = false, appliedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, appliedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, appliedWatermarkPosition = (CppEnums.WatermarkPositionType).eWatermarkPositionType_RightDown, appliedWatermarkScale = (CppEnums.WatermarkScaleType).eWatermarkScaleType_Regular, appliedWatermarkService = (CppEnums.WatermarkServiceType).eWatermarkServiceType_KR, appliedWatermarkAlpha = 0.5, appliedFontResizeType = 0, appliedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, appliedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, appliedWorldMapCameraType = (CppEnums.WorldMapAnimationStyle).eWorldMapCameraPitchType_Default, appliedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, appliedFovValue = 50, appliedCheckWorkerVisible = true, appliedCheckIsUIModeMouseLock = false, appliedCheckShowAttackEffect = true, appliedCheckBlackSpiritAlert = true, appliedCheckIsPvpRefuse = false, appliedCheckIsExchangeRefuse = false, appliedCheckIsOnScreenSaver = true, appliedCheckUseNewQuickSlot = false, appliedGuideLineZoneChange = false, appliedGuideLineWarAlly = false, appliedGuideLineGuild = false, appliedGuideLineQuestLine = true, appliedGuideLineNonWarPlayer = false, appliedGuideLineParty = false, appliedGuideLineHumanRelation = true, appliedGuideLineEnemy = false, appliedGuideLinePartyMemberEffect = false, savedScreenModeIdx = 0, savedScreenShotFormat = 0, savedScreenShotSize = 0, savedColorBlind = 0, savedSelfPlayerOnlyEffect = true, savedNearestPlayerOnlyEffect = true, savedSelfPlayerOnlyLantern = false, savedLowPower = false, savedUpscaleEnable = false, savedCropModeEnable = false, savedCropModeScaleX = 0, savedCropModeScaleY = 0, savedAutoOptimization = true, savedOptimizationFrame = 20, savedLUT = 0, savedScreenResolutionIdx = 0, savedTextureQualityIdx = 0, savedGraphicOptionIdx = 0, savedGammaValue = 0, savedContrastValue = 0, savedCheckDof = true, savedCheckAA = true, savedCheckUltra = false, savedCheckLensBlood = true, savedCheckBloodEffect = true, savedCheckRepresent = true, savedCheckSnowPoolOnlyInSafeZone = false, savedCheckSSAO = true, savedCheckTessellation = true, savedCheckPostFilter = true, savedCheckCharacterEffect = true, savedCheckUIScale = 1, savedCheckWorkerVisible = true, savedMaster = 0, savedMusic = 0, savedFxSound = 0, savedEnvSound = 0, savedDlgSound = 0, savedHitFxWeight = 0, savedPlayerVolume = 0, savedCheckMusic = true, savedCheckSound = true, savedCheckEnvSound = true, savedCheckCombatMusic = (CppEnums.BattleSoundType).Sound_Nomal, savedCheckNpcVoice = getGameServiceResType(), savedCheckRiddingMusic = true, savedCheckWhisperMusic = true, savedCheckTraySoundOnOff = true, savedCheckNameTag = false, savedCheckShowSkillCmd = true, savedCheckShowComboGuide = true, savedCheckAutoAim = true, savedCheckHideWindowByAttacked = true, savedCheckShowGuildLoginMessage = true, savedCheckEnableSimpleUI = true, savedCheckRenderCharacterColor = true, savedCheckEnableOVR = true, savedCheckMiniMapRotation = false, savedCheckRejectInvitation = false, savedCheckCameraMasterPower = 1, savedCheckColorByPass = 1, savedCheckCameraShakePower = 0.5, savedCheckMotionBlurPower = 0.5, savedCheckCameraPosPower = 0.7, savedCheckCameraFovPower = 0.7, savedCheckEffectAlpha = 1, savedCheckMouseMove = false, savedCheckMouseInvertX = false, savedCheckMouseInvertY = false, savedCheckMouseSensitivityX = 1.05, savedCheckMouseSensitivityY = 1.05, savedCheckPadEnable = false, savedCheckPadVibration = false, savedCheckPadInvertX = false, savedCheckPadInvertY = false, savedCheckPadSensitivityX = 1.05, savedCheckPadSensitivityY = 1.05, savedCheckIsHideMast = true, savedCheckShowCasheAlert = false, savedCheckSelfNameShow = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow, savedPetObjectShow = (CppEnums.PetVisibleType).ePetVisibleType_All, savedFontResizeType = 0, savedNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_Arrow, savedWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).noAnimation, savedWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default, savedServiceResourceType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedChatChannelType = (CppEnums.ServiceResourceType).eServiceResourceType_KR, savedFovValue = 50, savedCheckIsUIModeMouseLock = false, savedCheckShowAttackEffect = true, savedCheckBlackSpiritAlert = true, savedCheckIsPvpRefuse = false, savedCheckIsExchangeRefuse = false, savedCheckIsOnScreenSaver = true, savedCheckUseNewQuickSlot = false, savedCheckGuideLineZoneChange = false, savedCheckGuideLineWarAlly = false, savedCheckGuideLineGuild = false, savedCheckGuideLineQuestLine = true, savedCheckGuideLineNonWarPlayer = false, savedCheckGuideLineParty = false, savedCheckGuideLineHumanRelation = true, savedCheckGuideLineEnemy = false, savedCheckGuideLinePartyMemberEffect = false}
 local isVoiceOpen = ToClient_IsContentsGroupOpen("75")
 local INPUT_COUNT_START = 0
 local INPUT_COUNT_END = isVoiceOpen and 49 or 48
@@ -3002,7 +3002,9 @@ InitGraphicOptionAll = function(gameOptionSetting, optionType)
   GameOption_InitFov(fovValue)
   GameOption_SetFovValueText(fovValue)
   local uiScale = gameOptionSetting:getUIScale()
-  uiScale = (uiScale + 0.002) * 100 / 100
+  uiScale = uiScale + 0.002
+  local uiScale_Percent = (math.floor)((uiScale) * 100)
+  uiScale = uiScale_Percent / 100
   if CppDefine.ChangeUIAndResolution == true then
     uiScale = GameOption_InitScale_50_200(uiScale)
   else
@@ -4486,10 +4488,10 @@ GameOption_RefreshFPSText = function()
   -- function num : 0_121 , upvalues : frame_Display
   local value = (math.floor)(ToClient_getFPS())
   if value < 20 then
-    (frame_Display._txt_FPS):SetText("FPS: " .. "<PAColor0xfff25221>" .. tostring(value) .. "<PAOldColor>")
+    (frame_Display._txt_FPS):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_FPS") .. ": " .. "<PAColor0xfff25221>" .. tostring(value) .. "<PAOldColor>")
   else
     ;
-    (frame_Display._txt_FPS):SetText("FPS: " .. "<PAColor0xff00f281>" .. tostring(value) .. "<PAOldColor>")
+    (frame_Display._txt_FPS):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_FPS") .. ": " .. "<PAColor0xff00f281>" .. tostring(value) .. "<PAOldColor>")
   end
 end
 
@@ -5439,6 +5441,7 @@ GameOption_SetGameMode = function(gameOptionSetting)
       self.currentChatChannelType = ChatChannelType
       self.appliedChatChannelType = ChatChannelType
       self.savedChatChannelType = ChatChannelType
+      self.currentCheckEffectAlpha = effectAlpha
       self.currentCheckMouseInvertX = mouseInvertX
       self.currentCheckMouseInvertY = mouseInvertY
       self.currentCheckMouseSensitivityX = mouseSensitivityX
@@ -5464,6 +5467,7 @@ GameOption_SetGameMode = function(gameOptionSetting)
       self.currentGuideLinePartyMemberEffect = partyMemberEffect
       self.currentHitFxVolume = hitFxVolume
       self.currentCheckShowComboGuide = showComboGuide
+      self.appliedCheckEffectAlpha = effectAlpha
       self.appliedCheckMouseInvertX = mouseInvertX
       self.appliedCheckMouseInvertY = mouseInvertY
       self.appliedCheckMouseSensitivityX = mouseSensitivityX
@@ -5489,6 +5493,7 @@ GameOption_SetGameMode = function(gameOptionSetting)
       self.appliedGuideLinePartyMemberEffect = partyMemberEffect
       self.appliedHitFxVolume = hitFxVolume
       self.appliedCheckShowComboGuide = showComboGuide
+      self.savedCheckEffectAlpha = effectAlpha
       self.savedCheckMouseInvertX = mouseInvertX
       self.savedCheckMouseInvertY = mouseInvertY
       self.savedCheckMouseSensitivityX = mouseSensitivityX
@@ -5634,9 +5639,9 @@ GameOption_SetGameMode = function(gameOptionSetting)
           if ChatChannelEnumsNumber[index] ~= ChatChannelType then
             do
               (_btn_ChatLanguageType[index]):SetCheck(nil == _btn_ChatLanguageType[index])
-              -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -5875,9 +5880,9 @@ GameOption_SetEffectAlpha = function()
   -- function num : 0_205 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local currentCheckEffectAlpha = self.currentCheckEffectAlpha * 100
+  setEffectAlpha(self.currentCheckEffectAlpha)
   ;
   (frame_Display._slide_EffectAlpha):SetControlPos(currentCheckEffectAlpha)
-  setEffectAlpha(self.currentCheckEffectAlpha)
   ;
   (frame_Display._txt_EffectAlpha):SetText(GetStr_Option[27] .. " ( <PAColor0xffbcf281>" .. (string.format)("%.0f", (math.min)(currentCheckEffectAlpha, 100)) .. "% <PAOldColor>)")
   GameOption_UpdateOptionChanged()
@@ -6820,7 +6825,7 @@ end
 GameOption_UpdateOptionChanged = function()
   -- function num : 0_287 , upvalues : chk_Option, gamePanel_Main
   local self = chk_Option
-  if self.currentScreenModeIdx == self.appliedScreenModeIdx and self.currentScreenResolutionIdx == self.appliedScreenModeIdx and self.currentScreenShotFormat == self.appliedScreenShotFormat and self.currentScreenShotSize == self.appliedScreenShotSize and self.currentWatermarkService == self.appliedWatermarkService and self.currentWatermarkPosition == self.appliedWatermarkPosition and self.currentWatermarkScale == self.appliedWatermarkScale and self.currentWatermarkAlpha == self.appliedWatermarkAlpha and self.currentColorBlind == self.appliedColorBlind and self.currentSelfPlayerOnlyEffect == self.appliedSelfPlayerOnlyEffect and self.currentNearestPlayerOnlyEffect == self.appliedNearestPlayerOnlyEffect and self.currentSelfPlayerOnlyLantern == self.appliedSelfPlayerOnlyLantern and self.currentLowPower == self.appliedLowPower and self.currentUpscaleEnable == self.appliedUpscaleEnable and self.currentCropModeEnable == self.appliedCropModeEnable and self.currentCropModeScaleX == self.appliedCropModeScaleX and self.currentCropModeScaleY == self.appliedCropModeScaleY and self.currentAutoOptimization == self.appliedAutoOptimization and self.currentOptimizationFrame == self.appliedOptimizationFrame and self.currentTextureQualityIdx == self.appliedTextureQualityIdx and self.currentGraphicOptionIdx == self.appliedGraphicOptionIdx and self.currentGammaValue == self.appliedGammaValue and self.currentContrastValue == self.appliedContrastValue and self.currentCheckDof == self.appliedCheckDof and self.currentCheckAA == self.appliedCheckAA and self.currentCheckUltra == self.appliedCheckUltra and self.currentCheckLensBlood == self.appliedCheckLensBlood and self.currentCheckBloodEffect == self.appliedCheckBloodEffect and self.currentCheckRepresent == self.appliedCheckRepresent and self.currentCheckSnowPoolOnlyInSafeZone == self.appliedCheckSnowPoolOnlyInSafeZone and self.currentCheckSSAO == self.appliedCheckSSAO and self.currentCheckTessellation == self.appliedCheckTessellation and self.currentCheckPostFilter == self.appliedCheckPostFilter and self.currentCheckCharacterEffect == self.appliedCheckCharacterEffect and self.currentMaster == self.appliedMaster and self.currentMusic == self.appliedMusic and self.currentFxSound == self.appliedFxSound and self.currentEnvSound == self.appliedEnvSound and self.currentDlgSound == self.appliedDlgSound and self.currentCheckMusic == self.appliedCheckMusic and self.currentCheckSound == self.appliedCheckSound and self.currentCheckEnvSound == self.appliedCheckEnvSound and self.currentCheckCombatMusic == self.appliedCheckCombatMusic and self.currentCheckNpcVoice == self.appliedCheckNpcVoice and self.currentCheckRiddingMusic == self.appliedCheckRiddingMusic and self.currentCheckWhisperMusic == self.appliedCheckWhisperMusic and self.currentCheckTraySoundOnOff == self.appliedCheckTraySoundOnOff and self.currentCheckShowSkillCmd == self.appliedCheckShowSkillCmd and self.currentCheckAutoAim == self.appliedCheckAutoAim and self.currentCheckHideWindowByAttacked == self.appliedCheckHideWindowByAttacked and self.currentCheckShowGuildLoginMessage == self.appliedCheckShowGuildLoginMessage and self.currentCheckEnableSimpleUI == self.appliedCheckEnableSimpleUI and self.currentCheckRenderCharacterColor == self.appliedCheckRenderCharacterColor and self.currentCheckMouseMove == self.appliedCheckMouseMove and self.currentCheckEnableOVR == self.appliedCheckEnableOVR and self.currentCheckMouseInvertX == self.appliedCheckMouseInvertX and self.currentCheckMouseInvertY == self.appliedCheckMouseInvertY and self.currentCheckMouseSensitivityX == self.appliedCheckMouseSensitivityX and self.currentCheckMouseSensitivityY == self.appliedCheckMouseSensitivityY and self.currentCheckPadEnable == self.appliedCheckPadEnable and self.currentCheckPadVibration == self.appliedCheckPadVibration and self.currentCheckPadInvertX == self.appliedCheckPadInvertX and self.currentCheckPadInvertY == self.appliedCheckPadInvertY and self.currentCheckPadSensitivityX == self.appliedCheckPadSensitivityX and self.currentCheckPadSensitivityY == self.appliedCheckPadSensitivityY and self.currentCheckCameraMasterPower == self.appliedCheckCameraMasterPower and self.currentCheckColorByPass == self.appliedCheckColorByPass and self.currentCheckCameraShakePower == self.appliedCheckCameraShakePower and self.currentCheckMotionBlurPower == self.appliedCheckMotionBlurPower and self.currentCheckCameraPosPower == self.appliedCheckCameraPosPower and self.currentCheckCameraFovPower == self.appliedCheckCameraFovPower and self.currentCheckUIScale == self.appliedCheckUIScale and self.currentSelfPlayerNameTagVisible == self.appliedSelfPlayerNameTagVisible and self.currentOtherPlayerNameTagVisible == self.appliedOtherPlayerNameTagVisible and self.currentPartyPlayerNameTagVisible == self.appliedPartyPlayerNameTagVisible and self.currentGuildPlayerNameTagVisible == self.appliedGuildPlayerNameTagVisible and self.currentPetObjectShow == self.appliedPetObjectShow and self.currentFontResizeType == self.appliedFontResizeType and self.currentNavPathEffectType == self.appliedNavPathEffectType and self.currentWorldMapOpenType == self.appliedWorldMapOpenType and self.currentWorldMapCameraType == self.appliedWorldMapCamreraType and self.currentHitFxWeight == self.appliedHitFxWeight and self.currentPlayerVolume == self.appliedPlayerVolume and self.currentFovValue == self.appliedFovValue and self.currentServiceResourceType == self.appliedServiceResourceType and self.currentChatChannelType == self.appliedChatChannelType and self.currentCheckIsUIModeMouseLock == self.appliedCheckIsUIModeMouseLock and self.currentCheckIsPvpRefuse == self.appliedCheckIsPvpRefuse and self.currentCheckIsExchangeRefuse == self.appliedCheckIsExchangeRefuse and self.currentCheckIsHideMast == self.appliedCheckIsHideMast and self.currentCheckWorkerVisible == self.appliedCheckWorkerVisible and self.currentCheckShowCashAlert == self.appliedCheckShowCashAlert then
+  if self.currentScreenModeIdx == self.appliedScreenModeIdx and self.currentScreenResolutionIdx == self.appliedScreenModeIdx and self.currentScreenShotFormat == self.appliedScreenShotFormat and self.currentScreenShotSize == self.appliedScreenShotSize and self.currentWatermarkService == self.appliedWatermarkService and self.currentWatermarkPosition == self.appliedWatermarkPosition and self.currentWatermarkScale == self.appliedWatermarkScale and self.currentWatermarkAlpha == self.appliedWatermarkAlpha and self.currentColorBlind == self.appliedColorBlind and self.currentSelfPlayerOnlyEffect == self.appliedSelfPlayerOnlyEffect and self.currentNearestPlayerOnlyEffect == self.appliedNearestPlayerOnlyEffect and self.currentSelfPlayerOnlyLantern == self.appliedSelfPlayerOnlyLantern and self.currentLowPower == self.appliedLowPower and self.currentUpscaleEnable == self.appliedUpscaleEnable and self.currentCropModeEnable == self.appliedCropModeEnable and self.currentCropModeScaleX == self.appliedCropModeScaleX and self.currentCropModeScaleY == self.appliedCropModeScaleY and self.currentAutoOptimization == self.appliedAutoOptimization and self.currentOptimizationFrame == self.appliedOptimizationFrame and self.currentTextureQualityIdx == self.appliedTextureQualityIdx and self.currentGraphicOptionIdx == self.appliedGraphicOptionIdx and self.currentGammaValue == self.appliedGammaValue and self.currentContrastValue == self.appliedContrastValue and self.currentCheckDof == self.appliedCheckDof and self.currentCheckAA == self.appliedCheckAA and self.currentCheckUltra == self.appliedCheckUltra and self.currentCheckLensBlood == self.appliedCheckLensBlood and self.currentCheckBloodEffect == self.appliedCheckBloodEffect and self.currentCheckRepresent == self.appliedCheckRepresent and self.currentCheckSnowPoolOnlyInSafeZone == self.appliedCheckSnowPoolOnlyInSafeZone and self.currentCheckSSAO == self.appliedCheckSSAO and self.currentCheckTessellation == self.appliedCheckTessellation and self.currentCheckPostFilter == self.appliedCheckPostFilter and self.currentCheckCharacterEffect == self.appliedCheckCharacterEffect and self.currentMaster == self.appliedMaster and self.currentMusic == self.appliedMusic and self.currentFxSound == self.appliedFxSound and self.currentEnvSound == self.appliedEnvSound and self.currentDlgSound == self.appliedDlgSound and self.currentCheckMusic == self.appliedCheckMusic and self.currentCheckSound == self.appliedCheckSound and self.currentCheckEnvSound == self.appliedCheckEnvSound and self.currentCheckCombatMusic == self.appliedCheckCombatMusic and self.currentCheckNpcVoice == self.appliedCheckNpcVoice and self.currentCheckRiddingMusic == self.appliedCheckRiddingMusic and self.currentCheckWhisperMusic == self.appliedCheckWhisperMusic and self.currentCheckTraySoundOnOff == self.appliedCheckTraySoundOnOff and self.currentCheckShowSkillCmd == self.appliedCheckShowSkillCmd and self.currentCheckAutoAim == self.appliedCheckAutoAim and self.currentCheckHideWindowByAttacked == self.appliedCheckHideWindowByAttacked and self.currentCheckShowGuildLoginMessage == self.appliedCheckShowGuildLoginMessage and self.currentCheckEnableSimpleUI == self.appliedCheckEnableSimpleUI and self.currentCheckRenderCharacterColor == self.appliedCheckRenderCharacterColor and self.currentCheckMouseMove == self.appliedCheckMouseMove and self.currentCheckEnableOVR == self.appliedCheckEnableOVR and self.currentCheckEffectAlpha == self.appliedCheckEffectAlpha and self.currentCheckMouseInvertX == self.appliedCheckMouseInvertX and self.currentCheckMouseInvertY == self.appliedCheckMouseInvertY and self.currentCheckMouseSensitivityX == self.appliedCheckMouseSensitivityX and self.currentCheckMouseSensitivityY == self.appliedCheckMouseSensitivityY and self.currentCheckPadEnable == self.appliedCheckPadEnable and self.currentCheckPadVibration == self.appliedCheckPadVibration and self.currentCheckPadInvertX == self.appliedCheckPadInvertX and self.currentCheckPadInvertY == self.appliedCheckPadInvertY and self.currentCheckPadSensitivityX == self.appliedCheckPadSensitivityX and self.currentCheckPadSensitivityY == self.appliedCheckPadSensitivityY and self.currentCheckCameraMasterPower == self.appliedCheckCameraMasterPower and self.currentCheckColorByPass == self.appliedCheckColorByPass and self.currentCheckCameraShakePower == self.appliedCheckCameraShakePower and self.currentCheckMotionBlurPower == self.appliedCheckMotionBlurPower and self.currentCheckCameraPosPower == self.appliedCheckCameraPosPower and self.currentCheckCameraFovPower == self.appliedCheckCameraFovPower and self.currentCheckUIScale == self.appliedCheckUIScale and self.currentSelfPlayerNameTagVisible == self.appliedSelfPlayerNameTagVisible and self.currentOtherPlayerNameTagVisible == self.appliedOtherPlayerNameTagVisible and self.currentPartyPlayerNameTagVisible == self.appliedPartyPlayerNameTagVisible and self.currentGuildPlayerNameTagVisible == self.appliedGuildPlayerNameTagVisible and self.currentPetObjectShow == self.appliedPetObjectShow and self.currentFontResizeType == self.appliedFontResizeType and self.currentNavPathEffectType == self.appliedNavPathEffectType and self.currentWorldMapOpenType == self.appliedWorldMapOpenType and self.currentWorldMapCameraType == self.appliedWorldMapCamreraType and self.currentHitFxWeight == self.appliedHitFxWeight and self.currentPlayerVolume == self.appliedPlayerVolume and self.currentFovValue == self.appliedFovValue and self.currentServiceResourceType == self.appliedServiceResourceType and self.currentChatChannelType == self.appliedChatChannelType and self.currentCheckIsUIModeMouseLock == self.appliedCheckIsUIModeMouseLock and self.currentCheckIsPvpRefuse == self.appliedCheckIsPvpRefuse and self.currentCheckIsExchangeRefuse == self.appliedCheckIsExchangeRefuse and self.currentCheckIsHideMast == self.appliedCheckIsHideMast and self.currentCheckWorkerVisible == self.appliedCheckWorkerVisible and self.currentCheckShowCashAlert == self.appliedCheckShowCashAlert then
     (gamePanel_Main._btn_Apply):SetEnable(false)
   else
     ;
@@ -7130,6 +7135,9 @@ GameOption_Cancel = function()
     end
     if self.appliedCheckPadSensitivityY ~= self.currentCheckPadSensitivityY then
       setGamePadSensitivityY(self.appliedCheckPadSensitivityY)
+    end
+    if self.appliedCheckEffectAlpha ~= self.currentCheckEffectAlpha then
+      setEffectAlpha(self.appliedCheckEffectAlpha)
     end
     if self.appliedCheckCameraMasterPower ~= self.currentCheckCameraMasterPower then
       setCameraMasterPower(self.appliedCheckCameraMasterPower)
@@ -7705,7 +7713,9 @@ GameOption_Apply = function()
         setUIScale(self.currentCheckUIScale)
       end
       local uiScale = self.currentCheckUIScale
-      uiScale = (uiScale + 0.002) * 100 / 100
+      uiScale = uiScale + 0.002
+      local uiScale_Percent = (math.floor)((uiScale) * 100)
+      uiScale = uiScale_Percent / 100
       local screenHeight = (ToClient_getGameOptionControllerWrapper()):getScreenResolutionHeight()
       if CppDefine.ChangeUIAndResolution == true then
         uiScale = GameOption_InitScale_50_200(uiScale)
@@ -8046,221 +8056,224 @@ GameOption_DefaultOption = function(gameOptionSetting, optionType)
     chk_Option.currentFovValue = gameOptionSetting:getFov()
     -- DECOMPILER ERROR at PC176: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCameraMasterPower = gameOptionSetting:getCameraMasterPower()
+    chk_Option.currentCheckEffectAlpha = gameOptionSetting:getEffectAlpha()
     -- DECOMPILER ERROR at PC180: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckColorByPass = gameOptionSetting:getSkillPostEffect()
+    chk_Option.currentCheckCameraMasterPower = gameOptionSetting:getCameraMasterPower()
     -- DECOMPILER ERROR at PC184: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCameraShakePower = gameOptionSetting:getCameraShakePower()
+    chk_Option.currentCheckColorByPass = gameOptionSetting:getSkillPostEffect()
     -- DECOMPILER ERROR at PC188: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMotionBlurPower = gameOptionSetting:getMotionBlurPower()
+    chk_Option.currentCheckCameraShakePower = gameOptionSetting:getCameraShakePower()
     -- DECOMPILER ERROR at PC192: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCameraPosPower = gameOptionSetting:getCameraTranslatePower()
+    chk_Option.currentCheckMotionBlurPower = gameOptionSetting:getMotionBlurPower()
     -- DECOMPILER ERROR at PC196: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckCameraPosPower = gameOptionSetting:getCameraTranslatePower()
+    -- DECOMPILER ERROR at PC200: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckCameraFovPower = gameOptionSetting:getCameraFovPower()
   end
-  -- DECOMPILER ERROR at PC202: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC206: Confused about usage of register: R2 in 'UnsetPending'
 
   if optionType == 2 then
     chk_Option.currentMaster = gameOptionSetting:getMasterVolume()
-    -- DECOMPILER ERROR at PC206: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentMusic = gameOptionSetting:getMusicVolume()
     -- DECOMPILER ERROR at PC210: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentFxSound = gameOptionSetting:getFxVolume()
+    chk_Option.currentMusic = gameOptionSetting:getMusicVolume()
     -- DECOMPILER ERROR at PC214: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentEnvSound = gameOptionSetting:getEnvSoundVolume()
+    chk_Option.currentFxSound = gameOptionSetting:getFxVolume()
     -- DECOMPILER ERROR at PC218: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckCombatMusic = gameOptionSetting:getEnableBattleSoundType()
+    chk_Option.currentEnvSound = gameOptionSetting:getEnvSoundVolume()
     -- DECOMPILER ERROR at PC222: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckNpcVoice = gameOptionSetting:getAudioResourceType()
+    chk_Option.currentCheckCombatMusic = gameOptionSetting:getEnableBattleSoundType()
     -- DECOMPILER ERROR at PC226: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentDlgSound = gameOptionSetting:getDialogueVolume()
+    chk_Option.currentCheckNpcVoice = gameOptionSetting:getAudioResourceType()
     -- DECOMPILER ERROR at PC230: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentHitFxVolume = gameOptionSetting:getHitFxVolume()
+    chk_Option.currentDlgSound = gameOptionSetting:getDialogueVolume()
     -- DECOMPILER ERROR at PC234: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentHitFxWeight = gameOptionSetting:getHitFxWeight()
+    chk_Option.currentHitFxVolume = gameOptionSetting:getHitFxVolume()
     -- DECOMPILER ERROR at PC238: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentPlayerVolume = gameOptionSetting:getOtherPlayerVolume()
+    chk_Option.currentHitFxWeight = gameOptionSetting:getHitFxWeight()
     -- DECOMPILER ERROR at PC242: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMusic = gameOptionSetting:getEnableMusic()
+    chk_Option.currentPlayerVolume = gameOptionSetting:getOtherPlayerVolume()
     -- DECOMPILER ERROR at PC246: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckSound = gameOptionSetting:getEnableSound()
+    chk_Option.currentCheckMusic = gameOptionSetting:getEnableMusic()
     -- DECOMPILER ERROR at PC250: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckEnvSound = gameOptionSetting:getEnableEnvSound()
+    chk_Option.currentCheckSound = gameOptionSetting:getEnableSound()
     -- DECOMPILER ERROR at PC254: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckRiddingMusic = gameOptionSetting:getEnableRidingSound()
+    chk_Option.currentCheckEnvSound = gameOptionSetting:getEnableEnvSound()
     -- DECOMPILER ERROR at PC258: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckWhisperMusic = gameOptionSetting:getEnableWhisperSound()
+    chk_Option.currentCheckRiddingMusic = gameOptionSetting:getEnableRidingSound()
     -- DECOMPILER ERROR at PC262: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckWhisperMusic = gameOptionSetting:getEnableWhisperSound()
+    -- DECOMPILER ERROR at PC266: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckTraySoundOnOff = gameOptionSetting:getEnableTraySound()
   end
-  -- DECOMPILER ERROR at PC268: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC272: Confused about usage of register: R2 in 'UnsetPending'
 
   if optionType == 3 then
     chk_Option.currentCheckShowSkillCmd = gameOptionSetting:getShowSkillCmd()
-    -- DECOMPILER ERROR at PC272: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentCheckShowComboGuide = gameOptionSetting:getShowComboGuide()
     -- DECOMPILER ERROR at PC276: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckAutoAim = gameOptionSetting:getAimAssist()
+    chk_Option.currentCheckShowComboGuide = gameOptionSetting:getShowComboGuide()
     -- DECOMPILER ERROR at PC280: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckHideWindowByAttacked = gameOptionSetting:getHideWindowByAttacked()
+    chk_Option.currentCheckAutoAim = gameOptionSetting:getAimAssist()
     -- DECOMPILER ERROR at PC284: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckShowGuildLoginMessage = gameOptionSetting:getShowGuildLoginMessage()
+    chk_Option.currentCheckHideWindowByAttacked = gameOptionSetting:getHideWindowByAttacked()
     -- DECOMPILER ERROR at PC288: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckEnableSimpleUI = gameOptionSetting:getEnableSimpleUI()
+    chk_Option.currentCheckShowGuildLoginMessage = gameOptionSetting:getShowGuildLoginMessage()
     -- DECOMPILER ERROR at PC292: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseMove = gameOptionSetting:getGameMouseMode()
+    chk_Option.currentCheckEnableSimpleUI = gameOptionSetting:getEnableSimpleUI()
     -- DECOMPILER ERROR at PC296: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckEnableOVR = gameOptionSetting:getEnableOVR()
+    chk_Option.currentCheckMouseMove = gameOptionSetting:getGameMouseMode()
     -- DECOMPILER ERROR at PC300: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseInvertX = gameOptionSetting:getMouseInvertX()
+    chk_Option.currentCheckEnableOVR = gameOptionSetting:getEnableOVR()
     -- DECOMPILER ERROR at PC304: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseInvertY = gameOptionSetting:getMouseInvertY()
+    chk_Option.currentCheckMouseInvertX = gameOptionSetting:getMouseInvertX()
     -- DECOMPILER ERROR at PC308: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseSensitivityX = gameOptionSetting:getMouseSensitivityX()
+    chk_Option.currentCheckMouseInvertY = gameOptionSetting:getMouseInvertY()
     -- DECOMPILER ERROR at PC312: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMouseSensitivityY = gameOptionSetting:getMouseSensitivityY()
+    chk_Option.currentCheckMouseSensitivityX = gameOptionSetting:getMouseSensitivityX()
     -- DECOMPILER ERROR at PC316: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadEnable = gameOptionSetting:getGamePadEnable()
+    chk_Option.currentCheckMouseSensitivityY = gameOptionSetting:getMouseSensitivityY()
     -- DECOMPILER ERROR at PC320: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadVibration = gameOptionSetting:getGamePadVibration()
+    chk_Option.currentCheckPadEnable = gameOptionSetting:getGamePadEnable()
     -- DECOMPILER ERROR at PC324: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadInvertX = gameOptionSetting:getGamePadInvertX()
+    chk_Option.currentCheckPadVibration = gameOptionSetting:getGamePadVibration()
     -- DECOMPILER ERROR at PC328: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadInvertY = gameOptionSetting:getGamePadInvertY()
+    chk_Option.currentCheckPadInvertX = gameOptionSetting:getGamePadInvertX()
     -- DECOMPILER ERROR at PC332: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadSensitivityX = gameOptionSetting:getGamePadSensitivityX()
+    chk_Option.currentCheckPadInvertY = gameOptionSetting:getGamePadInvertY()
     -- DECOMPILER ERROR at PC336: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckPadSensitivityY = gameOptionSetting:getGamePadSensitivityY()
+    chk_Option.currentCheckPadSensitivityX = gameOptionSetting:getGamePadSensitivityX()
     -- DECOMPILER ERROR at PC340: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckIsHideMast = gameOptionSetting:getHideMastOnCarrier()
+    chk_Option.currentCheckPadSensitivityY = gameOptionSetting:getGamePadSensitivityY()
     -- DECOMPILER ERROR at PC344: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_option.currentCheckShowCashAlert = gameOptionSetting:getCashAlert()
+    chk_Option.currentCheckIsHideMast = gameOptionSetting:getHideMastOnCarrier()
     -- DECOMPILER ERROR at PC348: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentSelfPlayerNameTagVisible = gameOptionSetting:getSelfPlayerNameTagVisible()
+    chk_option.currentCheckShowCashAlert = gameOptionSetting:getCashAlert()
     -- DECOMPILER ERROR at PC352: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentOtherPlayerNameTagVisible = gameOptionSetting:getOtherPlayerNameTagVisible()
+    chk_Option.currentSelfPlayerNameTagVisible = gameOptionSetting:getSelfPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC356: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentPartyPlayerNameTagVisible = gameOptionSetting:getPartyPlayerNameTagVisible()
+    chk_Option.currentOtherPlayerNameTagVisible = gameOptionSetting:getOtherPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC360: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentGuildPlayerNameTagVisible = gameOptionSetting:getGuildPlayerNameTagVisible()
+    chk_Option.currentPartyPlayerNameTagVisible = gameOptionSetting:getPartyPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC364: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentPetObjectShow = gameOptionSetting:getPetRender()
+    chk_Option.currentGuildPlayerNameTagVisible = gameOptionSetting:getGuildPlayerNameTagVisible()
     -- DECOMPILER ERROR at PC368: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentFontResizeType = gameOptionSetting:getUIFontSizeType()
+    chk_Option.currentPetObjectShow = gameOptionSetting:getPetRender()
     -- DECOMPILER ERROR at PC372: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentNavPathEffectType = gameOptionSetting:getShowNavPathEffectType()
+    chk_Option.currentFontResizeType = gameOptionSetting:getUIFontSizeType()
     -- DECOMPILER ERROR at PC376: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWorldMapOpenType = gameOptionSetting:getWorldmapOpenType()
+    chk_Option.currentNavPathEffectType = gameOptionSetting:getShowNavPathEffectType()
     -- DECOMPILER ERROR at PC380: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentWorldMapCameraType = gameOptionSetting:getWorldMapCameraPitchType()
+    chk_Option.currentWorldMapOpenType = gameOptionSetting:getWorldmapOpenType()
     -- DECOMPILER ERROR at PC384: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentServiceResourceType = gameOptionSetting:getServiceResType()
+    chk_Option.currentWorldMapCameraType = gameOptionSetting:getWorldMapCameraPitchType()
     -- DECOMPILER ERROR at PC388: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentChatChannelType = gameOptionSetting:getChatLanguageType()
+    chk_Option.currentServiceResourceType = gameOptionSetting:getServiceResType()
     -- DECOMPILER ERROR at PC392: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckIsUIModeMouseLock = gameOptionSetting:getUIModeMouseLock()
+    chk_Option.currentChatChannelType = gameOptionSetting:getChatLanguageType()
     -- DECOMPILER ERROR at PC396: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckRejectInvitation = gameOptionSetting:getRefuseRequests()
+    chk_Option.currentCheckIsUIModeMouseLock = gameOptionSetting:getUIModeMouseLock()
     -- DECOMPILER ERROR at PC400: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckMiniMapRotation = gameOptionSetting:getRadarRotateMode()
+    chk_Option.currentCheckRejectInvitation = gameOptionSetting:getRefuseRequests()
     -- DECOMPILER ERROR at PC404: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckShowAttackEffect = gameOptionSetting:getRenderHitEffect()
+    chk_Option.currentCheckMiniMapRotation = gameOptionSetting:getRadarRotateMode()
     -- DECOMPILER ERROR at PC408: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckBlackSpiritAlert = gameOptionSetting:getBlackSpiritNotice()
+    chk_Option.currentCheckShowAttackEffect = gameOptionSetting:getRenderHitEffect()
     -- DECOMPILER ERROR at PC412: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckIsPvpRefuse = gameOptionSetting:getPvpRefuse()
+    chk_Option.currentCheckBlackSpiritAlert = gameOptionSetting:getBlackSpiritNotice()
     -- DECOMPILER ERROR at PC416: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentCheckIsExchangeRefuse = gameOptionSetting:getIsExchangeRefuse()
+    chk_Option.currentCheckIsPvpRefuse = gameOptionSetting:getPvpRefuse()
     -- DECOMPILER ERROR at PC420: Confused about usage of register: R2 in 'UnsetPending'
 
+    chk_Option.currentCheckIsExchangeRefuse = gameOptionSetting:getIsExchangeRefuse()
+    -- DECOMPILER ERROR at PC424: Confused about usage of register: R2 in 'UnsetPending'
+
     chk_Option.currentCheckIsOnScreenSaver = gameOptionSetting:getIsOnScreenSaver()
-    -- DECOMPILER ERROR at PC422: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC426: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckUseNewQuickSlot = false
     ;
     (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).NewQuickSlot, chk_Option.currentCheckUseNewQuickSlot)
-    -- DECOMPILER ERROR at PC437: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC441: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineZoneChange = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.zoneChange)
-    -- DECOMPILER ERROR at PC443: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC447: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineWarAlly = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.warAlly)
-    -- DECOMPILER ERROR at PC449: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineGuild = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.guild)
     -- DECOMPILER ERROR at PC453: Confused about usage of register: R2 in 'UnsetPending'
 
+    chk_Option.currentGuideLineGuild = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.guild)
+    -- DECOMPILER ERROR at PC457: Confused about usage of register: R2 in 'UnsetPending'
+
     chk_Option.currentGuideLineQuestLine = gameOptionSetting:getShowQuestActorColor()
-    -- DECOMPILER ERROR at PC459: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC463: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineNonWarPlayer = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.nonWarPlayer)
-    -- DECOMPILER ERROR at PC465: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineParty = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.party)
     -- DECOMPILER ERROR at PC469: Confused about usage of register: R2 in 'UnsetPending'
 
+    chk_Option.currentGuideLineParty = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.party)
+    -- DECOMPILER ERROR at PC473: Confused about usage of register: R2 in 'UnsetPending'
+
     chk_Option.currentGuideLineHumanRelation = gameOptionSetting:getShowHumanRelation()
-    -- DECOMPILER ERROR at PC475: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC479: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineEnemy = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.enemy)
-    -- DECOMPILER ERROR at PC479: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC483: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLinePartyMemberEffect = gameOptionSetting:getRenderHitEffectParty()
     ;

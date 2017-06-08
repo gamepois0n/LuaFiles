@@ -707,15 +707,11 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           if MiniGame_Manual_Value_FishingStart == true then
             Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_FISHING_ACK"))
             return 
-          elseif not Panel_Dye_New:GetShow() then
+          elseif not Panel_Dye_ReNew:GetShow() then
             audioPostEvent_SystemUi(1, 24)
             ;
             (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-            if ToClient_IsDevelopment() == true then
-              FGlobal_Panel_Dye_ReNew_Open()
-            else
-              FGlobal_Panel_DyeNew_Show()
-            end
+            FGlobal_Panel_Dye_ReNew_Open()
           end
           return 
         end
@@ -798,7 +794,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
               return 
             end
-            -- DECOMPILER ERROR at PC1415: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1408: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -815,7 +811,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            -- DECOMPILER ERROR at PC1458: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1451: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -912,7 +908,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               Panel_NaviButton:SetShow(false)
               audioPostEvent_SystemUi(0, 15)
             end
-            -- DECOMPILER ERROR: 130 unprocessed JMP targets
+            -- DECOMPILER ERROR: 129 unprocessed JMP targets
           end
         end
       end
@@ -1287,11 +1283,7 @@ local _keyBinder_UIMode_Dye = function(delataTime)
   -- function num : 0_20 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
   if (not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE)) or GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Dyeing) then
     audioPostEvent_SystemUi(1, 23)
-    if ToClient_IsDevelopment() == true then
-      FGlobal_Panel_DyeReNew_Hide()
-    else
-      FGlobal_Panel_DyeNew_Hide()
-    end
+    FGlobal_Panel_DyeReNew_Hide()
     if check_ShowWindow() == false then
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     end

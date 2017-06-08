@@ -475,7 +475,7 @@ DyeReNew.Reset_AmpuleList = function(self, isClearCheck)
 end
 
 DyeReNew.Update_AmpuleList = function(self)
-  -- function num : 0_15 , upvalues : enControlValue
+  -- function num : 0_15
   self:Reset_AmpuleList(false)
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex, self._paletteShowAll)
   if DyeingPaletteCategoryInfo ~= nil then
@@ -523,9 +523,7 @@ DyeReNew.Update_AmpuleList = function(self)
   end
   do
     ;
-    (UIScroll.SetButtonSize)(self._AmpuleScroll, self._scrollMaxRow / enControlValue.MaxAmpuleColsCount, self._scrollMaxRow)
-    ;
-    ((UI.getChildControl)(self._AmpuleScroll, "Scroll_CtrlButton")):SetPosY(self._scrollStartIndex)
+    (UIScroll.SetButtonSize)(self._AmpuleScroll, self._MaxPaletteSlotBG / 7, self._scrollMaxRow)
   end
 end
 

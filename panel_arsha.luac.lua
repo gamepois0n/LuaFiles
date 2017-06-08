@@ -1713,26 +1713,34 @@ FromClient_UpdateTeamScore = function(teamNum, scoreValue, round, winTeamHP, los
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAMSCORE_DRAW", "currentRound", round))
   else
     local matchMode = ToClient_CompetitionMatchType()
+    local teamA_Info = ToClient_GetTeamListAt(0)
+    local teamB_Info = ToClient_GetTeamListAt(1)
+    local teamA_Name = ""
+    local teamB_Name = ""
+    if teamA_Info ~= nil and teamB_Info ~= nil then
+      teamA_Name = teamA_Info:getTeamName()
+      teamB_Name = teamB_Info:getTeamName()
+    end
+    if teamA_Name == "" or teamB_Name == "" then
+      teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
+      teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+    end
+    local teamWinString = teamB_Name
+    local teamLoseString = teamA_Name
+    if teamNum == 1 then
+      teamWinString = teamA_Name
+      teamLoseString = teamB_Name
+    end
     if matchMode == 0 then
-      local teamAlphabet = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_B")
-      if teamNum == 1 then
-        teamAlphabet = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_A")
-      end
-      Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAMSCORE", "currentRound", round, "teamNo", teamAlphabet, "score", scoreValue))
+      Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAMSCORE", "currentRound", round, "teamNo", teamWinString, "score", scoreValue))
     else
-      do
-        do
-          if matchMode == 1 then
-            local leaderInfo = ToClient_GetTeamLeaderInfo(teamNum)
-            Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAMSCORE", "currentRound", round, "teamNo", leaderInfo:getUserName(), "score", scoreValue))
-          end
-          local teamWinString = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_B")
-          if teamNum == 1 then
-            teamWinString = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_A")
-          end
-          Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_ARSHA_TEAMWIN_PERCENT_HP", "hpA", winTeamHP, "hpB", loseTeamHP, "winTeam", teamWinString))
-        end
+      if matchMode == 1 then
+        local leaderInfo = ToClient_GetTeamLeaderInfo(teamNum)
+        Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAMSCORE", "currentRound", round, "teamNo", leaderInfo:getUserName(), "score", scoreValue))
       end
+    end
+    do
+      Proc_ShowMessage_Ack(PAGetStringParam4(Defines.StringSheet_GAME, "LUA_ARSHA_TEAMWIN_PERCENT_HP", "teamNameA", teamWinString, "hpA", winTeamHP, "teamNameB", teamLoseString, "hpB", loseTeamHP))
     end
   end
 end
@@ -1746,11 +1754,23 @@ FromClient_CompetitionMatchDone = function(teamNo, rank, teamHpPercent)
   _PA_LOG("HP", tostring(teamHpPercent))
   local matchMode = ToClient_CompetitionMatchType()
   if matchMode == 0 then
-    local teamAlphabet = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_B")
-    if teamNo == 1 then
-      teamAlphabet = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_A")
+    local teamA_Info = ToClient_GetTeamListAt(0)
+    local teamB_Info = ToClient_GetTeamListAt(1)
+    local teamA_Name = ""
+    local teamB_Name = ""
+    if teamA_Info ~= nil and teamB_Info ~= nil then
+      teamA_Name = teamA_Info:getTeamName()
+      teamB_Name = teamB_Info:getTeamName()
     end
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE", "teamNo", teamAlphabet))
+    if teamA_Name == "" or teamB_Name == "" then
+      teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
+      teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+    end
+    local winTeamName = teamB_Name
+    if teamNo == 1 then
+      winTeamName = teamA_Name
+    end
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_MATCH_DONE", "teamNo", winTeamName))
   else
     do
       if matchMode == 1 then

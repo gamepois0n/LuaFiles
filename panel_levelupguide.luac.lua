@@ -13,6 +13,9 @@ Panel_LevelupGuide:RegisterShowEventFunc(false, "LevelupGuideHideAni()")
 local levelupGuide = {levelupBG = (UI.getChildControl)(Panel_LevelupGuide, "Static_WebBG"), btnClose = (UI.getChildControl)(Panel_LevelupGuide, "Button_Close")}
 local _Web = nil
 local isLevelGuideUse = true
+if isGameTypeKR2() then
+  isLevelGuideUse = false
+end
 LevelupGuideShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
   (UIAni.fadeInSCR_Down)(Panel_LevelupGuide)

@@ -975,7 +975,7 @@ SelfCharacterInfo_UpdateWeight = function()
     (CharacterInfo._progress2_weightvalue_Inventory):SetProgressRate(Int64toInt32(s64_allWeight / s64_allWeight_div))
   end
   ;
-  (CharacterInfo._weightvalue):SetText(tostring(str_AllWeight) .. " / " .. tostring(str_MaxWeight) .. " LT")
+  (CharacterInfo._weightvalue):SetText(tostring(str_AllWeight) .. " / " .. tostring(str_MaxWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
 end
 
 SelfCharacterInfo_UpdateAttackStat = function()
@@ -1618,7 +1618,7 @@ FromClientFitnessUp = function(addSp, addWeight, addHp, addMp)
   ;
   (CharacterInfo._progress2_stamina):SetProgressRate(staminaRate)
   ;
-  (CharacterInfo._value_stamina):SetText(" Lv." .. tostring(currStaminaLv))
+  (CharacterInfo._value_stamina):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_CRAFTLEVEL") .. tostring(currStaminaLv))
   local currStrength = Int64toInt32(selfPlayerGet:getCurrFitnessExperiencePoint(fitness.strength))
   local maxStrength = Int64toInt32(selfPlayerGet:getDemandFItnessExperiencePoint(fitness.strength))
   local strengthRate = currStrength / maxStrength * 100
@@ -1626,7 +1626,7 @@ FromClientFitnessUp = function(addSp, addWeight, addHp, addMp)
   ;
   (CharacterInfo._progress2_strength):SetProgressRate(strengthRate)
   ;
-  (CharacterInfo._value_strength):SetText(" Lv." .. tostring(currStrengthLv))
+  (CharacterInfo._value_strength):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_CRAFTLEVEL") .. tostring(currStrengthLv))
   local currHealth = Int64toInt32(selfPlayerGet:getCurrFitnessExperiencePoint(fitness.health))
   local maxHealth = Int64toInt32(selfPlayerGet:getDemandFItnessExperiencePoint(fitness.health))
   local healthRate = currHealth / maxHealth * 100
@@ -1634,7 +1634,7 @@ FromClientFitnessUp = function(addSp, addWeight, addHp, addMp)
   ;
   (CharacterInfo._progress2_health):SetProgressRate(healthRate)
   ;
-  (CharacterInfo._value_health):SetText(" Lv." .. tostring(currHealthLv))
+  (CharacterInfo._value_health):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_CRAFTLEVEL") .. tostring(currHealthLv))
   if staminaLevel < currStaminaLv then
     FGlobal_FitnessLevelUp(addSp, addWeight, addHp, addMp, fitness.stamina)
     staminaLevel = currStaminaLv

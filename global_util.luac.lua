@@ -101,9 +101,9 @@ local _time_GameTimeFormatting = function(inGameMinute)
   end
   local calcHour = ""
   if clockHour < 12 or clockHour == 24 then
-    calcHour = "AM "
+    calcHour = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_TIME_MORNING") .. " "
   else
-    calcHour = "PM "
+    calcHour = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_TIME_AFTERNOON") .. " "
   end
   if clockHour > 12 then
     clockHour = clockHour - 12

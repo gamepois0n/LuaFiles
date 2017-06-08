@@ -1150,7 +1150,7 @@ deadMessage_ButtonPushed_SavageDefence = function()
     ToClient_SavageDefenceUnJoin()
   end
 
-  local messageBoxMemo = "야만�\152 균열�\132 나가�\180 포인트가 초기�\148 됩니�\164.\n �\128활하려면 다른 모험�\128에게 요청하여 �\128활하세요.\n<PAColor0xFFF26A6A>야만�\152 균열에서 나가시겠습니�\140?<PAOldColor>"
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_SAVAGEDEAD")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = executeUnjoin, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageBoxData)

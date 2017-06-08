@@ -59,11 +59,9 @@ PcRoomNotify_FirstUsePearl_Open = function()
   if selfPlayer == nil then
     return 
   end
-  _PA_LOG("정태�\164", "false면안�\168///피씨방쪽�\152 판단isPremiumPcRoom : " .. tostring(isPremiumPcRoom))
   if not isPremiumPcRoom then
     return 
   end
-  _PA_LOG("정태�\164", "true�\180 안됨.temporaryPCRoomWrapper:isPcRoomBeforeShow() : " .. tostring(temporaryPCRoomWrapper:isPcRoomBeforeShow()))
   if temporaryPCRoomWrapper:isPcRoomBeforeShow() then
     return 
   end

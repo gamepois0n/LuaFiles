@@ -218,12 +218,12 @@ UpdateDecorationContents = function(contentsIndex)
     local paramMax = getParamMax(selectedClassType, listParamType, listParamIndex)
     for itemIndex = 0, paramMax do
       local luaShapeIdx = itemIndex + 1
-      local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_Image_" .. itemIndex)
+      local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_Image_" .. itemIndex .. "_" .. selectedUiId)
       CopyBaseProperty(Frame_ContentImage, tempContentImage)
       tempContentImage:addInputEvent("Mouse_LUp", "UpdateDecorationListMessage(" .. listParamType .. "," .. listParamIndex .. "," .. itemIndex .. ")")
       local staticPayMark = nil
       if NoCashType.eCustomizationNoCashType_Deco == listParamType and (NoCashDeco.eCustomizationNoCashDeco_FaceTattoo == listParamIndex or NoCashDeco.eCustomizationNoCashDeco_BodyTattoo == listParamIndex) then
-        staticPayMark = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempContentImage, "Static_PayMark_" .. itemIndex)
+        staticPayMark = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempContentImage, "Static_PayMark_" .. itemIndex .. "_" .. selectedUiId)
         CopyBaseProperty(Static_PayMark, staticPayMark)
       end
       local mod = itemIndex % listColumCount
@@ -256,10 +256,10 @@ UpdateDecorationContents = function(contentsIndex)
           staticPayMark:SetShow(false)
         end
       end
-      -- DECOMPILER ERROR at PC225: Confused about usage of register: R24 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC229: Confused about usage of register: R24 in 'UnsetPending'
 
       ContentImage[luaShapeIdx] = tempContentImage
-      -- DECOMPILER ERROR at PC227: Confused about usage of register: R24 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC231: Confused about usage of register: R24 in 'UnsetPending'
 
       PayMark[luaShapeIdx] = staticPayMark
     end
@@ -284,20 +284,20 @@ UpdateDecorationContents = function(contentsIndex)
     local sliderValueBasePosX = 0
     for sliderIndex = 0, sliderCount - 1 do
       local luaSliderIndex = sliderIndex + 1
-      -- DECOMPILER ERROR at PC292: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC296: Confused about usage of register: R11 in 'UnsetPending'
 
       sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC300: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC304: Confused about usage of register: R11 in 'UnsetPending'
 
       sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC315: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC319: Confused about usage of register: R12 in 'UnsetPending'
 
       sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC324: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC328: Confused about usage of register: R12 in 'UnsetPending'
 
       sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC333: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC337: Confused about usage of register: R12 in 'UnsetPending'
 
       sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
       setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])

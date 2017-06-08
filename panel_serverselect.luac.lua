@@ -859,8 +859,8 @@ Panel_SelectServer_Delta = function(deltaTime)
             ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isAdmission or isRadioBtnShow)
             ;
             ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isAdmission or isRadioBtnShow)
-            if serverData._isSteamChannel then
-              if isSteamClient() == true then
+            if serverData._isPremiumChannel then
+              if temporaryWrapper:isPremiumChannelPermission() == true then
                 if isTempShow then
                   ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
                   ;
@@ -873,8 +873,8 @@ Panel_SelectServer_Delta = function(deltaTime)
                   ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(false)
                   ;
                   ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(false)
-                  if serverData._isSpeedChannel then
-                    if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
+                  if serverData._isSteamChannel then
+                    if isSteamClient() == true then
                       if isTempShow then
                         ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
                         ;
@@ -887,8 +887,8 @@ Panel_SelectServer_Delta = function(deltaTime)
                         ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(false)
                         ;
                         ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(false)
-                        if serverData._isBalanceChannel then
-                          if ToClient_isAccessableBalanceChannel() then
+                        if serverData._isSpeedChannel then
+                          if temporaryWrapper:getMyAdmissionToSpeedServer() ~= 0 then
                             if isTempShow then
                               ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
                               ;
@@ -901,92 +901,121 @@ Panel_SelectServer_Delta = function(deltaTime)
                               ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(false)
                               ;
                               ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(false)
-                              if serverData._isPcroomChannel then
-                                ((((_worldServerCtrls[index])._channelCtrls)[idx])._premiumIcon):SetShow(true)
-                              elseif isTempShow then
-                                ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
-                                ;
-                                ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isTempShow or isRadioBtnShow)
-                                ;
-                                ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isTempShow or isRadioBtnShow)
-                                ;
-                                ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(not isTempShow)
-                                if busyState == 0 then
-                                  ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(false)
-                                end
-                                -- DECOMPILER ERROR at PC622: Overwrote pending register: R29 in 'AssignReg'
+                              if serverData._isBalanceChannel then
+                                if ToClient_isAccessableBalanceChannel() then
+                                  if isTempShow then
+                                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
+                                    ;
+                                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isTempShow or isRadioBtnShow)
+                                    ;
+                                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isTempShow or isRadioBtnShow)
+                                    ;
+                                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(false)
+                                    ;
+                                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(false)
+                                    ;
+                                    ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(false)
+                                    if serverData._isPcroomChannel then
+                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._premiumIcon):SetShow(true)
+                                    elseif isTempShow then
+                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._enterBtn):SetShow(not isRadioBtnShow)
+                                      ;
+                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):SetShow(not isTempShow or isRadioBtnShow)
+                                      ;
+                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._mainServerSQ):SetShow(not isTempShow or isRadioBtnShow)
+                                      ;
+                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(not isTempShow)
+                                      if busyState == 0 then
+                                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(false)
+                                      end
+                                      -- DECOMPILER ERROR at PC686: Overwrote pending register: R29 in 'AssignReg'
 
-                                ;
-                                ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetText(PAGetStringParam1(Defines.StringSheet_GAME, R29_PC195, "changeRealChannelTime", changeRealChannelTime))
-                                local mainServerNo = ServerList_GetMainServerNo()
-                                -- DECOMPILER ERROR at PC637: Overwrote pending register: R29 in 'AssignReg'
+                                      ;
+                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetText(PAGetStringParam1(Defines.StringSheet_GAME, R29_PC195, "changeRealChannelTime", changeRealChannelTime))
+                                      local mainServerNo = ServerList_GetMainServerNo()
+                                      -- DECOMPILER ERROR at PC701: Overwrote pending register: R29 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC638: Overwrote pending register: R29 in 'AssignReg'
+                                      -- DECOMPILER ERROR at PC702: Overwrote pending register: R29 in 'AssignReg'
 
-                                if mainServerNo ~= -1 and serverData._serverNo == mainServerNo then
-                                  mainServerText:SetText(PAGetStringParam1(R29_PC195, "LUA_SERVERSELECT_SETMAINSERVER", "serverName", tostring(getChannelName(worldServerData._worldNo, serverData._serverNo))))
-                                end
-                                do
-                                  local lastServerNo = temporaryWrapper:getLastServerNo()
-                                  if getChannelName(worldServerData._worldNo, lastServerNo) == nil then
-                                    txt_EnterLastJoinServer:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_BTN_LASTJOINSERVER"))
-                                  else
-                                    txt_EnterLastJoinServer:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_LASTJOINSERVER_NUMBER", "lastJoinServer", tostring(getChannelName(worldServerData._worldNo, lastServerNo))))
+                                      if mainServerNo ~= -1 and serverData._serverNo == mainServerNo then
+                                        mainServerText:SetText(PAGetStringParam1(R29_PC195, "LUA_SERVERSELECT_SETMAINSERVER", "serverName", tostring(getChannelName(worldServerData._worldNo, serverData._serverNo))))
+                                      end
+                                      do
+                                        local lastServerNo = temporaryWrapper:getLastServerNo()
+                                        if getChannelName(worldServerData._worldNo, lastServerNo) == nil then
+                                          txt_EnterLastJoinServer:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_BTN_LASTJOINSERVER"))
+                                        else
+                                          txt_EnterLastJoinServer:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_LASTJOINSERVER_NUMBER", "lastJoinServer", tostring(getChannelName(worldServerData._worldNo, lastServerNo))))
+                                        end
+                                        ;
+                                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):addInputEvent("Mouse_LUp", "ServerList_SetMainServer(" .. R31_PC757 .. "," .. idx .. ")")
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                        -- DECOMPILER ERROR at PC759: LeaveBlock: unexpected jumping out IF_STMT
+
+                                      end
+                                    end
                                   end
-                                  ;
-                                  ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):addInputEvent("Mouse_LUp", "ServerList_SetMainServer(" .. R31_PC693 .. "," .. idx .. ")")
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                  -- DECOMPILER ERROR at PC695: LeaveBlock: unexpected jumping out IF_STMT
-
                                 end
                               end
                             end
@@ -1004,7 +1033,7 @@ Panel_SelectServer_Delta = function(deltaTime)
     end
     serverSelectDeltaTime = 0
   end
-  -- DECOMPILER ERROR: 39 unprocessed JMP targets
+  -- DECOMPILER ERROR: 44 unprocessed JMP targets
 end
 
 Panel_SelectServer_ShowChannelCtrls = function(worldIndex)

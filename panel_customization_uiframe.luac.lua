@@ -24,16 +24,21 @@ local customizationPartControl = {}
 local partNum = 0
 local partControlButtonHeight = StaticText_Category_Template:GetSizeY()
 local radioButtonTextureName = "new_ui_common_forlua/Window/Lobby/cus_buttons.dds"
+local isTatooCheckContry = isGameTypeKR2()
+local isTatooGroup = false
+local tatooIndex = 0
 local clearGroupFrame = function()
   -- function num : 0_0 , upvalues : partNum, customizationPartControl
   for partIndex = 1, partNum do
-    ((customizationPartControl[partIndex]).button):SetShow(false)
-    ;
-    ((customizationPartControl[partIndex]).text):SetShow(false)
-    ;
-    (UI.deleteControl)((customizationPartControl[partIndex]).button)
-    ;
-    (UI.deleteControl)((customizationPartControl[partIndex]).text)
+    if ChekcTatoo_PossibleContry(partIndex, true) then
+      ((customizationPartControl[partIndex]).button):SetShow(false)
+      ;
+      ((customizationPartControl[partIndex]).text):SetShow(false)
+      ;
+      (UI.deleteControl)((customizationPartControl[partIndex]).button)
+      ;
+      (UI.deleteControl)((customizationPartControl[partIndex]).text)
+    end
   end
   partNum = 0
   g_selectedPart = 0
@@ -116,18 +121,20 @@ updateGroupFrameControls = function(selectedPartSpaceLength, selectedPanel)
   local textOffsetY = ((customizationPartControl[1]).text):GetPosY()
   local buttonGap = 2
   for partIndex = 1, partNum do
-    local buttonOffsetY = textOffsetY + buttonGap
-    ;
-    ((customizationPartControl[partIndex]).text):SetPosY(textOffsetY)
-    ;
-    ((customizationPartControl[partIndex]).button):SetPosY(buttonOffsetY)
-    textOffsetY = textOffsetY + partControlButtonHeight
-    if partIndex == g_selectedPart then
-      local selectedPanelHeight = g_selectedPanel:GetSizeY()
-      Panel_Child:SetPosX(panelGapWidth)
-      Panel_Child:SetPosY(panelGapHeight + (textOffsetY))
-      Panel_Child:SetSize(Panel_Child:GetSizeX(), selectedPanelHeight)
-      textOffsetY = textOffsetY + panelGapHeight + selectedPanelHeight + panelGapHeight
+    if ChekcTatoo_PossibleContry(partIndex, true) then
+      local buttonOffsetY = textOffsetY + buttonGap
+      ;
+      ((customizationPartControl[partIndex]).text):SetPosY(textOffsetY)
+      ;
+      ((customizationPartControl[partIndex]).button):SetPosY(buttonOffsetY)
+      textOffsetY = textOffsetY + partControlButtonHeight
+      if partIndex == g_selectedPart then
+        local selectedPanelHeight = g_selectedPanel:GetSizeY()
+        Panel_Child:SetPosX(panelGapWidth)
+        Panel_Child:SetPosY(panelGapHeight + (textOffsetY))
+        Panel_Child:SetSize(Panel_Child:GetSizeX(), selectedPanelHeight)
+        textOffsetY = textOffsetY + panelGapHeight + selectedPanelHeight + panelGapHeight
+      end
     end
   end
   Panel_CustomizationFrame:SetSize(Panel_CustomizationFrame:GetSizeX(), textOffsetY + 4)
@@ -173,7 +180,7 @@ CloseFrameForPoseUI = function()
 end
 
 OpenCustomizationUiGroupFrame = function(classType, uiGroupIndex)
-  -- function num : 0_9 , upvalues : clearGroupFrame, CheckButton_UseFaceCustomizationHair, StaticText_UseFaceCustomizationHair, partNum, StaticText_Category_Template, partControlButtonHeight, Button_ShowDetail_Template, customizationPartControl
+  -- function num : 0_9 , upvalues : clearGroupFrame, CheckButton_UseFaceCustomizationHair, StaticText_UseFaceCustomizationHair, isTatooGroup, partNum, tatooIndex, StaticText_Category_Template, partControlButtonHeight, Button_ShowDetail_Template, customizationPartControl
   ClearFocusEdit()
   clearGroupFrame()
   if uiGroupIndex == 1 then
@@ -184,29 +191,45 @@ OpenCustomizationUiGroupFrame = function(classType, uiGroupIndex)
     CheckButton_UseFaceCustomizationHair:SetShow(false)
     StaticText_UseFaceCustomizationHair:SetShow(false)
   end
+  if uiGroupIndex == 1 or uiGroupIndex == 2 then
+    isTatooGroup = true
+  else
+    isTatooGroup = false
+  end
   partNum = getUiPartCount(classType, uiGroupIndex)
   for uiPartIndex = 0, partNum - 1 do
-    local luaUiPartIndex = uiPartIndex + 1
     local partName = getUiPartDescName(classType, uiGroupIndex, uiPartIndex)
-    local tempGroup = {button, text}
-    local tempStaticText = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_CustomizationFrame, "StaticText_Category_" .. uiPartIndex)
-    CopyBaseProperty(StaticText_Category_Template, tempStaticText)
-    tempStaticText:SetText(PAGetString(Defines.StringSheet_GAME, partName))
-    tempStaticText:SetShow(true)
-    tempStaticText:SetPosY(StaticText_Category_Template:GetPosY() + uiPartIndex * partControlButtonHeight)
-    local tempButton = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_CustomizationFrame, "Button_ShowDetail_" .. uiPartIndex)
-    CopyBaseProperty(Button_ShowDetail_Template, tempButton)
-    tempButton:SetShow(true)
-    tempButton:SetPosY(Button_ShowDetail_Template:GetPosY() + uiPartIndex * partControlButtonHeight)
-    tempButton:addInputEvent("Mouse_LUp", "SelectControlPart(" .. uiPartIndex .. ")")
-    tempGroup.text = tempStaticText
-    tempGroup.button = tempButton
-    -- DECOMPILER ERROR at PC112: Confused about usage of register: R11 in 'UnsetPending'
-
-    customizationPartControl[luaUiPartIndex] = tempGroup
+    if partName == "XML_CUSTOMIZATION_TATTOO" then
+      tatooIndex = uiPartIndex
+      break
+    end
   end
-  SelectControlPart(0)
-  Panel_CustomizationFrame:SetShow(true, false)
+  do
+    for uiPartIndex = 0, partNum - 1 do
+      if ChekcTatoo_PossibleContry(uiPartIndex, false) then
+        local luaUiPartIndex = uiPartIndex + 1
+        local partName = getUiPartDescName(classType, uiGroupIndex, uiPartIndex)
+        local tempGroup = {button, text}
+        local tempStaticText = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_CustomizationFrame, "StaticText_Category_" .. uiPartIndex)
+        CopyBaseProperty(StaticText_Category_Template, tempStaticText)
+        tempStaticText:SetText(PAGetString(Defines.StringSheet_GAME, partName))
+        tempStaticText:SetShow(true)
+        tempStaticText:SetPosY(StaticText_Category_Template:GetPosY() + uiPartIndex * partControlButtonHeight)
+        local tempButton = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_CustomizationFrame, "Button_ShowDetail_" .. uiPartIndex)
+        CopyBaseProperty(Button_ShowDetail_Template, tempButton)
+        tempButton:SetShow(true)
+        tempButton:SetPosY(Button_ShowDetail_Template:GetPosY() + uiPartIndex * partControlButtonHeight)
+        tempButton:addInputEvent("Mouse_LUp", "SelectControlPart(" .. uiPartIndex .. ")")
+        tempGroup.text = tempStaticText
+        tempGroup.button = tempButton
+        -- DECOMPILER ERROR at PC142: Confused about usage of register: R11 in 'UnsetPending'
+
+        customizationPartControl[luaUiPartIndex] = tempGroup
+      end
+    end
+    SelectControlPart(0)
+    Panel_CustomizationFrame:SetShow(true, false)
+  end
 end
 
 CheckFaceCustomizationHair = function()
@@ -217,6 +240,19 @@ end
 toggleShowFrameUI = function(show)
   -- function num : 0_11
   Panel_CustomizationFrame:SetShow(show)
+end
+
+ChekcTatoo_PossibleContry = function(uiPartIndex, isContainer)
+  -- function num : 0_12 , upvalues : isTatooGroup, isTatooCheckContry, tatooIndex
+  local plusIndex = 0
+  if isContainer then
+    plusIndex = 1
+  end
+  do
+    local isTatoo = isTatooGroup ~= false and ((tatooIndex + plusIndex ~= uiPartIndex and isTatooCheckContry))
+    do return isTatoo end
+    -- DECOMPILER ERROR: 3 unprocessed JMP targets
+  end
 end
 
 

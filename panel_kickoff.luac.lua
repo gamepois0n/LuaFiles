@@ -54,8 +54,7 @@ PaGlobal_Panel_KickOff_Open = function(isType)
       if isType == 3 then
         (self._txt_KickOffDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_E"))
       else
-        ;
-        (self._txt_KickOffDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_C"))
+        return 
       end
     end
   end

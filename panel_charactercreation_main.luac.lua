@@ -149,6 +149,9 @@ if isGameTypeSA() then
           Button_CustomHistoryUnDo:SetShow(isButtonOpen)
           Button_CustomHistoryDo:addInputEvent("Mouse_LUp", "customHistoryDo()")
           Button_CustomHistoryUnDo:addInputEvent("Mouse_LUp", "customHistoryUnDo()")
+          local screenShotTime = 0
+          local screenShotButtonUse = true
+          local screenShotReady = false
           customHistoryDo = function()
   -- function num : 0_0
   ToClient_HistoryDo()
@@ -181,6 +184,7 @@ end
           Line_Template:SetSize(Line_Template:GetSizeX(), 28)
           Panel_CustomizationMain:RegisterUpdateFunc("MainPanel_UpdatePerFrame")
           local _web_RandomBeauty = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_CustomizationMain, "WebControl_RandomCustomization")
+          btn_RandomBeauty:SetShow(webAlbumOpen)
           local preview_Main = true
           local UI_TM = CppEnums.TextMode
           local mainButtonNum = 5
@@ -229,6 +233,7 @@ end
           local timer = 0
           local isSubEffectPlay = false
           local doScreenShot = false
+          local doScreenShotSub = false
           local doScreenShotInFrame = false
           local doScreenCapture = false
           local EndScreenCapture = false
@@ -502,9 +507,14 @@ end
   StaticText_ZodiacDescription:SetText("")
 end
 
-          local isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CashCustom, isShow_CustomizationStatic, isShow_CustomizingAlbum = nil, nil, nil, nil, nil, nil, nil, nil
+          local isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CashCustom, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_HistoryButton = nil, nil, nil, nil, nil, nil, nil, nil, nil
           TakeScreenShot = function()
-  -- function num : 0_13 , upvalues : isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_CashCustom, doScreenShot
+  -- function num : 0_13 , upvalues : screenShotReady, screenShotButtonUse, isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_HistoryButton, Button_CustomHistoryDo, Button_CustomHistoryUnDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, isShow_CashCustom, doScreenShot, doScreenShotSub
+  if screenShotReady == false then
+    return 
+  end
+  screenShotReady = false
+  screenShotButtonUse = true
   if ToClient_getCaptureUpdateState() then
     return 
   end
@@ -514,22 +524,45 @@ end
   isShow_CustomizationFrame = Panel_CustomizationFrame:GetShow()
   isShow_CustomizationMain = Panel_CustomizationMain:GetShow()
   isShow_CustomizingAlbum = Panel_CustomizingAlbum:GetShow()
+  isShow_HistoryButton = Button_CustomHistoryDo:GetShow()
   StaticText_CustomizationMessage:SetShow(false)
   Panel_CustomizationCloth:SetShow(false)
   Panel_CustomizationMotion:SetShow(false)
   Panel_CustomizationFrame:SetShow(false)
   Panel_CustomizationMain:SetShow(false)
   Panel_CustomizingAlbum:SetShow(false)
+  Button_CustomHistoryDo:SetShow(false)
+  Button_CustomHistoryUnDo:SetShow(false)
+  CheckButton_CameraLook:SetShow(false)
+  CheckButton_ToggleUi:SetShow(false)
+  CheckButton_ImagePreset:SetShow(false)
+  Button_ScreenShot:SetShow(false)
+  Button_ScreenShotFolder:SetShow(false)
+  CheckButton_CameraLook_Title:SetShow(false)
+  CheckButton_ToggleUi_Title:SetShow(false)
+  CheckButton_ImagePreset_Title:SetShow(false)
+  Button_ScreenShot_Title:SetShow(false)
+  Button_ScreenShotFolder_Title:SetShow(false)
+  if InGameMode then
+    Button_ProfileScreenShot:SetShow(false)
+    Button_ProfileScreenShot_Title:SetShow(false)
+  end
   if not ToClient_isLobbyProcessor() then
     isShow_CashCustom = Panel_Cash_Customization:GetShow()
     Panel_Cash_Customization:SetShow(false)
   end
   doScreenShot = true
+  doScreenShotSub = true
   ToClient_setCaptureUpdateState(true)
 end
 
           TakeFaceScreenShot = function()
-  -- function num : 0_14 , upvalues : isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, isShow_CashCustom, doScreenShotInFrame, doScreenCapture
+  -- function num : 0_14 , upvalues : screenShotReady, screenShotButtonUse, isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_HistoryButton, Button_CustomHistoryDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, Button_CustomHistoryUnDo, isShow_CashCustom, doScreenShotInFrame, doScreenCapture, doScreenShotSub
+  if screenShotReady == false then
+    return 
+  end
+  screenShotReady = false
+  screenShotButtonUse = true
   if ToClient_getCaptureUpdateState() then
     return 
   end
@@ -540,6 +573,7 @@ end
   isShow_CustomizationMain = Panel_CustomizationMain:GetShow()
   isShow_CustomizationStatic = Panel_CustomizationStatic:GetShow()
   isShow_CustomizingAlbum = Panel_CustomizingAlbum:GetShow()
+  isShow_HistoryButton = Button_CustomHistoryDo:GetShow()
   StaticText_CustomizationMessage:SetShow(false)
   Panel_CustomizationCloth:SetShow(false)
   Panel_CustomizationMotion:SetShow(false)
@@ -552,19 +586,24 @@ end
   CheckButton_ImagePreset:SetShow(false)
   Button_ScreenShot:SetShow(false)
   Button_ScreenShotFolder:SetShow(false)
-  Button_ProfileScreenShot:SetShow(false)
-  Button_ProfileScreenShot_Title:SetShow(false)
+  if InGameMode then
+    Button_ProfileScreenShot:SetShow(false)
+    Button_ProfileScreenShot_Title:SetShow(false)
+  end
   CheckButton_CameraLook_Title:SetShow(false)
   CheckButton_ToggleUi_Title:SetShow(false)
   CheckButton_ImagePreset_Title:SetShow(false)
   Button_ScreenShot_Title:SetShow(false)
   Button_ScreenShotFolder_Title:SetShow(false)
+  Button_CustomHistoryDo:SetShow(false)
+  Button_CustomHistoryUnDo:SetShow(false)
   if not ToClient_isLobbyProcessor() then
     isShow_CashCustom = Panel_Cash_Customization:GetShow()
     Panel_Cash_Customization:SetShow(false)
   end
   doScreenShotInFrame = true
   doScreenCapture = true
+  doScreenShotSub = true
   ToClient_setCaptureUpdateState(true)
 end
 
@@ -605,14 +644,14 @@ end
 end
 
           local _takeScreenShot = function()
-  -- function num : 0_17 , upvalues : StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_CashCustom
+  -- function num : 0_17 , upvalues : isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_CashCustom
   ToClient_Capture()
-  StaticText_CustomizationMessage:SetShow(isShow_CustomizationMessage)
   Panel_CustomizationCloth:SetShow(isShow_CustomizationCloth)
   Panel_CustomizationMotion:SetShow(isShow_CustomizationMotion)
   Panel_CustomizationFrame:SetShow(isShow_CustomizationFrame)
   Panel_CustomizationMain:SetShow(isShow_CustomizationMain)
   Panel_CustomizingAlbum:SetShow(isShow_CustomizingAlbum)
+  Panel_CustomizationStatic:SetShow(true)
   if not ToClient_isLobbyProcessor() then
     Panel_Cash_Customization:SetShow(isShow_CashCustom)
   end
@@ -650,13 +689,14 @@ end
 end
 
           local timerForSS = 0
+          local subTime = 0
           OpenScreenShotFolder = function()
   -- function num : 0_20
   ToClient_OpenDirectory((CppEnums.OpenDirectoryType).DirectoryType_ScreenShot)
 end
 
           CustomizationStatic_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_21 , upvalues : doScreenShot, timerForSS, _takeScreenShot, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface
+  -- function num : 0_21 , upvalues : doScreenShot, timerForSS, _takeScreenShot, screenShotButtonUse, screenShotTime, screenShotReady, doScreenShotSub, subTime, StaticText_CustomizationMessage, isShow_CustomizationMessage, Button_CustomHistoryDo, isShow_HistoryButton, Button_CustomHistoryUnDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface
   if doScreenShot then
     if timerForSS > 0.3 then
       timerForSS = 0
@@ -664,6 +704,39 @@ end
       _takeScreenShot()
     else
       timerForSS = timerForSS + deltaTime
+    end
+  end
+  if screenShotButtonUse == true then
+    screenShotTime = screenShotTime + deltaTime
+    if screenShotTime > 1 then
+      screenShotTime = 0
+      screenShotReady = true
+      screenShotButtonUse = false
+    end
+  end
+  if doScreenShotSub then
+    if subTime > 0.5 then
+      doScreenShotSub = false
+      subTime = 0
+      StaticText_CustomizationMessage:SetShow(isShow_CustomizationMessage)
+      Button_CustomHistoryDo:SetShow(isShow_HistoryButton)
+      Button_CustomHistoryUnDo:SetShow(isShow_HistoryButton)
+      CheckButton_CameraLook:SetShow(true)
+      CheckButton_ToggleUi:SetShow(true)
+      CheckButton_ImagePreset:SetShow(true)
+      Button_ScreenShot:SetShow(true)
+      Button_ScreenShotFolder:SetShow(true)
+      CheckButton_CameraLook_Title:SetShow(true)
+      CheckButton_ToggleUi_Title:SetShow(true)
+      CheckButton_ImagePreset_Title:SetShow(true)
+      Button_ScreenShot_Title:SetShow(true)
+      Button_ScreenShotFolder_Title:SetShow(true)
+      if InGameMode then
+        Button_ProfileScreenShot:SetShow(true)
+        Button_ProfileScreenShot_Title:SetShow(true)
+      end
+    else
+      subTime = subTime + deltaTime
     end
   end
   if doScreenShotInFrame then
@@ -1246,7 +1319,7 @@ end
 end
 
           ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
-  -- function num : 0_55 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, btn_RandomBeauty, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
+  -- function num : 0_55 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, btn_RandomBeauty, webAlbumOpen, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
   closeCustomizationMode = false
   InGameMode = isInGame
   _classIndex = classIndex
@@ -1257,7 +1330,7 @@ end
     Button_SelectClass:SetShow(false)
     Button_Back:SetShow(false)
     btn_CharacterNameCreateRule:SetShow(false)
-    btn_RandomBeauty:SetShow(true)
+    btn_RandomBeauty:SetShow(webAlbumOpen)
     Static_CharName:SetShow(false)
     Edit_CharName:SetShow(false)
     ;
@@ -1281,7 +1354,7 @@ end
     Button_SelectClass:SetShow(true)
     Button_Back:SetShow(true)
     btn_CharacterNameCreateRule:SetShow(true)
-    btn_RandomBeauty:SetShow(true)
+    btn_RandomBeauty:SetShow(webAlbumOpen)
     Static_CharName:SetShow(true)
     Edit_CharName:SetShow(true)
     StaticText_Zodiac:SetShow(true)
@@ -1297,7 +1370,7 @@ end
       link1:SetShow(true)
       link2:SetShow(true)
     else
-      if isGameTypeJapan() then
+      if false then
         if usingClassPic[classIndex] == true then
           japanEventBanner:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Customize_EventBanner_" .. classIndex .. ".dds")
           local x1, y1, x2, y2 = setTextureUV_Func(japanEventBanner, 2, 2, 342, 158)
@@ -1309,11 +1382,11 @@ end
           ;
           (japanEventBanner:getOnTexture()):setUV(x1, y1, x2, y2)
           japanEventBanner:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Customize_EventBanner_" .. classIndex .. ".dds")
-          -- DECOMPILER ERROR at PC304: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC303: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC305: Overwrote pending register: R6 in 'AssignReg'
+          -- DECOMPILER ERROR at PC304: Overwrote pending register: R6 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC306: Overwrote pending register: R5 in 'AssignReg'
+          -- DECOMPILER ERROR at PC305: Overwrote pending register: R5 in 'AssignReg'
 
           x1 = setTextureUV_Func(japanEventBanner, 2, 320, 342, 476)
           ;
@@ -1322,7 +1395,7 @@ end
         else
           do
             do
-              -- DECOMPILER ERROR at PC323: Overwrote pending register: R5 in 'AssignReg'
+              -- DECOMPILER ERROR at PC322: Overwrote pending register: R5 in 'AssignReg'
 
               japanEventBanner:SetShow(false)
               if (isGameTypeEnglish() or isGameTypeTaiwan()) and not isInGame then

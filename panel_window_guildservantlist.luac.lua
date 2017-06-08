@@ -17,6 +17,17 @@ GuildServantList_Init = function()
   local guildServantCount = guildstable_getUnsealGuildServantCount()
   for index = 0, guildServantCount - 1 do
     local list = {}
+    if (self._listPool)[index] ~= nil then
+      (UI.deleteControl)(((self._listPool)[index]).name)
+      ;
+      (UI.deleteControl)(((self._listPool)[index]).channel)
+      ;
+      (UI.deleteControl)(((self._listPool)[index]).call)
+      -- DECOMPILER ERROR at PC32: Confused about usage of register: R7 in 'UnsetPending'
+
+      ;
+      (self._listPool)[index] = {}
+    end
     list.name = (UI.createAndCopyBasePropertyControl)(Panel_GuildServantList, "StaticText_ServantName", self._frame_Contents, "GuildServantList_Name_" .. index)
     list.channel = (UI.createAndCopyBasePropertyControl)(Panel_GuildServantList, "StaticText_ChannelName", self._frame_Contents, "GuildServantList_Channel_" .. index)
     list.call = (UI.createAndCopyBasePropertyControl)(Panel_GuildServantList, "Button_Call", self._frame_Contents, "GuildServantList_Call_" .. index)
@@ -32,7 +43,7 @@ GuildServantList_Init = function()
     (list.call):SetPosX(295)
     ;
     (list.call):SetPosY(2 + 20 * index)
-    -- DECOMPILER ERROR at PC66: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC91: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (self._listPool)[index] = list

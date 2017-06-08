@@ -40,11 +40,11 @@ local InitPartyMemberTooltipTable = function()
     panel:SetDragAll(false)
     panelTail:SetIgnore(false)
     panelTail:SetDragAll(false)
-    local controlName = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_PartyMemberIcon, "StaticText_PartyMemberName")
-    local controlClassIconBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIconBG")
-    local controlClassIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIcon")
-    local controlLevel = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_PartyMemberIcon, "StaticText_PartyLevel")
-    local controlTail = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberTail, "Static_PartyTail")
+    local controlName = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_PartyMemberIcon, "StaticText_PartyMemberName" .. tostring(ii))
+    local controlClassIconBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIconBG" .. tostring(ii))
+    local controlClassIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIcon" .. tostring(ii))
+    local controlLevel = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_PartyMemberIcon, "StaticText_PartyLevel" .. tostring(ii))
+    local controlTail = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberTail, "Static_PartyTail" .. tostring(ii))
     CopyBaseProperty(Name, controlName)
     CopyBaseProperty(ClassIconBG, controlClassIconBG)
     CopyBaseProperty(ClassIcon, controlClassIcon)
@@ -55,10 +55,10 @@ local InitPartyMemberTooltipTable = function()
     panel:SetChild_DoNotUseXXX(controlClassIcon)
     panel:SetChild_DoNotUseXXX(controlLevel)
     panelTail:SetChild_DoNotUseXXX(controlTail)
-    -- DECOMPILER ERROR at PC163: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC183: Confused about usage of register: R16 in 'UnsetPending'
 
     Panel_WorldMap_PartyMemberIcon_table[ii] = panel
-    -- DECOMPILER ERROR at PC165: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC185: Confused about usage of register: R16 in 'UnsetPending'
 
     Panel_WorldMap_PartyMemberTail_table[ii] = panelTail
   end
@@ -123,15 +123,24 @@ initNodeResultDropGroupControl = function()
   local nodeResultIconBase = (UI.getChildControl)(Panel_WorldMap_Tooltip, "StaticText_IconName_ResultIcon")
   local nodeResultIconBGBase = (UI.getChildControl)(Panel_WorldMap_Tooltip, "StaticText_IconName_ResultIconBG")
   for ii = 1, nodeResultDropGroupMaxCount do
-    -- DECOMPILER ERROR at PC32: Confused about usage of register: R7 in 'UnsetPending'
+    if nodeResultIconBG[ii] ~= nil then
+      (UI.deleteControl)(nodeResultIconBG[ii])
+    end
+    if nodeResultIcon[ii] ~= nil then
+      (UI.deleteControl)(nodeResultIcon[ii])
+    end
+    if nodeResultIconName[ii] ~= nil then
+      (UI.deleteControl)(nodeResultIconName[ii])
+    end
+    -- DECOMPILER ERROR at PC59: Confused about usage of register: R7 in 'UnsetPending'
 
     nodeResultIconBG[ii] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_Tooltip, "StaticText_IconName_ResultIconBG_" .. tostring(ii))
     CopyBaseProperty(nodeResultIconBGBase, nodeResultIconBG[ii])
-    -- DECOMPILER ERROR at PC51: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC78: Confused about usage of register: R7 in 'UnsetPending'
 
     nodeResultIcon[ii] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_Tooltip, "StaticText_IconName_ResultIcon_" .. tostring(ii))
     CopyBaseProperty(nodeResultIconBase, nodeResultIcon[ii])
-    -- DECOMPILER ERROR at PC70: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC97: Confused about usage of register: R7 in 'UnsetPending'
 
     nodeResultIconName[ii] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_Tooltip, "StaticText_IconName_ResultName_" .. tostring(ii))
     CopyBaseProperty(nodeResultIconNameBase, nodeResultIconName[ii])
@@ -672,9 +681,9 @@ FromClient_PartyIcon = function(partyMemberIcon, partyMemberProxy, index, isVali
     (Panel_WorldMap_PartyMemberTail_table[partyCount]):SetShow(false)
     return 
   end
-  -- DECOMPILER ERROR at PC80: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC100: Confused about usage of register: R5 in 'UnsetPending'
 
-  partyMember[partyCount] = {Name = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "StaticText_PartyMemberName"), ClassIconBG = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "Static_PartyClassIconBG"), ClassIcon = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "Static_PartyClassIcon"), Level = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "StaticText_PartyLevel"), Tail = (UI.getChildControl)(Panel_WorldMap_PartyMemberTail_table[partyCount], "Static_PartyTail"), PosX = partyMemberIcon:GetPosX(), PosY = partyMemberIcon:GetPosY(), SizeX = (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX(), SizeY = (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY()}
+  partyMember[partyCount] = {Name = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "StaticText_PartyMemberName" .. tostring(partyCount)), ClassIconBG = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "Static_PartyClassIconBG" .. tostring(partyCount)), ClassIcon = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "Static_PartyClassIcon" .. tostring(partyCount)), Level = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon_table[partyCount], "StaticText_PartyLevel" .. tostring(partyCount)), Tail = (UI.getChildControl)(Panel_WorldMap_PartyMemberTail_table[partyCount], "Static_PartyTail" .. tostring(partyCount)), PosX = partyMemberIcon:GetPosX(), PosY = partyMemberIcon:GetPosY(), SizeX = (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeX(), SizeY = (Panel_WorldMap_PartyMemberIcon_table[partyCount]):GetSizeY()}
   ;
   (Panel_WorldMap_PartyMemberIcon_table[partyCount]):SetShow(true)
   ;

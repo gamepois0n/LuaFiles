@@ -178,27 +178,39 @@ LogInPanel_Resize = function()
                   Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
                 else
                   do
-                    Static_DaumCI:SetSize(144, 26)
-                    Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
-                    do
-                      local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 144, 26)
+                    if isGameTypeKR2() then
+                      Static_DaumCI:SetSize(95, 53)
+                      Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
+                      local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 95, 53)
                       ;
                       (Static_DaumCI:getBaseTexture()):setUV(x1, y1, x2, y2)
                       Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
                       Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
-                      Static_DaumCI:SetSpanSize(20, (Static_Blackline_down:GetSizeY() - Static_DaumCI:GetSizeY()) / 2)
-                      StaticEventBG:SetShow(false)
-                      local isXmas = ToClient_isEventOn("x-mas")
-                      if isXmas then
-                        StaticEventBG:SetShow(true)
+                    else
+                      do
+                        Static_DaumCI:SetSize(144, 26)
+                        Static_DaumCI:ChangeTextureInfoName("new_ui_common_forlua/window/lobby/login_CI_Daum.dds")
+                        do
+                          local x1, y1, x2, y2 = setTextureUV_Func(Static_DaumCI, 0, 0, 144, 26)
+                          ;
+                          (Static_DaumCI:getBaseTexture()):setUV(x1, y1, x2, y2)
+                          Static_DaumCI:setRenderTexture(Static_DaumCI:getBaseTexture())
+                          Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
+                          Static_DaumCI:SetSpanSize(20, (Static_Blackline_down:GetSizeY() - Static_DaumCI:GetSizeY()) / 2)
+                          StaticEventBG:SetShow(false)
+                          local isXmas = ToClient_isEventOn("x-mas")
+                          if isXmas then
+                            StaticEventBG:SetShow(true)
+                          end
+                          StaticEventBG:ComputePos()
+                          Static_BI:ComputePos()
+                          Static_Blackline_up:ComputePos()
+                          Static_Blackline_down:ComputePos()
+                          Static_CI:ComputePos()
+                          Static_DaumCI:ComputePos()
+                          Static_BI:SetPosY(getScreenSizeY() * 0.14)
+                        end
                       end
-                      StaticEventBG:ComputePos()
-                      Static_BI:ComputePos()
-                      Static_Blackline_up:ComputePos()
-                      Static_Blackline_down:ComputePos()
-                      Static_CI:ComputePos()
-                      Static_DaumCI:ComputePos()
-                      Static_BI:SetPosY(getScreenSizeY() * 0.14)
                     end
                   end
                 end

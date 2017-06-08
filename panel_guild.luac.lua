@@ -2231,6 +2231,9 @@ GuildMainInfo_Show = function()
     (GuildInfoPage._btnGetArshaHost):SetShow(true)
   end
   GuildMainInfo_MandateBtn()
+  if isGameTypeKR2() then
+    (GuildInfoPage._btnChangeMark):SetShow(false)
+  end
   if guildCommentsWebUrl ~= nil then
     _Web:SetShow(true)
   end
@@ -2289,6 +2292,14 @@ guildCommentsUrlByServiceType = function()
                     else
                       if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
                         url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_URL_TW_REAL")
+                      else
+                        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_URL_SA_ALPHA")
+                        else
+                          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_URL_SA_REAL")
+                          end
+                        end
                       end
                     end
                   end
@@ -2806,9 +2817,23 @@ FromClient_ResponseUpdateGuildContract = function(notifyType, userNickName, char
                                                                                           end
                                                                                           local msg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_BUILDING_AUTODESTROYBUILD", "areaName", areaName, "characterName", characterName)
                                                                                           Proc_ShowMessage_Ack(msg)
-                                                                                        end
-                                                                                        do
-                                                                                          FromClient_ResponseGuildUpdate()
+                                                                                        else
+                                                                                          do
+                                                                                            if notifyType == 38 then
+                                                                                              local tempTxt = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDE_PAYPROPERTYTAX", "typeMoney", makeDotMoney(s64_param1))
+                                                                                              Proc_ShowMessage_Ack(tempTxt)
+                                                                                            else
+                                                                                              do
+                                                                                                do
+                                                                                                  if notifyType == 39 then
+                                                                                                    local tempTxt = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_GETWELFARE", "typeMoney", makeDotMoney(s64_param1))
+                                                                                                    Proc_ShowMessage_Ack(tempTxt)
+                                                                                                  end
+                                                                                                  FromClient_ResponseGuildUpdate()
+                                                                                                end
+                                                                                              end
+                                                                                            end
+                                                                                          end
                                                                                         end
                                                                                       end
                                                                                     end

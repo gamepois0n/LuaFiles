@@ -422,17 +422,17 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     local idx = 0
     for idx = 0, self.chatFilterCount - 1 do
       local tempBtn = {}
-      tempBtn.chatFilter = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_CHECKBUTTON, _msgFilter_BG, "ChatOption_Btn_" .. idx)
+      tempBtn.chatFilter = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_CHECKBUTTON, _msgFilter_BG, "ChatOption_Btn_" .. idx .. "_" .. panelIdex)
       CopyBaseProperty(msgFilter_Chkbox, tempBtn.chatFilter)
       ;
       (tempBtn.chatFilter):SetShow(false)
-      tempBtn.chatColor = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON, _msgFilter_BG, "ChatOption_Color_Btn_" .. idx)
+      tempBtn.chatColor = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON, _msgFilter_BG, "ChatOption_Color_Btn_" .. idx .. "_" .. panelIdex)
       CopyBaseProperty(selectColor_btn, tempBtn.chatColor)
       ;
       (tempBtn.chatColor):SetShow(false)
       local isRoleplay = (eChatButtonType.eChatRolePlay == idx and not roleplayTypeOpen)
       local isOpen = isGameTypeRussia()
-      -- DECOMPILER ERROR at PC105: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC109: Unhandled construct in 'MakeBoolean' P1
 
       if (isGameTypeTaiwan() or isGameTypeJapan()) and idx >= 10 then
         if isArshaOpen then
@@ -469,14 +469,16 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         else
           index = idx
         end
-      else
-        -- DECOMPILER ERROR at PC166: Unhandled construct in 'MakeBoolean' P1
-
-        if isGameTypeJapan() and idx >= 8 then
+      elseif isGameTypeJapan() then
+        if idx >= 8 then
           index = idx - 1
         else
           index = idx
         end
+      elseif isGameTypeKR2() then
+        index = idx
+      else
+        index = idx
       end
       local row = (math.floor)(index / self._slotsCols)
       local col = index % self._slotsCols
@@ -485,7 +487,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       (tempBtn.chatFilter):SetPosX(self.slotStartX + self.slotGapX * col)
       ;
       (tempBtn.chatFilter):SetPosY(self.slotStartY + self.slotGapY * row)
-      -- DECOMPILER ERROR at PC192: Confused about usage of register: R17 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC204: Confused about usage of register: R17 in 'UnsetPending'
 
       btnFilter[idx] = tempBtn
       if eChatButtonType.eChatNotice == idx then
@@ -618,14 +620,14 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     for idx = 0, self.chatSystemFilterCount - 1 do
       posX = self.slotSystemTypeStartX
       posY = self.slotSystemTypeStartY + idx * self.slotGapY
-      -- DECOMPILER ERROR at PC796: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC808: Confused about usage of register: R14 in 'UnsetPending'
 
       btnSystemFilter[idx] = {}
       if eChatSystemButtonType.eChatSystem == idx then
-        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx, PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SYSTEM"), chat:isShowChatType(UI_CT.System), posX, posY, UI_color.C_FFEFEFEF, idx)
+        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SYSTEM"), chat:isShowChatType(UI_CT.System), posX, posY, UI_color.C_FFEFEFEF, idx)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_System( " .. panelIdex .. " )")
-        createRadioButton(btnSystemFilter[idx], "ChatSystemOption_Color_" .. idx, posX, posY, UI_color.C_FFEFEFEF, idx)
+        createRadioButton(btnSystemFilter[idx], "ChatSystemOption_Color_" .. idx .. "_" .. panelIdex, posX, posY, UI_color.C_FFEFEFEF, idx)
         local chatColorIndex = chat:getChatSystemColorIndex(UI_CT.System)
         if chatColorIndex == -1 then
           ((btnSystemFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFC4BEBE)
@@ -643,34 +645,34 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ;
         ((btnSystemFilter[idx]).chatColor):SetPosX(((btnSystemFilter[idx]).chatFilter):GetPosX() + ((btnSystemFilter[idx]).chatFilter):GetSizeX() + ((btnSystemFilter[idx]).chatFilter):GetTextSizeX() + 10)
       elseif eChatSystemButtonType.eChatSystemUndefine == idx then
-        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_UNDEFINE"), chat:isShowChatSystemType(UI_CST.Undefine), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
+        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_UNDEFINE"), chat:isShowChatSystemType(UI_CST.Undefine), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Undefine( " .. panelIdex .. " )")
       elseif eChatSystemButtonType.eChatSystemPrivateItem == idx then
-        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_PRIVATEITEM"), chat:isShowChatSystemType(UI_CST.PrivateItem), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
+        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_PRIVATEITEM"), chat:isShowChatSystemType(UI_CST.PrivateItem), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_PrivateItem( " .. panelIdex .. " )")
       elseif eChatSystemButtonType.eChatSystemPartyItem == idx then
-        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_PARTYITEM"), chat:isShowChatSystemType(UI_CST.PartyItem), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
+        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_PARTYITEM"), chat:isShowChatSystemType(UI_CST.PartyItem), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_PartyItem( " .. panelIdex .. " )")
       elseif eChatSystemButtonType.eChatSystemMarket == idx then
-        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_MARKET"), chat:isShowChatSystemType(UI_CST.Market), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
+        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_MARKET"), chat:isShowChatSystemType(UI_CST.Market), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Market( " .. panelIdex .. " )")
       elseif eChatSystemButtonType.eChatSystemWorker == idx then
-        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_WORKER"), chat:isShowChatSystemType(UI_CST.Worker), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
+        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_WORKER"), chat:isShowChatSystemType(UI_CST.Worker), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Worker( " .. panelIdex .. " )")
       elseif eChatSystemButtonType.eChatSystemHarvest == idx then
-        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_HARVEST"), chat:isShowChatSystemType(UI_CST.Harvest), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
+        createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_HARVEST"), chat:isShowChatSystemType(UI_CST.Harvest), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Harvest( " .. panelIdex .. " )")
       else
         _PA_LOG("�\128형욱", "처리되지 않은 eChatSystemButtonType Index : " .. idx)
       end
     end
-    -- DECOMPILER ERROR at PC1145: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1173: Confused about usage of register: R10 in 'UnsetPending'
 
     chatPanel[panelIdex] = true
   end
@@ -971,7 +973,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     rdo_FontSizeNormal2:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 18 )")
     rdo_FontSizeBig:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 20 )")
     FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
-    -- DECOMPILER ERROR: 83 unprocessed JMP targets
+    -- DECOMPILER ERROR: 85 unprocessed JMP targets
   end
 end
 
@@ -1220,7 +1222,7 @@ end
 HandleClicked_ChattingSetTransparency = function(penelIdex)
   -- function num : 0_37 , upvalues : _alphaSlider_ControlBTN, _alphaSlider_Control
   local _transparency = _alphaSlider_ControlBTN:GetPosX() / (_alphaSlider_Control:GetSizeX() - _alphaSlider_ControlBTN:GetSizeX())
-  FGlobal_Chatting_PanelTransparency(penelIdex, _transparency)
+  FGlobal_Chatting_PanelTransparency(penelIdex, _transparency, true)
 end
 
 HandleClicked_ChattingOption_SetFilter = function(panelIdex)

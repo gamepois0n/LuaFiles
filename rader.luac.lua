@@ -995,29 +995,29 @@ RadarMap_UpdateTimePerFrame = function()
     end
     local radarControl = radarTime.controls
     if hour == 12 then
-      (radarControl.gameTime):SetText("PM " .. tostring(hour) .. " : " .. calcMinute)
+      (radarControl.gameTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_TIME_AFTERNOON") .. " " .. tostring(hour) .. " : " .. calcMinute)
     else
       if hour == 0 then
         local calcHour = hour + 12
         ;
-        (radarControl.gameTime):SetText("AM " .. tostring(calcHour) .. " : " .. calcMinute)
+        (radarControl.gameTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_TIME_MORNING") .. " " .. tostring(calcHour) .. " : " .. calcMinute)
       else
         do
           if hour == 24 then
             local calcHour = hour
             ;
-            (radarControl.gameTime):SetText("AM " .. "0" .. " : " .. calcMinute)
+            (radarControl.gameTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_TIME_MORNING") .. " " .. "0" .. " : " .. calcMinute)
           else
             do
               if hour > 11 then
                 local calcHour = hour - 12
                 ;
-                (radarControl.gameTime):SetText("PM " .. tostring(calcHour) .. " : " .. calcMinute)
+                (radarControl.gameTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_TIME_AFTERNOON") .. " " .. tostring(calcHour) .. " : " .. calcMinute)
               else
                 do
                   do
                     ;
-                    (radarControl.gameTime):SetText("AM " .. tostring(hour) .. " : " .. calcMinute)
+                    (radarControl.gameTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_TIME_MORNING") .. " " .. tostring(hour) .. " : " .. calcMinute)
                     local radarTimeControl = radarTime.controls
                     local realInGameTime = getIngameTime_minute()
                     if RegionData_RealIngameTime ~= realInGameTime then

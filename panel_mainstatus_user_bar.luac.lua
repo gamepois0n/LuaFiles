@@ -6,6 +6,7 @@
 Panel_MainStatus_User_Bar:SetShow(true)
 Panel_MainStatus_User_Bar:RegisterShowEventFunc(true, "mainStatus_AniOpen()")
 Panel_MainStatus_User_Bar:RegisterShowEventFunc(false, "mainStatus_AniClose()")
+Panel_MainStatus_User_Bar:SetFakeUIRenderList()
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_AH = CppEnums.PA_UI_ALIGNHORIZON
@@ -663,7 +664,7 @@ MainStatus_ChangeTexture_Off = function()
   end
 end
 
--- DECOMPILER ERROR at PC435: Confused about usage of register: R38 in 'UnsetPending'
+-- DECOMPILER ERROR at PC438: Confused about usage of register: R38 in 'UnsetPending'
 
 Panel_MainStatus_User_Bar.MainStatusShowToggle = function()
   -- function num : 0_24

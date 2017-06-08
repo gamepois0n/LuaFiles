@@ -1885,11 +1885,7 @@ Manufacture_Button_LUp_Cook = function(isClear)
   if ToClient_IsContentsGroupOpen("228") then
     _usingItemSlotCount = 3
   else
-    if isGameTypeRussia() then
-      _usingItemSlotCount = 3
-    else
-      _usingItemSlotCount = 2
-    end
+    _usingItemSlotCount = 2
   end
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()

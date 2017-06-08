@@ -5,9 +5,9 @@
 -- function num : 0
 local enTimeValue = {Second = 1, RunningTime = 6, StandingTime = 24, StandingTime_Half = 12}
 local enCameraValue = {UpdateCameraYaw = 0.015, SetCameraPich_Low = -0.2, SetCameraPich_High = 0.35, ForLogAngle = 0.1, GoalArea = 200, BreakArea = 50}
-local AutoFrameCheckManager = {_isOn = false, _isRpeat = false, _minFrame = 25, _prevTick = 0, _cameraYaw = 0, _cameraPitch = 0, _isStop = true, _index = 0, _maxIndex = 0, 
+local AutoFrameCheckManager = {_isOn = false, _isRpeat = false, _nowRepeatCount = 0, _maxRepeatCount = 0, _minFrame = 25, _prevTick = 0, _cameraYaw = 0, _cameraPitch = 0, _isStop = true, _index = 0, _maxIndex = 0, 
 _PositionList = {}
-, _oldPositionX = 0, _oldPositionY = 0, _oldPositionZ = 0, _logPositionX = 0, _logPositionY = 0, _logPositionZ = 0, _logCameraYaw = 0, _accumulateFrame = 0, _accumulateCount = 0}
+, _oldPositionX = 0, _oldPositionY = 0, _oldPositionZ = 0, _logPositionX = 0, _logPositionY = 0, _logPositionZ = 0, _logCameraYaw = 0, _accumulateFrame = 0, _accumulateCount = 0, _isCaptured = false}
 setStandingTime = function(value)
   -- function num : 0_0 , upvalues : enTimeValue
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
@@ -49,12 +49,20 @@ AutoFrameCheckManager.FrameCheck = function(self)
     if fixedYaw < enCameraValue.ForLogAngle then
       return 
     end
+    local TargetPosition = (self._PositionList)[self._index]
     self._logPositionX = nowPositionX
     self._logPositionY = nowPositionY
     self._logPositionZ = nowPositionZ
     self._logCameraYaw = self._cameraYaw
-    local logString = (string.format)("FrameLow[%d] Position[%f/%f/%f] CameraYaw[%f] avgFrame[%d]", nowFrame, nowPositionX, nowPositionY, nowPositionZ, self._cameraYaw, self._accumulateFrame / self._accumulateCount)
+    local logString = (string.format)("NowCycle[%d] FrameLow[%d] Position[%f/%f/%f] CameraYaw[%f] avgFrame[%d]", self._nowRepeatCount + 1, nowFrame, nowPositionX, nowPositionY, nowPositionZ, self._cameraYaw, self._accumulateFrame / self._accumulateCount)
+    local logString2 = (string.format)("TargetPosition[%f/%f/%f] (%s)", TargetPosition._goalX, TargetPosition._goalY, TargetPosition._goalZ, TargetPosition._where)
+    local screenShotString = (string.format)("_Position(%f/%f/%f)", nowPositionX, nowPositionY, nowPositionZ)
     _PA_SVN_LOG(logString)
+    _PA_SVN_LOG(logString2)
+    if self._isCaptured == false then
+      ToClient_CaptureByFrameCheck()
+      self._isCaptured = true
+    end
   end
 end
 
@@ -96,6 +104,7 @@ AutoFrameCheckManager.AutoFrameCheck = function(self)
   local X = ((self._PositionList)[self._index])._goalX
   local Y = ((self._PositionList)[self._index])._goalY
   local Z = ((self._PositionList)[self._index])._goalZ
+  local NowWhere = ((self._PositionList)[self._index])._where
   local selfPlayer = getSelfPlayer()
   if self:isArriveGoalbyPosition(X, Y, Z) == true then
     ToClient_StopNavi()
@@ -103,9 +112,15 @@ AutoFrameCheckManager.AutoFrameCheck = function(self)
     if self._maxIndex <= self._index then
       if self._isRpeat == true then
         self._index = 0
+        self._nowRepeatCount = self._nowRepeatCount + 1
+        if self._maxRepeatCount <= self._nowRepeatCount and self._maxRepeatCount ~= 0 then
+          OffFrameCheck()
+          return 
+        end
+      else
+        OffFrameCheck()
+        return 
       end
-      self._isOn = false
-      return 
     end
     local X1 = ((self._PositionList)[self._index])._goalX
     local Y1 = ((self._PositionList)[self._index])._goalY
@@ -148,6 +163,7 @@ AutoFrameCheckManager.AutoFrameCheck = function(self)
         self._cameraPitch = 0
         self._cameraRoll = 0
         self._prevTick = (os.time)()
+        self._isCaptured = false
         ToClient_StopNavi()
         return 
       end
@@ -170,16 +186,20 @@ FGlobal_AutoFrameCheck_setMinFrame = function(frame)
   AutoFrameCheckManager._minFrame = frame
 end
 
-FGlobal_AutoFrameCheck_addPositionList = function(X, Y, Z)
+FGlobal_AutoFrameCheck_addPositionList = function(X, Y, Z, strWhere)
   -- function num : 0_9 , upvalues : AutoFrameCheckManager
   local nowIndex = AutoFrameCheckManager._maxIndex
-  -- DECOMPILER ERROR at PC6: Confused about usage of register: R4 in 'UnsetPending'
+  local tempString = ""
+  if strWhere ~= nil then
+    tempString = strWhere
+  end
+  -- DECOMPILER ERROR at PC10: Confused about usage of register: R6 in 'UnsetPending'
 
   AutoFrameCheckManager._maxIndex = AutoFrameCheckManager._maxIndex + 1
-  -- DECOMPILER ERROR at PC13: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC18: Confused about usage of register: R6 in 'UnsetPending'
 
   ;
-  (AutoFrameCheckManager._PositionList)[nowIndex] = {_goalX = X, _goalY = Y, _goalZ = Z}
+  (AutoFrameCheckManager._PositionList)[nowIndex] = {_goalX = X, _goalY = Y, _goalZ = Z, _where = tempString}
 end
 
 FGlobal_AutoFrameCheck_resetPositionList = function()
@@ -206,7 +226,8 @@ FGlobal_AutoFrameCheck_Start = function()
   local Z = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalZ
   local Position = float3(X, Y, Z)
   ToClient_WorldMapNaviStart(Position, NavigationGuideParam(), false, true)
-  -- DECOMPILER ERROR at PC31: Confused about usage of register: R4 in 'UnsetPending'
+  _PA_SVN_LOG("############################ AutoFrameCheck Start!! ####################################")
+  -- DECOMPILER ERROR at PC34: Confused about usage of register: R4 in 'UnsetPending'
 
   AutoFrameCheckManager._isOn = true
 end
@@ -218,11 +239,14 @@ FGlobal_AutoFrameCheck_Stop = function()
   AutoFrameCheckManager._isOn = false
 end
 
-FGlobal_setAutoFrameCheckRepeat = function(value)
+FGlobal_setAutoFrameCheckRepeat = function(value, count)
   -- function num : 0_13 , upvalues : AutoFrameCheckManager
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R2 in 'UnsetPending'
 
   AutoFrameCheckManager._isRpeat = value
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R2 in 'UnsetPending'
+
+  AutoFrameCheckManager._maxRepeatCount = count
 end
 
 OnFrameCheck = function()
@@ -230,7 +254,6 @@ OnFrameCheck = function()
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   AutoFrameCheckManager._isOn = true
-  _PA_LOG("�\128민혁", "자동 프레임체�\172 매니�\128 시작!!!")
 end
 
 OffFrameCheck = function()
@@ -238,26 +261,18 @@ OffFrameCheck = function()
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   AutoFrameCheckManager._isOn = false
-  _PA_LOG("�\128민혁", "자동 프레임체�\172 매니�\128 종료!!!")
+  _PA_SVN_LOG("############################ AutoFrameCheck End!! ####################################")
 end
 
 testAutoQuestStart = function()
   -- function num : 0_16
-  setRunningTime(4)
-  setStandingTime(6)
-  FGlobal_AutoFrameCheck_addPositionList(-377959.53125, 9696.186523, -373333.3125)
-  FGlobal_AutoFrameCheck_addPositionList(-380519.28125, 9422.658203, -374120.9375)
-  FGlobal_AutoFrameCheck_addPositionList(-254953.21875, 14020.24707, -335996.1875)
-  FGlobal_AutoFrameCheck_addPositionList(-388703.28125, 12982.615234, -365806.25)
-  FGlobal_AutoFrameCheck_addPositionList(-386187, 13398.860352, -364142.03125)
-  FGlobal_AutoFrameCheck_addPositionList(-387069.75, 10809.834961, -371190.25)
-  FGlobal_AutoFrameCheck_addPositionList(-380692.375, 9391.583984, -373983)
-  FGlobal_AutoFrameCheck_addPositionList(-376622.75, 9672.875977, -374074.9375)
+  setRunningTime(8)
+  setStandingTime(2)
+  FGlobal_setAutoFrameCheckRepeat(true, 0)
+  FGlobal_AutoFrameCheck_setMinFrame(80)
   FGlobal_AutoFrameCheck_addPositionList(-309323.09375, 13343.671875, -370570.78125)
   FGlobal_AutoFrameCheck_addPositionList(-306090.40625, 13897.889648, -366944.25)
   FGlobal_AutoFrameCheck_addPositionList(-289764.21875, 16052.167969, -363110.46875)
-  FGlobal_AutoFrameCheck_addPositionList(-254953.21875, 14020.24707, -335996.1875)
-  FGlobal_setAutoFrameCheckRepeat(true)
   FGlobal_AutoFrameCheck_Start()
 end
 
@@ -279,6 +294,11 @@ end
 ToClient_ReStartNavi = function()
   -- function num : 0_20
   ToClient_NaviReStart()
+end
+
+CCAP = function()
+  -- function num : 0_21
+  ToClient_CaptureByFrameCheck()
 end
 
 

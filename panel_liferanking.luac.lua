@@ -573,19 +573,19 @@ LifeRanking.Update = function(self)
       (LifeRanking._inMyRankRate):SetShow(false)
     else
       if myLifeRankerRate >= 0 and myLifeRankerRate <= 20 then
-        lifeGrade = "A"
+        lifeGrade = PAGetString(Defines.StringSheet_GAME, "LUA_LIFERANKING_A")
       else
         if myLifeRankerRate > 20 and myLifeRankerRate <= 40 then
-          lifeGrade = "B"
+          lifeGrade = PAGetString(Defines.StringSheet_GAME, "LUA_LIFERANKING_B")
         else
           if myLifeRankerRate > 40 and myLifeRankerRate <= 60 then
-            lifeGrade = "C"
+            lifeGrade = PAGetString(Defines.StringSheet_GAME, "LUA_LIFERANKING_C")
           else
             if myLifeRankerRate > 60 and myLifeRankerRate <= 80 then
-              lifeGrade = "D"
+              lifeGrade = PAGetString(Defines.StringSheet_GAME, "LUA_LIFERANKING_D")
             else
               if myLifeRankerRate > 80 and myLifeRankerRate <= 100 then
-                lifeGrade = "E"
+                lifeGrade = PAGetString(Defines.StringSheet_GAME, "LUA_LIFERANKING_E")
               end
             end
           end

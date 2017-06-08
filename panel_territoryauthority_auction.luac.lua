@@ -45,7 +45,7 @@ TerritoryAuth_Resize = function()
   -- function num : 0_2
 end
 
-EventNotifyResponseAuctionInfo = function(goodsType, sendType, tempStr, tempStr2, bidRv)
+EventNotifyResponseAuctionInfo = function(goodsType, sendType, tempStr, tempStr2, bidRv, param1)
   -- function num : 0_3
   local strGoodsType = ""
   local msg = ""
@@ -92,7 +92,20 @@ EventNotifyResponseAuctionInfo = function(goodsType, sendType, tempStr, tempStr2
           end
         end
       else
-        _PA_ASSERT(false, "작업해주세요")
+        if goodsType == (CppEnums.AuctionType).AuctionGoods_Item then
+          strGoodsType = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_15")
+          if sendType == 0 then
+            msg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_AUCTION", "tempStr", tempStr, "strGoodsType", strGoodsType) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_7")
+          else
+            if sendType == 1 then
+              msg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_AUCTION", "tempStr", tempStr, "strGoodsType", strGoodsType) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_8")
+            else
+              _PA_ASSERT(false, "작업해주세요")
+            end
+          end
+        else
+          _PA_ASSERT(false, "작업해주세요")
+        end
       end
     end
   end

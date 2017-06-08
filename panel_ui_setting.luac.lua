@@ -1361,6 +1361,8 @@ HandleClicked_UiSet_ConfirmSetting = function(isReset)
   Panel_NewEquip_EffectLastUpdate()
   FGlobal_PetListNew_NoPet()
   scale = scale + 0.002
+  local uiScale_Percent = (math.floor)((scale) * 100)
+  scale = uiScale_Percent / 100
   setUIScale(scale)
   GameOption_SetUIMode(scale)
   saveGameOption(false)
@@ -2237,9 +2239,10 @@ FromClient_getUiSettingPanelInfo = function(panelIndex, posX, posY, isShow, chat
   end
 end
 
-FromClient_applyChattingOptionToLua = function(presetIndex, chatWindowIndex, chatFontSizeType, chatNameType, isCombined)
+FromClient_applyChattingOptionToLua = function(presetIndex, chatWindowIndex, chatFontSizeType, chatNameType, isCombined, transparency)
   -- function num : 0_29
   ChattingOption_Open(chatWindowIndex, chatWindowIndex, isCombined)
+  FGlobal_Chatting_PanelTransparency(chatWindowIndex, transparency, false)
   HandleClicked_ChattingTypeFilter_Notice(chatWindowIndex)
   HandleClicked_ChattingTypeFilter_World(chatWindowIndex)
   HandleClicked_ChattingTypeFilter_Battle(chatWindowIndex)

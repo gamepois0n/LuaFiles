@@ -292,11 +292,7 @@ RaceWindowToggleCheck = function()
   end
   IngameCustomize_Hide()
   Panel_Knowledge_Hide()
-  if ToClient_IsDevelopment() == true then
-    FGlobal_Panel_DyeReNew_Hide()
-  else
-    FGlobal_Panel_DyeNew_Hide()
-  end
+  FGlobal_Panel_DyeReNew_Hide()
 end
 
 RaceResultPanel_Resize = function()

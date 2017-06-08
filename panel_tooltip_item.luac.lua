@@ -1910,48 +1910,48 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                         local bonusText = ""
                         if itemWrapper:getAddedDD() > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. "공격�\165 +" .. itemWrapper:getAddedDD()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACK", "value", itemWrapper:getAddedDD())
                           else
-                            bonusText = bonusText .. " | 공격�\165 +" .. itemWrapper:getAddedDD()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACKB", "value", itemWrapper:getAddedDD())
                           end
                         end
                         if itemWrapper:getAddedHIT() > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. "적중�\165 +" .. (math.floor)(itemWrapper:getAddedHIT() / 4)
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HIT", "value", itemWrapper:getAddedDD())
                           else
-                            bonusText = bonusText .. " | 적중�\165 +" .. (math.floor)(itemWrapper:getAddedHIT() / 4)
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HITB", "value", itemWrapper:getAddedDD())
                           end
                         end
                         if itemWrapper:getAddedDV() > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. "회피�\168 +" .. itemWrapper:getAddedDV()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE", "value", itemWrapper:getAddedDD())
                           else
-                            bonusText = bonusText .. " | 회피�\168 +" .. itemWrapper:getAddedDV()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGEB", "value", itemWrapper:getAddedDD())
                           end
                         end
                         if itemWrapper:getAddedPV() > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. "피해 감소 +" .. itemWrapper:getAddedPV()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE", "value", itemWrapper:getAddedDD())
                           else
-                            bonusText = bonusText .. " | 피해 감소 +" .. itemWrapper:getAddedPV()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCEB", "value", itemWrapper:getAddedDD())
                           end
                         end
                         if itemWrapper:getAddedMaxHP() > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. "최대 생명�\165 +" .. itemWrapper:getAddedMaxHP()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HP", "value", itemWrapper:getAddedDD())
                           else
-                            bonusText = bonusText .. " | 최대 생명�\165 +" .. itemWrapper:getAddedMaxHP()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HPB", "value", itemWrapper:getAddedDD())
                           end
                         end
                         if itemWrapper:getAddedMaxMP() > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. "최대 투지/정신�\165/신성�\165 +" .. itemWrapper:getAddedMaxMP()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MP", "value", itemWrapper:getAddedDD())
                           else
-                            bonusText = bonusText .. " | 최대 투지/정신�\165/신성�\165 +" .. itemWrapper:getAddedMaxMP()
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MPB", "value", itemWrapper:getAddedDD())
                           end
                         end
                         if bonusText == "" then
-                          bonusText = "없음"
+                          bonusText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_NOTHING")
                         end
                         ;
                         (target.cronStoneEnchant):SetShow(true)
@@ -1980,9 +1980,9 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                         ;
                         ((target.cronStoneCountValue)[3]):SetShow(true)
                         ;
-                        (target.cronStoneGrade):SetText("크론�\157 에너�\128 누적�\152 : " .. currentEnchantFailCount)
+                        (target.cronStoneGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_VALUE", "failCount", currentEnchantFailCount))
                         ;
-                        (target.cronStoneValue):SetText("적용 효과 : " .. bonusText)
+                        (target.cronStoneValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_BONUS", "bonusText", bonusText))
                         ;
                         (target.cronStoneProgress):SetProgressRate(0)
                         ;
@@ -2101,11 +2101,11 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                                             _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
                                             ;
                                             ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetShow(true)
-                                            -- DECOMPILER ERROR at PC1996: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC2061: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC1996: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                            -- DECOMPILER ERROR at PC2061: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                            -- DECOMPILER ERROR at PC1996: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC2061: LeaveBlock: unexpected jumping out IF_STMT
 
                                           end
                                         end
@@ -2225,7 +2225,7 @@ extendedSlotInfoArray = {}
                                               local compareSlot = {}
                                               for i = 1, slotNoMax do
                                                 local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                -- DECOMPILER ERROR at PC2515: Confused about usage of register: R54 in 'UnsetPending'
+                                                -- DECOMPILER ERROR at PC2580: Confused about usage of register: R54 in 'UnsetPending'
 
                                                 if slotNoMax ~= extendSlotNo then
                                                   (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2243,7 +2243,7 @@ extendedSlotInfoArray = {}
                                               end
                                               if 1 == equip.checkExtendedSlot then
                                                 local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                -- DECOMPILER ERROR at PC2550: Confused about usage of register: R50 in 'UnsetPending'
+                                                -- DECOMPILER ERROR at PC2615: Confused about usage of register: R50 in 'UnsetPending'
 
                                                 ;
                                                 (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2265,7 +2265,7 @@ extendedSlotInfoArray = {}
                                                     if nil ~= servantKindType then
                                                       for i = 1, slotNoMax do
                                                         local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                        -- DECOMPILER ERROR at PC2605: Confused about usage of register: R55 in 'UnsetPending'
+                                                        -- DECOMPILER ERROR at PC2670: Confused about usage of register: R55 in 'UnsetPending'
 
                                                         if slotNoMax ~= extendSlotNo then
                                                           (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2285,7 +2285,7 @@ extendedSlotInfoArray = {}
                                                     do
                                                       if 1 == equip.checkExtendedSlot then
                                                         local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                        -- DECOMPILER ERROR at PC2640: Confused about usage of register: R51 in 'UnsetPending'
+                                                        -- DECOMPILER ERROR at PC2705: Confused about usage of register: R51 in 'UnsetPending'
 
                                                         ;
                                                         (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2453,7 +2453,7 @@ extendedSlotInfoArray = {}
                                                                         (target.weight_value):SetShow(true)
                                                                         local calcWeight = gotWeight / 10000
                                                                         ;
-                                                                        (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " LT")
+                                                                        (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
                                                                       else
                                                                         do
                                                                           ;
@@ -2463,7 +2463,7 @@ extendedSlotInfoArray = {}
                                                                           do
                                                                             local calcWeight = gotWeight / 10000
                                                                             ;
-                                                                            (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " LT")
+                                                                            (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
                                                                             target.wei_Value = gotWeight / 10000
                                                                             if (itemSSW:get()):isCash() then
                                                                               (target.weight):SetShow(false)
@@ -2653,9 +2653,9 @@ extendedSlotInfoArray = {}
                                                                                                   else
                                                                                                     buffList = buffList .. " / " .. desc
                                                                                                   end
-                                                                                                  -- DECOMPILER ERROR at PC3758: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                  -- DECOMPILER ERROR at PC3833: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC3758: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                  -- DECOMPILER ERROR at PC3833: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                 end
                                                                                               end
@@ -2684,21 +2684,21 @@ extendedSlotInfoArray = {}
                                                                                               ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
                                                                                               ;
                                                                                               ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                              -- DECOMPILER ERROR at PC3849: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                              -- DECOMPILER ERROR at PC3924: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                             end
                                                                                           end
@@ -3307,7 +3307,7 @@ extendedSlotInfoArray = {}
                                                                                         (target.itemLockNotify):SetShow(false)
                                                                                         if normalTooltip == target and true == Panel_Tooltip_Item_DataObject.inventory then
                                                                                           if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan()) and getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
-                                                                                            if false == (itemSSW:get()):isCash() then
+                                                                                            if false == (itemSSW:get()):isCash() and false == itemWrapper:isSoulCollector() then
                                                                                               (target.productNotify):SetShow(true)
                                                                                             else
                                                                                               (target.productNotify):SetShow(false)

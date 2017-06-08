@@ -719,8 +719,16 @@ GuildRank_Web_Show = function()
                         if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
                           url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TW_REAL")
                         else
-                          _PA_LOG("정태�\164", "한국, 일본, 러시�\132, 북미&유럽, �\128�\140 �\184 다른 국가�\152 �\128입이 존재한다!!!! 수정해야�\168!!")
-                          return 
+                          if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_SA_ALPHA")
+                          else
+                            if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_SA_REAL")
+                            else
+                              _PA_LOG("정태�\164", "한국, 일본, 러시�\132, 북미&유럽, �\128�\140 �\184 다른 국가�\152 �\128입이 존재한다!!!! 수정해야�\168!!")
+                              return 
+                            end
+                          end
                         end
                       end
                     end

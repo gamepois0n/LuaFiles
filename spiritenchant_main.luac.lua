@@ -369,6 +369,20 @@ PaGlobal_Enchant.SecretExtractionCheck = function(self)
       end
     end
   end
+  local useStartSlot = inventorySlotNoUserStart()
+  local invenUseSize = selfPlayer:getInventorySlotCount(false)
+  local inventory = selfPlayer:getInventoryByType((CppEnums.ItemWhereType).eCashInventory)
+  local invenMaxSize = inventory:sizeXXX()
+  for index = 0, invenMaxSize - 1 do
+    local itemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, index)
+    if itemWrapper ~= nil then
+      local itemSSW = itemWrapper:getStaticStatus()
+      local maxEnchantParam = itemSSW:getContentsEventParam1()
+      if (CppEnums.ContentsEventType).ContentsType_ConvertEnchantFailCountToItem == (itemSSW:get()):getContentsEventType() and failCount <= maxEnchantParam then
+        return true, true
+      end
+    end
+  end
   return false
 end
 

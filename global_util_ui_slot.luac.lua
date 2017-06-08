@@ -277,15 +277,15 @@ SlotItem.createChild = function(self)
           if (self.param).createSoulComplete == true and self.soulComplete == nil then
             self.soulComplete = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_soulComplete")
             ;
-            (self.soulComplete):SetSize(_config.iconSize, _config.iconSize)
+            (self.soulComplete):SetSize(15, 15)
             ;
             (self.soulComplete):SetIgnore(true)
             ;
             (self.soulComplete):SetShow(false)
             ;
-            (self.soulComplete):SetPosX(0)
+            (self.soulComplete):SetPosX(27)
             ;
-            (self.soulComplete):SetPosY(0)
+            (self.soulComplete):SetPosY(1)
           end
         end
       end
@@ -467,8 +467,8 @@ SlotItem.setItem = function(self, itemWrapper, slotNo, equipment)
       soulCount = itemWrapper:getSoulCollectorCount()
       soulMax = itemWrapper:getSoulCollectorMaxCount()
       if soulMax <= soulCount then
-        (self.soulComplete):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Item_Lock.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(self.soulComplete, 1, 1, 42, 42)
+        (self.soulComplete):ChangeTextureInfoName("new_ui_common_forlua/Widget/Dialogue/Dialogue_Etc_00.dds")
+        local x1, y1, x2, y2 = setTextureUV_Func(self.soulComplete, 330, 61, 346, 76)
         ;
         ((self.soulComplete):getBaseTexture()):setUV(x1, y1, x2, y2)
         ;

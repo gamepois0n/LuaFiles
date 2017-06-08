@@ -14,7 +14,7 @@ _defaultUI = {}
 _uiData = {}
 , _button_CartClear = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "Button_CartClear"), _button_BuyAll = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "Button_CartBuyAll"), _button_CartClose = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "Button_CartClose"), _scroll = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "Scroll_IngameCashCart"), _static_PearlBox = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "Static_PearlBox"), _static_NowPearlIcon = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "Static_NowPearlIcon"), _staticText_TotalCount = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "StaticText_TotalCount"), _staticText_NowPearlCount = (UI.getChildControl)(Panel_IngameCashShop_NewCart, "StaticText_NowPearlCount")}
 CashShopCart._scrollBTN = (UI.getChildControl)(CashShopCart._scroll, "Scroll_CtrlButton")
-local contry = {kr = 0, jp = 1, ru = 2, cn = 3}
+local contry = {kr = 0, jp = 1, ru = 2, kr2 = 3}
 local cashIconType = {cash = 0, pearl = 1, mileage = 2, silver = 3}
 local convertDateStr = function(ttime64)
   -- function num : 0_0

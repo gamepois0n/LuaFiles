@@ -64,7 +64,7 @@ HandleClicked_Extraction = function()
   if self._selectSlotNo == nil then
     return 
   end
-  local itemWrapper = getInventoryItemByType(0, self._selectSlotNo)
+  local itemWrapper = getInventoryItemByType(self._fromWhereType, self._selectSlotNo)
   if itemWrapper == nil then
     return 
   end
@@ -103,6 +103,10 @@ Panel_EnchantExtraction_Show = function()
   ;
   ((self.control).enchantCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ENCHANTCOUNTEXTRACTION_2", "count", "+" .. failCount))
   enchantExtraction:DataInit()
+  local isHave, isExistCash = PaGlobal_Enchant:SecretExtractionCheck()
+  if isExistCash then
+    FGlobal_CashInventoryOpen_ByEnchant()
+  end
 end
 
 enchantExtraction.DataInit = function(self)

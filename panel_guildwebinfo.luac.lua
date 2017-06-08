@@ -196,7 +196,15 @@ end
                           if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
                             url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_REAL")
                           else
-                            return 
+                            if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_ALPHA")
+                            else
+                              if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_REAL")
+                              else
+                                return 
+                              end
+                            end
                           end
                         end
                       end

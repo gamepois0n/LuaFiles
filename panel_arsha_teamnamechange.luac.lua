@@ -20,6 +20,18 @@ ArshaPvP_TeamNameChangeControl_Confirm = function()
   local nameA = (self._txt_Edit_A):GetEditText()
   local nameB = (self._txt_Edit_B):GetEditText()
   ToClient_changeTeamName(nameA, nameB)
+  local teamA_Info = ToClient_GetTeamListAt(0)
+  local teamB_Info = ToClient_GetTeamListAt(1)
+  if teamA_Info == nil or teamB_Info == nil then
+    FGlobal_TeamNameChangeControl_Close()
+    return 
+  end
+  local teamA_Name = teamA_Info:getTeamName()
+  local teamB_Name = teamB_Info:getTeamName()
+  ;
+  (self._txt_Edit_A):SetEditText(teamA_Name)
+  ;
+  (self._txt_Edit_B):SetEditText(teamB_Name)
   FGlobal_TeamNameChangeControl_Close()
 end
 
