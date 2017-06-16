@@ -61,7 +61,7 @@ _btn_ScreenShotFormat = {[0] = (UI.getChildControl)(_frameContent_Display, "Radi
 _btn_ColorBlind = {[0] = (UI.getChildControl)(_frameContent_Display, "Radiobutton_ColorBlindNone"), [1] = (UI.getChildControl)(_frameContent_Display, "Radiobutton_ColorBlind_Protanopia"), [2] = (UI.getChildControl)(_frameContent_Display, "Radiobutton_ColorBlind_Deuteranopia")}
 , 
 _btn_ScreenShotSize = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotSize_Default"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotSize_4K"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_ScreenshotSize_8K")}
-, _btn_NearestPlayerOnlyEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserEffect"), _btn_SelfPlayerOnlyEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserEffectAll"), _btn_SelfPlayerOnlyLantern = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserLantern"), _btn_LowPower = (UI.getChildControl)(_frameContent_Display, "CheckButton_LowPower"), _btn_UpscaleEnable = (UI.getChildControl)(_frameContent_Display, "CheckButton_Upscale"), _btn_CropModeEnable = (UI.getChildControl)(_frameContent_Display, "CheckButton_CropMode"), _slide_CropModeScaleX = (UI.getChildControl)(_frameContent_Display, "Slider_CropModeX"), _slide_CropModeScaleY = (UI.getChildControl)(_frameContent_Display, "Slider_CropModeY"), _btn_WorkerVisible = (UI.getChildControl)(_frameContent_Display, "CheckButton_WorkerVisible"), _btn_AutoOptimization = (UI.getChildControl)(_frameContent_Display, "CheckButton_AutoOptimization"), _slide_AutoOptimization = (UI.getChildControl)(_frameContent_Display, "Slider_AutoOptimization"), _slideText_FrameRate = (UI.getChildControl)(_frameContent_Display, "StaticText_FPS_MID"), _slide_WatermarkAlpha = (UI.getChildControl)(_frameContent_Display, "Slider_AlphaControl"), 
+, _btn_NearestPlayerOnlyEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserEffect"), _btn_SelfPlayerOnlyEffect = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserEffectAll"), _btn_SelfPlayerOnlyLantern = (UI.getChildControl)(_frameContent_Display, "CheckButton_OtherUserLantern"), _btn_LowPower = (UI.getChildControl)(_frameContent_Display, "CheckButton_LowPower"), _btn_UpscaleEnable = (UI.getChildControl)(_frameContent_Display, "CheckButton_Upscale"), _btn_CropModeEnable = (UI.getChildControl)(_frameContent_Display, "CheckButton_CropMode"), _slide_CropModeScaleX = (UI.getChildControl)(_frameContent_Display, "Slider_CropModeX"), _slide_CropModeScaleY = (UI.getChildControl)(_frameContent_Display, "Slider_CropModeY"), _btn_WorkerVisible = (UI.getChildControl)(_frameContent_Display, "CheckButton_WorkerVisible"), _btn_AutoOptimization = (UI.getChildControl)(_frameContent_Display, "CheckButton_AutoOptimization"), _slide_AutoOptimization = (UI.getChildControl)(_frameContent_Display, "Slider_AutoOptimization"), _slideText_FrameRate = (UI.getChildControl)(_frameContent_Display, "StaticText_FPS_MID"), _txt_WaterMarkAlphaTitle = (UI.getChildControl)(_frameContent_Display, "StaticText_WaterMakrAlpha"), _txt_WaterMarkMin = (UI.getChildControl)(_frameContent_Display, "StaticText_Alpha_Min"), _txt_WaterMarkDefault = (UI.getChildControl)(_frameContent_Display, "StaticText_Alpha_Default"), _txt_WaterMarkMax = (UI.getChildControl)(_frameContent_Display, "StaticText_Alpha_Max"), _slide_WatermarkAlpha = (UI.getChildControl)(_frameContent_Display, "Slider_AlphaControl"), _txt_ScreenShotAlphaSizeTitle = (UI.getChildControl)(_frameContent_Display, "StaticText_ScreenShotAlphaSize"), _txt_ScreenShotAlphaPosTitle = (UI.getChildControl)(_frameContent_Display, "StaticText_ScreenShotAlphaPos"), _txt_ScreenShotAlphaTypeTitle = (UI.getChildControl)(_frameContent_Display, "StaticText_ScreenShotAlphaType"), 
 _btn_WatermarkPosition = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_LeftTop"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_RightTop"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_LeftBotton"), [3] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_RightBottom")}
 , 
 _btn_WatermarkService = {[0] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Kor"), [1] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Jap"), [2] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Na"), [3] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Rus"), [4] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Tw"), [5] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_Sa"), [6] = (UI.getChildControl)(_frameContent_Display, "RadioButton_Screenshot_None")}
@@ -1790,7 +1790,7 @@ else
   ((frame_Display._btn_WatermarkService)[6]):SetShow(false)
 end
 Option_RegistEventHandler = function()
-  -- function num : 0_28 , upvalues : gamePanel_Main, frame_Display, chk_Option, _btn_CropModeScaleX, _btn_CropModeScaleY, _btn_AutoOptimizationSlide, _btn_Gamma, _btn_WatermarkAlpha, _btn_Contrast, _btn_UIScale, _btn_Fov, frame_Sound, _btn_TotalVol, _btn_MusicVol, _btn_FxVol, _btn_EnvFxVol, _btn_VoiceVol, _btn_hitFxWeightVolume, _btn_otherPlayerVolume, frame_Game, randerPlayerColorStr, _btn_EffectAlpha, _btn_CameraMaster, _btn_ColorByPass, _btn_CameraShake, _btn_MotionBlur, _btn_CameraPos, _btn_CameraFov, _btn_MouXSen, _btn_MouYSen, _btn_PadXSen, _btn_PadYSen, _btn_hitFxVolume, _static_ResetKeyConfig, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, simpleToolTipIdx
+  -- function num : 0_28 , upvalues : gamePanel_Main, frame_Display, chk_Option, _btn_CropModeScaleX, _btn_CropModeScaleY, _btn_AutoOptimizationSlide, _frameContent_Display, _btn_Gamma, _btn_WatermarkAlpha, _btn_Contrast, _btn_UIScale, _btn_Fov, frame_Sound, _btn_TotalVol, _btn_MusicVol, _btn_FxVol, _btn_EnvFxVol, _btn_VoiceVol, _btn_hitFxWeightVolume, _btn_otherPlayerVolume, frame_Game, randerPlayerColorStr, _btn_EffectAlpha, _btn_CameraMaster, _btn_ColorByPass, _btn_CameraShake, _btn_MotionBlur, _btn_CameraPos, _btn_CameraFov, _btn_MouXSen, _btn_MouYSen, _btn_PadXSen, _btn_PadYSen, _btn_hitFxVolume, _static_ResetKeyConfig, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, simpleToolTipIdx
   (gamePanel_Main._btn_Close):addInputEvent("Mouse_LUp", "Option_Hide()")
   ;
   (gamePanel_Main._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"UIGameOption\" )")
@@ -1950,6 +1950,52 @@ Option_RegistEventHandler = function()
   (frame_Display._btn_CharacterEffect):addInputEvent("Mouse_LUp", "GameOption_CheckCharacterEffect()")
   ;
   (frame_Display._btn_WorkerVisible):addInputEvent("Mouse_LUp", "GameOption_CheckWorkerVisible()")
+  if isGameTypeKR2() then
+    (frame_Display._slide_WatermarkAlpha):SetShow(false)
+    ;
+    (frame_Display._txt_WaterMarkAlphaTitle):SetShow(false)
+    ;
+    (frame_Display._txt_WaterMarkMin):SetShow(false)
+    ;
+    (frame_Display._txt_WaterMarkDefault):SetShow(false)
+    ;
+    (frame_Display._txt_WaterMarkMax):SetShow(false)
+    ;
+    (frame_Display._txt_ScreenShotAlphaSizeTitle):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkScale)[0]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkScale)[1]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkScale)[2]):SetShow(false)
+    ;
+    (frame_Display._txt_ScreenShotAlphaPosTitle):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkPosition)[0]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkPosition)[1]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkPosition)[2]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkPosition)[3]):SetShow(false)
+    ;
+    (frame_Display._txt_ScreenShotAlphaTypeTitle):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkService)[0]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkService)[1]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkService)[2]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkService)[3]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkService)[4]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkService)[5]):SetShow(false)
+    ;
+    ((frame_Display._btn_WatermarkService)[6]):SetShow(false)
+    _frameContent_Display:SetSize(_frameContent_Display:GetSizeX(), 1800)
+  end
   ;
   (frame_Display._slide_Gamma):addInputEvent("Mouse_LPress", "GameOption_ChangeGamma_slider()")
   ;

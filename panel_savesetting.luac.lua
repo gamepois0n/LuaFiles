@@ -167,6 +167,22 @@ PaGlobal_SaveSettingUrlByServiceType = function()
                     else
                       if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
                         url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TW_REAL")
+                      else
+                        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_SA_ALPHA")
+                        else
+                          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+                            url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_SA_REAL")
+                          else
+                            if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
+                              url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KR2_ALPHA")
+                            else
+                              if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
+                                url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KR2_REAL")
+                              end
+                            end
+                          end
+                        end
                       end
                     end
                   end

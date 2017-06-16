@@ -94,8 +94,16 @@ FGlobal_SavageDefenceShop_Update = function()
   (self._myCoin):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCESHOP_GETPOINT", "point", makeDotMoney(inMyCoin)))
 end
 
+FGlobal_SavageDefenceShop_coinUpdate = function()
+  -- function num : 0_3 , upvalues : PaGlobal_SavageDefenceShop
+  local self = PaGlobal_SavageDefenceShop
+  local inMyCoin = ToClient_getSavageDefenceMyCoinCount()
+  ;
+  (self._myCoin):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCESHOP_GETPOINT", "point", makeDotMoney(inMyCoin)))
+end
+
 FGlobal_SavageDefenceShop_buy = function(idx)
-  -- function num : 0_3
+  -- function num : 0_4
   local inMyCoin = ToClient_getSavageDefenceMyCoinCount()
   local price = ToClient_getSavageDefenceItemPrice(idx)
   local s32_maxNumber = (math.floor)(inMyCoin / Int64toInt32(price))
@@ -104,12 +112,12 @@ FGlobal_SavageDefenceShop_buy = function(idx)
 end
 
 FGlobal_SavageDefenceShop_BuyXXX = function(inputNumber, param)
-  -- function num : 0_4
+  -- function num : 0_5
   ToClient_SavageDefenceBuyItem(param, inputNumber)
 end
 
 FGlobal_SavageDefenceShop_ItemTooltip = function(idx)
-  -- function num : 0_5 , upvalues : PaGlobal_SavageDefenceShop
+  -- function num : 0_6 , upvalues : PaGlobal_SavageDefenceShop
   local self = PaGlobal_SavageDefenceShop
   local itemStaticStatus = nil
   if idx == nil then
@@ -128,7 +136,7 @@ FGlobal_SavageDefenceShop_ItemTooltip = function(idx)
 end
 
 FGlobal_SavageDefenceShop_Open = function()
-  -- function num : 0_6
+  -- function num : 0_7
   if not ToClient_getPlayNowSavageDefence() then
     return 
   end
@@ -140,7 +148,7 @@ FGlobal_SavageDefenceShop_Open = function()
 end
 
 FGlobal_FromClient_joinSavageDefence = function()
-  -- function num : 0_7
+  -- function num : 0_8
   if not Panel_SavageDefenceShop:GetShow() then
     FGlobal_SavageDefenceShop_Open()
   else
@@ -149,12 +157,12 @@ FGlobal_FromClient_joinSavageDefence = function()
 end
 
 FGlobal_SavageDefenceShop_Close = function()
-  -- function num : 0_8
+  -- function num : 0_9
   Panel_SavageDefenceShop:SetShow(false)
 end
 
 FGlobal_SavageDefenceShop_SetCoin = function(coin)
-  -- function num : 0_9 , upvalues : PaGlobal_SavageDefenceShop
+  -- function num : 0_10 , upvalues : PaGlobal_SavageDefenceShop
   local self = PaGlobal_SavageDefenceShop
   ;
   (self._myCoin):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCESHOP_GETPOINT", "point", makeDotMoney(coin)))

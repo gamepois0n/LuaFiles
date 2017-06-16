@@ -103,8 +103,8 @@ CompetitionGameTeam_Update = function()
     teamB_Name = teamB_Info:getTeamName()
   end
   if teamA_Name == "" or teamB_Name == "" then
-    teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
-    teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+    teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A")
+    teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B")
   end
   _txt_CompetitionGameTeamA:SetText(teamA_Name)
   _txt_CompetitionGameTeamB:SetText(teamB_Name)

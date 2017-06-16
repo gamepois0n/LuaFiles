@@ -28,7 +28,7 @@ HorseHP_init = function()
 end
 
 HorseHP_Open = function()
-  -- function num : 0_2 , upvalues : UI_VT, servantHpBar
+  -- function num : 0_2 , upvalues : servantHpBar, UI_VT
   if Panel_HorseHp:GetShow() then
     return 
   end
@@ -38,9 +38,8 @@ HorseHP_Open = function()
   if Panel_WorldMap:GetShow() then
     return 
   end
-  local selfProxy = (getSelfPlayer()):get()
-  local actorKeyRaw = selfProxy:getRideVehicleActorKeyRaw()
-  local vehicleProxy = getVehicleActor(actorKeyRaw)
+  local self = servantHpBar
+  local vehicleProxy = getVehicleActor(self._actorKeyRaw)
   if vehicleProxy == nil then
     return 
   end
@@ -79,9 +78,7 @@ HorseHP_Update = function()
     return 
   end
   local self = servantHpBar
-  local selfProxy = (getSelfPlayer()):get()
-  local actorKeyRaw = selfProxy:getRideVehicleActorKeyRaw()
-  local vehicleProxy = getVehicleActor(actorKeyRaw)
+  local vehicleProxy = getVehicleActor(self._actorKeyRaw)
   if vehicleProxy == nil then
     return 
   end

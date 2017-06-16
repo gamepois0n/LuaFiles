@@ -2076,14 +2076,15 @@ savePresetInfo = function(presetIndex)
       local chatPanelSize = float2()
       chatPanelSize.x = chatPanel:getPanelSizeX()
       chatPanelSize.y = chatPanel:getPanelSizeY()
-      ToClient_setUISettingChattingPanelInfo(presetIndex, chatWindowIndex, chatPanel:isOpen(), chatPanel:isCombinedToMainPanel(), uiType, controlPos, controlShowToggle, relativePos, chatPanelSize)
+      ToClient_setUISettingChattingPanelInfo(presetIndex, chatWindowIndex, chatPanel:isOpen(), chatPanel:isCombinedToMainPanel(), uiType, controlPos, controlShowToggle, relativePos, chatPanelSize, setUISettingChattingPanelInfo)
+      ToClient_setUISettingChattingOption(presetIndex, chatWindowIndex, Chatting_getUsedSmoothChattingUp())
       ;
       ((panelControl[idx]).control):SetSize(sizeX, sizeY)
     end
     do
       do
         ToClient_setUISettingPanelInfo(uiType, controlPos.x, controlPos.y, controlShowToggle, chatWindowIndex, relativePos.x, relativePos.y)
-        -- DECOMPILER ERROR at PC108: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC115: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end
@@ -2112,17 +2113,17 @@ applyPresetInfo = function(presetIndex)
   UiSet_ConfrimSetting_Sub(false)
 end
 
-FromClient_getUiSettingChattingPanelInfo = function(chatWindowIndex, isOpen, isCombined, sizeX, sizeY)
+FromClient_getUiSettingChattingPanelInfo = function(chatWindowIndex, isOpen, isCombined, sizeX, sizeY, isUsedSmoothChattingup)
   -- function num : 0_27 , upvalues : panelID, closePanelState, closeEmptyPanelState, ChatPanelIsOpenState, UiSet, panelControl
   local index = chatWindowIndex + panelID.Chat0
-  -- DECOMPILER ERROR at PC4: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC4: Confused about usage of register: R7 in 'UnsetPending'
 
   closePanelState[chatWindowIndex] = false
-  -- DECOMPILER ERROR at PC6: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R7 in 'UnsetPending'
 
   closeEmptyPanelState[chatWindowIndex] = false
   local chatPanel = ToClient_getChattingPanel(chatWindowIndex)
-  -- DECOMPILER ERROR at PC14: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC14: Confused about usage of register: R8 in 'UnsetPending'
 
   if isOpen then
     ChatPanelIsOpenState[chatWindowIndex + 1] = true
@@ -2172,10 +2173,10 @@ FromClient_getUiSettingChattingPanelInfo = function(chatWindowIndex, isOpen, isC
       ;
       ((panelControl[index]).control):SetShow(true)
       chatPanel:setPanelSize(sizeX, sizeY)
-      -- DECOMPILER ERROR at PC166: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC166: Confused about usage of register: R8 in 'UnsetPending'
 
       closeEmptyPanelState[chatWindowIndex] = true
-      -- DECOMPILER ERROR at PC169: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC169: Confused about usage of register: R8 in 'UnsetPending'
 
       ChatPanelIsOpenState[chatWindowIndex + 1] = false
     else
@@ -2184,11 +2185,12 @@ FromClient_getUiSettingChattingPanelInfo = function(chatWindowIndex, isOpen, isC
       ;
       (((UiSet.panelPool)[index]).close):SetShow(false)
       HandleClicked_Chatting_Close(chatWindowIndex)
-      -- DECOMPILER ERROR at PC189: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC189: Confused about usage of register: R8 in 'UnsetPending'
 
       closePanelState[chatWindowIndex] = true
     end
   end
+  Chatting_setUsedSmoothChattingUp(isUsedSmoothChattingup)
 end
 
 FromClient_getUiSettingPanelInfo = function(panelIndex, posX, posY, isShow, chatWindowIndex, relativePosX, relativePosY)
@@ -2239,7 +2241,7 @@ FromClient_getUiSettingPanelInfo = function(panelIndex, posX, posY, isShow, chat
   end
 end
 
-FromClient_applyChattingOptionToLua = function(presetIndex, chatWindowIndex, chatFontSizeType, chatNameType, isCombined, transparency)
+FromClient_applyChattingOptionToLua = function(presetIndex, chatWindowIndex, chatFontSizeType, chatNameType, isCombined, transparency, isUsedSmoothChattingUp)
   -- function num : 0_29
   ChattingOption_Open(chatWindowIndex, chatWindowIndex, isCombined)
   FGlobal_Chatting_PanelTransparency(chatWindowIndex, transparency, false)
@@ -2276,6 +2278,8 @@ FromClient_applyChattingOptionToLua = function(presetIndex, chatWindowIndex, cha
   Panel_ChatOption:SetShow(false, false)
   Panel_ChatOption:SetIgnore(true)
   ChattingColor_Hide()
+  Chatting_setUsedSmoothChattingUp(isUsedSmoothChattingUp)
+  ChattingOption_UpdateChattingAnimationControl(isUsedSmoothChattingUp)
   setisChangeFontSize(true)
 end
 

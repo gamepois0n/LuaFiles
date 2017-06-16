@@ -6,12 +6,14 @@
 local IM = CppEnums.EProcessorInputMode
 local UI_TM = CppEnums.TextMode
 Panel_Window_ArshaTeamNameChange:SetShow(false)
-local arshaTeamNameSet = {_txt_Edit_A = (UI.getChildControl)(Panel_Window_ArshaTeamNameChange, "Edit_TeamA_Name"), _txt_Edit_B = (UI.getChildControl)(Panel_Window_ArshaTeamNameChange, "Edit_TeamB_Name"), _btn_Change = (UI.getChildControl)(Panel_Window_ArshaTeamNameChange, "Button_Admin")}
+local arshaTeamNameSet = {_txt_Edit_A = (UI.getChildControl)(Panel_Window_ArshaTeamNameChange, "Edit_TeamA_Name"), _txt_Edit_B = (UI.getChildControl)(Panel_Window_ArshaTeamNameChange, "Edit_TeamB_Name"), _btn_Change = (UI.getChildControl)(Panel_Window_ArshaTeamNameChange, "Button_Admin"), _btn_Close = (UI.getChildControl)(Panel_Window_ArshaTeamNameChange, "Button_Close")}
 Panel_Window_TeamNameChangeControl_Init = function()
   -- function num : 0_0 , upvalues : arshaTeamNameSet
   local self = arshaTeamNameSet
   ;
   (self._btn_Change):addInputEvent("Mouse_LUp", "ArshaPvP_TeamNameChangeControl_Confirm()")
+  ;
+  (self._btn_Close):addInputEvent("Mouse_LUp", "FGlobal_TeamNameChangeControl_Close()")
 end
 
 ArshaPvP_TeamNameChangeControl_Confirm = function()

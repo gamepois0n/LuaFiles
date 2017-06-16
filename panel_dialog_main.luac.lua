@@ -597,6 +597,7 @@ FromClient_ShowDialog = function()
   SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
   Panel_Tooltip_Item_hideTooltip()
   Panel_SkillTooltip_Hide()
+  FGlobal_BuffTooltipOff()
   Interaction_Close()
   FGlobal_Dialog_renderMode:set()
   setShowLine(false)
@@ -627,7 +628,7 @@ FromClient_ShowDialog = function()
   while 1 do
     strFirst = stringList[i * 2 + 1]
     strSecond = stringList[i * 2 + 2]
-    -- DECOMPILER ERROR at PC228: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC230: Confused about usage of register: R10 in 'UnsetPending'
 
     if strFirst ~= nil and strSecond ~= nil then
       _mainDialog[i] = strFirst .. "\n" .. strSecond
@@ -635,7 +636,7 @@ FromClient_ShowDialog = function()
       if strFirst == nil then
         break
       else
-        -- DECOMPILER ERROR at PC237: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC239: Confused about usage of register: R10 in 'UnsetPending'
 
         if strSecond == nil then
           _mainDialog[i] = strFirst
@@ -652,44 +653,44 @@ FromClient_ShowDialog = function()
   for idx = 1, baseCount do
     local baseReward = dialogData:getBaseRewardAt(idx - 1)
     _baseReward[idx] = {}
-    -- DECOMPILER ERROR at PC262: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC264: Confused about usage of register: R18 in 'UnsetPending'
 
     ;
     (_baseReward[idx])._type = baseReward._type
-    -- DECOMPILER ERROR at PC271: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC273: Confused about usage of register: R18 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == baseReward._type then
       (_baseReward[idx])._exp = baseReward._experience
     else
-      -- DECOMPILER ERROR at PC281: Confused about usage of register: R18 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC283: Confused about usage of register: R18 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == baseReward._type then
         (_baseReward[idx])._exp = baseReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC291: Confused about usage of register: R18 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC293: Confused about usage of register: R18 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == baseReward._type then
           (_baseReward[idx])._exp = baseReward._productExperience
         else
-          -- DECOMPILER ERROR at PC302: Confused about usage of register: R18 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC304: Confused about usage of register: R18 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == baseReward._type then
             (_baseReward[idx])._item = baseReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC305: Confused about usage of register: R18 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC307: Confused about usage of register: R18 in 'UnsetPending'
 
             ;
             (_baseReward[idx])._count = baseReward._itemCount
           else
-            -- DECOMPILER ERROR at PC316: Confused about usage of register: R18 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC318: Confused about usage of register: R18 in 'UnsetPending'
 
             if (CppEnums.RewardType).RewardType_Intimacy == baseReward._type then
               (_baseReward[idx])._character = baseReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC319: Confused about usage of register: R18 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC321: Confused about usage of register: R18 in 'UnsetPending'
 
               ;
               (_baseReward[idx])._value = baseReward._intimacyValue
             else
-              -- DECOMPILER ERROR at PC330: Confused about usage of register: R18 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC332: Confused about usage of register: R18 in 'UnsetPending'
 
               if (CppEnums.RewardType).RewardType_Knowledge == baseReward._type then
                 (_baseReward[idx])._mentalCard = baseReward:getMentalCardKey()
@@ -705,37 +706,37 @@ FromClient_ShowDialog = function()
   for idx = 1, selectCount do
     local selectReward = dialogData:getSelectRewardAt(idx - 1)
     _selectReward[idx] = {}
-    -- DECOMPILER ERROR at PC346: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC348: Confused about usage of register: R20 in 'UnsetPending'
 
     ;
     (_selectReward[idx])._type = selectReward._type
-    -- DECOMPILER ERROR at PC355: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC357: Confused about usage of register: R20 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == selectReward._type then
       (_selectReward[idx])._exp = selectReward._experience
     else
-      -- DECOMPILER ERROR at PC365: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC367: Confused about usage of register: R20 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == selectReward._type then
         (_selectReward[idx])._exp = selectReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC375: Confused about usage of register: R20 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC377: Confused about usage of register: R20 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == selectReward._type then
           (_selectReward[idx])._exp = selectReward._productExperience
         else
-          -- DECOMPILER ERROR at PC386: Confused about usage of register: R20 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC388: Confused about usage of register: R20 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == selectReward._type then
             (_selectReward[idx])._item = selectReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC389: Confused about usage of register: R20 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC391: Confused about usage of register: R20 in 'UnsetPending'
 
             ;
             (_selectReward[idx])._count = selectReward._itemCount
             local selfPlayer = getSelfPlayer()
             if selfPlayer ~= nil then
               local classType = selfPlayer:getClassType()
-              -- DECOMPILER ERROR at PC400: Confused about usage of register: R22 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC402: Confused about usage of register: R22 in 'UnsetPending'
 
               ;
               (_selectReward[idx])._isEquipable = selectReward:isEquipable(classType)
@@ -743,38 +744,38 @@ FromClient_ShowDialog = function()
           else
             do
               do
-                -- DECOMPILER ERROR at PC411: Confused about usage of register: R20 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC413: Confused about usage of register: R20 in 'UnsetPending'
 
                 if (CppEnums.RewardType).RewardType_Intimacy == selectReward._type then
                   (_selectReward[idx])._character = selectReward:getIntimacyCharacter()
-                  -- DECOMPILER ERROR at PC414: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC416: Confused about usage of register: R20 in 'UnsetPending'
 
                   ;
                   (_selectReward[idx])._value = selectReward._intimacyValue
                 else
-                  -- DECOMPILER ERROR at PC425: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC427: Confused about usage of register: R20 in 'UnsetPending'
 
                   if (CppEnums.RewardType).RewardType_Knowledge == selectReward._type then
                     (_selectReward[idx])._mentalCard = selectReward:getMentalCardKey()
                   end
                 end
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC426: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -3090,8 +3091,8 @@ HandleClickedFuncButton = function(index)
   if Panel_SkillAwaken:GetShow() then
     SkillAwaken_Close()
   end
-  if Panel_Masterpiece_Auction:GetShow() then
-    MasterpieceAuction_Close()
+  if Panel_Window_MasterpieceAuction:GetShow() then
+    FGlobal_MasterpieceAuction_Close()
   end
   local count = 0
   local targetWindowList = {}
@@ -3724,6 +3725,7 @@ HandleClickedExitButton = function(isSetWait)
   FGlobal_RaceInfo_Hide()
   GuildServantList_Close()
   LordMenu_Hide()
+  FGlobal_MasterpieceAuction_Close()
 end
 
 HandleClickedBackButton = function()
@@ -3757,6 +3759,9 @@ HandleClickedBackButton = function()
   end
   if Panel_SkillReinforce:GetShow() then
     Panel_SkillReinforce_Close()
+  end
+  if Panel_Window_MasterpieceAuction:GetShow() then
+    FGlobal_MasterpieceAuction_Close()
   end
   _dialogIndex = 0
   Dialog_PageButton_Init()

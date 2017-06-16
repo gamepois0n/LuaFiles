@@ -22,6 +22,8 @@ local contentsOffsetX = 10
 local contentsOffsetY = 10
 local texSize = 48
 local selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex = nil, nil, nil, nil
+local currentclassType = -1
+local currentuiId = -1
 registerEvent("EventOpenSelectMeshUi", "OpenSelectMeshUi")
 registerEvent("EventCloseSelectMeshUi", "CloseSelectMeshUi")
 local UpdateSelectedMark = function(meshUiIndex)
@@ -47,12 +49,18 @@ end
 
 CloseSelectMeshUi = function()
   -- function num : 0_2
+  globalcurrentclassType = -2
+  globalcurrentuiId = -2
 end
 
 OpenSelectMeshUi = function(classType, uiId)
-  -- function num : 0_3 , upvalues : clearMeshUI, paramValueList, selectedClassType, Frame_ContentImage, Static_PayMark, textureColumnCount, texSize, meshColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, ContentImage, UpdateSelectedMark, meshImageGap
+  -- function num : 0_3 , upvalues : clearMeshUI, paramValueList, currentclassType, currentuiId, selectedClassType, Frame_ContentImage, Static_PayMark, textureColumnCount, texSize, meshColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, ContentImage, UpdateSelectedMark, meshImageGap
   clearMeshUI()
   paramValueList = {}
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
   selectedClassType = classType
   local defaultContentsIndex = 0
   local listCount = getUiListCount(classType, uiId, defaultContentsIndex)
@@ -97,7 +105,7 @@ OpenSelectMeshUi = function(classType, uiId)
         staticPayMark:SetShow(false)
         normalLastIndex = normalLastIndex + 1
       end
-      -- DECOMPILER ERROR at PC197: Confused about usage of register: R26 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC201: Confused about usage of register: R26 in 'UnsetPending'
 
       ContentImage[luaShapeIdx] = tempContentImage
     end
@@ -122,7 +130,7 @@ OpenSelectMeshUi = function(classType, uiId)
         local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMesh, "Frame_Image_" .. elementIndex)
         CopyBaseProperty(Frame_ContentImage, tempContentImage)
         local paramValue = getUiDetailListElementParamValue(classType, uiId, defaultContentsIndex, defaultDetailListIndex, elementIndex)
-        -- DECOMPILER ERROR at PC288: Confused about usage of register: R21 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC292: Confused about usage of register: R21 in 'UnsetPending'
 
         paramValueList[luaElementIndex] = paramValue
         if paramValue == currentParamValue then
@@ -159,7 +167,7 @@ OpenSelectMeshUi = function(classType, uiId)
           staticPayMark:SetShow(false)
           normalLastIndex = normalLastIndex + 1
         end
-        -- DECOMPILER ERROR at PC433: Confused about usage of register: R28 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC437: Confused about usage of register: R28 in 'UnsetPending'
 
         ContentImage[luaElementIndex] = tempContentImage
       end
@@ -205,6 +213,14 @@ UpdateMeshIndex = function()
   setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedParamValue)
   UpdateSelectedMark(selectedItemIndex)
   applyInitializeToGroupCustomizedBoneInfo()
+end
+
+MeshHistoryApplyUpdate = function()
+  -- function num : 0_6 , upvalues : currentclassType, currentuiId
+  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+    return 
+  end
+  OpenSelectMeshUi(currentclassType, currentuiId)
 end
 
 

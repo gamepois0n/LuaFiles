@@ -3404,6 +3404,7 @@ end
   (self._promotionWeb):SetIME()
   InGameShop_Promotion_Open()
   FGlobal_SpecialMoveSettingCheck()
+  FGlobal_BuffTooltipOff()
 end
 
   FGlobal_CheckPromotionTab = function()

@@ -13,7 +13,11 @@ local countryType = true
 if (isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan()) and getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
   countryType = false
 else
-  countryType = true
+  if isGameTypeKR2() then
+    countryType = false
+  else
+    countryType = true
+  end
 end
 Panel_MovieTheater_LowLevel_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV

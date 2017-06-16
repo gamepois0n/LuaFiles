@@ -148,11 +148,15 @@ local selectedClassType = -1
 local sliderContentsStartY = 125
 local sliderTextGap = 3
 local contentsGapHeight = 10
-local selectedClassIndex = nil
+local selectedClassIndex = 0
 local param = {}
 local paramMin = {}
 local paramMax = {}
 local paramDefault = {}
+local iswithoutbone = true
+local currentclassType = -1
+local currentuiId = -1
+local checktransrot = 1
 local UpdateHairBoneControls = function()
   -- function num : 0_0 , upvalues : currentTranslation, Slider_TransX, transMin, transMax, Slider_TransY, Slider_TransZ, currentRotation, Slider_RotX, rotMin, rotMax, Slider_RotY, Slider_RotZ
   if currentTranslation ~= nil then
@@ -221,7 +225,7 @@ local UpdateHairRadioButtons = function(updateControlMode)
 end
 
 UpdateHairBone = function(updateControlMode)
-  -- function num : 0_5 , upvalues : UpdateHairRadioButtons, Slider_TransX, transMin, transMax, Slider_TransY, Slider_TransZ, currentTranslation, Slider_RotX, rotMin, rotMax, Slider_RotY, Slider_RotZ, currentRotation
+  -- function num : 0_5 , upvalues : UpdateHairRadioButtons, Slider_TransX, transMin, transMax, Slider_TransY, Slider_TransZ, currentTranslation, checktransrot, Slider_RotX, rotMin, rotMax, Slider_RotY, Slider_RotZ, currentRotation
   if ControlMode ~= updateControlMode then
     UpdateHairRadioButtons(updateControlMode)
   end
@@ -240,21 +244,23 @@ UpdateHairBone = function(updateControlMode)
 
     currentTranslation.z = z
     applyTranslationValue(x, y, z)
+    checktransrot = 1
   else
     do
       if updateControlMode == 2 then
         local x = calculateSliderValue(Slider_RotX, rotMin.x, rotMax.x)
         local y = calculateSliderValue(Slider_RotY, rotMin.y, rotMax.y)
         local z = calculateSliderValue(Slider_RotZ, rotMin.z, rotMax.z)
-        -- DECOMPILER ERROR at PC68: Confused about usage of register: R4 in 'UnsetPending'
-
-        currentRotation.x = x
         -- DECOMPILER ERROR at PC70: Confused about usage of register: R4 in 'UnsetPending'
 
-        currentRotation.y = y
+        currentRotation.x = x
         -- DECOMPILER ERROR at PC72: Confused about usage of register: R4 in 'UnsetPending'
 
+        currentRotation.y = y
+        -- DECOMPILER ERROR at PC74: Confused about usage of register: R4 in 'UnsetPending'
+
         currentRotation.z = z
+        checktransrot = 2
         applyRotationValue(x, y, z)
       end
     end
@@ -271,9 +277,15 @@ UpdateHairSlider = function(sliderIndex)
 end
 
 OpenHairShapeUi = function(classType, uiId)
-  -- function num : 0_7 , upvalues : selectedClassType, ShowBoneControls, StaticText_ControlPart, CheckButton_ControlPart, Button_Part_Reset, Button_All_Reset, contentsGapHeight, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, sliderTextGap, UpdateHairRadioButtons
+  -- function num : 0_7 , upvalues : iswithoutbone, currentclassType, currentuiId, selectedClassType, checktransrot, ShowBoneControls, StaticText_ControlPart, CheckButton_ControlPart, Button_Part_Reset, Button_All_Reset, contentsGapHeight, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, sliderTextGap, UpdateHairRadioButtons
+  iswithoutbone = false
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
+  selectedClassType = classType
   CameraLookEnable(false)
-  CursorSelect(1)
+  CursorSelect(checktransrot)
   EnableHairSlide(false)
   startHairPickingMode()
   selectedClassType = classType
@@ -293,22 +305,22 @@ OpenHairShapeUi = function(classType, uiId)
   local sliderValueBasePosX = 0
   for sliderIndex = 0, sliderNum - 1 do
     local luaSliderIndex = sliderIndex + 1
-    -- DECOMPILER ERROR at PC66: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC73: Confused about usage of register: R13 in 'UnsetPending'
 
     paramType[luaSliderIndex] = getUiSliderParamType(classType, uiId, defaultContentsIndex, sliderIndex)
-    -- DECOMPILER ERROR at PC74: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC81: Confused about usage of register: R13 in 'UnsetPending'
 
     paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
     local sliderText = getUiSliderDescName(classType, uiId, defaultContentsIndex, sliderIndex)
     local param = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-    -- DECOMPILER ERROR at PC95: Confused about usage of register: R15 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC102: Confused about usage of register: R15 in 'UnsetPending'
 
     if sliderIndex >= 0 and sliderIndex < 3 then
       paramMin[luaSliderIndex] = getHairMinLength(sliderIndex)
-      -- DECOMPILER ERROR at PC104: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC111: Confused about usage of register: R15 in 'UnsetPending'
 
       paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC113: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC120: Confused about usage of register: R15 in 'UnsetPending'
 
       paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
       if paramMin[luaSliderIndex] == paramMax[luaSliderIndex] then
@@ -319,13 +331,13 @@ OpenHairShapeUi = function(classType, uiId)
     else
       if sliderIndex == 3 then
         local curlRange = getCurlLengthRange()
-        -- DECOMPILER ERROR at PC147: Confused about usage of register: R16 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC154: Confused about usage of register: R16 in 'UnsetPending'
 
         paramMin[luaSliderIndex] = 50 - curlRange / 2
-        -- DECOMPILER ERROR at PC151: Confused about usage of register: R16 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC158: Confused about usage of register: R16 in 'UnsetPending'
 
         paramMax[luaSliderIndex] = 50 + curlRange / 2
-        -- DECOMPILER ERROR at PC160: Confused about usage of register: R16 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC167: Confused about usage of register: R16 in 'UnsetPending'
 
         paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
         if curlRange == 0 then
@@ -335,14 +347,14 @@ OpenHairShapeUi = function(classType, uiId)
         end
       else
         do
-          -- DECOMPILER ERROR at PC193: Confused about usage of register: R15 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC200: Confused about usage of register: R15 in 'UnsetPending'
 
           if sliderIndex == 4 then
             paramMin[luaSliderIndex] = getParamMin(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-            -- DECOMPILER ERROR at PC202: Confused about usage of register: R15 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC209: Confused about usage of register: R15 in 'UnsetPending'
 
             paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-            -- DECOMPILER ERROR at PC211: Confused about usage of register: R15 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC218: Confused about usage of register: R15 in 'UnsetPending'
 
             paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
             if curlRange == 0 then
@@ -369,15 +381,15 @@ OpenHairShapeUi = function(classType, uiId)
               sliderValueBasePosX = (math.max)(sliderValueBasePosX, sliderTextSizeX)
             end
             controlPosY = controlPosY + contentsGapHeight + (StaticTextArr[luaSliderIndex]):GetSizeY()
-            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -394,10 +406,10 @@ OpenHairShapeUi = function(classType, uiId)
       (SliderArr[luaSliderIndex]):SetSize(174 - (sliderValueBasePosX - sliderValuePosX), (SliderArr[luaSliderIndex]):GetSizeY())
       ;
       (SliderArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
-      -- DECOMPILER ERROR at PC342: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC349: Confused about usage of register: R14 in 'UnsetPending'
 
       paramType[luaSliderIndex] = getUiSliderParamType(classType, uiId, defaultContentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC350: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC357: Confused about usage of register: R14 in 'UnsetPending'
 
       paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
       local sliderParam = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
@@ -408,40 +420,45 @@ OpenHairShapeUi = function(classType, uiId)
   end
   do
     Panel_CustomizationTransformHair:SetSize(Panel_CustomizationTransformHair:GetSizeX(), controlPosY)
-    UpdateHairRadioButtons(1)
+    UpdateHairRadioButtons(checktransrot)
     updateGroupFrameControls(Panel_CustomizationTransformHair:GetSizeY(), Panel_CustomizationTransformHair)
     ToggleShowHairBoneControlPart()
   end
 end
 
 OpenHairShapeUiWithoutBoneControl = function(classType, uiId)
-  -- function num : 0_8 , upvalues : selectedClassType, ShowBoneControls, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, sliderTextGap, contentsGapHeight
+  -- function num : 0_8 , upvalues : iswithoutbone, currentclassType, currentuiId, selectedClassType, ShowBoneControls, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, sliderTextGap, contentsGapHeight
+  iswithoutbone = true
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
   selectedClassType = classType
   CameraLookEnable(false)
   ShowBoneControls(false)
   local controlPosY = 10
   local defaultContentsIndex = 0
-  local sliderNum = getUiSliderCount(classType, uiId, defaultContentsIndex)
+  sliderCount = getUiSliderCount(classType, uiId, defaultContentsIndex)
   local meshParamType = 1
   local curlRange = getCurlLengthRange()
-  for sliderIndex = 0, sliderNum - 1 do
+  for sliderIndex = 0, sliderCount - 1 do
     local luaSliderIndex = sliderIndex + 1
-    -- DECOMPILER ERROR at PC29: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC37: Confused about usage of register: R11 in 'UnsetPending'
 
     paramType[luaSliderIndex] = getUiSliderParamType(classType, uiId, defaultContentsIndex, sliderIndex)
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC45: Confused about usage of register: R11 in 'UnsetPending'
 
     paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
     local sliderText = getUiSliderDescName(classType, uiId, defaultContentsIndex, sliderIndex)
     local param = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-    -- DECOMPILER ERROR at PC58: Confused about usage of register: R14 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC66: Confused about usage of register: R13 in 'UnsetPending'
 
     if sliderIndex >= 0 and sliderIndex < 3 then
       paramMin[luaSliderIndex] = getHairMinLength(sliderIndex)
-      -- DECOMPILER ERROR at PC67: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC75: Confused about usage of register: R13 in 'UnsetPending'
 
       paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC76: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC84: Confused about usage of register: R13 in 'UnsetPending'
 
       paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
       if paramMin[luaSliderIndex] == paramMax[luaSliderIndex] then
@@ -450,14 +467,14 @@ OpenHairShapeUiWithoutBoneControl = function(classType, uiId)
         EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
       end
     else
-      -- DECOMPILER ERROR at PC108: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC116: Confused about usage of register: R13 in 'UnsetPending'
 
       if sliderIndex == 3 then
         paramMin[luaSliderIndex] = 50 - curlRange / 2
-        -- DECOMPILER ERROR at PC112: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC120: Confused about usage of register: R13 in 'UnsetPending'
 
         paramMax[luaSliderIndex] = 50 + curlRange / 2
-        -- DECOMPILER ERROR at PC121: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC129: Confused about usage of register: R13 in 'UnsetPending'
 
         paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
         if curlRange == 0 then
@@ -466,14 +483,14 @@ OpenHairShapeUiWithoutBoneControl = function(classType, uiId)
           EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
         end
       else
-        -- DECOMPILER ERROR at PC154: Confused about usage of register: R14 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC162: Confused about usage of register: R13 in 'UnsetPending'
 
         if sliderIndex == 4 then
           paramMin[luaSliderIndex] = getParamMin(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-          -- DECOMPILER ERROR at PC163: Confused about usage of register: R14 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC171: Confused about usage of register: R13 in 'UnsetPending'
 
           paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-          -- DECOMPILER ERROR at PC172: Confused about usage of register: R14 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC180: Confused about usage of register: R13 in 'UnsetPending'
 
           paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
           if curlRange == 0 then
@@ -557,36 +574,38 @@ EnableHairSlide = function(enable)
 end
 
 AdjustHairBoneTranslation = function(translationX, translationY, translationZ)
-  -- function num : 0_12 , upvalues : Slider_TransX, transMin, transMax, StaticText_CurrValue_TransX, Slider_TransY, StaticText_CurrValue_TransY, Slider_TransZ, StaticText_CurrValue_TransZ, currentTranslation
+  -- function num : 0_12 , upvalues : checktransrot, Slider_TransX, transMin, transMax, StaticText_CurrValue_TransX, Slider_TransY, StaticText_CurrValue_TransY, Slider_TransZ, StaticText_CurrValue_TransZ, currentTranslation
+  checktransrot = 1
   setValueSlider(Slider_TransX, translationX, transMin.x, transMax.x)
   StaticText_CurrValue_TransX:SetText((math.floor)(translationX * 10) / 10)
   setValueSlider(Slider_TransY, translationY, transMin.y, transMax.y)
   StaticText_CurrValue_TransY:SetText((math.floor)(translationY * 10) / 10)
   setValueSlider(Slider_TransZ, translationZ, transMin.z, transMax.z)
   StaticText_CurrValue_TransZ:SetText((math.floor)(translationZ * 10) / 10)
-  -- DECOMPILER ERROR at PC49: Confused about usage of register: R3 in 'UnsetPending'
-
-  currentTranslation.x = translationX
   -- DECOMPILER ERROR at PC51: Confused about usage of register: R3 in 'UnsetPending'
 
-  currentTranslation.y = translationY
+  currentTranslation.x = translationX
   -- DECOMPILER ERROR at PC53: Confused about usage of register: R3 in 'UnsetPending'
+
+  currentTranslation.y = translationY
+  -- DECOMPILER ERROR at PC55: Confused about usage of register: R3 in 'UnsetPending'
 
   currentTranslation.z = translationZ
 end
 
 AdjustHairBoneRotation = function(rotationX, rotationY, rotationZ)
-  -- function num : 0_13 , upvalues : Slider_RotX, rotMin, rotMax, Slider_RotY, Slider_RotZ, currentRotation
+  -- function num : 0_13 , upvalues : checktransrot, Slider_RotX, rotMin, rotMax, Slider_RotY, Slider_RotZ, currentRotation
+  checktransrot = 2
   setValueSlider(Slider_RotX, rotationX, rotMin.x, rotMax.x)
   setValueSlider(Slider_RotY, rotationY, rotMin.y, rotMax.y)
   setValueSlider(Slider_RotZ, rotationZ, rotMin.z, rotMax.z)
-  -- DECOMPILER ERROR at PC25: Confused about usage of register: R3 in 'UnsetPending'
-
-  currentRotation.x = rotationX
   -- DECOMPILER ERROR at PC27: Confused about usage of register: R3 in 'UnsetPending'
 
-  currentRotation.y = rotationY
+  currentRotation.x = rotationX
   -- DECOMPILER ERROR at PC29: Confused about usage of register: R3 in 'UnsetPending'
+
+  currentRotation.y = rotationY
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R3 in 'UnsetPending'
 
   currentRotation.z = rotationZ
 end
@@ -595,11 +614,28 @@ CloseHairShapeUi = function()
   -- function num : 0_14
   endPickingMode()
   CameraLookEnable(true)
+  globalcurrentclassType = -2
+  globalcurrentuiId = -2
 end
 
 CloseHairShapeUiWithoutBoneControl = function()
   -- function num : 0_15
   CameraLookEnable(true)
+  globalcurrentclassType = -2
+  globalcurrentuiId = -2
+end
+
+HairShapeHistoryApplyUpdate = function()
+  -- function num : 0_16 , upvalues : currentclassType, currentuiId, iswithoutbone
+  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+    return 
+  end
+  if iswithoutbone then
+    OpenHairShapeUiWithoutBoneControl(currentclassType, currentuiId)
+  else
+    OpenHairShapeUi(currentclassType, currentuiId)
+    PickingHairBone()
+  end
 end
 
 

@@ -124,8 +124,9 @@ Profile_TimeSet = function()
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local userPlayTime = ((Util.Time).timeFormatting)(Int64toInt32(ToClient_GetUserPlayTimePerDay()))
+  local totalPlayTime = ((Util.Time).timeFormatting_Minute)(Int64toInt32(ToClient_GetCharacterPlayTime()))
   ;
-  (control._playTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TODAYPLAYTIME") .. "<PAColor0xFFFFC730>" .. tostring(userPlayTime) .. "<PAOldColor>")
+  (control._playTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TODAYPLAYTIME") .. "<PAColor0xFFFFC730>" .. tostring(userPlayTime) .. "<PAOldColor> | " .. PAGetString(Defines.StringSheet_GAME, "LUA_CONTRACT_TIME_BLACKSPIRIT") .. "<PAColor0xFFFFC730> " .. totalPlayTime .. "<PAOldColor> ")
   if isPremiumPcRoom and (isGameTypeKorea() or isGameTypeJapan()) then
     (control._playTime):SetPosY(5)
     ;

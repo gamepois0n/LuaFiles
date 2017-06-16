@@ -114,6 +114,7 @@ end
 FGlobal_DyeNew_CharacterController_Open = function()
   -- function num : 0_8
   Panel_DyeNew_CharacterController:SetShow(true)
+  FGlobal_BuffTooltipOff()
 end
 
 FGlobal_DyeNew_CharacterController_Close = function()

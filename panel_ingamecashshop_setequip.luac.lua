@@ -69,6 +69,9 @@ CashShopSetEquip.Initialize = function(self)
   cashShop_SetEquip_SetPosition()
   ;
   (getIngameCashMall()):clearCart()
+  if isGameTypeKR2() then
+    (self.BTN_QNA):SetShow(false)
+  end
 end
 
 CashShopSetEquip.Update = function(self)
@@ -677,6 +680,8 @@ CashShopController.Initialize = function(self)
     (self.txt_Endurance):SetShow(false)
     ;
     (self.Slider_Endurance):SetShow(false)
+    ;
+    (self.btn_ShowUnderwear):SetShow(false)
     ;
     (self.static_SetOptionBG):SetSize((self.static_SetOptionBG):GetSizeX(), 60)
     ;

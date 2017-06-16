@@ -221,13 +221,31 @@ end
 
 FGlobal_AutoFrameCheck_Start = function()
   -- function num : 0_11 , upvalues : AutoFrameCheckManager
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+
+  AutoFrameCheckManager._index = 0
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
+
+  AutoFrameCheckManager._nowRepeatCount = 0
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
+
+  AutoFrameCheckManager._prevTick = 0
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R0 in 'UnsetPending'
+
+  AutoFrameCheckManager._isCaptured = false
+  -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
+
+  AutoFrameCheckManager._accumulateCount = 0
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R0 in 'UnsetPending'
+
+  AutoFrameCheckManager._accumulateFrame = 0
   local X = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalX
   local Y = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalY
   local Z = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalZ
   local Position = float3(X, Y, Z)
   ToClient_WorldMapNaviStart(Position, NavigationGuideParam(), false, true)
   _PA_SVN_LOG("############################ AutoFrameCheck Start!! ####################################")
-  -- DECOMPILER ERROR at PC34: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC46: Confused about usage of register: R4 in 'UnsetPending'
 
   AutoFrameCheckManager._isOn = true
 end

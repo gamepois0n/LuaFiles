@@ -69,6 +69,8 @@ local selectedCharacterClass = -1
 local sliderTextGap = 3
 local contentsGapHeight = 10
 local selectedClassIndex = nil
+local currentclassType = -1
+local currentuiId = -1
 local InitBodyBoneControls = function()
   -- function num : 0_0 , upvalues : currentScale, Slider_ScaleX, scaleMin, scaleMax, Slider_ScaleY, Slider_ScaleZ
   if currentScale ~= nil then
@@ -130,7 +132,11 @@ UpdateBodyBoneScale = function()
 end
 
 OpenBodyShapeUi = function(classType, uiId)
-  -- function num : 0_7 , upvalues : selectedClassType, CheckButton_ControlPart
+  -- function num : 0_7 , upvalues : currentclassType, currentuiId, selectedClassType, CheckButton_ControlPart
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
   selectedClassType = classType
   startBodyPickingMode()
   EnableBodySlide(false)
@@ -146,6 +152,8 @@ CloseBodyShapeUi = function()
   -- function num : 0_8
   endPickingMode()
   ToggleShowPosePreCheck()
+  globalcurrentclassType = -2
+  globalcurrentuiId = -2
 end
 
 ShowBodyBoneEditor = function()
@@ -229,6 +237,15 @@ AdjustBodyBoneScale = function(scaleX, scaleY, scaleZ)
   -- DECOMPILER ERROR at PC54: Confused about usage of register: R4 in 'UnsetPending'
 
   currentScale.z = scaleZ
+end
+
+BodyBoneHistoryApplyUpdate = function()
+  -- function num : 0_14 , upvalues : currentclassType, currentuiId
+  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+    return 
+  end
+  OpenBodyShapeUi(currentclassType, currentuiId)
+  PickingBodyBone(ToClient_getCharacterCustomizationUiWrapper())
 end
 
 

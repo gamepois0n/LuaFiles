@@ -524,8 +524,8 @@ ArshaPvP_SelectedUpdate_Round = function()
             teamB_Name = teamB_Info:getTeamName()
           end
           if teamA_Name == "" or teamB_Name == "" then
-            teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
-            teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+            teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A")
+            teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B")
           end
           ;
           (self.txt_RoundMarkTeamA):SetText(teamA_Name)
@@ -1722,8 +1722,8 @@ FromClient_UpdateTeamScore = function(teamNum, scoreValue, round, winTeamHP, los
       teamB_Name = teamB_Info:getTeamName()
     end
     if teamA_Name == "" or teamB_Name == "" then
-      teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
-      teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+      teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A")
+      teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B")
     end
     local teamWinString = teamB_Name
     local teamLoseString = teamA_Name
@@ -1763,8 +1763,8 @@ FromClient_CompetitionMatchDone = function(teamNo, rank, teamHpPercent)
       teamB_Name = teamB_Info:getTeamName()
     end
     if teamA_Name == "" or teamB_Name == "" then
-      teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
-      teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+      teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A")
+      teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B")
     end
     local winTeamName = teamB_Name
     if teamNo == 1 then

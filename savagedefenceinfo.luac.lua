@@ -233,17 +233,65 @@ end
 
 FGlobal_SavegeDefenceInfo_join = function(idx)
   -- function num : 0_3
-  local savageDefenceStatusData = ToClient_getSavageDefenceStatusData(idx)
-  local getServerNo = savageDefenceStatusData:getServerNo()
   local curChannelData = getCurrentChannelServerData()
+  local getLevel = ((getSelfPlayer()):get()):getLevel()
   if curChannelData == nil then
     return 
   end
-  local curServerNo = curChannelData._serverNo
-  if curServerNo == getServerNo then
-    ToClient_SavageDefenceJoin(idx)
+  local savageDefenceStatusData = ToClient_getSavageDefenceStatusData(idx)
+  local getServerNo = savageDefenceStatusData:getServerNo()
+  local channelName = getChannelName(curChannelData._worldNo, getServerNo)
+  local isGameMaster = ToClient_SelfPlayerIsGM()
+  local channelMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CHANNELMOVE", "channelName", channelName)
+  local tempChannel = getGameChannelServerDataByWorldNo(curChannelData._worldNo, index)
+  local isBalanceServer = tempChannel._isBalanceChannel
+  local joinSavageDefence = function()
+    -- function num : 0_3_0 , upvalues : isGameMaster, getServerNo, curChannelData, idx
+    local playerWrapper = getSelfPlayer()
+    local player = playerWrapper:get()
+    local hp = player:getHp()
+    local maxHp = player:getMaxHp()
+    if player:doRideMyVehicle() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_NOT_RIDEHORSE"))
+    else
+      if ToClient_IsMyselfInArena() then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCompetitionAlreadyIn"))
+        return 
+      end
+    end
+    if IsSelfPlayerWaitAction() then
+      if hp == maxHp or isGameMaster then
+        if getServerNo == curChannelData._serverNo then
+          ToClient_SavageDefenceJoin(idx)
+        else
+          ToClient_RequestSavageDefenceJoinToAnotherChannel(getServerNo)
+        end
+      else
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_MAXHP_CHECK"))
+      end
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_LOCALWARINFO"))
+    end
+  end
+
+  if getServerNo == curChannelData._serverNo then
+    channelMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_CURRENTCHANNELJOIN")
   else
-    ToClient_RequestSavageDefenceJoinToAnotherChannel(getServerNo)
+    channelMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_CHANNELMOVE", "channelName", channelName)
+  end
+  local changeChannelTime = getChannelMoveableRemainTime(curChannelData._worldNo)
+  local changeRealChannelTime = convertStringFromDatetime(changeChannelTime)
+  if toInt64(0, 0) < changeChannelTime and getServerNo ~= curChannelData._serverNo then
+    local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANGECHANNEL_PENALTY", "changeRealChannelTime", changeRealChannelTime)
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+  else
+    do
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = channelMemo, functionYes = joinSavageDefence, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+    end
   end
 end
 
@@ -254,7 +302,15 @@ end
 
 FGlobal_SavegeDefenceInfo_unjoin = function()
   -- function num : 0_5
-  ToClient_SavageDefenceUnJoin()
+  local SavageUnJoin = function()
+    -- function num : 0_5_0
+    ToClient_SavageDefenceUnJoin()
+  end
+
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GETOUT_MEMO")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = SavageUnJoin, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
 end
 
 FGlobal_SavageDefenceInfo_Open = function()

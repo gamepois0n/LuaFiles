@@ -23,8 +23,14 @@ local contentsStartY = 0
 local sliderOffset = 7
 local sliderValueOffset = 10
 local sliderHeight = SliderText:GetSizeY()
+local currentclassType = -1
+local currentuiId = -1
 OpenSkinUi = function(classType, uiId)
-  -- function num : 0_0 , upvalues : selectedClassType, selectedUiId, contentsStartY, controlOffset, FrameTemplateColor, Static_Collision, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControl, Button_Slider, SliderText, sliderOffset, Static_CurrentValue, sliderValueOffset, sliderHeight
+  -- function num : 0_0 , upvalues : currentclassType, currentuiId, selectedClassType, selectedUiId, contentsStartY, controlOffset, FrameTemplateColor, Static_Collision, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControl, Button_Slider, SliderText, sliderOffset, Static_CurrentValue, sliderValueOffset, sliderHeight
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
   selectedClassType = classType
   selectedUiId = uiId
   contentsIndex = 0
@@ -82,6 +88,8 @@ end
 
 CloseSkinUi = function()
   -- function num : 0_1
+  globalcurrentclassType = -2
+  globalcurrentuiId = -2
 end
 
 UpdateSkinSlider = function()
@@ -89,6 +97,14 @@ UpdateSkinSlider = function()
   local value = getSliderValue(SliderControl, sliderParamMin, sliderParamMax)
   setParam(selectedClassType, sliderParamType, sliderParamIndex, value)
   Static_CurrentValue:SetText(value)
+end
+
+SkinHistoryApplyUpdate = function()
+  -- function num : 0_3 , upvalues : currentclassType, currentuiId
+  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+    return 
+  end
+  OpenSkinUi(currentclassType, currentuiId)
 end
 
 

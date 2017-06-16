@@ -5,6 +5,7 @@
 -- function num : 0
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_color = Defines.Color
+local isEnableCron = ToClient_IsContentsGroupOpen("74")
 PaGlobal_ExtractionCloth = {_currentTime = 0, 
 _slotConfig = {createIcon = false, createBorder = false, createCount = true, createEnchant = true, createCash = false}
 , _buttonApply = (UI.getChildControl)(Panel_Window_Extraction_Cloth, "Button_ExtractionCloth"), _effectCircleEff = (UI.getChildControl)(Panel_Window_Extraction_Cloth, "Static_ExtractionSpinEffect"), _textExtractionGuide = (UI.getChildControl)(Panel_Window_Extraction_Cloth, "StaticText_ExtractionGuide"), 
@@ -20,7 +21,7 @@ LoadComplete_ExtractionCloth_Initialize = function()
   PaGlobal_ExtractionCloth:registMessageHandler()
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC88: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_ExtractionCloth.initialize = function(self)
   -- function num : 0_1
@@ -78,7 +79,7 @@ PaGlobal_ExtractionCloth.initialize = function(self)
   (self._buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelWindowExtractionEnchantStone\", \"false\")")
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC91: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_ExtractionCloth.clear = function(self)
   -- function num : 0_2
@@ -112,7 +113,7 @@ PaGlobal_ExtractionCloth.clear = function(self)
 end
 
 ExtractionCloth_WindowOpen = function()
-  -- function num : 0_3
+  -- function num : 0_3 , upvalues : isEnableCron
   local self = PaGlobal_ExtractionCloth
   Panel_Window_Extraction_Cloth:SetShow(true, true)
   Panel_Window_Extraction_Cloth:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Window_Extraction_Cloth:GetSizeY() / 2 - 20)
@@ -131,6 +132,9 @@ ExtractionCloth_WindowOpen = function()
 
   ;
   (self.count)[1] = 0
+  if not isEnableCron then
+    (self._radioBtnCronStone):SetShow(false)
+  end
   ;
   (self._radioBtnValks):SetIgnore(self._doExtracting)
   ;
@@ -155,7 +159,7 @@ ExtractionCloth_WindowClose = function()
   Panel_Window_Extraction_Cloth:SetShow(false, false)
 end
 
--- DECOMPILER ERROR at PC95: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_ExtractionCloth.getShow = function(self)
   -- function num : 0_5

@@ -93,25 +93,41 @@ EventNotifyResponseAuctionInfo = function(goodsType, sendType, tempStr, tempStr2
         end
       else
         if goodsType == (CppEnums.AuctionType).AuctionGoods_Item then
-          strGoodsType = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_15")
+          strGoodsType = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_16")
           if sendType == 0 then
-            msg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_AUCTION", "tempStr", tempStr, "strGoodsType", strGoodsType) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_7")
+            msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MASTERPIECE_AUCTION_START", "itemName", itemName)
           else
             if sendType == 1 then
-              msg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_AUCTION", "tempStr", tempStr, "strGoodsType", strGoodsType) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_8")
+              local itemKey = param1
+              local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(itemKey))
+              if itemSSW == nil then
+                return 
+              end
+              local itemName = itemSSW:getName()
+              if bidRv == 0 then
+                msg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MASTERPIECE_AUCTION_SUCCESS", "itemName", itemName, "familyName", tempStr)
+              else
+                msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MASTERPIECE_AUCTION_FAIL", "itemName", itemName)
+              end
             else
-              _PA_ASSERT(false, "작업해주세요")
+              do
+                _PA_ASSERT(false, "작업해주세요")
+                do
+                  local message = {main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_AUCTION_MSG_MAIN", "strGoodsType", strGoodsType), sub = msg, addMsg = ""}
+                  Proc_ShowMessage_Ack_For_RewardSelect(message, 3, 68)
+                  do return  end
+                  _PA_ASSERT(false, "작업해주세요")
+                  Panel_MyHouseNavi_Update(true)
+                  local message = {main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_AUCTION_MSG_MAIN", "strGoodsType", strGoodsType), sub = msg, addMsg = ""}
+                  Proc_ShowMessage_Ack_For_RewardSelect(message, 3, 7)
+                end
+              end
             end
           end
-        else
-          _PA_ASSERT(false, "작업해주세요")
         end
       end
     end
   end
-  Panel_MyHouseNavi_Update(true)
-  local message = {main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_AUCTION_AUCTION_MSG_MAIN", "strGoodsType", strGoodsType), sub = msg, addMsg = ""}
-  Proc_ShowMessage_Ack_For_RewardSelect(message, 3, 7)
 end
 
 EventNotifyBidAuctionGoods = function(goodsType, param1, param2)

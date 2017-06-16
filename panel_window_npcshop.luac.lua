@@ -1247,6 +1247,7 @@ handleClickedNpcShow_WindowClose = function()
     audioPostEvent_SystemUi(1, 1)
     ReqeustDialog_retryTalk()
     PaGlobal_TutorialManager:handleNpcShopWindowClose()
+    FGlobal_SetIsCamping()
   end
 end
 

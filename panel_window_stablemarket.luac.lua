@@ -1241,7 +1241,7 @@ StableMarket_ResponseServantBuyItNowFail = function()
   if Panel_Window_StableList:GetShow() == false then
     return 
   end
-  RequestAuctionListPage()
+  RequestActionReloadPage(self._isFromNpc)
   StableMarket_UpdateSlotData()
 end
 

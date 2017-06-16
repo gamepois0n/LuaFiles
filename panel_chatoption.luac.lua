@@ -106,6 +106,11 @@ local chatPanel = (Array.new)()
 for i = 0, chatOptionData.makeChatPanelCount - 1 do
   chatPanel[i] = false
 end
+local ChattingAnimationTitleBg = (UI.getChildControl)(Panel_ChatOption, "Static_AnimationTitleBg")
+local ChattingAnimationOptionBg = (UI.getChildControl)(Panel_ChatOption, "Static_AnimationOptionBg")
+local rdo_ChattingAnimationOn = (UI.getChildControl)(ChattingAnimationOptionBg, "RadioButton_AnimationOn")
+local rdo_ChattingAnimationOff = (UI.getChildControl)(ChattingAnimationOptionBg, "RadioButton_AnimationOff")
+local preChattingAnimation = true
 HandleClicked_ChattingTypeFilter_Notice = function(panelIdex)
   -- function num : 0_0 , upvalues : chatOptionData, btnFilter, eChatButtonType, channel_Notice
   local self = chatOptionData
@@ -288,10 +293,9 @@ FGlobal_ChatOption_HandleChattingOptionInitialize = function(panelIndex)
   local currentIsCheckChatTime = FGlobal_ChatOption_GetIsShowTimeString(panelIndex)
   _checkButton_ChatTime:SetCheck(currentIsCheckChatTime)
   _checkButton_ChatTime:addInputEvent("Mouse_LUp", "HandleClicked_ChatTime(" .. panelIndex .. ")")
-  _checkButton_ChatTime:SetSpanSize(30, 230)
   local chatCount = ToClient_getChattingPanelCount()
   for ii = 0, chatCount - 1 do
-    -- DECOMPILER ERROR at PC30: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC25: Confused about usage of register: R7 in 'UnsetPending'
 
     _prevIsCheckChatTime[ii] = FGlobal_ChatOption_GetIsShowTimeString(ii)
   end
@@ -961,7 +965,6 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     else
       _check_Division:SetCheck((ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision))
     end
-    _check_Division:SetSpanSize(30, 205)
     _button_resetColor:addInputEvent("Mouse_LUp", "HandledClicked_ChattingColorReset(" .. panelIdex .. ")")
     _button_Confirm:addInputEvent("Mouse_LUp", "HandleClicked_ChattingOption_SetFilter( " .. panelIdex .. " )")
     _button_Cancle:addInputEvent("Mouse_LUp", "ChattingOption_Close()")
@@ -972,6 +975,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     rdo_FontSizeNormal:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 14 )")
     rdo_FontSizeNormal2:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 18 )")
     rdo_FontSizeBig:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 20 )")
+    ChattingOption_InitailizeChattingAnimationControl()
     FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
     -- DECOMPILER ERROR: 85 unprocessed JMP targets
   end
@@ -1343,9 +1347,8 @@ ChattingOption_Open = function(penelIdex, drawPanelIndex, isCombinedMainPanel)
 end
 
 ChattingOption_Close = function()
-  -- function num : 0_41 , upvalues : prevFontSizeType, _prevIsCheckChatTime, _checkButton_ChatTime, preNameType
+  -- function num : 0_41 , upvalues : prevFontSizeType, _prevIsCheckChatTime, _checkButton_ChatTime, preNameType, preChattingAnimation
   local chatCount = ToClient_getChattingPanelCount()
-  _PA_LOG("곽민�\176", "chatCount : " .. tostring(chatCount))
   for panelIdex = 0, chatCount - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIdex)
     chatPanel:setChatFontSizeType(prevFontSizeType)
@@ -1359,9 +1362,10 @@ ChattingOption_Close = function()
   ChatPanel_Update()
   ToClient_setChatNameType(preNameType)
   for panelIdex = 0, chatCount - 1 do
-    Chatting_ScrollEvent(R6_PC55, true)
-    Chatting_ScrollEvent(R6_PC55, false)
+    Chatting_ScrollEvent(R6_PC47, true)
+    Chatting_ScrollEvent(R6_PC47, false)
   end
+  ChattingOption_ChatiingAnimation(preChattingAnimation)
   FromClient_ChatUpdate()
   Panel_ChatOption:SetShow(false, false)
   Panel_ChatOption:SetIgnore(true)
@@ -1619,6 +1623,53 @@ ChattingOption_SelectNameType = function(nameType)
   end
   audioPostEvent_SystemUi(0, 0)
   ToClient_setChatNameType(nameType)
+end
+
+ChattingOption_InitailizeChattingAnimationControl = function()
+  -- function num : 0_67 , upvalues : ChattingAnimationTitleBg, ChattingAnimationOptionBg, rdo_ChattingAnimationOn, rdo_ChattingAnimationOff, preChattingAnimation
+  ChattingAnimationTitleBg:ComputePos()
+  ChattingAnimationOptionBg:ComputePos()
+  rdo_ChattingAnimationOn:ComputePos()
+  rdo_ChattingAnimationOff:ComputePos()
+  rdo_ChattingAnimationOn:addInputEvent("Mouse_LUp", "ChattingOption_ChatiingAnimation( true )")
+  rdo_ChattingAnimationOff:addInputEvent("Mouse_LUp", "ChattingOption_ChatiingAnimation( false )")
+  local ChattingAnimationflag = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChattingAnimation)
+  if ChattingAnimationflag == true then
+    rdo_ChattingAnimationOn:SetCheck(true)
+    rdo_ChattingAnimationOff:SetCheck(false)
+    ChattingOption_ChatiingAnimation(true)
+    preChattingAnimation = true
+  else
+    rdo_ChattingAnimationOn:SetCheck(false)
+    rdo_ChattingAnimationOff:SetCheck(true)
+    ChattingOption_ChatiingAnimation(false)
+    preChattingAnimation = false
+  end
+end
+
+ChattingOption_UpdateChattingAnimationControl = function(isUsedChattingAnimation)
+  -- function num : 0_68 , upvalues : rdo_ChattingAnimationOn, rdo_ChattingAnimationOff, preChattingAnimation
+  if isUsedChattingAnimation == true then
+    rdo_ChattingAnimationOn:SetCheck(true)
+    rdo_ChattingAnimationOff:SetCheck(false)
+    ChattingOption_ChatiingAnimation(true)
+    preChattingAnimation = true
+  else
+    rdo_ChattingAnimationOn:SetCheck(false)
+    rdo_ChattingAnimationOff:SetCheck(true)
+    ChattingOption_ChatiingAnimation(false)
+    preChattingAnimation = false
+  end
+end
+
+ChattingOption_ChatiingAnimation = function(ChattingAniFlag)
+  -- function num : 0_69
+  if ChattingAniFlag == nil then
+    return 
+  end
+  ;
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChattingAnimation, ChattingAniFlag)
+  Chatting_setUsedSmoothChattingUp(ChattingAniFlag)
 end
 
 

@@ -199,12 +199,12 @@ ButtonToggle_AI = function(key, isOn)
   end
   if isOn then
     if key == "_m0" then
-      aUI:SetText("L")
-      aUI2:SetText("L")
+      aUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_LEFT"))
+      aUI2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_LEFT"))
     else
       if key == "_m1" then
-        aUI:SetText("R")
-        aUI2:SetText("R")
+        aUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_RIGHT"))
+        aUI2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_RIGHT"))
       else
         local actionString = ""
         if getGamePadEnable() then
@@ -261,12 +261,12 @@ local ButtonToggle = function(key, isOn)
   end
   if isOn then
     if key == "_m0" then
-      aUI:SetText("L")
-      aUI2:SetText("L")
+      aUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_LEFT"))
+      aUI2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_LEFT"))
     else
       if key == "_m1" then
-        aUI:SetText("R")
-        aUI2:SetText("R")
+        aUI:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_RIGHT"))
+        aUI2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_RIGHT"))
       else
         local actionString = ""
         if getGamePadEnable() then
@@ -319,9 +319,9 @@ end
 
 Panel_KeyViewer_KeyUpdate = function()
   -- function num : 0_9 , upvalues : ui, ButtonToggleAll
-  (ui._m0):SetText("L")
+  (ui._m0):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_LEFT"))
   ;
-  (ui._m1):SetText("R")
+  (ui._m1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MOVIE_KEYVIEWER_RIGHT"))
   ButtonToggleAll(true)
 end
 

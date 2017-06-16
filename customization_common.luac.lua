@@ -3,6 +3,8 @@
 
 -- params : ...
 -- function num : 0
+globalcurrentclassType = -2
+globalcurrentuiId = -2
 setSliderValue = function(SliderControl, value, valueMin, valueMax)
   -- function num : 0_0
   local range = valueMax - valueMin

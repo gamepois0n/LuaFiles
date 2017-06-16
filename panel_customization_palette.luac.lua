@@ -8,6 +8,7 @@ local rgbArr = {}
 local Static_SelectMark = nil
 local ColumnCount = 10
 local imageSize = 25
+local currentColorIndex = 0
 local checkPalette = function(x, y, static)
   -- function num : 0_0
   panel_x = 0
@@ -68,8 +69,8 @@ CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType,
     local colorTemp = getPaletteColor(PaletteIndex, colorIndex)
     tempStatic:SetColor(Int64toInt32(colorTemp))
     tempStatic:addInputEvent("Mouse_PressMove", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
-    tempStatic:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R17 in 'UnsetPending'
+    tempStatic:addInputEvent("Mouse_LUp", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
+    -- DECOMPILER ERROR at PC122: Confused about usage of register: R17 in 'UnsetPending'
 
     colorStatic[luaColorIndex] = tempStatic
   end
@@ -77,7 +78,7 @@ CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType,
   ;
   (ftCollision:getBaseTexture()):setUV(0, 0, 1, 1)
   ftCollision:addInputEvent("Mouse_LPress", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
-  ftCollision:addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+  ftCollision:addInputEvent("Mouse_LUp", "UpdateCommonPalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. ")")
   ftCollision:SetShow(true)
   ftCollision:SetPosX(FrameTemplate:GetPosX())
   ftCollision:SetPosY(FrameTemplate:GetPosY())
@@ -90,7 +91,7 @@ CreateCommonPalette = function(FrameTemplate, ftCollision, classType, paramType,
 end
 
 UpdateCommonPalette = function(classType, paramType, paramIndex)
-  -- function num : 0_3 , upvalues : colorStatic, checkPalette
+  -- function num : 0_3 , upvalues : colorStatic, checkPalette, currentColorIndex
   posX = getMousePosX()
   posY = getMousePosY()
   for luaColorIndex = 1, #colorStatic do
@@ -98,6 +99,10 @@ UpdateCommonPalette = function(classType, paramType, paramIndex)
     if checkPalette(posX, posY, colorStatic[luaColorIndex]) == true then
       setParam(classType, paramType, paramIndex, colorIndex)
       UpdatePaletteMarkPosition(colorIndex)
+      if currentColorIndex ~= colorIndex then
+        add_CurrentHistory()
+      end
+      currentColorIndex = colorIndex
       return 
     end
   end
@@ -141,6 +146,7 @@ CreateEyePalette = function(FrameTemplate, ftCollision, classType, paramType, pa
   ;
   (ftCollision:getBaseTexture()):setUV(0, 0, 1, 1)
   ftCollision:addInputEvent("Mouse_LPress", "UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
+  ftCollision:addInputEvent("Mouse_LUp", "UpdateEyePalette(" .. classType .. "," .. paramType .. "," .. paramIndex .. "," .. paramIndex2 .. ")")
   ftCollision:SetShow(true)
   ftCollision:SetPosX(FrameTemplate:GetPosX())
   ftCollision:SetPosY(FrameTemplate:GetPosY())
@@ -153,7 +159,7 @@ CreateEyePalette = function(FrameTemplate, ftCollision, classType, paramType, pa
 end
 
 UpdateEyePalette = function(classType, paramType, paramIndex, paramIndex2)
-  -- function num : 0_5 , upvalues : colorStatic, checkPalette, CheckControlArr
+  -- function num : 0_5 , upvalues : colorStatic, checkPalette, CheckControlArr, currentColorIndex
   posX = getMousePosX()
   posY = getMousePosY()
   for luaColorIndex = 1, #colorStatic do
@@ -166,7 +172,10 @@ UpdateEyePalette = function(classType, paramType, paramIndex, paramIndex2)
         setParam(classType, paramType, paramIndex2, colorIndex)
       end
       UpdatePaletteMarkPosition(colorIndex)
-      add_CurrentHistory()
+      if currentColorIndex ~= colorIndex and ((CheckControlArr[1]):IsCheck() == true or (CheckControlArr[2]):IsCheck() == true) then
+        add_CurrentHistory()
+      end
+      currentColorIndex = colorIndex
       return 
     end
   end

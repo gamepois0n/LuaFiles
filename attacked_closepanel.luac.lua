@@ -43,6 +43,9 @@ FromClient_CancelByAttacked = function()
   if Panel_Window_Quest_New_Option:GetShow() then
     FGlobal_CheckedQuestOptionClose()
   end
+  if Panel_Window_MonsterRanking:GetShow() then
+    FGlobal_MonsterRanking_Close()
+  end
   if isPhotoMode() then
     audioPostEvent_SystemUi(8, 14)
   end

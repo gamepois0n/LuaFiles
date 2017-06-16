@@ -35,8 +35,12 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
       (self._btn_MovieGuide):SetShow(false)
     end
   else
-    ;
-    (self._btn_MovieGuide):SetShow(not isRecordMode)
+    if isGameTypeKR2() then
+      (self._btn_MovieGuide):SetShow(false)
+    else
+      ;
+      (self._btn_MovieGuide):SetShow(not isRecordMode)
+    end
   end
   if playerLV > 51 then
     (self._btn_NpcNavi):SetShow(true)

@@ -67,7 +67,17 @@ FGlobal_EventNotifyContent_Open = function(eventIndex)
         end
       end
     else
-      url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL", "index", eventIndex)
+      if isGameTypeSA() then
+        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+          url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_SA_ALPHA", "index", eventIndex)
+        else
+          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_SA", "index", eventIndex)
+          end
+        end
+      else
+        url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL", "index", eventIndex)
+      end
     end
   end
   local isType = false

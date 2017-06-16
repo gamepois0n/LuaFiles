@@ -388,6 +388,15 @@ FGlobal_ShowRewardList = function(isVisible, isManualClick)
   end
 end
 
+FGlobal_getSelectRewardPosition = function()
+  -- function num : 0_9 , upvalues : _uiButtonSelectRewardSlots
+  local Position = {_Return = false, _PosX = -1, _PosY = -1}
+  Position._Return = true
+  Position._PosX = (_uiButtonSelectRewardSlots[0]):GetPosX() + Panel_Npc_Quest_Reward:GetPosX()
+  Position._PosY = (_uiButtonSelectRewardSlots[0]):GetPosY() + Panel_Npc_Quest_Reward:GetPosY()
+  return Position
+end
+
 local _buttonQuestion = (UI.getChildControl)(Panel_Npc_Quest_Reward, "Button_Question")
 _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelQuestReward\" )")
 _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"PanelQuestReward\", \"true\")")

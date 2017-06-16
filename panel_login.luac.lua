@@ -116,7 +116,7 @@ FGlobal_Panel_Login_Enter = function()
 end
 
 LogInPanel_Resize = function()
-  -- function num : 0_2 , upvalues : _loginBG, _buttonBG, _txt_Guide, Button_Login, Button_Exit, Button_GameOption, Edit_ID, Static_BI, totalBG, Static_Blackline_up, Static_Blackline_down, Static_DaumCI, Static_CI, StaticEventBG
+  -- function num : 0_2 , upvalues : _loginBG, _buttonBG, _txt_Guide, Button_Login, Button_Exit, Button_GameOption, Edit_ID, totalBG, Static_Blackline_up, Static_Blackline_down, Static_DaumCI, Static_CI, StaticEventBG, Static_BI
   Panel_Login:SetSize(getScreenSizeX(), getScreenSizeY())
   _loginBG:ComputePos()
   _buttonBG:ComputePos()
@@ -126,9 +126,6 @@ LogInPanel_Resize = function()
   Button_Exit:ComputePos()
   Button_GameOption:ComputePos()
   Edit_ID:ComputePos()
-  if isGameTypeKR2() then
-    Static_BI:SetShow(false)
-  end
   for ii = 1, totalBG do
     (Static_Back[ii]):SetSize(getScreenSizeX(), getScreenSizeY())
   end

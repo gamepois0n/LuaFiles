@@ -16,8 +16,9 @@ local UCT_STATIC = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC
 local isSpecialCharacterOpen = ToClient_IsContentsGroupOpen("267")
 local CharacterListIndex = 0
 local SpecialCharacterListIndex = 1
+local isGhostMode = false
 Panel_CharacterSelectNew:SetShow(false)
-local SelectCharacter = {panelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharacterSelect"), btn_EmptySlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CreateSlot"), btn_CharacterSlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Character0"), static_CharacterState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_Character0"), static_ConnectionState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_UserCount"), static_CharacterLevel = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharLevel"), btn_Create = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterCreate"), btn_Delete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDelete"), btn_StartGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Start"), static_PenelBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_BG"), static_FamilyName = (UI.getChildControl)(Panel_CharacterSelectNew, "FamilyName"), btn_ServerSelect = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_BackServerSelect"), btn_EndGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_EndGame"), btn_ChangeLocate = (UI.getChildControl)(Panel_CharacterSelectNew, "CheckButton_CharacterLocateChange"), static_DeleteCancelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteTitle"), static_DeleteCancelDate = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteDate"), btn_DeleteCancel = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDeleteCancel"), static_DeleteBox = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_DeleteBox"), static_CharacterInfoBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_BG"), btn_ChaInfoStart = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_StartCharacter"), btn_ChaInfoDelete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_DeleteCharacter"), static_ChaInfoName = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Name"), static_ChaInfoProgressBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_GaugeBG"), static_ChaInfoProgress = (UI.getChildControl)(Panel_CharacterSelectNew, "Progress2_CharInfo_Gauge"), static_ChaInfoProgressText = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Do"), static_ChaInfo_DoRemainTime = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_RemainTime"), static_ChaInfoNowLoc = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_NowPos"), static_ChaInfoNowLocValue = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Where"), static_ticketNoByRegion = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_TicketNoByRegion"), _scroll = (UI.getChildControl)(Panel_CharacterSelectNew, "Scroll_SlotList"), btn_Link1 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link1"), btn_Link2 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link2"), block_BG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_block_BG"), radioBtn_CharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_CharacterList"), radioBtn_SpecialCharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_SpecialCharacterList")}
+local SelectCharacter = {panelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharacterSelect"), btn_EmptySlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CreateSlot"), btn_CharacterSlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Character0"), static_CharacterState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_Character0"), static_ConnectionState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_UserCount"), static_CharacterLevel = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharLevel"), btn_Create = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterCreate"), btn_Delete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDelete"), btn_StartGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Start"), static_PenelBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_BG"), static_FamilyName = (UI.getChildControl)(Panel_CharacterSelectNew, "FamilyName"), btn_ServerSelect = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_BackServerSelect"), btn_EndGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_EndGame"), btn_ChangeLocate = (UI.getChildControl)(Panel_CharacterSelectNew, "CheckButton_CharacterLocateChange"), static_DeleteCancelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteTitle"), static_DeleteCancelDate = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteDate"), btn_DeleteCancel = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDeleteCancel"), static_DeleteBox = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_DeleteBox"), static_CharacterInfoBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_BG"), btn_ChaInfoStart = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_StartCharacter"), btn_ChaInfoDelete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_DeleteCharacter"), static_ChaInfoName = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Name"), static_ChaInfoProgressBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_GaugeBG"), static_ChaInfoProgress = (UI.getChildControl)(Panel_CharacterSelectNew, "Progress2_CharInfo_Gauge"), static_ChaInfoProgressText = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Do"), static_ChaInfo_DoRemainTime = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_RemainTime"), static_ChaInfoNowLoc = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_NowPos"), static_ChaInfoNowLocValue = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Where"), static_ticketNoByRegion = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_TicketNoByRegion"), _scroll = (UI.getChildControl)(Panel_CharacterSelectNew, "Scroll_SlotList"), btn_Link1 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link1"), btn_Link2 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link2"), block_BG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_block_BG"), radioBtnBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_RadioBtnBg"), radioBtn_CharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_CharacterList"), radioBtn_SpecialCharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_SpecialCharacterList"), premiumPcRoomSizeY = 0}
 SelectCharacter._ScrollBtn = (UI.getChildControl)(SelectCharacter._scroll, "Scroll_CtrlButton")
 local btn_SaveCustomization = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_LoadCustomization")
 btn_SaveCustomization:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERCREATION_MAIN_BUTTON_SAVECUSTOMIZATION"))
@@ -49,7 +50,7 @@ local getMaxCharacsterCount = function(isCharacterSpecial)
 end
 
 local SelectCharacter_Init = function()
-  -- function num : 0_2 , upvalues : btn_SaveCustomization, SelectCharacter, configData, isSpecialCharacterOpen
+  -- function num : 0_2 , upvalues : btn_SaveCustomization, SelectCharacter, isSpecialCharacterOpen, configData
   setShowBlockBG(false)
   Panel_CharacterSelectNew:SetShow(true)
   Panel_CharacterSelectNew:SetSize(getScreenSizeX(), getScreenSizeY())
@@ -155,16 +156,48 @@ local SelectCharacter_Init = function()
   (SelectCharacter.static_DeleteBox):SetSpanSize(-((SelectCharacter.static_PenelBG):GetSizeX() / 2), 0)
   ;
   (SelectCharacter.static_DeleteBox):SetShow(false)
+  local self = SelectCharacter
+  local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
+  local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
+  if isSpecialCharacterOpen == true then
+    if isPremiumPcRoom then
+      (SelectCharacter.radioBtn_CharacterList):SetShow(true)
+      ;
+      (SelectCharacter.radioBtn_CharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + 5)
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(true)
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + (SelectCharacter.radioBtn_CharacterList):GetSizeX() + 5)
+      ;
+      (self.radioBtnBG):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + 5)
+      ;
+      (self.radioBtnBG):SetShow(true)
+      self.premiumPcRoomSizeY = (SelectCharacter.radioBtn_CharacterList):GetSizeY()
+      ;
+      (self._scroll):SetPosY((self._scroll):GetPosY() + self.premiumPcRoomSizeY)
+    else
+      ;
+      (SelectCharacter.radioBtn_CharacterList):SetShow(false)
+      ;
+      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
+      ;
+      (self.radioBtnBG):SetShow(false)
+    end
+  else
+    ;
+    (SelectCharacter.radioBtn_CharacterList):SetShow(false)
+    ;
+    (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
+  end
   local scrSizeY = getScreenSizeY()
-  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25
+  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - self.premiumPcRoomSizeY + 5
   local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   ;
-  (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount)
-  -- DECOMPILER ERROR at PC388: Confused about usage of register: R4 in 'UnsetPending'
+  (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount - self.premiumPcRoomSizeY)
+  -- DECOMPILER ERROR at PC487: Confused about usage of register: R7 in 'UnsetPending'
 
   configData._listCount = _btnCount
-  local self = SelectCharacter
   for slotIdx = 0, configData._listCount - 1 do
     local slot = {}
     slot._btn_Slot = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_CreateSlot", self.static_PenelBG, "SelectCharacter_EmptySlot_" .. slotIdx)
@@ -181,7 +214,7 @@ local SelectCharacter_Init = function()
     ;
     (slot._btn_Slot):SetPosX(12)
     ;
-    (slot._btn_Slot):SetPosY((SelectCharacter.static_FamilyName):GetSizeY() + 5 + ((slot._btn_Slot):GetSizeY() + 5) * slotIdx)
+    (slot._btn_Slot):SetPosY((SelectCharacter.static_FamilyName):GetSizeY() + 5 + ((slot._btn_Slot):GetSizeY() + 5) * slotIdx + self.premiumPcRoomSizeY + 5)
     ;
     (slot._ChaStat):SetPosX(300)
     ;
@@ -228,11 +261,12 @@ local SelectCharacter_Init = function()
     (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC607: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC708: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (configData.slotUiPool)[slotIdx] = slot
   end
+  Panel_CharacterSelectNew:SetChildIndex(self.radioBtnBG, 0)
   ;
   (SelectCharacter.btn_Link1):ComputePos()
   ;
@@ -260,32 +294,10 @@ local SelectCharacter_Init = function()
   (UIScroll.InputEvent)(SelectCharacter._scroll, "SelectCharacter_ScrollEvent")
   ;
   (UIScroll.InputEventByControl)(SelectCharacter._scroll, "SelectCharacter_ScrollEvent")
-  local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
-  local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
-  if isSpecialCharacterOpen == true then
-    if isPremiumPcRoom then
-      (SelectCharacter.radioBtn_CharacterList):SetShow(true)
-      ;
-      (SelectCharacter.radioBtn_CharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() - (SelectCharacter.radioBtn_CharacterList):GetSizeX())
-      ;
-      (SelectCharacter.radioBtn_CharacterList):SetPosY(50)
-      ;
-      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(true)
-      ;
-      (SelectCharacter.radioBtn_SpecialCharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() - (SelectCharacter.radioBtn_SpecialCharacterList):GetSizeX())
-      ;
-      (SelectCharacter.radioBtn_SpecialCharacterList):SetPosY((SelectCharacter.radioBtn_CharacterList):GetPosY() + (SelectCharacter.radioBtn_CharacterList):GetSizeY() + 10)
-    else
-      ;
-      (SelectCharacter.radioBtn_CharacterList):SetShow(false)
-      ;
-      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
-    end
-  else
-    ;
-    (SelectCharacter.radioBtn_CharacterList):SetShow(false)
-    ;
-    (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
+  if ToClient_IsDevelopment() then
+    local CheckButton = (UI.getChildControl)(Panel_CharacterSelectNew, "check_GhostMode")
+    CheckButton:SetShow(true)
+    CheckButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleGhostMode()")
   end
 end
 
@@ -844,7 +856,7 @@ end
 local getMaxCharacsterScrollCount = function(isSpecialCharacter)
   -- function num : 0_8 , upvalues : SelectCharacter, configData
   local scrSizeY = getScreenSizeY()
-  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25
+  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - SelectCharacter.premiumPcRoomSizeY + 5
   local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   local characterCount = getCharacterDataCount(isSpecialCharacter)
@@ -871,7 +883,7 @@ end
 local getMaxSPCharacsterScrollCount = function()
   -- function num : 0_9 , upvalues : SelectCharacter, configData
   local scrSizeY = getScreenSizeY()
-  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25
+  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - SelectCharacter.premiumPcRoomSizeY + 5
   local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   local characterCount = getSpecialCharacterDataCount()
@@ -915,7 +927,7 @@ scrollTotalCount = function()
 end
 
 local CharacterList_Update = function(isChangeSpecialTab)
-  -- function num : 0_11 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now
+  -- function num : 0_11 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now, isGhostMode
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -982,6 +994,8 @@ local CharacterList_Update = function(isChangeSpecialTab)
   end
   local scrollListIndex = 0
   local maxCharacter = getMaxCharacsterScrollCount(isSpecialCharacter)
+  ;
+  (SelectCharacter.radioBtnBG):SetSize((SelectCharacter.radioBtnBG):GetSizeX(), (SelectCharacter.static_FamilyName):GetSizeY() + 5 + ((((configData.slotUiPool)[0])._btn_Slot):GetSizeY() + 5) * maxCharacter - 31)
   local iii = 0
   for slotIdx = configData._startIndex, maxCharacter + configData._startIndex - 1 do
     local slot = (configData.slotUiPool)[iii]
@@ -1190,11 +1204,11 @@ local CharacterList_Update = function(isChangeSpecialTab)
             (slot._btnCreate):SetShow(false)
           end
           scrollListIndex = scrollListIndex + 1
-          -- DECOMPILER ERROR at PC626: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC649: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC626: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC649: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC626: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC649: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1206,6 +1220,12 @@ local CharacterList_Update = function(isChangeSpecialTab)
   local selectedCharacterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
   if selectedCharacterData ~= nil then
     CharacterSelect_setUpdateTicketNo(selectedCharacterData)
+  end
+  local GhostButton = (UI.getChildControl)(Panel_CharacterSelectNew, "check_GhostMode")
+  if isGhostMode then
+    GhostButton:SetText("GhostMode ON")
+  else
+    GhostButton:SetText("GhostMode OFF")
   end
 end
 
@@ -1235,7 +1255,7 @@ CharacterSelect_selected = function(index)
 end
 
 CharacterSelect_PlayGame = function(index)
-  -- function num : 0_15 , upvalues : SelectCharacter, configData, ePcWorkingType
+  -- function num : 0_15 , upvalues : SelectCharacter, configData, ePcWorkingType, isGhostMode
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1284,7 +1304,7 @@ CharacterSelect_PlayGame = function(index)
               else
                 do
                   do
-                    selectCharacter(configData.selectCaracterIdx, isSpecialCharacter)
+                    selectCharacter(configData.selectCaracterIdx, isSpecialCharacter, isGhostMode)
                     local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
                     local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
                     ;
@@ -1644,6 +1664,17 @@ RadioButton_Click = function(radioIndex)
   ;
   (SelectCharacter._scroll):SetControlPos(0)
   CharacterList_Update(true)
+end
+
+HandleClicked_ToggleGhostMode = function()
+  -- function num : 0_35 , upvalues : isGhostMode
+  isGhostMode = not isGhostMode
+  local GhostButton = (UI.getChildControl)(Panel_CharacterSelectNew, "check_GhostMode")
+  if isGhostMode then
+    GhostButton:SetText("GhostMode ON")
+  else
+    GhostButton:SetText("GhostMode OFF")
+  end
 end
 
 SelectCharacter_Init()

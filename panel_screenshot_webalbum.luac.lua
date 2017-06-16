@@ -102,6 +102,22 @@ ScreenshotAlbum_Open = function()
                   else
                     if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
                       url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_TW")
+                    else
+                      if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+                        url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_SA")
+                      else
+                        if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_SA")
+                        else
+                          if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
+                            url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_KR2")
+                          else
+                            if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
+                              url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_KR2")
+                            end
+                          end
+                        end
+                      end
                     end
                   end
                 end

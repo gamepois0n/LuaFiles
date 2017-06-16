@@ -468,7 +468,7 @@ FromClient_RequestUseExchangeBattleAndSkillExp = function(fromWhereType, fromSlo
   ;
   (TransferLife.btn_Confirm):addInputEvent("Mouse_LUp", "TransferLife_Confirm(" .. 1 .. ")")
   ;
-  (self.title):SetText("전투 경험�\152 이전")
+  (self.title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRANSFERLIFEEXPERIENCE_TITLE"))
 end
 
 FromClient_ResponseExchangeBattleAndSkillExp = function()

@@ -34,6 +34,7 @@ handleMClickedRepairExitButton = function()
   -- function num : 0_3
   PaGlobal_Repair:repair_OpenPanel(false)
   PaGlobal_FixEquip:fixEquipExit()
+  FGlobal_SetIsCamping()
 end
 
 Repair_InvenFilter = function(slotNo, itemWrapper)

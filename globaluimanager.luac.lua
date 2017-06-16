@@ -84,6 +84,7 @@ close_WindowPanelList = function()
   Panel_Tooltip_Item_chattingLinkedItem_hideTooltip()
   Panel_Tooltip_Item_chattingLinkedItemClick_hideTooltip()
   Panel_SkillTooltip_Hide()
+  FGlobal_BuffTooltipOff()
   if Panel_IngameCashShop_GoodsTooltip:IsShow() then
     Panel_IngameCashShop_GoodsTooltip:SetShow(false)
   end
@@ -335,6 +336,7 @@ close_force_WindowPanelList = function()
   Panel_Tooltip_Item_chattingLinkedItem_hideTooltip()
   Panel_Tooltip_Item_chattingLinkedItemClick_hideTooltip()
   Panel_SkillTooltip_Hide()
+  FGlobal_BuffTooltipOff()
   if Panel_IngameCashShop_GoodsTooltip:IsShow() then
     Panel_IngameCashShop_GoodsTooltip:SetShow(false)
   end
@@ -551,6 +553,12 @@ close_force_WindowPanelList = function()
           end
         end
       end
+    end
+    if Panel_Window_Camp:GetShow() then
+      FGlobal_Camp_Close()
+    end
+    if Panel_Window_MonsterRanking:GetShow() then
+      FGlobal_MonsterRanking_Close()
     end
     close_UISubAppPanelList()
   end

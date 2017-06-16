@@ -56,6 +56,7 @@ BlackSpirit2_Show = function()
   else
     return 
   end
+  audioPostEvent_SystemUi(0, 22)
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -122,10 +123,10 @@ blackSpirit2UrlByServiceType = function()
     url = "http://10.32.129.20/BlackSpiritAdventure"
   else
     if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_KOR_ALPHA")
+      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_KR_ALPHA")
     else
       if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_KOR_REAL")
+        url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_KR_REAL")
       else
         if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
           if getServiceNationType() == 0 then

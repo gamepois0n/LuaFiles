@@ -41,6 +41,9 @@ Panel_WebHelper_ShowToggle = function(helpType)
           (MessageBox.showMessageBox)(messageBoxData)
           return false
         end
+        if isGameTypeKR2() then
+          return false
+        end
         if Panel_Login == nil then
           if Panel_WorldMap:GetShow() then
             WorldMapPopupManager:push(Panel_WebControl, true)

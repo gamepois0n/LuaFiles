@@ -3,12 +3,16 @@
 
 -- params : ...
 -- function num : 0
+local buffTooltipIndex = 0
+local isTooltipDebuff = false
 ShowBuffTooltip = function(buffIndex, isDebuff)
-  -- function num : 0_0
+  -- function num : 0_0 , upvalues : buffTooltipIndex, isTooltipDebuff
   local appliedBuff = (getSelfPlayer()):getAppliedBuffByIndex(buffIndex - 1, isDebuff)
   if appliedBuff == nil then
     return 
   end
+  buffTooltipIndex = buffIndex
+  isTooltipDebuff = isDebuff
   local icon = nil
   if isDebuff then
     icon = (PaGlobalAppliedBuffList._uiDeBuffList)[buffIndex]
@@ -35,7 +39,7 @@ end
 
 local sumCount = 0
 local default_uiBackBuffPosX = (PaGlobalAppliedBuffList._uiBackBuff):GetPosX()
--- DECOMPILER ERROR at PC13: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC17: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobalAppliedBuffList.updateBuff = function(self, isDebuff)
   -- function num : 0_2 , upvalues : sumCount, default_uiBackBuffPosX
@@ -86,7 +90,7 @@ PaGlobalAppliedBuffList.updateBuff = function(self, isDebuff)
   end
 end
 
--- DECOMPILER ERROR at PC17: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC21: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobalAppliedBuffList.updateBuffList = function(self)
   -- function num : 0_3 , upvalues : sumCount
@@ -134,6 +138,11 @@ reloadAppliedBuffPanel = function()
   -- function num : 0_7
   PaGlobalAppliedBuffList:show()
   ResponseBuff_changeBuffList()
+end
+
+FGlobal_BuffTooltipOff = function()
+  -- function num : 0_8 , upvalues : buffTooltipIndex, isTooltipDebuff
+  HideBuffTooltip(buffTooltipIndex, isTooltipDebuff)
 end
 
 reloadAppliedBuffPanel()

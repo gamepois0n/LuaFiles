@@ -1658,10 +1658,12 @@ end
           CustomizationMain_PanelResize_ByFontSize()
           FromClient_CustomizationHistoryApplyUpdate = function()
   -- function num : 0_73
-end
-
-          FromClient_CustomizationHistoryUpdate = function()
-  -- function num : 0_74
+  HairShapeHistoryApplyUpdate()
+  MeshHistoryApplyUpdate()
+  BodyBoneHistoryApplyUpdate()
+  CommonDecorationHistoryApplyUpdate()
+  FaceBoneHistoryApplyUpdate()
+  SkinHistoryApplyUpdate()
 end
 
         end

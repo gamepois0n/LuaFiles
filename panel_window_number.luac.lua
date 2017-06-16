@@ -235,7 +235,7 @@ end
 
 local _isExchange = nil
 Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1, isItemMarket)
-  -- function num : 0_8 , upvalues : _isExchange, _textNumber, IM, numberPad, realNumber
+  -- function num : 0_8 , upvalues : _isExchange, _textNumber, IM, numberPad, _checkButtonMaxCount, realNumber
   _isExchange = isExchange
   local maxLength = (string.len)(tostring(s64_maxNumber))
   _textNumber:SetMaxInput(maxLength + 1)
@@ -256,9 +256,15 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
     if isItemMarket == true then
       numberPad.s64_inputNumber = s64_maxNumber
     else
-      -- DECOMPILER ERROR at PC43: Confused about usage of register: R8 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC45: Confused about usage of register: R8 in 'UnsetPending'
 
-      numberPad.s64_inputNumber = (Defines.s64_const).s64_1
+      if _checkButtonMaxCount:IsCheck() then
+        numberPad.s64_inputNumber = s64_maxNumber
+      else
+        -- DECOMPILER ERROR at PC51: Confused about usage of register: R8 in 'UnsetPending'
+
+        numberPad.s64_inputNumber = (Defines.s64_const).s64_1
+      end
     end
     if (Defines.s64_const).s64_1 == s64_maxNumber then
       Panel_NumberPad_Init(param0, confirmFunction, false, param1)
@@ -272,13 +278,18 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
         realNumber = s64_maxNumber
         _textNumber:SetEditText(makeDotMoney(s64_maxNumber))
       else
-        realNumber = (Defines.s64_const).s64_1
-        _textNumber:SetEditText("1")
+        if _checkButtonMaxCount:IsCheck() then
+          realNumber = s64_maxNumber
+          _textNumber:SetEditText(makeDotMoney(s64_maxNumber))
+        else
+          realNumber = (Defines.s64_const).s64_1
+          _textNumber:SetEditText("1")
+        end
       end
     end
   end
   Panel_Window_Exchange_Number:SetSize(200, 240)
-  Panel_NumberPad_CheckButtonShow(false)
+  Panel_NumberPad_CheckButtonShow(true)
 end
 
 local slotNo, whereType = nil, nil

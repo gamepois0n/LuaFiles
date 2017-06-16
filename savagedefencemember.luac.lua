@@ -241,6 +241,7 @@ FromClient_refreshSavageDefencePlayer = function(count)
   -- function num : 0_10
   SavageDefenceMember_Open()
   SavageDefenceMember_Update()
+  FGlobal_SavageDefenceShop_coinUpdate()
 end
 
 SavageDefenceMember_Init(380, 420)

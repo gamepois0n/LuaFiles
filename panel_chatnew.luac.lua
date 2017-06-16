@@ -31,7 +31,7 @@ local smoothResetScorllTime = 0
 local isResetsmoothscroll = false
 local preDownPosY = 0
 local ismsgin = false
-local isUsedSmoothChattingUp = false
+local isUsedSmoothChattingUp = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChattingAnimation)
 local isReportGoldSellerOpen = ToClient_IsContentsGroupOpen("89")
 local _scroll_Interval_AddPos = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0}
 local ChatSubMenu = {_mainPanel = Panel_Chat_SubMenu, _uiBg = (UI.getChildControl)(Panel_Chat_SubMenu, "Static_SubMenu"), _uiButtonWhisper = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_Whisper"), _uiButtonAddFriend = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_AddFriend"), _uiButtonInviteParty = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteParty"), _uiButtonInviteGuild = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteGuild"), _uiButtonInviteCompetition = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteCompetition"), _uiButtonBlock = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_Block"), _uiButtonReportGoldSeller = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_ReportGoldSeller"), _uiButtonBlockVote = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_BlockVote"), _uiButtonIntroduce = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_ShowIntroduce"), _uiButtonWinClose = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_WinClose")}
@@ -640,7 +640,7 @@ ChatUIPoolManager.initialize = function(self)
       ;
       ((chatUI._list_PanelBG)[0]):SetSize(panelSizeX, panelSizeY)
       ;
-      ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), panelSizeY - 42)
+      ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), panelSizeY - 67)
       for chattingContents_idx = 0, chatUI._maxcount_ChattingContents - 1 do
         ((chatUI._list_ChattingContents)[chattingContents_idx]):SetSize(panelSizeX - 25, ((chatUI._list_ChattingContents)[chattingContents_idx]):GetSizeY())
       end
@@ -657,7 +657,7 @@ ChatUIPoolManager.initialize = function(self)
       ;
       ((chatUI._list_PanelBG)[0]):SetSize(panelSizeX, panelSizeY)
       ;
-      ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), panelSizeY - 42)
+      ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), panelSizeY - 67)
       for chattingContents_idx = 0, chatUI._maxcount_ChattingContents - 1 do
         ((chatUI._list_ChattingContents)[chattingContents_idx]):SetSize(panelSizeX - 25, ((chatUI._list_ChattingContents)[chattingContents_idx]):GetSizeY())
       end
@@ -1889,7 +1889,7 @@ Chatting_OnResize = function()
           ;
           ((chatUI._list_PanelBG)[0]):SetSize(panelSizeX, panelSizeY)
           ;
-          ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), panelSizeY - 42)
+          ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), panelSizeY - 67)
           for chattingContents_idx = 0, chatUI._maxcount_ChattingContents - 1 do
             ((chatUI._list_ChattingContents)[chattingContents_idx]):SetSize(panelSizeX - 25, ((chatUI._list_ChattingContents)[chattingContents_idx]):GetSizeY())
           end
@@ -2088,6 +2088,7 @@ HandleClicked_Chatting_Division = function(panelIndex)
   -- function num : 0_28 , upvalues : ChatUIPoolManager, ChattingViewManager
   local divisionPanel = ToClient_getChattingPanel(panelIndex)
   local panel = ChatUIPoolManager:getPanel(panelIndex)
+  local chatUI = ChatUIPoolManager:getPool(panelIndex)
   divisionPanel:setPosition(getScreenSizeX() / 2 - panel:GetSizeX() / 2, getScreenSizeY() / 2 - panel:GetSizeY() / 2, panel:GetSizeX(), panel:GetSizeY())
   panel:SetSize(400, 200)
   panel:SetPosX(getScreenSizeX() / 2 - panel:GetSizeX() / 2)
@@ -2096,10 +2097,20 @@ HandleClicked_Chatting_Division = function(panelIndex)
   panel:SetIgnore(false)
   panel:SetRelativePosX(0.5)
   panel:SetRelativePosY(0.5)
-  -- DECOMPILER ERROR at PC62: Confused about usage of register: R3 in 'UnsetPending'
+  local sizeX = panel:GetSizeX()
+  local sizeY = panel:GetSizeY()
+  ;
+  ((chatUI._list_PanelBG)[0]):SetSize(sizeX, sizeY)
+  ;
+  ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), sizeY - 67)
+  ;
+  ((chatUI._list_ResizeButton)[0]):SetPosX(sizeX - (((chatUI._list_ResizeButton)[0]):GetSizeX() + 5))
+  ;
+  ((chatUI._list_Scroll)[0]):SetControlBottom()
+  -- DECOMPILER ERROR at PC99: Confused about usage of register: R6 in 'UnsetPending'
 
   ChattingViewManager._mainPanelSelectPanelIndex = 0
-  -- DECOMPILER ERROR at PC65: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC102: Confused about usage of register: R6 in 'UnsetPending'
 
   ;
   (ChattingViewManager._transparency)[panelIndex] = 0.5
@@ -2198,7 +2209,7 @@ HandleClicked_Chatting_Resize = function(drawPanelIndex, panelIdx)
   ;
   ((chatUI._list_PanelBG)[0]):SetSize(sizeX, sizeY)
   ;
-  ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), sizeY - 42)
+  ((chatUI._list_Scroll)[0]):SetSize(((chatUI._list_Scroll)[0]):GetSizeX(), sizeY - 67)
   for chattingContents_idx = 0, chatUI._maxcount_ChattingContents - 1 do
     ((chatUI._list_ChattingContents)[chattingContents_idx]):SetSize(sizeX - 25, ((chatUI._list_ChattingContents)[chattingContents_idx]):GetSizeY())
   end

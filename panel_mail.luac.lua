@@ -76,6 +76,9 @@ defalut_Control.Init_Control = function(self)
   local isCommercial = FGlobal_IsCommercialService()
   ;
   ((self._mail)._Btn_QnA):SetShow(isCommercial)
+  if isGameTypeKR2() then
+    ((self._mail)._Btn_QnA):SetShow(false)
+  end
 end
 
 defalut_Control:Init_Control()

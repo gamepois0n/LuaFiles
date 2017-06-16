@@ -84,7 +84,17 @@ EventNotify_Open = function(isDo, isMenu)
         end
       end
     else
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL")
+      if isGameTypeSA() then
+        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+          url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_SA_ALPHA")
+        else
+          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+            url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_SA")
+          end
+        end
+      else
+        url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL")
+      end
     end
   end
   _Web:SetSize(636, 494)

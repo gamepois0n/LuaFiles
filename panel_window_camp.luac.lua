@@ -8,7 +8,7 @@ Panel_Window_Camp:setGlassBackground(true)
 Panel_Window_Camp:ActiveMouseEventEffect(true)
 Panel_Icon_Camp:ActiveMouseEventEffect(true)
 PaGlobal_Camp = {
-_ui = {_btn_UnSealTent = (UI.getChildControl)(Panel_Window_Camp, "Button_UnsealTent"), _btn_InvenOpen = (UI.getChildControl)(Panel_Window_Camp, "Button_Warehouse"), _btn_Repair = (UI.getChildControl)(Panel_Window_Camp, "Button_Repair"), _btn_ShopOpen = (UI.getChildControl)(Panel_Window_Camp, "Button_Shop"), _btn_Close = (UI.getChildControl)(Panel_Window_Camp, "Button_Win_Close"), 
+_ui = {_btn_UnSealTent = (UI.getChildControl)(Panel_Window_Camp, "Button_UnsealTent"), _btn_InvenOpen = (UI.getChildControl)(Panel_Window_Camp, "Button_Warehouse"), _btn_Repair = (UI.getChildControl)(Panel_Window_Camp, "Button_Repair"), _btn_ShopOpen = (UI.getChildControl)(Panel_Window_Camp, "Button_Shop"), _btn_Close = (UI.getChildControl)(Panel_Window_Camp, "Button_Win_Close"), _btn_Seal = (UI.getChildControl)(Panel_Window_Camp, "Button_SealTent"), _btn_RemoteSeal = (UI.getChildControl)(Panel_Window_Camp, "Button_RemoteSealTent"), 
 _slotBg = {[3] = (UI.getChildControl)(Panel_Window_Camp, "Static_ItemSlotBg_Warehouse"), [4] = (UI.getChildControl)(Panel_Window_Camp, "Static_ItemSlotBg_Repair"), [5] = (UI.getChildControl)(Panel_Window_Camp, "Static_ItemSlotBg_Shop")}
 }
 , 
@@ -22,7 +22,7 @@ _slotID = {[3] = "Static_Icon_CampInven", [4] = "Static_Icon_CampRepair", [5] = 
 _isSetItem = {[3] = false, [4] = false, [5] = false}
 }
 , _btn_Camp = (UI.getChildControl)(Panel_Icon_Camp, "Button_CampIcon"), _itemSlots = (Array.new)(), _actorKeyRaw = nil, _isCamping = false}
--- DECOMPILER ERROR at PC110: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC122: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_Initialize = function(self)
   -- function num : 0_0
@@ -35,12 +35,10 @@ PaGlobal_Camp.Camp_Initialize = function(self)
     (SlotItem.new)(slot, "CampEquip_" .. value, value, ((self._ui)._slotBg)[value], (self._config)._itemSlot)
     slot:createChild()
     ;
-    (slot.icon):addInputEvent("Mouse_RUp", "PaGlobal_Camp:Camp_RClick(" .. value .. ")")
-    ;
     (slot.icon):addInputEvent("Mouse_On", "PaGlobal_Camp:Camp_EquipItemTooltipShow(" .. value .. ", true)")
     ;
     (slot.icon):addInputEvent("Mouse_Out", "PaGlobal_Camp:Camp_EquipItemTooltipShow(" .. value .. ", false)")
-    -- DECOMPILER ERROR at PC54: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC46: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self._itemSlots)[value] = slot
@@ -49,7 +47,7 @@ PaGlobal_Camp.Camp_Initialize = function(self)
   (self._btn_Camp):ActiveMouseEventEffect(true)
 end
 
--- DECOMPILER ERROR at PC113: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC125: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_Open = function(self)
   -- function num : 0_1
@@ -58,6 +56,7 @@ PaGlobal_Camp.Camp_Open = function(self)
     Panel_Window_Camp:SetShow(false)
     return 
   end
+  FGlobal_Camp_SetPos()
   Panel_Window_Camp:SetShow(true)
   ToClient_openCampingInfo()
   PaGlobal_Camp:Camp_Update()
@@ -73,7 +72,7 @@ FGlobal_Camp_Close = function()
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC130: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_Close = function(self)
   -- function num : 0_3
@@ -86,89 +85,98 @@ FromClient_Camp_OpenByActorKeyRaw = function(actorKeyRaw)
   PaGlobal_Camp:Camp_OpenByActorKeyRaw(actorKeyRaw)
 end
 
--- DECOMPILER ERROR at PC123: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC135: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_OpenByActorKeyRaw = function(self, actorKeyRaw)
   -- function num : 0_5
   self._actorKeyRaw = actorKeyRaw
 end
 
--- DECOMPILER ERROR at PC126: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_SealTent = function(self)
   -- function num : 0_6
   ToClient_requestServantSealCampingTent()
 end
 
--- DECOMPILER ERROR at PC129: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC141: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_UnSealTent = function(self)
   -- function num : 0_7
   ToClient_requestServantUnsealCampingTent(0)
 end
 
--- DECOMPILER ERROR at PC132: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC144: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Camp.Camp_Repair = function(self)
+PaGlobal_Camp.Camp_FunctionOpen = function(self, slotIndex)
   -- function num : 0_8
-  local isSetItem = ((self._config)._isSetItem)[4]
+  local isSetItem = ((self._config)._isSetItem)[slotIndex]
   if isSetItem then
-    ToClient_requestCampingRepairOpen()
+    if slotIndex == 3 then
+      ToClient_requestCampingInventoryOpen()
+      PaGlobal_Camp:Camp_Close()
+    else
+      if slotIndex == 4 then
+        ToClient_requestCampingRepairOpen()
+        Panel_Window_Camp:SetShow(false)
+      else
+        if slotIndex == 5 then
+          ToClient_requestCampingShopOpen()
+          Panel_Window_Camp:SetShow(false)
+        end
+      end
+    end
+  else
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_UNEQUIPEDITEM"))
   end
-end
-
--- DECOMPILER ERROR at PC135: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_Camp.Camp_ShopOpen = function(self)
-  -- function num : 0_9
-  local isSetItem = ((self._config)._isSetItem)[5]
-  if isSetItem then
-    ToClient_requestCampingShopOpen()
-  end
-end
-
--- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_Camp.Camp_InvenOpen = function(self)
-  -- function num : 0_10
-  local isSetItem = ((self._config)._isSetItem)[3]
-  if isSetItem then
-    ToClient_requestCampingInventoryOpen()
-  end
-end
-
-FromClient_OpenCampingRepair = function()
-  -- function num : 0_11
-  PaGlobal_Repair:repair_OpenPanel(true, true)
-end
-
-FromClient_OpenCampingShop = function()
-  -- function num : 0_12
-  NpcShop_UpdateContent()
-end
-
-FromClient_CampingUpdate = function()
-  -- function num : 0_13
-  PaGlobal_Camp:Camp_Update()
 end
 
 -- DECOMPILER ERROR at PC147: Confused about usage of register: R0 in 'UnsetPending'
 
+PaGlobal_Camp.Camp_RemoteSeal = function(self)
+  -- function num : 0_9
+  local FunctionYesRemoteSeal = function()
+    -- function num : 0_9_0
+    ToClient_requestServantCompulsionSealCampingTent()
+  end
+
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_REMOTERESET_DESC")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_REMOTERESET_TITLE"), content = messageBoxMemo, functionYes = FunctionYesRemoteSeal, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
+end
+
+FromClient_OpenCampingRepair = function()
+  -- function num : 0_10
+  PaGlobal_Repair:repair_OpenPanel(true, true)
+end
+
+FromClient_OpenCampingShop = function()
+  -- function num : 0_11
+  NpcShop_UpdateContent()
+end
+
+FromClient_CampingUpdate = function()
+  -- function num : 0_12
+  PaGlobal_Camp:Camp_Update()
+end
+
+-- DECOMPILER ERROR at PC156: Confused about usage of register: R0 in 'UnsetPending'
+
 PaGlobal_Camp.Camp_Update = function(self)
-  -- function num : 0_14
-  FGlobal_Camp_SetPos()
+  -- function num : 0_13
   for index,value in pairs((self._config)._slotNo) do
     local slot = (self._itemSlots)[value]
     local campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
     if campWrapper ~= nil then
       local itemWrapper = campWrapper:getEquipItem(value)
-      -- DECOMPILER ERROR at PC21: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC19: Confused about usage of register: R9 in 'UnsetPending'
 
       if itemWrapper ~= nil then
         ((self._config)._isSetItem)[value] = true
         slot:setItem(itemWrapper)
       else
-        -- DECOMPILER ERROR at PC28: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC26: Confused about usage of register: R9 in 'UnsetPending'
 
         ;
         ((self._config)._isSetItem)[value] = false
@@ -178,21 +186,31 @@ PaGlobal_Camp.Camp_Update = function(self)
   end
   local isUnseal = ToClient_isCampingUnseal()
   if isUnseal then
-    ((self._ui)._btn_UnSealTent):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_SealTent()")
+    ((self._ui)._btn_Seal):SetShow(true)
     ;
-    ((self._ui)._btn_UnSealTent):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CAMP_SEALBTN"))
+    ((self._ui)._btn_RemoteSeal):SetShow(true)
+    ;
+    ((self._ui)._btn_UnSealTent):SetShow(false)
+    ;
+    ((self._ui)._btn_Seal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_SealTent()")
+    ;
+    ((self._ui)._btn_RemoteSeal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_RemoteSeal()")
   else
     ;
-    ((self._ui)._btn_UnSealTent):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_UnSealTent()")
+    ((self._ui)._btn_UnSealTent):SetShow(true)
     ;
-    ((self._ui)._btn_UnSealTent):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CAMP_UNSEALBTN"))
+    ((self._ui)._btn_Seal):SetShow(false)
+    ;
+    ((self._ui)._btn_RemoteSeal):SetShow(false)
+    ;
+    ((self._ui)._btn_UnSealTent):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_UnSealTent()")
   end
 end
 
--- DECOMPILER ERROR at PC150: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC159: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_TooltipShow = function(self, isShow)
-  -- function num : 0_15
+  -- function num : 0_14
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_TOOLTIP_TITLE")
     local desc = PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_TOOLTIP_DESC")
@@ -204,23 +222,23 @@ PaGlobal_Camp.Camp_TooltipShow = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC153: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC162: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_EquipItemTooltipShow = function(self, slotNo, isShow)
-  -- function num : 0_16
+  -- function num : 0_15
   local slot = (self._itemSlots)[slotNo]
   Panel_Tooltip_Item_SetPosition(slotNo, slot, "CampEquip")
   Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "CampEquip", isShow)
 end
 
 FGlobal_Camp_GetActorKeyRaw = function()
-  -- function num : 0_17
+  -- function num : 0_16
   local self = PaGlobal_Camp
   return self._actorKeyRaw
 end
 
 FGlobal_Camp_SetPos = function()
-  -- function num : 0_18
+  -- function num : 0_17
   local posX = 0
   local posY = 0
   if Panel_Icon_Duel:GetShow() then
@@ -254,17 +272,17 @@ FGlobal_Camp_SetPos = function()
   Panel_Icon_Camp:SetPosY(posY)
 end
 
--- DECOMPILER ERROR at PC160: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC169: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_Register = function(self)
-  -- function num : 0_19
+  -- function num : 0_18
   FGlobal_CampRegister_Open()
 end
 
--- DECOMPILER ERROR at PC163: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC172: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_RClick = function(self, slotNo)
-  -- function num : 0_20
+  -- function num : 0_19
   local self = PaGlobal_Camp
   local campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if campWrapper == nil then
@@ -278,7 +296,7 @@ PaGlobal_Camp.Camp_RClick = function(self, slotNo)
 end
 
 CampInfo_ChangeEquipItem = function(slotNo)
-  -- function num : 0_21
+  -- function num : 0_20
   local self = PaGlobal_Camp
   local slot = (self._itemSlots)[slotNo]
   if self._actorKeyRaw == nil then
@@ -300,11 +318,18 @@ CampInfo_ChangeEquipItem = function(slotNo)
 end
 
 FGlobal_IsCamping = function()
-  -- function num : 0_22
+  -- function num : 0_21
   return PaGlobal_Camp._isCamping
 end
 
--- DECOMPILER ERROR at PC170: Confused about usage of register: R0 in 'UnsetPending'
+FGlobal_SetIsCamping = function()
+  -- function num : 0_22
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+
+  PaGlobal_Camp._isCamping = false
+end
+
+-- DECOMPILER ERROR at PC181: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Camp.Camp_registMessageHandler = function(self)
   -- function num : 0_23
@@ -316,11 +341,11 @@ PaGlobal_Camp.Camp_registMessageHandler = function(self)
   ;
   (self._btn_Camp):addInputEvent("Mouse_Out", "PaGlobal_Camp:Camp_TooltipShow( false )")
   ;
-  ((self._ui)._btn_Repair):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_Repair()")
+  ((self._ui)._btn_Repair):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_FunctionOpen(" .. 4 .. ")")
   ;
-  ((self._ui)._btn_InvenOpen):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_InvenOpen()")
+  ((self._ui)._btn_InvenOpen):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_FunctionOpen(" .. 3 .. ")")
   ;
-  ((self._ui)._btn_ShopOpen):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_ShopOpen()")
+  ((self._ui)._btn_ShopOpen):addInputEvent("Mouse_LUp", "PaGlobal_Camp:Camp_FunctionOpen(" .. 5 .. ")")
   registerEvent("FromClient_OpenCampingRepair", "FromClient_OpenCampingRepair")
   registerEvent("FromClient_OpenCampingShop", "FromClient_OpenCampingShop")
   registerEvent("FromClient_OpenCampingInfo", "FromClient_Camp_OpenByActorKeyRaw")

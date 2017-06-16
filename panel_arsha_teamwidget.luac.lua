@@ -57,8 +57,8 @@ ArshaPvP_Widget_Init = function()
     teamB_Name = teamB_Info:getTeamName()
   end
   if teamA_Name == "" or teamB_Name == "" then
-    teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_A_TEAM")
-    teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_B_TEAM")
+    teamA_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_A")
+    teamB_Name = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITION_TEAM_B")
   end
   ;
   (self.leftParty):SetText(teamA_Name)

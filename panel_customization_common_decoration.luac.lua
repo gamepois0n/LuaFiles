@@ -100,6 +100,10 @@ local sliderOffset = 7
 local sliderValueOffset = 10
 local sliderHeight = (SliderTextArr[1]):GetSizeY()
 local colorPickerStartY = 370
+local currentclassType = -1
+local currentuiId = -1
+local checkType = -1
+local currentcontentindex = -1
 local UpdateMarkPosition = function(shapeIdx)
   -- function num : 0_0 , upvalues : FrameTemplate, Static_SelectMark, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY
   if FrameTemplate:GetShow() then
@@ -150,7 +154,12 @@ local clearContents = function()
 end
 
 OpenCommonDecorationUi = function(classType, uiId)
-  -- function num : 0_3 , upvalues : clearRadioButtons, CheckControlArr, CheckTextArr, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup, contentsStartY, controlOffset
+  -- function num : 0_3 , upvalues : currentclassType, currentuiId, checkType, clearRadioButtons, CheckControlArr, CheckTextArr, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup, contentsStartY, controlOffset
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
+  checkType = 0
   clearRadioButtons()
   ;
   (CheckControlArr[1]):SetShow(false)
@@ -177,7 +186,7 @@ OpenCommonDecorationUi = function(classType, uiId)
       tempRadioButton:SetPosY(radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
       tempRadioButton:addInputEvent("Mouse_LUp", "UpdateDecorationContents(" .. contentsIndex .. ")")
       tempRadioButton:SetShow(true)
-      -- DECOMPILER ERROR at PC107: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC113: Confused about usage of register: R10 in 'UnsetPending'
 
       RadioButtonGroup[luaContentsIndex] = tempRadioButton
     end
@@ -197,15 +206,28 @@ end
 CloseCommonDecorationUi = function()
   -- function num : 0_4
   EnableDecorationSlide(true)
+  clearPalette()
+  globalcurrentclassType = -2
+  globalcurrentuiId = -2
 end
 
 CloseEyeDecorationUi = function()
   -- function num : 0_5
+  clearPalette()
+  globalcurrentclassType = -2
+  globalcurrentuiId = -2
 end
 
-UpdateDecorationContents = function(contentsIndex)
-  -- function num : 0_6 , upvalues : clearContents, contentsStartY, selectedClassType, selectedUiId, Frame_Content, Frame_ContentImage, NoCashType, NoCashDeco, Static_PayMark, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, PayMark, selectedListParamType, selectedListParamIndex, selectedItemIndex, FrameTemplate, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, Frame_Scroll
+UpdateDecorationContents = function(contentsIndex, currentclassType, currentuiId)
+  -- function num : 0_6 , upvalues : clearContents, currentcontentindex, selectedClassType, selectedUiId, contentsStartY, Frame_Content, Frame_ContentImage, NoCashType, NoCashDeco, Static_PayMark, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, PayMark, selectedListParamType, selectedListParamIndex, selectedItemIndex, FrameTemplate, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, Frame_Scroll
   clearContents()
+  currentcontentindex = contentsIndex
+  if currentclassType ~= nil then
+    selectedClassType = currentclassType
+  end
+  if currentuiId ~= nil then
+    selectedUiId = currentuiId
+  end
   local texSize = 48.25
   local controlPosY = contentsStartY
   local listCount = getUiListCount(selectedClassType, selectedUiId, contentsIndex)
@@ -256,10 +278,10 @@ UpdateDecorationContents = function(contentsIndex)
           staticPayMark:SetShow(false)
         end
       end
-      -- DECOMPILER ERROR at PC229: Confused about usage of register: R24 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC236: Confused about usage of register: R26 in 'UnsetPending'
 
       ContentImage[luaShapeIdx] = tempContentImage
-      -- DECOMPILER ERROR at PC231: Confused about usage of register: R24 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC238: Confused about usage of register: R26 in 'UnsetPending'
 
       PayMark[luaShapeIdx] = staticPayMark
     end
@@ -284,20 +306,20 @@ UpdateDecorationContents = function(contentsIndex)
     local sliderValueBasePosX = 0
     for sliderIndex = 0, sliderCount - 1 do
       local luaSliderIndex = sliderIndex + 1
-      -- DECOMPILER ERROR at PC296: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC303: Confused about usage of register: R13 in 'UnsetPending'
 
       sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC304: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC311: Confused about usage of register: R13 in 'UnsetPending'
 
       sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC319: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC326: Confused about usage of register: R14 in 'UnsetPending'
 
       sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC328: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC335: Confused about usage of register: R14 in 'UnsetPending'
 
       sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC337: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC344: Confused about usage of register: R14 in 'UnsetPending'
 
       sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
       setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
@@ -465,7 +487,12 @@ UpdateHairDecorationSlider = function(sliderIndex)
 end
 
 OpenEyeDecorationUi = function(classType, uiId)
-  -- function num : 0_13 , upvalues : clearRadioButtons, CheckControlArr, CheckTextArr, contentsStartY, controlOffset, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
+  -- function num : 0_13 , upvalues : currentclassType, currentuiId, checkType, clearRadioButtons, CheckControlArr, CheckTextArr, contentsStartY, controlOffset, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
+  checkType = 1
   clearRadioButtons()
   ;
   (CheckControlArr[1]):SetShow(true)
@@ -496,7 +523,7 @@ OpenEyeDecorationUi = function(classType, uiId)
       tempRadioButton:SetPosY(contentsStartY + radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
       tempRadioButton:addInputEvent("Mouse_LUp", "UpdateEyeDecorationContents(" .. contentsIndex .. ", " .. 0 .. ")")
       tempRadioButton:SetShow(true)
-      -- DECOMPILER ERROR at PC124: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC130: Confused about usage of register: R10 in 'UnsetPending'
 
       RadioButtonGroup[luaContentsIndex] = tempRadioButton
     end
@@ -513,9 +540,16 @@ OpenEyeDecorationUi = function(classType, uiId)
   end
 end
 
-UpdateEyeDecorationContents = function(contentsIndex, addHistory)
-  -- function num : 0_14 , upvalues : clearContents, contentsStartY, selectedClassType, selectedUiId, FrameTemplate, Frame_Content, Frame_ContentImage, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, UpdateMarkPosition, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamIndex2, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, CheckControlArr, Frame_Scroll
+UpdateEyeDecorationContents = function(contentsIndex, addHistory, currentclassType, currentuiId)
+  -- function num : 0_14 , upvalues : clearContents, currentcontentindex, selectedClassType, selectedUiId, contentsStartY, FrameTemplate, Frame_Content, Frame_ContentImage, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, UpdateMarkPosition, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamIndex2, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, CheckControlArr, Frame_Scroll
   clearContents()
+  currentcontentindex = contentsIndex
+  if currentclassType ~= nil then
+    selectedClassType = currentclassType
+  end
+  if currentuiId ~= nil then
+    selectedUiId = currentuiId
+  end
   local texSize = 48.25
   local controlPosY = contentsStartY
   local listCount = getUiListCount(selectedClassType, selectedUiId, contentsIndex)
@@ -548,7 +582,7 @@ UpdateEyeDecorationContents = function(contentsIndex, addHistory)
       tempContentImage:SetPosY((math.floor)(itemIndex / listColumCount) * listColumnHeight + listStartY)
       tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
       tempContentImage:SetShow(true)
-      -- DECOMPILER ERROR at PC146: Confused about usage of register: R25 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC153: Confused about usage of register: R27 in 'UnsetPending'
 
       ContentImage[luaShapeIdx] = tempContentImage
     end
@@ -567,23 +601,23 @@ UpdateEyeDecorationContents = function(contentsIndex, addHistory)
     local sliderValueBasePosX = 0
     for sliderIndex = 0, sliderCount - 1 do
       local luaSliderIndex = sliderIndex + 1
-      -- DECOMPILER ERROR at PC203: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC210: Confused about usage of register: R14 in 'UnsetPending'
 
       sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC211: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC218: Confused about usage of register: R14 in 'UnsetPending'
 
       sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC219: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC226: Confused about usage of register: R14 in 'UnsetPending'
 
       sliderParamIndex2[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex + 3, sliderIndex)
       local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC234: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC241: Confused about usage of register: R15 in 'UnsetPending'
 
       sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC243: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC250: Confused about usage of register: R15 in 'UnsetPending'
 
       sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC252: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC259: Confused about usage of register: R15 in 'UnsetPending'
 
       sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
       setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
@@ -741,9 +775,14 @@ EnableDecorationSlide = function(enable)
 end
 
 OpenTattooDecorationUi = function(classType, uiId)
-  -- function num : 0_18 , upvalues : isTattooMode, selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex
+  -- function num : 0_18 , upvalues : isTattooMode, currentclassType, currentuiId, checkType, selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex
   isTattooMode = true
   OpenCommonDecorationUi(classType, uiId)
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
+  checkType = 2
   if isTattooMode then
     slideEnable = getEnableTattooSlide(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
     EnableDecorationSlide(slideEnable)
@@ -758,9 +797,14 @@ CloseTattooDecorationUi = function()
 end
 
 OpenCommonExpressionUi = function(classType, uiId)
-  -- function num : 0_20
+  -- function num : 0_20 , upvalues : currentclassType, currentuiId, checkType
   SetExpression()
   OpenCommonDecorationUi(classType, uiId)
+  globalcurrentclassType = classType
+  globalcurrentuiId = uiId
+  currentclassType = classType
+  currentuiId = uiId
+  checkType = 3
 end
 
 CloseCommonExpressionUi = function()
@@ -774,6 +818,29 @@ SetExpression = function()
   local expressionIndex = getParam(4, 0)
   local expressionWeight = getParam(4, 1)
   applyExpression(expressionIndex, expressionWeight)
+end
+
+CommonDecorationHistoryApplyUpdate = function()
+  -- function num : 0_23 , upvalues : currentclassType, currentuiId, checkType, currentcontentindex
+  if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
+    return 
+  end
+  if checkType == 0 then
+    UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+  else
+    if checkType == 1 then
+      UpdateEyeDecorationContents(currentcontentindex, 0, currentclassType, currentuiId)
+    else
+      if checkType == 2 then
+        UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+      else
+        if checkType == 3 then
+          SetExpression()
+          UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+        end
+      end
+    end
+  end
 end
 
 
