@@ -153,17 +153,17 @@ Challenge_TapMenu_Create = function()
   if isGameTypeRussia() then
     countrySet = true
   else
-    if isGameTypeEnglish() or isGameTypeTaiwan() then
+    if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA() or isGameTypeKR2() then
       countrySet = false
     else
       countrySet = true
     end
   end
   for index = 0, tapCount - 1 do
-    -- DECOMPILER ERROR at PC27: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC35: Confused about usage of register: R4 in 'UnsetPending'
 
     _tapMenu[index] = {}
-    -- DECOMPILER ERROR at PC38: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC46: Confused about usage of register: R4 in 'UnsetPending'
 
     _tapMenu[index] = (UI.createControl)(UCT.PA_UI_CONTROL_RADIOBUTTON, Panel_Window_Challenge, "Challenge_Tapmenu_" .. index)
     CopyBaseProperty(radioBtn_TapMenu, _tapMenu[index])
@@ -177,7 +177,7 @@ Challenge_TapMenu_Create = function()
       if isGameTypeRussia() then
         (_tapMenu[index]):SetShow(true)
       else
-        if isGameTypeEnglish() or isGameTypeTaiwan() then
+        if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA() or isGameTypeKR2() then
           (_tapMenu[index]):SetShow(false)
         else
           ;

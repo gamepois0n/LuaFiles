@@ -5,8 +5,15 @@
 -- function num : 0
 globalcurrentclassType = -2
 globalcurrentuiId = -2
-setSliderValue = function(SliderControl, value, valueMin, valueMax)
+globalcheckSlider = false
+globalisCustomizationPicking = false
+setGlobalCheck = function(sliderflag)
   -- function num : 0_0
+  globalcheckSlider = sliderflag
+end
+
+setSliderValue = function(SliderControl, value, valueMin, valueMax)
+  -- function num : 0_1
   local range = valueMax - valueMin
   if value < valueMin then
     value = valueMin
@@ -22,7 +29,7 @@ setSliderValue = function(SliderControl, value, valueMin, valueMax)
 end
 
 getSliderValue = function(SliderControl, valueMin, valueMax)
-  -- function num : 0_1
+  -- function num : 0_2
   local ratio = SliderControl:GetControlPos()
   local range = valueMax - valueMin
   if range < 0 then
@@ -33,12 +40,12 @@ end
 
 local clearGroupCustomizedBonInfoPostProcessList = (Array.new)()
 pushClearGroupCustomizedBonInfoPostFunction = function(functor)
-  -- function num : 0_2 , upvalues : clearGroupCustomizedBonInfoPostProcessList
+  -- function num : 0_3 , upvalues : clearGroupCustomizedBonInfoPostProcessList
   clearGroupCustomizedBonInfoPostProcessList:push_back(functor)
 end
 
 clearGroupCustomizedBonInfoLua = function()
-  -- function num : 0_3 , upvalues : clearGroupCustomizedBonInfoPostProcessList
+  -- function num : 0_4 , upvalues : clearGroupCustomizedBonInfoPostProcessList
   clearGroupCustomizedBoneInfo()
   for key,value in pairs(clearGroupCustomizedBonInfoPostProcessList) do
     value()
@@ -46,7 +53,10 @@ clearGroupCustomizedBonInfoLua = function()
 end
 
 add_CurrentHistory = function()
-  -- function num : 0_4
+  -- function num : 0_5
+  if globalisCustomizationPicking == false then
+    globalcheckSlider = false
+  end
   ToClient_addHistory()
 end
 

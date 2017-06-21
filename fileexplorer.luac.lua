@@ -306,6 +306,7 @@ end
 closeExplorer = function()
   -- function num : 0_18 , upvalues : _btn_CancelFunction
   Panel_FileExplorer:SetShow(false)
+  ClearFocusEdit()
   if _btn_CancelFunction == nil then
     return 
   end
@@ -368,6 +369,11 @@ callOpenFunction = function(index)
   local text = _fileExplorer:getCurrentPath()
   text = "" .. text .. "\\" .. _fileExplorer:getFileNameAtIndex(index)
   _openWithFunction(text)
+end
+
+FileExplorer_getTextFocusEdit = function()
+  -- function num : 0_28 , upvalues : text_EditBox
+  return text_EditBox:GetFocusEdit()
 end
 
 

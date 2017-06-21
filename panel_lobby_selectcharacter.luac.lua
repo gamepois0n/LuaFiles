@@ -50,7 +50,7 @@ local getMaxCharacsterCount = function(isCharacterSpecial)
 end
 
 local SelectCharacter_Init = function()
-  -- function num : 0_2 , upvalues : btn_SaveCustomization, SelectCharacter, isSpecialCharacterOpen, configData
+  -- function num : 0_2 , upvalues : btn_SaveCustomization, SelectCharacter, isSpecialCharacterOpen, configData, isGhostMode
   setShowBlockBG(false)
   Panel_CharacterSelectNew:SetShow(true)
   Panel_CharacterSelectNew:SetSize(getScreenSizeX(), getScreenSizeY())
@@ -295,6 +295,7 @@ local SelectCharacter_Init = function()
   ;
   (UIScroll.InputEventByControl)(SelectCharacter._scroll, "SelectCharacter_ScrollEvent")
   if ToClient_IsDevelopment() then
+    isGhostMode = ToClient_getGhostMode()
     local CheckButton = (UI.getChildControl)(Panel_CharacterSelectNew, "check_GhostMode")
     CheckButton:SetShow(true)
     CheckButton:addInputEvent("Mouse_LUp", "HandleClicked_ToggleGhostMode()")
@@ -1222,6 +1223,7 @@ local CharacterList_Update = function(isChangeSpecialTab)
     CharacterSelect_setUpdateTicketNo(selectedCharacterData)
   end
   local GhostButton = (UI.getChildControl)(Panel_CharacterSelectNew, "check_GhostMode")
+  isGhostMode = ToClient_getGhostMode()
   if isGhostMode then
     GhostButton:SetText("GhostMode ON")
   else
@@ -1255,7 +1257,7 @@ CharacterSelect_selected = function(index)
 end
 
 CharacterSelect_PlayGame = function(index)
-  -- function num : 0_15 , upvalues : SelectCharacter, configData, ePcWorkingType, isGhostMode
+  -- function num : 0_15 , upvalues : SelectCharacter, configData, ePcWorkingType
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1304,7 +1306,7 @@ CharacterSelect_PlayGame = function(index)
               else
                 do
                   do
-                    selectCharacter(configData.selectCaracterIdx, isSpecialCharacter, isGhostMode)
+                    selectCharacter(configData.selectCaracterIdx, isSpecialCharacter)
                     local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
                     local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
                     ;
@@ -1668,8 +1670,9 @@ end
 
 HandleClicked_ToggleGhostMode = function()
   -- function num : 0_35 , upvalues : isGhostMode
-  isGhostMode = not isGhostMode
+  ToClient_ToggleGhostMode()
   local GhostButton = (UI.getChildControl)(Panel_CharacterSelectNew, "check_GhostMode")
+  isGhostMode = ToClient_getGhostMode()
   if isGhostMode then
     GhostButton:SetText("GhostMode ON")
   else

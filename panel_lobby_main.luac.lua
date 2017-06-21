@@ -670,8 +670,11 @@ Panel_Lobby_function_ClearData = function()
 end
 
 Panel_Lobby_function_SelectClassType = function(index, isOn)
-  -- function num : 0_6 , upvalues : UI_Class, Panel_Lobby_ClassUI, Panel_Lobby_UI, Panel_Lobby_Global_Variable, UI_TM, txt_BottomDesc, _frameBottomDesc
+  -- function num : 0_6 , upvalues : UI_Class, isSpecialCharacter, Panel_Lobby_ClassUI, Panel_Lobby_UI, Panel_Lobby_Global_Variable, UI_TM, txt_BottomDesc, _frameBottomDesc
   if index < UI_Class.ClassType_Count then
+    if ToClient_checkCreatePossibleClass(index, isSpecialCharacter) == false then
+      return 
+    end
     for key,value in pairs(Panel_Lobby_ClassUI.ClassButtons) do
       value:SetMonoTone(true)
       value:SetVertexAniRun("Ani_Color_Reset", true)
@@ -681,24 +684,24 @@ Panel_Lobby_function_SelectClassType = function(index, isOn)
     ((Panel_Lobby_ClassUI.ClassButtons)[index]):SetMonoTone(false)
     ;
     ((Panel_Lobby_ClassUI.ClassButtons)[index]):AddEffect("UI_CharactorSelcect_Line", true, 10, 4)
-    local movieName = getClassMovie(index)
+    local movieName = getClassMovie(index, isSpecialCharacter)
     if movieName ~= nil then
       (Panel_Lobby_UI.CCSC_ClassMovie):TriggerEvent("PlayMovie", "coui://" .. movieName)
     end
     viewCharacterCreateSelectClassMode(index)
-    -- DECOMPILER ERROR at PC52: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC60: Confused about usage of register: R3 in 'UnsetPending'
 
     Panel_Lobby_Global_Variable.characterSelectType = index
     ;
-    (Panel_Lobby_UI.CCSC_ClassName):SetText(getClassName(index))
+    (Panel_Lobby_UI.CCSC_ClassName):SetText(getClassName(index, isSpecialCharacter))
     ;
     (Panel_Lobby_UI.CCSC_ClassDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
     ;
-    (Panel_Lobby_UI.CCSC_ClassDesc):SetText(getClassDescription(index))
+    (Panel_Lobby_UI.CCSC_ClassDesc):SetText(getClassDescription(index, isSpecialCharacter))
     ;
     (Panel_Lobby_UI.CCSC_ClassDesc):SetShow(false)
     txt_BottomDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    txt_BottomDesc:SetText(getClassDescription(index))
+    txt_BottomDesc:SetText(getClassDescription(index, isSpecialCharacter))
     _frameBottomDesc:SetSize(_frameBottomDesc:GetSizeX(), txt_BottomDesc:GetTextSizeY())
     for _,value in pairs(Panel_Lobby_ClassUI.ClassStatus) do
       value:SetShow(false)

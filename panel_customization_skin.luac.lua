@@ -97,6 +97,7 @@ UpdateSkinSlider = function()
   local value = getSliderValue(SliderControl, sliderParamMin, sliderParamMax)
   setParam(selectedClassType, sliderParamType, sliderParamIndex, value)
   Static_CurrentValue:SetText(value)
+  setGlobalCheck(true)
 end
 
 SkinHistoryApplyUpdate = function()

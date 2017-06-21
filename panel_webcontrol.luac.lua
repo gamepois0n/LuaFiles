@@ -41,20 +41,28 @@ Panel_WebHelper_ShowToggle = function(helpType)
           (MessageBox.showMessageBox)(messageBoxData)
           return false
         end
-        if isGameTypeKR2() then
-          return false
-        end
-        if Panel_Login == nil then
-          if Panel_WorldMap:GetShow() then
-            WorldMapPopupManager:push(Panel_WebControl, true)
+        do
+          if isGameTypeSA() then
+            local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_MSGBOX_COMMON_READY"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+            ;
+            (MessageBox.showMessageBox)(messageBoxData)
+            return false
+          end
+          if isGameTypeKR2() then
+            return false
+          end
+          if Panel_Login == nil then
+            if Panel_WorldMap:GetShow() then
+              WorldMapPopupManager:push(Panel_WebControl, true)
+            else
+              Panel_WebControl:SetShow(true, true)
+            end
           else
             Panel_WebControl:SetShow(true, true)
           end
-        else
-          Panel_WebControl:SetShow(true, true)
+          Panel_WebControl_TakeAndShow(helpType)
+          do return true end
         end
-        Panel_WebControl_TakeAndShow(helpType)
-        do return true end
       end
     end
   end

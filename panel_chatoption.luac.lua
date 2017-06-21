@@ -481,6 +481,12 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         end
       elseif isGameTypeKR2() then
         index = idx
+      elseif isGameTypeSA() then
+        if idx >= 8 then
+          index = idx - 1
+        else
+          index = idx
+        end
       else
         index = idx
       end
@@ -491,7 +497,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       (tempBtn.chatFilter):SetPosX(self.slotStartX + self.slotGapX * col)
       ;
       (tempBtn.chatFilter):SetPosY(self.slotStartY + self.slotGapY * row)
-      -- DECOMPILER ERROR at PC204: Confused about usage of register: R17 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC214: Confused about usage of register: R17 in 'UnsetPending'
 
       btnFilter[idx] = tempBtn
       if eChatButtonType.eChatNotice == idx then
@@ -624,7 +630,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     for idx = 0, self.chatSystemFilterCount - 1 do
       posX = self.slotSystemTypeStartX
       posY = self.slotSystemTypeStartY + idx * self.slotGapY
-      -- DECOMPILER ERROR at PC808: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC818: Confused about usage of register: R14 in 'UnsetPending'
 
       btnSystemFilter[idx] = {}
       if eChatSystemButtonType.eChatSystem == idx then
@@ -676,7 +682,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         _PA_LOG("�\128형욱", "처리되지 않은 eChatSystemButtonType Index : " .. idx)
       end
     end
-    -- DECOMPILER ERROR at PC1173: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1183: Confused about usage of register: R10 in 'UnsetPending'
 
     chatPanel[panelIdex] = true
   end
@@ -977,7 +983,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     rdo_FontSizeBig:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 20 )")
     ChattingOption_InitailizeChattingAnimationControl()
     FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
-    -- DECOMPILER ERROR: 85 unprocessed JMP targets
+    -- DECOMPILER ERROR: 87 unprocessed JMP targets
   end
 end
 

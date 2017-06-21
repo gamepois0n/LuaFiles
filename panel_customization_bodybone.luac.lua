@@ -95,11 +95,13 @@ pushClearGroupCustomizedBonInfoPostFunction(bonInfoPostFunction)
 UpdateBodyHeight = function()
   -- function num : 0_3 , upvalues : selectedClassType, Slider_Height
   applyBodyHeight(selectedClassType, Slider_Height:GetControlPos() * 100)
+  setGlobalCheck(true)
 end
 
 UpdateBodyWeight = function()
   -- function num : 0_4 , upvalues : selectedClassType, Slider_Weight
   applyBodyWeight(selectedClassType, Slider_Weight:GetControlPos() * 100)
+  setGlobalCheck(true)
 end
 
 historyInit = function()
@@ -191,6 +193,7 @@ end
 
 EnableBodySlide = function(enable)
   -- function num : 0_12 , upvalues : StaticText_ScaleX, StaticText_ScaleY, StaticText_ScaleZ, Slider_ScaleX, Slider_ScaleY, Slider_ScaleZ, Slider_Weight, StaticText_Weight, Slider_Height, StaticText_Height
+  globalisCustomizationPicking = enable
   local color = (Defines.Color).C_FF444444
   if enable then
     color = (Defines.Color).C_FFFFFFFF

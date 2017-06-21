@@ -463,7 +463,7 @@ SlotItem.setItem = function(self, itemWrapper, slotNo, equipment)
     local isCash = itemWrapper:isCash()
     local isSoulCollecTor = (itemWrapper:isSoulCollector())
     local soulCount, soulMax = nil, nil
-    if isSoulCollecTor == true then
+    if isSoulCollecTor == true and self.soulComplete ~= nil then
       soulCount = itemWrapper:getSoulCollectorCount()
       soulMax = itemWrapper:getSoulCollectorMaxCount()
       if soulMax <= soulCount then

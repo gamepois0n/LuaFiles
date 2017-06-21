@@ -95,7 +95,7 @@ EventNotifyResponseAuctionInfo = function(goodsType, sendType, tempStr, tempStr2
         if goodsType == (CppEnums.AuctionType).AuctionGoods_Item then
           strGoodsType = PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYAUTHORITY_MESSAGE_16")
           if sendType == 0 then
-            msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MASTERPIECE_AUCTION_START", "itemName", itemName)
+            msg = PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_STARTMSG")
           else
             if sendType == 1 then
               local itemKey = param1

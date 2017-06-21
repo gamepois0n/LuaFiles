@@ -56,14 +56,14 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
     if myGuildInfo ~= nil then
       local hasOccupyTerritory = myGuildInfo:getHasSiegeCount()
-      if not hasOccupyTerritory then
+      if hasOccupyTerritory == 0 then
         local isPossible = false
-        if myGuildInfo:getTerritoryCount() > 0 then
-          for idx = 0, myGuildInfo:getTerritoryCount() - 1 do
-            territoryKey = myGuildInfo:getTerritoryKeyAt(idx)
-            if territoryKey >= 2 then
-              local territoryInfoWrapper = getTerritoryInfoWrapperByIndex(territoryKey)
-              if territoryInfoWrapper ~= nil then
+        if myGuildInfo:getSiegeCount() > 0 then
+          for idx = 0, myGuildInfo:getSiegeCount() - 1 do
+            local regionKey = myGuildInfo:getSiegeKeyAt(idx)
+            if regionKey > 0 then
+              local regionInfoWrapper = getRegionInfoWrapper(regionKey)
+              if regionInfoWrapper ~= nil and regionInfoWrapper:getTerritoryKeyRaw() >= 2 then
                 isPossible = true
                 break
               end

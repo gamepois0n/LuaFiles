@@ -480,6 +480,7 @@ UpdateDecorationSlider = function(sliderIndex)
   setParam(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex], value)
   ;
   (SliderValueArr[luaSliderIndex]):SetText(value)
+  setGlobalCheck(true)
 end
 
 UpdateHairDecorationSlider = function(sliderIndex)
@@ -725,6 +726,7 @@ UpdateEyeDecorationSlider = function(sliderIndex)
   end
   ;
   (SliderValueArr[luaSliderIndex]):SetText(value)
+  setGlobalCheck(true)
 end
 
 EnableDecorationSlide = function(enable)

@@ -188,6 +188,8 @@ local MiniGame_Manual_Cart_0 = function(actorKeyRaw, isSelf)
     ;
     (ui._purposeText2):SetShow(true)
     ;
+    (ui._purposeText2):SetSize(800, 95)
+    ;
     (ui._purposeText2):AddEffect("UI_QustComplete01", false, 0, 0)
     ;
     (ui._purposeText2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_CART_TITLE"))
@@ -207,7 +209,7 @@ local MiniGame_Manual_Cart_0 = function(actorKeyRaw, isSelf)
     (uiPress._m1):SetShow(true)
     ;
     (ui._mBody):SetShow(true)
-    -- DECOMPILER ERROR at PC104: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC110: Confused about usage of register: R2 in 'UnsetPending'
 
     ui_Value.isFirstTime_Manual_Cart_0 = false
   end
@@ -1012,13 +1014,60 @@ local MiniGame_BulletCount_2 = function(actorKeyRaw, isSelf)
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 
+local MiniGame_BulletCount_3 = function()
+  -- function num : 0_38
+  local msg = PAGetString(Defines.StringSheet_GAME, "LUA_RELOADALERT")
+  Proc_ShowMessage_Ack_WithOut_ChattingMessage(msg)
+end
+
 FGlobal_BulletShow = function()
-  -- function num : 0_38 , upvalues : MiniGame_BulletCount_0
+  -- function num : 0_39 , upvalues : MiniGame_BulletCount_0
   MiniGame_BulletCount_0()
 end
 
+local MiniGame_Diving_0 = function()
+  -- function num : 0_40 , upvalues : ui
+  for _,v in pairs(ui) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  Panel_Global_Manual:SetShow(true)
+  ;
+  (ui._purposeText2):SetShow(true)
+  ;
+  (ui._purposeText2):SetSize(800, 70)
+  ;
+  (ui._purposeText2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_DIVING_DESC_0"))
+end
+
+local MiniGame_Diving_1 = function()
+  -- function num : 0_41 , upvalues : ui
+  for _,v in pairs(ui) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  Panel_Global_Manual:SetShow(true)
+  ;
+  (ui._purposeText):SetShow(true)
+  ;
+  (ui._purposeText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_DIVING_DESC_1"))
+end
+
+local MiniGame_Diving_2 = function()
+  -- function num : 0_42 , upvalues : ui
+  for _,v in pairs(ui) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  Panel_Global_Manual:SetShow(true)
+  ;
+  (ui._purposeText):SetShow(true)
+  ;
+  (ui._purposeText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_DIVING_DESC_2"))
+end
+
 local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
-  -- function num : 0_39 , upvalues : uiPress, ui_Value
+  -- function num : 0_43 , upvalues : uiPress, ui_Value
   if isSelf == false then
     return 
   end
@@ -1114,7 +1163,7 @@ local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Instrument_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_40 , upvalues : Panel_Global_Manual_End
+  -- function num : 0_44 , upvalues : Panel_Global_Manual_End
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 
@@ -1150,6 +1199,10 @@ ActionChartEventBindFunction(294, MiniGame_Manual_Instrument_1)
 ActionChartEventBindFunction(350, MiniGame_BulletCount_0)
 ActionChartEventBindFunction(351, MiniGame_BulletCount_1)
 ActionChartEventBindFunction(352, MiniGame_BulletCount_2)
+ActionChartEventBindFunction(353, MiniGame_BulletCount_3)
+ActionChartEventBindFunction(370, MiniGame_Diving_0)
+ActionChartEventBindFunction(371, MiniGame_Diving_1)
+ActionChartEventBindFunction(372, MiniGame_Diving_2)
 ActionChartEventBindFunction(9998, FromAction_CheckedBasic)
 ActionChartEventBindFunction(9999, Panel_Global_Manual_End)
 Global_Manual_Initialize()

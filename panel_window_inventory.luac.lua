@@ -318,6 +318,10 @@ inven.init = function(self)
   ;
   (self.trashArea):addInputEvent("Mouse_LUp", "HandleClicked_Inventory_ItemDelete()")
   ;
+  (self.trashArea):addInputEvent("Mouse_On", "Inventory_TrashToolTip( true )")
+  ;
+  (self.trashArea):addInputEvent("Mouse_Out", "Inventory_TrashToolTip( false )")
+  ;
   (UIScroll.InputEvent)(self._scroll, "Inventory_CashTabScroll")
   ;
   (UIScroll.InputEventByControl)(self.cashScrollArea, "Inventory_CashTabScroll")
@@ -1291,10 +1295,10 @@ Inventory_GroundClick_Message = function(s64_itemCount, slotNo, whereType)
       if isUseNewQuickSlot() then
         FGlobal_SetNewQuickSlot_ByGroundClick(s64_itemCount, slotNo, whereType)
       else
-        local luaDeleteItemMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_DELETEITEM_MSG", "itemName", itemName, "itemCount", tostring(itemCount))
+        local luaDeleteItemMsg = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ONLYTRASH_INVENTORY")
         local luaDelete = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TEXT_DELETE")
         local messageContent = luaDeleteItemMsg
-        local messageboxData = {title = luaDelete, content = messageContent, functionYes = Inventory_Delete_Yes, functionNo = Inventory_Delete_No, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+        local messageboxData = {title = luaDelete, content = messageContent, functionYes = Inventory_Delete_No, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
         ;
         (MessageBox.showMessageBox)(messageboxData)
       end
@@ -1375,6 +1379,7 @@ Inventory_Delete_No = function()
   -- function num : 0_48 , upvalues : deleteWhereType, deleteSlotNo
   deleteWhereType = nil
   deleteSlotNo = nil
+  DragManager:clearInfo()
 end
 
 local inventoryDragNoUseList = nil
@@ -2881,23 +2886,37 @@ Inventory_FilterRadioTooltip_Show = function(isShow, target)
   end
 end
 
+Inventory_TrashToolTip = function(isShow)
+  -- function num : 0_106 , upvalues : inven
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  local self = inven
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TRASH_TOOLTIP_TITLE")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TRASH_TOOLTIP_DESC")
+  control = self.trashArea
+  TooltipSimple_Show(control, name, desc)
+end
+
 local panel_tmpPosX = 0
 local panel_tmpPosY = 0
 Inventory_PosSaveMemory = function()
-  -- function num : 0_106 , upvalues : panel_tmpPosX, panel_tmpPosY
+  -- function num : 0_107 , upvalues : panel_tmpPosX, panel_tmpPosY
   panel_tmpPosX = Panel_Window_Inventory:GetPosX()
   panel_tmpPosY = Panel_Window_Inventory:GetPosY()
 end
 
 Inventory_PosLoadMemory = function()
-  -- function num : 0_107 , upvalues : panel_tmpPosX, panel_tmpPosY
+  -- function num : 0_108 , upvalues : panel_tmpPosX, panel_tmpPosY
   Panel_Window_Inventory:SetPosX(panel_tmpPosX)
   Panel_Window_Inventory:SetPosY(panel_tmpPosY)
 end
 
 Inventory_RePosition()
 Inventory_SetIgnoreMoneyButton = function(setIgnore)
-  -- function num : 0_108 , upvalues : inven
+  -- function num : 0_109 , upvalues : inven
   local self = inven
   if setIgnore == true and not Panel_Window_Warehouse:GetShow() then
     (self.buttonMoney):SetIgnore(true)
@@ -2908,7 +2927,7 @@ Inventory_SetIgnoreMoneyButton = function(setIgnore)
 end
 
 Inventory_ManufactureBTN = function()
-  -- function num : 0_109
+  -- function num : 0_110
   if MiniGame_Manual_Value_FishingStart == true then
     return 
   else
@@ -2934,7 +2953,7 @@ Inventory_ManufactureBTN = function()
 end
 
 FGlobal_RecentCookItemCheck = function(itemKey, itemCount)
-  -- function num : 0_110 , upvalues : inven, isNormalInven
+  -- function num : 0_111 , upvalues : inven, isNormalInven
   local self = inven
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
@@ -2961,7 +2980,7 @@ FGlobal_RecentCookItemCheck = function(itemKey, itemCount)
 end
 
 inventory_FlushRestoreFunc = function()
-  -- function num : 0_111 , upvalues : btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead, btn_DyePalette
+  -- function num : 0_112 , upvalues : btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead, btn_DyePalette
   btn_Manufacture:SetEnable(true)
   btn_Manufacture:SetMonoTone(false)
   btn_AlchemyStone:SetEnable(true)
@@ -2973,7 +2992,7 @@ inventory_FlushRestoreFunc = function()
 end
 
 renderModeChange_inventory_FlushRestoreFunc = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_112 , upvalues : btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead, btn_DyePalette
+  -- function num : 0_113 , upvalues : btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead, btn_DyePalette
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     if isFlushedUI() then
       btn_Manufacture:SetEnable(false)
@@ -2991,7 +3010,7 @@ renderModeChange_inventory_FlushRestoreFunc = function(prevRenderModeList, nextR
 end
 
 Global_GetInventorySlotNoByNotSorted = function(fromSlotNo)
-  -- function num : 0_113 , upvalues : inven
+  -- function num : 0_114 , upvalues : inven
   if fromSlotNo == nil then
     return 
   end
@@ -3001,7 +3020,7 @@ Global_GetInventorySlotNoByNotSorted = function(fromSlotNo)
 end
 
 FGlobal_UpdateInventoryWeight = function()
-  -- function num : 0_114 , upvalues : inven
+  -- function num : 0_115 , upvalues : inven
   local self = inven
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
@@ -3035,7 +3054,7 @@ FGlobal_UpdateInventoryWeight = function()
 end
 
 Inventory_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_115 , upvalues : checkPopUp
+  -- function num : 0_116 , upvalues : checkPopUp
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""

@@ -9,6 +9,7 @@ local UI_color = Defines.Color
 local UI_PLT = CppEnums.CashPurchaseLimitType
 local UI_CCC = CppEnums.CashProductCategory
 local IM = CppEnums.EProcessorInputMode
+local UI_SERVICE_RESOURCE = CppEnums.ServiceResourceType
 Panel_IngameCashShop:SetShow(false, false)
 local renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_InGameCashShop}, false)
 local inGameShop = {
@@ -469,6 +470,18 @@ inGameShop.init = function(self)
       else
         if gameServiceType == 9 or gameServiceType == 10 then
           cashIcon_changeTexture(self._nowCash, contry.kr2)
+          ;
+          (self._btn_BuyPearl):SetShow(false)
+          ;
+          (self._cashBox):SetShow(false)
+          ;
+          (self._nowCash):SetShow(false)
+          ;
+          (self._btn_BuyDaum):SetShow(false)
+          ;
+          (self._btn_RefreshCash):SetShow(false)
+          ;
+          (self._staticText_CashCount):SetShow(false)
         else
           if isGameTypeTaiwan() then
             cashIcon_changeTexture(self._nowCash, contry.tw)
@@ -1694,7 +1707,7 @@ FGlobal_InGameShop_UpdateByBuy = function()
 end
 
 FGlobal_InGameShop_OpenByEventAlarm = function()
-  -- function num : 0_50 , upvalues : isNaver, renderMode, inGameShop, isTaiwanNation, _AllBG
+  -- function num : 0_50 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG
   ToClient_SaveUiInfo(false)
   if isFlushedUI() then
     return 
@@ -1746,6 +1759,14 @@ FGlobal_InGameShop_OpenByEventAlarm = function()
   Panel_IngameCashShop:SetShow(true)
   ;
   (self._scroll_IngameCash):SetShow(false)
+  local SALangType = "pt"
+  if UI_SERVICE_RESOURCE.eServiceResourceType_ES == getGameServiceResType() then
+    SALangType = "es"
+  else
+    if UI_SERVICE_RESOURCE.eServiceResourceType_PT == getGameServiceResType() then
+      SALangType = "pt"
+    end
+  end
   local scrSizeY = getScreenSizeY()
   local categoryUrl = ""
   local promotionUrl = ""
@@ -1772,8 +1793,18 @@ FGlobal_InGameShop_OpenByEventAlarm = function()
           promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_KR2")
           categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_KR2")
         else
-          promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
-          categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+          if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+            promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA_ALPHA", "lang", SALangType)
+            categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA_ALPHA", "lang", SALangType)
+          else
+            if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA", "lang", SALangType)
+              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA", "lang", SALangType)
+            else
+              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
+              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+            end
+          end
         end
       end
     end
@@ -3287,7 +3318,7 @@ end
 end
 
   InGameShop_Open = function()
-  -- function num : 0_90 , upvalues : isNaver, renderMode, inGameShop, isTaiwanNation, _AllBG
+  -- function num : 0_90 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOPOPENALERT_INDEAD"))
     return 
@@ -3359,6 +3390,14 @@ end
   ;
   (self._scroll_IngameCash):SetShow(false)
   local scrSizeY = getScreenSizeY()
+  local SALangType = "pt"
+  if UI_SERVICE_RESOURCE.eServiceResourceType_ES == getGameServiceResType() then
+    SALangType = "es"
+  else
+    if UI_SERVICE_RESOURCE.eServiceResourceType_PT == getGameServiceResType() then
+      SALangType = "pt"
+    end
+  end
   local categoryUrl = ""
   local promotionUrl = ""
   if isServerFixedCharge() then
@@ -3384,8 +3423,18 @@ end
           promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_KR2")
           categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_KR2")
         else
-          promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
-          categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+          if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+            promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA_ALPHA", "lang", SALangType)
+            categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA_ALPHA", "lang", SALangType)
+          else
+            if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA", "lang", SALangType)
+              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA", "lang", SALangType)
+            else
+              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
+              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+            end
+          end
         end
       end
     end

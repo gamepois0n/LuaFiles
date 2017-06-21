@@ -675,6 +675,7 @@ HandleClicked_ChannelSelect = function(selectChannel)
     local channelName = getChannelName(tempChannel._worldNo, tempChannel._serverNo)
     local changeChannelTime = getChannelMoveableRemainTime(curChannelData._worldNo)
     local changeRealChannelTime = convertStringFromDatetime(changeChannelTime)
+    _PA_LOG("�\128규보", "테스�\184 : " .. tostring(changeChannelTime))
     local isSiegeBeing = deadMessage_isSiegeBeingMyChannel()
     local isInSiegeBattle = deadMessage_isInSiegeBattle()
     if isSiegeBeing == true and isInSiegeBattle == false then

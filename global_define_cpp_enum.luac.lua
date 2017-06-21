@@ -494,32 +494,29 @@ CppEnums.QuestWidgetType = {eQuestWidgetType_Simple = 0, eQuestWidgetType_Extend
 -- DECOMPILER ERROR at PC6073: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WorldMapCameraPitchType = {eWorldMapCameraPitchType_Degree30 = 0, eWorldMapCameraPitchType_Default = 1, eWorldMapCameraPitchType_Degree90 = 2, eWorldMapCameraPitchType_Count = 3}
--- DECOMPILER ERROR at PC6101: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6104: Confused about usage of register: R0 in 'UnsetPending'
 
-CppEnums.QuestType = {eQuestType_BlackSpirit = 0, eQuestType_Story = 1, eQuestType_Town = 2, eQuestType_Adventure = 3, eQuestType_Trade = 4, eQuestType_Craft = 5, eQuestType_Repetition = 6, eQuestType_Count = 7}
--- DECOMPILER ERROR at PC6138: Confused about usage of register: R0 in 'UnsetPending'
+CppEnums.QuestType = {eQuestType_BlackSpirit = 0, eQuestType_Story = 1, eQuestType_Town = 2, eQuestType_Adventure = 3, eQuestType_Trade = 4, eQuestType_Craft = 5, eQuestType_Repetition = 6, eQuestType_Guild = 7, eQuestType_Count = 8}
+-- DECOMPILER ERROR at PC6141: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuestRegionType = {eQuestRegionType_None = 0, eQuestRegionType_Balenos = 1, eQuestRegionType_Serendia = 2, eQuestRegionType_NorthCalpheon = 3, eQuestRegionType_CalpheonBigCity = 4, eQuestRegionType_Keplan = 5, eQuestRegionType_SouthWestCalpheon = 6, eQuestRegionType_Media = 7, eQuestRegionType_Valencia = 8, eQuestRegionType_Kamasylvia = 9, eQuestRegionType_Count = 10}
 QuestConditionCheckType = {eQuestConditionCheckType_Complete = 0, eQuestConditionCheckType_Progress = 1, eQuestConditionCheckType_NotAccept = 99}
--- DECOMPILER ERROR at PC6165: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6168: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.UIConvertableType = {eUIConvertableType_none = 0, eUIConvertableType_showTime = 1, eUIConvertableType_always = 2, eUIConvertableType_Count = 3}
--- DECOMPILER ERROR at PC6181: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6184: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ClientSceneState = {eClientSceneStateType_Customization = 0, eClientSceneStateType_InGameCustomization = 1, eClientSceneStateType_InGame = 2, eClientSceneStateType_Customization = 3}
--- DECOMPILER ERROR at PC6200: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6203: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.EnchantDifficulty = {eEnchantDifficulty_None = 0, eEnchantDifficulty_Easy = 1, eEnchantDifficulty_Normal = 2, eEnchantDifficulty_Hard = 3, eEnchantDifficulty_Count = 4}
--- DECOMPILER ERROR at PC6219: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6222: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ProfileInitTermType = {eProfileInitTermType_None = 0, eProfileInitTermType_Day = 1, eProfileInitTermType_Week = 7, eProfileInitTermType_Month = 30, eProfileInitTermType_Maxcount = 4}
--- DECOMPILER ERROR at PC6238: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6241: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ProfileIndex = {eUserProfileValueType_MonsterKillCount = 0, eUserProfileValueType_FishingSuccessCount = 1, eUserProfileValueType_ItemGainCount = 2, eUserProfileValueType_ProductSuccessCount = 3, eUserProfileValueType_Count = 4}
 -- DECOMPILER ERROR at PC6248: Confused about usage of register: R0 in 'UnsetPending'
-
-CppEnums.ConsoleUIControlType = {eConsoleUIControlType_ITEM = 0, eConsoleUIControlType_TAB = 1}
--- DECOMPILER ERROR at PC6255: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.GuildBenefit = {eMaxContractedBenefit = 5000000}
 getNameSize = function()

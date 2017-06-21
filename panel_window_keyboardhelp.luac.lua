@@ -5,8 +5,15 @@
 -- function num : 0
 Panel_KeyboardHelp:SetShow(false, false)
 local keyboardHelp = {btn_XClose = (UI.getChildControl)(Panel_KeyboardHelp, "Button_Close"), btn_Close = (UI.getChildControl)(Panel_KeyboardHelp, "Button_CloseWindow"), btn_Help = (UI.getChildControl)(Panel_KeyboardHelp, "Button_Help")}
+KeyBoardHelp_Init = function()
+  -- function num : 0_0 , upvalues : keyboardHelp
+  if isGameTypeKR2() then
+    (keyboardHelp.btn_Help):SetShow(false)
+  end
+end
+
 KeyboardHelpShow = function()
-  -- function num : 0_0
+  -- function num : 0_1
   if Panel_KeyboardHelp:GetShow() then
     return 
   end
@@ -15,7 +22,7 @@ KeyboardHelpShow = function()
 end
 
 FGlobal_KeyboardHelpShow = function()
-  -- function num : 0_1
+  -- function num : 0_2
   if Panel_KeyboardHelp:IsShow() then
     Panel_KeyboardHelp:SetShow(false)
     return false
@@ -27,12 +34,12 @@ FGlobal_KeyboardHelpShow = function()
 end
 
 KeyboardHelpHide = function()
-  -- function num : 0_2
+  -- function num : 0_3
   Panel_KeyboardHelp:SetShow(false)
 end
 
 keyboardHelp.registEventHandler = function(self)
-  -- function num : 0_3
+  -- function num : 0_4
   (self.btn_Close):addInputEvent("Mouse_LUp", "KeyboardHelpHide()")
   ;
   (self.btn_XClose):addInputEvent("Mouse_LUp", "KeyboardHelpHide()")
@@ -40,5 +47,6 @@ keyboardHelp.registEventHandler = function(self)
   (self.btn_Help):addInputEvent("Mouse_LUp", "FGlobal_Panel_WebHelper_ShowToggle()")
 end
 
+KeyBoardHelp_Init()
 keyboardHelp:registEventHandler()
 

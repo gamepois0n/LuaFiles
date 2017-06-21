@@ -1792,7 +1792,7 @@ PaGlobal_CheckedQuest.setQuestCondition = function(self, idx, uiQuestInfo, quest
         uiCompleteNpc:SetShow(true)
         uiCompleteNpc:SetLineRender(true)
         uiCompleteNpc:SetIgnore(true)
-        FGlobal_ChangeOnTextureForDialogQuestIcon(uiQuestIcon, 7)
+        FGlobal_ChangeOnTextureForDialogQuestIcon(uiQuestIcon, 8)
         if isSingle == false then
           uiGroupInfomation:SetFontColor(UI_color.C_FFF26A6A)
         end

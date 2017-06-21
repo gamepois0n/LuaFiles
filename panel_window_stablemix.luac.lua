@@ -12,12 +12,9 @@ local UI_WHERETYPE = CppEnums.ItemWhereType
 local UI_TM = CppEnums.TextMode
 local isContentsStallionEnable = ToClient_IsContentsGroupOpen("243")
 local isContentsNineTierEnable = ToClient_IsContentsGroupOpen("80")
-local stableMix = {_staticIcon1 = (UI.getChildControl)(Panel_Window_StableMix, "Static_ServantIcon_1"), _staticIcon2 = (UI.getChildControl)(Panel_Window_StableMix, "Static_ServantIcon_2"), _staticInfo1 = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Info1"), _staticInfo2 = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Info2"), _iconStallion1 = (UI.getChildControl)(Panel_Window_StableMix, "Static_iconStallion1"), _iconStallion2 = (UI.getChildControl)(Panel_Window_StableMix, "Static_iconStallion2"), _staticNotify = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Notify"), _editName = (UI.getChildControl)(Panel_Window_StableMix, "Edit_Naming"), _buttonMix = (UI.getChildControl)(Panel_Window_StableMix, "Button_Mix"), _buttonCancel = (UI.getChildControl)(Panel_Window_StableMix, "Button_Cancel"), _buttonClose = (UI.getChildControl)(Panel_Window_StableMix, "Button_Close"), _staticPrice = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Price"), _chkInven = (UI.getChildControl)(Panel_Window_StableMix, "RadioButton_Icon_Money"), _chkWare = (UI.getChildControl)(Panel_Window_StableMix, "RadioButton_Icon_Money2"), _invenMoney = (UI.getChildControl)(Panel_Window_StableMix, "Static_Text_Money"), _wareMoney = (UI.getChildControl)(Panel_Window_StableMix, "Static_Text_Money2"), _slotNo1 = nil, _slotNo2 = nil}
+local stableMix = {_staticIcon1 = (UI.getChildControl)(Panel_Window_StableMix, "Static_ServantIcon_1"), _staticIcon2 = (UI.getChildControl)(Panel_Window_StableMix, "Static_ServantIcon_2"), _staticInfo1 = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Info1"), _staticInfo2 = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Info2"), _iconStallion1 = (UI.getChildControl)(Panel_Window_StableMix, "Static_iconStallion1"), _iconStallion2 = (UI.getChildControl)(Panel_Window_StableMix, "Static_iconStallion2"), _staticNotify = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Notify"), _editName = (UI.getChildControl)(Panel_Window_StableMix, "Edit_Naming"), _buttonMix = (UI.getChildControl)(Panel_Window_StableMix, "Button_Mix"), _buttonCancel = (UI.getChildControl)(Panel_Window_StableMix, "Button_Cancel"), _buttonClose = (UI.getChildControl)(Panel_Window_StableMix, "Button_Close"), _staticPrice = (UI.getChildControl)(Panel_Window_StableMix, "StaticText_Price"), _chkInven = (UI.getChildControl)(Panel_Window_StableMix, "RadioButton_Icon_Money"), _chkWare = (UI.getChildControl)(Panel_Window_StableMix, "RadioButton_Icon_Money2"), _invenMoney = (UI.getChildControl)(Panel_Window_StableMix, "Static_Text_Money"), _wareMoney = (UI.getChildControl)(Panel_Window_StableMix, "Static_Text_Money2"), _servantNo1 = nil, _servantNo2 = nil}
 stableMix.init = function(self)
   -- function num : 0_0 , upvalues : UI_TM
-  self._slotNo1 = nil
-  self._slotNo2 = nil
-  ;
   (self._staticInfo1):SetText("")
   ;
   (self._staticInfo2):SetText("")
@@ -62,8 +59,8 @@ stableMix.update = function(self)
   ;
   (self._iconStallion2):SetShow(false)
   local matingServantPrice = getServantSelfMatingPrice()
-  if self._slotNo1 ~= nil then
-    local servantInfo1 = stable_getServant(self._slotNo1)
+  if self._servantNo1 ~= nil then
+    local servantInfo1 = stable_getServantByServantNo(self._servantNo1)
     if servantInfo1 ~= nil then
       (self._staticIcon1):ChangeTextureInfoName(servantInfo1:getIconPath1())
       if isContentsStallionEnable then
@@ -84,8 +81,8 @@ stableMix.update = function(self)
           (self._staticInfo1):SetShow(true)
           ;
           (self._staticIcon1):SetShow(true)
-          if self._slotNo2 ~= nil then
-            local servantInfo2 = stable_getServant(self._slotNo2)
+          if self._servantNo2 ~= nil then
+            local servantInfo2 = stable_getServantByServantNo(self._servantNo2)
             if servantInfo2 ~= nil then
               (self._staticIcon2):ChangeTextureInfoName(servantInfo2:getIconPath1())
               if isContentsStallionEnable then
@@ -106,12 +103,12 @@ stableMix.update = function(self)
                   (self._staticInfo2):SetShow(true)
                   ;
                   (self._staticIcon2):SetShow(true)
-                  if self._slotNo1 ~= nil or self._slotNo2 ~= nil then
+                  if self._servantNo1 ~= nil or self._servantNo2 ~= nil then
                     (self._staticNotify):SetShow(true)
                     ;
                     (self._editName):SetShow(false)
                   end
-                  if self._slotNo1 ~= nil and self._slotNo2 ~= nil then
+                  if self._servantNo1 ~= nil and self._servantNo2 ~= nil then
                     (self._staticNotify):SetShow(false)
                     ;
                     (self._staticPrice):SetShow(true)
@@ -172,7 +169,7 @@ StableMix_Mix = function()
     return 
   end
   do
-    if self._slotNo1 == nil or self._slotNo2 == nil then
+    if self._servantNo1 == nil or self._servantNo2 == nil then
       return 
     end
     local whereType = UI_WHERETYPE.eInventory
@@ -183,7 +180,7 @@ StableMix_Mix = function()
     else
       whereType = UI_WHERETYPE.eWarehouse
     end
-    stable_mix(self._slotNo1, self._slotNo2, whereType, name)
+    stable_mix(self._servantNo1, self._servantNo2, whereType, name)
   end
 
     local messageBoxMemo = ""
@@ -204,7 +201,7 @@ stableMix_ClearSlot = function(slotType)
   -- function num : 0_5 , upvalues : stableMix
   local self = stableMix
   if slotType == 1 then
-    self._slotNo1 = nil
+    self._servantNo1 = nil
     ;
     (self._staticPrice):SetShow(false)
     ;
@@ -212,7 +209,7 @@ stableMix_ClearSlot = function(slotType)
     ;
     (self._staticNotify):SetShow(true)
   else
-    self._slotNo2 = nil
+    self._servantNo2 = nil
     ;
     (self._staticPrice):SetShow(false)
     ;
@@ -235,9 +232,9 @@ StableMix_Set = function(slotNo)
     return 
   end
   if servantInfo:isMale() then
-    self._slotNo1 = slotNo
+    self._servantNo1 = servantInfo:getServantNo()
   else
-    self._slotNo2 = slotNo
+    self._servantNo2 = servantInfo:getServantNo()
   end
   self:update()
 end

@@ -95,7 +95,7 @@ local _btn_VoiceVol = (UI.getChildControl)(frame_Sound._slide_VoiceVol, "Slider_
 local _btn_hitFxVolume = (UI.getChildControl)(frame_Sound._slide_hitFxVolume, "Slider_VoiceVolume_Button")
 local _btn_hitFxWeightVolume = (UI.getChildControl)(frame_Sound._slide_hitFxWeightVolume, "Slider_VoiceVolume_Button")
 local _btn_otherPlayerVolume = (UI.getChildControl)(frame_Sound._slide_otherPlayerVolume, "Slider_VoiceVolume_Button")
-local frame_Game = {_btn_ShowTag = (UI.getChildControl)(_frameContent_Game, "Checkbox_ShowCharTag"), _btn_AutoAim = (UI.getChildControl)(_frameContent_Game, "CheckButton_AutoAim"), _btn_RejectInvitation = (UI.getChildControl)(_frameContent_Game, "Checkbox_RejectInvitation"), _btn_HideWindow = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideUIWindow"), _btn_EnableSimpleUI = (UI.getChildControl)(_frameContent_Game, "Checkbox_SimpleUI"), _btn_SpiritGuide = (UI.getChildControl)(_frameContent_Game, "Checkbox_SpiritGuide"), _btn_MouseMove = (UI.getChildControl)(_frameContent_Game, "CheckBox_MoveMouse"), _btn_MiniMapRotation = (UI.getChildControl)(_frameContent_Game, "CheckBox_Minimap"), _btn_ShowAttackEffect = (UI.getChildControl)(_frameContent_Game, "CheckBox_ShowAttackEffect"), _btn_Alert_BlackSpirit = (UI.getChildControl)(_frameContent_Game, "CheckButton_BlackSpirit_Alert"), _btn_UseNewQuickSlot = (UI.getChildControl)(_frameContent_Game, "CheckButton_NewQuickSlot"), _btn_UseChattingFilter = (UI.getChildControl)(_frameContent_Game, "CheckButton_UseChattingFilter"), _btn_IsOnScreenSaver = (UI.getChildControl)(_frameContent_Game, "CheckButton_ScreenSaver"), _btn_UIModeMouseLock = (UI.getChildControl)(_frameContent_Game, "CheckButton_UIModeMouseLock"), _btn_PvpRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_PvpRefuse"), _btn_ExchangeRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_ExchangeRefuse"), _btn_HideMast = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideMast"), _btn_ShowCashAlert = (UI.getChildControl)(_frameContent_Game, "CheckButton_ShowCashAlert"), _btn_EnableOVR = (UI.getChildControl)(_frameContent_Game, "Checkbox_SupportOculus"), _btn_MouseX = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseX"), _btn_MouseY = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseY"), _btn_UsePad = (UI.getChildControl)(_frameContent_Game, "Checkbox_UsePad"), _btn_UseVibe = (UI.getChildControl)(_frameContent_Game, "Checkbox_UseVibe"), _btn_PadX = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadX"), _btn_PadY = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadY"), _btn_SelfNameShowAllways = (UI.getChildControl)(_frameContent_Game, "CheckButton_SelfPlayer"), _btn_SelfNameShowNoShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_MyCharacterNickNameShow"), _btn_SelfNameShowImportant = (UI.getChildControl)(_frameContent_Game, "Checkbox_AttackNameShow"), _btn_PetAll = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualAll"), _btn_PetMine = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualMine"), _btn_PetHide = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualHide"), _title_FontResize = (UI.getChildControl)(_frameContent_Game, "StaticText_FontResize"), _btn_FontResizeDefault = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeDefault"), _btn_FontResizeBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeBig"), _btn_FontResizeMoreBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeMoreBig"), _btn_NavGuideNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideNone"), _btn_NavGuideArrow = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideArrow"), _btn_NavGuideEffect = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideEffect"), _btn_NavGuideFairy = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideFairy"), _btn_WorldMapOpenByWestMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByWestMaintain"), _btn_WorldMapOpenByCharacterToWest = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterToWest"), _btn_WorldMapOpenByCharacterMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterMaintain"), _btn_WorldMapOpenByNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByNone"), _btn_WorldMapCameraAngle = (UI.getChildControl)(_frameContent_Game, "StaticText_WorldMapOpenAngle"), _btn_WorldMapCameraDefaultAngle = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDefaultAngle"), _btn_WorldMapCameraDegree30 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree30"), _btn_WorldMapCameraDegree90 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree90"), _btn_OtherNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_AnotherCharacterNickNameShow"), _btn_PartyNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyNickName"), _btn_GuildNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_GuildAndClanCharacterNickName"), _btn_GuideLineHumanRelation = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_HumanRelation"), _btn_GuideLineQuestObject = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_QuestObjectLine"), _btn_GuideLineZoneChange = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_ZoneChange"), _btn_GuideLineWarAlly = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_WarAlly"), _btn_GuideLineGuild = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Guild"), _btn_GuideLineParty = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Party"), _btn_GuideLineEnemy = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Enemy"), _btn_GuideLineNonWarPlayer = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_NonWarPlayer"), _btn_GuideLinePartyEffect = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyAttackEffect"), _btn_Alert_Region = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_Region"), _btn_Alert_TerritoryTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryTrade"), _btn_Alert_RoyalTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_RoyalTrade"), _btn_Alert_Fitness = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_FitnessLevelUp"), _btn_Alert_TerritoryWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryWar"), _btn_Alert_GuildWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildWarStart"), _btn_Alert_PlayerGotItem = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_AnotherPlayerGotItem"), _btn_Alert_ItemMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ItemMarket"), _btn_Alert_LifeLevUp = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_LifeLevUp"), _btn_Alert_GuildQuest = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildQuest"), _btn_Alert_NearMonster = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_NearMonster"), _btn_Alert_ServantMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ServantMarket"), _btn_GuildLogin = (UI.getChildControl)(_frameContent_Game, "CheckButton_GuildLogin"), _txt_MouXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseXSen"), _slide_MouXSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseXSenControl"), _txt_MouYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseYSen"), _slide_MouYSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseYSenControl"), _txt_PadXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen"), _slide_PadXSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadXSenControl"), _txt_PadYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen"), _slide_PadYSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadYSenControl"), _btn_Reset = (UI.getChildControl)(_frameContent_Game, "Button_Reset")}
+local frame_Game = {_btn_ShowTag = (UI.getChildControl)(_frameContent_Game, "Checkbox_ShowCharTag"), _btn_AutoAim = (UI.getChildControl)(_frameContent_Game, "CheckButton_AutoAim"), _btn_RejectInvitation = (UI.getChildControl)(_frameContent_Game, "Checkbox_RejectInvitation"), _btn_HideWindow = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideUIWindow"), _btn_EnableSimpleUI = (UI.getChildControl)(_frameContent_Game, "Checkbox_SimpleUI"), _btn_SpiritGuide = (UI.getChildControl)(_frameContent_Game, "Checkbox_SpiritGuide"), _btn_MouseMove = (UI.getChildControl)(_frameContent_Game, "CheckBox_MoveMouse"), _btn_MiniMapRotation = (UI.getChildControl)(_frameContent_Game, "CheckBox_Minimap"), _btn_ShowAttackEffect = (UI.getChildControl)(_frameContent_Game, "CheckBox_ShowAttackEffect"), _btn_Alert_BlackSpirit = (UI.getChildControl)(_frameContent_Game, "CheckButton_BlackSpirit_Alert"), _btn_UseNewQuickSlot = (UI.getChildControl)(_frameContent_Game, "CheckButton_NewQuickSlot"), _btn_UseChattingFilter = (UI.getChildControl)(_frameContent_Game, "CheckButton_UseChattingFilter"), _btn_IsOnScreenSaver = (UI.getChildControl)(_frameContent_Game, "CheckButton_ScreenSaver"), _btn_UIModeMouseLock = (UI.getChildControl)(_frameContent_Game, "CheckButton_UIModeMouseLock"), _btn_PvpRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_PvpRefuse"), _btn_ExchangeRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_ExchangeRefuse"), _btn_HideMast = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideMast"), _btn_ShowCashAlert = (UI.getChildControl)(_frameContent_Game, "CheckButton_ShowCashAlert"), _btn_EnableOVR = (UI.getChildControl)(_frameContent_Game, "Checkbox_SupportOculus"), _btn_MouseX = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseX"), _btn_MouseY = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseY"), _txt_Pad_Title = (UI.getChildControl)(_frameContent_Game, "StaticText_GamePadSet"), _btn_UsePad = (UI.getChildControl)(_frameContent_Game, "Checkbox_UsePad"), _btn_UseVibe = (UI.getChildControl)(_frameContent_Game, "Checkbox_UseVibe"), _btn_PadX = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadX"), _btn_PadY = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadY"), _btn_SelfNameShowAllways = (UI.getChildControl)(_frameContent_Game, "CheckButton_SelfPlayer"), _btn_SelfNameShowNoShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_MyCharacterNickNameShow"), _btn_SelfNameShowImportant = (UI.getChildControl)(_frameContent_Game, "Checkbox_AttackNameShow"), _btn_PetAll = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualAll"), _btn_PetMine = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualMine"), _btn_PetHide = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualHide"), _title_FontResize = (UI.getChildControl)(_frameContent_Game, "StaticText_FontResize"), _btn_FontResizeDefault = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeDefault"), _btn_FontResizeBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeBig"), _btn_FontResizeMoreBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeMoreBig"), _btn_NavGuideNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideNone"), _btn_NavGuideArrow = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideArrow"), _btn_NavGuideEffect = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideEffect"), _btn_NavGuideFairy = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideFairy"), _btn_WorldMapOpenByWestMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByWestMaintain"), _btn_WorldMapOpenByCharacterToWest = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterToWest"), _btn_WorldMapOpenByCharacterMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterMaintain"), _btn_WorldMapOpenByNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByNone"), _btn_WorldMapCameraAngle = (UI.getChildControl)(_frameContent_Game, "StaticText_WorldMapOpenAngle"), _btn_WorldMapCameraDefaultAngle = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDefaultAngle"), _btn_WorldMapCameraDegree30 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree30"), _btn_WorldMapCameraDegree90 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree90"), _btn_OtherNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_AnotherCharacterNickNameShow"), _btn_PartyNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyNickName"), _btn_GuildNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_GuildAndClanCharacterNickName"), _btn_GuideLineHumanRelation = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_HumanRelation"), _btn_GuideLineQuestObject = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_QuestObjectLine"), _btn_GuideLineZoneChange = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_ZoneChange"), _btn_GuideLineWarAlly = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_WarAlly"), _btn_GuideLineGuild = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Guild"), _btn_GuideLineParty = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Party"), _btn_GuideLineEnemy = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Enemy"), _btn_GuideLineNonWarPlayer = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_NonWarPlayer"), _btn_GuideLinePartyEffect = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyAttackEffect"), _btn_Alert_Region = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_Region"), _btn_Alert_TerritoryTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryTrade"), _btn_Alert_RoyalTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_RoyalTrade"), _btn_Alert_Fitness = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_FitnessLevelUp"), _btn_Alert_TerritoryWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryWar"), _btn_Alert_GuildWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildWarStart"), _btn_Alert_PlayerGotItem = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_AnotherPlayerGotItem"), _btn_Alert_ItemMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ItemMarket"), _btn_Alert_LifeLevUp = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_LifeLevUp"), _btn_Alert_GuildQuest = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildQuest"), _btn_Alert_NearMonster = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_NearMonster"), _btn_Alert_ServantMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ServantMarket"), _btn_GuildLogin = (UI.getChildControl)(_frameContent_Game, "CheckButton_GuildLogin"), _txt_MouXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseXSen"), _slide_MouXSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseXSenControl"), _txt_MouYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseYSen"), _slide_MouYSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseYSenControl"), _txt_X_0 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen_0"), _txt_X_50 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen_50"), _txt_X_100 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen_100"), _txt_PadXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen"), _slide_PadXSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadXSenControl"), _txt_Y_0 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen_0"), _txt_Y_50 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen_50"), _txt_Y_100 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen_100"), _txt_PadYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen"), _slide_PadYSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadYSenControl"), _btn_Reset = (UI.getChildControl)(_frameContent_Game, "Button_Reset")}
 local randerPlayerColorStr = {zoneChange = "ZoneChange", warAlly = "WarAlly", guild = "Guild", party = "Party", enemy = "Enemy", nonWarPlayer = "NonWarPlayer"}
 value_GameOption_Check_ComboGuide = frame_Game._btn_SpiritGuide
 value_GameOption_Check_ComboGuide:SetCheck(true)
@@ -1200,7 +1200,38 @@ Panel_GameOption_Initialize = function()
     ;
     (frame_Game._btn_FontResizeMoreBig):SetShow(false)
   end
-  if isDev == true or isUsePcExchangeInLocalizingValue() == true then
+  if isGameTypeKR2() then
+    (frame_Game._txt_PadXSen):SetShow(false)
+    ;
+    (frame_Game._slide_PadXSen):SetShow(false)
+    ;
+    (frame_Game._txt_PadYSen):SetShow(false)
+    ;
+    (frame_Game._slide_PadYSen):SetShow(false)
+    ;
+    (frame_Game._btn_UsePad):SetShow(false)
+    ;
+    (frame_Game._btn_UseVibe):SetShow(false)
+    ;
+    (frame_Game._btn_PadX):SetShow(false)
+    ;
+    (frame_Game._btn_PadY):SetShow(false)
+    ;
+    (frame_Game._txt_X_0):SetShow(false)
+    ;
+    (frame_Game._txt_X_50):SetShow(false)
+    ;
+    (frame_Game._txt_X_100):SetShow(false)
+    ;
+    (frame_Game._txt_Y_0):SetShow(false)
+    ;
+    (frame_Game._txt_Y_50):SetShow(false)
+    ;
+    (frame_Game._txt_Y_100):SetShow(false)
+    ;
+    (frame_Game._txt_Pad_Title):SetShow(false)
+  end
+  if true == isDev or true == isUsePcExchangeInLocalizingValue() then
     (frame_Game._btn_ExchangeRefuse):SetShow(true)
   else
     ;
@@ -1566,7 +1597,11 @@ optionCommentary = function()
       else
         if (gamePanel_Main._btn_KeyConfig):IsCheck() then
           _static_KeySetBG:SetShow(true)
-          _static_PadSetBG:SetShow(true)
+          if isGameTypeKR2() then
+            _static_PadSetBG:SetShow(false)
+          else
+            _static_PadSetBG:SetShow(true)
+          end
           _static_ResetKeyConfig:SetShow(true)
           _static_KeySetTitle:SetShow(true)
           ;
@@ -1578,7 +1613,11 @@ optionCommentary = function()
         else
           if (gamePanel_Main._btn_KeyConfig_UI):IsCheck() then
             _static_KeySetBG_UI:SetShow(true)
-            _static_PadSetBG_UI:SetShow(true)
+            if isGameTypeKR2() then
+              _static_PadSetBG_UI:SetShow(false)
+            else
+              _static_PadSetBG_UI:SetShow(true)
+            end
             _static_ResetKeyConfig_UI:SetShow(true)
             _static_ResetPositionConfig_UI:SetShow(false)
             _static_KeySetTitle_UI:SetShow(true)
@@ -3141,8 +3180,12 @@ Option_Init_KeyConfig = function()
       CopyBaseProperty(frame_Key._button_Pad_Func2, BUTTON_PAD[ii])
       ;
       (BUTTON_PAD[ii]):addInputEvent("Mouse_LUp", "KeyCustom_Action_ButtonPushed_Pad(" .. ii .. ")")
-      ;
-      (BUTTON_PAD[ii]):SetShow(true)
+      if isGameTypeKR2() then
+        (BUTTON_PAD[ii]):SetShow(false)
+      else
+        ;
+        (BUTTON_PAD[ii]):SetShow(true)
+      end
     end
     ;
     (STATIC_INPUT_TITLE[ii]):SetPosY(titleStaticPosY)
@@ -3217,8 +3260,12 @@ Option_Init_KeyConfig_UI = function()
         CopyBaseProperty(frame_Key_UI._button_Pad_Func1, BUTTON_PAD_UI[ii])
         ;
         (BUTTON_PAD_UI[ii]):addInputEvent("Mouse_LUp", "KeyCustom_UI_ButtonPushed_Pad(" .. ii .. ")")
-        ;
-        (BUTTON_PAD_UI[ii]):SetShow(true)
+        if isGameTypeKR2() then
+          (BUTTON_PAD_UI[ii]):SetShow(false)
+        else
+          ;
+          (BUTTON_PAD_UI[ii]):SetShow(true)
+        end
       end
       ;
       (STATIC_INPUT_TITLE_UI[ii]):SetPosY(titleStaticPosY)

@@ -370,7 +370,7 @@ PaGlobal_LatestQuest.setConditions = function(self, index, PosY, uiQuestInfo)
           end
           ;
           (questEntry._uiCompleteNpc):SetPosY(PosY)
-          FGlobal_ChangeOnTextureForDialogQuestIcon(questEntry._uiQuestIcon, 7)
+          FGlobal_ChangeOnTextureForDialogQuestIcon(questEntry._uiQuestIcon, 8)
           PosY = PosY + (questEntry._uiCompleteNpc):GetSizeY() + 3
           FGlobal_QuestWidget_AutoReleaseNavi(uiQuestInfo)
           return PosY

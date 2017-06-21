@@ -250,8 +250,7 @@ FGlobal_WorldMapOpenForMenu = function()
   Panel_WorldMap:SetShow(true, false)
   Panel_Worldmap_MovieGuide_Init()
   if isGameTypeKR2() then
-    HelpMenu_Btn:SetIgnore(true)
-    HelpMenu_Btn:SetMonoTone(true)
+    HelpMenu_Btn:SetShow(false)
   end
 end
 

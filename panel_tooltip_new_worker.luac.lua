@@ -525,16 +525,18 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, uiBase, isRight, 
       else
         posX = posX - tooltipSizeX - 5
       end
-      if scrnSizeY - posY - parentSizeY < posY then
-        posY = posY - tooltipSizeY + parentSizeY + 5
-      else
-        posY = posY - 5
-      end
-      if scrnSizeY < posY + tooltipSizeY then
-        posY = scrnSizeY - tooltipSizeY - 5
-      else
-        if posY < 0 then
-          posY = 5
+      if uiBase:IsUISubApp() then
+        if scrnSizeY - posY - parentSizeY < posY then
+          posY = posY - tooltipSizeY + parentSizeY + 5
+        else
+          posY = posY - 5
+        end
+        if scrnSizeY < posY + tooltipSizeY then
+          posY = scrnSizeY - tooltipSizeY - 5
+        else
+          if posY < 0 then
+            posY = 5
+          end
         end
       end
       Panel_Worker_Tooltip:SetPosX(posX)

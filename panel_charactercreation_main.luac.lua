@@ -70,6 +70,8 @@ local CheckButton_ImagePreset_Title = (UI.getChildControl)(Panel_CustomizationSt
 local Button_ScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ScreenShot")
 local Button_ScreenShotFolder_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ScreenShotFolder")
 local Button_ProfileScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ProfileScreenShot")
+local customization_HistoryBG = (UI.getChildControl)(Panel_CustomizationStatic, "Static_HistoryBG")
+customization_HistoryBG:SetShow(isGameServiceTypeDev())
 local isShowScreenShot = true
 Button_ScreenShot:SetShow(isShowScreenShot)
 Button_ScreenShotFolder:SetShow(isShowScreenShot)
@@ -696,7 +698,7 @@ end
 end
 
           CustomizationStatic_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_21 , upvalues : doScreenShot, timerForSS, _takeScreenShot, screenShotButtonUse, screenShotTime, screenShotReady, doScreenShotSub, subTime, StaticText_CustomizationMessage, isShow_CustomizationMessage, Button_CustomHistoryDo, isShow_HistoryButton, Button_CustomHistoryUnDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface
+  -- function num : 0_21 , upvalues : doScreenShot, timerForSS, _takeScreenShot, screenShotButtonUse, screenShotTime, screenShotReady, doScreenShotSub, subTime, StaticText_CustomizationMessage, isShow_CustomizationMessage, Button_CustomHistoryDo, isShow_HistoryButton, Button_CustomHistoryUnDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface, Edit_CharName
   if doScreenShot then
     if timerForSS > 0.3 then
       timerForSS = 0
@@ -759,11 +761,23 @@ end
       end
     end
   end
+  -- DECOMPILER ERROR at PC165: Unhandled construct in 'MakeBoolean' P1
+
+  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_RIGHT) and Edit_CharName:GetFocusEdit() == false and FileExplorer_getTextFocusEdit() == false then
+    customHistoryDo()
+  end
+  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_LEFT) and Edit_CharName:GetFocusEdit() == false and FileExplorer_getTextFocusEdit() == false then
+    customHistoryUnDo()
+  end
+  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_LBUTTON) and globalcheckSlider == true then
+    add_CurrentHistory()
+    globalcheckSlider = false
+  end
 end
 
           Panel_CustomizationStatic:RegisterUpdateFunc("CustomizationStatic_UpdatePerFrame")
           MainPanel_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_22 , upvalues : initialized, mainButtonNum, mainButtonInfo, isSubEffectPlay, timer
+  -- function num : 0_22 , upvalues : initialized, mainButtonNum, mainButtonInfo, Edit_CharName, isSubEffectPlay, timer
   if initialized == true then
     for index = 1, mainButtonNum do
       if index ~= 3 then
@@ -786,12 +800,25 @@ end
     end
   end
   do
-    if isSubEffectPlay == false then
-      if timer > 0.2 then
-        isSubEffectPlay = true
-        timer = 0
-      else
-        timer = timer + deltaTime
+    if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_LBUTTON) then
+      local mouseposx = getMousePosX()
+      local mouseposy = getMousePosY()
+      local widthmax = Edit_CharName:GetPosX() + Edit_CharName:GetSizeX() / 2
+      local widthmix = Edit_CharName:GetPosX() - Edit_CharName:GetSizeX() / 2
+      local heightmax = Edit_CharName:GetPosY() + Edit_CharName:GetSizeY() / 2
+      local heightmin = Edit_CharName:GetPosY() - Edit_CharName:GetSizeY() / 2
+      if ((mouseposx >= widthmix and widthmax >= mouseposx) or (mouseposy >= heightmin and heightmax >= mouseposy) or Edit_CharName:GetFocusEdit()) then
+        ClearFocusEdit()
+      end
+    end
+    do
+      if isSubEffectPlay == false then
+        if timer > 0.2 then
+          isSubEffectPlay = true
+          timer = 0
+        else
+          timer = timer + deltaTime
+        end
       end
     end
   end
@@ -1666,6 +1693,32 @@ end
   SkinHistoryApplyUpdate()
 end
 
+          FromClient_customzationGamePadInput = function(currentScene, moveScene)
+  -- function num : 0_74
+  if (CppEnums.CountryType).DEV == getGameServiceType() then
+    _PA_LOG("광운", "currentScene : " .. tostring(currentScene))
+    _PA_LOG("광운", "currentScene : " .. tostring(moveScene))
+  end
+  -- DECOMPILER ERROR at PC36: Unhandled construct in 'MakeBoolean' P1
+
+  if currentScene == 1 and (moveScene ~= true or moveScene == false) then
+    if currentScene == 2 then
+      if moveScene == true then
+        changeCreateCharacterMode()
+      else
+        if moveScene == false then
+          Panel_CharacterCreateCancel()
+        end
+      end
+    else
+    end
+  end
+  if currentScene == 3 and (moveScene ~= true or moveScene == false) then
+    HandleClicked_CustomizationMain_SelectClass()
+  end
+end
+
+          registerEvent("FromClient_customzationGamePadInput", "FromClient_customzationGamePadInput")
         end
       end
     end

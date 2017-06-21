@@ -356,7 +356,7 @@ PaGlobal_MainQuest.setConditionInfo = function(self, uiQuestInfo, startPosY)
           (self._uiQuestCompleteNpc):SetFontColor((Defines.Color).C_FFF26A6A)
           ;
           (self._uiQuestCompleteNpc):SetShow(true)
-          FGlobal_ChangeOnTextureForDialogQuestIcon(self._uiQuestTypeIcon, 7)
+          FGlobal_ChangeOnTextureForDialogQuestIcon(self._uiQuestTypeIcon, 8)
           startPosY = startPosY + (self._uiQuestCompleteNpc):GetSizeY() + 2
           FGlobal_QuestWidget_AutoReleaseNavi(uiQuestInfo)
         end

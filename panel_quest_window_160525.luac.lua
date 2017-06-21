@@ -86,8 +86,8 @@ local regionString = {[QuestRegionType.eQuestRegionType_None] = PAGetString(Defi
 local regionOpen = {[QuestRegionType.eQuestRegionType_None] = true, [QuestRegionType.eQuestRegionType_Balenos] = true, [QuestRegionType.eQuestRegionType_Serendia] = true, [QuestRegionType.eQuestRegionType_NorthCalpheon] = true, [QuestRegionType.eQuestRegionType_CalpheonBigCity] = true, [QuestRegionType.eQuestRegionType_Keplan] = true, [QuestRegionType.eQuestRegionType_SouthWestCalpheon] = true, [QuestRegionType.eQuestRegionType_Media] = true, [QuestRegionType.eQuestRegionType_Valencia] = true, [QuestRegionType.eQuestRegionType_Kamasylvia] = true, [QuestRegionType.eQuestRegionType_Count] = false}
 local questType = {black = 0, story = 1, town = 2, adv = 3, trade = 4, craft = 5, rep = 6, count = 7}
 local questSelectType = {story = 0, hunt = 1, life = 2, fish = 3, adv = 4, etc = 5}
-local typeString = {[QuestType.eQuestType_BlackSpirit] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_1"), [QuestType.eQuestType_Story] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_2"), [QuestType.eQuestType_Town] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_3"), [QuestType.eQuestType_Adventure] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_4"), [QuestType.eQuestType_Trade] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_5"), [QuestType.eQuestType_Craft] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_6"), [QuestType.eQuestType_Repetition] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_7")}
-local typeOpen = {[QuestType.eQuestType_BlackSpirit] = true, [QuestType.eQuestType_Story] = true, [QuestType.eQuestType_Town] = true, [QuestType.eQuestType_Adventure] = true, [QuestType.eQuestType_Trade] = true, [QuestType.eQuestType_Craft] = true, [QuestType.eQuestType_Repetition] = true, [QuestType.eQuestType_Count] = false}
+local typeString = {[QuestType.eQuestType_BlackSpirit] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_1"), [QuestType.eQuestType_Story] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_2"), [QuestType.eQuestType_Town] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_3"), [QuestType.eQuestType_Adventure] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_4"), [QuestType.eQuestType_Trade] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_5"), [QuestType.eQuestType_Craft] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_6"), [QuestType.eQuestType_Repetition] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_7"), [QuestType.eQuestType_Guild] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_HISTORY_TXT_TYPE_8")}
+local typeOpen = {[QuestType.eQuestType_BlackSpirit] = true, [QuestType.eQuestType_Story] = true, [QuestType.eQuestType_Town] = true, [QuestType.eQuestType_Adventure] = true, [QuestType.eQuestType_Trade] = true, [QuestType.eQuestType_Craft] = true, [QuestType.eQuestType_Repetition] = true, [QuestType.eQuestType_Guild] = true, [QuestType.eQuestType_Count] = false}
 local groupOpen = {}
 local repetitiveQuestGroupOpen = {}
 local questArrayGroupCount = {}
@@ -130,9 +130,15 @@ local questSortArrayType = {
 [QuestType.eQuestType_Craft] = {}
 , 
 [QuestType.eQuestType_Repetition] = {}
+, 
+[QuestType.eQuestType_Guild] = {}
 }
-local questArrayTypeCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0}
-local questArrayTypeProgressCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0}
+local questArrayTypeCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0, 
+[QuestType.eQuestType_Guild] = {}
+}
+local questArrayTypeProgressCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0, 
+[QuestType.eQuestType_Guild] = {}
+}
 local questSelectTypeString = {[questSelectType.story] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_QUESTSELECTTYPE_TXT_TYPE_1"), [questSelectType.hunt] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_QUESTSELECTTYPE_TXT_TYPE_2"), [questSelectType.life] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_QUESTSELECTTYPE_TXT_TYPE_3"), [questSelectType.fish] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_QUESTSELECTTYPE_TXT_TYPE_4"), [questSelectType.adv] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_QUESTSELECTTYPE_TXT_TYPE_5"), [questSelectType.etc] = PAGetString(Defines.StringSheet_GAME, "LUA_QUESTLIST_QUESTSELECTTYPE_TXT_TYPE_6")}
 Panel_QuestListShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
@@ -536,9 +542,11 @@ QuestWindow.ResetDataArray = function(self)
 [QuestType.eQuestType_Craft] = {}
 , 
 [QuestType.eQuestType_Repetition] = {}
+, 
+[QuestType.eQuestType_Guild] = {}
 }
-  questArrayTypeCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0}
-  questArrayTypeProgressCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0}
+  questArrayTypeCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0, [QuestType.eQuestType_Guild] = 0}
+  questArrayTypeProgressCount = {[QuestType.eQuestType_BlackSpirit] = 0, [QuestType.eQuestType_Story] = 0, [QuestType.eQuestType_Town] = 0, [QuestType.eQuestType_Adventure] = 0, [QuestType.eQuestType_Trade] = 0, [QuestType.eQuestType_Craft] = 0, [QuestType.eQuestType_Repetition] = 0, [QuestType.eQuestType_Guild] = 0}
 end
 
 QuestWindow.GetProgressingActiveTab = function(self)
@@ -1111,16 +1119,10 @@ QuestWindow.update = function(self)
           local iconType = 0
           ;
           ((((self.uiPool).groupTitle)[uiCount]).name):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_QUESTWINDOW_GROUPTITLE", "title", (useArray[questIdx]).title, "count", countBase))
-          if ((((self.uiPool).groupTitle)[uiCount]).name):IsLimitText() then
-            ((((self.uiPool).groupTitle)[uiCount]).bg):addInputEvent("Mouse_On", "QuestWindow_SimpleTooltip(true, " .. questIdx .. ", " .. uiCount .. ", " .. tostring(countBase) .. ")")
-            ;
-            ((((self.uiPool).groupTitle)[uiCount]).bg):addInputEvent("Mouse_Out", "QuestWindow_SimpleTooltip()")
-          else
-            ;
-            ((((self.uiPool).groupTitle)[uiCount]).name):addInputEvent("Mouse_On", "")
-            ;
-            ((((self.uiPool).groupTitle)[uiCount]).name):addInputEvent("Mouse_Out", "")
-          end
+          ;
+          ((((self.uiPool).groupTitle)[uiCount]).bg):addInputEvent("Mouse_On", "QuestWindow_SimpleTooltip(true, " .. questIdx .. ", " .. uiCount .. ", " .. tostring(countBase) .. ")")
+          ;
+          ((((self.uiPool).groupTitle)[uiCount]).bg):addInputEvent("Mouse_Out", "QuestWindow_SimpleTooltip()")
           local isBarExpand = nil
           if QuestTabType.QuestTabType_Progress == progressingActiveTab then
             if ((self.ui).radioTerritoryGroup):IsCheck() then
@@ -1434,39 +1436,39 @@ QuestWindow.update = function(self)
                                     ((((self.uiPool).listMain)[uiCount]).btnReward):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 3 .. " )")
                                   end
                                   uiCount = uiCount + 1
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1543: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
                                 end
                               end
@@ -1766,12 +1768,15 @@ QuestWindow_SimpleTooltip = function(isShow, idx, uiCount, baseCount)
     TooltipSimple_Hide()
     return 
   end
+  local self = QuestWindow
+  if not ((((self.uiPool).groupTitle)[uiCount]).name):IsLimitText() then
+    return 
+  end
   local progressingActiveTab = QuestWindow:GetProgressingActiveTab()
   if QuestTabType.QuestTabType_Progress == progressingActiveTab then
     TooltipSimple_Hide()
     return 
   end
-  local self = QuestWindow
   local name, desc, control = nil, nil, nil
   name = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_QUESTWINDOW_GROUPTITLE", "title", (useArray[idx]).title, "count", questArrayGroupCompleteCount[(useArray[idx]).groupIdx] .. "/" .. questArrayGroupCount[(useArray[idx]).groupIdx])
   control = (((self.uiPool).groupTitle)[uiCount]).bg

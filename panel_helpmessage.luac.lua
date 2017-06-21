@@ -14,6 +14,9 @@ _staticTextDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
 _staticDescBG:SetShow(true)
 HelpMessageQuestion_Show = function(where, isTrue)
   -- function num : 0_0 , upvalues : _staticTextDesc
+  if isGameTypeKR2() then
+    return 
+  end
   if where == "PanelImportantKnowledge" then
     _staticTextDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HELPMESSAGE_Knowledge"))
   else

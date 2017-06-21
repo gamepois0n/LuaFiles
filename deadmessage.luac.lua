@@ -247,7 +247,7 @@ deadMessage_Resize = function()
   _button_MoveExploration:SetPosX(screenX / 2 - buttonHalfSizeX)
   _button_MoveExploration:SetPosY(screenY / 2 + buttonSizeY * 2 + 165)
   _button_Valunteer:SetPosX(screenX / 2 - buttonHalfSizeX)
-  _button_Valunteer:SetPosY(screenY / 2 + buttonSizeY * 2 + 165)
+  _button_Valunteer:SetPosY(screenY / 2 + buttonSizeY * 2 + 215)
   _button_SiegeIng:SetPosX(_button_Immediate:GetPosX())
   _button_SiegeIng:SetPosY(_button_Immediate:GetPosY())
   _button_AdvancedBase:SetPosX(screenX / 2 - buttonHalfSizeX)
@@ -514,6 +514,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
   _button_ObserverMode:SetShow(false)
   local attackerActorProxyWrapper = getActor(attackerActorKeyRaw)
   isPvPMatchRevive = isAblePvPMatchRevive
+  local isMilitia = false
+  local playerActorProxyWrapper = getPlayerActor(attackerActorKeyRaw)
+  if playerActorProxyWrapper ~= nil then
+    isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+  end
   if (selfProxy:get()):isBattleGroundDefine() then
     _button_SiegeIng:SetShow(false)
     _button_MoveExploration:SetShow(false)
@@ -534,7 +539,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
     if attackerActorProxyWrapper == nil then
       _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
     else
-      _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+      if isMilitia then
+        _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA")))
+      else
+        _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+      end
     end
     ResurrectionTime = revivalTime
     Panel_DeadMessage:SetShow(true, false)
@@ -564,7 +573,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       if attackerActorProxyWrapper == nil then
         _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
       else
-        _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+        if isMilitia then
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA")))
+        else
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+        end
       end
       Panel_DeadMessage:SetShow(true, false)
       ResurrectionTime = ToClient_CompetitionMatchTimeLimit() + ToClient_GetMaxWaitTime()
@@ -618,7 +631,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       if attackerActorProxyWrapper == nil then
         _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
       else
-        _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+        if isMilitia then
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA")))
+        else
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+        end
       end
       ResurrectionTime = revivalTime
       Panel_DeadMessage:SetShow(true, false)
@@ -712,7 +729,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
               displayText = PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg")
             else
               if attackerActorProxyWrapper ~= nil then
-                displayText = PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName())
+                if isMilitia then
+                  displayText = PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA"))
+                else
+                  displayText = PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName())
+                end
               else
                 displayText = PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg")
               end
@@ -873,24 +894,26 @@ deadMessage_UpdatePerFrame = function(deltaTime)
         _regenTime:SetShow(false)
       end
     end
-    if isSiegeBeingInDead then
-      Panel_DeadMessage:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
-      do
-        local aniInfo1 = Panel_DeadMessage:addColorAnimation(0, 1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-        aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
-        aniInfo1:SetEndColor(UI_color.C_00FFFFFF)
-        aniInfo1.IsChangeChild = true
-        aniInfo1:SetHideAtEnd(true)
-        aniInfo1:SetDisableWhileAni(true)
-        deadMessage_ClearDropItems()
-        deadMessage_Revival(enRespawnType.respawnType_TimeOver, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
-        SetUIMode((Defines.UIMode).eUIMode_Default)
-        local isObserverMode = false
-        if ((getSelfPlayer()):get()):isCompetitionDefined() then
-          isObserverMode = true
+    if not isSiegeBeingInDead then
+      if ((getSelfPlayer()):get()):getValunteerTeamNoForLua() ~= 0 then
+        Panel_DeadMessage:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
+        do
+          local aniInfo1 = Panel_DeadMessage:addColorAnimation(0, 1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+          aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
+          aniInfo1:SetEndColor(UI_color.C_00FFFFFF)
+          aniInfo1.IsChangeChild = true
+          aniInfo1:SetHideAtEnd(true)
+          aniInfo1:SetDisableWhileAni(true)
+          deadMessage_ClearDropItems()
+          deadMessage_Revival(enRespawnType.respawnType_TimeOver, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+          SetUIMode((Defines.UIMode).eUIMode_Default)
+          local isObserverMode = false
+          if ((getSelfPlayer()):get()):isCompetitionDefined() then
+            isObserverMode = true
+          end
+          _button_ObserverMode:SetShow(isObserverMode)
+          _regenTime:SetShow(false)
         end
-        _button_ObserverMode:SetShow(isObserverMode)
-        _regenTime:SetShow(false)
       end
     end
   end

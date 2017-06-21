@@ -329,8 +329,13 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                   name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_SA")
                   desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_SA")
                 else
-                  name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE")
-                  desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC")
+                  if isGameTypeKR2() then
+                    name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_KR2")
+                    desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_KR2")
+                  else
+                    name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE")
+                    desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC")
+                  end
                 end
               end
             end
@@ -553,7 +558,7 @@ FromClient_PackageIconUpdate = function()
     _btnCashShop:SetShow(false)
     _btnAlertClose:SetShow(false)
   end
-  if isPremiumPcRoom == true and not isGameTypeRussia() and not isGameTypeEnglish() then
+  if isPremiumPcRoom == true and not isGameTypeRussia() and not isGameTypeEnglish() and not isGameTypeSA() and not isGameTypeKR2() then
     _pcRoomIcon:SetShow(true)
   end
   if isServerFixedCharge() then

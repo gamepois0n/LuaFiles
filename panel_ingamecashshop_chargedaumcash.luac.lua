@@ -61,6 +61,7 @@ end
   local self = termsofDaumCash
   local url = nil
   local langType = "EN"
+  local SALangType = "PT"
   if UI_SERVICE_RESOURCE.eServiceResourceType_EN == getGameServiceResType() then
     langType = "EN"
   else
@@ -70,6 +71,13 @@ end
       if UI_SERVICE_RESOURCE.eServiceResourceType_DE == getGameServiceResType() then
         langType = "DE"
       end
+    end
+  end
+  if UI_SERVICE_RESOURCE.eServiceResourceType_ES == getGameServiceResType() then
+    SALangType = "es"
+  else
+    if UI_SERVICE_RESOURCE.eServiceResourceType_PT == getGameServiceResType() then
+      SALangType = "pt"
     end
   end
   if isGameServiceTypeKorReal() then
@@ -111,7 +119,15 @@ end
                 if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
                   url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TW_REAL")
                 else
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+                  if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+                    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_SA_TEST", "lang", SALangType)
+                  else
+                    if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+                      url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_SA_REAL", "lang", SALangType)
+                    else
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+                    end
+                  end
                 end
               end
               local exeIE = true

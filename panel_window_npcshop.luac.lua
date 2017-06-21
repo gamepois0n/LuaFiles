@@ -1166,7 +1166,7 @@ NpcShop_BuySome_Do = function()
       return 
     end
   end
-  npcShop_doBuy(slot.slotNo, buyCount, fromWhereType, 0, _isCamping)
+  npcShop_doBuy(slot.slotNo, buyCount, fromWhereType, 0, self._isCamping)
 end
 
 npcShop.registEventHandler = function(self)

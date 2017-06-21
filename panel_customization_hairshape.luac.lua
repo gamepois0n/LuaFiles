@@ -268,12 +268,15 @@ UpdateHairBone = function(updateControlMode)
 end
 
 UpdateHairSlider = function(sliderIndex)
-  -- function num : 0_6 , upvalues : SliderArr, paramMin, paramMax, selectedClassType, paramType, paramIndex, StaticText_CurrentValue
+  -- function num : 0_6 , upvalues : SliderArr, paramMin, paramMax, selectedClassType, paramType, paramIndex, StaticText_CurrentValue, Slider_TransX, iswithoutbone
   local luaSliderIndex = sliderIndex + 1
   local value = getSliderValue(SliderArr[luaSliderIndex], paramMin[luaSliderIndex], paramMax[luaSliderIndex])
   setParam(selectedClassType, paramType[luaSliderIndex], paramIndex[luaSliderIndex], value)
   ;
   (StaticText_CurrentValue[luaSliderIndex]):SetText(value)
+  if Slider_TransX:IsEnable() == false or iswithoutbone then
+    setGlobalCheck(true)
+  end
 end
 
 OpenHairShapeUi = function(classType, uiId)
@@ -546,6 +549,7 @@ end
 
 EnableHairSlide = function(enable)
   -- function num : 0_11 , upvalues : Slider_TransX, Slider_TransY, Slider_TransZ, Button_Slider_TransX, Button_Slider_TransY, Button_Slider_TransZ, Slider_RotX, Slider_RotY, Slider_RotZ, Button_Slider_RotX, Button_Slider_RotY, Button_Slider_RotZ, StaticText_CurrValue_TransX, StaticText_CurrValue_TransY, StaticText_CurrValue_TransZ, StaticText_TransX, StaticText_TransY, StaticText_TransZ, StaticText_RotX, StaticText_RotY, StaticText_RotZ
+  globalisCustomizationPicking = enable
   Slider_TransX:SetEnable(enable)
   Slider_TransY:SetEnable(enable)
   Slider_TransZ:SetEnable(enable)

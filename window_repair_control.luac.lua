@@ -213,7 +213,7 @@ Repair_AllItem_MessageBox_Confirm = function()
   else
     moneyWhereType = (CppEnums.ItemWhereType).eWarehouse
   end
-  if Panel_Window_Camp:GetShow() then
+  if FGlobal_IsCamping() then
     repair_AllItemByCamping()
   else
     repair_AllItem(moneyWhereType)
@@ -231,7 +231,7 @@ Repair_Item_MessageBox_Confirm = function()
   else
     moneyWhereType = (CppEnums.ItemWhereType).eWarehouse
   end
-  if Panel_Window_Camp:GetShow() then
+  if FGlobal_IsCamping() then
     repair_ItemByCamping(self._repairWhereType, self._repairSlotNo, (CppEnums.ServantType).Type_Count)
   else
     repair_Item(self._repairWhereType, self._repairSlotNo, moneyWhereType, (CppEnums.ServantType).Type_Count)
