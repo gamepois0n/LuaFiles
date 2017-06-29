@@ -11,17 +11,17 @@ Panel_SavageDefenceInfo:setMaskingChild(true)
 Panel_SavageDefenceInfo:ActiveMouseEventEffect(true)
 Panel_SavageDefenceInfo:setGlassBackground(true)
 local PaGlobal_SavegeDefenceInfo = {_blackBG = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BlackBG"), _txtTitle = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Title"), _btnClose = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Win_Close"), _btnHelp = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Question"), _listBg = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_SavageDefenceListBG"), _scroll = (UI.getChildControl)(Panel_SavageDefenceInfo, "Scroll_SavageDefenceList"), _txtRule = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RuleContent"), _txtReward = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RewardContent"), _txtInfo = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_InfoContent"), _btnInmy = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_InmyChannel"), _list2 = (UI.getChildControl)(Panel_SavageDefenceInfo, "List2_SavageDefenceList"), _desc_Rule_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Rule"), _desc_rule = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_1"), 
-desc_Rule = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_6"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_7"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_8"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_9"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_10"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_11"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_12"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1")}
+desc_Rule = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_6"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1")}
 , 
-desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_6"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_7"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_8"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_9"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_10"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_12"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_1")}
+desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_6"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_1")}
 , _desc_Reward_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Reward"), _desc_Reward = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_2"), 
 desc_Reward = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_2"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_1")}
 , 
-desc_RewardText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_REWARD_2"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_REWARD_1")}
+desc_RewardText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_2"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_1")}
 , _desc_Explanation_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Explanation"), _desc_Explanation = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_3"), 
-desc_Explanation = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_5"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_1")}
+desc_Explanation = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_2"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_1")}
 , 
-desc_ExplanationText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_2"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_3"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_4"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_5"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_1")}
+desc_ExplanationText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_EXPLANATION_2"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_EXPLANATION_1")}
 , _createListCount = 14, _startIndex = 0, 
 _listPool = {}
 , _openDesc = -1, _maxDescRuleSize = 40, _maxDescRewardSize = 20, _maxDescExplanationSize = 30, 
@@ -109,18 +109,6 @@ FGlobal_SavegeDefenceInfo_Initionalize = function()
   ((self.desc_Rule)[4]):SetPosY(((self.desc_Rule)[3]):GetPosY() + ((self.desc_Rule)[3]):GetTextSizeY() + 2)
   ;
   ((self.desc_Rule)[5]):SetPosY(((self.desc_Rule)[4]):GetPosY() + ((self.desc_Rule)[4]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Rule)[6]):SetPosY(((self.desc_Rule)[5]):GetPosY() + ((self.desc_Rule)[5]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Rule)[7]):SetPosY(((self.desc_Rule)[6]):GetPosY() + ((self.desc_Rule)[6]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Rule)[8]):SetPosY(((self.desc_Rule)[7]):GetPosY() + ((self.desc_Rule)[7]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Rule)[9]):SetPosY(((self.desc_Rule)[8]):GetPosY() + ((self.desc_Rule)[8]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Rule)[10]):SetPosY(((self.desc_Rule)[9]):GetPosY() + ((self.desc_Rule)[9]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Rule)[11]):SetPosY(((self.desc_Rule)[10]):GetPosY() + ((self.desc_Rule)[10]):GetTextSizeY() + 2)
   for index = 0, #self.desc_RewardText do
     ((self.desc_Reward)[index]):SetPosX(5)
   end
@@ -136,12 +124,6 @@ FGlobal_SavegeDefenceInfo_Initionalize = function()
   ;
   ((self.desc_Explanation)[1]):SetPosY(((self.desc_Explanation)[0]):GetPosY() + ((self.desc_Explanation)[0]):GetTextSizeY() + 2)
   ;
-  ((self.desc_Explanation)[2]):SetPosY(((self.desc_Explanation)[1]):GetPosY() + ((self.desc_Explanation)[1]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Explanation)[3]):SetPosY(((self.desc_Explanation)[2]):GetPosY() + ((self.desc_Explanation)[2]):GetTextSizeY() + 2)
-  ;
-  ((self.desc_Explanation)[4]):SetPosY(((self.desc_Explanation)[3]):GetPosY() + ((self.desc_Explanation)[3]):GetTextSizeY() + 2)
-  ;
   (self._txtRule):SetPosX(5)
   ;
   (self._txtRule):SetPosY(5)
@@ -151,6 +133,8 @@ FGlobal_SavegeDefenceInfo_Initionalize = function()
   (self._blackBG):SetHorizonCenter()
   ;
   (self._blackBG):SetVerticalMiddle()
+  ;
+  (self._btnInmy):SetShow(false)
   ;
   (self._btnClose):addInputEvent("Mouse_LUp", "FGlobal_SavageDefenceInfo_Close()")
 end

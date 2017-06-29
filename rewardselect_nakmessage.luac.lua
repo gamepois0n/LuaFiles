@@ -529,7 +529,7 @@ NakMessageUpdate_For_RewardSelect = function(updateTime)
   if Panel_LifeTutorial:GetShow() then
     return 
   end
-  if Panel_IngameCashShop:GetShow() or Panel_Cash_Customization:GetShow() or Panel_IngameCashShop_Controller:GetShow() or Panel_Dye_New:GetShow() or Panel_DyeNew_CharacterController:GetShow() then
+  if Panel_IngameCashShop:GetShow() or Panel_Cash_Customization:GetShow() or Panel_IngameCashShop_Controller:GetShow() or Panel_Dye_ReNew:GetShow() or Panel_DyeNew_CharacterController:GetShow() then
     return 
   end
   if (Defines.UIMode).eUIMode_InGameCustomize == GetUIMode() or (Defines.UIMode).eUIMode_ScreenShotMode == GetUIMode() then

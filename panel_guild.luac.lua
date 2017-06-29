@@ -1677,6 +1677,7 @@ GuildManager.TabToggle = function(self, index)
   (self.mainBtn_Recruitment):SetCheck(index == 5)
   ;
   (self.mainBtn_CraftInfo):SetCheck(index == 6)
+  ConsoleGroupDelete_Panel_Window_Guild()
   if ((getSelfPlayer()):get()):isGuildMaster() and ((getSelfPlayer()):get()):isGuildSubMaster() then
     FGlobal_ClearCandidate()
     _Web:ResetUrl()
@@ -3695,6 +3696,31 @@ Guild_Init = function()
   GuildMainInfo_Show()
   Notice_Init()
   Introduce_Init()
+  ConsoleGroupCreate_Panel_Window_Guild()
+end
+
+ConsoleGroupCreate_Panel_Window_Guild = function()
+  -- function num : 0_90
+  local self = GuildManager
+  Panel_Window_Guild:addConsoleUIControl(0, 8, 0, self.mainBtn_Main)
+  Panel_Window_Guild:addConsoleUIControl(1, 8, 0, self.mainBtn_Info)
+  Panel_Window_Guild:addConsoleUIControl(2, 8, 0, self.mainBtn_Quest)
+  Panel_Window_Guild:addConsoleUIControl(3, 8, 0, self.mainBtn_Tree)
+  Panel_Window_Guild:addConsoleUIControl(4, 8, 0, self.mainBtn_Warfare)
+  Panel_Window_Guild:addConsoleUIControl(5, 8, 0, self.mainBtn_History)
+  Panel_Window_Guild:addConsoleUIControl(6, 8, 0, self.mainBtn_Recruitment)
+  Panel_Window_Guild:addConsoleUIControl(7, 8, 0, self.mainBtn_CraftInfo)
+end
+
+ConsoleGroupDelete_Panel_Window_Guild = function()
+  -- function num : 0_91
+  Panel_Window_Guild:deleteConsoleUIGroup(1)
+  Panel_Window_Guild:deleteConsoleUIGroup(2)
+  Panel_Window_Guild:deleteConsoleUIGroup(3)
+  Panel_Window_Guild:deleteConsoleUIGroup(4)
+  Panel_Window_Guild:deleteConsoleUIGroup(5)
+  Panel_Window_Guild:deleteConsoleUIGroup(6)
+  Panel_Window_Guild:deleteConsoleUIGroup(7)
 end
 
 

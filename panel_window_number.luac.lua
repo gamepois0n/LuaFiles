@@ -43,11 +43,11 @@ _buttonConfirm:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonConfirm_Mouse_C
 _buttonConfirm:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
 _buttonConfirm:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
 local _buttonAllSelect = (UI.getChildControl)(Panel_Window_Exchange_Number, "Button_AllSelect")
-_buttonAllSelect:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click()")
+_buttonAllSelect:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click(0)")
 _buttonAllSelect:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
 _buttonAllSelect:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
 local _checkButtonMaxCount = (UI.getChildControl)(Panel_Window_Exchange_Number, "CheckButton_MaxCount")
-_checkButtonMaxCount:addInputEvent("Mouse_LUp", "Panel_NumberPad_SetMaxCount()")
+_checkButtonMaxCount:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click(1)")
 _checkButtonMaxCount:SetCheck(false)
 numberPad.init = function(self)
   -- function num : 0_0 , upvalues : numberPad
@@ -182,6 +182,7 @@ Panel_NumberPad_Open = function()
   -- function num : 0_5
   if not Panel_Window_Exchange_Number:IsShow() then
     Panel_Window_Exchange_Number:SetShow(true, true)
+    Panel_Window_Exchange_Number:setLockFocusPanel(true)
   end
 end
 
@@ -293,7 +294,7 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
 end
 
 local slotNo, whereType = nil, nil
-Panel_NumberPad_Show_MaxCount = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1)
+Panel_NumberPad_Show_MaxCount = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1, isItemMarket)
   -- function num : 0_9 , upvalues : _isExchange, _textNumber, IM, numberPad, _checkButtonMaxCount, realNumber, slotNo, whereType
   _isExchange = isExchange
   local maxLength = (string.len)(tostring(s64_maxNumber))
@@ -307,15 +308,15 @@ Panel_NumberPad_Show_MaxCount = function(isShow, s64_maxNumber, param0, confirmF
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
     end
   else
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC33: Confused about usage of register: R8 in 'UnsetPending'
 
     numberPad.s64_maxNumber = s64_maxNumber
-    -- DECOMPILER ERROR at PC40: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC40: Confused about usage of register: R8 in 'UnsetPending'
 
     if _checkButtonMaxCount:IsCheck() then
       numberPad.s64_inputNumber = s64_maxNumber
     else
-      -- DECOMPILER ERROR at PC46: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC46: Confused about usage of register: R8 in 'UnsetPending'
 
       numberPad.s64_inputNumber = (Defines.s64_const).s64_1
     end
@@ -487,21 +488,42 @@ Panel_NumberPad_ButtonConfirm_Mouse_Click = function()
   end
 end
 
-Panel_NumberPad_ButtonAllSelect_Mouse_Click = function()
-  -- function num : 0_18 , upvalues : numberPad, IM, _textNumber, realNumber
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
+Panel_NumberPad_ButtonAllSelect_Mouse_Click = function(isType)
+  -- function num : 0_18 , upvalues : numberPad, _checkButtonMaxCount, _textNumber, realNumber, IM
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
 
   numberPad.s64_inputNumber = numberPad.s64_maxNumber
-  if (Defines.s64_const).s64_1 == s64_maxNumber then
-    Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
-    Panel_NumberPad_ButtonConfirm_Mouse_Click()
+  if isType == 1 then
+    if not _checkButtonMaxCount:IsCheck() then
+      Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+      SetFocusEdit(_textNumber)
+      _textNumber:SetEditText(tostring((Defines.s64_const).s64_1))
+      realNumber = (Defines.s64_const).s64_1
+      -- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
+
+      numberPad.s64_inputNumber = (Defines.s64_const).s64_1
+    else
+      Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+      ;
+      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+      SetFocusEdit(_textNumber)
+      _textNumber:SetEditText(makeDotMoney(numberPad.s64_maxNumber))
+      realNumber = numberPad.s64_maxNumber
+    end
   else
-    Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-    SetFocusEdit(_textNumber)
-    _textNumber:SetEditText(makeDotMoney(numberPad.s64_maxNumber))
-    realNumber = numberPad.s64_maxNumber
+    if isType == 0 then
+      if (Defines.s64_const).s64_1 == s64_maxNumber then
+        Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+        Panel_NumberPad_ButtonConfirm_Mouse_Click()
+      else
+        Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+        ;
+        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+        SetFocusEdit(_textNumber)
+        _textNumber:SetEditText(makeDotMoney(numberPad.s64_maxNumber))
+        realNumber = numberPad.s64_maxNumber
+      end
+    end
   end
 end
 
@@ -557,4 +579,26 @@ end
 Panel_Window_Exchange_Number:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
 Panel_Window_Exchange_Number:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
 numberPad:init()
+ConsoleGroupCreate_Panel_Window_Exchange_Number = function()
+  -- function num : 0_23 , upvalues : _textNumber, _checkButtonMaxCount, numberPad, _buttonBackSpace, _buttonClear, _buttonAllSelect, _buttonConfirm, _buttonCancel
+  Panel_Window_Exchange_Number:addConsoleUIControl(0, 1, 0, _textNumber)
+  Panel_Window_Exchange_Number:addConsoleUIControl(1, 1, 0, _checkButtonMaxCount)
+  Panel_Window_Exchange_Number:addConsoleUIControl(0, 3, 1, (numberPad._buttonNumber)[8])
+  Panel_Window_Exchange_Number:addConsoleUIControl(1, 3, 1, (numberPad._buttonNumber)[9])
+  Panel_Window_Exchange_Number:addConsoleUIControl(2, 3, 1, (numberPad._buttonNumber)[10])
+  Panel_Window_Exchange_Number:addConsoleUIControl(3, 3, 1, (numberPad._buttonNumber)[5])
+  Panel_Window_Exchange_Number:addConsoleUIControl(4, 3, 1, (numberPad._buttonNumber)[6])
+  Panel_Window_Exchange_Number:addConsoleUIControl(5, 3, 1, (numberPad._buttonNumber)[7])
+  Panel_Window_Exchange_Number:addConsoleUIControl(6, 3, 1, (numberPad._buttonNumber)[2])
+  Panel_Window_Exchange_Number:addConsoleUIControl(7, 3, 1, (numberPad._buttonNumber)[3])
+  Panel_Window_Exchange_Number:addConsoleUIControl(8, 3, 1, (numberPad._buttonNumber)[4])
+  Panel_Window_Exchange_Number:addConsoleUIControl(9, 3, 1, (numberPad._buttonNumber)[1])
+  Panel_Window_Exchange_Number:addConsoleUIControl(10, 3, 1, _buttonBackSpace)
+  Panel_Window_Exchange_Number:addConsoleUIControl(11, 3, 1, _buttonClear)
+  Panel_Window_Exchange_Number:addConsoleUIControl(0, 1, 2, _buttonAllSelect)
+  Panel_Window_Exchange_Number:addConsoleUIControl(1, 1, 2, _buttonConfirm)
+  Panel_Window_Exchange_Number:addConsoleUIControl(2, 1, 2, _buttonCancel)
+end
+
+ConsoleGroupCreate_Panel_Window_Exchange_Number()
 

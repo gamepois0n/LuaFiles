@@ -26,6 +26,7 @@ local withdrawMember = nil
 local requestPlayerList = {}
 local refuseName = ""
 local isMainChannel, isDevServer = nil, nil
+local partyType = 0
 local controlTemplate = {_styleLeaderIcon = (UI.getChildControl)(Panel_Party, "Static_Icon_Leader"), _styleBackGround = (UI.getChildControl)(Panel_Party, "Static_ClassSlot"), _styleClassIcon = (UI.getChildControl)(Panel_Party, "Static_Icon_Class"), _styleUserName = (UI.getChildControl)(Panel_Party, "StaticText_UserName"), _styleHpBG = (UI.getChildControl)(Panel_Party, "Static_HpBG"), _styleHp = (UI.getChildControl)(Panel_Party, "Progress2_Hp"), _styleMp = (UI.getChildControl)(Panel_Party, "Progress2_Mp"), _styleUserLevel = (UI.getChildControl)(Panel_Party, "StaticText_UserLevel"), _styleConditionBG = (UI.getChildControl)(Panel_Party, "Static_DeadConditionBG"), _styleConditionTxt = (UI.getChildControl)(Panel_Party, "StaticText_NowCondition"), _stylePartyOptionBtn = (UI.getChildControl)(Panel_Party, "Button_Option"), _styleFollowBtn = (UI.getChildControl)(Panel_Party, "Button_Follow"), _distance = (UI.getChildControl)(Panel_Party, "Static_Distance")}
 local partyMarketOption = (UI.getChildControl)(Panel_Party, "Static_MarketOption")
 partyMarketOption:addInputEvent("Mouse_On", "Show_Tooltips_SpecialGoods( " .. 1 .. ", true )")
@@ -489,503 +490,370 @@ end
 createPartyControls()
 local _partyMemberCount = RequestParty_getPartyMemberCount()
 ResponseParty_createPartyList = function()
-  -- function num : 0_19 , upvalues : requestPlayerList, _partyMemberCount
+  -- function num : 0_19 , upvalues : partyType, requestPlayerList, _partyMemberCount
   local partyMemberCount = RequestParty_getPartyMemberCount()
   if partyMemberCount > 0 then
-    if not isFlushedUI() then
-      Panel_Party:SetShow(true, false)
+    if (CppEnums.PartyType).ePartyType_Normal == partyType then
+      if not isFlushedUI() then
+        Panel_Party:SetShow(true, false)
+      end
+      ;
+      (table.remove)(requestPlayerList)
+      ResponseParty_updatePartyList()
+      _partyMemberCount = partyMemberCount
+      Party_RegistItem_Show(false)
+      ToClient_requestListMySellInfo()
+    else
+      if (CppEnums.PartyType).ePartyType_Large == partyType then
+        Panel_LargeParty:SetShow(true)
+      end
     end
-    ;
-    (table.remove)(requestPlayerList)
-    ResponseParty_updatePartyList()
-    _partyMemberCount = partyMemberCount
-    Party_RegistItem_Show(false)
-    ToClient_requestListMySellInfo()
   end
 end
 
 local savedPrice = toInt64(0, 0)
 local savedGrade = 0
 local firstCheck = 0
-ResponseParty_updatePartyList = function()
-  -- function num : 0_20 , upvalues : _partyData, _uiPartyMemberList, isContentsEnable, CT2S, UI_Class, _preLootType, PLT2S, _uiComboLootingOption, _styleLootType, requestPlayerList, _partyMemberCount, Match_Button_Info, isMainChannel, isDevServer, partyPenalty, partyMarketOption, btnSpecialGoods, firstCheck, savedPrice, savedGrade, registMarket, registItem
-  local isSelfMaster = false
-  if Panel_Party:IsShow() then
-    local partyMemberCount = (RequestParty_getPartyMemberCount())
-    local classTypeTexture, distanceTexture = nil, nil
-    local lootType = RequestParty_getPartyLootType()
-    local classMP = ""
-    local _idx = 0
-    _partyData = {}
-    for index = 0, partyMemberCount - 1 do
-      local idx = 0
-      local memberData = RequestParty_getPartyMemberAt(index)
-      if RequestParty_isSelfPlayer(index) == true then
-        idx = 0
-      else
-        idx = _idx + 1
-        _idx = idx
-      end
-      -- DECOMPILER ERROR at PC62: Confused about usage of register: R13 in 'UnsetPending'
-
-      _partyData[idx] = {_index = index, _isMaster = memberData._isMaster, _isSelf = RequestParty_isSelfPlayer(index), _name = memberData:name(), _class = memberData:classType(), _level = memberData._level, _nowHp = memberData._hp * 100, _maxHp = memberData._maxHp, _nowMp = memberData._mp * 100, _maxMp = memberData._maxMp, _distance = memberData:getExperienceGrade()}
-      if (_partyData[idx])._isSelf == true and (_partyData[idx])._isMaster == true then
-        isSelfMaster = true
-      end
+local isSelfMaster = false
+FGlobal_ResponseParty_PartyMemberSet = function(partyMemberCount)
+  -- function num : 0_20 , upvalues : isSelfMaster
+  local _idx = 0
+  local partyData = {}
+  for index = 0, partyMemberCount - 1 do
+    local idx = 0
+    local memberData = RequestParty_getPartyMemberAt(index)
+    if RequestParty_isSelfPlayer(index) == true then
+      idx = 0
+    else
+      idx = _idx + 1
+      _idx = idx
     end
-    for index = 0, _maxPartyMemberCount - 1 do
-      ((_uiPartyMemberList[index])._hpBG):SetShow(true)
-      if index <= partyMemberCount - 1 and _partyData[index] ~= nil then
-        ((_uiPartyMemberList[index])._name):SetText((_partyData[index])._name)
+    partyData[idx] = {_index = index, _isMaster = memberData._isMaster, _isSelf = RequestParty_isSelfPlayer(index), _name = memberData:name(), _class = memberData:classType(), _level = memberData._level, _nowHp = memberData._hp * 100, _maxHp = memberData._maxHp, _nowMp = memberData._mp * 100, _maxMp = memberData._maxMp, _distance = memberData:getExperienceGrade()}
+    if (partyData[idx])._isSelf == true and (partyData[idx])._isMaster == true then
+      isSelfMaster = true
+    end
+  end
+  return partyData
+end
+
+ResponseParty_PartyMemberTextureSet = function(partyData, partyMemberCount, index)
+  -- function num : 0_21 , upvalues : _uiPartyMemberList, isSelfMaster, isContentsEnable, CT2S, UI_Class
+  local _partyData = partyData
+  local classTypeTexture = nil
+  local classMP = ""
+  ;
+  ((_uiPartyMemberList[index])._hpBG):SetShow(true)
+  if index <= partyMemberCount - 1 and _partyData[index] ~= nil then
+    ((_uiPartyMemberList[index])._name):SetText((_partyData[index])._name)
+    ;
+    ((_uiPartyMemberList[index])._level):SetText((_partyData[index])._level)
+    ;
+    ((_uiPartyMemberList[index])._hp):SetProgressRate((_partyData[index])._nowHp / (_partyData[index])._maxHp)
+    ;
+    ((_uiPartyMemberList[index])._mp):SetProgressRate((_partyData[index])._nowMp / (_partyData[index])._maxMp)
+    if isSelfMaster == true or (_partyData[index])._isSelf == true then
+      local spanSizeX = ((_uiPartyMemberList[index])._name):GetTextSizeX() + ((_uiPartyMemberList[index])._name):GetPosX()
+      ;
+      ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._stylePartyOptionBtn):GetSpanSize()).y)
+      if isContentsEnable then
+        ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetShow(true)
+      else
         ;
-        ((_uiPartyMemberList[index])._level):SetText((_partyData[index])._level)
+        ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetShow(true)
+      end
+    else
+      do
         ;
-        ((_uiPartyMemberList[index])._hp):SetProgressRate((_partyData[index])._nowHp / (_partyData[index])._maxHp)
-        ;
-        ((_uiPartyMemberList[index])._mp):SetProgressRate((_partyData[index])._nowMp / (_partyData[index])._maxMp)
-        if isSelfMaster == true or (_partyData[index])._isSelf == true then
-          local spanSizeX = ((_uiPartyMemberList[index])._name):GetTextSizeX() + ((_uiPartyMemberList[index])._name):GetPosX()
+        ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetShow(false)
+        classTypeTexture = "new_ui_common_forlua/widget/party/portrait_" .. CT2S[(_partyData[index])._class] .. ".dds"
+        if (_partyData[index])._class == 4 then
+          classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
           ;
-          ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._stylePartyOptionBtn):GetSpanSize()).y)
-          if isContentsEnable then
-            ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetShow(true)
-          else
-            ;
-            ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetShow(true)
-          end
+          ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
+          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 70, 233, 76)
+          ;
+          (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
+          ;
+          ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
         else
           do
-            ;
-            ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetShow(false)
-            classTypeTexture = "new_ui_common_forlua/widget/party/portrait_" .. CT2S[(_partyData[index])._class] .. ".dds"
-            if (_partyData[index])._class == 4 then
+            if (_partyData[index])._class == 8 or (_partyData[index])._class == 16 or (_partyData[index])._class == 28 or (_partyData[index])._class == 31 then
               classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
               ;
               ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 70, 233, 76)
+              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 63, 233, 69)
               ;
               (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
               ;
               ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
             else
               do
-                if (_partyData[index])._class == 8 or (_partyData[index])._class == 16 or (_partyData[index])._class == 28 or (_partyData[index])._class == 31 then
+                if (_partyData[index])._class == 24 then
                   classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
                   ;
                   ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 63, 233, 69)
+                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 2, 250, 232, 255)
                   ;
                   (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
                   ;
                   ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
                 else
                   do
-                    if (_partyData[index])._class == 24 then
+                    if (_partyData[index])._class == 0 or (_partyData[index])._class == 12 or (_partyData[index])._class == 20 or (_partyData[index])._class == 21 or (_partyData[index])._class == 25 or (_partyData[index])._class == 26 or (_partyData[index])._class == 19 then
                       classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
                       ;
                       ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 2, 250, 232, 255)
+                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 56, 233, 62)
                       ;
                       (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
                       ;
                       ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
                     else
                       do
-                        if (_partyData[index])._class == 0 or (_partyData[index])._class == 12 or (_partyData[index])._class == 20 or (_partyData[index])._class == 21 or (_partyData[index])._class == 25 or (_partyData[index])._class == 26 or (_partyData[index])._class == 19 then
+                        if (_partyData[index])._class == 27 then
                           classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
                           ;
                           ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 56, 233, 62)
+                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 206, 214, 255, 217)
                           ;
                           (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
                           ;
                           ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
-                        else
-                          do
-                            if (_partyData[index])._class == 27 then
-                              classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
-                              ;
-                              ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 206, 214, 255, 217)
-                              ;
-                              (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
-                              ;
-                              ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
-                            end
+                        end
+                        do
+                          if (_partyData[index])._class == UI_Class.ClassType_Warrior then
+                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                            ;
+                            ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 77, 25, 107, 55)
+                            ;
+                            (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                            ;
+                            ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                          else
                             do
-                              if (_partyData[index])._class == UI_Class.ClassType_Warrior then
+                              if (_partyData[index])._class == UI_Class.ClassType_Ranger then
                                 classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                 ;
                                 ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 77, 25, 107, 55)
+                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 108, 25, 138, 55)
                                 ;
                                 (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                 ;
                                 ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                               else
                                 do
-                                  if (_partyData[index])._class == UI_Class.ClassType_Ranger then
+                                  if (_partyData[index])._class == UI_Class.ClassType_Sorcerer then
                                     classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                     ;
                                     ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 108, 25, 138, 55)
+                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 139, 25, 169, 55)
                                     ;
                                     (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                     ;
                                     ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                   else
                                     do
-                                      if (_partyData[index])._class == UI_Class.ClassType_Sorcerer then
+                                      if (_partyData[index])._class == UI_Class.ClassType_Giant then
                                         classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                         ;
                                         ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 139, 25, 169, 55)
+                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 170, 25, 200, 55)
                                         ;
                                         (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                         ;
                                         ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                       else
                                         do
-                                          if (_partyData[index])._class == UI_Class.ClassType_Giant then
+                                          if (_partyData[index])._class == UI_Class.ClassType_Tamer then
                                             classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                             ;
                                             ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 170, 25, 200, 55)
+                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 56, 197, 86)
                                             ;
                                             (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                             ;
                                             ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                           else
                                             do
-                                              if (_partyData[index])._class == UI_Class.ClassType_Tamer then
+                                              if (_partyData[index])._class == UI_Class.ClassType_BladeMaster then
                                                 classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                                 ;
                                                 ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 56, 197, 86)
+                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 56, 228, 86)
                                                 ;
                                                 (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                 ;
                                                 ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                               else
                                                 do
-                                                  if (_partyData[index])._class == UI_Class.ClassType_BladeMaster then
+                                                  if (_partyData[index])._class == UI_Class.ClassType_BladeMasterWomen then
                                                     classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                                     ;
                                                     ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 56, 228, 86)
+                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 87, 228, 117)
                                                     ;
                                                     (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                     ;
                                                     ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                                   else
                                                     do
-                                                      if (_partyData[index])._class == UI_Class.ClassType_BladeMasterWomen then
+                                                      if (_partyData[index])._class == UI_Class.ClassType_Valkyrie then
                                                         classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                                         ;
                                                         ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 87, 228, 117)
+                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 87, 197, 117)
                                                         ;
                                                         (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                         ;
                                                         ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                                       else
                                                         do
-                                                          if (_partyData[index])._class == UI_Class.ClassType_Valkyrie then
+                                                          if (_partyData[index])._class == UI_Class.ClassType_Wizard then
                                                             classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                                             ;
                                                             ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 87, 197, 117)
+                                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 118, 228, 148)
                                                             ;
                                                             (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                             ;
                                                             ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                                           else
                                                             do
-                                                              if (_partyData[index])._class == UI_Class.ClassType_Wizard then
+                                                              if (_partyData[index])._class == UI_Class.ClassType_WizardWomen then
                                                                 classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                                                 ;
                                                                 ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 118, 228, 148)
+                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 149, 228, 179)
                                                                 ;
                                                                 (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                 ;
                                                                 ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                                               else
                                                                 do
-                                                                  if (_partyData[index])._class == UI_Class.ClassType_WizardWomen then
+                                                                  if (_partyData[index])._class == UI_Class.ClassType_NinjaWomen then
                                                                     classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                                                     ;
                                                                     ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 149, 228, 179)
+                                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 201, 25, 231, 55)
                                                                     ;
                                                                     (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                     ;
                                                                     ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                                                   else
                                                                     do
-                                                                      if (_partyData[index])._class == UI_Class.ClassType_NinjaWomen then
+                                                                      if (_partyData[index])._class == UI_Class.ClassType_NinjaMan then
                                                                         classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
                                                                         ;
                                                                         ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 201, 25, 231, 55)
+                                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 180, 228, 210)
                                                                         ;
                                                                         (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                         ;
                                                                         ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                                                       else
                                                                         do
-                                                                          if (_partyData[index])._class == UI_Class.ClassType_NinjaMan then
-                                                                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                                          if (_partyData[index])._class == UI_Class.ClassType_DarkElf then
+                                                                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
                                                                             ;
                                                                             ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 180, 228, 210)
+                                                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 1, 31, 31)
                                                                             ;
                                                                             (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                             ;
                                                                             ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
                                                                           else
                                                                             do
-                                                                              if (_partyData[index])._class == UI_Class.ClassType_DarkElf then
+                                                                              if (_partyData[index])._class == UI_Class.ClassType_Combattant then
                                                                                 classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
                                                                                 ;
                                                                                 ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 1, 31, 31)
+                                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 222, 31, 252)
                                                                                 ;
                                                                                 (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                 ;
                                                                                 ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                              else
-                                                                                do
-                                                                                  if (_partyData[index])._class == UI_Class.ClassType_Combattant then
-                                                                                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
-                                                                                    ;
-                                                                                    ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 222, 31, 252)
-                                                                                    ;
-                                                                                    (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                    ;
-                                                                                    ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                                  end
+                                                                              end
+                                                                              do
+                                                                                ;
+                                                                                ((_uiPartyMemberList[index])._distance):SetShow(true)
+                                                                                ;
+                                                                                ((_uiPartyMemberList[index])._distance):ChangeTextureInfoName("new_ui_common_forlua/widget/party/party_00.dds")
+                                                                                if (_partyData[index])._distance == 0 then
+                                                                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 152, 1, 174, 23)
+                                                                                  ;
+                                                                                  (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                else
                                                                                   do
-                                                                                    ;
-                                                                                    ((_uiPartyMemberList[index])._distance):SetShow(true)
-                                                                                    ;
-                                                                                    ((_uiPartyMemberList[index])._distance):ChangeTextureInfoName("new_ui_common_forlua/widget/party/party_00.dds")
-                                                                                    if (_partyData[index])._distance == 0 then
-                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 152, 1, 174, 23)
+                                                                                    if (_partyData[index])._distance == 1 then
+                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 176, 1, 198, 23)
                                                                                       ;
                                                                                       (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                     else
                                                                                       do
-                                                                                        if (_partyData[index])._distance == 1 then
-                                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 176, 1, 198, 23)
+                                                                                        if (_partyData[index])._distance == 2 then
+                                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 200, 1, 222, 23)
                                                                                           ;
                                                                                           (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                         else
                                                                                           do
-                                                                                            if (_partyData[index])._distance == 2 then
-                                                                                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 200, 1, 222, 23)
+                                                                                            do
+                                                                                              if (_partyData[index])._distance == 3 then
+                                                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 224, 1, 246, 23)
+                                                                                                ;
+                                                                                                (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                              end
                                                                                               ;
-                                                                                              (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                            else
-                                                                                              do
-                                                                                                do
-                                                                                                  do
-                                                                                                    if (_partyData[index])._distance == 3 then
-                                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 224, 1, 246, 23)
-                                                                                                      ;
-                                                                                                      (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                    end
-                                                                                                    ;
-                                                                                                    ((_uiPartyMemberList[index])._distance):setRenderTexture(((_uiPartyMemberList[index])._distance):getBaseTexture())
-                                                                                                    ;
-                                                                                                    ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_On", "PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                    ;
-                                                                                                    ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_Out", "PartyPop_SimpleTooltip_Show( false, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                    ;
-                                                                                                    ((_uiPartyMemberList[index])._distance):setTooltipEventRegistFunc("PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                    if (_partyData[index])._nowHp <= 0 then
-                                                                                                      ((_uiPartyMemberList[index])._conditionBG):SetShow(true)
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._conditionTxt):SetShow(true)
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._conditionTxt):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DEATH"))
-                                                                                                    else
-                                                                                                      if (_partyData[index])._nowHp >= 1 then
-                                                                                                        ((_uiPartyMemberList[index])._conditionBG):SetShow(false)
-                                                                                                        ;
-                                                                                                        ((_uiPartyMemberList[index])._conditionTxt):SetShow(false)
-                                                                                                        ;
-                                                                                                        ((_uiPartyMemberList[index])._conditionTxt):SetText("")
-                                                                                                      end
-                                                                                                    end
-                                                                                                    if (_partyData[index])._isMaster == true then
-                                                                                                      ((_uiPartyMemberList[index])._leader):SetShow(true)
-                                                                                                    else
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._leader):SetShow(false)
-                                                                                                    end
-                                                                                                    if (_partyData[index])._isSelf then
-                                                                                                      ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(false)
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._distance):SetShow(false)
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._distance):SetSpanSize(-125, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
-                                                                                                    else
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(true)
-                                                                                                      if ((_uiPartyMemberList[index])._stylePartyOptionBtn):GetShow() then
-                                                                                                        ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-165, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
-                                                                                                      else
-                                                                                                        ;
-                                                                                                        ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
-                                                                                                      end
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._distance):SetSpanSize((((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).x + 23, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
-                                                                                                    end
-                                                                                                    ;
-                                                                                                    ((_uiPartyMemberList[index])._base):SetShow(true)
-                                                                                                    ;
-                                                                                                    ((_uiPartyMemberList[index])._base):SetShow(false)
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                                                                                    -- DECOMPILER ERROR at PC1416: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                                  end
+                                                                                              ((_uiPartyMemberList[index])._distance):setRenderTexture(((_uiPartyMemberList[index])._distance):getBaseTexture())
+                                                                                              ;
+                                                                                              ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_On", "PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
+                                                                                              ;
+                                                                                              ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_Out", "PartyPop_SimpleTooltip_Show( false, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
+                                                                                              ;
+                                                                                              ((_uiPartyMemberList[index])._distance):setTooltipEventRegistFunc("PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
+                                                                                              if (_partyData[index])._nowHp <= 0 then
+                                                                                                ((_uiPartyMemberList[index])._conditionBG):SetShow(true)
+                                                                                                ;
+                                                                                                ((_uiPartyMemberList[index])._conditionTxt):SetShow(true)
+                                                                                                ;
+                                                                                                ((_uiPartyMemberList[index])._conditionTxt):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DEATH"))
+                                                                                              else
+                                                                                                if (_partyData[index])._nowHp >= 1 then
+                                                                                                  ((_uiPartyMemberList[index])._conditionBG):SetShow(false)
+                                                                                                  ;
+                                                                                                  ((_uiPartyMemberList[index])._conditionTxt):SetShow(false)
+                                                                                                  ;
+                                                                                                  ((_uiPartyMemberList[index])._conditionTxt):SetText("")
                                                                                                 end
                                                                                               end
+                                                                                              if (_partyData[index])._isMaster == true then
+                                                                                                ((_uiPartyMemberList[index])._leader):SetShow(true)
+                                                                                              else
+                                                                                                ;
+                                                                                                ((_uiPartyMemberList[index])._leader):SetShow(false)
+                                                                                              end
+                                                                                              if (_partyData[index])._isSelf then
+                                                                                                ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(false)
+                                                                                                ;
+                                                                                                ((_uiPartyMemberList[index])._distance):SetShow(false)
+                                                                                                ;
+                                                                                                ((_uiPartyMemberList[index])._distance):SetSpanSize(-125, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
+                                                                                              else
+                                                                                                ;
+                                                                                                ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(true)
+                                                                                                if ((_uiPartyMemberList[index])._stylePartyOptionBtn):GetShow() then
+                                                                                                  ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-165, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                else
+                                                                                                  ;
+                                                                                                  ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                end
+                                                                                                ;
+                                                                                                ((_uiPartyMemberList[index])._distance):SetSpanSize((((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).x + 23, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
+                                                                                              end
+                                                                                              ;
+                                                                                              ((_uiPartyMemberList[index])._base):SetShow(true)
+                                                                                              ;
+                                                                                              ((_uiPartyMemberList[index])._base):SetShow(false)
                                                                                             end
                                                                                           end
                                                                                         end
@@ -1030,6 +898,19 @@ ResponseParty_updatePartyList = function()
           end
         end
       end
+    end
+  end
+end
+
+ResponseParty_updatePartyList = function()
+  -- function num : 0_22 , upvalues : partyType, _partyData, _preLootType, PLT2S, _uiComboLootingOption, _styleLootType, requestPlayerList, _partyMemberCount, isContentsEnable, Match_Button_Info, isMainChannel, isDevServer, partyPenalty, partyMarketOption, btnSpecialGoods, firstCheck, savedPrice, savedGrade, registMarket, registItem
+  if Panel_Party:IsShow() and partyType == 0 then
+    local partyMemberCount = RequestParty_getPartyMemberCount()
+    local lootType = RequestParty_getPartyLootType()
+    _partyData = {}
+    _partyData = FGlobal_ResponseParty_PartyMemberSet(partyMemberCount)
+    for index = 0, _maxPartyMemberCount - 1 do
+      ResponseParty_PartyMemberTextureSet(_partyData, partyMemberCount, index)
     end
     if _preLootType ~= nil and _preLootType ~= PLT2S[lootType] then
       local rottingMsg = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_LOOTING_RULE1") .. " " .. PLT2S[lootType] .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_LOOTING_RULE2")
@@ -1095,6 +976,12 @@ ResponseParty_updatePartyList = function()
             ;
             (registItem._bg):SetPosY(partyMemberCount * Panel_Party:GetSizeY() + 40 + sizeY)
           end
+          do
+            if Panel_LargeParty:GetShow() and partyType == 1 then
+              Panel_Party:SetShow(false)
+              FGlobal_LargePartyUpdate()
+            end
+          end
         end
       end
     end
@@ -1102,18 +989,22 @@ ResponseParty_updatePartyList = function()
 end
 
 FGlobal_PartyMemberCount = function()
-  -- function num : 0_21 , upvalues : _partyMemberCount
+  -- function num : 0_23 , upvalues : _partyMemberCount
   return _partyMemberCount
 end
 
 local messageBox_party_accept = function()
-  -- function num : 0_22 , upvalues : requestPlayerList
+  -- function num : 0_24 , upvalues : requestPlayerList, partyType
   requestPlayerList = {}
-  RequestParty_acceptInvite()
+  if partyType == 1 then
+    Panel_LargeParty:SetShow(true)
+    Panel_Party:SetShow(false)
+  end
+  RequestParty_acceptInvite(partyType)
 end
 
 local messageBox_party_refuse = function()
-  -- function num : 0_23 , upvalues : requestPlayerList, refuseName
+  -- function num : 0_25 , upvalues : requestPlayerList, refuseName
   RequestParty_refuseInvite()
   for ii = 0, #requestPlayerList do
     -- DECOMPILER ERROR at PC13: Confused about usage of register: R4 in 'UnsetPending'
@@ -1126,7 +1017,7 @@ local messageBox_party_refuse = function()
 end
 
 ResponseParty_withdraw = function(withdrawType, actorKey, isMe)
-  -- function num : 0_24 , upvalues : partyPenalty, Match_Button_Info
+  -- function num : 0_26 , upvalues : partyPenalty, Match_Button_Info
   if ToClient_IsRequestedPvP() or ToClient_IsMyselfInEntryUser() then
     return 
   end
@@ -1171,7 +1062,7 @@ ResponseParty_withdraw = function(withdrawType, actorKey, isMe)
 end
 
 ResponseParty_changeLeader = function(actorKey)
-  -- function num : 0_25
+  -- function num : 0_27
   local actorProxyWrapper = getActor(actorKey)
   if actorProxyWrapper == nil then
     return 
@@ -1183,22 +1074,23 @@ ResponseParty_changeLeader = function(actorKey)
 end
 
 ResponseParty_refuse = function(reason)
-  -- function num : 0_26
+  -- function num : 0_28
   local contentString = reason
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "PARTY_INVITE_MESSAGEBOX_TITLE"), content = contentString, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)
 end
 
-ResponseParty_invite = function(hostName)
-  -- function num : 0_27 , upvalues : requestPlayerList, refuseName, messageBox_party_accept, messageBox_party_refuse, PP
+ResponseParty_invite = function(hostName, invitePartyType)
+  -- function num : 0_29 , upvalues : requestPlayerList, partyType, refuseName, messageBox_party_accept, messageBox_party_refuse, PP
   for ii = 0, #requestPlayerList do
     if requestPlayerList[ii] == hostName then
       return 
     end
   end
+  partyType = invitePartyType
   refuseName = hostName
-  -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
 
   requestPlayerList[#requestPlayerList] = hostName
   local messageboxMemo = hostName .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_INVITE_ACCEPT")
@@ -1208,21 +1100,21 @@ ResponseParty_invite = function(hostName)
 end
 
 PartyPop_clickChangeLeader = function(index)
-  -- function num : 0_28 , upvalues : closePartyOption
+  -- function num : 0_30 , upvalues : closePartyOption
   RequestParty_changeLeader(index)
   local memberData = RequestParty_getPartyMemberAt(index)
   closePartyOption()
 end
 
 PartyPop_clickWithdrawMember = function(index)
-  -- function num : 0_29 , upvalues : closePartyOption
+  -- function num : 0_31 , upvalues : closePartyOption
   local isPlayingPvPMatch = (getSelfPlayer()):isDefinedPvPMatch()
   if isPlayingPvPMatch == true then
     RequestParty_withdrawMember(index)
     return 
   end
   local partyOut = function()
-    -- function num : 0_29_0 , upvalues : index, closePartyOption
+    -- function num : 0_31_0 , upvalues : index, closePartyOption
     RequestParty_withdrawMember(index)
     FGlobal_PartyInventoryClose()
     closePartyOption()
@@ -1235,7 +1127,7 @@ PartyPop_clickWithdrawMember = function(index)
 end
 
 messageBox_party_withdrawMember = function()
-  -- function num : 0_30 , upvalues : withdrawMember
+  -- function num : 0_32 , upvalues : withdrawMember
   local memberData = RequestParty_getPartyMemberAt(withdrawMember)
   RequestParty_withdrawMember(withdrawMember)
   if (getSelfPlayer()):isDefinedPvPMatch() == true then
@@ -1244,7 +1136,7 @@ messageBox_party_withdrawMember = function()
 end
 
 PartyPop_clickBanishMember = function(index)
-  -- function num : 0_31 , upvalues : withdrawMember, PP, closePartyOption
+  -- function num : 0_33 , upvalues : withdrawMember, PP, closePartyOption
   withdrawMember = index
   local withdrawMemberData = RequestParty_getPartyMemberAt(withdrawMember)
   local withdrawMemberActorKey = withdrawMemberData:getActorKey()
@@ -1258,7 +1150,7 @@ PartyPop_clickBanishMember = function(index)
 end
 
 local ResponseParty_showList = function(idx)
-  -- function num : 0_32 , upvalues : _partyData, _last_Index, closePartyOption, _uiPartyMemberList, isContentsEnable, _uiButtonWithdrawMember, _uiButtonChangeLeader
+  -- function num : 0_34 , upvalues : _partyData, _last_Index, closePartyOption, _uiPartyMemberList, isContentsEnable, _uiButtonWithdrawMember, _uiButtonChangeLeader
   local index = (_partyData[idx])._index
   local isShow = Panel_PartyOption:IsShow()
   if isShow == true and _last_Index == idx then
@@ -1320,12 +1212,12 @@ local ResponseParty_showList = function(idx)
 end
 
 PartyPop_clickPartyOption = function(index)
-  -- function num : 0_33 , upvalues : ResponseParty_showList
+  -- function num : 0_35 , upvalues : ResponseParty_showList
   ResponseParty_showList(index)
 end
 
 PartyPop_clickPartyFollow = function(index)
-  -- function num : 0_34
+  -- function num : 0_36
   local selfPlayer = getSelfPlayer()
   local memberData = RequestParty_getPartyMemberAt(index)
   if memberData ~= nil then
@@ -1335,7 +1227,7 @@ PartyPop_clickPartyFollow = function(index)
 end
 
 PartyPop_SimpleTooltip_Show = function(isShow, tipType, index, isDistance)
-  -- function num : 0_35 , upvalues : _uiPartyMemberList, partyPenalty
+  -- function num : 0_37 , upvalues : _uiPartyMemberList, partyPenalty
   local name, desc, control = nil
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_RESOURCE, "INTERACTION_BTN_FOLLOW_ACTOR")
@@ -1362,13 +1254,13 @@ PartyPop_SimpleTooltip_Show = function(isShow, tipType, index, isDistance)
 end
 
 PartyOption_Hide = function()
-  -- function num : 0_36
+  -- function num : 0_38
   Panel_PartyOption:SetShow(false)
   return false
 end
 
 PartyPop_onLootingOptionUI = function()
-  -- function num : 0_37 , upvalues : _uiComboLootingOption, PLT, PLT2S
+  -- function num : 0_39 , upvalues : _uiComboLootingOption, PLT, PLT2S
   if RequestParty_isLeader() == true then
     local lootType = RequestParty_getPartyLootType()
     _uiComboLootingOption:DeleteAllItem()
@@ -1381,7 +1273,7 @@ PartyPop_onLootingOptionUI = function()
 end
 
 PartyPop_offLootingOptionUI = function()
-  -- function num : 0_38 , upvalues : _uiComboLootingOption
+  -- function num : 0_40 , upvalues : _uiComboLootingOption
   local list = _uiComboLootingOption:GetListControl()
   if list:GetShow() then
     return 
@@ -1389,7 +1281,7 @@ PartyPop_offLootingOptionUI = function()
 end
 
 Panel_Party_ShowToggle = function()
-  -- function num : 0_39 , upvalues : requestPlayerList
+  -- function num : 0_41 , upvalues : requestPlayerList
   local isShow = Panel_Party:GetShow()
   if RequestParty_getPartyMemberCount() == 0 then
     return 
@@ -1403,7 +1295,7 @@ Panel_Party_ShowToggle = function()
 end
 
 partWidget_OnscreenEvent = function()
-  -- function num : 0_40 , upvalues : requestPlayerList, _uiComboLootingOption
+  -- function num : 0_42 , upvalues : requestPlayerList, _uiComboLootingOption
   if RequestParty_getPartyMemberCount() == 0 then
     Panel_Party:SetShow(false)
     requestPlayerList = {}
@@ -1437,21 +1329,21 @@ partWidget_OnscreenEvent = function()
 end
 
 FromClient_NotifyPartyMemberPickupItem = function(userName, itemName)
-  -- function num : 0_41
+  -- function num : 0_43
   local message = ""
   message = PAGetStringParam2(Defines.StringSheet_GAME, "GAME_MESSAGE_NOTIFY_PARTYMEMBER_PICKUP_ITEM", "userName", userName, "itemName", itemName)
   Proc_ShowMessage_Ack_With_ChatType(message, nil, (CppEnums.ChatType).System, (CppEnums.ChatSystemType).PartyItem)
 end
 
 FromClient_NotifyPartyMemberPickupItemFromPartyInventory = function(userName, itemName, itemCount)
-  -- function num : 0_42
+  -- function num : 0_44
   local message = ""
   message = PAGetStringParam3(Defines.StringSheet_GAME, "GAME_MESSAGE_NOTIFY_PARTYMEMBER_PICKUP_ITEM_FOR_PARTYINVENTORY", "userName", userName, "itemName", itemName, "itemCount", tostring(itemCount))
   Proc_ShowMessage_Ack_With_ChatType(message, nil, (CppEnums.ChatType).System, (CppEnums.ChatSystemType).PartyItem)
 end
 
 PartyPanel_Repos = function()
-  -- function num : 0_43
+  -- function num : 0_45
   if not Panel_Window_PetControl:GetShow() then
     Panel_Party:SetSpanSize(10, 200)
   else
@@ -1460,12 +1352,12 @@ PartyPanel_Repos = function()
 end
 
 FGlobal_PartyListUpdate = function()
-  -- function num : 0_44
+  -- function num : 0_46
   ResponseParty_updatePartyList()
 end
 
 FromClient_UpdatePartyExperiencePenalty = function(isPenalty)
-  -- function num : 0_45 , upvalues : partyPenalty, Match_Button_Info
+  -- function num : 0_47 , upvalues : partyPenalty, Match_Button_Info
   if isPenalty == nil then
     return 
   end
@@ -1476,6 +1368,11 @@ FromClient_UpdatePartyExperiencePenalty = function(isPenalty)
   else
     partyPenalty:SetShow(false)
   end
+end
+
+PartyInit = function()
+  -- function num : 0_48 , upvalues : partyType
+  partyType = ToClient_GetPartyType()
 end
 
 _uiComboLootingOption:addInputEvent("Mouse_LUp", "Looting_ComboBox()")
@@ -1491,10 +1388,11 @@ registerEvent("onScreenResize", "partWidget_OnscreenEvent")
 registerEvent("FromClient_UpdatePartyExperiencePenalty", "FromClient_UpdatePartyExperiencePenalty")
 registerEvent("FromClient_NotifyPartyMemberPickupItem", "FromClient_NotifyPartyMemberPickupItem")
 registerEvent("FromClient_NotifyPartyMemberPickupItemFromPartyInventory", "FromClient_NotifyPartyMemberPickupItemFromPartyInventory")
+PartyInit()
 ResponseParty_createPartyList()
 ResponseParty_updatePartyList()
 renderModeChange_Panel_Party = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_46 , upvalues : requestPlayerList
+  -- function num : 0_49 , upvalues : requestPlayerList
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -1509,7 +1407,7 @@ renderModeChange_Panel_Party = function(prevRenderModeList, nextRenderModeList)
 end
 
 FGlobal_Party_ConditionalShow = function()
-  -- function num : 0_47 , upvalues : requestPlayerList
+  -- function num : 0_50 , upvalues : requestPlayerList
   if RequestParty_getPartyMemberCount() == 0 then
     Panel_Party:SetShow(false)
     requestPlayerList = {}

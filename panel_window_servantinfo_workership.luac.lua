@@ -229,7 +229,7 @@ workerShipInfo.update = function(self)
   ;
   (self._deadCountValue):SetText(deadCount * 10 .. "%")
   local vehicleType = servantWrapper:getVehicleType()
-  if UI_VT.Type_PersonTradeShip == vehicleType then
+  if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType then
     (self._deadCountTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SHIPINFO_DEADCOUNT"))
     ;
     (self._deadCountValue):SetText(deadCount)
@@ -268,8 +268,11 @@ workerShipInfo.update = function(self)
         local skillName = skillWrapper:getName()
         local startIndex = (string.find)(skillName, " ")
         local endIndex = (string.find)(skillName, ")")
+        if startIndex == nil then
+          startIndex = 1
+        end
         local onlySkillName = (string.sub)(skillName, 1, startIndex - 1)
-        -- DECOMPILER ERROR at PC337: Confused about usage of register: R22 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC344: Confused about usage of register: R22 in 'UnsetPending'
 
         if startIndex ~= nil and endIndex ~= nil then
           skillCondition[ii] = (string.sub)(skillWrapper:getName(), startIndex + 2, endIndex - 1)
@@ -290,7 +293,7 @@ workerShipInfo.update = function(self)
         end
         ;
         (slot.dec):SetText(skillWrapper:getDescription())
-        -- DECOMPILER ERROR at PC391: Confused about usage of register: R22 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC398: Confused about usage of register: R22 in 'UnsetPending'
 
         skillDescArray[ii] = skillWrapper:getDescription()
         if (slot.dec):GetTextSizeX() > 140 then
@@ -324,11 +327,11 @@ workerShipInfo.update = function(self)
       do
         do
           self._skillCount = self._skillCount + 1
-          -- DECOMPILER ERROR at PC477: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC484: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC477: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC484: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC477: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC484: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

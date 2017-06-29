@@ -246,7 +246,7 @@ ShipInfo_ChangeEquipItem = function(slotNo)
     return 
   end
   local vehicleType = vehicleWrapper:getVehicleType()
-  if UI_VT.Type_Boat ~= vehicleType or UI_VT.Type_Raft ~= vehicleType or UI_VT.Type_FishingBoat ~= vehicleType or UI_VT.Type_SailingBoat ~= vehicleType or UI_VT.Type_TradeShip ~= vehicleType then
+  if UI_VT.Type_Boat ~= vehicleType or UI_VT.Type_Raft ~= vehicleType or UI_VT.Type_FishingBoat ~= vehicleType or UI_VT.Type_SailingBoat ~= vehicleType or UI_VT.Type_PersonalBattleShip ~= vehicleType then
     return 
   end
   ;

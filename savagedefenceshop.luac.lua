@@ -108,7 +108,15 @@ FGlobal_SavageDefenceShop_buy = function(idx)
   local price = ToClient_getSavageDefenceItemPrice(idx)
   local s32_maxNumber = (math.floor)(inMyCoin / Int64toInt32(price))
   local s64_maxNumber = toInt64(0, s32_maxNumber)
-  Panel_NumberPad_Show(true, s64_maxNumber, idx, FGlobal_SavageDefenceShop_BuyXXX)
+  local itemKey = ToClient_getSavageDefenceItemkey(idx)
+  if itemKey ~= 0 then
+    local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(itemKey))
+    if itemStatic:isStackable() then
+      Panel_NumberPad_Show(true, s64_maxNumber, idx, FGlobal_SavageDefenceShop_BuyXXX)
+    else
+      ToClient_SavageDefenceBuyItem(idx, 1)
+    end
+  end
 end
 
 FGlobal_SavageDefenceShop_BuyXXX = function(inputNumber, param)

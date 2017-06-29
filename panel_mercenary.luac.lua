@@ -66,14 +66,28 @@ end
 Mercenary_Request = function(isAttack)
   -- function num : 0_1
   local currentSiegeTerrytoryKey = ToClient_GetStartSiegeTerritoryKey()
-  ToClient_MilitiaEnterReq(currentSiegeTerrytoryKey, isAttack)
+  local doRequest_Militia = function()
+    -- function num : 0_1_0 , upvalues : currentSiegeTerrytoryKey, isAttack
+    ToClient_ValunteerEnterReq(currentSiegeTerrytoryKey, isAttack)
+  end
+
+  local title = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA__REQUESTTITLE")
+  local content = ""
+  if isAttack then
+    content = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA__REQUESCONTENT_ATTACK")
+  else
+    content = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA__REQUESCONTENT_DEFFENCE")
+  end
+  local messageBoxData = {title = title, content = content, functionYes = doRequest_Militia, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
 end
 
 Mercenary_Cancel = function()
   -- function num : 0_2
   local cancelMercenary = function()
     -- function num : 0_2_0
-    ToClient_MilitiaLeaveReq()
+    ToClient_ValunteerLeaveReq()
   end
 
   local title = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_MSGTITLE")
@@ -195,10 +209,10 @@ end
 mercenary.registerEvent = function(self)
   -- function num : 0_14
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Mercenary")
-  registerEvent("FromClient_ResponseMilitiaStart", "FromClient_ResponseMilitiaStart")
-  registerEvent("FromClient_ResponseMilitiaEnd", "FromClient_ResponseMilitiaEnd")
-  registerEvent("FromClient_ResponseMilitiaEnter", "FromClient_ResponseMilitiaEnter")
-  registerEvent("FromClient_ResponseMilitiaLeave", "FromClient_ResponseMilitiaLeave")
+  registerEvent("FromClient_ResponseValunteerStart", "FromClient_ResponseMilitiaStart")
+  registerEvent("FromClient_ResponseValunteerEnd", "FromClient_ResponseMilitiaEnd")
+  registerEvent("FromClient_ResponseValunteerEnter", "FromClient_ResponseMilitiaEnter")
+  registerEvent("FromClient_ResponseValunteerLeave", "FromClient_ResponseMilitiaLeave")
   registerEvent("onScreenResize", "Panel_Mercenary_Repos")
   ;
   ((self._control)._btnCancel):addInputEvent("Mouse_LUp", "Mercenary_Cancel()")

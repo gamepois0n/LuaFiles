@@ -333,6 +333,7 @@ FGlobal_WarehouseOpenByMaid = function(index)
   local isFreeBattle = (selfProxy:get()):isBattleGroundDefine()
   local isArshaJoin = ToClient_IsMyselfInArena()
   local localWarTeam = ToClient_GetMyTeamNoLocalWar()
+  local isSpecialCharacter = (getTemporaryInformationWrapper()):isSpecialCharacter()
   if localWarTeam ~= 0 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_SUMMON_LOCALWAR"))
     return 
@@ -347,6 +348,10 @@ FGlobal_WarehouseOpenByMaid = function(index)
   end
   if selfplayerIsInHorseRace() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_DONT_SUMMON_HORSERACE"))
+    return 
+  end
+  if isSpecialCharacter then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_FREEBATTLE"))
     return 
   end
   local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()

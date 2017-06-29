@@ -30,6 +30,7 @@ slot = {}
 (clothInven.desc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 ;
 (clothInven.desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_DESC"))
+Panel_Window_ClothInventory:addConsoleUIControl(0, 1, 1, clothInven.btnChangeAll)
 FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlotNo)
   -- function num : 0_2 , upvalues : clothInven
   local self = clothInven
@@ -46,15 +47,16 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   ;
   (self.textTitle):SetText(_title)
   self.bagWhereType = bagType
+  Panel_Window_ClothInventory:deleteConsoleUIGroup(0)
   for index = 0, bagSize - 1 do
-    -- DECOMPILER ERROR at PC36: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC40: Confused about usage of register: R10 in 'UnsetPending'
 
     (self.bg)[index] = {}
-    -- DECOMPILER ERROR at PC39: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC43: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.slot)[index] = {}
-    -- DECOMPILER ERROR at PC51: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.bg)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_ClothInventory, "ColothInventory_SlotBg_" .. index)
@@ -69,6 +71,7 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
     (SlotItem.new)((self.slot)[index], "ClothInventory_", index, (self.bg)[index], self.config)
     ;
     ((self.slot)[index]):createChild()
+    Panel_Window_ClothInventory:addConsoleUIControl(index, 4, 0, ((self.slot)[index]).icon)
     local itemWrapper = getInventoryBagItemByType(fromWhereType, fromSlotNo, index)
     if itemWrapper ~= nil then
       ((self.slot)[index]):setItem(itemWrapper, index)

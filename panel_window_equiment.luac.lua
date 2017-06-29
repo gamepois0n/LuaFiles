@@ -288,17 +288,57 @@ equip.initControl = function(self)
   (self.checkCamouflage):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 8 )")
   ;
   (self.checkCamouflage):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 8 )")
+  ConsoleGroupCreate_Panel_Equipment()
+end
+
+ConsoleGroupCreate_Panel_Equipment = function()
+  -- function num : 0_3 , upvalues : equip
+  local self = equip
+  Panel_Equipment:addConsoleUIControl(0, 13, 0, ((self.slots)[6]).icon)
+  Panel_Equipment:addConsoleUIControl(1, 13, 0, ((self.slots)[3]).icon)
+  Panel_Equipment:addConsoleUIControl(2, 13, 0, ((self.slots)[8]).icon)
+  Panel_Equipment:addConsoleUIControl(3, 13, 0, ((self.slots)[9]).icon)
+  Panel_Equipment:addConsoleUIControl(4, 13, 0, ((self.slots)[4]).icon)
+  Panel_Equipment:addConsoleUIControl(5, 13, 0, ((self.slots)[7]).icon)
+  Panel_Equipment:addConsoleUIControl(6, 13, 0, ((self.slots)[1]).icon)
+  Panel_Equipment:addConsoleUIControl(7, 13, 0, ((self.slots)[29]).icon)
+  Panel_Equipment:addConsoleUIControl(8, 13, 0, ((self.slots)[0]).icon)
+  Panel_Equipment:addConsoleUIControl(9, 13, 0, ((self.slots)[12]).icon)
+  Panel_Equipment:addConsoleUIControl(10, 13, 0, ((self.slots)[5]).icon)
+  Panel_Equipment:addConsoleUIControl(11, 13, 0, ((self.slots)[11]).icon)
+  Panel_Equipment:addConsoleUIControl(12, 13, 0, ((self.slots)[10]).icon)
+  Panel_Equipment:addConsoleUIControl(0, 8, 1, ((self.slots)[17]).icon)
+  Panel_Equipment:addConsoleUIControl(1, 8, 1, ((self.slots)[14]).icon)
+  Panel_Equipment:addConsoleUIControl(2, 8, 1, ((self.slots)[15]).icon)
+  Panel_Equipment:addConsoleUIControl(3, 8, 1, ((self.slots)[19]).icon)
+  Panel_Equipment:addConsoleUIControl(4, 8, 1, ((self.slots)[20]).icon)
+  Panel_Equipment:addConsoleUIControl(5, 8, 1, ((self.slots)[30]).icon)
+  Panel_Equipment:addConsoleUIControl(6, 8, 1, ((self.slots)[18]).icon)
+  Panel_Equipment:addConsoleUIControl(7, 8, 1, ((self.slots)[16]).icon)
+  Panel_Equipment:addConsoleUIControl(0, 1, 2, ((self.slots)[27]).icon)
+  Panel_Equipment:addConsoleUIControl(0, 5, 3, ((self.slots)[13]).icon)
+  Panel_Equipment:addConsoleUIControl(1, 5, 3, ((self.slots)[21]).icon)
+  Panel_Equipment:addConsoleUIControl(2, 5, 3, ((self.slots)[22]).icon)
+  Panel_Equipment:addConsoleUIControl(3, 5, 3, ((self.slots)[23]).icon)
+  Panel_Equipment:addConsoleUIControl(4, 5, 3, ((self.slots)[2]).icon)
+  Panel_Equipment:addConsoleUIControl(0, 7, 4, self.btn_ServantInventory)
+  Panel_Equipment:addConsoleUIControl(1, 7, 4, self.checkCamouflage)
+  Panel_Equipment:addConsoleUIControl(2, 7, 4, self.checkUnderwear)
+  Panel_Equipment:addConsoleUIControl(3, 7, 4, self.btn_PetList)
+  Panel_Equipment:addConsoleUIControl(4, 7, 4, self.checkHelmOpen)
+  Panel_Equipment:addConsoleUIControl(5, 7, 4, self.checkHelm)
+  Panel_Equipment:addConsoleUIControl(6, 7, 4, self.checkCloak)
 end
 
 HandleClicked_EquipmentWindow_Close = function()
-  -- function num : 0_3 , upvalues : equip
+  -- function num : 0_4 , upvalues : equip
   (equip.checkPopUp):SetCheck(false)
   Panel_Equipment:CloseUISubApp()
   EquipmentWindow_Close()
 end
 
 EquipmentWindow_Close = function()
-  -- function num : 0_4 , upvalues : equip
+  -- function num : 0_5 , upvalues : equip
   if Panel_Equipment:IsUISubApp() then
     return 
   end
@@ -320,7 +360,7 @@ EquipmentWindow_Close = function()
 end
 
 EquipmentWindow_ShowAni = function()
-  -- function num : 0_5 , upvalues : UI_ANI_ADV
+  -- function num : 0_6 , upvalues : UI_ANI_ADV
   (UIAni.fadeInSCR_Left)(Panel_Equipment)
   local aniInfo1 = Panel_Equipment:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -339,7 +379,7 @@ EquipmentWindow_ShowAni = function()
 end
 
 EquipmentWindow_HideAni = function()
-  -- function num : 0_6 , upvalues : UI_ANI_ADV, UI_color
+  -- function num : 0_7 , upvalues : UI_ANI_ADV, UI_color
   Panel_Equipment:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
   local aniInfo1 = Panel_Equipment:addColorAnimation(0, 0.1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
@@ -352,12 +392,12 @@ EquipmentWindow_HideAni = function()
 end
 
 Equipment_MouseOn = function(slotNo, isOn)
-  -- function num : 0_7
+  -- function num : 0_8
   Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "equipment", isOn, false)
 end
 
 Equipment_NilSlot_MouseOn = function(slotNo, isOn)
-  -- function num : 0_8 , upvalues : equip, toolTip_BlankSlot
+  -- function num : 0_9 , upvalues : equip, toolTip_BlankSlot
   local self = equip
   if isOn == true then
     toolTip_BlankSlot:SetText((self.slotNoIdToString)[slotNo])
@@ -372,7 +412,7 @@ end
 
 local _offenceValue, _awakenOffecnValue, _defenceValue = nil, nil, nil
 Equipment_RClick = function(slotNo)
-  -- function num : 0_9 , upvalues : equip
+  -- function num : 0_10 , upvalues : equip
   local itemWrapper = getEquipmentItem(slotNo)
   if itemWrapper ~= nil then
     Equipment_Checkbutton(slotNo, true, equip.checkUnderwear)
@@ -389,7 +429,7 @@ Equipment_RClick = function(slotNo)
 end
 
 Equipment_LClick = function(slotNo)
-  -- function num : 0_10
+  -- function num : 0_11
   if DragManager.dragStartPanel == Panel_Window_Inventory then
     local dragSlotNo = DragManager.dragSlotInfo
     local itemWrapper = getInventoryItem(dragSlotNo)
@@ -404,7 +444,7 @@ Equipment_LClick = function(slotNo)
 end
 
 AvatarEquipSlot_LClick = function(slotNo)
-  -- function num : 0_11 , upvalues : equip
+  -- function num : 0_12 , upvalues : equip
   local self = equip
   local selfPlayer = getSelfPlayer()
   do
@@ -432,19 +472,19 @@ end
 local equipMentPosX = 0
 local equipMentPosY = 0
 Equipment_PosSaveMemory = function()
-  -- function num : 0_12 , upvalues : equipMentPosX, equipMentPosY
+  -- function num : 0_13 , upvalues : equipMentPosX, equipMentPosY
   equipMentPosX = Panel_Equipment:GetPosX()
   equipMentPosY = Panel_Equipment:GetPosY()
 end
 
 Equipment_PosLoadMemory = function()
-  -- function num : 0_13 , upvalues : equipMentPosX, equipMentPosY
+  -- function num : 0_14 , upvalues : equipMentPosX, equipMentPosY
   Panel_Equipment:SetPosX(equipMentPosX)
   Panel_Equipment:SetPosY(equipMentPosY)
 end
 
 Equipment_SetShow = function(isShow)
-  -- function num : 0_14 , upvalues : equip, EquipNoMin, EquipNoMax, alchemyStoneQuickKey
+  -- function num : 0_15 , upvalues : equip, EquipNoMin, EquipNoMax, alchemyStoneQuickKey
   local self = equip
   if Panel_Window_Camp:GetShow() then
     return 
@@ -486,12 +526,12 @@ Equipment_SetShow = function(isShow)
 end
 
 FGlobal_Equipment_SetHide = function(isShow)
-  -- function num : 0_15
+  -- function num : 0_16
   Equipment_SetShow(isShow)
 end
 
 FGlobal_Equipment_SetFunctionButtonHide = function(isShow)
-  -- function num : 0_16 , upvalues : equip, isKR2ContentsEnable
+  -- function num : 0_17 , upvalues : equip, isKR2ContentsEnable
   (equip.btn_PetList):SetShow(isShow)
   if isKR2ContentsEnable then
     (equip.checkUnderwear):SetShow(false)
@@ -508,7 +548,7 @@ FGlobal_Equipment_SetFunctionButtonHide = function(isShow)
 end
 
 equip.registEventHandler = function(self)
-  -- function num : 0_17 , upvalues : _buttonQuestion
+  -- function num : 0_18 , upvalues : _buttonQuestion
   (self.buttonClose):addInputEvent("Mouse_LUp", "HandleClicked_EquipmentWindow_Close()")
   ;
   (self.checkCloak):addInputEvent("Mouse_LUp", "Check_Cloak()")
@@ -536,7 +576,7 @@ equip.registEventHandler = function(self)
 end
 
 local extendedSlotInfo = function(itemWrapper, SlotNo)
-  -- function num : 0_18 , upvalues : equip
+  -- function num : 0_19 , upvalues : equip
   local itemSSW = itemWrapper:getStaticStatus()
   local itemName = itemSSW:getName()
   local slotNoMax = itemSSW:getExtendedSlotCount()
@@ -559,7 +599,7 @@ local extendedSlotInfo = function(itemWrapper, SlotNo)
 end
 
 local setItemInfoUseWrapper = function(slot, itemWrapper, isMono, isExtended, slotNo)
-  -- function num : 0_19
+  -- function num : 0_20
   slot:setItem(itemWrapper, slotNo, true)
   local itemSSW = itemWrapper:getStaticStatus()
   local enchantCount = ((itemSSW:get())._key):getEnchantLevel()
@@ -655,7 +695,7 @@ local setItemInfoUseWrapper = function(slot, itemWrapper, isMono, isExtended, sl
 end
 
 Equipment_updateSlotData = function()
-  -- function num : 0_20 , upvalues : equip, EquipNoMin, EquipNoMax, extendedSlotInfo, setItemInfoUseWrapper, awakenWeaponContentsOpen, isContentsEnable, alchemyStoneQuickKey, _offenceValue, _awakenOffecnValue, _defenceValue
+  -- function num : 0_21 , upvalues : equip, EquipNoMin, EquipNoMax, extendedSlotInfo, setItemInfoUseWrapper, awakenWeaponContentsOpen, isContentsEnable, alchemyStoneQuickKey, _offenceValue, _awakenOffecnValue, _defenceValue
   local self = equip
   self.extendedSlotInfoArray = {}
   self.checkExtendedSlot = 0
@@ -800,7 +840,7 @@ end
 
 local _awakenValue = 0
 Equipment_equipItem = function(slotNo)
-  -- function num : 0_21 , upvalues : equip, _offenceValue, _awakenOffecnValue, awakenWeaponContentsOpen, _defenceValue
+  -- function num : 0_22 , upvalues : equip, _offenceValue, _awakenOffecnValue, awakenWeaponContentsOpen, _defenceValue
   local self = equip
   local slot = (self.slots)[slotNo]
   if slotNo > 13 and slotNo < 24 then
@@ -840,13 +880,13 @@ Equipment_equipItem = function(slotNo)
 end
 
 Equipment_onScreenResize = function()
-  -- function num : 0_22
+  -- function num : 0_23
   Panel_Equipment:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Equipment:GetSizeX())
   Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
 end
 
 equip.registMessageHandler = function(self)
-  -- function num : 0_23
+  -- function num : 0_24
   registerEvent("EventEquipmentUpdate", "Equipment_updateSlotData")
   registerEvent("EventEquipItem", "Equipment_equipItem")
   registerEvent("EventPCEquipSetShow", "Equipment_SetShow")
@@ -854,27 +894,27 @@ equip.registMessageHandler = function(self)
 end
 
 Check_Cloak = function()
-  -- function num : 0_24 , upvalues : equip
+  -- function num : 0_25 , upvalues : equip
   selfPlayerShowCloak(not (equip.checkCloak):IsCheck())
 end
 
 Check_Helm = function()
-  -- function num : 0_25 , upvalues : equip
+  -- function num : 0_26 , upvalues : equip
   selfPlayerShowHelmet(not (equip.checkHelm):IsCheck())
 end
 
 Check_HelmOpen = function()
-  -- function num : 0_26 , upvalues : equip
+  -- function num : 0_27 , upvalues : equip
   selfPlayerShowBattleHelmet((equip.checkHelmOpen):IsCheck())
 end
 
 Check_ShowNameWhenCamouflage = function()
-  -- function num : 0_27
+  -- function num : 0_28
   Toclient_setShowNameWhenCamouflage(not ((getSelfPlayer()):get()):isShowNameWhenCamouflage())
 end
 
 Check_PopUI = function()
-  -- function num : 0_28 , upvalues : equip
+  -- function num : 0_29 , upvalues : equip
   if (equip.checkPopUp):IsCheck() then
     Panel_Equipment:OpenUISubApp()
   else
@@ -884,7 +924,7 @@ Check_PopUI = function()
 end
 
 Check_Underwear = function()
-  -- function num : 0_29 , upvalues : equip
+  -- function num : 0_30 , upvalues : equip
   local self = equip
   if not IsSelfPlayerWaitAction() or IsSelfPlayerBattleWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_UNDERWEAR"))
@@ -916,7 +956,7 @@ Check_Underwear = function()
 end
 
 FGlobal_CheckUnderwear = function()
-  -- function num : 0_30 , upvalues : equip
+  -- function num : 0_31 , upvalues : equip
   local self = equip
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
   local isSafeZone = (regionInfo:get()):isSafeZone()
@@ -926,7 +966,7 @@ FGlobal_CheckUnderwear = function()
 end
 
 Equipment_SimpleToolTips = function(isShow, btnType, flagControl)
-  -- function num : 0_31 , upvalues : equip
+  -- function num : 0_32 , upvalues : equip
   if btnType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_CHECKHELM_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_TOOLTIPS_CHECKHELM_DESC")
@@ -989,7 +1029,7 @@ Equipment_SimpleToolTips = function(isShow, btnType, flagControl)
 end
 
 HandleClicked_ServantInventoryOpen = function()
-  -- function num : 0_32
+  -- function num : 0_33
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -1013,14 +1053,14 @@ HandleClicked_ServantInventoryOpen = function()
 end
 
 FromClient_ChangeUnderwearMode_Equipment = function(isUnderwearModeInHouse)
-  -- function num : 0_33 , upvalues : equip
+  -- function num : 0_34 , upvalues : equip
   local self = equip
   ;
   (self.checkUnderwear):SetCheck(isUnderwearModeInHouse)
 end
 
 FGlobal_AlchemyStonCheck = function()
-  -- function num : 0_34 , upvalues : equip
+  -- function num : 0_35 , upvalues : equip
   local itemWrapper = getEquipmentItem(27)
   local coolTime = 0
   do
@@ -1043,7 +1083,7 @@ FGlobal_AlchemyStonCheck = function()
 end
 
 FGlobal_AccSlotNo = function(itemWrapper, isChange)
-  -- function num : 0_35 , upvalues : equip
+  -- function num : 0_36 , upvalues : equip
   local equipType = (itemWrapper:getStaticStatus()):getEquipType()
   local firstRingOffence = 0
   local firstRingDeffence = 0
@@ -1121,7 +1161,7 @@ end
 
 local posXDefault = 345
 Equipment_RePosition = function()
-  -- function num : 0_36 , upvalues : equip, posXDefault
+  -- function num : 0_37 , upvalues : equip, posXDefault
   local self = equip
   if (self.checkCloak):GetShow() then
     (self.checkCloak):SetPosX(posXDefault)
@@ -1154,7 +1194,7 @@ Equipment_RePosition = function()
 end
 
 Equipment_Checkbutton = function(index, isShow, controlBtn)
-  -- function num : 0_37 , upvalues : equip
+  -- function num : 0_38 , upvalues : equip
   if index ~= 20 then
     return 
   end
@@ -1179,7 +1219,7 @@ Equipment_Checkbutton = function(index, isShow, controlBtn)
 end
 
 Equipment__PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_38 , upvalues : equip
+  -- function num : 0_39 , upvalues : equip
   if isShow then
     local self = equip
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")

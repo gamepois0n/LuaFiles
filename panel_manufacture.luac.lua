@@ -18,6 +18,7 @@ local UI_color = Defines.Color
 local UIMode = Defines.UIMode
 local territorySupply = ToClient_IsContentsGroupOpen("22")
 local contentsOption = ToClient_IsContentsGroupOpen("36")
+local enableCraft = ToClient_IsContentsGroupOpen("239")
 local manufacture_Init = function()
   -- function num : 0_0
   local screenSizeX = getScreenSizeX()
@@ -58,6 +59,7 @@ local _ACTIONNAME_COOK = "MANUFACTURE_COOK"
 local _ACTIONNAME_RG_COOK = "MANUFACTURE_ROYALGIFT_COOK"
 local _ACTIONNAME_RG_ALCHEMY = "MANUFACTURE_ROYALGIFT_ALCHEMY"
 local _ACTIONNAME_GUILDMANUFACTURE = "MANUFACTURE_GUILD"
+local _ACTIONNAME_CRAFT = "MANUFACTURE_CRAFT"
 local CURRENT_ACTIONNAME = ""
 local MAX_ACTION_BTN = 13
 local SUBTEXT_OFFSETX = 60
@@ -80,19 +82,27 @@ local _actionName = "NONE"
 local _usingInstallationType = (CppEnums.InstallationType).TypeCount
 local _listAction = {}
 local manufactureAction = {_radioBtn, _actionName}
-local manufactureListDesc = {[0] = "GAME_MANUFACTURE_DESC_SHAKE", [1] = "GAME_MANUFACTURE_DESC_GRIND", [2] = "GAME_MANUFACTURE_DESC_FIREWOOD", [3] = "GAME_MANUFACTURE_DESC_DRY", [4] = "GAME_MANUFACTURE_DESC_THINNING", [5] = "GAME_MANUFACTURE_DESC_HEAT", [6] = "GAME_MANUFACTURE_DESC_RAINWATER", [7] = "GAME_MANUFACTURE_DESC_REPAIR", [8] = "GAME_MANUFACTURE_DESC_ALCHEMY", [9] = "GAME_MANUFACTURE_DESC_COOK", [10] = "GAME_MANUFACTURE_DESC_ROYALGIFT_COOK", [11] = "GAME_MANUFACTURE_DESC_ROYALGIFT_ALCHEMY", [12] = "LUA_MANUFACTURE_GUILDMANURACTURE_NAME"}
-local manufactureListName = {[0] = "ALCHEMY_MANUFACTURE_SHAKE", [1] = "ALCHEMY_MANUFACTURE_GRIND", [2] = "ALCHEMY_MANUFACTURE_WOODSPLITTING", [3] = "ALCHEMY_MANUFACTURE_DRY", [4] = "ALCHEMY_MANUFACTURE_THINNING", [5] = "ALCHEMY_MANUFACTURE_HEATING", [6] = "", [7] = "ALCHEMY_MANUFACTURE_REPAIR", [8] = "LUA_ALCHEMY_MANUFACTURE_ALCHEMY", [9] = "LUA_ALCHEMY_MANUFACTURE_COOK", [10] = "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_COOK", [11] = "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_ALCHEMY", [12] = "LUA_MANUFACTURE_GUILDMANURACTURE_NAME"}
+local manufactureListDesc = {[0] = "GAME_MANUFACTURE_DESC_SHAKE", [1] = "GAME_MANUFACTURE_DESC_GRIND", [2] = "GAME_MANUFACTURE_DESC_FIREWOOD", [3] = "GAME_MANUFACTURE_DESC_DRY", [4] = "GAME_MANUFACTURE_DESC_THINNING", [5] = "GAME_MANUFACTURE_DESC_HEAT", [6] = "GAME_MANUFACTURE_DESC_RAINWATER", [7] = "GAME_MANUFACTURE_DESC_REPAIR", [8] = "GAME_MANUFACTURE_DESC_ALCHEMY", [9] = "GAME_MANUFACTURE_DESC_COOK", [10] = "GAME_MANUFACTURE_DESC_ROYALGIFT_COOK", [11] = "GAME_MANUFACTURE_DESC_ROYALGIFT_ALCHEMY", [12] = "LUA_MANUFACTURE_GUILDMANURACTURE_NAME", [13] = "LUA_MANUFACTURE_CRAFT_NAME"}
+local manufactureListName = {[0] = "ALCHEMY_MANUFACTURE_SHAKE", [1] = "ALCHEMY_MANUFACTURE_GRIND", [2] = "ALCHEMY_MANUFACTURE_WOODSPLITTING", [3] = "ALCHEMY_MANUFACTURE_DRY", [4] = "ALCHEMY_MANUFACTURE_THINNING", [5] = "ALCHEMY_MANUFACTURE_HEATING", [6] = "", [7] = "ALCHEMY_MANUFACTURE_REPAIR", [8] = "LUA_ALCHEMY_MANUFACTURE_ALCHEMY", [9] = "LUA_ALCHEMY_MANUFACTURE_COOK", [10] = "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_COOK", [11] = "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_ALCHEMY", [12] = "LUA_MANUFACTURE_GUILDMANURACTURE_NAME", [13] = "LUA_MANUFACTURE_CRAFT_NAME"}
 local _usingItemSlotCount = 0
 local _whiteCircle = (UI.getChildControl)(Panel_Manufacture, "Static_WhiteCircle")
 local _slotConfig = {createIcon = true, createBorder = false, createCount = true, createCash = true}
 local _slotCount = 5
 local _pointList = {}
 local contentsOptionCheck = function()
-  -- function num : 0_2 , upvalues : contentsOption, MAX_ACTION_BTN
+  -- function num : 0_2 , upvalues : contentsOption, enableCraft, MAX_ACTION_BTN
   if contentsOption then
-    MAX_ACTION_BTN = 13
+    if enableCraft then
+      MAX_ACTION_BTN = 14
+    else
+      MAX_ACTION_BTN = 13
+    end
   else
-    MAX_ACTION_BTN = 12
+    if enableCraft then
+      MAX_ACTION_BTN = 13
+    else
+      MAX_ACTION_BTN = 12
+    end
   end
 end
 
@@ -176,6 +186,7 @@ local _textDesc = (UI.getChildControl)(Panel_Manufacture, "StaticText_Desc")
 _textDesc:SetIgnore(true)
 _textDesc:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 _textDesc:SetText("")
+local _btn_funcBG = (UI.getChildControl)(Panel_Manufacture, "Static_FrameBG")
 local list2 = (UI.getChildControl)(Panel_Manufacture, "List2_Manufacture")
 local selectIndex = -1
 local Manufacture_Notify = {_progress_BG = (UI.getChildControl)(Panel_Manufacture_Notify, "Static_Progress_BG"), _progress_Bar = (UI.getChildControl)(Panel_Manufacture_Notify, "Progress2_Manufacture"), _progress_Text = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Manufacture_Progress"), _progress_Effect = (UI.getChildControl)(Panel_Manufacture_Notify, "Static_Progress_Effect"), _type_Name = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Manufacture_Type"), _result_Title = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Result_Title"), 
@@ -222,13 +233,14 @@ local ALCHEMY_MENTALTHEMEKEY = 31009
 local ROYALCOOK_MENTALTHEMEKEY = 30110
 local ROYALALCHEMY_MENTALTHEMEKEY = 31012
 local GUILDMANUFACTURE_MENTALTHEMEKEY = 31013
+local CRAFT_MENTALTHEMEKEY = 30800
 local RAINWATER_MENTALTHEMEKEY = 30800
 local iconPosY = _currentActionIcon:GetPosY()
 local textTempPosY = _textTemp:GetPosY()
 local textDescPosY = _textDesc:GetPosY()
 local manufactureNamePosY = _manufactureName:GetPosY()
 ManufactureControlInit = function()
-  -- function num : 0_3 , upvalues : _ACTIONNAME_SHAKE, _listAction, _ACTIONNAME_GRIND, _ACTIONNAME_FIREWOOD, _ACTIONNAME_DRY, _ACTIONNAME_THINNING, _ACTIONNAME_HEAT, _ACTIONNAME_RAINWATER, _ACTIONNAME_REPAIR, _ACTIONNAME_ALCHEMY, _ACTIONNAME_COOK, _ACTIONNAME_RG_COOK, _ACTIONNAME_RG_ALCHEMY, contentsOption, _ACTIONNAME_GUILDMANUFACTURE
+  -- function num : 0_3 , upvalues : _ACTIONNAME_SHAKE, _listAction, _ACTIONNAME_GRIND, _ACTIONNAME_FIREWOOD, _ACTIONNAME_DRY, _ACTIONNAME_THINNING, _ACTIONNAME_HEAT, _ACTIONNAME_RAINWATER, _ACTIONNAME_REPAIR, _ACTIONNAME_ALCHEMY, _ACTIONNAME_COOK, _ACTIONNAME_RG_COOK, _ACTIONNAME_RG_ALCHEMY, contentsOption, _ACTIONNAME_GUILDMANUFACTURE, enableCraft, _ACTIONNAME_CRAFT, _btn_funcBG, list2
   local manufactureAction1 = {}
   manufactureAction1._actionName = _ACTIONNAME_SHAKE
   manufactureAction1._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action1")
@@ -325,8 +337,8 @@ ManufactureControlInit = function()
   -- DECOMPILER ERROR at PC191: Confused about usage of register: R12 in 'UnsetPending'
 
   _listAction[11] = manufactureAction12
+  local manufactureAction13 = {}
   if contentsOption then
-    local manufactureAction13 = {}
     manufactureAction13._actionName = _ACTIONNAME_GUILDMANUFACTURE
     manufactureAction13._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action13")
     ;
@@ -335,13 +347,29 @@ ManufactureControlInit = function()
 
     _listAction[12] = manufactureAction13
   else
-    do
-      -- DECOMPILER ERROR at PC218: Confused about usage of register: R12 in 'UnsetPending'
+    manufactureAction13._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action13")
+    ;
+    (manufactureAction13._radioBtn):SetShow(false)
+  end
+  local manufactureAction14 = {}
+  if enableCraft then
+    manufactureAction14._actionName = _ACTIONNAME_CRAFT
+    manufactureAction14._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action14")
+    ;
+    (manufactureAction14._radioBtn):addInputEvent("Mouse_LUp", "Manufacture_Button_LUp_Craft(true)")
+    -- DECOMPILER ERROR at PC240: Confused about usage of register: R14 in 'UnsetPending'
 
-      manufactureAction13._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action13")
-      ;
-      (manufactureAction13._radioBtn):SetShow(false)
-    end
+    _listAction[13] = manufactureAction14
+    _btn_funcBG:SetSize(_btn_funcBG:GetSizeX(), 195)
+    list2:SetSize(list2:GetSizeX(), 360)
+    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 597)
+  else
+    manufactureAction14._radioBtn = (UI.getChildControl)(Panel_Manufacture, "RadioButton_Action14")
+    ;
+    (manufactureAction14._radioBtn):SetShow(false)
+    Panel_Manufacture:SetSize(Panel_Manufacture:GetSizeX(), 540)
+    _btn_funcBG:SetSize(_btn_funcBG:GetSizeX(), 133)
+    list2:SetSize(list2:GetSizeX(), 300)
   end
 end
 
@@ -1031,6 +1059,10 @@ Manufacture_RepeatManufacture = function()
                         else
                           if _actionIndex == 12 then
                             Manufacture_Button_LUp_GuildManufacture(true)
+                          else
+                            if _actionIndex == 13 then
+                              Manufacture_Button_LUp_Craft(true)
+                            end
                           end
                         end
                       end
@@ -1499,6 +1531,10 @@ Manufacture_Button_LUp_Shake = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 10)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1510,7 +1546,7 @@ Manufacture_Button_LUp_Shake = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 172, 58, 228, 114)
+  manufactureClickSetTextureUV(_currentActionIcon, 172, 58, 228, 114, 0)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SHAKE"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_SHAKE"))
@@ -1541,6 +1577,10 @@ Manufacture_Button_LUp_Grind = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 2)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1552,7 +1592,7 @@ Manufacture_Button_LUp_Grind = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 115, 1, 171, 57)
+  manufactureClickSetTextureUV(_currentActionIcon, 115, 1, 171, 57, 1)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_GRIND"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_GRIND"))
@@ -1583,6 +1623,10 @@ Manufacture_Button_LUp_FireWood = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 0)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1594,7 +1638,7 @@ Manufacture_Button_LUp_FireWood = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 1, 58, 57, 114)
+  manufactureClickSetTextureUV(_currentActionIcon, 1, 58, 57, 114, 2)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_WOODSPLITTING"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_WOODSPLITTING"))
@@ -1625,6 +1669,10 @@ Manufacture_Button_LUp_Dry = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 1)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1636,7 +1684,7 @@ Manufacture_Button_LUp_Dry = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 286, 1, 342, 58)
+  manufactureClickSetTextureUV(_currentActionIcon, 286, 1, 342, 58, 3)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_DRY"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_DRY"))
@@ -1667,6 +1715,10 @@ Manufacture_Button_LUp_Thinning = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 3)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1678,7 +1730,7 @@ Manufacture_Button_LUp_Thinning = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 58, 115, 114, 171)
+  manufactureClickSetTextureUV(_currentActionIcon, 58, 115, 114, 171, 4)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_THINNING"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_THINNING"))
@@ -1709,6 +1761,10 @@ Manufacture_Button_LUp_Heat = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 4)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1720,7 +1776,7 @@ Manufacture_Button_LUp_Heat = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 343, 58, 399, 114)
+  manufactureClickSetTextureUV(_currentActionIcon, 343, 58, 399, 114, 5)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_HEATING"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_HEATING"))
@@ -1751,6 +1807,10 @@ Manufacture_Button_LUp_Rainwater = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(0, 0)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1762,7 +1822,7 @@ Manufacture_Button_LUp_Rainwater = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 400, 115, 456, 171)
+  manufactureClickSetTextureUV(_currentActionIcon, 400, 115, 456, 171, 6)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "GAME_MANUFACTURE_RAINWATER"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_RAINWATER"))
@@ -1792,6 +1852,10 @@ Manufacture_Button_LUp_RepairItem = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 9)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1803,7 +1867,7 @@ Manufacture_Button_LUp_RepairItem = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).eType_Anvil
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 229, 115, 285, 171)
+  manufactureClickSetTextureUV(_currentActionIcon, 229, 115, 285, 171, 7)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_REPAIR"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_REPAIR"))
@@ -1831,6 +1895,10 @@ Manufacture_Button_LUp_Alchemy = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 13)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1846,7 +1914,7 @@ Manufacture_Button_LUp_Alchemy = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 400, 115, 456, 171)
+  manufactureClickSetTextureUV(_currentActionIcon, 400, 115, 456, 171, 8)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ALCHEMY"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ALCHEMY"))
@@ -1876,6 +1944,10 @@ Manufacture_Button_LUp_Cook = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 14)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1891,7 +1963,7 @@ Manufacture_Button_LUp_Cook = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 115, 172, 171, 228)
+  manufactureClickSetTextureUV(_currentActionIcon, 115, 172, 171, 228, 9)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_COOK"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_COOK"))
@@ -1921,6 +1993,10 @@ Manufacture_Button_LUp_RGCook = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 14)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1932,7 +2008,7 @@ Manufacture_Button_LUp_RGCook = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 345, 456, 401, 512)
+  manufactureClickSetTextureUV(_currentActionIcon, 345, 456, 401, 512, 10)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_COOK"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_COOK"))
@@ -1962,6 +2038,10 @@ Manufacture_Button_LUp_RGAlchemy = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   audioPostEvent_SystemUi(13, 13)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
@@ -1973,7 +2053,7 @@ Manufacture_Button_LUp_RGAlchemy = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 400, 172, 456, 228)
+  manufactureClickSetTextureUV(_currentActionIcon, 400, 172, 456, 228, 11)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_ALCHEMY"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMY_MANUFACTURE_ROYALGIFT_ALCHEMY"))
@@ -2003,6 +2083,10 @@ Manufacture_Button_LUp_GuildManufacture = function(isClear)
   if Panel_Win_System:GetShow() then
     return 
   end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   if houseWrapper == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_INNTER_GUILDHOUSE_USE"))
@@ -2019,7 +2103,7 @@ Manufacture_Button_LUp_GuildManufacture = function(isClear)
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount
   _currentActionIcon:SetShow(true)
-  manufactureClickSetTextureUV(_currentActionIcon, 400, 172, 456, 228)
+  manufactureClickSetTextureUV(_currentActionIcon, 3, 116, 59, 172, 12)
   _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANURACTURE_NAME"))
   _manufactureText:SetShow(true)
   _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANURACTURE_NAME"))
@@ -2044,8 +2128,56 @@ Manufacture_Button_LUp_GuildManufacture = function(isClear)
   end
 end
 
+Manufacture_Button_LUp_Craft = function(isClear)
+  -- function num : 0_48 , upvalues : enableCraft, _actionIndex, _usingItemSlotCount, _usingInstallationType, _currentActionIcon, _manufactureText, _manufactureName, _textDesc, _textTemp, _uiButtonManufacture, _startKnowledgeIndex, CRAFT_MENTALTHEMEKEY, _defaultMSG1, _defaultMSG2, materialItemWhereType
+  if Panel_Win_System:GetShow() then
+    return 
+  end
+  if not IsSelfPlayerWaitAction() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_MANUFACTURE"))
+    return 
+  end
+  if not enableCraft then
+    return 
+  end
+  audioPostEvent_SystemUi(13, 13)
+  if isClear ~= nil and isClear == true then
+    Manufacture_ClearMaterial()
+  end
+  StopManufactureAction()
+  _actionIndex = 13
+  _usingItemSlotCount = 5
+  Manufacture_UpdateSlotPos()
+  Manufacture_ShowPointEffect()
+  _usingInstallationType = (CppEnums.InstallationType).TypeCount
+  _currentActionIcon:SetShow(true)
+  manufactureClickSetTextureUV(_currentActionIcon, 64, 117, 120, 173, 13)
+  _manufactureText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_NAME"))
+  _manufactureText:SetShow(true)
+  _manufactureName:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_NAME"))
+  _manufactureName:SetShow(true)
+  _textDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_DESC"))
+  _textTemp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_SUBDESC"))
+  _textTemp:SetShow(true)
+  FontSize_SetPos()
+  _uiButtonManufacture:SetText(PAGetString(Defines.StringSheet_GAME, "ALCHEMY_MANUFACTURE_BTN_MANUFACTURE"))
+  Manufacture_UpdateCheckRadioButton()
+  _startKnowledgeIndex = 0
+  ReconstructionAlchemyKnowledge(CRAFT_MENTALTHEMEKEY)
+  ManufactureKnowledge_UpdateList()
+  _defaultMSG1:SetShow(false)
+  _defaultMSG2:SetShow(false)
+  if (CppEnums.ItemWhereType).eInventory == materialItemWhereType or (CppEnums.ItemWhereType).eCashInventory == materialItemWhereType then
+    Inventory_SetFunctor(ManufactureAction_InvenFiler, Manufacture_PushItemFromInventory, Manufacture_Close, nil)
+    Inventory_updateSlotData()
+  else
+    Warehouse_SetFunctor(ManufactureAction_WarehouseFilter, Manufacture_PushItemFromWarehouse)
+    Warehouse_updateSlotData()
+  end
+end
+
 Manufacture_KnowledgeList_SelectKnowledge = function(index)
-  -- function num : 0_48 , upvalues : _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _uiKnowledgeIcon, selectIndex, list2
+  -- function num : 0_49 , upvalues : _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _uiKnowledgeIcon, selectIndex, list2
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2079,7 +2211,7 @@ Manufacture_KnowledgeList_SelectKnowledge = function(index)
 end
 
 Manufacture_KnowledgeList_Tooltip = function(isShow, index)
-  -- function num : 0_49 , upvalues : _startKnowledgeIndex
+  -- function num : 0_50 , upvalues : _startKnowledgeIndex
   local knowledgeIndex = _startKnowledgeIndex + index
   local mentalCardStaticWrapper = getAlchemyKnowledge(knowledgeIndex)
   -- DECOMPILER ERROR at PC13: Unhandled construct in 'MakeBoolean' P1
@@ -2098,7 +2230,7 @@ Manufacture_KnowledgeList_Tooltip = function(isShow, index)
 end
 
 ManufactureKnowledge_UpdateList = function()
-  -- function num : 0_50 , upvalues : list2, selectIndex, _startKnowledgeIndex
+  -- function num : 0_51 , upvalues : list2, selectIndex, _startKnowledgeIndex
   (list2:getElementManager()):clearKey()
   selectIndex = -1
   ManufactureKnowledge_ClearList()
@@ -2109,7 +2241,7 @@ ManufactureKnowledge_UpdateList = function()
 end
 
 ManufactureKnowledge_ShowList = function(isShow)
-  -- function num : 0_51 , upvalues : _defaultMSG1, _defaultMSG2, _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
+  -- function num : 0_52 , upvalues : _defaultMSG1, _defaultMSG2, _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
   if isShow then
     _defaultMSG1:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_1"))
     _defaultMSG2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_DEFAULT_MSG_2"))
@@ -2131,7 +2263,7 @@ ManufactureKnowledge_ShowList = function(isShow)
 end
 
 ManufactureKnowledge_ClearList = function()
-  -- function num : 0_52 , upvalues : _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
+  -- function num : 0_53 , upvalues : _uiKnowledgeIcon, _uiKnowledgeDesc, _frameContent
   _uiKnowledgeIcon:ReleaseTexture()
   _uiKnowledgeIcon:SetShow(true)
   _uiKnowledgeDesc:SetText("")
@@ -2140,7 +2272,7 @@ ManufactureKnowledge_ClearList = function()
 end
 
 Note_Mouse_LUp = function()
-  -- function num : 0_53
+  -- function num : 0_54
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2148,14 +2280,14 @@ Note_Mouse_LUp = function()
 end
 
 Note_Mouse_On = function()
-  -- function num : 0_54
+  -- function num : 0_55
   audioPostEvent_SystemUi(1, 13)
 end
 
 ManufactureControlInit()
 Manufacture_Reset_ContinueGrindJewel()
 Material_Update = function(slotCount)
-  -- function num : 0_55 , upvalues : _materialSlotNoList, _slotList
+  -- function num : 0_56 , upvalues : _materialSlotNoList, _slotList
   local inventory = ((getSelfPlayer()):get()):getInventory()
   local invenSize = inventory:size()
   for ii = 0, slotCount - 1 do
@@ -2170,7 +2302,7 @@ Material_Update = function(slotCount)
 end
 
 Manufacture_Notify.Init = function(self)
-  -- function num : 0_56
+  -- function num : 0_57
   for key,value in pairs(self._templat) do
     value:SetShow(false)
   end
@@ -2183,7 +2315,7 @@ end
 
 Manufacture_Notify:Init()
 Manufacture_Notify.createResultControl = function(self, index)
-  -- function num : 0_57
+  -- function num : 0_58
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
 
   if (self._item_Result)[index] == nil or (self._icon_ResultBG)[index] == nil or (self._icon_Result)[index] == nil then
@@ -2213,7 +2345,7 @@ Manufacture_Notify.createResultControl = function(self, index)
 end
 
 Manufacture_Notify.createResourceControl = function(self, index)
-  -- function num : 0_58
+  -- function num : 0_59
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
 
   if (self._item_Resource)[index] == nil or (self._icon_ResourceBG)[index] == nil or (self._icon_Resource)[index] == nil then
@@ -2243,7 +2375,7 @@ Manufacture_Notify.createResourceControl = function(self, index)
 end
 
 Manufacture_Notify.clear = function(self)
-  -- function num : 0_59 , upvalues : Manufacture_Notify
+  -- function num : 0_60 , upvalues : Manufacture_Notify
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
   Manufacture_Notify._data_Resource = {}
@@ -2275,13 +2407,13 @@ Manufacture_Notify.clear = function(self)
 end
 
 Manufacture_Notify.SetPos = function(self)
-  -- function num : 0_60
+  -- function num : 0_61
   local gapCnt = #self._data_Resource
   Panel_Manufacture_Notify:SetSpanSize((Panel_Manufacture_Notify:GetSpanSize()).x, self._defalutSpanY + self._gapY * gapCnt)
 end
 
 Manufacture_Progress_Update = function(materialItemWhereType)
-  -- function num : 0_61 , upvalues : Manufacture_Notify
+  -- function num : 0_62 , upvalues : Manufacture_Notify
   local progressRate = 0
   local currentInventoryType = Inventory_GetCurrentInventoryType()
   for key,value in pairs(Manufacture_Notify._data_Resource) do
@@ -2352,7 +2484,7 @@ Manufacture_Progress_Update = function(materialItemWhereType)
 end
 
 Manufacture_Tooltip_Item_Show = function(index, isResult)
-  -- function num : 0_62 , upvalues : Manufacture_Notify
+  -- function num : 0_63 , upvalues : Manufacture_Notify
   local itemKey, uiBase = nil
   if isResult then
     itemKey = ((Manufacture_Notify._data_Result)[index])._key
@@ -2371,7 +2503,7 @@ Manufacture_Tooltip_Item_Show = function(index, isResult)
 end
 
 IsManufacture_Chk = function(variableName, value)
-  -- function num : 0_63 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType, IM
+  -- function num : 0_64 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType, IM
   if variableName == "IsManufactureChk" then
     if value == 0 then
       Panel_Manufacture_Notify:SetShow(false)
@@ -2400,14 +2532,14 @@ IsManufacture_Chk = function(variableName, value)
 end
 
 Manufacture_Notify_Check = function()
-  -- function num : 0_64 , upvalues : Manufacture_Notify
+  -- function num : 0_65 , upvalues : Manufacture_Notify
   if Panel_Manufacture_Notify:GetShow() == true and #Manufacture_Notify._data_Resource == 0 then
     Panel_Manufacture_Notify:SetShow(false)
   end
 end
 
 ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
-  -- function num : 0_65 , upvalues : _actionIndex, _listAction
+  -- function num : 0_66 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
@@ -2432,7 +2564,7 @@ ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
 end
 
 ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
-  -- function num : 0_66 , upvalues : _actionIndex, _listAction
+  -- function num : 0_67 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
@@ -2461,8 +2593,13 @@ ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
   end
 end
 
-manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2)
-  -- function num : 0_67
+manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2, isType)
+  -- function num : 0_68
+  if isType > 11 then
+    uiBase:ChangeTextureInfoName("new_ui_common_forlua/window/manufacture/manufacture_01.dds")
+  else
+    uiBase:ChangeTextureInfoName("new_ui_common_forlua/window/manufacture/manufacture_00.dds")
+  end
   local x1, y1, x2, y2 = setTextureUV_Func(uiBase, x1, y1, x2, y2)
   ;
   (uiBase:getBaseTexture()):setUV(x1, y1, x2, y2)
@@ -2471,7 +2608,7 @@ manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2)
 end
 
 manufacture_ShowIconToolTip = function(isShow, idx)
-  -- function num : 0_68 , upvalues : isEnableMsg, _listAction
+  -- function num : 0_69 , upvalues : isEnableMsg, _listAction
   local name, desc = nil
   if isShow == true then
     audioPostEvent_SystemUi(1, 13)
@@ -2526,6 +2663,11 @@ manufacture_ShowIconToolTip = function(isShow, idx)
                             if idx == 12 then
                               name = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANURACTURE_NAME")
                               desc = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_GUILDMANUFACTURE_SUBDESC")
+                            else
+                              if idx == 13 then
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_NAME")
+                                desc = PAGetString(Defines.StringSheet_GAME, "LUA_MANUFACTURE_CRAFT_SUBDESC")
+                              end
                             end
                           end
                         end
@@ -2550,14 +2692,14 @@ manufacture_ShowIconToolTip = function(isShow, idx)
 end
 
 noneStackItemCheckBT = function()
-  -- function num : 0_69 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
+  -- function num : 0_70 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
   if Panel_Manufacture:GetShow() then
     noneStackItemCheck = noneStackItem_ChkBtn:IsCheck()
   end
 end
 
 Manufacture_RepeatAction = function()
-  -- function num : 0_70 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem
+  -- function num : 0_71 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2573,7 +2715,7 @@ Manufacture_RepeatAction = function()
 end
 
 registEventHandler = function()
-  -- function num : 0_71 , upvalues : MAX_ACTION_BTN, _listAction
+  -- function num : 0_72 , upvalues : MAX_ACTION_BTN, _listAction
   for i = 0, MAX_ACTION_BTN - 1 do
     ((_listAction[i])._radioBtn):addInputEvent("Mouse_On", "manufacture_ShowIconToolTip( true, " .. i .. " )")
     ;
@@ -2582,7 +2724,7 @@ registEventHandler = function()
 end
 
 FontSize_SetPos = function()
-  -- function num : 0_72 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
+  -- function num : 0_73 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
   if getUiFontSize() ~= 0 then
     _currentActionIcon:SetPosY(iconPosY - 5)
     _textDesc:SetPosY(textDescPosY - 8)
@@ -2597,7 +2739,7 @@ FontSize_SetPos = function()
 end
 
 Manufacture_ListControlCreate = function(content, key)
-  -- function num : 0_73 , upvalues : selectIndex, UI_color
+  -- function num : 0_74 , upvalues : selectIndex, UI_color
   local index = Int64toInt32(key)
   local recipe = (UI.getChildControl)(content, "StaticText_List2_AlchemyRecipe")
   local selectList = (UI.getChildControl)(content, "Static_List2_SelectList")

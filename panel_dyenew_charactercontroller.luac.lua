@@ -234,6 +234,7 @@ HandleClicked_WeatherToggle = function()
   (self.btn_temp5):SetShow(weatherCheck)
   ;
   (self.btn_temp6):SetShow(weatherCheck)
+  self:SetConsolePadGroup(weatherCheck)
 end
 
 HandleClicked_DeyNew_RandomPose = function()
@@ -360,9 +361,37 @@ DyeNewController.registEventHandler = function(self)
   (self.btn_Exit):addInputEvent("Mouse_LUp", "HandleClicked_DeyNew_Exit()")
 end
 
+ConsoleGroupCreate_Panel_DyeNew_CharacterController = function()
+  -- function num : 0_17 , upvalues : DyeNewController
+  Panel_DyeNew_CharacterController:addConsoleUIControl(0, 4, 0, DyeNewController.btn_Pose)
+  Panel_DyeNew_CharacterController:addConsoleUIControl(1, 4, 0, DyeNewController.btn_Weather)
+  Panel_DyeNew_CharacterController:addConsoleUIControl(2, 4, 0, DyeNewController.btn_EyeSee)
+  Panel_DyeNew_CharacterController:addConsoleUIControl(3, 4, 0, DyeNewController.btn_ShowUI)
+  Panel_DyeNew_CharacterController:addConsoleUIControl(0, 1, 1, DyeNewController.btn_Exit)
+end
+
+DyeNewController.SetConsolePadGroup = function(self, isAdd)
+  -- function num : 0_18 , upvalues : DyeNewController
+  if isAdd then
+    Panel_DyeNew_CharacterController:deleteConsoleUIGroup(1)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 6, 1, DyeNewController.btn_temp1)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 6, 1, DyeNewController.btn_temp2)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 6, 1, DyeNewController.btn_temp3)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 6, 1, DyeNewController.btn_temp4)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 6, 1, DyeNewController.btn_temp5)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 6, 1, DyeNewController.btn_temp6)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 1, 2, DyeNewController.btn_Exit)
+  else
+    Panel_DyeNew_CharacterController:deleteConsoleUIGroup(1)
+    Panel_DyeNew_CharacterController:deleteConsoleUIGroup(2)
+    Panel_DyeNew_CharacterController:addConsoleUIControl(0, 1, 1, DyeNewController.btn_Exit)
+  end
+end
+
 Panel_DyeNew_CharacterController:RegisterUpdateFunc("deyNew_Controller_UpdateCharacterRotate")
 registerEvent("onScreenResize", "dyeNew_CharacterController_SetPosition")
 DyeNewController:initialize()
 DyeNewController:registEventHandler()
 dyeNew_CharacterController_SetPosition()
+ConsoleGroupCreate_Panel_DyeNew_CharacterController()
 

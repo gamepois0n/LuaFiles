@@ -337,6 +337,10 @@ TargetWindow_ShowToggle = function(index)
                                                                                   else
                                                                                     do
                                                                                       if maxHp == playerHp then
+                                                                                        if IsSelfPlayerWaitAction() == false then
+                                                                                          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_PVPBATTLEGROUND_CONDITION_WAIT"))
+                                                                                          return 
+                                                                                        end
                                                                                         local FunctionYesJoinPvpBattle = function()
     -- function num : 0_1_1
     ToClient_JoinPvpBattleGround(0)
@@ -1094,6 +1098,7 @@ _Panel_Menu_OpenLimit = function()
         (menuButtonBG[index]):addInputEvent("Mouse_On", "HandleOn_SlotBg(" .. index .. ")")
         ;
         (menuButtonBG[index]):addInputEvent("Mouse_Out", "HandleOn_SlotBg()")
+        Panel_Menu:addConsoleUIControl(posIndex - 1, 7, 0, menuButtonBG[index])
         if posIndex % columnCountByRaw == 0 then
           columnCount = 0
           rowCount = rowCount + 1

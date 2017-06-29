@@ -666,18 +666,20 @@ FGlobal_LifeRanking_Open = function()
     ((LifeRanking._tab)[idx]):SetCheck(false)
   end
   local setShowCount = 0
+  Panel_LifeRanking:deleteConsoleUIGroup(0)
   for index = 0, 13 do
     if FGlobal_LifeRanking_CheckEnAble(index) then
       ((LifeRanking._tab)[index]):SetShow(true)
       ;
       ((LifeRanking._tab)[index]):SetSpanSize(35 + 35 * setShowCount + 5, 60)
+      Panel_LifeRanking:addConsoleUIControl(setShowCount, 1, 0, (LifeRanking._tab)[index])
       setShowCount = setShowCount + 1
     else
       ;
       ((LifeRanking._tab)[index]):SetShow(false)
     end
   end
-  -- DECOMPILER ERROR at PC58: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
 
   LifeRanking._selectedTabIdx = 0
   ;

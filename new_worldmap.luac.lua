@@ -451,6 +451,9 @@ FromClient_WorldMapOpen = function()
   if Panel_Window_ItemMarket_ItemSet:GetShow() then
     FGlobal_ItemMarketItemSet_Close()
   end
+  if Panel_ChatOption:GetShow() then
+    ChattingOption_Close()
+  end
   isCullingNaviBtn = true
   Panel_WorldMapNaviBtn()
   Panel_Tooltip_Item_hideTooltip()

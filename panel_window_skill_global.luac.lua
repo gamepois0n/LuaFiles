@@ -208,10 +208,64 @@ PaGlobal_Skill.initTabControl = function(self, cellTable, parent, container)
   -- DECOMPILER ERROR: 12 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC538: Confused about usage of register: R2 in 'UnsetPending'
+local beforeRowCount = 0
+-- DECOMPILER ERROR at PC540: Confused about usage of register: R3 in 'UnsetPending'
+
+PaGlobal_Skill.addConsoleUIControl = function(self, tabIndex)
+  -- function num : 0_3 , upvalues : beforeRowCount
+  local selfProxy = getSelfPlayer()
+  if selfProxy == nil then
+    return 
+  end
+  local classType = (selfProxy:getClassType())
+  local cellTable = nil
+  if self.combatTabIndex == tabIndex then
+    cellTable = getCombatSkillTree(classType)
+  else
+    if self.awakenTabIndex == tabIndex then
+      cellTable = getAwakeningWeaponSkillTree(classType)
+    else
+      return 
+    end
+  end
+  if beforeRowCount > 0 then
+    for index = 1, beforeRowCount do
+      Panel_Window_Skill:deleteConsoleUIGroup(index)
+    end
+  end
+  do
+    local cols = cellTable:capacityX()
+    local rows = cellTable:capacityY()
+    local beforeRow = -1
+    local count = 0
+    for row = 0, rows - 1 do
+      local columCount = 0
+      for col = 0, cols - 1 do
+        local cell = cellTable:atPointer(col, row)
+        local skillNo = cell._skillNo
+        if cell:isSkillType() then
+          local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
+          if skillTypeStaticWrapper ~= nil and skillTypeStaticWrapper:isValidLocalizing() then
+            if row ~= beforeRow then
+              beforeRow = row
+              count = count + 1
+            end
+            if (((self.slots)[tabIndex])[skillNo]).icon ~= nil then
+              Panel_Window_Skill:addConsoleUIControl(columCount, 1, count, (((self.slots)[tabIndex])[skillNo]).icon)
+            end
+            columCount = columCount + 1
+          end
+        end
+      end
+    end
+    beforeRowCount = count
+  end
+end
+
+-- DECOMPILER ERROR at PC543: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl_Combat = function(self)
-  -- function num : 0_3
+  -- function num : 0_4
   local targetFrame = (self.frames)[self.combatTabIndex]
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -227,10 +281,10 @@ PaGlobal_Skill.initTabControl_Combat = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC541: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC546: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl_AwakeningWeapon = function(self)
-  -- function num : 0_4
+  -- function num : 0_5
   local targetFrame = (self.frames)[self.awakenTabIndex]
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -246,10 +300,10 @@ PaGlobal_Skill.initTabControl_AwakeningWeapon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC544: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC549: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initSkillLearnableSlot = function(self)
-  -- function num : 0_5
+  -- function num : 0_6
   self.staticBottomBox = (UI.getChildControl)(Panel_Window_Skill, "Static_BottomBox")
   for index = 0, self.learnableSlotShowMaxCount - 1 do
     local slot = {}
@@ -268,10 +322,10 @@ PaGlobal_Skill.initSkillLearnableSlot = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC547: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC552: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.getLineTemplate = function(self, isSlotColumn, isSlotRow, lineType)
-  -- function num : 0_6
+  -- function num : 0_7
   local lineDef = nil
   if isSlotColumn and isSlotRow then
     lineDef = (self.template_guideLine).l
@@ -289,10 +343,10 @@ PaGlobal_Skill.getLineTemplate = function(self, isSlotColumn, isSlotRow, lineTyp
   return lineDef[lineType]
 end
 
--- DECOMPILER ERROR at PC550: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC555: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.Skill_ScrollMove = function(self, moveDirection)
-  -- function num : 0_7
+  -- function num : 0_8
   if moveDirection == "up" then
     (((self.frames)[0]):GetVScroll()):SetCtrlPosByInterval(-1)
   else
@@ -305,10 +359,10 @@ PaGlobal_Skill.Skill_ScrollMove = function(self, moveDirection)
   HandleMScroll_SkillWindow_ScrollEvent(true)
 end
 
--- DECOMPILER ERROR at PC553: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC558: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillCalcPosYByRow = function(self, row)
-  -- function num : 0_8
+  -- function num : 0_9
   if row % 2 == 0 then
     return row / 2 * ((self.config).slotGapY + (self.config).emptyGapY) + (self.config).emptyGapY + (self.config).slotStartY
   else
@@ -316,10 +370,10 @@ PaGlobal_Skill.SkillCalcPosYByRow = function(self, row)
   end
 end
 
--- DECOMPILER ERROR at PC556: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC561: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillCalcPosYByColumn = function(self, col)
-  -- function num : 0_9
+  -- function num : 0_10
   if col % 2 == 0 then
     return col / 2 * ((self.config).slotGapX + (self.config).emptyGapX) + (self.config).emptyGapX + (self.config).slotStartX
   else
@@ -327,10 +381,10 @@ PaGlobal_Skill.SkillCalcPosYByColumn = function(self, col)
   end
 end
 
--- DECOMPILER ERROR at PC559: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC564: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.Skill_WindowPosSet = function(self, pos)
-  -- function num : 0_10
+  -- function num : 0_11
   local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
   local contentUseSize = (((PaGlobal_Skill.frames)[0]):GetFrameContent()):GetSizeY() - ((PaGlobal_Skill.frames)[0]):GetSizeY()
   local posPercents = (pos - ((PaGlobal_Skill.frames)[0]):GetSizeY() / 2) / contentUseSize
@@ -339,10 +393,10 @@ PaGlobal_Skill.Skill_WindowPosSet = function(self, pos)
   ((PaGlobal_Skill.frames)[0]):UpdateContentPos()
 end
 
--- DECOMPILER ERROR at PC563: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC568: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindowEffect = function(self, row, col, skillNo, isOn)
-  -- function num : 0_11 , upvalues : beforSkillNo
+  -- function num : 0_12 , upvalues : beforSkillNo
   local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
   do
     if skillTypeStaticWrapper:isValidLocalizing() then
@@ -363,10 +417,10 @@ PaGlobal_Skill.SkillWindowEffect = function(self, row, col, skillNo, isOn)
   end
 end
 
--- DECOMPILER ERROR at PC566: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC571: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_UpdateClearData = function(self)
-  -- function num : 0_12
+  -- function num : 0_13
   self.isPartsSkillReset = true
   local isNewSkillBtn = ((self.radioButtons)[self.awakenTabIndex]):IsCheck()
   local isOldSkillBtn = (((self.radioButtons)[self.combatTabIndex]):IsCheck())
@@ -421,10 +475,10 @@ PaGlobal_Skill.SkillWindow_UpdateClearData = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC569: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC574: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_PlayerLearnableSkill = function(self)
-  -- function num : 0_13
+  -- function num : 0_14
   local slots = (self.slots)[self.combatTabIndex]
   for skillNo,slot in pairs(slots) do
     local skillLevelInfo = getSkillLevelInfo(skillNo)
@@ -436,10 +490,10 @@ PaGlobal_Skill.SkillWindow_PlayerLearnableSkill = function(self)
   return false
 end
 
--- DECOMPILER ERROR at PC572: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC577: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
-  -- function num : 0_14
+  -- function num : 0_15
   if self.saved_isLearnMode == false then
     return 
   end
@@ -470,17 +524,17 @@ PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
   end
 end
 
--- DECOMPILER ERROR at PC575: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC580: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.UpdateLearnableSlots = function(self)
-  -- function num : 0_15
+  -- function num : 0_16
   self:ClearLearnableSlots()
 end
 
--- DECOMPILER ERROR at PC578: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC583: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.ClearLearnableSlots = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
   for index,skillSlot in pairs(self.learnableSlots) do
     (skillSlot.icon):SetShow(false)
     skillSlot:clearSkill()
@@ -488,10 +542,10 @@ PaGlobal_Skill.ClearLearnableSlots = function(self)
   self.learnableSlotCount = 0
 end
 
--- DECOMPILER ERROR at PC581: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC586: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_Show = function(self)
-  -- function num : 0_17
+  -- function num : 0_18
   HandleMLUp_SkillWindow_OpenForLearn()
   local vScroll = ((self.frames)[0]):GetVScroll()
   vScroll:SetControlPos(self.scrollPos)
@@ -516,6 +570,19 @@ PaGlobal_Skill.SkillWindow_Show = function(self)
     ((self.radioButtons)[self.awakenTabIndex]):SetMonoTone(true)
     ;
     ((self.radioButtons)[self.awakenTabIndex]):SetEnable(false)
+  end
+  ConsoleGroupCreate_Panel_Window_Skill()
+end
+
+ConsoleGroupCreate_Panel_Window_Skill = function()
+  -- function num : 0_19
+  Panel_Window_Skill:deleteConsoleUIGroup(0)
+  Panel_Window_Skill:addConsoleUIControl(0, 1, 0, (PaGlobal_Skill.radioButtons)[PaGlobal_Skill.combatTabIndex])
+  if PaGlobal_AwakenSkill.isAwakenWeaponContentsOpen then
+    Panel_Window_Skill:addConsoleUIControl(1, 1, 0, (PaGlobal_Skill.radioButtons)[PaGlobal_Skill.awakenTabIndex])
+    Panel_Window_Skill:addConsoleUIControl(2, 1, 0, PaGlobal_Skill._btn_ResetAllSkill)
+  else
+    Panel_Window_Skill:addConsoleUIControl(1, 1, 0, PaGlobal_Skill._btn_ResetAllSkill)
   end
 end
 

@@ -7,7 +7,7 @@ local UI_TM = CppEnums.TextMode
 Panel_SavageDefenceMember:SetShow(false)
 Panel_SavageDefenceMember:SetDragEnable(true)
 Panel_SavageDefenceMember:SetDragAll(true)
-local savageDefenceMember = {_list2 = (UI.getChildControl)(Panel_SavageDefenceMember, "List2_JoinMember"), buttonBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ButtonBG"), listBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ListBG")}
+local savageDefenceMember = {_list2 = (UI.getChildControl)(Panel_SavageDefenceMember, "List2_JoinMember"), buttonBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ButtonBG"), listBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ListBG"), waveBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_WaveBG")}
 savageDefenceMember.mycharacterName = (UI.getChildControl)(savageDefenceMember.buttonBG, "StaticText_MyCharacterName")
 savageDefenceMember.myPoint = (UI.getChildControl)(savageDefenceMember.buttonBG, "StaticText_MyPoint")
 savageDefenceMember.chk_List = (UI.getChildControl)(savageDefenceMember.buttonBG, "CheckButton_List")
@@ -242,6 +242,19 @@ FromClient_refreshSavageDefencePlayer = function(count)
   SavageDefenceMember_Open()
   SavageDefenceMember_Update()
   FGlobal_SavageDefenceShop_coinUpdate()
+end
+
+SavageDefenceMember_UpdateCurrentWave = function(wavecount)
+  -- function num : 0_11 , upvalues : savageDefenceMember
+  local self = savageDefenceMember
+  local nextWaveCount = ToClient_SavageDefenceNextWave()
+end
+
+SavageDefenceMember_UpdateTowerHp = function()
+  -- function num : 0_12 , upvalues : savageDefenceMember
+  local self = savageDefenceMember
+  local currenthp = ToClient_SavageDefenceTowerHp()
+  local maxhp = ToClient_SavageDefenceTowerMaxHp()
 end
 
 SavageDefenceMember_Init(380, 420)

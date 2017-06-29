@@ -58,9 +58,11 @@ local _listItemHeight = 12
 local _cusomizeText = "Customization File"
 local _bDirectorySerch = true
 local _bUseFilter = true
+local _isFileExplorerOpen = false
 static_FilePath:SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
 FileExplorer_Open = function(ExplorerTitleName, ExtensionType, ExtensionTypeList)
-  -- function num : 0_0 , upvalues : _fileExplorer, text_EditBox, StaticText_Title, _current_ext_type, combo_Ext, list_Ext
+  -- function num : 0_0 , upvalues : _isFileExplorerOpen, _fileExplorer, text_EditBox, StaticText_Title, _current_ext_type, combo_Ext, list_Ext
+  _isFileExplorerOpen = true
   _fileExplorer:init()
   text_EditBox:SetEditText("")
   StaticText_Title:SetText(ExplorerTitleName)
@@ -304,8 +306,9 @@ FileExplorer_Confirm = function(index)
 end
 
 closeExplorer = function()
-  -- function num : 0_18 , upvalues : _btn_CancelFunction
+  -- function num : 0_18 , upvalues : _isFileExplorerOpen, _btn_CancelFunction
   Panel_FileExplorer:SetShow(false)
+  _isFileExplorerOpen = false
   ClearFocusEdit()
   if _btn_CancelFunction == nil then
     return 
@@ -374,6 +377,11 @@ end
 FileExplorer_getTextFocusEdit = function()
   -- function num : 0_28 , upvalues : text_EditBox
   return text_EditBox:GetFocusEdit()
+end
+
+FileExplorer_IsOpen = function(...)
+  -- function num : 0_29 , upvalues : _isFileExplorerOpen
+  return _isFileExplorerOpen
 end
 
 

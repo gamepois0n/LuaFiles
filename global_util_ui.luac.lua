@@ -27,16 +27,10 @@ end
 
 -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.createControl = function(uiType, parent, strID, traversalIDX, traversalIDY)
+UI.createControl = function(uiType, parent, strID)
   -- function num : 0_2
   tempUIBaseForLua = nil
-  if traversalIDX == nil then
-    traversalIDX = 0
-  end
-  if traversalIDY == nil then
-    traversalIDY = 0
-  end
-  createControl(uiType, parent, strID, traversalIDX, traversalIDY)
+  createControl(uiType, parent, strID)
   return tempUIBaseForLua
 end
 
@@ -66,16 +60,10 @@ end
 
 -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.createCustomControl = function(typeStr, parent, strID, traversalIDX, traversalIDY)
+UI.createCustomControl = function(typeStr, parent, strID)
   -- function num : 0_4
   tempUIBaseForLua = nil
-  if traversalIDX == nil then
-    traversalIDX = 0
-  end
-  if traversalIDY == nil then
-    traversalIDY = 0
-  end
-  createCustomControl(typeStr, parent, strID, traversalIDX, traversalIDY)
+  createCustomControl(typeStr, parent, strID)
   return tempUIBaseForLua
 end
 

@@ -52,157 +52,133 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     ;
     (self._btn_NpcNaviTW):SetShow(true)
   end
-  if ToClient_IsContentsGroupOpen("245") then
-    local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
-    if myGuildInfo ~= nil then
-      local hasOccupyTerritory = myGuildInfo:getHasSiegeCount()
-      if hasOccupyTerritory == 0 then
-        local isPossible = false
-        if myGuildInfo:getSiegeCount() > 0 then
-          for idx = 0, myGuildInfo:getSiegeCount() - 1 do
-            local regionKey = myGuildInfo:getSiegeKeyAt(idx)
-            if regionKey > 0 then
-              local regionInfoWrapper = getRegionInfoWrapper(regionKey)
-              if regionInfoWrapper ~= nil and regionInfoWrapper:getTerritoryKeyRaw() >= 2 then
-                isPossible = true
-                break
-              end
-            end
-          end
+  do
+    if ToClient_IsContentsGroupOpen("245") then
+      local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
+      if myGuildInfo ~= nil then
+        if playerLV >= 58 then
+          (self._btn_Militia):SetShow(true)
+        else
+          ;
+          (self._btn_Militia):SetShow(false)
         end
-        do
-          do
-            do
-              do
-                if isPossible then
-                  (self._btn_Militia):SetShow(true)
-                  ;
-                  (self._btn_Militia):SetPosX((sizeX + controlGapX) * showIconCount)
-                  ;
-                  (self._btn_Militia):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                else
-                  ;
-                  (self._btn_Militia):SetShow(false)
-                end
-                ;
-                (self._btn_Militia):SetShow(false)
-                ;
-                (self._btn_Militia):SetShow(false)
-                ;
-                (self._btn_Militia):SetShow(false)
-                if (self._btn_WarCall):GetShow() then
-                  (self._btn_WarCall):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_WarCall):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                end
-                if (self._btn_SummonParty):GetShow() then
-                  (self._btn_SummonParty):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_SummonParty):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                end
-                if (self._btn_ReturnStone):GetShow() then
-                  (self._btn_ReturnStone):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_ReturnStone):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                end
-                if (self._btn_BusterCall):GetShow() then
-                  (self._btn_BusterCall):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_BusterCall):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                end
-                local trainableMinLev = 50
-                if ToClient_IsContentsGroupOpen("57") and trainableMinLev <= playerLV then
-                  (self._btn_AutoTraining):SetShow(not isRecordMode)
-                  ;
-                  (self._btn_AutoTraining):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_AutoTraining):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                else
-                  ;
-                  (self._btn_AutoTraining):SetShow(false)
-                end
-                if (self._btn_SummonElephant):GetShow() then
-                  (self._btn_SummonElephant):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_SummonElephant):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                end
-                ;
-                (self._btn_SiegeArea):SetShow(not isRecordMode)
-                ;
-                (self._btn_SiegeArea):SetPosX((sizeX + controlGapX) * (showIconCount))
-                ;
-                (self._btn_SiegeArea):SetPosY(10)
-                showIconCount = showIconCount + 1
-                if ToClient_IsContentsGroupOpen("28") then
-                  (self._btn_Hunting):SetShow(not isRecordMode)
-                  ;
-                  (self._btn_Hunting):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_Hunting):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                else
-                  ;
-                  (self._btn_Hunting):SetShow(false)
-                end
-                if ToClient_IsContentsGroupOpen("75") then
-                  (self._btn_VoiceChat):SetShow(not isRecordMode)
-                  ;
-                  (self._btn_VoiceChat):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_VoiceChat):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                else
-                  ;
-                  (self._btn_VoiceChat):SetShow(false)
-                end
-                if (self._btn_MovieGuide):GetShow() then
-                  (self._btn_MovieGuide):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_MovieGuide):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                end
-                if (self._btn_NpcNavi):GetShow() or (self._btn_NpcNaviTW):GetShow() then
-                  (self._btn_NpcNavi):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_NpcNavi):SetPosY(10)
-                  ;
-                  (self._btn_NpcNaviTW):SetPosX((sizeX + controlGapX) * (showIconCount))
-                  ;
-                  (self._btn_NpcNaviTW):SetPosY(10)
-                  showIconCount = showIconCount + 1
-                end
-                ;
-                (self._plus_MovieGuide):SetPosX((self._btn_MovieGuide):GetPosX() + 25)
-                ;
-                (self._plus_MovieGuide):SetPosY((self._btn_MovieGuide):GetPosY() + 25)
-                ;
-                (self._plus_Hunting):SetPosX((self._btn_Hunting):GetPosX() + 25)
-                ;
-                (self._plus_Hunting):SetPosY((self._btn_Hunting):GetPosY() + 25)
-                ;
-                (self._text_AutoTraining):SetPosX((self._btn_AutoTraining):GetPosX() + 12)
-                ;
-                (self._text_AutoTraining):SetPosY((self._btn_AutoTraining):GetPosY() + 25)
-                Panel_PersonalIcon:SetShow(true)
-                if CppDefine.ChangeUIAndResolution == true then
-                  radarPosX = FGlobal_Panel_Radar_GetPosX()
-                  radarPosY = FGlobal_Panel_Radar_GetPosY()
-                end
-                Panel_PersonalIcon:SetSize((sizeX + controlGapX) * (showIconCount) - 5, Panel_PersonalIcon:GetSizeY())
-                Panel_PersonalIcon:SetPosX(radarPosX - (sizeX + controlGapX) * (showIconCount))
-              end
-            end
-          end
-        end
+      else
+        ;
+        (self._btn_Militia):SetShow(false)
       end
     end
+    if (self._btn_Militia):GetShow() then
+      (self._btn_Militia):SetPosX((sizeX + controlGapX) * showIconCount)
+      ;
+      (self._btn_Militia):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    if (self._btn_WarCall):GetShow() then
+      (self._btn_WarCall):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_WarCall):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    if (self._btn_SummonParty):GetShow() then
+      (self._btn_SummonParty):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_SummonParty):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    if (self._btn_ReturnStone):GetShow() then
+      (self._btn_ReturnStone):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_ReturnStone):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    if (self._btn_BusterCall):GetShow() then
+      (self._btn_BusterCall):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_BusterCall):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    local trainableMinLev = 50
+    if ToClient_IsContentsGroupOpen("57") and trainableMinLev <= playerLV then
+      (self._btn_AutoTraining):SetShow(not isRecordMode)
+      ;
+      (self._btn_AutoTraining):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_AutoTraining):SetPosY(10)
+      showIconCount = showIconCount + 1
+    else
+      ;
+      (self._btn_AutoTraining):SetShow(false)
+    end
+    if (self._btn_SummonElephant):GetShow() then
+      (self._btn_SummonElephant):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_SummonElephant):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    ;
+    (self._btn_SiegeArea):SetShow(not isRecordMode)
+    ;
+    (self._btn_SiegeArea):SetPosX((sizeX + controlGapX) * (showIconCount))
+    ;
+    (self._btn_SiegeArea):SetPosY(10)
+    showIconCount = showIconCount + 1
+    if ToClient_IsContentsGroupOpen("28") then
+      (self._btn_Hunting):SetShow(not isRecordMode)
+      ;
+      (self._btn_Hunting):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_Hunting):SetPosY(10)
+      showIconCount = showIconCount + 1
+    else
+      ;
+      (self._btn_Hunting):SetShow(false)
+    end
+    if ToClient_IsContentsGroupOpen("75") then
+      (self._btn_VoiceChat):SetShow(not isRecordMode)
+      ;
+      (self._btn_VoiceChat):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_VoiceChat):SetPosY(10)
+      showIconCount = showIconCount + 1
+    else
+      ;
+      (self._btn_VoiceChat):SetShow(false)
+    end
+    if (self._btn_MovieGuide):GetShow() then
+      (self._btn_MovieGuide):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_MovieGuide):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    if (self._btn_NpcNavi):GetShow() or (self._btn_NpcNaviTW):GetShow() then
+      (self._btn_NpcNavi):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_NpcNavi):SetPosY(10)
+      ;
+      (self._btn_NpcNaviTW):SetPosX((sizeX + controlGapX) * (showIconCount))
+      ;
+      (self._btn_NpcNaviTW):SetPosY(10)
+      showIconCount = showIconCount + 1
+    end
+    ;
+    (self._plus_MovieGuide):SetPosX((self._btn_MovieGuide):GetPosX() + 25)
+    ;
+    (self._plus_MovieGuide):SetPosY((self._btn_MovieGuide):GetPosY() + 25)
+    ;
+    (self._plus_Hunting):SetPosX((self._btn_Hunting):GetPosX() + 25)
+    ;
+    (self._plus_Hunting):SetPosY((self._btn_Hunting):GetPosY() + 25)
+    ;
+    (self._text_AutoTraining):SetPosX((self._btn_AutoTraining):GetPosX() + 12)
+    ;
+    (self._text_AutoTraining):SetPosY((self._btn_AutoTraining):GetPosY() + 25)
+    Panel_PersonalIcon:SetShow(true)
+    if CppDefine.ChangeUIAndResolution == true then
+      radarPosX = FGlobal_Panel_Radar_GetPosX()
+      radarPosY = FGlobal_Panel_Radar_GetPosY()
+    end
+    Panel_PersonalIcon:SetSize((sizeX + controlGapX) * (showIconCount) - 5, Panel_PersonalIcon:GetSizeY())
+    Panel_PersonalIcon:SetPosX(radarPosX - (sizeX + controlGapX) * (showIconCount))
   end
 end
 
@@ -248,7 +224,7 @@ FGlobal_GetPersonalIconControl = function(index)
                         if index == 10 then
                           return self._btn_WarCall
                         else
-                          if self._btn_Militia == 11 then
+                          if index == 11 then
                             return self._btn_Militia
                           else
                             return nil

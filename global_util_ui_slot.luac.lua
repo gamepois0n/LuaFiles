@@ -124,168 +124,185 @@ SlotItem.createChild = function(self)
       (self.enchantText):SetIgnore(true)
     end
     do
-      if (self.param).createCooltime == true and self.cooltime == nil then
-        self.cooltime = (UI.createCustomControl)("StaticCooltime", self.icon, "StaticCooltime_" .. self.id)
+      if (self.param).createRemoteEnchant == true and self.remoteEnchantText == nil then
+        self.remoteEnchantText = (UI.createControl)(UCT.PA_UI_CONTROL_STATICTEXT, self.icon, "StaticText_" .. self.id .. "_RemoteEnchant")
+        local remoteEnchantNumber = (UI.getChildControl)(Panel_RemoteInventory, "StaticText_RemoteSlot_Enchantvalue")
+        CopyBaseProperty(remoteEnchantNumber, self.remoteEnchantText)
         ;
-        (self.cooltime):SetSize((self.icon):GetSizeX(), (self.icon):GetSizeY())
+        (self.remoteEnchantText):SetPosX(0)
         ;
-        (self.cooltime):SetIgnore(true)
+        (self.remoteEnchantText):SetPosY(0)
         ;
-        (self.cooltime):SetShow(false)
-      end
-      if (self.param).createCount == true and self.count == nil then
-        self.count = (UI.createControl)(UCT.PA_UI_CONTROL_STATICTEXT, self.icon, "StaticText_" .. self.id .. "_Count")
-        local stackCount = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Slot_StackCount_value")
-        CopyBaseProperty(stackCount, self.count)
+        (self.remoteEnchantText):SetTextHorizonCenter()
         ;
-        (self.count):SetSize((self.icon):GetSizeX() - 3, (self.icon):GetSizeY() / 2)
+        (self.remoteEnchantText):SetTextVerticalCenter()
         ;
-        (self.count):SetTextHorizonRight()
-        ;
-        (self.count):SetTextVerticalBottom()
-        ;
-        (self.count):SetIgnore(true)
+        (self.remoteEnchantText):SetIgnore(true)
       end
       do
-        if (self.param).createMailCount == true and self.mailCount == nil then
-          self.mailCount = (UI.createControl)(UCT.PA_UI_CONTROL_STATICTEXT, self.icon, "StaticText_" .. self.id .. "_MailCount")
-          local mailStackCount = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Slot_MailStackCount_value")
-          CopyBaseProperty(mailStackCount, self.mailCount)
+        if (self.param).createCooltime == true and self.cooltime == nil then
+          self.cooltime = (UI.createCustomControl)("StaticCooltime", self.icon, "StaticCooltime_" .. self.id)
           ;
-          (self.mailCount):SetSize((self.icon):GetSizeX() - 3, (self.icon):GetSizeY() / 2)
+          (self.cooltime):SetSize((self.icon):GetSizeX(), (self.icon):GetSizeY())
           ;
-          (self.mailCount):SetTextHorizonRight()
+          (self.cooltime):SetIgnore(true)
           ;
-          (self.mailCount):SetTextVerticalBottom()
+          (self.cooltime):SetShow(false)
+        end
+        if (self.param).createCount == true and self.count == nil then
+          self.count = (UI.createControl)(UCT.PA_UI_CONTROL_STATICTEXT, self.icon, "StaticText_" .. self.id .. "_Count")
+          local stackCount = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Slot_StackCount_value")
+          CopyBaseProperty(stackCount, self.count)
           ;
-          (self.mailCount):SetIgnore(true)
+          (self.count):SetSize((self.icon):GetSizeX() - 3, (self.icon):GetSizeY() / 2)
+          ;
+          (self.count):SetTextHorizonRight()
+          ;
+          (self.count):SetTextVerticalBottom()
+          ;
+          (self.count):SetIgnore(true)
         end
         do
-          if (self.param).createExpiration == true and self.expiration == nil then
-            self.expiration = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_expiration")
+          if (self.param).createMailCount == true and self.mailCount == nil then
+            self.mailCount = (UI.createControl)(UCT.PA_UI_CONTROL_STATICTEXT, self.icon, "StaticText_" .. self.id .. "_MailCount")
+            local mailStackCount = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Slot_MailStackCount_value")
+            CopyBaseProperty(mailStackCount, self.mailCount)
             ;
-            (self.expiration):SetSize(_config.expirationSize, _config.expirationSize)
+            (self.mailCount):SetSize((self.icon):GetSizeX() - 3, (self.icon):GetSizeY() / 2)
             ;
-            (self.expiration):SetPosX(_config.expirationPosX)
+            (self.mailCount):SetTextHorizonRight()
             ;
-            (self.expiration):SetPosY(_config.expirationPosY)
+            (self.mailCount):SetTextVerticalBottom()
             ;
-            (self.expiration):SetIgnore(true)
+            (self.mailCount):SetIgnore(true)
           end
-          if (self.param).createCash == true and self.isCash == nil then
-            self.isCash = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_isCash")
-            ;
-            (self.isCash):SetSize(_config.isCashSize, _config.isCashSize)
-            ;
-            (self.isCash):SetPosX(_config.isCashPosX)
-            ;
-            (self.isCash):SetPosY(_config.isCashPosY)
-            ;
-            (self.isCash):SetIgnore(true)
-          end
-          if (self.param).createClassEquipBG == true and self.classEquipBG == nil then
-            self.classEquipBG = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_classEquipBG_" .. self.id)
-            ;
-            (self.classEquipBG):SetSize(_config.disableClass, _config.disableClass)
-            ;
-            (self.classEquipBG):SetPosX(_config.iconSize - _config.disableClass)
-            ;
-            (self.classEquipBG):SetPosY(_config.iconSize - _config.disableClass)
-            ;
-            (self.classEquipBG):SetIgnore(true)
-          end
-          if (self.param).createEnduranceIcon == true and self.enduranceIcon == nil then
-            self.enduranceIcon = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_enduranceIcon")
-            ;
-            (self.enduranceIcon):SetSize(_config.iconSize + 1, _config.iconSize + 1)
-            ;
-            (self.enduranceIcon):SetPosX(0)
-            ;
-            (self.enduranceIcon):SetPosY(0)
-            ;
-            (self.enduranceIcon):SetIgnore(true)
-          end
-          if (self.param).createCooltimeText == true and self.cooltimeText == nil then
-            self.cooltimeText = (UI.createControl)(UCT.PA_UI_CONTROL_STATICTEXT, self.icon, "StaticText_" .. self.id .. "_Cooltime")
-            ;
-            (self.cooltimeText):SetSize(_config.iconSize, _config.iconSize)
-            ;
-            (self.cooltimeText):SetIgnore(true)
-            ;
-            (self.cooltimeText):SetShow(false)
-            ;
-            (self.cooltimeText):SetPosX(0)
-            ;
-            (self.cooltimeText):SetPosY(0)
-            ;
-            (self.cooltimeText):SetTextHorizonCenter()
-            ;
-            (self.cooltimeText):SetTextVerticalCenter()
-          end
-          if (self.param).createCheckBox == true and self.checkBox == nil then
-            self.checkBox = (UI.createControl)(UCT.PA_UI_CONTROL_CHECKBUTTON, self.icon, "CheckButton_" .. self.id)
-            ;
-            (self.checkBox):SetSize(_config.checkBtnSize, _config.checkBtnSize)
-            ;
-            (self.checkBox):SetPosX(23)
-            ;
-            (self.checkBox):SetPosY(1)
-            ;
-            (self.checkBox):SetIgnore(false)
-            ;
-            (self.checkBox):SetShow(false)
-          end
-          if (self.param).createItemLock == true and self.itemLock == nil then
-            self.itemLock = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_ItemLock")
-            ;
-            (self.itemLock):SetSize(_config.iconSize, _config.iconSize)
-            ;
-            (self.itemLock):SetIgnore(true)
-            ;
-            (self.itemLock):SetShow(false)
-            ;
-            (self.itemLock):SetPosX(0)
-            ;
-            (self.itemLock):SetPosY(0)
-          end
-          if (self.param).createBagIcon == true and self.bagIcon == nil then
-            self.bagIcon = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_BagIcon")
-            ;
-            (self.bagIcon):SetSize(25, 25)
-            ;
-            (self.bagIcon):SetIgnore(true)
-            ;
-            (self.bagIcon):SetShow(false)
-            ;
-            (self.bagIcon):SetPosX(1)
-            ;
-            (self.bagIcon):SetPosY(1)
-          end
-          if (self.param).createQuickslotBagIcon == true and self.quickslotBagIcon == nil then
-            self.quickslotBagIcon = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_QuickSlotBagIcon")
-            ;
-            (self.quickslotBagIcon):SetSize(25, 25)
-            ;
-            (self.quickslotBagIcon):SetIgnore(true)
-            ;
-            (self.quickslotBagIcon):SetShow(false)
-            ;
-            (self.quickslotBagIcon):SetPosX(1)
-            ;
-            (self.quickslotBagIcon):SetPosY(1)
-          end
-          if (self.param).createSoulComplete == true and self.soulComplete == nil then
-            self.soulComplete = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_soulComplete")
-            ;
-            (self.soulComplete):SetSize(15, 15)
-            ;
-            (self.soulComplete):SetIgnore(true)
-            ;
-            (self.soulComplete):SetShow(false)
-            ;
-            (self.soulComplete):SetPosX(27)
-            ;
-            (self.soulComplete):SetPosY(1)
+          do
+            if (self.param).createExpiration == true and self.expiration == nil then
+              self.expiration = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_expiration")
+              ;
+              (self.expiration):SetSize(_config.expirationSize, _config.expirationSize)
+              ;
+              (self.expiration):SetPosX(_config.expirationPosX)
+              ;
+              (self.expiration):SetPosY(_config.expirationPosY)
+              ;
+              (self.expiration):SetIgnore(true)
+            end
+            if (self.param).createCash == true and self.isCash == nil then
+              self.isCash = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_isCash")
+              ;
+              (self.isCash):SetSize(_config.isCashSize, _config.isCashSize)
+              ;
+              (self.isCash):SetPosX(_config.isCashPosX)
+              ;
+              (self.isCash):SetPosY(_config.isCashPosY)
+              ;
+              (self.isCash):SetIgnore(true)
+            end
+            if (self.param).createClassEquipBG == true and self.classEquipBG == nil then
+              self.classEquipBG = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_classEquipBG_" .. self.id)
+              ;
+              (self.classEquipBG):SetSize(_config.disableClass, _config.disableClass)
+              ;
+              (self.classEquipBG):SetPosX(_config.iconSize - _config.disableClass)
+              ;
+              (self.classEquipBG):SetPosY(_config.iconSize - _config.disableClass)
+              ;
+              (self.classEquipBG):SetIgnore(true)
+            end
+            if (self.param).createEnduranceIcon == true and self.enduranceIcon == nil then
+              self.enduranceIcon = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_enduranceIcon")
+              ;
+              (self.enduranceIcon):SetSize(_config.iconSize + 1, _config.iconSize + 1)
+              ;
+              (self.enduranceIcon):SetPosX(0)
+              ;
+              (self.enduranceIcon):SetPosY(0)
+              ;
+              (self.enduranceIcon):SetIgnore(true)
+            end
+            if (self.param).createCooltimeText == true and self.cooltimeText == nil then
+              self.cooltimeText = (UI.createControl)(UCT.PA_UI_CONTROL_STATICTEXT, self.icon, "StaticText_" .. self.id .. "_Cooltime")
+              ;
+              (self.cooltimeText):SetSize(_config.iconSize, _config.iconSize)
+              ;
+              (self.cooltimeText):SetIgnore(true)
+              ;
+              (self.cooltimeText):SetShow(false)
+              ;
+              (self.cooltimeText):SetPosX(0)
+              ;
+              (self.cooltimeText):SetPosY(0)
+              ;
+              (self.cooltimeText):SetTextHorizonCenter()
+              ;
+              (self.cooltimeText):SetTextVerticalCenter()
+            end
+            if (self.param).createCheckBox == true and self.checkBox == nil then
+              self.checkBox = (UI.createControl)(UCT.PA_UI_CONTROL_CHECKBUTTON, self.icon, "CheckButton_" .. self.id)
+              ;
+              (self.checkBox):SetSize(_config.checkBtnSize, _config.checkBtnSize)
+              ;
+              (self.checkBox):SetPosX(23)
+              ;
+              (self.checkBox):SetPosY(1)
+              ;
+              (self.checkBox):SetIgnore(false)
+              ;
+              (self.checkBox):SetShow(false)
+            end
+            if (self.param).createItemLock == true and self.itemLock == nil then
+              self.itemLock = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_ItemLock")
+              ;
+              (self.itemLock):SetSize(_config.iconSize, _config.iconSize)
+              ;
+              (self.itemLock):SetIgnore(true)
+              ;
+              (self.itemLock):SetShow(false)
+              ;
+              (self.itemLock):SetPosX(0)
+              ;
+              (self.itemLock):SetPosY(0)
+            end
+            if (self.param).createBagIcon == true and self.bagIcon == nil then
+              self.bagIcon = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_BagIcon")
+              ;
+              (self.bagIcon):SetSize(25, 25)
+              ;
+              (self.bagIcon):SetIgnore(true)
+              ;
+              (self.bagIcon):SetShow(false)
+              ;
+              (self.bagIcon):SetPosX(1)
+              ;
+              (self.bagIcon):SetPosY(1)
+            end
+            if (self.param).createQuickslotBagIcon == true and self.quickslotBagIcon == nil then
+              self.quickslotBagIcon = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_QuickSlotBagIcon")
+              ;
+              (self.quickslotBagIcon):SetSize(25, 25)
+              ;
+              (self.quickslotBagIcon):SetIgnore(true)
+              ;
+              (self.quickslotBagIcon):SetShow(false)
+              ;
+              (self.quickslotBagIcon):SetPosX(1)
+              ;
+              (self.quickslotBagIcon):SetPosY(1)
+            end
+            if (self.param).createSoulComplete == true and self.soulComplete == nil then
+              self.soulComplete = (UI.createControl)(UCT.PA_UI_CONTROL_STATIC, self.icon, "Static_" .. self.id .. "_soulComplete")
+              ;
+              (self.soulComplete):SetSize(15, 15)
+              ;
+              (self.soulComplete):SetIgnore(true)
+              ;
+              (self.soulComplete):SetShow(false)
+              ;
+              (self.soulComplete):SetPosX(27)
+              ;
+              (self.soulComplete):SetPosY(1)
+            end
           end
         end
       end
@@ -327,6 +344,9 @@ SlotItem.reInclude = function(itemSlot, id, slotNo, parent, param)
     end
     if (itemSlot.param).createEnchant == true and itemSlot.enchantText == nil then
       itemSlot.enchantText = (UI.getChildControl)(itemSlot.icon, "StaticText_" .. itemSlot.id .. "_Enchant")
+    end
+    if (itemSlot.param).createRemoteEnchant == true and itemSlot.remoteEnchantText == nil then
+      itemSlot.remoteEnchantText = (UI.getChildControl)(itemSlot.icon, "StaticText_" .. itemSlot.id .. "_RemoteEnchant")
     end
     if (itemSlot.param).createCooltime == true and itemSlot.cooltime == nil then
       itemSlot.cooltime = (UI.getChildControl)("StaticCooltime", itemSlot.icon, "StaticCooltime_" .. itemSlot.id)
@@ -379,6 +399,10 @@ SlotItem.destroyChild = function(self)
   if self.enchantText ~= nil then
     (UI.deleteControl)(self.enchantText)
     self.enchantText = nil
+  end
+  if self.remoteEnchantText ~= nil then
+    (UI.deleteControl)(self.remoteEnchantText)
+    self.remoteEnchantText = nil
   end
   if self.cooltime ~= nil then
     (UI.deleteControl)(self.cooltime)
@@ -707,155 +731,232 @@ SlotItem.setItemByStaticStatus = function(self, itemStaticWrapper, s64_stackCoun
                           (self.enchantText):SetShow(false)
                         end
                       end
-                      if self.expiration ~= nil then
-                        if expirationIndex ~= -1 then
-                          (self.expiration):ChangeTextureInfoName((((UI.itemSlotConfig).expirationTexture)[expirationIndex]).texture)
-                          local x1, y1, x2, y2 = setTextureUV_Func(self.expiration, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).x1, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).y1, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).x2, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).y2)
-                          ;
-                          ((self.expiration):getBaseTexture()):setUV(x1, y1, x2, y2)
-                          ;
-                          (self.expiration):setRenderTexture((self.expiration):getBaseTexture())
-                          ;
-                          (self.expiration):SetShow(true)
-                        else
-                          do
+                      do
+                        if self.remoteEnchantText ~= nil then
+                          local itemStatic = itemStaticWrapper:get()
+                          if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() > 0 and (itemStatic._key):getEnchantLevel() < 16 then
+                            (self.remoteEnchantText):SetText("+" .. tostring((itemStatic._key):getEnchantLevel()))
                             ;
-                            (self.expiration):SetShow(false)
-                            if self.expiration2h ~= nil then
-                              if expirationIndex == 1 then
-                                local x1, y1, x2, y2 = setTextureUV_Func(self.expiration2h, 1, 91, 44, 134)
+                            (self.remoteEnchantText):SetShow(true)
+                          else
+                            if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 16 then
+                              (self.remoteEnchantText):SetText("I")
+                              ;
+                              (self.remoteEnchantText):SetShow(true)
+                            else
+                              if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 17 then
+                                (self.remoteEnchantText):SetText("II")
                                 ;
-                                ((self.expiration2h):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                ;
-                                (self.expiration2h):setRenderTexture((self.expiration2h):getBaseTexture())
-                                ;
-                                (self.expiration2h):SetShow(true)
+                                (self.remoteEnchantText):SetShow(true)
                               else
-                                do
+                                if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 18 then
+                                  (self.remoteEnchantText):SetText("III")
                                   ;
-                                  (self.expiration2h):SetShow(false)
-                                  if self.isCash ~= nil then
-                                    if (itemStaticWrapper:get()):isCash() then
-                                      (self.isCash):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/CashIcon.dds")
-                                      local x1, y1, x2, y2 = setTextureUV_Func(self.isCash, 1, 1, 28, 28)
+                                  (self.remoteEnchantText):SetShow(true)
+                                else
+                                  if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 19 then
+                                    (self.remoteEnchantText):SetText("IV")
+                                    ;
+                                    (self.remoteEnchantText):SetShow(true)
+                                  else
+                                    if itemStatic:isEquipable() and (itemStatic._key):getEnchantLevel() == 20 then
+                                      (self.remoteEnchantText):SetText("V")
                                       ;
-                                      ((self.isCash):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                      ;
-                                      (self.isCash):setRenderTexture((self.isCash):getBaseTexture())
-                                      ;
-                                      (self.isCash):SetShow(true)
+                                      (self.remoteEnchantText):SetShow(true)
                                     else
-                                      do
+                                      ;
+                                      (self.remoteEnchantText):SetText("")
+                                    end
+                                  end
+                                end
+                              end
+                            end
+                          end
+                          if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemStaticWrapper:getItemClassify() then
+                            if (itemStatic._key):getEnchantLevel() == 1 then
+                              (self.remoteEnchantText):SetText("I")
+                              ;
+                              (self.remoteEnchantText):SetShow(true)
+                            else
+                              if (itemStatic._key):getEnchantLevel() == 2 then
+                                (self.remoteEnchantText):SetText("II")
+                                ;
+                                (self.remoteEnchantText):SetShow(true)
+                              else
+                                if (itemStatic._key):getEnchantLevel() == 3 then
+                                  (self.remoteEnchantText):SetText("III")
+                                  ;
+                                  (self.remoteEnchantText):SetShow(true)
+                                else
+                                  if (itemStatic._key):getEnchantLevel() == 4 then
+                                    (self.remoteEnchantText):SetText("IV")
+                                    ;
+                                    (self.remoteEnchantText):SetShow(true)
+                                  else
+                                    if (itemStatic._key):getEnchantLevel() == 5 then
+                                      (self.remoteEnchantText):SetText("V")
+                                      ;
+                                      (self.remoteEnchantText):SetShow(true)
+                                    end
+                                  end
+                                end
+                              end
+                            end
+                          end
+                          if itemStatic:isCash() then
+                            (self.remoteEnchantText):SetShow(false)
+                          end
+                        end
+                        if self.expiration ~= nil then
+                          if expirationIndex ~= -1 then
+                            (self.expiration):ChangeTextureInfoName((((UI.itemSlotConfig).expirationTexture)[expirationIndex]).texture)
+                            local x1, y1, x2, y2 = setTextureUV_Func(self.expiration, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).x1, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).y1, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).x2, (((UI.itemSlotConfig).expirationTexture)[expirationIndex]).y2)
+                            ;
+                            ((self.expiration):getBaseTexture()):setUV(x1, y1, x2, y2)
+                            ;
+                            (self.expiration):setRenderTexture((self.expiration):getBaseTexture())
+                            ;
+                            (self.expiration):SetShow(true)
+                          else
+                            do
+                              ;
+                              (self.expiration):SetShow(false)
+                              if self.expiration2h ~= nil then
+                                if expirationIndex == 1 then
+                                  local x1, y1, x2, y2 = setTextureUV_Func(self.expiration2h, 1, 91, 44, 134)
+                                  ;
+                                  ((self.expiration2h):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                  ;
+                                  (self.expiration2h):setRenderTexture((self.expiration2h):getBaseTexture())
+                                  ;
+                                  (self.expiration2h):SetShow(true)
+                                else
+                                  do
+                                    ;
+                                    (self.expiration2h):SetShow(false)
+                                    if self.isCash ~= nil then
+                                      if (itemStaticWrapper:get()):isCash() then
+                                        (self.isCash):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/CashIcon.dds")
+                                        local x1, y1, x2, y2 = setTextureUV_Func(self.isCash, 1, 1, 28, 28)
                                         ;
-                                        (self.isCash):SetShow(false)
-                                        if self.expirationBG ~= nil then
-                                          if expirationIndex == 2 then
-                                            (self.expirationBG):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/inventory_01.dds")
-                                            local x1, y1, x2, y2 = setTextureUV_Func(self.expirationBG, 1, 1, 44, 44)
-                                            ;
-                                            ((self.expirationBG):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                            ;
-                                            (self.expirationBG):setRenderTexture((self.expirationBG):getBaseTexture())
-                                            ;
-                                            (self.expirationBG):SetShow(true)
-                                          else
-                                            do
+                                        ((self.isCash):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                        ;
+                                        (self.isCash):setRenderTexture((self.isCash):getBaseTexture())
+                                        ;
+                                        (self.isCash):SetShow(true)
+                                      else
+                                        do
+                                          ;
+                                          (self.isCash):SetShow(false)
+                                          if self.expirationBG ~= nil then
+                                            if expirationIndex == 2 then
+                                              (self.expirationBG):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/inventory_01.dds")
+                                              local x1, y1, x2, y2 = setTextureUV_Func(self.expirationBG, 1, 1, 44, 44)
                                               ;
-                                              (self.expirationBG):SetShow(false)
-                                              if self.classEquipBG ~= nil then
-                                                (self.classEquipBG):SetShow(false)
-                                                local isUsableClass = nil
-                                                local itemSSW = itemStaticWrapper
-                                                local classType = (getSelfPlayer()):getClassType()
-                                                if itemSSW ~= nil then
-                                                  if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
-                                                    isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
-                                                  else
-                                                    isUsableClass = true
-                                                  end
-                                                else
-                                                  isUsableClass = false
-                                                end
-                                                if (itemSSW:get()):isEquipable() == true and isUsableClass == false then
-                                                  (self.classEquipBG):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Disable_Class.dds")
-                                                  local x1, y1, x2, y2 = setTextureUV_Func(self.classEquipBG, 1, 1, 12, 12)
-                                                  ;
-                                                  ((self.classEquipBG):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                  ;
-                                                  (self.classEquipBG):setRenderTexture((self.classEquipBG):getBaseTexture())
-                                                  ;
-                                                  (self.classEquipBG):SetShow(true)
-                                                end
-                                              end
+                                              ((self.expirationBG):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                              ;
+                                              (self.expirationBG):setRenderTexture((self.expirationBG):getBaseTexture())
+                                              ;
+                                              (self.expirationBG):SetShow(true)
+                                            else
                                               do
-                                                local equipSlotNo = itemStaticWrapper:getEquipSlotNo()
-                                                if self.enduranceIcon ~= nil then
-                                                  (self.enduranceIcon):SetShow(false)
-                                                  if isBroken == true then
-                                                    if equipSlotNo == 2 then
-                                                      (self.enduranceIcon):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Disable_Repair.dds")
-                                                      local x1, y1, x2, y2 = setTextureUV_Func(self.enduranceIcon, 1, 1, 41, 41)
-                                                      ;
-                                                      ((self.enduranceIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                      ;
-                                                      (self.enduranceIcon):setRenderTexture((self.enduranceIcon):getBaseTexture())
-                                                      ;
-                                                      (self.enduranceIcon):SetShow(true)
+                                                ;
+                                                (self.expirationBG):SetShow(false)
+                                                if self.classEquipBG ~= nil then
+                                                  (self.classEquipBG):SetShow(false)
+                                                  local isUsableClass = nil
+                                                  local itemSSW = itemStaticWrapper
+                                                  local classType = (getSelfPlayer()):getClassType()
+                                                  if itemSSW ~= nil then
+                                                    if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
+                                                      isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
                                                     else
-                                                      do
+                                                      isUsableClass = true
+                                                    end
+                                                  else
+                                                    isUsableClass = false
+                                                  end
+                                                  if (itemSSW:get()):isEquipable() == true and isUsableClass == false then
+                                                    (self.classEquipBG):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Disable_Class.dds")
+                                                    local x1, y1, x2, y2 = setTextureUV_Func(self.classEquipBG, 1, 1, 12, 12)
+                                                    ;
+                                                    ((self.classEquipBG):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                    ;
+                                                    (self.classEquipBG):setRenderTexture((self.classEquipBG):getBaseTexture())
+                                                    ;
+                                                    (self.classEquipBG):SetShow(true)
+                                                  end
+                                                end
+                                                do
+                                                  local equipSlotNo = itemStaticWrapper:getEquipSlotNo()
+                                                  if self.enduranceIcon ~= nil then
+                                                    (self.enduranceIcon):SetShow(false)
+                                                    if isBroken == true then
+                                                      if equipSlotNo == 2 then
+                                                        (self.enduranceIcon):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Disable_Repair.dds")
+                                                        local x1, y1, x2, y2 = setTextureUV_Func(self.enduranceIcon, 1, 1, 41, 41)
                                                         ;
-                                                        (self.enduranceIcon):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Need_Repair.dds")
+                                                        ((self.enduranceIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                        ;
+                                                        (self.enduranceIcon):setRenderTexture((self.enduranceIcon):getBaseTexture())
+                                                        ;
+                                                        (self.enduranceIcon):SetShow(true)
+                                                      else
                                                         do
-                                                          local x1, y1, x2, y2 = setTextureUV_Func(self.enduranceIcon, 1, 1, 41, 41)
                                                           ;
-                                                          ((self.enduranceIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                          ;
-                                                          (self.enduranceIcon):setRenderTexture((self.enduranceIcon):getBaseTexture())
-                                                          ;
-                                                          (self.enduranceIcon):SetShow(true)
-                                                          if self.checkBox ~= nil then
-                                                            (self.checkBox):ChangeTextureInfoName((((UI.itemSlotConfig).checkBtnTexture)[0]).texture)
-                                                            local x1, y1, x2, y2 = setTextureUV_Func(self.checkBox, (((UI.itemSlotConfig).checkBtnTexture)[0]).x1, (((UI.itemSlotConfig).checkBtnTexture)[0]).y1, (((UI.itemSlotConfig).checkBtnTexture)[0]).x2, (((UI.itemSlotConfig).checkBtnTexture)[0]).y2)
-                                                            ;
-                                                            ((self.checkBox):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                            ;
-                                                            (self.checkBox):setRenderTexture((self.checkBox):getBaseTexture())
-                                                            ;
-                                                            (self.checkBox):ChangeOnTextureInfoName((((UI.itemSlotConfig).checkBtnTexture)[1]).texture)
-                                                            local x1, y1, x2, y2 = setTextureUV_Func(self.checkBox, (((UI.itemSlotConfig).checkBtnTexture)[1]).x1, (((UI.itemSlotConfig).checkBtnTexture)[1]).y1, (((UI.itemSlotConfig).checkBtnTexture)[1]).x2, (((UI.itemSlotConfig).checkBtnTexture)[1]).y2)
-                                                            ;
-                                                            ((self.checkBox):getOnTexture()):setUV(x1, y1, x2, y2)
-                                                            ;
-                                                            (self.checkBox):ChangeClickTextureInfoName((((UI.itemSlotConfig).checkBtnTexture)[2]).texture)
-                                                            local x1, y1, x2, y2 = setTextureUV_Func(self.checkBox, (((UI.itemSlotConfig).checkBtnTexture)[2]).x1, (((UI.itemSlotConfig).checkBtnTexture)[2]).y1, (((UI.itemSlotConfig).checkBtnTexture)[2]).x2, (((UI.itemSlotConfig).checkBtnTexture)[2]).y2)
-                                                            ;
-                                                            ((self.checkBox):getClickTexture()):setUV(x1, y1, x2, y2)
-                                                            ;
-                                                            (self.checkBox):SetShow(false)
-                                                            ;
-                                                            (self.checkBox):SetCheck(true)
-                                                          end
+                                                          (self.enduranceIcon):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Need_Repair.dds")
                                                           do
-                                                            if self.quickslotBagIcon ~= nil then
-                                                              (self.quickslotBagIcon):SetShow(false)
-                                                              local itemSSW = itemStaticWrapper
-                                                              if (CppEnums.ContentsEventType).ContentsType_InventoryBag == (itemSSW:get()):getContentsEventType() then
-                                                                local bagSize = itemSSW:getContentsEventParam2()
-                                                                local whereType = (CppEnums.ItemWhereType).eInventory
-                                                                if (itemSSW:get()):isCash() then
-                                                                  whereType = (CppEnums.ItemWhereType).eCashInventory
-                                                                end
-                                                                local inventory = ((getSelfPlayer()):get()):getInventoryByType(whereType)
-                                                                local invenSlotNo = inventory:getSlot((itemSSW:get())._key)
-                                                                for index = 0, bagSize - 1 do
-                                                                  local quickSlotBagItemWrapper = getInventoryBagItemByType(whereType, invenSlotNo, index)
-                                                                  if quickSlotBagItemWrapper ~= nil then
-                                                                    local iconPath = (quickSlotBagItemWrapper:getStaticStatus()):getIconPath()
-                                                                    ;
-                                                                    (self.quickslotBagIcon):ChangeTextureInfoName("icon/" .. iconPath)
-                                                                    ;
-                                                                    (self.quickslotBagIcon):SetShow(true)
-                                                                    break
+                                                            local x1, y1, x2, y2 = setTextureUV_Func(self.enduranceIcon, 1, 1, 41, 41)
+                                                            ;
+                                                            ((self.enduranceIcon):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                            ;
+                                                            (self.enduranceIcon):setRenderTexture((self.enduranceIcon):getBaseTexture())
+                                                            ;
+                                                            (self.enduranceIcon):SetShow(true)
+                                                            if self.checkBox ~= nil then
+                                                              (self.checkBox):ChangeTextureInfoName((((UI.itemSlotConfig).checkBtnTexture)[0]).texture)
+                                                              local x1, y1, x2, y2 = setTextureUV_Func(self.checkBox, (((UI.itemSlotConfig).checkBtnTexture)[0]).x1, (((UI.itemSlotConfig).checkBtnTexture)[0]).y1, (((UI.itemSlotConfig).checkBtnTexture)[0]).x2, (((UI.itemSlotConfig).checkBtnTexture)[0]).y2)
+                                                              ;
+                                                              ((self.checkBox):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                              ;
+                                                              (self.checkBox):setRenderTexture((self.checkBox):getBaseTexture())
+                                                              ;
+                                                              (self.checkBox):ChangeOnTextureInfoName((((UI.itemSlotConfig).checkBtnTexture)[1]).texture)
+                                                              local x1, y1, x2, y2 = setTextureUV_Func(self.checkBox, (((UI.itemSlotConfig).checkBtnTexture)[1]).x1, (((UI.itemSlotConfig).checkBtnTexture)[1]).y1, (((UI.itemSlotConfig).checkBtnTexture)[1]).x2, (((UI.itemSlotConfig).checkBtnTexture)[1]).y2)
+                                                              ;
+                                                              ((self.checkBox):getOnTexture()):setUV(x1, y1, x2, y2)
+                                                              ;
+                                                              (self.checkBox):ChangeClickTextureInfoName((((UI.itemSlotConfig).checkBtnTexture)[2]).texture)
+                                                              local x1, y1, x2, y2 = setTextureUV_Func(self.checkBox, (((UI.itemSlotConfig).checkBtnTexture)[2]).x1, (((UI.itemSlotConfig).checkBtnTexture)[2]).y1, (((UI.itemSlotConfig).checkBtnTexture)[2]).x2, (((UI.itemSlotConfig).checkBtnTexture)[2]).y2)
+                                                              ;
+                                                              ((self.checkBox):getClickTexture()):setUV(x1, y1, x2, y2)
+                                                              ;
+                                                              (self.checkBox):SetShow(false)
+                                                              ;
+                                                              (self.checkBox):SetCheck(true)
+                                                            end
+                                                            do
+                                                              if self.quickslotBagIcon ~= nil then
+                                                                (self.quickslotBagIcon):SetShow(false)
+                                                                local itemSSW = itemStaticWrapper
+                                                                if (CppEnums.ContentsEventType).ContentsType_InventoryBag == (itemSSW:get()):getContentsEventType() then
+                                                                  local bagSize = itemSSW:getContentsEventParam2()
+                                                                  local whereType = (CppEnums.ItemWhereType).eInventory
+                                                                  if (itemSSW:get()):isCash() then
+                                                                    whereType = (CppEnums.ItemWhereType).eCashInventory
+                                                                  end
+                                                                  local inventory = ((getSelfPlayer()):get()):getInventoryByType(whereType)
+                                                                  local invenSlotNo = inventory:getSlot((itemSSW:get())._key)
+                                                                  for index = 0, bagSize - 1 do
+                                                                    local quickSlotBagItemWrapper = getInventoryBagItemByType(whereType, invenSlotNo, index)
+                                                                    if quickSlotBagItemWrapper ~= nil then
+                                                                      local iconPath = (quickSlotBagItemWrapper:getStaticStatus()):getIconPath()
+                                                                      ;
+                                                                      (self.quickslotBagIcon):ChangeTextureInfoName("icon/" .. iconPath)
+                                                                      ;
+                                                                      (self.quickslotBagIcon):SetShow(true)
+                                                                      break
+                                                                    end
                                                                   end
                                                                 end
                                                               end
@@ -949,6 +1050,9 @@ SlotItem.clearItem = function(self)
   end
   if self.enchantText ~= nil then
     (self.enchantText):SetShow(false)
+  end
+  if self.remoteEnchantText ~= nil then
+    (self.remoteEnchantText):SetShow(false)
   end
   if self.cooltime ~= nil then
     (self.cooltime):SetShow(false)

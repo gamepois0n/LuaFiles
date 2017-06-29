@@ -102,12 +102,33 @@ setCurrentMessageData = function(currentData, position)
       buttonClose:SetShow(true)
     end
     globalButtonShowCount = buttonShowCount
+    Panel_Win_System:setLockFocusPanel(true)
+    Panel_Win_System:deleteConsoleUIGroup(0)
     if buttonShowCount == 1 then
       buttonYes:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonYes:GetSizeX() / 2)
       buttonApply:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonApply:GetSizeX() / 2)
       buttonNo:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonNo:GetSizeX() / 2)
       buttonIgnore:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonIgnore:GetSizeX() / 2)
       buttonCancel:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonCancel:GetSizeX() / 2)
+      if buttonYes:GetShow() then
+        Panel_Win_System:addConsoleUIControl(0, 1, 0, buttonYes)
+      else
+        if buttonApply:GetShow() then
+          Panel_Win_System:addConsoleUIControl(0, 1, 0, buttonApply)
+        else
+          if buttonNo:GetShow() then
+            Panel_Win_System:addConsoleUIControl(0, 1, 0, buttonNo)
+          else
+            if buttonIgnore:GetShow() then
+              Panel_Win_System:addConsoleUIControl(0, 1, 0, buttonIgnore)
+            else
+              if buttonCancel:GetShow() then
+                Panel_Win_System:addConsoleUIControl(0, 1, 0, buttonCancel)
+              end
+            end
+          end
+        end
+      end
     else
       if buttonShowCount == 2 then
         buttonYes:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonYes:GetSizeX() / 2 + 5))
@@ -115,6 +136,24 @@ setCurrentMessageData = function(currentData, position)
         buttonApply:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonApply:GetSizeX() / 2 + 5))
         buttonIgnore:SetPosX(Panel_Win_System:GetSizeX() / 2 + (buttonIgnore:GetSizeX() / 2 + 5))
         buttonCancel:SetPosX(Panel_Win_System:GetSizeX() / 2 + (buttonCancel:GetSizeX() / 2 + 5))
+        if buttonYes:GetShow() then
+          Panel_Win_System:addConsoleUIControl(0, 1, 0, buttonYes)
+        else
+          if buttonApply:GetShow() then
+            Panel_Win_System:addConsoleUIControl(0, 1, 0, buttonApply)
+          end
+        end
+        if buttonNo:GetShow() then
+          Panel_Win_System:addConsoleUIControl(1, 1, 0, buttonNo)
+        else
+          if buttonIgnore:GetShow() then
+            Panel_Win_System:addConsoleUIControl(1, 1, 0, buttonIgnore)
+          else
+            if buttonCancel:GetShow() then
+              Panel_Win_System:addConsoleUIControl(1, 1, 0, buttonCancel)
+            end
+          end
+        end
       else
         if buttonShowCount == 3 then
           local buttonSize = buttonYes:GetSizeX()
@@ -123,6 +162,23 @@ setCurrentMessageData = function(currentData, position)
           buttonApply:SetPosX(5)
           buttonIgnore:SetPosX(buttonSize + 10)
           buttonCancel:SetPosX(buttonSize * 2 + 15)
+          if buttonYes:GetShow() then
+            Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 0, buttonYes)
+          else
+            if buttonApply:GetShow() then
+              Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 0, buttonApply)
+            end
+          end
+          if buttonNo:GetShow() then
+            Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 0, buttonNo)
+          else
+            if buttonIgnore:GetShow() then
+              Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 0, buttonIgnore)
+            end
+          end
+          if buttonCancel:GetShow() then
+            Panel_Window_CharInfo_Status:addConsoleUIControl(2, 1, 0, buttonCancel)
+          end
         end
       end
     end

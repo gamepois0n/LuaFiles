@@ -137,6 +137,7 @@ end
 
 TitleInfo_Open = function()
   -- function num : 0_4 , upvalues : TitleInfo
+  TitleInfo:SetConsolePadGroup()
   ToClient_SetCurrentTitleCategory(0)
   TitleInfo_SetCategory(0)
   local self = TitleInfo
@@ -149,8 +150,25 @@ TitleInfo_Open = function()
   self:updateCoolTime()
 end
 
-TitleInfo.registEventHandler = function(self)
+TitleInfo.SetConsolePadGroup = function(self)
   -- function num : 0_5
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
+  Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 1, (self.Category_BTN)[0])
+  Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 1, (self.Category_BTN)[1])
+  Panel_Window_CharInfo_Status:addConsoleUIControl(2, 1, 1, (self.Category_BTN)[2])
+  Panel_Window_CharInfo_Status:addConsoleUIControl(3, 1, 1, (self.Category_BTN)[3])
+  Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 2, (self.titleSubject_Btn)[0])
+  Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 2, (self.titleSubject_Btn)[1])
+  Panel_Window_CharInfo_Status:addConsoleUIControl(2, 1, 2, (self.titleSubject_Btn)[2])
+  Panel_Window_CharInfo_Status:addConsoleUIControl(3, 1, 2, (self.titleSubject_Btn)[3])
+end
+
+TitleInfo.registEventHandler = function(self)
+  -- function num : 0_6
   for idx = 0, 3 do
     ((self.Category_BTN)[idx]):addInputEvent("Mouse_LUp", "TitleInfo_SetCategory( " .. idx .. " )")
     ;
@@ -167,7 +185,7 @@ TitleInfo.registEventHandler = function(self)
 end
 
 HandleMouseEvent_CategoryDesc = function(descType, isOn)
-  -- function num : 0_6 , upvalues : TitleInfo
+  -- function num : 0_7 , upvalues : TitleInfo
   if descType == 0 and isOn == true then
     (TitleInfo.txt_AllRoundDesc):SetAlpha(0)
     ;
@@ -251,7 +269,7 @@ HandleMouseEvent_CategoryDesc = function(descType, isOn)
 end
 
 TitleInfo_SetCategory = function(categoryIdx)
-  -- function num : 0_7 , upvalues : TitleInfo
+  -- function num : 0_8 , upvalues : TitleInfo
   local self = TitleInfo
   for idx = 0, 3 do
     ((self.Category_BTN)[idx]):SetCheck(false)
@@ -285,12 +303,12 @@ TitleInfo_SetCategory = function(categoryIdx)
 end
 
 TitleInfo.registMessageHandler = function(self)
-  -- function num : 0_8
+  -- function num : 0_9
   registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_TitleInfo_Update")
 end
 
 HandleClick_ShowDescription = function(categoryIdx, titleIdx)
-  -- function num : 0_9 , upvalues : TitleInfo, UI_TM
+  -- function num : 0_10 , upvalues : TitleInfo, UI_TM
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   ;
@@ -300,7 +318,7 @@ HandleClick_ShowDescription = function(categoryIdx, titleIdx)
 end
 
 HandleClick_TitleSet = function(categoryIdx, titleIdx)
-  -- function num : 0_10 , upvalues : TitleInfo, UI_TM
+  -- function num : 0_11 , upvalues : TitleInfo, UI_TM
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   ;
@@ -311,7 +329,7 @@ HandleClick_TitleSet = function(categoryIdx, titleIdx)
 end
 
 CharacterInfo_Title_ListControlCreate = function(content, key)
-  -- function num : 0_11 , upvalues : TitleInfo
+  -- function num : 0_12 , upvalues : TitleInfo
   local self = TitleInfo
   local titleIndex = Int64toInt32(key)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIndex)

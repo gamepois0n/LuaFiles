@@ -13,9 +13,10 @@ local UCT_BUTTON = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON
 local UCT_RADIOBUTTON = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON
 local UCT_STATICTEXT = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT
 local UCT_STATIC = (CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC
-local isSpecialCharacterOpen = ToClient_IsContentsGroupOpen("267")
+local isSpecialCharacterOpen = ToClient_IsContentsGroupOpen("281")
 local CharacterListIndex = 0
 local SpecialCharacterListIndex = 1
+local isChangeCharacterTab = false
 local isGhostMode = false
 Panel_CharacterSelectNew:SetShow(false)
 local SelectCharacter = {panelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharacterSelect"), btn_EmptySlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CreateSlot"), btn_CharacterSlot = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Character0"), static_CharacterState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_Character0"), static_ConnectionState = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_UserCount"), static_CharacterLevel = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharLevel"), btn_Create = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterCreate"), btn_Delete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDelete"), btn_StartGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Start"), static_PenelBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_BG"), static_FamilyName = (UI.getChildControl)(Panel_CharacterSelectNew, "FamilyName"), btn_ServerSelect = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_BackServerSelect"), btn_EndGame = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_EndGame"), btn_ChangeLocate = (UI.getChildControl)(Panel_CharacterSelectNew, "CheckButton_CharacterLocateChange"), static_DeleteCancelTitle = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteTitle"), static_DeleteCancelDate = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_DeleteDate"), btn_DeleteCancel = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_CharacterDeleteCancel"), static_DeleteBox = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_DeleteBox"), static_CharacterInfoBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_BG"), btn_ChaInfoStart = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_StartCharacter"), btn_ChaInfoDelete = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_DeleteCharacter"), static_ChaInfoName = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Name"), static_ChaInfoProgressBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_CharInfo_GaugeBG"), static_ChaInfoProgress = (UI.getChildControl)(Panel_CharacterSelectNew, "Progress2_CharInfo_Gauge"), static_ChaInfoProgressText = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Do"), static_ChaInfo_DoRemainTime = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_RemainTime"), static_ChaInfoNowLoc = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_NowPos"), static_ChaInfoNowLocValue = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_CharInfo_Where"), static_ticketNoByRegion = (UI.getChildControl)(Panel_CharacterSelectNew, "StaticText_TicketNoByRegion"), _scroll = (UI.getChildControl)(Panel_CharacterSelectNew, "Scroll_SlotList"), btn_Link1 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link1"), btn_Link2 = (UI.getChildControl)(Panel_CharacterSelectNew, "Button_Link2"), block_BG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_block_BG"), radioBtnBG = (UI.getChildControl)(Panel_CharacterSelectNew, "Static_RadioBtnBg"), radioBtn_CharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_CharacterList"), radioBtn_SpecialCharacterList = (UI.getChildControl)(Panel_CharacterSelectNew, "RadioButton_Tab_SpecialCharacterList"), premiumPcRoomSizeY = 0}
@@ -157,32 +158,12 @@ local SelectCharacter_Init = function()
   ;
   (SelectCharacter.static_DeleteBox):SetShow(false)
   local self = SelectCharacter
-  local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
-  local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   if isSpecialCharacterOpen == true then
-    if isPremiumPcRoom then
-      (SelectCharacter.radioBtn_CharacterList):SetShow(true)
-      ;
-      (SelectCharacter.radioBtn_CharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + 5)
-      ;
-      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(true)
-      ;
-      (SelectCharacter.radioBtn_SpecialCharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + (SelectCharacter.radioBtn_CharacterList):GetSizeX() + 5)
-      ;
-      (self.radioBtnBG):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + 5)
-      ;
-      (self.radioBtnBG):SetShow(true)
-      self.premiumPcRoomSizeY = (SelectCharacter.radioBtn_CharacterList):GetSizeY()
-      ;
-      (self._scroll):SetPosY((self._scroll):GetPosY() + self.premiumPcRoomSizeY)
-    else
-      ;
-      (SelectCharacter.radioBtn_CharacterList):SetShow(false)
-      ;
-      (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
-      ;
-      (self.radioBtnBG):SetShow(false)
-    end
+    (SelectCharacter.radioBtn_CharacterList):SetShow(false)
+    ;
+    (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
+    ;
+    (SelectCharacter.radioBtnBG):SetShow(false)
   else
     ;
     (SelectCharacter.radioBtn_CharacterList):SetShow(false)
@@ -195,7 +176,7 @@ local SelectCharacter_Init = function()
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   ;
   (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount - self.premiumPcRoomSizeY)
-  -- DECOMPILER ERROR at PC487: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC423: Confused about usage of register: R5 in 'UnsetPending'
 
   configData._listCount = _btnCount
   for slotIdx = 0, configData._listCount - 1 do
@@ -209,6 +190,7 @@ local SelectCharacter_Init = function()
     slot._btnUp = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_Up", slot._btn_Slot, "SelectCharacter_btnUp_" .. slotIdx)
     slot._btnDown = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_Down", slot._btn_Slot, "SelectCharacter_btnDown_" .. slotIdx)
     slot._centerBg = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Static_Center", slot._btn_Slot, "SelectCharacter_CenterIcon_" .. slotIdx)
+    slot._possibleStat = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "StaticText_PossibleEnter", slot._btn_Slot, "SelectCharacter_PossibleEnter_" .. slotIdx)
     ;
     (slot._btn_Slot):SetText("")
     ;
@@ -236,6 +218,10 @@ local SelectCharacter_Init = function()
     ;
     (slot._btnStart):SetPosY(5)
     ;
+    (slot._possibleStat):SetPosX(180)
+    ;
+    (slot._possibleStat):SetPosY(20)
+    ;
     (slot._btn_Slot):SetShow(false)
     ;
     (slot._ChaStat):SetShow(false)
@@ -254,6 +240,8 @@ local SelectCharacter_Init = function()
     ;
     (slot._centerBg):SetShow(false)
     ;
+    (slot._possibleStat):SetShow(false)
+    ;
     (slot._btn_Slot):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btn_Slot):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
@@ -261,7 +249,7 @@ local SelectCharacter_Init = function()
     (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC708: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC666: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (configData.slotUiPool)[slotIdx] = slot
@@ -1131,6 +1119,22 @@ local CharacterList_Update = function(isChangeSpecialTab)
             ;
             (slot._centerBg):SetShow(false)
           end
+          if ToClient_isDataStreamingContentsOpen() then
+            (slot._possibleStat):SetPosX(180)
+            ;
+            (slot._possibleStat):SetPosY(20)
+            ;
+            (slot._possibleStat):SetShow(true)
+            if ToClient_isPossibleEnterToField(characterData._currentPosition) then
+              (slot._possibleStat):SetText("접속 �\128�\165")
+            else
+              ;
+              (slot._possibleStat):SetText("접속 불가�\165")
+            end
+          else
+            ;
+            (slot._possibleStat):SetShow(false)
+          end
           ;
           (slot._btnStart):SetShow(true)
         end
@@ -1205,11 +1209,11 @@ local CharacterList_Update = function(isChangeSpecialTab)
             (slot._btnCreate):SetShow(false)
           end
           scrollListIndex = scrollListIndex + 1
-          -- DECOMPILER ERROR at PC649: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC649: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC649: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1638,8 +1642,14 @@ HandleClicked_SaveCustomizationFile = function()
 end
 
 RadioButton_Click = function(radioIndex)
-  -- function num : 0_34 , upvalues : CharacterListIndex, SelectCharacter, SpecialCharacterListIndex, configData, CharacterList_Update
+  -- function num : 0_34 , upvalues : CharacterListIndex, SelectCharacter, isChangeCharacterTab, SpecialCharacterListIndex, configData, CharacterList_Update
   if radioIndex == CharacterListIndex then
+    if (SelectCharacter.btn_ChangeLocate):GetShow() == true then
+      isChangeCharacterTab = false
+    else
+      isChangeCharacterTab = true
+    end
+    ;
     (SelectCharacter.radioBtn_CharacterList):SetCheck(true)
     ;
     (SelectCharacter.radioBtn_SpecialCharacterList):SetCheck(false)
@@ -1647,6 +1657,12 @@ RadioButton_Click = function(radioIndex)
     (SelectCharacter.btn_ChangeLocate):SetShow(true)
   else
     if radioIndex == SpecialCharacterListIndex then
+      if (SelectCharacter.btn_ChangeLocate):GetShow() == false then
+        isChangeCharacterTab = false
+      else
+        isChangeCharacterTab = true
+      end
+      ;
       (SelectCharacter.radioBtn_CharacterList):SetCheck(false)
       ;
       (SelectCharacter.radioBtn_SpecialCharacterList):SetCheck(true)
@@ -1657,15 +1673,18 @@ RadioButton_Click = function(radioIndex)
       end
     end
   end
-  -- DECOMPILER ERROR at PC49: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
 
   configData.selectCaracterIdx = 0
-  -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC73: Confused about usage of register: R1 in 'UnsetPending'
 
   configData._startIndex = 0
   ;
   (SelectCharacter._scroll):SetControlPos(0)
-  CharacterList_Update(true)
+  ;
+  (SelectCharacter.static_CharacterInfoBG):SetShow(false)
+  ToClient_viewCharacterDelete(isChangeCharacterTab)
+  CharacterList_Update(isChangeCharacterTab)
 end
 
 HandleClicked_ToggleGhostMode = function()
@@ -1680,8 +1699,126 @@ HandleClicked_ToggleGhostMode = function()
   end
 end
 
+UpdateSpecialCharacterTab = function()
+  -- function num : 0_36 , upvalues : SelectCharacter, isSpecialCharacterOpen, configData
+  local self = SelectCharacter
+  if isSpecialCharacterOpen == false then
+    return 
+  end
+  local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
+  local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
+  if isPremiumPcRoom == false then
+    return 
+  end
+  ;
+  (SelectCharacter.radioBtn_CharacterList):SetShow(true)
+  ;
+  (SelectCharacter.radioBtn_CharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + 5)
+  ;
+  (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(true)
+  ;
+  (SelectCharacter.radioBtn_SpecialCharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + (SelectCharacter.radioBtn_CharacterList):GetSizeX() + 5)
+  ;
+  (SelectCharacter.radioBtnBG):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + 5)
+  ;
+  (SelectCharacter.radioBtnBG):SetShow(true)
+  -- DECOMPILER ERROR at PC64: Confused about usage of register: R3 in 'UnsetPending'
+
+  SelectCharacter.premiumPcRoomSizeY = (SelectCharacter.radioBtn_CharacterList):GetSizeY()
+  ;
+  (SelectCharacter._scroll):SetPosY((SelectCharacter._scroll):GetPosY() + SelectCharacter.premiumPcRoomSizeY)
+  local scrSizeY = getScreenSizeY()
+  local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - self.premiumPcRoomSizeY + 5
+  local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
+  local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
+  ;
+  (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount - self.premiumPcRoomSizeY)
+  -- DECOMPILER ERROR at PC118: Confused about usage of register: R7 in 'UnsetPending'
+
+  configData._listCount = _btnCount
+  -- DECOMPILER ERROR at PC121: Confused about usage of register: R7 in 'UnsetPending'
+
+  configData.slotUiPool = {}
+  for slotIdx = 0, configData._listCount - 1 do
+    local slot = {}
+    slot._btn_Slot = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_CreateSlot", self.static_PenelBG, "SelectCharacter_EmptySlot_" .. slotIdx)
+    slot._ChaStat = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "StaticText_Character0", slot._btn_Slot, "SelectCharacter_ChaStat_" .. slotIdx)
+    slot._ContStat = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "StaticText_UserCount", slot._btn_Slot, "SelectCharacter_ContStat_" .. slotIdx)
+    slot._ChaLev = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "StaticText_CharLevel", slot._btn_Slot, "SelectCharacter_ChaLev_" .. slotIdx)
+    slot._btnCreate = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_CharacterCreate", slot._btn_Slot, "SelectCharacter_btnCreate_" .. slotIdx)
+    slot._btnStart = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_Start", slot._btn_Slot, "SelectCharacter_btnStart_" .. slotIdx)
+    slot._btnUp = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_Up", slot._btn_Slot, "SelectCharacter_btnUp_" .. slotIdx)
+    slot._btnDown = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Button_Down", slot._btn_Slot, "SelectCharacter_btnDown_" .. slotIdx)
+    slot._centerBg = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "Static_Center", slot._btn_Slot, "SelectCharacter_CenterIcon_" .. slotIdx)
+    slot._possibleStat = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "StaticText_PossibleEnter", slot._btn_Slot, "SelectCharacter_PossibleEnter_" .. slotIdx)
+    ;
+    (slot._btn_Slot):SetText("")
+    ;
+    (slot._btn_Slot):SetPosX(12)
+    ;
+    (slot._btn_Slot):SetPosY((SelectCharacter.static_FamilyName):GetSizeY() + 5 + ((slot._btn_Slot):GetSizeY() + 5) * slotIdx + self.premiumPcRoomSizeY + 5)
+    ;
+    (slot._ChaStat):SetPosX(300)
+    ;
+    (slot._ChaStat):SetPosY(15)
+    ;
+    (slot._ContStat):SetPosX(300)
+    ;
+    (slot._ContStat):SetPosY(20)
+    ;
+    (slot._ChaLev):SetPosX(65)
+    ;
+    (slot._ChaLev):SetPosY(35)
+    ;
+    (slot._btnCreate):SetPosX(280)
+    ;
+    (slot._btnCreate):SetPosY(5)
+    ;
+    (slot._btnStart):SetPosX(280)
+    ;
+    (slot._btnStart):SetPosY(5)
+    ;
+    (slot._possibleStat):SetPosX(180)
+    ;
+    (slot._possibleStat):SetPosY(20)
+    ;
+    (slot._btn_Slot):SetShow(false)
+    ;
+    (slot._ChaStat):SetShow(false)
+    ;
+    (slot._ContStat):SetShow(false)
+    ;
+    (slot._ChaLev):SetShow(false)
+    ;
+    (slot._btnCreate):SetShow(false)
+    ;
+    (slot._btnStart):SetShow(false)
+    ;
+    (slot._btnUp):SetShow(false)
+    ;
+    (slot._btnDown):SetShow(false)
+    ;
+    (slot._centerBg):SetShow(false)
+    ;
+    (slot._possibleStat):SetShow(false)
+    ;
+    (slot._btn_Slot):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
+    ;
+    (slot._btn_Slot):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
+    ;
+    (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
+    ;
+    (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
+    -- DECOMPILER ERROR at PC364: Confused about usage of register: R12 in 'UnsetPending'
+
+    ;
+    (configData.slotUiPool)[slotIdx] = slot
+  end
+end
+
 SelectCharacter_Init()
 registerEvent("EventChangeLobbyStageToCharacterSelect", "CharacterSelect_Open")
+registerEvent("FromClient_UpdateSpecialCharacterTab", "UpdateSpecialCharacterTab")
 registerEvent("EventCancelEnterWating", "cancelEnterWaitingLine")
 registerEvent("EventReceiveEnterWating", "receiveEnterWaiting")
 registerEvent("EventSetEnterWating", "setEnterWaitingUserCount")

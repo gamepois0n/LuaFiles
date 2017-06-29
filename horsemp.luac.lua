@@ -50,7 +50,7 @@ HorseMp_InitStaminaAlertText = function(vehicleType)
     if (CppEnums.VehicleType).Type_Boat == vehicleType or (CppEnums.VehicleType).Type_Raft == vehicleType or (CppEnums.VehicleType).Type_FishingBoat == vehicleType then
       alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_3")
     else
-      if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_TradeShip == vehicleType then
+      if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == vehicleType then
         alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_4")
       else
         alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_2")
@@ -74,7 +74,7 @@ HorseMP_Update = function()
   local vehicleType = ((vehicleProxy:get()):getVehicleType())
   local staminaPercent = nil
   staminaPercent = (vehicleProxy:get()):getMp() / (vehicleProxy:get()):getMaxMp() * 100
-  if (CppEnums.VehicleType).Type_Carriage ~= vehicleType and (CppEnums.VehicleType).Type_CowCarriage ~= vehicleType and (CppEnums.VehicleType).Type_Boat ~= vehicleType and (CppEnums.VehicleType).Type_Raft ~= vehicleType and (CppEnums.VehicleType).Type_FishingBoat ~= vehicleType and (CppEnums.VehicleType).Type_SailingBoat ~= vehicleType and (CppEnums.VehicleType).Type_TradeShip ~= vehicleType and (CppEnums.VehicleType).Type_PersonTradeShip ~= vehicleType then
+  if (CppEnums.VehicleType).Type_Carriage ~= vehicleType and (CppEnums.VehicleType).Type_CowCarriage ~= vehicleType and (CppEnums.VehicleType).Type_Boat ~= vehicleType and (CppEnums.VehicleType).Type_Raft ~= vehicleType and (CppEnums.VehicleType).Type_FishingBoat ~= vehicleType and (CppEnums.VehicleType).Type_SailingBoat ~= vehicleType and (CppEnums.VehicleType).Type_PersonalBattleShip ~= vehicleType and (CppEnums.VehicleType).Type_PersonTradeShip ~= vehicleType then
     if staminaPercent < 10 then
       (self._staticBarBG):EraseAllEffect()
       ;
@@ -117,7 +117,7 @@ HorseMP_Update = function()
         ;
         (self._staticBar):setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 0, " .. staminaPercent .. ")")
       else
-        if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_SailingBoat == vehicleType then
+        if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType then
           (self._staticText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_GUILDSHIP_NAME") .. " : " .. makeDotMoney((vehicleProxy:get()):getMp()) .. "/" .. makeDotMoney((vehicleProxy:get()):getMaxMp()))
           ;
           (self._staticBar):addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 4, " .. staminaPercent .. ")")
@@ -137,7 +137,7 @@ HorseMP_Update = function()
     end
   end
   if (getSelfPlayer()):isNavigationLoop() and (getSelfPlayer()):isNavigationMoving() then
-    if UI_VT.Type_Boat == vehicleType or UI_VT.Type_Raft == vehicleType or UI_VT.Type_FishingBoat == vehicleType or UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_Cannon == vehicleType or UI_VT.Type_PracticeCannon == vehicleType or UI_VT.Type_Elephant == vehicleType or UI_VT.Type_BabyElephant == vehicleType or UI_VT.Type_ThrowFire == vehicleType or UI_VT.Type_ThrowStone == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_TradeShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
+    if UI_VT.Type_Boat == vehicleType or UI_VT.Type_Raft == vehicleType or UI_VT.Type_FishingBoat == vehicleType or UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_Cannon == vehicleType or UI_VT.Type_PracticeCannon == vehicleType or UI_VT.Type_Elephant == vehicleType or UI_VT.Type_BabyElephant == vehicleType or UI_VT.Type_ThrowFire == vehicleType or UI_VT.Type_ThrowStone == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
       (servantMpBar._button_AutoCarrot):SetShow(false)
     else
       ;
@@ -426,6 +426,11 @@ renderModechange_HorseMP_OpenByInteraction = function(prevRenderModeList, nextRe
     return 
   end
   HorseMP_OpenByInteraction()
+end
+
+FGlobal_ToggleServantAutoCarrot = function()
+  -- function num : 0_14 , upvalues : servantMpBar
+  (servantMpBar._button_AutoCarrot):SetCheck(true)
 end
 
 

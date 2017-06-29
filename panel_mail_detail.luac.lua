@@ -260,6 +260,24 @@ Mail_Detail_Open = function(mailNo)
             ;
             (self._checkboxToWarehouse):SetShow(false)
             Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY - 40)
+            local groupIndex = 0
+            Panel_Mail_Detail:deleteConsoleUIGroup(0)
+            if (self._buttonReceive):GetShow() then
+              Panel_Mail_Detail:addConsoleUIControl(groupIndex, 1, 0, self._buttonReceive)
+              groupIndex = groupIndex + 1
+            end
+            if (self._buttonDelete):GetShow() then
+              Panel_Mail_Detail:addConsoleUIControl(groupIndex, 1, 0, self._buttonDelete)
+              groupIndex = groupIndex + 1
+            end
+            if (self._checkboxToWarehouse):GetShow() then
+              Panel_Mail_Detail:addConsoleUIControl(groupIndex, 1, 0, self._checkboxToWarehouse)
+              groupIndex = groupIndex + 1
+            end
+            if ((self._itemSlot).icon):GetShow() then
+              Panel_Mail_Detail:addConsoleUIControl(groupIndex, 1, 0, (self._itemSlot).icon)
+              groupIndex = groupIndex + 1
+            end
             ;
             (mailDetail._buttonDelete):ComputePos()
           end

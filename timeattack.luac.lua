@@ -7,8 +7,8 @@ registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_TimeAtta
 registerEvent("FromClient_startTimeAttack", "FromClient_startTimeAttack")
 registerEvent("FromClient_endTimeAttack", "FromClient_endTimeAttack")
 Panel_TimeAttack:SetShow(false)
-PaGlobal_TimeAttack = {_expiredTime = 0, _isProgress = false, _uiTitle = (UI.getChildControl)(Panel_TimeAttack, "StaticText_Title"), _uiRemainTime = (UI.getChildControl)(Panel_TimeAttack, "StaticText_BossName"), _panelPosX = 0, _panelPosY = 0}
--- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobal_TimeAttack = {_expiredTime = 0, _isProgress = false, _uiRemainTime = (UI.getChildControl)(Panel_TimeAttack, "StaticText_BossName"), _panelPosX = 0, _panelPosY = 0}
+-- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TimeAttack.TimeAttack_Initialize = function(self)
   -- function num : 0_0
@@ -18,35 +18,35 @@ PaGlobal_TimeAttack.TimeAttack_Initialize = function(self)
   Panel_TimeAttack:SetPosY(PaGlobal_TimeAttack._panelPosY)
 end
 
--- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TimeAttack.openTimeAttack = function(self)
   -- function num : 0_1
   Panel_TimeAttack:SetShow(true)
 end
 
--- DECOMPILER ERROR at PC42: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TimeAttack.closeTimeAttack = function(self)
   -- function num : 0_2
   Panel_TimeAttack:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TimeAttack.setInfo = function(self, expiredTime)
   -- function num : 0_3
   self._expiredTime = expiredTime
 end
 
--- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC42: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TimeAttack.getExpiredTime = function(self)
   -- function num : 0_4
   return self._expiredTime
 end
 
--- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TimeAttack.isProgress = function(self)
   -- function num : 0_5

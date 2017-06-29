@@ -399,6 +399,15 @@ FGlobal_HouseInstallationControl_Open = function(installMode, posX, posY, isShow
       end
     end
   end
+  local isRotatePossible = housing_isAvailableRotateSelectedObject()
+  if isRotatePossible then
+    (self.txt_RotateDesc):SetShow(true)
+    ;
+    (self.txt_RotateDesc):SetPosY((self.staticText_DetailGuide):GetPosY() + (self.staticText_DetailGuide):GetSizeY())
+  else
+    ;
+    (self.txt_RotateDesc):SetShow(false)
+  end
   if characterStaticWrapper ~= nil then
     local objectStaticWrapper = characterStaticWrapper:getObjectStaticStatus()
     local isPersonalTent = objectStaticWrapper:isPersonalTent()

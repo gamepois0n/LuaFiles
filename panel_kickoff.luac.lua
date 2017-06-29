@@ -5,7 +5,7 @@
 -- function num : 0
 Panel_KickOff:SetShow(false)
 local UI_TM = CppEnums.TextMode
-local kickOff = {_txt_Title = (UI.getChildControl)(Panel_KickOff, "StaticText_Title"), _btn_KickOff_Win_Close = (UI.getChildControl)(Panel_KickOff, "Button_Win_Close"), _screenShotBG = (UI.getChildControl)(Panel_KickOff, "Static_BG"), _txt_KickOffDesc = (UI.getChildControl)(Panel_KickOff, "StaticText_KickOffDesc"), _btn_KickOffApply = (UI.getChildControl)(Panel_KickOff, "Button_Confirm"), _btn_KickOffCancel = (UI.getChildControl)(Panel_KickOff, "Button_AlarmCancel")}
+local kickOff = {_txt_Title = (UI.getChildControl)(Panel_KickOff, "StaticText_Title"), _btn_KickOff_Win_Close = (UI.getChildControl)(Panel_KickOff, "Button_Win_Close"), _screenShotBG = (UI.getChildControl)(Panel_KickOff, "Static_BG"), _txt_KickOffDesc = (UI.getChildControl)(Panel_KickOff, "StaticText_KickOffDesc"), _btn_KickOffApply = (UI.getChildControl)(Panel_KickOff, "Button_Confirm"), _btn_KickOffCancel = (UI.getChildControl)(Panel_KickOff, "Button_AlarmCancel"), savedIsType = 1}
 PaGlobal_Panel_KickOff_Init = function()
   -- function num : 0_0 , upvalues : kickOff, UI_TM
   local self = kickOff
@@ -35,7 +35,9 @@ PaGlobal_Panel_KickOff_Position = function()
 end
 
 FromClient_AntiAddiction = function(isType)
-  -- function num : 0_2
+  -- function num : 0_2 , upvalues : kickOff
+  local self = kickOff
+  self.savedIsType = isType
   PaGlobal_Panel_KickOff_Open(isType)
 end
 
@@ -54,7 +56,11 @@ PaGlobal_Panel_KickOff_Open = function(isType)
       if isType == 3 then
         (self._txt_KickOffDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_E"))
       else
-        return 
+        if isType == 4 then
+          (self._txt_KickOffDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_E"))
+        else
+          return 
+        end
       end
     end
   end
@@ -70,8 +76,13 @@ PaGlobal_Panel_KickOff_Close = function()
 end
 
 PaGlobal_Panel_KickOff_Apply = function()
-  -- function num : 0_5
-  PaGlobal_Panel_KickOff_Close()
+  -- function num : 0_5 , upvalues : kickOff
+  local self = kickOff
+  if self.savedIsType == 4 then
+    exitGameClient(1)
+  else
+    PaGlobal_Panel_KickOff_Close()
+  end
 end
 
 PaGlobal_Panel_KickOff_Init()

@@ -479,10 +479,27 @@ PetList.Open = function(self)
   self:SetPetList()
 end
 
-PetList.SetPetList = function(self)
+PetList.SetPetList = function(self, noclearscroll)
   -- function num : 0_10
   if not Panel_Window_PetListNew:GetShow() then
     return 
+  end
+  local toIndex = 0
+  local scrollvalue = 0
+  local vscroll = (self.list2_PetList):GetVScroll()
+  local hscroll = (self.list2_PetList):GetHScroll()
+  if noclearscroll then
+    toIndex = (self.list2_PetList):getCurrenttoIndex()
+    if (self.list2_PetList):IsIgnoreVerticalScroll() == false then
+      scrollvalue = vscroll:GetControlPos()
+    else
+      if (self.list2_PetList):IsIgnoreHorizontalScroll() == false then
+        scrollvalue = hscroll:GetControlPos()
+      end
+    end
+    if toIndex == (self.list2_PetList):getEndIndex() and self.UnSealDATACount == 0 and self.UnSealDATACount + self.SealDATACount > 4 then
+      toIndex = toIndex - 1
+    end
   end
   ;
   ((self.list2_PetList):getElementManager()):clearKey()
@@ -518,21 +535,31 @@ PetList.SetPetList = function(self)
               if petNo ~= nil then
                 ((self.list2_PetList):getElementManager()):pushKey(petNo)
               end
-              -- DECOMPILER ERROR at PC77: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC77: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC77: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC77: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC77: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC77: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
         end
+      end
+    end
+  end
+  if noclearscroll then
+    (self.list2_PetList):setCurrenttoIndex(toIndex)
+    if (self.list2_PetList):IsIgnoreVerticalScroll() == false then
+      vscroll:SetControlPos(scrollvalue)
+    else
+      if (self.list2_PetList):IsIgnoreHorizontalScroll() == false then
+        hscroll:SetControlPos(scrollvalue)
       end
     end
   end
@@ -1191,7 +1218,7 @@ FromClient_PetUpdate = function()
   if getGameServiceType() ~= 5 and getGameServiceType() ~= 6 then
     PetInfoInit_ByPetNo()
   end
-  PetList:SetPetList()
+  PetList:SetPetList(true)
 end
 
 FromClient_PetUpdate_ButtonShow = function(petNo)
@@ -1201,7 +1228,7 @@ FromClient_PetUpdate_ButtonShow = function(petNo)
   end
   PetInfoInit_ByPetNo()
   FGlobal_PetControl_CheckUnSealPet(petNo)
-  PetList:SetPetList()
+  PetList:SetPetList(true)
 end
 
 FGlobal_PetListNew_NoPet = function()
@@ -1520,6 +1547,8 @@ PetListControlCreate = function(control, key)
           btnInfo:addInputEvent("Mouse_LUp", "sealPetListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
           btnUnseal:addInputEvent("Mouse_LUp", "petListNew_UnSeal( \"" .. tostring(petNo_s64) .. "\" )")
           btnFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_Set( \"" .. tostring(petNo_s64) .. "\" ," .. petRace .. ", " .. unsealPetIndex .. " )")
+          btnSeal:setNotImpactScrollEvent(true)
+          btnUnseal:setNotImpactScrollEvent(true)
           tier:SetPosX(btnFusion:GetPosX() - btnFusion:GetSizeX() - 5)
           icon:ChangeTextureInfoName(iconPath)
           level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(petLevel))

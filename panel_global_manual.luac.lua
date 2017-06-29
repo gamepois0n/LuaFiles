@@ -1025,8 +1025,13 @@ FGlobal_BulletShow = function()
   MiniGame_BulletCount_0()
 end
 
+FGlobal_BulletCount_UiShowCheck = function()
+  -- function num : 0_40 , upvalues : ui_Value
+  return not ui_Value.isFirstTime_Manual_Bullet_0
+end
+
 local MiniGame_Diving_0 = function()
-  -- function num : 0_40 , upvalues : ui
+  -- function num : 0_41 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1041,7 +1046,7 @@ local MiniGame_Diving_0 = function()
 end
 
 local MiniGame_Diving_1 = function()
-  -- function num : 0_41 , upvalues : ui
+  -- function num : 0_42 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1054,7 +1059,7 @@ local MiniGame_Diving_1 = function()
 end
 
 local MiniGame_Diving_2 = function()
-  -- function num : 0_42 , upvalues : ui
+  -- function num : 0_43 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1067,7 +1072,7 @@ local MiniGame_Diving_2 = function()
 end
 
 local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
-  -- function num : 0_43 , upvalues : uiPress, ui_Value
+  -- function num : 0_44 , upvalues : uiPress, ui_Value
   if isSelf == false then
     return 
   end
@@ -1163,7 +1168,7 @@ local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Instrument_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_44 , upvalues : Panel_Global_Manual_End
+  -- function num : 0_45 , upvalues : Panel_Global_Manual_End
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 

@@ -93,7 +93,7 @@ FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWra
   local viewIndex = 0
   for index = 0, maxCount - 1 do
     local dataGroup = createList[viewIndex]
-    if count <= index + 1 then
+    if count <= index then
       for viewCount = 0, maxCount - 1 do
         local group = createList[viewCount]
         ;
@@ -196,25 +196,25 @@ FromClient_TentTooltipShow = function(tentIcon, householdDataWithInstallationWra
                     local sizeX = (dataGroup._itemName):GetTextSizeX() + (dataGroup._itemName):GetPosX() - (dataGroup._percent):GetPosX()
                     nameSizeX = sizeX
                     viewIndex = viewIndex + 1
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC319: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC318: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -368,7 +368,7 @@ FGlobal_TentTooltipShow = function(householdDataWithInstallationWrapper)
   local viewIndex = 0
   for index = 0, maxCount - 1 do
     local dataGroup = createList[viewIndex]
-    if count <= index + 1 then
+    if count <= index then
       for viewCount = 0, maxCount - 1 do
         local group = createList[viewCount]
         ;
@@ -468,19 +468,19 @@ FGlobal_TentTooltipShow = function(householdDataWithInstallationWrapper)
                   end
                 end
                 viewIndex = viewIndex + 1
-                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC305: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC305: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC305: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC305: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC305: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                -- DECOMPILER ERROR at PC305: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC306: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC305: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end

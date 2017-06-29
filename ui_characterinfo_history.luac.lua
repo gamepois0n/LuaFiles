@@ -88,6 +88,7 @@ FromClient_MyHistoryInfo_Update = function()
     haveInfoMonth = ToClient_GetThisMonth()
   end
   _listCount = ToClient_GetJournalListCount(currentValue._year, currentValue._month, currentValue._myHistory)
+  MyHistroy_SetConsolePadGroup()
   if _listCount == 0 then
     if currentValue._year == ToClient_GetThisYear() and currentValue._month == ToClient_GetThisMonth() then
       for i = 0, 11 do
@@ -166,7 +167,7 @@ FromClient_MyHistoryInfo_Update = function()
                     if dayLogCount % 2 == 1 then
                       local _dayHistoryLeftValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, _contentHistoryList, "StaticText_MyHistory_" .. i)
                       CopyBaseProperty(dayHistoryLeftValue, _dayHistoryLeftValue)
-                      -- DECOMPILER ERROR at PC285: Confused about usage of register: R20 in 'UnsetPending'
+                      -- DECOMPILER ERROR at PC287: Confused about usage of register: R20 in 'UnsetPending'
 
                       _dayHistoryValue[i] = _dayHistoryLeftValue
                       ;
@@ -181,7 +182,7 @@ FromClient_MyHistoryInfo_Update = function()
                           do
                             local _dayHistoryRightValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, _contentHistoryList, "StaticText_MyHistory_" .. i)
                             CopyBaseProperty(dayHistoryRightValue, _dayHistoryRightValue)
-                            -- DECOMPILER ERROR at PC324: Confused about usage of register: R20 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC326: Confused about usage of register: R20 in 'UnsetPending'
 
                             _dayHistoryValue[i] = _dayHistoryRightValue
                             ;
@@ -200,17 +201,18 @@ FromClient_MyHistoryInfo_Update = function()
                             (_dayHistoryValue[i]):SetShow(true)
                             ;
                             (_dayHistoryValue[i]):SetIgnore(false)
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out DO_STMT
+                            Panel_Window_CharInfo_Status:addConsoleUIControl(_listCount - i - 1, _listCount, 2, _dayHistoryValue[i])
+                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end
@@ -233,13 +235,13 @@ FromClient_MyHistoryInfo_Update = function()
                   dayLogCount = dayLogCount + 1
                   firstDay = dayIndex
                 end
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -274,8 +276,47 @@ FromClient_MyHistoryInfo_Update = function()
   end
 end
 
+MyHistroy_SetConsolePadGroup = function()
+  -- function num : 0_3 , upvalues : yearLeftButton, yearRightButton, monthIndex
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
+  if yearLeftButton:GetShow() then
+    if yearRightButton:GetShow() then
+      Panel_Window_CharInfo_Status:addConsoleUIControl(0, 14, 1, yearLeftButton)
+      Panel_Window_CharInfo_Status:addConsoleUIControl(1, 14, 1, yearRightButton)
+      for index = 0, 11 do
+        Panel_Window_CharInfo_Status:addConsoleUIControl(index + 2, 14, 1, monthIndex[index])
+      end
+    else
+      do
+        Panel_Window_CharInfo_Status:addConsoleUIControl(0, 13, 1, yearLeftButton)
+        for index = 0, 11 do
+          Panel_Window_CharInfo_Status:addConsoleUIControl(index + 1, 13, 1, monthIndex[index])
+        end
+        do
+          if yearRightButton:GetShow() then
+            Panel_Window_CharInfo_Status:addConsoleUIControl(0, 13, 1, yearRightButton)
+            for index = 0, 11 do
+              Panel_Window_CharInfo_Status:addConsoleUIControl(index + 1, 13, 1, monthIndex[index])
+            end
+          else
+            do
+              for index = 0, 11 do
+                Panel_Window_CharInfo_Status:addConsoleUIControl(index, 12, 1, monthIndex[index])
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
 MyHistory_HelpWidget_Show = function(isShow, index, isLeft)
-  -- function num : 0_3 , upvalues : currentValue, helpWidget, _dayHistoryValue
+  -- function num : 0_4 , upvalues : currentValue, helpWidget, _dayHistoryValue
   if index ~= nil then
     local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._myHistory, index)
     if journalInfo ~= nil then
@@ -302,7 +343,7 @@ MyHistory_HelpWidget_Show = function(isShow, index, isLeft)
 end
 
 HandleClicked_MyHistory_MonthCheck = function(index)
-  -- function num : 0_4 , upvalues : monthIndex, UI_color, currentValue, pastMonth_DayCount
+  -- function num : 0_5 , upvalues : monthIndex, UI_color, currentValue, pastMonth_DayCount
   for i = 0, 11 do
     if index == i then
       (monthIndex[i]):SetFontColor(UI_color.C_FFFFFFFF)
@@ -334,7 +375,7 @@ HandleClicked_MyHistory_MonthCheck = function(index)
 end
 
 HandleClicked_MyHistory_YearCheck = function(index)
-  -- function num : 0_5 , upvalues : currentValue, firstLogYearValue, radioBtn_YearValue, selectedYear, yearLeftButton, yearRightButton
+  -- function num : 0_6 , upvalues : currentValue, firstLogYearValue, radioBtn_YearValue, selectedYear, yearLeftButton, yearRightButton
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
 
   currentValue._year = firstLogYearValue + index

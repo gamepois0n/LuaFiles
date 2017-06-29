@@ -295,7 +295,7 @@ ReinforceSkill_SetData = function()
                       ;
                       (skillSlot._skillNoSetBg):SetShow(true)
                       ;
-                      (skillSlot._skillLimitLv):SetText(normalSkillreinforceableLv[index] .. " LV")
+                      (skillSlot._skillLimitLv):SetText(normalSkillreinforceableLv[index] .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV"))
                       ;
                       (skillSlot._skillNoSetTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_NORMAL_1"))
                       if index < reinforcableSkillCount then
@@ -433,7 +433,7 @@ ReinforceSkill_SetData = function()
                                             ;
                                             (skillSlot._skillNoSetBg):SetShow(true)
                                             ;
-                                            (skillSlot._skillLimitLv):SetText(awakenSkillreinforceableLv[index - 3] .. " LV")
+                                            (skillSlot._skillLimitLv):SetText(awakenSkillreinforceableLv[index - 3] .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV"))
                                             ;
                                             (skillSlot._skillNoSetTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_AWAKEN_1"))
                                             if index < reinforcableSkillCount then
@@ -478,73 +478,73 @@ ReinforceSkill_SetData = function()
                                                     (skillSlot._skillNoSetTitle):SetFontColor(fontColor_Disable)
                                                     ;
                                                     (skillSlot._skillNoSetBg):addInputEvent("Mouse_LUp", "Panel_SkillReinforce_Show(" .. 1 .. ")")
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out DO_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                    -- DECOMPILER ERROR at PC885: LeaveBlock: unexpected jumping out IF_STMT
+                                                    -- DECOMPILER ERROR at PC895: LeaveBlock: unexpected jumping out IF_STMT
 
                                                   end
                                                 end

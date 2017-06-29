@@ -549,10 +549,29 @@ CharacterInfo.Init = function(self)
   (CharacterInfo._todayPlayTime):addInputEvent("Mouse_On", "CharacterInfo_SimpleTooltip( true, 1 )")
   ;
   (CharacterInfo._todayPlayTime):addInputEvent("Mouse_Out", "CharacterInfo_SimpleTooltip()")
+  ConsoleGroupCreate_Panel_Window_CharInfo_Status()
+end
+
+ConsoleGroupCreate_Panel_Window_CharInfo_Status = function()
+  -- function num : 0_4 , upvalues : CharacterInfo, profileOpen
+  local self = CharacterInfo
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+  if profileOpen then
+    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 5, 0, self.BTN_Tab_Basic)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 5, 0, self.BTN_Tab_Title)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 5, 0, self.BTN_Tab_History)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 5, 0, self.BTN_Tab_Challenge)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(4, 5, 0, self.BTN_Tab_Profile)
+  else
+    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 4, 0, self.BTN_Tab_Basic)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 4, 0, self.BTN_Tab_Title)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 4, 0, self.BTN_Tab_History)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 4, 0, self.BTN_Tab_Challenge)
+  end
 end
 
 FGlobal_CraftLevel_Replace = function(lev, lifeType)
-  -- function num : 0_4
+  -- function num : 0_5
   if lev >= 1 and lev <= 10 then
     lev = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_CRAFTLEVEL_GROUP_1") .. lev
   else
@@ -584,7 +603,7 @@ FGlobal_CraftLevel_Replace = function(lev, lifeType)
 end
 
 FGlobal_CraftLevelColor_Replace = function(lev)
-  -- function num : 0_5 , upvalues : UI_color
+  -- function num : 0_6 , upvalues : UI_color
   if lev >= 1 and lev <= 10 then
     levColor = UI_color.C_FFC4C4C4
   else
@@ -616,7 +635,7 @@ FGlobal_CraftLevelColor_Replace = function(lev)
 end
 
 FGlobal_CraftType_ReplaceName = function(typeNo)
-  -- function num : 0_6
+  -- function num : 0_7
   local typeName = nil
   if typeNo == 0 then
     typeName = PAGetString(Defines.StringSheet_GAME, "LUA_SELFCHARACTERINFO_GATHER")
@@ -663,7 +682,7 @@ FGlobal_CraftType_ReplaceName = function(typeNo)
 end
 
 SelfCharacterInfo_UpdateCharacterBasicInfo = function()
-  -- function num : 0_7 , upvalues : CharacterInfo
+  -- function num : 0_8 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -684,7 +703,7 @@ SelfCharacterInfo_UpdateCharacterBasicInfo = function()
 end
 
 SelfCharacterInfo_UpdateAffiliatedTerritory = function()
-  -- function num : 0_8 , upvalues : CharacterInfo
+  -- function num : 0_9 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -701,7 +720,7 @@ SelfCharacterInfo_UpdateAffiliatedTerritory = function()
 end
 
 SelfCharacterInfo_UpdateWp = function()
-  -- function num : 0_9 , upvalues : CharacterInfo
+  -- function num : 0_10 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -713,7 +732,7 @@ SelfCharacterInfo_UpdateWp = function()
 end
 
 SelfCharacterInfo_UpdateExplorePoint = function()
-  -- function num : 0_10 , upvalues : CharacterInfo
+  -- function num : 0_11 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -725,7 +744,7 @@ SelfCharacterInfo_UpdateExplorePoint = function()
 end
 
 SelfCharacterInfo_UpdateLevel = function()
-  -- function num : 0_11 , upvalues : CharacterInfo
+  -- function num : 0_12 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -750,7 +769,7 @@ SelfCharacterInfo_UpdateLevel = function()
 end
 
 SelfCharacterInfo_UpdateFamilyPoints = function()
-  -- function num : 0_12 , upvalues : CharacterInfo
+  -- function num : 0_13 , upvalues : CharacterInfo
   local self = CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
@@ -772,7 +791,7 @@ SelfCharacterInfo_UpdateFamilyPoints = function()
 end
 
 SelfCharacterInfo_UpdateMainStatus = function()
-  -- function num : 0_13 , upvalues : CharacterInfo, profileOpen
+  -- function num : 0_14 , upvalues : CharacterInfo, profileOpen
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -907,14 +926,14 @@ end
 ;
 (CharacterInfo._selfTimer):addInputEvent("Mouse_LUp", "HandleClicked_SelfTimer_BlackAnimation()")
 HandleClicked_SelfTimer_BlackAnimation = function()
-  -- function num : 0_14 , upvalues : CharacterInfo
+  -- function num : 0_15 , upvalues : CharacterInfo
   (CharacterInfo._selfTimerIcon):ResetVertexAni()
   ;
   (CharacterInfo._selfTimerIcon):SetVertexAniRun("Ani_Rotate_New", true)
 end
 
 SelfCharacterInfo_UpdateMainStatusRegen = function()
-  -- function num : 0_15 , upvalues : CharacterInfo
+  -- function num : 0_16 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -945,7 +964,7 @@ SelfCharacterInfo_UpdateMainStatusRegen = function()
 end
 
 SelfCharacterInfo_UpdateWeight = function()
-  -- function num : 0_16 , upvalues : CharacterInfo
+  -- function num : 0_17 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -979,7 +998,7 @@ SelfCharacterInfo_UpdateWeight = function()
 end
 
 SelfCharacterInfo_UpdateAttackStat = function()
-  -- function num : 0_17 , upvalues : CharacterInfo
+  -- function num : 0_18 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -1016,7 +1035,7 @@ SelfCharacterInfo_UpdateAttackStat = function()
 end
 
 SelfCharacterInfo_UpdateTendency = function()
-  -- function num : 0_18 , upvalues : CharacterInfo
+  -- function num : 0_19 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -1028,12 +1047,12 @@ SelfCharacterInfo_UpdateTendency = function()
 end
 
 SelfCharacterInfo_UpdateStamina = function()
-  -- function num : 0_19 , upvalues : CharacterInfo
+  -- function num : 0_20 , upvalues : CharacterInfo
   (CharacterInfo._stamina):SetText(makeDotMoney((((getSelfPlayer()):get()):getStamina()):getMaxSp()))
 end
 
 SelfCharacterInfo_UpdateCraftLevel = function()
-  -- function num : 0_20 , upvalues : CharacterInfo
+  -- function num : 0_21 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -1183,7 +1202,7 @@ SelfCharacterInfo_UpdateCraftLevel = function()
 end
 
 SelfCharacterInfo_UpdatePotenGradeInfo = function()
-  -- function num : 0_21 , upvalues : CharacterInfo, currentPotencial
+  -- function num : 0_22 , upvalues : CharacterInfo, currentPotencial
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -1445,7 +1464,7 @@ SelfCharacterInfo_UpdatePotenGradeInfo = function()
 end
 
 CharacterInfoWindowUpdate = function()
-  -- function num : 0_22
+  -- function num : 0_23
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -1468,8 +1487,52 @@ CharacterInfoWindowUpdate = function()
   SelfCharacterInfo_UpdatePotenGradeInfo()
 end
 
+CharacterInfo.SetConsolePadGroup = function(self, isShowIntroduce)
+  -- function num : 0_24
+  if isShowIntroduce then
+    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(0)
+    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
+    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
+    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 1, (self._introduce)._editText)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 1, (self._introduce)._btnSetIntro)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 1, 1, (self._introduce)._btnResetIntro)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 1, 1, (self._introduce)._closeIntro)
+  else
+    ConsoleGroupCreate_Panel_Window_CharInfo_Status()
+    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 1, self._btnIntroduce)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 2, 2, self.attackspeed)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 2, 2, self._title_stamina)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 2, 2, self.castspeed)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 2, 2, self._title_strength)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(4, 2, 2, self.movespeed)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(5, 2, 2, self._title_health)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(6, 2, 2, self.critical)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(7, 2, 2, self._stunTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(8, 2, 2, self.fishTime)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(9, 2, 2, self._downTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(10, 2, 2, self.product)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(11, 2, 2, self._captureTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(12, 2, 2, self.dropChance)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(13, 2, 2, self._knockBackTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 3, self._ranker)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 3, self._gatherTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 1, 3, self._manufactureTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 1, 3, self._cookingTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(4, 1, 3, self._alchemyTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(5, 1, 3, self._trainingTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(6, 1, 3, self._fishingTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(7, 1, 3, self._huntingTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(8, 1, 3, self._tradeTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(9, 1, 3, self._growthTitle)
+    Panel_Window_CharInfo_Status:addConsoleUIControl(10, 1, 3, self._sailTitle)
+  end
+end
+
 HandleClicked_CharacterInfo_Tab = function(index)
-  -- function num : 0_23 , upvalues : CharacterInfo
+  -- function num : 0_25 , upvalues : CharacterInfo
   if index == nil then
     return 
   end
@@ -1495,6 +1558,11 @@ HandleClicked_CharacterInfo_Tab = function(index)
   (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
   ;
   (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
   if index == 0 then
     (self._frameDefaultBG_Basic):SetShow(true)
     ;
@@ -1508,6 +1576,7 @@ HandleClicked_CharacterInfo_Tab = function(index)
     ;
     (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
     FromClientFitnessUp(0, 0, 0, 0)
+    CharacterInfo:SetConsolePadGroup(isShowIntroduce)
   else
     if index == 1 then
       (self._frameDefaultBG_Title):SetShow(true)
@@ -1572,7 +1641,7 @@ HandleClicked_CharacterInfo_Tab = function(index)
 end
 
 SelfCharacterInfo_UpdateTolerance = function()
-  -- function num : 0_24 , upvalues : CharacterInfo
+  -- function num : 0_26 , upvalues : CharacterInfo
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -1609,7 +1678,7 @@ if nil ~= getSelfPlayer() then
   healthLevel = ((getSelfPlayer()):get()):getFitnessLevel(fitness.health)
 end
 FromClientFitnessUp = function(addSp, addWeight, addHp, addMp)
-  -- function num : 0_25 , upvalues : fitness, CharacterInfo, staminaLevel, strengthLevel, healthLevel
+  -- function num : 0_27 , upvalues : fitness, CharacterInfo, staminaLevel, strengthLevel, healthLevel
   local selfPlayerGet = (getSelfPlayer()):get()
   local currStamina = Int64toInt32(selfPlayerGet:getCurrFitnessExperiencePoint(fitness.stamina))
   local maxStamina = Int64toInt32(selfPlayerGet:getDemandFItnessExperiencePoint(fitness.stamina))
@@ -1656,7 +1725,7 @@ FromClientFitnessUp = function(addSp, addWeight, addHp, addMp)
 end
 
 CharInfo_MouseOverEvent = function(sourceType, isOn)
-  -- function num : 0_26 , upvalues : CharacterInfo
+  -- function num : 0_28 , upvalues : CharacterInfo
   if isOn == true then
     if sourceType == 0 then
       registTooltipControl(CharacterInfo._hpRegen, Panel_Window_CharInfo_BasicStatus)
@@ -1692,7 +1761,7 @@ CharInfo_MouseOverEvent = function(sourceType, isOn)
 end
 
 Fitness_MouseOverEvent = function(_type)
-  -- function num : 0_27 , upvalues : fitnessTooltip, fitness, CharacterInfo
+  -- function num : 0_29 , upvalues : fitnessTooltip, fitness, CharacterInfo
   if _type == nil then
     fitnessTooltip:SetShow(false)
     return 
@@ -1728,7 +1797,7 @@ Fitness_MouseOverEvent = function(_type)
 end
 
 Poten_MouseOverEvent = function(sourceType, isOn)
-  -- function num : 0_28 , upvalues : potenTooltip, CharacterInfo, UI_PD
+  -- function num : 0_30 , upvalues : potenTooltip, CharacterInfo, UI_PD
   if isOn == true then
     if sourceType == 0 then
       potenTooltip:SetPosX(((CharacterInfo.attackspeed):GetSpanSize()).x + 70)
@@ -1784,7 +1853,7 @@ Poten_MouseOverEvent = function(sourceType, isOn)
 end
 
 Craft_MouseOverEvent = function(sourceType, isOn)
-  -- function num : 0_29 , upvalues : potenTooltip, CharacterInfo, UI_PD
+  -- function num : 0_31 , upvalues : potenTooltip, CharacterInfo, UI_PD
   if isOn == true then
     if sourceType == 0 then
       potenTooltip:SetPosX((CharacterInfo._gatherTitle):GetPosX() + 40)
@@ -1858,7 +1927,7 @@ Craft_MouseOverEvent = function(sourceType, isOn)
 end
 
 Regist_MouseOverEvent = function(tipType, isShow)
-  -- function num : 0_30 , upvalues : CharacterInfo
+  -- function num : 0_32 , upvalues : CharacterInfo
   local name, desc, control = nil, nil, nil
   local self = CharacterInfo
   if tipType == 0 then
@@ -1893,7 +1962,7 @@ Regist_MouseOverEvent = function(tipType, isShow)
 end
 
 local initProgress = function()
-  -- function num : 0_31 , upvalues : CharacterInfo
+  -- function num : 0_33 , upvalues : CharacterInfo
   (CharacterInfo._progress2_characterlevel):SetProgressRate(0)
   ;
   (CharacterInfo._progress2_hp):SetProgressRate(0)
@@ -1930,7 +1999,7 @@ local initProgress = function()
 end
 
 CharacterInfoWindow_Show = function()
-  -- function num : 0_32 , upvalues : CharacterInfo
+  -- function num : 0_34 , upvalues : CharacterInfo
   Panel_Window_CharInfo_Status:SetShow(true, true)
   CharacterInfoWindowUpdate()
   HandleClicked_CharacterInfo_Tab(0)
@@ -1952,7 +2021,7 @@ CharacterInfoWindow_Show = function()
 end
 
 CharacterInfoWindow_Hide = function()
-  -- function num : 0_33 , upvalues : CharacterInfo, initProgress, IM
+  -- function num : 0_35 , upvalues : CharacterInfo, initProgress, IM
   if (CharacterInfo._frameDefaultBG_Challenge):GetShow() then
     CharacterInfoWindowUpdate()
     HandleClicked_CharacterInfo_Tab(0)
@@ -1993,7 +2062,7 @@ CharacterInfoWindow_Hide = function()
 end
 
 HandleClicked_CharacterInfo_PopUp = function()
-  -- function num : 0_34 , upvalues : CharacterInfo
+  -- function num : 0_36 , upvalues : CharacterInfo
   if (CharacterInfo.checkPopUp):IsCheck() then
     Panel_Window_CharInfo_Status:OpenUISubApp()
   else
@@ -2003,7 +2072,7 @@ HandleClicked_CharacterInfo_PopUp = function()
 end
 
 FGlobal_Challenge_Show = function()
-  -- function num : 0_35 , upvalues : CharacterInfo
+  -- function num : 0_37 , upvalues : CharacterInfo
   Panel_Window_CharInfo_Status:SetShow(true, true)
   HandleClicked_CharacterInfo_Tab(3)
   FGlobal_TapButton_Complete()
@@ -2020,7 +2089,7 @@ FGlobal_Challenge_Show = function()
 end
 
 FGlobal_Challenge_Hide = function()
-  -- function num : 0_36 , upvalues : CharacterInfo, IM
+  -- function num : 0_38 , upvalues : CharacterInfo, IM
   if (CharacterInfo._frameDefaultBG_Basic):GetShow() then
     HandleClicked_CharacterInfo_Tab(3)
     ;
@@ -2051,7 +2120,7 @@ FGlobal_Challenge_Hide = function()
 end
 
 CharacterInfoWindow_ShowToggle = function()
-  -- function num : 0_37
+  -- function num : 0_39
   if Panel_Window_CharInfo_Status:GetShow() then
     CharacterInfoWindow_Hide()
     audioPostEvent_SystemUi(1, 0)
@@ -2064,7 +2133,7 @@ CharacterInfoWindow_ShowToggle = function()
 end
 
 MyIntroduce_Init = function()
-  -- function num : 0_38 , upvalues : CharacterInfo
+  -- function num : 0_40 , upvalues : CharacterInfo
   local self = CharacterInfo._introduce
   ;
   (self._editText):SetMaxEditLine(6)
@@ -2081,7 +2150,7 @@ MyIntroduce_Init = function()
 end
 
 IntroduceMyself_ShowToggle = function(isShow)
-  -- function num : 0_39 , upvalues : CharacterInfo
+  -- function num : 0_41 , upvalues : CharacterInfo
   local self = CharacterInfo._introduce
   if isShow == nil then
     isShow = true
@@ -2098,10 +2167,11 @@ IntroduceMyself_ShowToggle = function(isShow)
   local msg = ToClient_GetUserIntroduction()
   ;
   ((CharacterInfo._introduce)._editText):SetEditText(msg)
+  CharacterInfo:SetConsolePadGroup(isShow)
 end
 
 HandleClicked_IntroduceMyself = function()
-  -- function num : 0_40 , upvalues : CharacterInfo, IM
+  -- function num : 0_42 , upvalues : CharacterInfo, IM
   local self = CharacterInfo._introduce
   ;
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
@@ -2111,7 +2181,7 @@ HandleClicked_IntroduceMyself = function()
 end
 
 HandleClicked_SetIntroduce = function()
-  -- function num : 0_41 , upvalues : CharacterInfo
+  -- function num : 0_43 , upvalues : CharacterInfo
   local self = CharacterInfo._introduce
   local msg = (self._editText):GetEditText()
   ToClient_RequestSetUserIntroduction(msg)
@@ -2126,7 +2196,7 @@ HandleClicked_SetIntroduce = function()
 end
 
 HandleClicked_ResetIntroduce = function()
-  -- function num : 0_42 , upvalues : CharacterInfo
+  -- function num : 0_44 , upvalues : CharacterInfo
   local self = CharacterInfo._introduce
   local msg = ""
   ;
@@ -2140,7 +2210,7 @@ HandleClicked_ResetIntroduce = function()
 end
 
 FGlobal_MyIntroduceClearFocusEdit = function()
-  -- function num : 0_43 , upvalues : IM
+  -- function num : 0_45 , upvalues : IM
   ClearFocusEdit()
   if AllowChangeInputMode() then
     if (UI.checkShowWindow)() then
@@ -2155,13 +2225,13 @@ FGlobal_MyIntroduceClearFocusEdit = function()
 end
 
 FGlobal_CheckMyIntroduceUiEdit = function(targetUI)
-  -- function num : 0_44 , upvalues : CharacterInfo
+  -- function num : 0_46 , upvalues : CharacterInfo
   do return targetUI ~= nil and targetUI:GetKey() == ((CharacterInfo._introduce)._editText):GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 FamilyPoints_SimpleTooltip = function(isShow, tipType)
-  -- function num : 0_45 , upvalues : CharacterInfo
+  -- function num : 0_47 , upvalues : CharacterInfo
   local self = CharacterInfo
   local name, desc, control = nil, nil, nil
   if tipType == 0 then
@@ -2195,7 +2265,7 @@ FamilyPoints_SimpleTooltip = function(isShow, tipType)
 end
 
 CharacterInfo.registEventHandler = function(self)
-  -- function num : 0_46
+  -- function num : 0_48
   (self._hpTitle):addInputEvent("Mouse_On", "CharInfo_MouseOverEvent( 0, true )")
   ;
   (self._hpTitle):addInputEvent("Mouse_Out", "CharInfo_MouseOverEvent( 0, false )")
@@ -2404,7 +2474,7 @@ CharacterInfo.registEventHandler = function(self)
 end
 
 HandleMouseEvent_TabButtonDesc = function(descType, isOn)
-  -- function num : 0_47 , upvalues : CharacterInfo
+  -- function num : 0_49 , upvalues : CharacterInfo
   if descType == 0 and isOn == true then
     (CharacterInfo.txt_CharinfoDesc):SetAlpha(0)
     ;
@@ -2488,12 +2558,12 @@ HandleMouseEvent_TabButtonDesc = function(descType, isOn)
 end
 
 FGlobal_MaxWeightChanged = function()
-  -- function num : 0_48
+  -- function num : 0_50
   SelfCharacterInfo_UpdateWeight()
 end
 
 CharacterInfo_SimpleTooltip = function(isShow, tipType)
-  -- function num : 0_49 , upvalues : CharacterInfo
+  -- function num : 0_51 , upvalues : CharacterInfo
   if isShow == nil then
     TooltipSimple_Hide()
     return 
@@ -2512,7 +2582,7 @@ CharacterInfo_SimpleTooltip = function(isShow, tipType)
 end
 
 CharacterInfo.registMessageHandler = function(self)
-  -- function num : 0_50
+  -- function num : 0_52
   registerEvent("FromClient_SelfPlayerHpChanged", "SelfCharacterInfo_UpdateMainStatus")
   registerEvent("FromClient_SelfPlayerMpChanged", "SelfCharacterInfo_UpdateMainStatus")
   registerEvent("FromClient_SelfPlayerMainStatusRegenChanged", "SelfCharacterInfo_UpdateMainStatusRegen")
@@ -2533,7 +2603,7 @@ CharacterInfo.registMessageHandler = function(self)
 end
 
 CharacterInfo_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_51 , upvalues : CharacterInfo
+  -- function num : 0_53 , upvalues : CharacterInfo
   if isShow then
     local self = CharacterInfo
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
@@ -2557,7 +2627,7 @@ CharacterInfo:registEventHandler()
 CharacterInfo:registMessageHandler()
 MyIntroduce_Init()
 CharacterInfo_onScreenResize = function()
-  -- function num : 0_52
+  -- function num : 0_54
   Panel_Window_CharInfo_Status:SetPosX(5)
   Panel_Window_CharInfo_Status:SetPosY(getScreenSizeY() / 2 - Panel_Window_CharInfo_Status:GetSizeY() / 2)
 end

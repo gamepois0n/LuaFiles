@@ -3736,6 +3736,6 @@ end
   registerEvent("FromClient_FlashBangStateChanged", "FromClient_FlashBangStateChanged")
   registerEvent("EventPvPModeChanged", "EventActorPvpModeChange")
   registerEvent("FromClient_ObjectInstanceMpChanged", "FromClient_ObjectInstanceMpChanged")
-  registerEvent("FromClient_ChangeMilitiaNameTag", "FromClient_ChangeMilitiaNameTag")
+  registerEvent("FromClient_ChangeValunteerNameTag", "FromClient_ChangeMilitiaNameTag")
 end
 

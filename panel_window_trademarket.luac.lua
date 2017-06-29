@@ -833,6 +833,7 @@ InitNpcTradeShopOpen = function()
         (npcTradeShop._alerttext):SetShow(false)
         ;
         (npcTradeShop._btnInvestNode):SetShow(false)
+        FGlobal_RemoteControl_Show(2)
       end
     end
   end

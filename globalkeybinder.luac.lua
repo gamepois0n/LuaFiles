@@ -883,7 +883,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             end
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_WorldMap) then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-              if not Panel_Global_Manual:GetShow() then
+              if not Panel_Global_Manual:GetShow() or FGlobal_BulletCount_UiShowCheck() then
                 FGlobal_PushOpenWorldMap()
               else
                 Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_MINIGAMING_NOT_WORLDMAP"))
@@ -928,7 +928,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               Panel_NaviButton:SetShow(false)
               audioPostEvent_SystemUi(0, 15)
             end
-            -- DECOMPILER ERROR: 132 unprocessed JMP targets
+            -- DECOMPILER ERROR: 133 unprocessed JMP targets
           end
         end
       end
@@ -2125,7 +2125,7 @@ GlobalKeyBinder_Update = function(deltaTime)
       else
         if Panel_NumberPad_IsPopUp() then
           if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F) then
-            Panel_NumberPad_ButtonAllSelect_Mouse_Click()
+            Panel_NumberPad_ButtonAllSelect_Mouse_Click(0)
             setUiInputProcessed(VCK.KeyCode_F)
           else
             if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) or keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction) then

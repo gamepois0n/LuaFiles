@@ -42,6 +42,8 @@ local rhythmQuestList = {
 {questGroup = 1001, questId = 53}
 , 
 {questGroup = 2001, questId = 58}
+, 
+{questGroup = 6505, questId = 3}
 ; 
 [0] = {questGroup = 1001, questId = 7}
 }

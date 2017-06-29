@@ -21,6 +21,8 @@ local _desc = (UI.getChildControl)(_frameContent, "StaticText_Desc")
 local _btn_Yes = (UI.getChildControl)(Panel_UseItem, "Button_Yes")
 local _btn_No = (UI.getChildControl)(Panel_UseItem, "Button_No")
 local _btn_Close = (UI.getChildControl)(Panel_UseItem, "Button_Close")
+Panel_UseItem:addConsoleUIControl(0, 1, 0, _btn_Yes)
+Panel_UseItem:addConsoleUIControl(1, 1, 0, _btn_No)
 local _copyItemSlot = (UI.getChildControl)(Panel_UseItem, "Static_C_ItemSlot")
 _copyItemSlot:SetShow(false)
 local popupItem = {
@@ -316,6 +318,7 @@ Panel_UseItem_ShowToggle_Func = function()
     _frame:UpdateContentScroll()
     _frameScroll:SetControlTop()
     _frame:UpdateContentPos()
+    Panel_UseItem:setLockFocusPanel(true)
   end
   descBG_sizeY = 0
 end

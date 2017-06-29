@@ -633,4 +633,12 @@ end
 AlchemyFigureHead:Init()
 AlchemyFigureHead:registEventHandler()
 AlchemyFigureHead:registMessageHandler()
+ConsoleGroupCreate_Panel_AlchemyFigureHead = function()
+  -- function num : 0_22 , upvalues : AlchemyFigureHead
+  Panel_AlchemyFigureHead:addConsoleUIControl(0, 1, 0, (AlchemyFigureHead.Stuff_slot).icon)
+  Panel_AlchemyFigureHead:addConsoleUIControl(1, 1, 0, (AlchemyFigureHead.FigureHead_slot).icon)
+  Panel_AlchemyFigureHead:addConsoleUIControl(2, 1, 0, (AlchemyFigureHead.control).btn_Doit)
+end
+
+ConsoleGroupCreate_Panel_AlchemyFigureHead()
 

@@ -25,6 +25,8 @@ local iconWarehouse = (UI.getChildControl)(Panel_Win_Check, "RadioButton_Icon_Wa
 local checkInven = (UI.getChildControl)(Panel_Win_Check, "Static_Text_InvenMoney")
 local checkWarehouse = (UI.getChildControl)(Panel_Win_Check, "Static_Text_WarehouseMoney")
 local globalButtonShowCount = 0
+Panel_Win_Check:addConsoleUIControl(0, 1, 0, iconInven)
+Panel_Win_Check:addConsoleUIControl(1, 1, 0, iconWarehouse)
 MessageBoxCheck = {}
 local MessageCheckData = {title = nil, content = nil, functionApply = nil, functionCancel = nil, priority = UI_PP.PAUIMB_PRIORITY_LOW, clientMessage = nil, exitButton = true, isTimeCount = false, countTime = 10, timeString = nil, isStartTimer = nil, afterFunction = nil, isCancelClose = false}
 local functionKeyUse = true
@@ -67,19 +69,31 @@ setCurrentMessageCheckData = function(currentData, position)
     if currentData.exitButton == true then
       buttonClose:SetShow(true)
     end
+    Panel_Win_Check:setLockFocusPanel(true)
+    Panel_Win_Check:deleteConsoleUIGroup(0)
     globalButtonShowCount = buttonShowCount
     if buttonShowCount == 1 then
       buttonApply:SetPosX(Panel_Win_Check:GetSizeX() / 2 - buttonApply:GetSizeX() / 2)
       buttonCancel:SetPosX(Panel_Win_Check:GetSizeX() / 2 - buttonCancel:GetSizeX() / 2)
+      if buttonApply:GetShow() then
+        Panel_Win_Check:addConsoleUIControl(0, 1, 1, buttonApply)
+      end
+      if buttonCancel:GetShow() then
+        Panel_Win_Check:addConsoleUIControl(0, 1, 1, buttonCancel)
+      end
     else
       if buttonShowCount == 2 then
         buttonApply:SetPosX(Panel_Win_Check:GetSizeX() / 2 - 95)
         buttonCancel:SetPosX(Panel_Win_Check:GetSizeX() / 2 + 4)
+        Panel_Win_Check:addConsoleUIControl(0, 1, 1, buttonApply)
+        Panel_Win_Check:addConsoleUIControl(1, 1, 1, buttonCancel)
       else
         if buttonShowCount == 3 then
           local buttonSize = buttonApply:GetSizeX()
           buttonApply:SetPosX(5)
           buttonCancel:SetPosX(buttonSize * 2 + 15)
+          Panel_Win_Check:addConsoleUIControl(0, 1, 1, buttonApply)
+          Panel_Win_Check:addConsoleUIControl(1, 1, 1, buttonCancel)
         end
       end
     end
@@ -89,7 +103,7 @@ setCurrentMessageCheckData = function(currentData, position)
   end
 end
 
--- DECOMPILER ERROR at PC127: Confused about usage of register: R22 in 'UnsetPending'
+-- DECOMPILER ERROR at PC141: Confused about usage of register: R22 in 'UnsetPending'
 
 MessageBoxCheck.showMessageBox = function(MessageCheckData, position, keyUse)
   -- function num : 0_1 , upvalues : list, functionKeyUse, iconInven, iconWarehouse, checkWarehouse, checkInven, textContent, textBG
@@ -224,7 +238,7 @@ allClearMessageCheckData = function()
   end
 end
 
--- DECOMPILER ERROR at PC151: Confused about usage of register: R22 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R22 in 'UnsetPending'
 
 MessageBoxCheck.doHaveMessageBoxData = function(title)
   -- function num : 0_5 , upvalues : list
@@ -240,14 +254,14 @@ MessageBoxCheck.doHaveMessageBoxData = function(title)
   return false
 end
 
--- DECOMPILER ERROR at PC154: Confused about usage of register: R22 in 'UnsetPending'
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R22 in 'UnsetPending'
 
 MessageBoxCheck.isPopUp = function()
   -- function num : 0_6
   return Panel_Win_Check:IsShow()
 end
 
--- DECOMPILER ERROR at PC159: Confused about usage of register: R22 in 'UnsetPending'
+-- DECOMPILER ERROR at PC173: Confused about usage of register: R22 in 'UnsetPending'
 
 MessageBoxCheck.isCheck = function()
   -- function num : 0_7 , upvalues : iconInven, iconWarehouse
@@ -264,7 +278,7 @@ MessageBoxCheck.isCheck = function()
   return isMoneyWhereType
 end
 
--- DECOMPILER ERROR at PC163: Confused about usage of register: R22 in 'UnsetPending'
+-- DECOMPILER ERROR at PC177: Confused about usage of register: R22 in 'UnsetPending'
 
 MessageBoxCheck.isCurrentOpen = function(title)
   -- function num : 0_8 , upvalues : _currentMessageBoxCheckData
@@ -274,7 +288,7 @@ MessageBoxCheck.isCurrentOpen = function(title)
   return false
 end
 
--- DECOMPILER ERROR at PC168: Confused about usage of register: R22 in 'UnsetPending'
+-- DECOMPILER ERROR at PC182: Confused about usage of register: R22 in 'UnsetPending'
 
 MessageBoxCheck.keyProcessEnter = function()
   -- function num : 0_9 , upvalues : functionKeyUse, list
@@ -293,7 +307,7 @@ MessageBoxCheck.keyProcessEnter = function()
   postProcessMessageCheckData()
 end
 
--- DECOMPILER ERROR at PC173: Confused about usage of register: R22 in 'UnsetPending'
+-- DECOMPILER ERROR at PC187: Confused about usage of register: R22 in 'UnsetPending'
 
 MessageBoxCheck.keyProcessEscape = function()
   -- function num : 0_10 , upvalues : functionKeyUse, list

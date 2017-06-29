@@ -188,9 +188,13 @@ _mail_Data.Update_MailPage = function(self)
   for index = 1, SlotMax do
     (((defalut_Control._mail)._checkBtn)[index]):SetCheck(false)
   end
+  local groupIndex = 0
+  for index = 0, 9 do
+    Panel_Mail_Main:deleteConsoleUIGroup(index)
+  end
   _mail_Data:clear()
   for index = 1, SlotMax do
-    -- DECOMPILER ERROR at PC43: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC53: Unhandled construct in 'MakeBoolean' P1
 
     if (self._Data)[pageNo] ~= nil and ((self._Data)[pageNo])[index] ~= nil then
       local _sender_Name = (((self._Data)[pageNo])[index])._sender_Name
@@ -235,35 +239,42 @@ _mail_Data.Update_MailPage = function(self)
         do
           do
             do
-              local x1, y1, x2, y2 = setTextureUV_Func(((defalut_Control._mail)._mail_GetItem)[index], 1, 457, 22, 479)
-              ;
-              ((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture()):setUV(x1, y1, x2, y2)
-              ;
-              (((defalut_Control._mail)._mail_GetItem)[index]):setRenderTexture((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture())
-              ;
-              (((defalut_Control._mail)._List_BG)[index]):SetShow(false)
-              ;
-              (((defalut_Control._mail)._checkBtn)[index]):SetShow(false)
-              ;
-              (((defalut_Control._mail)._Sender_Name)[index]):SetShow(false)
-              ;
-              (((defalut_Control._mail)._Mail_Title)[index]):SetShow(false)
-              ;
-              (((defalut_Control._mail)._Mail_Num)[index]):SetShow(false)
-              ;
-              (((defalut_Control._mail)._mail_GetItem)[index]):SetShow(false)
-              -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out DO_STMT
+              do
+                local x1, y1, x2, y2 = setTextureUV_Func(((defalut_Control._mail)._mail_GetItem)[index], 1, 457, 22, 479)
+                ;
+                ((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture()):setUV(x1, y1, x2, y2)
+                ;
+                (((defalut_Control._mail)._mail_GetItem)[index]):setRenderTexture((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture())
+                Panel_Mail_Main:addConsoleUIControl(0, 1, groupIndex, ((defalut_Control._mail)._List_BG)[index])
+                Panel_Mail_Main:addConsoleUIControl(1, 1, groupIndex, ((defalut_Control._mail)._checkBtn)[index])
+                groupIndex = groupIndex + 1
+                ;
+                (((defalut_Control._mail)._List_BG)[index]):SetShow(false)
+                ;
+                (((defalut_Control._mail)._checkBtn)[index]):SetShow(false)
+                ;
+                (((defalut_Control._mail)._Sender_Name)[index]):SetShow(false)
+                ;
+                (((defalut_Control._mail)._Mail_Title)[index]):SetShow(false)
+                ;
+                (((defalut_Control._mail)._Mail_Num)[index]):SetShow(false)
+                ;
+                (((defalut_Control._mail)._mail_GetItem)[index]):SetShow(false)
+                -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
+                -- DECOMPILER ERROR at PC310: LeaveBlock: unexpected jumping out IF_STMT
+
+              end
             end
           end
         end
@@ -292,6 +303,25 @@ _mail_Data.Update_MailPage = function(self)
       end
     end
   end
+  if ((defalut_Control._mail)._Btn_pre_page):GetShow() and ((defalut_Control._mail)._Btn_Nxt_page):GetShow() then
+    Panel_Mail_Main:addConsoleUIControl(0, 1, groupIndex, (defalut_Control._mail)._Btn_pre_page)
+    Panel_Mail_Main:addConsoleUIControl(1, 1, groupIndex, (defalut_Control._mail)._Btn_Nxt_page)
+    groupIndex = groupIndex + 1
+  else
+    if ((defalut_Control._mail)._Btn_pre_page):GetShow() and not ((defalut_Control._mail)._Btn_Nxt_page):GetShow() then
+      Panel_Mail_Main:addConsoleUIControl(0, 1, groupIndex, (defalut_Control._mail)._Btn_pre_page)
+      groupIndex = groupIndex + 1
+    else
+      if not ((defalut_Control._mail)._Btn_pre_page):GetShow() and ((defalut_Control._mail)._Btn_Nxt_page):GetShow() then
+        Panel_Mail_Main:addConsoleUIControl(0, 1, groupIndex, (defalut_Control._mail)._Btn_Nxt_page)
+        groupIndex = groupIndex + 1
+      end
+    end
+  end
+  Panel_Mail_Main:addConsoleUIControl(0, 1, groupIndex, (defalut_Control._mail)._Btn_SelectAll)
+  Panel_Mail_Main:addConsoleUIControl(1, 1, groupIndex, (defalut_Control._mail)._Btn_SelectDel)
+  Panel_Mail_Main:addConsoleUIControl(2, 1, groupIndex, (defalut_Control._mail)._Btn_ReceiveAll)
+  Panel_Mail_Main:addConsoleUIControl(3, 1, groupIndex, (defalut_Control._mail)._Btn_QnA)
   if pageNo_Total > 0 then
     local pageCount = tostring(pageNo) .. "/" .. tostring(pageNo_Total)
     ;

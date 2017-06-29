@@ -590,6 +590,10 @@ ChannelSelect_Update = function()
     FGlobal_SeasonTexture_ChannelSelectPanelSizeCahnge(Panel_ChannelSelect:GetSizeX())
     oneTimeChange = true
   end
+  Panel_ChannelSelect:deleteConsoleUIGroup(0)
+  for chIndex = 0, channelCount - 1 do
+    Panel_ChannelSelect:addConsoleUIControl(chIndex, 1, 0, ((self.channelSelectUIPool)[chIndex]).channelBg)
+  end
 end
 
 local tooltipCheck = false

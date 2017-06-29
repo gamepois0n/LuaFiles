@@ -24,6 +24,7 @@ FGlobal_Panel_Dye_ReNew_Reset = function()
   local checkButton_ToggleHideHelmet = (UI.getChildControl)(Panel_Dye_ReNew, "CheckButton_HideHelmet")
   local checkButton_ToggleOpenFaceGuard = (UI.getChildControl)(Panel_Dye_ReNew, "CheckButton_OpenFaceGuard")
   local checkButton_ToggleAwakenWeapon = (UI.getChildControl)(Panel_Dye_ReNew, "CheckButton_AwakenWeapon")
+  local txt_Endurance = (UI.getChildControl)(Panel_Dye_ReNew, "StaticText_Endurance")
   local slider_Endurance = (UI.getChildControl)(Panel_Dye_ReNew, "Slider_Endurance")
   checkButton_ToggleWarStance:SetCheck(true)
   checkButton_ToggleShowUnderwear:SetCheck(true)
@@ -52,6 +53,9 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
     staticBG_CharacterType = (UI.getChildControl)(Static_BG, "Static_SlotBG_CharacterType_" .. ii)
     radioButton_CharacterType = (UI.getChildControl)(staticBG_CharacterType, "RadioButton_CharacterType_" .. ii)
     radioButton_CharacterType:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SelectCharacterType( " .. ii .. " )")
+    if ii == 3 and FGlobal_DyeReNew_GetEnableCamel() == false then
+      radioButton_CharacterType:SetShow(false)
+    end
   end
   local buttonQuestion = (UI.getChildControl)(Panel_Dye_ReNew, "Button_Question")
   buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"Dye\" )")
@@ -61,6 +65,11 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   local slider_EnduranceController = (UI.getChildControl)(slider_Endurance, "Slider_Endurance_Button")
   slider_Endurance:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetEndurance()")
   slider_EnduranceController:addInputEvent("Mouse_LPress", "HandleClicked_DyeReNew_SetEndurance()")
+  local txt_Endurance = (UI.getChildControl)(Panel_Dye_ReNew, "StaticText_Endurance")
+  if FGlobal_DyeReNew_GetEnableKR2() == true then
+    txt_Endurance:SetShow(false)
+    slider_Endurance:SetShow(false)
+  end
   local checkButton_ToggleWarStance = (UI.getChildControl)(Panel_Dye_ReNew, "CheckButton_WarStance")
   checkButton_ToggleWarStance:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_ToggleWarStance()")
   checkButton_ToggleWarStance:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.WarStance .. ")")
@@ -69,6 +78,9 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   checkButton_ToggleShowUnderwear:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetShowUnderwear()")
   checkButton_ToggleShowUnderwear:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.Underwear .. ")")
   checkButton_ToggleShowUnderwear:addInputEvent("Mouse_Out", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(false," .. enToggleIndex.Underwear .. ")")
+  if FGlobal_DyeReNew_GetEnableKR2() == true then
+    checkButton_ToggleShowUnderwear:SetShow(false)
+  end
   local checkButton_ToggleHideAvatar = (UI.getChildControl)(Panel_Dye_ReNew, "CheckButton_HideAvatar")
   checkButton_ToggleHideAvatar:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetHideAvartar()")
   checkButton_ToggleHideAvatar:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.Avater .. ")")
@@ -89,6 +101,9 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetAwakenWeapon()")
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.AwakenWeapon .. ")")
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_Out", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(false," .. enToggleIndex.AwakenWeapon .. ")")
+  if FGlobal_DyeReNew_GetEnableAwaken() == false then
+    checkButton_ToggleAwakenWeapon:SetShow(false)
+  end
   local UIAmpuleTargetBG = (UI.getChildControl)(Static_BG, "Static_AmpuleTartget_BG")
   local RadioButton_Tab_ALL = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_ALL")
   local RadioButton_Tab_My = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_My")
@@ -96,7 +111,9 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   RadioButton_Tab_ALL:addInputEvent("Mouse_LUp", "HandleClicked_LUp_Ampule_SelectedType( true, false )")
   RadioButton_Tab_My:addInputEvent("Mouse_LUp", "HandleClicked_LUp_Ampule_SelectedType( false, false )")
   RadioButton_Tab_Pearl:addInputEvent("Mouse_LUp", "HandleClicked_LUp_Ampule_SelectedType( true, true )")
-  RadioButton_Tab_My:SetCheck(true)
+  if FGlobal_DyeReNew_GetEnableDyePearl() == false then
+    RadioButton_Tab_Pearl:SetShow(false)
+  end
   for ii = 0, 7 do
     local UIMaterial = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Material_" .. ii)
     UIMaterial:addInputEvent("Mouse_LUp", "HandleClicked_LUp_Ampule_SelectCategory( " .. ii .. ")")
@@ -327,7 +344,7 @@ HandleClicked_DeyReNew_Palette_SelectColor = function(dataIdx)
     return 
   end
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex, self._paletteShowAll)
-  local isDyeUI = false
+  local isDyeUI = true
   local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteDataIndex, isDyeUI)
   local convertCount = tostring(ampuleCount)
   convertCount = tonumber(convertCount)

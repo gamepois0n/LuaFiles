@@ -617,7 +617,7 @@ FriendList.updateList = function(self)
         else
           do
             if friendInfo:getWp() > -1 and friendInfo:getExplorationPoint() > -1 then
-              friendName = friendName .. "(" .. friendInfo:getCharacterName() .. ", Lv" .. tostring(friendInfo:getLevel()) .. ") " .. tostring(friendInfo:getWp()) .. "/" .. tostring(friendInfo:getExplorationPoint())
+              friendName = friendName .. "(" .. friendInfo:getCharacterName() .. ", " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. tostring(friendInfo:getLevel()) .. ") " .. tostring(friendInfo:getWp()) .. "/" .. tostring(friendInfo:getExplorationPoint())
             else
               friendName = friendName .. "(" .. PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_ONLINE") .. ")"
             end
@@ -638,18 +638,18 @@ FriendList.updateList = function(self)
             end
             do
               do
-                -- DECOMPILER ERROR at PC203: Confused about usage of register: R21 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC208: Confused about usage of register: R21 in 'UnsetPending'
 
                 ;
                 (_friendListData._friendInfo)[indexCnt] = friendInfo
                 indexCnt = indexCnt + 1
-                -- DECOMPILER ERROR at PC205: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC205: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC205: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC205: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end

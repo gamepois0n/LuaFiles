@@ -3,109 +3,61 @@
 
 -- params : ...
 -- function num : 0
-Panel_Hammer:SetShow(false)
-local HammerManager = {_uiReadyGroup, _uiButtonSpace, _uiSingaugeGroup, _uiSingaugeRedLine, _uiSingaugeMatchLine, _uiSingaugeBar, _uiResultText; _isDoing = false, _isSucc = false, _power = 0, _result = 0, _preTick = 0, _isUpdateGauge = false, _dirGauge = false}
+local HammerManagerNew = {_isStart, _uiProgressBG, _uiProgressBar, _percentValue, _resultValue, _dirGauge}
 MiniGame_Hammer_Init = function()
-  -- function num : 0_0 , upvalues : HammerManager
-  local this = HammerManager
-  this._uiReadyGroup = (UI.getChildControl)(Panel_Hammer, "Static_ReadyGroup")
-  this._uiButtonSpace = (UI.getChildControl)(this._uiReadyGroup, "StaticText_Btn_Space_2")
-  this._uiSingaugeGroup = (UI.getChildControl)(Panel_Hammer, "Static_SinGaugeGroup")
-  this._uiSingaugeRedLine = (UI.getChildControl)(this._uiSingaugeGroup, "Static_RedLine")
-  this._uiSingaugeMatchLine = (UI.getChildControl)(this._uiSingaugeGroup, "Static_SinGaugeLine_1")
-  this._uiSingaugeBar = (UI.getChildControl)(this._uiSingaugeGroup, "Static_SinGauge")
-  this._uiResultText = (UI.getChildControl)(Panel_Hammer, "StaticText_Result")
-  ;
-  (this._uiReadyGroup):SetShow(false)
-  ;
-  (this._uiSingaugeGroup):SetShow(false)
-  ;
-  (UIAni.AlphaAnimation)(1, this._uiButtonSpace, 0.75, 1)
+  -- function num : 0_0 , upvalues : HammerManagerNew
+  local this = HammerManagerNew
+  this._uiProgressBG = (UI.getChildControl)(Panel_Hammer_New, "Static_GaugeBG")
+  this._uiProgressBar = (UI.getChildControl)(Panel_Hammer_New, "Progress2_Gauge")
+  this._isStart = false
+  this._percentValue = 0
+  this._resultValue = 0
+  this._countEnd = 0
+  Panel_Hammer_New:RegisterUpdateFunc("Update_HammerGauge")
 end
 
 MiniGame_Hammer_Start = function()
-  -- function num : 0_1 , upvalues : HammerManager
-  local this = HammerManager
-  this._isDoing = true
-  this._power = 0
-  this._result = 0
-  Panel_Hammer:SetShow(true)
-  Panel_Hammer:RegisterUpdateFunc("Update_HammerGauge")
-  ;
-  (this._uiReadyGroup):SetShow(true)
+  -- function num : 0_1 , upvalues : HammerManagerNew
+  local this = HammerManagerNew
+  Panel_Hammer_New:SetShow(true)
+  this._isStart = true
+  this._dirGauge = 5
+  this._percentValue = 0
+  this._resultValue = 0
+  this._countEnd = 0
 end
 
-MiniGame_Hammer_Hit = function()
-  -- function num : 0_2 , upvalues : HammerManager
-  local this = HammerManager
-  ;
-  (this._uiReadyGroup):SetShow(false)
-  ;
-  (this._uiSingaugeGroup):SetShow(true)
-  this._isUpdateGauge = true
-end
-
-local gaugeSpeed = 0.8
 Update_HammerGauge = function()
-  -- function num : 0_3 , upvalues : HammerManager, gaugeSpeed
-  local this = HammerManager
-  _PA_LOG("�\128민혁", "Update_HammerGauge()")
-  if this._isUpdateGauge == false then
+  -- function num : 0_2 , upvalues : HammerManagerNew
+  _PA_LOG("민혁", "얘는 언제 들어옵니�\140?")
+  local this = HammerManagerNew
+  if this._isStart == false then
     return 
   end
-  local currentTick = getTickCount32()
-  local deltaTick = currentTick - this._preTick
-  local deltaBar = deltaTick / 1000 * gaugeSpeed
-  if deltaTick > 2000 then
-    deltaBar = 0.8
-  end
-  this._preTick = currentTick
-  local nowBarSize = (this._uiSingaugeBar):GetSizeX()
-  if this._dirGauge == false then
-    nowBarSize = nowBarSize + (nowBarSize + 1) / 273 * 273 * 10 * deltaBar
-    if nowBarSize > 273 then
-      nowBarSize = 273
-      this._dirGauge = true
-    end
-    ;
-    (this._uiSingaugeBar):SetSize(nowBarSize, 20)
+  this._percentValue = this._percentValue + this._dirGauge
+  if this._percentValue > 100 then
+    this._percentValue = 100
+    this._dirGauge = -5
   else
-    nowBarSize = nowBarSize - (nowBarSize + 1) / 273 * 273 * 2.5 * deltaBar
-    if nowBarSize < 5 then
-      nowBarSize = 5
-      this._dirGauge = false
+    if this._percentValue < 0 then
+      this._percentValue = 0
+      this._dirGauge = 5
+      this._countEnd = this._countEnd + 1
     end
-    ;
-    (this._uiSingaugeBar):SetSize(nowBarSize, 20)
   end
-  if isKeyDown_Once((CppEnums.VirtualKeyCode).KeyCode_SPACE) then
-    this._power = nowBarSize
-    this._isUpdateGauge = false
-    MiniGame_Hammer_Result()
+  ;
+  (this._uiProgressBar):SetProgressRate(this._percentValue)
+  if this._countEnd > 3 then
+    this._isStart = false
+    MiniGame_Hammer_End()
   end
-end
-
-MiniGame_Hammer_Result = function()
-  -- function num : 0_4 , upvalues : HammerManager
-  local this = HammerManager
-  ;
-  (this._uiSingaugeGroup):SetShow(false)
-  ;
-  (this._uiResultText):SetText("100�\144 ! 당신�\128 뚝배�\176 킬러!")
-  ;
-  (this._uiResultText):SetShow(true)
 end
 
 MiniGame_Hammer_End = function()
-  -- function num : 0_5 , upvalues : HammerManager
-  local this = HammerManager
-  ;
-  (this._uiReadyGroup):SetShow(false)
-  ;
-  (this._uiSingaugeGroup):SetShow(false)
-  ;
-  (this._uiResultText):SetShow(false)
+  -- function num : 0_3
+  Panel_Hammer_New:SetShow(false)
 end
 
+Panel_Hammer_New:SetShow(false)
 MiniGame_Hammer_Init()
 

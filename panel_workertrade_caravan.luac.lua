@@ -49,7 +49,11 @@ control = {_closeBtn = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_C
 _routerNode = {_btnStartNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_StartNode"), _btnArrivalNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_ArrivalNode"), 
 _btnRouterNode = {[1] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode1"), [2] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode2"), [3] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode3"), [4] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode4"), [5] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_RouteNode5")}
 }
-, _list2TradeWorker = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_TradeWorkerList"), _list2TradeItem = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_TradeItemList"), _list2ArrivalNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_ArrivalNodeList"), _list2RouteNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_RouteNodeList"), _tradePrice = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "StaticText_TradePrice"), _btnTradeStart = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_TradeStart"), 
+, _list2TradeWorker = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_TradeWorkerList"), _list2TradeItem = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_TradeItemList"), _list2ArrivalNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_ArrivalNodeList"), _list2RouteNode = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "List2_RouteNodeList"), _itemListBg = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_ItemListBg"), 
+_tradeItemSlotBg = {}
+, 
+_tradeItemSlot = {}
+, _tradePrice = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "StaticText_TradePrice"), _btnTradeStart = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_TradeStart"), 
 _caravanStat = {}
 , 
 _worker = {}
@@ -64,6 +68,8 @@ _selectedWorker = {[0] = (Defines.u64_const).u64_0, [1] = (Defines.u64_const).u6
 _currentSelectRouteNodeList = {}
 , _allWeight = 0, _allPrice = 0, _maxCarriageCount = 5, _minCarriageCount = 1, _maxWorkerCount = 3, _minWorkerCount = 2, _maxGuardCount = 3, _maxFACount = 3, 
 tradeItemInfo = {}
+, _maxItemCount = 30, 
+_itemCountInSlot = {}
 }
 workerTradeCaravan.ControlInit = function(self)
   -- function num : 0_2
@@ -87,74 +93,145 @@ _itemSetBg = {
 , 
 [5] = {}
 }
-}
+, _btnClose = (UI.getChildControl)(control._itemListBg, "Button_ItemListClose")}
+  ;
+  (control._itemListBg):SetShow(false)
+  control._itemSlotBg = (UI.getChildControl)(control._itemListBg, "Static_SlotBg")
+  ;
+  (control._itemSlotBg):SetShow(false)
+  control._itemSlot = (UI.getChildControl)(control._itemListBg, "Static_Slot")
+  local rowCount = (math.ceil)(self._maxItemCount / 4)
+  for index = 0, rowCount - 1 do
+    for cIndex = 0, 3 do
+      local realIndex = index * 4 + cIndex
+      -- DECOMPILER ERROR at PC224: Confused about usage of register: R12 in 'UnsetPending'
+
+      if realIndex < self._maxItemCount then
+        (control._tradeItemSlotBg)[realIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, control._itemListBg, "TradeItemBg_" .. realIndex)
+        CopyBaseProperty(control._itemSlotBg, (control._tradeItemSlotBg)[realIndex])
+        ;
+        ((control._tradeItemSlotBg)[realIndex]):SetPosX(10 + 60 * cIndex)
+        ;
+        ((control._tradeItemSlotBg)[realIndex]):SetPosY(50 + 60 * index)
+        ;
+        ((control._tradeItemSlotBg)[realIndex]):SetShow(false)
+        -- DECOMPILER ERROR at PC259: Confused about usage of register: R12 in 'UnsetPending'
+
+        ;
+        (control._tradeItemSlot)[realIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._tradeItemSlotBg)[realIndex], "TradeItemSlot_" .. realIndex)
+        CopyBaseProperty(control._itemSlot, (control._tradeItemSlot)[realIndex])
+        ;
+        ((control._tradeItemSlot)[realIndex]):SetPosX(2)
+        ;
+        ((control._tradeItemSlot)[realIndex]):SetPosY(2)
+      end
+    end
+  end
   for index = 1, 5 do
-    -- DECOMPILER ERROR at PC177: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC285: Confused about usage of register: R7 in 'UnsetPending'
 
     (((control._itemSet)._itemSetBg)[index])._itemSlotBg = {}
-    -- DECOMPILER ERROR at PC189: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC297: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[1] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "Static_ItemSlotBg1")
-    -- DECOMPILER ERROR at PC201: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC309: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[2] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "Static_ItemSlotBg2")
-    -- DECOMPILER ERROR at PC206: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC314: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._itemSlot = {}
-    -- DECOMPILER ERROR at PC220: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC328: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlot)[1] = (UI.getChildControl)(((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[1], "Static_Slot")
-    -- DECOMPILER ERROR at PC234: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC342: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._itemSlot)[2] = (UI.getChildControl)(((((control._itemSet)._itemSetBg)[index])._itemSlotBg)[2], "Static_Slot")
-    -- DECOMPILER ERROR at PC239: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC347: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._plus = {}
-    -- DECOMPILER ERROR at PC251: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC359: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._plus)[1] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Plus1")
-    -- DECOMPILER ERROR at PC263: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC371: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._plus)[2] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Plus2")
-    -- DECOMPILER ERROR at PC268: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC376: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._count = {}
-    -- DECOMPILER ERROR at PC280: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC388: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._count)[1] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Count1")
-    -- DECOMPILER ERROR at PC292: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC400: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((((control._itemSet)._itemSetBg)[index])._count)[2] = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_Count2")
-    -- DECOMPILER ERROR at PC303: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC411: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (((control._itemSet)._itemSetBg)[index])._noCarriage = (UI.getChildControl)(((control._itemSet)._itemSlotBg)[index], "StaticText_NoCarriage")
+    -- DECOMPILER ERROR at PC417: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    (self._itemCountInSlot)[(index - 1) * 2 + 1] = {}
+    -- DECOMPILER ERROR at PC423: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    ((self._itemCountInSlot)[(index - 1) * 2 + 1])._count = 0
+    -- DECOMPILER ERROR at PC429: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    ((self._itemCountInSlot)[(index - 1) * 2 + 1])._key = 0
+    -- DECOMPILER ERROR at PC435: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    (self._itemCountInSlot)[(index - 1) * 2 + 2] = {}
+    -- DECOMPILER ERROR at PC441: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    ((self._itemCountInSlot)[(index - 1) * 2 + 2])._count = 0
+    -- DECOMPILER ERROR at PC447: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    ((self._itemCountInSlot)[(index - 1) * 2 + 2])._key = 0
+  end
+end
+
+workerTradeCaravan.tradeItemInit = function(self)
+  -- function num : 0_3
+  for index = 1, 10 do
+    -- DECOMPILER ERROR at PC6: Confused about usage of register: R5 in 'UnsetPending'
+
+    ((self._itemCountInSlot)[index])._count = 0
+    -- DECOMPILER ERROR at PC9: Confused about usage of register: R5 in 'UnsetPending'
+
+    ;
+    ((self._itemCountInSlot)[index])._key = 0
   end
 end
 
 workerTradeCaravan.Show = function(self, index)
-  -- function num : 0_3
+  -- function num : 0_4
   WorldMapPopupManager:increaseLayer(true)
   WorldMapPopupManager:push(Panel_WorkerTrade_Caravan, true)
   ToClient_RequestClearTempInfo()
   self._selectArrNodeIndex = -1
   self._currentSelectRouteNodeList = {}
+  self:tradeItemInit()
   self:SetData(index)
 end
 
 workerTradeCaravan.SetData = function(self, index)
-  -- function num : 0_4
+  -- function num : 0_5
   local player = getSelfPlayer()
   if not player then
     return 
@@ -304,15 +381,17 @@ workerTradeCaravan.SetData = function(self, index)
                             (((((control._itemSet)._itemSetBg)[iIndex])._plus)[slotIndex]):SetShow(true)
                             ;
                             (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SelectItem(" .. itemIndex .. ")")
-                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out DO_STMT
+                            ;
+                            (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_RUp", "WorkerTradeCaravan_DecreaseItem(" .. itemIndex .. ")")
+                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC519: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end
@@ -333,6 +412,8 @@ workerTradeCaravan.SetData = function(self, index)
                 (control._list2ArrivalNode):SetShow(false)
                 ;
                 (control._list2RouteNode):SetShow(false)
+                ;
+                (control._itemListBg):SetShow(false)
                 self._currentSelectRouteNodeCount = ToClient_GetWorkerTradeEventNodeCount(startWayPointKey)
                 self._routeNodeIndex = 0
                 self._currentSelectRouteNodeList = {}
@@ -346,7 +427,7 @@ workerTradeCaravan.SetData = function(self, index)
 end
 
 workerTradeCaravan.AssetUpdate = function(self, index)
-  -- function num : 0_5
+  -- function num : 0_6
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(index - 1)
   if tradeGroupWrapper == nil then
@@ -384,7 +465,7 @@ workerTradeCaravan.AssetUpdate = function(self, index)
 end
 
 WorkerTrade_SetAsset = function(assetType, increaseCount)
-  -- function num : 0_6 , upvalues : workerTradeCaravan
+  -- function num : 0_7 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(self._selectIndex)
@@ -400,68 +481,76 @@ WorkerTrade_SetAsset = function(assetType, increaseCount)
   local carriageCount = tradeGroupWrapper:getTradeGroupCarriage()
   local amuletCount = tradeGroupWrapper:getTradeGroupAmulet()
   if assetType == 0 then
-    carriageCount = carriageCount + increaseCount
-    if carriageCount < 0 and increaseCount == -1 then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_1"))
-      return 
-    end
-    if self._maxCarriageCount < carriageCount then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_2"))
-      return 
-    end
-    if groupCarriageCount == 0 and increaseCount == 1 then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_3"))
-      return 
-    end
-    ToClient_RequestSetCarriageInTradeGroup(self._selectIndex, carriageCount)
-  else
-    if assetType == 1 then
-      porterCount = porterCount + increaseCount
-      if porterCount < 0 and increaseCount == -1 then
-        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_4"))
-        return 
-      end
-      if (carriageCount) * self._maxWorkerCount < porterCount then
-        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_5"))
-        return 
-      end
-      if groupPorterCount == 0 and increaseCount == 1 then
-        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_6"))
-        return 
-      end
-      ToClient_RequestSetPorterInTradeGroup(self._selectIndex, porterCount)
-    else
-      if assetType == 2 then
-        guardCount = guardCount + increaseCount
-        if guardCount < 0 and increaseCount == -1 then
-          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_7"))
+    do
+      if carriageCount > 0 and increaseCount < 0 then
+        local countIndex = (carriageCount - 1) * 2
+        if ((self._itemCountInSlot)[countIndex + 1])._count > 0 or ((self._itemCountInSlot)[countIndex + 2])._count > 0 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_0"))
           return 
         end
-        if self._maxGuardCount < guardCount then
-          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_8"))
+      end
+      carriageCount = carriageCount + increaseCount
+      if carriageCount < 0 and increaseCount == -1 then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_1"))
+        return 
+      end
+      if self._maxCarriageCount < carriageCount then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_2"))
+        return 
+      end
+      if groupCarriageCount == 0 and increaseCount == 1 then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_3"))
+        return 
+      end
+      ToClient_RequestSetCarriageInTradeGroup(self._selectIndex, carriageCount)
+      if assetType == 1 then
+        porterCount = porterCount + increaseCount
+        if porterCount < 0 and increaseCount == -1 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_4"))
           return 
         end
-        if groupGuardCount == 0 and increaseCount == 1 then
-          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_9"))
+        if (carriageCount) * self._maxWorkerCount < porterCount then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_5"))
           return 
         end
-        ToClient_RequestSetGuardInTradeGroup(self._selectIndex, guardCount)
+        if groupPorterCount == 0 and increaseCount == 1 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_6"))
+          return 
+        end
+        ToClient_RequestSetPorterInTradeGroup(self._selectIndex, porterCount)
       else
-        if assetType == 3 then
-          amuletCount = amuletCount + increaseCount
-          if amuletCount < 0 and increaseCount == -1 then
-            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_10"))
+        if assetType == 2 then
+          guardCount = guardCount + increaseCount
+          if guardCount < 0 and increaseCount == -1 then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_7"))
             return 
           end
-          if self._maxFACount < amuletCount then
-            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_11"))
+          if self._maxGuardCount < guardCount then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_8"))
             return 
           end
-          if groupAmuletCount == 0 and increaseCount == 1 then
-            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_12"))
+          if groupGuardCount == 0 and increaseCount == 1 then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_9"))
             return 
           end
-          ToClient_RequestSetAmuletInTradeGroup(self._selectIndex, amuletCount)
+          ToClient_RequestSetGuardInTradeGroup(self._selectIndex, guardCount)
+        else
+          if assetType == 3 then
+            amuletCount = amuletCount + increaseCount
+            if amuletCount < 0 and increaseCount == -1 then
+              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_10"))
+              return 
+            end
+            if self._maxFACount < amuletCount then
+              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_11"))
+              return 
+            end
+            if groupAmuletCount == 0 and increaseCount == 1 then
+              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_SETALERT_12"))
+              return 
+            end
+            ToClient_RequestSetAmuletInTradeGroup(self._selectIndex, amuletCount)
+          end
         end
       end
     end
@@ -469,28 +558,28 @@ WorkerTrade_SetAsset = function(assetType, increaseCount)
 end
 
 FGlobal_WorkerTradeCaravan_SetData = function()
-  -- function num : 0_7 , upvalues : workerTradeCaravan
+  -- function num : 0_8 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   self:SetData(self._selectIndex + 1)
 end
 
 FGlobal_WorkerTradeCaravan_Show = function(index)
-  -- function num : 0_8 , upvalues : workerTradeCaravan
+  -- function num : 0_9 , upvalues : workerTradeCaravan
   workerTradeCaravan:Show(index)
 end
 
 workerTradeCaravan.Hide = function(self)
-  -- function num : 0_9
+  -- function num : 0_10
   WorldMapPopupManager:pop()
 end
 
 FGlobal_WorkerTradeCaravan_Hide = function()
-  -- function num : 0_10 , upvalues : workerTradeCaravan
+  -- function num : 0_11 , upvalues : workerTradeCaravan
   workerTradeCaravan:Hide()
 end
 
 WorkerTradeCaravan_Set = function(index)
-  -- function num : 0_11 , upvalues : workerTradeCaravan
+  -- function num : 0_12 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(index - 1)
@@ -500,7 +589,7 @@ end
 local clickedWorkerIndex = 0
 local setableWorkerCount = 0
 WorkerTradeCaravan_SetWorker = function(index)
-  -- function num : 0_12 , upvalues : workerTradeCaravan, setableWorkerCount, clickedWorkerIndex
+  -- function num : 0_13 , upvalues : workerTradeCaravan, setableWorkerCount, clickedWorkerIndex
   if ((workerTradeCaravan.control)._list2TradeWorker):GetShow() then
     ((workerTradeCaravan.control)._list2TradeWorker):SetShow(false)
     return 
@@ -549,12 +638,14 @@ WorkerTradeCaravan_SetWorker = function(index)
   (control._list2ArrivalNode):SetShow(false)
   ;
   (control._list2RouteNode):SetShow(false)
+  ;
+  (control._itemListBg):SetShow(false)
   clickedWorkerIndex = index
 end
 
 local tempWorkerNo = {}
 TradeWorkerListControlCreate = function(content, key)
-  -- function num : 0_13 , upvalues : workerTradeCaravan, tempWorkerNo, setableWorkerCount, clickedWorkerIndex
+  -- function num : 0_14 , upvalues : workerTradeCaravan, tempWorkerNo, setableWorkerCount, clickedWorkerIndex
   local workerListBg = (UI.getChildControl)(content, "List2_OptionList_Bg")
   local tradeWorkerName = (UI.getChildControl)(content, "List2_OptionList_Desc")
   local self = workerTradeCaravan
@@ -601,7 +692,7 @@ TradeWorkerListControlCreate = function(content, key)
 end
 
 TradeWorker_SetWorker = function(workerIndex)
-  -- function num : 0_14 , upvalues : workerTradeCaravan, clickedWorkerIndex, tempWorkerNo
+  -- function num : 0_15 , upvalues : workerTradeCaravan, clickedWorkerIndex, tempWorkerNo
   local self = workerTradeCaravan
   ToClient_RequestSetWorker(self._selectIndex, clickedWorkerIndex, tempWorkerNo[workerIndex])
   ;
@@ -609,13 +700,13 @@ TradeWorker_SetWorker = function(workerIndex)
 end
 
 TradeWorker_FireWorker = function(index)
-  -- function num : 0_15 , upvalues : workerTradeCaravan
+  -- function num : 0_16 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   ToClient_RequestUnsetWorker(self._selectIndex, index)
 end
 
 WorkerTradeCaravan_ShowArrivalNodeList = function()
-  -- function num : 0_16 , upvalues : workerTradeCaravan
+  -- function num : 0_17 , upvalues : workerTradeCaravan
   if ((workerTradeCaravan.control)._list2ArrivalNode):GetShow() then
     ((workerTradeCaravan.control)._list2ArrivalNode):SetShow(false)
     return 
@@ -650,10 +741,12 @@ WorkerTradeCaravan_ShowArrivalNodeList = function()
   (control._list2RouteNode):SetShow(false)
   ;
   (control._list2TradeItem):SetShow(false)
+  ;
+  (control._itemListBg):SetShow(false)
 end
 
 ArrivalNodeList_Set = function(index)
-  -- function num : 0_17 , upvalues : workerTradeCaravan
+  -- function num : 0_18 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   local control = self.control
   local startWayPointKey = WorkerTradeCaravan_StartWayPointKey()
@@ -667,7 +760,7 @@ ArrivalNodeList_Set = function(index)
 end
 
 ArrivalNodeListControlCreate = function(content, key)
-  -- function num : 0_18 , upvalues : workerTradeCaravan
+  -- function num : 0_19 , upvalues : workerTradeCaravan
   local arrivalNodeBg = (UI.getChildControl)(content, "List2_OptionList_Bg")
   local arrivalNodeName = (UI.getChildControl)(content, "List2_OptionList_Desc")
   local self = workerTradeCaravan
@@ -687,7 +780,7 @@ ArrivalNodeListControlCreate = function(content, key)
 end
 
 WorkerTradeCaravan_RouteNodeSet = function(nodeIndex)
-  -- function num : 0_19 , upvalues : workerTradeCaravan
+  -- function num : 0_20 , upvalues : workerTradeCaravan
   if ((workerTradeCaravan.control)._list2RouteNode):GetShow() then
     ((workerTradeCaravan.control)._list2RouteNode):SetShow(false)
     return 
@@ -723,10 +816,12 @@ WorkerTradeCaravan_RouteNodeSet = function(nodeIndex)
   (control._list2RouteNode):SetShow(true)
   ;
   (control._list2TradeItem):SetShow(false)
+  ;
+  (control._itemListBg):SetShow(false)
 end
 
 RouteNodeList_Set = function(index)
-  -- function num : 0_20 , upvalues : workerTradeCaravan
+  -- function num : 0_21 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   local control = self.control
   local startWayPointKey = WorkerTradeCaravan_StartWayPointKey()
@@ -756,7 +851,7 @@ RouteNodeList_Set = function(index)
 end
 
 RouteNodeListControlCreate = function(content, key)
-  -- function num : 0_21 , upvalues : workerTradeCaravan
+  -- function num : 0_22 , upvalues : workerTradeCaravan
   local optionListBg = (UI.getChildControl)(content, "List2_OptionList_Bg")
   local optionListDesc = (UI.getChildControl)(content, "List2_OptionList_Desc")
   local self = workerTradeCaravan
@@ -777,7 +872,7 @@ RouteNodeListControlCreate = function(content, key)
 end
 
 RouteNodeCompare = function(areaName)
-  -- function num : 0_22 , upvalues : workerTradeCaravan
+  -- function num : 0_23 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   if self._currentSelectRouteNodeList == nil then
     return true
@@ -792,7 +887,7 @@ end
 
 local _slotIndex = nil
 WorkerTradeCaravan_SelectItem = function(slotIndex)
-  -- function num : 0_23 , upvalues : _slotIndex
+  -- function num : 0_24 , upvalues : _slotIndex
   if not isChangeableState() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ITEMALERT"))
     return 
@@ -801,8 +896,69 @@ WorkerTradeCaravan_SelectItem = function(slotIndex)
   ToClient_RequestOpenWorkerTradeList()
 end
 
+WorkerTradeCaravan_DecreaseItem = function(slotIndex)
+  -- function num : 0_25 , upvalues : workerTradeCaravan
+  local self = workerTradeCaravan
+  local control = self.control
+  local _slotIndex = slotIndex
+  local countIndex = _slotIndex + 1
+  local carriageIndex = (math.ceil)(countIndex / 2)
+  local uiIndex = slotIndex % 2 + 1
+  if ((self._itemCountInSlot)[countIndex])._count == 0 then
+    return 
+  end
+  local startWayPointKey = (WorkerTradeCaravan_StartWayPointKey())
+  local destWayPointKey = nil
+  if self._selectArrNodeIndex == -1 then
+    destWayPointKey = startWayPointKey
+  else
+    local regionInfo = ToClient_GetWorkerTradeMainNodeByIndex(startWayPointKey, self._selectArrNodeIndex)
+    destWayPointKey = regionInfo:getExplorationKey()
+  end
+  do
+    local itemKey = ((self._itemCountInSlot)[countIndex])._key
+    local rv = ((self._itemCountInSlot)[countIndex])._count - 1
+    -- DECOMPILER ERROR at PC42: Confused about usage of register: R11 in 'UnsetPending'
+
+    if rv == 0 then
+      ((self._itemCountInSlot)[countIndex])._key = rv
+      -- DECOMPILER ERROR at PC45: Confused about usage of register: R11 in 'UnsetPending'
+
+      ;
+      ((self._itemCountInSlot)[countIndex])._count = rv
+      ;
+      (((((control._itemSet)._itemSetBg)[carriageIndex])._count)[uiIndex]):SetShow(false)
+      ;
+      (((((control._itemSet)._itemSetBg)[carriageIndex])._plus)[uiIndex]):SetShow(true)
+      ;
+      (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("")
+      ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, rv, startWayPointKey, destWayPointKey)
+    else
+      local canBuyItem = ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, rv, startWayPointKey, destWayPointKey)
+      -- DECOMPILER ERROR at PC93: Confused about usage of register: R12 in 'UnsetPending'
+
+      if canBuyItem then
+        ((self._itemCountInSlot)[countIndex])._count = rv
+        ;
+        (((((control._itemSet)._itemSetBg)[carriageIndex])._count)[uiIndex]):SetText(((self._itemCountInSlot)[countIndex])._count)
+      end
+    end
+    do
+      local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
+      local tradeGroupWrapper = tradeCompanyWrapper:getGroup(workerTradeCaravan._selectIndex)
+      local maxWeight = tradeGroupWrapper:getTradeGroupTransportCapacity()
+      local totalPrice = tradeCompanyWrapper:getTempTotalPrice()
+      local totalWeight = tradeCompanyWrapper:getTempTotalWeight()
+      ;
+      (control._itemWeight):SetText(makeDotMoney(totalWeight) .. " / " .. makeDotMoney(maxWeight))
+      ;
+      (control._tradePrice):SetText(makeDotMoney(totalPrice))
+    end
+  end
+end
+
 FromClient_OpenWorkerTradeItemList = function()
-  -- function num : 0_24 , upvalues : workerTradeCaravan, _slotIndex
+  -- function num : 0_26 , upvalues : workerTradeCaravan
   if ((workerTradeCaravan.control)._list2TradeItem):GetShow() then
     ((workerTradeCaravan.control)._list2TradeItem):SetShow(false)
     return 
@@ -821,13 +977,45 @@ FromClient_OpenWorkerTradeItemList = function()
     ;
     ((control._list2TradeItem):getElementManager()):clearKey()
     local buyableItemCount = ToClient_RequestBuyableWorkerTradeItemCount(startWayPointKey)
-    for index = 0, buyableItemCount - 1 do
-      if (self.tradeItemInfo)[_slotIndex] ~= index and WorkerTradeCaravan_ItemCheck(index) then
-        ((control._list2TradeItem):getElementManager()):pushKey(toInt64(0, index))
+    local startWayPointKey = WorkerTradeCaravan_StartWayPointKey()
+    for index = 0, self._maxItemCount - 1 do
+      if index < buyableItemCount then
+        ((control._tradeItemSlotBg)[index]):SetShow(true)
+        ;
+        ((control._tradeItemSlot)[index]):SetShow(true)
+        local tradeItemWrapper = ToClient_RequestWorkerTradeItemMaster(startWayPointKey, index)
+        if tradeItemWrapper ~= nil then
+          ((control._tradeItemSlot)[index]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
+          ;
+          ((control._tradeItemSlot)[index]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SetItem(" .. index .. "," .. 1 .. ")")
+          ;
+          ((control._tradeItemSlot)[index]):addInputEvent("Mouse_RUp", "WorkerTradeCaravan_SetItem(" .. index .. "," .. -1 .. ")")
+        end
+      else
+        do
+          do
+            ;
+            ((control._tradeItemSlotBg)[index]):SetShow(false)
+            ;
+            ((control._tradeItemSlot)[index]):SetShow(false)
+            -- DECOMPILER ERROR at PC105: LeaveBlock: unexpected jumping out DO_STMT
+
+            -- DECOMPILER ERROR at PC105: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+            -- DECOMPILER ERROR at PC105: LeaveBlock: unexpected jumping out IF_STMT
+
+          end
+        end
       end
-      ;
-      ((control._list2TradeItem):getElementManager()):pushKey(toInt64(0, index))
     end
+    ;
+    (control._itemListBg):SetShow(true)
+    ;
+    (control._itemListBg):SetSize((control._itemListBg):GetSizeX(), 50 + (math.ceil)(buyableItemCount / 4) * 60 + 40)
+    ;
+    (control._itemListBg):ComputePos()
+    ;
+    ((control._itemSet)._btnClose):ComputePos()
     ;
     (control._list2TradeWorker):SetShow(false)
     ;
@@ -835,12 +1023,150 @@ FromClient_OpenWorkerTradeItemList = function()
     ;
     (control._list2RouteNode):SetShow(false)
     ;
-    (control._list2TradeItem):SetShow(true)
+    (control._list2TradeItem):SetShow(false)
+  end
+end
+
+WorkerTradeCaravan_ItemListClose = function()
+  -- function num : 0_27 , upvalues : workerTradeCaravan
+  local self = workerTradeCaravan
+  local control = self.control
+  ;
+  (control._itemListBg):SetShow(false)
+end
+
+WorkerTradeCaravan_SetItem = function(index, value)
+  -- function num : 0_28 , upvalues : workerTradeCaravan
+  local self = workerTradeCaravan
+  local control = self.control
+  local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
+  local tradeGroupWrapper = tradeCompanyWrapper:getGroup(workerTradeCaravan._selectIndex)
+  if tradeGroupWrapper == nil then
+    return 
+  end
+  local carriageCount = tradeGroupWrapper:getTradeGroupCarriage()
+  if carriageCount == 0 then
+    return 
+  end
+  local startWayPointKey = (WorkerTradeCaravan_StartWayPointKey())
+  local destWayPointKey = nil
+  if self._selectArrNodeIndex == -1 then
+    destWayPointKey = startWayPointKey
+  else
+    local regionInfo = ToClient_GetWorkerTradeMainNodeByIndex(startWayPointKey, self._selectArrNodeIndex)
+    destWayPointKey = regionInfo:getExplorationKey()
+  end
+  do
+    local tradeItemWrapper = ToClient_RequestWorkerTradeItemMaster(startWayPointKey, index)
+    local itemKey = tradeItemWrapper:getKey()
+    local maxWeight = tradeGroupWrapper:getTradeGroupTransportCapacity()
+    local _slotIndex = -1
+    local isSameItem = false
+    for carriageIndex = 1, carriageCount do
+      for uiIndex = 1, 2 do
+        local countIndex = (carriageIndex - 1) * 2 + uiIndex
+        local _slotIndex = countIndex - 1
+        if itemKey == ((self._itemCountInSlot)[countIndex])._key then
+          local rv = ((self._itemCountInSlot)[countIndex])._count + value
+          -- DECOMPILER ERROR at PC66: Confused about usage of register: R25 in 'UnsetPending'
+
+          if rv == 0 then
+            ((self._itemCountInSlot)[countIndex])._key = rv
+            -- DECOMPILER ERROR at PC69: Confused about usage of register: R25 in 'UnsetPending'
+
+            ;
+            ((self._itemCountInSlot)[countIndex])._count = rv
+            ;
+            (((((control._itemSet)._itemSetBg)[carriageIndex])._count)[uiIndex]):SetShow(false)
+            ;
+            (((((control._itemSet)._itemSetBg)[carriageIndex])._plus)[uiIndex]):SetShow(true)
+            ;
+            (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("")
+            ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, rv, startWayPointKey, destWayPointKey)
+          else
+            local canBuyItem = ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, rv, startWayPointKey, destWayPointKey)
+            -- DECOMPILER ERROR at PC117: Confused about usage of register: R26 in 'UnsetPending'
+
+            if canBuyItem then
+              ((self._itemCountInSlot)[countIndex])._count = rv
+              ;
+              (((((control._itemSet)._itemSetBg)[carriageIndex])._count)[uiIndex]):SetText(((self._itemCountInSlot)[countIndex])._count)
+            end
+          end
+          do
+            do
+              isSameItem = true
+              do break end
+              -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out DO_STMT
+
+              -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
+          end
+        end
+      end
+      if isSameItem then
+        break
+      end
+    end
+    do
+      do
+        if not isSameItem and value > 0 then
+          local isEmptySlot = false
+          for carriageIndex = 1, carriageCount do
+            for uiIndex = 1, 2 do
+              local countIndex = (carriageIndex - 1) * 2 + uiIndex
+              local _slotIndex = countIndex - 1
+              if ((self._itemCountInSlot)[countIndex])._count == 0 then
+                local canBuyItem = ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, value, startWayPointKey, destWayPointKey)
+                -- DECOMPILER ERROR at PC170: Confused about usage of register: R26 in 'UnsetPending'
+
+                if canBuyItem then
+                  ((self._itemCountInSlot)[countIndex])._key = itemKey
+                  -- DECOMPILER ERROR at PC177: Confused about usage of register: R26 in 'UnsetPending'
+
+                  ;
+                  ((self._itemCountInSlot)[countIndex])._count = ((self._itemCountInSlot)[countIndex])._count + value
+                  ;
+                  (((((control._itemSet)._itemSetBg)[carriageIndex])._count)[uiIndex]):SetText(((self._itemCountInSlot)[countIndex])._count)
+                  ;
+                  (((((control._itemSet)._itemSetBg)[carriageIndex])._count)[uiIndex]):SetShow(true)
+                  ;
+                  (((((control._itemSet)._itemSetBg)[carriageIndex])._plus)[uiIndex]):SetShow(false)
+                  ;
+                  (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
+                  isEmptySlot = true
+                  break
+                end
+              end
+            end
+            do
+              do
+                if isEmptySlot then
+                  break
+                end
+                -- DECOMPILER ERROR at PC221: LeaveBlock: unexpected jumping out DO_STMT
+
+              end
+            end
+          end
+        end
+        local maxWeight = tradeGroupWrapper:getTradeGroupTransportCapacity()
+        local totalPrice = tradeCompanyWrapper:getTempTotalPrice()
+        local totalWeight = tradeCompanyWrapper:getTempTotalWeight()
+        ;
+        (control._itemWeight):SetText(makeDotMoney(totalWeight) .. " / " .. makeDotMoney(maxWeight))
+        ;
+        (control._tradePrice):SetText(makeDotMoney(totalPrice))
+      end
+    end
   end
 end
 
 WorkerTradeCaravan_ItemCheck = function(index)
-  -- function num : 0_25 , upvalues : workerTradeCaravan
+  -- function num : 0_29 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   for slotIndex = 0, #self.tradeItemInfo do
     if index == (self.tradeItemInfo)[slotIndex] then
@@ -851,7 +1177,7 @@ WorkerTradeCaravan_ItemCheck = function(index)
 end
 
 TradeItemListControlCreate = function(content, key)
-  -- function num : 0_26 , upvalues : workerTradeCaravan
+  -- function num : 0_30 , upvalues : workerTradeCaravan
   local optionListBg = (UI.getChildControl)(content, "List2_OptionList_Bg")
   local slotBg = (UI.getChildControl)(content, "Static_Slot_BG")
   local slot = (UI.getChildControl)(content, "Static_Slot")
@@ -893,7 +1219,7 @@ TradeItemListControlCreate = function(content, key)
 end
 
 WorkerTradeCaravan_BuyItem = function(index, addCount)
-  -- function num : 0_27 , upvalues : workerTradeCaravan, _slotIndex
+  -- function num : 0_31 , upvalues : workerTradeCaravan, _slotIndex
   local self = workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(workerTradeCaravan._selectIndex)
@@ -911,7 +1237,7 @@ WorkerTradeCaravan_BuyItem = function(index, addCount)
     local tradeItemWrapper = ToClient_RequestWorkerTradeItemMaster(startWayPointKey, index)
     local maxCount = (math.floor)(Int64toInt32(coinCount / tradeItemWrapper:getBuyPrice()))
     local setTradeItem = function(inputNumber)
-    -- function num : 0_27_0 , upvalues : _slotIndex, tradeItemWrapper, tradeGroupWrapper, canBuyItem, workerTradeCaravan, startWayPointKey, destWayPointKey, self, index, tradeCompanyWrapper
+    -- function num : 0_31_0 , upvalues : _slotIndex, tradeItemWrapper, tradeGroupWrapper, canBuyItem, workerTradeCaravan, startWayPointKey, destWayPointKey, self, index, tradeCompanyWrapper
     if _slotIndex == nil then
       return 
     end
@@ -966,7 +1292,7 @@ WorkerTradeCaravan_BuyItem = function(index, addCount)
 end
 
 WorkerTradeCaravan_Go = function()
-  -- function num : 0_28 , upvalues : workerTradeCaravan
+  -- function num : 0_32 , upvalues : workerTradeCaravan
   if not isChangeableState() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_STARTALERT_1"))
     return 
@@ -990,7 +1316,7 @@ WorkerTradeCaravan_Go = function()
 end
 
 WorkerTradeCaravan_StartWayPointKey = function()
-  -- function num : 0_29 , upvalues : workerTradeCaravan
+  -- function num : 0_33 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(self._selectIndex)
@@ -1003,7 +1329,7 @@ WorkerTradeCaravan_StartWayPointKey = function()
 end
 
 isChangeableState = function()
-  -- function num : 0_30 , upvalues : workerTradeCaravan
+  -- function num : 0_34 , upvalues : workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(workerTradeCaravan._selectIndex)
   local currentState = tradeGroupWrapper:getState()
@@ -1015,7 +1341,7 @@ isChangeableState = function()
 end
 
 FGlobal_WorkerTradeCaraven_Open = function(index)
-  -- function num : 0_31 , upvalues : workerTradeCaravan
+  -- function num : 0_35 , upvalues : workerTradeCaravan
   if Panel_WorkerTrade_Caravan:GetShow() then
     workerTradeCaravan:Hide()
   else
@@ -1027,12 +1353,12 @@ FGlobal_WorkerTradeCaraven_Open = function(index)
 end
 
 WorkerTradeCaravan_Close = function()
-  -- function num : 0_32 , upvalues : workerTradeCaravan
+  -- function num : 0_36 , upvalues : workerTradeCaravan
   workerTradeCaravan:Hide()
 end
 
 workerTradeCaravan.registerEvent = function(self)
-  -- function num : 0_33
+  -- function num : 0_37
   local control = self.control
   ;
   (((control._worker)._image)[1]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SetWorker(" .. 0 .. ")")
@@ -1071,6 +1397,8 @@ workerTradeCaravan.registerEvent = function(self)
   (control._list2RouteNode):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "RouteNodeListControlCreate")
   ;
   (control._list2RouteNode):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
+  ;
+  ((control._itemSet)._btnClose):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_ItemListClose()")
   ;
   (control._list2TradeItem):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "TradeItemListControlCreate")
   ;

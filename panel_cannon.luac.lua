@@ -449,7 +449,7 @@ end
 
 FromClient_UpdateCannonBallCount = function(count, VehicleTpye)
   -- function num : 0_7 , upvalues : UI_VT, shootCount
-  if UI_VT.Type_SailingBoat == VehicleTpye or UI_VT.Type_TradeShip == VehicleTpye or UI_VT.Type_PersonTradeShip == VehicleTpye then
+  if UI_VT.Type_SailingBoat == VehicleTpye or UI_VT.Type_PersonalBattleShip == VehicleTpye or UI_VT.Type_PersonTradeShip == VehicleTpye then
     return 
   end
   local shootCountValue = Int64toInt32(count)

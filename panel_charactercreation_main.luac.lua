@@ -71,7 +71,7 @@ local Button_ScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, 
 local Button_ScreenShotFolder_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ScreenShotFolder")
 local Button_ProfileScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ProfileScreenShot")
 local customization_HistoryBG = (UI.getChildControl)(Panel_CustomizationStatic, "Static_HistoryBG")
-customization_HistoryBG:SetShow(isGameServiceTypeDev())
+customization_HistoryBG:SetShow(false)
 local isShowScreenShot = true
 Button_ScreenShot:SetShow(isShowScreenShot)
 Button_ScreenShotFolder:SetShow(isShowScreenShot)
@@ -763,10 +763,10 @@ end
   end
   -- DECOMPILER ERROR at PC165: Unhandled construct in 'MakeBoolean' P1
 
-  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_RIGHT) and Edit_CharName:GetFocusEdit() == false and FileExplorer_getTextFocusEdit() == false then
+  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_RIGHT) and Edit_CharName:GetFocusEdit() == false and FileExplorer_IsOpen() == false then
     customHistoryDo()
   end
-  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_LEFT) and Edit_CharName:GetFocusEdit() == false and FileExplorer_getTextFocusEdit() == false then
+  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_LEFT) and Edit_CharName:GetFocusEdit() == false and FileExplorer_IsOpen() == false then
     customHistoryUnDo()
   end
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_LBUTTON) and globalcheckSlider == true then

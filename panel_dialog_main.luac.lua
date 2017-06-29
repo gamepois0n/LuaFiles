@@ -50,6 +50,8 @@ local _skillTutorial = false
 local handleClickedQuestComplete = false
 local nextQuestFunctionBtnClick = {}
 local isAllowTutorialPanelShow = false
+local warehouseIndex = -1
+local tradeIndex = -1
 local uv = {
 {_fileName = "New_UI_Common_forLua/Widget/HumanRelations/Compensation_00.dds", x1 = 62, y1 = 1, x2 = 122, y2 = 61}
 , 
@@ -559,6 +561,7 @@ end
 FromClient_ShowDialog = function()
   -- function num : 0_21 , upvalues : PreclosePanel_OpenDialog, _wpHelp, intimacyNotice, intimacyNoticeText, _ignoreShowDialog, _uiFuncBG, _equipRewardCount, _currentLine, _uiNpcTitle, _uiNpcName, _mainDialog, _maxLine, isFirstShowTooltip
   PaGlobal_TutorialManager:handleBeforeShowDialog()
+  FGlobal_RemoteControl_Hide()
   local charLevel = ((getSelfPlayer()):get()):getLevel()
   if CheckTutorialEnd() then
     ToClient_SaveUiInfo(false)
@@ -628,7 +631,7 @@ FromClient_ShowDialog = function()
   while 1 do
     strFirst = stringList[i * 2 + 1]
     strSecond = stringList[i * 2 + 2]
-    -- DECOMPILER ERROR at PC230: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC232: Confused about usage of register: R10 in 'UnsetPending'
 
     if strFirst ~= nil and strSecond ~= nil then
       _mainDialog[i] = strFirst .. "\n" .. strSecond
@@ -636,7 +639,7 @@ FromClient_ShowDialog = function()
       if strFirst == nil then
         break
       else
-        -- DECOMPILER ERROR at PC239: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC241: Confused about usage of register: R10 in 'UnsetPending'
 
         if strSecond == nil then
           _mainDialog[i] = strFirst
@@ -653,44 +656,44 @@ FromClient_ShowDialog = function()
   for idx = 1, baseCount do
     local baseReward = dialogData:getBaseRewardAt(idx - 1)
     _baseReward[idx] = {}
-    -- DECOMPILER ERROR at PC264: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC266: Confused about usage of register: R18 in 'UnsetPending'
 
     ;
     (_baseReward[idx])._type = baseReward._type
-    -- DECOMPILER ERROR at PC273: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC275: Confused about usage of register: R18 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == baseReward._type then
       (_baseReward[idx])._exp = baseReward._experience
     else
-      -- DECOMPILER ERROR at PC283: Confused about usage of register: R18 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC285: Confused about usage of register: R18 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == baseReward._type then
         (_baseReward[idx])._exp = baseReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC293: Confused about usage of register: R18 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC295: Confused about usage of register: R18 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == baseReward._type then
           (_baseReward[idx])._exp = baseReward._productExperience
         else
-          -- DECOMPILER ERROR at PC304: Confused about usage of register: R18 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC306: Confused about usage of register: R18 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == baseReward._type then
             (_baseReward[idx])._item = baseReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC307: Confused about usage of register: R18 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC309: Confused about usage of register: R18 in 'UnsetPending'
 
             ;
             (_baseReward[idx])._count = baseReward._itemCount
           else
-            -- DECOMPILER ERROR at PC318: Confused about usage of register: R18 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC320: Confused about usage of register: R18 in 'UnsetPending'
 
             if (CppEnums.RewardType).RewardType_Intimacy == baseReward._type then
               (_baseReward[idx])._character = baseReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC321: Confused about usage of register: R18 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC323: Confused about usage of register: R18 in 'UnsetPending'
 
               ;
               (_baseReward[idx])._value = baseReward._intimacyValue
             else
-              -- DECOMPILER ERROR at PC332: Confused about usage of register: R18 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC334: Confused about usage of register: R18 in 'UnsetPending'
 
               if (CppEnums.RewardType).RewardType_Knowledge == baseReward._type then
                 (_baseReward[idx])._mentalCard = baseReward:getMentalCardKey()
@@ -706,37 +709,37 @@ FromClient_ShowDialog = function()
   for idx = 1, selectCount do
     local selectReward = dialogData:getSelectRewardAt(idx - 1)
     _selectReward[idx] = {}
-    -- DECOMPILER ERROR at PC348: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC350: Confused about usage of register: R20 in 'UnsetPending'
 
     ;
     (_selectReward[idx])._type = selectReward._type
-    -- DECOMPILER ERROR at PC357: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC359: Confused about usage of register: R20 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == selectReward._type then
       (_selectReward[idx])._exp = selectReward._experience
     else
-      -- DECOMPILER ERROR at PC367: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC369: Confused about usage of register: R20 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == selectReward._type then
         (_selectReward[idx])._exp = selectReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC377: Confused about usage of register: R20 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC379: Confused about usage of register: R20 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == selectReward._type then
           (_selectReward[idx])._exp = selectReward._productExperience
         else
-          -- DECOMPILER ERROR at PC388: Confused about usage of register: R20 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC390: Confused about usage of register: R20 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == selectReward._type then
             (_selectReward[idx])._item = selectReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC391: Confused about usage of register: R20 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC393: Confused about usage of register: R20 in 'UnsetPending'
 
             ;
             (_selectReward[idx])._count = selectReward._itemCount
             local selfPlayer = getSelfPlayer()
             if selfPlayer ~= nil then
               local classType = selfPlayer:getClassType()
-              -- DECOMPILER ERROR at PC402: Confused about usage of register: R22 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC404: Confused about usage of register: R22 in 'UnsetPending'
 
               ;
               (_selectReward[idx])._isEquipable = selectReward:isEquipable(classType)
@@ -744,38 +747,38 @@ FromClient_ShowDialog = function()
           else
             do
               do
-                -- DECOMPILER ERROR at PC413: Confused about usage of register: R20 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC415: Confused about usage of register: R20 in 'UnsetPending'
 
                 if (CppEnums.RewardType).RewardType_Intimacy == selectReward._type then
                   (_selectReward[idx])._character = selectReward:getIntimacyCharacter()
-                  -- DECOMPILER ERROR at PC416: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC418: Confused about usage of register: R20 in 'UnsetPending'
 
                   ;
                   (_selectReward[idx])._value = selectReward._intimacyValue
                 else
-                  -- DECOMPILER ERROR at PC427: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC429: Confused about usage of register: R20 in 'UnsetPending'
 
                   if (CppEnums.RewardType).RewardType_Knowledge == selectReward._type then
                     (_selectReward[idx])._mentalCard = selectReward:getMentalCardKey()
                   end
                 end
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC428: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -957,7 +960,7 @@ end
 
 local promiseTokenKey = 44192
 Dialog_updateButtons = function(isVisible)
-  -- function num : 0_27 , upvalues : isReContactDialog, isDialogFunctionQuest, _questDialogButtonIndex, _exchangalbeButtonIndex, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _uiIntimacyIcon, _prevPageButton, _nextPageButton, _scrollControl, _pageValue, _dialogIndex, defaultDialogBtnSizeX, isExchangeButtonIndex, isPromiseToken, _styleExploreTalkButton, _styleNormalTalkButton, UI_color, UI_DS, _isQuestComplete, promiseTokenKey, UI_BTN_TYPE, _uiDialogIcon, hasMentalCardText, hasntMentalCardText, _rBtnPosY, _uiNextButton, _SpacebarIcon, _rBtnPosX, _uiFuncButton, _uiFuncBG, nextQuestFunctionBtnClick, UI_PD, handleClickedQuestComplete, isAuctionDialog, _uiButtonBack, _uiButtonExit
+  -- function num : 0_27 , upvalues : isReContactDialog, isDialogFunctionQuest, _questDialogButtonIndex, _exchangalbeButtonIndex, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _uiIntimacyIcon, _prevPageButton, _nextPageButton, _scrollControl, _pageValue, _dialogIndex, defaultDialogBtnSizeX, isExchangeButtonIndex, isPromiseToken, _styleExploreTalkButton, _styleNormalTalkButton, UI_color, UI_DS, _isQuestComplete, promiseTokenKey, UI_BTN_TYPE, _uiDialogIcon, hasMentalCardText, hasntMentalCardText, _rBtnPosY, _uiNextButton, _SpacebarIcon, _rBtnPosX, _uiFuncButton, tradeIndex, warehouseIndex, _uiFuncBG, nextQuestFunctionBtnClick, UI_PD, handleClickedQuestComplete, isAuctionDialog, _uiButtonBack, _uiButtonExit
   local sizeX = getScreenSizeX()
   local sizeY = (getScreenSizeY())
   local pos, displayData = nil, nil
@@ -1337,6 +1340,8 @@ Dialog_updateButtons = function(isVisible)
     local investNode_Alert_Txt = (UI.getChildControl)(Panel_Npc_Dialog, "StaticText_BubbleBox2")
     investNode_Alert:SetShow(false)
     investNode_Alert_Txt:SetShow(false)
+    tradeIndex = -1
+    warehouseIndex = -1
     for index = 0, 5 do
       local posX = startPosX + (buttonSize + buttonGap) * index
       ;
@@ -1349,7 +1354,7 @@ Dialog_updateButtons = function(isVisible)
       (_uiFuncBG[index]):ResetVertexAni()
       ;
       (_uiFuncBG[index]):SetShow(false)
-      -- DECOMPILER ERROR at PC1167: Confused about usage of register: R42 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1171: Confused about usage of register: R42 in 'UnsetPending'
 
       nextQuestFunctionBtnClick[index] = false
       if index < funcButtonCount then
@@ -1465,7 +1470,7 @@ Dialog_updateButtons = function(isVisible)
                 (_uiFuncButton[index]):SetMonoTone(false)
                 isDialogFunctionQuest = true
                 _btnPositionType = 3
-                -- DECOMPILER ERROR at PC1575: Confused about usage of register: R57 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC1579: Confused about usage of register: R57 in 'UnsetPending'
 
                 if handleClickedQuestComplete == true then
                   nextQuestFunctionBtnClick[index] = true
@@ -1512,6 +1517,10 @@ Dialog_updateButtons = function(isVisible)
                           ((_uiFuncButton[index]):getClickTexture()):setUV(x1, y1, x2, y2)
                           ;
                           (_uiFuncButton[index]):SetMonoTone(false)
+                          if isNormalTradeMerchant() then
+                            FGlobal_RemoteControl_Show(5)
+                            tradeIndex = index
+                          end
                           if funcButtonType == (CppEnums.ContentsType).Contents_Skill then
                             (_uiFuncButton[index]):ChangeTextureInfoName("New_UI_Common_forLua/Widget/Dialogue/Dialogue_Btn_01.dds")
                             local x1, y1, x2, y2 = setTextureUV_Func(_uiFuncButton[index], 1, 67, 155, 99)
@@ -1650,6 +1659,10 @@ Dialog_updateButtons = function(isVisible)
                                             ((_uiFuncButton[index]):getClickTexture()):setUV(x1, y1, x2, y2)
                                             ;
                                             (_uiFuncButton[index]):SetMonoTone(false)
+                                            if not Panel_Window_Warehouse:GetShow() then
+                                              FGlobal_RemoteControl_Show(6)
+                                              warehouseIndex = index
+                                            end
                                           else
                                             do
                                               if funcButtonType == (CppEnums.ContentsType).Contents_IntimacyGame then
@@ -2225,205 +2238,205 @@ Dialog_updateButtons = function(isVisible)
                                                                                                                                             do
                                                                                                                                               ;
                                                                                                                                               (_uiFuncButton[index]):SetShow(false)
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4714: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4736: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                                                             end
                                                                                                                                           end
@@ -2637,7 +2650,7 @@ Dialog_updateButtons = function(isVisible)
               for i = 0, 5 do
                 if true == handleClickedQuestComplete and true == nextQuestFunctionBtnClick[i] then
                   handleClickedQuestComplete = false
-                  -- DECOMPILER ERROR at PC5452: Confused about usage of register: R41 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC5474: Confused about usage of register: R41 in 'UnsetPending'
 
                   nextQuestFunctionBtnClick[i] = false
                   Dialog_clickFuncButtonReq(i)
@@ -3396,8 +3409,15 @@ isSkillLearnTutorial = function()
   return _skillTutorial
 end
 
+FGlobal_Dialog_TradeOpen = function()
+  -- function num : 0_34 , upvalues : tradeIndex
+  if tradeIndex >= 0 then
+    HandleClickedFuncButton(tradeIndex)
+  end
+end
+
 Dialog_innerPanelShow = function(count, targetWindowList)
-  -- function num : 0_34
+  -- function num : 0_35
   if count <= 0 then
     return 
   end
@@ -3425,7 +3445,7 @@ Dialog_innerPanelShow = function(count, targetWindowList)
 end
 
 HandleClickedDialogButton = function(index)
-  -- function num : 0_35 , upvalues : _doConfirmIndex, _isQuestComplete
+  -- function num : 0_36 , upvalues : _doConfirmIndex, _isQuestComplete
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -3446,17 +3466,17 @@ HandleClickedDialogButton = function(index)
 end
 
 _doConfirmYes = function()
-  -- function num : 0_36 , upvalues : _doConfirmIndex
+  -- function num : 0_37 , upvalues : _doConfirmIndex
   FGlobal_SelectRewardItemNameClear()
   HandleClickedDialogButtonReal(_doConfirmIndex)
 end
 
 _doConfirmNo = function()
-  -- function num : 0_37
+  -- function num : 0_38
 end
 
 HandleClickedDialogButtonReal = function(index)
-  -- function num : 0_38 , upvalues : _dialogIndex, handleClickedQuestComplete, UI_BTN_TYPE, UI_DS
+  -- function num : 0_39 , upvalues : _dialogIndex, handleClickedQuestComplete, UI_BTN_TYPE, UI_DS
   local dialogData = ToClient_GetCurrentDialogData()
   local dlgBtnCnt = dialogData:getDialogButtonCount()
   if dlgBtnCnt <= 0 then
@@ -3465,7 +3485,7 @@ HandleClickedDialogButtonReal = function(index)
   end
   index = index + _dialogIndex
   local clickDialogButtonReq = function()
-    -- function num : 0_38_0 , upvalues : index, handleClickedQuestComplete
+    -- function num : 0_39_0 , upvalues : index, handleClickedQuestComplete
     local displayData = Dialog_getButtonDisplayData(index)
     local questInfo = questList_isClearQuest(1038, 2)
     if displayData:empty() then
@@ -3491,13 +3511,13 @@ HandleClickedDialogButtonReal = function(index)
     do
       if ExpirationItemCheck(dialogButton:getNeedItemKey()) then
         local CancelExchange = function()
-    -- function num : 0_38_1
+    -- function num : 0_39_1
     return 
   end
 
         do
           local GoExchange = function()
-    -- function num : 0_38_2 , upvalues : index
+    -- function num : 0_39_2 , upvalues : index
     HandleClickedDialogButton_ShowData(index)
   end
 
@@ -3518,17 +3538,17 @@ HandleClickedDialogButtonReal = function(index)
                   local exchangeCount = (math.floor)(itemCount / needItemCount)
                   if exchangeCount > 1 and dialogButton._isValidMultipleExchange then
                     local dialogExchangeCountSet = function(inputNum)
-    -- function num : 0_38_3 , upvalues : dialogButton, dialogData, clickDialogButtonReq, needItemCount
+    -- function num : 0_39_3 , upvalues : dialogButton, dialogData, clickDialogButtonReq, needItemCount
     local itemStaticWrapper = getItemEnchantStaticStatus(ItemEnchantKey(dialogButton:getNeedItemKey()))
     local _exchangeCount = Int64toInt32(inputNum)
     local doExchange = function()
-      -- function num : 0_38_3_0 , upvalues : dialogData, _exchangeCount, clickDialogButtonReq
+      -- function num : 0_39_3_0 , upvalues : dialogData, _exchangeCount, clickDialogButtonReq
       dialogData:setExchangeCount(_exchangeCount)
       clickDialogButtonReq()
     end
 
     local exchangeOne = function()
-      -- function num : 0_38_3_1 , upvalues : dialogData, clickDialogButtonReq
+      -- function num : 0_39_3_1 , upvalues : dialogData, clickDialogButtonReq
       dialogData:setExchangeCount(1)
       clickDialogButtonReq()
     end
@@ -3563,7 +3583,7 @@ HandleClickedDialogButtonReal = function(index)
 end
 
 ExchangeItem_HaveCount = function(itemKey)
-  -- function num : 0_39
+  -- function num : 0_40
   local selfProxy = (getSelfPlayer()):get()
   if selfProxy == nil then
     return 
@@ -3586,7 +3606,7 @@ ExchangeItem_HaveCount = function(itemKey)
 end
 
 HandleClickedDialogButton_ShowData = function(index)
-  -- function num : 0_40 , upvalues : handleClickedQuestComplete
+  -- function num : 0_41 , upvalues : handleClickedQuestComplete
   local displayData = Dialog_getButtonDisplayData(index)
   local questInfo = questList_isClearQuest(1038, 2)
   if displayData:empty() then
@@ -3607,7 +3627,7 @@ HandleClickedDialogButton_ShowData = function(index)
 end
 
 ExpirationItemCheck = function(itemKey)
-  -- function num : 0_41
+  -- function num : 0_42
   local selfProxy = (getSelfPlayer()):get()
   if selfProxy == nil then
     return 
@@ -3632,7 +3652,7 @@ ExpirationItemCheck = function(itemKey)
 end
 
 FGlobal_HideDialog = function()
-  -- function num : 0_42 , upvalues : dialogShowCheck_Once, handleClickedQuestComplete
+  -- function num : 0_43 , upvalues : dialogShowCheck_Once, handleClickedQuestComplete
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -3648,15 +3668,18 @@ FGlobal_HideDialog = function()
   end
   FGlobal_NewLocalWar_Show()
   PaGlobal_TutorialManager:handleAfterAndPopFlush()
+  FGlobal_RemoteControl_Hide()
+  FGlobal_RemoteControl_Show(1)
+  RemoteControl_Interaction_ShowToggloe(true)
 end
 
 setIgnoreShowDialog = function(ignoreShowDialog)
-  -- function num : 0_43 , upvalues : _ignoreShowDialog
+  -- function num : 0_44 , upvalues : _ignoreShowDialog
   _ignoreShowDialog = ignoreShowDialog
 end
 
 dialog_CloseNpcTalk = function(isSetWait)
-  -- function num : 0_44 , upvalues : handleClickedQuestComplete
+  -- function num : 0_45 , upvalues : handleClickedQuestComplete
   if FGlobal_IsChecked_SkillCommand() == true then
     Panel_SkillCommand:SetShow(true)
     changePositionBySever(Panel_SkillCommand, (CppEnums.PAGameUIType).PAGameUIPanel_SkillCommand, true, true, false)
@@ -3673,7 +3696,7 @@ dialog_CloseNpcTalk = function(isSetWait)
 end
 
 Panel_Dialog_RestoreUI = function()
-  -- function num : 0_45 , upvalues : handleClickedQuestComplete
+  -- function num : 0_46 , upvalues : handleClickedQuestComplete
   SetUIMode((Defines.UIMode).eUIMode_Default)
   if Panel_Npc_Dialog:IsShow() then
     FGlobal_Dialog_renderMode:reset()
@@ -3709,10 +3732,13 @@ Panel_Dialog_RestoreUI = function()
     Panel_SkillCommand:SetShow(false)
     changePositionBySever(Panel_SkillCommand, (CppEnums.PAGameUIType).PAGameUIPanel_SkillCommand, true, true, false)
   end
+  FGlobal_RemoteControl_Hide()
+  FGlobal_RemoteControl_Show(1)
+  RemoteControl_Interaction_ShowToggloe(true)
 end
 
 HandleClickedExitButton = function(isSetWait)
-  -- function num : 0_46
+  -- function num : 0_47
   FGlobal_Dialog_HideTutorialStartButtonList()
   QuickSlot_UpdateData()
   FGlobal_QuestWidget_CalcScrollButtonSize()
@@ -3729,7 +3755,7 @@ HandleClickedExitButton = function(isSetWait)
 end
 
 HandleClickedBackButton = function()
-  -- function num : 0_47 , upvalues : _dialogIndex
+  -- function num : 0_48 , upvalues : _dialogIndex
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -3772,7 +3798,7 @@ local DCCOT = CppEnums.DlgCommonConditionOperatorType
 local operatorString = {[(CppEnums.DlgCommonConditionOperatorType).Equal] = "", [(CppEnums.DlgCommonConditionOperatorType).Large] = "<PAColor0xFFFF0000>â–\178<PAOldColor>", [(CppEnums.DlgCommonConditionOperatorType).Small] = "<PAColor0xFF0000FF>â–\188<PAOldColor>"}
 local giftshowgap = 0.025
 FruitageItem_ShowTooltip = function(percent)
-  -- function num : 0_48 , upvalues : intimacyValueBuffer, giftshowgap, operatorString, giftNotice
+  -- function num : 0_49 , upvalues : intimacyValueBuffer, giftshowgap, operatorString, giftNotice
   local textSum = ""
   for key,value in pairs(intimacyValueBuffer) do
     if (math.abs)(value.giftPercent - percent) < giftshowgap or (math.abs)(value.giftPercent - (percent - 1)) < giftshowgap or (math.abs)(value.giftPercent - (percent + 1)) < giftshowgap then
@@ -3791,12 +3817,12 @@ FruitageItem_ShowTooltip = function(percent)
 end
 
 FruitageItem_HideTooltip = function()
-  -- function num : 0_49 , upvalues : giftNotice
+  -- function num : 0_50 , upvalues : giftNotice
   giftNotice:SetShow(false)
 end
 
 FruitageValue_ShowTooltip = function(isShow)
-  -- function num : 0_50 , upvalues : intimacyNoticeText, UI_TM, intimacyNotice, _intimacyCircularProgress
+  -- function num : 0_51 , upvalues : intimacyNoticeText, UI_TM, intimacyNotice, _intimacyCircularProgress
   intimacyNoticeText:SetAutoResize(true)
   intimacyNoticeText:SetTextMode(UI_TM.eTextMode_AutoWrap)
   intimacyNoticeText:SetSize(200, 250)
@@ -3815,7 +3841,7 @@ end
 
 local VehicleInfo_Window = nil
 ExitStable_VehicleInfo_Off = function(value)
-  -- function num : 0_51 , upvalues : VehicleInfo_Window
+  -- function num : 0_52 , upvalues : VehicleInfo_Window
   if value == true then
     VehicleInfo_Window = value
   else
@@ -3827,7 +3853,7 @@ ExitStable_VehicleInfo_Off = function(value)
 end
 
 FGlobal_Dialog_FindFuncButtonIndexByType = function(targetFuncButtonType)
-  -- function num : 0_52
+  -- function num : 0_53
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return -1
@@ -3844,7 +3870,7 @@ FGlobal_Dialog_FindFuncButtonIndexByType = function(targetFuncButtonType)
 end
 
 FGlobal_Dialog_GetPositionByIndex = function(ii)
-  -- function num : 0_53 , upvalues : _uiDialogButton
+  -- function num : 0_54 , upvalues : _uiDialogButton
   local Position = {_Return = false, _PosX = -1, _PosY = -1}
   if ii < 0 then
     return Position
@@ -3856,7 +3882,7 @@ FGlobal_Dialog_GetPositionByIndex = function(ii)
 end
 
 FGlobal_Dialog_GetFuncPositionNewQuestButton = function()
-  -- function num : 0_54 , upvalues : _uiFuncButton
+  -- function num : 0_55 , upvalues : _uiFuncButton
   local Position = {_Return = false, _PosX = -1, _PosY = -1}
   local Index = FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_NewQuest)
   if Index == -1 then
@@ -3869,7 +3895,7 @@ FGlobal_Dialog_GetFuncPositionNewQuestButton = function()
 end
 
 FGlobal_Dialog_FindDialogButtonIndexByType = function(targetFuncButtonType)
-  -- function num : 0_55
+  -- function num : 0_56
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return -1
@@ -3886,7 +3912,7 @@ FGlobal_Dialog_FindDialogButtonIndexByType = function(targetFuncButtonType)
 end
 
 FGlobal_Dialog_GetDialogButtonPositionByIndex = function(ii)
-  -- function num : 0_56 , upvalues : _uiFuncButton
+  -- function num : 0_57 , upvalues : _uiFuncButton
   if ii < 0 then
     return nil
   end
@@ -3897,17 +3923,17 @@ FGlobal_Dialog_GetDialogButtonPositionByIndex = function(ii)
 end
 
 FGlobal_AddEffect_ExitButton = function(effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
-  -- function num : 0_57 , upvalues : _uiButtonExit
+  -- function num : 0_58 , upvalues : _uiButtonExit
   _uiButtonExit:AddEffect(effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
 end
 
 FGlobal_EraseAllEffect_ExitButton = function()
-  -- function num : 0_58 , upvalues : _uiButtonExit
+  -- function num : 0_59 , upvalues : _uiButtonExit
   _uiButtonExit:EraseAllEffect()
 end
 
 FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
-  -- function num : 0_59 , upvalues : _uiFuncButton
+  -- function num : 0_60 , upvalues : _uiFuncButton
   if buttonNo == -1 or buttonNo == nil then
     return 
   end
@@ -3916,7 +3942,7 @@ FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEf
 end
 
 FGlobal_EraseAllEffect_DialogButton = function(buttonNo)
-  -- function num : 0_60 , upvalues : _uiFuncButton
+  -- function num : 0_61 , upvalues : _uiFuncButton
   if buttonNo == -1 or buttonNo == nil then
     return 
   end
@@ -3925,7 +3951,7 @@ FGlobal_EraseAllEffect_DialogButton = function(buttonNo)
 end
 
 FromClient_Dialog_onScreenResize = function()
-  -- function num : 0_61 , upvalues : _uiNpcDialog, _scrollControl, _uiHalfLine, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _SpacebarIcon, _uiNextButton, _uiButtonExit, _uiButtonBack, _prevPageButton, _nextPageButton, _pageValue, _rBtnPosX, _rBtnPosY
+  -- function num : 0_62 , upvalues : _uiNpcDialog, _scrollControl, _uiHalfLine, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _SpacebarIcon, _uiNextButton, _uiButtonExit, _uiButtonBack, _prevPageButton, _nextPageButton, _pageValue, _rBtnPosX, _rBtnPosY
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   Panel_Npc_Dialog:SetSize(sizeX, Panel_Npc_Dialog:GetSizeY())
@@ -3963,7 +3989,7 @@ FromClient_Dialog_onScreenResize = function()
 end
 
 Panel_Dialog_EnchantHelp_Func = function(isOn)
-  -- function num : 0_62 , upvalues : _txt_EnchantHelp, _txt_EnchantHelp_Desc, UI_TM
+  -- function num : 0_63 , upvalues : _txt_EnchantHelp, _txt_EnchantHelp_Desc, UI_TM
   local mouse_posX = getMousePosX()
   local mouse_posY = getMousePosY()
   local panel_posX = Panel_Npc_Dialog:GetPosX()
@@ -3988,7 +4014,7 @@ Panel_Dialog_EnchantHelp_Func = function(isOn)
 end
 
 Panel_Dialog_SocketHelp_Func = function(isOn)
-  -- function num : 0_63 , upvalues : _txt_SocketHelp, _txt_SocketHelp_Desc, UI_TM
+  -- function num : 0_64 , upvalues : _txt_SocketHelp, _txt_SocketHelp_Desc, UI_TM
   local mouse_posX = getMousePosX()
   local mouse_posY = getMousePosY()
   local panel_posX = Panel_Npc_Dialog:GetPosX()
@@ -4013,7 +4039,7 @@ Panel_Dialog_SocketHelp_Func = function(isOn)
 end
 
 wpHelp_Func = function(isOn)
-  -- function num : 0_64 , upvalues : _wpHelp, UI_TM, isFirstShowTooltip
+  -- function num : 0_65 , upvalues : _wpHelp, UI_TM, isFirstShowTooltip
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -4046,12 +4072,12 @@ wpHelp_Func = function(isOn)
 end
 
 getAuctionState = function()
-  -- function num : 0_65 , upvalues : isAuctionDialog
+  -- function num : 0_66 , upvalues : isAuctionDialog
   return isAuctionDialog
 end
 
 FromClient_CloseAllPanelWhenNpcGoHome = function()
-  -- function num : 0_66
+  -- function num : 0_67
   if GetUIMode() == (Defines.UIMode).eUIMode_Stable then
     StableFunction_Close()
   end
@@ -4073,7 +4099,7 @@ FromClient_CloseAllPanelWhenNpcGoHome = function()
 end
 
 Dialog_MouseToolTips = function(isShow, tipType, index)
-  -- function num : 0_67 , upvalues : _uiFuncButton
+  -- function num : 0_68 , upvalues : _uiFuncButton
   local name, desc, control = nil, nil, nil
   local Wp = 0
   local playerLevel = 0
@@ -4259,7 +4285,7 @@ Dialog_MouseToolTips = function(isShow, tipType, index)
 end
 
 Dialog_EtcButtonToolTips = function(isShow, tipType)
-  -- function num : 0_68 , upvalues : _uiButtonExit, _uiButtonBack
+  -- function num : 0_69 , upvalues : _uiButtonExit, _uiButtonBack
   local name, desc, control = nil
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_RESOURCE, "DIALOGUE_BTN_EXIT")
@@ -4279,7 +4305,7 @@ Dialog_EtcButtonToolTips = function(isShow, tipType)
 end
 
 extraction_Open = function()
-  -- function num : 0_69
+  -- function num : 0_70
   if Panel_Window_Extraction:GetShow() == false then
     PaGlobal_Extraction:openPanel(true)
   else
@@ -4288,33 +4314,33 @@ extraction_Open = function()
 end
 
 isShowReContactDialog = function()
-  -- function num : 0_70 , upvalues : isReContactDialog
+  -- function num : 0_71 , upvalues : isReContactDialog
   return isReContactDialog
 end
 
 isShowDialogFunctionQuest = function()
-  -- function num : 0_71 , upvalues : isDialogFunctionQuest
+  -- function num : 0_72 , upvalues : isDialogFunctionQuest
   return isDialogFunctionQuest
 end
 
 questDialogIndex = function()
-  -- function num : 0_72 , upvalues : _questDialogButtonIndex
+  -- function num : 0_73 , upvalues : _questDialogButtonIndex
   return _questDialogButtonIndex
 end
 
 isCheckExchangeItemButton = function(index)
-  -- function num : 0_73 , upvalues : isExchangeButtonIndex
+  -- function num : 0_74 , upvalues : isExchangeButtonIndex
   return isExchangeButtonIndex[index]
 end
 
 exchangalbeButtonIndex = function()
-  -- function num : 0_74 , upvalues : _exchangalbeButtonIndex
+  -- function num : 0_75 , upvalues : _exchangalbeButtonIndex
   return _exchangalbeButtonIndex
 end
 
 local _blackSpiritButtonPos = {eBlackSpiritButtonType_Quest = 0, eBlackSpiritButtonType_Enchant = 1, eBlackSpiritButtonType_Socket = 2, eBlackSpiritButtonType_Improve = 3, eBlackSpiritButtonType_Count = 4}
 ExecuteAfterDialogLoad = function()
-  -- function num : 0_75 , upvalues : _blackSpiritButtonPos
+  -- function num : 0_76 , upvalues : _blackSpiritButtonPos
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return 
@@ -4356,8 +4382,23 @@ ExecuteAfterDialogLoad = function()
   end
 end
 
+isNormalTradeMerchant = function()
+  -- function num : 0_77
+  local talker = dialog_getTalker()
+  if talker ~= nil then
+    local characterKey = talker:getCharacterKey()
+    local npcData = getNpcInfoByCharacterKeyRaw(characterKey, (talker:get()):getDialogIndex())
+    if npcData ~= nil then
+      return npcData:hasSpawnType((CppEnums.SpawnType).eSpawnType_TradeMerchant)
+    end
+  end
+  do
+    return false
+  end
+end
+
 FGlobal_CloseNpcDialogForDetail = function()
-  -- function num : 0_76
+  -- function num : 0_78
   if Panel_Npc_Trade_Market:IsShow() then
     closeNpcTrade_Basket()
     return true
@@ -4418,19 +4459,19 @@ registerEvent("FromClient_CloseNpcTradeMarketTalkForDead", "FGlobal_CloseNpcDial
 registerEvent("FromClient_CloseAllPanelWhenNpcGoHome", "FromClient_CloseAllPanelWhenNpcGoHome")
 registerEvent("onScreenResize", "FromClient_Dialog_onScreenResize")
 RenderMode_DialogListClose = function()
-  -- function num : 0_77
+  -- function num : 0_79
   FGlobal_CloseNpcDialogForDetail()
   Panel_Npc_Dialog:SetShow(true)
   FGlobal_HideDialog(true)
 end
 
 proRenderModeSet = function()
-  -- function num : 0_78 , upvalues : dialogShowCheck_Once
+  -- function num : 0_80 , upvalues : dialogShowCheck_Once
   dialogShowCheck_Once = true
 end
 
 FromClient_CloseDialogByAttacked = function()
-  -- function num : 0_79
+  -- function num : 0_81
   FGlobal_Dialog_renderMode:reset()
 end
 

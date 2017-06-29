@@ -332,10 +332,11 @@ WharfList_ButtonOpen = function(eType, slotNo)
         buttonList[button_Index] = self._buttonRepair
         button_Index = button_Index + 1
       end
-      if nowHp == maxHp and nowMp < maxMp and (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType then
+      if nowHp == maxHp and nowMp < maxMp and ((CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == vehicleType) then
         buttonList[button_Index] = self._buttonRepair
         button_Index = button_Index + 1
       end
+      _PA_LOG("GG", "GGGGGGGGGGG:" .. tostring(vehicleType))
       if FGlobal_IsCommercialService() then
         buttonList[button_Index] = self._buttonChangeName
         button_Index = button_Index + 1

@@ -680,6 +680,37 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       ResurrectionTime = 2
       return 
     end
+    if ToClient_GetMyTeamNoLocalWar() == 0 and ToClient_getPlayNowSavageDefence() == false and ToClient_isSpecialCharacter() == true then
+      _button_SiegeIng:SetShow(false)
+      _button_MoveExploration:SetShow(false)
+      _button_MoveTown:SetShow(false)
+      _button_AdvancedBase:SetShow(false)
+      _text_AdvancedBaseAlert:SetShow(false)
+      _text_reviveNotify:SetShow(false)
+      _button_Immediate:SetShow(true)
+      _button_GuildSpawn:SetShow(false)
+      _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
+      _useCashItemBG:SetShow(false)
+      _checkBoxUseCache:SetShow(false)
+      _text_ImmediateCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_IMMEDIATECOUNT_TEXT"))
+      _text_ImmediateCount:SetShow(true)
+      _button_LocalWar:SetShow(false)
+      _button_SavageOut:SetShow(false)
+      _button_Valunteer:SetShow(false)
+      if attackerActorProxyWrapper == nil then
+        _deadMessage:SetText(PAGetString(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_DisplayMsg"))
+      else
+        if isMilitia then
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA")))
+        else
+          _deadMessage:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "DEADMESSAGE_TEXT_KilledDisplayMsg", "attackerName", attackerActorProxyWrapper:getOriginalName()))
+        end
+      end
+      ResurrectionTime = revivalTime
+      Panel_DeadMessage:SetShow(true, false)
+      deadMessage_Animation()
+      return 
+    end
     isHasRestoreExperience = isHasRestoreExp
     local linkedSiegeRegionInfoWrapper = ToClient_getVillageSiegeRegionInfoWrapperByPosition((selfProxy:get()):getPosition())
     local isKingOrLordWarZone = (regionInfo:get()):isKingOrLordWarZone()
