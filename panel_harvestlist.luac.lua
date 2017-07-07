@@ -46,13 +46,15 @@ HarvestList.frameContent = (UI.getChildControl)(HarvestList._frame, "Frame_1_Con
 HarvestList.frameScroll = (UI.getChildControl)(HarvestList._frame, "Frame_1_VerticalScroll")
 ;
 (HarvestList.frameScroll):SetIgnore(false)
-local HarvestList_ContentGroup = {_workerTitle = (UI.getChildControl)(Panel_HarvestList, "StaticText_M_Worker"), _border = (UI.getChildControl)(Panel_HarvestList, "Static_TitleBorder_4"), _naviTitle = (UI.getChildControl)(Panel_HarvestList, "StaticText_M_Navi")}
+local HarvestList_ContentGroup = {_workerTitle = (UI.getChildControl)(Panel_HarvestList, "StaticText_M_Worker"), _border = (UI.getChildControl)(Panel_HarvestList, "Static_TitleBorder_4"), _border5 = (UI.getChildControl)(Panel_HarvestList, "Static_TitleBorder_5"), _naviTitle = (UI.getChildControl)(Panel_HarvestList, "StaticText_M_Navi")}
 if not isharvestManagement then
   (HarvestList_ContentGroup._workerTitle):SetShow(false)
   ;
-  (HarvestList_ContentGroup._border):SetShow(false)
+  (HarvestList_ContentGroup._border):SetShow(true)
   ;
-  (HarvestList_ContentGroup._naviTitle):SetSpanSize(35, 46)
+  (HarvestList_ContentGroup._border5):SetShow(false)
+  ;
+  (HarvestList_ContentGroup._naviTitle):SetSpanSize(580, 46)
 end
 HarvestList.Panel_HarvestList_Initialize = function(self)
   -- function num : 0_2 , upvalues : maxTentCount

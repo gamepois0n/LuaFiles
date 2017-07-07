@@ -214,6 +214,9 @@ _defaultMSG1:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 local _defaultMSG2 = (UI.getChildControl)(Panel_Manufacture, "StaticText_DefaultMSG2")
 _defaultMSG2:SetShow(false)
 local _uiButtonNote = (UI.getChildControl)(Panel_Manufacture, "Button_Note")
+if isGameTypeKR2() then
+  _uiButtonNote:SetShow(false)
+end
 _uiButtonNote:addInputEvent("Mouse_LUp", "Note_Mouse_LUp()")
 _uiButtonNote:addInputEvent("Mouse_On", "Note_Mouse_On()")
 local _frameManufactureDesc = (UI.getChildControl)(Panel_Manufacture, "Frame_ManufactureDesc")
@@ -1905,11 +1908,7 @@ Manufacture_Button_LUp_Alchemy = function(isClear)
   end
   StopManufactureAction()
   _actionIndex = 8
-  if ToClient_IsContentsGroupOpen("228") then
-    _usingItemSlotCount = 3
-  else
-    _usingItemSlotCount = 2
-  end
+  _usingItemSlotCount = 5
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()
   _usingInstallationType = (CppEnums.InstallationType).TypeCount

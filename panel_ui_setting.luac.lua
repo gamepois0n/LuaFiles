@@ -127,7 +127,7 @@ local original_controlPosX = 0
 local original_controlPosY = 0
 local posGapX = 0
 local posGapY = 0
-local isLargeParty = isGameServiceTypeDev()
+local isLargePartyOpen = isGameServiceTypeDev()
 local closePanelState = {[0] = false, [1] = false, [2] = false, [3] = false, [4] = false}
 local closeEmptyPanelState = {[0] = false, [1] = false, [2] = false, [3] = false, [4] = false}
 local panelID = {ExpGage = 1, ServantIcon = 2, Radar = 3, Quest = 4, Chat0 = 5, Chat1 = 6, Chat2 = 7, Chat3 = 8, Chat4 = 9, GameTip = 10, QuickSlot = 11, HPBar = 12, Pvp = 13, ClassResource = 14, Adrenallin = 15, UIMain = 16, House = 17, NewEquip = 18, Party = 19, TimeBar = 20, ActionGuide = 21, KeyGuide = 22, NewQuickSlot0 = 23, NewQuickSlot1 = 24, NewQuickSlot2 = 25, NewQuickSlot3 = 26, NewQuickSlot4 = 27, NewQuickSlot5 = 28, NewQuickSlot6 = 29, NewQuickSlot7 = 30, NewQuickSlot8 = 31, NewQuickSlot9 = 32, NewQuickSlot10 = 33, NewQuickSlot11 = 34, NewQuickSlot12 = 35, NewQuickSlot13 = 36, NewQuickSlot14 = 37, NewQuickSlot15 = 38, NewQuickSlot16 = 39, NewQuickSlot17 = 40, NewQuickSlot18 = 41, NewQuickSlot19 = 42, SkillCoolTime = 43, MainQuest = 44, LargeParty = 45}
@@ -687,7 +687,7 @@ UiSet_Initialize = function()
 end
 
 UiSet_update = function()
-  -- function num : 0_3 , upvalues : UiSet, panelID, isLargeParty, panelControl
+  -- function num : 0_3 , upvalues : UiSet, panelID, isLargePartyOpen, panelControl
   (UiSet.slider_UI_Scale):SetControlPos(UiSet.nowCurrentPercent)
   local scaleText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SCALETEXT", "currentScale", UiSet.currentScale)
   ;
@@ -702,7 +702,7 @@ UiSet_update = function()
     (slot.control):SetScale(1, 1)
     ;
     (slot.control):SetShow(true)
-    if idx == panelID.LargeParty and isLargeParty == false then
+    if idx == panelID.LargeParty and isLargePartyOpen == false then
       (slot.control):SetShow(false)
     end
     slot.originPosX = ((panelControl[idx]).control):GetPosX()

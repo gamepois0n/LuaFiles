@@ -161,6 +161,8 @@ PaGlobal_TutorialPhase_ExtractionEnchantStone.toNextProgress = function(self)
     else
       self._currentProgress = self._currentProgress + 1
     end
+  else
+    self._currentProgress = self._currentProgress + 1
   end
   self:handleChangeStep(self._currentStep)
 end

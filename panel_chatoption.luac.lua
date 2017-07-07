@@ -1363,12 +1363,9 @@ ChattingOption_Close = function()
       _checkButton_ChatTime:SetCheck(_prevIsCheckChatTime[panelIdex])
     end
   end
-  ;
-  (ToClient_getFontWrapper("BaseFont_10_Chat")):changeFontSize(ChattingOption_convertChatFontTypeToFontSize(prevFontSizeType))
-  ChatPanel_Update()
+  setisChangeFontSize(true)
+  FromClient_ChatUpdate(true)
   ToClient_setChatNameType(preNameType)
-  Chatting_BackFontSize(panelIdex, true)
-  Chatting_BackFontSize(panelIdex, false)
   ChattingOption_ChatiingAnimation(preChattingAnimation)
   Panel_ChatOption:SetShow(false, false)
   Panel_ChatOption:SetIgnore(true)

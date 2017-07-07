@@ -48,7 +48,7 @@ local init = function()
     _phantomCount_Icon:SetShow(true)
   else
     do
-      if (CppEnums.ClassType).ClassType_Combattant == classType then
+      if (CppEnums.ClassType).ClassType_Combattant == classType or (CppEnums.ClassType).ClassType_CombattantWomen == classType then
         Panel_ClassResource:SetShow(true)
         _fighterIcon:SetShow(true)
         isFighter = true
@@ -89,7 +89,7 @@ local ResizeInit = function()
     end
   else
     do
-      if (CppEnums.ClassType).ClassType_Combattant == classType then
+      if (CppEnums.ClassType).ClassType_Combattant == classType or (CppEnums.ClassType).ClassType_CombattantWomen == classType then
         isFighter = true
         Panel_ClassResource:SetShow(true)
         if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_ClassResource, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
@@ -117,7 +117,7 @@ FGlobal_ClassResource_SetShowControl = function(isShow)
       resourceValue:SetShow(true)
       _phantomCount_Icon:SetShow(true)
     else
-      if (CppEnums.ClassType).ClassType_Combattant == classType then
+      if (CppEnums.ClassType).ClassType_Combattant == classType or (CppEnums.ClassType).ClassType_CombattantWomen == classType then
         _fighterIcon:SetShow(true)
       else
         _PA_ASSERT(false, "표시�\160 직업 전용 자원�\180 없는 직업입니�\164.")
@@ -146,7 +146,7 @@ PhantomCount_HelpComment = function(_isShowPhantomHelp)
     if (CppEnums.ClassType).ClassType_Sorcerer == classType then
       _phantomCount_Message = PAGetString(Defines.StringSheet_GAME, "LUA_PHANTOMCOUNT_MESSAGE")
     else
-      if (CppEnums.ClassType).ClassType_Combattant == classType then
+      if (CppEnums.ClassType).ClassType_Combattant == classType or (CppEnums.ClassType).ClassType_CombattantWomen == classType then
         _phantomCount_Message = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTER")
       end
     end
@@ -182,7 +182,7 @@ FighterIcon_HelpComment = function(isShow)
     return 
   end
   local classType = selfPlayer:getClassType()
-  if (CppEnums.ClassType).ClassType_Combattant ~= classType then
+  if (CppEnums.ClassType).ClassType_Combattant ~= classType and (CppEnums.ClassType).ClassType_CombattantWomen ~= classType then
     return 
   end
   local control = _fighterIcon

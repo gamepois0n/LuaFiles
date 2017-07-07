@@ -34,7 +34,7 @@ handleMClickedRepairExitButton = function()
   -- function num : 0_3
   PaGlobal_Repair:repair_OpenPanel(false)
   PaGlobal_FixEquip:fixEquipExit()
-  FGlobal_SetIsCamping()
+  PaGlobal_Camp:setIsCamping()
 end
 
 Repair_InvenFilter = function(slotNo, itemWrapper)
@@ -213,7 +213,7 @@ Repair_AllItem_MessageBox_Confirm = function()
   else
     moneyWhereType = (CppEnums.ItemWhereType).eWarehouse
   end
-  if FGlobal_IsCamping() then
+  if PaGlobal_Camp:getIsCamping() then
     repair_AllItemByCamping()
   else
     repair_AllItem(moneyWhereType)
@@ -231,7 +231,7 @@ Repair_Item_MessageBox_Confirm = function()
   else
     moneyWhereType = (CppEnums.ItemWhereType).eWarehouse
   end
-  if FGlobal_IsCamping() then
+  if PaGlobal_Camp:getIsCamping() then
     repair_ItemByCamping(self._repairWhereType, self._repairSlotNo, (CppEnums.ServantType).Type_Count)
   else
     repair_Item(self._repairWhereType, self._repairSlotNo, moneyWhereType, (CppEnums.ServantType).Type_Count)

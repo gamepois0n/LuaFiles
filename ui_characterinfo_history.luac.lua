@@ -201,18 +201,17 @@ FromClient_MyHistoryInfo_Update = function()
                             (_dayHistoryValue[i]):SetShow(true)
                             ;
                             (_dayHistoryValue[i]):SetIgnore(false)
-                            Panel_Window_CharInfo_Status:addConsoleUIControl(_listCount - i - 1, _listCount, 2, _dayHistoryValue[i])
-                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC379: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC379: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC379: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC379: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC379: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC389: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC379: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end
@@ -235,13 +234,13 @@ FromClient_MyHistoryInfo_Update = function()
                   dayLogCount = dayLogCount + 1
                   firstDay = dayIndex
                 end
-                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC411: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC411: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC411: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC421: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC411: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -277,42 +276,7 @@ FromClient_MyHistoryInfo_Update = function()
 end
 
 MyHistroy_SetConsolePadGroup = function()
-  -- function num : 0_3 , upvalues : yearLeftButton, yearRightButton, monthIndex
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
-  if yearLeftButton:GetShow() then
-    if yearRightButton:GetShow() then
-      Panel_Window_CharInfo_Status:addConsoleUIControl(0, 14, 1, yearLeftButton)
-      Panel_Window_CharInfo_Status:addConsoleUIControl(1, 14, 1, yearRightButton)
-      for index = 0, 11 do
-        Panel_Window_CharInfo_Status:addConsoleUIControl(index + 2, 14, 1, monthIndex[index])
-      end
-    else
-      do
-        Panel_Window_CharInfo_Status:addConsoleUIControl(0, 13, 1, yearLeftButton)
-        for index = 0, 11 do
-          Panel_Window_CharInfo_Status:addConsoleUIControl(index + 1, 13, 1, monthIndex[index])
-        end
-        do
-          if yearRightButton:GetShow() then
-            Panel_Window_CharInfo_Status:addConsoleUIControl(0, 13, 1, yearRightButton)
-            for index = 0, 11 do
-              Panel_Window_CharInfo_Status:addConsoleUIControl(index + 1, 13, 1, monthIndex[index])
-            end
-          else
-            do
-              for index = 0, 11 do
-                Panel_Window_CharInfo_Status:addConsoleUIControl(index, 12, 1, monthIndex[index])
-              end
-            end
-          end
-        end
-      end
-    end
-  end
+  -- function num : 0_3
 end
 
 MyHistory_HelpWidget_Show = function(isShow, index, isLeft)

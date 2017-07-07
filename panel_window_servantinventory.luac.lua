@@ -254,7 +254,6 @@ servantInventory.updateByIndex = function(self, index)
     end
     slot:clearItem()
   end
-  Panel_Window_ServantInventory:deleteConsoleUIGroup(0)
   for ii = 0, fullCount - 1 do
     local slot = (data._slot)[ii]
     local slotNo = ii + useStartSlot
@@ -262,7 +261,6 @@ servantInventory.updateByIndex = function(self, index)
     if itemWrapper ~= nil then
       slot:setItem(itemWrapper)
     end
-    Panel_Window_ServantInventory:addConsoleUIControl(R29_PC220, 8, 0, slot.icon)
   end
   local row = fullCount / 8
   if fullCount % 8 >= 0 then

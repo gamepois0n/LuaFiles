@@ -153,6 +153,7 @@ FGlobal_SavageDefenceShop_Open = function()
   end
   Panel_SavageDefenceShop:SetShow(true)
   FGlobal_SavageDefenceShop_Update()
+  Panel_SavageDefenceShop:SetPosY(Panel_Radar:GetPosY() + Panel_Radar:GetSizeY() + Panel_SavageDefenceWave:GetSizeY())
 end
 
 FGlobal_FromClient_joinSavageDefence = function()
@@ -177,6 +178,5 @@ FGlobal_SavageDefenceShop_SetCoin = function(coin)
 end
 
 FGlobal_SavageDefenceShop_init()
-registerEvent("FromClient_luaLoadComplete", "FGlobal_SavageDefenceShop_Open")
 registerEvent("FromClient_joinSavageDefence", "FGlobal_FromClient_joinSavageDefence")
 

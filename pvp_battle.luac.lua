@@ -72,7 +72,7 @@ PaGlobal_PvPBattle.setPosMatchIcon = function(self)
   else
     do
       Panel_Icon_Duel:SetShow(false)
-      FGlobal_Camp_SetPos()
+      PaGlobal_Camp:setPos()
     end
   end
 end

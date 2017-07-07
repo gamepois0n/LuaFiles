@@ -14,7 +14,6 @@ Panel_GuildWebInfo:RegisterShowEventFunc(false, "Panel_GuildWebInfo_HideAni()")
 local isBeforeShow = false
 local eCountryType = CppEnums.CountryType
 local gameServiceType = getGameServiceType()
-local isNaver = (CppEnums.MembershipType).naver == getMembershipType()
 local isContentsGuildInfo = ToClient_IsContentsGroupOpen("206")
 Panel_GuildWebInfo_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
@@ -46,9 +45,8 @@ local _btn_Close = (UI.getChildControl)(Panel_GuildWebInfo, "Button_Close")
 local _btnHelp = ((UI.getChildControl)(Panel_GuildWebInfo, "Button_Question"))
 local _Web = nil
 local isShowGuildWebInfo = false
-do
-  local webSizeY = 630
-  Panel_GuildWebInfo_Initialize = function()
+local webSizeY = 630
+Panel_GuildWebInfo_Initialize = function()
   -- function num : 0_2 , upvalues : _Web, webSizeY
   _Web = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_GuildWebInfo, "WebControl_GuildWebInfo_WebLink")
   _Web:SetShow(true)
@@ -59,9 +57,9 @@ do
   registerEvent("FromClient_GuildWebInfoByName", "FGlobal_GuildWebInfoByName_Open")
 end
 
-  Panel_GuildWebInfo_Initialize()
-  FGlobal_GuildWebInfo_Open = function(listIdx)
-  -- function num : 0_3 , upvalues : isContentsGuildInfo, isNaver, GST, gameServiceType, _Web, webSizeY
+Panel_GuildWebInfo_Initialize()
+FGlobal_GuildWebInfo_Open = function(listIdx)
+  -- function num : 0_3 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
   end
@@ -141,10 +139,6 @@ end
     end
     do
       local guildCount = guildRanker._guildMemberCount
-      if isNaver == true then
-        Proc_ShowMessage_Ack("�\128비중입니�\164.")
-        return 
-      end
       local temporaryWrapper = getTemporaryInformationWrapper()
       local worldNo = temporaryWrapper:getSelectedWorldServerNo()
       if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
@@ -254,7 +248,7 @@ end
   end
 end
 
-  FGlobal_GuildWebInfoForGuildRank_Open = function(guildNo_string)
+FGlobal_GuildWebInfoForGuildRank_Open = function(guildNo_string)
   -- function num : 0_4 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
@@ -370,8 +364,8 @@ end
   Panel_GuildWebInfo:SetShow(true, true)
 end
 
-  FGlobal_GuildWebInfoByName_Open = function()
-  -- function num : 0_5 , upvalues : isContentsGuildInfo, isNaver, GST, gameServiceType, _Web, webSizeY
+FGlobal_GuildWebInfoByName_Open = function()
+  -- function num : 0_5 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
   end
@@ -453,10 +447,6 @@ end
     end
     do
       local guildCount = guildWebInfo:getGuildMemberCount()
-      if isNaver == true then
-        Proc_ShowMessage_Ack("�\128비중입니�\164.")
-        return 
-      end
       local temporaryWrapper = getTemporaryInformationWrapper()
       local worldNo = temporaryWrapper:getSelectedWorldServerNo()
       if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
@@ -566,8 +556,8 @@ end
   end
 end
 
-  FGlobal_GuildWebInfoFromGuildMain_Open = function()
-  -- function num : 0_6 , upvalues : isContentsGuildInfo, isNaver, GST, gameServiceType, _Web, webSizeY
+FGlobal_GuildWebInfoFromGuildMain_Open = function()
+  -- function num : 0_6 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
   end
@@ -650,10 +640,6 @@ end
     end
     do
       local guildCount = myGuildInfo:getMemberCount()
-      if isNaver == true then
-        Proc_ShowMessage_Ack("�\128비중입니�\164.")
-        return 
-      end
       local temporaryWrapper = getTemporaryInformationWrapper()
       local worldNo = temporaryWrapper:getSelectedWorldServerNo()
       if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
@@ -763,7 +749,7 @@ end
   end
 end
 
-  GuildWebInfo_Close = function()
+GuildWebInfo_Close = function()
   -- function num : 0_7 , upvalues : _Web, IM
   FGlobal_ClearCandidate()
   _Web:ResetUrl()
@@ -774,18 +760,16 @@ end
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
-  FGlobal_GuildWebInfoClose = function()
+FGlobal_GuildWebInfoClose = function()
   -- function num : 0_8
   GuildWebInfo_Close()
 end
 
-  HandleClicked_GuildWebInfo_Close = function()
+HandleClicked_GuildWebInfo_Close = function()
   -- function num : 0_9
   GuildWebInfo_Close()
 end
 
-  _btn_Close:addInputEvent("Mouse_LUp", "HandleClicked_GuildWebInfo_Close()")
-  _btnHelp:SetShow(false)
-  -- DECOMPILER ERROR: 1 unprocessed JMP targets
-end
+_btn_Close:addInputEvent("Mouse_LUp", "HandleClicked_GuildWebInfo_Close()")
+_btnHelp:SetShow(false)
 

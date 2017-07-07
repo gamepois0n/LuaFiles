@@ -829,7 +829,7 @@ FromClient_CompleteStallionTrainingAck = function(servantNo, servantCharacterKey
     StableStallion_AwakenEffect(false)
     audioPostEvent_SystemUi(13, 22)
   else
-    StableStallion_AwakenEffect(true)
+    StableStallion_AwakenEffect(true, servantKey)
     audioPostEvent_SystemUi(13, 21)
   end
   self:Refresh_UIData()

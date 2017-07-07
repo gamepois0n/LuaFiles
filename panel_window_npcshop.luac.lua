@@ -737,9 +737,9 @@ end
 NpcShop_UpdateContent = function()
   -- function num : 0_12 , upvalues : npcShop
   local talker = dialog_getTalker()
-  -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
-  npcShop._isCamping = FGlobal_IsCamping()
+  npcShop._isCamping = PaGlobal_Camp:getIsCamping()
   if talker == nil and (npcShop._isCamping == false or npcShop._isCamping == nil) then
     return 
   end
@@ -1247,7 +1247,7 @@ handleClickedNpcShow_WindowClose = function()
     audioPostEvent_SystemUi(1, 1)
     ReqeustDialog_retryTalk()
     PaGlobal_TutorialManager:handleNpcShopWindowClose()
-    FGlobal_SetIsCamping()
+    PaGlobal_Camp:setIsCamping()
   end
 end
 

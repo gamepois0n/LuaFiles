@@ -2044,7 +2044,7 @@ PaGlobal_CheckedQuest.getQuestTitle = function(self, groupId, questId)
     questTitle = uiQuestInfo:getTitle()
     questLevel = uiQuestInfo:getRecommendLevel()
     if questLevel ~= nil and questLevel ~= 0 then
-      questTitle = "[Lv." .. questLevel .. "] " .. questTitle
+      questTitle = "[" .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. questLevel .. "] " .. questTitle
     end
   end
   return questTitle

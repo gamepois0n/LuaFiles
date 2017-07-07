@@ -89,7 +89,6 @@ warehouse.init = function(self)
     ;
     (SlotItem.new)(slot, "ItemIcon_" .. ii, ii, Panel_Window_Warehouse, self.slotConfig)
     slot:createChild()
-    Panel_Window_Warehouse:addConsoleUIControl(ii, 8, 1, slot.icon)
     local row = (math.floor)(ii / (self.config).slotCols)
     local column = ii % (self.config).slotCols
     ;
@@ -113,7 +112,7 @@ warehouse.init = function(self)
     ;
     (UIScroll.InputEventByControl)(slot.icon, "Warehouse_Scroll")
     Panel_Tooltip_Item_SetPosition(ii, slot, "WareHouse")
-    -- DECOMPILER ERROR at PC218: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC211: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self.slots)[ii] = slot
@@ -1246,24 +1245,6 @@ Warehouse_OpenPanel = function(waypointKey, fromType)
         Panel_Window_Warehouse:SetPosY(Panel_Manufacture:GetPosY())
       end
     end
-    local groupIndex = 0
-    Panel_Window_Warehouse:deleteConsoleUIGroup(2)
-    if (self.BtnManufacture):GetShow() then
-      Panel_Window_Warehouse:addConsoleUIControl(groupIndex, 1, 2, self.BtnManufacture)
-      groupIndex = groupIndex + 1
-    end
-    if (self.BtnMarketRegist):GetShow() then
-      Panel_Window_Warehouse:addConsoleUIControl(groupIndex, 1, 2, self.BtnMarketRegist)
-      groupIndex = groupIndex + 1
-    end
-    if (self.BtnGuildUpdate):GetShow() then
-      Panel_Window_Warehouse:addConsoleUIControl(groupIndex, 1, 2, self.BtnGuildUpdate)
-      groupIndex = groupIndex + 1
-    end
-    Panel_Window_Warehouse:deleteConsoleUIGroup(3)
-    if FGlobal_Warehouse_IsMoveItem() then
-      Panel_Window_Warehouse:addConsoleUIControl(0, 1, 3, self.buttonMoney)
-    end
     self:update()
   end
 end
@@ -1365,8 +1346,7 @@ warehouse:init()
 warehouse:registEventHandler()
 warehouse:registMessageHandler()
 ConsoleGroupCreate_Panel_Window_Warehouse = function()
-  -- function num : 0_64 , upvalues : warehouse
-  Panel_Window_Warehouse:addConsoleUIControl(0, 1, 0, warehouse.checkSort)
+  -- function num : 0_64
 end
 
 ConsoleGroupCreate_Panel_Window_Warehouse()

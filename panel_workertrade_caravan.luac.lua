@@ -53,7 +53,7 @@ _btnRouterNode = {[1] = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_
 _tradeItemSlotBg = {}
 , 
 _tradeItemSlot = {}
-, _tradePrice = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "StaticText_TradePrice"), _btnTradeStart = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_TradeStart"), 
+, _tradePrice = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "StaticText_TradePrice"), _btnTradeStart = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Button_TradeStart"), _tooltip = (UI.getChildControl)(Panel_WorkerTrade_Caravan, "Static_ItemTooltipBg"), 
 _caravanStat = {}
 , 
 _worker = {}
@@ -61,6 +61,8 @@ _worker = {}
 _asset = {}
 , 
 _itemSet = {}
+, 
+_tooltipItem = {}
 }
 , 
 _selectedWorker = {[0] = (Defines.u64_const).u64_0, [1] = (Defines.u64_const).u64_0}
@@ -204,6 +206,7 @@ _itemSetBg = {
     ;
     ((self._itemCountInSlot)[(index - 1) * 2 + 2])._key = 0
   end
+  control._tooltipItem = {_slotBg = (UI.getChildControl)(control._tooltip, "Static_ItemSlotBg"), _slot = (UI.getChildControl)(control._tooltip, "Static_ItemSlot"), _name = (UI.getChildControl)(control._tooltip, "StaticText_ItemName"), _price = (UI.getChildControl)(control._tooltip, "StaticText_Price"), _weight = (UI.getChildControl)(control._tooltip, "StaticText_Weight")}
 end
 
 workerTradeCaravan.tradeItemInit = function(self)
@@ -308,12 +311,12 @@ workerTradeCaravan.SetData = function(self, index)
               local startRegionInfo = tradeGroupWrapper:getStartRegion()
               ;
               ((control._routerNode)._btnStartNode):SetText(startRegionInfo:getAreaName())
-              local arrivalRegionInfo = tradeGroupWrapper:getDestinationRegion()
+              local arrivalRegionInfo = tradeCompanyWrapper:ToClient_getTempDestinationRegion()
               ;
               ((control._routerNode)._btnArrivalNode):SetText(arrivalRegionInfo:getAreaName())
-              local routeNodeCount = tradeGroupWrapper:getEventNodeCount()
+              local routeNodeCount = tradeCompanyWrapper:ToClient_getTempEventNodeCount()
               for rIndex = 1, routeNodeCount do
-                local routeNodeInfo = tradeGroupWrapper:getEventNodeRegion(rIndex - 1)
+                local routeNodeInfo = tradeCompanyWrapper:ToClient_getTempEventNodeRegion(rIndex - 1)
                 ;
                 (((control._routerNode)._btnRouterNode)[rIndex]):SetText(routeNodeInfo:getAreaName())
               end
@@ -571,6 +574,7 @@ end
 workerTradeCaravan.Hide = function(self)
   -- function num : 0_10
   WorldMapPopupManager:pop()
+  WorkerTradeCaravan_TooltipHide()
 end
 
 FGlobal_WorkerTradeCaravan_Hide = function()
@@ -985,7 +989,13 @@ FromClient_OpenWorkerTradeItemList = function()
         ((control._tradeItemSlot)[index]):SetShow(true)
         local tradeItemWrapper = ToClient_RequestWorkerTradeItemMaster(startWayPointKey, index)
         if tradeItemWrapper ~= nil then
+          local itemKey = tradeItemWrapper:getKey()
+          ;
           ((control._tradeItemSlot)[index]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
+          ;
+          ((control._tradeItemSlot)[index]):addInputEvent("Mouse_On", "WorkerTradeCaravan_TooltipShow(" .. index .. ",nil," .. itemKey .. ")")
+          ;
+          ((control._tradeItemSlot)[index]):addInputEvent("Mouse_Out", "WorkerTradeCaravan_TooltipHide()")
           ;
           ((control._tradeItemSlot)[index]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SetItem(" .. index .. "," .. 1 .. ")")
           ;
@@ -998,11 +1008,11 @@ FromClient_OpenWorkerTradeItemList = function()
             ((control._tradeItemSlotBg)[index]):SetShow(false)
             ;
             ((control._tradeItemSlot)[index]):SetShow(false)
-            -- DECOMPILER ERROR at PC105: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC124: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC105: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC124: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC105: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC124: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1082,10 +1092,14 @@ WorkerTradeCaravan_SetItem = function(index, value)
             (((((control._itemSet)._itemSetBg)[carriageIndex])._plus)[uiIndex]):SetShow(true)
             ;
             (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("")
+            ;
+            (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):addInputEvent("Mouse_On", "")
+            ;
+            (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):addInputEvent("Mouse_Out", "WorkerTradeCaravan_TooltipHide()")
             ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, rv, startWayPointKey, destWayPointKey)
           else
             local canBuyItem = ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, rv, startWayPointKey, destWayPointKey)
-            -- DECOMPILER ERROR at PC117: Confused about usage of register: R26 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC135: Confused about usage of register: R26 in 'UnsetPending'
 
             if canBuyItem then
               ((self._itemCountInSlot)[countIndex])._count = rv
@@ -1097,11 +1111,11 @@ WorkerTradeCaravan_SetItem = function(index, value)
             do
               isSameItem = true
               do break end
-              -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC148: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC148: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC130: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC148: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -1121,11 +1135,11 @@ WorkerTradeCaravan_SetItem = function(index, value)
               local _slotIndex = countIndex - 1
               if ((self._itemCountInSlot)[countIndex])._count == 0 then
                 local canBuyItem = ToClient_RequestAddCart(workerTradeCaravan._selectIndex, _slotIndex, itemKey, value, startWayPointKey, destWayPointKey)
-                -- DECOMPILER ERROR at PC170: Confused about usage of register: R26 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC188: Confused about usage of register: R26 in 'UnsetPending'
 
                 if canBuyItem then
                   ((self._itemCountInSlot)[countIndex])._key = itemKey
-                  -- DECOMPILER ERROR at PC177: Confused about usage of register: R26 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC195: Confused about usage of register: R26 in 'UnsetPending'
 
                   ;
                   ((self._itemCountInSlot)[countIndex])._count = ((self._itemCountInSlot)[countIndex])._count + value
@@ -1138,6 +1152,10 @@ WorkerTradeCaravan_SetItem = function(index, value)
                   ;
                   (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
                   isEmptySlot = true
+                  ;
+                  (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):addInputEvent("Mouse_On", "WorkerTradeCaravan_TooltipShow(" .. carriageIndex .. "," .. uiIndex .. "," .. itemKey .. ")")
+                  ;
+                  (((((control._itemSet)._itemSetBg)[carriageIndex])._itemSlot)[uiIndex]):addInputEvent("Mouse_Out", "WorkerTradeCaravan_TooltipHide()")
                   break
                 end
               end
@@ -1147,7 +1165,7 @@ WorkerTradeCaravan_SetItem = function(index, value)
                 if isEmptySlot then
                   break
                 end
-                -- DECOMPILER ERROR at PC221: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
 
               end
             end
@@ -1315,8 +1333,67 @@ WorkerTradeCaravan_Go = function()
   ToClient_RequestStartTradeGroup(workerTradeCaravan._selectIndex)
 end
 
-WorkerTradeCaravan_StartWayPointKey = function()
+WorkerTradeCaravan_TooltipShow = function(uiIndex, slotIndex, itemKey)
   -- function num : 0_33 , upvalues : workerTradeCaravan
+  local self = workerTradeCaravan
+  local control = self.control
+  local startWayPointKey = WorkerTradeCaravan_StartWayPointKey()
+  for index = 0, self._maxItemCount - 1 do
+    local tradeItemWrapper = ToClient_RequestWorkerTradeItemMaster(startWayPointKey, index)
+    local tradeItemKey = tradeItemWrapper:getKey()
+    if itemKey == tradeItemKey then
+      ((control._tooltipItem)._slot):ChangeTextureInfoName("Icon/" .. tradeItemWrapper:getIconPath())
+      ;
+      ((control._tooltipItem)._name):SetText(tradeItemWrapper:getName())
+      ;
+      ((control._tooltipItem)._price):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ITEMTOOLTIP_PRICE", "price", tostring(makeDotMoney(tradeItemWrapper:getBuyPrice()))))
+      ;
+      ((control._tooltipItem)._weight):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORKERTRADECARAVAN_ITEMTOOLTIP_WEIGHT", "weight", tostring(makeDotMoney(tradeItemWrapper:getWeight()))))
+      break
+    end
+  end
+  do
+    if ((control._tooltipItem)._name):GetTextSizeX() > 150 then
+      (control._tooltip):SetSize(((control._tooltipItem)._name):GetTextSizeX() + 20, 90)
+    else
+      ;
+      (control._tooltip):SetSize(170, 90)
+    end
+    local basePosX, basePosY = nil, nil
+    if slotIndex == nil then
+      basePosX = (control._itemListBg):GetPosX() + ((control._tradeItemSlotBg)[uiIndex]):GetPosX()
+      basePosY = (control._itemListBg):GetPosY() + ((control._tradeItemSlotBg)[uiIndex]):GetPosY()
+    else
+      basePosX = (control._itemSetBg):GetPosX() + (((control._itemSet)._itemSlotBg)[uiIndex]):GetPosX() + (((((control._itemSet)._itemSetBg)[uiIndex])._itemSlotBg)[slotIndex]):GetPosX()
+      basePosY = (control._itemSetBg):GetPosY() + (((control._itemSet)._itemSlotBg)[uiIndex]):GetPosY()
+    end
+    if basePosX + Panel_WorkerTrade_Caravan:GetPosX() < getScreenSizeX() / 2 - (control._tooltip):GetSizeX() / 2 then
+      (control._tooltip):SetPosX(basePosX + 60)
+    else
+      ;
+      (control._tooltip):SetPosX(basePosX - (control._tooltip):GetSizeX() - 10)
+    end
+    if getScreenSizeY() < basePosY then
+      (control._tooltip):SetPosY(basePosY - 90)
+    else
+      ;
+      (control._tooltip):SetPosY(basePosY)
+    end
+    ;
+    (control._tooltip):SetShow(true)
+  end
+end
+
+WorkerTradeCaravan_TooltipHide = function()
+  -- function num : 0_34 , upvalues : workerTradeCaravan
+  local self = workerTradeCaravan
+  local control = self.control
+  ;
+  (control._tooltip):SetShow(false)
+end
+
+WorkerTradeCaravan_StartWayPointKey = function()
+  -- function num : 0_35 , upvalues : workerTradeCaravan
   local self = workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(self._selectIndex)
@@ -1329,7 +1406,7 @@ WorkerTradeCaravan_StartWayPointKey = function()
 end
 
 isChangeableState = function()
-  -- function num : 0_34 , upvalues : workerTradeCaravan
+  -- function num : 0_36 , upvalues : workerTradeCaravan
   local tradeCompanyWrapper = ToClient_GetTradeCompanyWrapper()
   local tradeGroupWrapper = tradeCompanyWrapper:getGroup(workerTradeCaravan._selectIndex)
   local currentState = tradeGroupWrapper:getState()
@@ -1341,7 +1418,7 @@ isChangeableState = function()
 end
 
 FGlobal_WorkerTradeCaraven_Open = function(index)
-  -- function num : 0_35 , upvalues : workerTradeCaravan
+  -- function num : 0_37 , upvalues : workerTradeCaravan
   if Panel_WorkerTrade_Caravan:GetShow() then
     workerTradeCaravan:Hide()
   else
@@ -1353,12 +1430,12 @@ FGlobal_WorkerTradeCaraven_Open = function(index)
 end
 
 WorkerTradeCaravan_Close = function()
-  -- function num : 0_36 , upvalues : workerTradeCaravan
+  -- function num : 0_38 , upvalues : workerTradeCaravan
   workerTradeCaravan:Hide()
 end
 
 workerTradeCaravan.registerEvent = function(self)
-  -- function num : 0_37
+  -- function num : 0_39
   local control = self.control
   ;
   (((control._worker)._image)[1]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SetWorker(" .. 0 .. ")")

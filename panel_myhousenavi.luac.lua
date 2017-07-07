@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 local UI_TM = CppEnums.TextMode
-local isharvestManagement = ToClient_IsContentsGroupOpen("72")
+local isharvestManagement = true
 Panel_MyHouseNavi:RegisterShowEventFunc(true, "MyHouseNaviShowAni()")
 Panel_MyHouseNavi:RegisterShowEventFunc(false, "MyHouseNaviHideAni()")
 Panel_MyHouseNavi:SetDragEnable(false)
@@ -456,7 +456,7 @@ Panel_MyHouseNavi_PositionReset = function()
   Panel_MyHouseNavi_Init()
 end
 
--- DECOMPILER ERROR at PC173: Confused about usage of register: R19 in 'UnsetPending'
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R19 in 'UnsetPending'
 
 Panel_MyHouseNavi.registEventHandler = function(self)
   -- function num : 0_15

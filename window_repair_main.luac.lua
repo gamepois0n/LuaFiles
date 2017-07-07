@@ -226,7 +226,7 @@ end
 
 PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
   -- function num : 0_6
-  self._isCamping = FGlobal_IsCamping()
+  self._isCamping = PaGlobal_Camp:getIsCamping()
   if isShow == true then
     SetUIMode((Defines.UIMode).eUIMode_Repair)
     repair_SetRepairMode(true)

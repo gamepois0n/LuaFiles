@@ -2502,21 +2502,29 @@ end
     if (actorProxyWrapper:get()):isHouseHold() then
       actorName = getHouseHoldName(actorProxyWrapper:get())
     else
-      actorName = actorProxyWrapper:getName()
+      do
+        if (actorProxyWrapper:get()):isPlayer() then
+          local playerActorProxyWrapper = getPlayerActor(actorProxyWrapper:getActorKey())
+          if playerActorProxyWrapper ~= nil and (playerActorProxyWrapper:get()):isVolunteer() then
+            return 
+          end
+        end
+        actorName = actorProxyWrapper:getName()
+        if radarMap.isRotateMode then
+          targetUIposY = targetUIposY - targetUI:GetSizeY() * 2 - targetUI:GetSizeY() / 2
+        else
+          targetUIposX = targetUI:GetPosX()
+          targetUIposY = targetUI:GetPosY()
+        end
+        radar_OverName:SetShow(true)
+        radar_OverName:SetText(actorName)
+        radar_OverName:SetSize(radar_OverName:GetTextSizeX() + 15, radar_OverName:GetTextSizeY() + (radar_OverName:GetSpanSize()).y)
+        Panel_Radar:SetChildIndex(radar_OverName, 9999)
+        CalcPositionUseToTextUI(targetUIposX, targetUIposY, radar_OverName)
+        radar_OverName:SetDepth(-1000)
+      end
     end
   end
-  if radarMap.isRotateMode then
-    targetUIposY = targetUIposY - targetUI:GetSizeY() * 2 - targetUI:GetSizeY() / 2
-  else
-    targetUIposX = targetUI:GetPosX()
-    targetUIposY = targetUI:GetPosY()
-  end
-  radar_OverName:SetShow(true)
-  radar_OverName:SetText(actorName)
-  radar_OverName:SetSize(radar_OverName:GetTextSizeX() + 15, radar_OverName:GetTextSizeY() + (radar_OverName:GetSpanSize()).y)
-  Panel_Radar:SetChildIndex(radar_OverName, 9999)
-  CalcPositionUseToTextUI(targetUIposX, targetUIposY, radar_OverName)
-  radar_OverName:SetDepth(-1000)
 end
 
   FromClient_NameOff = function()

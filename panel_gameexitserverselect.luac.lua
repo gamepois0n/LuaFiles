@@ -205,7 +205,32 @@ ChannelSelect_Init = function()
           (channelMainDesc._speedDesc):SetShow(false)
           sizeControl = channelMainDesc._serverDesc
         else
-          sizeControl = channelMainDesc._speedDesc
+          if isGameTypeKR2() then
+            (channelMainDesc._speedTitle):SetShow(false)
+            ;
+            (channelMainDesc._speedDesc):SetShow(false)
+            ;
+            (channelMainDesc._siegeTitle):SetShow(false)
+            ;
+            (channelMainDesc._siegeBalenos):SetShow(false)
+            ;
+            (channelMainDesc._siegeSerendia):SetShow(false)
+            ;
+            (channelMainDesc._siegeCalpheon):SetShow(false)
+            ;
+            (channelMainDesc._siegeMedia):SetShow(false)
+            ;
+            (channelMainDesc._siegeValencia):SetShow(false)
+            ;
+            (channelMainDesc._scheduleTitle):SetShow(false)
+            ;
+            (channelMainDesc._scheduleSiege):SetShow(false)
+            ;
+            (channelMainDesc._scheduleNodeWar):SetShow(false)
+            sizeControl = channelMainDesc._serverDesc
+          else
+            sizeControl = channelMainDesc._speedDesc
+          end
         end
         ;
         (channelMainDesc._speedTitle):SetPosY((channelMainDesc._serverDesc):GetPosY() + (channelMainDesc._serverDesc):GetTextSizeY() + 15)
@@ -235,8 +260,12 @@ ChannelSelect_Init = function()
         (channelMainDesc._scheduleSiege):SetPosY((channelMainDesc._scheduleTitle):GetPosY() + 20)
         ;
         (channelMainDesc._scheduleNodeWar):SetPosY((channelMainDesc._scheduleSiege):GetPosY() + 20)
-        ;
-        (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._scheduleNodeWar):GetPosY() + (channelMainDesc._scheduleNodeWar):GetTextSizeY())
+        if isGameTypeKR2() then
+          (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._serverDesc):GetPosY() + (channelMainDesc._serverDesc):GetTextSizeY())
+        else
+          ;
+          (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._scheduleNodeWar):GetPosY() + (channelMainDesc._scheduleNodeWar):GetTextSizeY())
+        end
         ;
         (self._mainDesc):SetSize((self._mainDesc):GetSizeX(), (self._mainDescBg):GetSizeY() + 15)
         ;
@@ -305,6 +334,17 @@ ChannelSelect_Init = function()
         else
           ;
           (self._PremiumIcon):SetShow(false)
+        end
+        if isGameTypeKR2() then
+          (channelSelect._warIcon):SetShow(false)
+          ;
+          (channelSelect._noEnteranceIcon):SetShow(false)
+          ;
+          (channelSelect._maintenanceIcon):SetShow(false)
+          ;
+          (channelSelect._expIcon):SetShow(false)
+          ;
+          (channelSelect._PremiumIcon):SetShow(false)
         end
       end
     end
@@ -589,10 +629,6 @@ ChannelSelect_Update = function()
   if not oneTimeChange then
     FGlobal_SeasonTexture_ChannelSelectPanelSizeCahnge(Panel_ChannelSelect:GetSizeX())
     oneTimeChange = true
-  end
-  Panel_ChannelSelect:deleteConsoleUIGroup(0)
-  for chIndex = 0, channelCount - 1 do
-    Panel_ChannelSelect:addConsoleUIControl(chIndex, 1, 0, ((self.channelSelectUIPool)[chIndex]).channelBg)
   end
 end
 

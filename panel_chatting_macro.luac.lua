@@ -58,13 +58,13 @@ ChatMacro.initialize = function(self)
     ;
     (ui._macroKey):SetPosX(5)
     if idx < 9 then
-      (ui._macroKey):SetText("Alt+Shift+" .. idx + 1)
+      (ui._macroKey):SetText(PAGetString(Defines.StringSheet_GAME, "InputCustomizer_Alt") .. "+" .. PAGetString(Defines.StringSheet_GAME, "InputCustomizer_Shift") .. "+" .. idx + 1)
     else
       if idx == 9 then
-        (ui._macroKey):SetText("Alt+Shift+0")
+        (ui._macroKey):SetText(PAGetString(Defines.StringSheet_GAME, "InputCustomizer_Alt") .. "+" .. PAGetString(Defines.StringSheet_GAME, "InputCustomizer_Shift") .. "+0")
       end
     end
-    -- DECOMPILER ERROR at PC80: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC103: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (ChatMacro._buttonChatType)[idx] = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_BUTTON, ui._macroBG, "Button_Normal_" .. idx)
@@ -73,14 +73,14 @@ ChatMacro.initialize = function(self)
     ((ChatMacro._buttonChatType)[idx]):SetShow(true)
     ;
     ((ChatMacro._buttonChatType)[idx]):addInputEvent("Mouse_LUp", "HandleClicked_ChatMacroType(" .. idx .. ")")
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC138: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (ChatMacro._editChatMessage)[idx] = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_EDIT, ui._macroBG, "Edit_InputMacro_" .. idx)
     CopyBaseProperty(StyleUI._c_edit_InputMacro, (ChatMacro._editChatMessage)[idx])
     ;
     ((ChatMacro._editChatMessage)[idx]):SetShow(true)
-    -- DECOMPILER ERROR at PC131: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC154: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (ChatMacro._chatType)[idx] = 0

@@ -257,7 +257,7 @@ Panel_ExchangePC_Update_Slot = function()
   local otherWeight = tradePC_GetOtherWeight_s64()
   otherWeight = Int64toInt32(otherWeight) / 10000
   ;
-  (exchangePC._textOtherWeight):SetText((string.format)("%.1f", otherWeight) .. " LT")
+  (exchangePC._textOtherWeight):SetText((string.format)("%.1f", otherWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
   local otherInfo = tradePC_GetOtherInfo()
   if otherInfo == 1 then
     (exchangePC._textOtherInfo):SetText(PAGetString(Defines.StringSheet_GAME, "EXCHANGE_TEXT_STATE_TRADE"))
@@ -279,7 +279,7 @@ Panel_ExchangePC_Update_Slot = function()
   ;
   (exchangePC._textureOtherUnLock):SetShow(not isOtherLock)
   for ii = 1, exchangePC.MAX_SLOT_COUNT do
-    -- DECOMPILER ERROR at PC145: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC150: Unhandled construct in 'MakeBoolean' P1
 
     if isOtherLock == true and _otherSlot[ii] == 0 then
       (((exchangePC._otherSlotsBG)[ii - 1]).BG):ChangeTextureInfoName("new_ui_common_forlua/default/useless_slot.dds")
@@ -298,7 +298,7 @@ Panel_ExchangePC_Update_Slot = function()
         ((((exchangePC._otherSlotsBG)[ii - 1]).BG):getBaseTexture()):setUV(x1, y1, x2, y2)
         ;
         (((exchangePC._otherSlotsBG)[ii - 1]).BG):setRenderTexture((((exchangePC._otherSlotsBG)[ii - 1]).BG):getBaseTexture())
-        -- DECOMPILER ERROR at PC231: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC236: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end
@@ -332,7 +332,7 @@ Panel_ExchangePC_Update_Slot = function()
   local s64_myWeight = tradePC_GetMyWeight_s64()
   s64_myWeight = Int64toInt32(s64_myWeight) / 10000
   ;
-  (exchangePC._textMyWeight):SetText((string.format)("%.1f", s64_myWeight) .. " LT")
+  (exchangePC._textMyWeight):SetText((string.format)("%.1f", s64_myWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
   local myInfo = tradePC_GetMyInfo()
   if myInfo == 1 then
     (exchangePC._textMyInfo):SetText(PAGetString(Defines.StringSheet_GAME, "EXCHANGE_TEXT_STATE_TRADE"))
@@ -354,7 +354,7 @@ Panel_ExchangePC_Update_Slot = function()
   ;
   (exchangePC._textureMyUnLock):SetShow(not isMyLock)
   for ii = 1, exchangePC.MAX_SLOT_COUNT do
-    -- DECOMPILER ERROR at PC398: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC408: Unhandled construct in 'MakeBoolean' P1
 
     if isMyLock == true and _mySlot[ii] == 0 then
       (((exchangePC._mySlotsBG)[ii - 1]).BG):ChangeTextureInfoName("new_ui_common_forlua/default/useless_slot.dds")
@@ -373,7 +373,7 @@ Panel_ExchangePC_Update_Slot = function()
         ((((exchangePC._mySlotsBG)[ii - 1]).BG):getBaseTexture()):setUV(x1, y1, x2, y2)
         ;
         (((exchangePC._mySlotsBG)[ii - 1]).BG):setRenderTexture((((exchangePC._mySlotsBG)[ii - 1]).BG):getBaseTexture())
-        -- DECOMPILER ERROR at PC484: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC494: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end

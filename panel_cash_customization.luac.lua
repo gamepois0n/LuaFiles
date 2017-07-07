@@ -618,7 +618,7 @@ CashCustomization_Open = function()
   (self.PearlValue):SetText(makeDotMoney(myInvenMoney))
   ;
   (UIAni.AlphaAnimation)(1, Panel_Cash_Customization, 0, 0.2)
-  FGlobal_CustomHistroyButton_Repos()
+  historyTableRePosY(true)
 end
 
 CashCumaBuy_Open = function(applyType)

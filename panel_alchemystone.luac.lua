@@ -550,27 +550,6 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   -- DECOMPILER ERROR at PC733: Confused about usage of register: R6 in 'UnsetPending'
 
   AlchemyStone.resultItemIndex = -1
-  Panel_AlchemyStone:deleteConsoleUIGroup(1)
-  if tabIdx == 0 then
-    Panel_AlchemyStone:addConsoleUIControl(0, 1, 1, (AlchemyStone.Stuff_slot).icon)
-    Panel_AlchemyStone:addConsoleUIControl(1, 1, 1, (AlchemyStone.Stone_slot).icon)
-    Panel_AlchemyStone:addConsoleUIControl(2, 1, 1, (AlchemyStone.control).btn_Plus)
-    Panel_AlchemyStone:addConsoleUIControl(3, 1, 1, (AlchemyStone.control).btn_Minus)
-    Panel_AlchemyStone:addConsoleUIControl(4, 1, 1, (AlchemyStone.control).btn_Doit)
-  else
-    if tabIdx == 1 then
-      Panel_AlchemyStone:addConsoleUIControl(0, 1, 1, (AlchemyStone.Stuff_slot).icon)
-      Panel_AlchemyStone:addConsoleUIControl(1, 1, 1, (AlchemyStone.Stone_slot).icon)
-      Panel_AlchemyStone:addConsoleUIControl(2, 1, 1, (AlchemyStone.control).btn_Doit)
-    else
-      if tabIdx == 2 then
-        Panel_AlchemyStone:addConsoleUIControl(0, 1, 1, (AlchemyStone.Stone_slot).icon)
-        Panel_AlchemyStone:addConsoleUIControl(1, 1, 1, (AlchemyStone.Stuff_slot).icon)
-        Panel_AlchemyStone:addConsoleUIControl(2, 1, 1, ((AlchemyStone.resultSlot)[0]).icon)
-        Panel_AlchemyStone:addConsoleUIControl(3, 1, 1, (AlchemyStone.control).btn_Doit)
-      end
-    end
-  end
 end
 
 HandleClicked_AlchemyStone_ChangeStuffCount = function(isUp)
@@ -1169,24 +1148,6 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
                 end
               end
             end
-            Panel_AlchemyStone:deleteConsoleUIGroup(1)
-            Panel_AlchemyStone:addConsoleUIControl(0, 1, 1, (AlchemyStone.Stone_slot).icon)
-            Panel_AlchemyStone:addConsoleUIControl(1, 1, 1, (AlchemyStone.Stuff_slot).icon)
-            if resultCount == 1 then
-              Panel_AlchemyStone:addConsoleUIControl(2, 1, 1, ((AlchemyStone.resultSlot)[0]).icon)
-              Panel_AlchemyStone:addConsoleUIControl(3, 1, 1, (AlchemyStone.control).btn_Doit)
-            else
-              if resultCount == 2 then
-                Panel_AlchemyStone:addConsoleUIControl(2, 1, 1, ((AlchemyStone.resultSlot)[0]).icon)
-                Panel_AlchemyStone:addConsoleUIControl(3, 1, 1, ((AlchemyStone.resultSlot)[1]).icon)
-                Panel_AlchemyStone:addConsoleUIControl(4, 1, 1, (AlchemyStone.control).btn_Doit)
-              else
-                Panel_AlchemyStone:addConsoleUIControl(2, 1, 1, ((AlchemyStone.resultSlot)[0]).icon)
-                Panel_AlchemyStone:addConsoleUIControl(3, 1, 1, ((AlchemyStone.resultSlot)[1]).icon)
-                Panel_AlchemyStone:addConsoleUIControl(4, 1, 1, ((AlchemyStone.resultSlot)[2]).icon)
-                Panel_AlchemyStone:addConsoleUIControl(5, 1, 1, (AlchemyStone.control).btn_Doit)
-              end
-            end
           end
           do
             ;
@@ -1646,10 +1607,7 @@ AlchemyStone:Init()
 AlchemyStone:registEventHandler()
 AlchemyStone:registMessageHandler()
 ConsoleGroupCreate_Panel_AlchemyStone = function()
-  -- function num : 0_27 , upvalues : AlchemyStone
-  Panel_AlchemyStone:addConsoleUIControl(0, 1, 0, (AlchemyStone.control).tab_Charge)
-  Panel_AlchemyStone:addConsoleUIControl(1, 1, 0, (AlchemyStone.control).tab_Exp)
-  Panel_AlchemyStone:addConsoleUIControl(2, 1, 0, (AlchemyStone.control).tab_Upgrade)
+  -- function num : 0_27
 end
 
 ConsoleGroupCreate_Panel_AlchemyStone()

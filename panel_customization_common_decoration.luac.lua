@@ -102,7 +102,7 @@ local sliderHeight = (SliderTextArr[1]):GetSizeY()
 local colorPickerStartY = 370
 local currentclassType = -1
 local currentuiId = -1
-local checkType = -1
+checkType = -1
 local currentcontentindex = -1
 local UpdateMarkPosition = function(shapeIdx)
   -- function num : 0_0 , upvalues : FrameTemplate, Static_SelectMark, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY
@@ -153,13 +153,15 @@ local clearContents = function()
   Frame_Content:SetSize(Frame_Content:GetSizeX(), 0)
 end
 
-OpenCommonDecorationUi = function(classType, uiId)
-  -- function num : 0_3 , upvalues : currentclassType, currentuiId, checkType, clearRadioButtons, CheckControlArr, CheckTextArr, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup, contentsStartY, controlOffset
+OpenCommonDecorationUi = function(classType, uiId, checkType)
+  -- function num : 0_3 , upvalues : currentclassType, currentuiId, clearRadioButtons, CheckControlArr, CheckTextArr, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup, contentsStartY, controlOffset
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
   currentuiId = uiId
-  checkType = 0
+  if false then
+    checkType = 0
+  end
   clearRadioButtons()
   ;
   (CheckControlArr[1]):SetShow(false)
@@ -186,7 +188,7 @@ OpenCommonDecorationUi = function(classType, uiId)
       tempRadioButton:SetPosY(radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
       tempRadioButton:addInputEvent("Mouse_LUp", "UpdateDecorationContents(" .. contentsIndex .. ")")
       tempRadioButton:SetShow(true)
-      -- DECOMPILER ERROR at PC113: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC116: Confused about usage of register: R11 in 'UnsetPending'
 
       RadioButtonGroup[luaContentsIndex] = tempRadioButton
     end
@@ -209,6 +211,7 @@ CloseCommonDecorationUi = function()
   clearPalette()
   globalcurrentclassType = -2
   globalcurrentuiId = -2
+  checkType = -1
 end
 
 CloseEyeDecorationUi = function()
@@ -216,6 +219,7 @@ CloseEyeDecorationUi = function()
   clearPalette()
   globalcurrentclassType = -2
   globalcurrentuiId = -2
+  checkType = -1
 end
 
 UpdateDecorationContents = function(contentsIndex, currentclassType, currentuiId)
@@ -327,10 +331,12 @@ UpdateDecorationContents = function(contentsIndex, currentclassType, currentuiId
       (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
       ;
       (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
-      ;
-      (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      ;
-      (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+      _PA_LOG("이재�\141", " checkType : " .. checkType)
+      if checkType ~= 3 then
+        (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+        ;
+        (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+      end
       local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       ;
       (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
@@ -447,7 +453,9 @@ UpdateDecorationListMessage = function(paramType, paramIndex, itemIndex)
         EnableDecorationSlide(slideEnable)
       end
       UpdateDecorationList()
-      add_CurrentHistory()
+      if checkType ~= 3 then
+        add_CurrentHistory()
+      end
     end
   end
 end
@@ -464,7 +472,9 @@ UpdateDecorationPose = function()
   -- function num : 0_9 , upvalues : selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex, UpdateMarkPosition
   setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
   UpdateMarkPosition(selectedItemIndex)
-  add_CurrentHistory()
+  if checkType ~= 3 then
+    add_CurrentHistory()
+  end
 end
 
 UpdateDecorationList = function()
@@ -480,7 +490,9 @@ UpdateDecorationSlider = function(sliderIndex)
   setParam(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex], value)
   ;
   (SliderValueArr[luaSliderIndex]):SetText(value)
-  setGlobalCheck(true)
+  if checkType ~= 3 then
+    setGlobalCheck(true)
+  end
 end
 
 UpdateHairDecorationSlider = function(sliderIndex)
@@ -488,7 +500,7 @@ UpdateHairDecorationSlider = function(sliderIndex)
 end
 
 OpenEyeDecorationUi = function(classType, uiId)
-  -- function num : 0_13 , upvalues : currentclassType, currentuiId, checkType, clearRadioButtons, CheckControlArr, CheckTextArr, contentsStartY, controlOffset, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
+  -- function num : 0_13 , upvalues : currentclassType, currentuiId, clearRadioButtons, CheckControlArr, CheckTextArr, contentsStartY, controlOffset, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
@@ -777,14 +789,14 @@ EnableDecorationSlide = function(enable)
 end
 
 OpenTattooDecorationUi = function(classType, uiId)
-  -- function num : 0_18 , upvalues : isTattooMode, currentclassType, currentuiId, checkType, selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex
+  -- function num : 0_18 , upvalues : isTattooMode, currentclassType, currentuiId, selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex
   isTattooMode = true
-  OpenCommonDecorationUi(classType, uiId)
+  checkType = 2
+  OpenCommonDecorationUi(classType, uiId, checkType)
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
   currentuiId = uiId
-  checkType = 2
   if isTattooMode then
     slideEnable = getEnableTattooSlide(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
     EnableDecorationSlide(slideEnable)
@@ -796,23 +808,25 @@ CloseTattooDecorationUi = function()
   isTattooMode = false
   EnableDecorationSlide(true)
   CloseCommonDecorationUi()
+  checkType = -1
 end
 
 OpenCommonExpressionUi = function(classType, uiId)
-  -- function num : 0_20 , upvalues : currentclassType, currentuiId, checkType
+  -- function num : 0_20 , upvalues : currentclassType, currentuiId
   SetExpression()
-  OpenCommonDecorationUi(classType, uiId)
+  checkType = 3
+  OpenCommonDecorationUi(classType, uiId, checkType)
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
   currentuiId = uiId
-  checkType = 3
 end
 
 CloseCommonExpressionUi = function()
   -- function num : 0_21
   applyExpression(-1, 1)
   CloseCommonDecorationUi()
+  checkType = -1
 end
 
 SetExpression = function()
@@ -823,7 +837,7 @@ SetExpression = function()
 end
 
 CommonDecorationHistoryApplyUpdate = function()
-  -- function num : 0_23 , upvalues : currentclassType, currentuiId, checkType, currentcontentindex
+  -- function num : 0_23 , upvalues : currentclassType, currentuiId, currentcontentindex
   if globalcurrentclassType ~= currentclassType or globalcurrentuiId ~= currentuiId then
     return 
   end

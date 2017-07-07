@@ -130,6 +130,8 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_Initialize = function(self)
   ((self._ui)._editPriceInput):SetNumberMode(true)
   ;
   ((self._ui)._but_Question):SetShow(false)
+  ;
+  ((self._ui)._staticTextDescBG):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_MYBIDITEMINFO"))
 end
 
 FGlobal_MasterpieceAuction_Open = function()
@@ -328,7 +330,13 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_bidItem = function(self, index, i
     return 
   end
   local myAuctionInfo = RequestGetAuctionInfo()
+  if myAuctionInfo == nil then
+    return 
+  end
   local goodsInfo = myAuctionInfo:getItemAuctionListAt(index)
+  if goodsInfo == nil then
+    return 
+  end
   local highPrice = goodsInfo:getHighPrice_s64()
   if highPrice < self._editPrice then
     RequestBidAuction(index, self._editPrice)

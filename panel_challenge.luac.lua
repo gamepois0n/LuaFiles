@@ -1114,18 +1114,7 @@ Fglobal_Challenge_UpdateData = function()
 end
 
 Challenge_SetConsolePadGroup = function()
-  -- function num : 0_9 , upvalues : tapCount, _tapMenu
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
-  Panel_Window_CharInfo_Status:addConsoleUIControl(0, tapCount, 1, _tapMenu[0])
-  Panel_Window_CharInfo_Status:addConsoleUIControl(1, tapCount, 1, _tapMenu[1])
-  Panel_Window_CharInfo_Status:addConsoleUIControl(2, tapCount, 1, _tapMenu[4])
-  Panel_Window_CharInfo_Status:addConsoleUIControl(3, tapCount, 1, _tapMenu[3])
-  Panel_Window_CharInfo_Status:addConsoleUIControl(4, tapCount, 1, _tapMenu[2])
-  Panel_Window_CharInfo_Status:addConsoleUIControl(5, tapCount, 1, _tapMenu[5])
+  -- function num : 0_9
 end
 
 HandleClicked_Challenge_ProgressReward = function(index)
@@ -1313,7 +1302,7 @@ ChallengeReward_Update = function(challengeWrapper, challenge_Idx, uiIdx)
 end
 
 SetChallengeRewardList = function(baseReward, selectReward, challenge_Idx, uiIdx)
-  -- function num : 0_14 , upvalues : _maxBaseSlotCount, _uiBackBaseReward, _listBaseRewardSlots, _maxSelectSlotCount, _listSelectRewardSlots, _uiButtonSelectRewardSlots, _tapMenu, _content
+  -- function num : 0_14 , upvalues : _maxBaseSlotCount, _uiBackBaseReward, _listBaseRewardSlots, _maxSelectSlotCount, _listSelectRewardSlots, _uiButtonSelectRewardSlots, _tapMenu
   _baseRewardCount = #baseReward
   for ii = 0, _maxBaseSlotCount - 1 do
     ((_uiBackBaseReward[uiIdx])[ii]):EraseAllEffect()
@@ -1321,7 +1310,6 @@ SetChallengeRewardList = function(baseReward, selectReward, challenge_Idx, uiIdx
       setChallengeRewardShow((_listBaseRewardSlots[uiIdx])[ii], baseReward[ii + 1], uiIdx, ii, "main")
       ;
       ((_uiBackBaseReward[uiIdx])[ii]):SetShow(true)
-      Panel_Window_CharInfo_Status:addConsoleUIControl(ii, 1, uiIdx + 2, ((_listBaseRewardSlots[uiIdx])[ii]).icon)
     else
       ;
       ((_uiBackBaseReward[uiIdx])[ii]):SetShow(false)
@@ -1336,14 +1324,14 @@ SetChallengeRewardList = function(baseReward, selectReward, challenge_Idx, uiIdx
       if (_tapMenu[5]):IsCheck() then
         (((_listSelectRewardSlots[uiIdx])[ii]).icon):addInputEvent("Mouse_LUp", "_challengeSelectReward_Set( " .. challenge_Idx .. ", " .. uiIdx .. ", " .. ii .. " )")
       end
-      Panel_Window_CharInfo_Status:addConsoleUIControl(ii + _baseRewardCount, 1, uiIdx + 2, ((_listSelectRewardSlots[uiIdx])[ii]).icon)
     else
       ;
       ((_uiButtonSelectRewardSlots[uiIdx])[ii]):SetShow(false)
     end
   end
-  if (_tapMenu[5]):IsCheck() then
-    Panel_Window_CharInfo_Status:addConsoleUIControl(_selectRewardCount + _baseRewardCount, 1, uiIdx + 2, (_content[uiIdx]).btnGetReward)
+  do
+    if (_tapMenu[5]):IsCheck() then
+    end
   end
 end
 

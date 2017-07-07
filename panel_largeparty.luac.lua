@@ -6,13 +6,13 @@
 local UI_Class = CppEnums.ClassType
 Panel_LargeParty:SetShow(false)
 PaGlobal_LargeParty = {
-_ui = {_staticPartyLeftBG = (UI.getChildControl)(Panel_LargeParty, "Static_PartyLeftBG"), _staticPartyRightBG = (UI.getChildControl)(Panel_LargeParty, "Static_PartyRightBG"), _btn_Mandate = (UI.getChildControl)(Panel_LargeParty, "Button_Mandate"), _btn_Exile = (UI.getChildControl)(Panel_LargeParty, "Button_Exile"), _btn_Exit = (UI.getChildControl)(Panel_LargeParty, "Button_Out"), _staticClassBG = (UI.getChildControl)(Panel_LargeParty, "Static_ClassSlotBG"), _staticTextUserName = nil, _staticTextUserLevel = nil, _staticHpBG = nil, _progressHp = nil, _btn_ButtonAction = nil}
+_ui = {_staticPartyLeftBG = (UI.getChildControl)(Panel_LargeParty, "Static_PartyLeftBG"), _staticPartyRightBG = (UI.getChildControl)(Panel_LargeParty, "Static_PartyRightBG"), _btn_Mandate = (UI.getChildControl)(Panel_LargeParty, "Button_Mandate"), _btn_Exile = (UI.getChildControl)(Panel_LargeParty, "Button_Exile"), _btn_Exit = (UI.getChildControl)(Panel_LargeParty, "Button_Out"), _staticClassBG = nil, _staticTextUserName = nil, _staticTextUserLevel = nil, _staticHpBG = nil, _progressHp = nil, _btn_ButtonAction = nil, _staticDeadBG = nil, _staticTextDead = nil, _staticRightClassBG = nil, _staticTextRightUserName = nil, _staticTextRightUserLevel = nil, _staticRightHpBG = nil, _progressRightHp = nil, _btn_ButtonRightAction = nil, _staticDeadRightBG = nil, _staticTextRightDead = nil}
 , 
 _partyMemberData = {}
 , 
 _uiPartyMemberList = {}
 , _partyMemberCount = 0, _slotMouseIndex = 0, _isSlotMouseOn = false, _isMaster = false, _selectIndex = 0, _maxPartyMemberCount = 20}
--- DECOMPILER ERROR at PC63: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_LargeParty.Initialize = function(self)
   -- function num : 0_0
@@ -42,27 +42,43 @@ PaGlobal_LargeParty.Initialize = function(self)
   -- DECOMPILER ERROR at PC55: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._staticRightClassBG = (UI.getChildControl)((self._ui)._staticPartyRightBG, "Static_ClassSlotBG")
+  (self._ui)._staticDeadBG = (UI.getChildControl)((self._ui)._staticClassBG, "Static_DeadConditionBG")
   -- DECOMPILER ERROR at PC63: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._staticTextRightUserName = (UI.getChildControl)((self._ui)._staticRightClassBG, "StaticText_UserName")
+  (self._ui)._staticTextDead = (UI.getChildControl)((self._ui)._staticClassBG, "StaticText_NowCondition")
   -- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._staticTextRightUserLevel = (UI.getChildControl)((self._ui)._staticRightClassBG, "StaticText_UserLevel")
+  (self._ui)._staticRightClassBG = (UI.getChildControl)((self._ui)._staticPartyRightBG, "Static_ClassSlotBG")
   -- DECOMPILER ERROR at PC79: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._staticRightHpBG = (UI.getChildControl)((self._ui)._staticRightClassBG, "Static_HpBG")
+  (self._ui)._staticTextRightUserName = (UI.getChildControl)((self._ui)._staticRightClassBG, "StaticText_UserName")
   -- DECOMPILER ERROR at PC87: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._progressRightHp = (UI.getChildControl)((self._ui)._staticRightClassBG, "Progress2_Hp")
+  (self._ui)._staticTextRightUserLevel = (UI.getChildControl)((self._ui)._staticRightClassBG, "StaticText_UserLevel")
   -- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
+  (self._ui)._staticRightHpBG = (UI.getChildControl)((self._ui)._staticRightClassBG, "Static_HpBG")
+  -- DECOMPILER ERROR at PC103: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._progressRightHp = (UI.getChildControl)((self._ui)._staticRightClassBG, "Progress2_Hp")
+  -- DECOMPILER ERROR at PC111: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
   (self._ui)._btn_ButtonRightAction = (UI.getChildControl)((self._ui)._staticRightClassBG, "Button_Action")
+  -- DECOMPILER ERROR at PC119: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._staticDeadRightBG = (UI.getChildControl)((self._ui)._staticRightClassBG, "Static_DeadConditionBG")
+  -- DECOMPILER ERROR at PC127: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._staticTextRightDead = (UI.getChildControl)((self._ui)._staticRightClassBG, "StaticText_NowCondition")
   ;
   ((self._ui)._btn_Mandate):SetShow(false)
   ;
@@ -71,6 +87,10 @@ PaGlobal_LargeParty.Initialize = function(self)
   ((self._ui)._btn_Exit):SetShow(false)
   ;
   ((self._ui)._staticPartyLeftBG):SetShow(true)
+  ;
+  ((self._ui)._staticTextUserName):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  ;
+  ((self._ui)._staticTextRightUserName):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
   for index = 0, self._maxPartyMemberCount - 1 do
     local partyMember = {}
     partyMember._base = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_LargeParty, "PartyMember_Back" .. index)
@@ -79,6 +99,8 @@ PaGlobal_LargeParty.Initialize = function(self)
     partyMember._hp = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_PROGRESS2, partyMember._base, "PartyMember_Hp" .. index)
     partyMember._level = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, partyMember._base, "PartyMember_UserLevel" .. index)
     partyMember._actionBtn = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, partyMember._base, "PartyMember_ActionBtn" .. index)
+    partyMember._deadConditionBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, partyMember._base, "PartyMember_DeadConditionBG" .. index)
+    partyMember._deadCondition = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, partyMember._base, "PartyMember_DeadCondition" .. index)
     if index < 10 then
       CopyBaseProperty((self._ui)._staticClassBG, partyMember._base)
       CopyBaseProperty((self._ui)._staticTextUserName, partyMember._name)
@@ -86,6 +108,8 @@ PaGlobal_LargeParty.Initialize = function(self)
       CopyBaseProperty((self._ui)._progressHp, partyMember._hp)
       CopyBaseProperty((self._ui)._staticTextUserLevel, partyMember._level)
       CopyBaseProperty((self._ui)._btn_ButtonAction, partyMember._actionBtn)
+      CopyBaseProperty((self._ui)._staticDeadBG, partyMember._deadConditionBG)
+      CopyBaseProperty((self._ui)._staticTextDead, partyMember._deadCondition)
       ;
       (partyMember._base):SetPosY(index * 42)
     else
@@ -95,6 +119,8 @@ PaGlobal_LargeParty.Initialize = function(self)
       CopyBaseProperty((self._ui)._progressRightHp, partyMember._hp)
       CopyBaseProperty((self._ui)._staticTextRightUserLevel, partyMember._level)
       CopyBaseProperty((self._ui)._btn_ButtonRightAction, partyMember._actionBtn)
+      CopyBaseProperty((self._ui)._staticDeadRightBG, partyMember._deadConditionBG)
+      CopyBaseProperty((self._ui)._staticTextRightDead, partyMember._deadCondition)
       ;
       (partyMember._base):SetPosX(((self._ui)._staticPartyLeftBG):GetPosX() + ((self._ui)._staticPartyLeftBG):GetSizeX() + 10)
       ;
@@ -105,26 +131,12 @@ PaGlobal_LargeParty.Initialize = function(self)
     ;
     (partyMember._actionBtn):SetShow(false)
     ;
-    (partyMember._name):SetIgnore(true)
-    ;
-    (partyMember._hpBG):SetIgnore(true)
-    ;
-    (partyMember._hp):SetIgnore(true)
-    ;
-    (partyMember._base):SetShow(true)
-    ;
-    (partyMember._name):SetShow(true)
-    ;
-    (partyMember._hpBG):SetShow(true)
-    ;
-    (partyMember._hp):SetShow(true)
-    ;
     (partyMember._base):addInputEvent("Mouse_On", "PaGlobal_LargeParty:ButtonAction(true," .. index .. ")")
     ;
     (partyMember._base):addInputEvent("Mouse_Out", "PaGlobal_LargeParty:ButtonAction(false," .. index .. ")")
     ;
     (partyMember._actionBtn):addInputEvent("Mouse_LUp", "PaGlobal_LargeParty:ClickButtonAction(" .. index .. ")")
-    -- DECOMPILER ERROR at PC334: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC394: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._uiPartyMemberList)[index] = partyMember
@@ -141,7 +153,9 @@ PaGlobal_LargeParty.Initialize = function(self)
   ((self._ui)._btn_Exit):addInputEvent("Mouse_LUp", "PaGlobal_LargeParty:ExitParty()")
 end
 
-FGlobal_LargePartyClose = function()
+-- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_LargeParty.Close = function(self)
   -- function num : 0_1
   self = PaGlobal_LargeParty
   Panel_LargeParty:SetShow(false)
@@ -158,19 +172,28 @@ FGlobal_LargePartyClose = function()
   end
 end
 
--- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_LargeParty.Update = function(self)
   -- function num : 0_2
   self._partyMemberCount = RequestParty_getPartyMemberCount()
   if self._partyMemberCount == 0 then
-    FGlobal_LargePartyClose()
+    PaGlobal_LargeParty:Close()
+  else
+    if self._partyMemberCount < 11 then
+      ((self._ui)._staticPartyRightBG):SetShow(false)
+    end
   end
   self._partyMemberData = FGlobal_ResponseParty_PartyMemberSet(self._partyMemberCount)
+  if (self._partyMemberData)[0] == nil then
+    return 
+  end
   if self._partyMemberCount > 0 and self._partyMemberCount <= 10 then
     ((self._ui)._staticPartyLeftBG):SetSize(((self._ui)._staticPartyLeftBG):GetSizeX(), 42 * self._partyMemberCount)
   else
     if self._partyMemberCount >= 11 then
+      ((self._ui)._staticPartyLeftBG):SetSize(((self._ui)._staticPartyLeftBG):GetSizeX(), 420)
+      ;
       ((self._ui)._staticPartyRightBG):SetShow(true)
       ;
       ((self._ui)._staticPartyRightBG):SetSize(((self._ui)._staticPartyRightBG):GetSizeX(), 42 * (self._partyMemberCount - 10))
@@ -187,31 +210,67 @@ PaGlobal_LargeParty.Update = function(self)
   end
 end
 
-FGlobal_LargePartyUpdate = function()
-  -- function num : 0_3
-  PaGlobal_LargeParty:Update()
-end
-
--- DECOMPILER ERROR at PC73: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_LargeParty.SetInfo = function(self, index)
-  -- function num : 0_4
+  -- function num : 0_3
   if ((self._partyMemberData)[index])._isSelf == true and ((self._partyMemberData)[index])._isMaster == true then
     self._isMaster = true
   end
   ;
-  (((self._uiPartyMemberList)[index])._name):SetText("Lv." .. ((self._partyMemberData)[index])._level .. " " .. ((self._partyMemberData)[index])._name)
+  (((self._uiPartyMemberList)[index])._name):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. ((self._partyMemberData)[index])._level .. " " .. ((self._partyMemberData)[index])._name)
   ;
   (((self._uiPartyMemberList)[index])._hp):SetProgressRate(((self._partyMemberData)[index])._nowHp / ((self._partyMemberData)[index])._maxHp)
+  if (((self._uiPartyMemberList)[index])._name):IsLimitText() then
+    (((self._uiPartyMemberList)[index])._name):SetIgnore(false)
+    ;
+    (((self._uiPartyMemberList)[index])._name):addInputEvent("Mouse_On", "PaGlobal_LargeParty:LimitTextTooptip(true, " .. index .. ")")
+    ;
+    (((self._uiPartyMemberList)[index])._name):addInputEvent("Mouse_Out", "PaGlobal_LargeParty:LimitTextTooptip(false, " .. index .. ")")
+  end
   if ((self._partyMemberData)[index])._isMaster then
     (((self._uiPartyMemberList)[index])._name):SetFontColor((Defines.Color).C_FFA3EF00)
   else
     ;
     (((self._uiPartyMemberList)[index])._name):SetFontColor((Defines.Color).C_FFFFFFFF)
   end
+  if ((self._partyMemberData)[index])._nowHp <= 0 then
+    (((self._uiPartyMemberList)[index])._deadConditionBG):SetShow(true)
+    ;
+    (((self._uiPartyMemberList)[index])._deadCondition):SetShow(true)
+    ;
+    (((self._uiPartyMemberList)[index])._deadCondition):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DEATH"))
+  else
+    if ((self._partyMemberData)[index])._nowHp >= 1 then
+      (((self._uiPartyMemberList)[index])._deadConditionBG):SetShow(false)
+      ;
+      (((self._uiPartyMemberList)[index])._deadCondition):SetShow(false)
+      ;
+      (((self._uiPartyMemberList)[index])._deadCondition):SetText("")
+    end
+  end
+  ;
+  (((self._uiPartyMemberList)[index])._base):SetShow(true)
+  ;
+  (((self._uiPartyMemberList)[index])._name):SetShow(true)
+  ;
+  (((self._uiPartyMemberList)[index])._hpBG):SetShow(true)
+  ;
+  (((self._uiPartyMemberList)[index])._hp):SetShow(true)
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_LargeParty.LimitTextTooptip = function(self, isShow, index)
+  -- function num : 0_4
+  if isShow == false then
+    TooltipSimple_Hide()
+    return 
+  end
+  TooltipSimple_Show(((self._uiPartyMemberList)[index])._name, (((self._uiPartyMemberList)[index])._name):GetText())
+end
+
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_LargeParty.ButtonAction = function(self, isShow, index)
   -- function num : 0_5
@@ -235,7 +294,7 @@ PaGlobal_LargeParty.ButtonAction = function(self, isShow, index)
   end
 end
 
--- DECOMPILER ERROR at PC79: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC86: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_LargeParty.ClickButtonAction = function(self, index)
   -- function num : 0_6
@@ -267,15 +326,9 @@ PaGlobal_LargeParty.ClickButtonAction = function(self, index)
     ((self._ui)._btn_Mandate):SetShow(true)
     ;
     ((self._ui)._btn_Exile):SetShow(true)
-    ;
-    ((self._ui)._btn_Mandate):SetPosY(10 + index * 42)
-    ;
-    ((self._ui)._btn_Exile):SetPosY(10 + index * 42)
   else
     if ((self._partyMemberData)[index])._isSelf then
       ((self._ui)._btn_Exit):SetShow(true)
-      ;
-      ((self._ui)._btn_Exit):SetPosY(10 + index * 42)
     else
       ;
       ((self._ui)._btn_Mandate):SetShow(false)
@@ -293,9 +346,9 @@ PaGlobal_LargeParty.ClickButtonAction = function(self, index)
   self._selectIndex = index
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC89: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_LargeParty.ChangeLeader = function(self, index)
+PaGlobal_LargeParty.ChangeLeader = function(self)
   -- function num : 0_7
   local index = self._selectIndex
   RequestParty_changeLeader(index)
@@ -306,9 +359,9 @@ PaGlobal_LargeParty.ChangeLeader = function(self, index)
   PaGlobal_LargeParty:Update()
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC92: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_LargeParty.BanishMember = function(self, index)
+PaGlobal_LargeParty.BanishMember = function(self)
   -- function num : 0_8
   local index = self._selectIndex
   local withdrawMemberData = RequestParty_getPartyMemberAt(index)
@@ -331,9 +384,9 @@ PaGlobal_LargeParty.BanishMember = function(self, index)
   (MessageBox.showMessageBox)(messageboxData)
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_LargeParty.ExitParty = function(self, index)
+PaGlobal_LargeParty.ExitParty = function(self)
   -- function num : 0_9
   local index = self._selectIndex
   local isPlayingPvPMatch = (getSelfPlayer()):isDefinedPvPMatch()
@@ -344,7 +397,7 @@ PaGlobal_LargeParty.ExitParty = function(self, index)
   local partyOut = function()
     -- function num : 0_9_0 , upvalues : index
     RequestParty_withdrawMember(index)
-    FGlobal_LargePartyClose()
+    PaGlobal_LargeParty:Close()
   end
 
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PARTY_DISTRIBUTION_GETOUTPARTY")
@@ -354,7 +407,9 @@ PaGlobal_LargeParty.ExitParty = function(self, index)
   PaGlobal_LargeParty:Update()
 end
 
-LargePartyResize = function()
+-- DECOMPILER ERROR at PC98: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_LargeParty.Resize = function(self)
   -- function num : 0_10
   if RequestParty_getPartyMemberCount() == 0 then
     Panel_LargeParty:SetShow(false)
@@ -383,7 +438,7 @@ LargeParty_registEventHandler = function()
   local self = PaGlobal_LargeParty
 end
 
-registerEvent("onScreenResize", "LargePartyResize()")
+registerEvent("onScreenResize", "PaGlobal_LargeParty:Resize()")
 PaGlobal_LargeParty:Initialize()
 LargeParty_registEventHandler()
 

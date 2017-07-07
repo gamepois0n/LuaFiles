@@ -555,7 +555,7 @@ close_force_WindowPanelList = function()
       end
     end
     if Panel_Window_Camp:GetShow() then
-      FGlobal_Camp_Close()
+      PaGlobal_Camp:close()
     end
     if Panel_Window_MonsterRanking:GetShow() then
       FGlobal_MonsterRanking_Close()

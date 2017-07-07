@@ -211,7 +211,7 @@ end
     return -1
   end
   local selfProxy = selfPlayer:get()
-  local myTeamNo = selfProxy:getValunteerTeamNoForLua()
+  local myTeamNo = selfProxy:getVolunteerTeamNoForLua()
   if myTeamNo >= 1000 then
     return 1
   else
@@ -256,11 +256,11 @@ end
   end
   if actorProxy:isPlayer() then
     local militiaIcon = (UI.getChildControl)(targetPanel, "Static_MilitiaIcon")
-    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
+    local militiaTeamNo = actorProxy:getVolunteerTeamNoForLua()
     -- DECOMPILER ERROR at PC110: Unhandled construct in 'MakeBoolean' P1
 
     if militiaTeamNo >= 1000 and playerActorProxyWrapper ~= nil then
-      local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+      local isMilitia = (playerActorProxyWrapper:get()):isVolunteer()
       if isMilitia then
         militiaIcon:SetShow(true)
         militiaIcon:ChangeTextureInfoName("New_UI_Common_forLua/Window/PvP/Militia_01.dds")
@@ -282,7 +282,7 @@ end
                 -- DECOMPILER ERROR at PC177: Unhandled construct in 'MakeBoolean' P1
 
                 if militiaTeamNo >= 100 and playerActorProxyWrapper ~= nil then
-                  local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+                  local isMilitia = (playerActorProxyWrapper:get()):isVolunteer()
                   if isMilitia then
                     militiaIcon:SetShow(true)
                     militiaIcon:ChangeTextureInfoName("New_UI_Common_forLua/Window/PvP/Militia_01.dds")
@@ -447,8 +447,8 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
-    local isMilitia = actorProxy:isValunteer()
+    local militiaTeamNo = actorProxy:getVolunteerTeamNoForLua()
+    local isMilitia = actorProxy:isVolunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       aliasInfo:SetShow(false)
       return 
@@ -508,8 +508,8 @@ end
     if playerActorProxyWrapper == nil then
       return 
     end
-    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
-    local isMilitia = (playerActorProxyWrapper:get()):isValunteer()
+    local militiaTeamNo = actorProxy:getVolunteerTeamNoForLua()
+    local isMilitia = (playerActorProxyWrapper:get()):isVolunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       nickName:SetShow(false)
       return 
@@ -692,8 +692,8 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
-    local isMilitia = playerActorProxy:isValunteer()
+    local militiaTeamNo = actorProxy:getVolunteerTeamNoForLua()
+    local isMilitia = playerActorProxy:isVolunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       guildName:SetShow(false)
       guildMark:SetShow(false)
@@ -849,8 +849,8 @@ end
     return 
   end
   if actorProxy:isPlayer() then
-    local militiaTeamNo = actorProxy:getValunteerTeamNoForLua()
-    local isMilitia = playerActorProxy:isValunteer()
+    local militiaTeamNo = actorProxy:getVolunteerTeamNoForLua()
+    local isMilitia = playerActorProxy:isVolunteer()
     if militiaTeamNo > 0 and isMilitia == true then
       return 
     end
@@ -3736,6 +3736,6 @@ end
   registerEvent("FromClient_FlashBangStateChanged", "FromClient_FlashBangStateChanged")
   registerEvent("EventPvPModeChanged", "EventActorPvpModeChange")
   registerEvent("FromClient_ObjectInstanceMpChanged", "FromClient_ObjectInstanceMpChanged")
-  registerEvent("FromClient_ChangeValunteerNameTag", "FromClient_ChangeMilitiaNameTag")
+  registerEvent("FromClient_ChangeVolunteerNameTag", "FromClient_ChangeMilitiaNameTag")
 end
 

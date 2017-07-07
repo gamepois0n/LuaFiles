@@ -54,10 +54,15 @@ end
 
 add_CurrentHistory = function()
   -- function num : 0_5
+  if checkType == 3 then
+    return 
+  end
   if globalisCustomizationPicking == false then
     globalcheckSlider = false
   end
   ToClient_addHistory()
+  SetHistroyList()
+  setCurrentActive()
 end
 
 

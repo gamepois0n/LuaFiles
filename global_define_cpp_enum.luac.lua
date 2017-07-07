@@ -522,9 +522,12 @@ CppEnums.GuildBenefit = {eMaxContractedBenefit = 5000000}
 -- DECOMPILER ERROR at PC6288: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PartyType = {ePartyType_Normal = 0, ePartyType_Large = 1}
--- DECOMPILER ERROR at PC6313: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6319: Confused about usage of register: R0 in 'UnsetPending'
 
-CppEnums.PA_CONSOLE_UI_EVENT_TYPE = {eCONSOLE_UI_EVENT_TYPE_UP = 0, eCONSOLE_UI_EVENT_TYPE_DOWN = 1, eCONSOLE_UI_EVENT_TYPE_LEFT = 2, eCONSOLE_UI_EVENT_TYPE_RIGHT = 3, eCONSOLE_UI_EVENT_TYPE_LB = 4, eCONSOLE_UI_EVENT_TYPE_RB = 5, eCONSOLE_UI_CONTROL_TYPE_MAX = 6}
+CppEnums.PA_CONSOLE_UI_EVENT_TYPE = {eCONSOLE_UI_EVENT_TYPE_UP = 0, eCONSOLE_UI_EVENT_TYPE_DOWN = 1, eCONSOLE_UI_EVENT_TYPE_LEFT = 2, eCONSOLE_UI_EVENT_TYPE_RIGHT = 3, eCONSOLE_UI_EVENT_TYPE_LB = 4, eCONSOLE_UI_EVENT_TYPE_RB = 5, eCONSOLE_UI_EVENT_TYPE_LB2 = 6, eCONSOLE_UI_EVENT_TYPE_RB2 = 7, eCONSOLE_UI_CONTROL_TYPE_MAX = 8}
+-- DECOMPILER ERROR at PC6335: Confused about usage of register: R0 in 'UnsetPending'
+
+CppEnums.PA_CONSOLE_UI_CONTROL_TYPE = {eCONSOLE_UI_CONTROL_TYPE_NOTEVENT = 0, eCONSOLE_UI_CONTROL_TYPE_INVENTORY = 1, eCONSOLE_UI_CONTROL_TYPE_LIST2 = 2, eCONSOLE_UI_CONTROL_TYPE_MAX = 3}
 getNameSize = function()
   -- function num : 0_0
   if isGameServiceTypeKor() or isGameServiceTypeJp() then

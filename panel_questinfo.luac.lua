@@ -228,7 +228,7 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
         questInfoWindow_naviButton:SetCheck(false)
         button_Navi_QuestInfoWindow:SetCheck(false)
       end
-      if uiCondition == 0 and questInfo:getCompleteNpc() == 0 then
+      if uiCondition == 0 and (questInfo:getCompleteNpc()):get() == 0 then
         questInfoWindow_naviButton:SetShow(false)
         button_Navi_QuestInfoWindow:SetShow(false)
         button_AutoNavi_QuestInfoWindow:SetShow(false)

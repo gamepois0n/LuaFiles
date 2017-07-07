@@ -3,7 +3,6 @@
 
 -- params : ...
 -- function num : 0
-local isButtonOpen = ToClient_IsContentsGroupOpen("280")
 local UI_classType = CppEnums.ClassType
 Panel_CustomizationMain:setFlushAble(false)
 Panel_CustomizationStatic:setFlushAble(false)
@@ -70,8 +69,6 @@ local CheckButton_ImagePreset_Title = (UI.getChildControl)(Panel_CustomizationSt
 local Button_ScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ScreenShot")
 local Button_ScreenShotFolder_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ScreenShotFolder")
 local Button_ProfileScreenShot_Title = (UI.getChildControl)(Panel_CustomizationStatic, "StaticText_ProfileScreenShot")
-local customization_HistoryBG = (UI.getChildControl)(Panel_CustomizationStatic, "Static_HistoryBG")
-customization_HistoryBG:SetShow(false)
 local isShowScreenShot = true
 Button_ScreenShot:SetShow(isShowScreenShot)
 Button_ScreenShotFolder:SetShow(isShowScreenShot)
@@ -144,24 +141,27 @@ if isGameTypeSA() then
           local _classIndex = nil
           local InGameMode = false
           local closeCustomizationMode = false
-          local Button_CustomHistoryDo, Button_CustomHistoryUnDo = nil, nil
-          Button_CustomHistoryDo = (UI.getChildControl)(Panel_CustomizationStatic, "Button_CtrlY")
-          Button_CustomHistoryUnDo = (UI.getChildControl)(Panel_CustomizationStatic, "Button_CtrlZ")
-          Button_CustomHistoryDo:SetShow(isButtonOpen)
-          Button_CustomHistoryUnDo:SetShow(isButtonOpen)
-          Button_CustomHistoryDo:addInputEvent("Mouse_LUp", "customHistoryDo()")
-          Button_CustomHistoryUnDo:addInputEvent("Mouse_LUp", "customHistoryUnDo()")
+          local isFristAddHistory = false
           local screenShotTime = 0
           local screenShotButtonUse = true
           local screenShotReady = false
           customHistoryDo = function()
   -- function num : 0_0
-  ToClient_HistoryDo()
+  if ToClient_HistoryDo() then
+    historyTableDoChangeActive()
+  end
 end
 
           customHistoryUnDo = function()
   -- function num : 0_1
-  ToClient_HistoryUnDo()
+  if ToClient_HistoryUnDo() then
+    historyTableUnDoChangeActive()
+  end
+end
+
+          customHistorySelectByIndex = function(index)
+  -- function num : 0_2
+  ToClient_HistorySelectByIndex(index)
 end
 
           Button_ApplyDefaultCustomization:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONMAIN_APPLYDEFAULTCUSTOMIZATION"))
@@ -240,7 +240,7 @@ end
           local doScreenCapture = false
           local EndScreenCapture = false
           local rotationPointNormalize = function(x, y, angle)
-  -- function num : 0_2
+  -- function num : 0_3
   local nX = x * (math.cos)(angle) + y * (math.sin)(angle)
   local nY = x * -(math.sin)(angle) + y * (math.cos)(angle)
   local normalize = (math.sqrt)(nX * nX + nY * nY)
@@ -250,7 +250,7 @@ end
 end
 
           local updateComputePos = function()
-  -- function num : 0_3 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, StaticText_Zodiac, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacImage, Button_ApplyDefaultCustomization, Button_Char, Button_Back, Button_SelectClass, Edit_CharName, Static_CharName, Button_SaveCustomization, Button_LoadCustomization, Button_CustomizingAlbum, btn_CharacterNameCreateRule, btn_RandomBeauty, StaticText_CustomizationInfo, StaticText_AuthorTitle, StaticText_AuthorName, Button_SaveHistory, StaticText_FamilyNameTitle, StaticText_FamilyName, StaticText_CustomizationMessage, link1, link2, japanEventBanner
+  -- function num : 0_4 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, StaticText_Zodiac, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacImage, Button_ApplyDefaultCustomization, Button_Char, Button_Back, Button_SelectClass, Edit_CharName, Static_CharName, Button_SaveCustomization, Button_LoadCustomization, Button_CustomizingAlbum, btn_CharacterNameCreateRule, btn_RandomBeauty, StaticText_CustomizationInfo, StaticText_AuthorTitle, StaticText_AuthorName, Button_SaveHistory, StaticText_FamilyNameTitle, StaticText_FamilyName, StaticText_CustomizationMessage, link1, link2, japanEventBanner
   CheckButton_CameraLook:ComputePos()
   CheckButton_ToggleUi:ComputePos()
   CheckButton_ImagePreset:ComputePos()
@@ -281,25 +281,7 @@ end
   link1:ComputePos()
   link2:ComputePos()
   japanEventBanner:ComputePos()
-  FGlobal_CustomHistroyButton_Repos()
-end
-
-          FGlobal_CustomHistroyButton_Repos = function()
-  -- function num : 0_4 , upvalues : Button_CustomHistoryUnDo, Button_CustomHistoryDo
-  Button_CustomHistoryUnDo:SetPosX(getScreenSizeX() - Button_CustomHistoryUnDo:GetSizeX() * 2 - 30)
-  Button_CustomHistoryDo:SetPosX(getScreenSizeX() - Button_CustomHistoryUnDo:GetSizeX() - 20)
-  if Panel_Cash_Customization ~= nil then
-    if Panel_Cash_Customization:GetShow() then
-      Button_CustomHistoryUnDo:SetPosY(Panel_Cash_Customization:GetPosY() + FGlobal_CashCustom_CashBgSizeY() + 10)
-      Button_CustomHistoryDo:SetPosY(Panel_Cash_Customization:GetPosY() + FGlobal_CashCustom_CashBgSizeY() + 10)
-    else
-      Button_CustomHistoryUnDo:SetPosY(40)
-      Button_CustomHistoryDo:SetPosY(40)
-    end
-  else
-    Button_CustomHistoryUnDo:SetPosY(40)
-    Button_CustomHistoryDo:SetPosY(40)
-  end
+  historyTableRePosY()
 end
 
           local createWeatherGroup = function(groupInfo)
@@ -509,9 +491,9 @@ end
   StaticText_ZodiacDescription:SetText("")
 end
 
-          local isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CashCustom, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_HistoryButton = nil, nil, nil, nil, nil, nil, nil, nil, nil
+          local isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CashCustom, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_HistoryTable = nil, nil, nil, nil, nil, nil, nil, nil, nil
           TakeScreenShot = function()
-  -- function num : 0_13 , upvalues : screenShotReady, screenShotButtonUse, isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_HistoryButton, Button_CustomHistoryDo, Button_CustomHistoryUnDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, isShow_CashCustom, doScreenShot, doScreenShotSub
+  -- function num : 0_13 , upvalues : screenShotReady, screenShotButtonUse, isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_HistoryTable, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, isShow_CashCustom, doScreenShot, doScreenShotSub
   if screenShotReady == false then
     return 
   end
@@ -526,15 +508,14 @@ end
   isShow_CustomizationFrame = Panel_CustomizationFrame:GetShow()
   isShow_CustomizationMain = Panel_CustomizationMain:GetShow()
   isShow_CustomizingAlbum = Panel_CustomizingAlbum:GetShow()
-  isShow_HistoryButton = Button_CustomHistoryDo:GetShow()
+  isShow_HistoryTable = historyTableGetShow()
   StaticText_CustomizationMessage:SetShow(false)
   Panel_CustomizationCloth:SetShow(false)
   Panel_CustomizationMotion:SetShow(false)
   Panel_CustomizationFrame:SetShow(false)
   Panel_CustomizationMain:SetShow(false)
   Panel_CustomizingAlbum:SetShow(false)
-  Button_CustomHistoryDo:SetShow(false)
-  Button_CustomHistoryUnDo:SetShow(false)
+  historyTableSetShow(false)
   CheckButton_CameraLook:SetShow(false)
   CheckButton_ToggleUi:SetShow(false)
   CheckButton_ImagePreset:SetShow(false)
@@ -559,7 +540,7 @@ end
 end
 
           TakeFaceScreenShot = function()
-  -- function num : 0_14 , upvalues : screenShotReady, screenShotButtonUse, isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_HistoryButton, Button_CustomHistoryDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, Button_CustomHistoryUnDo, isShow_CashCustom, doScreenShotInFrame, doScreenCapture, doScreenShotSub
+  -- function num : 0_14 , upvalues : screenShotReady, screenShotButtonUse, isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_HistoryTable, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, isShow_CashCustom, doScreenShotInFrame, doScreenCapture, doScreenShotSub
   if screenShotReady == false then
     return 
   end
@@ -575,7 +556,7 @@ end
   isShow_CustomizationMain = Panel_CustomizationMain:GetShow()
   isShow_CustomizationStatic = Panel_CustomizationStatic:GetShow()
   isShow_CustomizingAlbum = Panel_CustomizingAlbum:GetShow()
-  isShow_HistoryButton = Button_CustomHistoryDo:GetShow()
+  isShow_HistoryTable = historyTableGetShow()
   StaticText_CustomizationMessage:SetShow(false)
   Panel_CustomizationCloth:SetShow(false)
   Panel_CustomizationMotion:SetShow(false)
@@ -597,8 +578,7 @@ end
   CheckButton_ImagePreset_Title:SetShow(false)
   Button_ScreenShot_Title:SetShow(false)
   Button_ScreenShotFolder_Title:SetShow(false)
-  Button_CustomHistoryDo:SetShow(false)
-  Button_CustomHistoryUnDo:SetShow(false)
+  historyTableSetShow(false)
   if not ToClient_isLobbyProcessor() then
     isShow_CashCustom = Panel_Cash_Customization:GetShow()
     Panel_Cash_Customization:SetShow(false)
@@ -698,7 +678,7 @@ end
 end
 
           CustomizationStatic_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_21 , upvalues : doScreenShot, timerForSS, _takeScreenShot, screenShotButtonUse, screenShotTime, screenShotReady, doScreenShotSub, subTime, StaticText_CustomizationMessage, isShow_CustomizationMessage, Button_CustomHistoryDo, isShow_HistoryButton, Button_CustomHistoryUnDo, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface, Edit_CharName
+  -- function num : 0_21 , upvalues : doScreenShot, timerForSS, _takeScreenShot, screenShotButtonUse, screenShotTime, screenShotReady, doScreenShotSub, subTime, StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_HistoryTable, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface, Edit_CharName
   if doScreenShot then
     if timerForSS > 0.3 then
       timerForSS = 0
@@ -721,8 +701,7 @@ end
       doScreenShotSub = false
       subTime = 0
       StaticText_CustomizationMessage:SetShow(isShow_CustomizationMessage)
-      Button_CustomHistoryDo:SetShow(isShow_HistoryButton)
-      Button_CustomHistoryUnDo:SetShow(isShow_HistoryButton)
+      historyTableSetShow(isShow_HistoryTable)
       CheckButton_CameraLook:SetShow(true)
       CheckButton_ToggleUi:SetShow(true)
       CheckButton_ImagePreset:SetShow(true)
@@ -761,7 +740,7 @@ end
       end
     end
   end
-  -- DECOMPILER ERROR at PC165: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC160: Unhandled construct in 'MakeBoolean' P1
 
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_RIGHT) and Edit_CharName:GetFocusEdit() == false and FileExplorer_IsOpen() == false then
     customHistoryDo()
@@ -1020,6 +999,7 @@ end
   Edit_CharName:RegistReturnKeyEvent("Panel_CharacterCreateOK_NewCustomization()")
   CheckButton_CameraLook:SetCheck(true)
   showAllUI(false)
+  HistoryTableOpen()
 end
 
           showAllUI = function(show)
@@ -1076,7 +1056,7 @@ end
 
           local hideUIIndex = 0
           ToggleUi = function()
-  -- function num : 0_41 , upvalues : CheckButton_ToggleUi, StaticText_CustomizationMessage, hideUIIndex, InGameMode, mainButtonNum, mainButtonInfo
+  -- function num : 0_41 , upvalues : CheckButton_ToggleUi, StaticText_CustomizationMessage, hideUIIndex, InGameMode, mainButtonNum, mainButtonInfo, isFristAddHistory
   if CheckButton_ToggleUi:IsCheck() then
     StaticText_CustomizationMessage:SetShow(true)
     if hideUIIndex == 2 then
@@ -1104,8 +1084,12 @@ end
       end
     end
     do
-      historyInit()
-      add_CurrentHistory()
+      if isFristAddHistory == false then
+        historyInit()
+        add_CurrentHistory()
+        isFristAddHistory = true
+      end
+      historyTableSetShow(true)
       hideUIIndex = 0
       StaticText_CustomizationMessage:SetShow(false)
       if Panel_CustomizationCloth:GetShow() then
@@ -1125,6 +1109,9 @@ end
             hideUIIndex = 0
           end
         end
+      end
+      do
+        historyTableSetShow(false)
       end
     end
   end
@@ -1328,7 +1315,7 @@ end
 end
 
           CloseCharacterCustomization = function()
-  -- function num : 0_54 , upvalues : closeCustomizationMode, CheckButton_ToggleUi
+  -- function num : 0_54 , upvalues : closeCustomizationMode, CheckButton_ToggleUi, isFristAddHistory
   closeCustomizationMode = true
   CheckButton_ToggleUi:SetCheck(false)
   if Panel_CustomizationCloth:GetShow() then
@@ -1343,6 +1330,8 @@ end
     end
   end
   Panel_CustomizationMain:SetShow(false)
+  historyTableClose()
+  isFristAddHistory = false
 end
 
           ShowCharacterCustomization = function(customizationData, classIndex, isInGame)

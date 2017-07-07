@@ -199,6 +199,16 @@ PaGlobal_Enchant.initialize = function(self)
   ;
   (self._uiEnchantBottomDesc):ComputePos()
   PaGlobal_Enchant:enchantFailCount()
+  if isGameTypeKR2() then
+    (self._uiButtonApply):SetSpanSize(-80, 150)
+    ;
+    (self._uiButtonSureSuccess):SetSpanSize(80, 150)
+  else
+    ;
+    (self._uiButtonApply):SetSpanSize(-80, 300)
+    ;
+    (self._uiButtonSureSuccess):SetSpanSize(80, 300)
+  end
   Panel_Window_Enchant:RegisterUpdateFunc("UpdateFunc_DoingEnchant")
   registerEvent("EventEnchantResultShow", "FromClient_EnchantResultShow")
   registerEvent("FromClient_UpgradeItem", "FromClient_UpgradeItem")

@@ -681,6 +681,7 @@ FGlobal_SetNewQuickSlot_ByGroundClick = function(s64_itemCount, slotNo, whereTyp
   -- function num : 0_23 , upvalues : NewQuickSlot
   local itemWrapper = (getInventoryItemByType(whereType, slotNo))
   local emptySlotIdx = nil
+  Inventory_DropEscape()
   for panelIdx = 0, (NewQuickSlot.config).maxPanelCount - 1 do
     local quickSlotKey = panelIdx
     local quickSlotInfo = getQuickSlotItem(quickSlotKey)

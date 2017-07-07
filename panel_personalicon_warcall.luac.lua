@@ -4,10 +4,14 @@
 -- params : ...
 -- function num : 0
 local _btn_WarCall = FGlobal_GetPersonalIconControl(10)
+local _isVolunteer = false
 WarCall_ToolTip = function(isShow)
-  -- function num : 0_0 , upvalues : _btn_WarCall
+  -- function num : 0_0 , upvalues : _isVolunteer, _btn_WarCall
   if isShow == false then
     TooltipSimple_Hide()
+    return 
+  end
+  if _isVolunteer == true then
     return 
   end
   local regionInfoWrapper = ToClient_getRegionInfoWrapperByPosition(ToClient_GetTeleportToSiegeTentPos())
@@ -28,8 +32,9 @@ Click_WarCall = function()
   TooltipSimple_Hide()
 end
 
-Response_GuildWarCall = function(sendType)
-  -- function num : 0_2
+Response_GuildWarCall = function(sendType, isVolunteer)
+  -- function num : 0_2 , upvalues : _isVolunteer
+  _isVolunteer = isVolunteer
   if sendType == 0 then
     Panel_WarCall_Open()
     luaTimer_AddEvent(Panel_WarCall_Close, 600000, false, 0)

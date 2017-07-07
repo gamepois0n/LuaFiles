@@ -306,18 +306,16 @@ FGlobal_EnchantArrowSet = function(isTop)
   -- function num : 0_7
   local self = PaGlobal_Enchant
   if isTop then
-    (self._uiCronDescArrow):SetPosY(178)
+    (self._uiCronDescArrow):SetPosY(232)
   else
     ;
     (self._uiCronDescArrow):SetPosY(210)
     self:SetCronDesc()
   end
   if not self._isCronEnchantOpen then
-    (self._uiCronDescArrow):SetPosY(200)
+    (self._uiProtectItem_Desc):SetShow(isTop)
+    self:CronDescSetShow(not isTop)
   end
-  ;
-  (self._uiProtectItem_Desc):SetShow(isTop)
-  self:CronDescSetShow(not isTop)
 end
 
 -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'

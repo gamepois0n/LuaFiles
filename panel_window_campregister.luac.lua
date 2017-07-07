@@ -35,22 +35,17 @@ PaGlobal_CampRegister.CampRegister_init = function(self)
   ((self._ui)._campRegisterDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
 end
 
-FGlobal_CampRegister_Open = function()
-  -- function num : 0_1
-  PaGlobal_CampRegister:CampRegister_Open()
-end
-
--- DECOMPILER ERROR at PC72: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CampRegister.CampRegister_Open = function(self)
-  -- function num : 0_2
+  -- function num : 0_1
   Panel_Window_CampRegister:SetShow(true)
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CampRegister.CampRegister_Close = function(self)
-  -- function num : 0_3 , upvalues : IM
+  -- function num : 0_2 , upvalues : IM
   if not Panel_Window_CampRegister:GetShow() then
     return 
   end
@@ -61,20 +56,33 @@ PaGlobal_CampRegister.CampRegister_Close = function(self)
 end
 
 FromClient_RegisterCampingTent = function(fromWhereType, fromSlotNo)
-  -- function num : 0_4
-  PaGlobal_CampRegister:CampRegister_InputCampName(fromWhereType, fromSlotNo)
+  -- function num : 0_3
+  local messageBox_RegistCamp = function()
+    -- function num : 0_3_0 , upvalues : fromWhereType, fromSlotNo
+    -- DECOMPILER ERROR at PC2: Confused about usage of register: R0 in 'UnsetPending'
+
+    self._tempFromWhereType = fromWhereType
+    -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
+
+    self._tempFromSlotNo = fromSlotNo
+    PaGlobal_CampRegister:HandleClicked_CampRegister_Register(fromWhereType, fromSlotNo)
+  end
+
+  local messageboxData = {title = titleForceOut, content = PAGetString(Defines.StringSheet_GAME, "LUA_CAMPREGISTER_DESC"), functionYes = messageBox_RegistCamp, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageboxData)
 end
 
 FromClient_CampingServantListUpdate = function()
-  -- function num : 0_5
+  -- function num : 0_4
   local isShow = ToClient_isCampingReigsted()
   Panel_Icon_Camp:SetShow(isShow)
 end
 
--- DECOMPILER ERROR at PC83: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC81: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CampRegister.CampRegister_InputCampName = function(self, fromWhereType, fromSlotNo)
-  -- function num : 0_6
+  -- function num : 0_5
   self._tempFromWhereType = fromWhereType
   self._tempFromSlotNo = fromSlotNo
   local campName = ((self._ui)._campNaming):GetEditText()
@@ -103,30 +111,28 @@ PaGlobal_CampRegister.CampRegister_InputCampName = function(self, fromWhereType,
   Panel_Window_CampRegister:SetShow(true)
 end
 
--- DECOMPILER ERROR at PC87: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
 
-PaGlobal_CampRegister.HandleClicked_CampRegister_Register = function(self)
-  -- function num : 0_7 , upvalues : IM
-  local fromWhereType = self._tempFromWhereType
-  local fromSlotNo = self._tempFromSlotNo
-  local campName = ((self._ui)._campNaming):GetEditText()
+PaGlobal_CampRegister.HandleClicked_CampRegister_Register = function(self, fromWhereType, fromSlotNo)
+  -- function num : 0_6 , upvalues : IM
+  local campName = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CAMP_TITLE")
   ToClient_requestServantRegisterCampingTent(fromWhereType, fromSlotNo, campName)
   ;
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   PaGlobal_CampRegister:HandleClicked_CampRegister_Close()
 end
 
--- DECOMPILER ERROR at PC90: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CampRegister.HandleClicked_CampRegister_Close = function(self)
-  -- function num : 0_8
+  -- function num : 0_7
   PaGlobal_CampRegister:CampRegister_Close()
 end
 
--- DECOMPILER ERROR at PC94: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC92: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CampRegister.HandleClicked_CampRegister_ClearEdit = function(self)
-  -- function num : 0_9 , upvalues : IM
+  -- function num : 0_8 , upvalues : IM
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   ;
   ((self._ui)._campNaming):SetEditText("", false)
@@ -134,15 +140,15 @@ PaGlobal_CampRegister.HandleClicked_CampRegister_ClearEdit = function(self)
 end
 
 FGlobal_CampRegister_Close = function()
-  -- function num : 0_10 , upvalues : IM
+  -- function num : 0_9 , upvalues : IM
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   Panel_Window_CampRegister:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC100: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC98: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CampRegister.CampRegister_registEventHandler = function(self)
-  -- function num : 0_11
+  -- function num : 0_10
   ((self._ui)._campRegisterCancel):addInputEvent("Mouse_LUp", "PaGlobal_CampRegister:CampRegister_Close()")
   ;
   ((self._ui)._campRegister):addInputEvent("Mouse_LUp", "PaGlobal_CampRegister:HandleClicked_CampRegister_Register()")
@@ -152,10 +158,10 @@ PaGlobal_CampRegister.CampRegister_registEventHandler = function(self)
   ((self._ui)._campNaming):RegistReturnKeyEvent("PaGlobal_CampRegister:HandleClicked_CampRegister_Register()")
 end
 
--- DECOMPILER ERROR at PC103: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC101: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CampRegister.CampRegister_registMessageHandler = function(self)
-  -- function num : 0_12
+  -- function num : 0_11
   registerEvent("FromClient_RegisterCampingTent", "FromClient_RegisterCampingTent")
   registerEvent("FromClient_CampingServantListUpdate", "FromClient_CampingServantListUpdate")
 end

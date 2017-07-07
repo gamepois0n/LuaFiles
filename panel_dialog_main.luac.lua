@@ -4407,7 +4407,7 @@ FGlobal_CloseNpcDialogForDetail = function()
     StableFunction_Close()
     return true
   end
-  if Panel_Window_Repair:IsShow() and FGlobal_IsCamping() == false then
+  if Panel_Window_Repair:IsShow() and PaGlobal_Camp:getIsCamping() == false then
     Panel_FixEquip:SetShow(false)
     PaGlobal_Repair:repair_OpenPanel(false)
     return true

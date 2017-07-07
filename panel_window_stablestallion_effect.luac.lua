@@ -9,22 +9,22 @@ local awakenSuccess = (UI.getChildControl)(Panel_Window_StableStallion_Effect, "
 local awakenFail = (UI.getChildControl)(Panel_Window_StableStallion_Effect, "Static_AwakenFail")
 local effectControl = {}
 local controlCount = 0
-StableStallion_AwakenEffect = function(isAwaken)
+StableStallion_AwakenEffect = function(isAwaken, servantKey)
   -- function num : 0_0 , upvalues : horseToehold, awakenFail, awakenSuccess
   if isAwaken == 0 then
-    StableStallion_Effect(Panel_Window_StableStallion_Effect, 6, 0, 220)
+    StableStallion_Effect(Panel_Window_StableStallion_Effect, 6, 0, 220, servantKey)
     return 
   else
     if isAwaken == true then
       horseToehold:SetShow(true)
       awakenFail:SetShow(false)
       horseToehold:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_AWAKENSUCCESS"))
-      StableStallion_Effect(Panel_Window_StableStallion_Effect, 7, 0, 220)
+      StableStallion_Effect(Panel_Window_StableStallion_Effect, 7, 0, 220, servantKey)
     else
       horseToehold:SetShow(true)
       awakenSuccess:SetShow(false)
       horseToehold:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLESTALLION_TEXT_AWAKENFAIL"))
-      StableStallion_Effect(Panel_Window_StableStallion_Effect, 12, 0, 220)
+      StableStallion_Effect(Panel_Window_StableStallion_Effect, 12, 0, 220, servantKey)
     end
   end
 end
@@ -34,7 +34,7 @@ StableStallion_doAwakenEffect = function()
   StableStallion_Effect(Panel_Window_StableStallion_Effect, 13, 0, -190)
 end
 
-StableStallion_Effect = function(control, index, posX, posY)
+StableStallion_Effect = function(control, index, posX, posY, servantKey)
   -- function num : 0_2 , upvalues : effectControl, controlCount
   if index == 0 then
     control:AddEffect("fUI_Alchemy_UpgradeStart01", false, posX, posY)
@@ -57,7 +57,17 @@ StableStallion_Effect = function(control, index, posX, posY)
             control:AddEffect("fUI_Horse_Upgrade_05B", false, posX, posY)
           else
             if index == 7 then
-              control:AddEffect("fUI_Horse_Upgrade_06B", false, posX, posY)
+              if servantKey == 9989 or servantKey == 9889 then
+                control:AddEffect("fUI_Horse_Upgrade_06B", false, posX, posY)
+              else
+                if servantKey == 9988 or servantKey == 9888 then
+                  control:AddEffect("fUI_Horse_Upgrade_06C", false, posX, posY)
+                else
+                  if servantKey == 9987 or servantKey == 9887 then
+                    control:AddEffect("fUI_Horse_Upgrade_06B", false, posX, posY)
+                  end
+                end
+              end
             else
             end
           end
@@ -87,7 +97,7 @@ StableStallion_Effect = function(control, index, posX, posY)
       end
     end
   end
-  -- DECOMPILER ERROR at PC139: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC165: Confused about usage of register: R5 in 'UnsetPending'
 
   effectControl[controlCount] = control
   controlCount = controlCount + 1

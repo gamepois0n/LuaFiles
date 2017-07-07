@@ -42,11 +42,9 @@ FromClient_AntiAddiction = function(isType)
 end
 
 PaGlobal_Panel_KickOff_Open = function(isType)
-  -- function num : 0_3 , upvalues : kickOff, UI_TM
+  -- function num : 0_3 , upvalues : kickOff
   local self = kickOff
   local screenShotFileName = getRecentScreenShotFileName()
-  ;
-  (self._txt_KickOffDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   if isType == 1 then
     (self._txt_KickOffDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_C"))
   else
@@ -67,6 +65,7 @@ PaGlobal_Panel_KickOff_Open = function(isType)
   ;
   (self._screenShotBG):SetSize((self._screenShotBG):GetSizeX(), (self._txt_KickOffDesc):GetTextSizeY() + 20)
   Panel_KickOff:SetSize(Panel_KickOff:GetSizeX(), (self._screenShotBG):GetSizeY() + 110)
+  PaGlobal_Panel_KickOff_Position()
   Panel_KickOff:SetShow(true)
 end
 

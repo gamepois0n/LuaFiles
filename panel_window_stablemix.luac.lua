@@ -160,20 +160,29 @@ StableMix_Mix = function()
   -- function num : 0_4 , upvalues : stableMix, UI_WHERETYPE, isContentsStallionEnable
   local self = stableMix
   local name = (self._editName):GetEditText()
-  local editNameString = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_EDITBOX_COMMENT")
-  if editNameString == name then
-    local messageBoxMemo = editNameString
+  local isEditShow = (self._editName):GetShow()
+  if not isEditShow then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMIX_SELECTMIX_PLS")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_EXCHANGE_CONFIRM"), content = messageBoxMemo, functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)
     return 
   end
   do
-    if self._servantNo1 == nil or self._servantNo2 == nil then
+    local editNameString = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_EDITBOX_COMMENT")
+    if editNameString == name then
+      local messageBoxMemo = editNameString
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_EXCHANGE_CONFIRM"), content = messageBoxMemo, functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
       return 
     end
-    local whereType = UI_WHERETYPE.eInventory
-    local servantMix = function()
+    do
+      if self._servantNo1 == nil or self._servantNo2 == nil then
+        return 
+      end
+      local whereType = UI_WHERETYPE.eInventory
+      local servantMix = function()
     -- function num : 0_4_0 , upvalues : self, whereType, UI_WHERETYPE, name
     if (self._chkInven):IsCheck() then
       whereType = UI_WHERETYPE.eInventory
@@ -183,17 +192,18 @@ StableMix_Mix = function()
     stable_mix(self._servantNo1, self._servantNo2, whereType, name)
   end
 
-    local messageBoxMemo = ""
-    if isContentsStallionEnable then
-      messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMIX_TEXT_MIXHELPMSG")
-    else
-      messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMIX_TEXT_MIXHELPMSG2")
+      local messageBoxMemo = ""
+      if isContentsStallionEnable then
+        messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMIX_TEXT_MIXHELPMSG")
+      else
+        messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEMIX_TEXT_MIXHELPMSG2")
+      end
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_EXCHANGE_CONFIRM"), content = messageBoxMemo, functionYes = servantMix, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+      ;
+      (self._editName):SetEditText("", true)
     end
-    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_EXCHANGE_CONFIRM"), content = messageBoxMemo, functionYes = servantMix, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-    ;
-    (MessageBox.showMessageBox)(messageBoxData)
-    ;
-    (self._editName):SetEditText("", true)
   end
 end
 
@@ -275,6 +285,8 @@ StableMix_Open = function()
   end
   self:init()
   self:update()
+  stableMix_ClearSlot(1)
+  stableMix_ClearSlot(2)
   ;
   (self._chkInven):SetCheck(false)
   ;

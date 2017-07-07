@@ -193,7 +193,6 @@ QuestWindow.init = function(self)
 
     ;
     ((self.uiPool).questFavorType)[ii] = control
-    Panel_Window_Quest_New:addConsoleUIControl(ii, 1, 3, control)
   end
   ;
   ((QuestWindow.ui).favorTitle):addInputEvent("Mouse_On", "QUestWindow_SelectQuestFavorTypeSimpleTooltip( true, 99 )")
@@ -235,7 +234,7 @@ QuestWindow.init = function(self)
     (groupSlot.completePercent):addInputEvent("Mouse_DownScroll", "HandleWheel_QuestWindow( false )")
     ;
     (groupSlot.name):SetTextMode(UI_TM.eTextMode_LimitText)
-    -- DECOMPILER ERROR at PC225: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC218: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self.uiPool).groupTitle)[slotIdx] = groupSlot
@@ -315,7 +314,7 @@ QuestWindow.init = function(self)
     (listSlot.btnReward):addInputEvent("Mouse_On", "")
     ;
     (listSlot.btnReward):addInputEvent("Mouse_Out", "")
-    -- DECOMPILER ERROR at PC495: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC488: Confused about usage of register: R11 in 'UnsetPending'
 
     ;
     ((self.uiPool).listMain)[slotIdx] = listSlot
@@ -330,17 +329,17 @@ QuestWindow.init = function(self)
   questArrayGroupCount = {}
   questArrayGroupCompleteCount = {}
   for groupIdx = 0, questGroupCount - 1 do
-    -- DECOMPILER ERROR at PC520: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC513: Confused about usage of register: R11 in 'UnsetPending'
 
     recommendationGroupOpen[groupIdx] = false
   end
   for groupIdx = 0, repeatitionQuestGroupCount - 1 do
-    -- DECOMPILER ERROR at PC527: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC520: Confused about usage of register: R11 in 'UnsetPending'
 
     repetitiveQuestGroupOpen[groupIdx] = false
   end
   for groupIdx = 0, mainQuestGroupCount - 1 do
-    -- DECOMPILER ERROR at PC534: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC527: Confused about usage of register: R11 in 'UnsetPending'
 
     mainQuestGroupOpen[groupIdx] = false
   end
@@ -1055,6 +1054,8 @@ QuestWindow.MakeDataArray = function(self)
   -- DECOMPILER ERROR: 30 unprocessed JMP targets
 end
 
+local beforeUiCount = 0
+local isCheckConsolePadGroup = true
 QuestWindow.update = function(self)
   -- function num : 0_11 , upvalues : QuestWindow, QuestTabType, useArray, questArrayTypeProgressCount, questArrayRegionProgressCount, questArrayGroupCompleteCount, questArrayGroupCount, regionOpen, typeOpen, repetitiveQuestGroupOpen, UI_color, UI_TM, questType
   local progressingActiveTab = QuestWindow:GetProgressingActiveTab()
@@ -1080,20 +1081,6 @@ QuestWindow.update = function(self)
       end
     end
   end
-  for gIndex = 1, 15 do
-    Panel_Window_Quest_New:deleteConsoleUIGroup(gIndex)
-  end
-  Panel_Window_Quest_New:addConsoleUIControl(0, 1, 0, (QuestWindow.ui).tabProgress)
-  Panel_Window_Quest_New:addConsoleUIControl(1, 1, 0, (QuestWindow.ui).tabMain)
-  Panel_Window_Quest_New:addConsoleUIControl(2, 1, 0, (QuestWindow.ui).tabImportant)
-  Panel_Window_Quest_New:addConsoleUIControl(3, 1, 0, (QuestWindow.ui).tabRepeat)
-  if QuestTabType.QuestTabType_Progress == progressingActiveTab then
-    Panel_Window_Quest_New:addConsoleUIControl(0, 1, 1, (QuestWindow.ui).radioTerritoryGroup)
-    Panel_Window_Quest_New:addConsoleUIControl(1, 1, 1, (QuestWindow.ui).radioTypeGroup)
-    Panel_Window_Quest_New:addConsoleUIControl(2, 1, 1, (QuestWindow.ui).chkEmptyGroupHide)
-  else
-    Panel_Window_Quest_New:addConsoleUIControl(0, 1, 1, (QuestWindow.ui).hideCompBtn)
-  end
   QuestWindow:ResetDataArray()
   QuestWindow:MakeDataArray()
   for uiIdx = 0, (self.config).slotMaxCount - 1 do
@@ -1101,7 +1088,7 @@ QuestWindow.update = function(self)
     ;
     ((((self.uiPool).listMain)[uiIdx]).bg):SetShow(false)
   end
-  -- DECOMPILER ERROR at PC174: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self.config).listCount = #useArray
@@ -1126,7 +1113,6 @@ QuestWindow.update = function(self)
         end
         if (useArray[questIdx]).isQuest == false then
           ((((self.uiPool).groupTitle)[uiCount]).bg):SetShow(true)
-          Panel_Window_Quest_New:addConsoleUIControl(0, 1, uiCount + 2, (((self.uiPool).groupTitle)[uiCount]).bg)
           local isOpenTypeCheck = 0
           local typeKey = 0
           local clearedQuestCnt = 0
@@ -1401,120 +1387,90 @@ QuestWindow.update = function(self)
                                   ((((self.uiPool).listMain)[uiCount]).btnAuto):SetCheck(true)
                                 end
                               end
-                              local nextCheck = 0
-                              if not (useArray[questIdx]).isNext then
-                                nextCheck = 1
-                              end
-                              ;
-                              ((((self.uiPool).listMain)[uiCount]).name):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_ShowDetailInfo(  " .. (useArray[questIdx]).gruopNo .. ", " .. (useArray[questIdx]).questNo .. ", " .. questCondition .. ", " .. (useArray[questIdx]).groupIdx .. ", " .. nextCheck .. " )")
-                              ;
-                              ((((self.uiPool).listMain)[uiCount]).name):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. " )")
-                              ;
-                              ((((self.uiPool).listMain)[uiCount]).name):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. " )")
-                              ;
-                              ((((self.uiPool).listMain)[uiCount]).name):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. " )")
-                              if ((((self.uiPool).listMain)[uiCount]).btnAuto):GetShow() then
-                                ((((self.uiPool).listMain)[uiCount]).btnAuto):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_FindWay_Prepare( " .. (useArray[questIdx]).gruopNo .. ", " .. (useArray[questIdx]).questNo .. ", " .. questCondition .. ", true )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnAuto):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 0 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnAuto):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 0 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnAuto):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 0 .. " )")
-                              end
-                              if ((((self.uiPool).listMain)[uiCount]).btnNavi):GetShow() then
-                                ((((self.uiPool).listMain)[uiCount]).btnNavi):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_FindWay_Prepare( " .. (useArray[questIdx]).gruopNo .. ", " .. (useArray[questIdx]).questNo .. ", " .. questCondition .. ", false )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnNavi):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 1 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnNavi):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 1 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnNavi):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 1 .. " )")
-                              end
-                              if ((((self.uiPool).listMain)[uiCount]).btnGiveup):GetShow() then
-                                ((((self.uiPool).listMain)[uiCount]).btnGiveup):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_QuestGiveUp(" .. (useArray[questIdx]).gruopNo .. "," .. (useArray[questIdx]).questNo .. ")")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnGiveup):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 2 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnGiveup):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 2 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnGiveup):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 2 .. " )")
-                              end
-                              if ((((self.uiPool).listMain)[uiCount]).btnReward):GetShow() then
-                                ((((self.uiPool).listMain)[uiCount]).btnReward):addInputEvent("Mouse_LUp", "HandleClicked_QuestReward_Show(" .. (useArray[questIdx]).gruopNo .. "," .. (useArray[questIdx]).questNo .. ")")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnReward):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 3 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnReward):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 3 .. " )")
-                                ;
-                                ((((self.uiPool).listMain)[uiCount]).btnReward):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 3 .. " )")
-                              end
                               do
                                 do
-                                  local groupIndex = 0
-                                  if ((((self.uiPool).listMain)[uiCount]).showBtn):GetShow() then
-                                    Panel_Window_Quest_New:addConsoleUIControl(groupIndex, 1, uiCount + 2, (((self.uiPool).listMain)[uiCount]).showBtn)
-                                    groupIndex = groupIndex + 1
+                                  local nextCheck = 0
+                                  if not (useArray[questIdx]).isNext then
+                                    nextCheck = 1
                                   end
-                                  if ((((self.uiPool).listMain)[uiCount]).name):GetShow() then
-                                    Panel_Window_Quest_New:addConsoleUIControl(groupIndex, 1, uiCount + 2, (((self.uiPool).listMain)[uiCount]).name)
-                                    groupIndex = groupIndex + 1
-                                  end
-                                  if ((((self.uiPool).listMain)[uiCount]).btnReward):GetShow() then
-                                    Panel_Window_Quest_New:addConsoleUIControl(groupIndex, 1, uiCount + 2, (((self.uiPool).listMain)[uiCount]).btnReward)
-                                    groupIndex = groupIndex + 1
-                                  end
-                                  if ((((self.uiPool).listMain)[uiCount]).btnGiveup):GetShow() then
-                                    Panel_Window_Quest_New:addConsoleUIControl(groupIndex, 1, uiCount + 2, (((self.uiPool).listMain)[uiCount]).btnGiveup)
-                                    groupIndex = groupIndex + 1
+                                  ;
+                                  ((((self.uiPool).listMain)[uiCount]).name):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_ShowDetailInfo(  " .. (useArray[questIdx]).gruopNo .. ", " .. (useArray[questIdx]).questNo .. ", " .. questCondition .. ", " .. (useArray[questIdx]).groupIdx .. ", " .. nextCheck .. " )")
+                                  ;
+                                  ((((self.uiPool).listMain)[uiCount]).name):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. " )")
+                                  ;
+                                  ((((self.uiPool).listMain)[uiCount]).name):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. " )")
+                                  ;
+                                  ((((self.uiPool).listMain)[uiCount]).name):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. " )")
+                                  if ((((self.uiPool).listMain)[uiCount]).btnAuto):GetShow() then
+                                    ((((self.uiPool).listMain)[uiCount]).btnAuto):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_FindWay_Prepare( " .. (useArray[questIdx]).gruopNo .. ", " .. (useArray[questIdx]).questNo .. ", " .. questCondition .. ", true )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnAuto):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 0 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnAuto):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 0 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnAuto):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 0 .. " )")
                                   end
                                   if ((((self.uiPool).listMain)[uiCount]).btnNavi):GetShow() then
-                                    Panel_Window_Quest_New:addConsoleUIControl(groupIndex, 1, uiCount + 2, (((self.uiPool).listMain)[uiCount]).btnNavi)
-                                    groupIndex = groupIndex + 1
+                                    ((((self.uiPool).listMain)[uiCount]).btnNavi):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_FindWay_Prepare( " .. (useArray[questIdx]).gruopNo .. ", " .. (useArray[questIdx]).questNo .. ", " .. questCondition .. ", false )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnNavi):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 1 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnNavi):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 1 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnNavi):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 1 .. " )")
                                   end
-                                  if ((((self.uiPool).listMain)[uiCount]).btnAuto):GetShow() then
-                                    Panel_Window_Quest_New:addConsoleUIControl(groupIndex, 1, uiCount + 2, (((self.uiPool).listMain)[uiCount]).btnAuto)
+                                  if ((((self.uiPool).listMain)[uiCount]).btnGiveup):GetShow() then
+                                    ((((self.uiPool).listMain)[uiCount]).btnGiveup):addInputEvent("Mouse_LUp", "HandleClicked_QuestWindow_QuestGiveUp(" .. (useArray[questIdx]).gruopNo .. "," .. (useArray[questIdx]).questNo .. ")")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnGiveup):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 2 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnGiveup):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 2 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnGiveup):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 2 .. " )")
                                   end
-                                  if uiCount == 0 then
-                                    Panel_Window_Quest_New:setConsoleKeyGruopEventForLUA("QuestWindow_UpScrollEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_UP, uiCount + 2)
-                                  end
-                                  if uiCount == 12 then
-                                    Panel_Window_Quest_New:setConsoleKeyGruopEventForLUA("QuestWindow_DownScrollEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_DOWN, uiCount + 2)
+                                  if ((((self.uiPool).listMain)[uiCount]).btnReward):GetShow() then
+                                    ((((self.uiPool).listMain)[uiCount]).btnReward):addInputEvent("Mouse_LUp", "HandleClicked_QuestReward_Show(" .. (useArray[questIdx]).gruopNo .. "," .. (useArray[questIdx]).questNo .. ")")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnReward):addInputEvent("Mouse_On", "HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 3 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnReward):addInputEvent("Mouse_Out", "HandleOnout_QuestWindow_ShowCondition( false, " .. questIdx .. ", " .. uiCount .. ", " .. 3 .. " )")
+                                    ;
+                                    ((((self.uiPool).listMain)[uiCount]).btnReward):setTooltipEventRegistFunc("HandleOnout_QuestWindow_ShowCondition( true, " .. questIdx .. ", " .. uiCount .. ", " .. 3 .. " )")
                                   end
                                   uiCount = uiCount + 1
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC1748: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC1518: LeaveBlock: unexpected jumping out IF_STMT
 
                                 end
                               end
@@ -1531,11 +1487,8 @@ QuestWindow.update = function(self)
         end
       end
     end
-    for ii = 0, (self.config).favorCount - 1 do
-      Panel_Window_Quest_New:addConsoleUIControl(ii, 1, uiCount + 2, ((self.uiPool).questFavorType)[ii])
-    end
     QuestWindow:ResetDataArray()
-    -- DECOMPILER ERROR: 31 unprocessed JMP targets
+    -- DECOMPILER ERROR: 23 unprocessed JMP targets
   end
 end
 
@@ -1572,6 +1525,7 @@ Panel_Window_QuestNew_Show = function(isShow)
     ;
     ((QuestWindow.ui).scroll):SetControlTop()
     QuestWindow:update()
+    Panel_Window_QuestNew_SetConsolePadGroup()
   else
     Panel_Window_Quest_New:SetShow(false, false)
     if Panel_CheckedQuestInfo:GetShow() then
@@ -1593,21 +1547,27 @@ end
 
 HandleClick_QuestWindow_Update = function()
   -- function num : 0_17 , upvalues : QuestWindow
-  -- DECOMPILER ERROR at PC2: Confused about usage of register: R0 in 'UnsetPending'
+  Panel_Window_QuestNew_SetConsolePadGroup()
+  -- DECOMPILER ERROR at PC4: Confused about usage of register: R0 in 'UnsetPending'
 
+  ;
   (QuestWindow.config).startSlotIndex = 1
   ;
   ((QuestWindow.ui).scroll):SetControlTop()
   QuestWindow:update()
 end
 
-HandleClicked_QuestWindow_ShowCheck = function(gruopNo, questNo)
+Panel_Window_QuestNew_SetConsolePadGroup = function()
   -- function num : 0_18
+end
+
+HandleClicked_QuestWindow_ShowCheck = function(gruopNo, questNo)
+  -- function num : 0_19
   HandleClicked_QuestShowCheck(gruopNo, questNo)
 end
 
 HandleClick_QuestWindow_UpdateExpandBar = function(isRegion, Idx, uiIdx)
-  -- function num : 0_19 , upvalues : regionOpen, typeOpen, repetitiveQuestGroupOpen, QuestWindow
+  -- function num : 0_20 , upvalues : regionOpen, typeOpen, repetitiveQuestGroupOpen, QuestWindow
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R3 in 'UnsetPending'
 
   if isRegion == 0 then
@@ -1639,7 +1599,7 @@ HandleClick_QuestWindow_UpdateExpandBar = function(isRegion, Idx, uiIdx)
 end
 
 HandleClicked_SetQuestSelectType = function(gruopNo, questNo, questCondition, isAuto, selectQuestType)
-  -- function num : 0_20
+  -- function num : 0_21
   local QuestListInfo = ToClient_GetQuestList()
   QuestListInfo:setQuestSelectType(selectQuestType, true)
   FGlobal_UpdateQuestFavorType()
@@ -1647,14 +1607,14 @@ HandleClicked_SetQuestSelectType = function(gruopNo, questNo, questCondition, is
 end
 
 HandleClicked_QuestWindow_SetQuestSlectType = function(gruopNo, questNo, questCondition, isAuto, selectQuestType)
-  -- function num : 0_21 , upvalues : questSelectType, questSelectTypeString
+  -- function num : 0_22 , upvalues : questSelectType, questSelectTypeString
   if selectQuestType < 0 or questSelectType.etc < selectQuestType then
     return 
   end
   local messageboxTitle = PAGetString(Defines.StringSheet_GAME, "GUILD_MESSAGEBOX_TITLE")
   local messageboxContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHECKEDQUEST_FAVORTYPE_ENABLE", "favortype", questSelectTypeString[selectQuestType])
   local funcSetQuestSelectType = function()
-    -- function num : 0_21_0 , upvalues : gruopNo, questNo, questCondition, isAuto, selectQuestType
+    -- function num : 0_22_0 , upvalues : gruopNo, questNo, questCondition, isAuto, selectQuestType
     HandleClicked_SetQuestSelectType(gruopNo, questNo, questCondition, isAuto, selectQuestType)
   end
 
@@ -1664,7 +1624,7 @@ HandleClicked_QuestWindow_SetQuestSlectType = function(gruopNo, questNo, questCo
 end
 
 HandleClicked_QuestWindow_FindWay_Prepare = function(gruopNo, questNo, questCondition, isAuto)
-  -- function num : 0_22
+  -- function num : 0_23
   local QuestStatic = questList_getQuestStatic(gruopNo, questNo)
   if QuestStatic ~= nil and ToClient_getTutorialLimitLevel() <= ((getSelfPlayer()):get()):getLevel() then
     local selectQuestType = QuestStatic:getSelectType()
@@ -1684,7 +1644,7 @@ HandleClicked_QuestWindow_FindWay_Prepare = function(gruopNo, questNo, questCond
 end
 
 HandleClicked_QuestWindow_FindWay = function(gruopNo, questNo, questCondition, isAuto)
-  -- function num : 0_23 , upvalues : QuestWindow
+  -- function num : 0_24 , upvalues : QuestWindow
   local QuestStatic = questList_getQuestStatic(gruopNo, questNo)
   -- DECOMPILER ERROR at PC16: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -1722,7 +1682,7 @@ HandleClicked_QuestWindow_FindWay = function(gruopNo, questNo, questCondition, i
 end
 
 HandleClicked_QuestWindow_ShowDetailInfo = function(questGroupId, questId, questCondition_Chk, groupIdx, nextChk)
-  -- function num : 0_24 , upvalues : QuestWindow, QuestTabType
+  -- function num : 0_25 , upvalues : QuestWindow, QuestTabType
   local progressingActiveTab = QuestWindow:GetProgressingActiveTab()
   local isProgressingActive = false
   if QuestTabType.QuestTabType_Progress == progressingActiveTab then
@@ -1770,7 +1730,7 @@ HandleClicked_QuestWindow_ShowDetailInfo = function(questGroupId, questId, quest
 end
 
 HandleClicked_QuestWindow_QuestGiveUp = function(groupId, questId)
-  -- function num : 0_25
+  -- function num : 0_26
   if PaGlobal_TutorialManager:isBeginnerTutorialQuest(groupId, questId) == true and PaGlobal_TutorialManager:isDoingTutorial() == true then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
     return 
@@ -1784,7 +1744,7 @@ HandleClicked_QuestWindow_QuestGiveUp = function(groupId, questId)
 end
 
 HandleOnout_QuestWindow_ShowCondition = function(isShow, arrayIdx, uiIdx, buttonType)
-  -- function num : 0_26 , upvalues : QuestWindow, useArray
+  -- function num : 0_27 , upvalues : QuestWindow, useArray
   if not ((QuestWindow.ui).tabProgress):IsCheck() then
     if isShow then
       local uiControl = (((QuestWindow.uiPool).listMain)[uiIdx]).name
@@ -1822,7 +1782,7 @@ HandleOnout_QuestWindow_ShowCondition = function(isShow, arrayIdx, uiIdx, button
 end
 
 QuestWindow_SimpleTooltip = function(isShow, idx, uiCount, baseCount)
-  -- function num : 0_27 , upvalues : QuestWindow, QuestTabType, useArray, questArrayGroupCompleteCount, questArrayGroupCount
+  -- function num : 0_28 , upvalues : QuestWindow, QuestTabType, useArray, questArrayGroupCompleteCount, questArrayGroupCount
   if isShow == nil then
     TooltipSimple_Hide()
     return 
@@ -1843,7 +1803,7 @@ QuestWindow_SimpleTooltip = function(isShow, idx, uiCount, baseCount)
 end
 
 HandleWheel_QuestWindow = function(isScrollUp)
-  -- function num : 0_28 , upvalues : QuestWindow
+  -- function num : 0_29 , upvalues : QuestWindow
   -- DECOMPILER ERROR at PC20: Confused about usage of register: R1 in 'UnsetPending'
 
   (QuestWindow.config).startSlotIndex = (UIScroll.ScrollEvent)((QuestWindow.ui).scroll, isScrollUp, (QuestWindow.config).slotMaxCount, (QuestWindow.config).listCount + 1, (QuestWindow.config).startSlotIndex, 1)
@@ -1856,7 +1816,7 @@ HandleWheel_QuestWindow = function(isScrollUp)
 end
 
 FGlobal_QuestWindow_Update_FindWay = function(groupId, questId, isAuto)
-  -- function num : 0_29 , upvalues : QuestWindow
+  -- function num : 0_30 , upvalues : QuestWindow
   -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
 
   if (QuestWindow.selectWay).groupID == groupId and (QuestWindow.selectWay).questID == questId then
@@ -1889,22 +1849,22 @@ FGlobal_QuestWindow_Update_FindWay = function(groupId, questId, isAuto)
 end
 
 FGlobal_QuestWindow_favorTypeUpdate = function()
-  -- function num : 0_30 , upvalues : QuestWindow
+  -- function num : 0_31 , upvalues : QuestWindow
   QuestWindow:favorTypeUpdate()
 end
 
 FGlobal_QuestWindowGetStartPosition = function()
-  -- function num : 0_31 , upvalues : QuestWindow
+  -- function num : 0_32 , upvalues : QuestWindow
   return (QuestWindow.config).startSlotIndex
 end
 
 FGlobal_QuestWindow_Update = function()
-  -- function num : 0_32 , upvalues : QuestWindow
+  -- function num : 0_33 , upvalues : QuestWindow
   QuestWindow:update()
 end
 
 FGlobal_QuestWindow_SetProgress = function()
-  -- function num : 0_33 , upvalues : QuestWindow
+  -- function num : 0_34 , upvalues : QuestWindow
   ((QuestWindow.ui).tabProgress):SetCheck(true)
   ;
   ((QuestWindow.ui).tabImportant):SetCheck(false)
@@ -1915,22 +1875,22 @@ FGlobal_QuestWindow_SetProgress = function()
 end
 
 FromClient_QuestWindow_Update = function()
-  -- function num : 0_34 , upvalues : QuestWindow
+  -- function num : 0_35 , upvalues : QuestWindow
   QuestWindow:update()
 end
 
 Panel_Window_QuestNew_OnScreenResize = function()
-  -- function num : 0_35
+  -- function num : 0_36
   Panel_Window_Quest_New:ComputePos()
 end
 
 Panel_Window_QuestNew_Toggle = function()
-  -- function num : 0_36
+  -- function num : 0_37
   Panel_Window_QuestNew_Show(not Panel_Window_Quest_New:GetShow())
 end
 
 QuestWindow.registEventHandler = function(self)
-  -- function num : 0_37
+  -- function num : 0_38
   ((self.ui).btn_Close):addInputEvent("Mouse_LUp", "HandleClicked_QuestNew_Close()")
   ;
   ((self.ui).checkPopUp):addInputEvent("Mouse_LUp", "Panel_Window_QuestNew_PopUp()")
@@ -1969,13 +1929,13 @@ QuestWindow.registEventHandler = function(self)
 end
 
 QuestWindow.registMessageHandler = function(self)
-  -- function num : 0_38
+  -- function num : 0_39
   registerEvent("FromClient_UpdateQuestList", "FromClient_QuestWindow_Update")
   registerEvent("onScreenResize", "Panel_Window_QuestNew_OnScreenResize")
 end
 
 Panel_Window_QuestNew_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_39 , upvalues : QuestWindow
+  -- function num : 0_40 , upvalues : QuestWindow
   if isShow then
     local self = QuestWindow
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")

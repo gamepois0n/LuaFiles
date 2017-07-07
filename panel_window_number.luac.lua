@@ -182,7 +182,6 @@ Panel_NumberPad_Open = function()
   -- function num : 0_5
   if not Panel_Window_Exchange_Number:IsShow() then
     Panel_Window_Exchange_Number:SetShow(true, true)
-    Panel_Window_Exchange_Number:setLockFocusPanel(true)
   end
 end
 
@@ -289,7 +288,7 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
       end
     end
   end
-  Panel_Window_Exchange_Number:SetSize(200, 240)
+  Panel_Window_Exchange_Number:SetSize(200, 260)
   Panel_NumberPad_CheckButtonShow(true)
 end
 
@@ -580,24 +579,7 @@ Panel_Window_Exchange_Number:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mo
 Panel_Window_Exchange_Number:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
 numberPad:init()
 ConsoleGroupCreate_Panel_Window_Exchange_Number = function()
-  -- function num : 0_23 , upvalues : _textNumber, _checkButtonMaxCount, numberPad, _buttonBackSpace, _buttonClear, _buttonAllSelect, _buttonConfirm, _buttonCancel
-  Panel_Window_Exchange_Number:addConsoleUIControl(0, 1, 0, _textNumber)
-  Panel_Window_Exchange_Number:addConsoleUIControl(1, 1, 0, _checkButtonMaxCount)
-  Panel_Window_Exchange_Number:addConsoleUIControl(0, 3, 1, (numberPad._buttonNumber)[8])
-  Panel_Window_Exchange_Number:addConsoleUIControl(1, 3, 1, (numberPad._buttonNumber)[9])
-  Panel_Window_Exchange_Number:addConsoleUIControl(2, 3, 1, (numberPad._buttonNumber)[10])
-  Panel_Window_Exchange_Number:addConsoleUIControl(3, 3, 1, (numberPad._buttonNumber)[5])
-  Panel_Window_Exchange_Number:addConsoleUIControl(4, 3, 1, (numberPad._buttonNumber)[6])
-  Panel_Window_Exchange_Number:addConsoleUIControl(5, 3, 1, (numberPad._buttonNumber)[7])
-  Panel_Window_Exchange_Number:addConsoleUIControl(6, 3, 1, (numberPad._buttonNumber)[2])
-  Panel_Window_Exchange_Number:addConsoleUIControl(7, 3, 1, (numberPad._buttonNumber)[3])
-  Panel_Window_Exchange_Number:addConsoleUIControl(8, 3, 1, (numberPad._buttonNumber)[4])
-  Panel_Window_Exchange_Number:addConsoleUIControl(9, 3, 1, (numberPad._buttonNumber)[1])
-  Panel_Window_Exchange_Number:addConsoleUIControl(10, 3, 1, _buttonBackSpace)
-  Panel_Window_Exchange_Number:addConsoleUIControl(11, 3, 1, _buttonClear)
-  Panel_Window_Exchange_Number:addConsoleUIControl(0, 1, 2, _buttonAllSelect)
-  Panel_Window_Exchange_Number:addConsoleUIControl(1, 1, 2, _buttonConfirm)
-  Panel_Window_Exchange_Number:addConsoleUIControl(2, 1, 2, _buttonCancel)
+  -- function num : 0_23
 end
 
 ConsoleGroupCreate_Panel_Window_Exchange_Number()

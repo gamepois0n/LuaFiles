@@ -11,6 +11,7 @@ Panel_GameTipMask:SetShow(true)
 Panel_GameTips:SetDragEnable(false)
 local msgCount = 319
 local MessageData = {}
+local txt_GameTip = (UI.getChildControl)(Panel_GameTips, "StaticText_Tip")
 gameTip_setMessageData = function()
   -- function num : 0_0 , upvalues : msgCount, MessageData
   for idx = 1, msgCount do
@@ -34,11 +35,12 @@ local nowPlayingIndex = 1
 local textIndex = 1
 local const = {textChangeTime = 60, controlCount = #gameTips_Message, textOffset = 100, fixStartPosX = 100}
 gameTip_init = function()
-  -- function num : 0_1 , upvalues : gameTips_Message
+  -- function num : 0_1 , upvalues : gameTips_Message, txt_GameTip
   for i = 1, #gameTips_Message do
     (gameTips_Message[i]):SetIgnore(true)
   end
   Panel_GameTipMask:addInputEvent("Mouse_LUp", "FGlobal_GameTipsShow()")
+  txt_GameTip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMETIPS_TIP"))
 end
 
 gameTip_aniPlay = function(deltaTime)

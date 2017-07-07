@@ -68,7 +68,7 @@ Mercenary_Request = function(isAttack)
   local currentSiegeTerrytoryKey = ToClient_GetStartSiegeTerritoryKey()
   local doRequest_Militia = function()
     -- function num : 0_1_0 , upvalues : currentSiegeTerrytoryKey, isAttack
-    ToClient_ValunteerEnterReq(currentSiegeTerrytoryKey, isAttack)
+    ToClient_VolunteerEnterReq(currentSiegeTerrytoryKey, isAttack)
   end
 
   local title = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA__REQUESTTITLE")
@@ -87,7 +87,7 @@ Mercenary_Cancel = function()
   -- function num : 0_2
   local cancelMercenary = function()
     -- function num : 0_2_0
-    ToClient_ValunteerLeaveReq()
+    ToClient_VolunteerLeaveReq()
   end
 
   local title = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_MSGTITLE")
@@ -186,33 +186,41 @@ Panel_Mercenary_Repos = function()
   Panel_Window_Mercenary:SetPosY(getScreenSizeY() / 2 - Panel_Window_Mercenary:GetSizeY() / 2)
 end
 
-FromClient_ResponseMilitiaStart = function()
+FromClient_ResponseVolunteerRecruit = function()
   -- function num : 0_10
-  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_STARTTEXT"))
+  local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_RECRUITSTART"), sub = "", addMsg = ""}
+  Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 75)
+end
+
+FromClient_ResponseMilitiaStart = function()
+  -- function num : 0_11
+  local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_STARTTEXT"), sub = "", addMsg = ""}
+  Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 76)
 end
 
 FromClient_ResponseMilitiaEnd = function()
-  -- function num : 0_11
+  -- function num : 0_12
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_ENDTEXT"))
 end
 
 FromClient_ResponseMilitiaEnter = function()
-  -- function num : 0_12
+  -- function num : 0_13
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_RESPONSE_JOIN"))
 end
 
 FromClient_ResponseMilitiaLeave = function()
-  -- function num : 0_13
+  -- function num : 0_14
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_RESPONSE_CANCEL"))
 end
 
 mercenary.registerEvent = function(self)
-  -- function num : 0_14
+  -- function num : 0_15
   registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Mercenary")
-  registerEvent("FromClient_ResponseValunteerStart", "FromClient_ResponseMilitiaStart")
-  registerEvent("FromClient_ResponseValunteerEnd", "FromClient_ResponseMilitiaEnd")
-  registerEvent("FromClient_ResponseValunteerEnter", "FromClient_ResponseMilitiaEnter")
-  registerEvent("FromClient_ResponseValunteerLeave", "FromClient_ResponseMilitiaLeave")
+  registerEvent("FromClient_ResponseVolunteerRecruit", "FromClient_ResponseVolunteerRecruit")
+  registerEvent("FromClient_ResponseVolunteerStart", "FromClient_ResponseMilitiaStart")
+  registerEvent("FromClient_ResponseVolunteerEnd", "FromClient_ResponseMilitiaEnd")
+  registerEvent("FromClient_ResponseVolunteerEnter", "FromClient_ResponseMilitiaEnter")
+  registerEvent("FromClient_ResponseVolunteerLeave", "FromClient_ResponseMilitiaLeave")
   registerEvent("onScreenResize", "Panel_Mercenary_Repos")
   ;
   ((self._control)._btnCancel):addInputEvent("Mouse_LUp", "Mercenary_Cancel()")

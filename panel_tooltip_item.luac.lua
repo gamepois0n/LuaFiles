@@ -617,7 +617,8 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                           itemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, slotNo)
                                                                                         else
                                                                                           if slotType == "CampEquip" then
-                                                                                            local servantWrapper = getServantInfoFromActorKey(FGlobal_Camp_GetActorKeyRaw())
+                                                                                            local actorKeyRaw = PaGlobal_Camp:getActorKeyRaw()
+                                                                                            local servantWrapper = getServantInfoFromActorKey(actorKeyRaw)
                                                                                             if servantWrapper ~= nil then
                                                                                               itemWrapper = servantWrapper:getEquipItem(slotNo)
                                                                                             end
@@ -636,15 +637,15 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                               local isEquipalbeItem = false
                                                                                               local servantItem = false
                                                                                               local skillKey = SkillKey()
-                                                                                              -- DECOMPILER ERROR at PC550: Confused about usage of register: R13 in 'UnsetPending'
+                                                                                              -- DECOMPILER ERROR at PC552: Confused about usage of register: R13 in 'UnsetPending'
 
                                                                                               Panel_Tooltip_Item_DataObject.isSkill = false
-                                                                                              -- DECOMPILER ERROR at PC559: Confused about usage of register: R13 in 'UnsetPending'
+                                                                                              -- DECOMPILER ERROR at PC561: Confused about usage of register: R13 in 'UnsetPending'
 
                                                                                               if (itemWrapper:getStaticStatus()):isSkillBook(skillKey) then
                                                                                                 Panel_Tooltip_Item_DataObject.skillSlot = slot
                                                                                                 Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
-                                                                                                -- DECOMPILER ERROR at PC568: Confused about usage of register: R13 in 'UnsetPending'
+                                                                                                -- DECOMPILER ERROR at PC570: Confused about usage of register: R13 in 'UnsetPending'
 
                                                                                                 Panel_Tooltip_Item_DataObject.isSkill = true
                                                                                                 return 
@@ -654,7 +655,7 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                                   if not itemSSW:isEquipable() then
                                                                                                     isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, nil)
                                                                                                   else
-                                                                                                    -- DECOMPILER ERROR at PC597: Overwrote pending register: R11 in 'AssignReg'
+                                                                                                    -- DECOMPILER ERROR at PC599: Overwrote pending register: R11 in 'AssignReg'
 
                                                                                                     isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, slotNo)
                                                                                                   end
@@ -678,13 +679,13 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                                         do
                                                                                                           do
                                                                                                             local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
-                                                                                                            -- DECOMPILER ERROR at PC651: Confused about usage of register: R15 in 'UnsetPending'
+                                                                                                            -- DECOMPILER ERROR at PC653: Confused about usage of register: R15 in 'UnsetPending'
 
                                                                                                             if accSlotNo ~= nil then
                                                                                                               EquipItem_Lock.itemAccNo = accSlotNo
                                                                                                               equipItemWrapper = getEquipmentItem(accSlotNo)
                                                                                                             else
-                                                                                                              -- DECOMPILER ERROR at PC658: Confused about usage of register: R15 in 'UnsetPending'
+                                                                                                              -- DECOMPILER ERROR at PC660: Confused about usage of register: R15 in 'UnsetPending'
 
                                                                                                               EquipItem_Lock.itemAccNo = -1
                                                                                                               equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())

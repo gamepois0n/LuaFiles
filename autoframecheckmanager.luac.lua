@@ -257,14 +257,26 @@ FGlobal_AutoFrameCheck_Stop = function()
   AutoFrameCheckManager._isOn = false
 end
 
-FGlobal_setAutoFrameCheckRepeat = function(value, count)
+FGlobal_setAutoFrameCheckRepeat = function(value)
   -- function num : 0_13 , upvalues : AutoFrameCheckManager
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R2 in 'UnsetPending'
+  if value < 0 then
+    _PA_SVN_LOG("FGlobal_setAutoFrameCheckRepeat 함수�\144 0 이하 값이 들어오면 안됩니다!!!")
+  end
+  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
 
-  AutoFrameCheckManager._isRpeat = value
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R2 in 'UnsetPending'
+  if value == 0 then
+    AutoFrameCheckManager._isRpeat = true
+    -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
 
-  AutoFrameCheckManager._maxRepeatCount = count
+    AutoFrameCheckManager._maxRepeatCount = value
+  else
+    -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
+
+    AutoFrameCheckManager._isRpeat = false
+    -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
+
+    AutoFrameCheckManager._maxRepeatCount = value
+  end
 end
 
 OnFrameCheck = function()
@@ -286,7 +298,7 @@ testAutoQuestStart = function()
   -- function num : 0_16
   setRunningTime(8)
   setStandingTime(2)
-  FGlobal_setAutoFrameCheckRepeat(true, 0)
+  FGlobal_setAutoFrameCheckRepeat(0)
   FGlobal_AutoFrameCheck_setMinFrame(80)
   FGlobal_AutoFrameCheck_addPositionList(-309323.09375, 13343.671875, -370570.78125)
   FGlobal_AutoFrameCheck_addPositionList(-306090.40625, 13897.889648, -366944.25)

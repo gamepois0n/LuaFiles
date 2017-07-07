@@ -15,20 +15,19 @@ registerEvent("FromClient_RClickWorldmapPanel", "FromClient_RClickWorldmapPanel_
 registerEvent("FromClient_resetTownMode", "FromClient_resetTownMode_TutorialManager")
 registerEvent("FromClient_RClickedWorldMapHouse", "FromClient_RClickedWorldMapHouse_TutorialManager")
 registerEvent("FromClint_EventUpdateExplorationNode", "FromClint_EventUpdateExplorationNode_TutorialManager")
-registerEvent("FromClient_RegisterExplorationNode", "FromClient_RegisterExplorationNode_TutorialManager")
 FromClient_luaLoadComplete_TutorialManager = function(isTool)
   -- function num : 0_0
   PaGlobal_TutorialManager:handleLuaLoadComplete(isTool)
 end
 
--- DECOMPILER ERROR at PC56: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleLuaLoadComplete = function(self, isTool)
   -- function num : 0_1
   _PA_LOG("곽민�\176", "@@@루아로드완료!!@@@")
 end
 
--- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleTutorialUiManagerInitialize = function(self)
   -- function num : 0_2
@@ -37,7 +36,7 @@ PaGlobal_TutorialManager.handleTutorialUiManagerInitialize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC62: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleOpenedInventory = function(self)
   -- function num : 0_3
@@ -46,7 +45,7 @@ PaGlobal_TutorialManager.handleOpenedInventory = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC65: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClosedInventory = function(self)
   -- function num : 0_4
@@ -55,7 +54,7 @@ PaGlobal_TutorialManager.handleClosedInventory = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC68: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleUpdateInventorySlotData = function(self, slot, slotItemKey)
   -- function num : 0_5
@@ -64,7 +63,7 @@ PaGlobal_TutorialManager.handleUpdateInventorySlotData = function(self, slot, sl
   end
 end
 
--- DECOMPILER ERROR at PC71: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC67: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleInventorySlotRClick = function(self, rClickedItemKey)
   -- function num : 0_6
@@ -73,7 +72,7 @@ PaGlobal_TutorialManager.handleInventorySlotRClick = function(self, rClickedItem
   end
 end
 
--- DECOMPILER ERROR at PC74: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleInventorySlotRClickgetSlotNo = function(self, SlotNo)
   -- function num : 0_7
@@ -82,7 +81,7 @@ PaGlobal_TutorialManager.handleInventorySlotRClickgetSlotNo = function(self, Slo
   end
 end
 
--- DECOMPILER ERROR at PC77: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleNewEquipInInventory = function(self, newItemSlotNo)
   -- function num : 0_8
@@ -100,7 +99,7 @@ PaGlobal_TutorialManager.handleNewEquipInInventory = function(self, newItemSlotN
   end
 end
 
--- DECOMPILER ERROR at PC80: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC76: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleEquipItem = function(self, slotNo)
   -- function num : 0_9
@@ -109,7 +108,7 @@ PaGlobal_TutorialManager.handleEquipItem = function(self, slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC83: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC79: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleInventoryDelete = function(self, itemWrapper, deleteWhereType, deleteSlotNo)
   -- function num : 0_10
@@ -118,7 +117,7 @@ PaGlobal_TutorialManager.handleInventoryDelete = function(self, itemWrapper, del
   end
 end
 
--- DECOMPILER ERROR at PC86: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC82: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleUpdateQuickSlotPerFrame = function(self, slot, quickSlotItemKey)
   -- function num : 0_11
@@ -127,13 +126,13 @@ PaGlobal_TutorialManager.handleUpdateQuickSlotPerFrame = function(self, slot, qu
   end
 end
 
--- DECOMPILER ERROR at PC89: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC85: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleUpdateNewQuickSlotPerFrame = function(self, panelIdx, slot, newQuickSlotItemKey)
   -- function num : 0_12
 end
 
--- DECOMPILER ERROR at PC92: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC88: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleQuickSlotClick = function(self, clickedItemKey)
   -- function num : 0_13
@@ -142,13 +141,13 @@ PaGlobal_TutorialManager.handleQuickSlotClick = function(self, clickedItemKey)
   end
 end
 
--- DECOMPILER ERROR at PC95: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC91: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleNewQuickSlotClick = function(self, clickedItemKey)
   -- function num : 0_14
 end
 
--- DECOMPILER ERROR at PC98: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC94: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleQuickSlotRegistItem = function(self, slotIndex, dragWhereTypeInfo, dragSlotInfo)
   -- function num : 0_15
@@ -162,7 +161,7 @@ FromClient_EventQuestUpdateNotify_TutorialManager = function(isAccept, questNoRa
   PaGlobal_TutorialManager:handleEventQuestUpdateNotify(isAccept, questNoRaw)
 end
 
--- DECOMPILER ERROR at PC103: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleEventQuestUpdateNotify = function(self, isAccept, questNoRaw)
   -- function num : 0_17
@@ -187,7 +186,7 @@ FromClient_UpdateQuestList_TutorialManager = function()
   PaGlobal_TutorialManager:handleQuestWidgetUpdate()
 end
 
--- DECOMPILER ERROR at PC108: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC104: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleQuestWidgetUpdate = function(self)
   -- function num : 0_19
@@ -196,7 +195,7 @@ PaGlobal_TutorialManager.handleQuestWidgetUpdate = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC111: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC107: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleAfterAndPopFlush = function(self)
   -- function num : 0_20
@@ -205,13 +204,13 @@ PaGlobal_TutorialManager.handleAfterAndPopFlush = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC114: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC110: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleUpdateMainDialog = function(self)
   -- function num : 0_21
 end
 
--- DECOMPILER ERROR at PC117: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC113: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedQuestWidgetFindTarget = function(self, questGroupId, questId, condition, isAuto)
   -- function num : 0_22
@@ -225,7 +224,7 @@ FromClient_DeleteNavigationGuide_TutorialManager = function(key)
   PaGlobal_TutorialManager:handleDeleteNavigationGuide(key)
 end
 
--- DECOMPILER ERROR at PC122: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC118: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleDeleteNavigationGuide = function(self, key)
   -- function num : 0_24
@@ -234,7 +233,7 @@ PaGlobal_TutorialManager.handleDeleteNavigationGuide = function(self, key)
   end
 end
 
--- DECOMPILER ERROR at PC125: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC121: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleQuestWidgetMouseOver = function(self, show)
   -- function num : 0_25
@@ -243,7 +242,7 @@ PaGlobal_TutorialManager.handleQuestWidgetMouseOver = function(self, show)
   end
 end
 
--- DECOMPILER ERROR at PC128: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC124: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleQuestWidgetScrollEvent = function(self, isDown)
   -- function num : 0_26
@@ -252,7 +251,7 @@ PaGlobal_TutorialManager.handleQuestWidgetScrollEvent = function(self, isDown)
   end
 end
 
--- DECOMPILER ERROR at PC131: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC127: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleEventSelfPlayerUsedSkill = function(self, skillWrapper)
   -- function num : 0_27
@@ -261,7 +260,7 @@ PaGlobal_TutorialManager.handleEventSelfPlayerUsedSkill = function(self, skillWr
   end
 end
 
--- DECOMPILER ERROR at PC134: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC130: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleShowQuestNewWindow = function(self, isShow)
   -- function num : 0_28
@@ -270,7 +269,7 @@ PaGlobal_TutorialManager.handleShowQuestNewWindow = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC137: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC133: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleRadarMouseOn = function(self)
   -- function num : 0_29
@@ -279,7 +278,7 @@ PaGlobal_TutorialManager.handleRadarMouseOn = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC140: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC136: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleBeforeShowDialog = function(self)
   -- function num : 0_30
@@ -288,7 +287,7 @@ PaGlobal_TutorialManager.handleBeforeShowDialog = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC143: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC139: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleShowDialog = function(self, dialogData)
   -- function num : 0_31
@@ -302,7 +301,7 @@ PaGlobal_TutorialManager.handleShowDialog = function(self, dialogData)
   end
 end
 
--- DECOMPILER ERROR at PC146: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC142: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedExitButton = function(self, talker)
   -- function num : 0_32
@@ -316,14 +315,14 @@ PaGlobal_TutorialManager.handleClickedExitButton = function(self, talker)
   end
 end
 
--- DECOMPILER ERROR at PC149: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC145: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedDialogTutorialStartButton = function(self, phaseNo)
   -- function num : 0_33
   self:startTutorial(phaseNo, 1)
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC148: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleNpcShopWindowClose = function(self)
   -- function num : 0_34
@@ -332,7 +331,7 @@ PaGlobal_TutorialManager.handleNpcShopWindowClose = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC155: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC151: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleNpcShopUpdateContent = function(self)
   -- function num : 0_35
@@ -341,7 +340,7 @@ PaGlobal_TutorialManager.handleNpcShopUpdateContent = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC158: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC154: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleNpcShopTabButtonClick = function(self, tabIndex)
   -- function num : 0_36
@@ -350,7 +349,7 @@ PaGlobal_TutorialManager.handleNpcShopTabButtonClick = function(self, tabIndex)
   end
 end
 
--- DECOMPILER ERROR at PC161: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC157: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleCloseIntroMovie = function(self)
   -- function num : 0_37
@@ -359,7 +358,7 @@ PaGlobal_TutorialManager.handleCloseIntroMovie = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC164: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC160: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleStopCutScene = function(self, cutSceneName)
   -- function num : 0_38
@@ -378,7 +377,7 @@ FromClient_selfPlayer_regionChanged_TutorialManager = function(regionInfo)
   PaGlobal_TutorialManager:handleRegionChanged(regionInfo)
 end
 
--- DECOMPILER ERROR at PC169: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleRegionChanged = function(self, regionInfo)
   -- function num : 0_40
@@ -389,7 +388,7 @@ PaGlobal_TutorialManager.handleRegionChanged = function(self, regionInfo)
   end
 end
 
--- DECOMPILER ERROR at PC172: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleBeforeWorldmapOpen = function(self)
   -- function num : 0_41
@@ -404,7 +403,7 @@ PaGlobal_TutorialManager.handleBeforeWorldmapOpen = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC175: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleWorldMapOpenComplete = function(self)
   -- function num : 0_42
@@ -418,7 +417,7 @@ FromClient_ImmediatelyCloseWorldMap_TutorialManager = function()
   PaGlobal_TutorialManager:handleWorldMapImmediatelyClose()
 end
 
--- DECOMPILER ERROR at PC180: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC176: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleWorldMapImmediatelyClose = function(self)
   -- function num : 0_44
@@ -432,7 +431,7 @@ PaGlobal_TutorialManager.handleWorldMapImmediatelyClose = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC183: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC179: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleLClickWorldMapNode = function(self, uiNodeButton)
   -- function num : 0_45
@@ -447,7 +446,7 @@ FromClient_RClickedWorldMapNode_TutorialManager = function(uiNodeButton)
   PaGlobal_TutorialManager:handleRClickWorldMapNode(uiNodeButton)
 end
 
--- DECOMPILER ERROR at PC188: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC184: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleRClickWorldMapNode = function(self, uiNodeButton)
   -- function num : 0_47
@@ -462,7 +461,7 @@ FromClient_RenderStateChange_TutorialManager = function(changeState)
   PaGlobal_TutorialManager:handleRenderStateChange(changeState)
 end
 
--- DECOMPILER ERROR at PC193: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC189: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleRenderStateChange = function(self, changeState)
   -- function num : 0_49
@@ -476,7 +475,7 @@ FromClient_RClickWorldmapPanel_TutorialManager = function(pos3D, immediately, is
   PaGlobal_TutorialManager:handleRClickWorldmapPanel(pos3D, immediately, isTopPicking, uiKnowledgeStatic)
 end
 
--- DECOMPILER ERROR at PC198: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC194: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleRClickWorldmapPanel = function(self, pos3D, immediately, isTopPicking, uiKnowledgeStatic)
   -- function num : 0_51
@@ -485,7 +484,7 @@ PaGlobal_TutorialManager.handleRClickWorldmapPanel = function(self, pos3D, immed
   end
 end
 
--- DECOMPILER ERROR at PC201: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC197: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleWorldmapMainEventTempControl = function(self)
   -- function num : 0_52
@@ -494,7 +493,7 @@ PaGlobal_TutorialManager.handleWorldmapMainEventTempControl = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC204: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC200: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedGrandWorldMapSearchNodeType = function(self, typeIndex)
   -- function num : 0_53
@@ -503,7 +502,7 @@ PaGlobal_TutorialManager.handleClickedGrandWorldMapSearchNodeType = function(sel
   end
 end
 
--- DECOMPILER ERROR at PC207: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC203: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedGrandWorldmapGotoNodeFocus = function(self, resultIdx)
   -- function num : 0_54
@@ -517,7 +516,7 @@ FromClient_resetTownMode_TutorialManager = function()
   PaGlobal_TutorialManager:handleResetTownMode()
 end
 
--- DECOMPILER ERROR at PC212: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC208: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleResetTownMode = function(self)
   -- function num : 0_56
@@ -526,7 +525,7 @@ PaGlobal_TutorialManager.handleResetTownMode = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC215: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC211: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleNpcNavi_ShowToggle = function(self, isShow)
   -- function num : 0_57
@@ -535,7 +534,7 @@ PaGlobal_TutorialManager.handleNpcNavi_ShowToggle = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC218: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC214: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedTownNpcIconNaviStart = function(self, spawnType, isAuto)
   -- function num : 0_58
@@ -544,7 +543,7 @@ PaGlobal_TutorialManager.handleClickedTownNpcIconNaviStart = function(self, spaw
   end
 end
 
--- DECOMPILER ERROR at PC221: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC217: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.checkTargetHouseKeyForTutorial = function(self, houseKey)
   -- function num : 0_59
@@ -554,7 +553,7 @@ PaGlobal_TutorialManager.checkTargetHouseKeyForTutorial = function(self, houseKe
   end
 end
 
--- DECOMPILER ERROR at PC224: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC220: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleHouseHoldButtonSetBaseTexture = function(self, houseBtn)
   -- function num : 0_60
@@ -563,7 +562,7 @@ PaGlobal_TutorialManager.handleHouseHoldButtonSetBaseTexture = function(self, ho
   end
 end
 
--- DECOMPILER ERROR at PC227: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC223: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleLClickedWorldMapHouse = function(self, uiHouseButton)
   -- function num : 0_61
@@ -577,7 +576,7 @@ FromClient_RClickedWorldMapHouse_TutorialManager = function(uiHouseButton)
   PaGlobal_TutorialManager:handleRClickedWorldMapHouse(uiHouseButton)
 end
 
--- DECOMPILER ERROR at PC232: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC228: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleRClickedWorldMapHouse = function(self, uiHouseButton)
   -- function num : 0_63
@@ -586,7 +585,7 @@ PaGlobal_TutorialManager.handleRClickedWorldMapHouse = function(self, uiHouseBut
   end
 end
 
--- DECOMPILER ERROR at PC235: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC231: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedHouseControlSetUseType = function(self, index, groupType)
   -- function num : 0_64
@@ -595,7 +594,7 @@ PaGlobal_TutorialManager.handleClickedHouseControlSetUseType = function(self, in
   end
 end
 
--- DECOMPILER ERROR at PC238: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC234: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedHouseControlBuyHouseContinue = function(self)
   -- function num : 0_65
@@ -604,7 +603,7 @@ PaGlobal_TutorialManager.handleClickedHouseControlBuyHouseContinue = function(se
   end
 end
 
--- DECOMPILER ERROR at PC241: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC237: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedHouseControlSellHouseContinue = function(self, houseKey)
   -- function num : 0_66
@@ -613,7 +612,7 @@ PaGlobal_TutorialManager.handleClickedHouseControlSellHouseContinue = function(s
   end
 end
 
--- DECOMPILER ERROR at PC244: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC240: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleCloseHouseControl = function(self)
   -- function num : 0_67
@@ -622,7 +621,7 @@ PaGlobal_TutorialManager.handleCloseHouseControl = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC247: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC243: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleTradeMarketSellSomeConfirm = function(self, itemKey)
   -- function num : 0_68
@@ -631,7 +630,7 @@ PaGlobal_TutorialManager.handleTradeMarketSellSomeConfirm = function(self, itemK
   end
 end
 
--- DECOMPILER ERROR at PC250: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC246: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedTradeItemAllSell = function(self, talker)
   -- function num : 0_69
@@ -640,7 +639,7 @@ PaGlobal_TutorialManager.handleClickedTradeItemAllSell = function(self, talker)
   end
 end
 
--- DECOMPILER ERROR at PC253: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC249: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleGrandWorldMap_CheckPopup = function(self, openPanelEnum, popupPanel)
   -- function num : 0_70
@@ -650,7 +649,7 @@ PaGlobal_TutorialManager.handleGrandWorldMap_CheckPopup = function(self, openPan
   end
 end
 
--- DECOMPILER ERROR at PC256: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC252: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleInteractionShow = function(self, actorProxyWrapper)
   -- function num : 0_71
@@ -659,7 +658,7 @@ PaGlobal_TutorialManager.handleInteractionShow = function(self, actorProxyWrappe
   end
 end
 
--- DECOMPILER ERROR at PC259: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC255: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickedDialogFuncButton = function(self, funcButtonType)
   -- function num : 0_72
@@ -668,7 +667,7 @@ PaGlobal_TutorialManager.handleClickedDialogFuncButton = function(self, funcButt
   end
 end
 
--- DECOMPILER ERROR at PC262: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC258: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleOnNodeUpgradeClick = function(self, nodeKey)
   -- function num : 0_73
@@ -682,7 +681,7 @@ FromClint_EventUpdateExplorationNode_TutorialManager = function(waypointKey)
   PaGlobal_TutorialManager:handleEventUpdateExplorationNode(waypointKey)
 end
 
--- DECOMPILER ERROR at PC267: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC263: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleEventUpdateExplorationNode = function(self, waypointKey)
   -- function num : 0_75
@@ -691,7 +690,7 @@ PaGlobal_TutorialManager.handleEventUpdateExplorationNode = function(self, waypo
   end
 end
 
--- DECOMPILER ERROR at PC270: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC266: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickPlantdoWork = function(self, plantKey, workingCount)
   -- function num : 0_76
@@ -700,7 +699,7 @@ PaGlobal_TutorialManager.handleClickPlantdoWork = function(self, plantKey, worki
   end
 end
 
--- DECOMPILER ERROR at PC273: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC269: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleSetTownMode = function(self, waypointKey)
   -- function num : 0_77
@@ -715,7 +714,7 @@ FromClient_RegisterExplorationNode_TutorialManager = function(waypointKey)
   PaGlobal_TutorialManager:handleRegisterExplorationNode(waypointKey)
 end
 
--- DECOMPILER ERROR at PC278: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC274: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleRegisterExplorationNode = function(self, waypointKey)
   -- function num : 0_79
@@ -735,7 +734,7 @@ PaGlobal_TutorialManager.handleRegisterExplorationNode = function(self, waypoint
   end
 end
 
--- DECOMPILER ERROR at PC281: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC277: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickWorldmapTutorialButton = function(self, buttonNum)
   -- function num : 0_80
@@ -761,7 +760,7 @@ PaGlobal_TutorialManager.handleClickWorldmapTutorialButton = function(self, butt
   self:startTutorial(phaseNo, 1)
 end
 
--- DECOMPILER ERROR at PC284: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC280: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleCloseEnchantWindow = function(self)
   -- function num : 0_81
@@ -770,7 +769,7 @@ PaGlobal_TutorialManager.handleCloseEnchantWindow = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC287: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC283: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleEnchantResultShow = function(self, resultType, mainWhereType, mainSlotNo, subWhereType, subSlotNo)
   -- function num : 0_82
@@ -779,7 +778,7 @@ PaGlobal_TutorialManager.handleEnchantResultShow = function(self, resultType, ma
   end
 end
 
--- DECOMPILER ERROR at PC290: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC286: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleExtractionEnchantStoneResultShow = function(self)
   -- function num : 0_83
@@ -788,7 +787,7 @@ PaGlobal_TutorialManager.handleExtractionEnchantStoneResultShow = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC293: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC289: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleOpenExtractionPanel = function(self, isShow)
   -- function num : 0_84
@@ -797,7 +796,7 @@ PaGlobal_TutorialManager.handleOpenExtractionPanel = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC296: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC292: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickExtractionEnchantStoneButton = function(self, isShow)
   -- function num : 0_85
@@ -806,7 +805,7 @@ PaGlobal_TutorialManager.handleClickExtractionEnchantStoneButton = function(self
   end
 end
 
--- DECOMPILER ERROR at PC299: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC295: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickExtractionCrystalButton = function(self, isShow)
   -- function num : 0_86
@@ -815,7 +814,7 @@ PaGlobal_TutorialManager.handleClickExtractionCrystalButton = function(self, isS
   end
 end
 
--- DECOMPILER ERROR at PC302: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC298: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleClickExtractionClothButton = function(self, isShow)
   -- function num : 0_87
@@ -824,7 +823,7 @@ PaGlobal_TutorialManager.handleClickExtractionClothButton = function(self, isSho
   end
 end
 
--- DECOMPILER ERROR at PC305: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC301: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleApplyExtractionEnchantStone = function(self)
   -- function num : 0_88
@@ -833,7 +832,7 @@ PaGlobal_TutorialManager.handleApplyExtractionEnchantStone = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC308: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC304: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialManager.handleMouseLUpBubble = function(self)
   -- function num : 0_89

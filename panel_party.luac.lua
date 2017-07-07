@@ -493,6 +493,7 @@ ResponseParty_createPartyList = function()
   -- function num : 0_19 , upvalues : partyType, requestPlayerList, _partyMemberCount
   local partyMemberCount = RequestParty_getPartyMemberCount()
   if partyMemberCount > 0 then
+    partyType = ToClient_GetPartyType()
     if (CppEnums.PartyType).ePartyType_Normal == partyType then
       if not isFlushedUI() then
         Panel_Party:SetShow(true, false)
@@ -503,9 +504,14 @@ ResponseParty_createPartyList = function()
       _partyMemberCount = partyMemberCount
       Party_RegistItem_Show(false)
       ToClient_requestListMySellInfo()
+      Panel_LargeParty:SetShow(false)
     else
       if (CppEnums.PartyType).ePartyType_Large == partyType then
         Panel_LargeParty:SetShow(true)
+        if partyMemberCount > 1 then
+          PaGlobal_LargeParty:Update()
+        end
+        Panel_Party:SetShow(false)
       end
     end
   end
@@ -979,7 +985,7 @@ ResponseParty_updatePartyList = function()
           do
             if Panel_LargeParty:GetShow() and partyType == 1 then
               Panel_Party:SetShow(false)
-              FGlobal_LargePartyUpdate()
+              PaGlobal_LargeParty:Update()
             end
           end
         end

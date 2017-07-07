@@ -21,7 +21,9 @@ local isProtectGuildMember = ToClient_IsContentsGroupOpen("52")
 local isContentsGuildDuel = ToClient_IsContentsGroupOpen("69")
 local isContentsGuildInfo = ToClient_IsContentsGroupOpen("206")
 local isContentsArsha = ToClient_IsContentsGroupOpen("227")
+local isContentsGuildHouse = ToClient_IsContentsGroupOpen("36")
 local isCanDoReservation = ToClient_IsCanDoReservationArsha()
+local isGuildBattle = isGameServiceTypeDev()
 local lifeType = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GATHERING"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_FISHING"), [2] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HUNTING"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_COOKING"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_ALCHEMY"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PROCESSING"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_OBEDIENCE"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GROWTH"), [9] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_WEALTH"), [10] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_COMBAT")}
 local tabNumber = 99
 local btn_GuildMasterMandateBG = (UI.getChildControl)(Panel_Window_Guild, "Static_GuildMandateBG")
@@ -55,7 +57,7 @@ local keyUseCheck = true
 local guildCommentsWebUrl = nil
 local GuildInfoPage = {}
 GuildInfoPage.initialize = function(self)
-  -- function num : 0_2 , upvalues : UI_TM, isContentsGuildInfo, isProtectGuildMember, isContentsArsha, isCanDoReservation, btn_GuildMasterMandate, btn_GuildMasterMandateBG, checkPopUp
+  -- function num : 0_2 , upvalues : UI_TM, isContentsGuildInfo, isProtectGuildMember, isContentsArsha, isCanDoReservation, isContentsGuildHouse, btn_GuildMasterMandate, btn_GuildMasterMandateBG, checkPopUp
   self._guildMainBG = (UI.getChildControl)(Panel_Window_Guild, "Static_Menu_BG_0")
   self._windowTitle = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Title")
   self._textGuildInfoTitle = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Title_Info")
@@ -114,6 +116,9 @@ GuildInfoPage.initialize = function(self)
   end
   if isContentsArsha == false or isCanDoReservation == false then
     (self._btnGetArshaHost):SetShow(false)
+  end
+  if not isContentsGuildHouse then
+    (self._btnGuildWarehouse):SetShow(false)
   end
   self.SetShow = function(self, isShow)
     -- function num : 0_2_0
@@ -1385,7 +1390,7 @@ local _txt_Help_GuildMember = (UI.getChildControl)(Panel_Window_Guild, "StaticTe
 local _txt_Help_GuildQuest = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildQuest")
 local _txt_Help_GuildSkill = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildSkill")
 local _txt_Help_WarInfo = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_WarInfo")
--- DECOMPILER ERROR at PC362: Confused about usage of register: R43 in 'UnsetPending'
+-- DECOMPILER ERROR at PC368: Confused about usage of register: R45 in 'UnsetPending'
 
 GuildManager.initialize = function(self)
   -- function num : 0_33 , upvalues : GuildInfoPage, GuildLetsWarPage, GuildWarInfoPage
@@ -1397,6 +1402,7 @@ GuildManager.initialize = function(self)
   self.mainBtn_Warfare = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_Warfare")
   self.mainBtn_Recruitment = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_Recruitment")
   self.mainBtn_CraftInfo = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_CraftInfo")
+  self.mainBtn_GuildBattle = (UI.getChildControl)(Panel_Window_Guild, "Button_Tab_GuildBattle")
   self.closeButton = (UI.getChildControl)(Panel_Window_Guild, "Button_Close")
   self._buttonQuestion = (UI.getChildControl)(Panel_Window_Guild, "Button_Question")
   ;
@@ -1415,6 +1421,8 @@ GuildManager.initialize = function(self)
   (self.mainBtn_Recruitment):addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 5 )")
   ;
   (self.mainBtn_CraftInfo):addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 6 )")
+  ;
+  (self.mainBtn_GuildBattle):addInputEvent("Mouse_LUp", "GuildManager:TabToggle( 7 )")
   ;
   (self.closeButton):addInputEvent("Mouse_LUp", "HandleClickedGuildHideButton()")
   ;
@@ -1440,6 +1448,8 @@ GuildManager.initialize = function(self)
   ;
   (self.mainBtn_CraftInfo):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 11, true )")
   ;
+  (self.mainBtn_GuildBattle):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( 12, true )")
+  ;
   (self.mainBtn_Main):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 99, false )")
   ;
   (self.mainBtn_History):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 5, false )")
@@ -1456,6 +1466,8 @@ GuildManager.initialize = function(self)
   ;
   (self.mainBtn_CraftInfo):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 11, false )")
   ;
+  (self.mainBtn_GuildBattle):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 12, false )")
+  ;
   (self.mainBtn_Main):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 99, true )")
   ;
   (self.mainBtn_History):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 5, true )")
@@ -1471,6 +1483,8 @@ GuildManager.initialize = function(self)
   (self.mainBtn_Recruitment):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 4, true )")
   ;
   (self.mainBtn_CraftInfo):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 11, true )")
+  ;
+  (self.mainBtn_GuildBattle):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 12, true )")
   GuildInfoPage:initialize()
   GuildLetsWarPage:initialize()
   GuildWarInfoPage:initialize()
@@ -1564,10 +1578,16 @@ Panel_Guild_Tab_ToolTip_Func = function(tabNo, isOn, inPut_index)
                             name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDCRAFTINFO_TITLE")
                             desc = nil
                           else
-                            if tabNo == 99 then
-                              uiControl = GuildManager.mainBtn_Main
-                              name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE")
+                            if tabNo == 12 then
+                              uiControl = GuildManager.mainBtn_GuildBattle
+                              name = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_GUILDBATTLE")
                               desc = nil
+                            else
+                              if tabNo == 99 then
+                                uiControl = GuildManager.mainBtn_Main
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE")
+                                desc = nil
+                              end
                             end
                           end
                         end
@@ -1655,7 +1675,7 @@ GuildSimplTooltips = function(isShow, tipType)
 end
 
 local _index = nil
--- DECOMPILER ERROR at PC385: Confused about usage of register: R44 in 'UnsetPending'
+-- DECOMPILER ERROR at PC391: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.TabToggle = function(self, index)
   -- function num : 0_37 , upvalues : tabNumber, _Web, btn_GuildMasterMandateBG, btn_GuildMasterMandate, _index
@@ -1677,6 +1697,8 @@ GuildManager.TabToggle = function(self, index)
   (self.mainBtn_Recruitment):SetCheck(index == 5)
   ;
   (self.mainBtn_CraftInfo):SetCheck(index == 6)
+  ;
+  (self.mainBtn_GuildBattle):SetCheck(index == 7)
   ConsoleGroupDelete_Panel_Window_Guild()
   if ((getSelfPlayer()):get()):isGuildMaster() and ((getSelfPlayer()):get()):isGuildSubMaster() then
     FGlobal_ClearCandidate()
@@ -1714,6 +1736,7 @@ GuildManager.TabToggle = function(self, index)
     GuildMainInfo_Hide()
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
     tabNumber = 1
   elseif index == 2 then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDQUEST"), 122, 1, 134, 15)
@@ -1726,6 +1749,7 @@ GuildManager.TabToggle = function(self, index)
     Guild_Recruitment_Close()
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
     tabNumber = 2
   elseif index == 3 then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDSKILL"), 137, 1, 149, 15)
@@ -1738,6 +1762,7 @@ GuildManager.TabToggle = function(self, index)
     Guild_Recruitment_Close()
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
     tabNumber = 3
   elseif index == 4 then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_GUILDWARFAREINFO"), 152, 1, 164, 15)
@@ -1750,6 +1775,7 @@ GuildManager.TabToggle = function(self, index)
     Guild_Recruitment_Close()
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
     tabNumber = 4
   elseif index == 5 then
     local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
@@ -1774,6 +1800,8 @@ GuildManager.TabToggle = function(self, index)
       (self.mainBtn_Recruitment):SetCheck(_index == 5)
       ;
       (self.mainBtn_CraftInfo):SetCheck(_index == 6)
+      ;
+      (self.mainBtn_GuildBattle):SetCheck(_index == 7)
       return 
     end
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENTGUILD"), 152, 1, 164, 15)
@@ -1786,6 +1814,7 @@ GuildManager.TabToggle = function(self, index)
     Guild_Recruitment_Open()
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
     tabNumber = 5
   elseif index == 99 then
     GuildMainInfo_Show()
@@ -1797,6 +1826,7 @@ GuildManager.TabToggle = function(self, index)
     GuildSkillFrame_Hide()
     Guild_Recruitment_Close()
     GuildComment_Load()
+    PaGlobal_GuildBattle:Close()
     tabNumber = 99
   elseif index == 6 then
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDCRAFTINFO_TITLE"), 461, 2, 473, 14)
@@ -1809,15 +1839,29 @@ GuildManager.TabToggle = function(self, index)
     Guild_Recruitment_Close()
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
     tabNumber = 6
+  elseif index == 7 then
+    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_GUILDBATTLE"), 461, 2, 473, 14)
+    FGlobal_GuildBattle_Open()
+    FGlobal_GuildHistory_Show(false)
+    GuildMainInfo_Hide()
+    GuildListInfoPage:Hide()
+    GuildQuestInfoPage:Hide()
+    GuildWarfareInfoPage:Hide()
+    GuildSkillFrame_Hide()
+    Guild_Recruitment_Close()
+    btn_GuildMasterMandateBG:SetShow(false)
+    btn_GuildMasterMandate:SetShow(false)
+    tabNumber = 7
   end
   FGlobal_Guild_CraftInfo_Open(index == 6)
   FGlobal_GuildMenuButtonHide()
   _index = index
-  -- DECOMPILER ERROR: 31 unprocessed JMP targets
+  -- DECOMPILER ERROR: 34 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC390: Confused about usage of register: R44 in 'UnsetPending'
+-- DECOMPILER ERROR at PC396: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.Hide = function(self)
   -- function num : 0_38 , upvalues : IM, _Web
@@ -1853,7 +1897,7 @@ GuildManager.Hide = function(self)
   _Web:ResetUrl()
 end
 
--- DECOMPILER ERROR at PC396: Confused about usage of register: R44 in 'UnsetPending'
+-- DECOMPILER ERROR at PC402: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.Show = function(self)
   -- function num : 0_39 , upvalues : GuildWarInfoPage, GuildInfoPage, GuildLetsWarPage
@@ -1901,6 +1945,8 @@ GuildManager.Show = function(self)
     ;
     (self.mainBtn_CraftInfo):SetIgnore(false)
     ;
+    (self.mainBtn_GuildBattle):SetIgnore(false)
+    ;
     (self.mainBtn_Main):SetMonoTone(false)
     ;
     (self.mainBtn_Info):SetMonoTone(false)
@@ -1924,7 +1970,7 @@ GuildManager.Show = function(self)
     (GuildWarInfoPage._btnWarList1):SetCheck(true)
     ;
     (GuildWarInfoPage._btnWarList2):SetCheck(false)
-    -- DECOMPILER ERROR at PC155: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC159: Confused about usage of register: R5 in 'UnsetPending'
 
     GuildWarInfoPage._startIndex = 0
     ;
@@ -1948,6 +1994,8 @@ GuildManager.Show = function(self)
       ;
       (self.mainBtn_CraftInfo):SetCheck(false)
       ;
+      (self.mainBtn_GuildBattle):SetCheck(false)
+      ;
       (self.mainBtn_Main):SetIgnore(true)
       ;
       (self.mainBtn_Info):SetIgnore(true)
@@ -1964,6 +2012,8 @@ GuildManager.Show = function(self)
       ;
       (self.mainBtn_CraftInfo):SetIgnore(true)
       ;
+      (self.mainBtn_GuildBattle):SetIgnore(true)
+      ;
       (self.mainBtn_Main):SetMonoTone(true)
       ;
       (self.mainBtn_Info):SetMonoTone(true)
@@ -1979,6 +2029,8 @@ GuildManager.Show = function(self)
       (self.mainBtn_Recruitment):SetMonoTone(true)
       ;
       (self.mainBtn_CraftInfo):SetMonoTone(true)
+      ;
+      (self.mainBtn_GuildBattle):SetMonoTone(true)
     else
       GuildManager:TabToggle(99)
     end
@@ -2071,7 +2123,7 @@ GuildMainInfo_MandateBtn = function()
 end
 
 GuildMainInfo_Show = function()
-  -- function num : 0_42 , upvalues : tabNumber, GuildWarInfoPage, GuildInfoPage, notice_btn, introduce_btn, introduce_Reset, isProtectGuildMember, introduce_edit_TW, introduce_edit, notice_title, notice_edit, isContentsGuildInfo, isContentsArsha, isCanDoReservation, guildCommentsWebUrl, _Web
+  -- function num : 0_42 , upvalues : tabNumber, GuildWarInfoPage, GuildInfoPage, notice_btn, introduce_btn, introduce_Reset, isProtectGuildMember, introduce_edit_TW, introduce_edit, notice_title, notice_edit, isContentsGuildHouse, isContentsGuildInfo, isContentsArsha, isCanDoReservation, guildCommentsWebUrl, _Web
   if tabNumber ~= 99 then
     return 
   end
@@ -2216,8 +2268,12 @@ GuildMainInfo_Show = function()
   (GuildInfoPage._txtGuildServantTitle):SetShow(true)
   ;
   (GuildInfoPage._txtGuildServantValue):SetShow(true)
-  ;
-  (GuildInfoPage._btnGuildWarehouse):SetShow(true)
+  if isContentsGuildHouse then
+    (GuildInfoPage._btnGuildWarehouse):SetShow(true)
+  else
+    ;
+    (GuildInfoPage._btnGuildWarehouse):SetShow(false)
+  end
   if isContentsGuildInfo then
     (GuildInfoPage._btnGuildWebInfo):SetShow(true)
   else
@@ -3349,7 +3405,7 @@ FromClient_RequestGuildWar = function(userNo, guildNo, guildName)
   if (MessageBox.isPopUp)() and targetGuildNo == guildNo then
     return 
   end
-  if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP) then
+  if isGameTypeJapan() or isGameTypeKR2() then
     keyUseCheck = false
   end
   targetUserNo = userNo
@@ -3691,36 +3747,23 @@ registerEvent("FromWeb_WebPageError", "FromWeb_WebPageError")
 registerEvent("onScreenResize", "Guild_onScreenResize")
 registerEvent("FromClient_luaLoadComplete", "Guild_Init")
 Guild_Init = function()
-  -- function num : 0_89
+  -- function num : 0_89 , upvalues : isGuildBattle
   GuildManager:initialize()
   GuildMainInfo_Show()
   Notice_Init()
   Introduce_Init()
   ConsoleGroupCreate_Panel_Window_Guild()
+  ;
+  (GuildManager.mainBtn_GuildBattle):SetShow(isGuildBattle)
 end
 
 ConsoleGroupCreate_Panel_Window_Guild = function()
   -- function num : 0_90
   local self = GuildManager
-  Panel_Window_Guild:addConsoleUIControl(0, 8, 0, self.mainBtn_Main)
-  Panel_Window_Guild:addConsoleUIControl(1, 8, 0, self.mainBtn_Info)
-  Panel_Window_Guild:addConsoleUIControl(2, 8, 0, self.mainBtn_Quest)
-  Panel_Window_Guild:addConsoleUIControl(3, 8, 0, self.mainBtn_Tree)
-  Panel_Window_Guild:addConsoleUIControl(4, 8, 0, self.mainBtn_Warfare)
-  Panel_Window_Guild:addConsoleUIControl(5, 8, 0, self.mainBtn_History)
-  Panel_Window_Guild:addConsoleUIControl(6, 8, 0, self.mainBtn_Recruitment)
-  Panel_Window_Guild:addConsoleUIControl(7, 8, 0, self.mainBtn_CraftInfo)
 end
 
 ConsoleGroupDelete_Panel_Window_Guild = function()
   -- function num : 0_91
-  Panel_Window_Guild:deleteConsoleUIGroup(1)
-  Panel_Window_Guild:deleteConsoleUIGroup(2)
-  Panel_Window_Guild:deleteConsoleUIGroup(3)
-  Panel_Window_Guild:deleteConsoleUIGroup(4)
-  Panel_Window_Guild:deleteConsoleUIGroup(5)
-  Panel_Window_Guild:deleteConsoleUIGroup(6)
-  Panel_Window_Guild:deleteConsoleUIGroup(7)
 end
 
 

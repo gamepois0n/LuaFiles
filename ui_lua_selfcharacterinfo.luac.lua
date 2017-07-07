@@ -554,19 +554,10 @@ end
 
 ConsoleGroupCreate_Panel_Window_CharInfo_Status = function()
   -- function num : 0_4 , upvalues : CharacterInfo, profileOpen
-  local self = CharacterInfo
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-  if profileOpen then
-    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 5, 0, self.BTN_Tab_Basic)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 5, 0, self.BTN_Tab_Title)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 5, 0, self.BTN_Tab_History)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 5, 0, self.BTN_Tab_Challenge)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(4, 5, 0, self.BTN_Tab_Profile)
-  else
-    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 4, 0, self.BTN_Tab_Basic)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 4, 0, self.BTN_Tab_Title)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 4, 0, self.BTN_Tab_History)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 4, 0, self.BTN_Tab_Challenge)
+  do
+    local self = CharacterInfo
+    if profileOpen then
+    end
   end
 end
 
@@ -1490,44 +1481,6 @@ end
 CharacterInfo.SetConsolePadGroup = function(self, isShowIntroduce)
   -- function num : 0_24
   if isShowIntroduce then
-    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(0)
-    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
-    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
-    Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 1, (self._introduce)._editText)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 1, (self._introduce)._btnSetIntro)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 1, 1, (self._introduce)._btnResetIntro)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 1, 1, (self._introduce)._closeIntro)
-  else
-    ConsoleGroupCreate_Panel_Window_CharInfo_Status()
-    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 1, self._btnIntroduce)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 2, 2, self.attackspeed)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 2, 2, self._title_stamina)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 2, 2, self.castspeed)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 2, 2, self._title_strength)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(4, 2, 2, self.movespeed)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(5, 2, 2, self._title_health)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(6, 2, 2, self.critical)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(7, 2, 2, self._stunTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(8, 2, 2, self.fishTime)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(9, 2, 2, self._downTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(10, 2, 2, self.product)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(11, 2, 2, self._captureTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(12, 2, 2, self.dropChance)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(13, 2, 2, self._knockBackTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(0, 1, 3, self._ranker)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(1, 1, 3, self._gatherTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(2, 1, 3, self._manufactureTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(3, 1, 3, self._cookingTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(4, 1, 3, self._alchemyTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(5, 1, 3, self._trainingTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(6, 1, 3, self._fishingTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(7, 1, 3, self._huntingTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(8, 1, 3, self._tradeTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(9, 1, 3, self._growthTitle)
-    Panel_Window_CharInfo_Status:addConsoleUIControl(10, 1, 3, self._sailTitle)
   end
 end
 
@@ -1558,11 +1511,6 @@ HandleClicked_CharacterInfo_Tab = function(index)
   (CharacterInfo.BTN_Tab_Challenge):SetCheck(false)
   ;
   (CharacterInfo.BTN_Tab_Profile):SetCheck(false)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
   if index == 0 then
     (self._frameDefaultBG_Basic):SetShow(true)
     ;

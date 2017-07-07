@@ -53,7 +53,7 @@ Panel_MovieGuide_HideAni = function()
 end
 
 local maxMovieCount = 24
-if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
+if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() or isGameTypeEnglish() or isGameTypeRussia() then
   maxMovieCount = 24
 else
   maxMovieCount = 23
@@ -78,7 +78,7 @@ Panel_MovieGuide_Initialize = function()
   ;
   ((ui_PanelWindow._list):getElementManager()):clearKey()
   for idx = 0, maxMovieCount - 1 do
-    if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() then
+    if isGameTypeKorea() or isGameTypeTaiwan() or isGameTypeJapan() or isGameTypeEnglish() or isGameTypeRussia() then
       ((ui_PanelWindow._list):getElementManager()):pushKey(toInt64(0, idx))
     else
       if idx >= 5 then

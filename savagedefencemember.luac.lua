@@ -7,7 +7,7 @@ local UI_TM = CppEnums.TextMode
 Panel_SavageDefenceMember:SetShow(false)
 Panel_SavageDefenceMember:SetDragEnable(true)
 Panel_SavageDefenceMember:SetDragAll(true)
-local savageDefenceMember = {_list2 = (UI.getChildControl)(Panel_SavageDefenceMember, "List2_JoinMember"), buttonBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ButtonBG"), listBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ListBG"), waveBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_WaveBG")}
+local savageDefenceMember = {_list2 = (UI.getChildControl)(Panel_SavageDefenceMember, "List2_JoinMember"), buttonBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ButtonBG"), listBG = (UI.getChildControl)(Panel_SavageDefenceMember, "Static_ListBG")}
 savageDefenceMember.mycharacterName = (UI.getChildControl)(savageDefenceMember.buttonBG, "StaticText_MyCharacterName")
 savageDefenceMember.myPoint = (UI.getChildControl)(savageDefenceMember.buttonBG, "StaticText_MyPoint")
 savageDefenceMember.chk_List = (UI.getChildControl)(savageDefenceMember.buttonBG, "CheckButton_List")
@@ -20,6 +20,8 @@ SavageDefenceMember_Init = function(listSize, BGSize)
   (self.chk_List):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SAVAGEDEFENCEMEMBER_JOINMEMBER"))
   ;
   (self.chk_Shop):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SAVAGEDEFENCEMEMBER_SHOP"))
+  ;
+  (self.chk_Shop):AddEffect("UI_Panel_Savage_Shop_01", true, 0, 0)
   local btnListSizeX = (self.chk_List):GetSizeX() + 23
   local btnListTextPosX = btnListSizeX - btnListSizeX / 2 - (self.chk_List):GetTextSizeX() / 2
   ;
@@ -223,7 +225,7 @@ SavageDefenceMember_Open = function()
   ;
   (self.chk_List):SetCheck(true)
   ;
-  (self.chk_Shop):SetCheck(true)
+  (self.chk_Shop):SetCheck(false)
   SavageDefenceMember_Update()
 end
 
@@ -234,7 +236,7 @@ end
 
 PaGlobal_SavageDefenceMember_Position = function()
   -- function num : 0_9
-  Panel_SavageDefenceMember:SetPosY(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeY() + 120)
+  Panel_SavageDefenceMember:SetPosY(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeY() + 170)
 end
 
 FromClient_refreshSavageDefencePlayer = function(count)
@@ -244,23 +246,8 @@ FromClient_refreshSavageDefencePlayer = function(count)
   FGlobal_SavageDefenceShop_coinUpdate()
 end
 
-SavageDefenceMember_UpdateCurrentWave = function(wavecount)
-  -- function num : 0_11 , upvalues : savageDefenceMember
-  local self = savageDefenceMember
-  local nextWaveCount = ToClient_SavageDefenceNextWave()
-end
-
-SavageDefenceMember_UpdateTowerHp = function()
-  -- function num : 0_12 , upvalues : savageDefenceMember
-  local self = savageDefenceMember
-  local currenthp = ToClient_SavageDefenceTowerHp()
-  local maxhp = ToClient_SavageDefenceTowerMaxHp()
-end
-
 SavageDefenceMember_Init(380, 420)
-SavageDefenceMember_Open()
 PaGlobal_SavageDefenceMember_Position()
 registerEvent("FromClient_refreshSavageDefencePlayer", "FromClient_refreshSavageDefencePlayer")
-registerEvent("FromClient_joinSavageDefence", "SavageDefenceMember_Open")
 registerEvent("onScreenResize", "PaGlobal_SavageDefenceMember_Position")
 

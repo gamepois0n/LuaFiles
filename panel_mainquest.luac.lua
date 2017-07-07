@@ -272,7 +272,7 @@ PaGlobal_MainQuest.getQuestTitle = function(self, uiQuestInfo)
   local questTitle = uiQuestInfo:getTitle()
   local recommandLevel = uiQuestInfo:getRecommendLevel()
   if recommandLevel ~= nil and recommandLevel ~= 0 then
-    questTitle = "[Lv." .. recommandLevel .. "] " .. questTitle
+    questTitle = "[" .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. recommandLevel .. "] " .. questTitle
   end
   return questTitle
 end
@@ -628,9 +628,6 @@ end
 FromClient_MainQuestWidget_ResetPosition = function()
   -- function num : 0_25
   if CppDefine.ChangeUIAndResolution == true then
-    if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsSaved) > 0 then
-      Panel_MainQuest:SetShow(ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_MainQuest, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow))
-    end
     if Panel_MainQuest:GetRelativePosX() == -1 and Panel_MainQuest:GetRelativePosY() == -1 then
       local initPosX = getScreenSizeX() - Panel_MainQuest:GetSizeX() - 20
       local initPosY = FGlobal_Panel_Radar_GetPosY() + FGlobal_Panel_Radar_GetSizeY() + 10

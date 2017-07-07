@@ -272,7 +272,7 @@ ButtonFacePhoto_ToolTip = function(isOn)
 end
 
 refreshCharacterInfoData = function(startIdx)
-  -- function num : 0_5 , upvalues : photoIndex, isCharacterSlot, isExitPhoto, UI_Class, charLevelPool, charNamePool, charPositionPool, normalStackPool, charWpCountPool, UI_color, charWorking, charPcDeliveryRemainTime, charEnterWaiting, CharacterChangeButton, isCharacterSlotBG, _charSlotBG, const_64, _btn_ChangeChannel, _btn_CharTransport, _btn_NextCharPage, _btn_PreCharPage, _addMessage
+  -- function num : 0_5 , upvalues : photoIndex, isCharacterSlot, isExitPhoto, UI_Class, charLevelPool, charNamePool, charPositionPool, normalStackPool, charWpCountPool, UI_color, charWorking, charPcDeliveryRemainTime, charEnterWaiting, CharacterChangeButton, isCharacterSlotBG, _charSlotBG, const_64, _btn_ChangeChannel, _btn_CharTransport, _btn_NextCharPage, _btn_PreCharPage
   local selfProxy = getSelfPlayer()
   local characterNo_64 = toInt64(0, 0)
   if startIdx == nil or startIdx <= 0 then
@@ -768,38 +768,6 @@ refreshCharacterInfoData = function(startIdx)
         _btn_PreCharPage:addInputEvent("Mouse_LUp", "")
         _btn_PreCharPage:SetShow(false)
       end
-      Panel_GameExit:deleteConsoleUIGroup(1)
-      Panel_GameExit:deleteConsoleUIGroup(2)
-      Panel_GameExit:deleteConsoleUIGroup(3)
-      Panel_GameExit:deleteConsoleUIGroup(4)
-      Panel_GameExit:deleteConsoleUIGroup(5)
-      Panel_GameExit:deleteConsoleUIGroup(6)
-      Panel_GameExit:deleteConsoleUIGroup(7)
-      local groupIndex = 1
-      if startIdx > 0 then
-        Panel_GameExit:addConsoleUIControl(0, 1, groupIndex, _btn_PreCharPage)
-        groupIndex = groupIndex + 1
-      end
-      local index = 0
-      local characterNo_64 = (getSelfPlayer()):getCharacterNo_64()
-      for idx = startIdx, characterDatacount - 1 do
-        if index <= 3 then
-          local characterData = getCharacterDataByIndex(idx)
-          if characterNo_64 == characterData._characterNo_s64 then
-            Panel_GameExit:addConsoleUIControl(0, 1, groupIndex, _btn_ChangeChannel)
-            Panel_GameExit:addConsoleUIControl(1, 1, groupIndex, _btn_CharTransport)
-          else
-            Panel_GameExit:addConsoleUIControl(0, 1, groupIndex, isCharacterSlot[index])
-          end
-          index = index + 1
-          groupIndex = groupIndex + 1
-        end
-      end
-      if startIdx + 4 <= characterDatacount - 1 then
-        Panel_GameExit:addConsoleUIControl(0, 1, groupIndex, _btn_NextCharPage)
-        groupIndex = groupIndex + 1
-      end
-      Panel_GameExit:addConsoleUIControl(0, 1, groupIndex, _addMessage)
     end
   end
 end
@@ -913,7 +881,7 @@ end
 
 local prevClickIndex = 0
 Panel_GameExit_ClickCharSlot = function(idx)
-  -- function num : 0_11 , upvalues : prevClickIndex, isCharacterSelect, CharacterChangeButton, isCharacterSlot, photoIndex
+  -- function num : 0_11 , upvalues : prevClickIndex, isCharacterSelect, CharacterChangeButton, isCharacterSlot
   if prevClickIndex ~= idx then
     (isCharacterSelect[prevClickIndex]):SetShow(false)
     ;
@@ -922,30 +890,16 @@ Panel_GameExit_ClickCharSlot = function(idx)
     (isCharacterSlot[prevClickIndex]):ResetVertexAni()
     ;
     (isCharacterSlot[prevClickIndex]):SetAlpha(1)
-    local groupIndex = 1 + prevClickIndex
-    if photoIndex > 0 then
-      groupIndex = groupIndex + 1
-    end
-    Panel_GameExit:deleteConsoleUIGroup(groupIndex)
-    Panel_GameExit:addConsoleUIControl(0, 1, groupIndex, isCharacterSlot[prevClickIndex])
   end
-  do
-    ;
-    (isCharacterSelect[idx]):SetShow(true)
-    ;
-    (CharacterChangeButton[idx]):SetShow(true)
-    ;
-    (isCharacterSlot[idx]):ResetVertexAni()
-    ;
-    (isCharacterSlot[idx]):SetVertexAniRun("Ani_Color_New", true)
-    local groupIndex = 1 + idx
-    if photoIndex > 0 then
-      groupIndex = groupIndex + 1
-    end
-    Panel_GameExit:deleteConsoleUIGroup(groupIndex)
-    Panel_GameExit:addConsoleUIControl(0, 1, groupIndex, CharacterChangeButton[idx])
-    prevClickIndex = idx
-  end
+  ;
+  (isCharacterSelect[idx]):SetShow(true)
+  ;
+  (CharacterChangeButton[idx]):SetShow(true)
+  ;
+  (isCharacterSlot[idx]):ResetVertexAni()
+  ;
+  (isCharacterSlot[idx]):SetVertexAniRun("Ani_Color_New", true)
+  prevClickIndex = idx
 end
 
 Panel_GameExit_ClickSelectCharacter = function()
@@ -1062,7 +1016,6 @@ Panel_GameExit_ClickGameOff = function()
   end
   Panel_ExitConfirm:SetShow(true)
   _exitConfirm_Chk_Tray_2:SetShow(false)
-  Panel_ExitConfirm:setLockFocusPanel(true)
 end
 
 FromClient_TrayIconMessageBox = function()
@@ -1074,7 +1027,6 @@ FromClient_TrayIconMessageBox = function()
   _exitConfirm_Chk_Tray:SetShow(false)
   Panel_ExitConfirm:SetShow(true)
   _exitConfirm_Chk_Tray_2:SetShow(true)
-  Panel_ExitConfirm:setLockFocusPanel(true)
 end
 
 Panel_GameExit_Minimize = function()
@@ -1520,18 +1472,11 @@ registEventHandler()
 registMessageHandler()
 ToClient_RequestCharacterEnchantFailCount()
 ConsoleGroupCreate_Panel_GameExit = function()
-  -- function num : 0_34 , upvalues : _btn_selectCharacter, _btn_gameExit, _btn_cancel, _btn_FacePhoto
-  Panel_GameExit:addConsoleUIControl(0, 1, 0, _btn_selectCharacter)
-  Panel_GameExit:addConsoleUIControl(1, 1, 0, _btn_gameExit)
-  Panel_GameExit:addConsoleUIControl(2, 1, 0, _btn_cancel)
-  Panel_GameExit:addConsoleUIControl(3, 1, 0, _btn_FacePhoto)
+  -- function num : 0_34
 end
 
 ConsoleGroupCreate_Panel_ExitConfirm = function()
-  -- function num : 0_35 , upvalues : _exitConfirm_Btn_Confirm, _exitConfirm_Btn_Cancle, _exitConfirm_Chk_Tray
-  Panel_ExitConfirm:addConsoleUIControl(0, 1, 0, _exitConfirm_Btn_Confirm)
-  Panel_ExitConfirm:addConsoleUIControl(1, 1, 0, _exitConfirm_Btn_Cancle)
-  Panel_ExitConfirm:addConsoleUIControl(2, 1, 0, _exitConfirm_Chk_Tray)
+  -- function num : 0_35
 end
 
 ConsoleGroupCreate_Panel_GameExit()

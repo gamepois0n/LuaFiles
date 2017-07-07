@@ -252,6 +252,7 @@ FGlobal_WorldMapOpenForMenu = function()
   if isGameTypeKR2() then
     HelpMenu_Btn:SetShow(false)
   end
+  Worldmap_ConsolePadGroupSet()
 end
 
 WorldmapGrand_setAlpha = function(boolValue)
@@ -380,6 +381,10 @@ FromClient_isCompletedTransport = function(isComplete)
   if isComplete == nil then
     return 
   end
+end
+
+Worldmap_ConsolePadGroupSet = function()
+  -- function num : 0_19
 end
 
 worldMap_Init()

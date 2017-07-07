@@ -45,27 +45,31 @@ local itemSlot = (UI.getChildControl)(Panel_TradeMarket_EventInfo, "Static_ItemP
 local slotBg = (UI.getChildControl)(Panel_TradeMarket_EventInfo, "Static_SlotBG")
 local supplyAlert = (UI.getChildControl)(Panel_TradeMarket_EventInfo, "StaticText_TerritorySupplyAlert")
 local slotConfig = {createIcon = true, createBorder = true, createCount = true}
-local territorySupplyNpcRegionKey = {[0] = 5, [1] = 32, [2] = 310, [3] = 202, [4] = 229, [5] = 821}
+local territorySupplyNpcRegionKey = {[0] = 5, [1] = 32, [2] = 310, [3] = 202, [4] = 229, [5] = 821, [6] = 735}
 local tradeEvnetNpcRegionKey = {[40010] = 5, [40028] = 9, [40715] = 88, [41051] = 32, [41090] = 52, [42005] = 310, [42013] = 311, [42026] = 312, [42301] = 120, [43010] = 107, [44010] = 202, [44110] = 221, [40025] = 16, [41223] = 56, [43449] = 313, [50418] = 110, [50493] = 212}
 local isCalpheon, isMedia, isValencia, terrCount = 2, 3, 4, nil
-if ToClient_IsContentsGroupOpen("83") then
-  terrCount = 6
+if ToClient_IsContentsGroupOpen("260") then
+  terrCount = 7
 else
-  if ToClient_IsContentsGroupOpen("4") then
-    terrCount = 5
+  if ToClient_IsContentsGroupOpen("83") then
+    terrCount = 6
   else
-    if ToClient_IsContentsGroupOpen("3") then
-      terrCount = 4
+    if ToClient_IsContentsGroupOpen("4") then
+      terrCount = 5
     else
-      if ToClient_IsContentsGroupOpen("2") then
-        terrCount = 3
+      if ToClient_IsContentsGroupOpen("3") then
+        terrCount = 4
       else
-        terrCount = 2
+        if ToClient_IsContentsGroupOpen("2") then
+          terrCount = 3
+        else
+          terrCount = 2
+        end
       end
     end
   end
 end
-local territoryName = {PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_3"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_4"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_5"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_ROTPORT"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_1")}
+local territoryName = {PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_3"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_4"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_5"), PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_ROTPORT"), PAGetString(Defines.StringSheet_GAME, "LUA_CONTRYNAME_6"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEEVENTINFO_1")}
 local maxTerritoryCount = #territoryName + 1
 local maxSlotCount = 6
 local eventBgSizeY = eventBg:GetSizeY()

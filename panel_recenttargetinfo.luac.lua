@@ -551,7 +551,7 @@ panel_Update_Monster_Info = function(actorKey)
   appliedBuff_Idx = 0
   if (targetActor:get()):isPlayer() then
     local playerActorProxyWrapper = getPlayerActor(actorKey)
-    if (playerActorProxyWrapper:get()):isValunteer() then
+    if (playerActorProxyWrapper:get()):isVolunteer() then
       lua_TargetInfo_Name:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WARINFOMESSAGE_MILITIA"))
     else
       lua_TargetInfo_Name:SetText(targetActor:getName())

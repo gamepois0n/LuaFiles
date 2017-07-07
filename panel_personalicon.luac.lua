@@ -116,7 +116,7 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
       showIconCount = showIconCount + 1
     end
     ;
-    (self._btn_SiegeArea):SetShow(not isRecordMode)
+    (self._btn_SiegeArea):SetShow(ToClient_IsContentsGroupOpen("21"))
     ;
     (self._btn_SiegeArea):SetPosX((sizeX + controlGapX) * (showIconCount))
     ;

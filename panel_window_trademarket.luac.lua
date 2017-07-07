@@ -169,7 +169,7 @@ totalCalculateMoney = function()
     (npcTradeShop._StaticTextCartWeightLT):SetFontColor((Defines.Color).C_FFFFBC3A)
   end
   ;
-  (npcTradeShop._StaticTextCartWeightLT):SetText(itemWeight .. " LT")
+  (npcTradeShop._StaticTextCartWeightLT):SetText(itemWeight .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
 end
 
 npcTradeShop.checkSlotIndex = function(self, index)
@@ -481,7 +481,7 @@ npcTradeShop.initTradeData = function(self)
   ;
   (npcTradeShop._staticTotalMoneyValue):SetText("0")
   ;
-  (npcTradeShop._StaticTextCartWeightLT):SetText("0" .. " LT")
+  (npcTradeShop._StaticTextCartWeightLT):SetText("0" .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
   TradeShopMoneyRefresh()
 end
 
