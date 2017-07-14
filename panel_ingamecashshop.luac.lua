@@ -2223,6 +2223,11 @@ IngameCashShop_DescUpdate = function()
                   (self._btn_BigCart):SetSpanSize(60, 10)
                   ;
                   (self._btn_BigBuy):SetSpanSize(20, 10)
+                  if isGameTypeSA() then
+                    (self._btn_BigGift):SetIgnore(true)
+                    ;
+                    (self._btn_BigGift):SetMonoTone(true)
+                  end
                   ;
                   (self._btn_BigGift):addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedGiftItem(" .. inGameShop._openProductKeyRaw .. ")")
                   ;
@@ -2957,7 +2962,7 @@ IngameCashShop_DescSelectedBuyItem = function(productNoRaw)
     if UI_CCC.eCashProductCategory_Pearl == categoryType or UI_CCC.eCashProductCategory_Mileage == categoryType then
       IngameCashShopCoupon_Close()
     else
-      IngameCashShopCoupon_Open(0)
+      IngameCashShopCoupon_Open(0, productNoRaw)
     end
     -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end

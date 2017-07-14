@@ -1033,8 +1033,9 @@ Panel_Menu_ShowToggle = function()
   return false
 end
 
+local group_0 = Panel_Menu:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
 _Panel_Menu_OpenLimit = function()
-  -- function num : 0_19 , upvalues : maxButtonCount, menuButtonBG, menuButtonIcon, menuButtonHotkey, countrySizeNum, iconBgPosX, iconBgPosY, menu_Bg, menuTitleBar, MenuButtonId
+  -- function num : 0_19 , upvalues : maxButtonCount, menuButtonBG, menuButtonIcon, menuButtonHotkey, countrySizeNum, iconBgPosX, iconBgPosY, group_0, menu_Bg, menuTitleBar, MenuButtonId
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   for index = 1, maxButtonCount do
     (menuButtonBG[index]):SetShow(false)
@@ -1084,6 +1085,7 @@ _Panel_Menu_OpenLimit = function()
         (menuButtonBG[index]):addInputEvent("Mouse_On", "HandleOn_SlotBg(" .. index .. ")")
         ;
         (menuButtonBG[index]):addInputEvent("Mouse_Out", "HandleOn_SlotBg()")
+        group_0:addControl((posIndex - 1) % 7, (posIndex - 1) / 7, 7, 7, menuButtonBG[index])
         if posIndex % columnCountByRaw == 0 then
           columnCount = 0
           rowCount = rowCount + 1

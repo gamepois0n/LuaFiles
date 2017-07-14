@@ -554,10 +554,19 @@ end
 
 ConsoleGroupCreate_Panel_Window_CharInfo_Status = function()
   -- function num : 0_4 , upvalues : CharacterInfo, profileOpen
-  do
-    local self = CharacterInfo
-    if profileOpen then
-    end
+  local self = CharacterInfo
+  local group_0 = Panel_Window_CharInfo_Status:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  if profileOpen then
+    group_0:addControl(0, 0, 5, 1, self.BTN_Tab_Basic)
+    group_0:addControl(1, 0, 5, 1, self.BTN_Tab_Title)
+    group_0:addControl(2, 0, 5, 1, self.BTN_Tab_History)
+    group_0:addControl(3, 0, 5, 1, self.BTN_Tab_Challenge)
+    group_0:addControl(4, 0, 5, 1, self.BTN_Tab_Profile)
+  else
+    group_0:addControl(0, 0, 4, 1, self.BTN_Tab_Basic)
+    group_0:addControl(1, 0, 4, 1, self.BTN_Tab_Title)
+    group_0:addControl(2, 0, 4, 1, self.BTN_Tab_History)
+    group_0:addControl(3, 0, 4, 1, self.BTN_Tab_Challenge)
   end
 end
 
@@ -1480,7 +1489,55 @@ end
 
 CharacterInfo.SetConsolePadGroup = function(self, isShowIntroduce)
   -- function num : 0_24
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
+  local group_1 = Panel_Window_CharInfo_Status:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  local group_2 = Panel_Window_CharInfo_Status:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  local group_3 = Panel_Window_CharInfo_Status:addConsoleUIGroup(3, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  local group_4 = Panel_Window_CharInfo_Status:addConsoleUIGroup(4, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  local group_5 = Panel_Window_CharInfo_Status:addConsoleUIGroup(5, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   if isShowIntroduce then
+    group_1:addControl(0, 0, 4, 1, (self._introduce)._editText)
+    group_1:addControl(1, 0, 4, 1, (self._introduce)._btnSetIntro)
+    group_1:addControl(2, 0, 4, 1, (self._introduce)._btnResetIntro)
+    group_1:addControl(3, 0, 4, 1, (self._introduce)._closeIntro)
+  else
+    group_1:addControl(0, 0, 5, 1, self._btnIntroduce)
+    group_1:addControl(1, 0, 5, 1, self.familyPoints)
+    group_1:addControl(2, 0, 5, 1, self.familyCombatPoints)
+    group_1:addControl(3, 0, 5, 1, self.familyLifePoints)
+    group_1:addControl(4, 0, 5, 1, self.familyEtcPoints)
+    group_1:addControl(5, 0, 5, 1, self._hpTitle)
+    group_1:addControl(6, 0, 5, 1, self._mpTitle)
+    group_1:addControl(7, 0, 5, 1, self._weightTitle)
+    group_2:addControl(0, 0, 2, 7, self.attackspeed)
+    group_2:addControl(1, 0, 2, 7, self._title_stamina)
+    group_2:addControl(0, 1, 2, 7, self.castspeed)
+    group_2:addControl(1, 1, 2, 7, self._title_strength)
+    group_2:addControl(0, 2, 2, 7, self.movespeed)
+    group_2:addControl(1, 2, 2, 7, self._title_health)
+    group_2:addControl(0, 3, 2, 7, self.critical)
+    group_2:addControl(1, 3, 2, 7, self._stunTitle)
+    group_2:addControl(0, 4, 2, 7, self.fishTime)
+    group_2:addControl(1, 4, 2, 7, self._downTitle)
+    group_2:addControl(0, 5, 2, 7, self.product)
+    group_2:addControl(1, 5, 2, 7, self._captureTitle)
+    group_2:addControl(0, 6, 2, 7, self.dropChance)
+    group_2:addControl(1, 6, 2, 7, self._knockBackTitle)
+    group_3:addControl(0, 0, 11, 1, self._ranker)
+    group_3:addControl(1, 0, 11, 1, self._gatherTitle)
+    group_3:addControl(2, 0, 11, 1, self._manufactureTitle)
+    group_3:addControl(3, 0, 11, 1, self._cookingTitle)
+    group_3:addControl(4, 0, 11, 1, self._alchemyTitle)
+    group_3:addControl(5, 0, 11, 1, self._trainingTitle)
+    group_3:addControl(6, 0, 11, 1, self._fishingTitle)
+    group_3:addControl(7, 0, 11, 1, self._huntingTitle)
+    group_3:addControl(8, 0, 11, 1, self._tradeTitle)
+    group_3:addControl(9, 0, 11, 1, self._growthTitle)
+    group_3:addControl(10, 0, 11, 1, self._sailTitle)
   end
 end
 

@@ -550,6 +550,28 @@ HandleClicked_AlchemyStoneTab = function(tabIdx)
   -- DECOMPILER ERROR at PC733: Confused about usage of register: R6 in 'UnsetPending'
 
   AlchemyStone.resultItemIndex = -1
+  Panel_AlchemyStone:deleteConsoleUIGroup(1, true)
+  local group_1 = Panel_AlchemyStone:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  if tabIdx == 0 then
+    group_1:addControl(0, 0, 5, 1, (AlchemyStone.Stone_slot).icon)
+    group_1:addControl(1, 0, 5, 1, (AlchemyStone.Stuff_slot).icon)
+    group_1:addControl(2, 0, 5, 1, (AlchemyStone.control).btn_Plus)
+    group_1:addControl(3, 0, 5, 1, (AlchemyStone.control).btn_Minus)
+    group_1:addControl(4, 0, 5, 1, (AlchemyStone.control).btn_Doit)
+  else
+    if tabIdx == 1 then
+      group_1:addControl(0, 0, 3, 1, (AlchemyStone.Stuff_slot).icon)
+      group_1:addControl(1, 0, 3, 1, (AlchemyStone.Stone_slot).icon)
+      group_1:addControl(2, 0, 3, 1, (AlchemyStone.control).btn_Doit)
+    else
+      if tabIdx == 2 then
+        group_1:addControl(0, 0, 4, 1, (AlchemyStone.Stone_slot).icon)
+        group_1:addControl(1, 0, 4, 1, (AlchemyStone.Stuff_slot).icon)
+        group_1:addControl(2, 0, 4, 1, ((AlchemyStone.resultSlot)[0]).icon)
+        group_1:addControl(3, 0, 4, 1, (AlchemyStone.control).btn_Doit)
+      end
+    end
+  end
 end
 
 HandleClicked_AlchemyStone_ChangeStuffCount = function(isUp)
@@ -1148,6 +1170,29 @@ AlchemyStone_StoneRfunction = function(slotNo, itemWrapper, count, inventoryType
                 end
               end
             end
+            Panel_AlchemyStone:deleteConsoleUIGroup(1)
+            local group_1 = Panel_AlchemyStone:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+            if resultCount == 1 then
+              group_1:addControl(0, 0, 4, 1, (AlchemyStone.Stone_slot).icon)
+              group_1:addControl(1, 0, 4, 1, (AlchemyStone.Stuff_slot).icon)
+              group_1:addControl(2, 0, 4, 1, ((AlchemyStone.resultSlot)[0]).icon)
+              group_1:addControl(3, 0, 4, 1, (AlchemyStone.control).btn_Doit)
+            else
+              if resultCount == 2 then
+                group_1:addControl(0, 0, 5, 1, (AlchemyStone.Stone_slot).icon)
+                group_1:addControl(1, 0, 5, 1, (AlchemyStone.Stuff_slot).icon)
+                group_1:addControl(2, 0, 5, 1, ((AlchemyStone.resultSlot)[0]).icon)
+                group_1:addControl(3, 0, 5, 1, ((AlchemyStone.resultSlot)[1]).icon)
+                group_1:addControl(4, 0, 5, 1, (AlchemyStone.control).btn_Doit)
+              else
+                group_1:addControl(0, 0, 6, 1, (AlchemyStone.Stone_slot).icon)
+                group_1:addControl(1, 0, 6, 1, (AlchemyStone.Stuff_slot).icon)
+                group_1:addControl(2, 0, 6, 1, ((AlchemyStone.resultSlot)[0]).icon)
+                group_1:addControl(3, 0, 6, 1, ((AlchemyStone.resultSlot)[1]).icon)
+                group_1:addControl(4, 0, 6, 1, ((AlchemyStone.resultSlot)[2]).icon)
+                group_1:addControl(5, 0, 6, 1, (AlchemyStone.control).btn_Doit)
+              end
+            end
           end
           do
             ;
@@ -1607,7 +1652,11 @@ AlchemyStone:Init()
 AlchemyStone:registEventHandler()
 AlchemyStone:registMessageHandler()
 ConsoleGroupCreate_Panel_AlchemyStone = function()
-  -- function num : 0_27
+  -- function num : 0_27 , upvalues : AlchemyStone
+  local group_0 = Panel_AlchemyStone:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_0:addControl(0, 0, 3, 1, (AlchemyStone.control).tab_Charge)
+  group_0:addControl(1, 0, 3, 1, (AlchemyStone.control).tab_Exp)
+  group_0:addControl(2, 0, 3, 1, (AlchemyStone.control).tab_Upgrade)
 end
 
 ConsoleGroupCreate_Panel_AlchemyStone()

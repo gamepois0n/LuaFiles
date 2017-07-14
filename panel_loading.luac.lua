@@ -20,11 +20,11 @@ local progressHead = (UI.getChildControl)(progressRate, "Progress2_Bar_Head")
 local staticBack = (UI.getChildControl)(Panel_Loading, "Static_Progress_Back")
 local goblinRun = (UI.getChildControl)(Panel_Loading, "Static_GoblinRun")
 local backGroundEvnetImage = (UI.getChildControl)(Panel_Loading, "Static_BackImage")
-local isBgOpen = false
+local isBgOpen = true
 local bgImageTexture = {}
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 if isBgOpen then
-  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/User_01.dds", count = 1}
+  bgImageTexture = {[0] = "New_UI_Common_ForLua/Window/Loading/User_01.dds", [1] = "New_UI_Common_ForLua/Window/Loading/User_02.dds", [2] = "New_UI_Common_ForLua/Window/Loading/User_03.dds", count = 3}
 end
 if isGameTypeJapan() then
   isBgOpen = false

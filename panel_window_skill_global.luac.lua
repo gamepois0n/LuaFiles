@@ -4,6 +4,7 @@
 -- params : ...
 -- function num : 0
 local UI_TM = CppEnums.TextMode
+local skillOldandNew = ToClient_IsContentsGroupOpen("920")
 PaGlobal_Skill = {staticBottomBox; 
 slotConfig = {createIcon = true, createEffect = true, createFG = true, createFGDisabled = true, createFG_Passive = true, createMinus = true, createLevel = true, createLearnButton = true, createTestimonial = true, createLockIcon = true, createMouseOver = true, 
 template = {effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect"), iconFG = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_FG"), iconFGDisabled = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_FG_DISABLE"), iconFG_Passive = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_BG"), iconMinus = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_EffectMinus"), learnButton = (UI.getChildControl)(Panel_Window_Skill, "Button_Skill_Point"), mouseOverButton = (UI.getChildControl)(Panel_Window_Skill, "Button_Skill_OverMouse"), testimonial = (UI.getChildControl)(Panel_Window_Skill, "Static_Skill_Effect"), lockIcon = (UI.getChildControl)(Panel_Window_Skill, "Static_SkillLockIcon")}
@@ -36,14 +37,22 @@ l = {[3] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeL_LT"), [4] = (U
 , 
 s = {[3] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_LT"), [4] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_CT"), [5] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_RT"), [6] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_LM"), [7] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_CM"), [8] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_RM"), [9] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_LB"), [10] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_CB"), [11] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_RB"), [12] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_HORI"), [13] = (UI.getChildControl)(Panel_Window_Skill, "Static_TypeS_VERTI")}
 }
-, awakenDesc = (UI.getChildControl)(Panel_Window_Skill, "StaticText_AwakenWeaponDesc"), _btn_MovieToolTipBG = (UI.getChildControl)(Panel_Window_Skill, "Static_MovieBG"), _btn_MovieToolTipDesc = (UI.getChildControl)(Panel_Window_Skill, "StaticText_MovieToolTip"), _btn_MovieToolTip = (UI.getChildControl)(Panel_Window_Skill, "Button_MovieTooltip"), _btn_MovieToolTip2 = (UI.getChildControl)(Panel_Window_Skill, "Button_MovieTooltip_SpacialCombo"), learnedSkillList = (Array.new)(), isPartsSkillReset = false, saved_isLearnMode = true, scrollPos = 0, skillNoCache = 0, slotTypeCache = 0, tooltipcacheCount = 0, skillLevelBg = (UI.getChildControl)(Panel_Window_Skill, "Static_SkillLevel"), _txt_MentalTip = (UI.getChildControl)(Panel_Window_Skill, "StaticText_Mental_Tip"), _txt_ResourceSaveDesc = (UI.getChildControl)(Panel_Window_Skill, "StaticText_ResourceSaveDesc"), _btn_ResetAllSkill = (UI.getChildControl)(Panel_Window_Skill, "Button_ResetAllSkill"), _btn_CommandLock = (UI.getChildControl)(Panel_Window_Skill, "Button_SkillCommandLock"), _bottomBG = (UI.getChildControl)(Panel_Window_Skill, "Static_BottomBox")}
+, awakenDesc = (UI.getChildControl)(Panel_Window_Skill, "StaticText_AwakenWeaponDesc"), _btn_MovieToolTipBG = (UI.getChildControl)(Panel_Window_Skill, "Static_MovieBG"), _btn_MovieToolTipDesc = (UI.getChildControl)(Panel_Window_Skill, "StaticText_MovieToolTip"), _btn_MovieToolTip = (UI.getChildControl)(Panel_Window_Skill, "Button_MovieTooltip"), _btn_MovieToolTip2 = (UI.getChildControl)(Panel_Window_Skill, "Button_MovieTooltip_SpacialCombo"), learnedSkillList = (Array.new)(), isPartsSkillReset = false, saved_isLearnMode = true, scrollPos = 0, skillNoCache = 0, slotTypeCache = 0, tooltipcacheCount = 0, skillLevelBg = (UI.getChildControl)(Panel_Window_Skill, "Static_SkillLevel"), _txt_MentalTip = (UI.getChildControl)(Panel_Window_Skill, "StaticText_Mental_Tip"), _txt_ResourceSaveDesc = (UI.getChildControl)(Panel_Window_Skill, "StaticText_ResourceSaveDesc"), _btn_ResetAllSkill = (UI.getChildControl)(Panel_Window_Skill, "Button_ResetAllSkill"), _btn_CommandLock = (UI.getChildControl)(Panel_Window_Skill, "Button_SkillCommandLock"), _bottomBG = (UI.getChildControl)(Panel_Window_Skill, "Static_BottomBox"), _static_CombiSkill_BG = nil, _static_CombiSlotBG = nil, 
+_slot_CombiSkill = {}
+, 
+_static_SlotBG = {}
+, _emptyCombiSkillIndex = 0}
+local selectindex = -1
 ;
 (PaGlobal_Skill._btn_CommandLock):SetShow(false)
 local beforSkillNo = -1
--- DECOMPILER ERROR at PC528: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC540: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.initialize = function(self)
-  -- function num : 0_0 , upvalues : UI_TM
+  -- function num : 0_0 , upvalues : skillOldandNew, UI_TM
+  if skillOldandNew then
+    self._static_CombiSkill_BG = (UI.getChildControl)(Panel_Window_Skill, "Static_SlotBG")
+  end
   Panel_Window_Skill:setMaskingChild(true)
   Panel_Window_Skill:ActiveMouseEventEffect(true)
   Panel_Window_Skill:setGlassBackground(true)
@@ -55,24 +64,11 @@ PaGlobal_Skill.initialize = function(self)
   (self._txt_MentalTip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_MENTALTIP") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_RESOURCESAVEDESC"))
   ;
   (self._txt_MentalTip):ComputePos()
-  if (self._txt_MentalTip):GetTextSizeY() > 75 then
-    Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), 670)
-    ;
-    (self._bottomBG):SetSize((self._bottomBG):GetSizeX(), 95)
-    ;
-    (self._btn_MovieToolTipBG):SetSize((self._btn_MovieToolTipBG):GetSizeX(), 85)
-  else
-    Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), 650)
-    ;
-    (self._bottomBG):SetSize((self._bottomBG):GetSizeX(), 75)
-    ;
-    (self._btn_MovieToolTipBG):SetSize((self._btn_MovieToolTipBG):GetSizeX(), 65)
-  end
   self:initControl()
   self:initSkillLearnableSlot()
 end
 
--- DECOMPILER ERROR at PC532: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC544: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.initControl = function(self)
   -- function num : 0_1 , upvalues : UI_TM
@@ -111,10 +107,166 @@ PaGlobal_Skill.initControl = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC535: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC547: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_Skill.initCombiControl = function(self, cellTable, parent, container, isLearn)
+  -- function num : 0_2
+  self._static_CombiSlotBG = (UI.getChildControl)(self._static_CombiSkill_BG, "Static_Slot")
+  local cols = cellTable:capacityX()
+  local rows = cellTable:capacityY()
+  local startY = (self.config).slotStartY
+  local index = 0
+  do
+    local skillMaxCount = ToClient_getPossibleFusionSkillCount()
+    for row = 0, rows - 1 do
+      local startX = (self.config).slotStartX
+      local isSlotRow = row % 2 == 0
+      if isSlotRow then
+        do
+          startY = startY + 8
+          for col = 0, cols - 1 do
+            local cell = cellTable:atPointer(col, row)
+            local isSlotColumn = col % 2 == 0
+            if isSlotColumn then
+              startX = startX + (self.config).emptyGapX
+            else
+              startX = startX + (self.config).slotGapX
+            end
+            if cell:isSkillType() then
+              local skillNo = ToClient_getFusionLearnSkillNo(index)
+              local slotBG = {}
+              slotBG._base = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, parent, "combiSkillSlot_" .. index)
+              CopyBaseProperty(self._static_CombiSlotBG, slotBG._base)
+              ;
+              (slotBG._base):SetPosX(startX - 4)
+              ;
+              (slotBG._base):SetShow(true)
+              -- DECOMPILER ERROR at PC84: Confused about usage of register: R24 in 'UnsetPending'
+
+              ;
+              (self._static_SlotBG)[index] = slotBG
+              -- DECOMPILER ERROR at PC88: Confused about usage of register: R24 in 'UnsetPending'
+
+              if skillNo == 0 then
+                (self.slotConfig).createFG = true
+                -- DECOMPILER ERROR at PC92: Confused about usage of register: R24 in 'UnsetPending'
+
+                ;
+                (self.slotConfig).createFGDisabled = (self.slotConfig).createFG
+                -- DECOMPILER ERROR at PC97: Confused about usage of register: R24 in 'UnsetPending'
+
+                ;
+                (self.slotConfig).createFG_Passive = not (self.slotConfig).createFG
+                local slot = {}
+                ;
+                (SlotSkill.new)(slot, index, parent, self.slotConfig)
+                slot:setPos(startX, startY)
+                if slot.learnButton ~= nil then
+                  (slot.learnButton):SetIgnore(false)
+                end
+                if slot.icon ~= nil then
+                  (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_Skill:HandleMLUp_CombiSkillWindow_LearnButtonClick()")
+                end
+                container[index] = slot
+                index = index + 1
+              else
+                local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
+                if skillTypeStaticWrapper ~= nil and skillTypeStaticWrapper:isValidLocalizing() then
+                  local skillTypeStatic = skillTypeStaticWrapper:get()
+                  -- DECOMPILER ERROR at PC145: Confused about usage of register: R26 in 'UnsetPending'
+
+                  if skillTypeStatic:isActiveSkill() then
+                    (self.slotConfig).createFG = skillTypeStatic._isSettableQuickSlot
+                    -- DECOMPILER ERROR at PC149: Confused about usage of register: R26 in 'UnsetPending'
+
+                    ;
+                    (self.slotConfig).createFGDisabled = (self.slotConfig).createFG
+                    -- DECOMPILER ERROR at PC154: Confused about usage of register: R26 in 'UnsetPending'
+
+                    ;
+                    (self.slotConfig).createFG_Passive = not (self.slotConfig).createFG
+                    do
+                      do
+                        local slot = {}
+                        ;
+                        (SlotSkill.new)(slot, skillNo, parent, self.slotConfig)
+                        slot:setPos(startX, startY)
+                        if slot.learnButton ~= nil then
+                          (slot.learnButton):SetIgnore(true)
+                        end
+                        if slot.icon ~= nil then
+                          (slot.icon):addInputEvent("Mouse_On", "HandleMOver_SkillWindow_ToolTipShow(" .. skillNo .. ",false, \"SkillBox\",true)")
+                          ;
+                          (slot.icon):addInputEvent("Mouse_Out", "HandleMOver_SkillWindow_ToolTipHide(" .. skillNo .. ",\"SkillBox\",true)")
+                          ;
+                          (slot.icon):addInputEvent("Mouse_PressMove", "HandleMLUp_SkillWindow_StartDrag(" .. skillNo .. ")")
+                          ;
+                          (slot.icon):SetEnableDragAndDrop(true)
+                          Panel_SkillTooltip_SetPosition(skillNo, slot.icon, "SkillBox")
+                        end
+                        slot:setSkillTypeStatic(skillTypeStaticWrapper)
+                        container[index] = slot
+                        index = index + 1
+                        self._emptyCombiSkillIndex = index
+                        _PA_ASSERT("스킬트리", "skillTypeStaticStatus 매니져에 없는 스킬�\180 있습니다.")
+                        if cell:isLineType() then
+                          local template = self:getLineTemplate(isSlotColumn, isSlotRow, cell._cellType)
+                          if template ~= nil then
+                            local line = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, parent, "Static_Line_" .. col .. "_" .. row)
+                            CopyBaseProperty(template, line)
+                            line:SetPosX(startX)
+                            line:SetPosY(startY)
+                            line:SetIgnore(true)
+                          end
+                        end
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out DO_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out DO_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                        -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+          -- DECOMPILER ERROR at PC259: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC259: LeaveBlock: unexpected jumping out IF_STMT
+
+        end
+      end
+    end
+    PaGlobal_Skill:CombiSkill(isLearn)
+    -- DECOMPILER ERROR: 14 unprocessed JMP targets
+  end
+end
+
+FromClient_responseLearnFusionSkill = function(learnCombiSkillNo)
+  -- function num : 0_3
+  PaGlobal_Skill:initTabControl_Combination(true)
+end
+
+-- DECOMPILER ERROR at PC552: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl = function(self, cellTable, parent, container)
-  -- function num : 0_2
+  -- function num : 0_4
   local cols = cellTable:capacityX()
   local rows = cellTable:capacityY()
   local startY = (self.config).slotStartY
@@ -208,16 +360,81 @@ PaGlobal_Skill.initTabControl = function(self, cellTable, parent, container)
   -- DECOMPILER ERROR: 12 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC538: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC555: Confused about usage of register: R4 in 'UnsetPending'
 
-PaGlobal_Skill.addConsoleUIControl = function(self, tabIndex)
-  -- function num : 0_3
+PaGlobal_Skill.HandleMLUp_CombiSkillWindow_LearnButtonClick = function(self)
+  -- function num : 0_5
+  Panel_EnableSkill:SetShow(false)
+  PaGlobal_SkillCombination:open()
 end
 
--- DECOMPILER ERROR at PC541: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC559: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_Skill.addConsoleUIControl = function(self, tabIndex)
+  -- function num : 0_6 , upvalues : selectindex
+  local selfProxy = getSelfPlayer()
+  if selfProxy == nil then
+    return 
+  end
+  local classType = (selfProxy:getClassType())
+  local cellTable = nil
+  if self.combatTabIndex == tabIndex then
+    cellTable = getCombatSkillTree(classType)
+    selectindex = tabIndex
+  else
+    if self.awakenTabIndex == tabIndex then
+      cellTable = getAwakeningWeaponSkillTree(classType)
+      selectindex = tabIndex
+    else
+      return 
+    end
+  end
+  Panel_Window_Skill:deleteConsoleUIGroup(1)
+  local group_1 = Panel_Window_Skill:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_SKILL)
+  group_1:setConsoleKeyEventForLUA("SkillWindow_ScrollUpEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_UP)
+  group_1:setConsoleKeyEventForLUA("SkillWindow_ScrollDownEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_DOWN)
+  local cols = cellTable:capacityX()
+  local rows = cellTable:capacityY()
+  local beforeRow = -1
+  local count = 0
+  for row = 0, rows - 1 do
+    local columCount = 0
+    for col = 0, cols - 1 do
+      local cell = cellTable:atPointer(col, row)
+      local skillNo = cell._skillNo
+      if cell:isSkillType() then
+        local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
+        if skillTypeStaticWrapper ~= nil and skillTypeStaticWrapper:isValidLocalizing() then
+          if row ~= beforeRow then
+            beforeRow = row
+            count = count + 1
+          end
+          if (((self.slots)[tabIndex])[skillNo]).icon ~= nil then
+            group_1:addControl(columCount, count - 1, 50, 50, (((self.slots)[tabIndex])[skillNo]).icon)
+          end
+          columCount = columCount + 1
+        end
+      end
+    end
+  end
+  beforeRowCount = count
+  group_1:calConsolePos()
+end
+
+SkillWindow_ScrollUpEvent = function()
+  -- function num : 0_7
+  PaGlobal_Skill:Skill_ScrollMove("up")
+end
+
+SkillWindow_ScrollDownEvent = function()
+  -- function num : 0_8
+  PaGlobal_Skill:Skill_ScrollMove("down")
+end
+
+-- DECOMPILER ERROR at PC566: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl_Combat = function(self)
-  -- function num : 0_4
+  -- function num : 0_9
   local targetFrame = (self.frames)[self.combatTabIndex]
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -233,10 +450,10 @@ PaGlobal_Skill.initTabControl_Combat = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC544: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC569: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl_AwakeningWeapon = function(self)
-  -- function num : 0_5
+  -- function num : 0_10
   local targetFrame = (self.frames)[self.awakenTabIndex]
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -255,10 +472,47 @@ PaGlobal_Skill.initTabControl_AwakeningWeapon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC547: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC573: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_Skill.initTabControl_Combination = function(self, isLearn)
+  -- function num : 0_11 , upvalues : skillOldandNew
+  if skillOldandNew == false then
+    return 
+  end
+  local cellTable = getFusionSkillTree()
+  self:initCombiControl(cellTable, self._static_CombiSkill_BG, self._slot_CombiSkill, isLearn)
+end
+
+-- DECOMPILER ERROR at PC577: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_Skill.CombiSkill = function(self, isLearn, skillNo)
+  -- function num : 0_12 , upvalues : skillOldandNew
+  if skillOldandNew == false then
+    return 
+  end
+  ;
+  (((self._static_SlotBG)[self._emptyCombiSkillIndex])._base):SetShow(true)
+  ;
+  (((self._slot_CombiSkill)[self._emptyCombiSkillIndex]).learnButton):SetShow(true)
+  ;
+  (((self._slot_CombiSkill)[self._emptyCombiSkillIndex]).learnButton):SetIgnore(true)
+  for index = self._emptyCombiSkillIndex + 1, 5 do
+  end
+  if isLearn then
+    (((self._slot_CombiSkill)[self._emptyCombiSkillIndex - 1]).icon):EraseAllEffect()
+    ;
+    (((self._slot_CombiSkill)[self._emptyCombiSkillIndex - 1]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
+    ;
+    (((self._slot_CombiSkill)[self._emptyCombiSkillIndex - 1]).icon):AddEffect("fUI_NewSkill01", false, 0, 0)
+    ;
+    (((self._slot_CombiSkill)[self._emptyCombiSkillIndex - 1]).learnButton):SetShow(false)
+  end
+end
+
+-- DECOMPILER ERROR at PC580: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.initSkillLearnableSlot = function(self)
-  -- function num : 0_6
+  -- function num : 0_13
   self.staticBottomBox = (UI.getChildControl)(Panel_Window_Skill, "Static_BottomBox")
   for index = 0, self.learnableSlotShowMaxCount - 1 do
     local slot = {}
@@ -277,10 +531,10 @@ PaGlobal_Skill.initSkillLearnableSlot = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC550: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC583: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.getLineTemplate = function(self, isSlotColumn, isSlotRow, lineType)
-  -- function num : 0_7
+  -- function num : 0_14
   local lineDef = nil
   if isSlotColumn and isSlotRow then
     lineDef = (self.template_guideLine).l
@@ -298,26 +552,38 @@ PaGlobal_Skill.getLineTemplate = function(self, isSlotColumn, isSlotRow, lineTyp
   return lineDef[lineType]
 end
 
--- DECOMPILER ERROR at PC553: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC587: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.Skill_ScrollMove = function(self, moveDirection)
-  -- function num : 0_8
+  -- function num : 0_15 , upvalues : selectindex
   if moveDirection == "up" then
-    (((self.frames)[0]):GetVScroll()):SetCtrlPosByInterval(-1)
+    if self.combatTabIndex == selectindex then
+      (((self.frames)[selectindex]):GetVScroll()):SetCtrlPosByInterval(-1)
+    else
+      if self.awakenTabIndex == selectindex then
+        (((self.frames)[selectindex]):GetVScroll()):SetCtrlPosByInterval(-5)
+      end
+    end
   else
     if moveDirection == "down" then
-      (((self.frames)[0]):GetVScroll()):SetCtrlPosByInterval(1)
+      if self.combatTabIndex == selectindex then
+        (((self.frames)[selectindex]):GetVScroll()):SetCtrlPosByInterval(1)
+      else
+        if self.awakenTabIndex == selectindex then
+          (((self.frames)[selectindex]):GetVScroll()):SetCtrlPosByInterval(5)
+        end
+      end
     end
   end
   ;
-  ((self.frames)[0]):UpdateContentPos()
+  ((self.frames)[selectindex]):UpdateContentPos()
   HandleMScroll_SkillWindow_ScrollEvent(true)
 end
 
--- DECOMPILER ERROR at PC556: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC590: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.SkillCalcPosYByRow = function(self, row)
-  -- function num : 0_9
+  -- function num : 0_16
   if row % 2 == 0 then
     return row / 2 * ((self.config).slotGapY + (self.config).emptyGapY) + (self.config).emptyGapY + (self.config).slotStartY
   else
@@ -325,10 +591,10 @@ PaGlobal_Skill.SkillCalcPosYByRow = function(self, row)
   end
 end
 
--- DECOMPILER ERROR at PC559: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC593: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.SkillCalcPosYByColumn = function(self, col)
-  -- function num : 0_10
+  -- function num : 0_17
   if col % 2 == 0 then
     return col / 2 * ((self.config).slotGapX + (self.config).emptyGapX) + (self.config).emptyGapX + (self.config).slotStartX
   else
@@ -336,10 +602,10 @@ PaGlobal_Skill.SkillCalcPosYByColumn = function(self, col)
   end
 end
 
--- DECOMPILER ERROR at PC562: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC596: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.Skill_WindowPosSet = function(self, pos)
-  -- function num : 0_11
+  -- function num : 0_18
   local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
   local contentUseSize = (((PaGlobal_Skill.frames)[0]):GetFrameContent()):GetSizeY() - ((PaGlobal_Skill.frames)[0]):GetSizeY()
   local posPercents = (pos - ((PaGlobal_Skill.frames)[0]):GetSizeY() / 2) / contentUseSize
@@ -348,10 +614,10 @@ PaGlobal_Skill.Skill_WindowPosSet = function(self, pos)
   ((PaGlobal_Skill.frames)[0]):UpdateContentPos()
 end
 
--- DECOMPILER ERROR at PC566: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC600: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindowEffect = function(self, row, col, skillNo, isOn)
-  -- function num : 0_12 , upvalues : beforSkillNo
+  -- function num : 0_19 , upvalues : beforSkillNo
   local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
   do
     if skillTypeStaticWrapper:isValidLocalizing() then
@@ -372,10 +638,10 @@ PaGlobal_Skill.SkillWindowEffect = function(self, row, col, skillNo, isOn)
   end
 end
 
--- DECOMPILER ERROR at PC569: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC603: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_UpdateClearData = function(self)
-  -- function num : 0_13
+  -- function num : 0_20
   self.isPartsSkillReset = true
   local isNewSkillBtn = ((self.radioButtons)[self.awakenTabIndex]):IsCheck()
   local isOldSkillBtn = (((self.radioButtons)[self.combatTabIndex]):IsCheck())
@@ -430,10 +696,10 @@ PaGlobal_Skill.SkillWindow_UpdateClearData = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC572: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC606: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_PlayerLearnableSkill = function(self)
-  -- function num : 0_14
+  -- function num : 0_21
   local slots = (self.slots)[self.combatTabIndex]
   for skillNo,slot in pairs(slots) do
     local skillLevelInfo = getSkillLevelInfo(skillNo)
@@ -445,10 +711,10 @@ PaGlobal_Skill.SkillWindow_PlayerLearnableSkill = function(self)
   return false
 end
 
--- DECOMPILER ERROR at PC575: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC609: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
-  -- function num : 0_15
+  -- function num : 0_22
   if self.saved_isLearnMode == false then
     return 
   end
@@ -479,17 +745,17 @@ PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
   end
 end
 
--- DECOMPILER ERROR at PC578: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC612: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.UpdateLearnableSlots = function(self)
-  -- function num : 0_16
+  -- function num : 0_23
   self:ClearLearnableSlots()
 end
 
--- DECOMPILER ERROR at PC581: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC615: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.ClearLearnableSlots = function(self)
-  -- function num : 0_17
+  -- function num : 0_24
   for index,skillSlot in pairs(self.learnableSlots) do
     (skillSlot.icon):SetShow(false)
     skillSlot:clearSkill()
@@ -497,10 +763,10 @@ PaGlobal_Skill.ClearLearnableSlots = function(self)
   self.learnableSlotCount = 0
 end
 
--- DECOMPILER ERROR at PC584: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC618: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_Show = function(self)
-  -- function num : 0_18
+  -- function num : 0_25
   HandleMLUp_SkillWindow_OpenForLearn()
   local vScroll = ((self.frames)[0]):GetVScroll()
   vScroll:SetControlPos(self.scrollPos)
@@ -530,7 +796,18 @@ PaGlobal_Skill.SkillWindow_Show = function(self)
 end
 
 ConsoleGroupCreate_Panel_Window_Skill = function()
-  -- function num : 0_19
+  -- function num : 0_26
+  Panel_Window_Skill:deleteConsoleUIGroup(0)
+  local group_0 = Panel_Window_Skill:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  if PaGlobal_AwakenSkill.isAwakenWeaponContentsOpen then
+    group_0:addControl(0, 0, 3, 1, (PaGlobal_Skill.radioButtons)[PaGlobal_Skill.combatTabIndex])
+    group_0:addControl(1, 0, 3, 1, (PaGlobal_Skill.radioButtons)[PaGlobal_Skill.awakenTabIndex])
+    group_0:addControl(2, 0, 3, 1, PaGlobal_Skill._btn_ResetAllSkill)
+  else
+    group_0:addControl(0, 0, 2, 1, (PaGlobal_Skill.radioButtons)[PaGlobal_Skill.combatTabIndex])
+    group_0:addControl(1, 0, 2, 1, PaGlobal_Skill._btn_ResetAllSkill)
+  end
 end
 
+registerEvent("FromClient_responseLearnFusionSkill", "FromClient_responseLearnFusionSkill")
 

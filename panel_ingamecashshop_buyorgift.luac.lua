@@ -664,7 +664,7 @@ end
   InGameShopBuy_ConfirmMSG = function()
   -- function num : 0_9 , upvalues : inGameShopBuy
   if not inGameShopBuy._isGift then
-    InGameShopBuy_Confirm()
+    InGameShopBuy_CouponCheck_BeforeConfirm()
     return 
   end
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(inGameShopBuy._productNoRaw)
@@ -686,8 +686,23 @@ end
   end
 end
 
+  InGameShopBuy_CouponCheck_BeforeConfirm = function()
+  -- function num : 0_10
+  if FGlobal_IngameCashShopCoupon_ReturnValue() == nil and Panel_IngameCashShop_Coupon:GetShow() == true then
+    local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING")
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_INGAMECASHSHOP_ALERTCOUPON")
+    local messageBoxData = {title = messageBoxtitle, content = messageBoxMemo, functionYes = InGameShopBuy_Confirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData, "middle")
+    return 
+  end
+  do
+    InGameShopBuy_Confirm()
+  end
+end
+
   InGameShopBuy_Confirm = function()
-  -- function num : 0_10 , upvalues : inGameShopBuy, UI_CCC
+  -- function num : 0_11 , upvalues : inGameShopBuy, UI_CCC
   local self = inGameShopBuy
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
   if cashProduct == nil then
@@ -717,12 +732,12 @@ end
 end
 
   InGameShopBuy_GiftMyFriend = function()
-  -- function num : 0_11
+  -- function num : 0_12
   PaymentPassword(FGlobal_InGameShopBuy_Gift)
 end
 
   _InGameShopBuy_Confirm_LackMoney = function(category)
-  -- function num : 0_12 , upvalues : inGameShopBuy, isNaver
+  -- function num : 0_13 , upvalues : inGameShopBuy, isNaver
   local self = inGameShopBuy
   if (CppEnums.CashProductCategory).eCashProductCategory_Mileage == category then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_LACKMONEY_ACK"))
@@ -751,7 +766,7 @@ end
 end
 
   _InGameShopBuy_BuyMoney = function()
-  -- function num : 0_13 , upvalues : inGameShopBuy
+  -- function num : 0_14 , upvalues : inGameShopBuy
   local self = inGameShopBuy
   local category = self._needMoneyType
   if (CppEnums.CashProductCategory).eCashProductCategory_Pearl == category then
@@ -766,7 +781,7 @@ end
 end
 
   _InGameShopBuy_Confirm_EnoughMoneyForGift = function()
-  -- function num : 0_14
+  -- function num : 0_15
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local isCreatePasword = selfPlayer:isPaymentPassword()
@@ -781,7 +796,7 @@ end
 end
 
   _InGameShopBuy_Confirm_EnoughMoney = function()
-  -- function num : 0_15 , upvalues : inGameShopBuy, UI_PLT, UI_CCC
+  -- function num : 0_16 , upvalues : inGameShopBuy, UI_PLT, UI_CCC
   local self = inGameShopBuy
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
   if cashProduct == nil then
@@ -823,7 +838,7 @@ end
 end
 
   InGameShopBuy_ConfirmDo = function()
-  -- function num : 0_16 , upvalues : inGameShopBuy
+  -- function num : 0_17 , upvalues : inGameShopBuy
   audioPostEvent_SystemUi(16, 0)
   local self = inGameShopBuy
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
@@ -849,13 +864,13 @@ end
 end
 
   _InGameShopBuy_Confirm_Cancel = function()
-  -- function num : 0_17
+  -- function num : 0_18
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_BUYCANCEL"))
   InGameShopBuy_Close()
 end
 
   FGlobal_InGameShopBuy_Gift = function()
-  -- function num : 0_18 , upvalues : inGameShopBuy
+  -- function num : 0_19 , upvalues : inGameShopBuy
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(inGameShopBuy._productNoRaw)
   if cashProduct == nil then
     return 
@@ -868,7 +883,7 @@ end
 end
 
   InGameShopBuy_Count = function(isUp)
-  -- function num : 0_19 , upvalues : inGameShopBuy, UI_color
+  -- function num : 0_20 , upvalues : inGameShopBuy, UI_color
   local self = inGameShopBuy
   local count = tonumber((self._edit_count):GetEditText())
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
@@ -917,7 +932,7 @@ end
   (self._txt_PearlIconPrice):SetPosY((self._static_PearlBG):GetPosY() + (self._static_PearlBG):GetSizeY() / 2 - (self._txt_PearlIconPrice):GetSizeY() / 2)
   ;
   (self._txt_PearlIconPrice):SetText(makeDotMoney(sumPrice))
-  FGlobal_IngameCashShopCoupon_RefreshList()
+  FGlobal_IngameCashShopCoupon_RefreshList(self._productNoRaw)
   FGlobal_IngameCashShopCoupon_ReturnValueCancel()
   ;
   (self._edit_count):SetEditText(tostring(count), false)
@@ -928,7 +943,7 @@ end
 end
 
   InGameShopBuy_ChangeMoneyIconTexture = function(categoryIdx, isEnableSilver)
-  -- function num : 0_20 , upvalues : inGameShopBuy, contry, UI_CCC, cashIconType
+  -- function num : 0_21 , upvalues : inGameShopBuy, contry, UI_CCC, cashIconType
   local self = inGameShopBuy
   local icon = self._static_PearlIcon
   icon = self._txt_PearlIconPrice
@@ -978,7 +993,7 @@ end
 end
 
   FromClient_NotifyCompleteBuyProduct = function(productNoRaw, isGift, toCharacterName)
-  -- function num : 0_21
+  -- function num : 0_22
   local isPearlBox = false
   if isGift then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_NOTIFYCOMPLETEBUYPRODUCT_GIFT", "toCharacterName", toCharacterName))
@@ -1010,14 +1025,14 @@ end
 end
 
   _InGameShopBuy_DontChangeCount = function()
-  -- function num : 0_22
+  -- function num : 0_23
   ClearFocusEdit()
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_DONTCHANGECOUNT"))
   return 
 end
 
   Scroll_GiftTopList = function(isUp)
-  -- function num : 0_23 , upvalues : inGameShopBuy
+  -- function num : 0_24 , upvalues : inGameShopBuy
   -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
 
   (inGameShopBuy._config)._giftTopListStart = (UIScroll.ScrollEvent)(inGameShopBuy._scroll_GiftTopList, isUp, (inGameShopBuy._config)._giftTopListMaxCount, (inGameShopBuy._config)._giftTopListCount, (inGameShopBuy._config)._giftTopListStart, 1)
@@ -1025,7 +1040,7 @@ end
 end
 
   Scroll_GiftBotList = function(isUp)
-  -- function num : 0_24 , upvalues : inGameShopBuy
+  -- function num : 0_25 , upvalues : inGameShopBuy
   -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
 
   (inGameShopBuy._config)._giftBotListStart = (UIScroll.ScrollEvent)(inGameShopBuy._scroll_GiftBotList, isUp, (inGameShopBuy._config)._giftBotListMaxCount, (inGameShopBuy._config)._giftBotListCount, (inGameShopBuy._config)._giftBotListStart, 1)
@@ -1033,7 +1048,7 @@ end
 end
 
   HandleClicked_AddGiftTopList = function(botIdx)
-  -- function num : 0_25 , upvalues : inGameShopBuy
+  -- function num : 0_26 , upvalues : inGameShopBuy
   local botName = ((inGameShopBuy.giftUserList)[botIdx]).name
   local botUserNo = ((inGameShopBuy.giftUserList)[botIdx]).userNo
   local botSendType = ((inGameShopBuy.giftUserList)[botIdx]).sendType
@@ -1046,7 +1061,7 @@ end
 end
 
   HandleClicked_InGameShop_ChangeGiftCount = function(isPlus, dataIdx)
-  -- function num : 0_26 , upvalues : inGameShopBuy
+  -- function num : 0_27 , upvalues : inGameShopBuy
   local beforCount = ((getIngameCashMall()):getGiftList(dataIdx)):getCount()
   if isPlus then
     if beforCount >= 20 then
@@ -1067,7 +1082,7 @@ end
 end
 
   HandleClicked_InGameShop_DeleteGiftList = function(dataIdx)
-  -- function num : 0_27 , upvalues : inGameShopBuy
+  -- function num : 0_28 , upvalues : inGameShopBuy
   (getIngameCashMall()):popGift(dataIdx)
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -1079,17 +1094,17 @@ end
 end
 
   HandelClicked_InGameShopBuy_FriendGuild = function()
-  -- function num : 0_28 , upvalues : inGameShopBuy
+  -- function num : 0_29 , upvalues : inGameShopBuy
   inGameShopBuy:update()
 end
 
   HandelClicked_InGameShopBuy_SetAddUser = function()
-  -- function num : 0_29 , upvalues : inGameShopBuy
+  -- function num : 0_30 , upvalues : inGameShopBuy
   (inGameShopBuy._edit_Gift):SetEditText("", true)
 end
 
   HandelClicked_InGameShopBuy_AddUser = function()
-  -- function num : 0_30 , upvalues : inGameShopBuy
+  -- function num : 0_31 , upvalues : inGameShopBuy
   local userName = (inGameShopBuy._edit_Gift):GetEditText()
   ;
   (getIngameCashMall()):pushGiftToCharacter(userName)
@@ -1102,7 +1117,7 @@ end
 end
 
   InGameShopBuy_ShowItemToolTip = function(isShow, index)
-  -- function num : 0_31 , upvalues : inGameShopBuy
+  -- function num : 0_32 , upvalues : inGameShopBuy
   local self = inGameShopBuy
   if isShow == true then
     local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
@@ -1117,7 +1132,7 @@ end
 end
 
   FGlobal_InGameShopBuy_Open = function(productNoRaw, isGift, byCart)
-  -- function num : 0_32 , upvalues : inGameShopBuy
+  -- function num : 0_33 , upvalues : inGameShopBuy
   local self = inGameShopBuy
   self._productNoRaw = productNoRaw
   self._isGift = isGift
@@ -1170,7 +1185,7 @@ end
 end
 
   InGameShopBuy_Open = function()
-  -- function num : 0_33 , upvalues : inGameShopBuy
+  -- function num : 0_34 , upvalues : inGameShopBuy
   if Panel_IngameCashShop_BuyOrGift:GetShow() then
     return 
   end
@@ -1181,7 +1196,7 @@ end
 end
 
   InGameShopBuy_Close = function(isCouponCheck)
-  -- function num : 0_34 , upvalues : inGameShopBuy
+  -- function num : 0_35 , upvalues : inGameShopBuy
   if not Panel_IngameCashShop_BuyOrGift:GetShow() then
     return 
   end
@@ -1196,7 +1211,7 @@ end
 end
 
   InGameShopBuy_CheckAddUser = function()
-  -- function num : 0_35 , upvalues : inGameShopBuy
+  -- function num : 0_36 , upvalues : inGameShopBuy
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1206,7 +1221,7 @@ end
 end
 
   FromClient_IncashshopGetUserNickName = function(outUserNickName, isSearched)
-  -- function num : 0_36 , upvalues : inGameShopBuy
+  -- function num : 0_37 , upvalues : inGameShopBuy
   local checkCharacterName = (inGameShopBuy._edit_Gift):GetEditText()
   if isSearched == true then
     local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING")

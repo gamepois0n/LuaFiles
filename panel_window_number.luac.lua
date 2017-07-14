@@ -579,7 +579,27 @@ Panel_Window_Exchange_Number:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mo
 Panel_Window_Exchange_Number:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
 numberPad:init()
 ConsoleGroupCreate_Panel_Window_Exchange_Number = function()
-  -- function num : 0_23
+  -- function num : 0_23 , upvalues : _textNumber, _checkButtonMaxCount, numberPad, _buttonBackSpace, _buttonClear, _buttonAllSelect, _buttonConfirm, _buttonCancel
+  local group_0 = Panel_Menu:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  local group_1 = Panel_Menu:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  local group_2 = Panel_Menu:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_0:addControl(0, 0, 2, 1, _textNumber)
+  group_0:addControl(1, 0, 2, 1, _checkButtonMaxCount)
+  group_1:addControl(0, 0, 4, 3, (numberPad._buttonNumber)[8])
+  group_1:addControl(1, 0, 4, 3, (numberPad._buttonNumber)[9])
+  group_1:addControl(2, 0, 4, 3, (numberPad._buttonNumber)[10])
+  group_1:addControl(3, 0, 4, 3, (numberPad._buttonNumber)[5])
+  group_1:addControl(0, 1, 4, 3, (numberPad._buttonNumber)[6])
+  group_1:addControl(1, 1, 4, 3, (numberPad._buttonNumber)[7])
+  group_1:addControl(2, 1, 4, 3, (numberPad._buttonNumber)[2])
+  group_1:addControl(3, 1, 4, 3, (numberPad._buttonNumber)[3])
+  group_1:addControl(0, 2, 4, 3, (numberPad._buttonNumber)[4])
+  group_1:addControl(1, 2, 4, 3, (numberPad._buttonNumber)[1])
+  group_1:addControl(2, 2, 4, 3, _buttonBackSpace)
+  group_1:addControl(3, 2, 4, 3, _buttonClear)
+  group_2:addControl(0, 0, 3, 1, _buttonAllSelect)
+  group_2:addControl(1, 0, 3, 1, _buttonConfirm)
+  group_2:addControl(2, 0, 3, 1, _buttonCancel)
 end
 
 ConsoleGroupCreate_Panel_Window_Exchange_Number()

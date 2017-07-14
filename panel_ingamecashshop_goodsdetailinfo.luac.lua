@@ -807,9 +807,9 @@ end
     end
   end
   if totalClassCount >= 12 then
-    returnString = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_ALLCLASS")
+    returnString = nil
+    return returnString
   end
-  return returnString
 end
 
   IngameShopDetailInfo_ConvertFromCategoryToTradeDesc = function(cashProduct)

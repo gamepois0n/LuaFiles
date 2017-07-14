@@ -199,7 +199,7 @@ ChannelSelect_Init = function()
         ;
         (channelMainDesc._serverDesc):SetText((channelMainDesc._serverDesc):GetText())
         local sizeControl = nil
-        if isGameTypeTaiwan() then
+        if isGameTypeSA() then
           (channelMainDesc._speedTitle):SetShow(false)
           ;
           (channelMainDesc._speedDesc):SetShow(false)
@@ -238,8 +238,12 @@ ChannelSelect_Init = function()
         (channelMainDesc._speedTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SPEEDCHANNEL_TITLE"))
         ;
         (channelMainDesc._speedDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
-        ;
-        (channelMainDesc._speedDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SPEEDCHANNEL_DESC"))
+        if isGameTypeTaiwan() then
+          (channelMainDesc._speedDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SPEEDCHANNEL_DESC_TW"))
+        else
+          ;
+          (channelMainDesc._speedDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_SPEEDCHANNEL_DESC"))
+        end
         ;
         (channelMainDesc._speedDesc):SetPosY((channelMainDesc._speedTitle):GetPosY() + 20)
         ;
@@ -629,6 +633,11 @@ ChannelSelect_Update = function()
   if not oneTimeChange then
     FGlobal_SeasonTexture_ChannelSelectPanelSizeCahnge(Panel_ChannelSelect:GetSizeX())
     oneTimeChange = true
+  end
+  Panel_ChannelSelect:deleteConsoleUIGroup(0)
+  local group_0 = Panel_ChannelSelect:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  for chIndex = 0, channelCount - 1 do
+    group_0:addControl(R22_PC824, 0, 1, 1, ((self.channelSelectUIPool)[chIndex]).channelBg)
   end
 end
 

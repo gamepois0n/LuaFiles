@@ -127,7 +127,7 @@ local original_controlPosX = 0
 local original_controlPosY = 0
 local posGapX = 0
 local posGapY = 0
-local isLargePartyOpen = isGameServiceTypeDev()
+local isLargePartyOpen = ToClient_IsContentsGroupOpen("286")
 local closePanelState = {[0] = false, [1] = false, [2] = false, [3] = false, [4] = false}
 local closeEmptyPanelState = {[0] = false, [1] = false, [2] = false, [3] = false, [4] = false}
 local panelID = {ExpGage = 1, ServantIcon = 2, Radar = 3, Quest = 4, Chat0 = 5, Chat1 = 6, Chat2 = 7, Chat3 = 8, Chat4 = 9, GameTip = 10, QuickSlot = 11, HPBar = 12, Pvp = 13, ClassResource = 14, Adrenallin = 15, UIMain = 16, House = 17, NewEquip = 18, Party = 19, TimeBar = 20, ActionGuide = 21, KeyGuide = 22, NewQuickSlot0 = 23, NewQuickSlot1 = 24, NewQuickSlot2 = 25, NewQuickSlot3 = 26, NewQuickSlot4 = 27, NewQuickSlot5 = 28, NewQuickSlot6 = 29, NewQuickSlot7 = 30, NewQuickSlot8 = 31, NewQuickSlot9 = 32, NewQuickSlot10 = 33, NewQuickSlot11 = 34, NewQuickSlot12 = 35, NewQuickSlot13 = 36, NewQuickSlot14 = 37, NewQuickSlot15 = 38, NewQuickSlot16 = 39, NewQuickSlot17 = 40, NewQuickSlot18 = 41, NewQuickSlot19 = 42, SkillCoolTime = 43, MainQuest = 44, LargeParty = 45}
@@ -759,13 +759,13 @@ UiSet_update = function()
     else
       do
         if idx == panelID.ClassResource then
-          if (CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() then
+          if (CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_CombattantWomen == (getSelfPlayer()):getClassType() then
             (slot.control):SetShow(true)
             ;
             (slot.close):SetShow(true)
-            -- DECOMPILER ERROR at PC266: Confused about usage of register: R6 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC284: Confused about usage of register: R6 in 'UnsetPending'
 
-            if (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() then
+            if (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_CombattantWomen == (getSelfPlayer()):getClassType() then
               (panelControl[panelID.ClassResource]).name = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTERTITLE")
             end
           else
@@ -777,65 +777,65 @@ UiSet_update = function()
         else
           if idx == panelID.ActionGuide then
             if isChecked_SkillCommand == true then
-              UiSet_ChangeTexture_BG(R7_PC287, 2)
+              UiSet_ChangeTexture_BG(R7_PC305, 2)
             else
-              UiSet_ChangeTexture_BG(R7_PC287, 1)
+              UiSet_ChangeTexture_BG(R7_PC305, 1)
             end
-            -- DECOMPILER ERROR at PC295: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC313: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC296: Confused about usage of register: R6 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC314: Confused about usage of register: R6 in 'UnsetPending'
 
             ;
-            (panelControl[idx]).isShow = R7_PC287
+            (panelControl[idx]).isShow = R7_PC305
           else
-            -- DECOMPILER ERROR at PC306: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC324: Overwrote pending register: R7 in 'AssignReg'
 
             if idx == panelID.KeyGuide then
               if isChecked_KeyViewer == true then
-                UiSet_ChangeTexture_BG(R7_PC287, 2)
+                UiSet_ChangeTexture_BG(R7_PC305, 2)
               else
-                -- DECOMPILER ERROR at PC311: Overwrote pending register: R7 in 'AssignReg'
+                -- DECOMPILER ERROR at PC329: Overwrote pending register: R7 in 'AssignReg'
 
-                UiSet_ChangeTexture_BG(R7_PC287, 1)
+                UiSet_ChangeTexture_BG(R7_PC305, 1)
               end
             else
-              -- DECOMPILER ERROR at PC321: Overwrote pending register: R7 in 'AssignReg'
+              -- DECOMPILER ERROR at PC339: Overwrote pending register: R7 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC326: Overwrote pending register: R7 in 'AssignReg'
+              -- DECOMPILER ERROR at PC344: Overwrote pending register: R7 in 'AssignReg'
 
               if idx == panelID.Adrenallin then
                 if (getSelfPlayer()):isEnableAdrenalin() then
                   (slot.control):SetShow(true)
-                  -- DECOMPILER ERROR at PC330: Overwrote pending register: R7 in 'AssignReg'
+                  -- DECOMPILER ERROR at PC348: Overwrote pending register: R7 in 'AssignReg'
 
                   ;
                   (slot.close):SetShow(true)
                 else
-                  -- DECOMPILER ERROR at PC335: Overwrote pending register: R7 in 'AssignReg'
+                  -- DECOMPILER ERROR at PC353: Overwrote pending register: R7 in 'AssignReg'
 
                   ;
                   (slot.control):SetShow(false)
-                  -- DECOMPILER ERROR at PC339: Overwrote pending register: R7 in 'AssignReg'
+                  -- DECOMPILER ERROR at PC357: Overwrote pending register: R7 in 'AssignReg'
 
                   ;
                   (slot.close):SetShow(false)
                 end
               else
-                -- DECOMPILER ERROR at PC352: Overwrote pending register: R7 in 'AssignReg'
+                -- DECOMPILER ERROR at PC370: Overwrote pending register: R7 in 'AssignReg'
 
                 if idx == panelID.Pvp then
                   if isPvpEnable() then
                     (slot.control):SetShow(true)
-                    -- DECOMPILER ERROR at PC356: Overwrote pending register: R7 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC374: Overwrote pending register: R7 in 'AssignReg'
 
                     ;
                     (slot.close):SetShow(true)
                   else
-                    -- DECOMPILER ERROR at PC361: Overwrote pending register: R7 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC379: Overwrote pending register: R7 in 'AssignReg'
 
                     ;
                     (slot.control):SetShow(false)
-                    -- DECOMPILER ERROR at PC365: Overwrote pending register: R7 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC383: Overwrote pending register: R7 in 'AssignReg'
 
                     ;
                     (slot.close):SetShow(false)
@@ -845,24 +845,24 @@ UiSet_update = function()
             end
           end
         end
-        -- DECOMPILER ERROR at PC379: Overwrote pending register: R7 in 'AssignReg'
+        -- DECOMPILER ERROR at PC397: Overwrote pending register: R7 in 'AssignReg'
 
         if (panelControl[idx]).isShow then
           if (panelControl[idx]).posFixed then
             (slot.control):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", (panelControl[idx]).name))
           else
-            -- DECOMPILER ERROR at PC392: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC410: Overwrote pending register: R7 in 'AssignReg'
 
             ;
             (slot.control):SetText((panelControl[idx]).name)
           end
         else
-          -- DECOMPILER ERROR at PC401: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC419: Overwrote pending register: R7 in 'AssignReg'
 
           if idx == 21 then
             (slot.control):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLGUIDE_EXTRA"))
           else
-            -- DECOMPILER ERROR at PC410: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC428: Overwrote pending register: R7 in 'AssignReg'
 
             ;
             (slot.control):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_OFF", "name", (panelControl[idx]).name))
@@ -870,35 +870,35 @@ UiSet_update = function()
         end
         do
           local stateValue = 0
-          -- DECOMPILER ERROR at PC422: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC440: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC423: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC441: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC424: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC442: Overwrote pending register: R7 in 'AssignReg'
 
-          if not R7_PC287 then
+          if not R7_PC305 then
             stateValue = 1
           else
-            -- DECOMPILER ERROR at PC429: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC447: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC430: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC448: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC431: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC449: Overwrote pending register: R7 in 'AssignReg'
 
-            if R7_PC287 then
+            if R7_PC305 then
               stateValue = 3
             else
               stateValue = 2
             end
           end
-          -- DECOMPILER ERROR at PC437: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC455: Overwrote pending register: R7 in 'AssignReg'
 
-          R7_PC287(R8_PC440, stateValue)
-          -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out DO_STMT
+          R7_PC305(R8_PC458, stateValue)
+          -- DECOMPILER ERROR at PC459: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC459: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC459: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1171,9 +1171,9 @@ UiSet_ConfrimSetting_Sub = function(isReset)
         Panel_GameTipMask:SetPosX(controlPosX + 15)
         Panel_GameTipMask:SetPosY(controlPosY - 7)
       else
-        -- DECOMPILER ERROR at PC217: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC226: Unhandled construct in 'MakeBoolean' P1
 
-        if idx == panelID.ClassResource and ((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType()) then
+        if idx == panelID.ClassResource and ((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_CombattantWomen == (getSelfPlayer()):getClassType()) then
           ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
         end
       end
@@ -1755,9 +1755,9 @@ HandleClicked_Reset_UiSetting_Msg = function()
               Panel_GameTipMask:SetPosX((((UiSet.panelPool)[idx]).control):GetPosX() + 15)
               Panel_GameTipMask:SetPosY((((UiSet.panelPool)[idx]).control):GetPosY() - 7)
             else
-              -- DECOMPILER ERROR at PC313: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC322: Unhandled construct in 'MakeBoolean' P1
 
-              if idx == panelID.ClassResource and ((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType()) then
+              if idx == panelID.ClassResource and ((CppEnums.ClassType).ClassType_Sorcerer == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_Combattant == (getSelfPlayer()):getClassType() or (CppEnums.ClassType).ClassType_CombattantWomen == (getSelfPlayer()):getClassType()) then
                 ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
               end
             end
@@ -1771,7 +1771,7 @@ HandleClicked_Reset_UiSetting_Msg = function()
                 ((panelControl[idx]).control):SetShow((panelControl[idx]).isShow)
                 GameOption_UpdateOptionChanged()
               else
-                -- DECOMPILER ERROR at PC358: Confused about usage of register: R14 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC367: Confused about usage of register: R14 in 'UnsetPending'
 
                 if idx == panelID.KeyGuide then
                   (panelControl[idx]).isShow = false
@@ -1871,121 +1871,121 @@ HandleClicked_Reset_UiSetting_Msg = function()
                 end
               end
             end
-            -- DECOMPILER ERROR at PC665: Confused about usage of register: R14 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC674: Confused about usage of register: R14 in 'UnsetPending'
 
             if CppDefine.ChangeUIAndResolution == true then
               if idx == panelID.ServantIcon then
                 cachePosX[idx] = 10
-                -- DECOMPILER ERROR at PC685: Confused about usage of register: R14 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC694: Confused about usage of register: R14 in 'UnsetPending'
 
                 cachePosY[idx] = (((UiSet.panelPool)[panelID.ExpGage]).control):GetPosY() + (((UiSet.panelPool)[panelID.ExpGage]).control):GetSizeY() + 15
               else
-                -- DECOMPILER ERROR at PC702: Confused about usage of register: R14 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC711: Confused about usage of register: R14 in 'UnsetPending'
 
                 if idx == panelID.Quest then
                   cachePosX[idx] = screenSizeX - (((UiSet.panelPool)[panelID.Quest]).control):GetSizeX() - 20
-                  -- DECOMPILER ERROR at PC740: Confused about usage of register: R14 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC749: Confused about usage of register: R14 in 'UnsetPending'
 
                   cachePosY[idx] = (((UiSet.panelPool)[panelID.Radar]).control):GetPosY() + (((UiSet.panelPool)[panelID.Radar]).control):GetSizeY() + (((UiSet.panelPool)[panelID.MainQuest]).control):GetSizeY() + 20 + (((UiSet.panelPool)[panelID.NewEquip]).control):GetSizeY()
                 else
-                  -- DECOMPILER ERROR at PC763: Confused about usage of register: R14 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC772: Confused about usage of register: R14 in 'UnsetPending'
 
                   if idx == panelID.Chat0 or idx == panelID.Chat1 or idx == panelID.Chat2 or idx == panelID.Chat3 or idx == panelID.Chat4 then
                     cachePosX[idx] = 0
-                    -- DECOMPILER ERROR at PC776: Confused about usage of register: R14 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC785: Confused about usage of register: R14 in 'UnsetPending'
 
                     cachePosY[idx] = screenSizeY - (((UiSet.panelPool)[idx]).control):GetSizeY() - Panel_GameTips:GetSizeY()
                   else
-                    -- DECOMPILER ERROR at PC793: Confused about usage of register: R14 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC802: Confused about usage of register: R14 in 'UnsetPending'
 
                     if idx == panelID.QuickSlot then
                       cachePosX[idx] = (screenSizeX - (((UiSet.panelPool)[panelID.QuickSlot]).control):GetSizeX()) / 2
-                      -- DECOMPILER ERROR at PC804: Confused about usage of register: R14 in 'UnsetPending'
+                      -- DECOMPILER ERROR at PC813: Confused about usage of register: R14 in 'UnsetPending'
 
                       cachePosY[idx] = screenSizeY - (((UiSet.panelPool)[panelID.QuickSlot]).control):GetSizeY()
                     else
-                      -- DECOMPILER ERROR at PC822: Confused about usage of register: R14 in 'UnsetPending'
+                      -- DECOMPILER ERROR at PC831: Confused about usage of register: R14 in 'UnsetPending'
 
                       if idx == panelID.HPBar then
                         cachePosX[idx] = screenSizeX / 2 - (((UiSet.panelPool)[panelID.HPBar]).control):GetSizeX() / 2
-                        -- DECOMPILER ERROR at PC842: Confused about usage of register: R14 in 'UnsetPending'
+                        -- DECOMPILER ERROR at PC851: Confused about usage of register: R14 in 'UnsetPending'
 
                         cachePosY[idx] = screenSizeY - (((UiSet.panelPool)[panelID.QuickSlot]).control):GetSizeY() - (((UiSet.panelPool)[panelID.HPBar]).control):GetSizeY()
                       else
-                        -- DECOMPILER ERROR at PC861: Confused about usage of register: R14 in 'UnsetPending'
+                        -- DECOMPILER ERROR at PC870: Confused about usage of register: R14 in 'UnsetPending'
 
                         if idx == panelID.Pvp then
                           cachePosX[idx] = screenSizeX / 2 - (((UiSet.panelPool)[panelID.HPBar]).control):GetSizeX() / 2 - 20
-                          -- DECOMPILER ERROR at PC881: Confused about usage of register: R14 in 'UnsetPending'
+                          -- DECOMPILER ERROR at PC890: Confused about usage of register: R14 in 'UnsetPending'
 
                           cachePosY[idx] = screenSizeY - (((UiSet.panelPool)[panelID.QuickSlot]).control):GetSizeY() - (((UiSet.panelPool)[panelID.Pvp]).control):GetSizeY()
                         else
-                          -- DECOMPILER ERROR at PC909: Confused about usage of register: R14 in 'UnsetPending'
+                          -- DECOMPILER ERROR at PC918: Confused about usage of register: R14 in 'UnsetPending'
 
                           if idx == panelID.ClassResource then
                             cachePosX[idx] = screenSizeX / 2 - (((UiSet.panelPool)[panelID.HPBar]).control):GetSizeX() / 2 + (((UiSet.panelPool)[panelID.ClassResource]).control):GetSizeX() - 5
-                            -- DECOMPILER ERROR at PC939: Confused about usage of register: R14 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC948: Confused about usage of register: R14 in 'UnsetPending'
 
                             cachePosY[idx] = screenSizeY - (((UiSet.panelPool)[panelID.QuickSlot]).control):GetSizeY() - (((UiSet.panelPool)[panelID.HPBar]).control):GetSizeY() - (((UiSet.panelPool)[panelID.ClassResource]).control):GetSizeY() + 5
                           else
-                            -- DECOMPILER ERROR at PC958: Confused about usage of register: R14 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC967: Confused about usage of register: R14 in 'UnsetPending'
 
                             if idx == panelID.Adrenallin then
                               cachePosX[idx] = screenSizeX / 2 - (((UiSet.panelPool)[panelID.Adrenallin]).control):GetSizeX() / 2 + 225
-                              -- DECOMPILER ERROR at PC970: Confused about usage of register: R14 in 'UnsetPending'
+                              -- DECOMPILER ERROR at PC979: Confused about usage of register: R14 in 'UnsetPending'
 
                               cachePosY[idx] = screenSizeY - (((UiSet.panelPool)[panelID.QuickSlot]).control):GetSizeY() - 76
                             else
-                              -- DECOMPILER ERROR at PC977: Confused about usage of register: R14 in 'UnsetPending'
+                              -- DECOMPILER ERROR at PC986: Confused about usage of register: R14 in 'UnsetPending'
 
                               if idx == panelID.House then
                                 cachePosX[idx] = 10
-                                -- DECOMPILER ERROR at PC993: Confused about usage of register: R14 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC1002: Confused about usage of register: R14 in 'UnsetPending'
 
                                 if Panel_Window_Servant:GetShow() then
                                   cachePosX[idx] = (((UiSet.panelPool)[panelID.ServantIcon]).control):GetSizeX() + 10
                                 end
-                                -- DECOMPILER ERROR at PC1013: Confused about usage of register: R14 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC1022: Confused about usage of register: R14 in 'UnsetPending'
 
                                 cachePosY[idx] = (((UiSet.panelPool)[panelID.ExpGage]).control):GetPosY() + (((UiSet.panelPool)[panelID.ExpGage]).control):GetSizeY() + 15
                               else
-                                -- DECOMPILER ERROR at PC1026: Confused about usage of register: R14 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC1035: Confused about usage of register: R14 in 'UnsetPending'
 
                                 if idx == panelID.NewEquip then
                                   cachePosX[idx] = FGlobal_GetPersonalIconPosY(4) + FGlobal_GetPersonalIconSizeY()
-                                  -- DECOMPILER ERROR at PC1031: Confused about usage of register: R14 in 'UnsetPending'
+                                  -- DECOMPILER ERROR at PC1040: Confused about usage of register: R14 in 'UnsetPending'
 
                                   cachePosY[idx] = FGlobal_GetPersonalIconPosX(4)
                                 else
-                                  -- DECOMPILER ERROR at PC1040: Confused about usage of register: R14 in 'UnsetPending'
+                                  -- DECOMPILER ERROR at PC1049: Confused about usage of register: R14 in 'UnsetPending'
 
                                   if idx == panelID.ActionGuide then
                                     cacahePosX[idx] = screenSizeX / 2 * 1.2
-                                    -- DECOMPILER ERROR at PC1044: Confused about usage of register: R14 in 'UnsetPending'
+                                    -- DECOMPILER ERROR at PC1053: Confused about usage of register: R14 in 'UnsetPending'
 
                                     cachePosY[idx] = screenSizeY / 2 * 0.85
                                   else
-                                    -- DECOMPILER ERROR at PC1060: Confused about usage of register: R14 in 'UnsetPending'
+                                    -- DECOMPILER ERROR at PC1069: Confused about usage of register: R14 in 'UnsetPending'
 
                                     if idx == panelID.KeyGuide then
                                       cachePosX[idx] = (((UiSet.panelPool)[panelID.KeyGuide]).control):GetSizeX() / 3
-                                      -- DECOMPILER ERROR at PC1071: Confused about usage of register: R14 in 'UnsetPending'
+                                      -- DECOMPILER ERROR at PC1080: Confused about usage of register: R14 in 'UnsetPending'
 
                                       cachePosY[idx] = (((UiSet.panelPool)[panelID.KeyGuide]).control):GetSizeY() * 2.3
                                     else
-                                      -- DECOMPILER ERROR at PC1079: Confused about usage of register: R14 in 'UnsetPending'
+                                      -- DECOMPILER ERROR at PC1088: Confused about usage of register: R14 in 'UnsetPending'
 
                                       if idx == panelID.SkillCoolTime then
                                         cachePosX[idx] = screenSizeX * 0.33
-                                        -- DECOMPILER ERROR at PC1082: Confused about usage of register: R14 in 'UnsetPending'
+                                        -- DECOMPILER ERROR at PC1091: Confused about usage of register: R14 in 'UnsetPending'
 
                                         cachePosY[idx] = screenSizeY * 0.42
                                       else
-                                        -- DECOMPILER ERROR at PC1099: Confused about usage of register: R14 in 'UnsetPending'
+                                        -- DECOMPILER ERROR at PC1108: Confused about usage of register: R14 in 'UnsetPending'
 
                                         if idx == panelID.MainQuest then
                                           cachePosX[idx] = screenSizeX - (((UiSet.panelPool)[panelID.MainQuest]).control):GetSizeX() - 20
-                                          -- DECOMPILER ERROR at PC1119: Confused about usage of register: R14 in 'UnsetPending'
+                                          -- DECOMPILER ERROR at PC1128: Confused about usage of register: R14 in 'UnsetPending'
 
                                           cachePosY[idx] = (((UiSet.panelPool)[panelID.Radar]).control):GetPosY() + (((UiSet.panelPool)[panelID.Radar]).control):GetSizeY() + 10
                                         end
@@ -2004,22 +2004,22 @@ HandleClicked_Reset_UiSetting_Msg = function()
               end
               if idx == panelID.NewQuickSlot0 or idx == panelID.NewQuickSlot1 or idx == panelID.NewQuickSlot2 or idx == panelID.NewQuickSlot3 or idx == panelID.NewQuickSlot4 or idx == panelID.NewQuickSlot5 or idx == panelID.NewQuickSlot6 or idx == panelID.NewQuickSlot7 or idx == panelID.NewQuickSlot8 or idx == panelID.NewQuickSlot9 or idx == panelID.NewQuickSlot10 or idx == panelID.NewQuickSlot11 or idx == panelID.NewQuickSlot12 or idx == panelID.NewQuickSlot13 or idx == panelID.NewQuickSlot14 or idx == panelID.NewQuickSlot15 or idx == panelID.NewQuickSlot16 or idx == panelID.NewQuickSlot17 or idx == panelID.NewQuickSlot18 or idx == panelID.NewQuickSlot19 then
                 local panelIdx = idx - panelID.NewQuickSlot0
-                -- DECOMPILER ERROR at PC1213: Confused about usage of register: R15 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC1222: Confused about usage of register: R15 in 'UnsetPending'
 
                 cachePosX[idx] = screenSizeX * 0.35 + (((panelControl[idx]).control):GetSizeX() + 5) * panelIdx
-                -- DECOMPILER ERROR at PC1222: Confused about usage of register: R15 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC1231: Confused about usage of register: R15 in 'UnsetPending'
 
                 cachePosY[idx] = screenSizeY - ((panelControl[idx]).control):GetSizeY() - 5
               end
             end
             do
-              -- DECOMPILER ERROR at PC1223: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC1232: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC1223: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC1232: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC1223: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC1232: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC1223: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC1232: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -2033,12 +2033,12 @@ HandleClicked_Reset_UiSetting_Msg = function()
       local count = ToClient_getChattingPanelCount()
       for chattingPanelindex = 0, count - 1 do
         Chatting_setIsOpenValue(chattingPanelindex, ChatPanelIsOpenState[chattingPanelindex + 1])
-        -- DECOMPILER ERROR at PC1248: Confused about usage of register: R15 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC1257: Confused about usage of register: R15 in 'UnsetPending'
 
         ChatPanelIsOpenState[chattingPanelindex + 1] = false
       end
       Chatting_setIsOpenValue(0, true)
-      -- DECOMPILER ERROR at PC1255: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1264: Confused about usage of register: R11 in 'UnsetPending'
 
       ChatPanelIsOpenState[1] = true
       FGlobal_ChattingPanel_Reset()

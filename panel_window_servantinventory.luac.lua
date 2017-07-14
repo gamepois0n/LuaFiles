@@ -254,6 +254,8 @@ servantInventory.updateByIndex = function(self, index)
     end
     slot:clearItem()
   end
+  Panel_Window_ServantInventory:deleteConsoleUIGroup(0)
+  local group_0 = Panel_Window_ServantInventory:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for ii = 0, fullCount - 1 do
     local slot = (data._slot)[ii]
     local slotNo = ii + useStartSlot
@@ -261,6 +263,7 @@ servantInventory.updateByIndex = function(self, index)
     if itemWrapper ~= nil then
       slot:setItem(itemWrapper)
     end
+    group_0:addControl(ii % 8, ii / 8, 8, fullCount / 8, slot.icon)
   end
   local row = fullCount / 8
   if fullCount % 8 >= 0 then

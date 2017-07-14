@@ -447,7 +447,7 @@ CarriageInfo_ChangeEquipItem = function(slotNo)
     return 
   end
   local vehicleType = vehicleWrapper:getVehicleType()
-  if UI_VT.Type_Carriage ~= vehicleType or UI_VT.Type_CowCarriage ~= vehicleType then
+  if UI_VT.Type_Carriage ~= vehicleType or UI_VT.Type_CowCarriage ~= vehicleType or UI_VT.Type_RepairableCarriage ~= vehicleType then
     return 
   end
   ;
@@ -695,7 +695,7 @@ CarriageInfo_Open = function()
   end
   local vehicleType = vehicleWrapper:getVehicleType()
   local seatIndex = (selfPlayer:get()):getVehicleSeatIndex()
-  if UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType then
+  if UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType then
     Panel_CarriageInfo:SetShow(true, true)
   else
     if UI_VT.Type_Train == vehicleType then

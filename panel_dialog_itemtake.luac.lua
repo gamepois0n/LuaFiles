@@ -28,6 +28,10 @@ TalkPopup.init = function(self)
   ;
   ((self._itemSlot).icon):addInputEvent("Mouse_Out", "hideTooltip()")
   Panel_Tooltip_Item_SetPosition(0, (self._itemSlot).icon, "talkPopup")
+  local group_0 = Panel_Dialogue_Itemtake:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_0:addControl(0, 0, 3, 1, (self._itemSlot).icon)
+  group_0:addControl(1, 0, 3, 1, self._buttonAccept)
+  group_0:addControl(2, 0, 3, 1, self._buttonCancel)
 end
 
 TalkPopup:init()

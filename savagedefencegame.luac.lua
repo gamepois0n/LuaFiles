@@ -31,7 +31,6 @@ end
 
 FromClient_SavageDefenceNotifyBossMonster = function(charactername)
   -- function num : 0_2
-  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCE_BOSSMONSTER_SPAWN", "charactername", charactername))
 end
 
 FromClient_UpdateSavageDefenceData = function(remainTime)

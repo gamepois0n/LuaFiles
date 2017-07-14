@@ -260,6 +260,38 @@ Mail_Detail_Open = function(mailNo)
             ;
             (self._checkboxToWarehouse):SetShow(false)
             Panel_Mail_Detail:SetSize(Panel_Mail_Detail:GetSizeX(), panel_SizeY - 40)
+            local groupIndex = 0
+            local groupCount = 0
+            Panel_Mail_Detail:deleteConsoleUIGroup(0)
+            local group_0 = Panel_Mail_Detail:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+            if (self._buttonReceive):GetShow() then
+              groupCount = groupCount + 1
+            end
+            if (self._buttonDelete):GetShow() then
+              groupCount = groupCount + 1
+            end
+            if (self._checkboxToWarehouse):GetShow() then
+              groupCount = groupCount + 1
+            end
+            if ((self._itemSlot).icon):GetShow() then
+              groupCount = groupCount + 1
+            end
+            if (self._buttonReceive):GetShow() then
+              group_0:addControl(groupIndex, 0, groupCount, 1, self._buttonReceive)
+              groupIndex = groupIndex + 1
+            end
+            if (self._buttonDelete):GetShow() then
+              group_0:addControl(groupIndex, 0, groupCount, 1, self._buttonDelete)
+              groupIndex = groupIndex + 1
+            end
+            if (self._checkboxToWarehouse):GetShow() then
+              group_0:addControl(groupIndex, 0, groupCount, 1, self._checkboxToWarehouse)
+              groupIndex = groupIndex + 1
+            end
+            if ((self._itemSlot).icon):GetShow() then
+              group_0:addControl(groupIndex, 0, groupCount, 1, (self._itemSlot).icon)
+              groupIndex = groupIndex + 1
+            end
             ;
             (mailDetail._buttonDelete):ComputePos()
           end

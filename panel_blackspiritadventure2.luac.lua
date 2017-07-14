@@ -94,7 +94,7 @@ BlackSpirit2_Show = function()
   end
   if bAdventureWebUrl ~= nil then
     local url = bAdventureWebUrl .. "?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&nationCode=" .. tostring(isNationType) .. "&serverNo=" .. tostring(serverNo) .. "?userId=" .. tostring(userNickName) .. "&characterName=" .. tostring(characterName) .. "&characterNo=" .. tostring(characterNo_64)
-    _Web:SetUrl(1220, 628, url)
+    _Web:SetUrl(1220, 628, url, false, true)
   end
 end
 

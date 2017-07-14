@@ -150,8 +150,25 @@ TitleInfo_Open = function()
   self:updateCoolTime()
 end
 
+local group_3 = nil
 TitleInfo.SetConsolePadGroup = function(self)
-  -- function num : 0_5
+  -- function num : 0_5 , upvalues : group_3
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
+  local group_1 = Panel_Window_CharInfo_Status:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  local group_2 = Panel_Window_CharInfo_Status:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_3 = Panel_Window_CharInfo_Status:addConsoleUIGroup(3, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_LIST2)
+  group_1:addControl(0, 0, 4, 1, (self.Category_BTN)[0])
+  group_1:addControl(1, 0, 4, 1, (self.Category_BTN)[1])
+  group_1:addControl(2, 0, 4, 1, (self.Category_BTN)[2])
+  group_1:addControl(3, 0, 4, 1, (self.Category_BTN)[3])
+  group_2:addControl(0, 0, 4, 1, (self.titleSubject_Btn)[0])
+  group_2:addControl(1, 0, 4, 1, (self.titleSubject_Btn)[1])
+  group_2:addControl(2, 0, 4, 1, (self.titleSubject_Btn)[2])
+  group_2:addControl(3, 0, 4, 1, (self.titleSubject_Btn)[3])
 end
 
 CharInfoMouseUpScroll = function()
@@ -330,7 +347,7 @@ HandleClick_TitleSet = function(categoryIdx, titleIdx)
 end
 
 CharacterInfo_Title_ListControlCreate = function(content, key)
-  -- function num : 0_14 , upvalues : TitleInfo
+  -- function num : 0_14 , upvalues : TitleInfo, group_3
   local self = TitleInfo
   local titleIndex = Int64toInt32(key)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIndex)
@@ -341,6 +358,8 @@ CharacterInfo_Title_ListControlCreate = function(content, key)
   titleBG:setNotImpactScrollEvent(true)
   local titleName = (UI.getChildControl)(content, "List2_StaticText_TitleList_Title")
   local titleSet = (UI.getChildControl)(content, "List2_Button_SetTitle")
+  group_3:addControl(0, titleIndex, 2, self.CurrentCategoryCount, titleBG)
+  group_3:addControl(1, titleIndex, 2, self.CurrentCategoryCount, titleSet)
   if titleWrapper:isAcquired() == true then
     titleBG:SetIgnore(false)
     titleBG:addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. ", " .. titleIndex .. " )")
@@ -359,6 +378,7 @@ CharacterInfo_Title_ListControlCreate = function(content, key)
     titleName:SetText("<PAColor0xFF444444>" .. titleWrapper:getName() .. "<PAOldColor>")
     titleBG:addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. "," .. titleIndex .. ")")
     titleSet:SetShow(false)
+    group_3:deleteControl(titleIndex * 2 + 1)
   end
 end
 

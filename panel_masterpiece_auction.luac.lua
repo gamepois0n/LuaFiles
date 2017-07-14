@@ -55,7 +55,7 @@ _itemTooltipDesc = {}
 }
 -- DECOMPILER ERROR at PC170: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_Initialize = function(self)
+PaGlobal_MasterpieceAuction.initialize = function(self)
   -- function num : 0_2
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -134,11 +134,13 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_Initialize = function(self)
   ((self._ui)._staticTextDescBG):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_MYBIDITEMINFO"))
 end
 
-FGlobal_MasterpieceAuction_Open = function()
+-- DECOMPILER ERROR at PC173: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_MasterpieceAuction.open = function(self)
   -- function num : 0_3
   local self = PaGlobal_MasterpieceAuction
   Panel_Window_MasterpieceAuction:SetShow(true, true)
-  PaGlobal_MasterpieceAuction:MasterpieceAuction_SetPos()
+  PaGlobal_MasterpieceAuction:setPos()
   local myAuctionInfo = RequestGetAuctionInfo()
   local itemListCount = myAuctionInfo:getItemAuctionListCount()
   self._selectTabIndex = 0
@@ -149,15 +151,17 @@ FGlobal_MasterpieceAuction_Open = function()
   ;
   ((self._ui)._staticTextCenterLeftTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MASTERPIECE_LEFTTIME", "time", tostring(((Util.Time).timeFormatting_Minute)(0))))
   if itemListCount ~= 0 then
-    PaGlobal_MasterpieceAuction:MasterpieceAuction_Information(0)
+    PaGlobal_MasterpieceAuction:information(0)
   end
-  PaGlobal_MasterpieceAuction:MasterpieceAuction_SelectTabMouseEvent(0)
-  PaGlobal_MasterpieceAuction:MasterpieceAuction_Update(self._selectTabIndex)
+  PaGlobal_MasterpieceAuction:selectTabMouseEvent(0)
+  PaGlobal_MasterpieceAuction:update(self._selectTabIndex)
 end
 
-FGlobal_MasterpieceAuction_Close = function()
+-- DECOMPILER ERROR at PC176: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_MasterpieceAuction.close = function(self)
   -- function num : 0_4
-  Panel_Window_MasterpieceAuction:SetShow(false, false)
+  Panel_Window_MasterpieceAuction:SetShow(false)
   Panel_Tooltip_Item_hideTooltip()
   local self = PaGlobal_MasterpieceAuction
   ;
@@ -165,25 +169,25 @@ FGlobal_MasterpieceAuction_Close = function()
   self._masterpieceCountCache = 0
 end
 
--- DECOMPILER ERROR at PC177: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC179: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_SetPos = function(self)
+PaGlobal_MasterpieceAuction.setPos = function(self)
   -- function num : 0_5
   Panel_Window_MasterpieceAuction:SetPosX(getScreenSizeX() / 2 - Panel_Window_MasterpieceAuction:GetSizeX() / 2)
   Panel_Window_MasterpieceAuction:SetPosY(getScreenSizeY() / 2 - Panel_Window_MasterpieceAuction:GetSizeY() / 2 - 50)
 end
 
--- DECOMPILER ERROR at PC180: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC182: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_Update = function(self, tabIndex)
+PaGlobal_MasterpieceAuction.update = function(self, tabIndex)
   -- function num : 0_6
   local myAuctionInfo = RequestGetAuctionInfo()
   if tabIndex == 0 then
     local itemListCount = myAuctionInfo:getItemAuctionListCount()
     if itemListCount == 0 then
-      PaGlobal_MasterpieceAuction:MasterpieceAuction_ShowList_Left(false)
+      PaGlobal_MasterpieceAuction:showList_Left(false)
     else
-      PaGlobal_MasterpieceAuction:MasterpieceAuction_ShowList_Left(true)
+      PaGlobal_MasterpieceAuction:showList_Left(true)
     end
     ;
     (((self._ui)._list2_LeftContent):getElementManager()):clearKey()
@@ -196,9 +200,9 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_Update = function(self, tabIndex)
         local bidItemListCount = myAuctionInfo:getMyItemBidListCount()
         bidItemListCount = (math.floor)(bidItemListCount / self._list2LineCount + 1 / self._list2LineCount)
         if bidItemListCount == 0 then
-          PaGlobal_MasterpieceAuction:MasterpieceAuction_ShowList_Right(false)
+          PaGlobal_MasterpieceAuction:showList_Right(false)
         else
-          PaGlobal_MasterpieceAuction:MasterpieceAuction_ShowList_Right(true)
+          PaGlobal_MasterpieceAuction:showList_Right(true)
         end
         ;
         (((self._ui)._list2_RightContent):getElementManager()):clearKey()
@@ -227,6 +231,9 @@ MasterpieceAution_LeftContent_ListControlCreate = function(content, key)
   local radioBtn = (UI.getChildControl)(content, "RadioButton_LeftContentBg")
   local myAuctionInfo = RequestGetAuctionInfo()
   local goodsInfo = myAuctionInfo:getItemAuctionListAt(index)
+  if goodsInfo == nil then
+    return 
+  end
   local itemWrapper = goodsInfo:getItem()
   local itemSSW = itemWrapper:getStaticStatus()
   local self = PaGlobal_MasterpieceAuction
@@ -237,12 +244,12 @@ MasterpieceAution_LeftContent_ListControlCreate = function(content, key)
   end
   radioBtn:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   radioBtn:SetText(itemSSW:getName())
-  radioBtn:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_Information( " .. index .. " )")
+  radioBtn:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:information( " .. index .. " )")
 end
 
--- DECOMPILER ERROR at PC185: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC187: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_Information = function(self, index)
+PaGlobal_MasterpieceAuction.information = function(self, index)
   -- function num : 0_8
   local myAuctionInfo = RequestGetAuctionInfo()
   local goodsInfo = myAuctionInfo:getItemAuctionListAt(index)
@@ -259,9 +266,9 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_Information = function(self, inde
   ;
   (self._slotItem):setItemByStaticStatus(itemSSW)
   ;
-  ((self._slotItem).icon):addInputEvent("Mouse_On", "PaGlobal_MasterpieceAuction:MasterpieceAuction_TooltipShow(" .. index .. "," .. auctionType .. ")")
+  ((self._slotItem).icon):addInputEvent("Mouse_On", "PaGlobal_MasterpieceAuction:tooltipShow(" .. index .. "," .. auctionType .. ")")
   ;
-  ((self._slotItem).icon):addInputEvent("Mouse_Out", "PaGlobal_MasterpieceAuction:MasterpieceAuction_TooltipHide()")
+  ((self._slotItem).icon):addInputEvent("Mouse_Out", "PaGlobal_MasterpieceAuction:tooltipHide()")
   if isEnd == false then
     ((self._ui)._staticTextCenterLeftTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MASTERPIECE_LEFTTIME", "time", tostring(((Util.Time).timeFormatting_Minute)(Int64toInt32(leftTime_u64)))))
     if Int64toInt32(highPrice_s64) == 0 then
@@ -275,10 +282,10 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_Information = function(self, inde
       ((self._ui)._staticTextCurrentPriceValue):SetText(makeDotMoney(highPrice_s64))
     end
     ;
-    ((self._ui)._btn_Bid):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_bidItem(" .. index .. ",isBiddable)")
+    ((self._ui)._btn_Bid):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:bidItem(" .. index .. ",isBiddable)")
   end
   ;
-  ((self._ui)._editPriceInput):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_SetPrice(" .. index .. ")")
+  ((self._ui)._editPriceInput):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:setPrice(" .. index .. ")")
   ;
   ((self._ui)._editPriceInput):SetText("0")
   local itemAuthor = goodsInfo:getExhibitor()
@@ -290,24 +297,24 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_Information = function(self, inde
   self._selectListIndex = index
 end
 
--- DECOMPILER ERROR at PC188: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC190: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_TooltipShow = function(self, index, auctionType)
+PaGlobal_MasterpieceAuction.tooltipShow = function(self, index, auctionType)
   -- function num : 0_9
   Panel_Tooltip_Item_SetPosition(index, self._slotItem, "masterpiecdAuction")
   Panel_Tooltip_Item_Show_GeneralStatic(index, "masterpiecdAuction", true, auctionType)
 end
 
--- DECOMPILER ERROR at PC191: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC193: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_TooltipHide = function(self)
+PaGlobal_MasterpieceAuction.tooltipHide = function(self)
   -- function num : 0_10
   Panel_Tooltip_Item_hideTooltip()
 end
 
--- DECOMPILER ERROR at PC194: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC196: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_SetPrice = function(self, index)
+PaGlobal_MasterpieceAuction.setPrice = function(self, index)
   -- function num : 0_11
   local setEditText = function(inputNumber)
     -- function num : 0_11_0 , upvalues : self
@@ -321,12 +328,12 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_SetPrice = function(self, index)
   Panel_NumberPad_Show(true, s64_maxNumber, 0, setEditText)
 end
 
--- DECOMPILER ERROR at PC197: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC199: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_bidItem = function(self, index, isBiddable)
+PaGlobal_MasterpieceAuction.bidItem = function(self, index, isBiddable)
   -- function num : 0_12
   if isBiddable then
-    PaGlobal_MasterpieceAuction:MasterpieceAuction_Update(self._selectTabIndex)
+    PaGlobal_MasterpieceAuction:update(self._selectTabIndex)
     return 
   end
   local myAuctionInfo = RequestGetAuctionInfo()
@@ -337,17 +344,29 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_bidItem = function(self, index, i
   if goodsInfo == nil then
     return 
   end
+  local bidItemAuction = function()
+    -- function num : 0_12_0 , upvalues : index, self
+    RequestBidAuction(index, self._editPrice)
+    -- DECOMPILER ERROR at PC10: Confused about usage of register: R0 in 'UnsetPending'
+
+    self._editPrice = toInt64(0, 0)
+    ;
+    ((self._ui)._editPriceInput):SetText("0")
+    PaGlobal_MasterpieceAuction:update(self._selectTabIndex)
+  end
+
   local highPrice = goodsInfo:getHighPrice_s64()
   if highPrice < self._editPrice then
-    RequestBidAuction(index, self._editPrice)
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_DESC")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_NAME"), content = messageBoxMemo, functionYes = bidItemAuction, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
     self._bidTypeIndex = (self._bidType)._bidTry
   else
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECE_PRICEALERT"))
+    do
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECE_PRICEALERT"))
+    end
   end
-  self._editPrice = toInt64(0, 0)
-  ;
-  ((self._ui)._editPriceInput):SetText("0")
-  PaGlobal_MasterpieceAuction:MasterpieceAuction_Update(self._selectTabIndex)
 end
 
 MasterpieceAution_RightContent_ListControlCreate = function(content, key)
@@ -436,9 +455,9 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
       ;
       (slot.icon):SetPosX((slot.icon):GetPosX())
       ;
-      (slot.icon):addInputEvent("Mouse_On", "PaGlobal_MasterpieceAuction:MasterpieceAuction_TooltipShow(" .. i .. "," .. auctionType .. ")")
+      (slot.icon):addInputEvent("Mouse_On", "PaGlobal_MasterpieceAuction:tooltipShow(" .. i .. "," .. auctionType .. ")")
       ;
-      (slot.icon):addInputEvent("Mouse_Out", "PaGlobal_MasterpieceAuction:MasterpieceAuction_TooltipHide()")
+      (slot.icon):addInputEvent("Mouse_Out", "PaGlobal_MasterpieceAuction:tooltipHide()")
       bidItemName:SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
       bidItemName:SetText(itemSSW:getName())
       bidItemName:SetShow(true)
@@ -447,8 +466,8 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
       ;
       (self._itemTooltipDesc)[i] = itemSSW:getName()
       if bidItemName:IsLimitText() then
-        bidItemName:addInputEvent("Mouse_On", "PaGlobal_MasterpieceAuction:MasterpieceAuction_ItemTooptip( true, " .. i .. " )")
-        bidItemName:addInputEvent("Mouse_Out", "PaGlobal_MasterpieceAuction:MasterpieceAuction_ItemTooptip( false )")
+        bidItemName:addInputEvent("Mouse_On", "PaGlobal_MasterpieceAuction:itemTooptip( true, " .. i .. " )")
+        bidItemName:addInputEvent("Mouse_Out", "PaGlobal_MasterpieceAuction:itemTooptip( false )")
       end
       leftTime:SetText(tostring(((Util.Time).timeFormatting_Minute)(Int64toInt32(leftTime_u64))))
       leftTime:SetShow(true)
@@ -456,12 +475,12 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
       bidMoney:SetShow(true)
       if myPrice_s64 < highPrice_s64 then
         btnAuction:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECE_RECIEVEMONEY"))
-        btnAuction:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_cancelBidorSell(" .. i .. ")")
+        btnAuction:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:cancelBidorSell(" .. i .. ")")
         btnAuction:SetShow(true)
       else
         if isBiddable then
           btnAuction:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECE_RECIEVEITEM"))
-          btnAuction:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_getSuccessItemorMoney(" .. i .. ")")
+          btnAuction:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:getSuccessItemorMoney(" .. i .. ")")
           btnAuction:SetShow(true)
         else
           btnAuction:SetShow(false)
@@ -473,7 +492,7 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
           bidMoney:SetText(makeDotMoney(myPrice_s64))
           bidMoney:SetShow(true)
           btnAuction:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECE_RECIEVEMONEY"))
-          btnAuction:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_cancelBidorSell(" .. i .. ")")
+          btnAuction:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:cancelBidorSell(" .. i .. ")")
           btnAuction:SetShow(true)
           -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out DO_STMT
 
@@ -487,9 +506,9 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
   end
 end
 
--- DECOMPILER ERROR at PC202: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC204: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_ItemTooptip = function(self, isShow, index)
+PaGlobal_MasterpieceAuction.itemTooptip = function(self, isShow, index)
   -- function num : 0_14
   if isShow == false then
     TooltipSimple_Hide()
@@ -498,17 +517,17 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_ItemTooptip = function(self, isSh
   TooltipSimple_Show(Panel_Window_MasterpieceAuction, (self._itemTooltipDesc)[index])
 end
 
--- DECOMPILER ERROR at PC205: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC207: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_cancelBidorSell = function(self, index)
+PaGlobal_MasterpieceAuction.cancelBidorSell = function(self, index)
   -- function num : 0_15
   RequestAuction_CancelGoods(index)
   self._bidTypeIndex = (self._bidType)._bidFail
 end
 
--- DECOMPILER ERROR at PC208: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC210: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_getSuccessItemorMoney = function(self, index)
+PaGlobal_MasterpieceAuction.getSuccessItemorMoney = function(self, index)
   -- function num : 0_16
   RequestAuction_GetGoods(index)
   self._bidTypeIndex = (self._bidType)._bidSuccess
@@ -521,21 +540,28 @@ FromClient_ResponseAuction_UpdateAuctionList = function()
   local auctionType = myAuctionInfo:getAuctionType()
   warehouse_requestInfoFromNpc()
   if (CppEnums.AuctionTabType).AuctionTab_SellItem == auctionType or (CppEnums.AuctionTabType).AuctionTab_MySellPage == auctionType then
-    FGlobal_MasterpieceAuction_Open()
+    PaGlobal_MasterpieceAuction:open()
   else
-    PaGlobal_MasterpieceAuction:MasterpieceAuction_Update(self._selectTabIndex)
-    PaGlobal_MasterpieceAuction:MasterpiecceAuction_BidTypeMessage(self._bidTypeIndex)
+    PaGlobal_MasterpieceAuction:update(self._selectTabIndex)
+    PaGlobal_MasterpieceAuction:bidTypeMessage(self._bidTypeIndex)
   end
 end
 
-FromClient_BidAuctionGoods = function()
+FromClient_BidAuctionGoods = function(goodsType, param1, param2)
   -- function num : 0_18
   RequestAuctionListPage()
+  if goodsType ~= 0 then
+    return 
+  end
+  local bidSuccess = param2
+  if bidSuccess then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_BIDTYPEMESSAGE_1"))
+  end
 end
 
--- DECOMPILER ERROR at PC215: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC217: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_ShowList_Left = function(self, isShow)
+PaGlobal_MasterpieceAuction.showList_Left = function(self, isShow)
   -- function num : 0_19
   ((self._ui)._staticTextMoney):SetShow(true)
   ;
@@ -579,9 +605,9 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_ShowList_Left = function(self, is
   -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC218: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC220: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_ShowList_Right = function(self, isShow)
+PaGlobal_MasterpieceAuction.showList_Right = function(self, isShow)
   -- function num : 0_20
   ((self._ui)._list2_RightContent):SetShow(isShow)
   ;
@@ -606,12 +632,12 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_ShowList_Right = function(self, i
   ((self._ui)._staticTextReady):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC221: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC223: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_SelectTab = function(self, index)
+PaGlobal_MasterpieceAuction.selectTab = function(self, index)
   -- function num : 0_21
   self._selectTabIndex = index
-  PaGlobal_MasterpieceAuction:MasterpieceAuction_SelectTabMouseEvent(self._selectTabIndex)
+  PaGlobal_MasterpieceAuction:selectTabMouseEvent(self._selectTabIndex)
   if index == 0 then
     RequestAuctionListPage()
   else
@@ -621,11 +647,11 @@ PaGlobal_MasterpieceAuction.MasterpieceAuction_SelectTab = function(self, index)
   end
 end
 
--- DECOMPILER ERROR at PC224: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC226: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpieceAuction_SelectTabMouseEvent = function(self, index)
+PaGlobal_MasterpieceAuction.selectTabMouseEvent = function(self, index)
   -- function num : 0_22
-  ((self._ui)._staticBtnReload):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_SelectTab(" .. index .. ")")
+  ((self._ui)._staticBtnReload):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:selectTab(" .. index .. ")")
 end
 
 EventWarehouseUpdate = function()
@@ -636,19 +662,19 @@ EventWarehouseUpdate = function()
   ((self._ui)._staticTextMoney):SetText(makeDotMoney(wareHouseMoney))
 end
 
--- DECOMPILER ERROR at PC229: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC231: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.MasterpiecceAuction_BidTypeMessage = function(self, index)
+PaGlobal_MasterpieceAuction.bidTypeMessage = function(self, index)
   -- function num : 0_24
-  if index ~= 0 then
+  if index == 2 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECEAUCTION_BIDTYPEMESSAGE_" .. index))
   end
   self._bidTypeIndex = (self._bidType)._bidNone
 end
 
--- DECOMPILER ERROR at PC232: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC234: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_MasterpieceAuction.RegisterEvent = function(self)
+PaGlobal_MasterpieceAuction.registerEvent = function(self)
   -- function num : 0_25
   registerEvent("FromClient_ResponseAuction_UpdateAuctionList", "FromClient_ResponseAuction_UpdateAuctionList")
   registerEvent("FromClient_BidAuctionGoods", "FromClient_BidAuctionGoods")
@@ -658,13 +684,13 @@ PaGlobal_MasterpieceAuction.RegisterEvent = function(self)
   ;
   ((self._ui)._list2_LeftContent):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
   ;
-  ((self._ui)._radioBtnList):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_SelectTab(" .. 0 .. ")")
+  ((self._ui)._radioBtnList):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:selectTab(" .. 0 .. ")")
   ;
-  ((self._ui)._radioBtnMyBid):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:MasterpieceAuction_SelectTab(" .. 1 .. ")")
+  ((self._ui)._radioBtnMyBid):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:selectTab(" .. 1 .. ")")
   ;
-  ((self._ui)._btn_Close):addInputEvent("Mouse_LUp", "FGlobal_MasterpieceAuction_Close()")
+  ((self._ui)._btn_Close):addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:close()")
 end
 
-PaGlobal_MasterpieceAuction:RegisterEvent()
-PaGlobal_MasterpieceAuction:MasterpieceAuction_Initialize()
+PaGlobal_MasterpieceAuction:registerEvent()
+PaGlobal_MasterpieceAuction:initialize()
 

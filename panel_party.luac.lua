@@ -11,6 +11,7 @@ Panel_Party:RegisterShowEventFunc(false, "PartyHideAni()")
 Panel_PartyOption:RegisterShowEventFunc(true, "PartyOptionShowAni()")
 Panel_PartyOption:RegisterShowEventFunc(false, "PartyOptionHideAni()")
 local isContentsEnable = ToClient_IsContentsGroupOpen("38")
+local isLargePartyOpen = ToClient_IsContentsGroupOpen("286")
 local CT2S = CppEnums.ClassType2String
 local PLT = CppEnums.PartyLootType
 local PLT2S = CppEnums.PartyLootType2String
@@ -508,9 +509,7 @@ ResponseParty_createPartyList = function()
     else
       if (CppEnums.PartyType).ePartyType_Large == partyType then
         Panel_LargeParty:SetShow(true)
-        if partyMemberCount > 1 then
-          PaGlobal_LargeParty:Update()
-        end
+        PaGlobal_LargeParty:Update()
         Panel_Party:SetShow(false)
       end
     end
@@ -1002,10 +1001,6 @@ end
 local messageBox_party_accept = function()
   -- function num : 0_24 , upvalues : requestPlayerList, partyType
   requestPlayerList = {}
-  if partyType == 1 then
-    Panel_LargeParty:SetShow(true)
-    Panel_Party:SetShow(false)
-  end
   RequestParty_acceptInvite(partyType)
 end
 

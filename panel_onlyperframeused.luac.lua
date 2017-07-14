@@ -62,6 +62,9 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     if Update_ReconnectHorse ~= nil then
       Update_ReconnectHorse()
     end
+    if Auto_FrameMove ~= nil then
+      Auto_FrameMove(deltaTime)
+    end
   end
 end
 

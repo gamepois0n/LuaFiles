@@ -375,6 +375,7 @@ Inventory_Tab = function()
     DragManager:clearInfo()
   end
   Inventory_TabSound()
+  Inventory_DropEscape()
   if Panel_Window_ClothInventory:GetShow() then
     ClothInventory_Close()
   end
@@ -417,7 +418,28 @@ Inventory_TabSound = function()
 end
 
 ConsoleGroupCreate_Panel_Window_Inventory = function()
-  -- function num : 0_16
+  -- function num : 0_16 , upvalues : inven, btn_AlchemyFigureHead, btn_AlchemyStone, btn_Manufacture, btn_DyePalette, radioButtonManu, radioButtonNote, _btn_WayPoint, _btn_Widget
+  local group_0 = Panel_Window_Inventory:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_INVENTORY)
+  group_0:addControl(0, 0, 5, 1, inven.radioButtonNormaiInven)
+  group_0:addControl(1, 0, 5, 1, inven.radioButtonCashInven)
+  group_0:addControl(2, 0, 5, 1, inven.radioButtonStd)
+  group_0:addControl(3, 0, 5, 1, inven.radioButtonTransport)
+  group_0:addControl(4, 0, 5, 1, inven.radioButtonHousing)
+  local group_2 = Panel_Window_Inventory:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_INVENTORY)
+  group_2:addControl(0, 0, 4, 1, btn_AlchemyFigureHead)
+  group_2:addControl(1, 0, 4, 1, btn_AlchemyStone)
+  group_2:addControl(2, 0, 4, 1, btn_Manufacture)
+  group_2:addControl(3, 0, 4, 1, btn_DyePalette)
+  local group_3 = Panel_Window_Inventory:addConsoleUIGroup(3, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_INVENTORY)
+  group_3:addControl(0, 0, 3, 1, inven.staticWeight)
+  group_3:addControl(1, 0, 3, 1, inven.buttonMoney)
+  group_3:addControl(2, 0, 3, 1, inven.trashArea)
+  local manuGroup = Panel_Invertory_Manufacture_BG:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_INVENTORY)
+  manuGroup:addControl(0, 0, 2, 1, radioButtonManu)
+  manuGroup:addControl(1, 0, 2, 1, radioButtonNote)
+  local exchangeGroup = Panel_Invertory_ExchangeButton:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_INVENTORY)
+  exchangeGroup:addControl(0, 0, 2, 1, _btn_WayPoint)
+  exchangeGroup:addControl(1, 0, 2, 1, _btn_Widget)
 end
 
 Inventory_ScrollUpEvent = function()
@@ -433,10 +455,14 @@ end
 inven.createSlot = function(self)
   -- function num : 0_19 , upvalues : UI_PUCT, inven, _puzzleNotice
   ConsoleGroupCreate_Panel_Window_Inventory()
+  local group_1 = Panel_Window_Inventory:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_INVENTORY)
+  group_1:setConsoleKeyEventForLUA("Inventory_ScrollUpEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_UP)
+  group_1:setConsoleKeyEventForLUA("Inventory_ScrollDownEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_DOWN)
   for ii = 0, (self.config).slotCount - 1 do
     local slot = {}
     slot.empty = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_Inventory, "Inventory_Slot_Base_" .. ii)
     slot.lock = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_Inventory, "Inventory_Slot_Lock_" .. ii)
+    group_1:addControl(ii % 8, ii / 8, 8, 8, slot.empty)
     CopyBaseProperty(self._baseSlot, slot.empty)
     CopyBaseProperty(self._baseLockSlot, slot.lock)
     ;
@@ -455,7 +481,7 @@ inven.createSlot = function(self)
     (slot.empty):SetShow(false)
     ;
     (slot.lock):SetShow(false)
-    -- DECOMPILER ERROR at PC98: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC124: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     (self._slotsBackground)[ii] = slot
@@ -514,7 +540,7 @@ inven.createSlot = function(self)
     (slot.background):SetPosY((slot.icon):GetPosY())
     ;
     (slot.background):SetShow(false)
-    -- DECOMPILER ERROR at PC283: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC309: Confused about usage of register: R11 in 'UnsetPending'
 
     ;
     (self.slots)[ii] = slot
@@ -529,7 +555,7 @@ inven.createSlot = function(self)
     Panel_Window_Inventory:SetChildIndex(((self.slots)[ii]).icon, 9998)
     effectSlot.isFirstItem = false
     effectSlot.puzzleControl = puzzle
-    -- DECOMPILER ERROR at PC338: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC364: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self.slotEtcData)[ii] = effectSlot

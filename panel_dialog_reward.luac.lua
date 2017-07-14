@@ -255,12 +255,20 @@ FGlobal_SetRewardList = function(baseReward, selectReward, questData)
   _baseRewardCount = #baseReward
   _selectRewardCount = #selectReward
   FGlobal_SelectRewardItemNameClear()
+  Panel_Npc_Quest_Reward:deleteConsoleUIGroup(0)
+  Panel_Npc_Quest_Reward:deleteConsoleUIGroup(1)
+  local group_0 = (Panel_Npc_Quest_Reward:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT))
+  local group_1 = nil
+  if _selectRewardCount > 0 then
+    group_1 = Panel_Npc_Quest_Reward:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  end
   for index = 0, _maxBaseSlotCount - 1 do
     (_uiBackBaseReward[index]):EraseAllEffect()
     if index < _baseRewardCount then
       setReward(_listBaseRewardSlots[index], baseReward[index + 1], index, "main")
       ;
       (_uiBackBaseReward[index]):SetShow(true)
+      group_0:addControl(index % 6, index / 6, 6, 2, (_listBaseRewardSlots[index]).icon)
     else
       ;
       (_uiBackBaseReward[index]):SetShow(false)
@@ -287,6 +295,7 @@ FGlobal_SetRewardList = function(baseReward, selectReward, questData)
       (_uiButtonSelectRewardSlots[index]):AddEffect("UI_Quest_Compensate", true, 0, 0)
       ;
       (_uiButtonSelectRewardSlots[index]):AddEffect("fUI_Light", false, 0, 0)
+      group_1:addControl(index, 0, 6, 1, _uiButtonSelectRewardSlots[index])
     else
       do
         ;
@@ -299,20 +308,20 @@ FGlobal_SetRewardList = function(baseReward, selectReward, questData)
           do
             if index < _selectRewardCount then
               local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey((selectReward[index + 1])._item))
-              -- DECOMPILER ERROR at PC141: Confused about usage of register: R12 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC185: Confused about usage of register: R14 in 'UnsetPending'
 
               _selectRewardItemNameArry[index] = itemStatic:getName()
             end
-            -- DECOMPILER ERROR at PC144: Confused about usage of register: R11 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC188: Confused about usage of register: R13 in 'UnsetPending'
 
             _selectRewardItemNameArry[index] = nil
-            -- DECOMPILER ERROR at PC145: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC189: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC145: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC189: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC145: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC189: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC145: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC189: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end

@@ -85,5 +85,4 @@ end
 
 registerEvent("FromClient_getDataDownloadProgress", "FromClient_getDataDownloadProgress")
 registerEvent("FromClient_completeDownloadProgress", "FromClient_completeDownloadProgress")
-PaGlobal_Dataprogress:Initialize()
 

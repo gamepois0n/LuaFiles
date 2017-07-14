@@ -7,9 +7,9 @@ Panel_Window_GuildBattle:SetShow(false)
 Panel_Window_GuildBattle:setGlassBackground(true)
 Panel_Window_GuildBattle:ActiveMouseEventEffect(true)
 PaGlobal_GuildBattle = {
-_ui = {_guildBattleBG = (UI.getChildControl)(Panel_Window_Guild, "Static_Frame_GuildBattleBG"), _btn_Reservation = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_Reservation"), _btn_Cancle = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_ReservationCancel"), _btn_Join = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_Join"), _btn_UnJoin = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_UnJoin"), _btn_Start = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_Start"), _txt_progress = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_Progress"), _txt_guildA = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_GuildA"), _txt_guildB = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_GuildB"), _edit_PriceInput = (UI.getChildControl)(Panel_Window_GuildBattle, "Edit_PriceInput")}
+_ui = {_guildBattleBG = (UI.getChildControl)(Panel_Window_Guild, "Static_Frame_GuildBattleBG"), _btn_Reservation = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_Reservation"), _btn_Cancle = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_ReservationCancel"), _btn_Join = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_Join"), _btn_UnJoin = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_UnJoin"), _btn_Start = (UI.getChildControl)(Panel_Window_GuildBattle, "Button_Start"), _txt_progress = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_Progress"), _txt_guildA = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_GuildA"), _txt_guildB = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_GuildB"), _txt_guildAScore = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_GuildAScore"), _txt_guildBScore = (UI.getChildControl)(Panel_Window_GuildBattle, "Static_Text_GuildBScore"), _edit_PriceInput = (UI.getChildControl)(Panel_Window_GuildBattle, "Edit_PriceInput")}
 , _battingPrice = 0}
--- DECOMPILER ERROR at PC79: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC91: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Initialize = function(self)
   -- function num : 0_0
@@ -27,7 +27,7 @@ PaGlobal_GuildBattle.Initialize = function(self)
   ((self._ui)._txt_guildB):SetText("예약중인 길드�\128 없습니다")
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC94: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Open = function(self)
   -- function num : 0_1
@@ -42,7 +42,7 @@ FGlobal_GuildBattle_Open = function()
   PaGlobal_GuildBattle:Open()
 end
 
--- DECOMPILER ERROR at PC87: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Close = function(self)
   -- function num : 0_3
@@ -54,42 +54,42 @@ FGlobal_GuildBattle_Close = function()
   PaGlobal_GuildBattle:Close()
 end
 
--- DECOMPILER ERROR at PC92: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC104: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Reservation = function(self)
   -- function num : 0_5
   ToClient_ReserveGuildBattle(self._battingPrice)
 end
 
--- DECOMPILER ERROR at PC95: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC107: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Reservation_Cancel = function(self)
   -- function num : 0_6
   ToClient_CancelGuildBattle()
 end
 
--- DECOMPILER ERROR at PC98: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC110: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Join = function(self)
   -- function num : 0_7
   ToClient_JoinGuildBattle()
 end
 
--- DECOMPILER ERROR at PC101: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC113: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.UnJoin = function(self)
   -- function num : 0_8
   ToClient_UnjoinGuildBattle()
 end
 
--- DECOMPILER ERROR at PC104: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC116: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Start = function(self)
   -- function num : 0_9
   ToClient_startGuildBattle()
 end
 
--- DECOMPILER ERROR at PC107: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC119: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.SetPrice = function(self)
   -- function num : 0_10
@@ -106,7 +106,7 @@ PaGlobal_GuildBattle.SetPrice = function(self)
   Panel_NumberPad_Show(true, getGuildMoney, 0, setEditText)
 end
 
--- DECOMPILER ERROR at PC110: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC122: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.SetProgressServer = function(self)
   -- function num : 0_11
@@ -118,7 +118,7 @@ PaGlobal_GuildBattle.SetProgressServer = function(self)
   ((self._ui)._txt_progress):SetText(progress)
 end
 
--- DECOMPILER ERROR at PC113: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC125: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
   -- function num : 0_12
@@ -127,16 +127,22 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
   local betting = ToClient_guildBattleBetting()
   if guildA ~= nil then
     local name = guildA:getName()
+    local rating = guildA:getRating()
     ;
     ((self._ui)._txt_guildA):SetText(name)
+    ;
+    ((self._ui)._txt_guildAScore):SetText(tostring(rating))
   else
     do
       ;
       ((self._ui)._txt_guildA):SetText("예약중인 길드�\128 없습니다")
       if guildB ~= nil then
         local name = guildB:getName()
+        local rating = guildB:getRating()
         ;
         ((self._ui)._txt_guildB):SetText(name)
+        ;
+        ((self._ui)._txt_guildBScore):SetText(tostring(rating))
       else
         do
           ;
@@ -159,7 +165,7 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC116: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC128: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattle.registMessageHandler = function(self)
   -- function num : 0_13

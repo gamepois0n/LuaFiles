@@ -116,7 +116,7 @@ local iconStartPosY = 275
 local _spawnType, _isAuto = nil, nil
 local _isCheck = false
 HandleClicked_TownNpcIcon_NaviStart = function(spawnType, isAuto)
-  -- function num : 0_2 , upvalues : _spawnType, _isAuto, _isCheck, UI_ST
+  -- function num : 0_2 , upvalues : _spawnType, UI_ST
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -126,16 +126,7 @@ HandleClicked_TownNpcIcon_NaviStart = function(spawnType, isAuto)
   end
   audioPostEvent_SystemUi(0, 0)
   ToClient_DeleteNaviGuideByGroup(0)
-  if (_spawnType == spawnType or _spawnType == -1) and _isAuto == isAuto and _isCheck == true then
-    _isCheck = false
-    _spawnType = -1
-    TownfunctionNavi_Set()
-    return 
-  else
-    _spawnType = spawnType
-    _isAuto = isAuto
-    _isCheck = true
-  end
+  _spawnType = spawnType
   local position = player:get3DPos()
   local nearNpcInfo = getNearNpcInfoByType(spawnType, position)
   if nearNpcInfo == nil then

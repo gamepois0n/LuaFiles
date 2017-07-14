@@ -39,6 +39,12 @@ end
 
 local _btn_Close = (UI.getChildControl)(Panel_ProductNote, "Button_Close")
 local _btn_CloseWindow = (UI.getChildControl)(Panel_ProductNote, "Button_CloseWindow")
+local _btn_PopUp = (UI.getChildControl)(Panel_ProductNote, "CheckButton_PopUp")
+local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
+_btn_PopUp:SetShow(isPopUpContentsEnable)
+_btn_PopUp:addInputEvent("Mouse_LUp", "HandleClicked_ProductNote_PopUp()")
+_btn_PopUp:addInputEvent("Mouse_On", "ProductNote_PopUp_ShowIconToolTip( true )")
+_btn_PopUp:addInputEvent("Mouse_Out", "ProductNote_PopUp_ShowIconToolTip( false )")
 local _buttonQuestion = (UI.getChildControl)(Panel_ProductNote, "Button_Question")
 _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"ProductNote\" )")
 _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"ProductNote\", \"true\")")
@@ -56,7 +62,7 @@ end
 
 Panel_ProductNote_Initialize()
 Panel_ProductNote_ShowToggle = function()
-  -- function num : 0_3 , upvalues : _productWeb, IM
+  -- function num : 0_3 , upvalues : _productWeb, IM, _btn_PopUp
   local isShow = Panel_ProductNote:IsShow()
   if ToClient_IsConferenceMode() then
     return 
@@ -69,6 +75,10 @@ Panel_ProductNote_ShowToggle = function()
     ClearFocusEdit()
     ;
     (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+    _btn_PopUp:SetCheck(false)
+    if Panel_ProductNote:IsUISubApp() then
+      Panel_ProductNote:CloseUISubApp()
+    end
     return false
   else
     audioPostEvent_SystemUi(13, 6)
@@ -86,7 +96,7 @@ Panel_ProductNoteClose = function()
 end
 
 ProductNote_Item_ShowToggle = function(itemKey)
-  -- function num : 0_5 , upvalues : _productWeb
+  -- function num : 0_5 , upvalues : _productWeb, _btn_PopUp
   if ToClient_IsConferenceMode() then
     return 
   end
@@ -102,6 +112,10 @@ ProductNote_Item_ShowToggle = function(itemKey)
     else
       SetFocusChatting()
     end
+    _btn_PopUp:SetCheck(false)
+    if Panel_ProductNote:IsUISubApp() then
+      Panel_ProductNote:CloseUISubApp()
+    end
   else
     audioPostEvent_SystemUi(13, 6)
     Panel_ProductNote:SetShow(true, true)
@@ -115,6 +129,34 @@ ProductNote_onScreenResize = function()
   -- function num : 0_6
   Panel_ProductNote:SetPosX((math.floor)((getScreenSizeX() - Panel_ProductNote:GetSizeX()) / 2))
   Panel_ProductNote:SetPosY((math.floor)((getScreenSizeY() - Panel_ProductNote:GetSizeY()) / 2))
+end
+
+HandleClicked_ProductNote_PopUp = function()
+  -- function num : 0_7 , upvalues : _btn_PopUp
+  if _btn_PopUp:IsCheck() then
+    Panel_ProductNote:OpenUISubApp()
+  else
+    Panel_ProductNote:CloseUISubApp()
+  end
+  TooltipSimple_Hide()
+end
+
+ProductNote_PopUp_ShowIconToolTip = function(isShow)
+  -- function num : 0_8 , upvalues : _btn_PopUp
+  if isShow then
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
+    local desc = ""
+    if _btn_PopUp:IsCheck() then
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_CHECK_TOOLTIP")
+    else
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_NOCHECK_TOOLTIP")
+    end
+    TooltipSimple_Show(_btn_PopUp, name, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
+  end
 end
 
 _btn_Close:addInputEvent("Mouse_LUp", "Panel_ProductNote_ShowToggle()")

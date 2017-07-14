@@ -43,6 +43,14 @@ SavageDefenceMember_Init = function(listSize, BGSize)
   ;
   (self.chk_Shop):addInputEvent("Mouse_LUp", "PaGlobal_SavageDefenceMember_Toggle(1)")
   ;
+  (self.chk_List):addInputEvent("Mouse_On", "SavageDefenceMember_TooltipButtonDesc(true, 0)")
+  ;
+  (self.chk_List):addInputEvent("Mouse_Out", "SavageDefenceMember_TooltipButtonDesc(false)")
+  ;
+  (self.chk_Shop):addInputEvent("Mouse_On", "SavageDefenceMember_TooltipButtonDesc(true, 1)")
+  ;
+  (self.chk_Shop):addInputEvent("Mouse_Out", "SavageDefenceMember_TooltipButtonDesc(false)")
+  ;
   (self.bottomArrow):addInputEvent("Mouse_LUp", "PaGlobal_SavageDefenceMember_BottomArrow()")
   ;
   (self.listBG):SetSize(284, BGSize)
@@ -107,6 +115,8 @@ PaGlobal_SavegeDefenceMember_ListUpdate = function(contents, key)
     txt_PointCount:SetFontColor((Defines.Color).C_FFFFFFFF)
     btn_GivePoint:SetMonoTone(false)
   end
+  btn_GivePoint:addInputEvent("Mouse_On", "SavageDefenceMember_Tooltip(true, " .. idx .. ")")
+  btn_GivePoint:addInputEvent("Mouse_Out", "SavageDefenceMember_Tooltip(false, " .. idx .. ")")
   btn_GivePoint:SetShow(true)
   if inMyCoin == 0 then
     btn_GivePoint:addInputEvent("Mouse_LUp", "")
@@ -222,10 +232,13 @@ SavageDefenceMember_Open = function()
   ;
   (self.bottomArrow):SetCheck(false)
   Panel_SavageDefenceMember:SetShow(true)
+  if (self.listBG):GetShow() then
+    local isListShow = (self._list2):GetShow()
+  end
   ;
-  (self.chk_List):SetCheck(true)
+  (self.chk_List):SetCheck(isListShow)
   ;
-  (self.chk_Shop):SetCheck(false)
+  (self.chk_Shop):SetCheck(Panel_SavageDefenceShop:GetShow())
   SavageDefenceMember_Update()
 end
 
@@ -239,8 +252,45 @@ PaGlobal_SavageDefenceMember_Position = function()
   Panel_SavageDefenceMember:SetPosY(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeY() + 170)
 end
 
+SavageDefenceMember_Tooltip = function(isShow, idx)
+  -- function num : 0_10 , upvalues : savageDefenceMember
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = savageDefenceMember
+  local control = self._list2
+  local contents = (control:GetContentByKey(toInt64(0, idx)))
+  local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_TOOLTIP_POINT_NAME")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_TOOLTIP_POINT_DESC")
+  TooltipSimple_Show(contents, name, desc)
+end
+
+SavageDefenceMember_TooltipButtonDesc = function(isShow, tipType)
+  -- function num : 0_11 , upvalues : savageDefenceMember
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = savageDefenceMember
+  local name, desc, control = nil, nil, nil
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_TOOLTIP_BUTTON_LIST_NAME")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_TOOLTIP_BUTTON_LIST_DESC")
+    control = self.chk_List
+  else
+    if tipType == 1 then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_TOOLTIP_BUTTON_SHOP_NAME")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_TOOLTIP_BUTTON_SHOP_DESC")
+      control = self.chk_Shop
+    end
+  end
+  TooltipSimple_Show(control, name, desc)
+end
+
 FromClient_refreshSavageDefencePlayer = function(count)
-  -- function num : 0_10
+  -- function num : 0_12
   SavageDefenceMember_Open()
   SavageDefenceMember_Update()
   FGlobal_SavageDefenceShop_coinUpdate()

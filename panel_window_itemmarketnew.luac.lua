@@ -23,7 +23,7 @@ Panel_Window_ItemMarket:ActiveMouseEventEffect(true)
 Panel_Window_ItemMarket:SetShow(false)
 local splitWindow = ToClient_IsContentsGroupOpen("240")
 local shopType = {eShopType_Potion = 1, eShopType_Weapon = 2, eShopType_Jewel = 3, eShopType_Furniture = 4, eShopType_Collect = 5, eShopType_Cook = 9, eShopType_PC = 10}
-local ItemMarket = {panelTitle = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Title"), panelBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_BG"), btn_Close = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Win_Close"), checkPopUp = (UI.getChildControl)(Panel_Window_ItemMarket, "CheckButton_PopUp"), btn_MyList = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_MyList"), btn_BackPage = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BackPage"), btn_SetAlarm = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetAlarm"), btn_SetPreBid = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetPreBid"), btn_Refresh = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Refresh"), btn_RegistItem = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_RegistItem"), btn_BidDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BidDesc"), selectCategory = 0, selectItemSort = 0, static_ListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_ListHeadSmallBG"), specialListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_SpecialListHeadBG"), 
+local ItemMarket = {panelTitle = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Title"), panelBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_BG"), btn_Close = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Win_Close"), checkPopUp = (UI.getChildControl)(Panel_Window_ItemMarket, "CheckButton_PopUp"), btn_MyList = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_MyList"), btn_BackPage = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BackPage"), btn_SetAlarm = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetAlarm"), btn_SetPreBid = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_SetPreBid"), btn_Refresh = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Refresh"), btn_RegistItem = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_RegistItem"), btn_BidDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_BidDesc"), btn_InMarketRegist = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_InMarketRegist"), selectCategory = 0, selectItemSort = 0, static_ListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_ListHeadSmallBG"), specialListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_SpecialListHeadBG"), 
 selectSingleSlot = {}
 , txt_SpecialGoodsName = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_SpecialGoods_Name"), txt_SpecialGoodsDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_SpecialGoods_Desc"), txt_ItemNameBackPage = "", txt_SpecialItemNameBackPage = "", static_FilterBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_FilterBG"), static_ItemListBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_ItemListBG"), invenMoney = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_Text_Money"), invenMoneyTit = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_Icon_Money"), warehouseMoney = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_Text_Money2"), warehouseMoneyTit = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_Icon_Money2"), invenDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Inven"), warehouseDesc = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_Warehouse"), iconTooltip = nil, _list2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket"), _list2_Inside = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Inside"), _list2_SpecialList = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_SpecialList"), _list2_SpecialList_Inside = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_SpecialList_Inside"), _btn_CategoryAll = (UI.getChildControl)(Panel_Window_ItemMarket, "RadioButton_MainCategoryAll"), selectedListHeadBG = (UI.getChildControl)(Panel_Window_ItemMarket, "Static_SelectedListHeadBG"), noSearchResult = (UI.getChildControl)(Panel_Window_ItemMarket, "StaticText_NoSearchResult"), nowScrollPos = 0, scrollInverVal = 0, curItemClassify = 1, curFilterIndex = -1, curClassType = -1, curServantType = -1, 
 categoryUiPool = {}
@@ -434,11 +434,19 @@ ItemMarket.Initialize = function(self)
   ;
   (self.btn_BidDesc):SetSize(135, 32)
   ;
-  (self.btn_BidDesc):SetPosX(730)
+  (self.btn_BidDesc):SetPosX(830)
   ;
   (self.btn_BidDesc):SetPosY(635)
   ;
   (self.btn_BidDesc):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_BidDesc_Open()")
+  ;
+  (self.btn_InMarketRegist):SetSize(135, 32)
+  ;
+  (self.btn_InMarketRegist):SetPosX(840)
+  ;
+  (self.btn_InMarketRegist):SetPosY(635)
+  ;
+  (self.btn_InMarketRegist):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketRegistItem_Open()")
   ;
   (self.btn_FavoriteOnOff):SetCheck(true)
   ;
@@ -2660,6 +2668,8 @@ HandleClicked_ItemMarket_GroupItem = function(itemIdx, itemEnchantKeyRaw)
     (self.btn_Refresh):SetShow(true)
     ;
     (self.btn_BidDesc):SetSize(135, 32)
+    ;
+    (self.btn_InMarketRegist):SetShow(false)
     if isGameTypeRussia() then
       (self.btn_SetAlarm):SetSize(235, 32)
       ;
@@ -3201,7 +3211,7 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
 end
 
 HandleClicked_ItemMarket_UnSetGroupItem = function()
-  -- function num : 0_44 , upvalues : ItemMarket
+  -- function num : 0_44 , upvalues : ItemMarket, isOpenByMaid
   local self = ItemMarket
   if not (self.selectedListHeadBG):GetShow() then
     return 
@@ -3220,6 +3230,11 @@ HandleClicked_ItemMarket_UnSetGroupItem = function()
     self:SpecialGoodsUpdate()
   else
     self:Update()
+  end
+  if not ItemMarket.escMenuSaveValue and not isOpenByMaid then
+    (self.btn_InMarketRegist):SetShow(true)
+    ;
+    (self.btn_BidDesc):SetPosX(700)
   end
   if Panel_Tooltip_Item:GetShow() or Panel_Tooltip_Item_equipped:GetShow() or Panel_Tooltip_SimpleText:GetShow() then
     Panel_Tooltip_Item_hideTooltip()
@@ -3586,6 +3601,10 @@ FGlobal_ItemMarketNew_Open = function()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGIONINFO_NIL"))
     return 
   end
+  ;
+  (self.btn_InMarketRegist):SetShow(true)
+  ;
+  (self.btn_BidDesc):SetPosX(700)
   self.curTerritoryKeyRaw = regionInfoWrapper:getTerritoryKeyRaw()
   ;
   (self.panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_NAMING"))
@@ -3691,6 +3710,10 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
     WorldMapPopupManager:increaseLayer(true)
     WorldMapPopupManager:push(Panel_Window_ItemMarket, true)
   end
+  ;
+  (self.btn_InMarketRegist):SetShow(false)
+  ;
+  (self.btn_BidDesc):SetPosX(830)
   ;
   (self.invenMoney):SetShow(false)
   ;
@@ -3808,6 +3831,10 @@ FGlobal_ItemMarket_OpenByMaid = function()
   end
   SetUIMode((Defines.UIMode).eUIMode_ItemMarket)
   isOpenByMaid = true
+  ;
+  (self.btn_InMarketRegist):SetShow(false)
+  ;
+  (self.btn_BidDesc):SetPosX(830)
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
   if regionInfo == nil then
     return 
@@ -4033,7 +4060,7 @@ FromClient_NotifyItemMarketByParty = function(notifyType, param0, param1)
 end
 
 FGlobal_HandleClicked_ItemMarketBackPage = function()
-  -- function num : 0_73 , upvalues : ItemMarket
+  -- function num : 0_73 , upvalues : ItemMarket, isOpenByMaid
   local self = ItemMarket
   TooltipSimple_Hide()
   ;
@@ -4049,6 +4076,11 @@ FGlobal_HandleClicked_ItemMarketBackPage = function()
   (self.edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
   if self.edit_ItemName == GetFocusEdit() then
     ClearFocusEdit()
+  end
+  if not ItemMarket.escMenuSaveValue and not isOpenByMaid then
+    (self.btn_InMarketRegist):SetShow(true)
+    ;
+    (self.btn_BidDesc):SetPosX(700)
   end
   local text = self.txt_ItemNameBackPage
   if text ~= nil and text ~= "" and PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME") ~= text then

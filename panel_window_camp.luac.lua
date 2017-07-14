@@ -177,28 +177,44 @@ PaGlobal_Camp.update = function(self)
   local isUnseal = ToClient_isCampingUnseal()
   for index,value in pairs((self._config)._slotNo) do
     local slot = (self._itemSlots)[value]
-    local campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
-    if campWrapper ~= nil then
-      local itemWrapper = campWrapper:getEquipItem(value)
-      -- DECOMPILER ERROR at PC23: Confused about usage of register: R10 in 'UnsetPending'
-
+    do
       if isUnseal then
-        if itemWrapper ~= nil then
-          ((self._config)._isSetItem)[value] = true
-          slot:setItem(itemWrapper)
-        else
-          -- DECOMPILER ERROR at PC30: Confused about usage of register: R10 in 'UnsetPending'
+        local campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+      end
+      if campWrapper ~= nil then
+        local itemWrapper = campWrapper:getEquipItem(value)
+        -- DECOMPILER ERROR at PC27: Confused about usage of register: R9 in 'UnsetPending'
 
-          ;
-          ((self._config)._isSetItem)[value] = false
-          slot:clearItem()
+        if isUnseal then
+          if itemWrapper ~= nil then
+            ((self._config)._isSetItem)[value] = true
+            slot:setItem(itemWrapper)
+          else
+            -- DECOMPILER ERROR at PC34: Confused about usage of register: R9 in 'UnsetPending'
+
+            ;
+            ((self._config)._isSetItem)[value] = false
+            slot:clearItem()
+          end
         end
       else
-        -- DECOMPILER ERROR at PC36: Confused about usage of register: R10 in 'UnsetPending'
+        do
+          do
+            -- DECOMPILER ERROR at PC40: Confused about usage of register: R8 in 'UnsetPending'
 
-        ;
-        ((self._config)._isSetItem)[value] = false
-        slot:clearItem()
+            ;
+            ((self._config)._isSetItem)[value] = false
+            slot:clearItem()
+            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out DO_STMT
+
+            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_STMT
+
+            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out DO_STMT
+
+          end
+        end
       end
     end
   end
@@ -456,7 +472,6 @@ PaGlobal_Camp.registMessageHandler = function(self)
   registerEvent("EventServantEquipItem", "EventServantEquipItem")
   registerEvent("EventServantEquipmentUpdate", "FromClient_CampingUpdate")
   registerEvent("FromClient_CampingTentSeal", "FromClient_CampingUpdate")
-  registerEvent("FromClient_CampingTentUnSeal", "FromClient_CampingUpdate")
   registerEvent("FromClient_CampingTentUnSeal", "FromClient_CampingUpdate")
   registerEvent("FromClient_InitializeCamp", "FromClient_InitializeCamp")
 end

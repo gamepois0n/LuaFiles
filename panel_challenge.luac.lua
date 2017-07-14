@@ -70,6 +70,8 @@ HandleClicked_challengeRewardAlert_Open = function()
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
+local group_2 = nil
+local totalSlotCount = 0
 local tapCount = 6
 if isGameTypeKorea() then
   tapCount = 6
@@ -266,7 +268,7 @@ HandleClickedTapButton = function(index)
   _scroll:SetControlPos(0)
   _scrollIndex = 0
   maxCount = 0
-  Fglobal_Challenge_UpdateData()
+  Challenge_Update()
 end
 
 local _content = {}
@@ -689,7 +691,16 @@ local challengeType = 0
 local challengeWrapper = nil
 local baseCount = 0
 Fglobal_Challenge_UpdateData = function()
-  -- function num : 0_8 , upvalues : _selectedReward_ChallengeIndex, _selectedReward_SlotIndex, _tapMenu, _tapValue, clearCount, shortClearCount, dailyChallengeValue, remainRewardCountValue, UI_color, _content, _baseReward, _selectReward, challengeType, challengeWrapper, _scrollIndex, baseCount, tapCount, controlValueCount, _scroll, controlCount, _count, maxCount
+  -- function num : 0_8
+  Challenge_SetConsolePadGroup()
+  Challenge_Update()
+end
+
+Challenge_Update = function()
+  -- function num : 0_9 , upvalues : group_2, totalSlotCount, _selectedReward_ChallengeIndex, _selectedReward_SlotIndex, _tapMenu, _tapValue, clearCount, shortClearCount, dailyChallengeValue, remainRewardCountValue, UI_color, _content, _baseReward, _selectReward, challengeType, challengeWrapper, _scrollIndex, baseCount, tapCount, controlValueCount, _scroll, controlCount, _count, maxCount
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+  group_2 = Panel_Window_CharInfo_Status:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  totalSlotCount = 0
   _selectedReward_ChallengeIndex = nil
   _selectedReward_SlotIndex = nil
   ;
@@ -769,7 +780,7 @@ Fglobal_Challenge_UpdateData = function()
     ((_content[list_Idx]).contentComplete):SetShow(false)
   end
   local rewardPositionSet = function()
-    -- function num : 0_8_0 , upvalues : viewCount, _tapValue, challengeType, challengeWrapper, _scrollIndex, baseCount, _content, _baseReward, _selectReward
+    -- function num : 0_9_0 , upvalues : viewCount, _tapValue, challengeType, challengeWrapper, _scrollIndex, baseCount, _content, _baseReward, _selectReward
     for list_Idx = 0, viewCount - 1 do
       Challenge_clearRewardSlot(list_Idx)
       Challenge_clearSlot(list_Idx)
@@ -913,7 +924,6 @@ Fglobal_Challenge_UpdateData = function()
       (_tapMenu[i]):SetFontColor(UI_color.C_FF888888)
     end
   end
-  Challenge_SetConsolePadGroup()
   if _tapValue ~= 2 and _tapValue ~= 5 then
     if _tapValue == 0 then
       challengeType = 1
@@ -1114,23 +1124,35 @@ Fglobal_Challenge_UpdateData = function()
 end
 
 Challenge_SetConsolePadGroup = function()
-  -- function num : 0_9
+  -- function num : 0_10 , upvalues : _tapMenu
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
+  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
+  local group_1 = Panel_Window_CharInfo_Status:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_1:addControl(0, 0, 6, 1, _tapMenu[0])
+  group_1:addControl(1, 0, 6, 1, _tapMenu[1])
+  group_1:addControl(2, 0, 6, 1, _tapMenu[4])
+  group_1:addControl(3, 0, 6, 1, _tapMenu[3])
+  group_1:addControl(4, 0, 6, 1, _tapMenu[2])
+  group_1:addControl(5, 0, 6, 1, _tapMenu[5])
 end
 
 HandleClicked_Challenge_ProgressReward = function(index)
-  -- function num : 0_10
+  -- function num : 0_11
   local progressInfo = ToClient_GetProgressChallengeAt(index)
   ChallengeReward_Update(progressInfo, index, index)
 end
 
 HandleClicked_Challenge_CompleteReward = function(completeInfo, index)
-  -- function num : 0_11
+  -- function num : 0_12
   local completeInfo = ToClient_GetChallengeRewardInfoWrapper(index)
   ChallengeReward_Update(completeInfo, index, index)
 end
 
 HandleClicked_Reward_Show = function(challenge_Idx, selectIndex)
-  -- function num : 0_12 , upvalues : _selectedReward_SlotIndex, _selectedReward_ChallengeIndex, controlCount, _maxSelectSlotCount, _listSelectRewardSlots, _scrollIndex, _scroll
+  -- function num : 0_13 , upvalues : _selectedReward_SlotIndex, _selectedReward_ChallengeIndex, controlCount, _maxSelectSlotCount, _listSelectRewardSlots, _scrollIndex, _scroll
   local selectedRewardSlotIndex = _selectedReward_SlotIndex
   local challengeWrapper = ToClient_GetChallengeRewardInfoWrapper(challenge_Idx)
   local selectRewardCount = challengeWrapper:getSelectRewardCount()
@@ -1168,7 +1190,7 @@ HandleClicked_Reward_Show = function(challenge_Idx, selectIndex)
 end
 
 ChallengeReward_Update = function(challengeWrapper, challenge_Idx, uiIdx)
-  -- function num : 0_13
+  -- function num : 0_14
   if challengeWrapper == nil then
     return 
   end
@@ -1302,7 +1324,16 @@ ChallengeReward_Update = function(challengeWrapper, challenge_Idx, uiIdx)
 end
 
 SetChallengeRewardList = function(baseReward, selectReward, challenge_Idx, uiIdx)
-  -- function num : 0_14 , upvalues : _maxBaseSlotCount, _uiBackBaseReward, _listBaseRewardSlots, _maxSelectSlotCount, _listSelectRewardSlots, _uiButtonSelectRewardSlots, _tapMenu
+  -- function num : 0_15 , upvalues : _tapMenu, group_2, _content, totalSlotCount, _maxBaseSlotCount, _uiBackBaseReward, _listBaseRewardSlots, _maxSelectSlotCount, _listSelectRewardSlots, _uiButtonSelectRewardSlots
+  local columnCount = 0
+  if (_tapMenu[5]):IsCheck() then
+    columnCount = 1
+  end
+  columnCount = columnCount + #baseReward + #selectReward
+  if (_tapMenu[5]):IsCheck() then
+    group_2:addControl(0, 0, columnCount, 1, (_content[uiIdx]).btnGetReward)
+    totalSlotCount = totalSlotCount + 1
+  end
   _baseRewardCount = #baseReward
   for ii = 0, _maxBaseSlotCount - 1 do
     ((_uiBackBaseReward[uiIdx])[ii]):EraseAllEffect()
@@ -1310,6 +1341,8 @@ SetChallengeRewardList = function(baseReward, selectReward, challenge_Idx, uiIdx
       setChallengeRewardShow((_listBaseRewardSlots[uiIdx])[ii], baseReward[ii + 1], uiIdx, ii, "main")
       ;
       ((_uiBackBaseReward[uiIdx])[ii]):SetShow(true)
+      group_2:addControl(totalSlotCount, 0, columnCount, 1, ((_listBaseRewardSlots[uiIdx])[ii]).icon)
+      totalSlotCount = totalSlotCount + 1
     else
       ;
       ((_uiBackBaseReward[uiIdx])[ii]):SetShow(false)
@@ -1324,19 +1357,17 @@ SetChallengeRewardList = function(baseReward, selectReward, challenge_Idx, uiIdx
       if (_tapMenu[5]):IsCheck() then
         (((_listSelectRewardSlots[uiIdx])[ii]).icon):addInputEvent("Mouse_LUp", "_challengeSelectReward_Set( " .. challenge_Idx .. ", " .. uiIdx .. ", " .. ii .. " )")
       end
+      group_2:addControl(totalSlotCount, 1, columnCount, 1, ((_listSelectRewardSlots[uiIdx])[ii]).icon)
+      totalSlotCount = totalSlotCount + 1
     else
       ;
       ((_uiButtonSelectRewardSlots[uiIdx])[ii]):SetShow(false)
     end
   end
-  do
-    if (_tapMenu[5]):IsCheck() then
-    end
-  end
 end
 
 _challengeSelectReward_Set = function(challenge_Idx, uiIdx, slot_Idx)
-  -- function num : 0_15 , upvalues : _selectedReward_ChallengeIndex, _selectedReward_SlotIndex, controlCount, _maxSelectSlotCount, _listSelectRewardSlots
+  -- function num : 0_16 , upvalues : _selectedReward_ChallengeIndex, _selectedReward_SlotIndex, controlCount, _maxSelectSlotCount, _listSelectRewardSlots
   _selectedReward_ChallengeIndex = challenge_Idx
   _selectedReward_SlotIndex = slot_Idx
   for ui_idx = 0, controlCount - 1 do
@@ -1354,7 +1385,7 @@ _challengeSelectReward_Set = function(challenge_Idx, uiIdx, slot_Idx)
 end
 
 ChallengeRewardTooltip = function(type, show, questtype, index, uiIdx)
-  -- function num : 0_16 , upvalues : expTooltip, _uiBackBaseReward, _uiButtonSelectRewardSlots
+  -- function num : 0_17 , upvalues : expTooltip, _uiBackBaseReward, _uiButtonSelectRewardSlots
   if show == true then
     if type == "Exp" then
       expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_EXP"))
@@ -1386,7 +1417,7 @@ ChallengeRewardTooltip = function(type, show, questtype, index, uiIdx)
 end
 
 setChallengeRewardShow = function(uiSlot, reward, uiIdx, index, questType)
-  -- function num : 0_17 , upvalues : UI_RewardType
+  -- function num : 0_18 , upvalues : UI_RewardType
   uiSlot._type = reward._type
   if UI_RewardType.RewardType_Exp == reward._type then
     (uiSlot.count):SetText("")
@@ -1467,9 +1498,9 @@ setChallengeRewardShow = function(uiSlot, reward, uiIdx, index, questType)
 end
 
 Challenge_Scroll = function(isUp)
-  -- function num : 0_18 , upvalues : _scrollIndex, _scroll, controlCount, controlValueCount, _maxSelectSlotCount, _listSelectRewardSlots
+  -- function num : 0_19 , upvalues : _scrollIndex, _scroll, controlCount, controlValueCount, _maxSelectSlotCount, _listSelectRewardSlots
   _scrollIndex = (UIScroll.ScrollEvent)(_scroll, isUp, controlCount, controlValueCount, _scrollIndex, 1)
-  Fglobal_Challenge_UpdateData()
+  Challenge_Update()
   for ui_idx = 0, controlCount - 1 do
     for idx = 0, _maxSelectSlotCount - 1 do
       (((_listSelectRewardSlots[ui_idx])[idx]).selectedSatic):SetShow(false)
@@ -1482,7 +1513,7 @@ end
 contentBody:addInputEvent("Mouse_UpScroll", "Challenge_Scroll( true )")
 contentBody:addInputEvent("Mouse_DownScroll", "Challenge_Scroll( false )")
 Challenge_RewardTooltipShow = function(isShow, uiIdx, slotNo, rewardType)
-  -- function num : 0_19 , upvalues : _listBaseRewardSlots, _listSelectRewardSlots
+  -- function num : 0_20 , upvalues : _listBaseRewardSlots, _listSelectRewardSlots
   local passTooltipType, uiSlot = nil
   if rewardType == "main" then
     passTooltipType = "Dialog_ChallengeReward_Base"
@@ -1502,8 +1533,8 @@ Challenge_RewardTooltipShow = function(isShow, uiIdx, slotNo, rewardType)
 end
 
 FromClient_ChallengeReward_UpdateText = function()
-  -- function num : 0_20
-  Fglobal_Challenge_UpdateData()
+  -- function num : 0_21
+  Challenge_Update()
 end
 
 registerEvent("FromClient_ChallengeReward_UpdateText", "FromClient_ChallengeReward_UpdateText")

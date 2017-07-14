@@ -38,7 +38,7 @@ local _scroll_Interval_AddPos = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0}
 local ChatSubMenu = {_mainPanel = Panel_Chat_SubMenu, _uiBg = (UI.getChildControl)(Panel_Chat_SubMenu, "Static_SubMenu"), _uiButtonWhisper = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_Whisper"), _uiButtonAddFriend = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_AddFriend"), _uiButtonInviteParty = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteParty"), _uiButtonInviteLargeParty = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteLargeParty"), _uiButtonInviteGuild = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteGuild"), _uiButtonInviteCompetition = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_InviteCompetition"), _uiButtonBlock = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_Block"), _uiButtonReportGoldSeller = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_ReportGoldSeller"), _uiButtonBlockVote = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_BlockVote"), _uiButtonIntroduce = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_ShowIntroduce"), _uiButtonWinClose = (UI.getChildControl)(Panel_Chat_SubMenu, "Button_WinClose")}
 local partyPosY = (ChatSubMenu._uiButtonInviteParty):GetPosY()
 local guildPosY = (ChatSubMenu._uiButtonInviteGuild):GetPosY()
-local isLargePartyOpen = isGameServiceTypeDev()
+local isLargePartyOpen = ToClient_IsContentsGroupOpen("286")
 ChatSubMenu.initialize = function(self)
   -- function num : 0_0
   (self._uiBg):addInputEvent("Mouse_On", "HandleOn_ChattingSubMenu()")
@@ -2847,6 +2847,7 @@ ChattingPoolUpdate = function(poolCurrentUI, currentPanel, panelIndex, drawPanel
   panel_ScrollBtn:addInputEvent("Mouse_RPress", "HandleClicked_ScrollBtnPosY( " .. panelIndex .. " )")
   panel_ScrollBtn:addInputEvent("Mouse_Out", "Chatting_PanelTransparency(" .. panelIndex .. ", false )")
   if getEnableSimpleUI() then
+    local self = ChattingViewManager
     panel_Scroll:SetShow(self._cacheSimpleUI)
     panel_ScrollBtn:SetShow(self._cacheSimpleUI)
   end

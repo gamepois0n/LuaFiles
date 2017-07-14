@@ -982,7 +982,7 @@ local _keyBinder_UIMode_NpcDialog = function(deltaTime)
     do return  end
     if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       if Panel_Window_MasterpieceAuction:GetShow() then
-        FGlobal_MasterpieceAuction_Close()
+        PaGlobal_MasterpieceAuction:close()
         return 
       end
       if Panel_EnchantExtraction:GetShow() then

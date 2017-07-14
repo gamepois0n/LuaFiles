@@ -28,7 +28,7 @@ Button_GameOption:SetEnable(true)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
-local bgItem = {"base", "calpeon", "media", "valencia", "sea", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only", "kamasilvia"}
+local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only", "kamasilvia2"}
 local bgIndex = {}
 for k,v in pairs(bgItem) do
   bgIndex[v] = k
@@ -46,6 +46,8 @@ local bgManager = {
 [bgIndex.sea] = {isOpen = ToClient_IsContentsGroupOpen("83"), imageCount = 3, iconPath = "bgValenciaSea_"}
 , 
 [bgIndex.kamasilvia] = {isOpen = ToClient_IsContentsGroupOpen("5"), imageCount = 7, iconPath = "bgKamasilvia_"}
+, 
+[bgIndex.kamasilvia2] = {isOpen = ToClient_IsContentsGroupOpen("260"), imageCount = 2, iconPath = "bgKamasilvia2_"}
 , 
 [bgIndex.dragan] = {isOpen = ToClient_IsContentsGroupOpen("6"), imageCount = 0, iconPath = "bgDragan_"}
 , 
@@ -87,7 +89,7 @@ for _,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_Login:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC364: Confused about usage of register: R35 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC374: Confused about usage of register: R35 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex

@@ -19,6 +19,7 @@ SkillEvent_SkillWindow_ControlInitialize = function()
   end
   self:initTabControl_Combat()
   self:initTabControl_AwakeningWeapon()
+  self:initTabControl_Combination()
   ;
   (((self.slotConfig).template).effect):SetShow(false)
   ;
@@ -265,6 +266,7 @@ HandleMLUp_SkillWindow_UpdateData = function(tabIndex, isLearnMode, doForce)
     end
     ;
     (self.awakenDesc):SetShow(false)
+    PaGlobal_Skill:addConsoleUIControl(tabIndex)
   end
 end
 
@@ -411,6 +413,7 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     UIMain_SkillPointUpdateRemove()
     Panel_Window_Skill:SetShow(false, true)
     EnableSkillShowFunc()
+    PaGlobal_SkillCombination:close()
     Panel_Scroll:SetShow(false, false)
     if Panel_EnableSkill:IsShow() then
       EnableSkillShowFunc()
@@ -422,7 +425,7 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     end
     HelpMessageQuestion_Out()
     local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
-    -- DECOMPILER ERROR at PC53: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC56: Confused about usage of register: R2 in 'UnsetPending'
 
     PaGlobal_Skill.scrollPos = vScroll:GetControlPos()
     FGlobal_ResetUrl_Tooltip_SkillForLearning()
@@ -430,14 +433,14 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
   end
 end
 
-HandleMOver_SkillWindow_ToolTipHide = function(skillNo, SlotType)
+HandleMOver_SkillWindow_ToolTipHide = function(skillNo, SlotType, isFusion)
   -- function num : 0_10
-  -- DECOMPILER ERROR at PC12: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
 
   if PaGlobal_Skill.skillNoCache == skillNo and PaGlobal_Skill.slotTypeCache == SlotType then
     PaGlobal_Skill.tooltipcacheCount = PaGlobal_Skill.tooltipcacheCount - 1
   else
-    -- DECOMPILER ERROR at PC15: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC15: Confused about usage of register: R3 in 'UnsetPending'
 
     PaGlobal_Skill.tooltipcacheCount = 0
   end
@@ -451,7 +454,7 @@ HandleMOver_SkillWindow_ToolTipHide = function(skillNo, SlotType)
     local skillStaticWrapper = getSkillStaticStatus(skillNo, 1)
     local skillTypeStaticStatusWrapper = skillStaticWrapper:getSkillTypeStaticStatusWrapper()
     local skillLevelInfo = getSkillLevelInfo(skillNo)
-    if skillLevelInfo._learnable == false and skillLevelInfo._usable and skillTypeStaticStatusWrapper:isSkillCommandCheck() then
+    if skillLevelInfo._learnable == false and skillLevelInfo._usable and skillTypeStaticStatusWrapper:isSkillCommandCheck() and isFusion == false then
       local isBlockSkill = ToClient_isBlockSkillCommand(skillLevelInfo._skillKey)
       if not isBlockSkill then
         (((PaGlobal_Skill.skillNoSlot)[skillNo]).lockIcon):SetShow(false)
@@ -460,26 +463,27 @@ HandleMOver_SkillWindow_ToolTipHide = function(skillNo, SlotType)
   end
 end
 
-HandleMOver_SkillWindow_ToolTipShow = function(skillNo, isShowNextLevel, SlotType)
+HandleMOver_SkillWindow_ToolTipShow = function(skillNo, isShowNextLevel, SlotType, isFusion)
   -- function num : 0_11
-  -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R4 in 'UnsetPending'
 
   if PaGlobal_Skill.skillNoCache == skillNo and PaGlobal_Skill.slotTypeCache == SlotType then
     PaGlobal_Skill.tooltipcacheCount = PaGlobal_Skill.tooltipcacheCount + 1
   else
-    -- DECOMPILER ERROR at PC15: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC15: Confused about usage of register: R4 in 'UnsetPending'
 
     PaGlobal_Skill.skillNoCache = skillNo
-    -- DECOMPILER ERROR at PC17: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC17: Confused about usage of register: R4 in 'UnsetPending'
 
     PaGlobal_Skill.slotTypeCache = SlotType
-    -- DECOMPILER ERROR at PC19: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC19: Confused about usage of register: R4 in 'UnsetPending'
 
     PaGlobal_Skill.tooltipcacheCount = 1
   end
   Panel_SkillTooltip_Show(skillNo, false, SlotType)
-  ;
-  (((PaGlobal_Skill.skillNoSlot)[skillNo]).icon):EraseAllEffect()
+  if isFusion == false then
+    (((PaGlobal_Skill.skillNoSlot)[skillNo]).icon):EraseAllEffect()
+  end
   do
     if SlotType == "SkillBoxBottom" then
       local selectedSlot = (UI.getChildControl)(((PaGlobal_Skill.frames)[0]):GetFrameContent(), "StaticSkill_" .. skillNo)
@@ -487,6 +491,9 @@ HandleMOver_SkillWindow_ToolTipShow = function(skillNo, isShowNextLevel, SlotTyp
     end
     local skillLevelInfo = getSkillLevelInfo(skillNo)
     if skillLevelInfo == nil then
+      return 
+    end
+    if isFusion then
       return 
     end
     if skillLevelInfo._usable then
@@ -680,6 +687,10 @@ Skill_RegistMessageHandler = function()
   registerEvent("EventSkillWindowUpdate", "HandleMLUp_SkillWindow_UpdateData")
   registerEvent("EventSkillWindowShowForLearn", "HandleMLUp_SkillWindow_OpenForLearn")
   registerEvent("FromClient_SkillWindowClose", "HandleMLUp_SkillWindow_UpdateData")
+end
+
+HandleMLUp_CombiSkillWindow_LearnButtonClick = function()
+  -- function num : 0_22
 end
 
 Skill_RegistMessageHandler()

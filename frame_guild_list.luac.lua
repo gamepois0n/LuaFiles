@@ -1101,9 +1101,9 @@ HandleClickedGuildMenuButton = function(index)
   end
 end
 
-HandleToolTipCharacterName = function(index, uiIndex)
-  -- function num : 0_17
-  if index == nil then
+HandleToolTipCharacterName = function(isShow, index, uiIndex)
+  -- function num : 0_17 , upvalues : tempGuildList
+  if not isShow then
     TooltipSimple_Hide()
     return 
   end
@@ -1111,11 +1111,17 @@ HandleToolTipCharacterName = function(index, uiIndex)
   if myGuildListInfo == nil then
     return 
   end
-  local myGuildMemberInfo = myGuildListInfo:getMember(index)
+  local dataIndex = (tempGuildList[uiIndex + 1]).idx
+  local myGuildMemberInfo = myGuildListInfo:getMember(dataIndex)
+  local isOnline = myGuildMemberInfo:isOnline()
   local uiControl = ((GuildListInfoPage._list)[uiIndex])._charName
   local name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDLIST_FAMILYNAME", "name", myGuildMemberInfo:getName())
   local desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDLIST_CHARACTERNAME", "name", myGuildMemberInfo:getCharacterName())
-  TooltipSimple_Show(uiControl, name, desc)
+  if isOnline then
+    TooltipSimple_Show(uiControl, name, desc)
+  else
+    TooltipSimple_Hide()
+  end
 end
 
 HandleToolTipChannelName = function(isShow, index)
@@ -1267,7 +1273,7 @@ GuildListMouseScrollEvent = function(isUpScroll)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC566: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC567: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.TitleLineReset = function(self)
   -- function num : 0_31 , upvalues : staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, staticText_contributedTendency, text_contributedTendency
@@ -1280,7 +1286,7 @@ GuildListInfoPage.TitleLineReset = function(self)
   staticText_contributedTendency:SetText(text_contributedTendency)
 end
 
--- DECOMPILER ERROR at PC570: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC571: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.SetGuildList = function(self)
   -- function num : 0_32 , upvalues : tempGuildList
@@ -1530,7 +1536,7 @@ HandleClicked_GuildListSort = function(sortType)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC611: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC612: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.GuildListSortSet = function(self)
   -- function num : 0_41 , upvalues : staticText_Grade, _listSort, tempGuildList, guildListCompareGrade
@@ -1543,7 +1549,7 @@ GuildListInfoPage.GuildListSortSet = function(self)
   (table.sort)(tempGuildList, guildListCompareGrade)
 end
 
--- DECOMPILER ERROR at PC623: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC624: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.updateSort = function(self)
   -- function num : 0_42 , upvalues : _selectSortType, tempGuildList, guildListCompareGrade, guildListCompareLev, guildListCompareClass, guildListCompareName, guildListCompareAp, guildListCompareExpiration, guildListCompareWp
@@ -1576,7 +1582,7 @@ GuildListInfoPage.updateSort = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC636: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC637: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.UpdateData = function(self)
   -- function num : 0_43 , upvalues : contentSizeY, _constGuildListMaxCount, tempGuildUserNolist, tempGuildList, UI_Class, isVoiceOpen, UI_color, btn_GuildMasterMandate, frameSizeY, notice_title
@@ -1773,9 +1779,9 @@ GuildListInfoPage.UpdateData = function(self)
                             if isVoiceOpen and (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
                               (((self._list)[index])._charName):SetText(myGuildMemberInfo:getName())
                               ;
-                              (((self._list)[index])._charName):addInputEvent("Mouse_On", "HandleToolTipCharacterName(" .. dataIdx .. "," .. index .. ")")
+                              (((self._list)[index])._charName):addInputEvent("Mouse_On", "HandleToolTipCharacterName(true, " .. dataIdx .. "," .. index .. ")")
                               ;
-                              (((self._list)[index])._charName):addInputEvent("Mouse_Out", "HandleToolTipCharacterName()")
+                              (((self._list)[index])._charName):addInputEvent("Mouse_Out", "HandleToolTipCharacterName(false)")
                             end
                             if isVoiceOpen == true then
                               (((self._list)[index])._saying):SetIgnore(false)
@@ -1959,7 +1965,7 @@ GuildListInfoTooltip_Grade = function(isShow, index, gradeType)
   end
 end
 
--- DECOMPILER ERROR at PC642: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC643: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.UpdateVoiceDataByUserNo = function(self, userNo)
   -- function num : 0_45 , upvalues : tempGuildUserNolist
@@ -2078,7 +2084,7 @@ GuildListControl_ChangeTexture_Expiration = function(control, state)
   end
 end
 
--- DECOMPILER ERROR at PC654: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC655: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.Show = function(self)
   -- function num : 0_49 , upvalues : _selectSortType, listening_Volume
@@ -2097,7 +2103,7 @@ GuildListInfoPage.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC658: Confused about usage of register: R63 in 'UnsetPending'
+-- DECOMPILER ERROR at PC659: Confused about usage of register: R63 in 'UnsetPending'
 
 GuildListInfoPage.Hide = function(self)
   -- function num : 0_50 , upvalues : IM

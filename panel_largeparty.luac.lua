@@ -307,15 +307,15 @@ PaGlobal_LargeParty.ClickButtonAction = function(self, index)
     return 
   end
   local gapX = 0
-  if index > 10 then
-    gapX = ((self._ui)._staticPartyRightBG):GetPosX() + ((self._ui)._staticPartyRightBG):GetSizeX() + 10
+  if index >= 10 then
+    gapX = ((self._ui)._staticPartyRightBG):GetSizeX() + 10
   end
   ;
-  ((self._ui)._btn_Mandate):SetPosX(((self._ui)._staticPartyLeftBG):GetPosX() + ((self._ui)._staticPartyLeftBG):GetSizeX() + 10 + (gapX))
+  ((self._ui)._btn_Mandate):SetPosX((((self._uiPartyMemberList)[index])._actionBtn):GetPosX() + 30 + (gapX))
   ;
-  ((self._ui)._btn_Exile):SetPosX(((self._ui)._staticPartyLeftBG):GetPosX() + ((self._ui)._staticPartyLeftBG):GetSizeX() + 10 + (gapX) + 58)
+  ((self._ui)._btn_Exile):SetPosX((((self._uiPartyMemberList)[index])._actionBtn):GetPosX() + 88 + (gapX))
   ;
-  ((self._ui)._btn_Exit):SetPosX(((self._ui)._staticPartyLeftBG):GetPosX() + ((self._ui)._staticPartyLeftBG):GetSizeX() + 10 + (gapX))
+  ((self._ui)._btn_Exit):SetPosX((((self._uiPartyMemberList)[index])._actionBtn):GetPosX() + 30 + (gapX))
   ;
   ((self._ui)._btn_Mandate):SetPosY(index % 10 * 42)
   ;
@@ -343,7 +343,7 @@ PaGlobal_LargeParty.ClickButtonAction = function(self, index)
   Panel_LargeParty:SetChildIndex((self._ui)._btn_Mandate, 9999)
   Panel_LargeParty:SetChildIndex((self._ui)._btn_Exile, 9998)
   Panel_LargeParty:SetChildIndex((self._ui)._btn_Exit, 9997)
-  self._selectIndex = index
+  self._selectIndex = ((self._partyMemberData)[index])._index
 end
 
 -- DECOMPILER ERROR at PC89: Confused about usage of register: R1 in 'UnsetPending'
@@ -407,10 +407,15 @@ PaGlobal_LargeParty.ExitParty = function(self)
   PaGlobal_LargeParty:Update()
 end
 
--- DECOMPILER ERROR at PC98: Confused about usage of register: R1 in 'UnsetPending'
+LargeParty_Resize = function()
+  -- function num : 0_10
+  PaGlobal_LargeParty:Resize()
+end
+
+-- DECOMPILER ERROR at PC100: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_LargeParty.Resize = function(self)
-  -- function num : 0_10
+  -- function num : 0_11
   if RequestParty_getPartyMemberCount() == 0 then
     Panel_LargeParty:SetShow(false)
   end
@@ -434,11 +439,11 @@ PaGlobal_LargeParty.Resize = function(self)
 end
 
 LargeParty_registEventHandler = function()
-  -- function num : 0_11
+  -- function num : 0_12
   local self = PaGlobal_LargeParty
 end
 
-registerEvent("onScreenResize", "PaGlobal_LargeParty:Resize()")
+registerEvent("onScreenResize", "LargeParty_Resize()")
 PaGlobal_LargeParty:Initialize()
 LargeParty_registEventHandler()
 

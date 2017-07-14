@@ -634,7 +634,11 @@ AlchemyFigureHead:Init()
 AlchemyFigureHead:registEventHandler()
 AlchemyFigureHead:registMessageHandler()
 ConsoleGroupCreate_Panel_AlchemyFigureHead = function()
-  -- function num : 0_22
+  -- function num : 0_22 , upvalues : AlchemyFigureHead
+  local group_0 = Panel_AlchemyFigureHead:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_0:addControl(0, 0, 3, 1, (AlchemyFigureHead.Stuff_slot).icon)
+  group_0:addControl(1, 0, 3, 1, (AlchemyFigureHead.FigureHead_slot).icon)
+  group_0:addControl(2, 0, 3, 1, (AlchemyFigureHead.control).btn_Doit)
 end
 
 ConsoleGroupCreate_Panel_AlchemyFigureHead()

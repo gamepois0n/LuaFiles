@@ -3,13 +3,15 @@
 
 -- params : ...
 -- function num : 0
-local enMouseMoveValue = {UpdateMoveSize = 8}
-local stateTypeValue = {idle = 0, startQuestToNpc = 1, endQuestToNpc = 2, doingQuest = 3, autoNaviButton = 4, needToDialog = 5, stuckescpae = 6, needToMeetRelationNPC = 7}
-local QuestProgress = {clear = 0, progressing = 1, start = 2}
-local pressButton = {default = 0, mouseL = 1, keyboarR = 2, mouseMoving = 4, selectreward = 5, showMouse = 6, escape = 7, navigationT = 8}
-local PaGlobal_AutoQuestManager = {_doAutoQuest = false, _stateType = stateTypeValue.idle, _questProgress = QuestProgress.clear, _mouseAutoMove = false, _doDialog = false, _doAutoHunt = false, _autoMove = false, _currentQuestGroup = 0, _currentQuestId = 0, _delay = 0, _isjustmeetNPC = false, _isSummonBoss = false, _pressButton = pressButton.default, _pressDelay = 0}
+enMouseMoveValue = {UpdateMoveSize = 8}
+stateTypeValue = {idle = 0, startQuestToNpc = 1, endQuestToNpc = 2, doingQuest = 3, autoNaviButton = 4, needToDialog = 5, stuckescpae = 6, needToMeetRelationNPC = 7}
+QuestProgress = {clear = 0, progressing = 1, start = 2}
+pressButton = {default = 0, mouseL = 1, keyboarR = 2, mouseMoving = 4, selectreward = 5, showMouse = 6, escape = 7, navigationT = 8}
+PaGlobal_AutoQuestManager = {_doAutoQuest = false, _stateType = stateTypeValue.idle, _questProgress = QuestProgress.clear, _mouseAutoMove = false, _doDialog = false, _doAutoHunt = false, _autoMove = false, _currentQuestGroup = 0, _currentQuestId = 0, _delay = 0, _isjustmeetNPC = false, _isSummonBoss = false, _pressButton = pressButton.default, _pressDelay = 0}
+-- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.init = function(self)
-  -- function num : 0_0 , upvalues : stateTypeValue, QuestProgress, pressButton
+  -- function num : 0_0
   self._doAutoQuest = false
   self._stateType = stateTypeValue.idle
   self._questProgress = QuestProgress.clear
@@ -24,8 +26,10 @@ PaGlobal_AutoQuestManager.init = function(self)
   self._pressDelay = 0
 end
 
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.UpdatePerFrame = function(self, deltaTime)
-  -- function num : 0_1 , upvalues : pressButton
+  -- function num : 0_1
   if not self._doAutoQuest then
     return 
   end
@@ -48,8 +52,19 @@ PaGlobal_AutoQuestManager.UpdatePerFrame = function(self, deltaTime)
   self:usePotion()
 end
 
+local svvv = nil
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R1 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.updateAutoQuest = function(self, deltaTime)
-  -- function num : 0_2 , upvalues : QuestProgress, stateTypeValue
+  -- function num : 0_2 , upvalues : svvv
+  nnntest = 0
+  if nnntest == 0 then
+    nnntest = 1
+    svvv = TTTTTTT
+    svvv:Update()
+    svvv = DDDDDDD
+    svvv:Update()
+  end
   local questList = ToClient_GetQuestList()
   if questList:isMainQuestClearAll() == true then
     return 
@@ -76,7 +91,7 @@ PaGlobal_AutoQuestManager.updateAutoQuest = function(self, deltaTime)
     if self._questProgress ~= QuestProgress.clear then
       self._isSummonBoss = uiQuestInfo:isSummonBoss()
     end
-    -- DECOMPILER ERROR at PC61: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC78: Unhandled construct in 'MakeBoolean' P1
 
     if self._doAutoHunt and self._questProgress == QuestProgress.clear then
       self._doAutoHunt = false
@@ -88,15 +103,20 @@ PaGlobal_AutoQuestManager.updateAutoQuest = function(self, deltaTime)
       self:showmouseorT()
     end
     local speed = ToClient_getPhysicalSpeedforFIndway()
-    if speed < 35 and self._autoMove and ToClient_pushStuckPostion() then
+    if speed < 35 and self._autoMove then
       self._stateType = stateTypeValue.stuckescpae
-      ToClient_changeAutoMode(2)
+      if ToClient_pushStuckPostion() then
+        ToClient_changeAutoMode(2)
+        _PA_LOG("�\128규보", "do pushStuckPostion")
+      end
     end
   end
 end
 
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R1 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.talkingToNpc = function(self)
-  -- function num : 0_3 , upvalues : QuestProgress, stateTypeValue
+  -- function num : 0_3
   if self._questProgress == QuestProgress.clear then
     self._stateType = stateTypeValue.endQuestToNpc
   else
@@ -108,38 +128,13 @@ PaGlobal_AutoQuestManager.talkingToNpc = function(self)
   end
   self._doDialog = true
   self._mouseAutoMove = true
+  _PA_LOG("�\128규보", "PaGlobal_AutoQuestManager:talkingToNpc()")
 end
 
-PaGlobal_AutoQuestManager.moveEnd = function(self)
-  -- function num : 0_4 , upvalues : stateTypeValue, pressButton
-  if not self._doAutoQuest then
-    return 
-  end
-  if self._stateType == stateTypeValue.stuckescpae then
-    return 
-  end
-  if self._stateType == stateTypeValue.startQuestToNpc or self._stateType == stateTypeValue.endQuestToNpc then
-    self._pressButton = pressButton.keyboarR
-    self._stateType = stateTypeValue.needToDialog
-  else
-    if self._isjustmeetNPC and self._stateType == stateTypeValue.doingQuest then
-      self._isjustmeetNPC = false
-      self._pressButton = pressButton.keyboarR
-      self._stateType = stateTypeValue.needToDialog
-    else
-      if self._isSummonBoss then
-        InventoryWindow_Show()
-      else
-        ToClient_changeAutoMode(1)
-        self._doAutoHunt = true
-      end
-    end
-  end
-  self._autoMove = false
-end
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_AutoQuestManager.mouseProgress = function(self)
-  -- function num : 0_5 , upvalues : stateTypeValue, pressButton, QuestProgress
+  -- function num : 0_4
   if self._stateType == stateTypeValue.autoNaviButton then
     local questWidget = PaGlobal_MainQuest._uiAutoNaviBtn
     local posX = Panel_MainQuest:GetPosX() + questWidget:GetPosX() + questWidget:GetSizeX() / 2
@@ -234,8 +229,10 @@ PaGlobal_AutoQuestManager.mouseProgress = function(self)
   end
 end
 
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R1 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.dialogProgress = function(self)
-  -- function num : 0_6 , upvalues : pressButton
+  -- function num : 0_5
   if self._mouseAutoMove then
     return 
   end
@@ -252,13 +249,16 @@ PaGlobal_AutoQuestManager.dialogProgress = function(self)
     if not ToClient_isCheckRenderModeDialog() then
       self._doDialog = false
       self._mouseAutoMove = true
+      _PA_LOG("�\128규보", "PaGlobal_AutoQuestManager:dialogProgress()")
       self:showmouseorT()
     end
   end
 end
 
+-- DECOMPILER ERROR at PC72: Confused about usage of register: R1 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.stuckEscape = function(self)
-  -- function num : 0_7 , upvalues : pressButton, stateTypeValue, QuestProgress
+  -- function num : 0_6
   ToClient_changeAutoMode(0)
   self._autoMove = true
   self._pressButton = pressButton.default
@@ -294,18 +294,20 @@ end
 local VCK = CppEnums.VirtualKeyCode
 local UIT = CppEnums.UiInputType
 local GlobalKeyBinder_CheckCustomKeyPressed = function(uiInputType)
-  -- function num : 0_8 , upvalues : VCK
+  -- function num : 0_7 , upvalues : VCK
   do return keyCustom_IsDownOnce_Ui(uiInputType) and ((not GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_MENU) and not isPhotoMode())) end
   -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
 local GlobalKeyBinder_CheckKeyPressed = function(keyCode)
-  -- function num : 0_9
+  -- function num : 0_8
   return isKeyDown_Once(keyCode)
 end
 
+-- DECOMPILER ERROR at PC84: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.waitForPressButton = function(self)
-  -- function num : 0_10 , upvalues : pressButton, stateTypeValue, GlobalKeyBinder_CheckKeyPressed, VCK, PaGlobal_AutoQuestManager
+  -- function num : 0_9 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
   if self._pressButton == pressButton.default then
     return true
   end
@@ -393,8 +395,10 @@ PaGlobal_AutoQuestManager.waitForPressButton = function(self)
   return false
 end
 
+-- DECOMPILER ERROR at PC87: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.moveMouse = function(self, PosX, PosY)
-  -- function num : 0_11 , upvalues : enMouseMoveValue
+  -- function num : 0_10
   if PosX < 0 or PosY < 0 then
     return true
   end
@@ -425,15 +429,19 @@ PaGlobal_AutoQuestManager.moveMouse = function(self, PosX, PosY)
   return true
 end
 
+-- DECOMPILER ERROR at PC90: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.QuestAcceptorClear = function(self, isAccept, questNoRaw)
-  -- function num : 0_12
+  -- function num : 0_11
   if self._doAutoQuest then
     self:updateAutoQuest(0)
   end
 end
 
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.summonBoss = function(self)
-  -- function num : 0_13
+  -- function num : 0_12
   if self._doAutoQuest then
     ToClient_changeAutoMode(1)
     self._doAutoHunt = true
@@ -441,72 +449,38 @@ PaGlobal_AutoQuestManager.summonBoss = function(self)
   end
 end
 
+-- DECOMPILER ERROR at PC96: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.showmouseorT = function(self)
-  -- function num : 0_14 , upvalues : pressButton, stateTypeValue
+  -- function num : 0_13
   local navi = ToClient_currentNaviisMainQuest()
   if navi then
     self._pressButton = pressButton.navigationT
   else
     self._pressButton = pressButton.showMouse
     self._stateType = stateTypeValue.autoNaviButton
+    _PA_LOG("�\128규보", "showmouseorT  " .. (debug.traceback)())
   end
 end
 
-PaGlobal_AutoQuestManager.restartNavigation = function(self)
-  -- function num : 0_15 , upvalues : PaGlobal_AutoQuestManager, QuestProgress
-  if self._doAutoQuest then
-    PaGlobal_AutoQuestManager:init()
-    ToClient_changeAutoMode(0)
-    local questList = ToClient_GetQuestList()
-    if questList:isMainQuestClearAll() == true then
-      return 
-    end
-    local uiQuestInfo = questList:getMainQuestInfo()
-    local queststate = QuestConditionCheckType.eQuestConditionCheckType_Complete
-    if uiQuestInfo ~= nil then
-      local questNo = uiQuestInfo:getQuestNo()
-      self._currentQuestGroup = questNo._group
-      self._currentQuestId = questNo._quest
-      local isAccepted = 1
-      if not uiQuestInfo._isCleared and not uiQuestInfo._isProgressing then
-        isAccepted = 0
-      end
-      if uiQuestInfo:isSatisfied() == true then
-        queststate = QuestConditionCheckType.eQuestConditionCheckType_Complete
-      else
-        if isAccepted == 0 then
-          queststate = QuestConditionCheckType.eQuestConditionCheckType_NotAccept
-        else
-          queststate = QuestConditionCheckType.eQuestConditionCheckType_Progress
-        end
-      end
-      self._isjustmeetNPC = uiQuestInfo:isjustMeetNpc()
-      if self._questProgress ~= QuestProgress.clear then
-        self._isSummonBoss = uiQuestInfo:isSummonBoss()
-      end
-    end
-    do
-      -- DECOMPILER ERROR at PC62: Confused about usage of register: R4 in 'UnsetPending'
-
-      PaGlobal_AutoQuestManager._autoMove = true
-      HandleClicked_QuestWindow_FindWay(0, 0, queststate, false)
-      HandleClicked_QuestWindow_FindWay(self._currentQuestGroup, self._currentQuestId, queststate, true)
-    end
-  end
-end
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_AutoQuestManager.getQuestIdByQuestNoRaw = function(self, questNoRaw)
-  -- function num : 0_16
+  -- function num : 0_14
   return (math.floor)(questNoRaw / 65536)
 end
 
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.getQuestGroupNoByQuestNoRaw = function(self, questNoRaw)
-  -- function num : 0_17
+  -- function num : 0_15
   return questNoRaw % 65536
 end
 
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.stopreasonFullinventory = function(self)
-  -- function num : 0_18
+  -- function num : 0_16
   local cnt = (((getSelfPlayer()):get()):getInventory()):getFreeCount()
   if cnt == 0 then
     self._doAutoQuest = false
@@ -515,8 +489,10 @@ PaGlobal_AutoQuestManager.stopreasonFullinventory = function(self)
   end
 end
 
+-- DECOMPILER ERROR at PC108: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.usePotion = function(self)
-  -- function num : 0_19
+  -- function num : 0_17
   local selfPlayer = (getSelfPlayer()):get()
   local hp = selfPlayer:getHp()
   local maxhp = selfPlayer:getMaxHp()
@@ -571,82 +547,40 @@ PaGlobal_AutoQuestManager.usePotion = function(self)
   end
 end
 
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.stopAuotoByUserControl = function(self)
-  -- function num : 0_20 , upvalues : stateTypeValue
+  -- function num : 0_18
   if self._stateType ~= stateTypeValue.stuckescpae and self._doAutoQuest and self._autoMove then
     Proc_ShowMessage_Ack("유저 컨트�\164 때문�\144 오토 정지.")
     self:stopAuoto()
   end
 end
 
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R5 in 'UnsetPending'
+
 PaGlobal_AutoQuestManager.stopAuoto = function(self)
-  -- function num : 0_21
+  -- function num : 0_19
   self:init()
   ToClient_changeAutoMode(0)
 end
 
-FGlobal_AutoQuestManager_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_22 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:UpdatePerFrame(deltaTime)
-end
-
-FGlobal_AutoQuestManager_stopAuto = function()
-  -- function num : 0_23 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:stopAuoto()
-end
-
-FromClient_autoQuestMoveEnd = function()
-  -- function num : 0_24 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:moveEnd()
-end
-
-FromClient_QuestAcceptorClear = function(isAccept, questNoRaw)
-  -- function num : 0_25 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:QuestAcceptorClear(isAccept, questNoRaw)
-end
-
-FromClient_autoControlFindWayEnd = function()
-  -- function num : 0_26 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:stuckEscape()
-end
-
-FromClient_autoQuestSummonBoss = function()
-  -- function num : 0_27 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:summonBoss()
-end
-
-FromClient_autoQuestNaviAgain = function()
-  -- function num : 0_28 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:restartNavigation()
-end
-
-FromClient_autoQuestMoveEndUserControl = function()
-  -- function num : 0_29 , upvalues : PaGlobal_AutoQuestManager
-  PaGlobal_AutoQuestManager:stopAuotoByUserControl()
-end
-
-registerEvent("FromClient_autoQuestMoveEnd", "FromClient_autoQuestMoveEnd")
-registerEvent("EventQuestUpdateNotify", "FromClient_QuestAcceptorClear")
-registerEvent("FromClient_UpdateQuestList", "FromClient_QuestAcceptorClear")
-registerEvent("FromClient_autoControlFindWayEnd", "FromClient_autoControlFindWayEnd")
-registerEvent("FromClient_autoQuestSummonBoss", "FromClient_autoQuestSummonBoss")
-registerEvent("FromClient_autoQuestNaviAgain", "FromClient_autoQuestNaviAgain")
-registerEvent("FromClient_autoQuestMoveEndUserControl", "FromClient_autoQuestMoveEndUserControl")
-testAuto = function()
-  -- function num : 0_30 , upvalues : PaGlobal_AutoQuestManager
+autoQuest_StartAuto = function()
+  -- function num : 0_20
+  _PA_LOG("�\128규보", "autoQuest_StartAuto")
   PaGlobal_AutoQuestManager:init()
   ToClient_changeAutoMode(0)
-  -- DECOMPILER ERROR at PC7: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_AutoQuestManager._doAutoQuest = true
-  -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC13: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_AutoQuestManager._autoMove = false
   PaGlobal_AutoQuestManager:updateAutoQuest(0)
 end
 
-stopAuto = function()
-  -- function num : 0_31 , upvalues : PaGlobal_AutoQuestManager
+autoQuest_StopAuto = function()
+  -- function num : 0_21
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_AutoQuestManager._doAutoQuest = false
@@ -654,12 +588,12 @@ stopAuto = function()
 end
 
 testway = function()
-  -- function num : 0_32
+  -- function num : 0_22
   ToClient_changeAutoMode(2)
 end
 
 testres = function()
-  -- function num : 0_33
+  -- function num : 0_23
   ToClient_NaviReStart()
 end
 

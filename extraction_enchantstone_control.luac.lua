@@ -145,6 +145,7 @@ ExtractionEnchant_Success = function()
   local self = PaGlobal_ExtractionEnchantStone
   self._currentTime = 0
   self._doExtracting = true
+  Panel_Tooltip_Item_hideTooltip()
 end
 
 -- DECOMPILER ERROR at PC17: Confused about usage of register: R0 in 'UnsetPending'

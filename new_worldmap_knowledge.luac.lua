@@ -162,6 +162,8 @@ local __extraMentalInfo = {
 , 
 [1088] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 112, x2 = 363, y2 = 148}
 , 
+[1156] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 112, x2 = 363, y2 = 148}
+, 
 [593] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
 , 
 [628] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
@@ -197,6 +199,14 @@ local __extraMentalInfo = {
 [865] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
 , 
 [1051] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
+, 
+[1111] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
+, 
+[1146] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
+, 
+[1149] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
+, 
+[1165] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 75, x2 = 363, y2 = 111}
 , 
 [587] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 327, y1 = 1, x2 = 363, y2 = 37}
 , 

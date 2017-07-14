@@ -174,12 +174,15 @@ ButtonToggle_AI = function(key, isOn)
   local aUI = ui[key]
   local aUI2 = ui_2[key]
   local keyName = "on"
+  if aUI == nil or aUI2 == nil then
+    return 
+  end
   if isOn == true then
     keyName = "click"
     aUI2:SetFontColor(UI_color.C_FFFFCE22)
     aUI:SetShow(false)
     aUI2:SetShow(true)
-    -- DECOMPILER ERROR at PC23: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC28: Confused about usage of register: R5 in 'UnsetPending'
 
     if keyIsUpdate[key] ~= "click" then
       keyIsUpdate[key] = "click"
@@ -188,7 +191,7 @@ ButtonToggle_AI = function(key, isOn)
     end
   else
     aUI:SetShow(true)
-    -- DECOMPILER ERROR at PC39: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC44: Confused about usage of register: R5 in 'UnsetPending'
 
     if keyIsUpdate[key] ~= "on" then
       keyIsUpdate[key] = "on"
@@ -288,7 +291,7 @@ end
 
 local ButtonToggleAll = function(isOn)
   -- function num : 0_4 , upvalues : uvSet, ButtonToggle
-  if ToClient_getIsSetSelfAI() == false then
+  if ToClient_getAutoMode() ~= (CppEnums.Client_AutoControlStateType).BATTLE then
     for key,value in pairs(uvSet) do
       ButtonToggle(key, isOn)
     end

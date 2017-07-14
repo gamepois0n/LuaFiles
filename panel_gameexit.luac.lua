@@ -271,8 +271,12 @@ ButtonFacePhoto_ToolTip = function(isOn)
   TooltipSimple_Show(uiControl, name, desc, reversePosX)
 end
 
+local consoleGroup = {}
+for index = 1, 7 do
+  consoleGroup[index] = Panel_GameExit:addConsoleUIGroup(index, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+end
 refreshCharacterInfoData = function(startIdx)
-  -- function num : 0_5 , upvalues : photoIndex, isCharacterSlot, isExitPhoto, UI_Class, charLevelPool, charNamePool, charPositionPool, normalStackPool, charWpCountPool, UI_color, charWorking, charPcDeliveryRemainTime, charEnterWaiting, CharacterChangeButton, isCharacterSlotBG, _charSlotBG, const_64, _btn_ChangeChannel, _btn_CharTransport, _btn_NextCharPage, _btn_PreCharPage
+  -- function num : 0_5 , upvalues : photoIndex, isCharacterSlot, isExitPhoto, UI_Class, charLevelPool, charNamePool, charPositionPool, normalStackPool, charWpCountPool, UI_color, charWorking, charPcDeliveryRemainTime, charEnterWaiting, CharacterChangeButton, isCharacterSlotBG, _charSlotBG, const_64, _btn_ChangeChannel, _btn_CharTransport, _btn_NextCharPage, _btn_PreCharPage, consoleGroup, _addMessage
   local selfProxy = getSelfPlayer()
   local characterNo_64 = toInt64(0, 0)
   if startIdx == nil or startIdx <= 0 then
@@ -768,6 +772,51 @@ refreshCharacterInfoData = function(startIdx)
         _btn_PreCharPage:addInputEvent("Mouse_LUp", "")
         _btn_PreCharPage:SetShow(false)
       end
+      for index = 1, 7 do
+        Panel_GameExit:deleteConsoleUIGroup(index, false)
+      end
+      local groupIndex = 1
+      -- DECOMPILER ERROR at PC1294: Confused about usage of register: R11 in 'UnsetPending'
+
+      if startIdx > 0 then
+        consoleGroup[groupIndex] = Panel_GameExit:addConsoleUIGroup(groupIndex, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+        ;
+        (consoleGroup[groupIndex]):addControl(0, 0, 1, 1, _btn_PreCharPage)
+        groupIndex = groupIndex + 1
+      end
+      local index = 0
+      local characterNo_64 = (getSelfPlayer()):getCharacterNo_64()
+      for idx = startIdx, characterDatacount - 1 do
+        if index <= 3 then
+          local characterData = getCharacterDataByIndex(idx)
+          -- DECOMPILER ERROR at PC1327: Confused about usage of register: R18 in 'UnsetPending'
+
+          consoleGroup[groupIndex] = Panel_GameExit:addConsoleUIGroup(groupIndex, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+          if characterNo_64 == characterData._characterNo_s64 then
+            (consoleGroup[groupIndex]):addControl(0, 0, 2, 1, _btn_ChangeChannel)
+            ;
+            (consoleGroup[groupIndex]):addControl(1, 0, 2, 1, _btn_CharTransport)
+          else
+            ;
+            (consoleGroup[groupIndex]):addControl(0, 0, 1, 1, isCharacterSlot[index])
+          end
+          index = index + 1
+          groupIndex = groupIndex + 1
+        end
+      end
+      -- DECOMPILER ERROR at PC1375: Confused about usage of register: R13 in 'UnsetPending'
+
+      if startIdx + 4 <= characterDatacount - 1 then
+        consoleGroup[groupIndex] = Panel_GameExit:addConsoleUIGroup(groupIndex, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+        ;
+        (consoleGroup[groupIndex]):addControl(0, 0, 1, 1, _btn_NextCharPage)
+        groupIndex = groupIndex + 1
+      end
+      -- DECOMPILER ERROR at PC1394: Confused about usage of register: R13 in 'UnsetPending'
+
+      consoleGroup[groupIndex] = Panel_GameExit:addConsoleUIGroup(groupIndex, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+      ;
+      (consoleGroup[groupIndex]):addControl(0, 0, 1, 1, _addMessage)
     end
   end
 end
@@ -881,7 +930,7 @@ end
 
 local prevClickIndex = 0
 Panel_GameExit_ClickCharSlot = function(idx)
-  -- function num : 0_11 , upvalues : prevClickIndex, isCharacterSelect, CharacterChangeButton, isCharacterSlot
+  -- function num : 0_11 , upvalues : prevClickIndex, isCharacterSelect, CharacterChangeButton, isCharacterSlot, photoIndex, consoleGroup
   if prevClickIndex ~= idx then
     (isCharacterSelect[prevClickIndex]):SetShow(false)
     ;
@@ -890,16 +939,32 @@ Panel_GameExit_ClickCharSlot = function(idx)
     (isCharacterSlot[prevClickIndex]):ResetVertexAni()
     ;
     (isCharacterSlot[prevClickIndex]):SetAlpha(1)
+    local groupIndex = 1 + prevClickIndex
+    if photoIndex > 0 then
+      groupIndex = groupIndex + 1
+    end
+    Panel_GameExit:deleteConsoleUIGroup(groupIndex, false)
+    ;
+    (consoleGroup[groupIndex]):addControl(0, 0, 1, 1, isCharacterSlot[prevClickIndex])
   end
-  ;
-  (isCharacterSelect[idx]):SetShow(true)
-  ;
-  (CharacterChangeButton[idx]):SetShow(true)
-  ;
-  (isCharacterSlot[idx]):ResetVertexAni()
-  ;
-  (isCharacterSlot[idx]):SetVertexAniRun("Ani_Color_New", true)
-  prevClickIndex = idx
+  do
+    ;
+    (isCharacterSelect[idx]):SetShow(true)
+    ;
+    (CharacterChangeButton[idx]):SetShow(true)
+    ;
+    (isCharacterSlot[idx]):ResetVertexAni()
+    ;
+    (isCharacterSlot[idx]):SetVertexAniRun("Ani_Color_New", true)
+    local groupIndex = 1 + idx
+    if photoIndex > 0 then
+      groupIndex = groupIndex + 1
+    end
+    Panel_GameExit:deleteConsoleUIGroup(groupIndex, false)
+    ;
+    (consoleGroup[groupIndex]):addControl(0, 0, 1, 1, CharacterChangeButton[idx])
+    prevClickIndex = idx
+  end
 end
 
 Panel_GameExit_ClickSelectCharacter = function()
@@ -1472,11 +1537,20 @@ registEventHandler()
 registMessageHandler()
 ToClient_RequestCharacterEnchantFailCount()
 ConsoleGroupCreate_Panel_GameExit = function()
-  -- function num : 0_34
+  -- function num : 0_34 , upvalues : _btn_selectCharacter, _btn_gameExit, _btn_cancel, _btn_FacePhoto
+  local group_0 = Panel_GameExit:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_0:addControl(0, 0, 4, 1, _btn_selectCharacter)
+  group_0:addControl(1, 0, 4, 1, _btn_gameExit)
+  group_0:addControl(2, 0, 4, 1, _btn_cancel)
+  group_0:addControl(3, 0, 4, 1, _btn_FacePhoto)
 end
 
 ConsoleGroupCreate_Panel_ExitConfirm = function()
-  -- function num : 0_35
+  -- function num : 0_35 , upvalues : _exitConfirm_Btn_Confirm, _exitConfirm_Btn_Cancle, _exitConfirm_Chk_Tray
+  local group_ExitConfirm = Panel_GameExit:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_ExitConfirm:addControl(0, 0, 3, 1, _exitConfirm_Btn_Confirm)
+  group_ExitConfirm:addControl(1, 0, 3, 1, _exitConfirm_Btn_Cancle)
+  group_ExitConfirm:addControl(2, 0, 3, 1, _exitConfirm_Chk_Tray)
 end
 
 ConsoleGroupCreate_Panel_GameExit()

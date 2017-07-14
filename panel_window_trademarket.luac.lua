@@ -366,7 +366,7 @@ npcTradeShop.registUiControl = function(self)
     end
   end
   ;
-  (npcTradeShop.buyListFrame):SetSize(getScreenSizeX() * 0.8, (npcTradeShop.buyListFrame):GetSizeY())
+  (npcTradeShop.buyListFrame):SetSize(getScreenSizeX() - 20, (npcTradeShop.buyListFrame):GetSizeY())
   ;
   (npcTradeShop.buyListFrameContent):SetSize((npcTradeShop.buyListFrame):GetSizeX(), (npcTradeShop.buyListFrame):GetSizeY())
   eventResetTradeUI()

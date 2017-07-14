@@ -59,6 +59,10 @@ InterestKnowledge_SetText = function(theme, npcActorProxyWrapper)
   local _needCount = npcActorProxyWrapper:getNeedCount()
   local _currCount = getKnowledgeCountMatchTheme(npcActorProxyWrapper:getNpcThemeKey())
   local _currentKnowledge = ""
+  Panel_Interest_Knowledge:deleteConsoleUIGroup(0)
+  local group_0 = Panel_Interest_Knowledge:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_0:setConsoleKeyEventForLUA("InterestKnowledge_UpScroll", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_UP)
+  group_0:setConsoleKeyEventForLUA("InterestKnowledge_DownScroll", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_DOWN)
   for index = 0, _knowledgeMaxCount - 1 do
     local _childCard = theme:getChildCardByIndex(index + scrollIndex)
     if _childCard == nil then
@@ -70,6 +74,7 @@ InterestKnowledge_SetText = function(theme, npcActorProxyWrapper)
       (uiText[index]):SetPosY(_listPosY + _needKnowledgeTextGap * index)
       ;
       (uiText[index]):SetShow(true)
+      group_0:addControl(0, index, 1, _knowledgeMaxCount, uiText[index])
     end
   end
   needKnowledgeText:SetText(_needKnowledge .. " ( " .. _currCount .. "/" .. theme:getChildCardCount() .. " ) ")
@@ -110,32 +115,42 @@ uiText_RePosY = function(count, isReposition)
   end
 end
 
+InterestKnowledge_UpScroll = function()
+  -- function num : 0_5
+  InterestKnowledge_Scroll(true)
+end
+
+InterestKnowledge_DownScroll = function()
+  -- function num : 0_6
+  InterestKnowledge_Scroll(false)
+end
+
 InterestKnowledge_Scroll = function(isUp)
-  -- function num : 0_5 , upvalues : scrollIndex, _scroll, _knowledgeMaxCount, Panel_Interest_Knowledge_Value_elementCount
+  -- function num : 0_7 , upvalues : scrollIndex, _scroll, _knowledgeMaxCount, Panel_Interest_Knowledge_Value_elementCount
   scrollIndex = (UIScroll.ScrollEvent)(_scroll, isUp, _knowledgeMaxCount, Panel_Interest_Knowledge_Value_elementCount, scrollIndex, 1)
   Dialog_InterestKnowledgeUpdate()
 end
 
 Panel_Interest_Knowledge_Show = function()
-  -- function num : 0_6
+  -- function num : 0_8
   Panel_Interest_Knowledge:SetShow(true, true)
 end
 
 Panel_Interest_Knowledge_Hide = function()
-  -- function num : 0_7 , upvalues : scrollIndex, _scrollCtrlBtn
+  -- function num : 0_9 , upvalues : scrollIndex, _scrollCtrlBtn
   Panel_Interest_Knowledge:SetShow(false, false)
   scrollIndex = 0
   _scrollCtrlBtn:SetPosY(0)
 end
 
 InterestKnowledge_onScreenResize = function()
-  -- function num : 0_8
+  -- function num : 0_10
   local scrY = getScreenSizeY()
   Panel_Interest_Knowledge:SetPosY(scrY - (Panel_Npc_Dialog:GetSizeY() + Panel_Interest_Knowledge:GetSizeY() + 50))
 end
 
 InterestKnowledge_Init = function()
-  -- function num : 0_9 , upvalues : _knowledgeMaxCount, uiText, UI_PUCT, _knowledgeList, _scroll, uiBackGround
+  -- function num : 0_11 , upvalues : _knowledgeMaxCount, uiText, UI_PUCT, _knowledgeList, _scroll, uiBackGround
   for index = 0, _knowledgeMaxCount - 1 do
     -- DECOMPILER ERROR at PC15: Confused about usage of register: R4 in 'UnsetPending'
 

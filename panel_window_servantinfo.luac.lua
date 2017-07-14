@@ -632,7 +632,7 @@ ServantInfo_BeforOpenByActorKeyRaw = function(actorKeyRaw)
     self._functionGet = ServantInfo_GetActorKey
     ServantInfo_OpenByActorKeyRaw(actorKeyRaw)
   else
-    if UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_Train == vehicleType then
+    if UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_Train == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType then
       self._functionGet = CarriageInfo_GetActorKey
       CarriageInfo_OpenByActorKeyRaw(actorKeyRaw)
     else

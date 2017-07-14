@@ -12,7 +12,7 @@ local UIMode = Defines.UIMode
 local IM = CppEnums.EProcessorInputMode
 Panel_House_InstallationMode:SetShow(false)
 local renderMode = (RenderModeWrapper.new)(99, {(Defines.RenderMode).eRenderMode_HouseInstallation}, false)
-local HouseInstallation = {panelTitle = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Title"), installedObjectCount = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InstalledObject"), bg_Menu = (UI.getChildControl)(Panel_House_InstallationMode, "Static_MenuBG"), bg_Menu_Top = (UI.getChildControl)(Panel_House_InstallationMode, "Static_MenuTopBG"), radio_AttAll = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeAll"), radio_AttFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeFloor"), radio_AttWall = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeWall"), radio_AttAllHarvest = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeAllHarvest"), radio_AttHarvest = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeHarvest"), radio_AttOthers = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeOthers"), radio_AttTabel = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeTabel"), edit_ItemName = (UI.getChildControl)(Panel_House_InstallationMode, "Edit_ItemName"), btn_Search = (UI.getChildControl)(Panel_House_InstallationMode, "Button_Search"), bg_Menu_Bottom = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Menu_BottomBG"), btn_Exit = (UI.getChildControl)(Panel_House_InstallationMode, "Button_Exit"), btn_RotateLeft = (UI.getChildControl)(Panel_House_InstallationMode, "Button_CameraRotation_Left"), btn_RotateRight = (UI.getChildControl)(Panel_House_InstallationMode, "Button_CameraRotation_Right"), btn_RotateAngle = (UI.getChildControl)(Panel_House_InstallationMode, "CheckButton_ObjectRotateAngle45"), btn_ResetArrangement = (UI.getChildControl)(Panel_House_InstallationMode, "Button_ResetFurniture"), btn_ExitInstallMode = (UI.getChildControl)(Panel_House_InstallationMode, "Button_ExitInstallMode"), bg_List = (UI.getChildControl)(Panel_House_InstallationMode, "Static_ListBG"), scroll = (UI.getChildControl)(Panel_House_InstallationMode, "Scroll_List"), _staticBackFloor = (UI.getChildControl)(Panel_House_InstallationMode, "Static_BackFloor"), _staticTextFloor = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_Floor"), _radioBtnFirstFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_FirstFloor"), _radioBtnSecondFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_SecondFloor"), _radioBtnThirdFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_ThirdFloor"), _staticInteriorSensePoint = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorSensePoint"), InteriorPointBG = (UI.getChildControl)(Panel_House_InstallationMode, "Static_InteriorPointBG"), InteriorPointBaseText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBase"), InteriorPointOptionText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointOption"), InteriorPointBonusText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBonus"), InteriorPointTotalText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointTotal"), InteriorPointBaseValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBaseValue"), InteriorPointOptionValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointOptionValue"), InteriorPointBonusValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBonusValue"), InteriorPointTotalValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointTotalValue"), maxSlotCount = 36, 
+local HouseInstallation = {panelTitle = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Title"), installedObjectCount = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InstalledObject"), bg_Menu = (UI.getChildControl)(Panel_House_InstallationMode, "Static_MenuBG"), bg_Menu_Top = (UI.getChildControl)(Panel_House_InstallationMode, "Static_MenuTopBG"), radio_AttAll = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeAll"), radio_AttFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeFloor"), radio_AttWall = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeWall"), radio_AttAllHarvest = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeAllHarvest"), radio_AttHarvest = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeHarvest"), radio_AttOthers = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeOthers"), radio_AttTabel = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_AttributeTabel"), edit_ItemName = (UI.getChildControl)(Panel_House_InstallationMode, "Edit_ItemName"), btn_Search = (UI.getChildControl)(Panel_House_InstallationMode, "Button_Search"), bg_Menu_Bottom = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Menu_BottomBG"), btn_Exit = (UI.getChildControl)(Panel_House_InstallationMode, "Button_Exit"), btn_RotateLeft = (UI.getChildControl)(Panel_House_InstallationMode, "Button_CameraRotation_Left"), btn_RotateRight = (UI.getChildControl)(Panel_House_InstallationMode, "Button_CameraRotation_Right"), btn_RotateAngle = (UI.getChildControl)(Panel_House_InstallationMode, "CheckButton_ObjectRotateAngle45"), btn_ResetArrangement = (UI.getChildControl)(Panel_House_InstallationMode, "Button_ResetFurniture"), btn_ExitInstallMode = (UI.getChildControl)(Panel_House_InstallationMode, "Button_ExitInstallMode"), bg_List = (UI.getChildControl)(Panel_House_InstallationMode, "Static_ListBG"), scroll = (UI.getChildControl)(Panel_House_InstallationMode, "Scroll_List"), _staticBackFloor = (UI.getChildControl)(Panel_House_InstallationMode, "Static_BackFloor"), _staticTextFloor = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_Floor"), _radioBtnFirstFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_FirstFloor"), _radioBtnSecondFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_SecondFloor"), _radioBtnThirdFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_ThirdFloor"), _radioBtnFourFloor = (UI.getChildControl)(Panel_House_InstallationMode, "RadioButton_FourFloor"), _staticInteriorSensePoint = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorSensePoint"), InteriorPointBG = (UI.getChildControl)(Panel_House_InstallationMode, "Static_InteriorPointBG"), InteriorPointBaseText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBase"), InteriorPointOptionText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointOption"), InteriorPointBonusText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBonus"), InteriorPointTotalText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointTotal"), InteriorPointBaseValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBaseValue"), InteriorPointOptionValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointOptionValue"), InteriorPointBonusValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointBonusValue"), InteriorPointTotalValueText = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorPointTotalValue"), maxSlotCount = 36, 
 slotUIPool = {}
 , maxInterval = 0, nowInterval = 0, filter_ItemType = -1, filter_SearchKeyword = "", dataCount = 0, 
 SlotConfig = {createIcon = true, createBorder = true, createCount = true, createCash = true, createCash = true}
@@ -44,6 +44,7 @@ HouseInstallation.Initialize = function(self)
     Panel_House_InstallationMode:RemoveControl(self._radioBtnFirstFloor)
     Panel_House_InstallationMode:RemoveControl(self._radioBtnSecondFloor)
     Panel_House_InstallationMode:RemoveControl(self._radioBtnThirdFloor)
+    Panel_House_InstallationMode:RemoveControl(self._radioBtnFourFloor)
     ;
     (self._staticBackFloor):AddChild(self._staticTextFloor)
     ;
@@ -52,6 +53,8 @@ HouseInstallation.Initialize = function(self)
     (self._staticBackFloor):AddChild(self._radioBtnSecondFloor)
     ;
     (self._staticBackFloor):AddChild(self._radioBtnThirdFloor)
+    ;
+    (self._staticBackFloor):AddChild(self._radioBtnFourFloor)
     Panel_House_InstallationMode:RemoveControl(self.radio_AttAll)
     Panel_House_InstallationMode:RemoveControl(self.radio_AttFloor)
     Panel_House_InstallationMode:RemoveControl(self.radio_AttWall)
@@ -757,6 +760,8 @@ HouseInstallation.ShowFloorStatic = function(self, isShow)
     (self._radioBtnSecondFloor):SetShow(true)
     ;
     (self._radioBtnThirdFloor):SetShow(false)
+    ;
+    (self._radioBtnFourFloor):SetShow(false)
     sizeY = 125
   else
     if numFloor <= 3 then
@@ -765,7 +770,20 @@ HouseInstallation.ShowFloorStatic = function(self, isShow)
       (self._radioBtnSecondFloor):SetShow(true)
       ;
       (self._radioBtnThirdFloor):SetShow(true)
+      ;
+      (self._radioBtnFourFloor):SetShow(false)
       sizeY = 160
+    else
+      if numFloor <= 4 then
+        (self._radioBtnFirstFloor):SetShow(true)
+        ;
+        (self._radioBtnSecondFloor):SetShow(true)
+        ;
+        (self._radioBtnThirdFloor):SetShow(true)
+        ;
+        (self._radioBtnFourFloor):SetShow(true)
+        sizeY = 195
+      end
     end
   end
   ;
@@ -778,6 +796,8 @@ HouseInstallation.ShowFloorStatic = function(self, isShow)
   (self._radioBtnSecondFloor):ComputePos()
   ;
   (self._radioBtnThirdFloor):ComputePos()
+  ;
+  (self._radioBtnFourFloor):ComputePos()
   local curFloor = housing_getHouseFloorSelfPlayerBeing()
   if curFloor == 0 then
     (self._radioBtnFirstFloor):SetCheck(true)
@@ -785,6 +805,8 @@ HouseInstallation.ShowFloorStatic = function(self, isShow)
     (self._radioBtnSecondFloor):SetCheck(false)
     ;
     (self._radioBtnThirdFloor):SetCheck(false)
+    ;
+    (self._radioBtnFourFloor):SetCheck(false)
   else
     if curFloor == 1 then
       (self._radioBtnFirstFloor):SetCheck(false)
@@ -792,6 +814,8 @@ HouseInstallation.ShowFloorStatic = function(self, isShow)
       (self._radioBtnSecondFloor):SetCheck(true)
       ;
       (self._radioBtnThirdFloor):SetCheck(false)
+      ;
+      (self._radioBtnFourFloor):SetCheck(false)
     else
       if curFloor == 2 then
         (self._radioBtnFirstFloor):SetCheck(false)
@@ -799,6 +823,18 @@ HouseInstallation.ShowFloorStatic = function(self, isShow)
         (self._radioBtnSecondFloor):SetCheck(false)
         ;
         (self._radioBtnThirdFloor):SetCheck(true)
+        ;
+        (self._radioBtnFourFloor):SetCheck(false)
+      else
+        if curFloor == 3 then
+          (self._radioBtnFirstFloor):SetCheck(false)
+          ;
+          (self._radioBtnSecondFloor):SetCheck(false)
+          ;
+          (self._radioBtnThirdFloor):SetCheck(false)
+          ;
+          (self._radioBtnFourFloor):SetCheck(true)
+        end
       end
     end
   end
@@ -1218,6 +1254,8 @@ HandleClicked_HouseInstallation_FirstFloor_MouseLUp = function()
   (HouseInstallation._radioBtnSecondFloor):SetCheck(false)
   ;
   (HouseInstallation._radioBtnThirdFloor):SetCheck(false)
+  ;
+  (HouseInstallation._radioBtnFourFloor):SetCheck(false)
 end
 
 HandleClicked_HouseInstallation_SecondFloor_MouseLUp = function()
@@ -1229,6 +1267,8 @@ HandleClicked_HouseInstallation_SecondFloor_MouseLUp = function()
   (HouseInstallation._radioBtnSecondFloor):SetCheck(true)
   ;
   (HouseInstallation._radioBtnThirdFloor):SetCheck(false)
+  ;
+  (HouseInstallation._radioBtnFourFloor):SetCheck(false)
 end
 
 HandleClicked_HouseInstallation_ThirdFloor_MouseLUp = function()
@@ -1240,10 +1280,25 @@ HandleClicked_HouseInstallation_ThirdFloor_MouseLUp = function()
   (HouseInstallation._radioBtnSecondFloor):SetCheck(false)
   ;
   (HouseInstallation._radioBtnThirdFloor):SetCheck(true)
+  ;
+  (HouseInstallation._radioBtnFourFloor):SetCheck(false)
+end
+
+HandleClicked_HouseInstallation_FourFloor_MouseLUp = function()
+  -- function num : 0_36 , upvalues : HouseInstallation
+  housing_selectHouseFloor(3)
+  ;
+  (HouseInstallation._radioBtnFirstFloor):SetCheck(false)
+  ;
+  (HouseInstallation._radioBtnSecondFloor):SetCheck(false)
+  ;
+  (HouseInstallation._radioBtnThirdFloor):SetCheck(false)
+  ;
+  (HouseInstallation._radioBtnFourFloor):SetCheck(true)
 end
 
 FromClient_ShowInstallationMenu = function(installMode, isShow, isShowMove, isShowFix, isShowDelete, isShowCancel)
-  -- function num : 0_36
+  -- function num : 0_37
   local posX = housing_getInstallationMenuPosX()
   local posY = housing_getInstallationMenuPosY()
   if isShow == true then
@@ -1255,17 +1310,17 @@ FromClient_ShowInstallationMenu = function(installMode, isShow, isShowMove, isSh
 end
 
 FromClient_CancelInstallObject = function()
-  -- function num : 0_37
-  FGlobal_HouseInstallationControl_Close()
-end
-
-FromClient_CancelInstallMode = function()
   -- function num : 0_38
   FGlobal_HouseInstallationControl_Close()
 end
 
+FromClient_CancelInstallMode = function()
+  -- function num : 0_39
+  FGlobal_HouseInstallationControl_Close()
+end
+
 FromClient_UpdateInventory = function()
-  -- function num : 0_39 , upvalues : HouseInstallation
+  -- function num : 0_40 , upvalues : HouseInstallation
   HouseInstallation:SetData()
   HouseInstallation:SetScroll()
   ;
@@ -1275,19 +1330,19 @@ FromClient_UpdateInventory = function()
 end
 
 FromClient_UpdateInstallationActor = function(isAdd)
-  -- function num : 0_40 , upvalues : HouseInstallation
+  -- function num : 0_41 , upvalues : HouseInstallation
   HouseInstallation:SetData()
   HouseInstallation:SetScroll()
   HouseInstallation:Update(HouseInstallation.nowInterval)
 end
 
 FromClient_ShowHousingModeUI = function(isShow)
-  -- function num : 0_41 , upvalues : HouseInstallation
+  -- function num : 0_42 , upvalues : HouseInstallation
   HouseInstallation:Open(isShow)
 end
 
 FromClient_CancelInstallModeMessageBox = function()
-  -- function num : 0_42 , upvalues : IM
+  -- function num : 0_43 , upvalues : IM
   audioPostEvent_SystemUi(1, 33)
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_MEMO")
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_TITLE"), content = messageBoxMemo, functionYes = HandleClicked_HouseInstallation_Exit_DO, functionCancel = _houseInstallation_Default_Cancel_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -1300,14 +1355,14 @@ FromClient_CancelInstallModeMessageBox = function()
 end
 
 FGlobal_House_InstallationMode_Update = function()
-  -- function num : 0_43 , upvalues : HouseInstallation
+  -- function num : 0_44 , upvalues : HouseInstallation
   HouseInstallation:SetData()
   HouseInstallation:SetScroll()
   HouseInstallation:Update(HouseInstallation.nowInterval)
 end
 
 FGlobal_House_InstallationMode_Open = function()
-  -- function num : 0_44 , upvalues : HouseInstallation, IM
+  -- function num : 0_45 , upvalues : HouseInstallation, IM
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   HouseInstallation.filter_ItemType = -1
@@ -1339,7 +1394,7 @@ FGlobal_House_InstallationMode_Open = function()
 end
 
 EventHousingPointUpdate = function()
-  -- function num : 0_45 , upvalues : HouseInstallation
+  -- function num : 0_46 , upvalues : HouseInstallation
   local self = HouseInstallation
   local iptBaseValue = toClient_GetVisitingBaseInteriorPoint()
   local iptOptionValue = toClient_GetVisitingSetOptionInteriorPoint()
@@ -1409,7 +1464,7 @@ EventHousingPointUpdate = function()
 end
 
 EventHousingPointUpdateClear = function()
-  -- function num : 0_46 , upvalues : HouseInstallation
+  -- function num : 0_47 , upvalues : HouseInstallation
   (HouseInstallation.InteriorPointBaseValueText):SetShow(false)
   ;
   (HouseInstallation.InteriorPointOptionValueText):SetShow(false)
@@ -1430,12 +1485,12 @@ EventHousingPointUpdateClear = function()
 end
 
 FGlobal_House_InstallationMode_Close = function()
-  -- function num : 0_47 , upvalues : HouseInstallation
+  -- function num : 0_48 , upvalues : HouseInstallation
   HouseInstallation:Close()
 end
 
 House_InstallationMode_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_48 , upvalues : HouseInstallation
+  -- function num : 0_49 , upvalues : HouseInstallation
   local self = HouseInstallation
   if self.isInstallMode == false or self.houseInstallationMode == false then
     return 
@@ -1469,7 +1524,7 @@ end
 
 Panel_House_InstallationMode:RegisterUpdateFunc("House_InstallationMode_UpdatePerFrame")
 HouseInstallation.registEventHandler = function(self)
-  -- function num : 0_49 , upvalues : buttonEum
+  -- function num : 0_50 , upvalues : buttonEum
   (self.bg_List):addInputEvent("Mouse_DownScroll", "_houseInstallation_UpdateScroll( true )")
   ;
   (self.bg_List):addInputEvent("Mouse_UpScroll", "_houseInstallation_UpdateScroll( false )")
@@ -1546,6 +1601,8 @@ HouseInstallation.registEventHandler = function(self)
   ;
   (self._radioBtnThirdFloor):addInputEvent("Mouse_LUp", "HandleClicked_HouseInstallation_ThirdFloor_MouseLUp()")
   ;
+  (self._radioBtnFourFloor):addInputEvent("Mouse_LUp", "HandleClicked_HouseInstallation_FourFloor_MouseLUp()")
+  ;
   (self.scrollCTRLBTN):addInputEvent("Mouse_LPress", "HandleClicked_HouseInstallation_ScrollBtn()")
   ;
   (self.scroll):addInputEvent("Mouse_LUp", "HandleClicked_HouseInstallation_ScrollBtn()")
@@ -1562,7 +1619,7 @@ HouseInstallation.registEventHandler = function(self)
 end
 
 HouseInstallation.registMessageHandler = function(self)
-  -- function num : 0_50
+  -- function num : 0_51
   registerEvent("EventHousingShowInstallationMenu", "FromClient_ShowInstallationMenu")
   registerEvent("EventHousingCancelInstallObjectMessageBox", "FromClient_CancelInstallObject")
   registerEvent("EventHousingCancelInstallModeMessageBox", "FromClient_CancelInstallMode")

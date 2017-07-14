@@ -38,13 +38,17 @@ FGlobal_NpcShop_GetNpcShop = function()
 end
 
 npcShop.init = function(self)
-  -- function num : 0_1 , upvalues : _npcShopHelp, UI_TM
+  -- function num : 0_1 , upvalues : _npcShopHelp, UI_TM, npcShop
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   (self.config).slotRows = (self.config).slotCount / (self.config).slotCols
   self.lastTabIndex = self.tabIndexBuy
   _npcShopHelp:SetTextMode(UI_TM.eTextMode_AutoWrap)
   _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HELPDESC"))
+  local group_0 = Panel_Window_NpcShop:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+  group_0:addControl(0, 0, 3, 1, (npcShop.radioButtons)[0])
+  group_0:addControl(1, 0, 3, 1, (npcShop.radioButtons)[1])
+  group_0:addControl(2, 0, 3, 1, (npcShop.radioButtons)[2])
 end
 
 local _const = Defines.s64_const
@@ -438,6 +442,8 @@ npcShop.updateContent = function(self, updateForce)
     (self.scroll):SetShow(false)
     return 
   end
+  Panel_Window_NpcShop:deleteConsoleUIGroup(1)
+  local group_1 = Panel_Window_NpcShop:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   if updateForce or self._startSlotIndex ~= self.lastStartSlotNo then
     if self.tabIndexBuy ~= self.lastTabIndex and (self.config).slotRows <= self._itemListSize and self._itemListSize < self._startSlotIndex + (self.config).slotRows then
       self._startSlotIndex = self._startSlotIndex - 1
@@ -507,6 +513,7 @@ npcShop.updateContent = function(self, updateForce)
               ;
               ((slot.icon).icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. slot.slotNo .. ",\"shop\", false)")
               Panel_Tooltip_Item_SetPosition(slot.slotNo, slot.icon, "shop")
+              group_1:addControl(ii % 2, ii / 2, 2, 7, slot.button)
             end
             local moneyItemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eInventory, getMoneySlotNo())
             local myInvenMoney_s64 = toInt64(0, 0)
@@ -538,19 +545,19 @@ npcShop.updateContent = function(self, updateForce)
                       (slot.price):SetFontColor(UI_color.C_FFE7E7E7)
                     end
                     slot:clearItem()
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end

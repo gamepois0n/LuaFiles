@@ -3,11 +3,6 @@
 
 -- params : ...
 -- function num : 0
-local Button_CustomHistoryDo, Button_CustomHistoryUnDo = nil, nil
-Button_CustomHistoryDo = (UI.getChildControl)(Panel_CustomizationStatic, "Button_CtrlY")
-Button_CustomHistoryUnDo = (UI.getChildControl)(Panel_CustomizationStatic, "Button_CtrlZ")
-Button_CustomHistoryDo:addInputEvent("Mouse_LUp", "customHistoryDo()")
-Button_CustomHistoryUnDo:addInputEvent("Mouse_LUp", "customHistoryUnDo()")
 local customization_HistoryBG = (UI.getChildControl)(Panel_CustomizationStatic, "Static_HistoryBG")
 local checkbox_Close = (UI.getChildControl)(customization_HistoryBG, "CheckButton_Close")
 local Static_HistoryTableTitle = (UI.getChildControl)(customization_HistoryBG, "StaticText_Title")
@@ -17,7 +12,7 @@ local list2_HistoryList = (UI.getChildControl)(customization_HistoryBG, "List2_H
 local listMaxCount = 12
 local selectIndex = 1
 local currentactive = nil
-local isHistroyTableShow = ToClient_IsContentsGroupOpen("280")
+local isHistroyTableShow = true
 local selectColor = (Defines.Color).C_FFEF9C7F
 local PosY = customization_HistoryBG:GetPosY()
 local BGSizeY = customization_HistoryBG:GetSizeY()
@@ -36,17 +31,7 @@ historyTableClose = function()
 end
 
 historyTableSetShow = function(flag)
-  -- function num : 0_2 , upvalues : Button_CustomHistoryDo, Button_CustomHistoryUnDo, isHistroyTableShow, customization_HistoryBG, checkbox_Close, Static_HistoryTableTitle, BTN_Previous, BTN_Next, list2_HistoryList
-  if isGameTypeKorea() == false then
-    flag = false
-  end
-  if isGameTypeEnglish() == true then
-    Button_CustomHistoryDo:SetShow(true)
-    Button_CustomHistoryUnDo:SetShow(true)
-  else
-    Button_CustomHistoryDo:SetShow(false)
-    Button_CustomHistoryUnDo:SetShow(false)
-  end
+  -- function num : 0_2 , upvalues : isHistroyTableShow, customization_HistoryBG, checkbox_Close, Static_HistoryTableTitle, BTN_Previous, BTN_Next, list2_HistoryList
   isHistroyTableShow = flag
   customization_HistoryBG:SetShow(flag)
   checkbox_Close:SetShow(flag)
@@ -161,48 +146,48 @@ calculateText = function(GroupIndex, PartIndex)
   local classtype = (getSelfPlayer()):getClassType()
   local partcount = ToClient_HistoryUIPartCount(classtype, GroupIndex)
   if GroupIndex == 0 then
-    text = "머리 모양 - "
+    text = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_HAIR") .. " - "
     if PartIndex == 0 then
-      text = text .. "종류"
+      text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_TYPE")
     else
       if PartIndex == 1 then
-        text = text .. "형태"
+        text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_SHAPE")
       else
         if PartIndex == 2 then
-          text = text .. "색상"
+          text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_COLOR")
         end
       end
     end
   else
     if GroupIndex == 1 then
-      text = "얼굴 - "
+      text = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_FACE") .. " - "
       if partcount == 10 then
         if PartIndex == 0 then
-          text = text .. "얼굴�\128�\133"
+          text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_FACETYPE")
         else
           if PartIndex == 1 then
-            text = text .. "피부"
+            text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_SKIN")
           else
             if PartIndex == 2 then
-              text = text .. "수염 & 눈썹"
+              text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_BEARD_EYEBROW")
             else
               if PartIndex == 3 then
-                text = text .. "얼굴형태"
+                text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_FACESHAPE")
               else
                 if PartIndex == 4 then
-                  text = text .. "화장"
+                  text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_MAKEUP")
                 else
                   if PartIndex == 5 then
-                    text = text .. "�\136"
+                    text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_EYE")
                   else
                     if PartIndex == 6 then
-                      text = text .. "아이라인"
+                      text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_EYELINE")
                     else
                       if PartIndex == 7 then
-                        text = text .. "문신"
+                        text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_TATTOO")
                       else
                         if PartIndex == 8 then
-                          text = text .. "주름"
+                          text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_WRINKLE")
                         end
                       end
                     end
@@ -214,28 +199,28 @@ calculateText = function(GroupIndex, PartIndex)
         end
       else
         if PartIndex == 0 then
-          text = text .. "얼굴�\128�\133"
+          text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_FACETYPE")
         else
           if PartIndex == 1 then
-            text = text .. "피부"
+            text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_SKIN")
           else
             if PartIndex == 2 then
-              text = text .. "얼굴형태"
+              text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_FACESHAPE")
             else
               if PartIndex == 3 then
-                text = text .. "화장"
+                text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_MAKEUP")
               else
                 if PartIndex == 4 then
-                  text = text .. "�\136"
+                  text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_EYE")
                 else
                   if PartIndex == 5 then
-                    text = text .. "아이라인"
+                    text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_EYELINE")
                   else
                     if PartIndex == 6 then
-                      text = text .. "문신"
+                      text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_TATTOO")
                     else
                       if PartIndex == 7 then
-                        text = text .. "주름"
+                        text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_WRINKLE")
                       end
                     end
                   end
@@ -247,20 +232,20 @@ calculateText = function(GroupIndex, PartIndex)
       end
     else
       if GroupIndex == 2 then
-        text = "�\184 - "
+        text = PAGetString(Defines.StringSheet_RESOURCE, "UI_CUSTOMIZATION_MAIN_FORM") .. " - "
         if PartIndex == 0 then
-          text = text .. "형태"
+          text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_SHAPE")
         else
           if PartIndex == 1 then
-            text = text .. "근육"
+            text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_MUSCLE")
           else
             if PartIndex == 2 then
-              text = text .. "문신"
+              text = text .. PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_TATTOO")
             end
           end
         end
       else
-        text = "기본"
+        text = PAGetString(Defines.StringSheet_GAME, "XML_CUSTOMIZATION_NORMAL")
       end
     end
   end
@@ -349,37 +334,16 @@ historyTableUnDoChangeActive = function()
 end
 
 historyTableRePosY = function(flag)
-  -- function num : 0_14 , upvalues : customization_HistoryBG, Button_CustomHistoryDo, Button_CustomHistoryUnDo
+  -- function num : 0_14 , upvalues : customization_HistoryBG
   customization_HistoryBG:SetPosX(getScreenSizeX() - customization_HistoryBG:GetSizeX() - 20)
-  Button_CustomHistoryDo:SetPosX(getScreenSizeX() - Button_CustomHistoryUnDo:GetSizeX() - 20)
-  Button_CustomHistoryUnDo:SetPosX(getScreenSizeX() - Button_CustomHistoryDo:GetSizeX() * 2 - 30)
   if Panel_Cash_Customization ~= nil then
     if Panel_Cash_Customization:GetShow() then
       customization_HistoryBG:SetPosY(Panel_Cash_Customization:GetPosY() + FGlobal_CashCustom_CashBgSizeY() + 10)
-      customization_HistoryBG:SetPosY(Panel_Cash_Customization:GetPosY() + FGlobal_CashCustom_CashBgSizeY() + 10)
-      Button_CustomHistoryDo:SetPosY(Panel_Cash_Customization:GetPosY() + FGlobal_CashCustom_CashBgSizeY() + 10)
-      Button_CustomHistoryUnDo:SetPosY(Panel_Cash_Customization:GetPosY() + FGlobal_CashCustom_CashBgSizeY() + 10)
     else
       customization_HistoryBG:SetPosY(40)
-      customization_HistoryBG:SetPosY(40)
-      Button_CustomHistoryDo:SetPosY(40)
-      Button_CustomHistoryUnDo:SetPosY(40)
     end
   else
     customization_HistoryBG:SetPosY(40)
-    customization_HistoryBG:SetPosY(40)
-    Button_CustomHistoryDo:SetPosY(40)
-    Button_CustomHistoryUnDo:SetPosY(40)
-  end
-  if isGameTypeKorea() == false then
-    customization_HistoryBG:SetShow(false)
-    Button_CustomHistoryDo:SetShow(false)
-    Button_CustomHistoryUnDo:SetShow(false)
-  end
-  if isGameTypeEnglish() then
-    Button_CustomHistoryDo:SetShow(true)
-    Button_CustomHistoryUnDo:SetShow(true)
-    customization_HistoryBG:SetShow(false)
   end
 end
 

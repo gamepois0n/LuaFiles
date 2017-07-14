@@ -491,6 +491,9 @@ FGlobal_ItemMarketRegistItem_Open = function(isOpenWarehouse, isByMaid)
   if isOpenWarehouse then
     requestItemMarketMyItems(true, true)
   end
+  if Panel_Window_ItemMarket:GetShow() then
+    FGolbal_ItemMarketNew_Close()
+  end
   ;
   (self.titleText):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_ITEMMODIFY_TEXT", "getItem", territoryKey[regionInfoWrapper:getTerritoryKeyRaw()]))
   self._invenWhereType = -1

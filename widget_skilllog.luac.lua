@@ -86,7 +86,7 @@ end
 FromClient_EventSelfPlayerUsedSkill = function()
   -- function num : 0_3 , upvalues : skillLog_Icon, notifySkillMsg, iconSizeX, iconSizeY, logPosX, prevIndex1, prevIndex2, index, _displayRunningTime
   local autoUIPosY = 0
-  if ToClient_getIsSetSelfAI() then
+  if ToClient_getAutoMode() == (CppEnums.Client_AutoControlStateType).BATTLE then
     Panel_Widget_SkillLog:SetPosX(Panel_Movie_KeyViewer:GetPosX() + 50)
     Panel_Widget_SkillLog:SetPosY(Panel_Movie_KeyViewer:GetPosY() - 100)
     skillLog_Icon:SetSize(70, 70)

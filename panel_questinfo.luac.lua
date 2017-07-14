@@ -171,6 +171,10 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
   if Panel_Window_Quest_New:GetShow() == false then
     Panel_Window_QuestNew_Show(true)
   end
+  Panel_CheckedQuestInfo:deleteConsoleUIGroup(0)
+  Panel_CheckedQuestInfo:deleteConsoleUIGroup(1)
+  Panel_CheckedQuestInfo:deleteConsoleUIGroup(2)
+  Panel_CheckedQuestInfo:deleteConsoleUIGroup(3)
   _questInfoDetailGroupId = groupId
   _questInfoDetailQuestId = questId
   local questInfo = questList_getQuestStatic(groupId, questId)
@@ -333,6 +337,27 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
       button_CallSpirit_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_CallSpirit_QuestInfoWindow:GetSizeY() - 5)
       button_Navi_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_Navi_QuestInfoWindow:GetSizeY() - 5)
       button_AutoNavi_QuestInfoWindow:SetPosY(Panel_CheckedQuestInfo:GetSizeY() - button_AutoNavi_QuestInfoWindow:GetSizeY() - 5)
+      local group_0 = Panel_CheckedQuestInfo:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+      if questInfoWindow_giveupButton:GetShow() then
+        group_0:addControl(0, 0, 2, 1, questInfoWindow_giveupButton)
+        group_0:addControl(1, 0, 2, 1, questInfoWindow_naviButton)
+      else
+        group_0:addControl(0, 0, 1, 1, questInfoWindow_naviButton)
+      end
+      if questInfo:getQuestSelectRewardCount() > 0 then
+        local group_3 = Panel_CheckedQuestInfo:addConsoleUIGroup(3, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+        group_3:addControl(0, 0, 3, 1, button_Giveup_QuestInfoWindow)
+        group_3:addControl(1, 0, 3, 1, button_Navi_QuestInfoWindow)
+        group_3:addControl(2, 0, 3, 1, button_AutoNavi_QuestInfoWindow)
+      else
+        do
+          Panel_CheckedQuestInfo:deleteConsoleUIGroup(2)
+          local group_2 = Panel_CheckedQuestInfo:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
+          group_2:addControl(0, 0, 3, 1, button_Giveup_QuestInfoWindow)
+          group_2:addControl(1, 0, 3, 1, button_Navi_QuestInfoWindow)
+          group_2:addControl(2, 0, 3, 1, button_AutoNavi_QuestInfoWindow)
+        end
+      end
     end
   end
 end
@@ -651,16 +676,19 @@ _questWidget_SetRewardList = function(baseReward, selectReward)
   -- function num : 0_9 , upvalues : _selectRewardCount, _maxBaseSlotCount, setReward, _listBaseRewardSlots, _uiBackBaseReward, _maxSelectSlotCount, _listSelectRewardSlots, _uiButtonSelectRewardSlots
   _baseRewardCount = #baseReward
   _selectRewardCount = #selectReward
+  local group_1 = Panel_CheckedQuestInfo:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for index = 0, _maxBaseSlotCount - 1 do
     if index < _baseRewardCount then
       setReward(_listBaseRewardSlots[index], baseReward[index + 1], index, "main")
       ;
       (_uiBackBaseReward[index]):SetShow(true)
+      group_1:addControl(index % 6, index / 6, 6, 2, (_listBaseRewardSlots[index]).icon)
     else
       ;
       (_uiBackBaseReward[index]):SetShow(false)
     end
   end
+  local group_2 = Panel_CheckedQuestInfo:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for index = 0, _maxSelectSlotCount - 1 do
     if index < _selectRewardCount then
       local isEquipable = setReward(_listSelectRewardSlots[index], selectReward[index + 1], index, "sub")
@@ -670,16 +698,17 @@ _questWidget_SetRewardList = function(baseReward, selectReward)
       end
       ;
       (_uiButtonSelectRewardSlots[index]):SetShow(true)
+      group_2:addControl(index, 0, 6, 1, (_listSelectRewardSlots[index]).icon)
     else
       do
         do
           ;
           (_uiButtonSelectRewardSlots[index]):SetShow(false)
-          -- DECOMPILER ERROR at PC65: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC97: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC65: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC97: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC65: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC97: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

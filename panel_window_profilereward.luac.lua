@@ -1,18 +1,12 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\characterinfo\panel_profile.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\profile\panel_window_profilereward.luac 
 
 -- params : ...
 -- function num : 0
-Panel_Window_Profile:SetShow(false)
-local myProfile = {
-_control = {_topBg = (UI.getChildControl)(Panel_Window_Profile, "Static_TopBg"), _list2Profile = (UI.getChildControl)(Panel_Window_Profile, "List2_LeftContent"), _rightDescBg = (UI.getChildControl)(Panel_Window_Profile, "Static_RightDescBg"), 
-_radioBtn = {[0] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Daily"), [1] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Weekly"), [2] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Monthly"), [3] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_SumAll")}
-}
-, _radioBtnIndex = 0, _selecteIndex = 0, 
-_termIndex = {[0] = 1, [1] = 7, [2] = 30, [3] = 0}
-, 
-_termDesc = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DAY"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_WEEK"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_MONTH"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TOTAL")}
-, 
+Panel_Window_ProfileReward:SetShow(false)
+local ProfileReward = {
+_control = {_topBg = (UI.getChildControl)(Panel_Window_ProfileReward, "Static_TopBg"), _list2Profile = (UI.getChildControl)(Panel_Window_ProfileReward, "List2_LeftContent"), _rightDescBg = (UI.getChildControl)(Panel_Window_ProfileReward, "Static_RightDescBg"), _slotBG = nil}
+, _radioBtnIndex = 0, _selecteIndex = 0, _termDesc = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DAY"), 
 _string = {[(CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_1"), [(CppEnums.ProfileIndex).eUserProfileValueType_FishingSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_2"), [(CppEnums.ProfileIndex).eUserProfileValueType_ItemGainCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_3"), [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_4"), [(CppEnums.ProfileIndex).eUserProfileValueType_Count] = 4}
 , 
 _desc = {[(CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_1"), [(CppEnums.ProfileIndex).eUserProfileValueType_FishingSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_2"), [(CppEnums.ProfileIndex).eUserProfileValueType_ItemGainCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_3"), [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_4")}
@@ -26,9 +20,10 @@ _iconCoordinate = {
 , 
 [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = {x1 = 1, y1 = 109, x2 = 71, y2 = 179}
 }
-}
-local group_2 = nil
-myProfile.Init = function(self)
+, 
+slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true}
+, _rewardSlot = nil}
+ProfileReward.Init = function(self)
   -- function num : 0_0
   local control = self._control
   control._playTime = (UI.getChildControl)(control._topBg, "StaticText_PlayTime")
@@ -42,37 +37,38 @@ myProfile.Init = function(self)
   (control._period):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
   (control._desc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  control._slotBG = (UI.getChildControl)(control._rightDescBg, "Reward_SlotBG")
+  local createSlot = {}
+  ;
+  (SlotItem.new)(createSlot, "Reward_SlotItem", 0, control._slotBG, self.slotConfig)
+  createSlot:createChild()
+  ;
+  (createSlot.icon):SetPosX(4)
+  ;
+  (createSlot.icon):SetPosY(1)
+  ;
+  (createSlot.icon):SetShow(true)
+  self._rewardSlot = createSlot
 end
 
-FGlobal_Profile_Update = function(tabBtnInit)
-  -- function num : 0_1 , upvalues : myProfile
-  local self = myProfile
+FGlobal_ProfileReward_Update = function(tabBtnInit)
+  -- function num : 0_1 , upvalues : ProfileReward
+  local self = ProfileReward
   self._selecteIndex = 0
   if not tabBtnInit then
     self._radioBtnIndex = 0
     self:RadioBtn_Init()
   end
-  Profile_RightDataSet(self._selecteIndex)
+  ProfileReward_RightDataSet(self._selecteIndex)
   ToClient_RequestUserProfileInfo()
-  Profile_SetConsolePadGroup()
+  ProfileReward_SetConsolePadGroup()
 end
 
-Profile_SetConsolePadGroup = function()
-  -- function num : 0_2 , upvalues : myProfile
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
-  local control = myProfile._control
-  local group_1 = Panel_Window_CharInfo_Status:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  group_1:addControl(0, 0, 4, 1, (control._radioBtn)[0])
-  group_1:addControl(1, 0, 4, 1, (control._radioBtn)[1])
-  group_1:addControl(2, 0, 4, 1, (control._radioBtn)[2])
-  group_1:addControl(3, 0, 4, 1, (control._radioBtn)[3])
+ProfileReward_SetConsolePadGroup = function()
+  -- function num : 0_2
 end
 
-myProfile.RadioBtn_Init = function(self)
+ProfileReward.RadioBtn_Init = function(self)
   -- function num : 0_3
   for index = 0, (CppEnums.ProfileInitTermType).eProfileInitTermType_Maxcount - 1 do
     (((self._control)._radioBtn)[index]):SetCheck(self._radioBtnIndex == index)
@@ -80,35 +76,33 @@ myProfile.RadioBtn_Init = function(self)
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
-Profile_Update = function()
-  -- function num : 0_4 , upvalues : myProfile, group_2
-  local self = myProfile
+ProfileReward_Update = function()
+  -- function num : 0_4 , upvalues : ProfileReward
+  local self = ProfileReward
   local control = self._control
   ;
   ((control._list2Profile):getElementManager()):clearKey()
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  group_2 = Panel_Window_CharInfo_Status:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for index = 0, (CppEnums.ProfileIndex).eUserProfileValueType_Count - 1 do
     ((control._list2Profile):getElementManager()):pushKey(toInt64(0, index))
   end
 end
 
 HandleClicked_RadioButton = function(index)
-  -- function num : 0_5 , upvalues : myProfile
-  local self = myProfile
+  -- function num : 0_5 , upvalues : ProfileReward
+  local self = ProfileReward
   self._radioBtnIndex = index
-  FGlobal_Profile_Update(true)
+  FGlobal_ProfileReward_Update(true)
 end
 
-Profile_DataSet = function(content, key)
-  -- function num : 0_6 , upvalues : myProfile, group_2
-  local self = myProfile
+ProfileReward_DataSet = function(content, key)
+  -- function num : 0_6 , upvalues : ProfileReward
+  local self = ProfileReward
   local contentBg = (UI.getChildControl)(content, "RadioButton_ContentBg")
   local title = (UI.getChildControl)(content, "StaticText_Title")
   local count = (UI.getChildControl)(content, "StaticText_Count")
   local _key = Int64toInt32(key)
-  local _count = ToClient_GetProfileInfo((self._termIndex)[self._radioBtnIndex], _key)
-  contentBg:addInputEvent("Mouse_LUp", "Profile_RightDataSet(" .. _key .. ")")
+  local _count = ToClient_GetProfileInfo(0, _key)
+  contentBg:addInputEvent("Mouse_LUp", "ProfileReward_RightDataSet(" .. _key .. ")")
   if (CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount == _key then
     _count = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_MONSTERCOUNT", "count", makeDotMoney(_count))
   else
@@ -128,18 +122,36 @@ Profile_DataSet = function(content, key)
   end
   title:SetText((self._string)[_key])
   count:SetText(_count)
-  Profile_TimeSet()
+  ProfileReward_TimeSet()
   if self._selecteIndex == _key then
     contentBg:SetCheck(true)
   else
     contentBg:SetCheck(false)
   end
-  group_2:addControl(_key, 0, (CppEnums.ProfileIndex).eUserProfileValueType_Count, 1, contentBg)
+  local itemlist_SlotBG = (UI.getChildControl)(contents, "Template_Static_SlotBG")
+  itemlist_SlotBG:SetShow(false)
+  local createSlot = {}
+  local itemlist_Slot = (UI.getChildControl)(contents, "Template_Static_Slot")
+  itemlist_Slot:SetShow(true)
+  ;
+  (SlotItem.reInclude)(createSlot, "Reward_SlotItem", 0, itemlist_Slot, self.slotConfig)
+  ;
+  (createSlot.icon):SetSize(40, 40)
+  ;
+  (createSlot.border):SetSize(41, 41)
+  ;
+  (createSlot.border):SetPosX(0)
+  local itemKey = ToClient_getSavageDefenceItemkey(idx)
+  local price = ToClient_getSavageDefenceItemPrice(idx)
+  if itemKey ~= 0 then
+    local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(itemKey))
+    local itemName = itemStatic:getName()
+  end
 end
 
-Profile_TimeSet = function()
-  -- function num : 0_7 , upvalues : myProfile
-  local self = myProfile
+ProfileReward_TimeSet = function()
+  -- function num : 0_7 , upvalues : ProfileReward
+  local self = ProfileReward
   local control = self._control
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
@@ -161,9 +173,9 @@ Profile_TimeSet = function()
   end
 end
 
-Profile_RightDataSet = function(index)
-  -- function num : 0_8 , upvalues : myProfile
-  local self = myProfile
+ProfileReward_RightDataSet = function(index)
+  -- function num : 0_8 , upvalues : ProfileReward
+  local self = ProfileReward
   local control = self._control
   self._selecteIndex = index
   ;
@@ -176,23 +188,39 @@ Profile_RightDataSet = function(index)
   ;
   (control._name):SetText((self._string)[index])
   ;
-  (control._period):SetText((self._termDesc)[self._radioBtnIndex])
+  (control._period):SetText(self._termDesc)
   ;
   (control._desc):SetText((self._desc)[index])
 end
 
-myProfile.registEvent = function(self)
+ProfileReward.registEvent = function(self)
   -- function num : 0_9
-  registerEvent("Profile_Updatelist", "Profile_Update")
-  for index = 0, (CppEnums.ProfileInitTermType).eProfileInitTermType_Maxcount - 1 do
-    (((self._control)._radioBtn)[index]):addInputEvent("Mouse_LUp", "HandleClicked_RadioButton(" .. index .. ")")
-  end
+  registerEvent("ProfileReward_Updatelist", "ProfileReward_Update")
   ;
-  ((self._control)._list2Profile):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "Profile_DataSet")
+  ((self._control)._list2Profile):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "ProfileReward_DataSet")
   ;
   ((self._control)._list2Profile):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
 end
 
-myProfile:Init()
-myProfile:registEvent()
+FGlobal_ProfileReward_Show = function()
+  -- function num : 0_10
+  ProfileReward_Update()
+  Panel_Window_ProfileReward:SetShow(true)
+end
+
+ProfileRewardItemSet = function()
+  -- function num : 0_11 , upvalues : ProfileReward
+  ProfileReward:SetItem()
+end
+
+ProfileReward.SetItem = function(self)
+  -- function num : 0_12
+  local itemWrapper = getInventoryItem(3)
+  ;
+  (self._rewardSlot):setItem(itemWrapper)
+end
+
+ProfileReward:Init()
+ProfileReward:registEvent()
+registerEvent("FromClient_luaLoadComplete", "ProfileRewardItemSet")
 

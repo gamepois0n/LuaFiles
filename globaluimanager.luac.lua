@@ -228,7 +228,7 @@ close_WindowPanelList = function()
   if Panel_Window_PetInfoNew:IsShow() then
     TooltipSimple_Hide()
   end
-  if Panel_ProductNote:IsShow() then
+  if Panel_ProductNote:IsShow() and Panel_ProductNote:IsUISubApp() == false then
     Panel_ProductNote_ShowToggle()
   end
   if Panel_KeyboardHelp:IsShow() then

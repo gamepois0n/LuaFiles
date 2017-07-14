@@ -209,16 +209,37 @@ IngameCashShopCoupon_ListUpdate_Unused = function(contents, key)
   end
 end
 
-IngameCashShopCoupon_Update = function()
+IngameCashShopCoupon_Update = function(productNoRaw)
   -- function num : 0_3 , upvalues : cashCoupon
   local self = cashCoupon
-  local count = ToClient_GetCouponInfoCount()
+  local count = (ToClient_GetCouponInfoCount())
+  local cashProduct = nil
+  local main = -1
+  local middle = -1
+  local small = -1
+  local tcount = 0
+  if productNoRaw ~= nil then
+    cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNoRaw)
+    main = cashProduct:getMainCategory()
+    middle = cashProduct:getMiddleCategory()
+    small = cashProduct:getSmallCategory()
+  end
   ;
   ((self._list2):getElementManager()):clearKey()
   for i = 0, count - 1 do
     local couponWrapper = ToClient_GetCouponInfoWrapper(i)
     if couponWrapper:getCouponState() == 0 then
-      ((self._list2):getElementManager()):pushKey(toInt64(0, i))
+      if cashProduct == nil then
+        tcount = tcount + 1
+        ;
+        ((self._list2):getElementManager()):pushKey(toInt64(0, i))
+      else
+        if couponWrapper:checkCategory(main, middle, small) == true then
+          tcount = tcount + 1
+          ;
+          ((self._list2):getElementManager()):pushKey(toInt64(0, i))
+        end
+      end
     end
   end
   ;
@@ -234,6 +255,9 @@ IngameCashShopCoupon_Update = function()
   else
     ;
     (self.btn_X):SetShow(true)
+  end
+  if tcount == 0 and cashProduct ~= nil then
+    Panel_IngameCashShop_Coupon:SetShow(false)
   end
 end
 
@@ -340,7 +364,7 @@ IngameCashShopCoupon_SimpletooltipTitle = function(isShow, index)
   end
 end
 
-FGlobal_IngameCashShopCoupon_RefreshList = function()
+FGlobal_IngameCashShopCoupon_RefreshList = function(productNoRaw)
   -- function num : 0_9 , upvalues : cashCoupon, selectKey
   local self = cashCoupon
   local savedIndex = selectKey
@@ -348,7 +372,7 @@ FGlobal_IngameCashShopCoupon_RefreshList = function()
   if savedIndex ~= -1 then
     (self._list2):requestUpdateByKey(toInt64(0, savedIndex))
   end
-  IngameCashShopCoupon_Update()
+  IngameCashShopCoupon_Update(productNoRaw)
 end
 
 FGlobal_IngameCashShopCoupon_ReturnWrapperValue = function()
@@ -383,7 +407,7 @@ FromClient_DeleteCoupon = function(checkDelete)
   end
 end
 
-IngameCashShopCoupon_Open = function(openType)
+IngameCashShopCoupon_Open = function(openType, productNoRaw)
   -- function num : 0_15 , upvalues : cashCoupon, isCouponOpen, selectKey
   local self = cashCoupon
   if not isCouponOpen then
@@ -414,7 +438,7 @@ IngameCashShopCoupon_Open = function(openType)
     end
   end
   FGlobal_IngameCashShopCoupon_ReturnValueCancel()
-  IngameCashShopCoupon_Update()
+  IngameCashShopCoupon_Update(productNoRaw)
 end
 
 IngameCashShopCoupon_Close = function(isCheck)
