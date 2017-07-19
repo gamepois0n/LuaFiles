@@ -590,9 +590,9 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
         end
         do return  end
-        -- DECOMPILER ERROR at PC802: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC807: Unhandled construct in 'MakeBoolean' P1
 
-        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil then
+        if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           if Panel_ProductNote_ShowToggle() then
             (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
           elseif check_ShowWindow() == false then
@@ -652,7 +652,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC970: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC975: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -810,7 +810,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
               return 
             end
-            -- DECOMPILER ERROR at PC1406: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1411: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -827,7 +827,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            -- DECOMPILER ERROR at PC1449: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1454: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)

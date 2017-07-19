@@ -344,7 +344,7 @@ WharfList_ButtonOpen = function(eType, slotNo)
       if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Elephant then
         (self._buttonClearDeadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_KILLCOUNTRESET"))
       else
-        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage then
+        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
           (self._buttonClearDeadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_DESTROYCOUNTRESET"))
         else
           if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Boat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Raft or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_FishingBoat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_SailingBoat then

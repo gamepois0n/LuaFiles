@@ -105,7 +105,6 @@ Proc_NoticeAlert_Ack = function(message, noticeType, noticeValue)
   end
   if (CppEnums.EChatNoticeType).SavageDefenceBoss == noticeType then
     if message ~= nil then
-      FGlobal_WorldBossShow(message, noticeType, noticeValue)
       Proc_ShowMessage_Ack_WithOut_ChattingMessage(message)
     end
     return 

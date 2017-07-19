@@ -890,7 +890,7 @@ StableList_ButtonOpen = function(eType, slotNo)
           buttonList[buttonSlotNo] = self._buttonRecovery
           buttonSlotNo = buttonSlotNo + 1
         end
-        if servantInfo:getHp() < servantInfo:getMaxHp() and stallionTraining ~= getState and ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType) then
+        if servantInfo:getHp() < servantInfo:getMaxHp() and stallionTraining ~= getState and ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType or (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType) then
           buttonList[buttonSlotNo] = self._buttonRepair
           buttonSlotNo = buttonSlotNo + 1
         end
@@ -914,7 +914,7 @@ StableList_ButtonOpen = function(eType, slotNo)
               if isPcroomOnly == false then
                 if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Elephant and stallionTraining ~= getState then
                   (self._buttonClearDeadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_KILLCOUNTRESET"))
-                elseif servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage and stallionTraining ~= getState then
+                elseif servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage and stallionTraining ~= getState then
                   (self._buttonClearDeadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_DESTROYCOUNTRESET"))
                 elseif servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Boat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Raft or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_FishingBoat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_SailingBoat and stallionTraining ~= getState then
                   (self._buttonClearDeadCount):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_DESTROYCOUNTRESET"))
@@ -938,9 +938,9 @@ StableList_ButtonOpen = function(eType, slotNo)
                 ;
                 (self._buttonHorseLookChange):addInputEvent("Mouse_LUp", "StableList_LookChange(" .. slotNo .. ")")
               end
-              -- DECOMPILER ERROR at PC707: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC719: Unhandled construct in 'MakeBoolean' P1
 
-              -- DECOMPILER ERROR at PC707: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC719: Unhandled construct in 'MakeBoolean' P1
 
               if isPcroomOnly == false and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_RidableBabyElephant ~= vehicleType or stallionTraining ~= getState) and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
                 if stable_isMarket() and servantLevel >= 15 and (CppEnums.VehicleType).Type_Horse == vehicleType and isContentsEnableSupply then
@@ -976,7 +976,7 @@ StableList_ButtonOpen = function(eType, slotNo)
               end
               positionX = (((self._slots)[slotNo]).button):GetPosX() + buttonConfig.startX
               positionY = (((self._slots)[slotNo]).button):GetPosY() + buttonConfig.startY + 20
-              -- DECOMPILER ERROR at PC871: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC883: Unhandled construct in 'MakeBoolean' P1
 
               if eType == (self._const).eTypeUnsealed and isSiegeStable() == false then
                 stableList:clear()
@@ -1005,7 +1005,7 @@ StableList_ButtonOpen = function(eType, slotNo)
                   buttonList[buttonSlotNo] = self._buttonRecoveryUnseal
                   buttonSlotNo = buttonSlotNo + 1
                 end
-                if unSealServantInfo:getHp() < unSealServantInfo:getMaxHp() and ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType) then
+                if unSealServantInfo:getHp() < unSealServantInfo:getMaxHp() and ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType or (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType) then
                   buttonList[buttonSlotNo] = self._buttonRepairUnseal
                   buttonSlotNo = buttonSlotNo + 1
                 end
@@ -2229,7 +2229,7 @@ FromClient_ServantRecovery = function(servantNo, servantWhereType)
   if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_MountainGoat then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_SERVANT_RECOVERY_ACK"))
   else
-    if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Boat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Raft or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_FishingBoat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_SailingBoat then
+    if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Boat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Raft or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_FishingBoat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_SailingBoat or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_SERVANT_REPAIR_ACK"))
     end
   end

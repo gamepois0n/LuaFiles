@@ -458,7 +458,7 @@ servantIcon.update = function(self)
                   ((((self._slots)[0]).icon):getBaseTexture()):setUV(x1, y1, x2, y2)
                 else
                   do
-                    if UI_VT.Type_Carriage == landVehicleWrapper:getVehicleType() or UI_VT.Type_CowCarriage == landVehicleWrapper:getVehicleType() then
+                    if UI_VT.Type_Carriage == landVehicleWrapper:getVehicleType() or UI_VT.Type_CowCarriage == landVehicleWrapper:getVehicleType() or UI_VT.Type_RepairableCarriage == landVehicleWrapper:getVehicleType() then
                       local x1, y1, x2, y2 = setTextureUV_Func(((self._slots)[0]).icon, 62, 123, 122, 183)
                       ;
                       ((((self._slots)[0]).icon):getBaseTexture()):setUV(x1, y1, x2, y2)
@@ -614,19 +614,19 @@ servantIcon.update = function(self)
                                             (((self._slots)[4]).icon):SetPosX(icon_PosX)
                                             icon_PosX = icon_PosX + (((self._slots)[4]).icon):GetSizeX()
                                             do break end
-                                            -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                            -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                            -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out IF_STMT
 
-                                            -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                            -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                            -- DECOMPILER ERROR at PC834: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC840: LeaveBlock: unexpected jumping out IF_STMT
 
                                           end
                                         end
@@ -913,7 +913,7 @@ HandleClicked_Servant_VehicleInfoToggle = function(servantType)
   if UI_VT.Type_Horse == targetType or UI_VT.Type_Camel == targetType or UI_VT.Type_Donkey == targetType or UI_VT.Type_Elephant == targetType then
     ServantInfo_OpenByActorKeyRaw(actorKeyRaw)
   else
-    if UI_VT.Type_Carriage == targetType or UI_VT.Type_CowCarriage == targetType then
+    if UI_VT.Type_Carriage == targetType or UI_VT.Type_CowCarriage == targetType or UI_VT.Type_RepairableCarriage == targetType then
       CarriageInfo_OpenByActorKeyRaw(actorKeyRaw)
     else
       if UI_VT.Type_Boat == targetType or UI_VT.Type_Raft == targetType or UI_VT.Type_FishingBoat == targetType or UI_VT.Type_SailingBoat == targetType then
@@ -1154,7 +1154,7 @@ Servant_SimpleTooltip = function(isShow, tipType)
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local targetType = vehicleWrapper:getVehicleType()
-  if UI_VT.Type_Horse == targetType or UI_VT.Type_Camel == targetType or UI_VT.Type_Donkey == targetType or UI_VT.Type_Elephant == targetType or UI_VT.Type_Carriage == targetType or UI_VT.Type_CowCarriage == targetType or UI_VT.Type_RidableBabyElephant then
+  if UI_VT.Type_Horse == targetType or UI_VT.Type_Camel == targetType or UI_VT.Type_Donkey == targetType or UI_VT.Type_Elephant == targetType or UI_VT.Type_Carriage == targetType or UI_VT.Type_CowCarriage == targetType or UI_VT.Type_RidableBabyElephant == targetType or UI_VT.Type_RepairableCarriage == targetType then
     if isPremiumPcRoom and UI_VT.Type_Horse == targetType then
       if doHaveContentsItem(16, UI_VT.Type_Horse) then
         ServantDesc = PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_SERVANT_ICONHELP")

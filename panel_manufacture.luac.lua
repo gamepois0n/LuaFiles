@@ -188,8 +188,6 @@ _textDesc:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 _textDesc:SetText("")
 local _btn_funcBG = (UI.getChildControl)(Panel_Manufacture, "Static_FrameBG")
 local list2 = (UI.getChildControl)(Panel_Manufacture, "List2_Manufacture")
-local limitTextTooltip = {}
-local IsLimitText = {}
 local selectIndex = -1
 local Manufacture_Notify = {_progress_BG = (UI.getChildControl)(Panel_Manufacture_Notify, "Static_Progress_BG"), _progress_Bar = (UI.getChildControl)(Panel_Manufacture_Notify, "Progress2_Manufacture"), _progress_Text = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Manufacture_Progress"), _progress_Effect = (UI.getChildControl)(Panel_Manufacture_Notify, "Static_Progress_Effect"), _type_Name = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Manufacture_Type"), _result_Title = (UI.getChildControl)(Panel_Manufacture_Notify, "StaticText_Result_Title"), 
 _item_Resource = {}
@@ -2740,12 +2738,11 @@ FontSize_SetPos = function()
 end
 
 Manufacture_ListControlCreate = function(content, key)
-  -- function num : 0_74 , upvalues : selectIndex, UI_color, limitTextTooltip, IsLimitText
+  -- function num : 0_74 , upvalues : selectIndex, UI_color
   local index = Int64toInt32(key)
   local recipe = (UI.getChildControl)(content, "StaticText_List2_AlchemyRecipe")
   local selectList = (UI.getChildControl)(content, "Static_List2_SelectList")
   local mentalCardStaticWrapper = getAlchemyKnowledge(index)
-  selectList:SetIgnore(true)
   if selectIndex == index then
     selectList:SetShow(true)
   else
@@ -2753,31 +2750,13 @@ Manufacture_ListControlCreate = function(content, key)
   end
   if mentalCardStaticWrapper ~= nil then
     local isLearn = isLearnMentalCardForAlchemy(mentalCardStaticWrapper:getKey())
-    recipe:SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
     if isLearn == true then
       recipe:SetFontColor(UI_color.C_FF84FFF5)
       recipe:SetText(mentalCardStaticWrapper:getName())
-      -- DECOMPILER ERROR at PC53: Confused about usage of register: R7 in 'UnsetPending'
-
-      limitTextTooltip[index] = mentalCardStaticWrapper:getName()
     else
       recipe:SetFontColor(UI_color.C_FF888888)
       recipe:SetText("??? ( " .. mentalCardStaticWrapper:getKeyword() .. " )")
-      -- DECOMPILER ERROR at PC69: Confused about usage of register: R7 in 'UnsetPending'
-
-      limitTextTooltip[index] = mentalCardStaticWrapper:getKeyword()
     end
-    -- DECOMPILER ERROR at PC75: Confused about usage of register: R7 in 'UnsetPending'
-
-    if recipe:IsLimitText() then
-      IsLimitText[index] = true
-    else
-      -- DECOMPILER ERROR at PC78: Confused about usage of register: R7 in 'UnsetPending'
-
-      IsLimitText[index] = false
-    end
-    recipe:addInputEvent("Mouse_On", "ManufactureLimitTextTooptip( true, " .. index .. " )")
-    recipe:addInputEvent("Mouse_Out", "ManufactureLimitTextTooptip( false )")
     recipe:SetShow(true)
     recipe:SetPosY(6)
     recipe:addInputEvent("Mouse_LUp", "Manufacture_KnowledgeList_SelectKnowledge( " .. index .. " )")
@@ -2786,15 +2765,6 @@ Manufacture_ListControlCreate = function(content, key)
       recipe:SetShow(false)
     end
   end
-end
-
-ManufactureLimitTextTooptip = function(isShow, index)
-  -- function num : 0_75 , upvalues : IsLimitText, limitTextTooltip
-  if isShow == false or IsLimitText[index] == false then
-    TooltipSimple_Hide()
-    return 
-  end
-  TooltipSimple_Show(Panel_Manufacture, limitTextTooltip[index])
 end
 
 registerEvent("onScreenResize", "manufacture_Repos")

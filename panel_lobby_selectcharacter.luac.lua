@@ -290,8 +290,73 @@ local SelectCharacter_Init = function()
   end
 end
 
+Panel_Lobby_SelectCharacter_EnableSelectButton = function(enableValue)
+  -- function num : 0_3 , upvalues : configData, SelectCharacter
+  for slotIdx = 0, configData._listCount - 1 do
+    _PA_LOG("�\128규보", "Idx:" .. tostring(slotIdx) .. "     " .. tostring(_btnCount))
+    local slot = (configData.slotUiPool)[slotIdx]
+    ;
+    (slot._btn_Slot):SetEnable(enableValue)
+    ;
+    (slot._btn_Slot):SetMonoTone(not enableValue)
+    ;
+    (slot._ChaStat):SetEnable(enableValue)
+    ;
+    (slot._ChaStat):SetMonoTone(not enableValue)
+    ;
+    (slot._ContStat):SetEnable(enableValue)
+    ;
+    (slot._ContStat):SetMonoTone(not enableValue)
+    ;
+    (slot._ChaLev):SetEnable(enableValue)
+    ;
+    (slot._ChaLev):SetMonoTone(not enableValue)
+    ;
+    (slot._btnCreate):SetEnable(enableValue)
+    ;
+    (slot._btnCreate):SetMonoTone(not enableValue)
+    ;
+    (slot._btnStart):SetEnable(enableValue)
+    ;
+    (slot._btnStart):SetMonoTone(not enableValue)
+    ;
+    (slot._btnUp):SetEnable(enableValue)
+    ;
+    (slot._btnUp):SetMonoTone(not enableValue)
+    ;
+    (slot._btnDown):SetEnable(enableValue)
+    ;
+    (slot._btnDown):SetMonoTone(not enableValue)
+    ;
+    (slot._centerBg):SetEnable(enableValue)
+    ;
+    (slot._centerBg):SetMonoTone(not enableValue)
+  end
+  local selChar = SelectCharacter
+  ;
+  (selChar.btn_ChaInfoStart):SetEnable(enableValue)
+  ;
+  (selChar.btn_ChaInfoStart):SetMonoTone(not enableValue)
+  ;
+  (selChar.btn_ChaInfoDelete):SetEnable(enableValue)
+  ;
+  (selChar.btn_ChaInfoDelete):SetMonoTone(not enableValue)
+  ;
+  (selChar.btn_ChangeLocate):SetEnable(enableValue)
+  ;
+  (selChar.btn_ChangeLocate):SetMonoTone(not enableValue)
+  ;
+  (selChar.btn_EndGame):SetEnable(enableValue)
+  ;
+  (selChar.btn_EndGame):SetMonoTone(not enableValue)
+  ;
+  (selChar.btn_ServerSelect):SetEnable(enableValue)
+  ;
+  (selChar.btn_ServerSelect):SetMonoTone(not enableValue)
+end
+
 local CharacterView = function(index, classType, isSpecialCharacter, isChangeSpecialTab)
-  -- function num : 0_3 , upvalues : UI_Class
+  -- function num : 0_4 , upvalues : UI_Class
   if classType == UI_Class.ClassType_Warrior then
     viewCharacter(index, -50, -40, -65, 0.15, isSpecialCharacter, isChangeSpecialTab)
     viewCharacterPitchRoll(0, 0)
@@ -408,7 +473,7 @@ local CharacterView = function(index, classType, isSpecialCharacter, isChangeSpe
 end
 
 local ChangeTexture_Class = function(control, classType)
-  -- function num : 0_4 , upvalues : UI_Class
+  -- function num : 0_5 , upvalues : UI_Class
   if classType == UI_Class.ClassType_Warrior then
     control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_00.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 1, 458, 61)
@@ -677,7 +742,7 @@ local ChangeTexture_Class = function(control, classType)
 end
 
 local ChangeTexture_Slot = function(isFree, control)
-  -- function num : 0_5
+  -- function num : 0_6
   if isFree == true then
     control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/lobby_classselect_btn_01.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
@@ -712,7 +777,7 @@ local ChangeTexture_Slot = function(isFree, control)
 end
 
 local What_R_U_Doing_Now = function(isSpecialCharacter)
-  -- function num : 0_6 , upvalues : configData, SelectCharacter, ePcWorkingType
+  -- function num : 0_7 , upvalues : configData, SelectCharacter, ePcWorkingType
   local characterData = getCharacterDataByIndex(configData.selectCaracterIdx, isSpecialCharacter)
   local workName = "-"
   local progressRate = 0
@@ -860,7 +925,7 @@ local What_R_U_Doing_Now = function(isSpecialCharacter)
 end
 
 local CharacterCustomization_Close = function()
-  -- function num : 0_7
+  -- function num : 0_8
   Panel_Customization_Control:SetShow(false, false)
   Panel_CustomizationTest:SetShow(false, false)
   Panel_CharacterCreateSelectClass:SetShow(false, false)
@@ -876,7 +941,7 @@ local CharacterCustomization_Close = function()
 end
 
 local getMaxCharacsterScrollCount = function(isSpecialCharacter)
-  -- function num : 0_8 , upvalues : SelectCharacter, configData
+  -- function num : 0_9 , upvalues : SelectCharacter, configData
   local scrSizeY = getScreenSizeY()
   local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - SelectCharacter.premiumPcRoomSizeY + 5
   local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
@@ -903,7 +968,7 @@ local getMaxCharacsterScrollCount = function(isSpecialCharacter)
 end
 
 local getMaxSPCharacsterScrollCount = function()
-  -- function num : 0_9 , upvalues : SelectCharacter, configData
+  -- function num : 0_10 , upvalues : SelectCharacter, configData
   local scrSizeY = getScreenSizeY()
   local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - SelectCharacter.premiumPcRoomSizeY + 5
   local btnSizeY = (SelectCharacter.btn_Create):GetSizeY() + 15
@@ -930,7 +995,7 @@ local getMaxSPCharacsterScrollCount = function()
 end
 
 scrollTotalCount = function()
-  -- function num : 0_10 , upvalues : SelectCharacter
+  -- function num : 0_11 , upvalues : SelectCharacter
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -949,7 +1014,7 @@ scrollTotalCount = function()
 end
 
 local CharacterList_Update = function(isChangeSpecialTab)
-  -- function num : 0_11 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now, isGhostMode
+  -- function num : 0_12 , upvalues : SelectCharacter, configData, getCharacterMaxSlotData, getMaxCharacsterCount, getMaxCharacsterScrollCount, ChangeTexture_Slot, ChangeTexture_Class, CharacterView, What_R_U_Doing_Now, isGhostMode
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1271,7 +1336,7 @@ local CharacterList_Update = function(isChangeSpecialTab)
 end
 
 CharacterSelect_ChangeLocate = function()
-  -- function num : 0_12 , upvalues : SelectCharacter, CharacterList_Update
+  -- function num : 0_13 , upvalues : SelectCharacter, CharacterList_Update
   if not (SelectCharacter.btn_ChangeLocate):IsCheck() then
     ToClient_SaveClientCacheData()
   end
@@ -1279,7 +1344,7 @@ CharacterSelect_ChangeLocate = function()
 end
 
 SelectCharacter_ScrollEvent = function(isUp)
-  -- function num : 0_13 , upvalues : SelectCharacter, configData, CharacterList_Update
+  -- function num : 0_14 , upvalues : SelectCharacter, configData, CharacterList_Update
   local self = SelectCharacter
   -- DECOMPILER ERROR at PC14: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -1288,7 +1353,7 @@ SelectCharacter_ScrollEvent = function(isUp)
 end
 
 CharacterSelect_selected = function(index)
-  -- function num : 0_14 , upvalues : configData, CharacterList_Update
+  -- function num : 0_15 , upvalues : configData, CharacterList_Update
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   configData.selectCaracterIdx = index
@@ -1296,7 +1361,7 @@ CharacterSelect_selected = function(index)
 end
 
 CharacterSelect_PlayGame = function(index)
-  -- function num : 0_15 , upvalues : SelectCharacter, configData, ePcWorkingType
+  -- function num : 0_16 , upvalues : SelectCharacter, configData, ePcWorkingType
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1345,7 +1410,9 @@ CharacterSelect_PlayGame = function(index)
               else
                 do
                   do
-                    selectCharacter(configData.selectCaracterIdx, isSpecialCharacter)
+                    if selectCharacter(configData.selectCaracterIdx, isSpecialCharacter) == true then
+                      Panel_Lobby_SelectCharacter_EnableSelectButton(false)
+                    end
                     local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
                     local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
                     ;
@@ -1362,7 +1429,7 @@ CharacterSelect_PlayGame = function(index)
 end
 
 CharacterSelect_ChangeCharacterPosition = function(index, isUp)
-  -- function num : 0_16 , upvalues : CharacterList_Update
+  -- function num : 0_17 , upvalues : CharacterList_Update
   if index == nil and isUp == nil then
     return 
   end
@@ -1372,7 +1439,7 @@ CharacterSelect_ChangeCharacterPosition = function(index, isUp)
 end
 
 CharacterSelect_SelectEnterToGame = function()
-  -- function num : 0_17 , upvalues : SelectCharacter, configData
+  -- function num : 0_18 , upvalues : SelectCharacter, configData
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1393,7 +1460,7 @@ CharacterSelect_SelectEnterToGame = function()
 end
 
 CharacterSelect_Open = function(characterIndex)
-  -- function num : 0_18 , upvalues : configData, CharacterCustomization_Close, SelectCharacter, CharacterList_Update
+  -- function num : 0_19 , upvalues : configData, CharacterCustomization_Close, SelectCharacter, CharacterList_Update
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   if characterIndex == -1 or configData.haveCount <= characterIndex then
@@ -1422,9 +1489,9 @@ CharacterSelect_Open = function(characterIndex)
 end
 
 CharacterSelect_ExitGame = function()
-  -- function num : 0_19
+  -- function num : 0_20
   local do_Exit = function()
-    -- function num : 0_19_0
+    -- function num : 0_20_0
     disConnectToGame()
     GlobalExitGameClient()
   end
@@ -1435,20 +1502,20 @@ CharacterSelect_ExitGame = function()
 end
 
 CharacterSelect_Back = function()
-  -- function num : 0_20
+  -- function num : 0_21
   Panel_CharacterSelectNew:SetShow(false)
   backServerSelect()
 end
 
 CharacterSelect_DeleteCharacter = function()
-  -- function num : 0_21 , upvalues : SelectCharacter, configData
+  -- function num : 0_22 , upvalues : SelectCharacter, configData
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
   end
   if configData.selectCaracterIdx ~= -1 then
     local do_Delete = function()
-    -- function num : 0_21_0 , upvalues : configData, isSpecialCharacter
+    -- function num : 0_22_0 , upvalues : configData, isSpecialCharacter
     deleteCharacter(configData.selectCaracterIdx, isSpecialCharacter)
   end
 
@@ -1474,7 +1541,7 @@ CharacterSelect_DeleteCharacter = function()
 end
 
 CharacterSelect_DeleteCancelCharacter = function()
-  -- function num : 0_22 , upvalues : SelectCharacter, configData
+  -- function num : 0_23 , upvalues : SelectCharacter, configData
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1485,23 +1552,23 @@ CharacterSelect_DeleteCancelCharacter = function()
 end
 
 FGlobal_CharacterSelect_Close = function()
-  -- function num : 0_23
+  -- function num : 0_24
   Panel_CharacterSelectNew:SetShow(false)
 end
 
 CharacterSelect_CreateNewCharacter = function()
-  -- function num : 0_24 , upvalues : SelectCharacter
+  -- function num : 0_25 , upvalues : SelectCharacter
   if Panel_Win_System:GetShow() then
     return 
   end
   local do_Create = function()
-    -- function num : 0_24_0 , upvalues : SelectCharacter
+    -- function num : 0_25_0 , upvalues : SelectCharacter
     local isSpecialCharacter = false
     if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
       isSpecialCharacter = true
     end
     changeCreateCharacterMode_SelectClass(isSpecialCharacter)
-    SetSpecialCharacter(isSpecialCharacter)
+    FGlobal_SetSpecialCharacter(isSpecialCharacter)
   end
 
   local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERSELECT_CREATENEWCHARACTER_NOTIFY")
@@ -1511,7 +1578,7 @@ CharacterSelect_CreateNewCharacter = function()
 end
 
 CharacterSelect_setUpdateTicketNo = function(characterData)
-  -- function num : 0_25 , upvalues : const_64, SelectCharacter
+  -- function num : 0_26 , upvalues : const_64, SelectCharacter
   local firstTicketNo = getFirstTicketNoByAll()
   local currentTicketNo = getCurrentTicketNo()
   local ticketCountByRegion = characterData._lastTicketNoByRegion
@@ -1538,7 +1605,7 @@ CharacterSelect_setUpdateTicketNo = function(characterData)
 end
 
 cancelEnterWaitingLine = function()
-  -- function num : 0_26 , upvalues : configData
+  -- function num : 0_27 , upvalues : configData
   setShowBlockBG(false)
   if configData.isWaitLine == true then
     MessageBox_HideAni()
@@ -1549,7 +1616,7 @@ cancelEnterWaitingLine = function()
 end
 
 makeEnterWaitingUserMsg = function(receiveTicketNoMyRegion)
-  -- function num : 0_27 , upvalues : SelectCharacter, configData, const_64
+  -- function num : 0_28 , upvalues : SelectCharacter, configData, const_64
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1598,7 +1665,7 @@ makeEnterWaitingUserMsg = function(receiveTicketNoMyRegion)
 end
 
 setShowBlockBG = function(isShow)
-  -- function num : 0_28 , upvalues : SelectCharacter
+  -- function num : 0_29 , upvalues : SelectCharacter
   (SelectCharacter.block_BG):SetShow(isShow)
   ;
   (SelectCharacter.block_BG):SetSize(getScreenSizeX() + 200, getScreenSizeY() + 200)
@@ -1609,7 +1676,7 @@ setShowBlockBG = function(isShow)
 end
 
 receiveEnterWaiting = function()
-  -- function num : 0_29 , upvalues : SelectCharacter, configData
+  -- function num : 0_30 , upvalues : SelectCharacter, configData
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
@@ -1634,7 +1701,7 @@ receiveEnterWaiting = function()
 end
 
 setEnterWaitingUserCount = function()
-  -- function num : 0_30 , upvalues : configData
+  -- function num : 0_31 , upvalues : configData
   if configData.isWaitLine == false then
     return 
   end
@@ -1650,7 +1717,7 @@ setEnterWaitingUserCount = function()
 end
 
 click_EnterWaitingCancel = function()
-  -- function num : 0_31 , upvalues : configData
+  -- function num : 0_32 , upvalues : configData
   setShowBlockBG(false)
   allClearMessageData()
   if configData.isWaitLine == true then
@@ -1659,7 +1726,7 @@ click_EnterWaitingCancel = function()
 end
 
 HandleClicked_PreOrderAndEvent = function(linkType)
-  -- function num : 0_32
+  -- function num : 0_33
   local linkURL = ""
   if linkType == 0 then
     linkURL = "https://www.blackdesertonline.com/preorder/?trcode=CCM001"
@@ -1672,12 +1739,12 @@ HandleClicked_PreOrderAndEvent = function(linkType)
 end
 
 HandleClicked_SaveCustomizationFile = function()
-  -- function num : 0_33
+  -- function num : 0_34
   OpenExplorerSaveCustomizing()
 end
 
 RadioButton_Click = function(radioIndex)
-  -- function num : 0_34 , upvalues : CharacterListIndex, SelectCharacter, isChangeCharacterTab, SpecialCharacterListIndex, configData, CharacterList_Update
+  -- function num : 0_35 , upvalues : CharacterListIndex, SelectCharacter, isChangeCharacterTab, SpecialCharacterListIndex, configData, CharacterList_Update
   if radioIndex == CharacterListIndex then
     if (SelectCharacter.btn_ChangeLocate):GetShow() == true then
       isChangeCharacterTab = false
@@ -1723,7 +1790,7 @@ RadioButton_Click = function(radioIndex)
 end
 
 HandleClicked_ToggleGhostMode = function()
-  -- function num : 0_35 , upvalues : isGhostMode
+  -- function num : 0_36 , upvalues : isGhostMode
   ToClient_ToggleGhostMode()
   local GhostButton = (UI.getChildControl)(Panel_CharacterSelectNew, "check_GhostMode")
   isGhostMode = ToClient_getGhostMode()
@@ -1735,7 +1802,7 @@ HandleClicked_ToggleGhostMode = function()
 end
 
 UpdateSpecialCharacterTab = function()
-  -- function num : 0_36 , upvalues : SelectCharacter, isSpecialCharacterOpen, configData
+  -- function num : 0_37 , upvalues : SelectCharacter, isSpecialCharacterOpen, configData
   local self = SelectCharacter
   local temporaryWrapper = getTemporaryInformationWrapper()
   temporaryWrapper:ToClient_completeInitialUI()

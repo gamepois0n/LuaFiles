@@ -68,7 +68,7 @@ FromClient_RegisterCampingTent = function(fromWhereType, fromSlotNo)
     PaGlobal_CampRegister:HandleClicked_CampRegister_Register(fromWhereType, fromSlotNo)
   end
 
-  local messageboxData = {title = titleForceOut, content = PAGetString(Defines.StringSheet_GAME, "LUA_CAMPREGISTER_DESC"), functionYes = messageBox_RegistCamp, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_CAMPREGISTER_NAME"), content = PAGetString(Defines.StringSheet_GAME, "LUA_CAMPREGISTER_DESC"), functionYes = messageBox_RegistCamp, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)
 end

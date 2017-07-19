@@ -177,43 +177,40 @@ PaGlobal_Camp.update = function(self)
   local isUnseal = ToClient_isCampingUnseal()
   for index,value in pairs((self._config)._slotNo) do
     local slot = (self._itemSlots)[value]
-    do
+    local campWrapper = nil
+    if isUnseal then
+      campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+    end
+    if campWrapper ~= nil then
+      local itemWrapper = campWrapper:getEquipItem(value)
+      -- DECOMPILER ERROR at PC27: Confused about usage of register: R10 in 'UnsetPending'
+
       if isUnseal then
-        local campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
-      end
-      if campWrapper ~= nil then
-        local itemWrapper = campWrapper:getEquipItem(value)
-        -- DECOMPILER ERROR at PC27: Confused about usage of register: R9 in 'UnsetPending'
+        if itemWrapper ~= nil then
+          ((self._config)._isSetItem)[value] = true
+          slot:setItem(itemWrapper)
+        else
+          -- DECOMPILER ERROR at PC34: Confused about usage of register: R10 in 'UnsetPending'
 
-        if isUnseal then
-          if itemWrapper ~= nil then
-            ((self._config)._isSetItem)[value] = true
-            slot:setItem(itemWrapper)
-          else
-            -- DECOMPILER ERROR at PC34: Confused about usage of register: R9 in 'UnsetPending'
-
-            ;
-            ((self._config)._isSetItem)[value] = false
-            slot:clearItem()
-          end
+          ;
+          ((self._config)._isSetItem)[value] = false
+          slot:clearItem()
         end
-      else
+      end
+    else
+      do
         do
-          do
-            -- DECOMPILER ERROR at PC40: Confused about usage of register: R8 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC40: Confused about usage of register: R9 in 'UnsetPending'
 
-            ;
-            ((self._config)._isSetItem)[value] = false
-            slot:clearItem()
-            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out DO_STMT
+          ;
+          ((self._config)._isSetItem)[value] = false
+          slot:clearItem()
+          -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out DO_STMT
-
-          end
         end
       end
     end

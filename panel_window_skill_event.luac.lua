@@ -689,9 +689,5 @@ Skill_RegistMessageHandler = function()
   registerEvent("FromClient_SkillWindowClose", "HandleMLUp_SkillWindow_UpdateData")
 end
 
-HandleMLUp_CombiSkillWindow_LearnButtonClick = function()
-  -- function num : 0_22
-end
-
 Skill_RegistMessageHandler()
 

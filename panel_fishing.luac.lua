@@ -63,7 +63,7 @@ fishingGame_Initialize = function()
 end
 
 setFishingResourcePool_text = function()
-  -- function num : 0_5 , upvalues : fishing_UI, UI_TM
+  -- function num : 0_5 , upvalues : fishing_UI, UI_TM, uiPress
   local fishComment_head = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_HEAD")
   local fishingPercent = (math.floor)(ToClient_CurrentFishingData() * 100)
   if fishingPercent >= 71 and fishingPercent <= 100 then
@@ -109,6 +109,25 @@ setFishingResourcePool_text = function()
       (fishing_UI._fishCheckBtn):SetShow(false)
     end
   end
+  local sizeX1 = (fishing_UI._fishPercent):GetTextSizeX()
+  local sizeX2 = (fishing_UI._fishComment):GetTextSizeX()
+  local maxSizeX = 0
+  if sizeX2 < sizeX1 then
+    maxSizeX = sizeX1
+  else
+    maxSizeX = sizeX2
+  end
+  local maxSizeY = (fishing_UI._fishComment):GetSizeY() + (fishing_UI._fishPercent):GetSizeY()
+  ;
+  (fishing_UI._fishBG):SetSize((fishing_UI._fishComment):GetTextSizeX() + 10, (fishing_UI._fishPercent):GetSizeY() + (fishing_UI._fishComment):GetSizeY() + 10)
+  ;
+  (fishing_UI._fishBG):SetPosX(getScreenSizeX() / 2 - (fishing_UI._fishBG):GetSizeX() / 2)
+  ;
+  (fishing_UI._fishCheckBtn):SetPosY((fishing_UI._fishBG):GetPosY() + (fishing_UI._fishBG):GetSizeY() + 10)
+  ;
+  (uiPress._button_Space):SetPosY((fishing_UI._fishCheckBtn):GetPosY() + (fishing_UI._fishCheckBtn):GetSizeY() + 10)
+  ;
+  (fishing_UI._fishWpDesc):SetPosY((uiPress._button_Space):GetPosY() + (uiPress._button_Space):GetSizeY() + 10)
 end
 
 fishingGame_Initialize()

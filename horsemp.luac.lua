@@ -47,13 +47,17 @@ HorseMp_InitStaminaAlertText = function(vehicleType)
   if (CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType then
     alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_1")
   else
-    if (CppEnums.VehicleType).Type_Boat == vehicleType or (CppEnums.VehicleType).Type_Raft == vehicleType or (CppEnums.VehicleType).Type_FishingBoat == vehicleType then
-      alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_3")
+    if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType then
+      alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_5")
     else
-      if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == vehicleType then
-        alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_4")
+      if (CppEnums.VehicleType).Type_Boat == vehicleType or (CppEnums.VehicleType).Type_Raft == vehicleType or (CppEnums.VehicleType).Type_FishingBoat == vehicleType then
+        alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_3")
       else
-        alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_2")
+        if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == vehicleType then
+          alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_4")
+        else
+          alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_2")
+        end
       end
     end
   end
@@ -137,7 +141,7 @@ HorseMP_Update = function()
     end
   end
   if (getSelfPlayer()):isNavigationLoop() and (getSelfPlayer()):isNavigationMoving() then
-    if UI_VT.Type_Boat == vehicleType or UI_VT.Type_Raft == vehicleType or UI_VT.Type_FishingBoat == vehicleType or UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_Cannon == vehicleType or UI_VT.Type_PracticeCannon == vehicleType or UI_VT.Type_Elephant == vehicleType or UI_VT.Type_BabyElephant == vehicleType or UI_VT.Type_ThrowFire == vehicleType or UI_VT.Type_ThrowStone == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
+    if UI_VT.Type_Boat == vehicleType or UI_VT.Type_Raft == vehicleType or UI_VT.Type_FishingBoat == vehicleType or UI_VT.Type_Carriage == vehicleType or UI_VT.Type_CowCarriage == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType or UI_VT.Type_Cannon == vehicleType or UI_VT.Type_PracticeCannon == vehicleType or UI_VT.Type_Elephant == vehicleType or UI_VT.Type_BabyElephant == vehicleType or UI_VT.Type_ThrowFire == vehicleType or UI_VT.Type_ThrowStone == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
       (servantMpBar._button_AutoCarrot):SetShow(false)
     else
       ;

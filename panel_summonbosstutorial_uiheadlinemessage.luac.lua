@@ -99,13 +99,13 @@ PaGlobal_SummonBossTutorial_UiHeadlineMessage.resetShowAll = function(self)
   -- function num : 0_8
   self:computePosAll()
   ;
-  ((self._ui)._nextStep_1):SetText("STEP 1")
+  ((self._ui)._nextStep_1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_STEP1"))
   ;
-  ((self._ui)._nextStep_2):SetText("STEP 2")
+  ((self._ui)._nextStep_2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_STEP2"))
   ;
-  ((self._ui)._nextStep_3):SetText("STEP 3")
+  ((self._ui)._nextStep_3):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_STEP3"))
   ;
-  ((self._ui)._nextStep_4):SetText("STEP 4")
+  ((self._ui)._nextStep_4):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_STEP4"))
   ;
   ((self._ui)._nextStep_1):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;

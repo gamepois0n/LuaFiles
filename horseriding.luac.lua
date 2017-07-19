@@ -77,4 +77,22 @@ FrameControl_ThreeSecond = function()
   return true
 end
 
+registerEvent("FromClient_ReconnectAlert_Show", "FromClient_ReconnectAlert_Show")
+registerEvent("FromClient_ReconnectAlert_Hide", "FromClient_ReconnectAlert_Hide")
+FromClient_ReconnectAlert_Show = function()
+  -- function num : 0_6
+  _PA_LOG("민혁", "FromClient_ReconnectAlert_Show 호출되었습니�\164.")
+  local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "GUILD_MESSAGEBOX_TITLE")
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_AUTO_RECONNECT")
+  local messageBoxData = {title = messageBoxtitle, content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_HIGH}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData, "middle")
+end
+
+FromClient_ReconnectAlert_Hide = function()
+  -- function num : 0_7
+  _PA_LOG("민혁", "FromClient_ReconnectAlert_Hide 호출되었습니�\164.")
+  postProcessMessageData()
+end
+
 

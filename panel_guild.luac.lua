@@ -2889,12 +2889,19 @@ FromClient_ResponseUpdateGuildContract = function(notifyType, userNickName, char
                                                                                               Proc_ShowMessage_Ack(tempTxt)
                                                                                             else
                                                                                               do
-                                                                                                do
-                                                                                                  if notifyType == 39 then
-                                                                                                    local tempTxt = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_GETWELFARE", "typeMoney", makeDotMoney(s64_param1))
-                                                                                                    Proc_ShowMessage_Ack(tempTxt)
+                                                                                                if notifyType == 39 then
+                                                                                                  local tempTxt = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_GETWELFARE", "typeMoney", makeDotMoney(s64_param1))
+                                                                                                  Proc_ShowMessage_Ack(tempTxt)
+                                                                                                else
+                                                                                                  do
+                                                                                                    do
+                                                                                                      if notifyType == 43 then
+                                                                                                        local tempTxt = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NOTIFYWELFARE")
+                                                                                                        Proc_ShowMessage_Ack(tempTxt)
+                                                                                                      end
+                                                                                                      FromClient_ResponseGuildUpdate()
+                                                                                                    end
                                                                                                   end
-                                                                                                  FromClient_ResponseGuildUpdate()
                                                                                                 end
                                                                                               end
                                                                                             end
@@ -3764,6 +3771,11 @@ end
 
 ConsoleGroupDelete_Panel_Window_Guild = function()
   -- function num : 0_91
+end
+
+Test_GiveMeGuildWelfare = function()
+  -- function num : 0_92
+  ToClient_RequestguildWelfare()
 end
 
 

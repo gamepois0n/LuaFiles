@@ -1118,21 +1118,35 @@ end
 
 Panel_Lobby_function_EnterChannel = function(index)
   -- function num : 0_12 , upvalues : _selectWorldIndex
-  selectServerGroup(_selectWorldIndex, index)
+  if selectServerGroup(_selectWorldIndex, index) == true then
+    Panel_Lobby_Function_EnableEnterChannelButton(false)
+  end
+end
+
+Panel_Lobby_Function_EnableEnterChannelButton = function(enableValue)
+  -- function num : 0_13 , upvalues : _worldServerCount, _worldServerCtrls, FRAME_SERVERLIST
+  for worldIndex = 0, _worldServerCount - 1 do
+    for idx = 0, (_worldServerCtrls[worldIndex])._channelCount - 1 do
+      local tmpBG = (UI.getChildControl)(FRAME_SERVERLIST:GetFrameContent(), "ChannelBG_" .. tostring(worldIndex) .. "_" .. tostring(idx))
+      local tmpButton = (UI.getChildControl)(tmpBG, "ChannelButton_" .. tostring(worldIndex) .. "_" .. tostring(idx))
+      tmpButton:SetEnable(enableValue)
+      tmpButton:SetMonoTone(not enableValue)
+    end
+  end
 end
 
 Panel_Lobby_function_EnterMemorizedChannel = function(index)
-  -- function num : 0_13 , upvalues : _selectWorldIndex
+  -- function num : 0_14 , upvalues : _selectWorldIndex
   selectMemorizedServer(_selectWorldIndex, index)
 end
 
 ServerList_RandomServerJoin = function()
-  -- function num : 0_14 , upvalues : _selectWorldIndex
+  -- function num : 0_15 , upvalues : _selectWorldIndex
   selectRandomServer(_selectWorldIndex)
 end
 
 EventUpdateServerInformation_SelectServer = function()
-  -- function num : 0_15 , upvalues : _selectWorldIndex
+  -- function num : 0_16 , upvalues : _selectWorldIndex
   local isShow = Panel_ServerSelect:IsShow()
   if isShow == false then
     return 
@@ -1145,12 +1159,12 @@ EventUpdateServerInformation_SelectServer = function()
 end
 
 SelectServer_RequestInfo_ForTest = function()
-  -- function num : 0_16
+  -- function num : 0_17
   requestServerInformationForTest()
 end
 
 PanelServerSelect_Resize = function()
-  -- function num : 0_17 , upvalues : SELECT_SERVER_BG_TEXT, FRAME_SERVERLIST, FRAME_Scroll, totalBG
+  -- function num : 0_18 , upvalues : SELECT_SERVER_BG_TEXT, FRAME_SERVERLIST, FRAME_Scroll, totalBG
   local count = getGameWorldServerDataCount() + 1
   Panel_ServerSelect:SetSize(getScreenSizeX(), getScreenSizeY())
   SELECT_SERVER_BG_TEXT:SetSize(SELECT_SERVER_BG_TEXT:GetSizeX() + 21, count * 48 + 50)
@@ -1181,7 +1195,7 @@ local endUV = startUV + 0.04
 local startUV2 = 0.9
 local endUV2 = startUV2 + 0.04
 ChannelSelectInfo_onScreenResize = function()
-  -- function num : 0_18 , upvalues : channelSelectInfo, FRAME_SERVERLIST
+  -- function num : 0_19 , upvalues : channelSelectInfo, FRAME_SERVERLIST
   local self = channelSelectInfo
   local scrX = getScreenSizeX()
   ;
@@ -1191,7 +1205,7 @@ ChannelSelectInfo_onScreenResize = function()
 end
 
 SpeedChannelInfo_onScreenResize = function()
-  -- function num : 0_19 , upvalues : channelSpeedInfo, FRAME_SERVERLIST, channelSelectInfo
+  -- function num : 0_20 , upvalues : channelSpeedInfo, FRAME_SERVERLIST, channelSelectInfo
   local self = channelSpeedInfo
   local scrX = getScreenSizeX()
   ;
@@ -1205,7 +1219,7 @@ SpeedChannelInfo_onScreenResize = function()
 end
 
 warInfo_onScreenResize = function()
-  -- function num : 0_20 , upvalues : warInfo, FRAME_SERVERLIST, channelSelectInfo, channelSpeedInfo
+  -- function num : 0_21 , upvalues : warInfo, FRAME_SERVERLIST, channelSelectInfo, channelSpeedInfo
   local self = warInfo
   local scrX = getScreenSizeX()
   ;
@@ -1219,7 +1233,7 @@ warInfo_onScreenResize = function()
 end
 
 ChannelSelectInfo_Show = function()
-  -- function num : 0_21 , upvalues : channelSelectInfo
+  -- function num : 0_22 , upvalues : channelSelectInfo
   local self = channelSelectInfo
   ChannelSelectInfo_onScreenResize()
   ;
@@ -1227,7 +1241,7 @@ ChannelSelectInfo_Show = function()
 end
 
 ChannelSelectInfo_Hide = function()
-  -- function num : 0_22 , upvalues : channelSelectInfo
+  -- function num : 0_23 , upvalues : channelSelectInfo
   local self = channelSelectInfo
   if not (self._mainBG):GetShow() then
     return 
@@ -1237,7 +1251,7 @@ ChannelSelectInfo_Hide = function()
 end
 
 SpeedChannelInfo_Show = function()
-  -- function num : 0_23 , upvalues : channelSpeedInfo
+  -- function num : 0_24 , upvalues : channelSpeedInfo
   local self = channelSpeedInfo
   SpeedChannelInfo_onScreenResize()
   ;
@@ -1245,7 +1259,7 @@ SpeedChannelInfo_Show = function()
 end
 
 SpeedChannelInfo_Hide = function()
-  -- function num : 0_24 , upvalues : channelSpeedInfo
+  -- function num : 0_25 , upvalues : channelSpeedInfo
   local self = channelSpeedInfo
   if not (self._speedMainBG):GetShow() then
     return 
@@ -1255,7 +1269,7 @@ SpeedChannelInfo_Hide = function()
 end
 
 warInfo_Show = function()
-  -- function num : 0_25 , upvalues : warInfo
+  -- function num : 0_26 , upvalues : warInfo
   local self = warInfo
   warInfo_onScreenResize()
   ;
@@ -1263,7 +1277,7 @@ warInfo_Show = function()
 end
 
 warInfo_Hide = function()
-  -- function num : 0_26 , upvalues : warInfo
+  -- function num : 0_27 , upvalues : warInfo
   local self = warInfo
   if not (self._uiWarInfo):GetShow() then
     return 
@@ -1273,7 +1287,7 @@ warInfo_Hide = function()
 end
 
 Panel_ServerSelect_Update = function(deltaTime)
-  -- function num : 0_27 , upvalues : updateTime, isScope, currentBackIndex, startUV, endUV, startUV2, endUV2, totalBG
+  -- function num : 0_28 , upvalues : updateTime, isScope, currentBackIndex, startUV, endUV, startUV2, endUV2, totalBG
   Panel_SelectServer_Delta(deltaTime)
   updateTime = updateTime - deltaTime
   if updateTime <= 0 then
@@ -1322,13 +1336,13 @@ Panel_ServerSelect_Update = function(deltaTime)
 end
 
 ServerList_GetMainServerNo = function()
-  -- function num : 0_28
+  -- function num : 0_29
   local mainServerNo = ToClient_getUserSubCacheData((CppEnums.GlobalUIOptionType).MainServerNo)
   return mainServerNo
 end
 
 ServerList_ToggleRadioBtn = function()
-  -- function num : 0_29 , upvalues : isRadioBtnShow
+  -- function num : 0_30 , upvalues : isRadioBtnShow
   if isRadioBtnShow == true then
     isRadioBtnShow = false
   else
@@ -1339,7 +1353,7 @@ ServerList_ToggleRadioBtn = function()
 end
 
 ServerList_SetMainServer = function(worldIndex, serverIndex)
-  -- function num : 0_30 , upvalues : isRadioBtnShow
+  -- function num : 0_31 , upvalues : isRadioBtnShow
   local worldServerData = getGameWorldServerDataByIndex(worldIndex)
   local serverData = getGameChannelServerDataByIndex(worldIndex, serverIndex)
   if serverData == nil then
@@ -1347,7 +1361,7 @@ ServerList_SetMainServer = function(worldIndex, serverIndex)
     return 
   end
   local Set_MainServer = function()
-    -- function num : 0_30_0 , upvalues : worldIndex, serverIndex, isRadioBtnShow
+    -- function num : 0_31_0 , upvalues : worldIndex, serverIndex, isRadioBtnShow
     local serverData = getGameChannelServerDataByIndex(worldIndex, serverIndex)
     local serverNo = serverData._serverNo
     ToClient_setUserSubCacheData((CppEnums.GlobalUIOptionType).MainServerNo, serverNo)
@@ -1361,7 +1375,7 @@ ServerList_SetMainServer = function(worldIndex, serverIndex)
 end
 
 ServerSelect_Simpletooltip = function(isShow, tipType, index, idx)
-  -- function num : 0_31 , upvalues : _worldServerCtrls
+  -- function num : 0_32 , upvalues : _worldServerCtrls
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -1381,7 +1395,7 @@ ServerSelect_Simpletooltip = function(isShow, tipType, index, idx)
 end
 
 ServerList_EnterMainServer = function()
-  -- function num : 0_32 , upvalues : _selectWorldIndex, _worldServerCtrls
+  -- function num : 0_33 , upvalues : _selectWorldIndex, _worldServerCtrls
   local mainServerNo = ServerList_GetMainServerNo()
   do
     if mainServerNo == -1 then
@@ -1414,7 +1428,7 @@ ServerList_EnterMainServer = function()
 end
 
 ServerList_LastJoinServer = function()
-  -- function num : 0_33 , upvalues : _selectWorldIndex, _worldServerCtrls
+  -- function num : 0_34 , upvalues : _selectWorldIndex, _worldServerCtrls
   local tempWrapper = getTemporaryInformationWrapper()
   local lastJoinServerNo = tempWrapper:getLastServerNo()
   if lastJoinServerNo == 1 then

@@ -11,13 +11,13 @@ Panel_SavageDefenceInfo:setMaskingChild(true)
 Panel_SavageDefenceInfo:ActiveMouseEventEffect(true)
 Panel_SavageDefenceInfo:setGlassBackground(true)
 local PaGlobal_SavegeDefenceInfo = {_blackBG = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BlackBG"), _txtTitle = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Title"), _btnClose = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Win_Close"), _btnHelp = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Question"), _listBg = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_SavageDefenceListBG"), _scroll = (UI.getChildControl)(Panel_SavageDefenceInfo, "Scroll_SavageDefenceList"), _txtRule = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RuleContent"), _txtReward = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RewardContent"), _txtInfo = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_InfoContent"), _btnInmy = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_InmyChannel"), _list2 = (UI.getChildControl)(Panel_SavageDefenceInfo, "List2_SavageDefenceList"), _desc_Rule_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Rule"), _desc_rule = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_1"), 
-desc_Rule = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_6"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_7"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_8"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1")}
+desc_Rule = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_6"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_7"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_8"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_9"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1")}
 , 
-desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_6"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_7"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_8"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_1")}
+desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_6"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_7"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_8"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_9"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_1")}
 , _desc_Reward_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Reward"), _desc_Reward = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_2"), 
-desc_Reward = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_3"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_1")}
+desc_Reward = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_6"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_1")}
 , 
-desc_RewardText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_2"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_3"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_1")}
+desc_RewardText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_2"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_3"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_4"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_5"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_6"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_REWARD_1")}
 , _desc_Explanation_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Explanation"), _desc_Explanation = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_3"), 
 desc_Explanation = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_2"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Explanation_1")}
 , 
@@ -113,6 +113,8 @@ FGlobal_SavegeDefenceInfo_Initionalize = function()
   ((self.desc_Rule)[6]):SetPosY(((self.desc_Rule)[5]):GetPosY() + ((self.desc_Rule)[5]):GetTextSizeY() + 2)
   ;
   ((self.desc_Rule)[7]):SetPosY(((self.desc_Rule)[6]):GetPosY() + ((self.desc_Rule)[6]):GetTextSizeY() + 2)
+  ;
+  ((self.desc_Rule)[8]):SetPosY(((self.desc_Rule)[7]):GetPosY() + ((self.desc_Rule)[7]):GetTextSizeY() + 2)
   for index = 0, #self.desc_RewardText do
     ((self.desc_Reward)[index]):SetPosX(5)
   end
@@ -122,6 +124,12 @@ FGlobal_SavegeDefenceInfo_Initionalize = function()
   ((self.desc_Reward)[1]):SetPosY(((self.desc_Reward)[0]):GetPosY() + ((self.desc_Reward)[0]):GetTextSizeY() + 2)
   ;
   ((self.desc_Reward)[2]):SetPosY(((self.desc_Reward)[1]):GetPosY() + ((self.desc_Reward)[1]):GetTextSizeY() + 2)
+  ;
+  ((self.desc_Reward)[3]):SetPosY(((self.desc_Reward)[2]):GetPosY() + ((self.desc_Reward)[2]):GetTextSizeY() + 2)
+  ;
+  ((self.desc_Reward)[4]):SetPosY(((self.desc_Reward)[3]):GetPosY() + ((self.desc_Reward)[3]):GetTextSizeY() + 2)
+  ;
+  ((self.desc_Reward)[5]):SetPosY(((self.desc_Reward)[4]):GetPosY() + ((self.desc_Reward)[4]):GetTextSizeY() + 2)
   for index = 0, #self.desc_ExplanationText do
     ((self.desc_Explanation)[index]):SetPosX(5)
   end
@@ -208,6 +216,9 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
     savageDefenceListStatus:SetText(isCurrentState)
     savageDefenceListWave:SetText(getWave)
     savageDefenceListJoinBtn:addInputEvent("Mouse_LUp", "FGlobal_SavegeDefenceInfo_join(" .. idx .. ")")
+    if getServerNo ~= curChannelData._serverNo then
+      savageDefenceListJoinBtn:SetShow(false)
+    end
   end
 end
 
@@ -249,18 +260,22 @@ FGlobal_SavegeDefenceInfo_join = function(idx)
         return 
       end
     end
+    if ToClient_hasInventorySavageDefenceItem() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_JOIN_FAIL_ITEM"))
+      return 
+    end
     if IsSelfPlayerWaitAction() then
       if hp == maxHp or isGameMaster then
         if getServerNo == curChannelData._serverNo then
           ToClient_SavageDefenceJoin(idx)
         else
-          ToClient_RequestSavageDefenceJoinToAnotherChannel(getServerNo)
+          Proc_ShowMessage_Ack("현재 접속 중인 서버�\140 입장�\180 �\128능합니다.")
         end
       else
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_MAXHP_CHECK"))
       end
     else
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_LOCALWARINFO"))
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_SAVAGEDEFENCEINFO"))
     end
   end
 
@@ -269,18 +284,13 @@ FGlobal_SavegeDefenceInfo_join = function(idx)
   else
     channelMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_CHANNELMOVE", "channelName", channelName)
   end
-  local changeChannelTime = getChannelMoveableRemainTime(curChannelData._worldNo)
-  local changeRealChannelTime = convertStringFromDatetime(changeChannelTime)
-  if toInt64(0, 0) < changeChannelTime and getServerNo ~= curChannelData._serverNo then
-    local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANGECHANNEL_PENALTY", "changeRealChannelTime", changeRealChannelTime)
-    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  if getServerNo == curChannelData._serverNo then
+    local messageBoxData = {title = "야만�\152 균열 입장", content = channelMemo, functionYes = joinSavageDefence, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)
   else
     do
-      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = channelMemo, functionYes = joinSavageDefence, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-      ;
-      (MessageBox.showMessageBox)(messageBoxData)
+      Proc_ShowMessage_Ack("현재 접속 중인 서버�\140 입장�\180 �\128능합니다.")
     end
   end
 end

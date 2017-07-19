@@ -188,8 +188,10 @@ end
 
 FromClient_ResponseVolunteerRecruit = function()
   -- function num : 0_10
-  local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_RECRUITSTART"), sub = "", addMsg = ""}
-  Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 75)
+  if ToClient_IsContentsGroupOpen("245") then
+    local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_RECRUITSTART"), sub = "", addMsg = ""}
+    Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 75)
+  end
 end
 
 FromClient_ResponseMilitiaStart = function()

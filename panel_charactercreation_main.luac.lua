@@ -1459,7 +1459,7 @@ end
           EventSelectClass = function()
   -- function num : 0_59
   restoreUIScale()
-  changeCreateCharacterMode_SelectClass(false)
+  changeCreateCharacterMode_SelectClass(FGlobal_getIsSpecialCharacter())
 end
 
           EventSelectBack = function()
@@ -1467,7 +1467,7 @@ end
   showStaticUI(false)
   Panel_CustomizationMain:SetShow(false)
   restoreUIScale()
-  characterCreateCancel()
+  characterCreateCancel(FGlobal_getIsSpecialCharacter())
   ToClient_clear_DoUnDoHistory()
 end
 

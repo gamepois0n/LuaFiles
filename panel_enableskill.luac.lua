@@ -570,6 +570,7 @@ FromClient_EventSkillWindowUpdate = function()
   slideIndex = 0
   _slide:SetControlPos(0)
   enableSkill_UpdateData(isEditCheck)
+  PaGlobal_SkillCombination:update()
 end
 
 FromClient_UseSkillAskFromOtherPlayer = function(fromName)

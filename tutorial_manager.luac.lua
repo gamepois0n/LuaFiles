@@ -358,6 +358,10 @@ PaGlobal_TutorialManager.initializeClassBasicSkillPhaseTable = function(self)
 
   ;
   (self._classBasicSkillPhaseList)[(CppEnums.ClassType).ClassType_Combattant] = PaGlobal_TutorialPhase_BasicSkill_Combattant
+  -- DECOMPILER ERROR at PC89: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._classBasicSkillPhaseList)[(CppEnums.ClassType).ClassType_CombattantWomen] = PaGlobal_TutorialPhase_BasicSkill_CombattantWomen
 end
 
 -- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'

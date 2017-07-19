@@ -2751,6 +2751,8 @@ HandleClicked_SpecialGoods_GroupItem = function(itemIdx, itemEnchantKeyRaw)
     (self.btn_SetPreBid):SetSize(135, 32)
     ;
     (self.btn_Refresh):SetSize(135, 32)
+    ;
+    (self.btn_BidDesc):SetSize(235, 32)
   else
     ;
     (self.btn_SetAlarm):SetSize(135, 32)
@@ -4081,6 +4083,9 @@ FGlobal_HandleClicked_ItemMarketBackPage = function()
     (self.btn_InMarketRegist):SetShow(true)
     ;
     (self.btn_BidDesc):SetPosX(700)
+    if isGameTypeRussia() then
+      (self.btn_BidDesc):SetSize(135, 32)
+    end
   end
   local text = self.txt_ItemNameBackPage
   if text ~= nil and text ~= "" and PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME") ~= text then

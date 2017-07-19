@@ -308,13 +308,18 @@ local _headContentImage = {}
 local _hairContentImage = {}
 local characterTicketAbleUI = {}
 local isSpecialCharacter = false
-SetSpecialCharacter = function(isSC)
+FGlobal_SetSpecialCharacter = function(isSC)
   -- function num : 0_0 , upvalues : isSpecialCharacter
   isSpecialCharacter = isSC
 end
 
+FGlobal_getIsSpecialCharacter = function()
+  -- function num : 0_1 , upvalues : isSpecialCharacter
+  return isSpecialCharacter
+end
+
 local Panel_Lobby_Function_Initialize = function()
-  -- function num : 0_1 , upvalues : Panel_Lobby_UI, Panel_Lobby_ClassUI, UI_Class, UI_TM, classButtonStartX, classButtonGapX, columnCount, classButtonGapY, rowCount, classNameStartX, classNameGapX, sortCharacterCount, columnCountByRaw
+  -- function num : 0_2 , upvalues : Panel_Lobby_UI, Panel_Lobby_ClassUI, UI_Class, UI_TM, classButtonStartX, classButtonGapX, columnCount, classButtonGapY, rowCount, classNameStartX, classNameGapX, sortCharacterCount, columnCountByRaw
   (UI.ASSERT)(Panel_CharacterCreateSelectClass ~= nil, "createCharacter_SelectClass\tnil")
   ;
   (UI.ASSERT)(Panel_Lobby_UI.CCSC_ClassName ~= nil, "CCSC_ClassName\t\t\t\tnil")
@@ -555,7 +560,7 @@ local Panel_Lobby_Function_Initialize = function()
 end
 
 local Panel_Lobby_function_StartUp_CreateCharacter_SelectClass = function()
-  -- function num : 0_2 , upvalues : UI_Class, Panel_Lobby_Global_Variable, _frameContents, Character_Status, Panel_Lobby_UI, bottomFrame, CCSC_Frame, _frameScroll, Panel_Lobby_ClassUI
+  -- function num : 0_3 , upvalues : UI_Class, Panel_Lobby_Global_Variable, _frameContents, Character_Status, Panel_Lobby_UI, bottomFrame, CCSC_Frame, _frameScroll, Panel_Lobby_ClassUI
   Panel_Lobby_function_SelectClassType(UI_Class.ClassType_Warrior)
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
 
@@ -606,7 +611,7 @@ local Panel_Lobby_function_StartUp_CreateCharacter_SelectClass = function()
     end
   end
   local ClassBtn_Show = function(classIndex)
-    -- function num : 0_2_0 , upvalues : Panel_Lobby_ClassUI
+    -- function num : 0_3_0 , upvalues : Panel_Lobby_ClassUI
     local classButton = (Panel_Lobby_ClassUI.ClassButtons)[classIndex]
     local className = (Panel_Lobby_ClassUI.ClassNames)[classIndex]
     if classButton ~= nil then
@@ -625,7 +630,7 @@ local Panel_Lobby_function_StartUp_CreateCharacter_SelectClass = function()
 end
 
 Panel_Lobby_Function_showCharacterCreate_SelectClass = function()
-  -- function num : 0_3 , upvalues : Panel_Lobby_function_StartUp_CreateCharacter_SelectClass
+  -- function num : 0_4 , upvalues : Panel_Lobby_function_StartUp_CreateCharacter_SelectClass
   FGlobal_CharacterSelect_Close()
   Panel_Lobby_function_DeleteButton()
   Panel_Lobby_function_ClearData()
@@ -646,7 +651,7 @@ Panel_Lobby_Function_showCharacterCreate_SelectClass = function()
 end
 
 Panel_Lobby_Function_showCharacterCustomization = function(customizationData)
-  -- function num : 0_4 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable
+  -- function num : 0_5 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable
   Panel_Lobby_function_DeleteButton()
   Panel_CharacterCreateSelectClass:SetShow(false, false)
   ;
@@ -657,7 +662,7 @@ Panel_Lobby_Function_showCharacterCustomization = function(customizationData)
 end
 
 Panel_Lobby_function_ClearData = function()
-  -- function num : 0_5 , upvalues : Panel_Lobby_Global_Variable
+  -- function num : 0_6 , upvalues : Panel_Lobby_Global_Variable
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   Panel_Lobby_Global_Variable.characterSelect = -1
@@ -670,7 +675,7 @@ Panel_Lobby_function_ClearData = function()
 end
 
 Panel_Lobby_function_SelectClassType = function(index, isOn)
-  -- function num : 0_6 , upvalues : UI_Class, isSpecialCharacter, Panel_Lobby_ClassUI, Panel_Lobby_UI, Panel_Lobby_Global_Variable, UI_TM, txt_BottomDesc, _frameBottomDesc
+  -- function num : 0_7 , upvalues : UI_Class, isSpecialCharacter, Panel_Lobby_ClassUI, Panel_Lobby_UI, Panel_Lobby_Global_Variable, UI_TM, txt_BottomDesc, _frameBottomDesc
   if index < UI_Class.ClassType_Count then
     if ToClient_checkCreatePossibleClass(index, isSpecialCharacter) == false then
       return 
@@ -712,7 +717,7 @@ Panel_Lobby_function_SelectClassType = function(index, isOn)
 end
 
 Panel_Lobby_SelectClass_MouseEvent = function(index, isOn)
-  -- function num : 0_7 , upvalues : Panel_Lobby_ClassUI
+  -- function num : 0_8 , upvalues : Panel_Lobby_ClassUI
   local classButton = (Panel_Lobby_ClassUI.ClassButtons)[index]
   if classButton ~= nil then
     if isOn == true then
@@ -724,15 +729,15 @@ Panel_Lobby_SelectClass_MouseEvent = function(index, isOn)
 end
 
 Panel_CharacterCreateOk = function()
-  -- function num : 0_8 , upvalues : Panel_Lobby_Global_Variable, Panel_Lobby_UI, isSpecialCharacter
+  -- function num : 0_9 , upvalues : Panel_Lobby_Global_Variable, Panel_Lobby_UI, isSpecialCharacter
   chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, (Panel_Lobby_UI.CC_CharacterNameEdit):GetEditText(), isSpecialCharacter)
 end
 
 Panel_CharacterCreateOK_NewCustomization = function()
-  -- function num : 0_9 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable, isSpecialCharacter
+  -- function num : 0_10 , upvalues : Panel_Lobby_UI, Panel_Lobby_Global_Variable, isSpecialCharacter
   local _edit_CharacterName = (Panel_Lobby_UI.CM_Edit_CharacterName):GetEditText()
   local createCharacterFunc = function()
-    -- function num : 0_9_0 , upvalues : Panel_Lobby_Global_Variable, _edit_CharacterName, isSpecialCharacter
+    -- function num : 0_10_0 , upvalues : Panel_Lobby_Global_Variable, _edit_CharacterName, isSpecialCharacter
     chracterCreate(Panel_Lobby_Global_Variable.characterSelectType, _edit_CharacterName, isSpecialCharacter)
   end
 
@@ -747,13 +752,13 @@ Panel_CharacterCreateOK_NewCustomization = function()
 end
 
 Panel_CharacterCreateCancel = function()
-  -- function num : 0_10
+  -- function num : 0_11
   Panel_CharacterCreateSelectClass:SetShow(false)
-  characterCreateCancel()
+  characterCreateCancel(FGlobal_getIsSpecialCharacter())
 end
 
 Panel_Lobby_function_DeleteButton = function()
-  -- function num : 0_11 , upvalues : Panel_Lobby_Global_Variable
+  -- function num : 0_12 , upvalues : Panel_Lobby_Global_Variable
   if Panel_Lobby_Global_Variable.UiMaker == nil then
     return 
   end

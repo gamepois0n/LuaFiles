@@ -272,7 +272,7 @@ FGlobal_setAutoFrameCheckRepeat = function(value)
   else
     -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
 
-    AutoFrameCheckManager._isRpeat = false
+    AutoFrameCheckManager._isRpeat = true
     -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
 
     AutoFrameCheckManager._maxRepeatCount = value

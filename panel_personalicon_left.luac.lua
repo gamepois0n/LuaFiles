@@ -503,6 +503,7 @@ Panel_SelfPlayer_EnableSkillCheck_Func = function()
   end
   FromClient_PackageIconUpdate()
   FromClient_ResponseChangeExpAndDropPercent()
+  PaGlobal_SkillCombination:update()
 end
 
 Panel_SelfPlayer_EnableSkillCheck_Close = function()

@@ -98,24 +98,19 @@ BlackSpirit2_Show = function()
   end
 end
 
-HandleClicked_BlackSpiritAdventure_PopUp = function()
-  -- function num : 0_3
-  TooltipSimple_Hide()
-end
-
 BlackSpirit2_Hide = function()
-  -- function num : 0_4 , upvalues : _Web
+  -- function num : 0_3 , upvalues : _Web
   Panel_Window_BlackSpiritAdventure_2:SetShow(false, false)
   _Web:ResetUrl()
 end
 
 FGlobal_BlackSpiritAdventure2_Open = function()
-  -- function num : 0_5
+  -- function num : 0_4
   BlackSpirit2_Show()
 end
 
 blackSpirit2UrlByServiceType = function()
-  -- function num : 0_6
+  -- function num : 0_5
   local url = nil
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
@@ -182,7 +177,7 @@ blackSpirit2UrlByServiceType = function()
 end
 
 BlackSpirit_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_7
+  -- function num : 0_6
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""

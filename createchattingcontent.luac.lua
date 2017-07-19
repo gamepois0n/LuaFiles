@@ -163,47 +163,53 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 chatting_contents[contentindex] = poolCurrentUI:newChattingEmoticon()
                 ;
                 (chatting_contents[contentindex]):ChangeTextureInfoName(chattingMessage:getEmoticonPath(emoNum - 1))
-                ;
-                ((chatting_contents[contentindex]):getBaseTexture()):setUV(0, 0, (chattingMessage:getEmoticonUV(emoNum - 1)).x, (chattingMessage:getEmoticonUV(emoNum - 1)).y)
-                ;
-                (chatting_contents[contentindex]):setRenderTexture((chatting_contents[contentindex]):getBaseTexture())
-                ;
-                (chatting_contents[contentindex]):SetSize(chatting_sender:GetSizeY(), chatting_sender:GetSizeY())
-                ;
-                (chatting_contents[contentindex]):SetShow(true)
-                j = 1
-                isWhile = false
-                textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-                textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
-                while 1 do
-                  if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
-                    isWhile = true
-                    textStaticSizeX = textStaticSizeX - (chatting_contents[contentindex - j]):GetSizeX()
-                    textStaticPosX = textStaticPosX + (chatting_contents[contentindex - j]):GetSizeX()
-                  end
-                  if (chatting_contents[contentindex - j]):GetPosX() <= chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX then
-                    break
-                  end
-                  j = j + 1
-                end
-                if textStaticSizeX <= 0 or isWhile == false then
+                local startX = (chattingMessage:getEmoticonUV(emoNum - 1)).x
+                local startY = (chattingMessage:getEmoticonUV(emoNum - 1)).y
+                local sizeX = (chattingMessage:getEmoticonSize(emoNum - 1)).x
+                do
+                  local sizeY = (chattingMessage:getEmoticonSize(emoNum - 1)).y
+                  ;
+                  ((chatting_contents[contentindex]):getBaseTexture()):setUV(startX, startY, startX + sizeX, startY + sizeY)
+                  ;
+                  (chatting_contents[contentindex]):setRenderTexture((chatting_contents[contentindex]):getBaseTexture())
+                  ;
+                  (chatting_contents[contentindex]):SetSize(chatting_sender:GetSizeY(), chatting_sender:GetSizeY())
+                  ;
+                  (chatting_contents[contentindex]):SetShow(true)
+                  j = 1
+                  isWhile = false
                   textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
                   textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                  while 1 do
+                    if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
+                      isWhile = true
+                      textStaticSizeX = textStaticSizeX - (chatting_contents[contentindex - j]):GetSizeX()
+                      textStaticPosX = textStaticPosX + (chatting_contents[contentindex - j]):GetSizeX()
+                    end
+                    if (chatting_contents[contentindex - j]):GetPosX() <= chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX then
+                      break
+                    end
+                    j = j + 1
+                  end
+                  if textStaticSizeX <= 0 or isWhile == false then
+                    textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
+                    textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                  end
+                  ;
+                  (chatting_contents[contentindex]):SetSize(chatting_sender:GetSizeY(), chatting_sender:GetSizeY())
+                  ;
+                  (chatting_contents[contentindex]):SetPosX(textStaticPosX)
+                  emoNum = emoNum + 1
+                  contentindex = contentindex + 1
+                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_STMT
+
+                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_STMT
+
                 end
-                ;
-                (chatting_contents[contentindex]):SetSize(chatting_sender:GetSizeY(), chatting_sender:GetSizeY())
-                ;
-                (chatting_contents[contentindex]):SetPosX(textStaticPosX)
-                emoNum = emoNum + 1
-                contentindex = contentindex + 1
-                -- DECOMPILER ERROR at PC491: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                -- DECOMPILER ERROR at PC491: LeaveBlock: unexpected jumping out IF_STMT
-
-                -- DECOMPILER ERROR at PC491: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                -- DECOMPILER ERROR at PC491: LeaveBlock: unexpected jumping out IF_STMT
-
               end
             end
           end
@@ -261,15 +267,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                     do
                       msgDataLen = 0
                       contentindex = contentindex + 1
-                      -- DECOMPILER ERROR at PC665: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC665: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                      -- DECOMPILER ERROR at PC665: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC665: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC665: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end
@@ -282,9 +288,9 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 (chatting_contents[contentindex - 1]):SetSize((chatting_contents[contentindex - 1]):GetSizeX(), chatting_sender:GetSizeY())
               end
               msgstartindex = emoticonindex
-              -- DECOMPILER ERROR at PC690: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC700: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC690: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC700: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -493,15 +499,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 do
                   msgDataLen = 0
                   contentindex = contentindex + 1
-                  -- DECOMPILER ERROR at PC1117: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC1117: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC1117: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC1117: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC1117: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -533,7 +539,7 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
           chatting_Icon:SetPosY(PosY - (deltaPosY))
           chatting_sender:SetPosY(PosY - (deltaPosY))
           PosY = PosY - 3
-          -- DECOMPILER ERROR at PC1238: Overwrote pending register: R34 in 'AssignReg'
+          -- DECOMPILER ERROR at PC1248: Overwrote pending register: R34 in 'AssignReg'
 
           chatting_contents = CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedWebSite, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, true, messageIndex)
           for index = contentindex - 1, 1, -1 do

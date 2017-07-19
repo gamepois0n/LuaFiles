@@ -797,7 +797,23 @@ getContryTypeLua = function()
               if eCountryType.SA_ALPHA == gameServiceType or eCountryType.SA_REAL == gameServiceType then
                 returnValue = (CppEnums.ContryCode).eContryCode_SA
               else
-                returnValue = (CppEnums.ContryCode).eContryCode_Count
+                if eCountryType.TH_ALPHA == gameServiceType or eCountryType.TH_REAL == gameServiceType then
+                  returnValue = (CppEnums.ContryCode).eContryCode_TH
+                else
+                  if eCountryType.ID_ALPHA == gameServiceType or eCountryType.ID_REAL == gameServiceType then
+                    returnValue = (CppEnums.ContryCode).eContryCode_ID
+                  else
+                    if eCountryType.TR_ALPHA == gameServiceType or eCountryType.TR_REAL == gameServiceType then
+                      returnValue = (CppEnums.ContryCode).eContryCode_TR
+                    else
+                      if eCountryType.AE_ALPHA == gameServiceType or eCountryType.AE_REAL == gameServiceType then
+                        returnValue = (CppEnums.ContryCode).eContryCode_AE
+                      else
+                        returnValue = (CppEnums.ContryCode).eContryCode_Count
+                      end
+                    end
+                  end
+                end
               end
             end
           end
@@ -842,7 +858,23 @@ getContryDetailTypeLua = function()
               if eCountryType.SA_ALPHA == gameServiceType or eCountryType.SA_REAL == gameServiceType then
                 returnValue = (CppEnums.ContryCode).eContryCode_SA
               else
-                returnValue = (CppEnums.ContryCode).eContryCode_Count
+                if eCountryType.TH_ALPHA == gameServiceType or eCountryType.TH_REAL == gameServiceType then
+                  returnValue = (CppEnums.ContryCode).eContryCode_TH
+                else
+                  if eCountryType.ID_ALPHA == gameServiceType or eCountryType.ID_REAL == gameServiceType then
+                    returnValue = (CppEnums.ContryCode).eContryCode_ID
+                  else
+                    if eCountryType.TR_ALPHA == gameServiceType or eCountryType.TR_REAL == gameServiceType then
+                      returnValue = (CppEnums.ContryCode).eContryCode_TR
+                    else
+                      if eCountryType.AE_ALPHA == gameServiceType or eCountryType.AE_REAL == gameServiceType then
+                        returnValue = (CppEnums.ContryCode).eContryCode_AE
+                      else
+                        returnValue = (CppEnums.ContryCode).eContryCode_Count
+                      end
+                    end
+                  end
+                end
               end
             end
           end
@@ -933,8 +965,28 @@ isGameTypeKR2 = function()
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KR2)
 end
 
-isCommonGameType = function()
+isGameTypeTH = function()
   -- function num : 0_64
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TH)
+end
+
+isGameTypeID = function()
+  -- function num : 0_65
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_ID)
+end
+
+isGameTypeTR = function()
+  -- function num : 0_66
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TR)
+end
+
+isGameTypeAE = function()
+  -- function num : 0_67
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_AE)
+end
+
+isCommonGameType = function()
+  -- function num : 0_68
   local returnValue = false
   if isGameTypeJapan() then
     returnValue = true
@@ -965,7 +1017,7 @@ isCommonGameType = function()
 end
 
 isItemMarketSecureCode = function()
-  -- function num : 0_65
+  -- function num : 0_69
   local isSecureCode = false
   if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA()) and isSecureCode == true then
     return true
@@ -979,7 +1031,7 @@ local g_TimerNo = 0
 local g_Timerlist = {}
 local g_TimerCount = 0
 luaTimer_UpdatePerFrame = function(fDelta)
-  -- function num : 0_66 , upvalues : g_TimerCount, g_Timerlist
+  -- function num : 0_70 , upvalues : g_TimerCount, g_Timerlist
   if g_TimerCount <= 0 then
     return 
   end
@@ -1020,7 +1072,7 @@ luaTimer_UpdatePerFrame = function(fDelta)
 end
 
 luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
-  -- function num : 0_67 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
+  -- function num : 0_71 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
   g_TimerNo = g_TimerNo + 1
   local tempTimer = {}
   tempTimer._timerNo = g_TimerNo
@@ -1039,7 +1091,7 @@ luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
 end
 
 luaTimer_RemoveEvent = function(timerNo)
-  -- function num : 0_68 , upvalues : g_Timerlist, g_TimerCount
+  -- function num : 0_72 , upvalues : g_Timerlist, g_TimerCount
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
   if g_Timerlist[timerNo] ~= nil then

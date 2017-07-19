@@ -4445,6 +4445,10 @@ end
 
 FGlobal_CloseNpcDialogForDetail = function()
   -- function num : 0_79
+  if (getCustomizingManager()):isShow() then
+    HandleClicked_CloseIngameCustomization()
+    return true
+  end
   if Panel_Npc_Trade_Market:IsShow() then
     closeNpcTrade_Basket()
     return true
