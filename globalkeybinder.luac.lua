@@ -42,27 +42,35 @@ local GlobalKeyBinder_CheckProgress = function()
   return false
 end
 
+local InteractionCheck = function(interactionType)
+  -- function num : 0_5
+  if interactionType == (CppEnums.InteractionType).InteractionType_ExchangeItem or interactionType == (CppEnums.InteractionType).InteractionType_InvitedParty or interactionType == (CppEnums.InteractionType).InteractionType_GuildInvite then
+    return true
+  end
+  return false
+end
+
 GlobalKeyBinder_CheckProgress_chk = function()
-  -- function num : 0_5 , upvalues : GlobalKeyBinder_CheckProgress
+  -- function num : 0_6 , upvalues : GlobalKeyBinder_CheckProgress
   return GlobalKeyBinder_CheckProgress()
 end
 
 local GlobalKeyBinder_Clear = function()
-  -- function num : 0_6 , upvalues : mouseKeyTable
+  -- function num : 0_7 , upvalues : mouseKeyTable
   mouseKeyTable = {}
 end
 
 local _keyBinder_GameMode = function()
-  -- function num : 0_7
+  -- function num : 0_8
   DragManager:clearInfo()
 end
 
 local _keyBinder_UIMode = function()
-  -- function num : 0_8
+  -- function num : 0_9
 end
 
 local _keyBinder_Chatting = function()
-  -- function num : 0_9 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, IM, GlobalKeyBinder_CheckCustomKeyPressed
+  -- function num : 0_10 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, IM, GlobalKeyBinder_CheckCustomKeyPressed
   uiEdit = GetFocusEdit()
   if WaitComment_CheckCurrentUiEdit(uiEdit) then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
@@ -274,7 +282,7 @@ local _keyBinder_Chatting = function()
 end
 
 local _keyBinder_Mail = function()
-  -- function num : 0_10 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_11 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
     MailSend_PressedDown()
   else
@@ -289,7 +297,7 @@ local _keyBinder_Mail = function()
 end
 
 local _keyBinder_UiModeNotInput = function()
-  -- function num : 0_11 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_12 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Alchemy_Close()
   end
@@ -297,7 +305,7 @@ end
 
 local fastPinDelta = 0
 local _keyBinder_UIMode_CommonWindow = function(deltaTime)
-  -- function num : 0_12 , upvalues : GlobalKeyBinder_CheckCustomKeyPressed, VCK, fastPinDelta, GlobalKeyBinder_CheckKeyPressed, IM, GlobalKeyBinder_Clear, escHandle
+  -- function num : 0_13 , upvalues : GlobalKeyBinder_CheckCustomKeyPressed, VCK, fastPinDelta, GlobalKeyBinder_CheckKeyPressed, IM, InteractionCheck, GlobalKeyBinder_Clear, escHandle
   if FGlobal_GetFirstTutorialState() == true then
     return 
   end
@@ -346,19 +354,25 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             local interactableActor = interaction_getInteractable()
             if interactableActor ~= nil and (not (interactableActor:get()):isPlayer() or (interactableActor:get()):isSelfPlayer()) and camBlur <= 0 then
               local interactionType = interactableActor:getSettedFirstInteractionType()
+              if InteractionCheck(interactionType) then
+                return 
+              end
               Interaction_ButtonPushed(interactionType)
               DragManager:clearInfo()
               GlobalKeyBinder_Clear()
               return 
             elseif interactableActor ~= nil and (interactableActor:get()):isPlayer() and camBlur <= 0 then
               local interactionType = interactableActor:getSettedFirstInteractionType()
+              if InteractionCheck(interactionType) then
+                return 
+              end
               Interaction_ButtonPushed(interactionType)
               DragManager:clearInfo()
               GlobalKeyBinder_Clear()
               return 
             end
           else
-            -- DECOMPILER ERROR at PC195: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC207: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_1) and buttonCount >= 2 then
               FGlobal_InteractionButtonActionRun(1)
@@ -369,7 +383,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             end
           end
         end
-        -- DECOMPILER ERROR at PC218: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC230: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_2) and buttonCount >= 3 then
           FGlobal_InteractionButtonActionRun(2)
@@ -378,7 +392,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F6)
           return 
         end
-        -- DECOMPILER ERROR at PC241: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC253: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_3) and buttonCount >= 4 then
           FGlobal_InteractionButtonActionRun(3)
@@ -387,7 +401,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F7)
           return 
         end
-        -- DECOMPILER ERROR at PC264: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC276: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_4) and buttonCount >= 5 then
           FGlobal_InteractionButtonActionRun(4)
@@ -396,7 +410,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F8)
           return 
         end
-        -- DECOMPILER ERROR at PC287: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC299: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_5) and buttonCount >= 6 then
           FGlobal_InteractionButtonActionRun(5)
@@ -580,7 +594,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             return 
           end
         end
-        -- DECOMPILER ERROR at PC772: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC784: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Help) and Panel_KeyboardHelp ~= nil then
           if FGlobal_KeyboardHelpShow() then
@@ -590,7 +604,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
         end
         do return  end
-        -- DECOMPILER ERROR at PC807: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC819: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           if Panel_ProductNote_ShowToggle() then
@@ -652,7 +666,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC975: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC987: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -810,7 +824,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
               return 
             end
-            -- DECOMPILER ERROR at PC1411: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1423: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -827,7 +841,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            -- DECOMPILER ERROR at PC1454: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1466: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -924,7 +938,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               Panel_NaviButton:SetShow(false)
               audioPostEvent_SystemUi(0, 15)
             end
-            -- DECOMPILER ERROR: 132 unprocessed JMP targets
+            -- DECOMPILER ERROR: 134 unprocessed JMP targets
           end
         end
       end
@@ -933,7 +947,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
 end
 
 local _keyBinder_UIMode_NpcDialog = function(deltaTime)
-  -- function num : 0_13 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed
+  -- function num : 0_14 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed
   if keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_Interaction) then
     if Panel_Window_NpcShop:GetShow() then
       return 
@@ -1048,7 +1062,7 @@ local _keyBinder_UIMode_NpcDialog = function(deltaTime)
 end
 
 local _keyBinder_UIMode_WorldMap = function(deltaTime)
-  -- function num : 0_14 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
+  -- function num : 0_15 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
   if FGlobal_IsFadeOutState() then
     return 
   end
@@ -1126,7 +1140,7 @@ local _keyBinder_UIMode_WorldMap = function(deltaTime)
 end
 
 local _keyBinder_WorldMapSearch = function(deltaTime)
-  -- function num : 0_15 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, IM
+  -- function num : 0_16 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, IM
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     ClearFocusEdit()
     ;
@@ -1140,7 +1154,7 @@ local _keyBinder_WorldMapSearch = function(deltaTime)
 end
 
 local _keyBinder_UIMode_Housing = function(deltaTime)
-  -- function num : 0_16 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, escHandle
+  -- function num : 0_17 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, escHandle
   if Panel_House_InstallationMode_VillageTent:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     VillageTent_Close()
     return 
@@ -1173,7 +1187,7 @@ local _keyBinder_UIMode_Housing = function(deltaTime)
 end
 
 local _keyBinder_UIMode_Mental = function(deltaTime)
-  -- function num : 0_17 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
+  -- function num : 0_18 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
   if not escHandle and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_MentalKnowledge)) then
     Panel_Knowledge_Hide()
     if (UI.isGameOptionMouseMode)() then
@@ -1183,15 +1197,22 @@ local _keyBinder_UIMode_Mental = function(deltaTime)
 end
 
 local _keyBinder_UIMode_MentalGame = function(deltaTime)
-  -- function num : 0_18 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_19 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     MentalGame_Hide()
     SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
   end
 end
 
+local _keyBinder_UIMode_InGameDance = function(deltaTime)
+  -- function num : 0_20 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  if (getGameDanceEditor()):isShow() == true and not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    Dance_Close()
+  end
+end
+
 local _keyBinder_UIMode_InGameCustomize = function(deltaTime)
-  -- function num : 0_19 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_21 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if Panel_CustomizationMain:IsShow() and Panel_CustomizationMain:GetAlpha() == 1 and not escHandle and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
     if Panel_CustomizingAlbum:GetShow() then
       CustomizingAlbum_Close()
@@ -1202,7 +1223,7 @@ local _keyBinder_UIMode_InGameCustomize = function(deltaTime)
   if Panel_Widget_ScreenShotFrame:GetShow() then
     if not escHandle and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_F4)) then
       local screenShotFrame_Close = function()
-    -- function num : 0_19_0
+    -- function num : 0_21_0
     FGlobal_ScreenShotFrame_Close()
   end
 
@@ -1231,7 +1252,7 @@ end
 
 local prevPressControl = nil
 local _keyBinder_UIMode_InGameCashShop = function(delataTime)
-  -- function num : 0_20 , upvalues : GlobalKeyBinder_CheckCustomKeyPressed, GlobalKeyBinder_CheckKeyPressed, VCK, prevPressControl
+  -- function num : 0_22 , upvalues : GlobalKeyBinder_CheckCustomKeyPressed, GlobalKeyBinder_CheckKeyPressed, VCK, prevPressControl
   if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_CashShop) then
     InGameShop_Close()
     Panel_Tooltip_Item_hideTooltip()
@@ -1259,7 +1280,11 @@ local _keyBinder_UIMode_InGameCashShop = function(delataTime)
                 if Panel_IngameCashShop_Coupon:GetShow() then
                   IngameCashShopCoupon_Close()
                 else
-                  InGameShop_Close()
+                  if (getGameDanceEditor()):isShow() then
+                    (getGameDanceEditor()):hide()
+                  else
+                    InGameShop_Close()
+                  end
                 end
               end
             end
@@ -1296,7 +1321,7 @@ local _keyBinder_UIMode_InGameCashShop = function(delataTime)
 end
 
 local _keyBinder_UIMode_Dye = function(delataTime)
-  -- function num : 0_21 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
+  -- function num : 0_23 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_CheckCustomKeyPressed, IM
   if (not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE)) or GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Dyeing) then
     audioPostEvent_SystemUi(1, 23)
     FGlobal_Panel_DyeReNew_Hide()
@@ -1308,7 +1333,7 @@ local _keyBinder_UIMode_Dye = function(delataTime)
 end
 
 local _keyBinder_UIMode_ItemMarket = function(delataTime)
-  -- function num : 0_22 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, IM, GlobalKeyBinder_CheckCustomKeyPressed
+  -- function num : 0_24 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, IM, GlobalKeyBinder_CheckCustomKeyPressed
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if Panel_Window_ItemMarket_ItemSet:GetShow() then
       FGlobal_ItemMarketItemSet_Close()
@@ -1388,7 +1413,7 @@ local _keyBinder_UIMode_ItemMarket = function(delataTime)
 end
 
 local _keyBinder_UIMode_Trade = function(deltaTime)
-  -- function num : 0_23 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_25 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     closeNpcTrade_Basket()
     TooltipSimple_Hide()
@@ -1396,7 +1421,7 @@ local _keyBinder_UIMode_Trade = function(deltaTime)
 end
 
 local _keyBinder_UIMode_Stable = function(deltaTime)
-  -- function num : 0_24 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_26 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() and FGlobal_IsButtonClick() == -1 then
       if Panel_Window_StableMarket:GetShow() then
@@ -1435,7 +1460,7 @@ local _keyBinder_UIMode_Stable = function(deltaTime)
 end
 
 local _keyBinder_UIMode_GameExit = function(deltaTime)
-  -- function num : 0_25 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_27 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if Panel_Window_DeliveryForGameExit:GetShow() == true then
       FGlobal_DeliveryForGameExit_Show(false)
@@ -1455,7 +1480,7 @@ local _keyBinder_UIMode_GameExit = function(deltaTime)
 end
 
 local _keyBinder_UIMode_DeadMessage = function(deltaTime)
-  -- function num : 0_26 , upvalues : GlobalKeyBinder_CheckCustomKeyPressed, IM, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_28 , upvalues : GlobalKeyBinder_CheckCustomKeyPressed, IM, GlobalKeyBinder_CheckKeyPressed, VCK
   if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Chat) then
     (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
     ChatInput_Show()
@@ -1497,7 +1522,7 @@ local _keyBinder_UIMode_DeadMessage = function(deltaTime)
 end
 
 local _keyBinder_UIMode_MiniGame = function(deltaTime)
-  -- function num : 0_27 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_29 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
   local MiniGame_BattleGauge_Space = Panel_BattleGauge:IsShow()
   local MiniGame_FillGauge_Mouse = Panel_FillGauge:IsShow()
   if MiniGame_FillGauge_Mouse then
@@ -1512,11 +1537,11 @@ local _keyBinder_UIMode_MiniGame = function(deltaTime)
 end
 
 local _keyBinder_UIMode_PreventMoveNSkill = function(deltaTime)
-  -- function num : 0_28
+  -- function num : 0_30
 end
 
 local _keyBinder_UIMode_Movie = function(deltaTime)
-  -- function num : 0_29 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, IM
+  -- function num : 0_31 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, IM
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if check_ShowWindow() then
       close_WindowPanelList()
@@ -1541,7 +1566,7 @@ local _keyBinder_UIMode_Movie = function(deltaTime)
 end
 
 local _keyBinder_UIMode_Repair = function(deltaTime)
-  -- function num : 0_30 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_32 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if Panel_FixEquip:GetShow() then
       PaGlobal_FixEquip:fixEquipExit()
@@ -1552,7 +1577,7 @@ local _keyBinder_UIMode_Repair = function(deltaTime)
 end
 
 local _keyBinder_UIMode_Extraction = function(deltaTime)
-  -- function num : 0_31 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_33 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if Panel_Window_Extraction_Cloth:GetShow() then
       ExtractionCloth_WindowClose()
@@ -1577,7 +1602,7 @@ local _keyBinder_UIMode_Extraction = function(deltaTime)
 end
 
 local _keyBinder_UIMode_KeyCustom_ActionKey = function(deltaTime)
-  -- function num : 0_32
+  -- function num : 0_34
   local isEnd = false
   local inputType = KeyCustom_Action_GetInputType()
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
@@ -1601,7 +1626,7 @@ local _keyBinder_UIMode_KeyCustom_ActionKey = function(deltaTime)
 end
 
 local _keyBinder_UIMode_KeyCustom_ActionPad = function(deltaTime)
-  -- function num : 0_33
+  -- function num : 0_35
   local isEnd = false
   local inputType = KeyCustom_Action_GetInputType()
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
@@ -1625,7 +1650,7 @@ local _keyBinder_UIMode_KeyCustom_ActionPad = function(deltaTime)
 end
 
 local _keyBinder_UIMode_KeyCustom_UiKey = function(deltaTime)
-  -- function num : 0_34
+  -- function num : 0_36
   local isEnd = false
   local inputType = KeyCustom_Ui_GetInputType()
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
@@ -1649,7 +1674,7 @@ local _keyBinder_UIMode_KeyCustom_UiKey = function(deltaTime)
 end
 
 local _keyBinder_UIMode_KeyCustom_UiPad = function(deltaTime)
-  -- function num : 0_35
+  -- function num : 0_37
   local isEnd = false
   local inputType = KeyCustom_Ui_GetInputType()
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
@@ -1673,7 +1698,7 @@ local _keyBinder_UIMode_KeyCustom_UiPad = function(deltaTime)
 end
 
 local _keyBinder_UIMode_KeyCustom_ActionPadFunc1 = function(deltaTime)
-  -- function num : 0_36
+  -- function num : 0_38
   local isEnd = false
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     isEnd = true
@@ -1696,7 +1721,7 @@ local _keyBinder_UIMode_KeyCustom_ActionPadFunc1 = function(deltaTime)
 end
 
 local _keyBinder_UIMode_KeyCustom_ActionPadFunc2 = function(deltaTime)
-  -- function num : 0_37
+  -- function num : 0_39
   local isEnd = false
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     isEnd = true
@@ -1719,21 +1744,21 @@ local _keyBinder_UIMode_KeyCustom_ActionPadFunc2 = function(deltaTime)
 end
 
 local _keyBinder_UIMode_PopupItem = function()
-  -- function num : 0_38 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_40 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Panel_UseItem_ShowToggle_Func()
   end
 end
 
 local _keyBinder_UIMode_ProductNote = function(deltaTime)
-  -- function num : 0_39 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_41 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     Panel_ProductNote_ShowToggle()
   end
 end
 
 local _keyBinder_UIMode_QnAWebLink = function(deltaTime)
-  -- function num : 0_40 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, IM
+  -- function num : 0_42 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK, IM
   if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) and Panel_QnAWebLink_ShowToggle() == false then
     if AllowChangeInputMode() then
       if check_ShowWindow() then
@@ -1749,7 +1774,7 @@ local _keyBinder_UIMode_QnAWebLink = function(deltaTime)
 end
 
 local _KeyBinder_UIMode_TradeGame = function(deltaTime)
-  -- function num : 0_41
+  -- function num : 0_43
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     Fglobal_TradeGame_Close()
     return 
@@ -1758,7 +1783,7 @@ local _KeyBinder_UIMode_TradeGame = function(deltaTime)
 end
 
 local _KeyBinder_UIMode_CutSceneMode = function(deltaTime)
-  -- function num : 0_42 , upvalues : isRunClosePopup
+  -- function num : 0_44 , upvalues : isRunClosePopup
   if ToClient_cutsceneIsPlay() then
     if not (MessageBox.isPopUp)() and isKeyDown_Once((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) and isRunClosePopup == false then
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "CUTSCENE_EXIT_MESSAGEBOX_MEMO")
@@ -1774,7 +1799,7 @@ local _KeyBinder_UIMode_CutSceneMode = function(deltaTime)
 end
 
 local _KeyBinder_UIMode_UiSetting = function(deltaTime)
-  -- function num : 0_43 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_45 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     FGlobal_UiSet_Close()
     return 
@@ -1782,7 +1807,7 @@ local _KeyBinder_UIMode_UiSetting = function(deltaTime)
 end
 
 local _KeyBinder_UIMode_Gacha_Roulette = function(deltaTime)
-  -- function num : 0_44 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_46 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
     FGlobal_gacha_Roulette_OnPressSpace()
   else
@@ -1794,10 +1819,10 @@ local _KeyBinder_UIMode_Gacha_Roulette = function(deltaTime)
 end
 
 local _KeyBinder_UIMode_ScreenShotMode = function(delataTime)
-  -- function num : 0_45 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_47 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     local screenShotFrame_Close = function()
-    -- function num : 0_45_0
+    -- function num : 0_47_0
     FGlobal_ScreenShotFrame_Close()
   end
 
@@ -1825,7 +1850,7 @@ local _KeyBinder_UIMode_ScreenShotMode = function(delataTime)
 end
 
 local _KeyBinder_UIMode_EventNotify = function(deltaTime)
-  -- function num : 0_46 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, IM
+  -- function num : 0_48 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, IM
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     EventNotifyContent_Close()
     if AllowChangeInputMode() then
@@ -1843,7 +1868,7 @@ local _KeyBinder_UIMode_EventNotify = function(deltaTime)
 end
 
 SetUIMode = function(uiMode)
-  -- function num : 0_47 , upvalues : UIMode, _uiMode
+  -- function num : 0_49 , upvalues : UIMode, _uiMode
   if uiMode >= 0 and uiMode < UIMode.eUIMode_Count then
     _PA_LOG("광운", "prev _uiMode = " .. tostring(_uiMode) .. " / next uiMode = " .. tostring(uiMode))
     _uiMode = uiMode
@@ -1851,30 +1876,30 @@ SetUIMode = function(uiMode)
 end
 
 GetUIMode = function()
-  -- function num : 0_48 , upvalues : _uiMode
+  -- function num : 0_50 , upvalues : _uiMode
   return _uiMode
 end
 
 IsBubbleAndInterActionShowCondition = function()
-  -- function num : 0_49 , upvalues : _uiMode, UIMode
+  -- function num : 0_51 , upvalues : _uiMode, UIMode
   do return _uiMode == UIMode.eUIMode_Default end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 IsWaitCommentAndInterActionShowCondition = function()
-  -- function num : 0_50 , upvalues : _uiMode, UIMode
+  -- function num : 0_52 , upvalues : _uiMode, UIMode
   do return _uiMode == UIMode.eUIMode_Default end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 IsCharacterNameTagShowCondition = function()
-  -- function num : 0_51 , upvalues : _uiMode, UIMode
+  -- function num : 0_53 , upvalues : _uiMode, UIMode
   do return _uiMode == UIMode.eUIMode_Default or _uiMode == UIMode.eUIMode_Housing end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 local GlobalKeyBinder_MouseDragEvent = function()
-  -- function num : 0_52 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, escHandle
+  -- function num : 0_54 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK, escHandle
   if DragManager:isDragging() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     DragManager:clearInfo()
     Inventory_DropEscape()
@@ -1885,7 +1910,7 @@ local GlobalKeyBinder_MouseDragEvent = function()
 end
 
 local _ChattingMacro_Process = function()
-  -- function num : 0_53 , upvalues : VCK
+  -- function num : 0_55 , upvalues : VCK
   if isKeyPressed(VCK.KeyCode_MENU) == false then
     return false
   end
@@ -1945,7 +1970,7 @@ local _ChattingMacro_Process = function()
 end
 
 local _SkillkeyBinder_UIMode_CommonWindow = function(deltaTime)
-  -- function num : 0_54
+  -- function num : 0_56
   if isUseNewQuickSlot() then
     if keyCustom_IsDownOnce_Action((CppEnums.ActionInputType).ActionInputType_QuickSlot1) then
       HandleClicked_NewQuickSlot_Use(0)
@@ -2070,7 +2095,7 @@ local _SkillkeyBinder_UIMode_CommonWindow = function(deltaTime)
 end
 
 GlobalKeyBinder_Update = function(deltaTime)
-  -- function num : 0_55 , upvalues : isOnlyCombat, isRunClosePopup, UIMode, GlobalKeyBinder_MouseDragEvent, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_Clear, IM, GlobalKeyBinder_CheckCustomKeyPressed, _uiMode, _keyBinder_UIMode_Housing, _keyBinder_Chatting, _keyBinder_UIMode_Mental, _keyBinder_UIMode_MentalGame, _keyBinder_UIMode_InGameCustomize, _keyBinder_UIMode_InGameCashShop, _keyBinder_UIMode_Dye, _keyBinder_UIMode_ItemMarket, _keyBinder_UIMode_NpcDialog, _keyBinder_UIMode_Trade, _keyBinder_UIMode_Stable, _keyBinder_UIMode_WorldMap, _keyBinder_WorldMapSearch, _keyBinder_UIMode_MiniGame, _keyBinder_UIMode_DeadMessage, _keyBinder_UIMode_PreventMoveNSkill, _keyBinder_UIMode_Movie, _keyBinder_UIMode_GameExit, _keyBinder_UIMode_Repair, _keyBinder_UIMode_Extraction, _keyBinder_UIMode_KeyCustom_ActionKey, _keyBinder_UIMode_KeyCustom_ActionPad, _keyBinder_UIMode_KeyCustom_UiKey, _keyBinder_UIMode_KeyCustom_UiPad, _keyBinder_UIMode_KeyCustom_ActionPadFunc1, _keyBinder_UIMode_KeyCustom_ActionPadFunc2, _keyBinder_UIMode_PopupItem, _keyBinder_UIMode_ProductNote, _keyBinder_UIMode_QnAWebLink, _KeyBinder_UIMode_TradeGame, _KeyBinder_UIMode_CutSceneMode, _KeyBinder_UIMode_UiSetting, _KeyBinder_UIMode_EventNotify, _KeyBinder_UIMode_Gacha_Roulette, _KeyBinder_UIMode_ScreenShotMode, _ChattingMacro_Process, _keyBinder_GameMode, _keyBinder_UIMode_CommonWindow, _SkillkeyBinder_UIMode_CommonWindow, _keyBinder_UIMode, _keyBinder_UiModeNotInput
+  -- function num : 0_57 , upvalues : isOnlyCombat, isRunClosePopup, UIMode, GlobalKeyBinder_MouseDragEvent, GlobalKeyBinder_CheckKeyPressed, VCK, GlobalKeyBinder_Clear, IM, GlobalKeyBinder_CheckCustomKeyPressed, _uiMode, _keyBinder_UIMode_Housing, _keyBinder_Chatting, _keyBinder_UIMode_Mental, _keyBinder_UIMode_MentalGame, _keyBinder_UIMode_InGameCustomize, _keyBinder_UIMode_InGameDance, _keyBinder_UIMode_InGameCashShop, _keyBinder_UIMode_Dye, _keyBinder_UIMode_ItemMarket, _keyBinder_UIMode_NpcDialog, _keyBinder_UIMode_Trade, _keyBinder_UIMode_Stable, _keyBinder_UIMode_WorldMap, _keyBinder_WorldMapSearch, _keyBinder_UIMode_MiniGame, _keyBinder_UIMode_DeadMessage, _keyBinder_UIMode_PreventMoveNSkill, _keyBinder_UIMode_Movie, _keyBinder_UIMode_GameExit, _keyBinder_UIMode_Repair, _keyBinder_UIMode_Extraction, _keyBinder_UIMode_KeyCustom_ActionKey, _keyBinder_UIMode_KeyCustom_ActionPad, _keyBinder_UIMode_KeyCustom_UiKey, _keyBinder_UIMode_KeyCustom_UiPad, _keyBinder_UIMode_KeyCustom_ActionPadFunc1, _keyBinder_UIMode_KeyCustom_ActionPadFunc2, _keyBinder_UIMode_PopupItem, _keyBinder_UIMode_ProductNote, _keyBinder_UIMode_QnAWebLink, _KeyBinder_UIMode_TradeGame, _KeyBinder_UIMode_CutSceneMode, _KeyBinder_UIMode_UiSetting, _KeyBinder_UIMode_EventNotify, _KeyBinder_UIMode_Gacha_Roulette, _KeyBinder_UIMode_ScreenShotMode, _ChattingMacro_Process, _keyBinder_GameMode, _keyBinder_UIMode_CommonWindow, _SkillkeyBinder_UIMode_CommonWindow, _keyBinder_UIMode, _keyBinder_UiModeNotInput
   if isOnlyCombat then
     return 
   end
@@ -2341,235 +2366,242 @@ GlobalKeyBinder_Update = function(deltaTime)
           GlobalKeyBinder_Clear()
           return 
         else
-          if UIMode.eUIMode_InGameCashShop == _uiMode then
-            if inputMode == IM.eProcessorInputMode_ChattingInputMode then
-              _keyBinder_Chatting(deltaTime)
-              GlobalKeyBinder_Clear()
-            else
-              ;
-              (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-              _keyBinder_UIMode_InGameCashShop(deltaTime)
-              GlobalKeyBinder_Clear()
-            end
+          if UIMode.eUIMode_InGameDance == _uiMode then
+            (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+            _keyBinder_UIMode_InGameDance(deltaTime)
+            GlobalKeyBinder_Clear()
             return 
           else
-            if UIMode.eUIMode_DyeNew == _uiMode then
-              (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-              _keyBinder_UIMode_Dye(deltaTime)
-              GlobalKeyBinder_Clear()
+            if UIMode.eUIMode_InGameCashShop == _uiMode then
+              if inputMode == IM.eProcessorInputMode_ChattingInputMode then
+                _keyBinder_Chatting(deltaTime)
+                GlobalKeyBinder_Clear()
+              else
+                ;
+                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                _keyBinder_UIMode_InGameCashShop(deltaTime)
+                GlobalKeyBinder_Clear()
+              end
               return 
             else
-              if UIMode.eUIMode_ItemMarket == _uiMode then
-                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
-                _keyBinder_UIMode_ItemMarket(deltaTime)
+              if UIMode.eUIMode_DyeNew == _uiMode then
+                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                _keyBinder_UIMode_Dye(deltaTime)
                 GlobalKeyBinder_Clear()
                 return 
               else
-                if UIMode.eUIMode_NpcDialog == _uiMode then
-                  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                  _keyBinder_UIMode_NpcDialog(deltaTime)
+                if UIMode.eUIMode_ItemMarket == _uiMode then
+                  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
+                  _keyBinder_UIMode_ItemMarket(deltaTime)
                   GlobalKeyBinder_Clear()
                   return 
                 else
-                  if UIMode.eUIMode_NpcDialog_Dummy == _uiMode then
-                    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+                  if UIMode.eUIMode_NpcDialog == _uiMode then
+                    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                    _keyBinder_UIMode_NpcDialog(deltaTime)
                     GlobalKeyBinder_Clear()
                     return 
                   else
-                    if UIMode.eUIMode_Trade == _uiMode then
-                      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                      _keyBinder_UIMode_Trade(deltaTime)
+                    if UIMode.eUIMode_NpcDialog_Dummy == _uiMode then
+                      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
                       GlobalKeyBinder_Clear()
                       return 
                     else
-                      if UIMode.eUIMode_Stable == _uiMode then
+                      if UIMode.eUIMode_Trade == _uiMode then
                         (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                        _keyBinder_UIMode_Stable(deltaTime)
+                        _keyBinder_UIMode_Trade(deltaTime)
                         GlobalKeyBinder_Clear()
                         return 
                       else
-                        if UIMode.eUIMode_WorldMap == _uiMode then
-                          if inputMode == IM.eProcessorInputMode_ChattingInputMode and not Panel_Window_ItemMarket:GetShow() then
-                            _keyBinder_Chatting(deltaTime)
-                            GlobalKeyBinder_Clear()
-                          else
-                            if getInputMode() ~= IM.eProcessorInputMode_ChattingInputMode or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                              (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                              _keyBinder_UIMode_WorldMap(deltaTime)
-                              GlobalKeyBinder_Clear()
-                            end
-                          end
+                        if UIMode.eUIMode_Stable == _uiMode then
+                          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                          _keyBinder_UIMode_Stable(deltaTime)
+                          GlobalKeyBinder_Clear()
                           return 
                         else
-                          if UIMode.eUIMode_WoldMapSearch == _uiMode then
-                            _keyBinder_WorldMapSearch(deltaTime)
-                            GlobalKeyBinder_Clear()
+                          if UIMode.eUIMode_WorldMap == _uiMode then
+                            if inputMode == IM.eProcessorInputMode_ChattingInputMode and not Panel_Window_ItemMarket:GetShow() then
+                              _keyBinder_Chatting(deltaTime)
+                              GlobalKeyBinder_Clear()
+                            else
+                              if getInputMode() ~= IM.eProcessorInputMode_ChattingInputMode or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                _keyBinder_UIMode_WorldMap(deltaTime)
+                                GlobalKeyBinder_Clear()
+                              end
+                            end
                             return 
                           else
-                            if UIMode.eUIMode_MiniGame == _uiMode then
-                              (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-                              _keyBinder_UIMode_MiniGame(deltaTime)
+                            if UIMode.eUIMode_WoldMapSearch == _uiMode then
+                              _keyBinder_WorldMapSearch(deltaTime)
                               GlobalKeyBinder_Clear()
                               return 
                             else
-                              if UIMode.eUIMode_DeadMessage == _uiMode then
-                                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                _keyBinder_UIMode_DeadMessage(deltaTime)
-                                if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Guild) then
-                                  local guildWrapper = ToClient_GetMyGuildInfoWrapper()
-                                  if guildWrapper ~= nil then
-                                    local guildGrade = guildWrapper:getGuildGrade()
-                                    if guildGrade == 0 then
-                                      if Panel_ClanList:IsShow() == false then
-                                        audioPostEvent_SystemUi(1, 36)
-                                        FGlobal_ClanList_Open()
-                                        ;
-                                        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                              if UIMode.eUIMode_MiniGame == _uiMode then
+                                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+                                _keyBinder_UIMode_MiniGame(deltaTime)
+                                GlobalKeyBinder_Clear()
+                                return 
+                              else
+                                if UIMode.eUIMode_DeadMessage == _uiMode then
+                                  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                  _keyBinder_UIMode_DeadMessage(deltaTime)
+                                  if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Guild) then
+                                    local guildWrapper = ToClient_GetMyGuildInfoWrapper()
+                                    if guildWrapper ~= nil then
+                                      local guildGrade = guildWrapper:getGuildGrade()
+                                      if guildGrade == 0 then
+                                        if Panel_ClanList:IsShow() == false then
+                                          audioPostEvent_SystemUi(1, 36)
+                                          FGlobal_ClanList_Open()
+                                          ;
+                                          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                        else
+                                          audioPostEvent_SystemUi(1, 31)
+                                          FGlobal_ClanList_Close()
+                                          if check_ShowWindow() == false then
+                                            (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+                                          end
+                                        end
                                       else
-                                        audioPostEvent_SystemUi(1, 31)
-                                        FGlobal_ClanList_Close()
-                                        if check_ShowWindow() == false then
-                                          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+                                        if Panel_Window_Guild:IsShow() == false and not Panel_DeadMessage:GetShow() then
+                                          audioPostEvent_SystemUi(1, 36)
+                                          GuildManager:Show()
+                                          ;
+                                          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                        else
+                                          audioPostEvent_SystemUi(1, 31)
+                                          GuildManager:Hide()
+                                          if check_ShowWindow() == false then
+                                            (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+                                          end
                                         end
                                       end
                                     else
-                                      if Panel_Window_Guild:IsShow() == false and not Panel_DeadMessage:GetShow() then
-                                        audioPostEvent_SystemUi(1, 36)
-                                        GuildManager:Show()
-                                        ;
-                                        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                      else
-                                        audioPostEvent_SystemUi(1, 31)
-                                        GuildManager:Hide()
-                                        if check_ShowWindow() == false then
-                                          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-                                        end
-                                      end
-                                    end
-                                  else
-                                    do
                                       do
-                                        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NO_GUILD"))
-                                        if Panel_DeadMessage:GetShow() then
-                                          GuildManager:Hide()
-                                        end
-                                        GlobalKeyBinder_Clear()
-                                        do return  end
-                                        if UIMode.eUIMode_PreventMoveNSkill == _uiMode then
-                                          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                          _keyBinder_UIMode_PreventMoveNSkill(deltaTime)
+                                        do
+                                          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NO_GUILD"))
+                                          if Panel_DeadMessage:GetShow() then
+                                            GuildManager:Hide()
+                                          end
                                           GlobalKeyBinder_Clear()
-                                          return 
-                                        else
-                                          if UIMode.eUIMode_Movie == _uiMode then
-                                            (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-                                            _keyBinder_UIMode_Movie(deltaTime)
+                                          do return  end
+                                          if UIMode.eUIMode_PreventMoveNSkill == _uiMode then
+                                            (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                            _keyBinder_UIMode_PreventMoveNSkill(deltaTime)
                                             GlobalKeyBinder_Clear()
                                             return 
                                           else
-                                            if UIMode.eUIMode_GameExit == _uiMode then
-                                              (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
-                                              _keyBinder_UIMode_GameExit(deltaTime)
+                                            if UIMode.eUIMode_Movie == _uiMode then
+                                              (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+                                              _keyBinder_UIMode_Movie(deltaTime)
                                               GlobalKeyBinder_Clear()
                                               return 
                                             else
-                                              if UIMode.eUIMode_Repair == _uiMode then
-                                                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                                _keyBinder_UIMode_Repair(deltaTime)
+                                              if UIMode.eUIMode_GameExit == _uiMode then
+                                                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
+                                                _keyBinder_UIMode_GameExit(deltaTime)
                                                 GlobalKeyBinder_Clear()
                                                 return 
                                               else
-                                                if UIMode.eUIMode_Extraction == _uiMode then
+                                                if UIMode.eUIMode_Repair == _uiMode then
                                                   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                                  _keyBinder_UIMode_Extraction(deltaTime)
+                                                  _keyBinder_UIMode_Repair(deltaTime)
                                                   GlobalKeyBinder_Clear()
                                                   return 
                                                 else
-                                                  if UIMode.eUIMode_KeyCustom_ActionKey == _uiMode then
-                                                    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_KeyCustomizing)
-                                                    _keyBinder_UIMode_KeyCustom_ActionKey(deltaTime)
+                                                  if UIMode.eUIMode_Extraction == _uiMode then
+                                                    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                                    _keyBinder_UIMode_Extraction(deltaTime)
                                                     GlobalKeyBinder_Clear()
                                                     return 
                                                   else
-                                                    if UIMode.eUIMode_KeyCustom_ActionPad == _uiMode then
+                                                    if UIMode.eUIMode_KeyCustom_ActionKey == _uiMode then
                                                       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_KeyCustomizing)
-                                                      _keyBinder_UIMode_KeyCustom_ActionPad(deltaTime)
+                                                      _keyBinder_UIMode_KeyCustom_ActionKey(deltaTime)
                                                       GlobalKeyBinder_Clear()
                                                       return 
                                                     else
-                                                      if UIMode.eUIMode_KeyCustom_UiKey == _uiMode then
+                                                      if UIMode.eUIMode_KeyCustom_ActionPad == _uiMode then
                                                         (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_KeyCustomizing)
-                                                        _keyBinder_UIMode_KeyCustom_UiKey(deltaTime)
+                                                        _keyBinder_UIMode_KeyCustom_ActionPad(deltaTime)
                                                         GlobalKeyBinder_Clear()
                                                         return 
                                                       else
-                                                        if UIMode.eUIMode_KeyCustom_UiPad == _uiMode then
+                                                        if UIMode.eUIMode_KeyCustom_UiKey == _uiMode then
                                                           (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_KeyCustomizing)
-                                                          _keyBinder_UIMode_KeyCustom_UiPad(deltaTime)
+                                                          _keyBinder_UIMode_KeyCustom_UiKey(deltaTime)
                                                           GlobalKeyBinder_Clear()
                                                           return 
                                                         else
-                                                          if UIMode.eUIMode_KeyCustom_ActionPadFunc1 == _uiMode then
+                                                          if UIMode.eUIMode_KeyCustom_UiPad == _uiMode then
                                                             (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_KeyCustomizing)
-                                                            _keyBinder_UIMode_KeyCustom_ActionPadFunc1(deltaTime)
+                                                            _keyBinder_UIMode_KeyCustom_UiPad(deltaTime)
                                                             GlobalKeyBinder_Clear()
                                                             return 
                                                           else
-                                                            if UIMode.eUIMode_KeyCustom_ActionPadFunc2 == _uiMode then
+                                                            if UIMode.eUIMode_KeyCustom_ActionPadFunc1 == _uiMode then
                                                               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_KeyCustomizing)
-                                                              _keyBinder_UIMode_KeyCustom_ActionPadFunc2(deltaTime)
+                                                              _keyBinder_UIMode_KeyCustom_ActionPadFunc1(deltaTime)
                                                               GlobalKeyBinder_Clear()
                                                               return 
                                                             else
-                                                              if UIMode.eUIMode_PopupItem == _uiMode then
-                                                                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                                                _keyBinder_UIMode_PopupItem()
+                                                              if UIMode.eUIMode_KeyCustom_ActionPadFunc2 == _uiMode then
+                                                                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_KeyCustomizing)
+                                                                _keyBinder_UIMode_KeyCustom_ActionPadFunc2(deltaTime)
                                                                 GlobalKeyBinder_Clear()
                                                                 return 
                                                               else
-                                                                if UIMode.eUIMode_ProductNote == _uiMode then
-                                                                  _keyBinder_UIMode_ProductNote(deltaTime)
+                                                                if UIMode.eUIMode_PopupItem == _uiMode then
+                                                                  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                                                  _keyBinder_UIMode_PopupItem()
                                                                   GlobalKeyBinder_Clear()
                                                                   return 
                                                                 else
-                                                                  if UIMode.eUIMode_QnAWebLink == _uiMode then
-                                                                    _keyBinder_UIMode_QnAWebLink(deltaTime)
+                                                                  if UIMode.eUIMode_ProductNote == _uiMode then
+                                                                    _keyBinder_UIMode_ProductNote(deltaTime)
                                                                     GlobalKeyBinder_Clear()
                                                                     return 
                                                                   else
-                                                                    if UIMode.eUIMode_TradeGame == _uiMode then
-                                                                      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                                                      _KeyBinder_UIMode_TradeGame(deltaTime)
+                                                                    if UIMode.eUIMode_QnAWebLink == _uiMode then
+                                                                      _keyBinder_UIMode_QnAWebLink(deltaTime)
                                                                       GlobalKeyBinder_Clear()
                                                                       return 
                                                                     else
-                                                                      if UIMode.eUIMode_Cutscene == _uiMode then
-                                                                        _KeyBinder_UIMode_CutSceneMode(deltaTime)
+                                                                      if UIMode.eUIMode_TradeGame == _uiMode then
+                                                                        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                                                        _KeyBinder_UIMode_TradeGame(deltaTime)
                                                                         GlobalKeyBinder_Clear()
                                                                         return 
                                                                       else
-                                                                        if UIMode.eUIMode_UiSetting == _uiMode then
-                                                                          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-                                                                          _KeyBinder_UIMode_UiSetting(deltaTime)
+                                                                        if UIMode.eUIMode_Cutscene == _uiMode then
+                                                                          _KeyBinder_UIMode_CutSceneMode(deltaTime)
                                                                           GlobalKeyBinder_Clear()
                                                                           return 
                                                                         else
-                                                                          if UIMode.eUIMode_EventNotify == _uiMode then
-                                                                            _KeyBinder_UIMode_EventNotify(deltaTime)
+                                                                          if UIMode.eUIMode_UiSetting == _uiMode then
+                                                                            (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+                                                                            _KeyBinder_UIMode_UiSetting(deltaTime)
                                                                             GlobalKeyBinder_Clear()
                                                                             return 
                                                                           else
-                                                                            if UIMode.eUIMode_Gacha_Roulette == _uiMode then
-                                                                              (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
-                                                                              _KeyBinder_UIMode_Gacha_Roulette(deltaTime)
+                                                                            if UIMode.eUIMode_EventNotify == _uiMode then
+                                                                              _KeyBinder_UIMode_EventNotify(deltaTime)
                                                                               GlobalKeyBinder_Clear()
                                                                               return 
                                                                             else
-                                                                              if UIMode.eUIMode_ScreenShotMode == _uiMode then
+                                                                              if UIMode.eUIMode_Gacha_Roulette == _uiMode then
                                                                                 (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
-                                                                                _KeyBinder_UIMode_ScreenShotMode(delataTime)
+                                                                                _KeyBinder_UIMode_Gacha_Roulette(deltaTime)
                                                                                 GlobalKeyBinder_Clear()
                                                                                 return 
+                                                                              else
+                                                                                if UIMode.eUIMode_ScreenShotMode == _uiMode then
+                                                                                  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
+                                                                                  _KeyBinder_UIMode_ScreenShotMode(delataTime)
+                                                                                  GlobalKeyBinder_Clear()
+                                                                                  return 
+                                                                                end
                                                                               end
                                                                             end
                                                                           end
@@ -2589,56 +2621,56 @@ GlobalKeyBinder_Update = function(deltaTime)
                                               end
                                             end
                                           end
-                                        end
-                                        if Panel_RecentMemory:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                          RecentMemory_Close()
-                                          return 
-                                        end
-                                        if Panel_Party_ItemList:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                          Panel_Party_ItemList_Close()
-                                          return 
-                                        end
-                                        if Panel_LocalWarInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                          FGlobal_LocalWarInfo_Close()
-                                          return 
-                                        end
-                                        if Panel_SavageDefenceInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                                          FGlobal_SavageDefenceInfo_Close()
-                                          return 
-                                        end
-                                        if _ChattingMacro_Process() == true then
-                                          return 
-                                        end
-                                        if inputMode == IM.eProcessorInputMode_GameMode then
-                                          if Panel_UIControl:IsShow() then
-                                            Panel_UIControl_SetShow(false)
-                                            Panel_Menu_ShowToggle()
-                                          else
-                                            if Panel_PartyOption:GetShow() then
-                                              PartyOption_Hide()
-                                            end
+                                          if Panel_RecentMemory:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                            RecentMemory_Close()
+                                            return 
                                           end
-                                          _keyBinder_GameMode(deltaTime)
-                                          _keyBinder_UIMode_CommonWindow(deltaTime)
-                                          _SkillkeyBinder_UIMode_CommonWindow(deltaTime)
-                                        else
-                                          if inputMode == IM.eProcessorInputMode_UiMode or inputMode == IM.eProcessorInputMode_UiControlMode then
-                                            _keyBinder_UIMode(deltaTime)
-                                            if UIMode.eUIMode_Default == _uiMode then
-                                              _keyBinder_UIMode_CommonWindow(deltaTime)
-                                              _SkillkeyBinder_UIMode_CommonWindow(deltaTime)
-                                            end
-                                          else
-                                            if inputMode == IM.eProcessorInputMode_ChattingInputMode then
-                                              _keyBinder_Chatting(deltaTime)
+                                          if Panel_Party_ItemList:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                            Panel_Party_ItemList_Close()
+                                            return 
+                                          end
+                                          if Panel_LocalWarInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                            FGlobal_LocalWarInfo_Close()
+                                            return 
+                                          end
+                                          if Panel_SavageDefenceInfo:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                            FGlobal_SavageDefenceInfo_Close()
+                                            return 
+                                          end
+                                          if _ChattingMacro_Process() == true then
+                                            return 
+                                          end
+                                          if inputMode == IM.eProcessorInputMode_GameMode then
+                                            if Panel_UIControl:IsShow() then
+                                              Panel_UIControl_SetShow(false)
+                                              Panel_Menu_ShowToggle()
                                             else
-                                              if inputMode == IM.eProcessorInputMode_UiModeNotInput then
-                                                _keyBinder_UiModeNotInput(deltaTime)
+                                              if Panel_PartyOption:GetShow() then
+                                                PartyOption_Hide()
+                                              end
+                                            end
+                                            _keyBinder_GameMode(deltaTime)
+                                            _keyBinder_UIMode_CommonWindow(deltaTime)
+                                            _SkillkeyBinder_UIMode_CommonWindow(deltaTime)
+                                          else
+                                            if inputMode == IM.eProcessorInputMode_UiMode or inputMode == IM.eProcessorInputMode_UiControlMode then
+                                              _keyBinder_UIMode(deltaTime)
+                                              if UIMode.eUIMode_Default == _uiMode then
+                                                _keyBinder_UIMode_CommonWindow(deltaTime)
+                                                _SkillkeyBinder_UIMode_CommonWindow(deltaTime)
+                                              end
+                                            else
+                                              if inputMode == IM.eProcessorInputMode_ChattingInputMode then
+                                                _keyBinder_Chatting(deltaTime)
+                                              else
+                                                if inputMode == IM.eProcessorInputMode_UiModeNotInput then
+                                                  _keyBinder_UiModeNotInput(deltaTime)
+                                                end
                                               end
                                             end
                                           end
+                                          GlobalKeyBinder_Clear()
                                         end
-                                        GlobalKeyBinder_Clear()
                                       end
                                     end
                                   end

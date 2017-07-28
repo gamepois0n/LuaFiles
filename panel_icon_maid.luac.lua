@@ -352,7 +352,7 @@ FGlobal_WarehouseOpenByMaid = function(index)
     return 
   end
   if isSpecialCharacter then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_FREEBATTLE"))
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_PREMIUMCHARACTER"))
     return 
   end
   if isSavageDefence then

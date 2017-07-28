@@ -3,12 +3,14 @@
 
 -- params : ...
 -- function num : 0
+local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local StaticText_Category_Template = (UI.getChildControl)(Panel_CustomizationFrame, "StaticText_Category_Template")
 local Button_ShowDetail_Template = (UI.getChildControl)(Panel_CustomizationFrame, "Button_ShowDetail_Template")
 local Button_Close = (UI.getChildControl)(Panel_CustomizationFrame, "Button_Close")
 local Panel_Child = (UI.getChildControl)(Panel_CustomizationFrame, "Panel_Child")
 local CheckButton_UseFaceCustomizationHair = (UI.getChildControl)(Panel_CustomizationFrame, "CheckButton_UseFaceCustomizationHair")
 local StaticText_UseFaceCustomizationHair = (UI.getChildControl)(Panel_CustomizationFrame, "StaticText_UseFaceCustomizationHair")
+local openclasstype = {}
 StaticText_UseFaceCustomizationHair:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATIONFRAME_USEFACECUSTOMIZATIONHAIR"))
 Button_Close:addInputEvent("Mouse_LUp", "CloseFrame()")
 registerEvent("EventCloseFrame", "CloseFrame")
@@ -18,6 +20,7 @@ CheckButton_UseFaceCustomizationHair:addInputEvent("Mouse_LUp", "CheckFaceCustom
 CheckButton_UseFaceCustomizationHair:SetCheck(false)
 g_selectedPart = 0
 g_selectedPanel = nil
+g_selectedGroup = 0
 local panelGapWidth = 10
 local panelGapHeight = 8
 local customizationPartControl = {}
@@ -27,6 +30,7 @@ local radioButtonTextureName = "new_ui_common_forlua/Window/Lobby/cus_buttons.dd
 local isTatooCheckContry = isGameTypeKR2()
 local isTatooGroup = false
 local tatooIndex = 0
+local currentidex = -1
 local clearGroupFrame = function()
   -- function num : 0_0 , upvalues : partNum, customizationPartControl
   for partIndex = 1, partNum do
@@ -86,8 +90,9 @@ local radioButtonOnOff = function(part, on)
 end
 
 SelectControlPart = function(partIndex)
-  -- function num : 0_2 , upvalues : Panel_Child, radioButtonOnOff
+  -- function num : 0_2 , upvalues : Panel_Child, currentidex, radioButtonOnOff
   Panel_Child:SetShow(false)
+  currentidex = partIndex
   if g_selectedPart ~= 0 then
     radioButtonOnOff(g_selectedPart, false)
   end
@@ -171,6 +176,9 @@ CloseFrame = function()
   selectCustomizationControlPart(-1)
   selectCustomizationControlGroup(-1)
   CustomizationMainUIShow(true)
+  Set_CustomizationUIPanel(0, Panel_CustomizationMain, 4)
+  ClearAll_CustomizationUIGroup(0)
+  CustomizationMain_SettingConsoleUI()
 end
 
 CloseFrameForPoseUI = function()
@@ -180,9 +188,11 @@ CloseFrameForPoseUI = function()
 end
 
 OpenCustomizationUiGroupFrame = function(classType, uiGroupIndex)
-  -- function num : 0_9 , upvalues : clearGroupFrame, CheckButton_UseFaceCustomizationHair, StaticText_UseFaceCustomizationHair, isTatooGroup, partNum, tatooIndex, StaticText_Category_Template, partControlButtonHeight, Button_ShowDetail_Template, customizationPartControl
+  -- function num : 0_9 , upvalues : clearGroupFrame, openclasstype, CheckButton_UseFaceCustomizationHair, StaticText_UseFaceCustomizationHair, isTatooGroup, partNum, tatooIndex, StaticText_Category_Template, partControlButtonHeight, Button_ShowDetail_Template, customizationPartControl
   ClearFocusEdit()
   clearGroupFrame()
+  g_selectedGroup = uiGroupIndex
+  openclasstype = classType
   if uiGroupIndex == 1 then
     CheckFaceCustomizationHair()
     CheckButton_UseFaceCustomizationHair:SetShow(true)
@@ -222,7 +232,7 @@ OpenCustomizationUiGroupFrame = function(classType, uiGroupIndex)
         tempButton:addInputEvent("Mouse_LUp", "SelectControlPart(" .. uiPartIndex .. ")")
         tempGroup.text = tempStaticText
         tempGroup.button = tempButton
-        -- DECOMPILER ERROR at PC142: Confused about usage of register: R11 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC144: Confused about usage of register: R11 in 'UnsetPending'
 
         customizationPartControl[luaUiPartIndex] = tempGroup
       end
@@ -253,6 +263,55 @@ ChekcTatoo_PossibleContry = function(uiPartIndex, isContainer)
     do return isTatoo end
     -- DECOMPILER ERROR: 3 unprocessed JMP targets
   end
+end
+
+InConsoleNextFrame = function()
+  -- function num : 0_13 , upvalues : partNum, currentidex, UI_GroupType, Button_Close, CheckButton_UseFaceCustomizationHair
+  if partNum < currentidex + 1 then
+    currentidex = 0
+    SelectControlPart(currentidex)
+  else
+    if partNum == currentidex + 1 then
+      SelectControlPart(currentidex)
+      Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
+      ClearAll_CustomizationUIGroup(0)
+      Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
+      Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
+      Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
+      if g_selectedGroup ~= 1 then
+        Add_CustomizationUIControl(0, 0, 0, 0, 1, 1, Button_Close)
+      else
+        Add_CustomizationUIControl(0, 0, 0, 0, 2, 1, Button_Close)
+        Add_CustomizationUIControl(0, 0, 1, 0, 2, 1, CheckButton_UseFaceCustomizationHair)
+      end
+      currentidex = currentidex + 1
+    else
+      SelectControlPart(currentidex + 1)
+    end
+  end
+  ToClient_setConsoleManagerSafeByLua(true)
+end
+
+InConsolePrevFrame = function()
+  -- function num : 0_14 , upvalues : currentidex, partNum, UI_GroupType, Button_Close, CheckButton_UseFaceCustomizationHair
+  if currentidex - 1 < 0 then
+    SelectControlPart(0)
+    currentidex = partNum
+    Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
+    ClearAll_CustomizationUIGroup(0)
+    Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
+    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
+    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
+    if g_selectedGroup ~= 1 then
+      Add_CustomizationUIControl(0, 0, 0, 0, 1, 1, Button_Close)
+    else
+      Add_CustomizationUIControl(0, 0, 0, 0, 2, 1, Button_Close)
+      Add_CustomizationUIControl(0, 0, 1, 0, 2, 1, CheckButton_UseFaceCustomizationHair)
+    end
+  else
+    SelectControlPart(currentidex - 1)
+  end
+  ToClient_setConsoleManagerSafeByLua(true)
 end
 
 

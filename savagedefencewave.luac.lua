@@ -86,4 +86,9 @@ SavageDefenceWave_GetTimeUnit = function(timedata)
   return str
 end
 
+SavageDefenceWave_jumpWave = function(index)
+  -- function num : 0_6
+  ToClient_RequestWaveJumpReq(index)
+end
+
 

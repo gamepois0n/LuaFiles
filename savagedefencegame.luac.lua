@@ -40,7 +40,7 @@ end
 
 FromClient_OpenSavageDefenceUI = function()
   -- function num : 0_4
-  SavageDefenceMember_Open()
+  SavageDefenceMember_Open(true)
   SavageDefenceTowerHp_Open()
   SavageDefenceWave_Open()
 end

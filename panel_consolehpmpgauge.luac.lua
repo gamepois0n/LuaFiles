@@ -85,24 +85,29 @@ Panel_ConsoleHpMpGauge_Update = function()
   PaGlobal_ConsoleHpMp:Update()
 end
 
-animation_Show = function()
+Panel_ConsoleHpMp_Simplify_Show = function()
   -- function num : 0_3
-  local aniInfo1 = Panel_ConsoleHpMpGauge:addMoveAnimation(0, 0.2, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
-  aniInfo1:SetStartPosition(-Panel_ConsoleHpMpGauge:GetSizeX(), -Panel_ConsoleHpMpGauge:GetSizeY())
+  Panel_ConsoleHpMpGauge:ResetVertexAni(true)
+  local aniInfo1 = Panel_ConsoleHpMpGauge:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  aniInfo1:SetStartPosition(Panel_ConsoleHpMpGauge:GetPosX() - Panel_ConsoleHpMpGauge:GetSizeX(), Panel_ConsoleHpMpGauge:GetPosY() - Panel_ConsoleHpMpGauge:GetSizeY())
   aniInfo1:SetEndPosition(0, 0)
   aniInfo1.IsChangeChild = true
 end
 
-animation_Hide = function()
+Panel_ConsoleHpMp_Simpilify_Hide = function()
   -- function num : 0_4
-  local aniInfo1 = Panel_ConsoleHpMpGauge:addMoveAnimation(0, 0.2, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  Panel_ConsoleHpMpGauge:ResetVertexAni(true)
+  local aniInfo1 = Panel_ConsoleHpMpGauge:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartPosition(0, 0)
   aniInfo1:SetEndPosition(Panel_ConsoleHpMpGauge:GetPosX() - Panel_ConsoleHpMpGauge:GetSizeX(), Panel_ConsoleHpMpGauge:GetPosY() - Panel_ConsoleHpMpGauge:GetSizeY())
   aniInfo1.IsChangeChild = true
 end
 
+Panel_ConsoleHpMpGauge:setConsoleUIPanelType(1)
 registerEvent("EventCharacterInfoUpdate", "Panel_ConsoleHpMpGauge_Update")
 registerEvent("FromClient_SelfPlayerHpChanged", "Panel_ConsoleHpMpGauge_Update")
 registerEvent("FromClient_SelfPlayerMpChanged", "Panel_ConsoleHpMpGauge_Update")
+registerEvent("FromClient_simplify_Show", "Panel_ConsoleHpMp_Simplify_Show")
+registerEvent("FromClient_simplify_Hide", "Panel_ConsoleHpMp_Simpilify_Hide")
 PaGlobal_ConsoleHpMp:Initialize()
 

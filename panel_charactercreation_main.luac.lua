@@ -4,9 +4,11 @@
 -- params : ...
 -- function num : 0
 local UI_classType = CppEnums.ClassType
+local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 Panel_CustomizationMain:setFlushAble(false)
 Panel_CustomizationStatic:setFlushAble(false)
 Panel_CustomizationMessage:setFlushAble(false)
+Set_CustomizationUIPanel(0, Panel_CustomizationMain, 3)
 local Line_Template = (UI.getChildControl)(Panel_CustomizationMain, "Static_LineTemplate1")
 local Static_Large_Point = (UI.getChildControl)(Panel_CustomizationMain, "Static_Large_Point")
 local Static_Small_Point = (UI.getChildControl)(Panel_CustomizationMain, "Static_Small_Point")
@@ -137,6 +139,10 @@ if isGameTypeSA() then
           link1:SetShow(false)
           link2:SetShow(false)
           japanEventBanner:SetShow(false)
+          local groupItemWeather = {}
+          local groupItemCustom = {}
+          local groupItemPose = {}
+          local groupItemZodiac = {}
           local historyButtons = {}
           local _classIndex = nil
           local InGameMode = false
@@ -285,7 +291,7 @@ end
 end
 
           local createWeatherGroup = function(groupInfo)
-  -- function num : 0_5 , upvalues : Line_Template, Button_Group, staticWeatherImage
+  -- function num : 0_5 , upvalues : Line_Template, Button_Group, staticWeatherImage, groupItemWeather
   local count = getWeatherCount()
   ;
   (groupInfo.treeItem):SetAsParentNode(100, Line_Template, 0.61, math.pi / 9, math.pi + math.pi / 8)
@@ -301,11 +307,15 @@ end
     local parentName = (groupInfo.button):GetID()
     ;
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton(\"" .. parentName .. "\",\"" .. name .. "\"" .. ")")
+    Add_CustomizationUIControl(0, 0, count + 1 - ii, 0, count + 1, 1, groupItem.control)
+    -- DECOMPILER ERROR at PC76: Confused about usage of register: R9 in 'UnsetPending'
+
+    groupItemWeather[ii] = groupItem.control
   end
 end
 
           local createCustomizationGroup = function(groupInfo)
-  -- function num : 0_6 , upvalues : Line_Template, Button_Group, staticCustom
+  -- function num : 0_6 , upvalues : Line_Template, Button_Group, staticCustom, mainButtonNum, groupItemCustom
   (groupInfo.treeItem):SetAsParentNode(100, Line_Template, 0.61, math.pi / 5, -math.pi / 2)
   for ii = 1, 4 do
     local groupItem = nil
@@ -324,11 +334,19 @@ end
     local parentName = (groupInfo.button):GetID()
     ;
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton(\"" .. parentName .. "\",\"" .. name .. "\"" .. ")")
+    if mainButtonNum == 5 then
+      Add_CustomizationUIControl(0, 2, ii, 0, 5, 1, groupItem.control)
+    else
+      Add_CustomizationUIControl(0, 1, ii, 0, 5, 1, groupItem.control)
+    end
+    -- DECOMPILER ERROR at PC94: Confused about usage of register: R8 in 'UnsetPending'
+
+    groupItemCustom[ii] = groupItem.control
   end
 end
 
           local createPoseGroup = function(groupInfo)
-  -- function num : 0_7 , upvalues : Line_Template, Button_Group, staticPoseImage
+  -- function num : 0_7 , upvalues : Line_Template, Button_Group, staticPoseImage, mainButtonNum, groupItemPose
   (groupInfo.treeItem):SetAsParentNode(100, Line_Template, 0.61, math.pi / 5, -math.pi / 5)
   for ii = 1, 2 do
     local groupItem = (groupInfo.treeItem):addItem(Button_Group, "TREE_BUTTON_" .. ii, staticPoseImage[ii])
@@ -346,6 +364,14 @@ end
     local parentName = (groupInfo.button):GetID()
     ;
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton(\"" .. parentName .. "\",\"" .. name .. "\"" .. ")")
+    if mainButtonNum == 5 then
+      Add_CustomizationUIControl(0, 3, ii, 0, 5, 1, groupItem.control)
+    else
+      Add_CustomizationUIControl(0, 2, ii, 0, 5, 1, groupItem.control)
+    end
+    -- DECOMPILER ERROR at PC95: Confused about usage of register: R8 in 'UnsetPending'
+
+    groupItemPose[ii] = groupItem.control
   end
 end
 
@@ -392,7 +418,7 @@ end
 end
 
           local createZodiacGroup = function(groupInfo)
-  -- function num : 0_10 , upvalues : Static_ZodiacIcon, Line_Template, Button_Group
+  -- function num : 0_10 , upvalues : Static_ZodiacIcon, Line_Template, Button_Group, groupItemZodiac
   local tempStatic_ZodiacIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "StaticText_Zodiac_Copied")
   CopyBaseProperty(Static_ZodiacIcon, tempStatic_ZodiacIcon)
   Line_Template:SetSize(Line_Template:GetSizeX(), 53)
@@ -419,11 +445,15 @@ end
     (groupItem.control):addInputEvent("Mouse_On", "overSubButton_Zodiac(\"" .. parentName .. "\",\"" .. name .. "\",\"" .. ii - 1 .. "\"" .. ")")
     ;
     (groupItem.control):addInputEvent("Mouse_Out", "outSubButton_Zodiac(\"" .. ii - 1 .. "\"" .. ")")
+    Add_CustomizationUIControl(0, 1, ii, 0, count + 1, 1, groupItem.control)
+    -- DECOMPILER ERROR at PC122: Confused about usage of register: R12 in 'UnsetPending'
+
+    groupItemZodiac[ii] = groupItem.control
   end
 end
 
           local createUI = function()
-  -- function num : 0_11 , upvalues : mainButtonNum, mainButtonInfo, Button_MainButton, Static_Large_Point, Line_Template, Static_Small_Point, staticMainImage, StaticText_Main, mainText, createCustomizationGroup, createWeatherGroup, createPoseGroup, createZodiacGroup
+  -- function num : 0_11 , upvalues : mainButtonNum, mainButtonInfo, Button_MainButton, Static_Large_Point, Line_Template, Static_Small_Point, staticMainImage, StaticText_Main, mainText, UI_GroupType, createCustomizationGroup, createWeatherGroup, createPoseGroup, createZodiacGroup
   for idx = 1, mainButtonNum do
     -- DECOMPILER ERROR at PC73: Confused about usage of register: R4 in 'UnsetPending'
 
@@ -458,23 +488,43 @@ end
       ;
       ((mainButtonInfo[idx]).staticText):SetShow(true)
       if idx == 2 then
-        createCustomizationGroup(mainButtonInfo[idx])
+        if mainButtonNum == 5 then
+          Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+          Add_CustomizationUIControl(0, 2, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
+          createCustomizationGroup(mainButtonInfo[idx])
+        else
+          Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+          Add_CustomizationUIControl(0, 1, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
+          createCustomizationGroup(mainButtonInfo[idx])
+        end
       else
         if idx == 1 then
+          Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+          Add_CustomizationUIControl(0, 0, 0, 0, getWeatherCount() + 1, 1, (mainButtonInfo[idx]).button)
           createWeatherGroup(mainButtonInfo[idx])
         else
           if idx == 4 then
-            createPoseGroup(mainButtonInfo[idx])
+            if mainButtonNum == 5 then
+              Add_CustomizationUIGroup(0, 3, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+              Add_CustomizationUIControl(0, 3, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
+              createPoseGroup(mainButtonInfo[idx])
+            else
+              Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+              Add_CustomizationUIControl(0, 2, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
+              createPoseGroup(mainButtonInfo[idx])
+            end
           else
           end
         end
       end
       if idx ~= 3 or idx == 5 then
+        Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+        Add_CustomizationUIControl(0, 1, 0, 0, getZodiacCount() + 1, 1, (mainButtonInfo[idx]).button)
         createZodiacGroup(mainButtonInfo[idx])
       end
       ;
       ((mainButtonInfo[idx]).tree):collapseAll()
-      -- DECOMPILER ERROR at PC210: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC338: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (mainButtonInfo[idx]).isOpen = false
@@ -959,6 +1009,8 @@ end
 
           SelectCustomizationGroup = function(idx)
   -- function num : 0_32
+  Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
+  ClearAll_CustomizationUIGroup(0)
   selectCustomizationControlGroup(idx)
   CustomizationMainUIShow(false)
   closeExplorer()
@@ -1704,6 +1756,100 @@ end
   end
   if currentScene == 3 and (moveScene ~= true or moveScene == false) then
     HandleClicked_CustomizationMain_SelectClass()
+  end
+end
+
+          CustomizationMain_SettingConsoleUI = function()
+  -- function num : 0_75 , upvalues : mainButtonNum, UI_GroupType, mainButtonInfo, groupItemCustom, groupItemWeather, groupItemPose, groupItemZodiac
+  for idx = 1, mainButtonNum do
+    if idx == 2 then
+      if mainButtonNum == 5 then
+        Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+        Add_CustomizationUIControl(0, 2, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
+        for ii = 1, 4 do
+          Add_CustomizationUIControl(0, 2, ii, 0, 5, 1, groupItemCustom[ii])
+        end
+      else
+        do
+          Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+          Add_CustomizationUIControl(0, 1, 0, 0, 5, 1, (mainButtonInfo[idx]).button)
+          for ii = 1, 4 do
+            Add_CustomizationUIControl(0, 1, ii, 0, 5, 1, groupItemCustom[ii])
+          end
+          do
+            if idx == 1 then
+              Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+              Add_CustomizationUIControl(0, 0, 0, 0, getWeatherCount() + 1, 1, (mainButtonInfo[idx]).button)
+              local count = getWeatherCount()
+              for ii = 1, count do
+                Add_CustomizationUIControl(0, 0, ii, 0, count + 1, 1, groupItemWeather[ii])
+              end
+            else
+              do
+                if idx == 4 then
+                  if mainButtonNum == 5 then
+                    Add_CustomizationUIGroup(0, 3, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+                    Add_CustomizationUIControl(0, 3, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
+                    for ii = 1, 2 do
+                      Add_CustomizationUIControl(0, 3, ii, 0, 3, 1, groupItemPose[ii])
+                    end
+                  else
+                    do
+                      Add_CustomizationUIGroup(0, 2, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+                      Add_CustomizationUIControl(0, 2, 0, 0, 3, 1, (mainButtonInfo[idx]).button)
+                      for ii = 1, 2 do
+                        Add_CustomizationUIControl(0, 2, ii, 0, 3, 1, groupItemPose[ii])
+                      end
+                      do
+                        if idx == 5 then
+                          Add_CustomizationUIGroup(0, 1, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+                          Add_CustomizationUIControl(0, 1, 0, 0, getZodiacCount() + 1, 1, (mainButtonInfo[idx]).button)
+                          for ii = 1, getZodiacCount() do
+                            Add_CustomizationUIControl(0, 1, ii, 0, getZodiacCount() + 1, 1, groupItemZodiac[ii])
+                          end
+                        end
+                        do
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out DO_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                          -- DECOMPILER ERROR at PC230: LeaveBlock: unexpected jumping out IF_STMT
+
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
   end
 end
 

@@ -1155,8 +1155,12 @@ Warehouse_OpenPanelFromMaid = function()
     return 
   end
   local regionInfoWrapper = getRegionInfoWrapper(regionInfo:getAffiliatedTownRegionKey())
-  local regionKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
-  Warehouse_OpenPanel(regionKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Maid)
+  local plantWayKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
+  local regionKey = regionInfoWrapper:getRegionKey()
+  if ToClient_IsAccessibleRegionKey(regionKey) == false then
+    plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey(regionKey)
+  end
+  Warehouse_OpenPanel(plantWayKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Maid)
   Warehouse_SetIgnoreMoneyButton(false)
   Warehouse_OpenWithInventory()
 end

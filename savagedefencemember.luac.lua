@@ -56,9 +56,11 @@ SavageDefenceMember_Init = function(listSize, BGSize)
   (self.listBG):SetSize(284, BGSize)
   ;
   (self.bottomArrow):ComputePos()
+  ;
+  (self.bottomArrow):SetShow(false)
 end
 
-SavageDefenceMember_Update = function()
+SavageDefenceMember_Update = function(isListShow)
   -- function num : 0_1 , upvalues : savageDefenceMember
   local self = savageDefenceMember
   local selfPlayer = getSelfPlayer()
@@ -68,13 +70,16 @@ SavageDefenceMember_Update = function()
   (savageDefenceMember.mycharacterName):SetText(tostring(selfPlayer:getOriginalName()))
   ;
   (savageDefenceMember.myPoint):SetText(makeDotMoney(inMyCoin))
-  ;
-  ((self._list2):getElementManager()):clearKey()
-  for idx = 0, memberCount - 1 do
-    ((self._list2):getElementManager()):pushKey(toInt64(0, R12_PC38))
+  if isListShow == true then
+    ((self._list2):getElementManager()):clearKey()
+    for idx = 0, memberCount - 1 do
+      ((self._list2):getElementManager()):pushKey(toInt64(0, R13_PC40))
+    end
   end
-  ;
-  (self.bottomArrow):ComputePos()
+  do
+    ;
+    (self.bottomArrow):ComputePos()
+  end
 end
 
 PaGlobal_SavegeDefenceMember_ListUpdate = function(contents, key)
@@ -189,7 +194,7 @@ PaGlobal_SavageDefenceMember_BottomArrow = function()
     (self.bottomArrow):setRenderTexture((self.bottomArrow):getClickTexture())
   else
     do
-      SavageDefenceMember_Init(380, 420)
+      SavageDefenceMember_Init(405, 420)
       local texturePath = "New_UI_Common_forLua/Widget/Party/Cave_00.dds"
       ;
       (self.bottomArrow):ChangeTextureInfoName(texturePath)
@@ -213,7 +218,7 @@ PaGlobal_SavageDefenceMember_BottomArrow = function()
         ((self.bottomArrow):getClickTexture()):setUV(x1, y1, x2, y2)
         ;
         (self.bottomArrow):setRenderTexture((self.bottomArrow):getClickTexture())
-        SavageDefenceMember_Update()
+        SavageDefenceMember_Update(true)
         ;
         (self._list2):moveTopIndex()
         ;
@@ -223,7 +228,7 @@ PaGlobal_SavageDefenceMember_BottomArrow = function()
   end
 end
 
-SavageDefenceMember_Open = function()
+SavageDefenceMember_Open = function(isListUpdate)
   -- function num : 0_7 , upvalues : savageDefenceMember
   local self = savageDefenceMember
   if not ToClient_getPlayNowSavageDefence() then
@@ -239,7 +244,7 @@ SavageDefenceMember_Open = function()
   (self.chk_List):SetCheck(isListShow)
   ;
   (self.chk_Shop):SetCheck(Panel_SavageDefenceShop:GetShow())
-  SavageDefenceMember_Update()
+  SavageDefenceMember_Update(isListUpdate)
 end
 
 SavageDefenceMember_Close = function()
@@ -289,14 +294,13 @@ SavageDefenceMember_TooltipButtonDesc = function(isShow, tipType)
   TooltipSimple_Show(control, name, desc)
 end
 
-FromClient_refreshSavageDefencePlayer = function(count)
+FromClient_refreshSavageDefencePlayer = function(isListUpdate)
   -- function num : 0_12
-  SavageDefenceMember_Open()
-  SavageDefenceMember_Update()
+  SavageDefenceMember_Open(isListUpdate)
   FGlobal_SavageDefenceShop_coinUpdate()
 end
 
-SavageDefenceMember_Init(380, 420)
+SavageDefenceMember_Init(405, 420)
 PaGlobal_SavageDefenceMember_Position()
 registerEvent("FromClient_refreshSavageDefencePlayer", "FromClient_refreshSavageDefencePlayer")
 registerEvent("onScreenResize", "PaGlobal_SavageDefenceMember_Position")

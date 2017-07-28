@@ -43,6 +43,8 @@ classIcon = {
 [(CppEnums.ClassType).ClassType_DarkElf] = {387, 251, 416, 280}
 , 
 [(CppEnums.ClassType).ClassType_Combattant] = {419, 219, 448, 248}
+, 
+[(CppEnums.ClassType).ClassType_CombattantWomen] = {451, 251, 480, 280}
 }
 , 
 [team2] = {
@@ -73,6 +75,8 @@ classIcon = {
 [(CppEnums.ClassType).ClassType_DarkElf] = {387, 219, 416, 248}
 , 
 [(CppEnums.ClassType).ClassType_Combattant] = {419, 251, 448, 280}
+, 
+[(CppEnums.ClassType).ClassType_CombattantWomen] = {451, 219, 480, 248}
 }
 }
 , 

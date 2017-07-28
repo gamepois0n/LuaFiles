@@ -151,6 +151,7 @@ HandleMove_VoiceChat_Volume = function(sliderIdx)
       end
     end
   end
+  HandleClick_VoiceChat_SetOnOff()
   FGlobal_VoiceChatState()
 end
 

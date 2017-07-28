@@ -3,22 +3,12 @@
 
 -- params : ...
 -- function num : 0
-Panel_ComboCommand:SetShow(false)
+Panel_ConsoleCombo:SetShow(false)
 local isAbleConsolePadGroup = ToClient_IsContentsGroupOpen("282")
 PaGlobal_ConsoleKeyCombo = {
-_ui = {_comboDelay = (UI.getChildControl)(Panel_ComboCommand, "Progress2_ComboDelay")}
+_ui = {_static_RotateBG = (UI.getChildControl)(Panel_ConsoleCombo, "Static_Bg"), _static_X = (UI.getChildControl)(Panel_ConsoleCombo, "Static_ButtonX"), _static_Y = (UI.getChildControl)(Panel_ConsoleCombo, "Static_ButtonY"), _static_A = (UI.getChildControl)(Panel_ConsoleCombo, "Static_ButtonA"), _static_B = (UI.getChildControl)(Panel_ConsoleCombo, "Static_ButtonB"), _static_SkillIcon_Up = (UI.getChildControl)(Panel_ConsoleCombo, "Static_SkillIcon_Up"), _static_SkillIcon_Right = (UI.getChildControl)(Panel_ConsoleCombo, "Static_SkillIcon_Right"), _static_SkillIcon_Down = (UI.getChildControl)(Panel_ConsoleCombo, "Static_SkillIcon_Down"), _static_SkillIcon_Left = (UI.getChildControl)(Panel_ConsoleCombo, "Static_SkillIcon_Left"), _comboDelay = (UI.getChildControl)(Panel_ConsoleCombo, "CircularProgress_LimitTime")}
 , 
-_firstButton = {[0] = "LT", [1] = "RT", [2] = "LB", [3] = "RB"}
-, 
-_secondButton = {[0] = "FRONT", [1] = "RIGHT", [2] = "BACK", [3] = "LEFT"}
-, 
-_thirdButton = {[0] = "X", [1] = "Y", [2] = "A", [3] = "B"}
-, 
-_slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true, createEnduranceIcon = true}
-, 
-_skillSlotConfig = {createIcon = true, createEffect = true, createFG = true, createFGDisabled = true, createFG_Passive = true, createMinus = true, createLevel = true, createLearnButton = true, createTestimonial = true, createLockIcon = true, createMouseOver = true, 
-template = {effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect"), iconFG = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_FG"), iconFGDisabled = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_FG_DISABLE"), iconFG_Passive = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_BG"), iconMinus = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_EffectMinus"), learnButton = (UI.getChildControl)(Panel_Window_Skill, "Button_Skill_Point"), mouseOverButton = (UI.getChildControl)(Panel_Window_Skill, "Button_Skill_OverMouse"), testimonial = (UI.getChildControl)(Panel_Window_Skill, "Static_Skill_Effect"), lockIcon = (UI.getChildControl)(Panel_Window_Skill, "Static_SkillLockIcon")}
-}
+_button = {[0] = "X", [1] = "Y", [2] = "A", [3] = "B"}
 , 
 _comboData = {
 [0] = {}
@@ -27,66 +17,32 @@ _comboData = {
 , 
 [2] = {}
 }
-, _maxNextSkillList = 6, _skillMaxKeyCount = 3, _buttonMaxCount = 4, _buttonIndex = 0, _showSkillIndex = 0, _currentTime = 0, _delayTime = 0, _screenSizeX = 0, _screenSizeY = 0, 
+, _maxNextSkillList = 12, _skillMaxKeyCount = 3, _buttonMaxCount = 4, _buttonIndex = 0, _showSkillIndex = 0, _currentTime = 0, _delayTime = 0, _screenSizeX = 0, _screenSizeY = 0, 
 _showSkillData = {}
 , _slots = (Array.new)()}
--- DECOMPILER ERROR at PC137: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_ConsoleKeyCombo.initialize = function(self)
   -- function num : 0_0
-  for index = 0, self._maxNextSkillList - 1 do
-    local slot = {}
-    slot._skillIcon = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_SkillIcon", Panel_ComboCommand, "skillComboCommand_SkillIcon_" .. index)
-    slot._line = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_Line", slot._skillIcon, "skillComboCommand_Line_" .. index)
-    slot._name = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_SkillName", slot._skillIcon, "skillComboCommand_SkillName_" .. index)
-    slot._RB = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_RB", slot._skillIcon, "skillComboCommand_RB_" .. index)
-    slot._LB = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_LB", slot._skillIcon, "skillComboCommand_LB_" .. index)
-    slot._RT = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_RT", slot._skillIcon, "skillComboCommand_RT_" .. index)
-    slot._LT = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_LT", slot._skillIcon, "skillComboCommand_LT_" .. index)
-    slot._crossUp = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_CrossUp", slot._skillIcon, "skillComboCommand_CrossUp_" .. index)
-    slot._crossRight = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_CrossRight", slot._skillIcon, "skillComboCommand_CrossRight_" .. index)
-    slot._crossDown = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_CrossDown", slot._skillIcon, "skillComboCommand_CrossDown_" .. index)
-    slot._crossLeft = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_CrossLeft", slot._skillIcon, "skillComboCommand_CrossLeft_" .. index)
-    slot._x = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_X", slot._skillIcon, "skillComboCommand_X_" .. index)
-    slot._y = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_Y", slot._skillIcon, "skillComboCommand_Y_" .. index)
-    slot._a = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_A", slot._skillIcon, "skillComboCommand_A_" .. index)
-    slot._b = (UI.createAndCopyBasePropertyControl)(Panel_ComboCommand, "Static_B", slot._skillIcon, "skillComboCommand_B" .. index)
-    for _,v in pairs(slot) do
-      v:SetShow(false)
-    end
-    -- DECOMPILER ERROR at PC166: Confused about usage of register: R6 in 'UnsetPending'
-
-    ;
-    (self._slots)[index] = slot
-  end
-  self._screenSizeX = getScreenSizeX() / 2 - 80
-  self._screenSizeY = getScreenSizeY() / 2 + 50
-  ;
-  ((self._ui)._comboDelay):SetPosX(self._screenSizeX - 10)
-  ;
-  ((self._ui)._comboDelay):SetPosY(self._screenSizeY - 200)
 end
 
--- DECOMPILER ERROR at PC140: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_ConsoleKeyCombo.open = function(self)
   -- function num : 0_1
 end
 
--- DECOMPILER ERROR at PC143: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC108: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_ConsoleKeyCombo.close = function(self)
   -- function num : 0_2
 end
 
--- DECOMPILER ERROR at PC146: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_ConsoleKeyCombo.nextSkillUpdate = function(self)
   -- function num : 0_3
   local skillCount = selfPlayerNextSkillConsoleKeySize()
-  for index = 0, self._showSkillIndex - 1 do
-    ((self._showSkillData)[index]):SetShow(false)
-  end
   for index = 0, skillCount - 1 do
     local skillNo = selfPlayerNextSkillConsoleSkillNo(index)
     local skillWrapper = getSkillTypeStaticStatus(skillNo)
@@ -94,143 +50,81 @@ PaGlobal_ConsoleKeyCombo.nextSkillUpdate = function(self)
       return 
     end
     local iconPath = skillWrapper:getIconPath()
-    self._buttonIndex = 0
-    ;
-    (((self._slots)[index])._skillIcon):ChangeTextureInfoName("Icon/" .. iconPath)
-    ;
-    (((self._slots)[index])._skillIcon):SetShow(true)
-    ;
-    (((self._slots)[index])._skillIcon):SetPosY(((((self._slots)[index])._skillIcon):GetSizeY() + 10) * index)
-    ;
-    (((self._slots)[index])._name):SetText(skillWrapper:getName())
-    ;
-    (((self._slots)[index])._name):SetShow(true)
     local buttonKey = selfPlayerNextSkillConsoleKeyList(index)
-    for buttonIndex = 0, self._skillMaxKeyCount - 1 do
-      local isFind = PaGlobal_ConsoleKeyCombo:findCommand(index, buttonKey, buttonIndex)
-      if isFind then
-        self._buttonIndex = self._buttonIndex + 1
-      end
-    end
+    local isFind = PaGlobal_ConsoleKeyCombo:findCommand(index, buttonKey, iconPath)
   end
 end
 
--- DECOMPILER ERROR at PC149: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_ConsoleKeyCombo.findCommand = function(self, index, buttonKey, buttonIndex)
+PaGlobal_ConsoleKeyCombo.findCommand = function(self, index, buttonKey, iconPath)
   -- function num : 0_4
-  local button = {}
-  if buttonIndex == 0 then
-    button = self._firstButton
-  else
-    if buttonIndex == 1 then
-      button = self._secondButton
-    else
-      if buttonIndex == 2 then
-        button = self._thirdButton
-      end
-    end
-  end
-  local isFind = false
   for buttonCount = 0, self._buttonMaxCount - 1 do
-    local startIndex, endIndex = (string.find)(buttonKey, button[buttonCount])
+    local startIndex, endIndex = (string.find)(buttonKey, (self._button)[buttonCount])
     if startIndex ~= nil and endIndex ~= nil then
       local command = (string.sub)(buttonKey, startIndex, endIndex)
-      PaGlobal_ConsoleKeyCombo:showCommand(index, command)
+      PaGlobal_ConsoleKeyCombo:showCommand(index, command, iconPath)
       isFind = true
     end
   end
-  return isFind
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC117: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_ConsoleKeyCombo.showCommand = function(self, index, command)
+PaGlobal_ConsoleKeyCombo.showCommand = function(self, index, command, iconPath)
   -- function num : 0_5
-  if command == "LT" then
-    PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._LT, 0)
+  if command == "X" then
+    PaGlobal_ConsoleKeyCombo:setPosCommand(index, 0, iconPath)
   else
-    if command == "RT" then
-      PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._RT, 0)
+    if command == "Y" then
+      PaGlobal_ConsoleKeyCombo:setPosCommand(index, 1, iconPath)
     else
-      if command == "LB" then
-        PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._LB, 0)
+      if command == "A" then
+        PaGlobal_ConsoleKeyCombo:setPosCommand(index, 2, iconPath)
       else
-        if command == "RB" then
-          PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._RB, 0)
-        else
-          if command == "FRONT" then
-            PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._crossUp, 0)
-          else
-            if command == "RIGHT" then
-              PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._crossRight, 0)
-            else
-              if command == "BACK" then
-                PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._crossDown, 0)
-              else
-                if command == "LEFT" then
-                  PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._crossLeft, 0)
-                else
-                  if command == "X" then
-                    PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._x, 1)
-                  else
-                    if command == "Y" then
-                      PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._y, 2)
-                    else
-                      if command == "A" then
-                        PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._a, 3)
-                      else
-                        if command == "B" then
-                          PaGlobal_ConsoleKeyCombo:setPosCommand(index, ((self._slots)[index])._b, 4)
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
+        if command == "B" then
+          PaGlobal_ConsoleKeyCombo:setPosCommand(index, 3, iconPath)
         end
       end
     end
   end
 end
 
--- DECOMPILER ERROR at PC155: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC120: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_ConsoleKeyCombo.setPosCommand = function(self, skillIndex, control, posIndex)
+PaGlobal_ConsoleKeyCombo.setPosCommand = function(self, skillIndex, posIndex, iconPath)
   -- function num : 0_6
-  if posIndex == 1 then
-    (((self._slots)[skillIndex])._skillIcon):SetPosX(self._screenSizeX - 150)
+  if posIndex == 0 then
+    ((self._ui)._static_X):SetShow(true)
     ;
-    (((self._slots)[skillIndex])._skillIcon):SetPosY(self._screenSizeY)
+    ((self._ui)._static_SkillIcon_Left):SetShow(true)
+    ;
+    ((self._ui)._static_SkillIcon_Left):ChangeTextureInfoName("Icon/" .. iconPath)
   else
-    if posIndex == 2 then
-      (((self._slots)[skillIndex])._skillIcon):SetPosX(self._screenSizeX)
+    if posIndex == 1 then
+      ((self._ui)._static_Y):SetShow(true)
       ;
-      (((self._slots)[skillIndex])._skillIcon):SetPosY(self._screenSizeY - 150)
+      ((self._ui)._static_SkillIcon_Up):SetShow(true)
+      ;
+      ((self._ui)._static_SkillIcon_Up):ChangeTextureInfoName("Icon/" .. iconPath)
     else
-      if posIndex == 3 then
-        (((self._slots)[skillIndex])._skillIcon):SetPosX(self._screenSizeX)
+      if posIndex == 2 then
+        ((self._ui)._static_A):SetShow(true)
         ;
-        (((self._slots)[skillIndex])._skillIcon):SetPosY(self._screenSizeY + 150)
+        ((self._ui)._static_SkillIcon_Down):SetShow(true)
+        ;
+        ((self._ui)._static_SkillIcon_Down):ChangeTextureInfoName("Icon/" .. iconPath)
       else
-        if posIndex == 4 then
-          (((self._slots)[skillIndex])._skillIcon):SetPosX(self._screenSizeX + 150)
+        if posIndex == 3 then
+          ((self._ui)._static_B):SetShow(true)
           ;
-          (((self._slots)[skillIndex])._skillIcon):SetPosY(self._screenSizeY)
+          ((self._ui)._static_SkillIcon_Right):SetShow(true)
+          ;
+          ((self._ui)._static_SkillIcon_Right):ChangeTextureInfoName("Icon/" .. iconPath)
         end
       end
     end
   end
-  local nameSize = (((self._slots)[skillIndex])._name):GetTextSizeX()
-  control:SetShow(true)
-  control:SetPosX((control:GetSizeX() + 10) * (self._buttonIndex + 1) + nameSize)
-  -- DECOMPILER ERROR at PC82: Confused about usage of register: R5 in 'UnsetPending'
-
-  ;
-  (self._showSkillData)[self._showSkillIndex] = control
-  self._showSkillIndex = self._showSkillIndex + 1
 end
 
 FromClient_consoleNextSkillList = function()
@@ -239,19 +133,23 @@ FromClient_consoleNextSkillList = function()
     return 
   end
   local self = PaGlobal_ConsoleKeyCombo
-  for index = 0, self._showSkillIndex - 1 do
-    ((self._showSkillData)[index]):SetShow(false)
-    ;
-    (((self._slots)[index])._skillIcon):SetShow(false)
+  for key,value in pairs(self._ui) do
+    value:SetShow(false)
   end
   self._showSkillIndex = 0
-  Panel_ComboCommand:SetShow(true)
+  Panel_ConsoleCombo:SetShow(true)
   ;
   ((self._ui)._comboDelay):SetShow(true)
   local delayTime = selfPlayerNextSkillConsoleDelayTime()
-  self._currentTime = Int64toInt32(delayTime)
-  self._delayTime = Int64toInt32(delayTime)
+  ;
+  ((self._ui)._comboDelay):SetCurrentControlPos(0)
+  ;
+  ((self._ui)._comboDelay):SetAniSpeed(0.1)
+  self._currentTime = 0
+  self._delayTime = Int64toInt32(delayTime) / 1000
   PaGlobal_ConsoleKeyCombo:nextSkillUpdate()
+  ;
+  ((self._ui)._static_RotateBG):SetShow(true)
 end
 
 ConsoleKeyComboUpdateTime = function(updateTime)
@@ -259,22 +157,20 @@ ConsoleKeyComboUpdateTime = function(updateTime)
   local isCombo = selfPlayerNextSkillConsoleSkillIsCombo()
   local self = PaGlobal_ConsoleKeyCombo
   if isCombo == false then
-    for index = 0, self._showSkillIndex - 1 do
-      ((self._showSkillData)[index]):SetShow(false)
-      ;
-      (((self._slots)[index])._skillIcon):SetShow(false)
+    for key,value in pairs(self._ui) do
+      value:SetShow(false)
     end
-    ;
-    ((self._ui)._comboDelay):SetShow(false)
     self._currentTime = 0
     return 
   end
-  self._currentTime = self._currentTime - updateTime
+  self._currentTime = self._currentTime + updateTime
   ;
   ((self._ui)._comboDelay):SetProgressRate(self._currentTime * 100 / self._delayTime)
+  ;
+  ((self._ui)._static_RotateBG):SetRotate()
 end
 
 PaGlobal_ConsoleKeyCombo:initialize()
 registerEvent("FromClient_consoleNextSkillList", "FromClient_consoleNextSkillList")
-Panel_ComboCommand:RegisterUpdateFunc("ConsoleKeyComboUpdateTime")
+Panel_ConsoleCombo:RegisterUpdateFunc("ConsoleKeyComboUpdateTime")
 

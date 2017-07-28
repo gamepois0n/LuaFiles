@@ -952,13 +952,13 @@ isChatInputLinkedItem = function(itemWrapper)
   local itemName = itemSSW:getName()
   local linkedItemPos = {startPos = 0, endPos = 0}
   local oldStr = ((chatInput.control).edit):GetEditText()
-  linkedItemPos.startPos = (string.len)(oldStr)
+  linkedItemPos.startPos = chatting_linkedItemRealPos(oldStr)
   local newStr = oldStr .. "[" .. itemName .. "]"
-  linkedItemPos.endPos = (string.len)(newStr)
+  linkedItemPos.endPos = chatting_linkedItemRealPos(newStr)
   ReleaseImeComposition()
   ;
   ((chatInput.control).edit):SetEditText(newStr, true)
-  -- DECOMPILER ERROR at PC52: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC50: Confused about usage of register: R6 in 'UnsetPending'
 
   if ((chatInput.control).edit):GetEditTextSize() <= chatInput.maxEditInput then
     (chatInput.linkedItemData)[chatInput.linkedItemCount] = linkedItemPos

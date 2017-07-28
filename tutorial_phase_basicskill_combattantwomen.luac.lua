@@ -9,7 +9,7 @@ _regionKeyRawList = {88, 349}
 _skillNoList = {
 [1] = {2656, 2657, 2658}
 , 
-[2] = {2680, 2681, 2682}
+[2] = {2674, 2675, 2676, 2677}
 , 
 [3] = {2637, 2638, 2639}
 }
@@ -18,7 +18,7 @@ _questData = {
 [1] = {_questGroupNo = 650, _questId = 3}
 }
 }
--- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.checkPossibleForPhaseStart = function(self, stepNo)
   -- function num : 0_0
@@ -52,7 +52,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.checkPossibleForPhaseStart = f
   end
 end
 
--- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.checkSkippablePhase = function(self)
   -- function num : 0_1
@@ -62,7 +62,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.checkSkippablePhase = function
   return false
 end
 
--- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.startPhase = function(self, stepNo, typeNo)
   -- function num : 0_2
@@ -82,7 +82,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.startPhase = function(self, st
 end
 
 local navigationGuideParam = nil
--- DECOMPILER ERROR at PC62: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.startPhaseXXX = function(self, stepNo, typeNo)
   -- function num : 0_3 , upvalues : navigationGuideParam
@@ -128,7 +128,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.startPhaseXXX = function(self,
   Panel_Tutorial:SetShow(true, true)
 end
 
--- DECOMPILER ERROR at PC65: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.endPhase = function(self)
   -- function num : 0_4
@@ -140,7 +140,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.endPhase = function(self)
 end
 
 local result = false
--- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC71: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.updatePerFrame = function(self, deltaTime)
   -- function num : 0_5 , upvalues : result
@@ -166,7 +166,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.updatePerFrame = function(self
   end
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.handleChangeStep = function(self, currentStep)
   -- function num : 0_6
@@ -189,7 +189,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.handleChangeStep = function(se
   end
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.showUiScoldingTooManyKeyInput = function(self)
   -- function num : 0_7
@@ -200,7 +200,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.showUiScoldingTooManyKeyInput 
 )
 end
 
--- DECOMPILER ERROR at PC79: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepTryBasicSkill = function(self)
   -- function num : 0_8
@@ -269,7 +269,7 @@ local isPressedTab = false
 local isPressedMouseL = false
 local mouseLUpCount = 0
 local isBlackSpiritScolding = false
--- DECOMPILER ERROR at PC90: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC91: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.updateTryBasicSkill = function(self, deltaTime)
   -- function num : 0_9 , upvalues : isPressedTab, isPressedMouseL, mouseLUpCount, isBlackSpiritScolding
@@ -364,7 +364,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.updateTryBasicSkill = function
   return false
 end
 
--- DECOMPILER ERROR at PC93: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC94: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.eventCallUsedSkill_TryBasicSkill = function(self, skillWrapper)
   -- function num : 0_10
@@ -388,7 +388,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.eventCallUsedSkill_TryBasicSki
   end
 end
 
--- DECOMPILER ERROR at PC96: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC97: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepTrySkillCombo = function(self)
   -- function num : 0_11
@@ -416,7 +416,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepTrySkillCombo = func
   (PaGlobal_TutorialUiManager:getUiKeyButton()):ButtonToggleAll(true)
 end
 
--- DECOMPILER ERROR at PC99: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC100: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.updateTrySkillCombo = function(self, deltaTime)
   -- function num : 0_12
@@ -440,7 +440,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.updateTrySkillCombo = function
   return false
 end
 
--- DECOMPILER ERROR at PC102: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC103: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.eventCallUsedSkill_TrySkillCombo = function(self, skillWrapper)
   -- function num : 0_13
@@ -471,7 +471,7 @@ end
 
 local isAcceptedQuest = false
 local isClearQuest = false
--- DECOMPILER ERROR at PC107: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC108: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepSuggestCallBlackSpirit = function(self)
   -- function num : 0_14
@@ -481,7 +481,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepSuggestCallBlackSpir
   end
 end
 
--- DECOMPILER ERROR at PC111: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC112: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.eventCallAcceptBlackSpiritQuest = function(self, isAccept, questGroupNo, questId)
   -- function num : 0_15 , upvalues : isAcceptedQuest
@@ -490,7 +490,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.eventCallAcceptBlackSpiritQues
   end
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC116: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.eventCallAfterBlackSpiritDialogClose = function(self)
   -- function num : 0_16 , upvalues : isAcceptedQuest
@@ -504,7 +504,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.eventCallAfterBlackSpiritDialo
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC119: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.handleEventQuestUpdateNotify = function(self, isAccept, questNoRaw)
   -- function num : 0_17
@@ -515,7 +515,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.handleEventQuestUpdateNotify =
   end
 end
 
--- DECOMPILER ERROR at PC121: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC122: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.handleAfterAndPopFlush = function(self)
   -- function num : 0_18
@@ -524,7 +524,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.handleAfterAndPopFlush = funct
   end
 end
 
--- DECOMPILER ERROR at PC124: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC125: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.handleEventSelfPlayerUsedSkill = function(self, skillWrapper)
   -- function num : 0_19

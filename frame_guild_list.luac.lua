@@ -1719,6 +1719,10 @@ GuildListInfoPage.UpdateData = function(self)
                                             else
                                               if UI_Class.ClassType_Combattant == classType then
                                                 (((self._list)[index])._class):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER"))
+                                              else
+                                                if UI_Class.ClassType_CombattantWomen == classType then
+                                                  (((self._list)[index])._class):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN"))
+                                                end
                                               end
                                             end
                                           end
@@ -1861,47 +1865,47 @@ GuildListInfoPage.UpdateData = function(self)
                                   end
                                   contentSizeY = contentSizeY + (((self._list)[index])._charName):GetSizeY() + 2
                                   btn_GuildMasterMandate:addInputEvent("Mouse_LUp", "HandleClicked_GuildMasterMandate( " .. index .. " )")
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out DO_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                  -- DECOMPILER ERROR at PC980: LeaveBlock: unexpected jumping out IF_STMT
+                                  -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
 
                                 end
                               end
@@ -1936,7 +1940,7 @@ GuildListInfoPage.UpdateData = function(self)
   (self._frameGuildList):UpdateContentPos()
   ;
   (self._scrollBar):SetInterval((self._contentGuildList):GetSizeY() / 100 * 1.1)
-  if isGuildMaster == true and guildGrade == 1 then
+  if (isGuildMaster == true or isGuildSubMaster == true) and guildGrade == 1 then
     (self._btnWelfare):SetShow(true)
   else
     ;

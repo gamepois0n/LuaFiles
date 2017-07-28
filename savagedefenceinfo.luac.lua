@@ -207,6 +207,14 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
             savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
             savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
             savageDefenceListJoinBtn:SetIgnore(true)
+          else
+            if getCurrentState == 4 then
+              isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
+              isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
+              savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
+              savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
+              savageDefenceListJoinBtn:SetIgnore(true)
+            end
           end
         end
       end
@@ -239,12 +247,16 @@ FGlobal_SavegeDefenceInfo_join = function(idx)
   if curChannelData == nil then
     return 
   end
+  if ToClient_hasInventorySavageDefenceItem() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_JOIN_FAIL_ITEM"))
+    return 
+  end
   local savageDefenceStatusData = ToClient_getSavageDefenceStatusData(idx)
   local getServerNo = savageDefenceStatusData:getServerNo()
   local channelName = getChannelName(curChannelData._worldNo, getServerNo)
   local isGameMaster = ToClient_SelfPlayerIsGM()
   local channelMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CHANNELMOVE", "channelName", channelName)
-  local tempChannel = getGameChannelServerDataByWorldNo(curChannelData._worldNo, index)
+  local tempChannel = getGameChannelServerDataByWorldNo(curChannelData._worldNo, idx)
   local isBalanceServer = tempChannel._isBalanceChannel
   local joinSavageDefence = function()
     -- function num : 0_3_0 , upvalues : isGameMaster, getServerNo, curChannelData, idx
@@ -259,10 +271,6 @@ FGlobal_SavegeDefenceInfo_join = function(idx)
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCompetitionAlreadyIn"))
         return 
       end
-    end
-    if ToClient_hasInventorySavageDefenceItem() then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEMEMBER_JOIN_FAIL_ITEM"))
-      return 
     end
     if IsSelfPlayerWaitAction() then
       if hp == maxHp or isGameMaster then

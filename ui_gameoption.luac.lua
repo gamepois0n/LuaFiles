@@ -7712,9 +7712,11 @@ GameOption_Apply = function()
         self.appliedCheckPadSensitivityY = self.currentCheckPadSensitivityY
         setGamePadSensitivityY(self.appliedCheckPadSensitivityY)
       end
+      local reloadConsoleUIMode = false
       if self.currentCheckPadConsoleUIMode ~= self.appliedCheckPadConsoleUIMode then
         self.appliedCheckPadConsoleUIMode = self.currentCheckPadConsoleUIMode
         setGamePadConsoleUIMode(self.appliedCheckPadConsoleUIMode)
+        reloadConsoleUIMode = true
       end
       if self.currentCheckPadConsoleComboMode ~= self.appliedCheckPadConsoleComboMode then
         self.appliedCheckPadConsoleComboMode = self.currentCheckPadConsoleComboMode
@@ -7953,6 +7955,9 @@ GameOption_Apply = function()
             FGlobal_NewMainQuest_Alarm_Check()
             QuickSlot_UpdateData()
             FGlobal_NewQuickSlot_Update()
+          end
+          if reloadConsoleUIMode == true then
+            ToClient_excuteReloadUI()
           end
         end
       end

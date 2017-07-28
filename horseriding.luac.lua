@@ -38,7 +38,7 @@ Update_ReconnectHorse = function()
   if HorseRiding._isStartHorseRiding == false then
     return 
   end
-  if FrameControl_ThreeSecond() == false or IsSelfPlayerWaitAction() == false then
+  if FrameControl_FiveSecond() == false or IsSelfPlayerWaitAction() == false then
     return 
   end
   local self = HorseRiding
@@ -62,7 +62,7 @@ Update_ReconnectHorse = function()
   end
 end
 
-FrameControl_ThreeSecond = function()
+FrameControl_FiveSecond = function()
   -- function num : 0_5 , upvalues : HorseRiding
   local self = HorseRiding
   local nowTick = (os.time)()
@@ -70,7 +70,7 @@ FrameControl_ThreeSecond = function()
     self._preTick = nowTick
     return false
   end
-  if nowTick - self._preTick < 3 then
+  if nowTick - self._preTick < 5 then
     return false
   end
   self._preTick = nowTick

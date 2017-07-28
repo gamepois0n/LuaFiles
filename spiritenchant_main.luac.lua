@@ -28,7 +28,7 @@ PaGlobal_Enchant.initialize = function(self)
   ;
   (self._uiHelpPerfectEnchant):SetSize(220, 60)
   ;
-  (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY())
+  (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY() + 50)
   ;
   (self._uiEnchantFailDesc):SetShow(false)
   ;
@@ -67,7 +67,7 @@ PaGlobal_Enchant.initialize = function(self)
   (self._uiDrasticEnchant):SetEnableArea(0, 0, (self._uiDrasticEnchant):GetTextSizeX() + 60, (self._uiDrasticEnchant):GetSizeY())
   ;
   (self._uiMeticulousEnchant):SetEnableArea(0, 0, (self._uiMeticulousEnchant):GetTextSizeX() + 60, (self._uiMeticulousEnchant):GetSizeY())
-  -- DECOMPILER ERROR at PC143: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC144: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotTargetItem).icon = (UI.getChildControl)(Panel_Window_Enchant, "Static_Slot_0")
@@ -75,12 +75,12 @@ PaGlobal_Enchant.initialize = function(self)
   (SlotItem.new)(self._slotTargetItem, "Slot_0", 0, Panel_Window_Enchant, self._slotConfig)
   ;
   (self._slotTargetItem):createChild()
-  -- DECOMPILER ERROR at PC156: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC157: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotTargetItem).empty = true
   Panel_Tooltip_Item_SetPosition(0, self._slotTargetItem, "Enchant")
-  -- DECOMPILER ERROR at PC168: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC169: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotEnchantItem).icon = (UI.getChildControl)(Panel_Window_Enchant, "Static_Slot_1")
@@ -88,7 +88,7 @@ PaGlobal_Enchant.initialize = function(self)
   (SlotItem.new)(self._slotEnchantItem, "Slot_1", 1, Panel_Window_Enchant, self._slotConfig)
   ;
   (self._slotEnchantItem):createChild()
-  -- DECOMPILER ERROR at PC181: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC182: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotEnchantItem).empty = true
@@ -426,7 +426,7 @@ PaGlobal_Enchant.handleMOnSureSuccessButton = function(self)
   ;
   (self._uiHelpPerfectEnchant):SetSize(220, self.savedBoxSizeY)
   ;
-  (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY())
+  (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY() + 50)
 end
 
 -- DECOMPILER ERROR at PC387: Confused about usage of register: R0 in 'UnsetPending'
@@ -701,7 +701,7 @@ PaGlobal_Enchant.handleMOnShowHelpDesc = function(self, isShow)
   ;
   (self._uiHelpEnchantBtn):SetSize((self._uiHelpEnchantBtn):GetSizeX(), boxSizeY)
   ;
-  (self._uiHelpEnchantBtn):SetPosY(self._bubbleBasePosY - (self._uiHelpEnchantBtn):GetSizeY())
+  (self._uiHelpEnchantBtn):SetPosY(self._bubbleBasePosY - (self._uiHelpEnchantBtn):GetSizeY() + 50)
   if isShow == true then
     self._btnMouseOnCount = self._btnMouseOnCount + 1
   end

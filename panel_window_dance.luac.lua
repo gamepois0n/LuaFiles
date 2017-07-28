@@ -13,7 +13,7 @@ local nSelectDanceList_VisibleMaxCount = 7
 local nSelectDance_MaxCount = 0
 local listRenderer_UIData = {}
 local slideIndex = 0
-local tempDanceNameInfo = {"DANCE_Type00_Step_End_00", "DANCE_Type00_Step_End_04", "DANCE_Type00_Step_End_05", "DANCE_Type00_Step_Ing_00", "DANCE_Type00_Step_Ing_01", "DANCE_Type00_Step_Ing_01-2", "DANCE_Type00_Step_Ing_02", "DANCE_Type00_Step_Ing_02_M", "DANCE_Type00_Step_Ing_03", "DANCE_Type00_Step_Ing_03_M", "DANCE_Type00_Step_Ing_04", "DANCE_Type00_Step_Ing_04_M", "DANCE_Type00_Step_Ing_05", "DANCE_Type00_Step_Ing_05_M", "DANCE_Type00_Step_Ing_06", "DANCE_Type00_Step_Ing_06_M", "DANCE_Type00_Step_Ing_07", "DANCE_Type00_Step_Ing_07_M", "DANCE_Type00_Step_Ing_08", "DANCE_Type00_Step_Ing_08_M", "DANCE_Type00_Step_Ing_09", "DANCE_Type00_Step_Ing_09_M", "DANCE_Type00_Step_Ing_10", "DANCE_Type00_Step_Ing_10_M", "DANCE_Type00_Step_Ing_11", "DANCE_Type00_Step_Ing_11_M", "DANCE_Type00_Step_Ing_12", "DANCE_Type00_Step_Ing_12_M", "DANCE_Type00_Step_Ing_13", "DANCE_Type00_Step_Ing_13_M", "DANCE_Type00_Step_Ing_14", "DANCE_Type00_Step_Ing_14_M", "DANCE_Type00_Step_Ing_15", "DANCE_Type00_Step_Ing_15_M", "DANCE_Type00_Step_Ing_16", "DANCE_Type00_Step_Ing_16_M", "DANCE_Type00_Step_Ing_17", "DANCE_Type00_Step_Ing_17_M", "DANCE_Type00_Step_Ing_18", "DANCE_Type00_Step_Ing_18_M", "DANCE_Type00_Step_Ing_19", "DANCE_Type00_Step_Ing_19_M", "DANCE_Type00_Step_Ing_20", "DANCE_Type00_Step_Ing_20_M", "DANCE_Type00_Step_Ing_21", "DANCE_Type00_Step_Ing_21_M", "DANCE_Type00_Step_Start_00", "DANCE_Type00_Step_Start_01"}
+local tempDanceNameInfo = {"DANCE_T00_Step00_Ing_00", "DANCE_T00_Step00_Ing_01", "DANCE_T00_Step00_Ing_01_M", "DANCE_T00_Step00_Ing_02", "DANCE_T00_Step00_Ing_02_M", "DANCE_T00_Step00_Ing_03", "DANCE_T00_Step00_Ing_03_M", "DANCE_T00_Step00_Ing_04_L", "DANCE_T00_Step00_Ing_04_R", "DANCE_T00_Step00_Ing_05", "DANCE_T00_Step00_Ing_05_M", "DANCE_T00_Step00_Ing_06_L", "DANCE_T00_Step00_Ing_06_R", "DANCE_T00_Step00_Start_00", "DANCE_T00_Step01_End_01_M", "DANCE_T00_Step01_End_02", "DANCE_T00_Step01_Ing_00", "DANCE_T00_Step01_Ing_01", "DANCE_T00_Step01_Ing_01_M", "DANCE_T00_Step01_Ing_02", "DANCE_T00_Step01_Ing_02_M", "DANCE_T00_Step01_Ing_03", "DANCE_T00_Step01_Ing_03_M", "DANCE_T00_Step01_Ing_04", "DANCE_T00_Step01_Ing_04_M", "DANCE_T00_Step01_Ing_05", "DANCE_T00_Step01_Ing_05_M", "DANCE_T00_Step01_Ing_06_L", "DANCE_T00_Step01_Ing_06_R", "DANCE_T00_Step01_Ing_07_L", "DANCE_T00_Step01_Ing_07_R", "DANCE_T00_Step01_Ing_08_L", "DANCE_T00_Step01_Ing_08_R", "DANCE_T00_Step01_Ing_09", "DANCE_T00_Step01_Ing_09_M", "DANCE_T00_Step01_Ing_10", "DANCE_T00_Step01_Ing_10_M", "DANCE_T00_Step01_Ing_11", "DANCE_T00_Step01_Ing_11_M", "DANCE_T00_Step01_Ing_12_L", "DANCE_T00_Step01_Ing_12_R", "DANCE_T00_Step01_Ing_13_L", "DANCE_T00_Step01_Ing_13_R", "DANCE_T00_Step01_Ing_14", "DANCE_T00_Step01_Ing_14_M"}
 danceInfo_Initialize = function()
   -- function num : 0_0
   danceInfo_Basic_Initialize()
@@ -174,6 +174,5 @@ danceInfo_HideAni = function()
   -- function num : 0_15
 end
 
-registerEvent("OpenDanceInfoUI", "danceInfo_OpenWindow")
 danceInfo_Initialize()
 

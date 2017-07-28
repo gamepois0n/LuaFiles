@@ -37,6 +37,9 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
   if isGameManager == true and not isDev then
     msgColor = 4282515258
   end
+  if chatting_sender == nil then
+    return PosY
+  end
   local deltaPosY = -chatting_sender:GetSizeY() * deltascrollPosy
   if chattingUpTime ~= 0 then
     deltaPosY = -chatting_sender:GetSizeY() + chatting_sender:GetSizeY() * chattingUpTime * 5
@@ -201,13 +204,13 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   (chatting_contents[contentindex]):SetPosX(textStaticPosX)
                   emoNum = emoNum + 1
                   contentindex = contentindex + 1
-                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC501: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -267,15 +270,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                     do
                       msgDataLen = 0
                       contentindex = contentindex + 1
-                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC675: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end
@@ -288,9 +291,9 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 (chatting_contents[contentindex - 1]):SetSize((chatting_contents[contentindex - 1]):GetSizeX(), chatting_sender:GetSizeY())
               end
               msgstartindex = emoticonindex
-              -- DECOMPILER ERROR at PC700: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC703: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC700: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC703: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -499,15 +502,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 do
                   msgDataLen = 0
                   contentindex = contentindex + 1
-                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC1127: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -539,7 +542,7 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
           chatting_Icon:SetPosY(PosY - (deltaPosY))
           chatting_sender:SetPosY(PosY - (deltaPosY))
           PosY = PosY - 3
-          -- DECOMPILER ERROR at PC1248: Overwrote pending register: R34 in 'AssignReg'
+          -- DECOMPILER ERROR at PC1251: Overwrote pending register: R34 in 'AssignReg'
 
           chatting_contents = CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedWebSite, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, true, messageIndex)
           for index = contentindex - 1, 1, -1 do

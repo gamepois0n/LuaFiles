@@ -392,7 +392,7 @@ PaGlobal_Skill.addConsoleUIControl = function(self, tabIndex)
     end
   end
   Panel_Window_Skill:deleteConsoleUIGroup(1)
-  local group_1 = Panel_Window_Skill:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_SKILL)
+  local group_1 = Panel_Window_Skill:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_SKILLTREE)
   group_1:setConsoleKeyEventForLUA("SkillWindow_ScrollUpEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_UP)
   group_1:setConsoleKeyEventForLUA("SkillWindow_ScrollDownEvent", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_DOWN)
   local cols = cellTable:capacityX()

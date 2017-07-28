@@ -3,6 +3,7 @@
 
 -- params : ...
 -- function num : 0
+local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local FrameTemplate = (UI.getChildControl)(Panel_CustomizationMotion, "Frame_Template")
 local Frame_Content = (UI.getChildControl)(FrameTemplate, "Frame_Content")
 local Frame_ContentImage = (UI.getChildControl)(Frame_Content, "Frame_Content_Image")
@@ -50,9 +51,20 @@ local clearContentList = function()
 end
 
 createMotionList = function()
-  -- function num : 0_2 , upvalues : clearContentList, selectedClassType, MotionTable, social, Frame_Content, Frame_ContentImage, textureColumnCount, ColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, ContentImage, FrameTemplate, Frame_Scroll, Static_Frame
+  -- function num : 0_2 , upvalues : clearContentList, UI_GroupType, selectedClassType, ColumnCount, Button_Close, MotionTable, social, Frame_Content, Frame_ContentImage, textureColumnCount, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, ContentImage, FrameTemplate, Frame_Scroll, Static_Frame
   clearContentList()
+  Set_CustomizationUIPanel(0, Panel_CustomizationMotion, 10)
+  ClearAll_CustomizationUIGroup(0)
+  Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
+  Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 1)
   local count = getMotionCount(selectedClassType)
+  local countx = ColumnCount
+  local county = (math.floor)(count / ColumnCount)
+  if count % ColumnCount ~= 0 then
+    county = county + 1
+  end
+  county = county + 1
+  Add_CustomizationUIControl(0, 0, 0, 0, countx, county, Button_Close)
   local textureName = getMotionTextureName(selectedClassType)
   local texSize = 48.25
   for itemIdx = 0, count - 1 do
@@ -75,9 +87,10 @@ createMotionList = function()
       tempContentImage:SetPosY((math.floor)(itemIdx / ColumnCount) * columnHeight + contentsOffsetY)
       tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
       tempContentImage:SetShow(true)
-      -- DECOMPILER ERROR at PC109: Confused about usage of register: R15 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC150: Confused about usage of register: R17 in 'UnsetPending'
 
       ContentImage[itemIdx] = tempContentImage
+      Add_CustomizationUIControl(0, 0, itemIdx % countx, itemIdx / countx + 1, countx, county, ContentImage[itemIdx])
     end
   end
   FrameTemplate:UpdateContentScroll()
@@ -122,6 +135,21 @@ closeMotionUi = function()
   CustomizationMainUIShow(true)
   selectPoseControl(0)
   setPresetCamera(10)
+  Set_CustomizationUIPanel(0, Panel_CustomizationMain, 10)
+  ClearAll_CustomizationUIGroup(0)
+  CustomizationMain_SettingConsoleUI()
+end
+
+MotionFrameScrollUp = function()
+  -- function num : 0_6 , upvalues : Frame_Scroll, FrameTemplate
+  Frame_Scroll:SetCtrlPosByInterval(-3)
+  FrameTemplate:UpdateContentPos()
+end
+
+MotionFrameScrollDown = function()
+  -- function num : 0_7 , upvalues : Frame_Scroll, FrameTemplate
+  Frame_Scroll:SetCtrlPosByInterval(3)
+  FrameTemplate:UpdateContentPos()
 end
 
 

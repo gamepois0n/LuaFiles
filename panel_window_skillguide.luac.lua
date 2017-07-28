@@ -23,11 +23,12 @@ local isKunoichiOpen = ToClient_IsContentsGroupOpen("17")
 local isNinjaOpen = ToClient_IsContentsGroupOpen("18")
 local isDarkElfOpen = ToClient_IsContentsGroupOpen("19")
 local isCombattantOpen = ToClient_IsContentsGroupOpen("20")
+local isCombattantWomenOpen = ToClient_IsContentsGroupOpen("917")
 Panel_Window_SkillGuide:SetShow(false)
 local ui = {_mainListBox = (UI.getChildControl)(Panel_Window_SkillGuide, "Static_Box"), _btn_WinClose = (UI.getChildControl)(Panel_Window_SkillGuide, "Button_Win_Close"), _btn_Close = (UI.getChildControl)(Panel_Window_SkillGuide, "Button_Close"), _btn_Question = (UI.getChildControl)(Panel_Window_SkillGuide, "Button_Question"), _verticalScroll = (UI.getChildControl)(Panel_Window_SkillGuide, "VerticalScroll")}
 ;
 (ui._verticalScroll):SetShow(false)
-local classBtn = {_btn_Class_0 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class0"), _btn_Class_1 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class1"), _btn_Class_2 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class2"), _btn_Class_3 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class3"), _btn_Class_4 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class4"), _btn_Class_5 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class5"), _btn_Class_6 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class6"), _btn_Class_7 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class7"), _btn_Class_8 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class8"), _btn_Class_9 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class9"), _btn_Class_10 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class10"), _btn_Class_11 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class11"), _btn_Class_12 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class12"), _btn_Class_13 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class13")}
+local classBtn = {_btn_Class_0 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class0"), _btn_Class_1 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class1"), _btn_Class_2 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class2"), _btn_Class_3 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class3"), _btn_Class_4 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class4"), _btn_Class_5 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class5"), _btn_Class_6 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class6"), _btn_Class_7 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class7"), _btn_Class_8 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class8"), _btn_Class_9 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class9"), _btn_Class_10 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class10"), _btn_Class_11 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class11"), _btn_Class_12 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class12"), _btn_Class_13 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class13"), _btn_Class_14 = (UI.getChildControl)(Panel_Window_SkillGuide, "RadioButton_Class14")}
 local _btn_ScrollBtn = (UI.getChildControl)(ui._verticalScroll, "VerticalScroll_CtrlButton")
 local copyUi = {_skillNameBG = (UI.getChildControl)(Panel_Window_SkillGuide, "Static_SkillList_BG"), _btn_PlayButton = (UI.getChildControl)(Panel_Window_SkillGuide, "Button_MovieTooltip")}
 ;
@@ -65,6 +66,8 @@ local difficultyDesc_Darkelf = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA
 local difficultyDesc_Darkelf_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 local difficultyDesc_Combattant = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
 local difficultyDesc_Combattant_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
+local difficultyDesc_CombattantWomen = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_LOW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_MIDDLE"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGH"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_HIGHTOP")}
+local difficultyDesc_CombattantWomen_TW = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_A_TW"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_B_TW"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_DEFFICULTYDESC_C_TW")}
 Panel_Window_SkillGuide_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
   (UIAni.AlphaAnimation)(1, Panel_Window_SkillGuide, 0, 0.15)
@@ -126,12 +129,14 @@ local classType = {
 [UI_classType.ClassType_DarkElf] = {_maxMovieCount = maxMovieCount - 1, _currentPos = 0, _interval = 0, _name = " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF")}
 , 
 [UI_classType.ClassType_Combattant] = {_maxMovieCount = maxMovieCount - 1, _currentPos = 0, _interval = 0, _name = " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")}
+, 
+[UI_classType.ClassType_CombattantWomen] = {_maxMovieCount = maxMovieCount - 1, _currentPos = 0, _interval = 0, _name = " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")}
 }
 local maxCount = 9
 local skillMovieList = {}
 local currentSelectedClass = UI_classType.ClassType_Warrior
 Panel_Window_SkillGuide_Initialize = function()
-  -- function num : 0_2 , upvalues : maxCount, UI_PUCT, ui, copyUi, skillMovieList, classBtn, isBeastMasterOpen, isBladerOpen, isValkyrieOpen, isMaeHwaOpen, isWizardOpen, isWitchOpen, isKunoichiOpen, isNinjaOpen, isDarkElfOpen, isCombattantOpen
+  -- function num : 0_2 , upvalues : maxCount, UI_PUCT, ui, copyUi, skillMovieList, classBtn, isBeastMasterOpen, isBladerOpen, isValkyrieOpen, isMaeHwaOpen, isWizardOpen, isWitchOpen, isKunoichiOpen, isNinjaOpen, isDarkElfOpen, isCombattantOpen, isCombattantWomenOpen
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -210,6 +215,8 @@ Panel_Window_SkillGuide_Initialize = function()
   ;
   (classBtn._btn_Class_13):addInputEvent("Mouse_LUp", "Panel_SkillGuide_ClassClicked(" .. UI_classType.ClassType_Combattant .. ")")
   ;
+  (classBtn._btn_Class_14):addInputEvent("Mouse_LUp", "Panel_SkillGuide_ClassClicked(" .. UI_classType.ClassType_CombattantWomen .. ")")
+  ;
   (classBtn._btn_Class_0):addInputEvent("Mouse_On", "Panel_SkillGuide_Tooltip( true,\t" .. UI_classType.ClassType_Warrior .. ")")
   ;
   (classBtn._btn_Class_0):addInputEvent("Mouse_Out", "Panel_SkillGuide_Tooltip( false,\t" .. UI_classType.ClassType_Warrior .. ")")
@@ -266,6 +273,10 @@ Panel_Window_SkillGuide_Initialize = function()
   ;
   (classBtn._btn_Class_13):addInputEvent("Mouse_Out", "Panel_SkillGuide_Tooltip( false,\t" .. UI_classType.ClassType_Combattant .. ")")
   ;
+  (classBtn._btn_Class_14):addInputEvent("Mouse_On", "Panel_SkillGuide_Tooltip( true,\t" .. UI_classType.ClassType_CombattantWomen .. ")")
+  ;
+  (classBtn._btn_Class_14):addInputEvent("Mouse_Out", "Panel_SkillGuide_Tooltip( false,\t" .. UI_classType.ClassType_CombattantWomen .. ")")
+  ;
   (classBtn._btn_Class_0):SetCheck(true)
   ;
   (classBtn._btn_Class_0):SetShow(true)
@@ -305,6 +316,9 @@ Panel_Window_SkillGuide_Initialize = function()
   if isCombattantOpen == true then
     (classBtn._btn_Class_13):SetShow(true)
   end
+  if isCombattantWomenOpen == true then
+    (classBtn._btn_Class_14):SetShow(true)
+  end
   ;
   (classBtn._btn_Class_0):ResetVertexAni()
   ;
@@ -337,6 +351,8 @@ Panel_Window_SkillGuide_Initialize = function()
     (classBtn._btn_Class_12):SetCheck(false)
     ;
     (classBtn._btn_Class_13):SetCheck(false)
+    ;
+    (classBtn._btn_Class_14):SetCheck(false)
     Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Warrior)
   else
     if UI_classType.ClassType_Ranger == myClassType then
@@ -367,6 +383,8 @@ Panel_Window_SkillGuide_Initialize = function()
       (classBtn._btn_Class_12):SetCheck(false)
       ;
       (classBtn._btn_Class_13):SetCheck(false)
+      ;
+      (classBtn._btn_Class_14):SetCheck(false)
       Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Ranger)
     else
       if UI_classType.ClassType_Sorcerer == myClassType then
@@ -397,6 +415,8 @@ Panel_Window_SkillGuide_Initialize = function()
         (classBtn._btn_Class_12):SetCheck(false)
         ;
         (classBtn._btn_Class_13):SetCheck(false)
+        ;
+        (classBtn._btn_Class_14):SetCheck(false)
         Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Sorcerer)
       else
         if UI_classType.ClassType_Giant == myClassType then
@@ -427,6 +447,8 @@ Panel_Window_SkillGuide_Initialize = function()
           (classBtn._btn_Class_12):SetCheck(false)
           ;
           (classBtn._btn_Class_13):SetCheck(false)
+          ;
+          (classBtn._btn_Class_14):SetCheck(false)
           Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Giant)
         else
           if UI_classType.ClassType_Tamer == myClassType then
@@ -457,6 +479,8 @@ Panel_Window_SkillGuide_Initialize = function()
             (classBtn._btn_Class_12):SetCheck(false)
             ;
             (classBtn._btn_Class_13):SetCheck(false)
+            ;
+            (classBtn._btn_Class_14):SetCheck(false)
             Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Tamer)
           else
             if UI_classType.ClassType_BladeMaster == myClassType then
@@ -487,6 +511,8 @@ Panel_Window_SkillGuide_Initialize = function()
               (classBtn._btn_Class_12):SetCheck(false)
               ;
               (classBtn._btn_Class_13):SetCheck(false)
+              ;
+              (classBtn._btn_Class_14):SetCheck(false)
               Panel_SkillGuide_ClassClicked(UI_classType.ClassType_BladeMaster)
             else
               if UI_classType.ClassType_Valkyrie == myClassType then
@@ -517,6 +543,8 @@ Panel_Window_SkillGuide_Initialize = function()
                 (classBtn._btn_Class_12):SetCheck(false)
                 ;
                 (classBtn._btn_Class_13):SetCheck(false)
+                ;
+                (classBtn._btn_Class_14):SetCheck(false)
                 Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Valkyrie)
               else
                 if UI_classType.ClassType_BladeMasterWomen == myClassType then
@@ -547,6 +575,8 @@ Panel_Window_SkillGuide_Initialize = function()
                   (classBtn._btn_Class_12):SetCheck(false)
                   ;
                   (classBtn._btn_Class_13):SetCheck(false)
+                  ;
+                  (classBtn._btn_Class_14):SetCheck(false)
                   Panel_SkillGuide_ClassClicked(UI_classType.ClassType_BladeMasterWomen)
                 else
                   if UI_classType.ClassType_Wizard == myClassType then
@@ -577,6 +607,8 @@ Panel_Window_SkillGuide_Initialize = function()
                     (classBtn._btn_Class_12):SetCheck(false)
                     ;
                     (classBtn._btn_Class_13):SetCheck(false)
+                    ;
+                    (classBtn._btn_Class_14):SetCheck(false)
                     Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Wizard)
                   else
                     if UI_classType.ClassType_WizardWomen == myClassType then
@@ -607,6 +639,8 @@ Panel_Window_SkillGuide_Initialize = function()
                       (classBtn._btn_Class_12):SetCheck(false)
                       ;
                       (classBtn._btn_Class_13):SetCheck(false)
+                      ;
+                      (classBtn._btn_Class_14):SetCheck(false)
                       Panel_SkillGuide_ClassClicked(UI_classType.ClassType_WizardWomen)
                     else
                       if UI_classType.ClassType_NinjaWomen == myClassType then
@@ -637,6 +671,8 @@ Panel_Window_SkillGuide_Initialize = function()
                         (classBtn._btn_Class_12):SetCheck(false)
                         ;
                         (classBtn._btn_Class_13):SetCheck(false)
+                        ;
+                        (classBtn._btn_Class_14):SetCheck(false)
                         Panel_SkillGuide_ClassClicked(UI_classType.ClassType_NinjaWomen)
                       else
                         if UI_classType.ClassType_NinjaMan == myClassType then
@@ -667,6 +703,8 @@ Panel_Window_SkillGuide_Initialize = function()
                           (classBtn._btn_Class_12):SetCheck(false)
                           ;
                           (classBtn._btn_Class_13):SetCheck(false)
+                          ;
+                          (classBtn._btn_Class_14):SetCheck(false)
                           Panel_SkillGuide_ClassClicked(UI_classType.ClassType_NinjaMan)
                         else
                           if UI_classType.ClassType_DarkElf == myClassType then
@@ -697,6 +735,8 @@ Panel_Window_SkillGuide_Initialize = function()
                             (classBtn._btn_Class_11):SetCheck(false)
                             ;
                             (classBtn._btn_Class_13):SetCheck(false)
+                            ;
+                            (classBtn._btn_Class_14):SetCheck(false)
                             Panel_SkillGuide_ClassClicked(UI_classType.ClassType_DarkElf)
                           else
                             if UI_classType.ClassType_Combattant == myClassType then
@@ -727,7 +767,42 @@ Panel_Window_SkillGuide_Initialize = function()
                               (classBtn._btn_Class_11):SetCheck(false)
                               ;
                               (classBtn._btn_Class_12):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_14):SetCheck(false)
                               Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Combattant)
+                            else
+                              if UI_classType.ClassType_CombattantWomen == myClassType then
+                                (classBtn._btn_Class_14):SetCheck(true)
+                                ;
+                                (classBtn._btn_Class_0):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_1):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_2):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_3):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_4):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_5):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_6):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_7):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_8):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_9):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_10):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_11):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_12):SetCheck(false)
+                                ;
+                                (classBtn._btn_Class_13):SetCheck(false)
+                                Panel_SkillGuide_ClassClicked(UI_classType.ClassType_CombattantWomen)
+                              end
                             end
                           end
                         end
@@ -778,6 +853,8 @@ Panel_SkillGuide_Update = function()
     (classBtn._btn_Class_12):SetCheck(false)
     ;
     (classBtn._btn_Class_13):SetCheck(false)
+    ;
+    (classBtn._btn_Class_14):SetCheck(false)
     Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Warrior)
   else
     if UI_classType.ClassType_Ranger == myClassType then
@@ -808,6 +885,8 @@ Panel_SkillGuide_Update = function()
       (classBtn._btn_Class_12):SetCheck(false)
       ;
       (classBtn._btn_Class_13):SetCheck(false)
+      ;
+      (classBtn._btn_Class_14):SetCheck(false)
       Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Ranger)
     else
       if UI_classType.ClassType_Sorcerer == myClassType then
@@ -838,6 +917,8 @@ Panel_SkillGuide_Update = function()
         (classBtn._btn_Class_12):SetCheck(false)
         ;
         (classBtn._btn_Class_13):SetCheck(false)
+        ;
+        (classBtn._btn_Class_14):SetCheck(false)
         Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Sorcerer)
       else
         if UI_classType.ClassType_Giant == myClassType then
@@ -868,6 +949,8 @@ Panel_SkillGuide_Update = function()
           (classBtn._btn_Class_12):SetCheck(false)
           ;
           (classBtn._btn_Class_13):SetCheck(false)
+          ;
+          (classBtn._btn_Class_14):SetCheck(false)
           Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Giant)
         else
           if UI_classType.ClassType_Tamer == myClassType then
@@ -898,6 +981,8 @@ Panel_SkillGuide_Update = function()
             (classBtn._btn_Class_12):SetCheck(false)
             ;
             (classBtn._btn_Class_13):SetCheck(false)
+            ;
+            (classBtn._btn_Class_14):SetCheck(false)
             Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Tamer)
           else
             if UI_classType.ClassType_BladeMaster == myClassType then
@@ -928,6 +1013,8 @@ Panel_SkillGuide_Update = function()
               (classBtn._btn_Class_12):SetCheck(false)
               ;
               (classBtn._btn_Class_13):SetCheck(false)
+              ;
+              (classBtn._btn_Class_14):SetCheck(false)
               Panel_SkillGuide_ClassClicked(UI_classType.ClassType_BladeMaster)
             else
               if UI_classType.ClassType_Valkyrie == myClassType then
@@ -958,6 +1045,8 @@ Panel_SkillGuide_Update = function()
                 (classBtn._btn_Class_12):SetCheck(false)
                 ;
                 (classBtn._btn_Class_13):SetCheck(false)
+                ;
+                (classBtn._btn_Class_14):SetCheck(false)
                 Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Valkyrie)
               else
                 if UI_classType.ClassType_BladeMasterWomen == myClassType then
@@ -988,6 +1077,8 @@ Panel_SkillGuide_Update = function()
                   (classBtn._btn_Class_12):SetCheck(false)
                   ;
                   (classBtn._btn_Class_13):SetCheck(false)
+                  ;
+                  (classBtn._btn_Class_14):SetCheck(false)
                   Panel_SkillGuide_ClassClicked(UI_classType.ClassType_BladeMasterWomen)
                 else
                   if UI_classType.ClassType_Wizard == myClassType then
@@ -1018,6 +1109,8 @@ Panel_SkillGuide_Update = function()
                     (classBtn._btn_Class_12):SetCheck(false)
                     ;
                     (classBtn._btn_Class_13):SetCheck(false)
+                    ;
+                    (classBtn._btn_Class_14):SetCheck(false)
                     Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Wizard)
                   else
                     if UI_classType.ClassType_WizardWomen == myClassType then
@@ -1048,6 +1141,8 @@ Panel_SkillGuide_Update = function()
                       (classBtn._btn_Class_12):SetCheck(false)
                       ;
                       (classBtn._btn_Class_13):SetCheck(false)
+                      ;
+                      (classBtn._btn_Class_14):SetCheck(false)
                       Panel_SkillGuide_ClassClicked(UI_classType.ClassType_WizardWomen)
                     else
                       if UI_classType.ClassType_NinjaMan == myClassType then
@@ -1078,6 +1173,8 @@ Panel_SkillGuide_Update = function()
                         (classBtn._btn_Class_12):SetCheck(false)
                         ;
                         (classBtn._btn_Class_13):SetCheck(false)
+                        ;
+                        (classBtn._btn_Class_14):SetCheck(false)
                         Panel_SkillGuide_ClassClicked(UI_classType.ClassType_NinjaMan)
                       else
                         if UI_classType.ClassType_DarkElf == myClassType then
@@ -1108,6 +1205,8 @@ Panel_SkillGuide_Update = function()
                           (classBtn._btn_Class_11):SetCheck(false)
                           ;
                           (classBtn._btn_Class_13):SetCheck(false)
+                          ;
+                          (classBtn._btn_Class_14):SetCheck(false)
                           Panel_SkillGuide_ClassClicked(UI_classType.ClassType_DarkElf)
                         else
                           if UI_classType.ClassType_Combattant == myClassType then
@@ -1138,7 +1237,42 @@ Panel_SkillGuide_Update = function()
                             (classBtn._btn_Class_11):SetCheck(false)
                             ;
                             (classBtn._btn_Class_12):SetCheck(false)
+                            ;
+                            (classBtn._btn_Class_14):SetCheck(false)
                             Panel_SkillGuide_ClassClicked(UI_classType.ClassType_Combattant)
+                          else
+                            if UI_classType.ClassType_CombattantWomen == myClassType then
+                              (classBtn._btn_Class_14):SetCheck(true)
+                              ;
+                              (classBtn._btn_Class_0):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_1):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_2):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_3):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_4):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_5):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_6):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_7):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_8):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_9):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_10):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_11):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_12):SetCheck(false)
+                              ;
+                              (classBtn._btn_Class_13):SetCheck(false)
+                              Panel_SkillGuide_ClassClicked(UI_classType.ClassType_CombattantWomen)
+                            end
                           end
                         end
                       end
@@ -1235,6 +1369,12 @@ Panel_SkillGuide_Update = function()
     ;
     (classBtn._btn_Class_13):SetPosY(iconPosY)
     iconPosX = iconPosX + (classBtn._btn_Class_13):GetSizeX() + 5
+  end
+  if (classBtn._btn_Class_14):GetShow() then
+    (classBtn._btn_Class_14):SetPosX(iconPosX)
+    ;
+    (classBtn._btn_Class_14):SetPosY(iconPosY)
+    iconPosX = iconPosX + (classBtn._btn_Class_14):GetSizeX() + 5
   end
 end
 
@@ -1342,52 +1482,61 @@ SetClassMovieInfo = function(classNo)
                       ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_BladeMasterWomen[index]))
                     end
                   else
-                    if classNo == 24 then
+                    if classNo == 23 then
                       if isGameTypeTaiwan() then
-                        ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Valkyrie_TW[index]))
+                        ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Combattant_TW[index]))
                       else
                         ;
-                        ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Valkyrie[index]))
+                        ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Combattant[index]))
                       end
                     else
-                      if classNo == 25 then
+                      if classNo == 24 then
                         if isGameTypeTaiwan() then
-                          ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaWomen_TW[index]))
+                          ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Valkyrie_TW[index]))
                         else
                           ;
-                          ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaWomen[index]))
+                          ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Valkyrie[index]))
                         end
                       else
-                        if classNo == 26 then
+                        if classNo == 25 then
                           if isGameTypeTaiwan() then
-                            ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaMan_TW[index]))
+                            ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaWomen_TW[index]))
                           else
                             ;
-                            ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaMan[index]))
+                            ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaWomen[index]))
                           end
                         else
-                          if classNo == 27 then
+                          if classNo == 26 then
                             if isGameTypeTaiwan() then
-                              ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Darkelf_TW[index]))
+                              ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaMan_TW[index]))
                             else
                               ;
-                              ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Darkelf[index]))
+                              ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_NinjaMan[index]))
                             end
                           else
-                            if classNo == 28 then
+                            if classNo == 27 then
                               if isGameTypeTaiwan() then
-                                ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Wizard_TW[index]))
+                                ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Darkelf_TW[index]))
                               else
                                 ;
-                                ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Wizard[index]))
+                                ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Darkelf[index]))
                               end
                             else
-                              if classNo == 31 then
+                              if classNo == 28 then
                                 if isGameTypeTaiwan() then
-                                  ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_WizardWomen_TW[index]))
+                                  ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Wizard_TW[index]))
                                 else
                                   ;
-                                  ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_WizardWomen[index]))
+                                  ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_Wizard[index]))
+                                end
+                              else
+                                if classNo == 31 then
+                                  if isGameTypeTaiwan() then
+                                    ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_WizardWomen_TW[index]))
+                                  else
+                                    ;
+                                    ((skillMovieList[index])._bg):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SKILLGUIDE_SKILLGUIDEMOVIE", "name", (classType[classNo])._name, "index", difficultyDesc_WizardWomen[index]))
+                                  end
                                 end
                               end
                             end
@@ -1508,6 +1657,11 @@ Panel_SkillGuide_Tooltip = function(isShow, classType)
                             if UI_classType.ClassType_Combattant == classType then
                               name = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
                               control = classBtn._btn_Class_13
+                            else
+                              if UI_classType.ClassType_CombattantWomen == classType then
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
+                                control = classBtn._btn_Class_14
+                              end
                             end
                           end
                         end

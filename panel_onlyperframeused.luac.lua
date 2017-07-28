@@ -68,6 +68,9 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     if Panel_ConsoleKeyGuide_updateConsole ~= nil then
       Panel_ConsoleKeyGuide_updateConsole()
     end
+    if (CppEnums.CountryType).DEV == getGameServiceType() and ConsoleUISimplifyPerFrameUpdate ~= nil then
+      ConsoleUISimplifyPerFrameUpdate(deltaTime)
+    end
   end
 end
 
@@ -76,6 +79,9 @@ FromClient_luaLoadComplete_OnlyPerframeUsed = function()
   -- function num : 0_3
   Panel_OnlyPerframeUsed:SetShow(true)
   Panel_OnlyPerframeUsed:RegisterUpdateFunc("Panel_OnlyPerframeUsedFunction")
+  if (CppEnums.CountryType).DEV == getGameServiceType() then
+    Panel_OnlyPerframeUsed:setConsoleUIPanelType(3)
+  end
 end
 
 

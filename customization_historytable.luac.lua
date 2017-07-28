@@ -303,8 +303,18 @@ historyTableDoChangeActive = function()
   if currentactive ~= nil then
     currentactive:SetColor((Defines.Color).C_FFFFFFFF)
   end
+  if key == -1 then
+    selectIndex = selectIndex - 1
+    key = list2_HistoryList:getKeyByIndex(selectIndex - 1)
+  end
   local control = list2_HistoryList:GetContentByKey(key)
+  if control == nil then
+    return 
+  end
   local active = (UI.getChildControl)(control, "Static_Active")
+  if active == nil then
+    return 
+  end
   active:SetColor(selectColor)
   currentactive = active
 end
@@ -327,8 +337,18 @@ historyTableUnDoChangeActive = function()
   if currentactive ~= nil then
     currentactive:SetColor((Defines.Color).C_FFFFFFFF)
   end
+  if key == -1 then
+    selectIndex = selectIndex + 1
+    key = list2_HistoryList:getKeyByIndex(selectIndex - 1)
+  end
   local control = list2_HistoryList:GetContentByKey(key)
+  if control == nil then
+    return 
+  end
   local active = (UI.getChildControl)(control, "Static_Active")
+  if active == nil then
+    return 
+  end
   active:SetColor(selectColor)
   currentactive = active
 end

@@ -7,6 +7,7 @@ globalcurrentclassType = -2
 globalcurrentuiId = -2
 globalcheckSlider = false
 globalisCustomizationPicking = false
+globalPartNumber = 0
 setGlobalCheck = function(sliderflag)
   -- function num : 0_0
   globalcheckSlider = sliderflag

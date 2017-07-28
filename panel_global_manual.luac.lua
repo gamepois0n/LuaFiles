@@ -1071,8 +1071,23 @@ local MiniGame_Diving_2 = function()
   (ui._purposeText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_DIVING_DESC_2"))
 end
 
+local MiniGame_SummerEventCannon_1 = function()
+  -- function num : 0_44 , upvalues : ui
+  for _,v in pairs(ui) do
+    v:SetShow(false)
+    v:ComputePos()
+  end
+  Panel_Global_Manual:SetShow(true)
+  ;
+  (ui._purposeText2):SetShow(true)
+  ;
+  (ui._purposeText2):SetSize(800, 70)
+  ;
+  (ui._purposeText2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_EVENTCANNON_DESC"))
+end
+
 local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
-  -- function num : 0_44 , upvalues : uiPress, ui_Value
+  -- function num : 0_45 , upvalues : uiPress, ui_Value
   if isSelf == false then
     return 
   end
@@ -1168,7 +1183,7 @@ local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Instrument_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_45 , upvalues : Panel_Global_Manual_End
+  -- function num : 0_46 , upvalues : Panel_Global_Manual_End
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 
@@ -1208,6 +1223,7 @@ ActionChartEventBindFunction(353, MiniGame_BulletCount_3)
 ActionChartEventBindFunction(370, MiniGame_Diving_0)
 ActionChartEventBindFunction(371, MiniGame_Diving_1)
 ActionChartEventBindFunction(372, MiniGame_Diving_2)
+ActionChartEventBindFunction(400, MiniGame_SummerEventCannon_1)
 ActionChartEventBindFunction(9998, FromAction_CheckedBasic)
 ActionChartEventBindFunction(9999, Panel_Global_Manual_End)
 Global_Manual_Initialize()

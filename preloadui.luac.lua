@@ -3,7 +3,9 @@
 
 -- params : ...
 -- function num : 0
-convertUIFontTypeToUIFontSize = function(fontType)
+if ToClient_isConsoleUIOption() then
+  __GLOBAL_DEFINE_CONSOLE_UI = isGameServiceTypeDev()
+  convertUIFontTypeToUIFontSize = function(fontType)
   -- function num : 0_0
   local addSize = 0
   if fontType == (CppEnums.UIFontSizeType).eUIFontSizeType_Normal then
@@ -20,7 +22,7 @@ convertUIFontTypeToUIFontSize = function(fontType)
   return addSize
 end
 
-preloadUI_cahngeUIFontSize = function(fontRaiseSize)
+  preloadUI_cahngeUIFontSize = function(fontRaiseSize)
   -- function num : 0_1
   if isGameServiceTypeDev() or isGameTypeTaiwan() or isGameTypeKorea() or isGameTypeJapan() then
     local addFontSize = convertUIFontTypeToUIFontSize(fontRaiseSize)
@@ -79,4 +81,5 @@ preloadUI_cahngeUIFontSize = function(fontRaiseSize)
   end
 end
 
+end
 

@@ -435,6 +435,8 @@ local Panel_Lobby_Function_Initialize = function()
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp2]):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
+  ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_CombattantWomen]):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Warrior]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_CHARACTERCREATE_SELECTCLASS_WARRIOR"))
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Ranger]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_CHARACTERCREATE_SELECTCLASS_RANGER"))
@@ -472,15 +474,17 @@ local Panel_Lobby_Function_Initialize = function()
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp1]):SetText("임시1")
   ;
   ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_Temp2]):SetText("임시2")
+  ;
+  ((Panel_Lobby_ClassUI.ClassNames)[UI_Class.ClassType_CombattantWomen]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN"))
   for index = 0, UI_Class.ClassType_Count - 1 do
     if (Panel_Lobby_ClassUI.ClassButtons)[index] ~= nil then
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_LUp", "Panel_Lobby_function_SelectClassType(" .. R8_PC688 .. ", true)")
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_LUp", "Panel_Lobby_function_SelectClassType(" .. R8_PC709 .. ", true)")
       ;
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_On", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC688 .. ", true)")
-      -- DECOMPILER ERROR at PC706: Overwrote pending register: R8 in 'AssignReg'
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_On", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC709 .. ", true)")
+      -- DECOMPILER ERROR at PC727: Overwrote pending register: R8 in 'AssignReg'
 
       ;
-      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_Out", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC688 .. ", false)")
+      ((Panel_Lobby_ClassUI.ClassButtons)[index]):addInputEvent("Mouse_Out", "Panel_Lobby_SelectClass_MouseEvent(" .. R8_PC709 .. ", false)")
     end
   end
   local count = getPossibleClassCount()
@@ -488,49 +492,49 @@ local Panel_Lobby_Function_Initialize = function()
     local classType = getPossibleClassTypeFromIndex(index)
     local classButton = (Panel_Lobby_ClassUI.ClassButtons)[classType]
     local className = (Panel_Lobby_ClassUI.ClassNames)[classType]
-    -- DECOMPILER ERROR at PC728: Overwrote pending register: R8 in 'AssignReg'
+    -- DECOMPILER ERROR at PC749: Overwrote pending register: R8 in 'AssignReg'
 
     if classButton ~= nil then
-      R8_PC688 = R8_PC688(classButton)
-      if R8_PC688 then
-        R8_PC688(classButton, classButtonStartX + classButton:GetPosX() + (classButton:GetSizeX() + classButtonGapX) * columnCount)
-        -- DECOMPILER ERROR at PC745: Overwrote pending register: R8 in 'AssignReg'
+      R8_PC709 = R8_PC709(classButton)
+      if R8_PC709 then
+        R8_PC709(classButton, classButtonStartX + classButton:GetPosX() + (classButton:GetSizeX() + classButtonGapX) * columnCount)
+        -- DECOMPILER ERROR at PC766: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC688(classButton, classButton:GetPosY() + (classButton:GetSizeY() + classButtonGapY) * rowCount)
-        -- DECOMPILER ERROR at PC756: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC709(classButton, classButton:GetPosY() + (classButton:GetSizeY() + classButtonGapY) * rowCount)
+        -- DECOMPILER ERROR at PC777: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC688(className, classNameStartX + className:GetPosX() + (className:GetSizeX() + classNameGapX) * columnCount)
-        -- DECOMPILER ERROR at PC769: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC709(className, classNameStartX + className:GetPosX() + (className:GetSizeX() + classNameGapX) * columnCount)
+        -- DECOMPILER ERROR at PC790: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC688(className, classButton:GetPosY() + classButton:GetSizeY() - className:GetTextSizeY() - 10)
-        -- DECOMPILER ERROR at PC780: Overwrote pending register: R8 in 'AssignReg'
+        R8_PC709(className, classButton:GetPosY() + classButton:GetSizeY() - className:GetTextSizeY() - 10)
+        -- DECOMPILER ERROR at PC801: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC782: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC803: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC785: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC806: Overwrote pending register: R8 in 'AssignReg'
 
-        if R8_PC688 == 0 then
-          columnCount = R8_PC688
-          -- DECOMPILER ERROR at PC787: Overwrote pending register: R8 in 'AssignReg'
+        if R8_PC709 == 0 then
+          columnCount = R8_PC709
+          -- DECOMPILER ERROR at PC808: Overwrote pending register: R8 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC788: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC809: Overwrote pending register: R8 in 'AssignReg'
 
-          rowCount = R8_PC688
+          rowCount = R8_PC709
         else
-          -- DECOMPILER ERROR at PC791: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC812: Overwrote pending register: R8 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC792: Overwrote pending register: R8 in 'AssignReg'
+          -- DECOMPILER ERROR at PC813: Overwrote pending register: R8 in 'AssignReg'
 
-          columnCount = R8_PC688
+          columnCount = R8_PC709
         end
-        -- DECOMPILER ERROR at PC794: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC815: Overwrote pending register: R8 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC795: Overwrote pending register: R8 in 'AssignReg'
+        -- DECOMPILER ERROR at PC816: Overwrote pending register: R8 in 'AssignReg'
 
-        sortCharacterCount = R8_PC688
-        -- DECOMPILER ERROR at PC797: Overwrote pending register: R8 in 'AssignReg'
+        sortCharacterCount = R8_PC709
+        -- DECOMPILER ERROR at PC818: Overwrote pending register: R8 in 'AssignReg'
 
-        R8_PC688(className, 88, ((Panel_Lobby_ClassUI.ClassNames)[classType]):GetTextSizeY() + 5)
+        R8_PC709(className, 88, ((Panel_Lobby_ClassUI.ClassNames)[classType]):GetTextSizeY() + 5)
       end
     end
   end
