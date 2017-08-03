@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\warehouse\panel_window_warehouse.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\warehouse\panel_window_warehouse.luac 
 
 -- params : ...
 -- function num : 0
@@ -1158,7 +1158,7 @@ Warehouse_OpenPanelFromMaid = function()
   local plantWayKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
   local regionKey = regionInfoWrapper:getRegionKey()
   if ToClient_IsAccessibleRegionKey(regionKey) == false then
-    plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey(regionKey)
+    plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
   end
   Warehouse_OpenPanel(plantWayKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Maid)
   Warehouse_SetIgnoreMoneyButton(false)

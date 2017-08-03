@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\characternametag\panel_characternametag.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\characternametag\panel_characternametag.luac 
 
 -- params : ...
 -- function num : 0
@@ -1776,7 +1776,7 @@ end
     mpMain:SetProgressRate(mpRate)
     mpMain:SetCurrentProgressRate(mpRate)
     local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType()
-    local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType()
+    local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType()
     local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
     local isOnlyDarkelf = UI_classType.ClassType_DarkElf == playerWrapper:getClassType()
     local isMP_Character = (not isEP_Character and not isFP_Character and not isBP_Character and not isOnlyDarkelf)

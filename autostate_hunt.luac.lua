@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\auto\autostate_hunt.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\auto\autostate_hunt.luac 
 
 -- params : ...
 -- function num : 0
@@ -49,10 +49,11 @@ AutoState_Hunt.update = function(self, deltaTime)
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
     _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(ToClient_Auto_CheckExistNearMonster(300))")
   end
-  if findNearQuestMonster(1000) == false then
+  local selfPlayer = (getSelfPlayer()):get()
+  if Auto_FindNearQuestMonster() == false then
     FGlobal_AutoQuestBlackSpiritMessage("주변�\144 �\128상이 없어�\156 상태�\188 전환합니�\164")
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
-    _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(findNearQuestMonster(500))")
+    _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(findNearQuestMonster())")
     return 
   end
 end

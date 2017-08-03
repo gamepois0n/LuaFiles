@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\ingamecashshop\panel_ingamecashshop_buyorgift.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\ingamecashshop\panel_ingamecashshop_buyorgift.luac 
 
 -- params : ...
 -- function num : 0
@@ -115,7 +115,7 @@ do
     ;
     (slot.name):SetSpanSize(10, 5 + (5 + (slot.name):GetSizeY() * giftIdx))
     ;
-    (slot.count):SetSpanSize(252, -2)
+    (slot.count):SetSpanSize(202, -2)
     ;
     (slot.btnPlus):SetSpanSize((slot.count):GetSizeX() + 3, 5)
     ;
@@ -184,7 +184,7 @@ do
     ;
     (slot.name):SetSpanSize(10, 35 + (5 + (slot.name):GetSizeY() * giftBotIdx))
     ;
-    (slot.btnAdd):SetSpanSize(307, -3)
+    (slot.btnAdd):SetSpanSize(257, -3)
     ;
     (slot.name):addInputEvent("Mouse_UpScroll", "Scroll_GiftBotList( true )")
     ;

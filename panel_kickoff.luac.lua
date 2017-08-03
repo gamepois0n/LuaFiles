@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\messagebox\panel_kickoff.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\messagebox\panel_kickoff.luac 
 
 -- params : ...
 -- function num : 0
@@ -57,6 +57,7 @@ PaGlobal_Panel_KickOff_Open = function(isType)
         if isType == 4 then
           (self._txt_KickOffDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_E"))
         else
+          connectToGameByChina()
           return 
         end
       end
@@ -80,6 +81,7 @@ PaGlobal_Panel_KickOff_Apply = function()
   if self.savedIsType == 4 then
     exitGameClient(1)
   else
+    connectToGameByChina()
     PaGlobal_Panel_KickOff_Close()
   end
 end

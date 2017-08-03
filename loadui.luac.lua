@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\loadui.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\loadui.luac 
 
 -- params : ...
 -- function num : 0
@@ -806,6 +806,7 @@ preLoadGameUI = function()
   loadUI("UI_Data/Widget/RemoteControl/Panel_RemoteControl_Equipment.XML", "Panel_RemoteEquipment", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_Dialog}))
   loadUI("UI_Data/Widget/RemoteControl/Panel_RemoteControl_Warehouse.XML", "Panel_RemoteWarehouse", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_Dialog}))
   loadUI("UI_Data/Widget/RemoteControl/Panel_RemoteControl_Manufacture.XML", "Panel_RemoteManufacture", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_Dialog}))
+  loadUI("UI_Data/Window/TranslationReport/Panel_Window_TranslationReport.XML", "Panel_TranslationReport", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Knowledge, RenderMode.eRenderMode_Dialog}))
 end
 
 loadOceanUI = function()
@@ -1142,9 +1143,9 @@ loadGameUI = function()
   runLua("UI_Data/Script/Widget/Tutorial/Panel_SummonBossTutorial_UiKeyButton.lua")
   runLua("UI_Data/Script/Widget/Tutorial/Panel_LifeTutorial.lua")
   runLua("UI_Data/Script/Widget/QuestList/Panel_LatestQuest.lua")
+  runLua("UI_Data/Script/Widget/QuestList/Panel_MainQuest.lua")
   runLua("UI_Data/Script/Widget/QuestList/Panel_CheckedQuest.lua")
   runLua("UI_Data/Script/Widget/QuestList/Panel_QuestInfo.lua")
-  runLua("UI_Data/Script/Widget/QuestList/Panel_MainQuest.lua")
   runLua("UI_Data/Script/Widget/Party/Panel_PartyCombat.lua")
   runLua("UI_Data/Script/Widget/RaceMatch/Panel_RaceMatch.lua")
   runLua("UI_Data/Script/Widget/Party/Panel_LargeParty.lua")
@@ -1427,6 +1428,7 @@ loadGameUI = function()
   loadCustomizationUI()
   runLua("UI_Data/Script/ConsolePad_PanelList.lua")
   runLua("UI_Data/Script/QASupport/QASupportMain.lua")
+  runLua("UI_Data/Script/Window/TranslationReport/Panel_TranslationReport.lua")
   runLua("UI_Data/Script/globalUIManager.lua")
   runLua("UI_Data/Script/globalKeyBinder.lua")
   isLuaLoadingComplete = true

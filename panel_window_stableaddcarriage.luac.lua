@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\servant\stable\panel_window_stableaddcarriage.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\servant\stable\panel_window_stableaddcarriage.luac 
 
 -- params : ...
 -- function num : 0
@@ -132,7 +132,7 @@ stableCarriage_Set = function(slotNo, slotIndex)
     return 
   end
   local vehicleType = servantInfo:getVehicleType()
-  if (CppEnums.VehicleType).Type_Carriage == vehicleType then
+  if (CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType then
     self._slotNo1 = slotNo
   else
     if (CppEnums.VehicleType).Type_Horse == vehicleType then

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\knowledge\panel_knowledge_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\knowledge\panel_knowledge_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -842,6 +842,10 @@ local settingCardInfo = function()
     (uiConst.info_Name):SetText(card:getName())
     ;
     (uiConst.info_Story):SetText(card:getDescription())
+    ;
+    (uiConst.info_Story):setLocalizedKey(card:getDescriptionLocalizedKey())
+    ;
+    (uiConst.info_Story):SetIgnore(false)
     local buffText = PAGetString(Defines.StringSheet_GAME, "MENTALGAME_BUFF_EMPTY")
     if card:isBuff() then
       if card:getApplyTurn() == 0 then

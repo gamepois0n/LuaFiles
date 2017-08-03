@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_facebone.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_facebone.luac 
 
 -- params : ...
 -- function num : 0
@@ -530,6 +530,7 @@ CloseFaceShapeUi = function()
   ;
   (endPickingMode()).globalcurrentclassType = -2
   globalcurrentuiId = -2
+  globalisCustomizationPicking = false
 end
 
 showBoneSculptingSelector = function(show)
@@ -675,6 +676,7 @@ end
 
 EnableFaceSlide = function(enable)
   -- function num : 0_31 , upvalues : Button_Slider_TransX, Button_Slider_TransY, Button_Slider_TransZ, Button_Slider_RotX, Button_Slider_RotY, Button_Slider_RotZ, Button_Slider_ScaleX, Button_Slider_ScaleY, Button_Slider_ScaleZ, Slider_TransX, Slider_TransY, Slider_TransZ, Slider_RotX, Slider_RotY, Slider_RotZ, Slider_ScaleX, Slider_ScaleY, Slider_ScaleZ, StaticText_TransX, StaticText_TransY, StaticText_TransZ, StaticText_RotX, StaticText_RotY, StaticText_RotZ, StaticText_ScaleX, StaticText_ScaleY, StaticText_ScaleZ
+  globalisCustomizationPicking = enable
   Button_Slider_TransX:SetMonoTone(not enable)
   Button_Slider_TransY:SetMonoTone(not enable)
   Button_Slider_TransZ:SetMonoTone(not enable)

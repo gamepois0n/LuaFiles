@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\equipment\panel_window_equiment.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\equipment\panel_window_equiment.luac 
 
 -- params : ...
 -- function num : 0
@@ -191,21 +191,17 @@ equip.initControl = function(self)
           ((self.avataSlots)[v]):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 4, " .. v .. " )")
           ;
           ((self.avataSlots)[v]):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 4, " .. v .. " )")
-          ;
-          ((self.avataSlots)[v]):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 4, " .. v .. " )")
         else
           ;
           ((self.avataSlots)[v]):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 5, " .. v .. " )")
           ;
           ((self.avataSlots)[v]):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 5, " .. v .. " )")
-          ;
-          ((self.avataSlots)[v]):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 5, " .. v .. " )")
         end
         if v == 30 then
           ((self.avataSlots)[v]):SetShow(awakenWeaponContentsOpen)
         end
       end
-      -- DECOMPILER ERROR at PC401: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC385: Confused about usage of register: R9 in 'UnsetPending'
 
       if (self.equipSlotId)[v] ~= nil then
         (self.defaultSlots)[v] = (UI.getChildControl)(Panel_Equipment, (self.equipSlotId)[v])
@@ -251,43 +247,41 @@ equip.initControl = function(self)
   ;
   (self.checkHelm):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 0 )")
   ;
-  (self.checkHelm):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 0 )")
-  ;
   (self.checkHelmOpen):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 1 )")
   ;
   (self.checkHelmOpen):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 1 )")
-  ;
-  (self.checkHelmOpen):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 1 )")
   ;
   (self.checkCloak):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 6 )")
   ;
   (self.checkCloak):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 6 )")
   ;
-  (self.checkCloak):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 6 )")
-  ;
   (self.checkUnderwear):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 7 )")
   ;
   (self.checkUnderwear):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 7 )")
-  ;
-  (self.checkUnderwear):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 7 )")
   ;
   (self.btn_PetList):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 2 )")
   ;
   (self.btn_PetList):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 2 )")
   ;
-  (self.btn_PetList):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 2 )")
-  ;
   (self.btn_ServantInventory):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 3 )")
   ;
   (self.btn_ServantInventory):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 3 )")
-  ;
-  (self.btn_ServantInventory):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 3 )")
   ;
   (self.checkCamouflage):addInputEvent("Mouse_On", "Equipment_SimpleToolTips( true, 8 )")
   ;
   (self.checkCamouflage):addInputEvent("Mouse_Out", "Equipment_SimpleToolTips( false, 8 )")
   ;
-  (self.checkCamouflage):setTooltipEventRegistFunc("Equipment_SimpleToolTips( true, 8 )")
+  (self.attackText):addInputEvent("Mouse_On", "Equipment_StatValueTooltips(true, 0)")
+  ;
+  (self.attackText):addInputEvent("Mouse_Out", "Equipment_StatValueTooltips(false)")
+  ;
+  (self.defenceText):addInputEvent("Mouse_On", "Equipment_StatValueTooltips(true, 1)")
+  ;
+  (self.defenceText):addInputEvent("Mouse_Out", "Equipment_StatValueTooltips(false)")
+  ;
+  (self.awakenText):addInputEvent("Mouse_On", "Equipment_StatValueTooltips(true, 2)")
+  ;
+  (self.awakenText):addInputEvent("Mouse_Out", "Equipment_StatValueTooltips(false)")
   ConsoleGroupCreate_Panel_Equipment()
 end
 
@@ -1025,7 +1019,6 @@ Equipment_SimpleToolTips = function(isShow, btnType, flagControl)
       end
     end
   end
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
   if isShow == true then
     TooltipSimple_Show(uiControl, name, desc)
   else
@@ -1033,8 +1026,35 @@ Equipment_SimpleToolTips = function(isShow, btnType, flagControl)
   end
 end
 
+Equipment_StatValueTooltips = function(isShow, tipType)
+  -- function num : 0_33 , upvalues : equip
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = equip
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_GAME, "CHARACTERINFO_TEXT_ATTACK")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_ATTACK_TEXT_TOOLTIP_DESC")
+    control = self.attackText
+  else
+    if tipType == 1 then
+      name = PAGetString(Defines.StringSheet_GAME, "CHARACTERINFO_TEXT_DEFENCE")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_DEFENCE_TEXT_TOOLTIP_DESC")
+      control = self.defenceText
+    else
+      if tipType == 2 then
+        name = PAGetString(Defines.StringSheet_RESOURCE, "EQUIPMENT_TOOLTIP_AWAKEN_TITLE")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AWAKEN_TEXT_TOOLTIP_DESC")
+        control = self.awakenText
+      end
+    end
+  end
+  TooltipSimple_Show(control, name, desc)
+end
+
 HandleClicked_ServantInventoryOpen = function()
-  -- function num : 0_33
+  -- function num : 0_34
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -1058,14 +1078,14 @@ HandleClicked_ServantInventoryOpen = function()
 end
 
 FromClient_ChangeUnderwearMode_Equipment = function(isUnderwearModeInHouse)
-  -- function num : 0_34 , upvalues : equip
+  -- function num : 0_35 , upvalues : equip
   local self = equip
   ;
   (self.checkUnderwear):SetCheck(isUnderwearModeInHouse)
 end
 
 FGlobal_AlchemyStonCheck = function()
-  -- function num : 0_35 , upvalues : equip
+  -- function num : 0_36 , upvalues : equip
   local itemWrapper = getEquipmentItem(27)
   local coolTime = 0
   do
@@ -1088,7 +1108,7 @@ FGlobal_AlchemyStonCheck = function()
 end
 
 FGlobal_AccSlotNo = function(itemWrapper, isChange)
-  -- function num : 0_36 , upvalues : equip
+  -- function num : 0_37 , upvalues : equip
   local equipType = (itemWrapper:getStaticStatus()):getEquipType()
   local firstRingOffence = 0
   local firstRingDeffence = 0
@@ -1166,7 +1186,7 @@ end
 
 local posXDefault = 345
 Equipment_RePosition = function()
-  -- function num : 0_37 , upvalues : equip, posXDefault
+  -- function num : 0_38 , upvalues : equip, posXDefault
   local self = equip
   if (self.checkCloak):GetShow() then
     (self.checkCloak):SetPosX(posXDefault)
@@ -1199,7 +1219,7 @@ Equipment_RePosition = function()
 end
 
 Equipment_Checkbutton = function(index, isShow, controlBtn)
-  -- function num : 0_38 , upvalues : equip
+  -- function num : 0_39 , upvalues : equip
   if index ~= 20 then
     return 
   end
@@ -1224,7 +1244,7 @@ Equipment_Checkbutton = function(index, isShow, controlBtn)
 end
 
 Equipment__PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_39 , upvalues : equip
+  -- function num : 0_40 , upvalues : equip
   if isShow then
     local self = equip
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")

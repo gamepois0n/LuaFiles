@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\houseinfo\panel_new_housecontrol.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\houseinfo\panel_new_housecontrol.luac 
 
 -- params : ...
 -- function num : 0
@@ -2213,7 +2213,13 @@ HouseWorkListSection_ShowTooltip_Reflesh = function()
   -- function num : 0_59 , upvalues : currentIndex
   local uiBase = (HouseWorkListSection.iconList)[currentIndex]
   local realIndex = (HouseWorkListSection.realIndex)[currentIndex]
+  if uiBase == nil or realIndex == nil then
+    return 
+  end
   local esSSW = ToClient_getHouseDataWorkableItemExchangeByIndex(realIndex)
+  if esSSW == nil then
+    return 
+  end
   if realIndex ~= nil and esSSW:isSet() then
     FGlobal_Show_Tooltip_Work(esSSW, uiBase)
   else
@@ -3094,10 +3100,10 @@ HouseProgressSection_Set = function(workType)
       end
     end
   end
-  if not isGameTypeKorea() and not isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP) then
+  if isGameTypeEnglish() then
     (HouseProgressSection._Btn_Immediately):SetShow(false)
   end
-  -- DECOMPILER ERROR at PC124: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC117: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseProgressSection.isFale_Init = false
   HouseProgressSection_Init()

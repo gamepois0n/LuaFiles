@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\servant\stable\panel_window_stablemarket.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\servant\stable\panel_window_stablemarket.luac 
 
 -- params : ...
 -- function num : 0
@@ -889,7 +889,7 @@ StableMarket_NextPage = function()
   if StableMarket_IsTabMy() then
     self:update(true)
   else
-    RequestAuctionNextPage(self._isFromNpc)
+    RequestAuctionNextPage(0, self._isFromNpc)
   end
 end
 
@@ -903,7 +903,7 @@ StableMarket_PrevPage = function()
   if StableMarket_IsTabMy() then
     self:update(true)
   else
-    RequestAuctionPrevPage(self._isFromNpc)
+    RequestAuctionPrevPage(0, self._isFromNpc)
   end
 end
 
@@ -1241,14 +1241,14 @@ StableMarket_ResponseServantBuyItNowFail = function()
   if Panel_Window_StableList:GetShow() == false then
     return 
   end
-  RequestActionReloadPage(self._isFromNpc)
+  RequestActionReloadPage(0, self._isFromNpc)
   StableMarket_UpdateSlotData()
 end
 
 StableMarket_Reload = function()
   -- function num : 0_33 , upvalues : stableMarket
   local self = stableMarket
-  RequestActionReloadPage(self._isFromNpc)
+  RequestActionReloadPage(0, self._isFromNpc)
 end
 
 stableMarket:init()

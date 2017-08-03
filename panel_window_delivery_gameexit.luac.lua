@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\delivery\panel_window_delivery_gameexit.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\delivery\panel_window_delivery_gameexit.luac 
 
 -- params : ...
 -- function num : 0
@@ -164,9 +164,6 @@ end
 
 click_DeliveryForGameExit_Close = function()
   -- function num : 0_6 , upvalues : changeDelayTime, deliveryForGameExit
-  if changeDelayTime ~= -1 then
-    sendGameDelayExitCancel()
-  end
   changeDelayTime = -1
   FGlobal_DeliveryForGameExit_Show(false)
   ;

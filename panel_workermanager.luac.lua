@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\workermanager\panel_workermanager.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\workermanager\panel_workermanager.luac 
 
 -- params : ...
 -- function num : 0
@@ -777,15 +777,15 @@ local workerManager_UpdateMain = function()
           ;
           (slot.workingName):SetShow(true)
           if hasUpgradeWoker == true then
-            if isGameTypeKorea() or isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP) then
+            if isGameTypeEnglish() then
+              (self._btnUpgradeNow):SetShow(false)
+            else
+              ;
               (self._btnUpgradeNow):SetIgnore(false)
               ;
               (self._btnUpgradeNow):SetMonoTone(false)
               ;
               (self._btnUpgradeNow):SetShow(true)
-            else
-              ;
-              (self._btnUpgradeNow):SetShow(false)
             end
             ;
             (slot.btn_Upgrade):SetMonoTone(true)
@@ -1770,10 +1770,9 @@ workerManager_ToolTip = function(isShow, workerIndex, uiIndex)
   -- function num : 0_49 , upvalues : workerManager, filteredArray
   local self = workerManager
   if isShow then
-    local slot = (self.slot)[uiIndex]
     local workerNoRaw = filteredArray[workerIndex]
     if workerNoRaw ~= nil then
-      FGlobal_ShowWorkerTooltipByWorkerNoRaw(workerNoRaw, slot.bg)
+      FGlobal_ShowWorkerTooltipByWorkerNoRaw(workerNoRaw, Panel_WorkerManager)
     else
       FGlobal_HideWorkerTooltip()
     end

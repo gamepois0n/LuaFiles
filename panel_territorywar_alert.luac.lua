@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\warinfomessage\panel_territorywar_alert.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\warinfomessage\panel_territorywar_alert.luac 
 
 -- params : ...
 -- function num : 0

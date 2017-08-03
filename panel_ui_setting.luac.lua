@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\ui_setting\panel_ui_setting.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\ui_setting\panel_ui_setting.luac 
 
 -- params : ...
 -- function num : 0
@@ -1409,10 +1409,9 @@ end
 
 HandleClicked_UiSet_ChangeScale = function()
   -- function num : 0_17 , upvalues : UiSet, cachePosX, cachePosY, cacheSizeX, cacheSizeY, cachePreScale, panelID
-  _PA_LOG("광운", "11111111111111111111111111111")
   local nowPercent = (UiSet.slider_UI_Scale):GetControlPos()
   local realPercent = (math.ceil)(UiSet.replaceScale / 100 * (nowPercent * 100) + UiSet.minScale)
-  -- DECOMPILER ERROR at PC20: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
 
   UiSet.currentScale = realPercent
   local scaleText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SCALETEXT", "currentScale", realPercent)

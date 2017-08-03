@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\auto\autostate_dialoginteraction.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\auto\autostate_dialoginteraction.luac 
 
 -- params : ...
 -- function num : 0
@@ -83,6 +83,7 @@ end
 AutoState_DialogInteraction.checkChangeState = function(self)
   -- function num : 0_4 , upvalues : AutoDialogInteractionState_Type, AutoState_MouseMoving_TargetButton
   _interactionState = AutoDialogInteractionState_Type.ESCAPE
+  _mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
   self._pressDelay = self._printTime
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData ~= nil then

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\arsha\panel_arsha.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\arsha\panel_arsha.luac 
 
 -- params : ...
 -- function num : 0
@@ -1593,8 +1593,6 @@ FGlobal_ArshaPvP_Open = function()
         (self.txt_FreeMarkCount):SetText(tostring(targetScore))
         ;
         (self.txt_RoundCountTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_ROUNDOFALIVE_TITLE"))
-        ;
-        (self.txt_FreeMarkText):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_ALIVEMODE_TITLE"))
         ;
         (self.btn_Kick_A):SetShow(false)
         ;

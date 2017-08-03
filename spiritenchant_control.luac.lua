@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\enchant\spiritenchant_control.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\enchant\spiritenchant_control.luac 
 
 -- params : ...
 -- function num : 0
@@ -147,6 +147,14 @@ PaGlobal_Enchant.clear = function(self)
   FGlobal_EnchantArrowSet(true)
   ;
   (getEnchantInformation()):clearData()
+  ;
+  (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+  ;
+  (self._uiProtectItem_Btn):SetMonoTone(true)
+  ;
+  (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+  ;
+  (self._uiProtectItem_Btn):SetIgnore(true)
 end
 
 -- DECOMPILER ERROR at PC8: Confused about usage of register: R0 in 'UnsetPending'
@@ -589,6 +597,8 @@ PaGlobal_Enchant.cancelEnchant = function(self)
   ;
   (self._uiMeticulousEnchant):SetIgnore(self._isDoingEnchant)
   ToClient_BlackspiritEnchantCancel()
+  ;
+  (self._uiCheckBtn_CronEnchnt):SetCheck(false)
 end
 
 -- DECOMPILER ERROR at PC44: Confused about usage of register: R0 in 'UnsetPending'
@@ -820,6 +830,9 @@ Enchat_CronStoneCountCheck = function()
   local needCronCount = (getTemporaryInformationWrapper()):getNeedSourceCountToUpgradeItem(itemKey)
   if (self._uiCheckBtn_CronEnchnt):IsCheck() then
     (self._uiProtectItem_Count):SetText(tostring(cronCount) .. "/" .. tostring(needCronCount))
+  end
+  if Int64toInt32(needCronCount) <= 0 then
+    return false
   end
   if needCronCount <= cronCount then
     return true

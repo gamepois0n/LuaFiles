@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\skill\panel_window_skillguide.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\skill\panel_window_skillguide.luac 
 
 -- params : ...
 -- function num : 0
@@ -130,7 +130,7 @@ local classType = {
 , 
 [UI_classType.ClassType_Combattant] = {_maxMovieCount = maxMovieCount - 1, _currentPos = 0, _interval = 0, _name = " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")}
 , 
-[UI_classType.ClassType_CombattantWomen] = {_maxMovieCount = maxMovieCount - 1, _currentPos = 0, _interval = 0, _name = " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")}
+[UI_classType.ClassType_CombattantWomen] = {_maxMovieCount = maxMovieCount - 1, _currentPos = 0, _interval = 0, _name = " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN")}
 }
 local maxCount = 9
 local skillMovieList = {}
@@ -1659,7 +1659,7 @@ Panel_SkillGuide_Tooltip = function(isShow, classType)
                               control = classBtn._btn_Class_13
                             else
                               if UI_classType.ClassType_CombattantWomen == classType then
-                                name = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN")
                                 control = classBtn._btn_Class_14
                               end
                             end

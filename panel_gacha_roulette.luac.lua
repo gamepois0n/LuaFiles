@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\gacha_roulette\panel_gacha_roulette.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\gacha_roulette\panel_gacha_roulette.luac 
 
 -- params : ...
 -- function num : 0

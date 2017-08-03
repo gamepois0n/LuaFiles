@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\servant\panel_window_servant.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\servant\panel_window_servant.luac 
 
 -- params : ...
 -- function num : 0
@@ -1154,7 +1154,7 @@ Servant_SimpleTooltip = function(isShow, tipType)
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local targetType = vehicleWrapper:getVehicleType()
-  if UI_VT.Type_Horse == targetType or UI_VT.Type_Camel == targetType or UI_VT.Type_Donkey == targetType or UI_VT.Type_Elephant == targetType or UI_VT.Type_Carriage == targetType or UI_VT.Type_CowCarriage == targetType or UI_VT.Type_RidableBabyElephant or UI_VT.Type_RepairableCarriage == targetType then
+  if UI_VT.Type_Horse == targetType or UI_VT.Type_Camel == targetType or UI_VT.Type_Donkey == targetType or UI_VT.Type_Elephant == targetType or UI_VT.Type_Carriage == targetType or UI_VT.Type_CowCarriage == targetType or UI_VT.Type_RidableBabyElephant == targetType or UI_VT.Type_RepairableCarriage == targetType then
     if isPremiumPcRoom and UI_VT.Type_Horse == targetType then
       if doHaveContentsItem(16, UI_VT.Type_Horse) then
         ServantDesc = PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_SERVANT_ICONHELP")

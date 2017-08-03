@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\dialogue\panel_dialog_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\dialogue\panel_dialog_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -123,8 +123,9 @@ local _tutorialMenuButtonMarginSize = 5
 local dialogShowCheck_Once = false
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_DialogMain")
 FromClient_luaLoadComplete_DialogMain = function()
-  -- function num : 0_4 , upvalues : _buttonTutorialMenu
+  -- function num : 0_4 , upvalues : _uiNpcDialog, _buttonTutorialMenu
   FGlobal_Dialog_TutorialStartButton_Init()
+  _uiNpcDialog:SetIgnore(false)
   _buttonTutorialMenu:addInputEvent("Mouse_LUp", "FGlobal_Dialog_HandleClicked_TutorialMenuButton()")
 end
 
@@ -560,7 +561,7 @@ local PreclosePanel_OpenDialog = function()
 end
 
 FromClient_ShowDialog = function()
-  -- function num : 0_21 , upvalues : PreclosePanel_OpenDialog, _wpHelp, intimacyNotice, intimacyNoticeText, _ignoreShowDialog, _uiFuncBG, _equipRewardCount, _currentLine, _uiNpcTitle, _uiNpcName, _mainDialog, _maxLine, isFirstShowTooltip
+  -- function num : 0_21 , upvalues : PreclosePanel_OpenDialog, _wpHelp, intimacyNotice, intimacyNoticeText, _ignoreShowDialog, _uiNpcDialog, _uiFuncBG, _equipRewardCount, _currentLine, _uiNpcTitle, _uiNpcName, _mainDialog, _maxLine, isFirstShowTooltip
   PaGlobal_TutorialManager:handleBeforeShowDialog()
   FGlobal_RemoteControl_Hide()
   local charLevel = ((getSelfPlayer()):get()):getLevel()
@@ -592,6 +593,12 @@ FromClient_ShowDialog = function()
     ToClient_PopDialogueFlush()
     return 
   end
+  local mainDialogLocalizedKey = dialogData:getMainDialogLocalizedKey()
+  if mainDialogLocalizedKey == nil then
+    ToClient_PopDialogueFlush()
+    return 
+  end
+  _uiNpcDialog:setLocalizedKey(mainDialogLocalizedKey)
   if not isFullSizeModeAble((FullSizeMode.fullSizeModeEnum).Dialog) then
     ToClient_PopDialogueFlush()
     return 
@@ -632,7 +639,7 @@ FromClient_ShowDialog = function()
   while 1 do
     strFirst = stringList[i * 2 + 1]
     strSecond = stringList[i * 2 + 2]
-    -- DECOMPILER ERROR at PC232: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC243: Confused about usage of register: R11 in 'UnsetPending'
 
     if strFirst ~= nil and strSecond ~= nil then
       _mainDialog[i] = strFirst .. "\n" .. strSecond
@@ -640,7 +647,7 @@ FromClient_ShowDialog = function()
       if strFirst == nil then
         break
       else
-        -- DECOMPILER ERROR at PC241: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC252: Confused about usage of register: R11 in 'UnsetPending'
 
         if strSecond == nil then
           _mainDialog[i] = strFirst
@@ -657,44 +664,44 @@ FromClient_ShowDialog = function()
   for idx = 1, baseCount do
     local baseReward = dialogData:getBaseRewardAt(idx - 1)
     _baseReward[idx] = {}
-    -- DECOMPILER ERROR at PC266: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC277: Confused about usage of register: R19 in 'UnsetPending'
 
     ;
     (_baseReward[idx])._type = baseReward._type
-    -- DECOMPILER ERROR at PC275: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC286: Confused about usage of register: R19 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == baseReward._type then
       (_baseReward[idx])._exp = baseReward._experience
     else
-      -- DECOMPILER ERROR at PC285: Confused about usage of register: R18 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC296: Confused about usage of register: R19 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == baseReward._type then
         (_baseReward[idx])._exp = baseReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC295: Confused about usage of register: R18 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC306: Confused about usage of register: R19 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == baseReward._type then
           (_baseReward[idx])._exp = baseReward._productExperience
         else
-          -- DECOMPILER ERROR at PC306: Confused about usage of register: R18 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC317: Confused about usage of register: R19 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == baseReward._type then
             (_baseReward[idx])._item = baseReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC309: Confused about usage of register: R18 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC320: Confused about usage of register: R19 in 'UnsetPending'
 
             ;
             (_baseReward[idx])._count = baseReward._itemCount
           else
-            -- DECOMPILER ERROR at PC320: Confused about usage of register: R18 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC331: Confused about usage of register: R19 in 'UnsetPending'
 
             if (CppEnums.RewardType).RewardType_Intimacy == baseReward._type then
               (_baseReward[idx])._character = baseReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC323: Confused about usage of register: R18 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC334: Confused about usage of register: R19 in 'UnsetPending'
 
               ;
               (_baseReward[idx])._value = baseReward._intimacyValue
             else
-              -- DECOMPILER ERROR at PC334: Confused about usage of register: R18 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC345: Confused about usage of register: R19 in 'UnsetPending'
 
               if (CppEnums.RewardType).RewardType_Knowledge == baseReward._type then
                 (_baseReward[idx])._mentalCard = baseReward:getMentalCardKey()
@@ -710,37 +717,37 @@ FromClient_ShowDialog = function()
   for idx = 1, selectCount do
     local selectReward = dialogData:getSelectRewardAt(idx - 1)
     _selectReward[idx] = {}
-    -- DECOMPILER ERROR at PC350: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC361: Confused about usage of register: R21 in 'UnsetPending'
 
     ;
     (_selectReward[idx])._type = selectReward._type
-    -- DECOMPILER ERROR at PC359: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC370: Confused about usage of register: R21 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == selectReward._type then
       (_selectReward[idx])._exp = selectReward._experience
     else
-      -- DECOMPILER ERROR at PC369: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC380: Confused about usage of register: R21 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == selectReward._type then
         (_selectReward[idx])._exp = selectReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC379: Confused about usage of register: R20 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC390: Confused about usage of register: R21 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == selectReward._type then
           (_selectReward[idx])._exp = selectReward._productExperience
         else
-          -- DECOMPILER ERROR at PC390: Confused about usage of register: R20 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC401: Confused about usage of register: R21 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == selectReward._type then
             (_selectReward[idx])._item = selectReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC393: Confused about usage of register: R20 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC404: Confused about usage of register: R21 in 'UnsetPending'
 
             ;
             (_selectReward[idx])._count = selectReward._itemCount
             local selfPlayer = getSelfPlayer()
             if selfPlayer ~= nil then
               local classType = selfPlayer:getClassType()
-              -- DECOMPILER ERROR at PC404: Confused about usage of register: R22 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC415: Confused about usage of register: R23 in 'UnsetPending'
 
               ;
               (_selectReward[idx])._isEquipable = selectReward:isEquipable(classType)
@@ -748,38 +755,38 @@ FromClient_ShowDialog = function()
           else
             do
               do
-                -- DECOMPILER ERROR at PC415: Confused about usage of register: R20 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC426: Confused about usage of register: R21 in 'UnsetPending'
 
                 if (CppEnums.RewardType).RewardType_Intimacy == selectReward._type then
                   (_selectReward[idx])._character = selectReward:getIntimacyCharacter()
-                  -- DECOMPILER ERROR at PC418: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC429: Confused about usage of register: R21 in 'UnsetPending'
 
                   ;
                   (_selectReward[idx])._value = selectReward._intimacyValue
                 else
-                  -- DECOMPILER ERROR at PC429: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC440: Confused about usage of register: R21 in 'UnsetPending'
 
                   if (CppEnums.RewardType).RewardType_Knowledge == selectReward._type then
                     (_selectReward[idx])._mentalCard = selectReward:getMentalCardKey()
                   end
                 end
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC430: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC441: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end

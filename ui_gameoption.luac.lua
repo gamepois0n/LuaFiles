@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\option\ui_gameoption.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\option\ui_gameoption.luac 
 
 -- params : ...
 -- function num : 0
@@ -7956,7 +7956,7 @@ GameOption_Apply = function()
             QuickSlot_UpdateData()
             FGlobal_NewQuickSlot_Update()
           end
-          if reloadConsoleUIMode == true then
+          if isGameServiceTypeDev() and reloadConsoleUIMode == true then
             ToClient_excuteReloadUI()
           end
         end

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\dye\panel_dye_renew_buttonhandler.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\dye\panel_dye_renew_buttonhandler.luac 
 
 -- params : ...
 -- function num : 0
@@ -109,8 +109,14 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   local RadioButton_Tab_My = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_My")
   local RadioButton_Tab_Pearl = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_Pearl")
   RadioButton_Tab_ALL:addInputEvent("Mouse_LUp", "HandleClicked_LUp_Ampule_SelectedType( true, false )")
+  RadioButton_Tab_ALL:addInputEvent("Mouse_On", "HandleOnOut_DyeReNew_Palette_Category_Tooltip( true, " .. 8 .. ")")
+  RadioButton_Tab_ALL:addInputEvent("Mouse_Out", "HandleOnOut_DyeReNew_Palette_Category_Tooltip( false, " .. 8 .. ")")
   RadioButton_Tab_My:addInputEvent("Mouse_LUp", "HandleClicked_LUp_Ampule_SelectedType( false, false )")
+  RadioButton_Tab_My:addInputEvent("Mouse_On", "HandleOnOut_DyeReNew_Palette_Category_Tooltip( true, " .. 9 .. ")")
+  RadioButton_Tab_My:addInputEvent("Mouse_Out", "HandleOnOut_DyeReNew_Palette_Category_Tooltip( false, " .. 9 .. ")")
   RadioButton_Tab_Pearl:addInputEvent("Mouse_LUp", "HandleClicked_LUp_Ampule_SelectedType( true, true )")
+  RadioButton_Tab_Pearl:addInputEvent("Mouse_On", "HandleOnOut_DyeReNew_Palette_Category_Tooltip( true, " .. 10 .. ")")
+  RadioButton_Tab_Pearl:addInputEvent("Mouse_Out", "HandleOnOut_DyeReNew_Palette_Category_Tooltip( false, " .. 10 .. ")")
   if FGlobal_DyeReNew_GetEnableDyePearl() == false then
     RadioButton_Tab_Pearl:SetShow(false)
   end
@@ -295,17 +301,39 @@ HandleOnOut_DyeReNew_Palette_Category_Tooltip = function(isOn, ButtonIndex)
   -- function num : 0_13
   local name = ""
   local desc = nil
+  local Static_BG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
+  local UIAmpuleTargetBG = (UI.getChildControl)(Static_BG, "Static_AmpuleTartget_BG")
   if isOn == true then
-    local Static_BG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
-    local UIAmpuleTargetBG = (UI.getChildControl)(Static_BG, "Static_AmpuleTartget_BG")
-    local UIMaterial = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Material_" .. ButtonIndex)
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_" .. ButtonIndex)
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_DESC_" .. ButtonIndex)
-    registTooltipControl(UIMaterial, Panel_Tooltip_SimpleText)
-    TooltipSimple_Show(UIMaterial, name, desc)
-  else
-    do
-      TooltipSimple_Hide()
+    if ButtonIndex > 7 then
+      local UICategory = nil
+      if ButtonIndex == 8 then
+        UICategory = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_ALL")
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_ALL")
+      else
+        if ButtonIndex == 9 then
+          UICategory = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_My")
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MY")
+        else
+          if ButtonIndex == 10 then
+            UICategory = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_Pearl")
+            name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE")
+            desc = PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_DESC_8")
+          end
+        end
+      end
+      registTooltipControl(UICategory, Panel_Tooltip_SimpleText)
+      TooltipSimple_Show(UICategory, name, desc)
+    else
+      do
+        do
+          local UIMaterial = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Material_" .. ButtonIndex)
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_" .. ButtonIndex)
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_PALETTE_TAB_MATERIAL_DESC_" .. ButtonIndex)
+          registTooltipControl(UIMaterial, Panel_Tooltip_SimpleText)
+          TooltipSimple_Show(UIMaterial, name, desc)
+          TooltipSimple_Hide()
+        end
+      end
     end
   end
 end

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\savagedefence\savagedefencemember.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\savagedefence\savagedefencemember.luac 
 
 -- params : ...
 -- function num : 0
@@ -75,15 +75,52 @@ SavageDefenceMember_Update = function(isListShow)
     for idx = 0, memberCount - 1 do
       ((self._list2):getElementManager()):pushKey(toInt64(0, R13_PC40))
     end
+  else
+    do
+      for idx = 0, memberCount - 1 do
+        FGlobal_SavageDefenceMember_ElementUpdate(R10_PC50)
+      end
+      do
+        ;
+        (self.bottomArrow):ComputePos()
+      end
+    end
   end
-  do
-    ;
-    (self.bottomArrow):ComputePos()
+end
+
+FGlobal_SavageDefenceMember_ElementUpdate = function(key)
+  -- function num : 0_2 , upvalues : savageDefenceMember
+  local self = savageDefenceMember
+  local KeyElement = (self._list2):GetContentByKey(toInt64(0, key))
+  if KeyElement ~= nil then
+    local btn_MemberName = (UI.getChildControl)(KeyElement, "Button_Member")
+    local btn_GivePoint = (UI.getChildControl)(KeyElement, "Button_GiveCoin")
+    local txt_PointCount = (UI.getChildControl)(KeyElement, "StaticText_CoinCount")
+    local txt_DeadInfo = (UI.getChildControl)(KeyElement, "StaticText_DeadInfo")
+    local memberName = ToClient_getSavageDefencePlayerName(key)
+    local memberCoin = ToClient_getSavageDefencePlayerCoin(key)
+    txt_PointCount:SetText(makeDotMoney(memberCoin))
+    if ToClient_getSavageDefencePlayerDead(key) then
+      txt_DeadInfo:SetShow(true)
+      btn_MemberName:SetFontColor((Defines.Color).C_FF888888)
+      txt_PointCount:SetFontColor((Defines.Color).C_FF888888)
+      btn_GivePoint:SetMonoTone(true)
+    else
+      txt_DeadInfo:SetShow(false)
+      btn_MemberName:SetFontColor((Defines.Color).C_FFFFFFFF)
+      txt_PointCount:SetFontColor((Defines.Color).C_FFFFFFFF)
+      btn_GivePoint:SetMonoTone(false)
+    end
+    if inMyCoin == 0 then
+      btn_GivePoint:addInputEvent("Mouse_LUp", "")
+    else
+      btn_GivePoint:addInputEvent("Mouse_LUp", "SavageDefenceMember_Give( " .. key .. " )")
+    end
   end
 end
 
 PaGlobal_SavegeDefenceMember_ListUpdate = function(contents, key)
-  -- function num : 0_2 , upvalues : savageDefenceMember
+  -- function num : 0_3 , upvalues : savageDefenceMember
   local self = savageDefenceMember
   local idx = Int64toInt32(key)
   local inMyCoin = ToClient_getSavageDefenceMyCoinCount()
@@ -131,19 +168,19 @@ PaGlobal_SavegeDefenceMember_ListUpdate = function(contents, key)
 end
 
 SavageDefenceMember_Give = function(idx)
-  -- function num : 0_3
+  -- function num : 0_4
   local inMyCoin = ToClient_getSavageDefenceMyCoinCount()
   local s64_maxNumber = toInt64(0, inMyCoin)
   Panel_NumberPad_Show(true, s64_maxNumber, idx, SavageDefenceMember_GiveXXX)
 end
 
 SavageDefenceMember_GiveXXX = function(inputNumber, param)
-  -- function num : 0_4
+  -- function num : 0_5
   ToClient_SavageDefenceCoinToss(param, Int64toInt32(inputNumber))
 end
 
 PaGlobal_SavageDefenceMember_Toggle = function(toggleType)
-  -- function num : 0_5 , upvalues : savageDefenceMember
+  -- function num : 0_6 , upvalues : savageDefenceMember
   local self = savageDefenceMember
   local isListCheck = (self.chk_List):IsCheck()
   local isShopCheck = (self.chk_Shop):IsCheck()
@@ -165,7 +202,7 @@ PaGlobal_SavageDefenceMember_Toggle = function(toggleType)
 end
 
 PaGlobal_SavageDefenceMember_BottomArrow = function()
-  -- function num : 0_6 , upvalues : savageDefenceMember
+  -- function num : 0_7 , upvalues : savageDefenceMember
   local self = savageDefenceMember
   local isArrowCheck = (self.bottomArrow):IsCheck()
   if isArrowCheck then
@@ -229,7 +266,7 @@ PaGlobal_SavageDefenceMember_BottomArrow = function()
 end
 
 SavageDefenceMember_Open = function(isListUpdate)
-  -- function num : 0_7 , upvalues : savageDefenceMember
+  -- function num : 0_8 , upvalues : savageDefenceMember
   local self = savageDefenceMember
   if not ToClient_getPlayNowSavageDefence() then
     return 
@@ -248,17 +285,17 @@ SavageDefenceMember_Open = function(isListUpdate)
 end
 
 SavageDefenceMember_Close = function()
-  -- function num : 0_8
+  -- function num : 0_9
   Panel_SavageDefenceMember:SetShow(false)
 end
 
 PaGlobal_SavageDefenceMember_Position = function()
-  -- function num : 0_9
+  -- function num : 0_10
   Panel_SavageDefenceMember:SetPosY(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeY() + 170)
 end
 
 SavageDefenceMember_Tooltip = function(isShow, idx)
-  -- function num : 0_10 , upvalues : savageDefenceMember
+  -- function num : 0_11 , upvalues : savageDefenceMember
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -273,7 +310,7 @@ SavageDefenceMember_Tooltip = function(isShow, idx)
 end
 
 SavageDefenceMember_TooltipButtonDesc = function(isShow, tipType)
-  -- function num : 0_11 , upvalues : savageDefenceMember
+  -- function num : 0_12 , upvalues : savageDefenceMember
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -295,7 +332,7 @@ SavageDefenceMember_TooltipButtonDesc = function(isShow, tipType)
 end
 
 FromClient_refreshSavageDefencePlayer = function(isListUpdate)
-  -- function num : 0_12
+  -- function num : 0_13
   SavageDefenceMember_Open(isListUpdate)
   FGlobal_SavageDefenceShop_coinUpdate()
 end

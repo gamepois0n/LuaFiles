@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\party\panel_largeparty.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\party\panel_largeparty.luac 
 
 -- params : ...
 -- function num : 0
@@ -11,7 +11,7 @@ _ui = {_staticPartyLeftBG = (UI.getChildControl)(Panel_LargeParty, "Static_Party
 _partyMemberData = {}
 , 
 _uiPartyMemberList = {}
-, _partyMemberCount = 0, _slotMouseIndex = 0, _isSlotMouseOn = false, _isMaster = false, _selectIndex = 0, _maxPartyMemberCount = 20}
+, _partyMemberCount = 0, _slotMouseIndex = 0, _isSlotMouseOn = false, _isMaster = false, _selectIndex = -1, _maxPartyMemberCount = 20}
 -- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_LargeParty.Initialize = function(self)
@@ -135,7 +135,7 @@ PaGlobal_LargeParty.Initialize = function(self)
     ;
     (partyMember._base):addInputEvent("Mouse_Out", "PaGlobal_LargeParty:ButtonAction(false," .. index .. ")")
     ;
-    (partyMember._actionBtn):addInputEvent("Mouse_LUp", "PaGlobal_LargeParty:ClickButtonAction(" .. index .. ")")
+    (partyMember._base):addInputEvent("Mouse_LUp", "PaGlobal_LargeParty:ClickButtonAction(" .. index .. ")")
     -- DECOMPILER ERROR at PC394: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
@@ -290,6 +290,14 @@ PaGlobal_LargeParty.ButtonAction = function(self, isShow, index)
     do
       ;
       (((self._uiPartyMemberList)[index])._actionBtn):SetShow(false)
+      if self._selectIndex == ((self._partyMemberData)[index])._index then
+        ((self._ui)._btn_Mandate):SetShow(false)
+        ;
+        ((self._ui)._btn_Exile):SetShow(false)
+        ;
+        ((self._ui)._btn_Exit):SetShow(false)
+        return 
+      end
     end
   end
 end
@@ -304,6 +312,14 @@ PaGlobal_LargeParty.ClickButtonAction = function(self, index)
     ((self._ui)._btn_Exile):SetShow(false)
     ;
     ((self._ui)._btn_Exit):SetShow(false)
+  end
+  if self._selectIndex == ((self._partyMemberData)[index])._index then
+    ((self._ui)._btn_Mandate):SetShow(false)
+    ;
+    ((self._ui)._btn_Exile):SetShow(false)
+    ;
+    ((self._ui)._btn_Exit):SetShow(false)
+    self._selectIndex = -1
     return 
   end
   local gapX = 0
@@ -338,8 +354,6 @@ PaGlobal_LargeParty.ClickButtonAction = function(self, index)
       ((self._ui)._btn_Exit):SetShow(false)
     end
   end
-  ;
-  (((self._uiPartyMemberList)[index])._actionBtn):SetShow(false)
   Panel_LargeParty:SetChildIndex((self._ui)._btn_Mandate, 9999)
   Panel_LargeParty:SetChildIndex((self._ui)._btn_Exile, 9998)
   Panel_LargeParty:SetChildIndex((self._ui)._btn_Exit, 9997)

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\tutorial\tutorial_phase_basicskill_combattantwomen.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\tutorial\tutorial_phase_basicskill_combattantwomen.luac 
 
 -- params : ...
 -- function num : 0
@@ -233,7 +233,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepTryBasicSkill = func
           end
         end
         ;
-        (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMBO_0_1") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMMAND_0_1") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
+        (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMBO_0_1") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMMAND_0_1") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
         ;
         (PaGlobal_TutorialUiManager:getUiKeyButton()):setPrevUsingKeyAll(true)
         ;
@@ -250,7 +250,7 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepTryBasicSkill = func
             end
           end
           ;
-          (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMBO_0_2") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMMAND_0_2") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
+          (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMBO_0_2") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMMAND_0_2") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
           ;
           (PaGlobal_TutorialUiManager:getUiKeyButton()):setPrevUsingKeyAll(true)
           ;
@@ -401,9 +401,9 @@ PaGlobal_TutorialPhase_BasicSkill_CombattantWomen.changeStepTrySkillCombo = func
   ;
   (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP6") .. " ( " .. self._usedComboCount .. " / " .. self._totalComboCount .. " )")
   ;
-  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_1):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMBO_0_3"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMMAND_0_3"), 1))
+  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_1):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMBO_0_3"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMMAND_0_3"), 1))
   ;
-  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_2):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMBO_0_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKER_COMMAND_0_2"), 2))
+  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_2):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMBO_0_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_STRIKERWOMEN_COMMAND_0_2"), 2))
   ;
   (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_3):SetShow(false)
   ;

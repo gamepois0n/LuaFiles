@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\mainstatus\panel_classresource.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\mainstatus\panel_classresource.luac 
 
 -- params : ...
 -- function num : 0
@@ -188,6 +188,10 @@ FighterIcon_HelpComment = function(isShow)
   local control = _fighterIcon
   local name = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTERTITLE")
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTER")
+  if (CppEnums.ClassType).ClassType_CombattantWomen == classType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_FIGHTERTITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CLASSRESOURCE_MYSTIC")
+  end
   TooltipSimple_Show(control, name, desc)
 end
 

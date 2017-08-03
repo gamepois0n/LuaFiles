@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\mercenary\panel_mercenary.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\mercenary\panel_mercenary.luac 
 
 -- params : ...
 -- function num : 0
@@ -188,8 +188,10 @@ end
 
 FromClient_ResponseVolunteerRecruit = function()
   -- function num : 0_10
-  local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_RECRUITSTART"), sub = "", addMsg = ""}
-  Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 75)
+  if ToClient_IsContentsGroupOpen("245") then
+    local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_MILITIA_RECRUITSTART"), sub = "", addMsg = ""}
+    Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 75)
+  end
 end
 
 FromClient_ResponseMilitiaStart = function()

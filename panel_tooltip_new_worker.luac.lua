@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\tooltip\panel_tooltip_new_worker.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\tooltip\panel_tooltip_new_worker.luac 
 
 -- params : ...
 -- function num : 0
@@ -342,7 +342,7 @@ FGlobal_ShowWorkerTooltip = function(workerData, uiBase, isRight, isPlant)
   end
 end
 
-FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, uiBase, isRight, isPlant)
+FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, panel, isRight, isPlant)
   -- function num : 0_4 , upvalues : controlWorkerTooltip, UI_TM, UI_color
   audioPostEvent_SystemUi(1, 13)
   local workerWrapperLua = getWorkerWrapper(workerNoRaw, true)
@@ -508,43 +508,31 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, uiBase, isRight, 
   end
 )
       end
-      local posX = uiBase:GetParentPosX()
-      local posY = uiBase:GetParentPosY()
-      local parentSizeX = uiBase:GetSizeX()
-      local parentSizeY = uiBase:GetSizeY()
+      local posX = panel:GetPosX()
+      local posY = panel:GetPosY()
+      local panelSizeX = panel:GetSizeX()
+      local panelSizeY = panel:GetSizeY()
       local tooltipSizeX = Panel_Worker_Tooltip:GetSizeX()
       local tooltipSizeY = Panel_Worker_Tooltip:GetSizeY()
       local scrnSizeX = getScreenSizeX()
       local scrnSizeY = getScreenSizeY()
-      if uiBase:IsUISubApp() then
-        posX = uiBase:GetScreenParentPosX()
-        posY = uiBase:GetScreenParentPosY()
-      end
-      if posX < tooltipSizeX then
-        posX = posX + parentSizeX + 5
+      if posX < scrnSizeX / 2 then
+        Panel_Worker_Tooltip:SetPosX(posX + panelSizeX + 5)
       else
-        posX = posX - tooltipSizeX - 5
+        Panel_Worker_Tooltip:SetPosX(posX - tooltipSizeX - 5)
       end
-      if uiBase:IsUISubApp() then
-        if scrnSizeY - posY - parentSizeY < posY then
-          posY = posY - tooltipSizeY + parentSizeY + 5
-        else
-          posY = posY - 5
-        end
-        if scrnSizeY < posY + tooltipSizeY then
-          posY = scrnSizeY - tooltipSizeY - 5
-        else
-          if posY < 0 then
-            posY = 5
-          end
-        end
+      if posY + tooltipSizeY < scrnSizeY then
+        Panel_Worker_Tooltip:SetPosY(posY)
+      else
+        local sizeY = posY + tooltipSizeY - scrnSizeY
+        Panel_Worker_Tooltip:SetPosY(posY - sizeY)
       end
-      Panel_Worker_Tooltip:SetPosX(posX)
-      Panel_Worker_Tooltip:SetPosY(posY)
-      Panel_Worker_Tooltip:SetShow(true, false)
-      Panel_Worker_Tooltip:setFlushAble(false)
-      if Panel_WorkerManager:IsUISubApp() then
-        Panel_Worker_Tooltip:OpenUISubApp()
+      do
+        Panel_Worker_Tooltip:SetShow(true, false)
+        Panel_Worker_Tooltip:setFlushAble(false)
+        if Panel_WorkerManager:IsUISubApp() then
+          Panel_Worker_Tooltip:OpenUISubApp()
+        end
       end
     end
   end

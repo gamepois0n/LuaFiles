@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\messagebox\messagebox.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\messagebox\messagebox.luac 
 
 -- params : ...
 -- function num : 0
@@ -48,7 +48,7 @@ local functionKeyUse = true
 local functionYes, list = nil, nil
 local elapsedTime = 0
 local _currentMessageBoxData = nil
-setCurrentMessageData = function(currentData, position)
+setCurrentMessageData = function(currentData, position, isConsoleLockFocus)
   -- function num : 0_0 , upvalues : buttonYes, buttonApply, buttonNo, buttonIgnore, buttonCancel, buttonClose, textTitle, textContent, UI_TM, globalButtonShowCount, _currentMessageBoxData
   if currentData ~= nil then
     buttonYes:SetShow(false)
@@ -103,6 +103,9 @@ setCurrentMessageData = function(currentData, position)
     end
     globalButtonShowCount = buttonShowCount
     Panel_Win_System:deleteConsoleUIGroup(0)
+    if isConsoleLockFocus ~= nil then
+      Panel_Win_System:setLockFocusPanel(isConsoleLockFocus)
+    end
     local group_0 = Panel_Win_System:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
     if buttonShowCount == 1 then
       buttonYes:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonYes:GetSizeX() / 2)
@@ -190,7 +193,7 @@ end
 
 -- DECOMPILER ERROR at PC221: Confused about usage of register: R28 in 'UnsetPending'
 
-MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse)
+MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse, isConsoleLockFocus)
   -- function num : 0_1 , upvalues : list, functionKeyUse, elapsedTime, textBG, static_Beginner_BG, static_BeginnerTitleBG, staticText_BeginnerTxt1, staticText_BeginnerTxt2, textContent, blockBG
   if Panel_Win_System:GetShow() and MessageData.enablePriority == nil then
     return 
@@ -203,17 +206,17 @@ MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse)
       if list == nil or MessageData.priority < (list.data).priority then
         list = {next = list, pre = preList, data = MessageData}
         if list.pre == nil then
-          setCurrentMessageData(list.data, position)
+          setCurrentMessageData(list.data, position, isConsoleLockFocus)
         else
-          -- DECOMPILER ERROR at PC40: Confused about usage of register: R6 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC41: Confused about usage of register: R7 in 'UnsetPending'
 
           ;
           (list.pre).next = list
           list = Front
         end
-        -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_THEN_STMT
+        -- DECOMPILER ERROR at PC44: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-        -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_STMT
+        -- DECOMPILER ERROR at PC44: LeaveBlock: unexpected jumping out IF_STMT
 
       end
     end
@@ -303,8 +306,11 @@ end
 postProcessMessageData = function()
   -- function num : 0_3 , upvalues : _currentMessageBoxData, list
   Panel_Win_System:SetShow(false, false)
+  if Panel_Win_System:isLockFocusPanel() then
+    Panel_Win_System:setLockFocusPanel(false)
+  end
   _currentMessageBoxData = nil
-  -- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
 
   if list ~= nil and list.data ~= nil then
     list.data = nil

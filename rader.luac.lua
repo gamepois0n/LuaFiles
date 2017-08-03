@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\rader\rader.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\rader\rader.luac 
 
 -- params : ...
 -- function num : 0
@@ -324,6 +324,7 @@ Radar_SetRotateMode = function(isRotate)
   (radarControl.rader_Background):SetParentRotCalc(isRotate)
   ;
   (radarControl.icon_SelfPlayer):SetRotate(rot)
+  FGlobal_GuildPinRotateMode(isRotate)
   FGlobal_PinRotateMode(isRotate)
   RadarBackground_SetRotateMode(isRotate)
   Radar_UpdateQuestList()
@@ -2451,7 +2452,7 @@ end
   ;
   (radarTimeControl.serverName):SetText(getCurrentWolrdName())
   local curChannelData = getCurrentChannelServerData()
-  if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR) then
+  if isGameTypeKorea() then
     (radarTimeControl.serverName):SetShow(false)
   else
     if isGameTypeJapan() then
@@ -2463,8 +2464,12 @@ end
         if isGameTypeTaiwan() then
           (radarTimeControl.serverName):SetShow(false)
         else
-          ;
-          (radarTimeControl.serverName):SetShow(true)
+          if isGameTypeSA() then
+            (radarTimeControl.serverName):SetShow(false)
+          else
+            ;
+            (radarTimeControl.serverName):SetShow(true)
+          end
         end
       end
     end

@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_common_decoration.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_common_decoration.luac 
 
 -- params : ...
 -- function num : 0
@@ -521,7 +521,7 @@ UpdateDecorationListMessage = function(paramType, paramIndex, itemIndex)
       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_APPLY_EXPRESSION")
       local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = fp, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
-      (MessageBox.showMessageBox)(messageBoxData, "top")
+      (MessageBox.showMessageBox)(messageBoxData, "top", nil, nil, true)
       return 
     end
     do

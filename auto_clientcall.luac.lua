@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\auto\auto_clientcall.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\auto\auto_clientcall.luac 
 
 -- params : ...
 -- function num : 0
@@ -33,13 +33,14 @@ FromClient_Auto_EndNaviMove = function()
     PaGlobal_AutoManager:stop()
     return 
   end
+  local selfPlayer = (getSelfPlayer()):get()
   local questList = ToClient_GetQuestList()
   local uiQuestInfo = questList:getMainQuestInfo()
   _PA_LOG("�\128규보", "NaviEndPosDist: " .. tostring(ToClient_getNaviEndPointDist()))
   _PA_LOG("�\128규보", "isKillMonster: " .. tostring(uiQuestInfo:isKillMonster()))
-  _PA_LOG("�\128규보", "FindMonster: " .. tostring(findNearQuestMonster(2000)))
-  if ToClient_getNaviEndPointDist() < 200 and findNearQuestMonster(2000) == true then
-    Auto_TransferState(AutoStateType.HUNT)
+  _PA_LOG("�\128규보", "FindMonster: " .. tostring(Auto_FindNearQuestMonster()))
+  if ToClient_getNaviEndPointDist() < 200 and Auto_FindNearQuestMonster() == true then
+    Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
   else
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
   end
@@ -72,7 +73,9 @@ end
 
 FromClient_Auto_NotifyRevive = function()
   -- function num : 0_9
-  Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
+  if PaGlobal_AutoManager._ActiveState == true then
+    Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
+  end
 end
 
 registerEvent("FromClient_Auto_StartNaviMove", "FromClient_Auto_StartNaviMove")

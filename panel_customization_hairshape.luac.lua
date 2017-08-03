@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_customization_hairshape.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_customization_hairshape.luac 
 
 -- params : ...
 -- function num : 0
@@ -738,6 +738,7 @@ CloseHairShapeUi = function()
   CameraLookEnable(true)
   globalcurrentclassType = -2
   globalcurrentuiId = -2
+  globalisCustomizationPicking = false
 end
 
 CloseHairShapeUiWithoutBoneControl = function()
@@ -745,6 +746,7 @@ CloseHairShapeUiWithoutBoneControl = function()
   CameraLookEnable(true)
   globalcurrentclassType = -2
   globalcurrentuiId = -2
+  globalisCustomizationPicking = false
 end
 
 HairShapeHistoryApplyUpdate = function()

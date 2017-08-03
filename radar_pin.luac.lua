@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\rader\radar_pin.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\rader\radar_pin.luac 
 
 -- params : ...
 -- function num : 0
@@ -410,8 +410,18 @@ FGlobal_UpdateGuildnPartyPin = function()
   end
 end
 
+FGlobal_GuildPinRotateMode = function(isRotateMode)
+  -- function num : 0_19 , upvalues : GetGuildPin, GetPartyPin, Pin_Party_Mine, Pin_Guild_Master, Pin_Guild_Mine
+  (GetGuildPin()):SetParentRotCalc(isRotateMode)
+  ;
+  (GetPartyPin()):SetParentRotCalc(isRotateMode)
+  Pin_Party_Mine:SetParentRotCalc(isRotateMode)
+  Pin_Guild_Master:SetParentRotCalc(isRotateMode)
+  Pin_Guild_Mine:SetParentRotCalc(isRotateMode)
+end
+
 FGlobal_UpdateRadarPin = function()
-  -- function num : 0_19 , upvalues : SelfPlayer, RadarSizeX, RadarSizeY, RadarPixelRate, SelfPosX, SelfPosZ
+  -- function num : 0_20 , upvalues : SelfPlayer, RadarSizeX, RadarSizeY, RadarPixelRate, SelfPosX, SelfPosZ
   SelfPlayerWrapper = getSelfPlayer()
   if SelfPlayerWrapper == nil then
     return 
@@ -427,13 +437,13 @@ FGlobal_UpdateRadarPin = function()
 end
 
 resetPinRotate = function()
-  -- function num : 0_20 , upvalues : Pin_FindWay, Pin_FindWay_Arrow
+  -- function num : 0_21 , upvalues : Pin_FindWay, Pin_FindWay_Arrow
   Pin_FindWay:SetRotate(0)
   Pin_FindWay_Arrow:SetRotate(0)
 end
 
 FGlobal_PinRotateMode = function(isRotateMode)
-  -- function num : 0_21 , upvalues : Pin_FindWay, Pin_FindWay_Arrow
+  -- function num : 0_22 , upvalues : Pin_FindWay, Pin_FindWay_Arrow
   Pin_FindWay:SetParentRotCalc(isRotateMode)
   Pin_FindWay_Arrow:SetParentRotCalc(isRotateMode)
 end

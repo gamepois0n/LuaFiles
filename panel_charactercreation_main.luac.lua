@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\customization\panel_charactercreation_main.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\customization\panel_charactercreation_main.luac 
 
 -- params : ...
 -- function num : 0
@@ -454,16 +454,18 @@ end
 
           local createUI = function()
   -- function num : 0_11 , upvalues : mainButtonNum, mainButtonInfo, Button_MainButton, Static_Large_Point, Line_Template, Static_Small_Point, staticMainImage, StaticText_Main, mainText, UI_GroupType, createCustomizationGroup, createWeatherGroup, createPoseGroup, createZodiacGroup
+  Set_CustomizationUIPanel(0, Panel_CustomizationMain, 4)
+  ClearAll_CustomizationUIGroup(0)
   for idx = 1, mainButtonNum do
-    -- DECOMPILER ERROR at PC73: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC81: Confused about usage of register: R4 in 'UnsetPending'
 
     if idx ~= 3 then
       mainButtonInfo[idx] = {line = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_LINE_" .. idx), point = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_POINT_" .. idx), smallPoint = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_SMALL_POINT_" .. idx), tree = (TreeMenu.new_Button)("TreeMenu_Button" .. idx, Panel_CustomizationMain), static = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_CustomizationMain, "STATIC_IMAGE_" .. idx), staticText = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_CustomizationMain, "STATICTEXT_MAIN_" .. idx), isOpen = true, button = nil}
-      -- DECOMPILER ERROR at PC81: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC89: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (mainButtonInfo[idx]).treeItem = ((mainButtonInfo[idx]).tree):getRootItem()
-      -- DECOMPILER ERROR at PC88: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC96: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (mainButtonInfo[idx]).button = ((mainButtonInfo[idx]).treeItem).control
@@ -524,7 +526,7 @@ end
       end
       ;
       ((mainButtonInfo[idx]).tree):collapseAll()
-      -- DECOMPILER ERROR at PC338: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC346: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (mainButtonInfo[idx]).isOpen = false
@@ -1042,6 +1044,10 @@ end
   if initialized == false then
     createUI()
     initialized = true
+  else
+    Set_CustomizationUIPanel(0, Panel_CustomizationMain, 4)
+    ClearAll_CustomizationUIGroup(0)
+    CustomizationMain_SettingConsoleUI()
   end
   updateComputePos()
   CreateHistoryButton()

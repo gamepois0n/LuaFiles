@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\window\skill\panel_window_skill_combination.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\window\skill\panel_window_skill_combination.luac 
 
 -- params : ...
 -- function num : 0
@@ -32,9 +32,13 @@ _fusionSlot = {
 [1] = {}
 }
 , _isFirstOpen = false, 
-_learnButton = {}
+_learnButton = {
+[0] = {}
+, 
+[1] = {}
 }
--- DECOMPILER ERROR at PC134: Confused about usage of register: R0 in 'UnsetPending'
+}
+-- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.initalize = function(self)
   -- function num : 0_0
@@ -45,7 +49,7 @@ PaGlobal_SkillCombination.initalize = function(self)
   ;
   ((self._ui)._staticTextDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
-  ((self._ui)._staticTextDesc):SetText("-57霠堧波鞚\180 霅橂┐ 旮办垹 臁绊暕 韮\173(鞁犼窚)鞚\180 頇滌劚頇\148 霅橂┌ 旮办垹 臁绊暕鞚\132 靷毄頃\160 靾\152 鞛堧嫟.\n-臁绊暕頃\156 旮办垹鞚\128 氅旍澑 旮办垹鞚\152 旎るЖ霌滊ゼ 鞙犾頃\160 靾\152 鞛堧嫟.\n-臁绊暕霅\156 旮办垹鞚\132 旮办垹鞛犼笀鞚\132 頃橁矊霅橂┐ 旮办〈鞚\152 旮办垹鞚\180 氚滊彊霅滊嫟.")
+  ((self._ui)._staticTextDesc):SetText("-56霠堧波鞚\180 霅橂┐ 旮办垹 臁绊暕 韮\173(鞁犼窚)鞚\180 頇滌劚頇\148 霅橂┌ 旮办垹 臁绊暕鞚\132 靷毄頃\160 靾\152 鞛堧嫟.\n-臁绊暕頃\156 旮办垹鞚\128 氅旍澑 旮办垹鞚\152 旎るЖ霌滊ゼ 鞙犾頃\160 靾\152 鞛堧嫟.\n-臁绊暕霅\156 旮办垹鞚\132 旮办垹鞛犼笀鞚\132 頃橁矊霅橂┐ 旮办〈鞚\152 旮办垹鞚\180 氚滊彊霅滊嫟.")
   do
     if ((self._ui)._staticTextDesc):GetSizeY() < ((self._ui)._staticTextDesc):GetTextSizeY() + 20 then
       local sizeY = ((self._ui)._staticTextDesc):GetTextSizeY() + 20 - ((self._ui)._staticTextDesc):GetSizeY()
@@ -60,7 +64,7 @@ PaGlobal_SkillCombination.initalize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC137: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC141: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.initalizeList = function(self)
   -- function num : 0_1
@@ -73,7 +77,7 @@ PaGlobal_SkillCombination.initalizeList = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC140: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC144: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.setPosition = function(self)
   -- function num : 0_2
@@ -81,7 +85,7 @@ PaGlobal_SkillCombination.setPosition = function(self)
   Panel_SkillCombination:SetPosY(Panel_Window_Skill:GetPosY() + 40)
 end
 
--- DECOMPILER ERROR at PC143: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC147: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.open = function(self)
   -- function num : 0_3
@@ -91,7 +95,7 @@ PaGlobal_SkillCombination.open = function(self)
   self._isFirstOpen = true
 end
 
--- DECOMPILER ERROR at PC146: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC150: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.close = function(self)
   -- function num : 0_4
@@ -103,7 +107,7 @@ PaGlobal_SkillCombination.close = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC149: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC153: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.update = function(self)
   -- function num : 0_5
@@ -118,10 +122,20 @@ PaGlobal_SkillCombination.update = function(self)
     PaGlobal_SkillCombination:UpdateCombiSkill(mainSkillNo, (self._mainSlot)[index], true)
     PaGlobal_SkillCombination:UpdateCombiSkill(subSkillNo, (self._subSlot)[index], true)
     PaGlobal_SkillCombination:UpdateCombiSkill(fusionSkillNo, (self._fusionSlot)[index], false)
+    if ToClient_isLearnedSkill(fusionSkillNo) == true then
+      ((self._learnButton)[index]):SetIgnore(true)
+      ;
+      ((self._learnButton)[index]):SetMonoTone(true)
+    else
+      ;
+      ((self._learnButton)[index]):SetIgnore(false)
+      ;
+      ((self._learnButton)[index]):SetMonoTone(false)
+    end
   end
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC156: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.UpdateCombiSkill = function(self, skillNo, slot, checkMonoTone)
   -- function num : 0_6
@@ -135,14 +149,14 @@ PaGlobal_SkillCombination.UpdateCombiSkill = function(self, skillNo, slot, check
   end
 end
 
--- DECOMPILER ERROR at PC155: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC159: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.combinationLearnSkill = function(self, index, mainSkillNo, subSkillNo, fusionSkillNo)
   -- function num : 0_7
   ToClient_requestLearnFusionSkill(fusionSkillNo, mainSkillNo, subSkillNo)
 end
 
--- DECOMPILER ERROR at PC158: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC162: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.tooltipHide = function(self, skillNo, SlotType)
   -- function num : 0_8
@@ -156,7 +170,7 @@ PaGlobal_SkillCombination.tooltipHide = function(self, skillNo, SlotType)
   end
 end
 
--- DECOMPILER ERROR at PC161: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.tooltipShow = function(self, skillNo, isShowNextLevel, SlotType)
   -- function num : 0_9
@@ -170,7 +184,7 @@ PaGlobal_SkillCombination.tooltipShow = function(self, skillNo, isShowNextLevel,
   Panel_SkillTooltip_Show(skillNo, false, SlotType)
 end
 
--- DECOMPILER ERROR at PC164: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_SkillCombination.SetCombiSkill = function(self, skillNo, selfSlot, parentSlot, checkMonoTone, index)
   -- function num : 0_10
@@ -219,9 +233,15 @@ SkillCombinationListControlCreate = function(content, key)
   PaGlobal_SkillCombination:SetCombiSkill(mainSkillNo, (self._mainSlot)[index], mainSkillSlot, true, index)
   PaGlobal_SkillCombination:SetCombiSkill(subSkillNo, (self._subSlot)[index], subSkillSlot, true, index)
   PaGlobal_SkillCombination:SetCombiSkill(fusionSkillNo, (self._fusionSlot)[index], combiSkillSlot, false, index)
+  -- DECOMPILER ERROR at PC61: Confused about usage of register: R11 in 'UnsetPending'
+
+  ;
+  (self._learnButton)[index] = btnLearnSkill
   btnLearnSkill:addInputEvent("Mouse_LUp", "PaGlobal_SkillCombination:combinationLearnSkill(" .. index .. "," .. mainSkillNo .. "," .. subSkillNo .. "," .. fusionSkillNo .. ")")
   if ToClient_isLearnedSkill(fusionSkillNo) == true then
-    btnLearnSkill:SetIgnore(true)
+    ((self._learnButton)[index]):SetIgnore(true)
+    ;
+    ((self._learnButton)[index]):SetMonoTone(true)
   end
 end
 

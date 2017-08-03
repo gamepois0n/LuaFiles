@@ -1,5 +1,5 @@
 -- Decompiled using luadec 2.2 rev:  for Lua 5.1 from https://github.com/viruscamp/luadec
--- Command line: D:\BDO_PazGameData\Unpacked\luacscript\x86\widget\menu\panel_menu.luac 
+-- Command line: D:\BDO_PazGameData\Unpacked\luacscript\ui_data\x86\widget\menu\panel_menu.luac 
 
 -- params : ...
 -- function num : 0
@@ -364,57 +364,58 @@ TargetWindow_ShowToggle = function(index)
                                                                                                 FGlobal_GameOptionOpen()
                                                                                               end
                                                                                             end
-                                                                                            if MenuButtonId.btn_ChattingFilter == index and (isGameTypeEnglish() or isGameServiceTypeDev()) then
+                                                                                            if MenuButtonId.btn_ChattingFilter == index then
                                                                                               FGlobal_ChattingFilterList_Open()
-                                                                                            end
-                                                                                            if MenuButtonId.btn_WebAlbum == index then
-                                                                                              FGlobal_CustomizingAlbum_Show(false, (CppEnums.ClientSceneState).eClientSceneStateType_InGame)
                                                                                             else
-                                                                                              if MenuButtonId.btn_Competition == index then
-                                                                                                if ToClient_IsHostInArena() and ToClient_IsCompetitionHost() then
-                                                                                                  FGlobal_ArshaPvP_Open()
-                                                                                                else
-                                                                                                  if ToClient_IsMyselfInArena() then
+                                                                                              if MenuButtonId.btn_WebAlbum == index then
+                                                                                                FGlobal_CustomizingAlbum_Show(false, (CppEnums.ClientSceneState).eClientSceneStateType_InGame)
+                                                                                              else
+                                                                                                if MenuButtonId.btn_Competition == index then
+                                                                                                  if ToClient_IsHostInArena() and ToClient_IsCompetitionHost() then
                                                                                                     FGlobal_ArshaPvP_Open()
                                                                                                   else
-                                                                                                    if ToClient_IsCompetitionHost() == false then
-                                                                                                      FGlobal_Panel_CompetitionGame_JoinDesc_Open()
+                                                                                                    if ToClient_IsMyselfInArena() then
+                                                                                                      FGlobal_ArshaPvP_Open()
                                                                                                     else
-                                                                                                      FGlobal_ArshaPvP_HostJoin()
+                                                                                                      if ToClient_IsCompetitionHost() == false then
+                                                                                                        FGlobal_Panel_CompetitionGame_JoinDesc_Open()
+                                                                                                      else
+                                                                                                        FGlobal_ArshaPvP_HostJoin()
+                                                                                                      end
                                                                                                     end
                                                                                                   end
-                                                                                                end
-                                                                                              else
-                                                                                                if MenuButtonId.btn_ScreenShotAlbum == index then
-                                                                                                  ScreenshotAlbum_Open()
                                                                                                 else
-                                                                                                  if MenuButtonId.btn_Mercenary == index then
-                                                                                                    FGlobal_MercenaryOpen()
+                                                                                                  if MenuButtonId.btn_ScreenShotAlbum == index then
+                                                                                                    ScreenshotAlbum_Open()
                                                                                                   else
-                                                                                                    if MenuButtonId.btn_SavageDefence == index then
-                                                                                                      if ToClient_getPlayNowSavageDefence() then
-                                                                                                        FGlobal_SavegeDefenceInfo_unjoin()
-                                                                                                      else
-                                                                                                        FGlobal_SavageDefenceInfo_Open()
-                                                                                                      end
+                                                                                                    if MenuButtonId.btn_Mercenary == index then
+                                                                                                      FGlobal_MercenaryOpen()
                                                                                                     else
-                                                                                                      if MenuButtonId.btn_PartyList == index then
-                                                                                                        FGlobal_PartyList_ShowToggle()
-                                                                                                      else
-                                                                                                        if MenuButtonId.btn_MonsterRanking == index then
-                                                                                                          FGlobal_MonsterRanking_Open()
+                                                                                                      if MenuButtonId.btn_SavageDefence == index then
+                                                                                                        if ToClient_getPlayNowSavageDefence() then
+                                                                                                          FGlobal_SavegeDefenceInfo_unjoin()
                                                                                                         else
-                                                                                                          if MenuButtonId.btn_Steam == index then
-                                                                                                            PaGlobal_Steam_Redemption()
+                                                                                                          FGlobal_SavageDefenceInfo_Open()
+                                                                                                        end
+                                                                                                      else
+                                                                                                        if MenuButtonId.btn_PartyList == index then
+                                                                                                          FGlobal_PartyList_ShowToggle()
+                                                                                                        else
+                                                                                                          if MenuButtonId.btn_MonsterRanking == index then
+                                                                                                            FGlobal_MonsterRanking_Open()
                                                                                                           else
-                                                                                                            if MenuButtonId.btn_Update == index then
-                                                                                                              Panel_WebHelper_ShowToggle("Update")
+                                                                                                            if MenuButtonId.btn_Steam == index then
+                                                                                                              PaGlobal_Steam_Redemption()
                                                                                                             else
-                                                                                                              if MenuButtonId.btn_BSAdventure2 == index then
-                                                                                                                FGlobal_BlackSpiritAdventure2_Open()
+                                                                                                              if MenuButtonId.btn_Update == index then
+                                                                                                                Panel_WebHelper_ShowToggle("Update")
                                                                                                               else
-                                                                                                                if MenuButtonId.btn_Twitch == index then
-                                                                                                                  PaGlobal_Twitch:ShowWindow()
+                                                                                                                if MenuButtonId.btn_BSAdventure2 == index then
+                                                                                                                  FGlobal_BlackSpiritAdventure2_Open()
+                                                                                                                else
+                                                                                                                  if MenuButtonId.btn_Twitch == index then
+                                                                                                                    PaGlobal_Twitch:ShowWindow()
+                                                                                                                  end
                                                                                                                 end
                                                                                                               end
                                                                                                             end
@@ -688,12 +689,15 @@ GameMenu_CheckEnAble = function(buttonType)
         returnValue = false
       end
     end
-    if buttonType == MenuButtonId.btn_Language or buttonType == MenuButtonId.btn_ChattingFilter then
+    if buttonType == MenuButtonId.btn_Language then
       if isGameTypeEnglish() or isGameServiceTypeDev() then
         returnValue = true
       else
         returnValue = false
       end
+    end
+    if buttonType == MenuButtonId.btn_ChattingFilter then
+      returnValue = true
     end
     if buttonType == MenuButtonId.btn_WebAlbum then
       if webAlbumOpen or isGameServiceTypeDev() then
