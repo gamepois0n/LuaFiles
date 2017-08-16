@@ -65,9 +65,6 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     if Auto_FrameMove ~= nil then
       Auto_FrameMove(deltaTime)
     end
-    if Panel_ConsoleKeyGuide_updateConsole ~= nil then
-      Panel_ConsoleKeyGuide_updateConsole()
-    end
     if (CppEnums.CountryType).DEV == getGameServiceType() and ConsoleUISimplifyPerFrameUpdate ~= nil then
       ConsoleUISimplifyPerFrameUpdate(deltaTime)
     end

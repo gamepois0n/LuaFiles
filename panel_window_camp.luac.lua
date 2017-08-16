@@ -63,6 +63,8 @@ PaGlobal_Camp.close = function(self)
   -- function num : 0_2
   Panel_Window_Camp:SetShow(false)
   self._isCamping = false
+  PaGlobal_Repair:setIsCamping(false)
+  npcShop:setIsCamping(false)
   if Panel_Window_Inventory:GetShow() then
     Inventory_ShowToggle()
     handleClickedNpcShow_WindowClose()
@@ -89,6 +91,8 @@ FromClient_Camp_OpenByActorKeyRaw = function(actorKeyRaw)
   -- DECOMPILER ERROR at PC40: Confused about usage of register: R1 in 'UnsetPending'
 
   PaGlobal_Camp._isCamping = true
+  PaGlobal_Repair:setIsCamping(true)
+  npcShop:setIsCamping(true)
 end
 
 -- DECOMPILER ERROR at PC159: Confused about usage of register: R0 in 'UnsetPending'
@@ -391,11 +395,11 @@ end
 
 -- DECOMPILER ERROR at PC212: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Camp.setIsCamping = function(self)
+PaGlobal_Camp.setIsCamping = function(self, isCamping)
   -- function num : 0_23
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R2 in 'UnsetPending'
 
-  PaGlobal_Camp._isCamping = false
+  PaGlobal_Camp._isCamping = isCamping
 end
 
 FromClient_InitializeCamp = function()

@@ -59,10 +59,6 @@ InterestKnowledge_SetText = function(theme, npcActorProxyWrapper)
   local _needCount = npcActorProxyWrapper:getNeedCount()
   local _currCount = getKnowledgeCountMatchTheme(npcActorProxyWrapper:getNpcThemeKey())
   local _currentKnowledge = ""
-  Panel_Interest_Knowledge:deleteConsoleUIGroup(0)
-  local group_0 = Panel_Interest_Knowledge:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  group_0:setConsoleKeyEventForLUA("InterestKnowledge_UpScroll", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_UP)
-  group_0:setConsoleKeyEventForLUA("InterestKnowledge_DownScroll", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_DOWN)
   for index = 0, _knowledgeMaxCount - 1 do
     local _childCard = theme:getChildCardByIndex(index + scrollIndex)
     if _childCard == nil then
@@ -74,7 +70,6 @@ InterestKnowledge_SetText = function(theme, npcActorProxyWrapper)
       (uiText[index]):SetPosY(_listPosY + _needKnowledgeTextGap * index)
       ;
       (uiText[index]):SetShow(true)
-      group_0:addControl(0, index, 1, _knowledgeMaxCount, uiText[index])
     end
   end
   needKnowledgeText:SetText(_needKnowledge .. " ( " .. _currCount .. "/" .. theme:getChildCardCount() .. " ) ")

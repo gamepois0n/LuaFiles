@@ -279,7 +279,7 @@ local txt_BottomDesc = (UI.getChildControl)(_frameBottomDesc, "StaticText_Desc")
 
 ;
 (Panel_Lobby_ClassUI.ClassStatus)[UI_Class.ClassType_CombattantWomen] = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Stat_Temp5")
-local Panel_Lobby_UI = {CC_CharacterCreateText = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_CharacterCreate"), CC_CharacterNameEdit = (UI.getChildControl)(Panel_CharacterCreate, "Edit_CharacterName"), CC_CreateButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_CharacterCreateStart"), CC_BackButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_Back"), CC_DumiText1 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_1"), CC_characterCreateBG = (UI.getChildControl)(Panel_CharacterCreate, "Static_BG"), CC_DumiText3 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_3"), CC_DumiText4 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_4"), CC_FrameHead = (UI.getChildControl)(Panel_CharacterCreate, "Frame_Head"), CC_FrameHead_Content = nil, CC_FrameHead_Content_Image = nil, CC_FrameHead_Scroll = nil, CC_FrameHair = (UI.getChildControl)(Panel_CharacterCreate, "Frame_Hair"), CC_FrameHair_Content = nil, CC_FrameHair_Content_Image = nil, CC_FrameHair_Scroll = nil, CC_SelectClassButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_SelectClass"), CC_CBTText = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_CBT"), CCSC_CreateTitle = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Title"), CCSC_ClassName = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_ClassName"), CCSC_PartLine = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_PartLine"), CCSC_ClassDescBG = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Desc_BG"), CCSC_ClassDesc = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Description"), CCSC_CreateButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_CharacterCreateStart"), CCSC_CreateBG = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_BG"), CCSC_ClassMovie = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_CharacterCreateSelectClass, "Static_ClassMovie"), CCSC_BackButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_Back"), CCSC_SelectClassButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_SelectClass"), CM_StaticText_CharacterName = (UI.getChildControl)(Panel_CustomizationMain, "StaticText_CharacterName"), CM_Edit_CharacterName = (UI.getChildControl)(Panel_CustomizationMain, "Edit_CharacterName")}
+local Panel_Lobby_UI = {CC_CharacterCreateText = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_CharacterCreate"), CC_CharacterNameEdit = (UI.getChildControl)(Panel_CharacterCreate, "Edit_CharacterName"), CC_CreateButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_CharacterCreateStart"), CC_BackButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_Back"), CC_DumiText1 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_1"), CC_characterCreateBG = (UI.getChildControl)(Panel_CharacterCreate, "Static_BG"), CC_DumiText3 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_3"), CC_DumiText4 = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_4"), CC_FrameHead = (UI.getChildControl)(Panel_CharacterCreate, "Frame_Head"), CC_FrameHead_Content = nil, CC_FrameHead_Content_Image = nil, CC_FrameHead_Scroll = nil, CC_FrameHair = (UI.getChildControl)(Panel_CharacterCreate, "Frame_Hair"), CC_FrameHair_Content = nil, CC_FrameHair_Content_Image = nil, CC_FrameHair_Scroll = nil, CC_SelectClassButton = (UI.getChildControl)(Panel_CharacterCreate, "Button_SelectClass"), CC_CBTText = (UI.getChildControl)(Panel_CharacterCreate, "StaticText_CBT"), CCSC_CreateTitle = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Title"), CCSC_ClassName = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_ClassName"), CCSC_PartLine = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_PartLine"), CCSC_ClassDescBG = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_Desc_BG"), CCSC_ClassDesc = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Description"), CCSC_CreateButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_CharacterCreateStart"), CCSC_CreateBG = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Static_BG"), CCSC_ClassMovie = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_CharacterCreateSelectClass, "Static_ClassMovie"), CCSC_BackButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_Back"), CCSC_SelectClassButton = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "Button_SelectClass"), CCSC_NoMovie = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_NoMovie"), CM_StaticText_CharacterName = (UI.getChildControl)(Panel_CustomizationMain, "StaticText_CharacterName"), CM_Edit_CharacterName = (UI.getChildControl)(Panel_CustomizationMain, "Edit_CharacterName")}
 local Character_Status = {_stat_Ctrl = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Ctrl"), _stat_Att = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Att"), _stat_Def = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Def"), _stat_Evd = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Evd"), _stat_Cmb = (UI.getChildControl)(Panel_CharacterCreateSelectClass, "StaticText_Stat_Cmb")}
 local Panel_Lobby_Global_Variable = {
 UIList = {}
@@ -559,6 +559,12 @@ local Panel_Lobby_Function_Initialize = function()
     (Panel_Lobby_UI.CCSC_ClassMovie):SetSpanSize(-1, 0)
     ;
     (Panel_Lobby_UI.CCSC_ClassMovie):SetShow(true)
+    ;
+    (Panel_Lobby_UI.CCSC_NoMovie):SetPosX(scrX - 441)
+    ;
+    (Panel_Lobby_UI.CCSC_NoMovie):SetPosY(scrY - 372)
+    ;
+    (Panel_Lobby_UI.CCSC_NoMovie):SetSpanSize(-1, 0)
     -- DECOMPILER ERROR: 22 unprocessed JMP targets
   end
 end
@@ -697,8 +703,12 @@ Panel_Lobby_function_SelectClassType = function(index, isOn)
     if movieName ~= nil then
       (Panel_Lobby_UI.CCSC_ClassMovie):TriggerEvent("PlayMovie", "coui://" .. movieName)
     end
+    ;
+    (Panel_Lobby_UI.CCSC_ClassMovie):SetShow(true)
+    ;
+    (Panel_Lobby_UI.CCSC_NoMovie):SetShow(false)
     viewCharacterCreateSelectClassMode(index)
-    -- DECOMPILER ERROR at PC60: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC70: Confused about usage of register: R3 in 'UnsetPending'
 
     Panel_Lobby_Global_Variable.characterSelectType = index
     ;

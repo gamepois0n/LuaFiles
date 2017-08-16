@@ -448,15 +448,11 @@ PaGlobal_TutorialPhase_CallBlackSpirit.handleEventQuestUpdateNotify = function(s
   if self._currentStep == 1 and isAccept == true then
     self:eventCallAcceptBlackSpiritQuest(isAccept, questGroupNo, questId)
   else
-    if self._currentStep == 2 and isAccept == false then
-      self:eventCallClearBlackSpiritQuest(isAccept, questGroupNo, questId)
+    if self._currentStep == 2 and isAccept == true then
+      self:eventCallAcceptFindSkillInstructorQuest(isAccept, questGroupNo, questId)
     else
-      if self._currentStep == 2 and isAccept == true then
-        self:eventCallAcceptFindSkillInstructorQuest(isAccept, questGroupNo, questId)
-      else
-        if self._currentStep == 3 and isAccept == false then
-          self:eventCallClearFindSkillInstructorQuest(isAccept, questGroupNo, questId)
-        end
+      if self._currentStep == 3 and isAccept == false then
+        self:eventCallClearFindSkillInstructorQuest(isAccept, questGroupNo, questId)
       end
     end
   end

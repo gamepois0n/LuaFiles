@@ -3,7 +3,6 @@
 
 -- params : ...
 -- function num : 0
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local RadioButton_Bone_Trans = (UI.getChildControl)(Panel_CustomizationTransformHair, "RadioButton_Bone_Trans")
 local RadioButton_Bone_Rot = (UI.getChildControl)(Panel_CustomizationTransformHair, "RadioButton_Bone_Rot")
 local StaticText_DefaultControl = (UI.getChildControl)(Panel_CustomizationTransformHair, "StaticText_DefaultControl")
@@ -280,16 +279,8 @@ UpdateHairSlider = function(sliderIndex)
   end
 end
 
-OpenHairShapeUi = function(classType, uiId, historyapply)
-  -- function num : 0_7 , upvalues : UI_GroupType, iswithoutbone, currentclassType, currentuiId, selectedClassType, checktransrot, ShowBoneControls, StaticText_ControlPart, CheckButton_ControlPart, Button_Part_Reset, Button_All_Reset, contentsGapHeight, Button_Slider_TransX, Button_Slider_TransY, Button_Slider_TransZ, Button_Slider_RotX, Button_Slider_RotY, Button_Slider_RotZ, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, Button_SliderArr, sliderTextGap, UpdateHairRadioButtons
-  if historyapply == nil then
-    Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
-    ClearAll_CustomizationUIGroup(0)
-    Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
-    Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 6)
-  end
+OpenHairShapeUi = function(classType, uiId)
+  -- function num : 0_7 , upvalues : iswithoutbone, currentclassType, currentuiId, selectedClassType, checktransrot, ShowBoneControls, StaticText_ControlPart, CheckButton_ControlPart, Button_Part_Reset, Button_All_Reset, contentsGapHeight, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, sliderTextGap, UpdateHairRadioButtons
   iswithoutbone = false
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
@@ -315,85 +306,64 @@ OpenHairShapeUi = function(classType, uiId, historyapply)
   local meshParamType = 1
   local curlRange = getCurlLengthRange()
   local sliderValueBasePosX = 0
-  local slidergroupnumber = 1
-  local maxcountx = 2
-  local maxcounty = 20
-  local groupHeight = 0
-  Add_CustomizationUIControl(0, 0, 0, 0, maxcountx, maxcounty, Button_Slider_TransX)
-  Add_CustomizationUIControl(0, 0, 0, 1, maxcountx, maxcounty, Button_Slider_TransY)
-  Add_CustomizationUIControl(0, 0, 0, 2, maxcountx, maxcounty, Button_Slider_TransZ)
-  Add_CustomizationUIControl(0, 0, 0, 3, maxcountx, maxcounty, Button_Slider_RotX)
-  Add_CustomizationUIControl(0, 0, 0, 4, maxcountx, maxcounty, Button_Slider_RotY)
-  Add_CustomizationUIControl(0, 0, 0, 5, maxcountx, maxcounty, Button_Slider_RotZ)
-  Add_CustomizationUIControl(0, 0, 0, 6, maxcountx, maxcounty, CheckButton_ControlPart)
-  Add_CustomizationUIControl(0, 0, 0, 7, maxcountx, maxcounty, Button_Part_Reset)
-  Add_CustomizationUIControl(0, 0, 1, 7, maxcountx, maxcounty, Button_All_Reset)
-  groupHeight = groupHeight + 8
-  local ablenumber = 0
   for sliderIndex = 0, sliderNum - 1 do
     local luaSliderIndex = sliderIndex + 1
-    -- DECOMPILER ERROR at PC198: Confused about usage of register: R19 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC73: Confused about usage of register: R13 in 'UnsetPending'
 
     paramType[luaSliderIndex] = getUiSliderParamType(classType, uiId, defaultContentsIndex, sliderIndex)
-    -- DECOMPILER ERROR at PC206: Confused about usage of register: R19 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC81: Confused about usage of register: R13 in 'UnsetPending'
 
     paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
     local sliderText = getUiSliderDescName(classType, uiId, defaultContentsIndex, sliderIndex)
     local param = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-    -- DECOMPILER ERROR at PC227: Confused about usage of register: R21 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC102: Confused about usage of register: R15 in 'UnsetPending'
 
     if sliderIndex >= 0 and sliderIndex < 3 then
       paramMin[luaSliderIndex] = getHairMinLength(sliderIndex)
-      -- DECOMPILER ERROR at PC236: Confused about usage of register: R21 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC111: Confused about usage of register: R15 in 'UnsetPending'
 
       paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC245: Confused about usage of register: R21 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC120: Confused about usage of register: R15 in 'UnsetPending'
 
       paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
       if paramMin[luaSliderIndex] == paramMax[luaSliderIndex] then
         EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], false)
       else
         EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
-        Add_CustomizationUIControl(0, 0, 0, groupHeight + ablenumber, maxcountx, maxcounty, Button_SliderArr[luaSliderIndex])
-        ablenumber = ablenumber + 1
       end
     else
       if sliderIndex == 3 then
         local curlRange = getCurlLengthRange()
-        -- DECOMPILER ERROR at PC290: Confused about usage of register: R22 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC154: Confused about usage of register: R16 in 'UnsetPending'
 
         paramMin[luaSliderIndex] = 50 - curlRange / 2
-        -- DECOMPILER ERROR at PC294: Confused about usage of register: R22 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC158: Confused about usage of register: R16 in 'UnsetPending'
 
         paramMax[luaSliderIndex] = 50 + curlRange / 2
-        -- DECOMPILER ERROR at PC303: Confused about usage of register: R22 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC167: Confused about usage of register: R16 in 'UnsetPending'
 
         paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
         if curlRange == 0 then
           EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], false)
         else
           EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
-          Add_CustomizationUIControl(0, 0, 0, groupHeight + (ablenumber), maxcountx, maxcounty, Button_SliderArr[luaSliderIndex])
-          ablenumber = ablenumber + 1
         end
       else
         do
-          -- DECOMPILER ERROR at PC347: Confused about usage of register: R21 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC200: Confused about usage of register: R15 in 'UnsetPending'
 
           if sliderIndex == 4 then
             paramMin[luaSliderIndex] = getParamMin(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-            -- DECOMPILER ERROR at PC356: Confused about usage of register: R21 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC209: Confused about usage of register: R15 in 'UnsetPending'
 
             paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-            -- DECOMPILER ERROR at PC365: Confused about usage of register: R21 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC218: Confused about usage of register: R15 in 'UnsetPending'
 
             paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
             if curlRange == 0 then
               EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], false)
             else
               EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
-              Add_CustomizationUIControl(0, 0, 0, groupHeight + (ablenumber), maxcountx, maxcounty, Button_SliderArr[luaSliderIndex])
-              ablenumber = ablenumber + 1
             end
           end
           ;
@@ -414,15 +384,15 @@ OpenHairShapeUi = function(classType, uiId, historyapply)
               sliderValueBasePosX = (math.max)(sliderValueBasePosX, sliderTextSizeX)
             end
             controlPosY = controlPosY + contentsGapHeight + (StaticTextArr[luaSliderIndex]):GetSizeY()
-            -- DECOMPILER ERROR at PC466: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC466: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC466: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC466: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC466: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC308: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -439,10 +409,10 @@ OpenHairShapeUi = function(classType, uiId, historyapply)
       (SliderArr[luaSliderIndex]):SetSize(174 - (sliderValueBasePosX - sliderValuePosX), (SliderArr[luaSliderIndex]):GetSizeY())
       ;
       (SliderArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
-      -- DECOMPILER ERROR at PC507: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC349: Confused about usage of register: R14 in 'UnsetPending'
 
       paramType[luaSliderIndex] = getUiSliderParamType(classType, uiId, defaultContentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC515: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC357: Confused about usage of register: R14 in 'UnsetPending'
 
       paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
       local sliderParam = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
@@ -459,17 +429,8 @@ OpenHairShapeUi = function(classType, uiId, historyapply)
   end
 end
 
-OpenHairShapeUiWithoutBoneControl = function(classType, uiId, historyapply)
-  -- function num : 0_8 , upvalues : UI_GroupType, iswithoutbone, currentclassType, currentuiId, selectedClassType, ShowBoneControls, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, Button_SliderArr, sliderTextGap, contentsGapHeight
-  if historyapply == nil then
-    Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
-    ClearAll_CustomizationUIGroup(0)
-    Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
-    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
-  end
-  local resetandpart = 0
-  local slidergroupnumber = 0
+OpenHairShapeUiWithoutBoneControl = function(classType, uiId)
+  -- function num : 0_8 , upvalues : iswithoutbone, currentclassType, currentuiId, selectedClassType, ShowBoneControls, paramType, paramIndex, paramMin, paramMax, paramDefault, EnableSlide, StaticTextArr, StaticText_CurrentValue, SliderArr, sliderTextGap, contentsGapHeight
   iswithoutbone = true
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
@@ -480,144 +441,65 @@ OpenHairShapeUiWithoutBoneControl = function(classType, uiId, historyapply)
   ShowBoneControls(false)
   local controlPosY = 10
   local defaultContentsIndex = 0
-  local sliderNum = getUiSliderCount(classType, uiId, defaultContentsIndex)
-  local sliderCount = getUiSliderCount(classType, uiId, defaultContentsIndex)
+  sliderCount = getUiSliderCount(classType, uiId, defaultContentsIndex)
   local meshParamType = 1
   local curlRange = getCurlLengthRange()
-  local ablecount = 0
-  for sliderIndex = 0, sliderNum - 1 do
-    local luaSliderIndex = sliderIndex + 1
-    -- DECOMPILER ERROR at PC75: Confused about usage of register: R17 in 'UnsetPending'
-
-    paramType[luaSliderIndex] = getUiSliderParamType(classType, uiId, defaultContentsIndex, sliderIndex)
-    -- DECOMPILER ERROR at PC83: Confused about usage of register: R17 in 'UnsetPending'
-
-    paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
-    local sliderText = getUiSliderDescName(classType, uiId, defaultContentsIndex, sliderIndex)
-    local param = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-    -- DECOMPILER ERROR at PC104: Confused about usage of register: R19 in 'UnsetPending'
-
-    if sliderIndex >= 0 and sliderIndex < 3 then
-      paramMin[luaSliderIndex] = getHairMinLength(sliderIndex)
-      -- DECOMPILER ERROR at PC113: Confused about usage of register: R19 in 'UnsetPending'
-
-      paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC122: Confused about usage of register: R19 in 'UnsetPending'
-
-      paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-      if paramMin[luaSliderIndex] ~= paramMax[luaSliderIndex] then
-        ablecount = ablecount + 1
-      end
-    else
-      if sliderIndex == 3 then
-        local curlRange = getCurlLengthRange()
-        -- DECOMPILER ERROR at PC138: Confused about usage of register: R20 in 'UnsetPending'
-
-        paramMin[luaSliderIndex] = 50 - curlRange / 2
-        -- DECOMPILER ERROR at PC142: Confused about usage of register: R20 in 'UnsetPending'
-
-        paramMax[luaSliderIndex] = 50 + curlRange / 2
-        -- DECOMPILER ERROR at PC151: Confused about usage of register: R20 in 'UnsetPending'
-
-        paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-        if curlRange ~= 0 then
-          ablecount = ablecount + 1
-        end
-      else
-        do
-          do
-            -- DECOMPILER ERROR at PC166: Confused about usage of register: R19 in 'UnsetPending'
-
-            if sliderIndex == 4 then
-              paramMin[luaSliderIndex] = getParamMin(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-              -- DECOMPILER ERROR at PC175: Confused about usage of register: R19 in 'UnsetPending'
-
-              paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-              -- DECOMPILER ERROR at PC184: Confused about usage of register: R19 in 'UnsetPending'
-
-              paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-              if curlRange ~= 0 then
-                ablecount = ablecount + 1
-              end
-            end
-            -- DECOMPILER ERROR at PC188: LeaveBlock: unexpected jumping out DO_STMT
-
-            -- DECOMPILER ERROR at PC188: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-            -- DECOMPILER ERROR at PC188: LeaveBlock: unexpected jumping out IF_STMT
-
-            -- DECOMPILER ERROR at PC188: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-            -- DECOMPILER ERROR at PC188: LeaveBlock: unexpected jumping out IF_STMT
-
-          end
-        end
-      end
-    end
-  end
-  local ablenumber = 0
   for sliderIndex = 0, sliderCount - 1 do
     local luaSliderIndex = sliderIndex + 1
-    -- DECOMPILER ERROR at PC202: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC37: Confused about usage of register: R11 in 'UnsetPending'
 
     paramType[luaSliderIndex] = getUiSliderParamType(classType, uiId, defaultContentsIndex, sliderIndex)
-    -- DECOMPILER ERROR at PC210: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC45: Confused about usage of register: R11 in 'UnsetPending'
 
     paramIndex[luaSliderIndex] = getUiSliderParamIndex(classType, uiId, defaultContentsIndex, sliderIndex)
     local sliderText = getUiSliderDescName(classType, uiId, defaultContentsIndex, sliderIndex)
     local param = getParam(paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-    -- DECOMPILER ERROR at PC231: Confused about usage of register: R20 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC66: Confused about usage of register: R13 in 'UnsetPending'
 
     if sliderIndex >= 0 and sliderIndex < 3 then
       paramMin[luaSliderIndex] = getHairMinLength(sliderIndex)
-      -- DECOMPILER ERROR at PC240: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC75: Confused about usage of register: R13 in 'UnsetPending'
 
       paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC249: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC84: Confused about usage of register: R13 in 'UnsetPending'
 
       paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
       if paramMin[luaSliderIndex] == paramMax[luaSliderIndex] then
         EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], false)
       else
         EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
-        Add_CustomizationUIControl(0, slidergroupnumber, 0, ablenumber, 1, ablecount, Button_SliderArr[luaSliderIndex])
-        ablenumber = ablenumber + 1
       end
     else
-      -- DECOMPILER ERROR at PC292: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC116: Confused about usage of register: R13 in 'UnsetPending'
 
       if sliderIndex == 3 then
         paramMin[luaSliderIndex] = 50 - curlRange / 2
-        -- DECOMPILER ERROR at PC296: Confused about usage of register: R20 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC120: Confused about usage of register: R13 in 'UnsetPending'
 
         paramMax[luaSliderIndex] = 50 + curlRange / 2
-        -- DECOMPILER ERROR at PC305: Confused about usage of register: R20 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC129: Confused about usage of register: R13 in 'UnsetPending'
 
         paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
         if curlRange == 0 then
           EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], false)
         else
           EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
-          Add_CustomizationUIControl(0, slidergroupnumber, 0, ablenumber, 1, ablecount, Button_SliderArr[luaSliderIndex])
-          ablenumber = ablenumber + 1
         end
       else
-        -- DECOMPILER ERROR at PC349: Confused about usage of register: R20 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC162: Confused about usage of register: R13 in 'UnsetPending'
 
         if sliderIndex == 4 then
           paramMin[luaSliderIndex] = getParamMin(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-          -- DECOMPILER ERROR at PC358: Confused about usage of register: R20 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC171: Confused about usage of register: R13 in 'UnsetPending'
 
           paramMax[luaSliderIndex] = getParamMax(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
-          -- DECOMPILER ERROR at PC367: Confused about usage of register: R20 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC180: Confused about usage of register: R13 in 'UnsetPending'
 
           paramDefault[luaSliderIndex] = getParamDefault(classType, paramType[luaSliderIndex], paramIndex[luaSliderIndex])
           if curlRange == 0 then
             EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], false)
           else
             EnableSlide(StaticTextArr[luaSliderIndex], StaticText_CurrentValue[luaSliderIndex], SliderArr[luaSliderIndex], true)
-            Add_CustomizationUIControl(0, slidergroupnumber, 0, ablenumber, 1, ablecount, Button_SliderArr[luaSliderIndex])
-            ablenumber = ablenumber + 1
           end
         end
       end
@@ -755,9 +637,9 @@ HairShapeHistoryApplyUpdate = function()
     return 
   end
   if iswithoutbone then
-    OpenHairShapeUiWithoutBoneControl(currentclassType, currentuiId, true)
+    OpenHairShapeUiWithoutBoneControl(currentclassType, currentuiId)
   else
-    OpenHairShapeUi(currentclassType, currentuiId, true)
+    OpenHairShapeUi(currentclassType, currentuiId)
     PickingHairBone()
   end
 end

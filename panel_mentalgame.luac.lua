@@ -265,7 +265,7 @@ local createCenterUI = function()
     circularProgress:SetCurrentControlPos(0)
     circularProgress:SetProgressRate(0)
     circularProgress:SetSmoothMode(true)
-    circularProgress:SetAniSpeed(mentalObject:getMentalGameSpeed() / 2000)
+    circularProgress:SetAniSpeed(mentalObject:getMentalGameSpeed() / 100)
     local SuccessIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, panel, "SuccessIcon_" .. key)
     CopyBaseProperty(select.SuccessIcon, SuccessIcon)
     uiGroup.SuccessIcon = SuccessIcon

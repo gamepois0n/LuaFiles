@@ -4,9 +4,7 @@
 -- params : ...
 -- function num : 0
 local _voidCursor = (UI.getChildControl)(Panel_Cursor, "Static_Cursor")
-local _consoleCursor = (UI.getChildControl)(Panel_Cursor, "Static_ConsoleCursor")
 Panel_Cursor:SetShow(true)
-_consoleCursor:SetShow(false)
 local mouseVisibleState = {[(CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode] = false, [(CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode] = true, [(CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode] = true, [(CppEnums.EProcessorInputMode).eProcessorInputMode_KeyCustomizing] = true, [(CppEnums.EProcessorInputMode).eProcessorInputMode_UiModeNotInput] = true, [(CppEnums.EProcessorInputMode).eProcessorInputMode_UiControlMode] = true, [(CppEnums.EProcessorInputMode).eProcessorInputMode_Undefined] = false}
 local currentModeCache = nil
 local posX = -10000
@@ -38,24 +36,13 @@ ProcessorInputModeChange = function(prevMode, currentMode)
 end
 
 CursorUIEffect_UpdateCursorPos = function()
-  -- function num : 0_1 , upvalues : _voidCursor, _consoleCursor, currentModeCache, posX, posY
-  if ToClient_isConsoleUIMode() == false then
-    _voidCursor:SetShow(true)
-    _consoleCursor:SetShow(false)
-    if currentModeCache then
-      _voidCursor:SetPosX(getMousePosX())
-      _voidCursor:SetPosY(getMousePosY())
-    else
-      _voidCursor:SetPosX(posX)
-      _voidCursor:SetPosY(posY)
-    end
+  -- function num : 0_1 , upvalues : currentModeCache, _voidCursor, posX, posY
+  if currentModeCache then
+    _voidCursor:SetPosX(getMousePosX())
+    _voidCursor:SetPosY(getMousePosY())
   else
-    _voidCursor:SetShow(false)
-    _consoleCursor:SetShow(true)
-    local posX = getMousePosX() - _consoleCursor:GetSizeX() * 0.5
-    local posY = getMousePosY() - _consoleCursor:GetSizeY()
-    _consoleCursor:SetPosX(posX)
-    _consoleCursor:SetPosY(posY)
+    _voidCursor:SetPosX(posX)
+    _voidCursor:SetPosY(posY)
   end
 end
 

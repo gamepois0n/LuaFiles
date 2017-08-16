@@ -96,14 +96,13 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
     else
       msg = chattingMessage:getContent()
     end
-    chatting_Icon:SetText("")
-    chatting_Icon:SetAutoResize(true)
-    UiPrivateChatType(chatType, chatting_Icon, msgColor, isChatDivision, sender, senderStr)
-    chatting_Icon:SetSize(chatting_Icon:GetTextSizeX(), chatting_Icon:GetTextSizeY())
+    chatting_Icon:SetSize(chatting_sender:GetTextSizeY() * 1.5, chatting_sender:GetTextSizeY() * 1.5)
+    UiPrivateChatType(chatType, chatting_Icon, msgColor, isChatDivision, sender, senderStr, poolCurrentUI)
+    chatting_Icon:ComputePos()
     local chat_contentAddPosX = 0
-    if chatting_Icon:GetTextSizeX() ~= 0 then
+    if chatting_Icon:GetShow() == true then
       chat_contentAddPosX = 15
-      chatting_sender:SetPosX(chatting_Icon:GetTextSizeX() + chat_contentAddPosX)
+      chatting_sender:SetPosX(chatting_Icon:GetSizeX())
     else
       chat_contentAddPosX = 10
       chatting_sender:SetPosX(chat_contentAddPosX)
@@ -112,21 +111,25 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
     chatting_sender:SetTextHorizonRight()
     chatting_sender:SetAutoResize(true)
     chatting_sender:SetFontColor(msgColor)
-    chatting_sender:SetText(senderStr)
+    if UI_CT.System == chatType then
+      chatting_sender:SetText(" ")
+    else
+      chatting_sender:SetText(senderStr)
+    end
     chatting_sender:SetSize(chatting_sender:GetTextSizeX(), chatting_sender:GetTextSizeY())
     chatting_sender:SetShow(true)
     local chat_contentPosX = 0
-    if chatting_Icon:GetTextSizeX() ~= 0 then
+    if chatting_Icon:GetShow() == true then
       chat_contentPosX = 15
-      chatting_sender:SetPosX(chatting_Icon:GetTextSizeX() + chat_contentPosX)
+      chatting_sender:SetPosX(chatting_Icon:GetSizeX() + chat_contentPosX)
     else
       chat_contentPosX = 10
       chatting_sender:SetPosX(chat_contentPosX)
     end
     chatting_Icon:SetPosY()
     local contentindex = 1
-    local textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-    local textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+    local textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+    local textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
     local msgstartindex = 0
     local checkFinishItemWebSite = false
     local atStart = 1000000
@@ -181,22 +184,22 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   (chatting_contents[contentindex]):SetShow(true)
                   j = 1
                   isWhile = false
-                  textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-                  textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                  textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+                  textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
                   while 1 do
-                    if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
+                    if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX() then
                       isWhile = true
                       textStaticSizeX = textStaticSizeX - (chatting_contents[contentindex - j]):GetSizeX()
                       textStaticPosX = textStaticPosX + (chatting_contents[contentindex - j]):GetSizeX()
                     end
-                    if (chatting_contents[contentindex - j]):GetPosX() <= chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX then
+                    if (chatting_contents[contentindex - j]):GetPosX() <= chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX then
                       break
                     end
                     j = j + 1
                   end
                   if textStaticSizeX <= 0 or isWhile == false then
-                    textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-                    textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                    textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+                    textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
                   end
                   ;
                   (chatting_contents[contentindex]):SetSize(chatting_sender:GetSizeY(), chatting_sender:GetSizeY())
@@ -204,13 +207,13 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   (chatting_contents[contentindex]):SetPosX(textStaticPosX)
                   emoNum = emoNum + 1
                   contentindex = contentindex + 1
-                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC510: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC510: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC510: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC504: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC510: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -231,24 +234,24 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                   ;
                   (chatting_contents[contentindex]):SetShow(true)
-                  textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-                  textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                  textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+                  textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
                   j = 1
                   isWhile = false
                   while 1 do
-                    if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
+                    if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX() then
                       isWhile = true
                       textStaticSizeX = textStaticSizeX - (chatting_contents[contentindex - j]):GetSizeX()
                       textStaticPosX = textStaticPosX + (chatting_contents[contentindex - j]):GetSizeX()
                     end
-                    if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
+                    if chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
                       break
                     end
                     j = j + 1
                   end
                   if textStaticSizeX == 0 or isWhile == false then
-                    textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-                    textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                    textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+                    textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
                   end
                   ;
                   (chatting_contents[contentindex]):SetSize(textStaticSizeX, chatting_sender:GetSizeY())
@@ -270,15 +273,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                     do
                       msgDataLen = 0
                       contentindex = contentindex + 1
-                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                      -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC678: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC684: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end
@@ -291,9 +294,9 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 (chatting_contents[contentindex - 1]):SetSize((chatting_contents[contentindex - 1]):GetSizeX(), chatting_sender:GetSizeY())
               end
               msgstartindex = emoticonindex
-              -- DECOMPILER ERROR at PC703: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC709: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC703: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC709: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -462,24 +465,24 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
               end
             end
             local j = 1
-            textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-            textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+            textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+            textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
             j = 1
             isWhile = false
             while 1 do
-              if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
+              if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX() then
                 isWhile = true
                 textStaticSizeX = textStaticSizeX - (chatting_contents[contentindex - j]):GetSizeX()
                 textStaticPosX = textStaticPosX + (chatting_contents[contentindex - j]):GetSizeX()
               end
-              if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
+              if chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
                 break
               end
               j = j + 1
             end
             if textStaticSizeX == 0 or isWhile == false then
-              textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-              textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+              textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+              textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
             end
             ;
             (chatting_contents[contentindex]):SetSize(textStaticSizeX, chatting_sender:GetSizeY())
@@ -502,15 +505,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 do
                   msgDataLen = 0
                   contentindex = contentindex + 1
-                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC1136: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC1136: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC1136: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC1136: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC1130: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC1136: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -532,27 +535,27 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
             (chatting_contents[index]):SetPosY(PosY - (chatting_contents[index]):GetSizeY() - (deltaPosY))
             ;
             (chatting_contents[index]):SetShow(true)
-            if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[index]):GetPosX() then
+            if chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[index]):GetPosX() then
               PosY = PosY - (chatting_contents[index]):GetSizeY()
               if index ~= 1 then
-                (chatting_contents[index]):SetPosX(chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX)
+                (chatting_contents[index]):SetPosX(chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX)
               end
             end
           end
           chatting_Icon:SetPosY(PosY - (deltaPosY))
           chatting_sender:SetPosY(PosY - (deltaPosY))
           PosY = PosY - 3
-          -- DECOMPILER ERROR at PC1251: Overwrote pending register: R34 in 'AssignReg'
+          -- DECOMPILER ERROR at PC1257: Overwrote pending register: R34 in 'AssignReg'
 
           chatting_contents = CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedWebSite, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, true, messageIndex)
           for index = contentindex - 1, 1, -1 do
             (chatting_contents[index]):SetPosY(PosY - (chatting_contents[index]):GetSizeY() - (deltaPosY))
             ;
             (chatting_contents[index]):SetShow(true)
-            if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[index]):GetPosX() then
+            if chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[index]):GetPosX() then
               PosY = PosY - (chatting_contents[index]):GetSizeY()
               if index ~= 1 then
-                (chatting_contents[index]):SetPosX(chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX)
+                (chatting_contents[index]):SetPosX(chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX)
               end
             end
           end
@@ -598,101 +601,148 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
   end
 end
 
-UiPrivateChatType = function(chatType, chatting_Icon, msgColor, isChatDivision, sender, senderStr)
+UiPrivateChatType = function(chatType, chatting_Icon, msgColor, isChatDivision, sender, senderStr, poolCurrentUI)
   -- function num : 0_1 , upvalues : UI_CT
   if UI_CT.Private == chatType then
-    chatting_Icon:SetFontColor(msgColor)
     if isChatDivision then
-      chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_WHISPER"))
+      local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 58, 29, 87, 58)
+      ;
+      (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+      chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
     else
-      chatting_Icon:SetText("")
-    end
-  else
-    if UI_CT.System == chatType then
-      chatting_Icon:SetFontColor(msgColor)
-      chatting_Icon:SetText("")
-    else
-      if UI_CT.World == chatType then
-        chatting_Icon:SetFontColor(msgColor)
-        if isChatDivision then
-          chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_CHANNEL"))
+      do
+        chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+        chatting_Icon:SetShow(false)
+        if UI_CT.System == chatType then
+          senderStr = " "
+          local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 29, 0, 58, 30)
+          ;
+          (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+          chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
         else
-          chatting_Icon:SetText("")
-        end
-      else
-        if UI_CT.Public == chatType then
-          chatting_Icon:SetFontColor(msgColor)
-          if isChatDivision then
-            chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_NORMAL"))
-          else
-            chatting_Icon:SetText("")
-          end
-        else
-          if UI_CT.Party == chatType then
-            chatting_Icon:SetFontColor(msgColor)
-            if isChatDivision then
-              chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_PARTY"))
-            else
-              chatting_Icon:SetText("")
-            end
-          else
-            if UI_CT.Guild == chatType then
-              chatting_Icon:SetFontColor(msgColor)
+          do
+            if UI_CT.World == chatType then
               if isChatDivision then
-                chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_GUILD"))
+                local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 58, 58, 87, 87)
+                ;
+                (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
               else
-                chatting_Icon:SetText("")
-              end
-            else
-              if UI_CT.WorldWithItem == chatType then
-                chatting_Icon:SetFontColor(msgColor)
-                if isChatDivision then
-                  chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_WORLD"))
-                else
-                  chatting_Icon:SetText("")
-                end
-              else
-                if UI_CT.Battle == chatType then
-                  chatting_Icon:SetFontColor(msgColor)
-                  if isChatDivision then
-                    chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_COMBAT"))
-                    if PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_COMBAT") == "[" .. sender .. "]" then
-                      senderStr = ": "
-                    end
-                  else
-                    chatting_Icon:SetText("")
-                  end
-                else
-                  if UI_CT.LocalWar == chatType then
-                    chatting_Icon:SetFontColor(msgColor)
+                do
+                  chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                  chatting_Icon:SetShow(false)
+                  if UI_CT.Public == chatType then
                     if isChatDivision then
-                      chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_LOCALWAR"))
+                      local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 0, 1, 29, 30)
+                      ;
+                      (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                      chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
                     else
-                      chatting_Icon:SetText("")
-                    end
-                  else
-                    if UI_CT.RolePlay == chatType then
-                      chatting_Icon:SetFontColor(msgColor)
-                      if isChatDivision then
-                        chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_ROLEPLAY"))
-                      else
-                        chatting_Icon:SetText("")
-                      end
-                    else
-                      if UI_CT.Arsha == chatType then
-                        chatting_Icon:SetFontColor(msgColor)
-                        if isChatDivision then
-                          chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_ARSHA"))
-                        else
-                          chatting_Icon:SetText("")
-                        end
-                      else
-                        if UI_CT.Team == chatType then
-                          chatting_Icon:SetFontColor(msgColor)
+                      do
+                        chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                        chatting_Icon:SetShow(false)
+                        if UI_CT.Party == chatType then
                           if isChatDivision then
-                            chatting_Icon:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_TEAM"))
+                            local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 87, 0, 116, 30)
+                            ;
+                            (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                            chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
                           else
-                            chatting_Icon:SetText("")
+                            do
+                              chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                              chatting_Icon:SetShow(false)
+                              if UI_CT.Guild == chatType then
+                                if isChatDivision then
+                                  local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 0, 60, 30, 89)
+                                  ;
+                                  (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                  chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+                                else
+                                  do
+                                    chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                                    chatting_Icon:SetShow(false)
+                                    if UI_CT.WorldWithItem == chatType then
+                                      if isChatDivision then
+                                        local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 58, 0, 87, 30)
+                                        ;
+                                        (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                        chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+                                      else
+                                        do
+                                          chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                                          chatting_Icon:SetShow(false)
+                                          if UI_CT.Battle == chatType then
+                                            if isChatDivision then
+                                              local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 0, 0, 29, 30)
+                                              ;
+                                              (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                              chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+                                            else
+                                              do
+                                                chatting_Icon:SetShow(false)
+                                                chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                                                if UI_CT.LocalWar == chatType then
+                                                  if isChatDivision then
+                                                    local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 29, 58, 58, 88)
+                                                    ;
+                                                    (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                    chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+                                                  else
+                                                    do
+                                                      chatting_Icon:SetShow(false)
+                                                      chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                                                      if UI_CT.RolePlay == chatType then
+                                                        if isChatDivision then
+                                                          local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 29, 29, 58, 59)
+                                                          ;
+                                                          (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                          chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+                                                        else
+                                                          do
+                                                            chatting_Icon:SetShow(false)
+                                                            chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                                                            if UI_CT.Arsha == chatType then
+                                                              if isChatDivision then
+                                                                local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 29, 58, 58, 88)
+                                                                ;
+                                                                (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+                                                              else
+                                                                do
+                                                                  chatting_Icon:SetShow(false)
+                                                                  chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                                                                  if UI_CT.Team == chatType then
+                                                                    if isChatDivision then
+                                                                      local x1, y1, x2, y2 = setTextureUV_Func(chatting_Icon, 0, 29, 29, 59)
+                                                                      ;
+                                                                      (chatting_Icon:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                      chatting_Icon:setRenderTexture(chatting_Icon:getBaseTexture())
+                                                                    else
+                                                                      do
+                                                                        chatting_Icon:SetShow(false)
+                                                                        chatting_Icon:SetSize(0, chatting_Icon:GetSizeY())
+                                                                      end
+                                                                    end
+                                                                  end
+                                                                end
+                                                              end
+                                                            end
+                                                          end
+                                                        end
+                                                      end
+                                                    end
+                                                  end
+                                                end
+                                              end
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
+                                  end
+                                end
+                              end
+                            end
                           end
                         end
                       end
@@ -708,8 +758,63 @@ UiPrivateChatType = function(chatType, chatting_Icon, msgColor, isChatDivision, 
   end
 end
 
+GetMessageFontColor = function(msg, color)
+  -- function num : 0_2
+  local Message = msg
+  if color == nil then
+    local fontColor = ""
+    while 1 do
+      while 1 do
+        while 1 do
+          if (string.len)(Message) > 0 then
+            local startIdx, endIdx = (string.find)(Message, "<PAColor")
+            if startIdx ~= nil and endIdx ~= nil then
+              local tempIdx, destIdx = (string.find)(Message, "<PAOldColor>")
+              if tempIdx ~= nil and destIdx ~= nil then
+                Message = (string.sub)(Message, destIdx + 1, (string.len)(Message))
+                -- DECOMPILER ERROR at PC38: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                -- DECOMPILER ERROR at PC38: LeaveBlock: unexpected jumping out IF_STMT
+
+                -- DECOMPILER ERROR at PC38: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                -- DECOMPILER ERROR at PC38: LeaveBlock: unexpected jumping out IF_STMT
+
+                -- DECOMPILER ERROR at PC38: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                -- DECOMPILER ERROR at PC38: LeaveBlock: unexpected jumping out IF_STMT
+
+              end
+            end
+          end
+        end
+        fontColor = (string.sub)(Message, startIdx, endIdx + 11)
+        return fontColor
+      end
+      do
+        do
+          do return nil end
+          -- DECOMPILER ERROR at PC50: LeaveBlock: unexpected jumping out DO_STMT
+
+        end
+      end
+    end
+    return nil
+  else
+    do
+      local startIdx, endIdx = (string.find)(Message, "<PAOldColor>")
+      if startIdx ~= nil and endIdx ~= nil then
+        Message = (string.sub)(Message, endIdx + 1, (string.len)(Message))
+        return GetMessageFontColor(Message, nil)
+      else
+        return color
+      end
+    end
+  end
+end
+
 CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedWebSite, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, isFinishItemWebSite, messageIndex)
-  -- function num : 0_2 , upvalues : UI_TM, UI_CT, UI_color
+  -- function num : 0_3 , upvalues : UI_TM, UI_CT, UI_color
   local checkFinishItemWebSite = false
   local atStart = 1000000
   local atEnd = -1
@@ -742,7 +847,7 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
   local textStaticSizeX = 0
   local textStaticPosX = 0
   local chat_contentAddPosX = 0
-  if chatting_Icon:GetTextSizeX() ~= 0 then
+  if chatting_Icon:GetShow() then
     chat_contentAddPosX = 15
   else
     chat_contentAddPosX = 10
@@ -754,8 +859,9 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
           local msgData = (string.sub)(msg, msgstartindex + 1, (string.len)(msg))
           local msgDataLen = (string.len)(msgData)
           local checkmsg = {}
+          local ispreEmoticonIndex = contentindex
           do
-            local ispreEmoticonIndex = contentindex
+            local fontColor = nil
             while 1 do
               if msgDataLen > 0 then
                 chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
@@ -765,24 +871,24 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
                 (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                 ;
                 (chatting_contents[contentindex]):SetShow(true)
-                textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-                textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+                textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
                 j = 1
                 isWhile = false
                 while 1 do
-                  if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
+                  if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX() then
                     isWhile = true
                     textStaticSizeX = textStaticSizeX - (chatting_contents[contentindex - j]):GetSizeX()
                     textStaticPosX = textStaticPosX + (chatting_contents[contentindex - j]):GetSizeX()
                   end
-                  if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
+                  if chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
                     break
                   end
                   j = j + 1
                 end
                 if textStaticSizeX == 0 or isWhile == false then
-                  textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-                  textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+                  textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+                  textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
                 end
                 ;
                 (chatting_contents[contentindex]):SetSize(textStaticSizeX, chatting_sender:GetSizeY())
@@ -794,6 +900,13 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
                 end
                 ;
                 (chatting_contents[contentindex]):SetText(checkmsg)
+                if fontColor ~= nil then
+                  (chatting_contents[contentindex]):SetText((string.format)("%s%s", fontColor, checkmsg))
+                else
+                  ;
+                  (chatting_contents[contentindex]):SetText(checkmsg)
+                end
+                fontColor = GetMessageFontColor(checkmsg, fontColor)
                 if (string.len)(checkmsg) < (string.len)(msgData) then
                   local msgStr = (string.sub)(msgData, (string.len)(checkmsg) + 1, (string.len)(msgData))
                   msgData = msgStr
@@ -802,15 +915,15 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
                   do
                     msgDataLen = 0
                     contentindex = contentindex + 1
-                    -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -823,13 +936,13 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
               (chatting_contents[contentindex - 1]):SetSize((chatting_contents[contentindex - 1]):GetSizeX(), chatting_sender:GetSizeY())
             end
             msgstartindex = (string.len)(msg)
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC280: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC280: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC280: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC280: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -996,24 +1109,24 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
             end
           end
         end
-        textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-        textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+        textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+        textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
         j = 1
         isWhile = false
         while 1 do
-          if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX() then
+          if contentindex > 1 and (chatting_contents[contentindex - j]):GetSizeX() < panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX() then
             isWhile = true
             textStaticSizeX = textStaticSizeX - (chatting_contents[contentindex - j]):GetSizeX()
             textStaticPosX = textStaticPosX + (chatting_contents[contentindex - j]):GetSizeX()
           end
-          if chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
+          if chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX == (chatting_contents[contentindex - j]):GetPosX() then
             break
           end
           j = j + 1
         end
         if textStaticSizeX == 0 or isWhile == false then
-          textStaticSizeX = panelSizeX - chatting_Icon:GetTextSizeX() - chatting_sender:GetTextSizeX()
-          textStaticPosX = chatting_Icon:GetTextSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
+          textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
+          textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
         end
         ;
         (chatting_contents[contentindex]):SetSize(textStaticSizeX, chatting_sender:GetSizeY())
@@ -1033,15 +1146,15 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
           do
             msgDataLen = 0
             contentindex = contentindex + 1
-            -- DECOMPILER ERROR at PC710: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC732: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC710: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC732: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC710: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC732: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC710: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC732: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC710: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC732: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end

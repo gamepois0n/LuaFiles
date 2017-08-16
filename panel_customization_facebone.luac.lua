@@ -3,7 +3,6 @@
 
 -- params : ...
 -- function num : 0
-local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local RadioButton_Bone_Trans = (UI.getChildControl)(Panel_CustomizationTransform, "RadioButton_Bone_Trans")
 local RadioButton_Bone_Rot = (UI.getChildControl)(Panel_CustomizationTransform, "RadioButton_Bone_Rot")
 local RadioButton_Bone_Scale = (UI.getChildControl)(Panel_CustomizationTransform, "RadioButton_Bone_Scale")
@@ -492,12 +491,7 @@ CloseBoneSculptingSelector = function()
 end
 
 OpenFaceShapeUi = function(classType, uiId)
-  -- function num : 0_23 , upvalues : UI_GroupType, currentclassType, currentuiId, Button_Slider_TransX, Button_Slider_TransY, Button_Slider_TransZ, Button_Slider_RotX, Button_Slider_RotY, Button_Slider_RotZ, Button_Slider_ScaleX, Button_Slider_ScaleY, Button_Slider_ScaleZ, CheckButton_Symmetry, CheckButton_ControlPart, Button_Part_Reset, Button_All_Reset
-  Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
-  ClearAll_CustomizationUIGroup(0)
-  Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
-  Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
-  Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
+  -- function num : 0_23 , upvalues : currentclassType, currentuiId
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
@@ -506,22 +500,6 @@ OpenFaceShapeUi = function(classType, uiId)
   startFacePickingMode()
   EnableFaceSlide(false)
   showBoneSculptingSelector(true)
-  local maxcountx = 2
-  local maxcounty = 11
-  Add_CustomizationUIControl(0, 0, 0, 0, maxcountx, maxcounty, Button_Slider_TransX)
-  Add_CustomizationUIControl(0, 0, 0, 1, maxcountx, maxcounty, Button_Slider_TransY)
-  Add_CustomizationUIControl(0, 0, 0, 2, maxcountx, maxcounty, Button_Slider_TransZ)
-  Add_CustomizationUIControl(0, 0, 0, 3, maxcountx, maxcounty, Button_Slider_RotX)
-  Add_CustomizationUIControl(0, 0, 0, 4, maxcountx, maxcounty, Button_Slider_RotY)
-  Add_CustomizationUIControl(0, 0, 0, 5, maxcountx, maxcounty, Button_Slider_RotZ)
-  Add_CustomizationUIControl(0, 0, 0, 6, maxcountx, maxcounty, Button_Slider_ScaleX)
-  Add_CustomizationUIControl(0, 0, 0, 7, maxcountx, maxcounty, Button_Slider_ScaleY)
-  Add_CustomizationUIControl(0, 0, 0, 8, maxcountx, maxcounty, Button_Slider_ScaleZ)
-  Add_CustomizationUIControl(0, 0, 0, 9, maxcountx, maxcounty, CheckButton_Symmetry)
-  Add_CustomizationUIControl(0, 0, 1, 9, maxcountx, maxcounty, CheckButton_ControlPart)
-  Add_CustomizationUIControl(0, 0, 0, 10, maxcountx, maxcounty, Button_Part_Reset)
-  Add_CustomizationUIControl(0, 0, 1, 10, maxcountx, maxcounty, Button_All_Reset)
-  Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 9)
 end
 
 CloseFaceShapeUi = function()

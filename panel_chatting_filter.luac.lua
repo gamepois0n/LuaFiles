@@ -219,18 +219,19 @@ ChattingFilter_InsertFilterString = function()
   -- function num : 0_6 , upvalues : ChattingFilter
   local self = ChattingFilter
   local filterString = ((self.ui).edit_Filter):GetEditText()
-  if filterString == nil or filterString == "" or filterString == " " then
+  if ToClient_InsertBlockStringList(filterString) == false then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_FILTER_NOWORD_ACK"))
+    ;
+    ((self.ui).edit_Filter):SetEditText("", true)
     return 
   end
-  ToClient_InsertBlockStringList((string.sub)(tostring(filterString), 1, 50))
   ;
   ((self.ui).edit_Filter):SetEditText("", true)
-  -- DECOMPILER ERROR at PC38: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC33: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self.config).totalFilterCount = ToClient_getBlockStringListCount()
-  -- DECOMPILER ERROR at PC49: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC44: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self.config).startIndex = (math.max)((self.config).totalFilterCount - (self.config).maxFilterCount, 0)

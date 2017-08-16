@@ -188,353 +188,353 @@ CppEnums.ServantStateType = {Type_Stable = 0, Type_Field = 1, Type_RegisterMarke
 -- DECOMPILER ERROR at PC3213: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ServantToRewardType = {Type_Money = 0, Type_Experience = 1}
--- DECOMPILER ERROR at PC3340: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3346: Confused about usage of register: R0 in 'UnsetPending'
 
-CppEnums.VehicleType = {Type_Horse = 0, Type_Cannon = 1, Type_Camel = 2, Type_Donkey = 3, Type_Elephant = 4, Type_Bomb = 5, Type_Ladder = 7, Type_Carriage = 9, Type_QuestObjectSheep = 10, Type_QuestObjectCart = 11, Type_QuestObjectOak = 13, Type_QuestObjectBox = 14, Type_QuestObjectSack = 15, Type_QuestObjectBoat = 16, Type_QuestObjectPumpkin = 17, Type_Boat = 18, Type_QuestObjectBrokenFrag = 19, Type_QuestObjectHerbalMachines = 24, Type_QuestObjectExtractor = 25, Type_Cow = 26, Type_CowCarriage = 28, Type_Raft = 29, Type_Cat = 30, Type_Dog = 31, Type_MountainGoat = 32, Type_FishingBoat = 33, Type_SailingBoat = 34, Type_Train = 35, Type_BabyElephant = 36, Type_ThrowStone = 37, Type_PracticeCannon = 38, Type_ThrowFire = 39, Type_RidableBabyElephant = 40, Type_WoodenFence = 41, Type_SiegeTower = 42, Type_LargeSiegeTower = 43, Type_PersonalBattleShip = 44, Type_PersonTradeShip = 46, Type_CampingTent = 47, Type_RepairableCarriage = 48, Type_Bungalow = 49}
--- DECOMPILER ERROR at PC3383: Confused about usage of register: R0 in 'UnsetPending'
+CppEnums.VehicleType = {Type_Horse = 0, Type_Cannon = 1, Type_Camel = 2, Type_Donkey = 3, Type_Elephant = 4, Type_Bomb = 5, Type_Ladder = 7, Type_Carriage = 9, Type_QuestObjectSheep = 10, Type_QuestObjectCart = 11, Type_QuestObjectOak = 13, Type_QuestObjectBox = 14, Type_QuestObjectSack = 15, Type_QuestObjectBoat = 16, Type_QuestObjectPumpkin = 17, Type_Boat = 18, Type_QuestObjectBrokenFrag = 19, Type_QuestObjectHerbalMachines = 24, Type_QuestObjectExtractor = 25, Type_Cow = 26, Type_CowCarriage = 28, Type_Raft = 29, Type_Cat = 30, Type_Dog = 31, Type_MountainGoat = 32, Type_FishingBoat = 33, Type_SailingBoat = 34, Type_Train = 35, Type_BabyElephant = 36, Type_ThrowStone = 37, Type_PracticeCannon = 38, Type_ThrowFire = 39, Type_RidableBabyElephant = 40, Type_WoodenFence = 41, Type_SiegeTower = 42, Type_LargeSiegeTower = 43, Type_PersonalBattleShip = 44, Type_PersonTradeShip = 46, Type_CampingTent = 47, Type_RepairableCarriage = 48, Type_Bungalow = 49, Type_Summer = 50, Type_Bungalow = 51}
+-- DECOMPILER ERROR at PC3389: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ServantKind = {Type_Horse = 0, Type_Camel = 1, Type_Donkey = 2, Type_Elephant = 3, Type_TwoWheelCarriage = 4, Type_FourWheeledCarriage = 5, Type_Ship = 6, Type_Cat = 7, Type_Dog = 8, Type_MountainGoat = 9, Type_Raft = 10, Type_FishingBoat = 11, Type_Count = 12}
--- DECOMPILER ERROR at PC3402: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3408: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ServantType = {Type_Vehicle = 0, Type_Ship = 1, Type_Pet = 2, Type_CampingTent = 3, Type_Count = 4}
--- DECOMPILER ERROR at PC3418: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3424: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ServantStatType = {Type_Acceleration = 0, Type_MaxMoveSpeed = 1, Type_CorneringSpeed = 2, Type_BrakeSpeed = 3}
--- DECOMPILER ERROR at PC3452: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3458: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WEATHER_SYSTEM_FACTOR_TYPE = {eWSFT_HUMIDITY = 0, eWSFT_CELSIUS = 1, eWSFT_CLOUD_RATE = 2, eWSFT_RAIN_AMOUNT = 3, eWSFT_WIND_DIR = 4, eWSFT_WIND_FORCE = 5, eWSFT_WATER = 6, eWSFT_OIL = 7, eWSFT_GRASS = 8, eWSFT_MAX = 9}
--- DECOMPILER ERROR at PC3489: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3495: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.NpcWorkingType = {eNpcWorkingType_PlantZone = 0, eNpcWorkingType_Upgrade = 1, eNpcWorkingType_PlantRentHouse = 2, eNpcWorkingType_ChangeTown = 3, eNpcWorkingType_PlantBuliding = 4, eNpcWorkingType_RegionManaging = 5, eNpcWorkingType_PlantRentHouseLargeCraft = 6, eNpcWorkingType_HouseParty = 7, eNpcWorkingType_GuildHouseLargeCraft = 8, eNpcWorkingType_HarvestWorking = 9, eNpcWorkingType_Count = 10}
--- DECOMPILER ERROR at PC3505: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3511: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.NpcWorkingState = {eNpcWorkingState_Undefined = -1, eNpcWorkingState_HarvestWorking_MoveTo = 900, eNpcWorkingState_HarvestWorking_Working = 901, eNpcWorkingState_HarvestWorking_Return = 902}
--- DECOMPILER ERROR at PC3521: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3527: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.RegionManagingType = {eRegionManagingType_Loyalty = 0, eRegionManagingType_Farming = 1, eRegionManagingType_Fishing = 2, eRegionManagingType_Count = 3}
--- DECOMPILER ERROR at PC3621: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3627: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ContentsType = {Contents_Quest = 0, Contents_NewQuest = 1, Contents_Shop = 2, Contents_Skill = 3, Contents_Repair = 4, Contents_Auction = 5, Contents_Inn = 6, Contents_Warehouse = 7, Contents_IntimacyGame = 8, Contents_Stable = 9, Contents_Transfer = 10, Contents_Guild = 11, Contents_Explore = 12, Contents_DeliveryPerson = 13, Contents_Enchant = 14, Contents_Socket = 15, Contents_Awaken = 16, Contents_ReAwaken = 17, Contents_LordMenu = 18, Contents_Extract = 19, Contents_TerritoryTrade = 20, Contents_TerritorySupply = 21, Contents_GuildShop = 22, Contents_ItemMarket = 23, Contents_Knowledge = 24, Contents_HelpDesk = 25, Contents_SupplyShop = 26, Contents_MinorLordMenu = 27, Contents_FishSupplyShop = 28, Contents_Join = 29, Contents_GuildSupplyShop = 30, Contents_Improve = 31}
--- DECOMPILER ERROR at PC3637: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3643: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.TransferType = {TransferType_Normal = 0, TransferType_Self = 1, TransferType_Guild = 2, TransferType_Count = 3}
--- DECOMPILER ERROR at PC3665: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3671: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.AuctionType = {AuctionGoods_Item = 0, AuctionGoods_WorkerNpc = 1, AuctionGoods_House = 2, AuctionGoods_ServantMating = 3, AuctionGoods_ServantMarket = 4, AuctionGoods_TerritoryTradeAuthority = 5, AuctionGoods_Villa = 6, AuctionGoods_Count = 7}
--- DECOMPILER ERROR at PC3723: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3729: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.AuctionTabType = {AuctionTab_SellItem = 0, AuctionTab_SellHouse = 1, AuctionTab_BuyItem = 2, AuctionTab_MySellPage = 3, AuctionTab_MyBuyPage = 4, AuctionTab_MyBidPage = 5, AuctionTab_tradeTapRate = 6, AuctionTab_ServantMating = 7, AuctionTab_ServantMarket = 8, AuctionTab_MyServantMating = 9, AuctionTab_MyServantMarket = 10, AuctionTab_TerritoryTradeAuthority = 11, AuctionTab_Worker = 12, AuctionTab_MyWorker = 13, AuctionTab_SellVilla = 14, AuctionTab_Pet = 15, AuctionTab_MyPet = 16, AuctionTab_Count = 17}
--- DECOMPILER ERROR at PC3742: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3748: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WaitWorkerSortMethod = {eSortWorkSpeed = 0, eSortMoveSpeed = 1, eSortLuck = 2, eSortActionPoint = 3, eSortMax = 4}
--- DECOMPILER ERROR at PC3758: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3764: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuestType = {QuestType_Progress = 0, QuestType_Normal_Cleared = 1, QuestType_Sub_Cleared = 2, QuestType_DoGuide = 3}
--- DECOMPILER ERROR at PC3795: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3801: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.NaviMaterialType = {NaviMaterialType_Normal = 0, NaviMaterialType_Road = 1, NaviMaterialType_Snow = 2, NaviMaterialType_Desert = 3, NaviMaterialType_Swamp = 4, NaviMaterialType_Object = 5, NaviMaterialType_Water = 6, NaviMaterialType_Grass = 7, NaviMaterialType_UnderWater = 8, NaviMaterialType_Air = 9, NaviMaterialType_Ocean = 10}
--- DECOMPILER ERROR at PC3919: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3925: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.SpawnType = {eSpawnType_NormalNpc = 0, eSpawnType_SkillTrainer = 1, eSpawnType_ItemRepairer = 2, eSpawnType_ShopMerchant = 3, eSpawnType_ImportantNpc = 4, eSpawnType_TradeMerchant = 5, eSpawnType_WareHouse = 6, eSpawnType_Stable = 7, eSpawnType_Wharf = 8, eSpawnType_transfer = 9, eSpawnType_intimacy = 10, eSpawnType_guild = 11, eSpawnType_explorer = 12, eSpawnType_inn = 13, eSpawnType_auction = 14, eSpawnType_mating = 15, eSpawnType_Potion = 16, eSpawnType_Weapon = 17, eSpawnType_Jewel = 18, eSpawnType_Furniture = 19, eSpawnType_Collect = 20, eSpawnType_Fish = 21, eSpawnType_Worker = 22, eSpawnType_Alchemy = 23, eSpawnType_GuildShop = 24, eSpawnType_ItemMarket = 25, eSpawnType_TerritorySupply = 26, eSpawnType_TerritoryTrade = 27, eSpawnType_Smuggle = 28, eSpawnType_Cook = 29, eSpawnType_PC = 30, eSpawnType_Grocery = 31, eSpawnType_RandomShop = 32, eSpawnType_SupplyShop = 33, eSpawnType_RandomShopDay = 34, eSpawnType_FishSupplyShop = 35, eSpawnType_GuildSupplyShop = 36, eSpawnType_GuildStable = 37, eSpawnType_GuildWharf = 38, eSpawnType_Count = 39}
--- DECOMPILER ERROR at PC3947: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3953: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.RegionType = {eRegionType_MinorTown = 0, eRegionType_MainTown = 1, eRegionType_Hunting = 2, eRegionType_Siege = 3, eRegionType_Fortress = 4, eRegionType_CastleInSiege = 5, eRegionType_Arena = 6, eRegionType_Count = 7}
--- DECOMPILER ERROR at PC3984: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC3990: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.DialogState = {eDialogState_ReContact = "0", eDialogState_QuestComplete = "1", eDialogState_QuestList = "2", eDialogState_DisplayQuest = "3", eDialogState_AcceptQuest = "4", eDialogState_RefuseQuest = "5", eDialogState_ProgressQuest = "6", eDialogState_RestartQuest = "7", eDialogState_Function = "8", eDialogState_Talk = "9", eDialogState_Count = "10"}
--- DECOMPILER ERROR at PC4009: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4015: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WarehoouseFromType = {eWarehoouseFromType_Npc = 0, eWarehoouseFromType_Worldmap = 1, eWarehoouseFromType_Installation = 2, eWarehoouseFromType_GuildHouse = 3, eWarehoouseFromType_Maid = 4, eWarehoouseFromType_Manufacture = 5, eWarehoouseFromType_Count = 6}
--- DECOMPILER ERROR at PC4034: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4040: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PcWorkType = {ePcWorkType_Empty = 0, ePcWorkType_Play = 1, ePcWorkType_RepairItem = 2, ePcWorkType_Delivery = 3, ePcWorkType_Relax = 4, ePcWorkType_ReadBook = 5, ePcWorkType_Count = 6}
--- DECOMPILER ERROR at PC4044: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4050: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.MatchType = {Pvp = 0, Race = 1}
--- DECOMPILER ERROR at PC4078: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4084: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ItemWhereType = {eInventory = 0, eEquip = 1, eWarehouse = 2, eServantInventory = 4, eServantEquip = 5, eGuildWarehouse = 14, eCashInventory = 17, eInventoryBag = 19, eCashInventoryBag = 20, eCount = 21}
--- DECOMPILER ERROR at PC4094: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4100: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuickSlotType = {eEmpty = 0, eItem = 1, eSkill = 2, eCashItem = 3}
--- DECOMPILER ERROR at PC4110: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4116: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CharacterInfoDisplayType = {eCharacterInfoDisplayType_None = 0, eCharacterInfoDisplayType_Bandit = 1, eCharacterInfoDisplayType_Whale = 2, eCharacterInfoDisplayType_Count = 3}
--- DECOMPILER ERROR at PC4132: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4138: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.MoveItemToType = {Type_Vehicle = 0, Type_Ship = 1, Type_Pet = 2, Type_Player = 3, Type_Warehouse = 4, Type_Count = 5}
--- DECOMPILER ERROR at PC4154: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4160: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.DropType = {Type_DeadBodyActor = 0, Type_CollectInfo = 1, Type_Fishing = 2, Type_Harvest = 3, Type_Steal = 4, Type_CollectUseTool = 5}
--- DECOMPILER ERROR at PC4179: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4185: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.TaxType = {eTaxType_BuyItemFromSystem = 0, eTaxType_BuyItemFromConsignment = 1, eTaxType_BuyHorseFromServantMarket = 2, eTaxType_BuyHorseFromServantMating = 3, eTaxType_DeliverItemByPublicWagon = 4, eTaxTypeSellItemToItemMarket = 5, eTaxType_Count = 6}
--- DECOMPILER ERROR at PC4207: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4213: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuestButtonType = {eQuest_BlackSpirit = 0, eQuest_Story = 1, eQuest_Normal = 2, eQuest_Explore = 3, eQuest_Trading = 4, eQuest_Product = 5, eQuest_Repeat = 6, eQuest_Count = 7}
--- DECOMPILER ERROR at PC4235: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4241: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.DialogQuestButtonType = {eDialogButton_QuestBlackSpirit = 0, eDialogButton_QuestStory = 1, eDialogButton_QuestNormal = 2, eDialogButton_QuestExplore = 3, eDialogButton_QuestTrading = 4, eDialogButton_QuestProduct = 5, eDialogButton_QuestRepeat = 6, eDialogButton_QuestCount = 7}
--- DECOMPILER ERROR at PC4260: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4266: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.DialogButtonType = {eDialogButton_Normal = 0, eDialogButton_Knowledge = 1, eDialogButton_Function = 2, eDialogButton_CutScene = 3, eDialogButton_Exchange = 4, eDialogButton_ExceptExchange = 5, eDialogButton_Count = 6}
--- DECOMPILER ERROR at PC4282: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4288: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PositionGuideActorType = {ePositionGuideActorType_isGuildMember = 0, ePositionGuideActorType_isGuildMaster = 1, ePositionGuideActorType_isGuildMine = 2, ePositionGuideActorType_isPartyMember = 3, ePositionGuideActorType_isPartyMine = 4, ePositionGuideActorType_Count = 5}
--- DECOMPILER ERROR at PC4301: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4307: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.NpcWorkerState = {NWS_IDLE = 0, NWS_GOWORK = 1, NWS_WORKING = 2, NWS_GOHOME = 3, NWS_COUNT = 4}
--- DECOMPILER ERROR at PC4335: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4341: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.MouseCursorType = {eMouseCursorType_Null = 0, eMouseCursorType_Default = 1, eMouseCursorType_Item = 2, eMouseCursorType_ItemHold = 3, eMouseCursorType_Time = 4, eMouseCursorType_Repair = 5, eMouseCursorType_Interaction = 6, eMouseCursorType_Interaction_Looting = 7, eMouseCursorType_Attack = 8, eMouseCursorType_Count = 9}
--- DECOMPILER ERROR at PC4363: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4369: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.TribeType = {eTribe_Human = 0, eTribe_Ain = 1, eTribe_ETC = 2, eTribe_Boss = 3, eTribe_Reptile = 4, eTribe_Untribe = 5, eTribe_Hunting = 6, eTribe_Count = 7}
--- DECOMPILER ERROR at PC4382: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4388: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.HouseGroupLocationType = {eHouseGroupLocationType_onlyOne = 0, eHouseGroupLocationType_bottom = 1, eHouseGroupLocationType_center = 2, eHouseGroupLocationType_top = 3, eHouseGroupLocationType_Count = 4}
--- DECOMPILER ERROR at PC4581: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4587: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.InteractionType = {InteractionType_GamePlay = 0, InteractionType_ShowCharacterInfo = 1, InteractionType_ExchangeItem = 2, InteractionType_InvitedParty = 3, InteractionType_Talk = 4, InteractionType_Ride = 5, InteractionType_Control = 6, InteractionType_Looting = 7, InteractionType_Collect = 8, InteractionType_OpenDoor = 9, InteractionType_GuildWarehouse = 10, InteractionType_RebuildTent = 11, InteractionType_InstallationMode = 12, InteractionType_ShowHouseInfo = 13, InteractionType_Havest = 14, InteractionType_ParkingHorse = 15, InteractionType_EquipInstallation = 16, InteractionType_UnequipInstallation = 17, InteractionType_InventoryOpen = 18, InteractionType_ShowServantInformation = 19, InteractionType_HouseBussiness = 20, InteractionType_GuildInvite = 21, InteractionType_GuildAllianceInvite = 22, InteractionType_UseItem = 23, InteractionType_UnbuildPersonalTent = 24, InteractionType_Manufacture = 25, InteractionType_Greet = 26, InteractionType_Steal = 27, InteractionType_Lottery = 28, InteractionType_SeedHavest = 29, InteractionType_InstallationPresent = 30, InteractionType_RankerHouseList = 31, InteractionType_HavestLop = 32, InteractionType_HavestKillBug = 33, InteractionType_UninstallTrap = 34, InteractionType_Sympathetic = 35, InteractionType_Observer = 36, InteractionType_HarvestInformation = 37, InteractionType_ClanInvite = 38, InteractionType_OpenSiegeGate = 39, InteractionType_UnbuildKingOrLordTent = 40, InteractionType_Eavesdrop = 41, InteractionType_WaitComment = 42, InteractionType_TakedownCannon = 43, InteractionType_OpenWindow = 44, InteractionType_ChangeLook = 45, InteractionType_ChangeName = 46, InteractionType_RepairKingOrLordTent = 47, InteractionType_UserIntroduction = 48, InteractionType_FollowActor = 49, InteractionType_Upgrade = 50, InteractionType_PvPBattle = 51, InteractionType_SiegeObjectStart = 52, InteractionType_SiegeObjectFinish = 53, InteractionType_GateOpen = 54, InteractionType_GateClose = 55, InteractionType_UninstallBarricade = 56, InteractionType_ServantRepair = 57, InteractionType_LanternOn = 58, InteractionType_LanternOff = 59, InteractionType_Escape = 60, InteractionType_Awake = 61, InteractionType_Diving = 62, InteractionType_Bungalow = 63, InteractionType_Count = 64}
--- DECOMPILER ERROR at PC4597: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4603: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.DlgCommonConditionOperatorType = {Equal = 0, Large = 1, Small = 2, Count = 3}
--- DECOMPILER ERROR at PC4613: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4619: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CashPurchaseLimitType = {None = 0, AtCharacter = 1, AtAccount = 2, Count = 3}
--- DECOMPILER ERROR at PC4635: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4641: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.InGameCashShopPreviewType = {SelfPlayer = 0, NormalPlayerCharacter = 1, SelflVehicleCharacter = 2, NormalVehicleCharacter = 3, Others = 4, Count = 5}
--- DECOMPILER ERROR at PC4669: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4675: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.MiniGame = {eMiniGameTutorial = 2, eMiniGameHerbMachine = 3, eMiniGameBuoy = 4, eMiniGameBuyHouse = 1000, eMiniGameInvestPlant = 1001, eMiniGamePowerControl = 1003, eMiniGameExtraction = 1007, eMiniGameEditingHouse = 1008, eTutorialSitDown = 9001, eTutorialLean = 9002}
--- DECOMPILER ERROR at PC4688: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4694: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.MiniGameParam = {eMiniGameParamDefault = 0, eMiniGameParamLoggiaCorn = 151, eMiniGameParamLoggiaFarm = 26, eMiniGameParamAlehandroHoney = 432, eMiniGameParamImpCave = 25}
--- DECOMPILER ERROR at PC4719: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4725: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CashProductCategory = {eCashProductCategory_Pearl = 1, eCashProductCategory_Mileage = 2, eCashProductCategory_Normal = 3, eCashProductCategory_Costumes = 4, eCashProductCategory_Furniture = 5, eCashProductCategory_Servant = 6, eCashProductCategory_Pet = 7, eCashProductCategory_Beauty = 8, eCashProductCategory_HotNew = 9}
--- DECOMPILER ERROR at PC4735: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4741: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ItemProductCategory = {eItemProductCategory_None = 0, eItemProductCategory_Customize = 1, eItemProductCategory_Revival = 2, eItemProductCategory_Count = 3}
--- DECOMPILER ERROR at PC4769: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4775: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ProductCategory = {ProductCategory_Undefined = 0, ProductCategory_Disassemble = 1, ProductCategory_Farm = 2, ProductCategory_Mine = 3, ProductCategory_LumberCamp = 4, ProductCategory_UseRecipe = 5, ProductCategory_DynamicPlant = 6, ProductCategory_RegionManager = 7, ProductCategory_LargeCraft = 8, ProductCategory_Count = 9}
--- DECOMPILER ERROR at PC4788: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4794: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.BuyItemReqTrType = {eBuyItemReqTrType_None = 0, eBuyItemReqTrType_ImmediatelyUse = 1, eBuyItemReqTrType_UiUpdate = 2, eBuyItemReqTrType_CashShopCart = 3, eBuyItemReqTrType_Count = 4}
--- DECOMPILER ERROR at PC4810: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4816: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ContentsServiceType = {eContentsServiceType_Closed = 0, eContentsServiceType_CBT = 1, eContentsServiceType_Pre = 2, eContentsServiceType_OBT = 3, eContentsServiceType_Commercial = 4, eContentsServiceType_Count = 5}
--- DECOMPILER ERROR at PC4892: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4898: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.GameServiceType = {eGameServiceType_NONE = 0, eGameServiceType_DEV = 1, eGameServiceType_KOR_ALPHA = 2, eGameServiceType_KOR_REAL = 3, eGameServiceType_KOR_TEST = 4, eGameServiceType_JPN_ALPHA = 5, eGameServiceType_JPN_REAL = 6, eGameServiceType_RUS_ALPHA = 7, eGameServiceType_RUS_REAL = 8, eGameServiceType_KR2_ALPHA = 9, eGameServiceType_KR2_REAL = 10, eGameServiceType_NA_ALPHA = 11, eGameServiceType_NA_REAL = 12, eGameServiceType_TW_ALPHA = 13, eGameServiceType_TW_REAL = 14, eGameServiceType_SA_ALPHA = 15, eGameServiceType_SA_REAL = 16, eGameServiceType_TH_ALPHA = 17, eGameServiceType_TH_REAL = 18, eGameServiceType_ID_ALPHA = 19, eGameServiceType_ID_REAL = 20, eGameServiceType_TR_ALPHA = 21, eGameServiceType_TR_REAL = 22, eGameServiceType_AE_ALPHA = 23, eGameServiceType_AE_REAL = 24, eGameServiceType_Count = 25}
--- DECOMPILER ERROR at PC4932: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4938: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ContryCode = {eContryCode_KOR = 0, eContryCode_JAP = 1, eContryCode_RUS = 2, eContryCode_KR2 = 3, eContryCode_NA = 4, eContryCode_TW = 5, eContryCode_SA = 6, eContryCode_TH = 7, eContryCode_ID = 8, eContryCode_TR = 9, eContryCode_AE = 10, eContryCode_Count = 11}
--- DECOMPILER ERROR at PC4945: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4951: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CustomizationNoCashType = {eCustomizationNoCashType_Voice = 0, eCustomizationNoCashType_Mesh = 1, eCustomizationNoCashType_Deco = 2}
--- DECOMPILER ERROR at PC4955: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4961: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CustomizationNoCashMesh = {eCustomizationNoCashMesh_Face = 0, eCustomizationNoCashMesh_Hair = 1}
--- DECOMPILER ERROR at PC4965: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4971: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CustomizationNoCashDeco = {eCustomizationNoCashDeco_FaceTattoo = 0, eCustomizationNoCashDeco_BodyTattoo = 1}
--- DECOMPILER ERROR at PC4972: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC4978: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CustomizationNoCashVoice = {eCustoimzationNoCashVoice_Type = 0}
--- DECOMPILER ERROR at PC4994: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5000: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ServantRegist = {eEventType_Inventory = 0, eEventType_Taming = 1, eEventType_Mating = 2, eEventType_ChangeName = 3, eEventType_RegisterMarket = 4, eEventType_RegisterMating = 5}
--- DECOMPILER ERROR at PC5010: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5016: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.FishEncyclopediaCategory = {eFishEncyclopediaCategory_Etc = 0, eFishEncyclopediaCategory_FreshWaterFish = 1, eFishEncyclopediaCategory_SeaFish = 2, eFishEncyclopediaCategory_Crustacea = 3}
--- DECOMPILER ERROR at PC5038: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5044: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WorldMapState = {eWMS_GLOBAL = 0, eWMS_EXPLORE_PLANT = 1, eWMS_REGION = 2, eWMS_LOCATION_INFO_WATER = 3, eWMS_LOCATION_INFO_CELCIUS = 4, eWMS_LOCATION_INFO_HUMIDITY = 5, eWMS_GUILD_WAR = 6, eWMS_PRODUCT_NODE = 7}
--- DECOMPILER ERROR at PC5072: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5078: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WorldMapCheckState = {eCheck_Quest = 0, eCheck_Knowledge = 1, eCheck_FishnChip = 2, eCheck_Node = 3, eCheck_Way = 4, eCheck_Postions = 5, eCheck_Trade = 6, eCheck_Wagon = 7, eCheck_Monster = 8, eCheck_MAX = 9}
--- DECOMPILER ERROR at PC5091: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5097: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.worldmapRenderState = {NOT_RENDER = 0, RENDER = 1, FADE_IN = 2, FADE_OUT = 3, RENDER_DEBUG = 4}
--- DECOMPILER ERROR at PC5116: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5122: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WeatherKind = {WeatherKind_Undefined = 0, WeatherKind_Water = 1, WeatherKind_Temperature = 2, WeatherKind_Humidity = 3, WeatherKind_NeedLop = 4, WeatherKind_BirdsAttack = 5, WeatherKind_Count = 6}
--- DECOMPILER ERROR at PC5132: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5138: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.HarvestGrowRateKind = {HarvestGrowRateKind_Nutrient = 0, HarvestGrowRateKind_Water = 1, HarvestGrowRateKind_Temperature = 2, HarvestGrowRateKind_Count = 3}
--- DECOMPILER ERROR at PC5145: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5151: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.GuildGrade = {GuildGrade_Clan = 0, GuildGrade_Guild = 1, GuildGrade_Count = 2}
--- DECOMPILER ERROR at PC5164: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5170: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.HouseOwnerFilter = {HOUSE_OWNER_ALL = 0, HOUSE_OWNER_MINE = 1, HOUSE_OWNER_MINE_AT = 2, HOUSE_OWNER_EMPTY = 3, HOUSE_OWNER_COUNT = 4}
--- DECOMPILER ERROR at PC5177: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5183: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.HouseUseableFilter = {HOUSE_USEABLE_ALL = 0, HOUSE_USEABLE_UPGRADE = 1, HOUSE_USEABLE_CRAFT = 2}
--- DECOMPILER ERROR at PC5193: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5199: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CheckedQuestSortMethod = {eCheckedQuestSort_TargetDistance = 0, eCheckedQuestSort_Type = 1, eCheckedQuestSort_AcceptDate = 2, eCheckedQuestSort_Max = 3}
--- DECOMPILER ERROR at PC5272: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5278: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.eHouseUseType = {Empty = 0, Lodging = 1, Depot = 2, Ranch = 3, WeaponForgingWorkshop = 4, ArmorForgingWorkshop = 5, HandMadeWorkshop = 6, WoodCraftWorkshop = 7, JewelryWorkshop = 8, ToolWorkshop = 9, Refinery = 10, ImproveWorkshop = 11, CannonWorkshop = 12, Shipyard = 13, CarriageWorkshop = 14, HorseArmorWorkshop = 15, FurnitureWorkshop = 16, LocalSpecailtiesWorkshop = 17, Wardrobe = 18, SiegeWeapons = 19, ShipParts = 20, WagonParts = 21, AssetManagementshop = 22, PotteryWorkshop = 23, Count = 24}
--- DECOMPILER ERROR at PC5297: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5303: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.DelivererType = {NotDeliverer = 0, Wagon = 1, TransportShip = 2, TradingShip = 3, WagonForPerson = 4, OfferingCarrier = 5, TypeCount = 6}
--- DECOMPILER ERROR at PC5313: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5319: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.eDeliveryProduct = {eDeliveryProduct_Empty = 0, eDeliveryProduct_Item = 1, eDeliveryProduct_Person = 2, eDeliveryProduct_Both = 3}
--- DECOMPILER ERROR at PC5329: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5335: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.VisibleNameTagType = {eVisibleNameTagType_AllwaysShow = 0, eVisibleNameTagType_ImportantShow = 1, eVisibleNameTagType_NoShow = 2, eVisibleNameTagType_Count = 3}
--- DECOMPILER ERROR at PC5354: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5360: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WatermarkServiceType = {eWatermarkServiceType_KR = 0, eWatermarkServiceType_JP = 1, eWatermarkServiceType_NA = 2, eWatermarkServiceType_RU = 3, eWatermarkServiceType_TW = 4, eWatermarkServiceType_NONE = 99, eWatermarkServiceType_Count = 6}
--- DECOMPILER ERROR at PC5373: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5379: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WatermarkPositionType = {eWatermarkPositionType_LeftUp = 0, eWatermarkPositionType_RightUp = 1, eWatermarkPositionType_LeftDown = 2, eWatermarkPositionType_RightDown = 3, eWatermarkPositionType_Count = 4}
--- DECOMPILER ERROR at PC5389: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5395: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WatermarkScaleType = {eWatermarkScaleType_Small = 0, eWatermarkScaleType_Regular = 1, eWatermarkScaleType_Large = 2, eWatermarkScaleType_Count = 3}
--- DECOMPILER ERROR at PC5402: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5408: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PetVisibleType = {ePetVisibleType_All = 0, ePetVisibleType_Mine = 1, ePetVisibleType_Hide = 2}
--- DECOMPILER ERROR at PC5418: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5424: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.NavPathEffectType = {eNavPathEffectType_None = 0, eNavPathEffectType_Arrow = 1, eNavPathEffectType_PathEffect = 2, eNavPathEffectType_Fairy = 3}
--- DECOMPILER ERROR at PC5437: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5443: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WorldMapAnimationStyle = {characterToNorthSmooth = 0, characterMaintainSmooth = 1, afterSpinNorth = 2, noAnimation = 3, count = 4}
--- DECOMPILER ERROR at PC5480: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5486: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ServiceResourceType = {eServiceResourceType_Dev = 0, eServiceResourceType_KR = 1, eServiceResourceType_EN = 2, eServiceResourceType_JP = 3, eServiceResourceType_CN = 4, eServiceResourceType_RU = 5, eServiceResourceType_FR = 6, eServiceResourceType_DE = 7, eServiceResourceType_ES = 8, eServiceResourceType_TW = 9, eServiceResourceType_SA = 10, eServiceResourceType_PT = 11, eServiceResourceTypeCount = 12}
--- DECOMPILER ERROR at PC5505: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5511: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.langType = {PA_LT_EN, PA_LT_JP, PA_LT_CH, PA_LT_RU, PA_LT_FR, PA_LT_DE, PA_LT_ES, PA_LT_NA, PA_LT_TW, PA_LT_SA, PA_LT_PT, PA_LT_TH, PA_LT_ID, PA_LT_TR, PA_LT_AE, PA_LT_XX, PA_LT_MAX; PA_LT_KR = 0}
--- DECOMPILER ERROR at PC5563: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5569: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ApplyWorkingType = {eApplyWorkingType_All = 0, eApplyWorkingType_Cutting = 1, eApplyWorkingType_LargeCraft = 2, eApplyWorkingType_WorkShop = 3, eApplyWorkingType_Tools = 4, eApplyWorkingType_Furniture = 5, eApplyWorkingType_Improve = 6, eApplyWorkingType_Wardrobe = 7, eApplyWorkingType_Normal = 8, eApplyWorkingType_SiegeWeapons = 9, eApplyWorkingType_WagonParts = 10, eApplyWorkingType_Zone = 11, eApplyWorkingType_Building = 12, eApplyWorkingType_Monopoly = 13, eApplyWorkingType_Upgrade = 14, eApplyWorkingType_HouseParty = 15, eApplyWorkingType_HarvestWorking = 16, eApplyWorkingType_Count = 17}
--- DECOMPILER ERROR at PC5591: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5597: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ContentsGroupType = {CondtionGroupKey = 0, ItemGroupKey = 1, CharacterGroupKey = 2, ExchangeGroupKey = 3, QuestGroupKey = 4, MentalCardGroupKey = 5, TitleGroupKey = 6, ContentsGroupKey = 7}
--- DECOMPILER ERROR at PC5610: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5616: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.InstantCashType = {eInstant_ChangeHouseUseType = 0, eInstant_CompleteServantMating = 1, eInstant_CompleteNpcWorking = 2, eInstant_CompleteNpcWorkerUpgrade = 3, eInstant_Count = 4}
--- DECOMPILER ERROR at PC5689: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5695: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CountryType = {NONE = 0, DEV = 1, KOR_ALPHA = 2, KOR_REAL = 3, KOR_TEST = 4, JPN_ALPHA = 5, JPN_REAL = 6, RUS_ALPHA = 7, RUS_REAL = 8, KR2_ALPHA = 9, KR2_REAL = 10, NA_ALPHA = 11, NA_REAL = 12, TW_ALPHA = 13, TW_REAL = 14, SA_ALPHA = 15, SA_REAL = 16, TH_ALPHA = 17, TH_REAL = 18, ID_ALPHA = 19, ID_REAL = 20, TR_ALPHA = 21, TR_REAL = 22, AE_ALPHA = 23, AE_REAL = 24}
--- DECOMPILER ERROR at PC5702: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5708: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.GuildWarType = {GuildWarType_Normal = 0, GuildWarType_Both = 1, GuildWarType_Count = 2}
--- DECOMPILER ERROR at PC5721: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5727: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ServantWhereType = {ServantWhereTypeUser = 0, ServantWhereTypeGuild = 1, ServantWhereTypeSiege = 2, ServantWhereTypePcRoom = 3, ServantWhereTypeCount = 4}
--- DECOMPILER ERROR at PC5734: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5740: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.BattleSoundType = {Sound_NotUse = 0, Sound_Always = 1, Sound_Nomal = 2}
--- DECOMPILER ERROR at PC5756: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5762: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PAUIList2EventType = {luaChangeContent = 0, ScrollBegin = 1, ScrollEnd = 2, ScrollBeginToBegin = 3, ScrollEndToEnd = 4, Count = 5}
--- DECOMPILER ERROR at PC5826: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5832: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.GlobalUIOptionType = {NewQuickSlot = 0, DefaultShortCut = 1, PetAllSeal0 = 2, PetAllSeal1 = 3, PetAllSeal2 = 4, PetAllSeal3 = 5, PetAllSeal4 = 6, PetAllSeal5 = 7, PetAllSeal6 = 8, PetAllSeal7 = 9, PetAllSeal8 = 10, PetAllSeal9 = 11, AlchemyStone = 12, ColorBlindMode = 13, ChatDivision = 14, LevelUpGuideDayCheck = 15, SkillIconCheck = 16, RecentMemoryCheck = 17, MemoryRecentChat = 18, MainServerNo = 19, EnchantType = 20, ChattingAnimation = 21}
--- DECOMPILER ERROR at PC5839: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5845: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.MembershipType = {default = 0, daum = 1, naver = 2}
--- DECOMPILER ERROR at PC5852: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5858: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PAUIList2ElementManagerType = {list = 0, tree = 1, count = 2}
--- DECOMPILER ERROR at PC5910: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5916: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PartIndex = {PartIndex_None = 0, PartIndex_RightHandWeapon = 1, PartIndex_LeftHandWeapon = 2, PartIndex_AwakenWeapon = 3, PartIndex_UpperBody = 4, PartIndex_Hand = 5, PartIndex_Foot = 6, PartIndex_Helm = 7, PartIndex_Necklace = 8, PartIndex_Ring = 9, PartIndex_EarRing = 10, PartIndex_Lantern = 11, PartIndex_Underwear = 12, PartIndex_FaceDecoration0 = 13, PartIndex_FaceDecoration1 = 14, PartIndex_FaceDecoration2 = 15, PartIndex_Body00 = 16, PartIndex_Max = 17}
--- DECOMPILER ERROR at PC5953: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5959: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.UserChargeType = {eUserChargeType_StarterPackage = 0, eUserChargeType_PremiumPackage = 1, eUserChargeType_PearlPackage = 2, eUserChargeType_PcRoom = 3, eUserChargeType_CustomizationPackage = 4, eUserChargeType_DyeingPackage = 5, eUserChargeType_Kamasilve = 6, eUserChargeType_UnlimitedSkillAwakening = 7, eUserChargeType_UnlimitedSkillChange = 8, eUserChargeType_RussiaPack3 = 9, eUserChargeType_BlackSpritTraining = 10, eUserChargeType_PcRoomUserHomeBuff = 11, eUserChargeType_Count = 12}
--- DECOMPILER ERROR at PC5969: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5975: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.OpenDirectoryType = {DirectoryType_ScreenShot = 0, DirectoryType_Customization = 1, DirectoryType_UserCache = 2, DirectoryType_Count = 3}
--- DECOMPILER ERROR at PC5985: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC5991: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.EnduranceType = {eEnduranceType_Player = 0, eEnduranceType_Horse = 1, eEnduranceType_Carriage = 2, eEnduranceType_Ship = 3}
--- DECOMPILER ERROR at PC6001: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6007: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.VoiceChatType = {eVoiceChatType_Guild = 0, eVoiceChatType_Party = 1, eVoiceChatType_World = 2, eVoiceChatType_Count = 3}
--- DECOMPILER ERROR at PC6020: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6026: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.Padding = {ePadding_Left = 0, ePadding_Top = 1, ePadding_Right = 2, ePadding_Bottom = 3, ePadding_Count = 4}
--- DECOMPILER ERROR at PC6033: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6039: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.SkillAwakeningType = {eSkillAwakeningType_Normal = 0, eSkillAwakeningType_AwakeningWeapon = 1, eSkillAwakeningType_Count = 2}
--- DECOMPILER ERROR at PC6052: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6058: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.EFlush_BlackSpirit_Ui_Type = {eFlush_BlackSpirit_Ui_None = 0, eFlush_BlackSpirit_Ui_ItemEnchant = 1, eFlush_BlackSpirit_Ui_Socket = 2, eFlush_BlackSpirit_Ui_Improve = 3, eFlush_BlackSpirit_Ui_Count = 4}
--- DECOMPILER ERROR at PC6065: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6071: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PA_UI_ANI_TYPE = {PA_UI_ANI_INFINITE = 0, PA_UI_ANI_ONETIME = 1, PA_UI_ANI_ONETIME_DISAPPEAR = 2}
--- DECOMPILER ERROR at PC6078: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6084: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CompetitionMatchType = {eCompetitionMatchMode_Round = 0, eCompetitionMatchMode_FreeForAll = 1, eCompetitionMatchMode_Count = 2}
--- DECOMPILER ERROR at PC6094: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6100: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CompetitionFightState = {eCompetitionFightState_Done = 0, eCompetitionFightState_Stop = 1, eCompetitionFightState_Wait = 2, eCompetitionFightState_Fight = 3}
--- DECOMPILER ERROR at PC6104: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6110: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.CompetitionFreeForAll = {eFreeForAllTeamLimit = 30, eFreeForAllWinTeamLimit = 10}
--- DECOMPILER ERROR at PC6117: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6123: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.InventoryBagType = {eInventoryBagType_Cash = 0, eInventoryBagType_Equipment = 1, eInventoryBagType_Count = 2}
--- DECOMPILER ERROR at PC6139: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6145: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ChatFontSizeType = {eChatFontSizeType_Small = 0, eChatFontSizeType_Medium = 1, eChatFontSizeType_Normal = 2, eChatFontSizeType_Biggish = 3, eChatFontSizeType_Big = 4, eChatFontSizeType_Count = 5}
--- DECOMPILER ERROR at PC6155: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6161: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.UIFontSizeType = {eUIFontSizeType_Normal = 0, eUIFontSizeType_Biggish = 1, eUIFontSizeType_Big = 2, eUIFontSizeType_Count = 3}
--- DECOMPILER ERROR at PC6168: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6174: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuestWidgetType = {eQuestWidgetType_Simple = 0, eQuestWidgetType_Extend = 1, eQuestWidgetType_Count = 2}
--- DECOMPILER ERROR at PC6184: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6190: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.WorldMapCameraPitchType = {eWorldMapCameraPitchType_Degree30 = 0, eWorldMapCameraPitchType_Default = 1, eWorldMapCameraPitchType_Degree90 = 2, eWorldMapCameraPitchType_Count = 3}
--- DECOMPILER ERROR at PC6215: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6221: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuestType = {eQuestType_BlackSpirit = 0, eQuestType_Story = 1, eQuestType_Town = 2, eQuestType_Adventure = 3, eQuestType_Trade = 4, eQuestType_Craft = 5, eQuestType_Repetition = 6, eQuestType_Guild = 7, eQuestType_Count = 8}
--- DECOMPILER ERROR at PC6252: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6258: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.QuestRegionType = {eQuestRegionType_None = 0, eQuestRegionType_Balenos = 1, eQuestRegionType_Serendia = 2, eQuestRegionType_NorthCalpheon = 3, eQuestRegionType_CalpheonBigCity = 4, eQuestRegionType_Keplan = 5, eQuestRegionType_SouthWestCalpheon = 6, eQuestRegionType_Media = 7, eQuestRegionType_Valencia = 8, eQuestRegionType_Kamasylvia = 9, eQuestRegionType_Count = 10}
 QuestConditionCheckType = {eQuestConditionCheckType_Complete = 0, eQuestConditionCheckType_Progress = 1, eQuestConditionCheckType_NotAccept = 99}
--- DECOMPILER ERROR at PC6279: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6285: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.UIConvertableType = {eUIConvertableType_none = 0, eUIConvertableType_showTime = 1, eUIConvertableType_always = 2, eUIConvertableType_Count = 3}
--- DECOMPILER ERROR at PC6295: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6301: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ClientSceneState = {eClientSceneStateType_Customization = 0, eClientSceneStateType_InGameCustomization = 1, eClientSceneStateType_InGame = 2, eClientSceneStateType_Customization = 3}
--- DECOMPILER ERROR at PC6314: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6320: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.EnchantDifficulty = {eEnchantDifficulty_None = 0, eEnchantDifficulty_Easy = 1, eEnchantDifficulty_Normal = 2, eEnchantDifficulty_Hard = 3, eEnchantDifficulty_Count = 4}
--- DECOMPILER ERROR at PC6333: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6339: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ProfileInitTermType = {eProfileInitTermType_None = 0, eProfileInitTermType_Day = 1, eProfileInitTermType_Week = 7, eProfileInitTermType_Month = 30, eProfileInitTermType_Maxcount = 4}
--- DECOMPILER ERROR at PC6352: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6358: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.ProfileIndex = {eUserProfileValueType_MonsterKillCount = 0, eUserProfileValueType_FishingSuccessCount = 1, eUserProfileValueType_ItemGainCount = 2, eUserProfileValueType_ProductSuccessCount = 3, eUserProfileValueType_Count = 4}
--- DECOMPILER ERROR at PC6359: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6365: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.GuildBenefit = {eMaxContractedBenefit = 5000000}
--- DECOMPILER ERROR at PC6369: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6375: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PartyType = {ePartyType_Normal = 0, ePartyType_Large = 1}
--- DECOMPILER ERROR at PC6400: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6406: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PA_CONSOLE_UI_EVENT_TYPE = {eCONSOLE_UI_EVENT_TYPE_UP = 0, eCONSOLE_UI_EVENT_TYPE_DOWN = 1, eCONSOLE_UI_EVENT_TYPE_LEFT = 2, eCONSOLE_UI_EVENT_TYPE_RIGHT = 3, eCONSOLE_UI_EVENT_TYPE_LB = 4, eCONSOLE_UI_EVENT_TYPE_RB = 5, eCONSOLE_UI_EVENT_TYPE_LB2 = 6, eCONSOLE_UI_EVENT_TYPE_RB2 = 7, eCONSOLE_UI_CONTROL_TYPE_MAX = 8}
--- DECOMPILER ERROR at PC6428: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6434: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PA_CONSOLE_UI_CONTROL_TYPE = {eCONSOLE_UI_CONTROL_TYPE_NOTEVENT = 0, eCONSOLE_UI_CONTROL_TYPE_INVENTORY = 1, eCONSOLE_UI_CONTROL_TYPE_LIST2 = 2, eCONSOLE_UI_CONTROL_TYPE_SKILLTREE = 3, eCONSOLE_UI_CONTROL_TYPE_NOFRAMEGRAPE = 4, eCONSOLE_UI_CONTROL_TYPE_SLIDER = 5, eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION = 6, eCONSOLE_UI_CONTROL_TYPE_MAX = 7}
--- DECOMPILER ERROR at PC6447: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6453: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.PA_CONSOLE_UI_SIMPLIFY_TYPE = {eCONSOLE_UI_SIMPLIFY_TYPE_NOTEVENT = 0, eCONSOLE_UI_SIMPLIFY_TYPE_SIMPLIFY = 1, eCONSOLE_UI_SIMPLIFY_TYPE_MAINSTATUS = 2, eCONSOLE_UI_SIMPLIFY_TYPE_ALWAYS = 3, eCONSOLE_UI_SIMPLIFY_TYPE_MAX = 4}
--- DECOMPILER ERROR at PC6460: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC6466: Confused about usage of register: R0 in 'UnsetPending'
 
 CppEnums.Client_AutoControlStateType = {NONE = 0, BATTLE = 1, FINDWAY = 2}
 getNameSize = function()

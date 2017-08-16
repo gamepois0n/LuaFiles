@@ -2602,7 +2602,7 @@ HandleClicked_ChatSubMenu_InviteLargeParty = function()
           selectName = clickedUserNickName
         end
       end
-      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_INVITE", "targetName", selectName))
+      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_ACK_LARGEPARTYINVITE", "targetName", selectName))
     end
     do
       clickedName = nil

@@ -3246,7 +3246,11 @@ end
   settingHpBar(actorKeyRaw, panel, actorProxyWrapper)
   if (getSelfPlayer()):getActorKey() ~= actorKeyRaw then
     local textName = actorProxyWrapper:getName()
-    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_PARTY_ACK", "textName", textName))
+    if ToClient_GetPartyType() == 0 then
+      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_PARTY_ACK", "textName", textName))
+    else
+      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHARACTERNAMETAG_LARGEPARTY_ACK", "textName", textName))
+    end
   end
 end
 

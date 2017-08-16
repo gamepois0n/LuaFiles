@@ -183,6 +183,10 @@ FGlobal_WorldBossShow = function(message, noticeType, noticeValue)
               else
                 if noticeValue == 8 or noticeValue == 9 then
                   audioPostEvent_SystemUi(19, 8)
+                else
+                  if noticeValue == 10 then
+                    audioPostEvent_SystemUi(19, 9)
+                  end
                 end
               end
             end

@@ -1031,37 +1031,57 @@ local messageBox_party_refuse = function()
 end
 
 ResponseParty_withdraw = function(withdrawType, actorKey, isMe)
-  -- function num : 0_26 , upvalues : partyPenalty, Match_Button_Info
+  -- function num : 0_26 , upvalues : partyType, partyPenalty, Match_Button_Info
   if ToClient_IsRequestedPvP() or ToClient_IsMyselfInEntryUser() then
     return 
   end
   local message = ""
   if withdrawType == 0 then
     if isMe then
-      message = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_LEAVE_PARTY_SELF")
+      if partyType == 0 then
+        message = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_LEAVE_PARTY_SELF")
+      else
+        message = PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_LEAVE_PARTY_SELF")
+      end
     else
       local actorProxyWrapper = getActor(actorKey)
       if actorProxyWrapper ~= nil then
         local textName = actorProxyWrapper:getOriginalName()
-        message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_LEAVE_PARTY_MEMBER")
+        if partyType == 0 then
+          message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_LEAVE_PARTY_MEMBER")
+        else
+          message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_LEAVE_PARTY_MEMBER")
+        end
       end
     end
   else
     do
       if withdrawType == 1 then
         if isMe then
-          message = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_SELF")
+          if partyType == 0 then
+            message = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_SELF")
+          else
+            message = PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_SELF")
+          end
         else
           local actorProxyWrapper = getActor(actorKey)
           if actorProxyWrapper ~= nil then
             local textName = actorProxyWrapper:getOriginalName()
-            message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_MEMBER")
+            if partyType == 0 then
+              message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_MEMBER")
+            else
+              message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_MEMBER")
+            end
           end
         end
       else
         do
           if withdrawType == 2 then
-            message = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DISPERSE")
+            if partyType == 0 then
+              message = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DISPERSE")
+            else
+              message = PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_DISPERSE")
+            end
           end
           NakMessagePanel_Reset()
           if message ~= "" and message ~= nil then
@@ -1076,13 +1096,17 @@ ResponseParty_withdraw = function(withdrawType, actorKey, isMe)
 end
 
 ResponseParty_changeLeader = function(actorKey)
-  -- function num : 0_27
+  -- function num : 0_27 , upvalues : partyType
   local actorProxyWrapper = getActor(actorKey)
   if actorProxyWrapper == nil then
     return 
   end
   local textName = actorProxyWrapper:getName()
-  Proc_ShowMessage_Ack(tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_PARTY_LEADER"))
+  if partyType == 0 then
+    Proc_ShowMessage_Ack(tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_PARTY_LEADER"))
+  else
+    Proc_ShowMessage_Ack(tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_CHANGE_PARTY_LEADER"))
+  end
   ResponseParty_updatePartyList()
   Party_RegistItem_Show(false)
 end
@@ -1090,7 +1114,8 @@ end
 ResponseParty_refuse = function(reason)
   -- function num : 0_28
   local contentString = reason
-  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "PARTY_INVITE_MESSAGEBOX_TITLE"), content = contentString, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  local messageboxData = nil
+  messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = contentString, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)
 end
@@ -1107,8 +1132,15 @@ ResponseParty_invite = function(hostName, invitePartyType)
   -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
 
   requestPlayerList[#requestPlayerList] = hostName
-  local messageboxMemo = hostName .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_INVITE_ACCEPT")
-  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "PARTY_INVITE_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = messageBox_party_accept, functionNo = messageBox_party_refuse, priority = PP.PAUIMB_PRIORITY_LOW}
+  local messageboxMemo = ""
+  local messageboxData = ""
+  if partyType == 0 then
+    messageboxMemo = hostName .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_INVITE_ACCEPT")
+    messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "PARTY_INVITE_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = messageBox_party_accept, functionNo = messageBox_party_refuse, priority = PP.PAUIMB_PRIORITY_LOW}
+  else
+    messageboxMemo = hostName .. PAGetString(Defines.StringSheet_GAME, "LUA_LARGEPARTY_INVITE_ACCEPT")
+    messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_LARGEPARTY_INVITE_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = messageBox_party_accept, functionNo = messageBox_party_refuse, priority = PP.PAUIMB_PRIORITY_LOW}
+  end
   ;
   (MessageBox.showMessageBox)(messageboxData)
 end
@@ -1150,13 +1182,20 @@ messageBox_party_withdrawMember = function()
 end
 
 PartyPop_clickBanishMember = function(index)
-  -- function num : 0_33 , upvalues : withdrawMember, PP, closePartyOption
+  -- function num : 0_33 , upvalues : withdrawMember, partyType, PP, closePartyOption
   withdrawMember = index
   local withdrawMemberData = RequestParty_getPartyMemberAt(withdrawMember)
   local withdrawMemberActorKey = withdrawMemberData:getActorKey()
   local withdrawMemberPlayerActor = getPlayerActor(withdrawMemberActorKey)
-  local contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_QUESTION")
-  local titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT")
+  local contentString = ""
+  local titleForceOut = ""
+  if partyType == 0 then
+    contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_QUESTION")
+    titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT")
+  else
+    contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_QUESTION")
+    titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT")
+  end
   local messageboxData = {title = titleForceOut, content = contentString, functionYes = messageBox_party_withdrawMember, functionNo = MessageBox_Empty_function, priority = PP.PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)

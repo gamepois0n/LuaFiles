@@ -45,8 +45,9 @@ end
 FGlobal_MouseclickTest = function()
   -- function num : 0_2
   FGlobal_AutoQuestBlackSpiritMessage("ì™\128ì•™~")
-  ;
-  (PaGlobal_AutoQuestMsg._accessBlackSpiritClick)()
+  if PaGlobal_AutoQuestMsg._accessBlackSpiritClick ~= nil then
+    (PaGlobal_AutoQuestMsg._accessBlackSpiritClick)()
+  end
 end
 
 FGlobal_EndBlackSpiritMessage = function()

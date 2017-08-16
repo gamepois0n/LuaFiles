@@ -381,6 +381,7 @@ PaGlobal_LargeParty.BanishMember = function(self)
   local withdrawMemberData = RequestParty_getPartyMemberAt(index)
   local withdrawMemberActorKey = withdrawMemberData:getActorKey()
   local withdrawMemberPlayerActor = getPlayerActor(withdrawMemberActorKey)
+  local partyType = ToClient_GetPartyType()
   local messageBox_party_BanishMember = function()
     -- function num : 0_8_0 , upvalues : index, self
     RequestParty_withdrawMember(index)
@@ -391,8 +392,15 @@ PaGlobal_LargeParty.BanishMember = function(self)
     PaGlobal_LargeParty:Update()
   end
 
-  local contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_QUESTION")
-  local titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT")
+  local contentString = ""
+  local titleForceOut = ""
+  if partyType == 0 then
+    contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_QUESTION")
+    titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT")
+  else
+    contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_QUESTION")
+    titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT")
+  end
   local messageboxData = {title = titleForceOut, content = contentString, functionYes = messageBox_party_BanishMember, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)
@@ -414,7 +422,13 @@ PaGlobal_LargeParty.ExitParty = function(self)
     PaGlobal_LargeParty:Close()
   end
 
-  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PARTY_DISTRIBUTION_GETOUTPARTY")
+  local partyType = ToClient_GetPartyType()
+  local messageBoxMemo = ""
+  if partyType == 0 then
+    messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_PARTY_DISTRIBUTION_GETOUTPARTY")
+  else
+    messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_LARGEPARTY_DISTRIBUTION_GETOUTPARTY")
+  end
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = partyOut, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageBoxData)

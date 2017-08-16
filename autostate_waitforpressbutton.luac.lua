@@ -142,6 +142,7 @@ end
 
 AutoState_WaitForPressButton.checkChangeState = function(self)
   -- function num : 0_5 , upvalues : IM, AutoState_MouseMoving_TargetButton
+  self:statesInit()
   local questList = ToClient_GetQuestList()
   if questList == nil then
     _PA_ASSERT(false, "Quest 정보�\128 nil입니�\164..AutoState_WaitForPressButton:start")
@@ -181,20 +182,20 @@ AutoState_WaitForPressButton.checkChangeState = function(self)
         if navi == false then
           HandleClicked_QuestWindow_FindWay((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest, questCondition, false)
         end
-        -- DECOMPILER ERROR at PC127: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC129: Confused about usage of register: R9 in 'UnsetPending'
 
         PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToMove_AccessBlackSpiritclick
       elseif Auto_IsPlayerInsideQuestArea(uiQuestInfo) == 0 then
         if Auto_FindNearQuestMonster() == true then
           self:setMainState((self.MAINSTATE).NEED_TO_HUNT)
-          -- DECOMPILER ERROR at PC144: Confused about usage of register: R9 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC146: Confused about usage of register: R9 in 'UnsetPending'
 
           PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToHunt_AccessBlackSpiritclick
         else
           self:setMainState((self.MAINSTATE).NEED_TO_MOVE)
           if navi == false then
             HandleClicked_QuestWindow_FindWay((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest, questCondition, false)
-            -- DECOMPILER ERROR at PC164: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC166: Confused about usage of register: R9 in 'UnsetPending'
 
             PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToMove_AccessBlackSpiritclick
           end
@@ -221,9 +222,11 @@ AutoState_WaitForPressButton.checkChangeState = function(self)
         self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
         return 
       end
-      self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_MOVING)
-      self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
-      -- DECOMPILER ERROR: 13 unprocessed JMP targets
+      if self._mainState == (self.MAINSTATE).NORMAL then
+        self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_MOVING)
+        self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
+      end
+      -- DECOMPILER ERROR: 14 unprocessed JMP targets
     end
   end
 end
@@ -281,6 +284,16 @@ AutoState_WaitForPressButton.setMainState = function(self, mainState)
   -- function num : 0_10
   self._mainState = mainState
   _PA_LOG("�\128규보", "Main_Change : " .. tostring(self._mainState))
+end
+
+-- DECOMPILER ERROR at PC78: Confused about usage of register: R2 in 'UnsetPending'
+
+AutoState_WaitForPressButton.statesInit = function(self)
+  -- function num : 0_11 , upvalues : AutoState_MouseMoving_TargetButton
+  self._mainState = (AutoState_WaitForPressButton.MAINSTATE).NONE
+  self._subState = (AutoState_WaitForPressButton.SUBSTATE).NONE
+  self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
+  self._pressDelay = 2.5
 end
 
 
