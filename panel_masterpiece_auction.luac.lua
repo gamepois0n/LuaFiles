@@ -256,7 +256,7 @@ PaGlobal_MasterpieceAuction.information = function(self, index)
   local auctionType = myAuctionInfo:getAuctionType()
   local itemWrapper = goodsInfo:getItem()
   local itemSSW = itemWrapper:getStaticStatus()
-  local leftTime_u64 = goodsInfo:getExpireTime_u64()
+  local leftTime_u64 = goodsInfo:getExpireTime_u64() / toUint64(0, 1000)
   local highPrice_s64 = goodsInfo:getHighPrice_s64()
   local lowPrice_s64 = goodsInfo:getLowPrice_s64()
   local isBiddable = goodsInfo:isBiddable()
@@ -432,7 +432,7 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
     priceBG:SetShow(true)
     btnMyBidPrice:SetShow(true)
     listBG:SetShow(true)
-    local leftTime_u64 = goodsInfo:getExpireTime_u64()
+    local leftTime_u64 = goodsInfo:getExpireTime_u64() / toUint64(0, 1000)
     local highPrice_s64 = goodsInfo:getUpperBidPrice_s64()
     local myPrice_s64 = goodsInfo:getMyBidPrice_s64()
     local isBiddable = goodsInfo:isSuccessBid()
@@ -461,7 +461,7 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
       bidItemName:SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
       bidItemName:SetText(itemSSW:getName())
       bidItemName:SetShow(true)
-      -- DECOMPILER ERROR at PC259: Confused about usage of register: R46 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC264: Confused about usage of register: R46 in 'UnsetPending'
 
       ;
       (self._itemTooltipDesc)[i] = itemSSW:getName()
@@ -494,11 +494,11 @@ MasterpieceAution_RightContent_ListControlCreate = function(content, key)
           btnAuction:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MASTERPIECE_RECIEVEMONEY"))
           btnAuction:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:cancelBidorSell(" .. i .. ")")
           btnAuction:SetShow(true)
-          -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC371: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC371: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC366: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC371: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

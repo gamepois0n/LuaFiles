@@ -54,26 +54,10 @@ FGlobal_Profile_Update = function(tabBtnInit)
   end
   Profile_RightDataSet(self._selecteIndex)
   ToClient_RequestUserProfileInfo()
-  Profile_SetConsolePadGroup()
-end
-
-Profile_SetConsolePadGroup = function()
-  -- function num : 0_2 , upvalues : myProfile
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
-  local control = myProfile._control
-  local group_1 = Panel_Window_CharInfo_Status:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  group_1:addControl(0, 0, 4, 1, (control._radioBtn)[0])
-  group_1:addControl(1, 0, 4, 1, (control._radioBtn)[1])
-  group_1:addControl(2, 0, 4, 1, (control._radioBtn)[2])
-  group_1:addControl(3, 0, 4, 1, (control._radioBtn)[3])
 end
 
 myProfile.RadioBtn_Init = function(self)
-  -- function num : 0_3
+  -- function num : 0_2
   for index = 0, (CppEnums.ProfileInitTermType).eProfileInitTermType_Maxcount - 1 do
     (((self._control)._radioBtn)[index]):SetCheck(self._radioBtnIndex == index)
   end
@@ -81,27 +65,25 @@ myProfile.RadioBtn_Init = function(self)
 end
 
 Profile_Update = function()
-  -- function num : 0_4 , upvalues : myProfile, group_2
+  -- function num : 0_3 , upvalues : myProfile
   local self = myProfile
   local control = self._control
   ;
   ((control._list2Profile):getElementManager()):clearKey()
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  group_2 = Panel_Window_CharInfo_Status:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for index = 0, (CppEnums.ProfileIndex).eUserProfileValueType_Count - 1 do
     ((control._list2Profile):getElementManager()):pushKey(toInt64(0, index))
   end
 end
 
 HandleClicked_RadioButton = function(index)
-  -- function num : 0_5 , upvalues : myProfile
+  -- function num : 0_4 , upvalues : myProfile
   local self = myProfile
   self._radioBtnIndex = index
   FGlobal_Profile_Update(true)
 end
 
 Profile_DataSet = function(content, key)
-  -- function num : 0_6 , upvalues : myProfile, group_2
+  -- function num : 0_5 , upvalues : myProfile
   local self = myProfile
   local contentBg = (UI.getChildControl)(content, "RadioButton_ContentBg")
   local title = (UI.getChildControl)(content, "StaticText_Title")
@@ -134,11 +116,10 @@ Profile_DataSet = function(content, key)
   else
     contentBg:SetCheck(false)
   end
-  group_2:addControl(_key, 0, (CppEnums.ProfileIndex).eUserProfileValueType_Count, 1, contentBg)
 end
 
 Profile_TimeSet = function()
-  -- function num : 0_7 , upvalues : myProfile
+  -- function num : 0_6 , upvalues : myProfile
   local self = myProfile
   local control = self._control
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
@@ -162,7 +143,7 @@ Profile_TimeSet = function()
 end
 
 Profile_RightDataSet = function(index)
-  -- function num : 0_8 , upvalues : myProfile
+  -- function num : 0_7 , upvalues : myProfile
   local self = myProfile
   local control = self._control
   self._selecteIndex = index
@@ -182,7 +163,7 @@ Profile_RightDataSet = function(index)
 end
 
 myProfile.registEvent = function(self)
-  -- function num : 0_9
+  -- function num : 0_8
   registerEvent("Profile_Updatelist", "Profile_Update")
   for index = 0, (CppEnums.ProfileInitTermType).eProfileInitTermType_Maxcount - 1 do
     (((self._control)._radioBtn)[index]):addInputEvent("Mouse_LUp", "HandleClicked_RadioButton(" .. index .. ")")

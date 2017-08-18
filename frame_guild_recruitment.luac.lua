@@ -48,6 +48,8 @@ local classPicture = {
 [UI_classType.ClassType_DarkElf] = {193, 291, 288, 435}
 , 
 [UI_classType.ClassType_Combattant] = {289, 291, 384, 435}
+, 
+[UI_classType.ClassType_CombattantWomen] = {385, 291, 480, 435}
 }
 Guild_Recruitment_Initialize = function()
   -- function num : 0_0 , upvalues : GuildRecruitment, UI_TM, defaultFrameBG_Recruitment
@@ -166,6 +168,10 @@ GuildRecruitment.Update = function(self)
                               else
                                 if UI_classType.ClassType_Combattant == classNo then
                                   returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
+                                else
+                                  if UI_classType.ClassType_CombattantWomen == classNo then
+                                    returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN")
+                                  end
                                 end
                               end
                             end

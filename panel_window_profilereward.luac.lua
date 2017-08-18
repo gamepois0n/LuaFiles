@@ -61,15 +61,10 @@ FGlobal_ProfileReward_Update = function(tabBtnInit)
   end
   ProfileReward_RightDataSet(self._selecteIndex)
   ToClient_RequestUserProfileInfo()
-  ProfileReward_SetConsolePadGroup()
-end
-
-ProfileReward_SetConsolePadGroup = function()
-  -- function num : 0_2
 end
 
 ProfileReward.RadioBtn_Init = function(self)
-  -- function num : 0_3
+  -- function num : 0_2
   for index = 0, (CppEnums.ProfileInitTermType).eProfileInitTermType_Maxcount - 1 do
     (((self._control)._radioBtn)[index]):SetCheck(self._radioBtnIndex == index)
   end
@@ -77,7 +72,7 @@ ProfileReward.RadioBtn_Init = function(self)
 end
 
 ProfileReward_Update = function()
-  -- function num : 0_4 , upvalues : ProfileReward
+  -- function num : 0_3 , upvalues : ProfileReward
   local self = ProfileReward
   local control = self._control
   ;
@@ -88,14 +83,14 @@ ProfileReward_Update = function()
 end
 
 HandleClicked_RadioButton = function(index)
-  -- function num : 0_5 , upvalues : ProfileReward
+  -- function num : 0_4 , upvalues : ProfileReward
   local self = ProfileReward
   self._radioBtnIndex = index
   FGlobal_ProfileReward_Update(true)
 end
 
 ProfileReward_DataSet = function(content, key)
-  -- function num : 0_6 , upvalues : ProfileReward
+  -- function num : 0_5 , upvalues : ProfileReward
   local self = ProfileReward
   local contentBg = (UI.getChildControl)(content, "RadioButton_ContentBg")
   local title = (UI.getChildControl)(content, "StaticText_Title")
@@ -150,7 +145,7 @@ ProfileReward_DataSet = function(content, key)
 end
 
 ProfileReward_TimeSet = function()
-  -- function num : 0_7 , upvalues : ProfileReward
+  -- function num : 0_6 , upvalues : ProfileReward
   local self = ProfileReward
   local control = self._control
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
@@ -174,7 +169,7 @@ ProfileReward_TimeSet = function()
 end
 
 ProfileReward_RightDataSet = function(index)
-  -- function num : 0_8 , upvalues : ProfileReward
+  -- function num : 0_7 , upvalues : ProfileReward
   local self = ProfileReward
   local control = self._control
   self._selecteIndex = index
@@ -194,7 +189,7 @@ ProfileReward_RightDataSet = function(index)
 end
 
 ProfileReward.registEvent = function(self)
-  -- function num : 0_9
+  -- function num : 0_8
   registerEvent("ProfileReward_Updatelist", "ProfileReward_Update")
   ;
   ((self._control)._list2Profile):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "ProfileReward_DataSet")
@@ -203,18 +198,18 @@ ProfileReward.registEvent = function(self)
 end
 
 FGlobal_ProfileReward_Show = function()
-  -- function num : 0_10
+  -- function num : 0_9
   ProfileReward_Update()
   Panel_Window_ProfileReward:SetShow(true)
 end
 
 ProfileRewardItemSet = function()
-  -- function num : 0_11 , upvalues : ProfileReward
+  -- function num : 0_10 , upvalues : ProfileReward
   ProfileReward:SetItem()
 end
 
 ProfileReward.SetItem = function(self)
-  -- function num : 0_12
+  -- function num : 0_11
   local itemWrapper = getInventoryItem(3)
   ;
   (self._rewardSlot):setItem(itemWrapper)

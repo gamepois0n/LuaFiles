@@ -1283,38 +1283,33 @@ FGlobal_WorldMapOpenForMain = function()
       FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
     end
     FGlobal_WorldmapMain_InitTutorialButton()
-    WorldMapMain_ConsoleGroupSet(_currentRenderMode)
     -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
 
-WorldMapMain_ConsoleGroupSet = function(filterType)
-  -- function num : 0_53
-end
-
 FGlobal_WorldmapGrand_Main_UpdateExplorePoint = function()
-  -- function num : 0_54 , upvalues : worldmapGrand
+  -- function num : 0_53 , upvalues : worldmapGrand
   worldmapGrand:UpdateExplorePoint()
 end
 
 FGlobal_resetGuildWarMode = function()
-  -- function num : 0_55 , upvalues : _isGuildWarMode
+  -- function num : 0_54 , upvalues : _isGuildWarMode
   _isGuildWarMode = false
   ToClient_SetGuildMode(false)
 end
 
 FGlobal_isGuildWarMode = function()
-  -- function num : 0_56 , upvalues : _isGuildWarMode
+  -- function num : 0_55 , upvalues : _isGuildWarMode
   return _isGuildWarMode
 end
 
 FGlobal_WorldMapStateMaintain = function()
-  -- function num : 0_57 , upvalues : CheckStateByChangeMode
+  -- function num : 0_56 , upvalues : CheckStateByChangeMode
   CheckStateByChangeMode()
 end
 
 WorldMapStateChange = function(state)
-  -- function num : 0_58 , upvalues : guildWar_Filter_Init, productNode_Filter_Init, _currentRenderMode, _isBlackFog, eWorldmapState, _isGuildWarMode, worldmapGrand, CheckStateByChangeMode, worldMapState, worldMapCheckState
+  -- function num : 0_57 , upvalues : guildWar_Filter_Init, productNode_Filter_Init, _currentRenderMode, _isBlackFog, eWorldmapState, _isGuildWarMode, worldmapGrand, CheckStateByChangeMode, worldMapState, worldMapCheckState
   guildWar_Filter_Init()
   productNode_Filter_Init()
   _currentRenderMode = state
@@ -1367,16 +1362,15 @@ WorldMapStateChange = function(state)
   else
     FGlobal_ActorTooltip_SetShowPartyMemberIcon(false)
   end
-  WorldMapMain_ConsoleGroupSet(_currentRenderMode)
 end
 
 WorldMapArrowEffectEraseClear = function()
-  -- function num : 0_59 , upvalues : btnArray
+  -- function num : 0_58 , upvalues : btnArray
   btnArray = {}
 end
 
 WorldMapArrowEffectErase = function()
-  -- function num : 0_60 , upvalues : btnArray
+  -- function num : 0_59 , upvalues : btnArray
   if btnArray == nil then
     return 
   end
@@ -1463,7 +1457,7 @@ WorldMapArrowEffectErase = function()
 end
 
 FromClient_NodeFilterOn = function(house_btn)
-  -- function num : 0_61 , upvalues : btnArray
+  -- function num : 0_60 , upvalues : btnArray
   local btn = house_btn
   ;
   (table.insert)(btnArray, btn)
@@ -1494,19 +1488,19 @@ end
 
 registerEvent("FromClient_NodeFilterOn", "FromClient_NodeFilterOn")
 FGlobal_SetNodeFilter = function()
-  -- function num : 0_62 , upvalues : worldmapGrand
+  -- function num : 0_61 , upvalues : worldmapGrand
   if ((worldmapGrand.ui).nodeSelectBg):GetShow() then
     PrevNodeType_Set()
   end
 end
 
 handleGuildModeChange = function(isGuildMode)
-  -- function num : 0_63
+  -- function num : 0_62
   ToClient_reloadNodeLine(isGuildMode, CppEnums.WaypointKeyUndefined)
 end
 
 WorldMapStateChange_SimpleTooltips = function(isShow, tipType)
-  -- function num : 0_64 , upvalues : eWorldmapState, worldMapState
+  -- function num : 0_63 , upvalues : eWorldmapState, worldMapState
   local name, desc, control = nil, nil, nil
   if eWorldmapState.eWMS_EXPLORE_PLANT == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_PANEL_TOOLTIP_PLANT_NAME")
@@ -1552,7 +1546,7 @@ WorldMapStateChange_SimpleTooltips = function(isShow, tipType)
 end
 
 WorldMapCheckListToolTips = function(isShow, checkType)
-  -- function num : 0_65 , upvalues : eCheckState, worldMapCheckState
+  -- function num : 0_64 , upvalues : eCheckState, worldMapCheckState
   if checkType == eCheckState.eCheck_Quest then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_PANEL_TOOLTIP_QUEST_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_PANEL_TOOLTIP_QUEST_DESC")
@@ -1614,7 +1608,7 @@ WorldMapCheckListToolTips = function(isShow, checkType)
 end
 
 worldmapGrand_nodeTypeTooltip = function(isShow, typeIdx)
-  -- function num : 0_66 , upvalues : worldMapNodeListType, worldMapNodeType_String
+  -- function num : 0_65 , upvalues : worldMapNodeListType, worldMapNodeType_String
   local uiControl = worldMapNodeListType[typeIdx]
   local name = worldMapNodeType_String[typeIdx]
   local desc = nil
@@ -1627,7 +1621,7 @@ worldmapGrand_nodeTypeTooltip = function(isShow, typeIdx)
 end
 
 HandleClicked_GrandWorldMap_SearchNode = function()
-  -- function num : 0_67 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_66 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1654,7 +1648,7 @@ HandleClicked_GrandWorldMap_SearchNode = function()
 end
 
 HandleClicked_GrandWorldMap_SearchGuild = function()
-  -- function num : 0_68 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_67 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1681,7 +1675,7 @@ HandleClicked_GrandWorldMap_SearchGuild = function()
 end
 
 HandleClicked_GrandWorldMap_SearchItem = function()
-  -- function num : 0_69 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_68 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1708,7 +1702,7 @@ HandleClicked_GrandWorldMap_SearchItem = function()
 end
 
 HandleClicked_GrandWorldMap_SearchUseType = function()
-  -- function num : 0_70 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_69 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
@@ -1735,7 +1729,7 @@ HandleClicked_GrandWorldMap_SearchUseType = function()
 end
 
 HandleClicked_GrandWorldMap_SearchNode_ResetString = function()
-  -- function num : 0_71 , upvalues : worldmapGrand, IM
+  -- function num : 0_70 , upvalues : worldmapGrand, IM
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1747,7 +1741,7 @@ HandleClicked_GrandWorldMap_SearchNode_ResetString = function()
 end
 
 HandleClicked_GrandWorldMap_SearchGuild_ResetString = function()
-  -- function num : 0_72 , upvalues : worldmapGrand, IM
+  -- function num : 0_71 , upvalues : worldmapGrand, IM
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1761,7 +1755,7 @@ HandleClicked_GrandWorldMap_SearchGuild_ResetString = function()
 end
 
 HandleClicked_GrandWorldMap_SearchItem_ResetString = function()
-  -- function num : 0_73 , upvalues : worldmapGrand, IM
+  -- function num : 0_72 , upvalues : worldmapGrand, IM
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1775,7 +1769,7 @@ HandleClicked_GrandWorldMap_SearchItem_ResetString = function()
 end
 
 HandleClicked_GrandWorldMap_SearchUseType_ResetString = function()
-  -- function num : 0_74 , upvalues : worldmapGrand, IM
+  -- function num : 0_73 , upvalues : worldmapGrand, IM
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
@@ -1789,7 +1783,7 @@ HandleClicked_GrandWorldMap_SearchUseType_ResetString = function()
 end
 
 HandleClicked_GrandWorldMap_SearchNodeType = function(typeIndex)
-  -- function num : 0_75 , upvalues : worldMapNodeType, worldmapGrand, worldmapGrand_SearchType
+  -- function num : 0_74 , upvalues : worldMapNodeType, worldmapGrand, worldmapGrand_SearchType
   if worldMapNodeType.note == typeIndex then
     return 
   end
@@ -1822,7 +1816,7 @@ HandleClicked_GrandWorldMap_SearchNodeType = function(typeIndex)
 end
 
 HandleClicked_GrandWorldMap_GotoNodeFocus = function(resultIdx)
-  -- function num : 0_76 , upvalues : worldmapGrand_SearchType, worldmapGrand
+  -- function num : 0_75 , upvalues : worldmapGrand_SearchType, worldmapGrand
   if worldmapGrand_SearchType.nodeName == (worldmapGrand.config).searchType or worldmapGrand_SearchType.nodeType == (worldmapGrand.config).searchType then
     ToCleint_gotoFindTown(resultIdx)
   else
@@ -1840,7 +1834,7 @@ HandleClicked_GrandWorldMap_GotoNodeFocus = function(resultIdx)
 end
 
 FGlobal_WorldmapMain_GotoBuildingMostRemainExpiredTime = function()
-  -- function num : 0_77
+  -- function num : 0_76
   if Panel_WorldMap_Main:GetShow() == false then
     return 
   end
@@ -1853,7 +1847,7 @@ FGlobal_WorldmapMain_GotoBuildingMostRemainExpiredTime = function()
 end
 
 GrandWorldMap_Scroll = function(isUp)
-  -- function num : 0_78 , upvalues : worldmapGrand
+  -- function num : 0_77 , upvalues : worldmapGrand
   -- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
 
   (worldmapGrand.config).scrollStartIdx = (UIScroll.ScrollEvent)((worldmapGrand.ui).list_scroll, isUp, (worldmapGrand.config).searchingResultMaxCount, (worldmapGrand.config).searchingResultCount, (worldmapGrand.config).scrollStartIdx, 1)
@@ -1861,7 +1855,7 @@ GrandWorldMap_Scroll = function(isUp)
 end
 
 HandleClicked_GrandWorldMap_ScrollPress = function()
-  -- function num : 0_79 , upvalues : worldmapGrand
+  -- function num : 0_78 , upvalues : worldmapGrand
   local config = worldmapGrand.config
   local scrollPos = ((worldmapGrand.ui).list_scroll):GetControlPos()
   local resultCount = config.searchingResultCount
@@ -1871,7 +1865,7 @@ HandleClicked_GrandWorldMap_ScrollPress = function()
 end
 
 HandleOnout_GrandWorldMap_explorePointHelp = function(isShow)
-  -- function num : 0_80 , upvalues : worldmapGrand
+  -- function num : 0_79 , upvalues : worldmapGrand
   local control = (worldmapGrand.ui).explorePointHelp
   if isShow then
     local name = (PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_EXPLORERPOINT"))
@@ -1886,7 +1880,7 @@ HandleOnout_GrandWorldMap_explorePointHelp = function(isShow)
 end
 
 FGlobal_GrandWorldMap_SearchToWorldMapMode = function()
-  -- function num : 0_81 , upvalues : IM
+  -- function num : 0_80 , upvalues : IM
   ClearFocusEdit()
   ;
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -1894,21 +1888,21 @@ FGlobal_GrandWorldMap_SearchToWorldMapMode = function()
 end
 
 worldmapGrand_OnScreenResize = function()
-  -- function num : 0_82 , upvalues : worldmapGrand
+  -- function num : 0_81 , upvalues : worldmapGrand
   Panel_WorldMap_Main:SetSize(getScreenSizeX(), getScreenSizeY())
   ;
   ((worldmapGrand.ui).ModeBG):ComputePos()
 end
 
 FromClient_RenderStateChange = function(state)
-  -- function num : 0_83 , upvalues : worldMapCheckState
+  -- function num : 0_82 , upvalues : worldMapCheckState
   for checkIndex,value in pairs(worldMapCheckState) do
     (worldMapCheckState[checkIndex]):SetCheck(ToClient_isWorldmapCheckState(checkIndex))
   end
 end
 
 worldmapGrand.registEventHandler = function(self)
-  -- function num : 0_84
+  -- function num : 0_83
   local ui = self.ui
   ;
   (ui.ListBG):addInputEvent("Mouse_UpScroll", "GrandWorldMap_Scroll( true )")
@@ -1970,12 +1964,12 @@ registerEvent("FromClient_MouseOnWorldmapMonsterInfo", "FromClient_MouseOnWorldm
 registerEvent("FromClient_MouseOutWorldmapMonsterInfo", "FromClient_MouseOutWorldmapMonsterInfo")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_WorldmapMain")
 FromClient_luaLoadComplete_WorldmapMain = function()
-  -- function num : 0_85
+  -- function num : 0_84
   FGlobal_WorldmapMain_InitTutorialButton()
 end
 
 maptest = function(scale, minScale, maxScale, yGap)
-  -- function num : 0_86
+  -- function num : 0_85
   ToClient_SetScalerWorldmapMonsterInfo(scale, minScale, maxScale, yGap)
 end
 

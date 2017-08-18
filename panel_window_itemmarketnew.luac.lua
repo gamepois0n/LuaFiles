@@ -37,7 +37,7 @@ itemSingleUiPool = {}
 slotGroupConfing = {createIcon = true, createBorder = true, createCount = false, createEnchant = true, createCash = true, createClassEquipBG = true}
 , 
 slotSingleConfing = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true, createClassEquipBG = true}
-, _buttonQuestion = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Question"), escMenuSaveValue = false, isSelectItem = false}
+, _buttonQuestion = (UI.getChildControl)(Panel_Window_ItemMarket, "Button_Question"), escMenuSaveValue = false, isSelectItem = false, _isMarketItemShow = false}
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 if splitWindow then
   (ItemMarket.checkPopUp):SetShow(isPopUpContentsEnable)
@@ -2085,6 +2085,9 @@ _itemMarket_ShowListOutsideItemSlotToolTip = function(idx, isSelected)
     _itemMarket_HideToolTip()
     return 
   end
+  -- DECOMPILER ERROR at PC8: Confused about usage of register: R4 in 'UnsetPending'
+
+  ItemMarket._isMarketItemShow = false
   local control = self._list2
   local contents = control:GetContentByKey(toInt64(0, idx))
   if contents ~= nil then
@@ -2112,6 +2115,9 @@ _itemMarket_ShowListOutsideItemSlotToolTip = function(idx, isSelected)
           local sellInfo = getItemMarketSellInfoInClientByIndex(self.curTerritoryKeyRaw, self.sellInfoItemEnchantKeyRaw, idx)
           itemWrapper = sellInfo:getItemWrapper()
           UiBase = itemIcon
+          -- DECOMPILER ERROR at PC85: Confused about usage of register: R10 in 'UnsetPending'
+
+          ItemMarket._isMarketItemShow = true
           Panel_Tooltip_Item_Show(itemWrapper, UiBase, false, true, nil, nil, true)
         end
       end
@@ -2119,8 +2125,14 @@ _itemMarket_ShowListOutsideItemSlotToolTip = function(idx, isSelected)
   end
 end
 
-_specialGoods_ShowToolTip = function(idx)
+ItemMarket_getIsMarketItem = function()
   -- function num : 0_21 , upvalues : ItemMarket
+  local self = ItemMarket
+  return self._isMarketItemShow
+end
+
+_specialGoods_ShowToolTip = function(idx)
+  -- function num : 0_22 , upvalues : ItemMarket
   local self = ItemMarket
   if idx == nil then
     return 
@@ -2137,7 +2149,7 @@ _specialGoods_ShowToolTip = function(idx)
 end
 
 _specialGoodsSingle_ShowToolTip = function(enchantKey, idx)
-  -- function num : 0_22 , upvalues : ItemMarket
+  -- function num : 0_23 , upvalues : ItemMarket
   local self = ItemMarket
   if enchantKey == nil then
     return 
@@ -2165,12 +2177,15 @@ _specialGoodsSingle_ShowToolTip = function(enchantKey, idx)
 end
 
 _itemMarket_HideToolTip = function()
-  -- function num : 0_23
+  -- function num : 0_24 , upvalues : ItemMarket
   Panel_Tooltip_Item_hideTooltip()
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
+
+  ItemMarket._isMarketItemShow = false
 end
 
 ItemMarket_SelectedItemNameTooltip = function(isShow, itemName, idx, tipType)
-  -- function num : 0_24 , upvalues : ItemMarket
+  -- function num : 0_25 , upvalues : ItemMarket
   local self = ItemMarket
   local name, desc, control = nil, nil, nil
   if itemName == nil then
@@ -2211,7 +2226,7 @@ ItemMarket_SelectedItemNameTooltip = function(isShow, itemName, idx, tipType)
 end
 
 _itemMarket_ShowListOutSideTooltip = function(isShow, iconType, uiIdx)
-  -- function num : 0_25 , upvalues : ItemMarket
+  -- function num : 0_26 , upvalues : ItemMarket
   local self = ItemMarket
   if uiIdx == nil then
     TooltipSimple_Hide()
@@ -2282,7 +2297,7 @@ _itemMarket_ShowListOutSideTooltip = function(isShow, iconType, uiIdx)
 end
 
 ItemMarket_FavoriteItemTooltip = function(isShow)
-  -- function num : 0_26 , upvalues : ItemMarket
+  -- function num : 0_27 , upvalues : ItemMarket
   local self = ItemMarket
   if isShow then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_FAVORITEBTN_NAME")
@@ -2294,7 +2309,7 @@ ItemMarket_FavoriteItemTooltip = function(isShow)
 end
 
 _itemMarket_ShowSpecialListOutSideTooltip = function(isShow, iconType, uiIdx)
-  -- function num : 0_27 , upvalues : ItemMarket
+  -- function num : 0_28 , upvalues : ItemMarket
   local self = ItemMarket
   if uiIdx == nil then
     TooltipSimple_Hide()
@@ -2332,7 +2347,7 @@ _itemMarket_ShowSpecialListOutSideTooltip = function(isShow, iconType, uiIdx)
 end
 
 _itemMarket_ShowListInSideTooltip = function(isShow, iconType)
-  -- function num : 0_28 , upvalues : ItemMarket
+  -- function num : 0_29 , upvalues : ItemMarket
   local self = ItemMarket
   if iconType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_AVG_NAME")
@@ -2385,7 +2400,7 @@ _itemMarket_ShowListInSideTooltip = function(isShow, iconType)
 end
 
 _itemMarket_ShowIconToolTip = function(isShow, iconType)
-  -- function num : 0_29 , upvalues : ItemMarket
+  -- function num : 0_30 , upvalues : ItemMarket
   local self = ItemMarket
   if iconType == 13 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_AVGTRADEITEM_NAME")
@@ -2412,7 +2427,7 @@ _itemMarket_ShowIconToolTip = function(isShow, iconType)
 end
 
 _itemMarket_MoneyToolTip = function(isShow, tipType)
-  -- function num : 0_30 , upvalues : ItemMarket
+  -- function num : 0_31 , upvalues : ItemMarket
   local self = ItemMarket
   if isShow == true then
     if tipType == 0 then
@@ -2431,7 +2446,7 @@ _itemMarket_MoneyToolTip = function(isShow, tipType)
 end
 
 _itemMarket_Search = function()
-  -- function num : 0_31 , upvalues : ItemMarket
+  -- function num : 0_32 , upvalues : ItemMarket
   local self = ItemMarket
   local text = (self.edit_ItemName):GetEditText()
   if text == nil or text == "" or PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME") == text then
@@ -2452,7 +2467,7 @@ _itemMarket_Search = function()
 end
 
 FGlobal_FavoriteItem_Search = function(text, enchantKey)
-  -- function num : 0_32 , upvalues : ItemMarket
+  -- function num : 0_33 , upvalues : ItemMarket
   local self = ItemMarket
   self.isSelectItem = false
   if ((string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_16")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_17")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_18")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_19")) ~= nil or (string.find)(text, PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_UTIL_UI_SLOT_ENCHANTLEVEL_20")) ~= nil) and enchantKey ~= 0 then
@@ -2479,7 +2494,7 @@ FGlobal_FavoriteItem_Search = function(text, enchantKey)
 end
 
 _itemMarket_FavoriteItemRegist = function()
-  -- function num : 0_33 , upvalues : ItemMarket
+  -- function num : 0_34 , upvalues : ItemMarket
   local self = ItemMarket
   local text = ""
   if self.isSpecialCategory then
@@ -2509,7 +2524,7 @@ _itemMarket_FavoriteItemRegist = function()
 end
 
 _itemMarket_SpecialSearch = function()
-  -- function num : 0_34 , upvalues : ItemMarket
+  -- function num : 0_35 , upvalues : ItemMarket
   local self = ItemMarket
   local text = (self.edit_SpecialItemName):GetEditText()
   if text == nil or text == "" or PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME") == text then
@@ -2533,7 +2548,7 @@ _itemMarket_SpecialSearch = function()
 end
 
 HandleClicked_ItemMarket_SetAlarm = function(itemEnchantKeyRaw, uiPoolIdx)
-  -- function num : 0_35 , upvalues : ItemMarket
+  -- function num : 0_36 , upvalues : ItemMarket
   local self = ItemMarket
   local totalItemCount = toClient_GetItemMarketFavoriteItemListSize()
   if itemEnchantKeyRaw ~= nil then
@@ -2640,7 +2655,7 @@ HandleClicked_ItemMarket_SetAlarm = function(itemEnchantKeyRaw, uiPoolIdx)
 end
 
 HandleClicked_ItemMarket_GroupItem = function(itemIdx, itemEnchantKeyRaw)
-  -- function num : 0_36 , upvalues : ItemMarket, isPreBidOpen
+  -- function num : 0_37 , upvalues : ItemMarket, isPreBidOpen
   do
     local self = ItemMarket
     if ToClient_WorldMapIsShow() or ToClient_CheckExistSummonMaid() or ItemMarket.escMenuSaveValue then
@@ -2731,7 +2746,7 @@ HandleClicked_ItemMarket_GroupItem = function(itemIdx, itemEnchantKeyRaw)
 end
 
 HandleClicked_SpecialGoods_GroupItem = function(itemIdx, itemEnchantKeyRaw)
-  -- function num : 0_37 , upvalues : ItemMarket
+  -- function num : 0_38 , upvalues : ItemMarket
   local self = ItemMarket
   if not ToClient_WorldMapIsShow() and not ToClient_CheckExistSummonMaid() then
     local isIgnoreNpc = ItemMarket.escMenuSaveValue
@@ -2772,7 +2787,7 @@ HandleClicked_SpecialGoods_GroupItem = function(itemIdx, itemEnchantKeyRaw)
 end
 
 HandleClicked_ItemMarket_SingleItem = function(slotidx, itemEnchantKeyRaw, isBidding)
-  -- function num : 0_38 , upvalues : ItemMarket
+  -- function num : 0_39 , upvalues : ItemMarket
   local self = ItemMarket
   local itemCount = self._registerCount
   self.buyItemKeyraw = itemEnchantKeyRaw
@@ -2806,13 +2821,13 @@ HandleClicked_ItemMarket_SingleItem = function(slotidx, itemEnchantKeyRaw, isBid
 end
 
 ItemMarket_SingleItemBuy = function()
-  -- function num : 0_39
+  -- function num : 0_40
   FGlobal_HandleClicked_ItemMarket_SingleItem_Do(1)
 end
 
 local isOpenByMaid = false
 ItemMarket_UpdateMoneyByWarehouse = function()
-  -- function num : 0_40 , upvalues : ItemMarket, isOpenByMaid
+  -- function num : 0_41 , upvalues : ItemMarket, isOpenByMaid
   local self = ItemMarket
   ;
   (self.invenMoney):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
@@ -2826,13 +2841,29 @@ ItemMarket_UpdateMoneyByWarehouse = function()
       return 
     end
     local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
-    ;
-    (self.warehouseMoney):SetText(makeDotMoney(warehouse_moneyFromRegionKey_s64(myAffiliatedTownRegionKey)))
+    local regionInfoWrapper = getRegionInfoWrapper(myAffiliatedTownRegionKey)
+    if ToClient_IsAccessibleRegionKey(myAffiliatedTownRegionKey) == false then
+      local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
+      local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
+      if newRegionInfo == nil then
+        return 
+      end
+      myAffiliatedTownRegionKey = newRegionInfo:getRegionKey()
+      Proc_ShowMessage_Ack(tostring(myAffiliatedTownRegionKey) .. "    " .. tostring(regionInfo:getAffiliatedTownRegionKey()))
+      if myAffiliatedTownRegionKey == 0 then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+        return 
+      end
+    end
+    do
+      ;
+      (self.warehouseMoney):SetText(makeDotMoney(warehouse_moneyFromRegionKey_s64(myAffiliatedTownRegionKey)))
+    end
   end
 end
 
 FGlobal_HandleClicked_ItemMarket_SingleItem_Do = function(itemCount)
-  -- function num : 0_41 , upvalues : ItemMarket
+  -- function num : 0_42 , upvalues : ItemMarket
   local self = ItemMarket
   local fromWhereType = (CppEnums.ItemWhereType).eInventory
   if (self.warehouseMoneyTit):IsCheck() then
@@ -2861,7 +2892,7 @@ end
 
 local _specialGoodsIndex, _specialGoodsEnchantKeyRaw = nil, nil
 HandleClicked_ItemMarket_SpecialItem = function(index, enchantKeyRaw)
-  -- function num : 0_42 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
+  -- function num : 0_43 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
   local self = ItemMarket
   local fromWhereType = (CppEnums.ItemWhereType).eInventory
   if (self.warehouseMoneyTit):IsCheck() then
@@ -2893,7 +2924,7 @@ HandleClicked_ItemMarket_SpecialItem = function(index, enchantKeyRaw)
 end
 
 FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2, param3, param4)
-  -- function num : 0_43 , upvalues : ItemMarket
+  -- function num : 0_44 , upvalues : ItemMarket
   local self = ItemMarket
   if msgType == 0 then
     if param1 == 0 then
@@ -3213,7 +3244,7 @@ FromClient_notifyItemMarketMessage = function(msgType, strParam1, param1, param2
 end
 
 HandleClicked_ItemMarket_UnSetGroupItem = function()
-  -- function num : 0_44 , upvalues : ItemMarket, isOpenByMaid
+  -- function num : 0_45 , upvalues : ItemMarket, isOpenByMaid
   local self = ItemMarket
   if not (self.selectedListHeadBG):GetShow() then
     return 
@@ -3245,7 +3276,7 @@ HandleClicked_ItemMarket_UnSetGroupItem = function()
 end
 
 HandleClicked_ItemMarketNew_SelectCategory = function(isBackPage, realCategory_Idx)
-  -- function num : 0_45 , upvalues : ItemMarket, selectedKey
+  -- function num : 0_46 , upvalues : ItemMarket, selectedKey
   TooltipSimple_Hide()
   local self = ItemMarket
   if (self.btn_BackPage):GetShow() == true then
@@ -3282,7 +3313,7 @@ end
 
 local filter1 = 0
 Itemmarket_Sort_ShowComboBox = function()
-  -- function num : 0_46 , upvalues : ItemMarket, tree2IndexMap, selectedKey, filter1
+  -- function num : 0_47 , upvalues : ItemMarket, tree2IndexMap, selectedKey, filter1
   local self = ItemMarket
   ;
   (self.combobox_Filter_Sort1):DeleteAllItem()
@@ -3318,7 +3349,7 @@ Itemmarket_Sort_ShowComboBox = function()
 end
 
 Itemmarket_Sort_SetSort = function()
-  -- function num : 0_47 , upvalues : ItemMarket, filter1
+  -- function num : 0_48 , upvalues : ItemMarket, filter1
   local self = ItemMarket
   ;
   (self.combobox_Filter_Sort1):SetSelectItemIndex((self.combobox_Filter_Sort1):GetSelectIndex())
@@ -3329,7 +3360,7 @@ Itemmarket_Sort_SetSort = function()
 end
 
 HandleClicked_ItemMarket_ItemSort = function(sortTarget)
-  -- function num : 0_48 , upvalues : ItemMarket
+  -- function num : 0_49 , upvalues : ItemMarket
   local self = ItemMarket
   self.selectItemSort = sortTarget
   _itemMarket_ChangeTextureBySort(self.btn_Sort_AverageTradePrice, 3, true)
@@ -3369,7 +3400,7 @@ HandleClicked_ItemMarket_ItemSort = function(sortTarget)
 end
 
 _itemMarket_ResetTextureBySort = function(control)
-  -- function num : 0_49
+  -- function num : 0_50
   local self = control
   self.curSortValue = false
   self.isSort_ItemName = true
@@ -3382,7 +3413,7 @@ _itemMarket_ResetTextureBySort = function(control)
 end
 
 HandleClicked_ItemMarket_Close = function()
-  -- function num : 0_50 , upvalues : ItemMarket
+  -- function num : 0_51 , upvalues : ItemMarket
   Panel_Window_ItemMarket:CloseUISubApp()
   ;
   (ItemMarket.checkPopUp):SetCheck(false)
@@ -3390,7 +3421,7 @@ HandleClicked_ItemMarket_Close = function()
 end
 
 HandleClicked_ItemMarket_PopUp = function()
-  -- function num : 0_51 , upvalues : ItemMarket
+  -- function num : 0_52 , upvalues : ItemMarket
   if (ItemMarket.checkPopUp):IsCheck() then
     Panel_Window_ItemMarket:OpenUISubApp()
   else
@@ -3400,7 +3431,7 @@ HandleClicked_ItemMarket_PopUp = function()
 end
 
 ItemMarketPopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_52 , upvalues : ItemMarket
+  -- function num : 0_53 , upvalues : ItemMarket
   if isShow then
     local self = ItemMarket
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
@@ -3419,34 +3450,34 @@ ItemMarketPopUp_ShowIconToolTip = function(isShow)
 end
 
 HandleClicked_ItemMarket_Search = function()
-  -- function num : 0_53
+  -- function num : 0_54
   _itemMarket_Search()
 end
 
 FGlobal_ItemMarket_FavoriteItemRegiste = function()
-  -- function num : 0_54
+  -- function num : 0_55
   _itemMarket_FavoriteItemRegist()
 end
 
 HandleClicked_ItemMarket_SpecialSearch = function()
-  -- function num : 0_55
+  -- function num : 0_56
   _itemMarket_SpecialSearch()
 end
 
 HandleClicked_ItemMarket_RefreshList = function()
-  -- function num : 0_56 , upvalues : ItemMarket
+  -- function num : 0_57 , upvalues : ItemMarket
   HandleClicked_ItemMarket_GroupItem(ItemMarket.curSummaryItemIndex, ItemMarket.sellInfoItemEnchantKeyRaw)
 end
 
 FGlobal_ItemMarket_FavoriteBtn_CheckOff = function()
-  -- function num : 0_57 , upvalues : ItemMarket
+  -- function num : 0_58 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.btn_FavoriteOnOff):SetCheck(false)
 end
 
 HandleClicked_ItemMarket_FavoriteCheckOnOff = function()
-  -- function num : 0_58 , upvalues : ItemMarket
+  -- function num : 0_59 , upvalues : ItemMarket
   local self = ItemMarket
   if (self.btn_FavoriteOnOff):IsCheck() then
     FGlobal_ItemMarket_FavoriteItem_Open()
@@ -3456,7 +3487,7 @@ HandleClicked_ItemMarket_FavoriteCheckOnOff = function()
 end
 
 HandleClicked_ItemMarket_EditText = function()
-  -- function num : 0_59 , upvalues : ItemMarket
+  -- function num : 0_60 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.edit_ItemName):SetEditText("", true)
@@ -3472,7 +3503,7 @@ HandleClicked_ItemMarket_EditText = function()
 end
 
 HandleClicked_ItemMarket_SpecialEditText = function()
-  -- function num : 0_60 , upvalues : ItemMarket
+  -- function num : 0_61 , upvalues : ItemMarket
   local self = ItemMarket
   ;
   (self.edit_SpecialItemName):SetEditText("", true)
@@ -3487,7 +3518,7 @@ HandleClicked_ItemMarket_SpecialEditText = function()
 end
 
 FGolbal_ItemMarketNew_Search = function()
-  -- function num : 0_61 , upvalues : IM, ItemMarket
+  -- function num : 0_62 , upvalues : IM, ItemMarket
   _itemMarket_Search()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
@@ -3502,7 +3533,7 @@ FGolbal_ItemMarketNew_Search = function()
 end
 
 FGolbal_ItemMarketNew_SpecialSearch = function()
-  -- function num : 0_62 , upvalues : IM, ItemMarket
+  -- function num : 0_63 , upvalues : IM, ItemMarket
   _itemMarket_SpecialSearch()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
@@ -3517,7 +3548,7 @@ FGolbal_ItemMarketNew_SpecialSearch = function()
 end
 
 HandleClicked_ItemMarket_ClearEdit = function()
-  -- function num : 0_63 , upvalues : IM, ItemMarket
+  -- function num : 0_64 , upvalues : IM, ItemMarket
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   ;
   (ItemMarket.edit_ItemName):SetEditText("", true)
@@ -3525,7 +3556,7 @@ HandleClicked_ItemMarket_ClearEdit = function()
 end
 
 HandleClicked_ItemMarket_RegistItem = function()
-  -- function num : 0_64 , upvalues : ItemMarket
+  -- function num : 0_65 , upvalues : ItemMarket
   Warehouse_OpenPanelFromMaid()
   HandleClicked_WhItemMarketRegistItem_Open(true)
   Panel_Window_ItemMarket:SetShow(false)
@@ -3538,7 +3569,7 @@ HandleClicked_ItemMarket_RegistItem = function()
 end
 
 FGlobal_ItemMarketNew_Open = function()
-  -- function num : 0_65 , upvalues : ItemMarket, IM, selectedKey, tree2IndexMap
+  -- function num : 0_66 , upvalues : ItemMarket, IM, selectedKey, tree2IndexMap
   local self = ItemMarket
   -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -3683,7 +3714,7 @@ FGlobal_ItemMarketNew_Open = function()
 end
 
 FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
-  -- function num : 0_66 , upvalues : ItemMarket, isPopUpContentsEnable, selectedKey, tree2IndexMap
+  -- function num : 0_67 , upvalues : ItemMarket, isPopUpContentsEnable, selectedKey, tree2IndexMap
   local self = ItemMarket
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R3 in 'UnsetPending'
 
@@ -3809,7 +3840,7 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
 end
 
 FGlobal_ItemMarket_OpenByMaid = function()
-  -- function num : 0_67 , upvalues : ItemMarket, isOpenByMaid, selectedKey, tree2IndexMap
+  -- function num : 0_68 , upvalues : ItemMarket, isOpenByMaid, selectedKey, tree2IndexMap
   local self = ItemMarket
   if Panel_Window_ItemMarket:IsUISubApp() then
     Panel_Window_ItemMarket:CloseUISubApp()
@@ -3954,7 +3985,7 @@ FGlobal_ItemMarket_OpenByMaid = function()
 end
 
 FGolbal_ItemMarketNew_Close = function()
-  -- function num : 0_68 , upvalues : selectedKey, IM, isOpenByMaid, ItemMarket
+  -- function num : 0_69 , upvalues : selectedKey, IM, isOpenByMaid, ItemMarket
   if Panel_Window_ItemMarket:IsShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true then
     return 
   end
@@ -3987,16 +4018,6 @@ FGolbal_ItemMarketNew_Close = function()
 end
 
 Update_ItemMarketMasterInfo = function()
-  -- function num : 0_69 , upvalues : ItemMarket
-  local self = ItemMarket
-  if self.isSpecialCategory then
-    self:SpecialGoodsUpdate()
-    return 
-  end
-  ItemMarket:Update()
-end
-
-Update_ItemMarketSummaryInfo = function()
   -- function num : 0_70 , upvalues : ItemMarket
   local self = ItemMarket
   if self.isSpecialCategory then
@@ -4006,8 +4027,18 @@ Update_ItemMarketSummaryInfo = function()
   ItemMarket:Update()
 end
 
-Update_ItemMarketSellInfo = function()
+Update_ItemMarketSummaryInfo = function()
   -- function num : 0_71 , upvalues : ItemMarket
+  local self = ItemMarket
+  if self.isSpecialCategory then
+    self:SpecialGoodsUpdate()
+    return 
+  end
+  ItemMarket:Update()
+end
+
+Update_ItemMarketSellInfo = function()
+  -- function num : 0_72 , upvalues : ItemMarket
   local self = ItemMarket
   if self.isSpecialCategory then
     self:SpecialGoodsUpdate()
@@ -4017,7 +4048,7 @@ Update_ItemMarketSellInfo = function()
 end
 
 FromClient_NotifyItemMarketByParty = function(notifyType, param0, param1)
-  -- function num : 0_72 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
+  -- function num : 0_73 , upvalues : ItemMarket, _specialGoodsIndex, _specialGoodsEnchantKeyRaw
   if notifyType == 0 and Panel_Window_ItemMarket:GetShow() then
     ItemMarket:SpecialGoodsUpdate()
   end
@@ -4062,7 +4093,7 @@ FromClient_NotifyItemMarketByParty = function(notifyType, param0, param1)
 end
 
 FGlobal_HandleClicked_ItemMarketBackPage = function()
-  -- function num : 0_73 , upvalues : ItemMarket, isOpenByMaid
+  -- function num : 0_74 , upvalues : ItemMarket, isOpenByMaid
   local self = ItemMarket
   TooltipSimple_Hide()
   ;
@@ -4095,7 +4126,7 @@ FGlobal_HandleClicked_ItemMarketBackPage = function()
 end
 
 FGlobal_HandleClicked_SpecialItemMarketBackPage = function()
-  -- function num : 0_74 , upvalues : ItemMarket
+  -- function num : 0_75 , upvalues : ItemMarket
   local self = ItemMarket
   TooltipSimple_Hide()
   ;
@@ -4118,25 +4149,25 @@ FGlobal_HandleClicked_SpecialItemMarketBackPage = function()
 end
 
 FGlobal_isOpenItemMarketBackPage = function()
-  -- function num : 0_75 , upvalues : ItemMarket
+  -- function num : 0_76 , upvalues : ItemMarket
   local self = ItemMarket
   return (self.btn_BackPage):GetShow()
 end
 
 FGlobal_SpecialListPage = function()
-  -- function num : 0_76 , upvalues : ItemMarket
+  -- function num : 0_77 , upvalues : ItemMarket
   local self = ItemMarket
   return self.isSpecialInside
 end
 
 FGlobal_ItemmarketNew_OpenInventory = function()
-  -- function num : 0_77
+  -- function num : 0_78
   Inventory_SetFunctor(nil, nil, nil, nil)
   InventoryWindow_Show(true, false, true)
 end
 
 Panel_ItemMarket_BidDesc_Init = function()
-  -- function num : 0_78 , upvalues : itemMarketBidDesc, UI_TM
+  -- function num : 0_79 , upvalues : itemMarketBidDesc, UI_TM
   local self = itemMarketBidDesc
   ;
   (self._txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -4154,23 +4185,23 @@ Panel_ItemMarket_BidDesc_Init = function()
 end
 
 HandleClicked_ItemMarket_BidDesc_Open = function()
-  -- function num : 0_79 , upvalues : itemMarketBidDesc
+  -- function num : 0_80 , upvalues : itemMarketBidDesc
   local self = itemMarketBidDesc
   Panel_ItemMarket_BidDesc_Show()
 end
 
 Panel_ItemMarket_BidDesc_Show = function()
-  -- function num : 0_80
+  -- function num : 0_81
   Panel_ItemMarket_BidDesc:SetShow(true)
 end
 
 Panel_ItemMarket_BidDesc_Hide = function()
-  -- function num : 0_81
+  -- function num : 0_82
   Panel_ItemMarket_BidDesc:SetShow(false)
 end
 
 ItemMarket.registEventHandler = function(self)
-  -- function num : 0_82
+  -- function num : 0_83
   (self.edit_ItemName):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_EditText()")
   ;
   (self.edit_ItemName):RegistReturnKeyEvent("FGolbal_ItemMarketNew_Search()")
@@ -4225,7 +4256,7 @@ ItemMarket.registEventHandler = function(self)
 end
 
 ItemMarket.registMessageHandler = function(self)
-  -- function num : 0_83
+  -- function num : 0_84
   registerEvent("FromClient_notifyItemMarketMessage", "FromClient_notifyItemMarketMessage")
   registerEvent("FromClient_NotifyItemMarketByParty", "FromClient_NotifyItemMarketByParty")
   registerEvent("FromClient_InventoryUpdate", "ItemMarket_UpdateMoneyByWarehouse")

@@ -84,13 +84,11 @@ warehouse.init = function(self)
     ;
     (self.blankSlots)[ii] = slot
   end
-  local group_1 = Panel_Window_Warehouse:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for ii = 0, (self.config).slotCount - 1 do
     local slot = {}
     ;
     (SlotItem.new)(slot, "ItemIcon_" .. ii, ii, Panel_Window_Warehouse, self.slotConfig)
     slot:createChild()
-    group_1:addControl(ii % 8, ii / 8, 8, 8, slot.icon)
     local row = (math.floor)(ii / (self.config).slotCols)
     local column = ii % (self.config).slotCols
     ;
@@ -114,7 +112,7 @@ warehouse.init = function(self)
     ;
     (UIScroll.InputEventByControl)(slot.icon, "Warehouse_Scroll")
     Panel_Tooltip_Item_SetPosition(ii, slot, "WareHouse")
-    -- DECOMPILER ERROR at PC225: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC211: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self.slots)[ii] = slot
@@ -1159,6 +1157,10 @@ Warehouse_OpenPanelFromMaid = function()
   local regionKey = regionInfoWrapper:getRegionKey()
   if ToClient_IsAccessibleRegionKey(regionKey) == false then
     plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
+    if plantWayKey == 0 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+      return 
+    end
   end
   Warehouse_OpenPanel(plantWayKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Maid)
   Warehouse_SetIgnoreMoneyButton(false)
@@ -1250,36 +1252,6 @@ Warehouse_OpenPanel = function(waypointKey, fromType)
         Panel_Window_Warehouse:SetPosX(Panel_Manufacture:GetPosX() + Panel_Manufacture:GetSizeX() - 20)
         Panel_Window_Warehouse:SetPosY(Panel_Manufacture:GetPosY())
       end
-    end
-    local groupIndex = 0
-    local groupCount = 0
-    Panel_Window_Warehouse:deleteConsoleUIGroup(2)
-    local group_2 = Panel_Window_Warehouse:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-    if (self.BtnManufacture):GetShow() then
-      groupCount = groupCount + 1
-    end
-    if (self.BtnMarketRegist):GetShow() then
-      groupCount = groupCount + 1
-    end
-    if (self.BtnGuildUpdate):GetShow() then
-      groupCount = groupCount + 1
-    end
-    if (self.BtnManufacture):GetShow() then
-      group_2:addControl(groupIndex, 0, groupCount, 1, self.BtnManufacture)
-      groupIndex = groupIndex + 1
-    end
-    if (self.BtnMarketRegist):GetShow() then
-      group_2:addControl(groupIndex, 0, groupCount, 1, self.BtnMarketRegist)
-      groupIndex = groupIndex + 1
-    end
-    if (self.BtnGuildUpdate):GetShow() then
-      group_2:addControl(groupIndex, 0, groupCount, 1, self.BtnGuildUpdate)
-      groupIndex = groupIndex + 1
-    end
-    Panel_Window_Warehouse:deleteConsoleUIGroup(3)
-    local group_3 = Panel_Window_Warehouse:addConsoleUIGroup(3, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-    if FGlobal_Warehouse_IsMoveItem() then
-      group_3:addControl(0, 0, 1, 1, self.buttonMoney)
     end
     self:update()
   end
@@ -1381,11 +1353,4 @@ end
 warehouse:init()
 warehouse:registEventHandler()
 warehouse:registMessageHandler()
-ConsoleGroupCreate_Panel_Window_Warehouse = function()
-  -- function num : 0_64 , upvalues : warehouse
-  local group_0 = Panel_Window_Warehouse:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  group_0:addControl(0, 0, 1, 1, warehouse.checkSort)
-end
-
-ConsoleGroupCreate_Panel_Window_Warehouse()
 

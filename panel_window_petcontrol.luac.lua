@@ -723,6 +723,7 @@ HandleClicked_petControl_AllUnSeal = function()
       FGlobal_petListNew_Seal(tostring(unsealPetNo_s64), index)
     end
   end
+  PetList_VScroll_MoveTop()
 end
 
 FGlobal_HandleClicked_petControl_AllUnSeal = function()

@@ -22,23 +22,30 @@ local Panel_WorldMap_PartyMemberTail_table = {}
 local RenderModeWorldMapBitSet = PAUIRenderModeBitSet({(Defines.RenderMode).eRenderMode_WorldMap})
 local InitPartyMemberTooltipTable = function()
   -- function num : 0_0 , upvalues : MAX_PARTY_MEMBER, RenderModeWorldMapBitSet, Panel_WorldMap_PartyMemberIcon_table, Panel_WorldMap_PartyMemberTail_table
+  Panel_WorldMap_PartyMemberIcon:SetIgnore(true)
   local Name = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "StaticText_PartyMemberName")
   local ClassIconBG = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIconBG")
   local ClassIcon = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIcon")
   local Level = (UI.getChildControl)(Panel_WorldMap_PartyMemberIcon, "StaticText_PartyLevel")
   local Tail = (UI.getChildControl)(Panel_WorldMap_PartyMemberTail, "Static_PartyTail")
+  Name:SetIgnore(true)
+  ClassIconBG:SetIgnore(true)
+  ClassIcon:SetIgnore(true)
+  Level:SetIgnore(true)
+  Tail:SetIgnore(true)
   for ii = 1, MAX_PARTY_MEMBER do
     local panel = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberIcon" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_Party + ii, RenderModeWorldMapBitSet)
     local panelTail = (UI.createPanelAndSetPanelRenderMode)("Panel_WorldMap_PartyMemberTail" .. tostring(ii), (Defines.UIGroup).PAGameUIGroup_Party + ii, RenderModeWorldMapBitSet)
     CopyBaseProperty(Panel_WorldMap_PartyMemberIcon, panel)
     CopyBaseProperty(Panel_WorldMap_PartyMemberTail, panelTail)
+    panel:SetIgnore(true)
     panel:setMaskingChild(true)
     panel:setGlassBackground(true)
     panelTail:setMaskingChild(true)
     panelTail:setGlassBackground(true)
-    panel:SetIgnore(false)
+    panel:SetIgnore(true)
     panel:SetDragAll(false)
-    panelTail:SetIgnore(false)
+    panelTail:SetIgnore(true)
     panelTail:SetDragAll(false)
     local controlName = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_WorldMap_PartyMemberIcon, "StaticText_PartyMemberName" .. tostring(ii))
     local controlClassIconBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_WorldMap_PartyMemberIcon, "Static_PartyClassIconBG" .. tostring(ii))
@@ -55,10 +62,10 @@ local InitPartyMemberTooltipTable = function()
     panel:SetChild_DoNotUseXXX(controlClassIcon)
     panel:SetChild_DoNotUseXXX(controlLevel)
     panelTail:SetChild_DoNotUseXXX(controlTail)
-    -- DECOMPILER ERROR at PC183: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC205: Confused about usage of register: R16 in 'UnsetPending'
 
     Panel_WorldMap_PartyMemberIcon_table[ii] = panel
-    -- DECOMPILER ERROR at PC185: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC207: Confused about usage of register: R16 in 'UnsetPending'
 
     Panel_WorldMap_PartyMemberTail_table[ii] = panelTail
   end

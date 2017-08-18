@@ -224,9 +224,6 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
     savageDefenceListStatus:SetText(isCurrentState)
     savageDefenceListWave:SetText(getWave)
     savageDefenceListJoinBtn:addInputEvent("Mouse_LUp", "FGlobal_SavegeDefenceInfo_join(" .. idx .. ")")
-    if getServerNo ~= curChannelData._serverNo then
-      savageDefenceListJoinBtn:SetShow(false)
-    end
   end
 end
 
@@ -277,7 +274,7 @@ FGlobal_SavegeDefenceInfo_join = function(idx)
         if getServerNo == curChannelData._serverNo then
           ToClient_SavageDefenceJoin(idx)
         else
-          Proc_ShowMessage_Ack("현재 접속 중인 서버�\140 입장�\180 �\128능합니다.")
+          ToClient_RequestSavageDefenceJoinToAnotherChannel(getServerNo)
         end
       else
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_MAXHP_CHECK"))
@@ -292,13 +289,18 @@ FGlobal_SavegeDefenceInfo_join = function(idx)
   else
     channelMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_CHANNELMOVE", "channelName", channelName)
   end
-  if getServerNo == curChannelData._serverNo then
-    local messageBoxData = {title = "야만�\152 균열 입장", content = channelMemo, functionYes = joinSavageDefence, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  local changeChannelTime = getChannelMoveableRemainTime(curChannelData._worldNo)
+  local changeRealChannelTime = convertStringFromDatetime(changeChannelTime)
+  if toInt64(0, 0) < changeChannelTime and getServerNo ~= curChannelData._serverNo then
+    local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANGECHANNEL_PENALTY", "changeRealChannelTime", changeRealChannelTime)
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)
   else
     do
-      Proc_ShowMessage_Ack("현재 접속 중인 서버�\140 입장�\180 �\128능합니다.")
+      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = channelMemo, functionYes = joinSavageDefence, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
     end
   end
 end

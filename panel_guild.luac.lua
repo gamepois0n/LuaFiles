@@ -1031,6 +1031,8 @@ GuildWarInfoPage.initialize = function(self)
               local guildDuelDeathScore = tostring(ToClient_GetGuildDuelDeathCount(guildNo_s64))
               ;
               (rtGuildWarInfo._guildShowbuScore):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUELSCORE", "killCount", guildDuelKillScore, "deathCount", guildDuelDeathScore))
+              ;
+              (rtGuildWarInfo._guildShowbuScore):SetPosX((rtGuildWarInfo._guildWarScore):GetPosX() + (rtGuildWarInfo._guildWarScore):GetTextSizeX() + 10)
               local deadline = ToClient_GetGuildDuelDeadline_s64(guildNo_s64)
               if deadline < toInt64(0, 3600) then
                 (rtGuildWarInfo._guildShowbuScore):AddEffect("UI_Quest_Complete_GoldAura", true, 0, 0)
@@ -1069,7 +1071,7 @@ GuildWarInfoPage.initialize = function(self)
                   ;
                   (rtGuildWarInfo._txtShowbu):addInputEvent("Mouse_LUp", "")
                 end
-                -- DECOMPILER ERROR at PC267: Confused about usage of register: R8 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC281: Confused about usage of register: R8 in 'UnsetPending'
 
                 rtGuildWarInfo._PenaltyType = 7
               end
@@ -1699,7 +1701,6 @@ GuildManager.TabToggle = function(self, index)
   (self.mainBtn_CraftInfo):SetCheck(index == 6)
   ;
   (self.mainBtn_GuildBattle):SetCheck(index == 7)
-  ConsoleGroupDelete_Panel_Window_Guild()
   if ((getSelfPlayer()):get()):isGuildMaster() and ((getSelfPlayer()):get()):isGuildSubMaster() then
     FGlobal_ClearCandidate()
     _Web:ResetUrl()
@@ -3759,22 +3760,12 @@ Guild_Init = function()
   GuildMainInfo_Show()
   Notice_Init()
   Introduce_Init()
-  ConsoleGroupCreate_Panel_Window_Guild()
   ;
   (GuildManager.mainBtn_GuildBattle):SetShow(isGuildBattle)
 end
 
-ConsoleGroupCreate_Panel_Window_Guild = function()
-  -- function num : 0_90
-  local self = GuildManager
-end
-
-ConsoleGroupDelete_Panel_Window_Guild = function()
-  -- function num : 0_91
-end
-
 Test_GiveMeGuildWelfare = function()
-  -- function num : 0_92
+  -- function num : 0_90
   ToClient_RequestguildWelfare()
 end
 

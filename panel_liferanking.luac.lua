@@ -105,10 +105,8 @@ LifeRanking_Initionalize = function()
 end
 
 local rankerData = {}
-local group_0 = Panel_LifeRanking:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-local group_1 = Panel_LifeRanking:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
 LifeRanking.Update = function(self)
-  -- function num : 0_3 , upvalues : LifeRanking, rankerData, group_1, UI_color
+  -- function num : 0_3 , upvalues : LifeRanking, rankerData, UI_color
   local levelFlotFunc = function(lifeRankerWrp)
     -- function num : 0_3_0
     if lifeRankerWrp == nil then
@@ -212,8 +210,6 @@ LifeRanking.Update = function(self)
   end
   myLifeRankerRate = tonumber(myLifeRanker / servnerUserCnt * 100)
   rankerData = {}
-  Panel_LifeRanking:deleteConsoleUIGroup(1, false)
-  group_1 = Panel_LifeRanking:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for listIdx = LifeRanking._startIndex, LifeRanking._listCount - 1 do
     if LifeRanking._selectedTabIdx <= 9 then
       lifeRanker = ToClient_GetLifeRankerAt(listIdx)
@@ -241,14 +237,14 @@ LifeRanking.Update = function(self)
     local lifeRankerCharName = lifeRanker:getCharacterName()
     local lifeRankerGuild = lifeRanker:getGuildName()
     local lifeRankerIntroDesc = lifeRanker:getUserIntroduction()
-    -- DECOMPILER ERROR at PC267: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC254: Confused about usage of register: R17 in 'UnsetPending'
 
     rankerData[listIdx] = {}
-    -- DECOMPILER ERROR at PC270: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC257: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (rankerData[listIdx])._name = lifeRankerName
-    -- DECOMPILER ERROR at PC273: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC260: Confused about usage of register: R17 in 'UnsetPending'
 
     ;
     (rankerData[listIdx])._desc = lifeRankerIntroDesc
@@ -314,7 +310,6 @@ LifeRanking.Update = function(self)
                 (LifeRanking.firstRankerName):addInputEvent("Mouse_On", "LifeRanking_Tooltip( " .. listIdx .. ")")
                 ;
                 (LifeRanking.firstRankerName):addInputEvent("Mouse_Out", "LifeRanking_Tooltip()")
-                group_1:addControl(0, listIdx, 1, 30, LifeRanking.firstRankerName)
                 if listIdx == 1 then
                   (LifeRanking.secondRanker):SetShow(true)
                   ;
@@ -362,7 +357,6 @@ LifeRanking.Update = function(self)
                           (LifeRanking.secondRankerName):addInputEvent("Mouse_On", "LifeRanking_Tooltip( " .. listIdx .. ")")
                           ;
                           (LifeRanking.secondRankerName):addInputEvent("Mouse_Out", "LifeRanking_Tooltip()")
-                          group_1:addControl(0, listIdx, 1, 30, LifeRanking.secondRankerName)
                           if listIdx == 2 then
                             (LifeRanking.thirdRanker):SetShow(true)
                             ;
@@ -410,7 +404,6 @@ LifeRanking.Update = function(self)
                                     (LifeRanking.thirdRankerName):addInputEvent("Mouse_On", "LifeRanking_Tooltip( " .. listIdx .. ")")
                                     ;
                                     (LifeRanking.thirdRankerName):addInputEvent("Mouse_Out", "LifeRanking_Tooltip()")
-                                    group_1:addControl(0, listIdx, 1, 30, LifeRanking.thirdRankerName)
                                     ;
                                     (list.rank):SetShow(true)
                                     ;
@@ -459,79 +452,78 @@ LifeRanking.Update = function(self)
                                               (list.name):addInputEvent("Mouse_On", "LifeRanking_Tooltip( " .. listIdx .. ")")
                                               ;
                                               (list.name):addInputEvent("Mouse_Out", "LifeRanking_Tooltip()")
-                                              group_1:addControl(0, listIdx, 1, 30, list.name)
                                               count = count + 1
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC995: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
 
                                             end
                                           end
@@ -666,7 +658,7 @@ LifeRanking_SelectTab = function(idx)
 end
 
 FGlobal_LifeRanking_Open = function()
-  -- function num : 0_7 , upvalues : LifeRanking, group_0
+  -- function num : 0_7 , upvalues : LifeRanking
   if Panel_LifeRanking:GetShow() then
     Panel_LifeRanking:SetShow(false, false)
   end
@@ -674,21 +666,18 @@ FGlobal_LifeRanking_Open = function()
     ((LifeRanking._tab)[idx]):SetCheck(false)
   end
   local setShowCount = 0
-  Panel_LifeRanking:deleteConsoleUIGroup(0, false)
-  group_0 = Panel_LifeRanking:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for index = 0, 13 do
     if FGlobal_LifeRanking_CheckEnAble(index) then
       ((LifeRanking._tab)[index]):SetShow(true)
       ;
       ((LifeRanking._tab)[index]):SetSpanSize(35 + 35 * setShowCount + 5, 60)
-      group_0:addControl(setShowCount, 0, 14, 1, (LifeRanking._tab)[index])
       setShowCount = setShowCount + 1
     else
       ;
       ((LifeRanking._tab)[index]):SetShow(false)
     end
   end
-  -- DECOMPILER ERROR at PC81: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC58: Confused about usage of register: R1 in 'UnsetPending'
 
   LifeRanking._selectedTabIdx = 0
   ;

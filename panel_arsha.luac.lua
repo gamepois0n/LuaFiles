@@ -1594,6 +1594,8 @@ FGlobal_ArshaPvP_Open = function()
         ;
         (self.txt_RoundCountTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_ROUNDOFALIVE_TITLE"))
         ;
+        (self.txt_FreeMarkText):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ARSHA_ALIVEMODE_TITLE"))
+        ;
         (self.btn_Kick_A):SetShow(false)
         ;
         (self.btn_Kick_B):SetShow(false)

@@ -643,7 +643,7 @@ if false == isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR) then
   const_LowMaxScaleValue = 100
 end
 Panel_GameOption_Initialize = function()
-  -- function num : 0_12 , upvalues : chk_Option, gamePanel_Main, isSaveSetting, UI_TM, GetStr_Option, frame_Display, frame_Game, frame_Sound, isDev
+  -- function num : 0_12 , upvalues : chk_Option, gamePanel_Main, isSaveSetting, UI_TM, GetStr_Option, frame_Display, frame_Game, frame_Sound
   HideAllFrame_Func()
   getFrameSize_SetSlideSize()
   -- DECOMPILER ERROR at PC13: Confused about usage of register: R0 in 'UnsetPending'
@@ -1240,10 +1240,17 @@ Panel_GameOption_Initialize = function()
     ;
     (frame_Game._btn_ComboMode):SetShow(false)
   end
-  ;
-  (frame_Game._btn_ConsoleMode):SetShow(isGameServiceTypeDev())
-  ;
-  (frame_Game._btn_ComboMode):SetShow(isGameServiceTypeDev())
+  local isDev = ToClient_IsDevelopment()
+  if ToClient_isServiceUIDATA2() == true or isDev then
+    (frame_Game._btn_ConsoleMode):SetShow(true)
+    ;
+    (frame_Game._btn_ComboMode):SetShow(true)
+  else
+    ;
+    (frame_Game._btn_ConsoleMode):SetShow(false)
+    ;
+    (frame_Game._btn_ComboMode):SetShow(false)
+  end
   if true == isDev or true == isUsePcExchangeInLocalizingValue() then
     (frame_Game._btn_ExchangeRefuse):SetShow(true)
   else
@@ -1344,26 +1351,36 @@ Panel_GameOption_Initialize = function()
   end
 end
 
-local isOnServiceResourceTypeList = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = false, [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = false, [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = true, [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = false, [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = false, [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = false, [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = true, [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = true, [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = false, [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = false}
-local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW")}
+local isOnServiceResourceTypeList_New = {
+[(CppEnums.GameServiceType).eGameServiceType_DEV] = {(CppEnums.ServiceResourceType).eServiceResourceType_EN, (CppEnums.ServiceResourceType).eServiceResourceType_FR, (CppEnums.ServiceResourceType).eServiceResourceType_DE}
+, 
+[(CppEnums.GameServiceType).eGameServiceType_NA_ALPHA] = {(CppEnums.ServiceResourceType).eServiceResourceType_EN, (CppEnums.ServiceResourceType).eServiceResourceType_FR, (CppEnums.ServiceResourceType).eServiceResourceType_DE}
+, 
+[(CppEnums.GameServiceType).eGameServiceType_NA_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_EN, (CppEnums.ServiceResourceType).eServiceResourceType_FR, (CppEnums.ServiceResourceType).eServiceResourceType_DE}
+, 
+[(CppEnums.GameServiceType).eGameServiceType_SA_ALPHA] = {(CppEnums.ServiceResourceType).eServiceResourceType_PT, (CppEnums.ServiceResourceType).eServiceResourceType_ES}
+, 
+[(CppEnums.GameServiceType).eGameServiceType_SA_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_PT, (CppEnums.ServiceResourceType).eServiceResourceType_ES}
+}
+local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.ServiceResourceType).eServiceResourceType_PT] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT")}
 local _btn_ServiceResourceType = {}
 local serviceResEnumsNumber = {}
 local serviceResCount = 0
 local _txt_LanguageOption, _txt_ChatChannelOption = nil, nil
 local _ServiceResComputePosY = 0
 local createServiceResOption = function(frame, frameContent)
-  -- function num : 0_13 , upvalues : isOnServiceResourceTypeList, _btn_ServiceResourceType, isOnServiceResourceTypeTag, serviceResEnumsNumber, serviceResCount, UI_TM, _ServiceResComputePosY, _txt_LanguageOption, _frameContent_Game
+  -- function num : 0_13 , upvalues : isOnServiceResourceTypeList_New, _btn_ServiceResourceType, isOnServiceResourceTypeTag, serviceResEnumsNumber, serviceResCount, UI_TM, _ServiceResComputePosY, _txt_LanguageOption, _frameContent_Game
   local serviceResourceTypeControl = (UI.getChildControl)(frameContent, "RadioButton_ServiceResourceType")
   local _frameContent = (UI.getChildControl)(frame, "Frame_1_Content")
   local _txt_LanguageDesc = (UI.getChildControl)(_frameContent, "Static_LanguageCommentBG")
   local _txt_ChattingLanguageDesc = (UI.getChildControl)(_frameContent, "Static_ChattingLanguageCommentBG")
   local posYCount = 0
   local btn_index = 0
-  local Size = (CppEnums.ServiceResourceType).eServiceResourceTypeCount
-  for index = 0, Size do
-    -- DECOMPILER ERROR at PC43: Confused about usage of register: R13 in 'UnsetPending'
+  local resTable = isOnServiceResourceTypeList_New[getGameServiceType()]
+  if resTable ~= nil then
+    for _,index in pairs(resTable) do
+      -- DECOMPILER ERROR at PC42: Confused about usage of register: R14 in 'UnsetPending'
 
-    if isOnServiceResourceTypeList[index] then
       _btn_ServiceResourceType[btn_index] = (UI.createAndCopyBasePropertyControl)(_frameContent, "RadioButton_ServiceResourceType", _frameContent, "RadioButton_ServiceResourceType_" .. btn_index)
       ;
       (_btn_ServiceResourceType[btn_index]):SetPosY(serviceResourceTypeControl:GetPosY() + posYCount * 25)
@@ -1371,7 +1388,7 @@ local createServiceResOption = function(frame, frameContent)
       (_btn_ServiceResourceType[btn_index]):SetText(tostring(isOnServiceResourceTypeTag[index]))
       ;
       (_btn_ServiceResourceType[btn_index]):addInputEvent("Mouse_LUp", "GameOption_ServiceResourceTypeFunc()")
-      -- DECOMPILER ERROR at PC67: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC66: Confused about usage of register: R14 in 'UnsetPending'
 
       serviceResEnumsNumber[btn_index] = index
       posYCount = posYCount + 1
@@ -1379,26 +1396,27 @@ local createServiceResOption = function(frame, frameContent)
       serviceResCount = serviceResCount + 1
     end
   end
-  _txt_LanguageDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  _txt_LanguageDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GMAEOPTION_LANGUAGESETTING_DESC"))
-  _txt_LanguageDesc:SetSize(545, _txt_LanguageDesc:GetTextSizeY() + 10)
-  _txt_LanguageDesc:SetPosY(serviceResourceTypeControl:GetPosY() + (posYCount) * 25)
-  _ServiceResComputePosY = (posYCount) * 25 + _txt_LanguageDesc:GetSizeY()
-  _txt_LanguageOption = (UI.getChildControl)(_frameContent_Game, "StaticText_Language")
+  do
+    _txt_LanguageDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    _txt_LanguageDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GMAEOPTION_LANGUAGESETTING_DESC"))
+    _txt_LanguageDesc:SetSize(545, _txt_LanguageDesc:GetTextSizeY() + 10)
+    _txt_LanguageDesc:SetPosY(serviceResourceTypeControl:GetPosY() + (posYCount) * 25)
+    _ServiceResComputePosY = (posYCount) * 25 + _txt_LanguageDesc:GetSizeY()
+    _txt_LanguageOption = (UI.getChildControl)(_frameContent_Game, "StaticText_Language")
+  end
 end
 
 local _btn_ChatLanguageType = {}
 local ChatChannelEnumsNumber = {}
 local createChatChannelOption = function(frame, frameContent)
-  -- function num : 0_14 , upvalues : _btn_ChatLanguageType, _ServiceResComputePosY, ChatChannelEnumsNumber, isOnServiceResourceTypeList, isOnServiceResourceTypeTag, UI_TM, _txt_ChatChannelOption
+  -- function num : 0_14 , upvalues : _btn_ChatLanguageType, _ServiceResComputePosY, ChatChannelEnumsNumber, isOnServiceResourceTypeList_New, isOnServiceResourceTypeTag, UI_TM, _txt_ChatChannelOption
   local serviceResourceTypeControl = (UI.getChildControl)(frameContent, "RadioButton_ChannelChat_Language")
   local _frameContent = (UI.getChildControl)(frame, "Frame_1_Content")
   local _txt_LanguageDesc = (UI.getChildControl)(_frameContent, "Static_LanguageCommentBG")
   local _txt_ChattingLanguageDesc = (UI.getChildControl)(_frameContent, "Static_ChattingLanguageCommentBG")
   local posYCount = 0
   local btn_index = 0
-  local Size = (CppEnums.ServiceResourceType).eServiceResourceTypeCount
-  -- DECOMPILER ERROR at PC35: Confused about usage of register: R9 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC32: Confused about usage of register: R8 in 'UnsetPending'
 
   _btn_ChatLanguageType[0] = (UI.createAndCopyBasePropertyControl)(_frameContent, "RadioButton_ChannelChat_Language", _frameContent, "RadioButton_ChannelChat_Language_" .. btn_index)
   ;
@@ -1407,15 +1425,16 @@ local createChatChannelOption = function(frame, frameContent)
   (_btn_ChatLanguageType[0]):SetText(tostring("International"))
   ;
   (_btn_ChatLanguageType[0]):addInputEvent("Mouse_LUp", "ChatChannelOption()")
-  -- DECOMPILER ERROR at PC61: Confused about usage of register: R9 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC58: Confused about usage of register: R8 in 'UnsetPending'
 
   ChatChannelEnumsNumber[btn_index] = 1
   posYCount = posYCount + 1
   btn_index = btn_index + 1
-  for index = 1, Size do
-    -- DECOMPILER ERROR at PC82: Confused about usage of register: R13 in 'UnsetPending'
+  local resTable = isOnServiceResourceTypeList_New[getGameServiceType()]
+  if resTable ~= nil then
+    for _,index in pairs(resTable) do
+      -- DECOMPILER ERROR at PC81: Confused about usage of register: R14 in 'UnsetPending'
 
-    if isOnServiceResourceTypeList[index] then
       _btn_ChatLanguageType[btn_index] = (UI.createAndCopyBasePropertyControl)(_frameContent, "RadioButton_ChannelChat_Language", _frameContent, "RadioButton_ChannelChat_Language_" .. btn_index)
       ;
       (_btn_ChatLanguageType[btn_index]):SetPosY(serviceResourceTypeControl:GetPosY() + (_ServiceResComputePosY - 25) + (posYCount) * 25)
@@ -1423,19 +1442,21 @@ local createChatChannelOption = function(frame, frameContent)
       (_btn_ChatLanguageType[btn_index]):SetText(tostring(isOnServiceResourceTypeTag[index]))
       ;
       (_btn_ChatLanguageType[btn_index]):addInputEvent("Mouse_LUp", "ChatChannelOption()")
-      -- DECOMPILER ERROR at PC109: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC108: Confused about usage of register: R14 in 'UnsetPending'
 
       ChatChannelEnumsNumber[btn_index] = index
       posYCount = posYCount + 1
       btn_index = btn_index + 1
     end
   end
-  _txt_ChattingLanguageDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  _txt_ChattingLanguageDesc:SetPosY(serviceResourceTypeControl:GetPosY() + (_ServiceResComputePosY - 25) + (posYCount) * 25)
-  _txt_ChattingLanguageDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GMAEOPTION_CHATTINGSETTING_DESC"))
-  _txt_ChattingLanguageDesc:SetSize(545, _txt_ChattingLanguageDesc:GetTextSizeY() + 10)
-  _txt_ChatChannelOption = (UI.getChildControl)(_frameContent, "StaticText_ChannelChat_Language")
-  _txt_ChatChannelOption:SetSpanSize(0, _txt_LanguageDesc:GetPosY() + _txt_LanguageDesc:GetSizeY() + 10)
+  do
+    _txt_ChattingLanguageDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+    _txt_ChattingLanguageDesc:SetPosY(serviceResourceTypeControl:GetPosY() + (_ServiceResComputePosY - 25) + (posYCount) * 25)
+    _txt_ChattingLanguageDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GMAEOPTION_CHATTINGSETTING_DESC"))
+    _txt_ChattingLanguageDesc:SetSize(545, _txt_ChattingLanguageDesc:GetTextSizeY() + 10)
+    _txt_ChatChannelOption = (UI.getChildControl)(_frameContent, "StaticText_ChannelChat_Language")
+    _txt_ChatChannelOption:SetSpanSize(0, _txt_LanguageDesc:GetPosY() + _txt_LanguageDesc:GetSizeY() + 10)
+  end
 end
 
 local eraseChatChannelOption = function(frameContent)
@@ -1466,7 +1487,7 @@ local loadLanguageResType = function()
     _cpy_frameContent = _frameContent_Game
   end
   _txt_LanguageOption = (UI.getChildControl)(_cpy_frameContent, "StaticText_Language")
-  if serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_DEV then
+  if serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_DEV or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_REAL then
     createServiceResOption(_cpy_frame, _cpy_frameContent)
     createChatChannelOption(_cpy_frame, _cpy_frameContent)
   else
@@ -3164,6 +3185,7 @@ GameOption_InitGameOption = function(gameOptionSetting, optionType)
   GameOption_SetGameMode(gameOptionSetting)
   GameOption_InitSystemNotify()
   currentLUT = gameOptionSetting:getCameraLUTFilter()
+  selfPlayerSetConsolePadType(0)
 end
 
 FGlobal_GetCurrentLUT = function()
@@ -7956,7 +7978,7 @@ GameOption_Apply = function()
             QuickSlot_UpdateData()
             FGlobal_NewQuickSlot_Update()
           end
-          if isGameServiceTypeDev() and reloadConsoleUIMode == true then
+          if reloadConsoleUIMode == true and ToClient_isUIDATA2() == true then
             ToClient_excuteReloadUI()
           end
         end

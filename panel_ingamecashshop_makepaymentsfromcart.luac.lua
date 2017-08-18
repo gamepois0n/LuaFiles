@@ -150,7 +150,7 @@ MakePaymentsFromCart.registMessageHandler = function(self)
   ;
   (self._button_Close):addInputEvent("Mouse_LUp", "HandleClicked_IngameCashShop_MakePaymentsFromCart_Close()")
   ;
-  (self._button_Confirm):addInputEvent("Mouse_LUp", "HandleClicked_IngameCashShop_MakePaymentsFromCart_Confirm()")
+  (self._button_Confirm):addInputEvent("Mouse_LUp", "HandleClicked_IngameCashShop_MakePaymentsFromCart_NoCouponConfirm()")
 end
 
 MakePaymentsFromCart.Close = function(self)
@@ -163,8 +163,16 @@ HandleClicked_IngameCashShop_MakePaymentsFromCart_Close = function()
   MakePaymentsFromCart:Close()
 end
 
+HandleClicked_IngameCashShop_MakePaymentsFromCart_NoCouponConfirm = function()
+  -- function num : 0_7
+  local messageboxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_MAKEPAYMENTFROMCART_NOCOUPON")
+  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageboxMemo, functionYes = HandleClicked_IngameCashShop_MakePaymentsFromCart_Confirm, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageboxData)
+end
+
 HandleClicked_IngameCashShop_MakePaymentsFromCart_Confirm = function()
-  -- function num : 0_7 , upvalues : MakePaymentsFromCart
+  -- function num : 0_8 , upvalues : MakePaymentsFromCart
   local self = MakePaymentsFromCart
   local pearl = (Defines.s64_const).s64_0
   local pearlItemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, getPearlSlotNo())
@@ -184,7 +192,7 @@ HandleClicked_IngameCashShop_MakePaymentsFromCart_Confirm = function()
 end
 
 FGlobal_IngameCashShop_MakePaymentsFromCart_Open = function()
-  -- function num : 0_8 , upvalues : MakePaymentsFromCart
+  -- function num : 0_9 , upvalues : MakePaymentsFromCart
   MakePaymentsFromCart:update()
   MakePaymentsFromCart:SetPosition()
   MakePaymentsFromCart:WindowSize()
@@ -192,7 +200,7 @@ FGlobal_IngameCashShop_MakePaymentsFromCart_Open = function()
 end
 
 FGlobal_IngameCashShop_MakePaymentsFromCart_Close = function()
-  -- function num : 0_9 , upvalues : MakePaymentsFromCart
+  -- function num : 0_10 , upvalues : MakePaymentsFromCart
   MakePaymentsFromCart:Close()
 end
 

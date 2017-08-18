@@ -7,7 +7,7 @@ local renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMod
 local UI_BUFFTYPE = CppEnums.UserChargeType
 local ENUM_EQUIP = CppEnums.EquipSlotNoClient
 local CT = CppEnums.ClassType
-local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [CT.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914")}
+local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [CT.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914"), [CT.ClassType_CombattantWomen] = ToClient_IsContentsGroupOpen("918")}
 local isKR2 = isGameTypeKR2()
 local enControlValue = {MaxCharacterTypeListCount = 7, MaxEquipSlotCount = 18, MaxPartCount = 8, MaxPartSlotCount = 3, MaxAmpuleRowsCount = 3, MaxAmpuleColsCount = 7}
 local enToggleIndex = {Underwear = 0, Avater = 1, Helmet = 2, AwakenWeapon = 3, FaceViewHair = 4, FaceGuard = 5, WarStance = 6}
@@ -758,9 +758,4 @@ end
 renderMode:setClosefunctor(renderMode, FGlobal_Panel_DyeReNew_Hide)
 Panel_Dye_ReNew:SetShow(false)
 DyeReNew:Initialize()
-ConsoleGroupCreate_Panel_Dye_ReNew = function()
-  -- function num : 0_32
-end
-
-ConsoleGroupCreate_Panel_Dye_ReNew()
 

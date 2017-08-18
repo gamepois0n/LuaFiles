@@ -22,6 +22,9 @@ end
 
 Panel_TranslationReport.Open = function(self, translationKey)
   -- function num : 0_1 , upvalues : _translationReportWebControl
+  if ToClient_IsDevelopment() == false then
+    return 
+  end
   audioPostEvent_SystemUi(13, 6)
   Panel_TranslationReport:SetShow(true, true)
   local selfPlayer = getSelfPlayer()
@@ -31,9 +34,9 @@ Panel_TranslationReport.Open = function(self, translationKey)
   local url = "http://10.32.129.20/Translation"
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
-  local translationKey = translationKey
   local languageType = ToClient_GetLanguageType()
-  url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey=" .. tostring(translationKey) .. "&languageType=" .. tostring(languageType)
+  local staticSTatusType = ToClient_GetStaticTypeFromLocalizedKey(translationKey)
+  url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey=" .. tostring(translationKey) .. "&languageType=" .. tostring(languageType) .. "&staticType=" .. tostring(staticSTatusType)
   _translationReportWebControl:SetUrl(500, 500, url, false, true)
   _translationReportWebControl:SetIME(true)
   Panel_TranslationReport:SetPosX(getScreenSizeX() / 2 - Panel_TranslationReport:GetSizeX() / 2, getScreenSizeY() / 2 - Panel_TranslationReport:GetSizeY() / 2)
@@ -48,18 +51,22 @@ Panel_TranslationReport.Close = function(self)
   Panel_TranslationReport:SetShow(false, false)
 end
 
-FromClient_TranslationReport = function(translationKey)
+TranslationReport_Opne = function(translationKey)
   -- function num : 0_3
-  _PA_LOG("장태�\132", "FromClient_TranslationReport call!! " .. tostring(translationKey))
   Panel_TranslationReport:Open(translationKey)
 end
 
--- DECOMPILER ERROR at PC37: Confused about usage of register: R3 in 'UnsetPending'
+TranslationReport_Close = function()
+  -- function num : 0_4
+  Panel_TranslationReport:Close()
+end
+
+-- DECOMPILER ERROR at PC39: Confused about usage of register: R3 in 'UnsetPending'
 
 Panel_TranslationReport.RegisterEvent = function(self)
-  -- function num : 0_4 , upvalues : _btn_Close
-  _btn_Close:addInputEvent("Mouse_LUp", "Panel_TranslationReport:Close()")
-  registerEvent("FromClient_TranslationReport", "FromClient_TranslationReport")
+  -- function num : 0_5 , upvalues : _btn_Close
+  _btn_Close:addInputEvent("Mouse_LUp", "TranslationReport_Close()")
+  registerEvent("FromClient_TranslationReport", "TranslationReport_Opne")
 end
 
 Panel_TranslationReport:Initialize()

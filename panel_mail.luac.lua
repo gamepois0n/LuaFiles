@@ -188,16 +188,10 @@ _mail_Data.Update_MailPage = function(self)
   for index = 1, SlotMax do
     (((defalut_Control._mail)._checkBtn)[index]):SetCheck(false)
   end
-  for index = 0, 2 do
-    Panel_Mail_Main:deleteConsoleUIGroup(index)
-  end
-  local group_0 = Panel_Mail_Main:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  local group_1 = Panel_Mail_Main:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  local group_2 = Panel_Mail_Main:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   local mailCount = RequestMail_mailCount()
   _mail_Data:clear()
   for index = 1, SlotMax do
-    -- DECOMPILER ERROR at PC75: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC45: Unhandled construct in 'MakeBoolean' P1
 
     if (self._Data)[pageNo] ~= nil and ((self._Data)[pageNo])[index] ~= nil then
       local _sender_Name = (((self._Data)[pageNo])[index])._sender_Name
@@ -242,41 +236,35 @@ _mail_Data.Update_MailPage = function(self)
         do
           do
             do
-              do
-                local x1, y1, x2, y2 = setTextureUV_Func(((defalut_Control._mail)._mail_GetItem)[index], 1, 457, 22, 479)
-                ;
-                ((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture()):setUV(x1, y1, x2, y2)
-                ;
-                (((defalut_Control._mail)._mail_GetItem)[index]):setRenderTexture((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture())
-                group_0:addControl(0, index - 1, 2, SlotMax, ((defalut_Control._mail)._List_BG)[index])
-                group_0:addControl(1, index - 1, 2, SlotMax, ((defalut_Control._mail)._checkBtn)[index])
-                ;
-                (((defalut_Control._mail)._List_BG)[index]):SetShow(false)
-                ;
-                (((defalut_Control._mail)._checkBtn)[index]):SetShow(false)
-                ;
-                (((defalut_Control._mail)._Sender_Name)[index]):SetShow(false)
-                ;
-                (((defalut_Control._mail)._Mail_Title)[index]):SetShow(false)
-                ;
-                (((defalut_Control._mail)._Mail_Num)[index]):SetShow(false)
-                ;
-                (((defalut_Control._mail)._mail_GetItem)[index]):SetShow(false)
-                -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out DO_STMT
+              local x1, y1, x2, y2 = setTextureUV_Func(((defalut_Control._mail)._mail_GetItem)[index], 1, 457, 22, 479)
+              ;
+              ((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture()):setUV(x1, y1, x2, y2)
+              ;
+              (((defalut_Control._mail)._mail_GetItem)[index]):setRenderTexture((((defalut_Control._mail)._mail_GetItem)[index]):getBaseTexture())
+              ;
+              (((defalut_Control._mail)._List_BG)[index]):SetShow(false)
+              ;
+              (((defalut_Control._mail)._checkBtn)[index]):SetShow(false)
+              ;
+              (((defalut_Control._mail)._Sender_Name)[index]):SetShow(false)
+              ;
+              (((defalut_Control._mail)._Mail_Title)[index]):SetShow(false)
+              ;
+              (((defalut_Control._mail)._Mail_Num)[index]):SetShow(false)
+              ;
+              (((defalut_Control._mail)._mail_GetItem)[index]):SetShow(false)
+              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC336: LeaveBlock: unexpected jumping out IF_STMT
-
-              end
             end
           end
         end
@@ -302,42 +290,6 @@ _mail_Data.Update_MailPage = function(self)
         ((defalut_Control._mail)._Btn_pre_page):SetShow(true)
         ;
         ((defalut_Control._mail)._Btn_Nxt_page):SetShow(true)
-      end
-    end
-  end
-  if ((defalut_Control._mail)._Btn_pre_page):GetShow() and ((defalut_Control._mail)._Btn_Nxt_page):GetShow() then
-    group_1:addControl(0, 0, 2, 1, (defalut_Control._mail)._Btn_pre_page)
-    group_1:addControl(1, 0, 2, 1, (defalut_Control._mail)._Btn_Nxt_page)
-    group_2:addControl(0, 0, 4, 1, (defalut_Control._mail)._Btn_SelectAll)
-    group_2:addControl(1, 0, 4, 1, (defalut_Control._mail)._Btn_SelectDel)
-    group_2:addControl(2, 0, 4, 1, (defalut_Control._mail)._Btn_ReceiveAll)
-    group_2:addControl(3, 0, 4, 1, (defalut_Control._mail)._Btn_QnA)
-  else
-    if ((defalut_Control._mail)._Btn_pre_page):GetShow() and not ((defalut_Control._mail)._Btn_Nxt_page):GetShow() then
-      group_1:addControl(0, 0, 1, 1, (defalut_Control._mail)._Btn_pre_page)
-      group_2:addControl(0, 0, 4, 1, (defalut_Control._mail)._Btn_SelectAll)
-      group_2:addControl(1, 0, 4, 1, (defalut_Control._mail)._Btn_SelectDel)
-      group_2:addControl(2, 0, 4, 1, (defalut_Control._mail)._Btn_ReceiveAll)
-      group_2:addControl(3, 0, 4, 1, (defalut_Control._mail)._Btn_QnA)
-    else
-      if not ((defalut_Control._mail)._Btn_pre_page):GetShow() and ((defalut_Control._mail)._Btn_Nxt_page):GetShow() then
-        group_1:addControl(0, 0, 1, 1, (defalut_Control._mail)._Btn_Nxt_page)
-        group_2:addControl(0, 0, 4, 1, (defalut_Control._mail)._Btn_SelectAll)
-        group_2:addControl(1, 0, 4, 1, (defalut_Control._mail)._Btn_SelectDel)
-        group_2:addControl(2, 0, 4, 1, (defalut_Control._mail)._Btn_ReceiveAll)
-        group_2:addControl(3, 0, 4, 1, (defalut_Control._mail)._Btn_QnA)
-      else
-        if mailCount == 0 then
-          group_0:addControl(0, 0, 4, 1, (defalut_Control._mail)._Btn_SelectAll)
-          group_0:addControl(1, 0, 4, 1, (defalut_Control._mail)._Btn_SelectDel)
-          group_0:addControl(2, 0, 4, 1, (defalut_Control._mail)._Btn_ReceiveAll)
-          group_0:addControl(3, 0, 4, 1, (defalut_Control._mail)._Btn_QnA)
-        else
-          group_1:addControl(0, 0, 4, 1, (defalut_Control._mail)._Btn_SelectAll)
-          group_1:addControl(1, 0, 4, 1, (defalut_Control._mail)._Btn_SelectDel)
-          group_1:addControl(2, 0, 4, 1, (defalut_Control._mail)._Btn_ReceiveAll)
-          group_1:addControl(3, 0, 4, 1, (defalut_Control._mail)._Btn_QnA)
-        end
       end
     end
   end

@@ -777,16 +777,11 @@ local workerManager_UpdateMain = function()
           ;
           (slot.workingName):SetShow(true)
           if hasUpgradeWoker == true then
-            if isGameTypeEnglish() then
-              (self._btnUpgradeNow):SetShow(false)
-            else
-              ;
-              (self._btnUpgradeNow):SetIgnore(false)
-              ;
-              (self._btnUpgradeNow):SetMonoTone(false)
-              ;
-              (self._btnUpgradeNow):SetShow(true)
-            end
+            (self._btnUpgradeNow):SetIgnore(false)
+            ;
+            (self._btnUpgradeNow):SetMonoTone(false)
+            ;
+            (self._btnUpgradeNow):SetShow(true)
             ;
             (slot.btn_Upgrade):SetMonoTone(true)
             ;

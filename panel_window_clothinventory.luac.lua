@@ -30,8 +30,6 @@ slot = {}
 (clothInven.desc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 ;
 (clothInven.desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_DESC"))
-local group_1 = Panel_Window_ClothInventory:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-group_1:addControl(0, 0, 1, 1, clothInven.btnChangeAll)
 FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlotNo)
   -- function num : 0_2 , upvalues : clothInven
   local self = clothInven
@@ -48,17 +46,15 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   ;
   (self.textTitle):SetText(_title)
   self.bagWhereType = bagType
-  Panel_Window_ClothInventory:deleteConsoleUIGroup(0)
-  local group_0 = Panel_Window_ClothInventory:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for index = 0, bagSize - 1 do
-    -- DECOMPILER ERROR at PC47: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC36: Confused about usage of register: R10 in 'UnsetPending'
 
     (self.bg)[index] = {}
-    -- DECOMPILER ERROR at PC50: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC39: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.slot)[index] = {}
-    -- DECOMPILER ERROR at PC62: Confused about usage of register: R11 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC51: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.bg)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_ClothInventory, "ColothInventory_SlotBg_" .. index)
@@ -73,7 +69,6 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
     (SlotItem.new)((self.slot)[index], "ClothInventory_", index, (self.bg)[index], self.config)
     ;
     ((self.slot)[index]):createChild()
-    group_0:addControl(index % 4, index / 4, 4, bagSize / 4, ((self.slot)[index]).icon)
     local itemWrapper = getInventoryBagItemByType(fromWhereType, fromSlotNo, index)
     if itemWrapper ~= nil then
       ((self.slot)[index]):setItem(itemWrapper, index)

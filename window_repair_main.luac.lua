@@ -383,6 +383,13 @@ PaGlobal_Repair.repair_registMessageHandler = function(self)
   Panel_LuckyRepair_Result:RegisterUpdateFunc("Chk_LuckyRepair_ResultMsg_ShowTime")
 end
 
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_Repair.setIsCamping = function(self, isCamping)
+  -- function num : 0_12
+  self._isCamping = isCamping
+end
+
 PaGlobal_Repair:initialize()
 PaGlobal_Repair:repair_BtnResize()
 PaGlobal_Repair:repair_registMessageHandler()

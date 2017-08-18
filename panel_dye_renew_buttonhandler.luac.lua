@@ -101,9 +101,7 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetAwakenWeapon()")
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.AwakenWeapon .. ")")
   checkButton_ToggleAwakenWeapon:addInputEvent("Mouse_Out", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(false," .. enToggleIndex.AwakenWeapon .. ")")
-  if FGlobal_DyeReNew_GetEnableAwaken() == false then
-    checkButton_ToggleAwakenWeapon:SetShow(false)
-  end
+  checkButton_ToggleAwakenWeapon:SetShow(FGlobal_DyeReNew_GetEnableAwaken())
   local UIAmpuleTargetBG = (UI.getChildControl)(Static_BG, "Static_AmpuleTartget_BG")
   local RadioButton_Tab_ALL = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_ALL")
   local RadioButton_Tab_My = (UI.getChildControl)(UIAmpuleTargetBG, "RadioButton_Tab_My")

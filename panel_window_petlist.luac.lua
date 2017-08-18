@@ -1753,4 +1753,9 @@ FromClient_luaLoadComplete_PetList = function()
   PetList:registMessageHandler()
 end
 
+PetList_VScroll_MoveTop = function()
+  -- function num : 0_61 , upvalues : PetList
+  (PetList.list2_PetList):moveTopIndex()
+end
+
 

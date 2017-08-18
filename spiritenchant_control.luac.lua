@@ -140,6 +140,10 @@ PaGlobal_Enchant.clear = function(self)
   ;
   (self._uiMeticulousEnchant):SetIgnore(self._isDoingEnchant)
   ;
+  (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+  ;
+  (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+  ;
   (self._uiHelpEnchantBtn):SetShow(false)
   local dummy, cronCount = self:protectItemCount()
   ;
@@ -148,13 +152,9 @@ PaGlobal_Enchant.clear = function(self)
   ;
   (getEnchantInformation()):clearData()
   ;
-  (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+  (self._uiProtectItem_Btn):SetIgnore(true)
   ;
   (self._uiProtectItem_Btn):SetMonoTone(true)
-  ;
-  (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
-  ;
-  (self._uiProtectItem_Btn):SetIgnore(true)
 end
 
 -- DECOMPILER ERROR at PC8: Confused about usage of register: R0 in 'UnsetPending'
@@ -302,6 +302,7 @@ FGlobal_EnchantMaterialSlotCheck = function()
         local itemKey = ((itemWrapper:getStaticStatus()):get())._key
         local needCount = (getEnchantInformation()):getNeedCountPreventDownGradeItem(itemKey)
         local dummy, cronCount = self:protectItemCount()
+        self._enchantLevel = enchantCount
         ;
         (self._uiProtectItem_Count):SetText(tostring(cronCount) .. "/" .. tostring(needCount))
         Inventory_SetFunctor(EnchantInvenFilerSubItem, EnchantInteractionFromInventory, Enchant_Close, nil)
@@ -360,10 +361,11 @@ end
 PaGlobal_Enchant.SetCronDesc = function(self)
   -- function num : 0_9
   local itemWrapper = getInventoryItemByType((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
+  local bonusText = ""
   if itemWrapper == nil then
     (self._uiCron_StackCount):SetText("0")
     ;
-    (self._uiCron_AddValue):SetText("적용 효과 : 없음")
+    (self._uiCron_AddValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_APPLY_NONE"))
     ;
     (self._uiCron_Progress):SetProgressRate(0)
     for gradeIndex = 0, 3 do
@@ -375,52 +377,65 @@ PaGlobal_Enchant.SetCronDesc = function(self)
     do
       local currentEnchantFailCount = itemWrapper:getCronEnchantFailCount()
       if currentEnchantFailCount > 0 then
-        local bonusText = ""
         if itemWrapper:getAddedDD() > 0 then
           if bonusText == "" then
-            bonusText = bonusText .. "추가 공격 +" .. itemWrapper:getAddedDD()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACK") .. itemWrapper:getAddedDD()
           else
-            bonusText = bonusText .. " | 추가 공격 +" .. itemWrapper:getAddedDD()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACKB") .. itemWrapper:getAddedDD()
           end
         end
         if itemWrapper:getAddedHIT() > 0 then
           if bonusText == "" then
-            bonusText = bonusText .. "추가 적중 +" .. itemWrapper:getAddedHIT()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HIT") .. itemWrapper:getAddedHIT()
           else
-            bonusText = bonusText .. " | 추가 적중 +" .. itemWrapper:getAddedHIT()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HITB") .. itemWrapper:getAddedHIT()
           end
         end
         if itemWrapper:getAddedDV() > 0 then
           if bonusText == "" then
-            bonusText = bonusText .. "추가 회피 +" .. itemWrapper:getAddedDV()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE") .. itemWrapper:getAddedDV()
           else
-            bonusText = bonusText .. " | 추가 회피 +" .. itemWrapper:getAddedDV()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGEB") .. itemWrapper:getAddedDV()
           end
         end
         if itemWrapper:getAddedPV() > 0 then
           if bonusText == "" then
-            bonusText = bonusText .. "추가 피해 감소 +" .. itemWrapper:getAddedPV()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE") .. itemWrapper:getAddedPV()
           else
-            bonusText = bonusText .. " | 추가 피해 감소 +" .. itemWrapper:getAddedPV()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCEB") .. itemWrapper:getAddedPV()
           end
         end
         if itemWrapper:getAddedMaxHP() > 0 then
           if bonusText == "" then
-            bonusText = bonusText .. "추가 최대 HP +" .. itemWrapper:getAddedMaxHP()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HP") .. itemWrapper:getAddedMaxHP()
           else
-            bonusText = bonusText .. " | 추가 최대 HP +" .. itemWrapper:getAddedMaxHP()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HPB") .. itemWrapper:getAddedMaxHP()
           end
         end
         if itemWrapper:getAddedMaxMP() > 0 then
           if bonusText == "" then
-            bonusText = bonusText .. "추가 최대 MP +" .. itemWrapper:getAddedMaxMP()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MP") .. itemWrapper:getAddedMaxMP()
           else
-            bonusText = bonusText .. " | 추가 최대 MP +" .. itemWrapper:getAddedMaxMP()
+            bonusText = bonusText .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MPB") .. itemWrapper:getAddedMaxMP()
           end
         end
         if bonusText == "" then
-          bonusText = "없음"
+          bonusText = PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_NONE")
         end
+      else
+        ;
+        (self._uiCron_StackCount):SetText("0")
+        ;
+        (self._uiCron_AddValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_APPLY_NONE"))
+        ;
+        (self._uiCron_Progress):SetProgressRate(0)
+        for gradeIndex = 0, 3 do
+          ((self._uiCron_StackCountValue)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
+          ;
+          ((self._uiCron_StackGrade)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
+        end
+      end
+      do
         local itemSSW = itemWrapper:getStaticStatus()
         local itemClassifyType = itemSSW:getItemClassify()
         local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
@@ -429,8 +444,8 @@ PaGlobal_Enchant.SetCronDesc = function(self)
         local lastCount = 0
         local lastIndex = gradeCount - 1
         local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, lastIndex)
-        local enchantablelastCount = cronEnchantSSW:getCount()
-        if currentEnchantFailCount > 0 then
+        if cronEnchantSSW ~= nil then
+          local enchantablelastCount = cronEnchantSSW:getCount()
           for gradeIndex = 0, gradeCount - 1 do
             local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, gradeIndex)
             local enchantableCount = cronEnchantSSW:getCount()
@@ -459,25 +474,12 @@ PaGlobal_Enchant.SetCronDesc = function(self)
           end
         end
         do
-          do
-            ;
-            (self._uiCron_StackCount):SetText(currentEnchantFailCount)
-            ;
-            (self._uiCron_AddValue):SetText("적용 효과 : " .. bonusText)
-            ;
-            (self._uiCron_Progress):SetProgressRate(currentEnchantFailCount / lastCount * 100)
-            ;
-            (self._uiCron_StackCount):SetText("0")
-            ;
-            (self._uiCron_AddValue):SetText("적용 효과 : 없음")
-            ;
-            (self._uiCron_Progress):SetProgressRate(0)
-            for gradeIndex = 0, 3 do
-              ((self._uiCron_StackCountValue)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
-              ;
-              ((self._uiCron_StackGrade)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
-            end
-          end
+          ;
+          (self._uiCron_StackCount):SetText(currentEnchantFailCount)
+          ;
+          (self._uiCron_AddValue):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_APPLY") .. " " .. bonusText)
+          ;
+          (self._uiCron_Progress):SetProgressRate(currentEnchantFailCount / lastCount * 100)
         end
       end
     end
@@ -638,6 +640,17 @@ PaGlobal_Enchant.successEnchant = function(self)
     ;
     (self._uiMeticulousEnchant):SetShow(false)
   end
+  if enchantCount >= 18 then
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(false)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(false)
+  else
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+  end
+  self._enchantLevel = enchantCount
   ToClient_BlackspiritEnchantSuccess()
   ;
   (self._uiButtonApply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DOENCHANT"))
@@ -652,6 +665,25 @@ PaGlobal_Enchant.failEnchant = function(self)
   ;
   (self._uiButtonApply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DOENCHANT"))
   PaGlobal_Enchant:enchantFailCount()
+  local itemWrapper = getInventoryItemByType((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
+  if itemWrapper == nil then
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+    return 
+  end
+  local enchantCount = ((itemWrapper:get()):getKey()):getEnchantLevel()
+  if enchantCount >= 18 then
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(false)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(false)
+  else
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+  end
+  self._enchantLevel = enchantCount
 end
 
 FGlobal_InvenFilterCronEnchant = function()
@@ -678,14 +710,8 @@ FGlobal_InvenFilterCronEnchant = function()
       local enchantInfo = getEnchantInformation()
       local rv = enchantInfo:SetEnchantSlot((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
       local itemWrapper = getInventoryItemByType((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
-      if rv ~= 0 and itemWrapper:checkToUpgradeItem() then
-        self:clear()
-        Inventory_SetFunctor(EnchantInvenFilerMainItem, EnchantInteractionFromInventory, Enchant_Close, nil)
-      else
-        ;
-        (self._slotEnchantItem):clearItem()
-        Inventory_SetFunctor(EnchantInvenFilerSubItem, EnchantInteractionFromInventory, Enchant_Close, nil)
-      end
+      self:clear()
+      Inventory_SetFunctor(EnchantInvenFilerMainItem, EnchantInteractionFromInventory, Enchant_Close, nil)
     end
   end
 end
@@ -791,6 +817,7 @@ RclickFunction_CronEnchant = function(slotNo, itemWrapper, count, inventoryType)
   self._isItemKey = ((enchantSSW:get())._key):getItemKey()
   self._isCash = isCashItem
   self._isEnchantLevel = enchantCount
+  self._enchantLevel = enchantCount
   itemWrapper = getInventoryItemByType(inventoryType, slotNo)
   ;
   (self._slotTargetItem):setItem(itemWrapper)
@@ -889,9 +916,13 @@ end
 PaGlobal_Enchant.SetMainAndCronStone = function(self, slotNo, itemWrapper, count, inventoryType)
   -- function num : 0_25
   if not (self._uiCheckBtn_CronEnchnt):IsCheck() then
+    (self._uiProtectItem_Btn):SetCheck(false)
+    ;
     (self._uiCheckBtn_CronEnchnt):SetCheck(true)
     ;
-    (self._uiProtectItem_Btn):SetCheck(false)
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
   end
   if (self._slotTargetItem).empty then
     if (self._slotTargetItem).icon then
@@ -899,15 +930,15 @@ PaGlobal_Enchant.SetMainAndCronStone = function(self, slotNo, itemWrapper, count
       ;
       ((self._slotTargetItem).icon):AddEffect("UI_Button_Hide", false, 0, 0)
     end
-    -- DECOMPILER ERROR at PC34: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC42: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self._slotTargetItem).empty = false
-    -- DECOMPILER ERROR at PC36: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC44: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self._slotTargetItem).slotNo = slotNo
-    -- DECOMPILER ERROR at PC38: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC46: Confused about usage of register: R5 in 'UnsetPending'
 
     ;
     (self._slotTargetItem).inventoryType = inventoryType
@@ -941,19 +972,23 @@ end
 
 -- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.CronEnchantCheck = function(self, itemWrapper)
+PaGlobal_Enchant.CronEnchantCheck = function(self, itemWrapper, enchantCount)
   -- function num : 0_27
   if (itemWrapper == nil or itemWrapper:checkToUpgradeItem()) and Enchat_CronStoneCountCheck() then
     (self._uiCheckBtn_CronEnchnt):SetIgnore(false)
     ;
     (self._uiCheckBtn_CronEnchnt):SetMonoTone(false)
   else
-    ;
-    (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
-    ;
-    (self._uiCheckBtn_CronEnchnt):SetCheck(false)
-    ;
-    (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+    if enchantCount >= 18 then
+      (self._uiCheckBtn_CronEnchnt):SetMonoTone(false)
+      ;
+      (self._uiCheckBtn_CronEnchnt):SetIgnore(false)
+    else
+      ;
+      (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+      ;
+      (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+    end
   end
 end
 
@@ -1046,16 +1081,16 @@ EnchantInteractionFromInventory = function(slotNo, itemWrapper, count, inventory
             ;
             (self._slotTargetItem):setItem(itemWrapper)
             Inventory_SetFunctor(EnchantInvenFilerSubItem, EnchantInteractionFromInventory, Enchant_Close, nil)
-            self:CronEnchantCheck(itemWrapper)
-            -- DECOMPILER ERROR at PC242: Confused about usage of register: R7 in 'UnsetPending'
+            self:CronEnchantCheck(itemWrapper, enchantCount)
+            -- DECOMPILER ERROR at PC243: Confused about usage of register: R7 in 'UnsetPending'
 
             if (self._slotEnchantItem).empty then
               (self._slotEnchantItem).empty = false
-              -- DECOMPILER ERROR at PC244: Confused about usage of register: R7 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC245: Confused about usage of register: R7 in 'UnsetPending'
 
               ;
               (self._slotEnchantItem).slotNo = slotNo
-              -- DECOMPILER ERROR at PC246: Confused about usage of register: R7 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC247: Confused about usage of register: R7 in 'UnsetPending'
 
               ;
               (self._slotEnchantItem).inventoryType = inventoryType
@@ -1150,6 +1185,10 @@ PaGlobal_Enchant.show = function(self)
   (self._uiProtectItem_Btn):SetCheck(false)
   ;
   (self._uiCheckBtn_CronEnchnt):SetCheck(false)
+  ;
+  (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+  ;
+  (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
   FGlobal_EnchantArrowSet(true)
   self:clear()
   Inventory_SetFunctor(EnchantInvenFilerMainItem, EnchantInteractionFromInventory, Enchant_Close, nil)
@@ -1230,6 +1269,17 @@ FromClient_UpgradeItem = function(itemWhereType, slotNo)
   PaGlobal_Enchant:successEnchant()
   PaGlobal_Enchant:SetCronStone()
   PaGlobal_Enchant:SetCronDesc()
+  local self = PaGlobal_Enchant
+  if self._enchantLevel >= 18 and self._enchantLevel < 20 then
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(false)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(false)
+  else
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+  end
 end
 
 

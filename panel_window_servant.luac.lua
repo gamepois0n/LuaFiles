@@ -177,8 +177,22 @@ FGlobal_RaceInfo_Open = function(isRegister, registerCount, remainedMinute, matc
     ;
     (horseRace._RaceInfo_btn_Cancel):SetFontColor(color)
   end
+  local raceInfoTextSizeY = (horseRace._RaceInfo_txt_Stat):GetTextSizeY()
+  local raceInfoTextPosY = (horseRace._RaceInfo_txt_Stat):GetPosY()
+  local raceJoinButtonPosY = (horseRace._RaceInfo_btn_Join):GetPosY()
+  local sizeY = 0
+  if raceJoinButtonPosY < raceInfoTextPosY + raceInfoTextSizeY then
+    sizeY = raceInfoTextPosY + raceInfoTextSizeY - raceJoinButtonPosY
+    ;
+    (horseRace._RaceInfo_btn_Join):SetPosY(raceJoinButtonPosY + (sizeY))
+    ;
+    (horseRace._RaceInfo_btn_Cancel):SetPosY(raceJoinButtonPosY + (sizeY))
+  end
+  ;
+  (horseRace._RaceInfo_static_BG):SetSize((horseRace._RaceInfo_static_BG):GetSizeX(), (horseRace._RaceInfo_static_BG):GetSizeY() + (sizeY))
   Panel_Window_HorseRace:SetPosX(Panel_Window_Servant:GetPosX() + 10)
   Panel_Window_HorseRace:SetPosY(Panel_Window_Servant:GetPosY() + 100)
+  Panel_Window_HorseRace:SetSize(Panel_Window_HorseRace:GetSizeX(), Panel_Window_HorseRace:GetSizeY() + (sizeY))
 end
 
 FGlobal_RaceInfo_MessageManager = function(msgType)

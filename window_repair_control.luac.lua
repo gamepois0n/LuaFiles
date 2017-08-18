@@ -32,9 +32,12 @@ end
 
 handleMClickedRepairExitButton = function()
   -- function num : 0_3
+  PaGlobal_Repair:setIsCamping(false)
+  npcShop:setIsCamping(false)
+  PaGlobal_Camp:setIsCamping(false)
   PaGlobal_Repair:repair_OpenPanel(false)
   PaGlobal_FixEquip:fixEquipExit()
-  PaGlobal_Camp:setIsCamping()
+  PaGlobal_Camp:setIsCamping(false)
 end
 
 Repair_InvenFilter = function(slotNo, itemWrapper)

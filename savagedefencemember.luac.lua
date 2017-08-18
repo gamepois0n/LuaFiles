@@ -231,7 +231,7 @@ PaGlobal_SavageDefenceMember_BottomArrow = function()
     (self.bottomArrow):setRenderTexture((self.bottomArrow):getClickTexture())
   else
     do
-      SavageDefenceMember_Init(405, 420)
+      SavageDefenceMember_Init(405, 350)
       local texturePath = "New_UI_Common_forLua/Widget/Party/Cave_00.dds"
       ;
       (self.bottomArrow):ChangeTextureInfoName(texturePath)
@@ -337,7 +337,7 @@ FromClient_refreshSavageDefencePlayer = function(isListUpdate)
   FGlobal_SavageDefenceShop_coinUpdate()
 end
 
-SavageDefenceMember_Init(405, 420)
+SavageDefenceMember_Init(405, 350)
 PaGlobal_SavageDefenceMember_Position()
 registerEvent("FromClient_refreshSavageDefencePlayer", "FromClient_refreshSavageDefencePlayer")
 registerEvent("onScreenResize", "PaGlobal_SavageDefenceMember_Position")

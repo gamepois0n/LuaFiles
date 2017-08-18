@@ -48,7 +48,7 @@ local functionKeyUse = true
 local functionYes, list = nil, nil
 local elapsedTime = 0
 local _currentMessageBoxData = nil
-setCurrentMessageData = function(currentData, position, isConsoleLockFocus)
+setCurrentMessageData = function(currentData, position)
   -- function num : 0_0 , upvalues : buttonYes, buttonApply, buttonNo, buttonIgnore, buttonCancel, buttonClose, textTitle, textContent, UI_TM, globalButtonShowCount, _currentMessageBoxData
   if currentData ~= nil then
     buttonYes:SetShow(false)
@@ -102,36 +102,12 @@ setCurrentMessageData = function(currentData, position, isConsoleLockFocus)
       buttonClose:SetShow(true)
     end
     globalButtonShowCount = buttonShowCount
-    Panel_Win_System:deleteConsoleUIGroup(0)
-    if isConsoleLockFocus ~= nil then
-      Panel_Win_System:setLockFocusPanel(isConsoleLockFocus)
-    end
-    local group_0 = Panel_Win_System:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
     if buttonShowCount == 1 then
       buttonYes:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonYes:GetSizeX() / 2)
       buttonApply:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonApply:GetSizeX() / 2)
       buttonNo:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonNo:GetSizeX() / 2)
       buttonIgnore:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonIgnore:GetSizeX() / 2)
       buttonCancel:SetPosX(Panel_Win_System:GetSizeX() / 2 - buttonCancel:GetSizeX() / 2)
-      if buttonYes:GetShow() then
-        group_0:addControl(0, 0, 1, 1, buttonYes)
-      else
-        if buttonApply:GetShow() then
-          group_0:addControl(0, 0, 1, 1, buttonApply)
-        else
-          if buttonNo:GetShow() then
-            group_0:addControl(0, 0, 1, 1, buttonNo)
-          else
-            if buttonIgnore:GetShow() then
-              group_0:addControl(0, 0, 1, 1, buttonIgnore)
-            else
-              if buttonCancel:GetShow() then
-                group_0:addControl(0, 0, 1, 1, buttonCancel)
-              end
-            end
-          end
-        end
-      end
     else
       if buttonShowCount == 2 then
         buttonYes:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonYes:GetSizeX() / 2 + 5))
@@ -139,24 +115,6 @@ setCurrentMessageData = function(currentData, position, isConsoleLockFocus)
         buttonApply:SetPosX(Panel_Win_System:GetSizeX() / 2 - (buttonApply:GetSizeX() / 2 + 5))
         buttonIgnore:SetPosX(Panel_Win_System:GetSizeX() / 2 + (buttonIgnore:GetSizeX() / 2 + 5))
         buttonCancel:SetPosX(Panel_Win_System:GetSizeX() / 2 + (buttonCancel:GetSizeX() / 2 + 5))
-        if buttonYes:GetShow() then
-          group_0:addControl(0, 0, 2, 1, buttonYes)
-        else
-          if buttonApply:GetShow() then
-            group_0:addControl(0, 0, 2, 1, buttonApply)
-          end
-        end
-        if buttonNo:GetShow() then
-          group_0:addControl(1, 0, 2, 1, buttonNo)
-        else
-          if buttonIgnore:GetShow() then
-            group_0:addControl(1, 0, 2, 1, buttonIgnore)
-          else
-            if buttonCancel:GetShow() then
-              group_0:addControl(1, 0, 2, 1, buttonCancel)
-            end
-          end
-        end
       else
         if buttonShowCount == 3 then
           local buttonSize = buttonYes:GetSizeX()
@@ -165,23 +123,6 @@ setCurrentMessageData = function(currentData, position, isConsoleLockFocus)
           buttonApply:SetPosX(5)
           buttonIgnore:SetPosX(buttonSize + 10)
           buttonCancel:SetPosX(buttonSize * 2 + 15)
-          if buttonYes:GetShow() then
-            group_0:addControl(0, 0, 3, 1, buttonYes)
-          else
-            if buttonApply:GetShow() then
-              group_0:addControl(0, 0, 3, 1, buttonApply)
-            end
-          end
-          if buttonNo:GetShow() then
-            group_0:addControl(1, 0, 3, 1, buttonNo)
-          else
-            if buttonIgnore:GetShow() then
-              group_0:addControl(1, 0, 3, 1, buttonIgnore)
-            end
-          end
-          if buttonCancel:GetShow() then
-            group_0:addControl(2, 0, 3, 1, buttonCancel)
-          end
         end
       end
     end
@@ -193,7 +134,7 @@ end
 
 -- DECOMPILER ERROR at PC221: Confused about usage of register: R28 in 'UnsetPending'
 
-MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse, isConsoleLockFocus)
+MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse)
   -- function num : 0_1 , upvalues : list, functionKeyUse, elapsedTime, textBG, static_Beginner_BG, static_BeginnerTitleBG, staticText_BeginnerTxt1, staticText_BeginnerTxt2, textContent, blockBG
   if Panel_Win_System:GetShow() and MessageData.enablePriority == nil then
     return 
@@ -206,17 +147,17 @@ MessageBox.showMessageBox = function(MessageData, position, isGameExit, keyUse, 
       if list == nil or MessageData.priority < (list.data).priority then
         list = {next = list, pre = preList, data = MessageData}
         if list.pre == nil then
-          setCurrentMessageData(list.data, position, isConsoleLockFocus)
+          setCurrentMessageData(list.data, position)
         else
-          -- DECOMPILER ERROR at PC41: Confused about usage of register: R7 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC40: Confused about usage of register: R6 in 'UnsetPending'
 
           ;
           (list.pre).next = list
           list = Front
         end
-        -- DECOMPILER ERROR at PC44: LeaveBlock: unexpected jumping out IF_THEN_STMT
+        -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-        -- DECOMPILER ERROR at PC44: LeaveBlock: unexpected jumping out IF_STMT
+        -- DECOMPILER ERROR at PC43: LeaveBlock: unexpected jumping out IF_STMT
 
       end
     end
@@ -306,11 +247,8 @@ end
 postProcessMessageData = function()
   -- function num : 0_3 , upvalues : _currentMessageBoxData, list
   Panel_Win_System:SetShow(false, false)
-  if Panel_Win_System:isLockFocusPanel() then
-    Panel_Win_System:setLockFocusPanel(false)
-  end
   _currentMessageBoxData = nil
-  -- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
 
   if list ~= nil and list.data ~= nil then
     list.data = nil

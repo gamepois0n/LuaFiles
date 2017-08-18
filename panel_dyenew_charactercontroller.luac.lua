@@ -234,7 +234,6 @@ HandleClicked_WeatherToggle = function()
   (self.btn_temp5):SetShow(weatherCheck)
   ;
   (self.btn_temp6):SetShow(weatherCheck)
-  self:SetConsolePadGroup(weatherCheck)
 end
 
 HandleClicked_DeyNew_RandomPose = function()
@@ -361,20 +360,9 @@ DyeNewController.registEventHandler = function(self)
   (self.btn_Exit):addInputEvent("Mouse_LUp", "HandleClicked_DeyNew_Exit()")
 end
 
-ConsoleGroupCreate_Panel_DyeNew_CharacterController = function()
-  -- function num : 0_17
-end
-
-DyeNewController.SetConsolePadGroup = function(self, isAdd)
-  -- function num : 0_18
-  if isAdd then
-  end
-end
-
 Panel_DyeNew_CharacterController:RegisterUpdateFunc("deyNew_Controller_UpdateCharacterRotate")
 registerEvent("onScreenResize", "dyeNew_CharacterController_SetPosition")
 DyeNewController:initialize()
 DyeNewController:registEventHandler()
 dyeNew_CharacterController_SetPosition()
-ConsoleGroupCreate_Panel_DyeNew_CharacterController()
 

@@ -36,7 +36,7 @@ desc = {_static_ItemNameCombo = nil, _staticText_Title = nil, _static_SlotBG = n
 _promotionTab = {}
 , 
 _myCartTab = {}
-, _tabCount = getCashMainCategorySize(), _slotCount = 30, _sortCount = 3, _slots = (Array.new)(), _tabs = (Array.new)(), _subTapSelect = nil, _list = (Array.new)(), _listCount = 1, _currentTab = nil, _currentSubTab = nil, _previousTab = nil, _currentClass = nil, _search = nil, _currentSort = nil, _currentSubFilter = nil, _openByEventAlarm = false, _currentPos = 0, _position = 0, _maxDescSize = 200, _checkTab = false, _pricePosX = 0, _currentIndex = 0, _isClick = false, _isSubItemClick = false, _categoryProductKeyRaw = -1, _currentProductKeyRaw = -1}
+, _tabCount = getCashMainCategorySize(), _slotCount = 30, _sortCount = 3, _slots = (Array.new)(), _tabs = (Array.new)(), _subTapSelect = nil, _list = (Array.new)(), _listCount = 1, _currentTab = nil, _currentSubTab = nil, _previousTab = nil, _currentClass = nil, _search = nil, _currentSort = nil, _currentSubFilter = nil, _openByEventAlarm = false, _currentPos = 0, _position = 0, _maxDescSize = 200, _checkTab = false, _pricePosX = 0, _currentIndex = 0, _isClick = false, _isSubItemClick = false, _categoryProductKeyRaw = -1, _currentProductKeyRaw = -1, _cashProductNoData = -1, _cashProductIndex = 1}
 inGameShop._scrollBTN_IngameCash = (UI.getChildControl)(inGameShop._scroll_IngameCash, "Scroll_CtrlButton")
 inGameShop._combo_ClassList = (UI.getChildControl)(inGameShop._combo_Class, "Combobox_List")
 inGameShop._combo_SubFilterList = (UI.getChildControl)(inGameShop._combo_SubFilter, "Combobox_List")
@@ -2358,6 +2358,11 @@ IngameCashShop_initDescData = function()
 
           ;
           ((inGameShop._subItemButton)[ii]).productNo = (inGameShop._comboList)[ii]
+          -- DECOMPILER ERROR at PC175: Confused about usage of register: R17 in 'UnsetPending'
+
+          if inGameShop._cashProductNoData == ((inGameShop._subItemButton)[ii]).productNo then
+            inGameShop._cashProductIndex = ii
+          end
           sizeX = (configButton._subButtonSize)._BigX
           divide = 2
           ;
@@ -2389,7 +2394,7 @@ IngameCashShop_initDescData = function()
             (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetShow(true)
             ;
             (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetIgnore(false)
-            -- DECOMPILER ERROR at PC269: Confused about usage of register: R17 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC279: Confused about usage of register: R17 in 'UnsetPending'
 
             ;
             ((inGameShop._subItemButton)[ii + inGameShop._skipCount]).productNo = (inGameShop._comboList)[ii]
@@ -2407,19 +2412,19 @@ IngameCashShop_initDescData = function()
               (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetPosX(30 + (realCount - 1 - (positionSX)) * sizeX)
               ;
               (((inGameShop._subItemButton)[ii + inGameShop._skipCount]).static):SetPosY(40 + (positionSY) * (configButton._subButton)._gapY)
-              -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC334: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC334: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC334: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC334: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC334: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC334: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC324: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC334: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -2427,10 +2432,10 @@ IngameCashShop_initDescData = function()
       end
     end
   end
-  -- DECOMPILER ERROR at PC326: Confused about usage of register: R11 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC336: Confused about usage of register: R11 in 'UnsetPending'
 
   inGameShop._endSunPositionY = positionSY
-  -- DECOMPILER ERROR at PC332: Confused about usage of register: R11 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC342: Confused about usage of register: R11 in 'UnsetPending'
 
   if inGameShop._smallButtonCount == 0 then
     inGameShop._endSunPositionY = positionBY
@@ -3568,7 +3573,15 @@ end
     if (self._tabs)[tabIndex] ~= nil then
       (((self._tabs)[tabIndex]).static):SetCheck(true)
     end
+    -- DECOMPILER ERROR at PC60: Confused about usage of register: R6 in 'UnsetPending'
+
+    inGameShop._cashProductNoData = productNo
     IngameCashShop_SelectedItemXXX(productNo, true)
+    ;
+    (((inGameShop._subItemButton)[1]).static):SetCheck(false)
+    ;
+    (((inGameShop._subItemButton)[inGameShop._cashProductIndex]).static):SetCheck(true)
+    InGameShop_subItemEvent(inGameShop._cashProductIndex)
   end
 end
 

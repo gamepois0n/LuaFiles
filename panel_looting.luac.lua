@@ -100,7 +100,7 @@ local closePanelLooting = function()
 end
 
 Panel_Looting_Update = function(empty)
-  -- function num : 0_4 , upvalues : looting, closePanelLooting, _buttonLootAllToServant, _buttonLootAll, _buttonCancel
+  -- function num : 0_4 , upvalues : looting, closePanelLooting
   if empty == 1 then
     Panel_Looting_Value_isCloseLooting = true
     Panel_Tooltip_Item_Show_GeneralNormal(looting.selectSlotNo, "looting", false)
@@ -112,33 +112,18 @@ Panel_Looting_Update = function(empty)
   if Panel_Chatting_Input:GetShow() then
     (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
   end
-  Panel_Looting:deleteConsoleUIGroup(1)
-  local group_1 = Panel_Looting:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  if looting_isPickItemToServant() then
-    _buttonLootAllToServant:SetShow(true)
-    group_1:addControl(0, 0, 3, 1, _buttonLootAllToServant)
-    group_1:addControl(1, 0, 3, 1, _buttonLootAll)
-    group_1:addControl(2, 0, 3, 1, _buttonCancel)
-  else
-    group_1:addControl(0, 0, 2, 1, _buttonLootAll)
-    group_1:addControl(1, 0, 2, 1, _buttonCancel)
-    _buttonLootAllToServant:SetShow(false)
-  end
   local lootingCount = looting_getItemCount()
-  -- DECOMPILER ERROR at PC93: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC34: Confused about usage of register: R2 in 'UnsetPending'
 
   looting.remainItemCnt = 0
-  Panel_Looting:deleteConsoleUIGroup(0)
-  local group_0 = Panel_Looting:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
   for ii = 1, looting.MAX_LOOTING_SLOT_COUNT do
     local slot = (looting.slots)[ii]
     local itemWrapper = looting_getItem(ii - 1)
     if itemWrapper ~= nil then
       slot:setItem(itemWrapper)
-      -- DECOMPILER ERROR at PC125: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC55: Confused about usage of register: R8 in 'UnsetPending'
 
       looting.remainItemCnt = looting.remainItemCnt + 1
-      group_0:addControl((ii - 1) % 4, (ii - 1) / 4, 4, 4, _buttonLootAll)
     else
       if ii - 1 == looting.selectSlotNo then
         Panel_Tooltip_Item_Show_GeneralNormal(looting.selectSlotNo, "looting", false)

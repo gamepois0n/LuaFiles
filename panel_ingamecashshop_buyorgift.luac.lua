@@ -115,7 +115,7 @@ do
     ;
     (slot.name):SetSpanSize(10, 5 + (5 + (slot.name):GetSizeY() * giftIdx))
     ;
-    (slot.count):SetSpanSize(202, -2)
+    (slot.count):SetSpanSize(252, -2)
     ;
     (slot.btnPlus):SetSpanSize((slot.count):GetSizeX() + 3, 5)
     ;
@@ -184,7 +184,7 @@ do
     ;
     (slot.name):SetSpanSize(10, 35 + (5 + (slot.name):GetSizeY() * giftBotIdx))
     ;
-    (slot.btnAdd):SetSpanSize(257, -3)
+    (slot.btnAdd):SetSpanSize(307, -3)
     ;
     (slot.name):addInputEvent("Mouse_UpScroll", "Scroll_GiftBotList( true )")
     ;

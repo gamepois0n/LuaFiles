@@ -49,7 +49,7 @@ PaGlobal_SkillCombination.initalize = function(self)
   ;
   ((self._ui)._staticTextDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
-  ((self._ui)._staticTextDesc):SetText("-56霠堧波鞚\180 霅橂┐ 旮办垹 臁绊暕 韮\173(鞁犼窚)鞚\180 頇滌劚頇\148 霅橂┌ 旮办垹 臁绊暕鞚\132 靷毄頃\160 靾\152 鞛堧嫟.\n-臁绊暕頃\156 旮办垹鞚\128 氅旍澑 旮办垹鞚\152 旎るЖ霌滊ゼ 鞙犾頃\160 靾\152 鞛堧嫟.\n-臁绊暕霅\156 旮办垹鞚\132 旮办垹鞛犼笀鞚\132 頃橁矊霅橂┐ 旮办〈鞚\152 旮办垹鞚\180 氚滊彊霅滊嫟.")
+  ((self._ui)._staticTextDesc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_COMBINATIONSKILL_TIP"))
   do
     if ((self._ui)._staticTextDesc):GetSizeY() < ((self._ui)._staticTextDesc):GetTextSizeY() + 20 then
       local sizeY = ((self._ui)._staticTextDesc):GetTextSizeY() + 20 - ((self._ui)._staticTextDesc):GetSizeY()

@@ -170,6 +170,8 @@ FromClient_GuildHistoryInfo_Update = function()
 
                       _dayHistoryValue[i] = _dayHistoryLeftValue
                       ;
+                      (_dayHistoryValue[i]):SetText(tostring((_journalInfo[i]):getName()))
+                      ;
                       (_dayHistoryValue[i]):addInputEvent("Mouse_On", "GuildHistory_HelpWidget_Show(true," .. i .. ", true)")
                       ;
                       (_dayHistoryValue[i]):addInputEvent("Mouse_Out", "GuildHistory_HelpWidget_Show(false)")
@@ -179,9 +181,11 @@ FromClient_GuildHistoryInfo_Update = function()
                           do
                             local _dayHistoryRightValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, _contentHistoryList, "StaticText_GuildHistory_" .. i)
                             CopyBaseProperty(dayHistoryRightValue, _dayHistoryRightValue)
-                            -- DECOMPILER ERROR at PC314: Confused about usage of register: R20 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC323: Confused about usage of register: R20 in 'UnsetPending'
 
                             _dayHistoryValue[i] = _dayHistoryRightValue
+                            ;
+                            (_dayHistoryValue[i]):SetText(tostring((_journalInfo[i]):getName()))
                             ;
                             (_dayHistoryValue[i]):addInputEvent("Mouse_On", "GuildHistory_HelpWidget_Show(true," .. i .. ", false)")
                             ;
@@ -189,24 +193,22 @@ FromClient_GuildHistoryInfo_Update = function()
                             ;
                             (_dayHistoryValue[i]):SetAutoResize(true)
                             ;
-                            (_dayHistoryValue[i]):SetText(tostring((_journalInfo[i]):getName()))
-                            ;
                             (_dayHistoryValue[i]):SetPosY(sizeY + 30)
                             ;
                             (_dayHistoryValue[i]):SetShow(true)
                             ;
                             (_dayHistoryValue[i]):SetIgnore(false)
-                            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC368: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC368: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC368: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC368: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC368: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC359: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC368: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end
@@ -229,13 +231,13 @@ FromClient_GuildHistoryInfo_Update = function()
                   dayLogCount = dayLogCount + 1
                   firstDay = dayIndex
                 end
-                -- DECOMPILER ERROR at PC391: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC400: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC391: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC400: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC391: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC400: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC391: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC400: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end

@@ -487,6 +487,8 @@ FromClient_RequestUseExchangeBattleAndSkillExp = function(fromWhereType, fromSlo
   (TransferLife.btn_Confirm):addInputEvent("Mouse_LUp", "TransferLife_Confirm(" .. 1 .. ")")
   ;
   (self.title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRANSFERLIFEEXPERIENCE_TITLE"))
+  ;
+  (self.notify):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TRANSFERBATTLEEXPERIENCE_NOTIFY"))
 end
 
 FromClient_ResponseExchangeBattleAndSkillExp = function()

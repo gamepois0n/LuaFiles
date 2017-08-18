@@ -352,11 +352,7 @@ Panel_LordMenu_PayInfoUpdate = function()
   (ui_Pay._txt_PolicingCost):SetShow(false)
   ;
   (ui_Pay._txt_PolicingCost_Gold):SetShow(false)
-  if isGameTypeEnglish() then
-    securityTax = ""
-  else
-    securityTax = "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_LORDMENU_SECUERITYTEX_DESC")
-  end
+  securityTax = "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_LORDMENU_SECUERITYTEX_DESC")
   for ii = 0, territorysInNationalCount - 1 do
     territoryKeyInNational = siegeWrapper:getTerritoryKeyInNationalByIndex(ii)
     if territoryKeyInNational == 3 or territoryKeyInNational == 4 then
@@ -378,16 +374,10 @@ Panel_LordMenu_PayInfoUpdate = function()
         (ui_Pay._txt_LocalTax_Gold):SetShow(true)
         ;
         (ui_Pay._txt_LocalTax):SetShow(true)
-        if isGameTypeEnglish() then
-          (ui_Pay._txt_PolicingCost):SetShow(false)
-          ;
-          (ui_Pay._txt_PolicingCost_Gold):SetShow(false)
-        else
-          ;
-          (ui_Pay._txt_PolicingCost):SetShow(true)
-          ;
-          (ui_Pay._txt_PolicingCost_Gold):SetShow(true)
-        end
+        ;
+        (ui_Pay._txt_PolicingCost):SetShow(true)
+        ;
+        (ui_Pay._txt_PolicingCost_Gold):SetShow(true)
       end
       ;
       (ui_Pay._txt_Balance):SetSpanSize(15, 355)

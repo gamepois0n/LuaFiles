@@ -137,7 +137,6 @@ end
 
 TitleInfo_Open = function()
   -- function num : 0_4 , upvalues : TitleInfo
-  TitleInfo:SetConsolePadGroup()
   ToClient_SetCurrentTitleCategory(0)
   TitleInfo_SetCategory(0)
   local self = TitleInfo
@@ -150,43 +149,22 @@ TitleInfo_Open = function()
   self:updateCoolTime()
 end
 
-local group_3 = nil
-TitleInfo.SetConsolePadGroup = function(self)
-  -- function num : 0_5 , upvalues : group_3
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(1)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(2)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(3)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(4)
-  Panel_Window_CharInfo_Status:deleteConsoleUIGroup(5)
-  local group_1 = Panel_Window_CharInfo_Status:addConsoleUIGroup(1, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  local group_2 = Panel_Window_CharInfo_Status:addConsoleUIGroup(2, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  group_3 = Panel_Window_CharInfo_Status:addConsoleUIGroup(3, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_LIST2)
-  group_1:addControl(0, 0, 4, 1, (self.Category_BTN)[0])
-  group_1:addControl(1, 0, 4, 1, (self.Category_BTN)[1])
-  group_1:addControl(2, 0, 4, 1, (self.Category_BTN)[2])
-  group_1:addControl(3, 0, 4, 1, (self.Category_BTN)[3])
-  group_2:addControl(0, 0, 4, 1, (self.titleSubject_Btn)[0])
-  group_2:addControl(1, 0, 4, 1, (self.titleSubject_Btn)[1])
-  group_2:addControl(2, 0, 4, 1, (self.titleSubject_Btn)[2])
-  group_2:addControl(3, 0, 4, 1, (self.titleSubject_Btn)[3])
-end
-
 CharInfoMouseUpScroll = function()
-  -- function num : 0_6 , upvalues : TitleInfo
+  -- function num : 0_5 , upvalues : TitleInfo
   local scroll = ((TitleInfo.list2):GetVScroll()):GetControlButton()
   ;
   (TitleInfo.list2):MouseUpScroll(scroll)
 end
 
 CharInfoMouseDownScroll = function()
-  -- function num : 0_7 , upvalues : TitleInfo
+  -- function num : 0_6 , upvalues : TitleInfo
   local scroll = ((TitleInfo.list2):GetVScroll()):GetControlButton()
   ;
   (TitleInfo.list2):MouseDownScroll(scroll)
 end
 
 TitleInfo.registEventHandler = function(self)
-  -- function num : 0_8
+  -- function num : 0_7
   for idx = 0, 3 do
     ((self.Category_BTN)[idx]):addInputEvent("Mouse_LUp", "TitleInfo_SetCategory( " .. idx .. " )")
     ;
@@ -203,7 +181,7 @@ TitleInfo.registEventHandler = function(self)
 end
 
 HandleMouseEvent_CategoryDesc = function(descType, isOn)
-  -- function num : 0_9 , upvalues : TitleInfo
+  -- function num : 0_8 , upvalues : TitleInfo
   if descType == 0 and isOn == true then
     (TitleInfo.txt_AllRoundDesc):SetAlpha(0)
     ;
@@ -287,7 +265,7 @@ HandleMouseEvent_CategoryDesc = function(descType, isOn)
 end
 
 TitleInfo_SetCategory = function(categoryIdx)
-  -- function num : 0_10 , upvalues : TitleInfo
+  -- function num : 0_9 , upvalues : TitleInfo
   local self = TitleInfo
   for idx = 0, 3 do
     ((self.Category_BTN)[idx]):SetCheck(false)
@@ -321,12 +299,12 @@ TitleInfo_SetCategory = function(categoryIdx)
 end
 
 TitleInfo.registMessageHandler = function(self)
-  -- function num : 0_11
+  -- function num : 0_10
   registerEvent("FromClient_TitleInfo_UpdateText", "FromClient_TitleInfo_Update")
 end
 
 HandleClick_ShowDescription = function(categoryIdx, titleIdx)
-  -- function num : 0_12 , upvalues : TitleInfo, UI_TM
+  -- function num : 0_11 , upvalues : TitleInfo, UI_TM
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   ;
@@ -336,7 +314,7 @@ HandleClick_ShowDescription = function(categoryIdx, titleIdx)
 end
 
 HandleClick_TitleSet = function(categoryIdx, titleIdx)
-  -- function num : 0_13 , upvalues : TitleInfo, UI_TM
+  -- function num : 0_12 , upvalues : TitleInfo, UI_TM
   ToClient_SetCurrentTitleCategory(categoryIdx)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIdx)
   ;
@@ -347,7 +325,7 @@ HandleClick_TitleSet = function(categoryIdx, titleIdx)
 end
 
 CharacterInfo_Title_ListControlCreate = function(content, key)
-  -- function num : 0_14 , upvalues : TitleInfo, group_3
+  -- function num : 0_13 , upvalues : TitleInfo
   local self = TitleInfo
   local titleIndex = Int64toInt32(key)
   local titleWrapper = ToClient_GetTitleStaticStatusWrapper(titleIndex)
@@ -358,8 +336,6 @@ CharacterInfo_Title_ListControlCreate = function(content, key)
   titleBG:setNotImpactScrollEvent(true)
   local titleName = (UI.getChildControl)(content, "List2_StaticText_TitleList_Title")
   local titleSet = (UI.getChildControl)(content, "List2_Button_SetTitle")
-  group_3:addControl(0, titleIndex, 2, self.CurrentCategoryCount, titleBG)
-  group_3:addControl(1, titleIndex, 2, self.CurrentCategoryCount, titleSet)
   if titleWrapper:isAcquired() == true then
     titleBG:SetIgnore(false)
     titleBG:addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. ", " .. titleIndex .. " )")
@@ -378,7 +354,6 @@ CharacterInfo_Title_ListControlCreate = function(content, key)
     titleName:SetText("<PAColor0xFF444444>" .. titleWrapper:getName() .. "<PAOldColor>")
     titleBG:addInputEvent("Mouse_LUp", "HandleClick_ShowDescription(" .. self.CurrentCategoryIdx .. "," .. titleIndex .. ")")
     titleSet:SetShow(false)
-    group_3:deleteControl(titleIndex * 2 + 1)
   end
 end
 

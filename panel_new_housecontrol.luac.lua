@@ -3100,10 +3100,7 @@ HouseProgressSection_Set = function(workType)
       end
     end
   end
-  if isGameTypeEnglish() then
-    (HouseProgressSection._Btn_Immediately):SetShow(false)
-  end
-  -- DECOMPILER ERROR at PC117: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC108: Confused about usage of register: R1 in 'UnsetPending'
 
   HouseProgressSection.isFale_Init = false
   HouseProgressSection_Init()

@@ -634,11 +634,6 @@ ChannelSelect_Update = function()
     FGlobal_SeasonTexture_ChannelSelectPanelSizeCahnge(Panel_ChannelSelect:GetSizeX())
     oneTimeChange = true
   end
-  Panel_ChannelSelect:deleteConsoleUIGroup(0)
-  local group_0 = Panel_ChannelSelect:addConsoleUIGroup(0, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT)
-  for chIndex = 0, channelCount - 1 do
-    group_0:addControl(R22_PC824, 0, 1, 1, ((self.channelSelectUIPool)[chIndex]).channelBg)
-  end
 end
 
 local tooltipCheck = false

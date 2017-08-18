@@ -266,7 +266,6 @@ HandleMLUp_SkillWindow_UpdateData = function(tabIndex, isLearnMode, doForce)
     end
     ;
     (self.awakenDesc):SetShow(false)
-    PaGlobal_Skill:addConsoleUIControl(tabIndex)
   end
 end
 
