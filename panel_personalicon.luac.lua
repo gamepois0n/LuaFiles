@@ -97,18 +97,6 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
       (self._btn_BusterCall):SetPosY(10)
       showIconCount = showIconCount + 1
     end
-    local trainableMinLev = 50
-    if ToClient_IsContentsGroupOpen("57") and trainableMinLev <= playerLV then
-      (self._btn_AutoTraining):SetShow(not isRecordMode)
-      ;
-      (self._btn_AutoTraining):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_AutoTraining):SetPosY(10)
-      showIconCount = showIconCount + 1
-    else
-      ;
-      (self._btn_AutoTraining):SetShow(false)
-    end
     if (self._btn_SummonElephant):GetShow() then
       (self._btn_SummonElephant):SetPosX((sizeX + controlGapX) * (showIconCount))
       ;
@@ -168,10 +156,6 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     (self._plus_Hunting):SetPosX((self._btn_Hunting):GetPosX() + 25)
     ;
     (self._plus_Hunting):SetPosY((self._btn_Hunting):GetPosY() + 25)
-    ;
-    (self._text_AutoTraining):SetPosX((self._btn_AutoTraining):GetPosX() + 12)
-    ;
-    (self._text_AutoTraining):SetPosY((self._btn_AutoTraining):GetPosY() + 25)
     Panel_PersonalIcon:SetShow(true)
     if CppDefine.ChangeUIAndResolution == true then
       radarPosX = FGlobal_Panel_Radar_GetPosX()
@@ -416,8 +400,6 @@ PersonalIcon_Tooltip = function()
   (self._btn_AutoTraining):addInputEvent("Mouse_On", "AutoTraining_ToolTip(true)")
   ;
   (self._btn_AutoTraining):addInputEvent("Mouse_Out", "AutoTraining_ToolTip(false)")
-  ;
-  (self._btn_AutoTraining):addInputEvent("Mouse_LUp", "AutoTraining_Set()")
   ;
   (self._btn_SummonElephant):addInputEvent("Mouse_On", "SummonElephant_Tooltip_ShowToggle(true)")
   ;

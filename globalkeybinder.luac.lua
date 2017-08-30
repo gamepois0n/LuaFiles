@@ -1003,6 +1003,10 @@ local _keyBinder_UIMode_NpcDialog = function(deltaTime)
         Panel_EnchantExtraction_Close()
         return 
       end
+      if Panel_Window_ServantInventory:GetShow() and Panel_Window_Warehouse:GetShow() then
+        ServantInventory_Close()
+        return 
+      end
       if check_ShowWindow() then
         close_WindowPanelList()
         if Panel_Npc_Quest_Reward:GetShow() then
@@ -1522,9 +1526,13 @@ local _keyBinder_UIMode_DeadMessage = function(deltaTime)
 end
 
 local _keyBinder_UIMode_MiniGame = function(deltaTime)
-  -- function num : 0_29 , upvalues : GlobalKeyBinder_CheckKeyPressed, VCK
+  -- function num : 0_29 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   local MiniGame_BattleGauge_Space = Panel_BattleGauge:IsShow()
   local MiniGame_FillGauge_Mouse = Panel_FillGauge:IsShow()
+  if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) and Panel_Window_DailyStamp:GetShow() then
+    DailStamp_Hide()
+    return 
+  end
   if MiniGame_FillGauge_Mouse then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_LBUTTON) then
       FillGauge_UpdateGauge(deltaTime, true)
@@ -1870,7 +1878,6 @@ end
 SetUIMode = function(uiMode)
   -- function num : 0_49 , upvalues : UIMode, _uiMode
   if uiMode >= 0 and uiMode < UIMode.eUIMode_Count then
-    _PA_LOG("광운", "prev _uiMode = " .. tostring(_uiMode) .. " / next uiMode = " .. tostring(uiMode))
     _uiMode = uiMode
   end
 end

@@ -59,10 +59,12 @@ PaGlobal_Skill.initialize = function(self)
   (self._txt_ResourceSaveDesc):SetShow(false)
   ;
   (self._txt_MentalTip):SetTextMode(UI_TM.eTextMode_AutoWrap)
-  ;
-  (self._txt_MentalTip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_MENTALTIP") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_RESOURCESAVEDESC"))
-  ;
-  (self._txt_MentalTip):ComputePos()
+  if skillOldandNew == false then
+    (self._txt_MentalTip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_MENTALTIP") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_RESOURCESAVEDESC"))
+  else
+    ;
+    (self._txt_MentalTip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_MENTALTIP") .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_MENTALTIP_FUSION") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_RESOURCESAVEDESC"))
+  end
   self:initControl()
   self:initSkillLearnableSlot()
 end
@@ -444,8 +446,8 @@ end
 
 PaGlobal_Skill.OnOffCombinationTab = function(self)
   -- function num : 0_12
-  local isLearnFusionSkill = ToClient_isLearnFusionSkillLevel()
-  local originFullSizeY = 755
+  local isLearnFusionSkill = not ToClient_isLearnFusionSkillLevel() or ToClient_getFusionSkillListCount() ~= 0
+  local originFullSizeY = 775
   local titleSize = (self._combinationSkillTitle):GetSizeY()
   local combinationSkillBG = (self._static_CombiSkill_BG):GetSizeY()
   if isLearnFusionSkill == true then
@@ -453,26 +455,39 @@ PaGlobal_Skill.OnOffCombinationTab = function(self)
     ;
     (self._static_CombiSkill_BG):SetShow(true)
     Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), originFullSizeY)
-  else
-    if isLearnFusionSkill == false then
-      (self._combinationSkillTitle):SetShow(false)
+  elseif isLearnFusionSkill == false then
+    (self._combinationSkillTitle):SetShow(false)
+    ;
+    (self._static_CombiSkill_BG):SetShow(false)
+    Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), originFullSizeY - (titleSize + combinationSkillBG))
+  end
+  local sizeY = (self._txt_MentalTip):GetTextSizeY()
+  local bgSizeY = (self._bottomBG):GetSizeY()
+  do
+    do
+      if bgSizeY < sizeY then
+        local size = sizeY - bgSizeY
+        Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), Panel_Window_Skill:GetSizeY() + size + 10)
+        ;
+        (self._bottomBG):SetSize((self._bottomBG):GetSizeX(), (self._bottomBG):GetSizeY() + size + 10)
+      end
+      Panel_Window_Skill:ComputePos()
       ;
-      (self._static_CombiSkill_BG):SetShow(false)
-      Panel_Window_Skill:SetSize(Panel_Window_Skill:GetSizeX(), originFullSizeY - (titleSize + combinationSkillBG))
+      (self._bottomBG):ComputePos()
+      ;
+      (self._btn_MovieToolTipBG):ComputePos()
+      ;
+      (self._btn_MovieToolTipDesc):ComputePos()
+      ;
+      (self._btn_MovieToolTip):ComputePos()
+      ;
+      (self._txt_MentalTip):SetPosX((self._bottomBG):GetPosX() + 4)
+      ;
+      (self._txt_MentalTip):SetPosY((self._bottomBG):GetPosY() + 4)
+      do return isLearnFusionSkill end
+      -- DECOMPILER ERROR: 5 unprocessed JMP targets
     end
   end
-  Panel_Window_Skill:ComputePos()
-  ;
-  (self._txt_MentalTip):ComputePos()
-  ;
-  (self._bottomBG):ComputePos()
-  ;
-  (self._btn_MovieToolTipBG):ComputePos()
-  ;
-  (self._btn_MovieToolTipDesc):ComputePos()
-  ;
-  (self._btn_MovieToolTip):ComputePos()
-  return isLearnFusionSkill
 end
 
 -- DECOMPILER ERROR at PC583: Confused about usage of register: R3 in 'UnsetPending'
@@ -489,33 +504,42 @@ PaGlobal_Skill.combinationSkillLearn = function(self, learnSkillNo)
     -- DECOMPILER ERROR at PC20: Confused about usage of register: R5 in 'UnsetPending'
 
     if skillTypeStatic:isActiveSkill() then
-      (self.slotConfig).createFG = skillTypeStatic._isSettableQuickSlot
-      -- DECOMPILER ERROR at PC24: Confused about usage of register: R5 in 'UnsetPending'
+      do
+        (self.slotConfig).createFG = skillTypeStatic._isSettableQuickSlot
+        -- DECOMPILER ERROR at PC24: Confused about usage of register: R5 in 'UnsetPending'
 
-      ;
-      (self.slotConfig).createFGDisabled = (self.slotConfig).createFG
-      -- DECOMPILER ERROR at PC29: Confused about usage of register: R5 in 'UnsetPending'
+        ;
+        (self.slotConfig).createFGDisabled = (self.slotConfig).createFG
+        -- DECOMPILER ERROR at PC29: Confused about usage of register: R5 in 'UnsetPending'
 
-      ;
-      (self.slotConfig).createFG_Passive = not (self.slotConfig).createFG
-      ;
-      ((self._slot_CombiSkill)[learnSkillCount - 1]):setSkillTypeStatic(skillTypeStaticWrapper)
-      if ((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton ~= nil then
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton):SetShow(false)
         ;
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton):SetIgnore(false)
-      end
-      if ((self._slot_CombiSkill)[learnSkillCount - 1]).icon ~= nil then
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_On", "HandleMOver_SkillWindow_ToolTipShow(" .. learnSkillNo .. ",false, \"SkillBox\",true)")
+        (self.slotConfig).createFG_Passive = not (self.slotConfig).createFG
         ;
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_Out", "HandleMOver_SkillWindow_ToolTipHide(" .. learnSkillNo .. ",\"SkillBox\",true)")
+        ((self._slot_CombiSkill)[learnSkillCount - 1]):setSkillTypeStatic(skillTypeStaticWrapper)
+        if ((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton ~= nil then
+          (((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton):SetShow(false)
+          ;
+          (((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton):SetIgnore(false)
+        end
+        if ((self._slot_CombiSkill)[learnSkillCount - 1]).icon ~= nil then
+          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_On", "HandleMOver_SkillWindow_ToolTipShow(" .. learnSkillNo .. ",false, \"SkillBox\",true)")
+          ;
+          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_Out", "HandleMOver_SkillWindow_ToolTipHide(" .. learnSkillNo .. ",\"SkillBox\",true)")
+          ;
+          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_PressMove", "HandleMLUp_SkillWindow_StartDrag(" .. learnSkillNo .. ")")
+          ;
+          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_RUp", "HandleMLUp_SkillWindow_ClearButtonClick(" .. learnSkillNo .. ")")
+          ;
+          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):SetEnableDragAndDrop(true)
+          Panel_SkillTooltip_SetPosition(learnSkillNo, ((self._slot_CombiSkill)[learnSkillCount - 1]).icon, "SkillBox")
+        end
+        audioPostEvent_SystemUi(4, 2)
         ;
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_PressMove", "HandleMLUp_SkillWindow_StartDrag(" .. learnSkillNo .. ")")
+        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
         ;
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_RUp", "HandleMLUp_SkillWindow_ClearButtonClick(" .. learnSkillNo .. ")")
-        ;
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):SetEnableDragAndDrop(true)
-        Panel_SkillTooltip_SetPosition(learnSkillNo, ((self._slot_CombiSkill)[learnSkillCount - 1]).icon, "SkillBox")
+        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):AddEffect("fUI_NewSkill01", false, 0, 0)
+        EnableSkillWindow_EffectOff()
+        PaGlobal_SkillCombination:showLearnSkillEffect()
       end
     end
   end

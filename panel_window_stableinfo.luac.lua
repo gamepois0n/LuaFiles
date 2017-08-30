@@ -467,17 +467,21 @@ stableInfo.update = function(self, unsealType)
             ;
             (self._staticLifeValue):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_INFO_TEXT_LIFEVALUE"))
           end
-          if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
+          if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_CowCarriage then
             (self._staticHPTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_DURABILITY"))
             ;
             (self._staticMPTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_LIFE"))
             ;
             (self._staticLife):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_PERIOD"))
           else
-            ;
-            (self._staticHPTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_HORSEHP_NAME"))
-            ;
-            (self._staticMPTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_STAMINA"))
+            if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
+              (self._staticMPTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_SHIPINFO_MP"))
+            else
+              ;
+              (self._staticHPTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_HORSEHP_NAME"))
+              ;
+              (self._staticMPTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_STAMINA"))
+            end
           end
           ;
           (self._maleIcon):SetShow(false)
@@ -641,7 +645,7 @@ stableInfo.updateSkill = function(self, unsealType)
         return 
       end
       if not servantInfo:doHaveVehicleSkill() then
-        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage then
+        if servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_Carriage or servantInfo:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
           local carriageNo = servantInfo:getServantNo()
           carrageInfo_Check(carriageNo)
         else
@@ -673,41 +677,41 @@ stableInfo.updateSkill = function(self, unsealType)
               end
             end
             for ii = 1, self._temporaySlotCount - 1 do
-              local skillWrapper = servantInfo:getSkill(R14_PC158)
+              local skillWrapper = servantInfo:getSkill(R14_PC165)
               if skillWrapper ~= nil and skillWrapper:isTrainingSkill() == false then
                 if slotNo < ((self._config).slot).count then
                   if self._startSlotIndex <= temporarySlotIndex then
                     local slot = (self._skill)[slotNo]
                     slot.key = ii
-                    -- DECOMPILER ERROR at PC176: Overwrote pending register: R14 in 'AssignReg'
-
-                    -- DECOMPILER ERROR at PC177: Overwrote pending register: R14 in 'AssignReg'
-
-                    R14_PC158(R14_PC158, "Icon/" .. skillWrapper:getIconPath())
                     -- DECOMPILER ERROR at PC183: Overwrote pending register: R14 in 'AssignReg'
 
                     -- DECOMPILER ERROR at PC184: Overwrote pending register: R14 in 'AssignReg'
 
-                    R14_PC158(R14_PC158, skillWrapper:getName())
-                    -- DECOMPILER ERROR at PC188: Overwrote pending register: R14 in 'AssignReg'
+                    R14_PC165(R14_PC165, "Icon/" .. skillWrapper:getIconPath())
+                    -- DECOMPILER ERROR at PC190: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC189: Overwrote pending register: R14 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC191: Overwrote pending register: R14 in 'AssignReg'
 
-                    R14_PC158(R14_PC158, servantInfo:getSkillExp(R18_PC192) / (skillWrapper:getMaxExp() / 100))
-                    -- DECOMPILER ERROR at PC198: Overwrote pending register: R14 in 'AssignReg'
+                    R14_PC165(R14_PC165, skillWrapper:getName())
+                    -- DECOMPILER ERROR at PC195: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC199: Overwrote pending register: R14 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC196: Overwrote pending register: R14 in 'AssignReg'
 
-                    R14_PC158(R14_PC158, 0)
-                    -- DECOMPILER ERROR at PC202: Overwrote pending register: R14 in 'AssignReg'
+                    R14_PC165(R14_PC165, servantInfo:getSkillExp(R18_PC199) / (skillWrapper:getMaxExp() / 100))
+                    -- DECOMPILER ERROR at PC205: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC206: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC206: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC209: Overwrote pending register: R18 in 'AssignReg'
+                    R14_PC165(R14_PC165, 0)
+                    -- DECOMPILER ERROR at PC209: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC211: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC213: Overwrote pending register: R18 in 'AssignReg'
 
-                    R14_PC158 = R14_PC158((string.format)("%.0f", servantInfo:getSkillExp(R19_PC208) / R18_PC192))
+                    -- DECOMPILER ERROR at PC216: Overwrote pending register: R18 in 'AssignReg'
+
+                    -- DECOMPILER ERROR at PC218: Overwrote pending register: R18 in 'AssignReg'
+
+                    R14_PC165 = R14_PC165((string.format)("%.0f", servantInfo:getSkillExp(R19_PC215) / R18_PC199))
                     local expTxt = nil
                     if expTxt >= 100 then
                       expTxt = 100
@@ -724,17 +728,17 @@ stableInfo.updateSkill = function(self, unsealType)
                         end
                       end
                     end
-                    -- DECOMPILER ERROR at PC306: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC313: Overwrote pending register: R18 in 'AssignReg'
 
                     if (slot.buttonTraining):GetShow() then
-                      (slot.dec):SetSize(150, R18_PC192)
+                      (slot.dec):SetSize(150, R18_PC199)
                     else
-                      -- DECOMPILER ERROR at PC312: Overwrote pending register: R18 in 'AssignReg'
+                      -- DECOMPILER ERROR at PC319: Overwrote pending register: R18 in 'AssignReg'
 
                       ;
-                      (slot.dec):SetSize(200, R18_PC192)
+                      (slot.dec):SetSize(200, R18_PC199)
                     end
-                    -- DECOMPILER ERROR at PC316: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC323: Overwrote pending register: R18 in 'AssignReg'
 
                     ;
                     (slot.dec):SetText(skillWrapper:getDescription())
@@ -744,65 +748,65 @@ stableInfo.updateSkill = function(self, unsealType)
                     (slot.exp):SetShow(true)
                     ;
                     (slot.expStr):SetShow(true)
-                    -- DECOMPILER ERROR at PC352: Unhandled construct in 'MakeBoolean' P1
+                    -- DECOMPILER ERROR at PC359: Unhandled construct in 'MakeBoolean' P1
 
-                    if FGlobal_IsCommercialService() and servantInfo:isSkillLock(R17_PC339) and servantInfo:getStateType() ~= (CppEnums.ServantStateType).Type_SkillTraining then
-                      (slot.buttonLock):SetShow(R17_PC339)
+                    if FGlobal_IsCommercialService() and servantInfo:isSkillLock(R17_PC346) and servantInfo:getStateType() ~= (CppEnums.ServantStateType).Type_SkillTraining then
+                      (slot.buttonLock):SetShow(R17_PC346)
                     end
-                    -- DECOMPILER ERROR at PC361: Overwrote pending register: R17 in 'AssignReg'
-
                     -- DECOMPILER ERROR at PC368: Overwrote pending register: R17 in 'AssignReg'
+
+                    -- DECOMPILER ERROR at PC375: Overwrote pending register: R17 in 'AssignReg'
 
                     if not servantInfo:isSeized() then
                       if (CppEnums.ServantStateType).Type_SkillTraining == servantInfo:getStateType() then
                         do
                           do
-                            (slot.button):SetShow(R17_PC339)
-                            -- DECOMPILER ERROR at PC372: Overwrote pending register: R17 in 'AssignReg'
+                            (slot.button):SetShow(R17_PC346)
+                            -- DECOMPILER ERROR at PC379: Overwrote pending register: R17 in 'AssignReg'
 
                             ;
-                            (slot.buttonDel):SetShow(R17_PC339)
-                            -- DECOMPILER ERROR at PC377: Overwrote pending register: R17 in 'AssignReg'
-
+                            (slot.buttonDel):SetShow(R17_PC346)
                             -- DECOMPILER ERROR at PC384: Overwrote pending register: R17 in 'AssignReg'
 
-                            -- DECOMPILER ERROR at PC390: Overwrote pending register: R17 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC391: Overwrote pending register: R17 in 'AssignReg'
+
+                            -- DECOMPILER ERROR at PC397: Overwrote pending register: R17 in 'AssignReg'
 
                             if (CppEnums.VehicleType).Type_Carriage ~= servantInfo:getVehicleType() and (CppEnums.VehicleType).Type_Donkey ~= servantInfo:getVehicleType() then
-                              (slot.button):SetShow(R17_PC339)
-                              -- DECOMPILER ERROR at PC394: Overwrote pending register: R17 in 'AssignReg'
+                              (slot.button):SetShow(R17_PC346)
+                              -- DECOMPILER ERROR at PC401: Overwrote pending register: R17 in 'AssignReg'
 
                               ;
-                              (slot.buttonDel):SetShow(R17_PC339)
+                              (slot.buttonDel):SetShow(R17_PC346)
                             end
-                            -- DECOMPILER ERROR at PC398: Overwrote pending register: R17 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC405: Overwrote pending register: R17 in 'AssignReg'
 
                             ;
-                            (slot.base):SetShow(R17_PC339)
+                            (slot.base):SetShow(R17_PC346)
                             slotNo = slotNo + 1
                             temporarySlotIndex = temporarySlotIndex + 1
                             self._temporayLearnSkillCount = self._temporayLearnSkillCount + 1
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC405: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end
@@ -813,81 +817,81 @@ stableInfo.updateSkill = function(self, unsealType)
               end
             end
             for ii = 1, self._temporaySlotCount - 1 do
-              local skillWrapper = servantInfo:getSkillXXX(R14_PC413)
-              -- DECOMPILER ERROR at PC418: Overwrote pending register: R14 in 'AssignReg'
+              local skillWrapper = servantInfo:getSkillXXX(R14_PC420)
+              -- DECOMPILER ERROR at PC425: Overwrote pending register: R14 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC419: Overwrote pending register: R14 in 'AssignReg'
+              -- DECOMPILER ERROR at PC426: Overwrote pending register: R14 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC420: Overwrote pending register: R14 in 'AssignReg'
+              -- DECOMPILER ERROR at PC427: Overwrote pending register: R14 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC423: Overwrote pending register: R14 in 'AssignReg'
+              -- DECOMPILER ERROR at PC430: Overwrote pending register: R14 in 'AssignReg'
 
-              if skillWrapper ~= nil and servantInfo:getStateType() ~= R14_PC413 and skillWrapper:isTrainingSkill() == false then
+              if skillWrapper ~= nil and servantInfo:getStateType() ~= R14_PC420 and skillWrapper:isTrainingSkill() == false then
                 if slotNo < ((self._config).slot).count then
                   do
                     do
                       if self._startSlotIndex <= temporarySlotIndex then
                         local slot = (self._skill)[slotNo]
                         slot.key = ii
-                        -- DECOMPILER ERROR at PC438: Overwrote pending register: R14 in 'AssignReg'
-
-                        -- DECOMPILER ERROR at PC439: Overwrote pending register: R14 in 'AssignReg'
-
-                        -- DECOMPILER ERROR at PC441: Overwrote pending register: R17 in 'AssignReg'
-
-                        R14_PC413(R14_PC413, "Icon/" .. R17_PC339)
                         -- DECOMPILER ERROR at PC445: Overwrote pending register: R14 in 'AssignReg'
 
                         -- DECOMPILER ERROR at PC446: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC447: Overwrote pending register: R17 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC448: Overwrote pending register: R17 in 'AssignReg'
 
-                        R14_PC413(R14_PC413, skillWrapper:getName())
-                        -- DECOMPILER ERROR at PC450: Overwrote pending register: R14 in 'AssignReg'
+                        R14_PC420(R14_PC420, "Icon/" .. R17_PC346)
+                        -- DECOMPILER ERROR at PC452: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC451: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC453: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC413(R14_PC413, skillWrapper:getDescription())
-                        -- DECOMPILER ERROR at PC455: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC454: Overwrote pending register: R17 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC456: Overwrote pending register: R14 in 'AssignReg'
+                        R14_PC420(R14_PC420, skillWrapper:getName())
+                        -- DECOMPILER ERROR at PC457: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC413(R14_PC413, false)
-                        -- DECOMPILER ERROR at PC459: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC458: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC413 = R14_PC413()
-                        if R14_PC413 then
-                          R14_PC413 = CppEnums
-                          R14_PC413 = R14_PC413.VehicleType
-                          R14_PC413 = R14_PC413.Type_Carriage
-                          if R14_PC413 ~= servantInfo:getVehicleType() then
-                            R14_PC413 = CppEnums
-                            R14_PC413 = R14_PC413.VehicleType
-                            R14_PC413 = R14_PC413.Type_Donkey
-                            if R14_PC413 ~= servantInfo:getVehicleType() then
-                              R14_PC413 = slot.buttonTarget
-                              R14_PC413(R14_PC413, true)
+                        R14_PC420(R14_PC420, skillWrapper:getDescription())
+                        -- DECOMPILER ERROR at PC462: Overwrote pending register: R14 in 'AssignReg'
+
+                        -- DECOMPILER ERROR at PC463: Overwrote pending register: R14 in 'AssignReg'
+
+                        R14_PC420(R14_PC420, false)
+                        -- DECOMPILER ERROR at PC466: Overwrote pending register: R14 in 'AssignReg'
+
+                        R14_PC420 = R14_PC420()
+                        if R14_PC420 then
+                          R14_PC420 = CppEnums
+                          R14_PC420 = R14_PC420.VehicleType
+                          R14_PC420 = R14_PC420.Type_Carriage
+                          if R14_PC420 ~= servantInfo:getVehicleType() then
+                            R14_PC420 = CppEnums
+                            R14_PC420 = R14_PC420.VehicleType
+                            R14_PC420 = R14_PC420.Type_Donkey
+                            if R14_PC420 ~= servantInfo:getVehicleType() then
+                              R14_PC420 = slot.buttonTarget
+                              R14_PC420(R14_PC420, true)
                             end
                           end
                         end
-                        -- DECOMPILER ERROR at PC481: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC488: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC482: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC489: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC413(R14_PC413, true)
+                        R14_PC420(R14_PC420, true)
                         slotNo = slotNo + 1
                       end
                       temporarySlotIndex = temporarySlotIndex + 1
                       self._temporayLearnSkillCount = self._temporayLearnSkillCount + 1
-                      -- DECOMPILER ERROR at PC490: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC490: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC490: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC490: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC490: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end

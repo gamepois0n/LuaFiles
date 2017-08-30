@@ -16,6 +16,7 @@ local _gaugeBG = (UI.getChildControl)(Panel_Tooltip_SimpleText, "Static_Gauge_BG
 local _gaugeProgress = (UI.getChildControl)(Panel_Tooltip_SimpleText, "Progress_Gauge")
 local _gaugeBarHead = (UI.getChildControl)(_gaugeProgress, "Progress2_1_Bar_Head")
 local _gaugeTime = (UI.getChildControl)(Panel_Tooltip_SimpleText, "StaticText_Gauge_Main")
+local _isTooltipShow = false
 local uiTextGroup = {_uiName = _uiName, _styleDesc = _styleDesc}
 local TooltipSimple_SetPosition = function(parentPos, size, reversePosX)
   -- function num : 0_0
@@ -154,7 +155,8 @@ local TooltipSimple_SetPosition_UISubApp = function(parent, size, reversePosX)
 end
 
 TooltipSimple_CommonShow = function(name, desc)
-  -- function num : 0_2 , upvalues : _uiName, UI_TM, _styleDesc
+  -- function num : 0_2 , upvalues : _isTooltipShow, _uiName, UI_TM, _styleDesc, _gaugeBG, _gaugeProgress, _gaugeBarHead, _gaugeTime
+  _isTooltipShow = Panel_Tooltip_SimpleText:GetShow()
   if Panel_Tooltip_SimpleText:GetShow() then
     Panel_Tooltip_SimpleText:SetShow(false)
   end
@@ -207,6 +209,10 @@ TooltipSimple_CommonShow = function(name, desc)
       end
       _uiName:SetTextHorizonLeft()
       _uiName:SetText(name)
+      _gaugeBG:SetShow(false)
+      _gaugeProgress:SetShow(false)
+      _gaugeBarHead:SetShow(false)
+      _gaugeTime:SetShow(false)
       if Panel_Tooltip_SimpleText:GetSizeX() < _uiName:GetTextSizeX() + 20 then
         Panel_Tooltip_SimpleText:SetSize(_uiName:GetTextSizeX() + 20, Panel_Tooltip_SimpleText:GetSizeY())
         _styleDesc:SetSize(Panel_Tooltip_SimpleText:GetSizeX() - 20, _styleDesc:GetSizeY())
@@ -261,7 +267,7 @@ TooltipSimple_CommonShow_Gauge = function(name, desc, needTime, useTime)
     end
     if desc ~= nil then
       local descLength = (string.len)(desc)
-      local panelWidth = 150
+      local panelWidth = 250
       if descLength < 100 then
         _uiName:SetSize(panelWidth - 20, _uiName:GetSizeY())
         _styleDesc:SetSize(panelWidth - 20, _styleDesc:GetSizeY())
@@ -312,7 +318,7 @@ TooltipSimple_CommonShow_Gauge = function(name, desc, needTime, useTime)
           _styleDesc:SetTextHorizonLeft()
           _styleDesc:SetAutoResize()
           _styleDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-          _styleDesc:SetText(desc .. "\n" .. gaugeText)
+          _styleDesc:SetText(desc .. gaugeText)
           _styleDesc:SetShow(true)
           _styleDesc:SetPosY(_uiName:GetTextSizeY() + 10)
           Panel_Tooltip_SimpleText:SetSize(Panel_Tooltip_SimpleText:GetSizeX(), _uiName:GetTextSizeY() + _styleDesc:GetTextSizeY() + (_uiName:GetSpanSize()).x * 2 + gaugeSizeY)

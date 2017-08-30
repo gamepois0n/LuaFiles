@@ -2842,14 +2842,14 @@ ItemMarket_UpdateMoneyByWarehouse = function()
     end
     local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
     local regionInfoWrapper = getRegionInfoWrapper(myAffiliatedTownRegionKey)
-    if ToClient_IsAccessibleRegionKey(myAffiliatedTownRegionKey) == false then
+    if ToClient_IsAccessibleRegionKey(regionInfo:getAffiliatedTownRegionKey()) == false then
       local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
       local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
       if newRegionInfo == nil then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
         return 
       end
       myAffiliatedTownRegionKey = newRegionInfo:getRegionKey()
-      Proc_ShowMessage_Ack(tostring(myAffiliatedTownRegionKey) .. "    " .. tostring(regionInfo:getAffiliatedTownRegionKey()))
       if myAffiliatedTownRegionKey == 0 then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
         return 
@@ -3875,112 +3875,128 @@ FGlobal_ItemMarket_OpenByMaid = function()
   local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
   local regionInfoWrapper = getRegionInfoWrapper(myAffiliatedTownRegionKey)
   local wayPointKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
-  warehouse_requestInfo(wayPointKey)
-  ;
-  (self.invenMoney):SetShow(true)
-  ;
-  (self.invenMoneyTit):SetShow(true)
-  ;
-  (self.invenMoneyTit):SetEnableArea(0, 0, 200, (self.invenMoneyTit):GetSizeY())
-  ;
-  (self.warehouseMoney):SetShow(true)
-  ;
-  (self.warehouseMoneyTit):SetShow(true)
-  ;
-  (self.warehouseMoneyTit):SetEnableArea(0, 0, 200, (self.warehouseMoneyTit):GetSizeY())
-  ;
-  (self.invenMoneyTit):SetCheck(true)
-  ;
-  (self.warehouseMoneyTit):SetCheck(false)
-  ;
-  (self.btn_MyList):SetShow(false)
-  ;
-  (self.btn_BackPage):SetShow(false)
-  ;
-  (self.btn_SetAlarm):SetShow(false)
-  ;
-  (self.btn_SetPreBid):SetShow(false)
-  ;
-  (self.btn_Refresh):SetShow(false)
-  Panel_Window_ItemMarket:SetShow(true)
-  local selfPlayer = getSelfPlayer()
-  local regionInfoWrapper = getRegionInfoWrapper(selfPlayer:getRegionKeyRaw())
-  if regionInfoWrapper == nil then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGIONINFO_NIL"))
-    return 
-  end
-  self.curTerritoryKeyRaw = regionInfoWrapper:getTerritoryKeyRaw()
-  ;
-  (self.panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_NAMING"))
-  self.curItemClassify = 1
-  self.curClassType = -1
-  self.curServantType = -1
-  self.curFilterIndex = -1
-  self.isGrouplist = true
-  self.isWorldMapOpen = false
-  self.isChangeSort = false
-  self.curSortTarget = -1
-  self.curSortValue = false
-  self.isSearch = false
-  selectedKey = -1
-  self.isGrouplist = true
-  self.isSpecialCategory = false
-  self.isSpecialInside = false
-  ;
-  (self.static_ListHeadBG):SetShow(true)
-  ;
-  (self.specialListHeadBG):SetShow(false)
-  ;
-  (self.selectedListHeadBG):SetShow(false)
-  ;
-  (self._list2):SetShow(true)
-  ;
-  (self._list2_Inside):SetShow(false)
-  ;
-  (self._list2_SpecialList):SetShow(false)
-  ;
-  (self._list2_SpecialList_Inside):SetShow(false)
-  ;
-  (self.combobox_Filter_Sort1):DeleteAllItem()
-  ;
-  (self.combobox_Filter_Sort1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETNEW_FILTER_NONE"))
-  requestOpenItemMarket()
-  requestItemMarketSummaryInfo(self.curTerritoryKeyRaw, false, false)
-  ;
-  (self.edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
-  ;
-  (self.edit_SpecialItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
-  self.txt_ItemNameBackPage = ""
-  self.txt_SpecialItemNameBackPage = ""
-  ClearFocusEdit()
-  self:SetPosition()
-  selectMarketCategory(0, -1)
-  self:Update()
-  ;
-  (self._btn_CategoryAll):SetCheck(true)
-  local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
-  for key,value in pairs(tree2IndexMap) do
-    if value._isMain then
-      local keyElement = (tree2:getElementManager()):getByKey(toInt64(0, key), false)
-      keyElement:setIsOpen(false)
+  local wayKey = getCurrentWaypointKey()
+  if ToClient_IsAccessibleRegionKey(myAffiliatedTownRegionKey) == false then
+    local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
+    local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
+    if newRegionInfo == nil then
+      return 
     end
+    wayKey = (newRegionInfo:get())._waypointKey
+    if wayKey == 0 then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+      return 
+    end
+    wayPointKey = wayKey
   end
-  ;
-  (tree2:getElementManager()):refillKeyList()
-  tree2:moveTopIndex()
-  ;
-  (self._list2):moveTopIndex()
-  ;
-  (self._list2_Inside):moveTopIndex()
-  ;
-  (self._list2_SpecialList):moveTopIndex()
-  ;
-  (self._list2_SpecialList_Inside):moveTopIndex()
-  _itemMarket_ResetTextureBySort(self)
-  ;
-  (self.btn_RegistItem):SetShow(true)
-  if (self.btn_FavoriteOnOff):IsCheck() then
-    FGlobal_ItemMarket_FavoriteItem_Open()
+  do
+    warehouse_requestInfo(wayPointKey)
+    ;
+    (self.invenMoney):SetShow(true)
+    ;
+    (self.invenMoneyTit):SetShow(true)
+    ;
+    (self.invenMoneyTit):SetEnableArea(0, 0, 200, (self.invenMoneyTit):GetSizeY())
+    ;
+    (self.warehouseMoney):SetShow(true)
+    ;
+    (self.warehouseMoneyTit):SetShow(true)
+    ;
+    (self.warehouseMoneyTit):SetEnableArea(0, 0, 200, (self.warehouseMoneyTit):GetSizeY())
+    ;
+    (self.invenMoneyTit):SetCheck(true)
+    ;
+    (self.warehouseMoneyTit):SetCheck(false)
+    ;
+    (self.btn_MyList):SetShow(false)
+    ;
+    (self.btn_BackPage):SetShow(false)
+    ;
+    (self.btn_SetAlarm):SetShow(false)
+    ;
+    (self.btn_SetPreBid):SetShow(false)
+    ;
+    (self.btn_Refresh):SetShow(false)
+    Panel_Window_ItemMarket:SetShow(true)
+    local selfPlayer = getSelfPlayer()
+    local regionInfoWrapper = getRegionInfoWrapper(selfPlayer:getRegionKeyRaw())
+    if regionInfoWrapper == nil then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGIONINFO_NIL"))
+      return 
+    end
+    self.curTerritoryKeyRaw = regionInfoWrapper:getTerritoryKeyRaw()
+    ;
+    (self.panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_NAMING"))
+    self.curItemClassify = 1
+    self.curClassType = -1
+    self.curServantType = -1
+    self.curFilterIndex = -1
+    self.isGrouplist = true
+    self.isWorldMapOpen = false
+    self.isChangeSort = false
+    self.curSortTarget = -1
+    self.curSortValue = false
+    self.isSearch = false
+    selectedKey = -1
+    self.isGrouplist = true
+    self.isSpecialCategory = false
+    self.isSpecialInside = false
+    ;
+    (self.static_ListHeadBG):SetShow(true)
+    ;
+    (self.specialListHeadBG):SetShow(false)
+    ;
+    (self.selectedListHeadBG):SetShow(false)
+    ;
+    (self._list2):SetShow(true)
+    ;
+    (self._list2_Inside):SetShow(false)
+    ;
+    (self._list2_SpecialList):SetShow(false)
+    ;
+    (self._list2_SpecialList_Inside):SetShow(false)
+    ;
+    (self.combobox_Filter_Sort1):DeleteAllItem()
+    ;
+    (self.combobox_Filter_Sort1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETNEW_FILTER_NONE"))
+    requestOpenItemMarket()
+    requestItemMarketSummaryInfo(self.curTerritoryKeyRaw, false, false)
+    ;
+    (self.edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+    ;
+    (self.edit_SpecialItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+    self.txt_ItemNameBackPage = ""
+    self.txt_SpecialItemNameBackPage = ""
+    ClearFocusEdit()
+    self:SetPosition()
+    selectMarketCategory(0, -1)
+    self:Update()
+    ;
+    (self._btn_CategoryAll):SetCheck(true)
+    local tree2 = (UI.getChildControl)(Panel_Window_ItemMarket, "List2_ItemMarket_Category")
+    for key,value in pairs(tree2IndexMap) do
+      if value._isMain then
+        local keyElement = (tree2:getElementManager()):getByKey(toInt64(0, key), false)
+        keyElement:setIsOpen(false)
+      end
+    end
+    ;
+    (tree2:getElementManager()):refillKeyList()
+    tree2:moveTopIndex()
+    ;
+    (self._list2):moveTopIndex()
+    ;
+    (self._list2_Inside):moveTopIndex()
+    ;
+    (self._list2_SpecialList):moveTopIndex()
+    ;
+    (self._list2_SpecialList_Inside):moveTopIndex()
+    _itemMarket_ResetTextureBySort(self)
+    ;
+    (self.btn_RegistItem):SetShow(true)
+    if (self.btn_FavoriteOnOff):IsCheck() then
+      FGlobal_ItemMarket_FavoriteItem_Open()
+    end
   end
 end
 

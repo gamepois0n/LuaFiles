@@ -35,6 +35,8 @@ maidList.scrollCtrlBtn = (UI.getChildControl)(maidList.scroll, "Scroll_CtrlButto
 (maidList.contentBg):addInputEvent("Mouse_DownScroll", "MaidList_ScrollEvent( true )")
 ;
 (maidList.contentBg):addInputEvent("Mouse_UpScroll", "MaidList_ScrollEvent( false )")
+;
+(maidList.scroll):addInputEvent("Mouse_LPress", "HandleClicked_MaidList_ScrollBtn()")
 maidList.Init = function(self)
   -- function num : 0_0
   for maidIndex = 0, self.maxShowCount - 1 do
@@ -614,7 +616,6 @@ end
 
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_FGlobal_MaidIcon_SetPos")
 Panel_Window_MaidList:RegisterUpdateFunc("MaidCoolTime_Update")
-registerEvent("selfPlayer_regionChanged", "FGlobal_MaidIcon_SetPos")
 registerEvent("FromClient_RefreshMaidList", "FGlobal_MaidIcon_SetPos")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Icon_Maid")
 FromClient_luaLoadComplete_Icon_Maid = function()

@@ -463,6 +463,11 @@ stableList.update = function(self)
           end
         elseif (CppEnums.ServantStateType).Type_Coma == getState then
           (slot.coma):SetShow(true)
+          if vehicleType == (CppEnums.VehicleType).Type_Carriage or vehicleType == (CppEnums.VehicleType).Type_CowCarriage or vehicleType == (CppEnums.VehicleType).Type_RepairableCarriage then
+            (slot.coma):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_BTN_REPAIR"))
+          else
+            (slot.coma):SetText(PAGetString(Defines.StringSheet_RESOURCE, "STABLE_LIST_TXT_HURT"))
+          end
         elseif (CppEnums.ServantStateType).Type_SkillTraining == getState then
           if stable_isSkillExpTrainingComplete(sortIndex) then
             (slot.training):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_TRAINFINISH"))
@@ -609,7 +614,7 @@ stableList.update = function(self)
       ;
       (UIScroll.SetButtonSize)(self._scroll, (self._config).slotCount, servantCount)
       FGlobal_NeedStableRegistItem_Print()
-      -- DECOMPILER ERROR: 41 unprocessed JMP targets
+      -- DECOMPILER ERROR: 43 unprocessed JMP targets
     end
   end
 end
@@ -890,7 +895,13 @@ StableList_ButtonOpen = function(eType, slotNo)
           buttonList[buttonSlotNo] = self._buttonRecovery
           buttonSlotNo = buttonSlotNo + 1
         end
-        if servantInfo:getHp() < servantInfo:getMaxHp() and stallionTraining ~= getState and ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType or (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType) then
+        -- DECOMPILER ERROR at PC363: Unhandled construct in 'MakeBoolean' P1
+
+        if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType and (servantInfo:getHp() < servantInfo:getMaxHp() or servantInfo:getMp() < servantInfo:getMaxMp()) then
+          buttonList[buttonSlotNo] = self._buttonRepair
+          buttonSlotNo = buttonSlotNo + 1
+        end
+        if ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType) and servantInfo:getHp() < servantInfo:getMaxHp() and stallionTraining ~= getState then
           buttonList[buttonSlotNo] = self._buttonRepair
           buttonSlotNo = buttonSlotNo + 1
         end
@@ -938,9 +949,9 @@ StableList_ButtonOpen = function(eType, slotNo)
                 ;
                 (self._buttonHorseLookChange):addInputEvent("Mouse_LUp", "StableList_LookChange(" .. slotNo .. ")")
               end
-              -- DECOMPILER ERROR at PC719: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC735: Unhandled construct in 'MakeBoolean' P1
 
-              -- DECOMPILER ERROR at PC719: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC735: Unhandled construct in 'MakeBoolean' P1
 
               if isPcroomOnly == false and ((CppEnums.VehicleType).Type_Horse == vehicleType or (CppEnums.VehicleType).Type_Donkey == vehicleType or (CppEnums.VehicleType).Type_Camel == vehicleType or (CppEnums.VehicleType).Type_RidableBabyElephant ~= vehicleType or stallionTraining ~= getState) and nowMating ~= getState and regMarket ~= getState and regMating ~= getState and training ~= getState then
                 if stable_isMarket() and servantLevel >= 15 and (CppEnums.VehicleType).Type_Horse == vehicleType and isContentsEnableSupply then
@@ -976,7 +987,7 @@ StableList_ButtonOpen = function(eType, slotNo)
               end
               positionX = (((self._slots)[slotNo]).button):GetPosX() + buttonConfig.startX
               positionY = (((self._slots)[slotNo]).button):GetPosY() + buttonConfig.startY + 20
-              -- DECOMPILER ERROR at PC883: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC899: Unhandled construct in 'MakeBoolean' P1
 
               if eType == (self._const).eTypeUnsealed and isSiegeStable() == false then
                 stableList:clear()
@@ -1005,7 +1016,13 @@ StableList_ButtonOpen = function(eType, slotNo)
                   buttonList[buttonSlotNo] = self._buttonRecoveryUnseal
                   buttonSlotNo = buttonSlotNo + 1
                 end
-                if unSealServantInfo:getHp() < unSealServantInfo:getMaxHp() and ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType or (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType) then
+                -- DECOMPILER ERROR at PC1019: Unhandled construct in 'MakeBoolean' P1
+
+                if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType and (unSealServantInfo:getHp() < unSealServantInfo:getMaxHp() or unSealServantInfo:getMp() < unSealServantInfo:getMaxMp()) then
+                  buttonList[buttonSlotNo] = self._buttonRepairUnseal
+                  buttonSlotNo = buttonSlotNo + 1
+                end
+                if ((CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType) and unSealServantInfo:getHp() < unSealServantInfo:getMaxHp() then
                   buttonList[buttonSlotNo] = self._buttonRepairUnseal
                   buttonSlotNo = buttonSlotNo + 1
                 end
@@ -1045,7 +1062,7 @@ StableList_ButtonOpen = function(eType, slotNo)
                 else
                   (self._staticButtonListBG):SetShow(false)
                 end
-                -- DECOMPILER ERROR: 49 unprocessed JMP targets
+                -- DECOMPILER ERROR: 53 unprocessed JMP targets
               end
             end
           end
@@ -1240,12 +1257,20 @@ StableList_RecoveryUnseal = function()
     return 
   end
   if servantWrapper:isImprint() then
-    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+    if servantWrapper:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
+      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+    else
+      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+    end
   else
     if servantWrapper:getVehicleType() == (CppEnums.VehicleType).Type_Horse or servantWrapper:getVehicleType() == (CppEnums.VehicleType).Type_Camel or servantWrapper:getVehicleType() == (CppEnums.VehicleType).Type_Donkey or servantWrapper:getVehicleType() == (CppEnums.VehicleType).Type_Elephant then
       Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_NOT")
     else
-      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+      if servantWrapper:getVehicleType() == (CppEnums.VehicleType).Type_RepairableCarriage then
+        Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+      else
+        Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+      end
     end
   end
   local RecoveryUnseal = function()
@@ -1289,12 +1314,20 @@ StableList_Recovery = function()
     confirmFunction = StableList_RecoveryXXX
   end
   if servantInfo:isImprint() then
-    Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+    if vehicleType == (CppEnums.VehicleType).Type_RepairableCarriage then
+      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+    else
+      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_DISCOUNT", "needMoney", needMoney)
+    end
   else
     if vehicleType == (CppEnums.VehicleType).Type_Horse or vehicleType == (CppEnums.VehicleType).Type_Camel or vehicleType == (CppEnums.VehicleType).Type_Donkey or vehicleType == (CppEnums.VehicleType).Type_Elephant then
       Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney) .. PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_STAMPING_NOT")
     else
-      Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+      if vehicleType == (CppEnums.VehicleType).Type_RepairableCarriage then
+        Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_REPAIRABLECARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+      else
+        Imprint_Notify_Title = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_MSG", "needMoney", imprintMoney)
+      end
     end
   end
   local Recovery_Notify_Title = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE")

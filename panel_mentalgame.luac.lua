@@ -1573,6 +1573,9 @@ MentalGame_Show = function()
     return 
   end
   renderMode:set()
+  MentalGame_ScreenResize()
+  ;
+  ((mgUI.left).panel):SetPosY(0)
   ;
   ((mgUI.left).panel):SetShow(true, false)
   ;

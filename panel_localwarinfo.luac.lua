@@ -691,10 +691,24 @@ end
 HandleClicked_InMyChannelJoin = function()
   -- function num : 0_11
   local playerWrapper = getSelfPlayer()
+  if playerWrapper == nil then
+    return 
+  end
+  local curChannelData = getCurrentChannelServerData()
+  if curChannelData == nil then
+    return 
+  end
   local player = playerWrapper:get()
   local hp = player:getHp()
   local maxHp = player:getMaxHp()
   local isGameMaster = ToClient_SelfPlayerIsGM()
+  local getLevel = (playerWrapper:get()):getLevel()
+  local inMyChannelInfo = ToClient_GetLocalwarStatusDataToServer(curChannelData._serverNo)
+  local isLimitLocalWar = inMyChannelInfo:isLimitedLocalWar()
+  if not isLimitLocalWar and getLevel < 50 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_LEVELLIMIT"))
+    return 
+  end
   if hp == maxHp or isGameMaster then
     ToClient_JoinLocalWar()
   else

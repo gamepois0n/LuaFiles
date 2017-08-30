@@ -833,7 +833,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
               if attackerActorProxyWrapper ~= nil then
                 local isAttackPlayer = (attackerActorProxyWrapper:get()):isPlayer()
                 if isAttackPlayer then
-                  _deadQuestion:SetShow(true)
+                  if ToClient_isDontPvPDecreaseTendency() then
+                    _deadQuestion:SetShow(false)
+                  else
+                    _deadQuestion:SetShow(true)
+                  end
                 else
                   _deadQuestion:SetShow(false)
                 end
@@ -1414,11 +1418,7 @@ deadMessage_PkPenalty_Tooltip = function(isShow)
   end
   local name, desc, control = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_TITLE")
-  if isGameTypeKorea() or isGameTypeJapan() then
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_DESC")
-  else
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_DESC_OTHER")
-  end
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_DESC")
   control = _deadQuestion
   TooltipSimple_Show(control, name, desc)
 end

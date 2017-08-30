@@ -47,17 +47,13 @@ HorseMp_InitStaminaAlertText = function(vehicleType)
   if (CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType then
     alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_1")
   else
-    if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType then
-      alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_5")
+    if (CppEnums.VehicleType).Type_Boat == vehicleType or (CppEnums.VehicleType).Type_Raft == vehicleType or (CppEnums.VehicleType).Type_FishingBoat == vehicleType then
+      alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_3")
     else
-      if (CppEnums.VehicleType).Type_Boat == vehicleType or (CppEnums.VehicleType).Type_Raft == vehicleType or (CppEnums.VehicleType).Type_FishingBoat == vehicleType then
-        alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_3")
+      if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == vehicleType or (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType then
+        alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_4")
       else
-        if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType or (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == vehicleType then
-          alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_4")
-        else
-          alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_2")
-        end
+        alertText = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STAMINA_ALERT_2")
       end
     end
   end
@@ -121,7 +117,7 @@ HorseMP_Update = function()
         ;
         (self._staticBar):setTooltipEventRegistFunc("HorseMP_SimpleTooltips( true, 0, " .. staminaPercent .. ")")
       else
-        if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType then
+        if UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_RepairableCarriage == vehicleType then
           (self._staticText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_GUILDSHIP_NAME") .. " : " .. makeDotMoney((vehicleProxy:get()):getMp()) .. "/" .. makeDotMoney((vehicleProxy:get()):getMaxMp()))
           ;
           (self._staticBar):addInputEvent("Mouse_On", "HorseMP_SimpleTooltips( true, 4, " .. staminaPercent .. ")")
@@ -354,7 +350,7 @@ HorseMP_Open = function()
       return 
     end
     local vehicleType = (vehicleProxy:get()):getVehicleType()
-    if UI_VT.Type_Ladder == vehicleType or UI_VT.Type_Cow == vehicleType or UI_VT.Type_Bomb == vehicleType or UI_VT.Type_QuestObjectBox == vehicleType or UI_VT.Type_QuestObjectSack == vehicleType or UI_VT.Type_QuestObjectSheep == vehicleType or UI_VT.Type_QuestObjectCart == vehicleType or UI_VT.Type_QuestObjectOak == vehicleType or UI_VT.Type_QuestObjectBoat == vehicleType or UI_VT.Type_QuestObjectPumpkin == vehicleType or UI_VT.Type_QuestObjectBrokenFrag == vehicleType or UI_VT.Type_QuestObjectHerbalMachines == vehicleType or UI_VT.Type_QuestObjectExtractor == vehicleType then
+    if UI_VT.Type_Ladder == vehicleType or UI_VT.Type_Cow == vehicleType or UI_VT.Type_Bomb == vehicleType or UI_VT.Type_QuestObjectBox == vehicleType or UI_VT.Type_QuestObjectSack == vehicleType or UI_VT.Type_QuestObjectSheep == vehicleType or UI_VT.Type_QuestObjectCart == vehicleType or UI_VT.Type_QuestObjectOak == vehicleType or UI_VT.Type_QuestObjectBoat == vehicleType or UI_VT.Type_QuestObjectPumpkin == vehicleType or UI_VT.Type_QuestObjectBrokenFrag == vehicleType or UI_VT.Type_QuestObjectHerbalMachines == vehicleType or UI_VT.Type_QuestObjectExtractor == vehicleType or UI_VT.Type_Training == vehicleType then
       return 
     end
     Panel_HorseMp:SetShow(true)

@@ -87,7 +87,7 @@ AutoState_DialogInteraction.checkChangeState = function(self)
   self._pressDelay = self._printTime
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData ~= nil then
-    local reward = dialogData:getBaseRewardCount()
+    local reward = dialogData:getSelectRewardCount()
     local bcount = dialogData:getFuncButtonCount()
     local newquest = dialogData:isHaveAcceptMainQuest()
     if reward == 0 and bcount ~= 0 and not newquest then

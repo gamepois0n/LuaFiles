@@ -130,8 +130,4 @@ FromClient_SetAutoLevelUp = function(isAuto)
   Proc_ShowMessage_Ack(msg)
 end
 
-registerEvent("EventSelfPlayerLevelUp", "Init_AutoTraining")
-registerEvent("FromClient_CantIncreaseExpWithAutoLevelUp", "AutoTraining_Stop")
-registerEvent("FromClient_InActivateTrainingBtn", "AutoTraining_Stop")
-registerEvent("FromClient_SetAutoLevelUp", "FromClient_SetAutoLevelUp")
 

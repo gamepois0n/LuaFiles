@@ -14,7 +14,7 @@ Panel_TranslationReport.Initialize = function(self)
   _translationReportWebControl:SetShow(true)
   _translationReportWebControl:SetPosX(15)
   _translationReportWebControl:SetPosY(50)
-  _translationReportWebControl:SetSize(500, 500)
+  _translationReportWebControl:SetSize(7500, 610)
   _translationReportWebControl:ResetUrl()
 end
 
@@ -37,7 +37,7 @@ Panel_TranslationReport.Open = function(self, translationKey)
   local languageType = ToClient_GetLanguageType()
   local staticSTatusType = ToClient_GetStaticTypeFromLocalizedKey(translationKey)
   url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey=" .. tostring(translationKey) .. "&languageType=" .. tostring(languageType) .. "&staticType=" .. tostring(staticSTatusType)
-  _translationReportWebControl:SetUrl(500, 500, url, false, true)
+  _translationReportWebControl:SetUrl(700, 610, url, false, true)
   _translationReportWebControl:SetIME(true)
   Panel_TranslationReport:SetPosX(getScreenSizeX() / 2 - Panel_TranslationReport:GetSizeX() / 2, getScreenSizeY() / 2 - Panel_TranslationReport:GetSizeY() / 2)
 end

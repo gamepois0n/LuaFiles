@@ -1054,6 +1054,10 @@ FGlobal_AlchemyStonCheck = function()
         else
           if alchemyStoneType == 2 or alchemyStoneType == 5 then
             coolTime = 602
+          else
+            if alchemyStoneType == 6 then
+              coolTime = 182
+            end
           end
         end
       end

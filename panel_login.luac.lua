@@ -28,7 +28,7 @@ Button_GameOption:SetEnable(true)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
-local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only", "kamasilvia2"}
+local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only"}
 local bgIndex = {}
 for k,v in pairs(bgItem) do
   bgIndex[v] = k

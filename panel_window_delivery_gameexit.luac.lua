@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 local UI_TM = CppEnums.TextMode
-local deliveryForGameExit = {_buttonClose = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Button_Close"), _buttonGetOn = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Button_GetOn"), _comboBoxDest = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Combobox_Destination"), _comboBoxSwapCharacter = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Combobox_Character"), _panelBg = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Static_Sample_Background"), _bg = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Static_BG"), _staticText_NoticeMsg = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "StaticText_NoticeText"), _staticText_NoticeAlert = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "StaticText_Alert"), _selectDestinationWaypointKey = -1, _selectDestCarriageKey = -1, _selectCharacterIndex = -1, _selectCharacterIndexPos = -1}
+local deliveryForGameExit = {_buttonClose = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Button_Close"), _buttonGetOn = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Button_GetOn"), _comboBoxDest = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Combobox_Destination"), _comboBoxSwapCharacter = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Combobox_Character"), _panelBg = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Static_Sample_Background"), _bg = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "Static_BG"), _staticText_NoticeMsg = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "StaticText_NoticeText"), _staticText_NoticeAlert = (UI.getChildControl)(Panel_Window_DeliveryForGameExit, "StaticText_Alert"), _selectDestinationWaypointKey = -1, _selectDestCarriageKey = -1, _selectCharacterIndex = -1, _selectCharacterIndexPos = -1, _changingCharacter = false}
 deliveryForGameExit.PanelResize_ByFontSize = function(self)
   -- function num : 0_0 , upvalues : UI_TM
   (self._staticText_NoticeAlert):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -153,8 +153,9 @@ FGlobal_DeliveryForGameExit_Show = function(show)
     end
   else
     do
-      ;
-      (deliveryForGameExit.resetData)()
+      if not deliveryForGameExit._changingCharacter then
+        (deliveryForGameExit.resetData)()
+      end
       ;
       (deliveryForGameExit._staticText_NoticeMsg):SetShow(false)
       Panel_Window_DeliveryForGameExit:SetShow(show)
@@ -164,6 +165,9 @@ end
 
 click_DeliveryForGameExit_Close = function()
   -- function num : 0_6 , upvalues : changeDelayTime, deliveryForGameExit
+  if changeDelayTime ~= -1 then
+    sendGameDelayExitCancel()
+  end
   changeDelayTime = -1
   FGlobal_DeliveryForGameExit_Show(false)
   ;
@@ -212,6 +216,9 @@ end
 DeliveryForGameExit_YouSure = function()
   -- function num : 0_8 , upvalues : deliveryForGameExit
   deliveryPerson_SendReserve(deliveryForGameExit._selectDestinationWaypointKey)
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
+
+  deliveryForGameExit._changingCharacter = true
 end
 
 click_DeliveryForGameExit_Dest = function()
@@ -278,6 +285,11 @@ deliveryForGameExitChangeCharacter = function()
   if rv == false then
     return 
   end
+  -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
+
+  deliveryForGameExit._changingCharacter = false
+  ;
+  (deliveryForGameExit.resetData)()
 end
 
 local initialize = function()

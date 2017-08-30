@@ -697,6 +697,12 @@ NpcShop_TabButtonClick = function(tabIndex)
       ((self.radioButtons)[self.tabIndexSell]):EraseAllEffect()
       ;
       ((self.radioButtons)[self.tabIndexRepurchase]):EraseAllEffect()
+      ;
+      (self.scroll):SetEnable(true)
+      ;
+      (self.scroll):SetMonoTone(false)
+      ;
+      (self.scroll):SetShow(true)
     else
       if tabIndex == 1 then
         ((self.radioButtons)[self.tabIndexSell]):EraseAllEffect()
@@ -706,6 +712,12 @@ NpcShop_TabButtonClick = function(tabIndex)
         ((self.radioButtons)[self.tabIndexBuy]):EraseAllEffect()
         ;
         ((self.radioButtons)[self.tabIndexRepurchase]):EraseAllEffect()
+        ;
+        (self.scroll):SetEnable(true)
+        ;
+        (self.scroll):SetMonoTone(false)
+        ;
+        (self.scroll):SetShow(true)
       else
         if tabIndex == 2 then
           ((self.radioButtons)[self.tabIndexRepurchase]):EraseAllEffect()

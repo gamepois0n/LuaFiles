@@ -20,7 +20,7 @@ local progressHead = (UI.getChildControl)(progressRate, "Progress2_Bar_Head")
 local staticBack = (UI.getChildControl)(Panel_Loading, "Static_Progress_Back")
 local goblinRun = (UI.getChildControl)(Panel_Loading, "Static_GoblinRun")
 local backGroundEvnetImage = (UI.getChildControl)(Panel_Loading, "Static_BackImage")
-local isBgOpen = true
+local isBgOpen = false
 local bgImageTexture = {}
 local iskamasilviaOpen = ToClient_IsContentsGroupOpen("5")
 if isBgOpen then

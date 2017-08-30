@@ -1162,6 +1162,9 @@ Warehouse_OpenPanelFromMaid = function()
       return 
     end
   end
+  -- DECOMPILER ERROR at PC41: Confused about usage of register: R5 in 'UnsetPending'
+
+  warehouse._currentWaypointKey = plantWayKey
   Warehouse_OpenPanel(plantWayKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Maid)
   Warehouse_SetIgnoreMoneyButton(false)
   Warehouse_OpenWithInventory()
@@ -1297,7 +1300,6 @@ Warehouse_Close = function()
     Panel_Window_Warehouse:SetShow(false, false)
   end
   Panel_Window_Warehouse:ChangeSpecialTextureInfoName("")
-  ServantInventory_Close()
   if ToClient_CheckExistSummonMaid() then
     ToClient_CallHandlerMaid("_maidLogOut")
   end

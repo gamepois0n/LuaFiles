@@ -100,7 +100,7 @@ local closePanelLooting = function()
 end
 
 Panel_Looting_Update = function(empty)
-  -- function num : 0_4 , upvalues : looting, closePanelLooting
+  -- function num : 0_4 , upvalues : looting, closePanelLooting, _buttonLootAllToServant
   if empty == 1 then
     Panel_Looting_Value_isCloseLooting = true
     Panel_Tooltip_Item_Show_GeneralNormal(looting.selectSlotNo, "looting", false)
@@ -112,8 +112,13 @@ Panel_Looting_Update = function(empty)
   if Panel_Chatting_Input:GetShow() then
     (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
   end
+  if looting_isPickItemToServant() then
+    _buttonLootAllToServant:SetShow(true)
+  else
+    _buttonLootAllToServant:SetShow(false)
+  end
   local lootingCount = looting_getItemCount()
-  -- DECOMPILER ERROR at PC34: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
 
   looting.remainItemCnt = 0
   for ii = 1, looting.MAX_LOOTING_SLOT_COUNT do
@@ -121,7 +126,7 @@ Panel_Looting_Update = function(empty)
     local itemWrapper = looting_getItem(ii - 1)
     if itemWrapper ~= nil then
       slot:setItem(itemWrapper)
-      -- DECOMPILER ERROR at PC55: Confused about usage of register: R8 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC68: Confused about usage of register: R8 in 'UnsetPending'
 
       looting.remainItemCnt = looting.remainItemCnt + 1
     else

@@ -12,7 +12,7 @@ Panel_TransferLifeExperience:ActiveMouseEventEffect(true)
 Panel_TransferLifeExperience:setGlassBackground(true)
 local TransferLife = {itemWhereType = nil, itemSlotNo = nil, itemLifeType = nil, characterIndex = nil, characterNo_64 = nil, title = (UI.getChildControl)(Panel_TransferLifeExperience, "StaticText_Title"), panelBG = (UI.getChildControl)(Panel_TransferLifeExperience, "Static_PanelBG"), btn_Confirm = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Confirm"), btn_Cancel = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Cancel"), btn_Close = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Win_Close"), _scroll = (UI.getChildControl)(Panel_TransferLifeExperience, "Scroll_TransferLife"), notify = (UI.getChildControl)(Panel_TransferLifeExperience, "Static_Notify"), maxSlotCount = 4, listCount = 0, startPos_characterBtn = 5, startCharacterIdx = 0, 
 Slot = {}
-}
+, _selectCharacterIndex = -1}
 TransferLife._scrollBtn = (UI.getChildControl)(TransferLife._scroll, "Scroll_CtrlButton")
 ;
 (TransferLife.btn_Cancel):addInputEvent("Mouse_LUp", "TransferLife_Close()")
@@ -377,9 +377,13 @@ local TransferLife_Update = function()
   local uiIdx = 0
   for slotIdx = self.startCharacterIdx, self.listCount - 1 do
     if self.maxSlotCount <= uiIdx then
+      if self._selectCharacterIndex >= 0 and self._selectCharacterIndex < 4 then
+        ((self.Slot)[self._selectCharacterIndex]):SetCheck(true)
+      end
       return 
     end
     local slotBtn = (self.Slot)[uiIdx]
+    slotBtn:SetCheck(false)
     slotBtn:SetMonoTone(false)
     slotBtn:SetEnable(true)
     local characterData = getCharacterDataByIndex(slotIdx)
@@ -404,6 +408,12 @@ TransferLife_Open = function()
   Panel_TransferLifeExperience:SetShow(true, true)
   ;
   (TransferLife._scroll):SetControlPos(0)
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R0 in 'UnsetPending'
+
+  TransferLife._selectCharacterIndex = -1
+  -- DECOMPILER ERROR at PC13: Confused about usage of register: R0 in 'UnsetPending'
+
+  TransferLife.characterIndex = nil
 end
 
 TransferLife_Close = function()
@@ -419,7 +429,10 @@ end
 TransferLife_ScrollEvent = function(isUp)
   -- function num : 0_8 , upvalues : TransferLife, TransferLife_Update
   local self = TransferLife
-  self.startCharacterIdx = (UIScroll.ScrollEvent)(self._scroll, isUp, self.maxSlotCount, self.listCount, self.startCharacterIdx, 1)
+  self.startCharacterIdx = (UIScroll.ScrollEvent)(self._scroll, isUp, self.maxSlotCount, self.listCount - 1, self.startCharacterIdx, 1)
+  if self.characterIndex ~= nil then
+    self._selectCharacterIndex = self.characterIndex - self.startCharacterIdx
+  end
   TransferLife_Update()
 end
 

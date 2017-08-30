@@ -433,7 +433,7 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
       (target.skillEffect_value):SetText(skillStatic:getDescription())
       local isAwakeningData = false
       local activeSkillSS = nil
-      if skillStatic:isActiveSkillHas() then
+      if skillStatic:isActiveSkillHas() and skillStatic:isFusionSkill() == false then
         activeSkillSS = getActiveSkillStatus(skillStatic)
         if activeSkillSS == nil then
           (target.awakeningeffect):SetText("")
@@ -442,9 +442,9 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
           local awakeningDataCount = activeSkillSS:getSkillAwakenInfoCount() - 1
           local realCount = 0
           for idx = 0, awakeningDataCount do
-            local skillInfo = activeSkillSS:getSkillAwakenInfo(R41_PC603)
+            local skillInfo = activeSkillSS:getSkillAwakenInfo(R41_PC607)
             if skillInfo ~= "" then
-              awakeInfo = awakeInfo .. R41_PC603 .. skillInfo
+              awakeInfo = awakeInfo .. R41_PC607 .. skillInfo
               realCount = realCount + 1
             end
           end
@@ -491,72 +491,72 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
       end
       local skillIconPosY = (target.skillIcon):GetPosY()
       local skillIconSizeY = (target.skillIcon):GetSizeY()
-      -- DECOMPILER ERROR at PC718: Overwrote pending register: R41 in 'AssignReg'
-
-      ;
-      (target.skillDescription):SetPosY(R41_PC603)
       -- DECOMPILER ERROR at PC722: Overwrote pending register: R41 in 'AssignReg'
 
+      ;
+      (target.skillDescription):SetPosY(R41_PC607)
+      -- DECOMPILER ERROR at PC726: Overwrote pending register: R41 in 'AssignReg'
+
       do
-        local skillDescriptionBottom = Tooltip_SkillData:GetBottomPos(R41_PC603) + elementgap
-        -- DECOMPILER ERROR at PC728: Overwrote pending register: R41 in 'AssignReg'
+        local skillDescriptionBottom = Tooltip_SkillData:GetBottomPos(R41_PC607) + elementgap
+        -- DECOMPILER ERROR at PC732: Overwrote pending register: R41 in 'AssignReg'
 
         if iconBottom < skillDescriptionBottom then
           TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
         else
-          -- DECOMPILER ERROR at PC734: Overwrote pending register: R41 in 'AssignReg'
+          -- DECOMPILER ERROR at PC738: Overwrote pending register: R41 in 'AssignReg'
 
           TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillIcon) + elementgap
         end
-        -- DECOMPILER ERROR at PC739: Overwrote pending register: R41 in 'AssignReg'
+        -- DECOMPILER ERROR at PC743: Overwrote pending register: R41 in 'AssignReg'
 
         ;
         (target.useMethod):SetPosY(TooltipYPos + 9)
-        -- DECOMPILER ERROR at PC743: Overwrote pending register: R41 in 'AssignReg'
+        -- DECOMPILER ERROR at PC747: Overwrote pending register: R41 in 'AssignReg'
 
         TooltipYPos = Tooltip_SkillData:GetBottomPos(target.useMethod) + elementgap
-        -- DECOMPILER ERROR at PC750: Overwrote pending register: R41 in 'AssignReg'
+        -- DECOMPILER ERROR at PC754: Overwrote pending register: R41 in 'AssignReg'
 
         if isNextLvWidget then
           (target.learnRequirement_category):SetPosY(TooltipYPos - 5)
-          -- DECOMPILER ERROR at PC754: Overwrote pending register: R41 in 'AssignReg'
+          -- DECOMPILER ERROR at PC758: Overwrote pending register: R41 in 'AssignReg'
 
           TooltipYPos = Tooltip_SkillData:GetBottomPos(target.learnRequirement_category) + elementgap - elementBiggap
-          -- DECOMPILER ERROR at PC760: Overwrote pending register: R41 in 'AssignReg'
+          -- DECOMPILER ERROR at PC764: Overwrote pending register: R41 in 'AssignReg'
 
           ;
           (target.learnRequirement_panel):SetPosY(TooltipYPos)
           TooltipYPos = TooltipYPos + elementBiggap / 2
           local isLevelShow = isNeedLvLearning
-          -- DECOMPILER ERROR at PC766: Overwrote pending register: R41 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC767: Overwrote pending register: R41 in 'AssignReg'
-
-          R41_PC603(R41_PC603, isLevelShow)
           -- DECOMPILER ERROR at PC770: Overwrote pending register: R41 in 'AssignReg'
 
           -- DECOMPILER ERROR at PC771: Overwrote pending register: R41 in 'AssignReg'
 
-          R41_PC603(R41_PC603, isLevelShow)
-          -- DECOMPILER ERROR at PC776: Overwrote pending register: R41 in 'AssignReg'
+          R41_PC607(R41_PC607, isLevelShow)
+          -- DECOMPILER ERROR at PC774: Overwrote pending register: R41 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC777: Overwrote pending register: R41 in 'AssignReg'
+          -- DECOMPILER ERROR at PC775: Overwrote pending register: R41 in 'AssignReg'
+
+          R41_PC607(R41_PC607, isLevelShow)
+          -- DECOMPILER ERROR at PC780: Overwrote pending register: R41 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC781: Overwrote pending register: R41 in 'AssignReg'
 
           if isLevelShow then
-            R41_PC603(R41_PC603, TooltipYPos)
-            -- DECOMPILER ERROR at PC780: Overwrote pending register: R41 in 'AssignReg'
-
-            -- DECOMPILER ERROR at PC781: Overwrote pending register: R41 in 'AssignReg'
-
-            R41_PC603(R41_PC603, TooltipYPos)
+            R41_PC607(R41_PC607, TooltipYPos)
             -- DECOMPILER ERROR at PC784: Overwrote pending register: R41 in 'AssignReg'
 
             -- DECOMPILER ERROR at PC785: Overwrote pending register: R41 in 'AssignReg'
 
-            R41_PC603 = R41_PC603(R41_PC603, target.requireLevel_value)
-            TooltipYPos = R41_PC603 + elementgap
+            R41_PC607(R41_PC607, TooltipYPos)
+            -- DECOMPILER ERROR at PC788: Overwrote pending register: R41 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC789: Overwrote pending register: R41 in 'AssignReg'
+
+            R41_PC607 = R41_PC607(R41_PC607, target.requireLevel_value)
+            TooltipYPos = R41_PC607 + elementgap
           end
-          R41_PC603 = needSkillLearning ~= 0
+          R41_PC607 = needSkillLearning ~= 0
           local isSpShow = nil
           ;
           (target.requireSP):SetShow(isSpShow)

@@ -1880,10 +1880,26 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
               (target.cronStoneValue):SetSize(300, (target.cronStoneValue):GetSizeY())
               ;
               (target.cronStoneValue):SetTextMode(UI_TM.eTextMode_AutoWrap)
-              if (equippedTooltip ~= target or isNextEnchantInfo ~= true) and itemWrapper ~= nil and ItemMarket_getIsMarketItem() ~= true then
-                local currentEnchantFailCount = itemWrapper:getCronEnchantFailCount()
+              if (equippedTooltip ~= target or isNextEnchantInfo ~= true) and (ItemMarket_getIsMarketItem() ~= true or equippedTooltip == target) then
+                local currentEnchantFailCount = 0
+                if itemWrapper ~= nil then
+                  currentEnchantFailCount = itemWrapper:getCronEnchantFailCount()
+                else
+                  if chattingLinkedItem ~= nil then
+                    currentEnchantFailCount = chattingLinkedItem:getItemParam(0)
+                  end
+                end
                 if currentEnchantFailCount > 0 then
-                  local itemSSW = itemWrapper:getStaticStatus()
+                  local itemSSW, itemEnchantWrapper = nil, nil
+                  if itemWrapper ~= nil then
+                    itemSSW = itemWrapper:getStaticStatus()
+                    itemEnchantWrapper = itemWrapper
+                  else
+                    if chattingLinkedItem ~= nil then
+                      itemSSW = chattingLinkedItem:getLinkedItemStaticStatus()
+                      itemEnchantWrapper = chattingLinkedItem
+                    end
+                  end
                   local itemClassifyType = itemSSW:getItemClassify()
                   local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
                   local gradeCount = ToClient_GetCronEnchnatInfoCount(itemClassifyType, enchantLevel)
@@ -1918,48 +1934,54 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                       end
                     end
                     do
+                      local bonusText = ""
+                      local itemaddedDD = itemEnchantWrapper:getAddedDD()
+                      local itemaddedHit = itemEnchantWrapper:getAddedHIT()
+                      local itemaddedDV = itemEnchantWrapper:getAddedDV()
+                      local itemaddedPV = itemEnchantWrapper:getAddedPV()
+                      local itemMaxHp = itemEnchantWrapper:getAddedMaxHP()
                       do
-                        local bonusText = ""
-                        if itemWrapper:getAddedDD() > 0 then
+                        local itemMaxMp = itemEnchantWrapper:getAddedMaxMP()
+                        if itemaddedDD > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACK", "value", itemWrapper:getAddedDD())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACK", "value", itemaddedDD)
                           else
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACKB", "value", itemWrapper:getAddedDD())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACKB", "value", itemaddedDD)
                           end
                         end
-                        if (math.floor)(itemWrapper:getAddedHIT()) > 0 then
+                        if (math.floor)(itemaddedHit) > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HIT", "value", (math.floor)(itemWrapper:getAddedHIT()))
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HIT", "value", (math.floor)(itemaddedHit))
                           else
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HITB", "value", (math.floor)(itemWrapper:getAddedHIT()))
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HITB", "value", (math.floor)(itemaddedHit))
                           end
                         end
-                        if itemWrapper:getAddedDV() > 0 then
+                        if itemaddedDV > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE", "value", itemWrapper:getAddedDV())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE", "value", itemaddedDV)
                           else
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGEB", "value", itemWrapper:getAddedDV())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGEB", "value", itemaddedDV)
                           end
                         end
-                        if itemWrapper:getAddedPV() > 0 then
+                        if itemaddedPV > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE", "value", itemWrapper:getAddedPV())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE", "value", itemaddedPV)
                           else
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCEB", "value", itemWrapper:getAddedPV())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCEB", "value", itemaddedPV)
                           end
                         end
-                        if itemWrapper:getAddedMaxHP() > 0 then
+                        if itemMaxHp > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HP", "value", itemWrapper:getAddedMaxHP())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HP", "value", itemMaxHp)
                           else
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HPB", "value", itemWrapper:getAddedMaxHP())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HPB", "value", itemMaxHp)
                           end
                         end
-                        if itemWrapper:getAddedMaxMP() > 0 then
+                        if itemMaxMp > 0 then
                           if bonusText == "" then
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MP", "value", itemWrapper:getAddedMaxMP())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MP", "value", itemMaxMp)
                           else
-                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MPB", "value", itemWrapper:getAddedMaxMP())
+                            bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MPB", "value", itemMaxMp)
                           end
                         end
                         if bonusText == "" then
@@ -1995,6 +2017,8 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                         (target.cronStoneGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_VALUE", "failCount", currentEnchantFailCount))
                         ;
                         (target.cronStoneValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_BONUS", "bonusText", bonusText))
+                        ;
+                        (target.cronStoneProgress):SetAniSpeed(0)
                         ;
                         (target.cronStoneProgress):SetProgressRate(0)
                         ;
@@ -2113,11 +2137,11 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                                             _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
                                             ;
                                             ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetShow(true)
-                                            -- DECOMPILER ERROR at PC2072: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC2089: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC2072: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                            -- DECOMPILER ERROR at PC2089: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                            -- DECOMPILER ERROR at PC2072: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC2089: LeaveBlock: unexpected jumping out IF_STMT
 
                                           end
                                         end
@@ -2237,7 +2261,7 @@ extendedSlotInfoArray = {}
                                               local compareSlot = {}
                                               for i = 1, slotNoMax do
                                                 local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                -- DECOMPILER ERROR at PC2591: Confused about usage of register: R54 in 'UnsetPending'
+                                                -- DECOMPILER ERROR at PC2608: Confused about usage of register: R54 in 'UnsetPending'
 
                                                 if slotNoMax ~= extendSlotNo then
                                                   (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2255,7 +2279,7 @@ extendedSlotInfoArray = {}
                                               end
                                               if 1 == equip.checkExtendedSlot then
                                                 local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                -- DECOMPILER ERROR at PC2626: Confused about usage of register: R50 in 'UnsetPending'
+                                                -- DECOMPILER ERROR at PC2643: Confused about usage of register: R50 in 'UnsetPending'
 
                                                 ;
                                                 (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2277,7 +2301,7 @@ extendedSlotInfoArray = {}
                                                     if nil ~= servantKindType then
                                                       for i = 1, slotNoMax do
                                                         local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                        -- DECOMPILER ERROR at PC2681: Confused about usage of register: R55 in 'UnsetPending'
+                                                        -- DECOMPILER ERROR at PC2698: Confused about usage of register: R55 in 'UnsetPending'
 
                                                         if slotNoMax ~= extendSlotNo then
                                                           (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2297,7 +2321,7 @@ extendedSlotInfoArray = {}
                                                     do
                                                       if 1 == equip.checkExtendedSlot then
                                                         local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                        -- DECOMPILER ERROR at PC2716: Confused about usage of register: R51 in 'UnsetPending'
+                                                        -- DECOMPILER ERROR at PC2733: Confused about usage of register: R51 in 'UnsetPending'
 
                                                         ;
                                                         (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2731,9 +2755,9 @@ extendedSlotInfoArray = {}
                                                                                                       else
                                                                                                         buffList = buffList .. " / " .. desc
                                                                                                       end
-                                                                                                      -- DECOMPILER ERROR at PC3983: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                      -- DECOMPILER ERROR at PC4000: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                      -- DECOMPILER ERROR at PC3983: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                      -- DECOMPILER ERROR at PC4000: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                     end
                                                                                                   end
@@ -2762,21 +2786,21 @@ extendedSlotInfoArray = {}
                                                                                                   ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
                                                                                                   ;
                                                                                                   ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4074: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                 end
                                                                                               end

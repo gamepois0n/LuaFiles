@@ -170,6 +170,20 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
   local savageDefenceListJoinBtn = (UI.getChildControl)(contents, "Button_Join")
   savageDefenceListJoinBtn:SetShow(true)
   local curChannelData = getCurrentChannelServerData()
+  local worldServerData = getGameWorldServerDataByWorldNo(curChannelData._worldNo)
+  local restrictedServerNo = worldServerData._restrictedServerNo
+  local isAdmission = true
+  if restrictedServerNo ~= 0 then
+    if restrictedServerNo == curChannelData._serverNo then
+      isAdmission = true
+    else
+      if toInt64(0, 0) < changeChannelTime then
+        isAdmission = false
+      else
+        isAdmission = true
+      end
+    end
+  end
   if curChannelData ~= nil then
     local savageDefenceStatusData = ToClient_getSavageDefenceStatusData(idx)
     local getServerNo = savageDefenceStatusData:getServerNo()
@@ -184,13 +198,16 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
       isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN_WAITING")
       isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_WAITING")
       savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FF3B8BBE)
+      savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FF3B8BBE)
       savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
       savageDefenceListJoinBtn:SetIgnore(false)
+      getWave = 0
     else
       if getCurrentState == 1 then
         isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ING")
         isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
-        savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FF3B8BBE)
+        savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF0EF9D)
+        savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF0EF9D)
         savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GAMING"))
         savageDefenceListJoinBtn:SetIgnore(false)
       else
@@ -198,6 +215,7 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
           isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_SOONFINISH")
           isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
           savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
+          savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF26A6A)
           savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GAMING"))
           savageDefenceListJoinBtn:SetIgnore(true)
         else
@@ -205,19 +223,28 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
             isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
             isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
             savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
+            savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF26A6A)
             savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
             savageDefenceListJoinBtn:SetIgnore(true)
+            getWave = 0
           else
             if getCurrentState == 4 then
               isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
               isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
               savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
+              savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF26A6A)
               savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
               savageDefenceListJoinBtn:SetIgnore(true)
+              getWave = 0
             end
           end
         end
       end
+    end
+    if not isAdmission then
+      savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
+      savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_ISADMISSION_LIMIT"))
+      savageDefenceListJoinBtn:SetIgnore(true)
     end
     savageDefenceListServer:SetText(channelName)
     savageDefenceListJoinMember:SetText(getJoinMemberCount)

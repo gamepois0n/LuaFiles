@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 Panel_SavageDefenceWave:SetShow(false)
-local SavageDefenceWave = {_wavecount = (UI.getChildControl)(Panel_SavageDefenceWave, "StaticText_WaveCount"), _waveTime = (UI.getChildControl)(Panel_SavageDefenceWave, "StaticText_WaveTime"), _nextwavecount = 0, _remainTime = -1, _alertMsg = false}
+local SavageDefenceWave = {_wavecount = (UI.getChildControl)(Panel_SavageDefenceWave, "StaticText_WaveCount"), _waveTime = (UI.getChildControl)(Panel_SavageDefenceWave, "StaticText_WaveTime"), _nextwavecount = -1, _remainTime = -1, _alertMsg = false}
 SavageDefenceWave_Open = function()
   -- function num : 0_0 , upvalues : SavageDefenceWave
   if not ToClient_getPlayNowSavageDefence() then

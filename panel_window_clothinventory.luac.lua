@@ -23,7 +23,7 @@ config = {createIcon = true, createBorder = true, createCount = true, createEnch
 bg = {}
 , 
 slot = {}
-, bagSize = 0, fromWhereType = nil, fromSlotNo = nil, bagWhereType = nil, bagSlotNo = nil}
+, bagSize = 0, fromWhereType = nil, fromSlotNo = nil, bagWhereType = nil, bagSlotNo = nil, inventoryBagType = nil}
 ;
 (clothInven.btnQuestion):SetShow(false)
 ;
@@ -34,27 +34,39 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   -- function num : 0_2 , upvalues : clothInven
   local self = clothInven
   local _title = ""
-  if bagType == 0 then
+  self.inventoryBagType = bagType
+  if (CppEnums.InventoryBagType).eInventoryBagType_Cash == bagType then
     bagType = (CppEnums.ItemWhereType).eCashInventory
     _title = PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_PEARLTITLE")
   else
-    if bagType == 1 then
+    if (CppEnums.InventoryBagType).eInventoryBagType_Equipment == bagType then
       bagType = (CppEnums.ItemWhereType).eInventory
       _title = PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_TITLE")
+    else
+      if (CppEnums.InventoryBagType).eInventoryBagType_Misc == bagType then
+        bagType = (CppEnums.ItemWhereType).eInventory
+        _title = PAGetString(Defines.StringSheet_GAME, "LUA_MISC_INVENTORY_TITLE")
+      else
+        if (CppEnums.InventoryBagType).eInventoryBagType_MiscForCash == bagType then
+          bagType = (CppEnums.ItemWhereType).eCashInventory
+          _title = PAGetString(Defines.StringSheet_GAME, "LUA_MISC_INVENTORY_TITLE")
+        end
+      end
     end
   end
   ;
   (self.textTitle):SetText(_title)
   self.bagWhereType = bagType
+  _PA_LOG("cylee", "FromClient_ShowInventoryBag() bagType:" .. tostring(bagType))
   for index = 0, bagSize - 1 do
-    -- DECOMPILER ERROR at PC36: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC81: Confused about usage of register: R10 in 'UnsetPending'
 
     (self.bg)[index] = {}
-    -- DECOMPILER ERROR at PC39: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC84: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.slot)[index] = {}
-    -- DECOMPILER ERROR at PC51: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC96: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.bg)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_ClothInventory, "ColothInventory_SlotBg_" .. index)
@@ -77,8 +89,9 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
       ;
       (((self.slot)[index]).icon):addInputEvent("Mouse_Out", "ShowTooltip_ClothInven()")
       ;
-      (((self.slot)[index]).icon):addInputEvent("Mouse_RUp", "RequestPush_BagToInventory(" .. fromWhereType .. ", " .. fromSlotNo .. ", " .. index .. ", " .. bagType .. ")")
+      (((self.slot)[index]).icon):addInputEvent("Mouse_RUp", "ClothInven_HandleInventoryBagSlotRClick(" .. fromWhereType .. ", " .. fromSlotNo .. ", " .. index .. ", " .. bagType .. ")")
     else
+      _PA_LOG("cylee", "FromClient_ShowInventoryBag() itemWrapper is nil, fromWhereType:" .. tostring(fromWhereType) .. ",fromSlotNo:" .. tostring(fromSlotNo) .. ",index:" .. tostring(index))
       ;
       ((self.slot)[index]):clearItem()
     end
@@ -92,16 +105,23 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   ;
   (self.desc):SetPosY((self.descBg):GetPosY() + 5)
   Panel_Window_ClothInventory:SetSize(Panel_Window_ClothInventory:GetSizeX(), (self.descBg):GetPosY() + (self.descBg):GetSizeY() + 60)
-  ;
-  (self.btnChangeAll):ComputePos()
-  Panel_Window_ClothInventory:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Window_ClothInventory:GetSizeX())
-  Panel_Window_ClothInventory:SetPosY(Panel_Window_Inventory:GetPosY() + 80)
-  Panel_Window_ClothInventory:SetShow(true, true)
-  self.bagSize = bagSize
-  self.fromWhereType = fromWhereType
-  self.fromSlotNo = fromSlotNo
-  Inventory_SetFunctor(ClothInven_Filter, ClothInven_RClickFunction, nil, nil)
-  Panel_Tooltip_Item_hideTooltip()
+  do
+    local useChangeAllButton = self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_Equipment or self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_Cash
+    ;
+    (self.btnChangeAll):SetShow(useChangeAllButton)
+    if not useChangeAllButton then
+      Panel_Window_ClothInventory:SetSize(Panel_Window_ClothInventory:GetSizeX(), Panel_Window_ClothInventory:GetSizeY() - (self.btnChangeAll):GetSizeY())
+    end
+    Panel_Window_ClothInventory:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Window_ClothInventory:GetSizeX())
+    Panel_Window_ClothInventory:SetPosY(Panel_Window_Inventory:GetPosY() + 80)
+    Panel_Window_ClothInventory:SetShow(true, true)
+    self.bagSize = bagSize
+    self.fromWhereType = fromWhereType
+    self.fromSlotNo = fromSlotNo
+    Inventory_SetFunctor(ClothInven_Filter, ClothInven_HandleInventorySlotRClick, nil, nil)
+    Panel_Tooltip_Item_hideTooltip()
+    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+  end
 end
 
 ClothInven_ChangeItem = function()
@@ -120,42 +140,80 @@ ClothInven_ChangeItem = function()
       ;
       (((self.slot)[index]).icon):addInputEvent("Mouse_Out", "ShowTooltip_ClothInven()")
       ;
-      (((self.slot)[index]).icon):addInputEvent("Mouse_RUp", "RequestPush_BagToInventory(" .. self.fromWhereType .. ", " .. self.fromSlotNo .. ", " .. index .. ", " .. self.bagWhereType .. ")")
+      (((self.slot)[index]).icon):addInputEvent("Mouse_RUp", "ClothInven_HandleInventoryBagSlotRClick(" .. self.fromWhereType .. ", " .. self.fromSlotNo .. ", " .. index .. ", " .. self.bagWhereType .. ")")
     end
   end
   FGlobal_UpdateInventoryWeight()
 end
 
 ClothInven_Filter = function(slotNo, itemWrapper, count, inventoryType)
-  -- function num : 0_4
-  local returnValue = true
+  -- function num : 0_4 , upvalues : clothInven
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return true
   end
+  local self = clothInven
+  if self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_Misc or self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_MiscForCash then
+    return false
+  end
   local myClass = selfPlayer:getClassType()
   local itemSSW = itemWrapper:getStaticStatus()
-  local isEuqipItme = itemSSW:isEquipable()
+  local isEuqipItem = itemSSW:isEquipable()
   local isUsableItem = ((itemSSW:get())._usableClassType):isOn(myClass)
   local isPushableItem = itemWrapper:isPushableInventoryBag()
-  if isEuqipItme and isUsableItem and isPushableItem then
-    returnValue = false
+  if isEuqipItem and isUsableItem and isPushableItem then
+    return false
   end
-  return returnValue
+  return true
 end
 
-ClothInven_RClickFunction = function(slotNo, itemWrapper, count, inventoryType)
+ClothInven_HandleInventorySlotRClick = function(slotNo, itemWrapper, count, inventoryType)
   -- function num : 0_5 , upvalues : clothInven
   if (((itemWrapper:getStaticStatus()):get())._vestedType):getItemKey() == 2 and (itemWrapper:get()):isVested() == false then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_INPUTALERT"))
     return 
   end
-  ToClient_ReqPushInventoryItemToInventoryBag(inventoryType, slotNo, clothInven.fromWhereType, clothInven.fromSlotNo)
+  local itemCount = (itemWrapper:get()):getCount_s64()
+  do
+    local useNumberPad = not (itemWrapper:getStaticStatus()):isStackable() or Int64toInt32(itemCount) > 1
+    _PA_LOG("cylee", "ClothInven_HandleInventorySlotRClick() useNumberPad:" .. tostring(useNumberPad))
+    if useNumberPad then
+      Panel_NumberPad_Show(true, itemCount, nil, function(inputNumber)
+    -- function num : 0_5_0 , upvalues : inventoryType, slotNo, clothInven
+    _PA_LOG("cylee", "ClothInven_HandleInventorySlotRClick() inputNumber:" .. tostring(inputNumber))
+    ToClient_ReqPushInventoryItemToInventoryBag(inventoryType, slotNo, clothInven.fromWhereType, clothInven.fromSlotNo, inputNumber)
+  end
+)
+    else
+      ToClient_ReqPushInventoryItemToInventoryBag(inventoryType, slotNo, clothInven.fromWhereType, clothInven.fromSlotNo, 1)
+    end
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  end
 end
 
-RequestPush_BagToInventory = function(fromWhereType, fromSlotNo, bagIndex, bagWhereType)
+ClothInven_HandleInventoryBagSlotRClick = function(fromWhereType, fromSlotNo, bagIndex, bagWhereType)
   -- function num : 0_6
-  ToClient_ReqPopInventoryBagItemToInventory(fromWhereType, fromSlotNo, bagIndex, bagWhereType)
+  local itemWrapper = getInventoryBagItemByType(fromWhereType, fromSlotNo, bagIndex)
+  if not itemWrapper then
+    _PA_LOG("cylee", "ClothInven_HandleInventoryBagSlotRClick() no itemWrapper, fromWhereType:" .. tostring(fromWhereType) .. ", fromSlotNo:" .. tostring(fromSlotNo) .. ", bagIndex:" .. tostring(bagIndex) .. ", bagWhereType:" .. tostring(bagWhereType))
+    return 
+  end
+  local itemCount = (itemWrapper:get()):getCount_s64()
+  do
+    local useNumberPad = not (itemWrapper:getStaticStatus()):isStackable() or Int64toInt32(itemCount) > 1
+    _PA_LOG("cylee", "ClothInven_HandleInventoryBagSlotRClick() itemCount:" .. tostring(itemCount) .. ", useNumberPad:" .. tostring(useNumberPad))
+    if useNumberPad then
+      Panel_NumberPad_Show(true, itemCount, nil, function(inputNumber)
+    -- function num : 0_6_0 , upvalues : fromWhereType, fromSlotNo, bagIndex, bagWhereType
+    _PA_LOG("cylee", "ClothInven_HandleInventoryBagSlotRClick() inputNumber:" .. tostring(inputNumber))
+    ToClient_ReqPopInventoryBagItemToInventory(fromWhereType, fromSlotNo, bagIndex, bagWhereType, inputNumber)
+  end
+)
+    else
+      ToClient_ReqPopInventoryBagItemToInventory(fromWhereType, fromSlotNo, bagIndex, bagWhereType, 1)
+    end
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  end
 end
 
 ClothInven_ChangeAllItem = function()

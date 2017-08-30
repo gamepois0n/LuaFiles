@@ -778,11 +778,16 @@ GameMenu_CheckEnAble = function(buttonType)
       returnValue = false
     end
     if not isGameTypeKR2() then
+      (menuNewPool[buttonType]):ResetVertexAni()
       if buttonType == MenuButtonId.btn_Twitch then
         (menuNewPool[buttonType]):SetShow(true)
+        ;
+        (menuNewPool[buttonType]):SetVertexAniRun("Ani_Color_New", true)
       else
         ;
         (menuNewPool[buttonType]):SetShow(false)
+        ;
+        (menuNewPool[buttonType]):ResetVertexAni()
       end
     end
     return returnValue

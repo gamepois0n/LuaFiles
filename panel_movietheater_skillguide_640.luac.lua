@@ -356,33 +356,30 @@ Panel_MovieTheaterSkillGuide640_ShowToggle = function(classNo, titleNo)
                 playedNo = 1300
                 if isGameTypeTaiwan() then
                   _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW_TW", "getText", combattantText))
-                  _comboList:SetText(comboDesc[77])
                 else
                   _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", combattantText))
-                  _comboList:SetText(comboDesc[98])
                 end
+                _comboList:SetText(comboDesc[98])
                 _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
               else
                 if titleNo == 1 then
                   playedNo = 1301
                   if isGameTypeTaiwan() then
                     _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE_TW", "getText", combattantText))
-                    _comboList:SetText(comboDesc[78])
                   else
                     _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_LOW", "getText", combattantText))
-                    _comboList:SetText(comboDesc[99])
                   end
+                  _comboList:SetText(comboDesc[99])
                   _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
                 else
                   if titleNo == 2 then
                     playedNo = 1302
                     if isGameTypeTaiwan() then
                       _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_HIGH_TW", "getText", combattantText))
-                      _comboList:SetText(comboDesc[79])
                     else
                       _txt_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_320_COMMON_LINK_MIDDLE", "getText", combattantText))
-                      _comboList:SetText(comboDesc[100])
                     end
+                    _comboList:SetText(comboDesc[100])
                     _movieTheater_640:TriggerEvent("PlayMovie", "coui://UI_Movie/Movie_Pc_Skill/11_Common_ComboGuide/" .. playedNo .. ".webm")
                   else
                     if titleNo == 3 then

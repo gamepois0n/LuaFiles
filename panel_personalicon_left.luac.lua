@@ -90,7 +90,7 @@ _ExpFix:SetShow(false)
 _btn_NewSkill:ActiveMouseEventEffect(true)
 local _buffIconPosX = 0
 PackageIconPosition = function()
-  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _pcRoomUserHomeBuff, _buffIconPosX
+  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _buffIconPosX
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -234,22 +234,25 @@ PackageIconPosition = function()
     _blackSpiritTraining:SetPosY(iconPosY)
     iconPosX = iconPosX + _blackSpiritTraining:GetSizeX() + iconGapX
   end
-  if applyPcRoomUserHomeBuff and pcRoomUserHomeBuff > 0 then
-    _pcRoomUserHomeBuff:SetPosX(iconPosX)
-    _pcRoomUserHomeBuff:SetPosY(iconPosY)
-    iconPosX = iconPosX + _pcRoomUserHomeBuff:GetSizeX() + iconGapX
+  -- DECOMPILER ERROR at PC566: Unhandled construct in 'MakeBoolean' P3
+
+  if (not _pcRoomIcon:GetShow() or applyPcRoomUserHomeBuff) then
+    Panel_PersonalIcon_Left:SetPosX(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX())
+    Panel_PersonalIcon_Left:SetPosY(5)
+    Panel_PersonalIcon_Left:SetSize(iconPosX, Panel_PersonalIcon_Left:GetSizeY())
+    _buffIconPosX = iconPosX
   end
-  Panel_PersonalIcon_Left:SetPosX(Panel_SelfPlayerExpGage:GetPosX() + Panel_SelfPlayerExpGage:GetSizeX())
-  Panel_PersonalIcon_Left:SetPosY(5)
-  Panel_PersonalIcon_Left:SetSize(iconPosX, Panel_PersonalIcon_Left:GetSizeY())
-  _buffIconPosX = iconPosX
 end
 
 local pcRoomNeedTime = ToClient_GetPcRoomUserHomeBuffLimitTime()
 local needTime = Int64toInt32(pcRoomNeedTime)
 local useTime = 0
 BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
-  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _btn_NewSkill, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff
+  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _btn_NewSkill, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff, needTime, useTime
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
   local name, desc, uiControl = nil, nil, nil
   local leftTime = 0
   local selfPlayer = getSelfPlayer()
@@ -275,6 +278,7 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
   local russiaPack3Time = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_RussiaPack3)
   local trainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritTraining)
   local trainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritTraining)
+  local pcRoomHomeTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local expEventPercent = getEventExpPercentByWorldNo(curChannelData._worldNo, curChannelData._serverNo)
   local expEventPercentShow = 0
   if _defaultEventExp < expEventPercent then
@@ -452,8 +456,19 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                                                 else
                                                   if iconType == 18 then
                                                     name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF")
-                                                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF_TOOLTIP_DESC")
                                                     uiControl = _pcRoomUserHomeBuff
+                                                    local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
+                                                    local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
+                                                    if isPremiumPcRoom == true then
+                                                      if isShow == true then
+                                                        TooltipSimple_PCRoomHomeBuff_Show(uiControl, name, "", false, needTime, useTime)
+                                                      else
+                                                        TooltipSimple_Hide()
+                                                      end
+                                                      return 
+                                                    else
+                                                      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF_TOOLTIP_DESC", "paPcRoomHomeTime", convertStringFromDatetime(toInt64(0, pcRoomHomeTime)))
+                                                    end
                                                   end
                                                 end
                                               end
@@ -461,10 +476,12 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                                           end
                                         end
                                       end
-                                      if isShow == true then
-                                        TooltipSimple_Show(uiControl, name, desc)
-                                      else
-                                        TooltipSimple_Hide()
+                                      do
+                                        if isShow == true then
+                                          TooltipSimple_Show(uiControl, name, desc)
+                                        else
+                                          TooltipSimple_Hide()
+                                        end
                                       end
                                     end
                                   end
@@ -622,11 +639,17 @@ FromClient_PackageIconUpdate = function()
           else
             _blackSpiritTraining:SetShow(false)
           end
-          if pcRoomUserHomeBuff then
+          if isPremiumPcRoom then
             _pcRoomUserHomeBuff:SetShow(false)
-            FGlobal_PersonalIcon_ButtonPosUpdate()
-            PackageIconPosition()
+          else
+            if pcRoomUserHomeBuff then
+              _pcRoomUserHomeBuff:SetShow(false)
+            else
+              _pcRoomUserHomeBuff:SetShow(false)
+            end
           end
+          FGlobal_PersonalIcon_ButtonPosUpdate()
+          PackageIconPosition()
         end
       end
     end
@@ -817,4 +840,5 @@ end
 
 registEventHandler()
 registMessageHandler()
+Panel_PersonalIcon_Left:RegisterUpdateFunc("PCRomm_UpdateTime")
 

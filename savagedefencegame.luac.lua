@@ -35,6 +35,7 @@ end
 
 FromClient_UpdateSavageDefenceData = function(remainTime)
   -- function num : 0_3 , upvalues : nextWaveCount
+  nextWaveCount = ToClient_SavageDefenceNextWave()
   SavageDefenceWave_UpdateWaveTime(remainTime, nextWaveCount)
 end
 

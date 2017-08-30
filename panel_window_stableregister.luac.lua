@@ -110,7 +110,7 @@ stableRegister.update = function(self)
     ;
     (self._iconFemale):SetShow(false)
   end
-  if (CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType or (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType then
+  if (CppEnums.VehicleType).Type_Carriage == vehicleType or (CppEnums.VehicleType).Type_CowCarriage == vehicleType then
     (self._staticHp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_CARRIAGE_HP"))
     ;
     (self._staticMp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_CARRIAGE_MP"))
@@ -125,20 +125,24 @@ stableRegister.update = function(self)
     ;
     (self._statusTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_NAMING_INPUT_STATUS_TITLE"))
   else
-    ;
-    (self._staticHp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_HP"))
-    ;
-    (self._staticMp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_MP"))
-    ;
-    (self._staticLife):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_LIFE"))
-    ;
-    (self._staticMarketHp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_HP"))
-    ;
-    (self._staticMarketMp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_MP"))
-    ;
-    (self._staticMarketLife):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_LIFE"))
-    ;
-    (self._statusTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANTREGIST_BASETITLE"))
+    if (CppEnums.VehicleType).Type_RepairableCarriage == vehicleType then
+      (self._staticMp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HORSEHP_TOOLTIP_GUILDSHIP_NAME"))
+    else
+      ;
+      (self._staticHp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_HP"))
+      ;
+      (self._staticMp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_MP"))
+      ;
+      (self._staticLife):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_LIFE"))
+      ;
+      (self._staticMarketHp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_HP"))
+      ;
+      (self._staticMarketMp):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_MP"))
+      ;
+      (self._staticMarketLife):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEREGISTER_LIFE"))
+      ;
+      (self._statusTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANTREGIST_BASETITLE"))
+    end
   end
   ;
   (self._editEditName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_EDITBOX_COMMENT"), true)
