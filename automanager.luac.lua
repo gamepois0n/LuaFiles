@@ -163,13 +163,15 @@ end
 Auto_TransferState = function(typeState)
   -- function num : 0_8
   _PA_LOG("�\128규보", "before: " .. AutoStateName[(PaGlobal_AutoManager._stateUnit)._state] .. "    after: " .. AutoStateName[typeState])
-  _PA_LOG("�\128규보", "traceBack:" .. (debug.traceback)())
+  local traceString = (debug.traceback)()
+  traceString = (string.gsub)(traceString, "d:/output/dev/UI_Data/Script/", "")
+  _PA_LOG("�\128규보", "traceBack:" .. traceString)
   if (PaGlobal_AutoManager._stateUnit)._state == typeState then
     return 
   end
   ;
   (PaGlobal_AutoManager._stateUnit):endProc()
-  -- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC43: Confused about usage of register: R2 in 'UnsetPending'
 
   PaGlobal_AutoManager._stateUnit = (PaGlobal_AutoManager._storageStateUnit)[typeState]
   ;

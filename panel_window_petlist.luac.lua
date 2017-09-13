@@ -1268,7 +1268,7 @@ FGlobal_PetListNew_NoPet = function()
     Panel_Window_PetIcon:SetPosY(posY)
   end
   do
-    FGlobal_MaidIcon_SetPos()
+    FGlobal_MaidIcon_SetPos(false)
   end
 end
 
@@ -1298,6 +1298,7 @@ PetListControlCreate = function(control, key)
   local orderGetItem = (UI.getChildControl)(control, "CheckButton_GetItem")
   local orderPlay = (UI.getChildControl)(control, "CheckButton_Play")
   local noUnsealpet = (UI.getChildControl)(control, "StaticText_NoneUnsealPet")
+  local skillIcon = {[0] = (UI.getChildControl)(control, "Static_SkillIcon_0"), [1] = (UI.getChildControl)(control, "Static_SkillIcon_1"), [2] = (UI.getChildControl)(control, "Static_SkillIcon_2"), [3] = (UI.getChildControl)(control, "Static_SkillIcon_3")}
   local sealPetCount = ToClient_getPetSealedList()
   local unsealPetCount = ToClient_getPetUnsealedList()
   local isUnsealPet = function(petNo_s64)
@@ -1345,6 +1346,14 @@ PetListControlCreate = function(control, key)
   orderGetItem:SetShow(isShow)
   orderPlay:SetShow(not isShow or isPlayOpen)
   noUnsealpet:SetShow(not isShow)
+  ;
+  (skillIcon[0]):SetShow(false)
+  ;
+  (skillIcon[1]):SetShow(false)
+  ;
+  (skillIcon[2]):SetShow(false)
+  ;
+  (skillIcon[3]):SetShow(false)
   if not isShow then
     return 
   end
@@ -1388,10 +1397,10 @@ PetListControlCreate = function(control, key)
         orderFind:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderGetItem:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderPlay:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
-        -- DECOMPILER ERROR at PC410: Confused about usage of register: R51 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC451: Confused about usage of register: R52 in 'UnsetPending'
 
         PetList.orderList = PetControl_UnsealPetOrderInfo(tostring(petNo_s64))
-        -- DECOMPILER ERROR at PC419: Confused about usage of register: R51 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC460: Confused about usage of register: R52 in 'UnsetPending'
 
         if isPassive then
           ((PetList.orderList)._find)[tostring(petNo_s64)] = true
@@ -1420,20 +1429,20 @@ PetListControlCreate = function(control, key)
         if petLootingType == 0 then
           x1 = setTextureUV_Func(orderPlay, 140, 280, 172, 312)
         else
-          -- DECOMPILER ERROR at PC507: Overwrote pending register: R55 in 'AssignReg'
+          -- DECOMPILER ERROR at PC548: Overwrote pending register: R56 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC508: Overwrote pending register: R54 in 'AssignReg'
+          -- DECOMPILER ERROR at PC549: Overwrote pending register: R55 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC509: Overwrote pending register: R53 in 'AssignReg'
+          -- DECOMPILER ERROR at PC550: Overwrote pending register: R54 in 'AssignReg'
 
           if petLootingType == 1 then
             x1 = setTextureUV_Func(orderPlay, 104, 280, 136, 312)
           else
-            -- DECOMPILER ERROR at PC521: Overwrote pending register: R55 in 'AssignReg'
+            -- DECOMPILER ERROR at PC562: Overwrote pending register: R56 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC522: Overwrote pending register: R54 in 'AssignReg'
+            -- DECOMPILER ERROR at PC563: Overwrote pending register: R55 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC523: Overwrote pending register: R53 in 'AssignReg'
+            -- DECOMPILER ERROR at PC564: Overwrote pending register: R54 in 'AssignReg'
 
             if petLootingType == 2 then
               x1 = setTextureUV_Func(orderPlay, 176, 280, 208, 312)
@@ -1452,6 +1461,56 @@ PetListControlCreate = function(control, key)
           name:addInputEvent("Mouse_On", "")
           name:addInputEvent("Mouse_Out", "")
         end
+        local uiIndex = 0
+        local baseskillindex = pcPetData:getPetBaseSkillIndex()
+        local skillMaxCount = ToClient_getPetEquipSkillMax()
+        local skillStaticStatus = ToClient_getPetBaseSkillStaticStatus(baseskillindex)
+        if skillStaticStatus ~= nil then
+          local skillTypeStaticWrapper = skillStaticStatus:getSkillTypeStaticStatusWrapper()
+          if skillTypeStaticWrapper ~= nil then
+            local skillNo = skillStaticStatus:getSkillNo()
+            ;
+            (skillIcon[uiIndex]):SetShow(true)
+            ;
+            (skillIcon[uiIndex]):ChangeTextureInfoName("Icon/" .. skillTypeStaticWrapper:getIconPath())
+            ;
+            (skillIcon[uiIndex]):addInputEvent("Mouse_On", "PetList_BaseSkill_ShowTooltip( " .. baseskillindex .. ", " .. uiIndex .. " )")
+            ;
+            (skillIcon[uiIndex]):addInputEvent("Mouse_Out", "PetList_BaseSkill_HideTooltip()")
+            Panel_SkillTooltip_SetPosition(skillNo, skillIcon[uiIndex], "PetListSkill")
+            uiIndex = uiIndex + 1
+          end
+        end
+        do
+          for skill_idx = 0, skillMaxCount - 1 do
+            local skillStaticStatus = ToClient_getPetEquipSkillStaticStatus(skill_idx)
+            local isLearn = pcPetData:isPetEquipSkillLearned(skill_idx)
+            if isLearn == true and skillStaticStatus ~= nil then
+              local skillTypeStaticWrapper = skillStaticStatus:getSkillTypeStaticStatusWrapper()
+              if skillTypeStaticWrapper ~= nil then
+                local skillNo = skillStaticStatus:getSkillNo()
+                ;
+                (skillIcon[uiIndex]):SetShow(true)
+                ;
+                (skillIcon[uiIndex]):ChangeTextureInfoName("Icon/" .. skillTypeStaticWrapper:getIconPath())
+                ;
+                (skillIcon[uiIndex]):addInputEvent("Mouse_On", "PetList_ShowSkillToolTip( " .. skill_idx .. ", " .. uiIndex .. " )")
+                ;
+                (skillIcon[uiIndex]):addInputEvent("Mouse_Out", "PetList_HideSkillToolTip()")
+                Panel_SkillTooltip_SetPosition(skillNo, skillIcon[uiIndex], "PetListSkill")
+                uiIndex = uiIndex + 1
+              end
+            end
+          end
+          do
+            -- DECOMPILER ERROR at PC729: LeaveBlock: unexpected jumping out DO_STMT
+
+            -- DECOMPILER ERROR at PC729: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+            -- DECOMPILER ERROR at PC729: LeaveBlock: unexpected jumping out IF_STMT
+
+          end
+        end
       end
     end
     btnInfo:SetShow(true)
@@ -1461,7 +1520,7 @@ PetListControlCreate = function(control, key)
     btnUnsealAll:SetShow(false)
     btnInfo:addInputEvent("Mouse_LUp", "petListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
     local uiIndex = 0
-    -- DECOMPILER ERROR at PC621: Overwrote pending register: R53 in 'AssignReg'
+    -- DECOMPILER ERROR at PC763: Overwrote pending register: R54 in 'AssignReg'
 
     btnSeal:addInputEvent("Mouse_LUp", "petListNew_Seal( \"" .. tostring(petNo_s64) .. "\" ," .. uiIndex .. y1)
   else
@@ -1487,10 +1546,10 @@ PetListControlCreate = function(control, key)
             isPassive = (pcPetData:getSkillParam(1)):isPassiveSkill()
           end
           local hungryPercent = pethungry / petMaxHungry * 100
-          -- DECOMPILER ERROR at PC678: Overwrote pending register: R54 in 'AssignReg'
+          -- DECOMPILER ERROR at PC820: Overwrote pending register: R55 in 'AssignReg'
 
           hungryProgress:SetProgressRate(x2)
-          -- DECOMPILER ERROR at PC683: Overwrote pending register: R55 in 'AssignReg'
+          -- DECOMPILER ERROR at PC825: Overwrote pending register: R56 in 'AssignReg'
 
           hungryPercentText:SetText((string.format)(y2, hungryPercent) .. "%")
           local isCheck = checkUnSealList[Int64toInt32(petNo_s64)]
@@ -1500,15 +1559,15 @@ PetListControlCreate = function(control, key)
           checkBtn:SetCheck(isCheck)
           checkBtn:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ")")
           checkBtn:SetShow(true)
-          -- DECOMPILER ERROR at PC715: Confused about usage of register: R53 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC857: Confused about usage of register: R54 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._follow)[petNo_s64] = true
-          -- DECOMPILER ERROR at PC719: Confused about usage of register: R53 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC861: Confused about usage of register: R54 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._find)[petNo_s64] = isPassive
-          -- DECOMPILER ERROR at PC723: Confused about usage of register: R53 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC865: Confused about usage of register: R54 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._getItem)[petNo_s64] = true
@@ -1549,7 +1608,6 @@ PetListControlCreate = function(control, key)
           btnFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_Set( \"" .. tostring(petNo_s64) .. "\" ," .. petRace .. ", " .. unsealPetIndex .. " )")
           btnSeal:setNotImpactScrollEvent(true)
           btnUnseal:setNotImpactScrollEvent(true)
-          tier:SetPosX(btnFusion:GetPosX() - btnFusion:GetSizeX() - 5)
           icon:ChangeTextureInfoName(iconPath)
           level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(petLevel))
           tier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", petTier))
@@ -1561,8 +1619,34 @@ PetListControlCreate = function(control, key)
   end
 end
 
-petListNew_SetOrder = function(orderType, index)
+PetList_BaseSkill_ShowTooltip = function(baseskillindex, uiIx)
   -- function num : 0_52
+  local skillStaticStatus = ToClient_getPetBaseSkillStaticStatus(baseskillindex)
+  local skillTypeStaticWrapper = skillStaticStatus:getSkillTypeStaticStatusWrapper()
+  local petSkillNo = skillStaticStatus:getSkillNo()
+  Panel_SkillTooltip_Show(petSkillNo, false, "PetListSkill")
+end
+
+PetList_BaseSkill_HideTooltip = function()
+  -- function num : 0_53
+  Panel_SkillTooltip_Hide()
+end
+
+PetList_ShowSkillToolTip = function(skill_idx, uiIdx)
+  -- function num : 0_54
+  local skillStaticStatus = ToClient_getPetEquipSkillStaticStatus(skill_idx)
+  local skillTypeStaticWrapper = skillStaticStatus:getSkillTypeStaticStatusWrapper()
+  local petSkillNo = skillStaticStatus:getSkillNo()
+  Panel_SkillTooltip_Show(petSkillNo, false, "PetListSkill")
+end
+
+PetList_HideSkillToolTip = function()
+  -- function num : 0_55
+  Panel_SkillTooltip_Hide()
+end
+
+petListNew_SetOrder = function(orderType, index)
+  -- function num : 0_56
   local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
   if pcPetData ~= nil then
     local petNo = pcPetData:getPcPetNo()
@@ -1571,7 +1655,7 @@ petListNew_SetOrder = function(orderType, index)
 end
 
 petListNew_SetPlay = function(index)
-  -- function num : 0_53 , upvalues : isPetFlyPet
+  -- function num : 0_57 , upvalues : isPetFlyPet
   local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
   if pcPetData ~= nil then
     local petNo = pcPetData:getPcPetNo()
@@ -1588,7 +1672,7 @@ petListNew_SetPlay = function(index)
 end
 
 FGlobal_PetList_PetOrder = function(index)
-  -- function num : 0_54 , upvalues : PetList
+  -- function num : 0_58 , upvalues : PetList
   local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
   if pcPetData ~= nil then
     local petNo = pcPetData:getPcPetNo()
@@ -1598,7 +1682,7 @@ FGlobal_PetList_PetOrder = function(index)
 end
 
 petListNew_OrderTooltip = function(orderType, index)
-  -- function num : 0_55 , upvalues : PetList
+  -- function num : 0_59 , upvalues : PetList
   if orderType == nil then
     TooltipSimple_Hide()
     return 
@@ -1664,7 +1748,7 @@ petListNew_OrderTooltip = function(orderType, index)
 end
 
 PetList_SkillTypeString = function(skillType)
-  -- function num : 0_56
+  -- function num : 0_60
   local paramText = ""
   if skillType == 1 then
     paramText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_ITEMGETTIME", "itemGetTime", (string.format)("%.1f", skillParam:getParam(0) / 1000))
@@ -1709,7 +1793,7 @@ PetList_SkillTypeString = function(skillType)
 end
 
 PetList.registEventHandler = function(self)
-  -- function num : 0_57
+  -- function num : 0_61
   (self.BTN_Close):addInputEvent("Mouse_LUp", "FGlobal_PetListNew_Close()")
   ;
   (self.BTN_Compose):addInputEvent("Mouse_LUp", "PetListNew_Compose()")
@@ -1724,11 +1808,11 @@ PetList.registEventHandler = function(self)
 end
 
 FromClient_PetPromotion = function(fromWhereType, fromSlotNo)
-  -- function num : 0_58
+  -- function num : 0_62
 end
 
 PetList.registMessageHandler = function(self)
-  -- function num : 0_59
+  -- function num : 0_63
   registerEvent("FromClient_PetAddSealedList", "FromClient_PetUpdate")
   registerEvent("FromClient_PetDelSealedList", "FromClient_PetUpdate_ButtonShow")
   registerEvent("FromClient_PetDelList", "FromClient_PetUpdate")
@@ -1743,7 +1827,7 @@ end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetList")
 FromClient_luaLoadComplete_PetList = function()
-  -- function num : 0_60 , upvalues : PetList
+  -- function num : 0_64 , upvalues : PetList
   PetList:Initialize()
   petListNew_Load()
   petSkillList_Close()
@@ -1754,7 +1838,7 @@ FromClient_luaLoadComplete_PetList = function()
 end
 
 PetList_VScroll_MoveTop = function()
-  -- function num : 0_61 , upvalues : PetList
+  -- function num : 0_65 , upvalues : PetList
   (PetList.list2_PetList):moveTopIndex()
 end
 

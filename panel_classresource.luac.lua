@@ -307,12 +307,19 @@ ClassResource_Update = function()
               _fighterIcon_Point3:AddEffect("fUI_PCM_Energy_02B", true, -15, -8)
             end
           end
+          if beforeFigherCount < 30 and fighterCount == 30 then
+            _fighterIcon_Point1:AddEffect("fUI_PCM_Energy_01A", false, 0, 0)
+            _fighterIcon_Point2:AddEffect("fUI_PCM_Energy_01A", false, 0, 0)
+            _fighterIcon_Point3:AddEffect("fUI_PCM_Energy_01A", false, 0, 0)
+            _fighterIcon_Point3:AddEffect("fUI_PCM_Energy_02A", false, -15, -8)
+            _fighterIcon_Point3:AddEffect("fUI_PCM_Energy_02B", true, -15, -8)
+          end
           if beforeFigherCount == 30 and fighterCount == 0 then
             _fighterIcon:AddEffect("fUI_PCM_Energy_02C", false, 0, 0)
           end
           beforeFigherCount = fighterCount
         end
-        -- DECOMPILER ERROR: 8 unprocessed JMP targets
+        -- DECOMPILER ERROR: 9 unprocessed JMP targets
       end
     end
   end

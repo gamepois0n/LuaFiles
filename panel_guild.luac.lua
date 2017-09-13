@@ -17,13 +17,15 @@ Panel_Window_Guild:setGlassBackground(true)
 Panel_Window_Guild:SetDragAll(true)
 Panel_Window_Guild:RegisterShowEventFunc(true, "guild_ShowAni()")
 Panel_Window_Guild:RegisterShowEventFunc(false, "guild_HideAni()")
+local isGuildBattle = ToClient_IsContentsGroupOpen("280")
 local isProtectGuildMember = ToClient_IsContentsGroupOpen("52")
-local isContentsGuildDuel = ToClient_IsContentsGroupOpen("69")
+if ToClient_IsContentsGroupOpen("69") then
+  local isContentsGuildDuel = not isGuildBattle
+end
 local isContentsGuildInfo = ToClient_IsContentsGroupOpen("206")
 local isContentsArsha = ToClient_IsContentsGroupOpen("227")
 local isContentsGuildHouse = ToClient_IsContentsGroupOpen("36")
 local isCanDoReservation = ToClient_IsCanDoReservationArsha()
-local isGuildBattle = isGameServiceTypeDev()
 local lifeType = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GATHERING"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_FISHING"), [2] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HUNTING"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_COOKING"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_ALCHEMY"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PROCESSING"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_OBEDIENCE"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GROWTH"), [9] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_WEALTH"), [10] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_COMBAT")}
 local tabNumber = 99
 local btn_GuildMasterMandateBG = (UI.getChildControl)(Panel_Window_Guild, "Static_GuildMandateBG")
@@ -1392,7 +1394,7 @@ local _txt_Help_GuildMember = (UI.getChildControl)(Panel_Window_Guild, "StaticTe
 local _txt_Help_GuildQuest = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildQuest")
 local _txt_Help_GuildSkill = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildSkill")
 local _txt_Help_WarInfo = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_WarInfo")
--- DECOMPILER ERROR at PC368: Confused about usage of register: R45 in 'UnsetPending'
+-- DECOMPILER ERROR at PC372: Confused about usage of register: R45 in 'UnsetPending'
 
 GuildManager.initialize = function(self)
   -- function num : 0_33 , upvalues : GuildInfoPage, GuildLetsWarPage, GuildWarInfoPage
@@ -1677,7 +1679,7 @@ GuildSimplTooltips = function(isShow, tipType)
 end
 
 local _index = nil
--- DECOMPILER ERROR at PC391: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC395: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.TabToggle = function(self, index)
   -- function num : 0_37 , upvalues : tabNumber, _Web, btn_GuildMasterMandateBG, btn_GuildMasterMandate, _index
@@ -1862,7 +1864,7 @@ GuildManager.TabToggle = function(self, index)
   -- DECOMPILER ERROR: 34 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC396: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC400: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.Hide = function(self)
   -- function num : 0_38 , upvalues : IM, _Web
@@ -1898,7 +1900,7 @@ GuildManager.Hide = function(self)
   _Web:ResetUrl()
 end
 
--- DECOMPILER ERROR at PC402: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC406: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.Show = function(self)
   -- function num : 0_39 , upvalues : GuildWarInfoPage, GuildInfoPage, GuildLetsWarPage

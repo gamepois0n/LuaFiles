@@ -1691,6 +1691,7 @@ workerManager_ResetPos = function(isWorldMap)
   -- function num : 0_44
   local posX = 0
   local posY = 0
+  _PA_LOG("정태�\164", "isWorldMap : " .. tostring(isWorldMap))
   if isWorldMap ~= nil then
     posX = getScreenSizeX() - Panel_WorkerManager:GetSizeX() - 10
     posY = 50
@@ -1710,7 +1711,7 @@ workerManager_ResetPos_WorldMapClose = function()
     workerManager.slotMaxCount = 6
     workerManager_Update()
     Panel_WorkerManager:SetPosX(getScreenSizeX() - Panel_WorkerManager:GetSizeX() - 10)
-    Panel_WorkerManager:SetPosY(FGlobal_Panel_Radar_GetSizeY())
+    Panel_WorkerManager:SetPosY(100)
   end
 end
 

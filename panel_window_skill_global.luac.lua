@@ -159,39 +159,40 @@ PaGlobal_Skill.initCombiControl = function(self, cellTable, parent, container, i
 
                 ;
                 (self.slotConfig).createFG_Passive = not (self.slotConfig).createFG
-                if isLearn == false then
+                if container[index] ~= nil and isLearn == false and skillNo == 0 then
                   (container[index]):clearSkill()
                   ;
                   ((container[index]).icon):ChangeTextureInfoName("")
                   ;
                   ((container[index]).icon):addInputEvent("Mouse_On", "")
-                end
-                local slot = {}
-                if container[index] == nil then
+                  ;
+                  ((container[index]).icon):addInputEvent("Mouse_PressMove", "")
+                  PaGlobal_Skill:CombiSkill(false, index)
+                elseif container[index] == nil then
+                  local slot = {}
+                  ;
                   (SlotSkill.new)(slot, index, parent, self.slotConfig)
                   slot:setPos(startX, startY)
-                  if slot.learnButton ~= nil then
-                    (slot.learnButton):SetIgnore(false)
-                  end
                   if slot.icon ~= nil then
-                    (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_Skill:HandleMLUp_CombiSkillWindow_LearnButtonClick()")
+                    (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_Skill:HandleMLUp_CombiSkillWindow_LearnButtonClick(" .. index .. ")")
                   end
                   container[index] = slot
+                  PaGlobal_Skill:CombiSkill(false, index)
                 end
                 index = index + 1
               else
                 local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
                 if skillTypeStaticWrapper ~= nil and skillTypeStaticWrapper:isValidLocalizing() then
                   local skillTypeStatic = skillTypeStaticWrapper:get()
-                  -- DECOMPILER ERROR at PC168: Confused about usage of register: R25 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC186: Confused about usage of register: R25 in 'UnsetPending'
 
                   if skillTypeStatic:isActiveSkill() then
                     (self.slotConfig).createFG = skillTypeStatic._isSettableQuickSlot
-                    -- DECOMPILER ERROR at PC172: Confused about usage of register: R25 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC190: Confused about usage of register: R25 in 'UnsetPending'
 
                     ;
                     (self.slotConfig).createFGDisabled = (self.slotConfig).createFG
-                    -- DECOMPILER ERROR at PC177: Confused about usage of register: R25 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC195: Confused about usage of register: R25 in 'UnsetPending'
 
                     ;
                     (self.slotConfig).createFG_Passive = not (self.slotConfig).createFG
@@ -201,9 +202,6 @@ PaGlobal_Skill.initCombiControl = function(self, cellTable, parent, container, i
                         ;
                         (SlotSkill.new)(slot, skillNo, parent, self.slotConfig)
                         slot:setPos(startX, startY)
-                        if slot.learnButton ~= nil then
-                          (slot.learnButton):SetIgnore(true)
-                        end
                         if slot.icon ~= nil then
                           (slot.icon):addInputEvent("Mouse_On", "HandleMOver_SkillWindow_ToolTipShow(" .. skillNo .. ",false, \"SkillBox\",true)")
                           ;
@@ -213,33 +211,33 @@ PaGlobal_Skill.initCombiControl = function(self, cellTable, parent, container, i
                           ;
                           (slot.icon):addInputEvent("Mouse_RUp", "HandleMLUp_SkillWindow_ClearButtonClick(" .. skillNo .. ")")
                           ;
-                          (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_Skill:HandleMLUp_CombiSkillWindow_LearnButtonClick()")
+                          (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_Skill:HandleMLUp_CombiSkillWindow_LearnButtonClick(" .. index .. ")")
                           ;
                           (slot.icon):SetEnableDragAndDrop(true)
                           Panel_SkillTooltip_SetPosition(skillNo, slot.icon, "SkillBox")
                         end
                         slot:setSkillTypeStatic(skillTypeStaticWrapper)
                         container[index] = slot
-                        self._emptyCombiSkillIndex = index
+                        PaGlobal_Skill:CombiSkill(true, index)
                         index = index + 1
                         _PA_ASSERT("스킬트리", "skillTypeStaticStatus 매니져에 없는 스킬�\180 있습니다.")
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out DO_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out DO_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                        -- DECOMPILER ERROR at PC257: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC275: LeaveBlock: unexpected jumping out IF_STMT
 
                       end
                     end
@@ -248,22 +246,20 @@ PaGlobal_Skill.initCombiControl = function(self, cellTable, parent, container, i
               end
             end
           end
-          -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC276: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC258: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC276: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
     end
-    self._fusionSlotMaxCount = index
-    PaGlobal_Skill:CombiSkill(isLearn)
-    -- DECOMPILER ERROR: 17 unprocessed JMP targets
+    -- DECOMPILER ERROR: 15 unprocessed JMP targets
   end
 end
 
-FromClient_responseLearnFusionSkill = function(learnCombiSkillNo)
+FromClient_responseLearnFusionSkill = function(learnCombiSkillNo, slotNo)
   -- function num : 0_3
-  PaGlobal_Skill:combinationSkillLearn(learnCombiSkillNo)
+  PaGlobal_Skill:combinationSkillLearn(learnCombiSkillNo, slotNo)
 end
 
 FromClient_responseClearFusionSkill = function()
@@ -370,10 +366,10 @@ end
 
 -- DECOMPILER ERROR at PC563: Confused about usage of register: R3 in 'UnsetPending'
 
-PaGlobal_Skill.HandleMLUp_CombiSkillWindow_LearnButtonClick = function(self)
+PaGlobal_Skill.HandleMLUp_CombiSkillWindow_LearnButtonClick = function(self, index)
   -- function num : 0_6
   Panel_EnableSkill:SetShow(false)
-  PaGlobal_SkillCombination:open()
+  PaGlobal_SkillCombination:open(index)
 end
 
 SkillWindow_ScrollUpEvent = function()
@@ -446,7 +442,7 @@ end
 
 PaGlobal_Skill.OnOffCombinationTab = function(self)
   -- function num : 0_12
-  local isLearnFusionSkill = not ToClient_isLearnFusionSkillLevel() or ToClient_getFusionSkillListCount() ~= 0
+  local isLearnFusionSkill = not ToClient_isLearnFusionSkillLevel() or ToClient_getFusionSkillListCount(0) ~= 0
   local originFullSizeY = 775
   local titleSize = (self._combinationSkillTitle):GetSizeY()
   local combinationSkillBG = (self._static_CombiSkill_BG):GetSizeY()
@@ -492,52 +488,51 @@ end
 
 -- DECOMPILER ERROR at PC583: Confused about usage of register: R3 in 'UnsetPending'
 
-PaGlobal_Skill.combinationSkillLearn = function(self, learnSkillNo)
+PaGlobal_Skill.combinationSkillLearn = function(self, learnSkillNo, slotNo)
   -- function num : 0_13
-  local learnSkillCount = ToClient_getLearnFusionSkillCount()
   local skillTypeStaticWrapper = getSkillTypeStaticStatus(learnSkillNo)
   if skillTypeStaticWrapper == nil then
     return 
   end
   if skillTypeStaticWrapper:isValidLocalizing() then
     local skillTypeStatic = skillTypeStaticWrapper:get()
-    -- DECOMPILER ERROR at PC20: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC18: Confused about usage of register: R5 in 'UnsetPending'
 
     if skillTypeStatic:isActiveSkill() then
       do
         (self.slotConfig).createFG = skillTypeStatic._isSettableQuickSlot
-        -- DECOMPILER ERROR at PC24: Confused about usage of register: R5 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC22: Confused about usage of register: R5 in 'UnsetPending'
 
         ;
         (self.slotConfig).createFGDisabled = (self.slotConfig).createFG
-        -- DECOMPILER ERROR at PC29: Confused about usage of register: R5 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC27: Confused about usage of register: R5 in 'UnsetPending'
 
         ;
         (self.slotConfig).createFG_Passive = not (self.slotConfig).createFG
         ;
-        ((self._slot_CombiSkill)[learnSkillCount - 1]):setSkillTypeStatic(skillTypeStaticWrapper)
-        if ((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton ~= nil then
-          (((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton):SetShow(false)
+        ((self._slot_CombiSkill)[slotNo]):setSkillTypeStatic(skillTypeStaticWrapper)
+        if ((self._slot_CombiSkill)[slotNo]).learnButton ~= nil then
+          (((self._slot_CombiSkill)[slotNo]).learnButton):SetShow(false)
           ;
-          (((self._slot_CombiSkill)[learnSkillCount - 1]).learnButton):SetIgnore(false)
+          (((self._slot_CombiSkill)[slotNo]).learnButton):SetIgnore(false)
         end
-        if ((self._slot_CombiSkill)[learnSkillCount - 1]).icon ~= nil then
-          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_On", "HandleMOver_SkillWindow_ToolTipShow(" .. learnSkillNo .. ",false, \"SkillBox\",true)")
+        if ((self._slot_CombiSkill)[slotNo]).icon ~= nil then
+          (((self._slot_CombiSkill)[slotNo]).icon):addInputEvent("Mouse_On", "HandleMOver_SkillWindow_ToolTipShow(" .. learnSkillNo .. ",false, \"SkillBox\",true)")
           ;
-          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_Out", "HandleMOver_SkillWindow_ToolTipHide(" .. learnSkillNo .. ",\"SkillBox\",true)")
+          (((self._slot_CombiSkill)[slotNo]).icon):addInputEvent("Mouse_Out", "HandleMOver_SkillWindow_ToolTipHide(" .. learnSkillNo .. ",\"SkillBox\",true)")
           ;
-          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_PressMove", "HandleMLUp_SkillWindow_StartDrag(" .. learnSkillNo .. ")")
+          (((self._slot_CombiSkill)[slotNo]).icon):addInputEvent("Mouse_PressMove", "HandleMLUp_SkillWindow_StartDrag(" .. learnSkillNo .. ")")
           ;
-          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):addInputEvent("Mouse_RUp", "HandleMLUp_SkillWindow_ClearButtonClick(" .. learnSkillNo .. ")")
+          (((self._slot_CombiSkill)[slotNo]).icon):addInputEvent("Mouse_RUp", "HandleMLUp_SkillWindow_ClearButtonClick(" .. learnSkillNo .. ")")
           ;
-          (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):SetEnableDragAndDrop(true)
-          Panel_SkillTooltip_SetPosition(learnSkillNo, ((self._slot_CombiSkill)[learnSkillCount - 1]).icon, "SkillBox")
+          (((self._slot_CombiSkill)[slotNo]).icon):SetEnableDragAndDrop(true)
+          Panel_SkillTooltip_SetPosition(learnSkillNo, ((self._slot_CombiSkill)[slotNo]).icon, "SkillBox")
         end
         audioPostEvent_SystemUi(4, 2)
         ;
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
+        (((self._slot_CombiSkill)[slotNo]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
         ;
-        (((self._slot_CombiSkill)[learnSkillCount - 1]).icon):AddEffect("fUI_NewSkill01", false, 0, 0)
+        (((self._slot_CombiSkill)[slotNo]).icon):AddEffect("fUI_Skill_Combination_01A", false, 0, 0)
         EnableSkillWindow_EffectOff()
         PaGlobal_SkillCombination:showLearnSkillEffect()
       end
@@ -547,25 +542,34 @@ end
 
 -- DECOMPILER ERROR at PC587: Confused about usage of register: R3 in 'UnsetPending'
 
-PaGlobal_Skill.CombiSkill = function(self, isLearn)
+PaGlobal_Skill.CombiSkill = function(self, isLearn, index)
   -- function num : 0_14 , upvalues : skillOldandNew
-  if skillOldandNew == false and isLearn == false then
+  if skillOldandNew == false then
     return 
   end
-  local learnSkillCount = ToClient_getLearnFusionSkillCount()
-  for index = 0, self._emptyCombiSkillIndex do
+  if isLearn == true then
     (((self._slot_CombiSkill)[index]).learnButton):SetShow(false)
+    ;
+    (((self._slot_CombiSkill)[index]).learnButton):SetIgnore(true)
     ;
     (((self._slot_CombiSkill)[index]).icon):EraseAllEffect()
     ;
     (((self._slot_CombiSkill)[index]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
     ;
     (((self._slot_CombiSkill)[index]).icon):AddEffect("fUI_NewSkill01", false, 0, 0)
-  end
-  for index = learnSkillCount, self._fusionSlotMaxCount - 1 do
-    (((self._slot_CombiSkill)[index]).learnButton):SetShow(true)
-    ;
-    (((self._slot_CombiSkill)[index]).learnButton):SetIgnore(true)
+  else
+    if ToClient_getFusionSkillListCount(index) == 0 then
+      (((self._slot_CombiSkill)[index]).learnButton):SetShow(false)
+      ;
+      (((self._slot_CombiSkill)[index]).learnButton):SetIgnore(true)
+      ;
+      (((self._slot_CombiSkill)[index]).icon):EraseAllEffect()
+    else
+      ;
+      (((self._slot_CombiSkill)[index]).learnButton):SetShow(true)
+      ;
+      (((self._slot_CombiSkill)[index]).learnButton):SetIgnore(true)
+    end
   end
 end
 

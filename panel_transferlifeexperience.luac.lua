@@ -375,7 +375,7 @@ local TransferLife_Update = function()
     (self._scroll):SetShow(false)
   end
   local uiIdx = 0
-  for slotIdx = self.startCharacterIdx, self.listCount - 1 do
+  for slotIdx = self.startCharacterIdx, self.listCount do
     if self.maxSlotCount <= uiIdx then
       if self._selectCharacterIndex >= 0 and self._selectCharacterIndex < 4 then
         ((self.Slot)[self._selectCharacterIndex]):SetCheck(true)
@@ -429,7 +429,7 @@ end
 TransferLife_ScrollEvent = function(isUp)
   -- function num : 0_8 , upvalues : TransferLife, TransferLife_Update
   local self = TransferLife
-  self.startCharacterIdx = (UIScroll.ScrollEvent)(self._scroll, isUp, self.maxSlotCount, self.listCount - 1, self.startCharacterIdx, 1)
+  self.startCharacterIdx = (UIScroll.ScrollEvent)(self._scroll, isUp, self.maxSlotCount, self.listCount, self.startCharacterIdx, 1)
   if self.characterIndex ~= nil then
     self._selectCharacterIndex = self.characterIndex - self.startCharacterIdx
   end

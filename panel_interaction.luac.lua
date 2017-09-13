@@ -877,20 +877,22 @@ FromClient_InteractionBuildingUpgrade = function(actorKeyRaw)
     return 
   end
   local strNeedItems = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_UPGRADE_BARRICADE", "getName", (upgradeStaticWrapper:getTargetCharacter()):getName())
+  local tempStr = ""
   local sourceItemCount = upgradeStaticWrapper:getSourceItemCount()
   for index = 0, sourceItemCount - 1 do
-    local iessw = upgradeStaticWrapper:getSourceItemEnchantStaticStatus(R11_PC44)
+    local iessw = upgradeStaticWrapper:getSourceItemEnchantStaticStatus(index)
     if iessw ~= nil then
-      local name = iessw:getName()
-      -- DECOMPILER ERROR at PC49: Overwrote pending register: R11 in 'AssignReg'
-
-      R11_PC44 = R11_PC44(upgradeStaticWrapper, R13_PC51)
-      local itemNeedCount = nil
-      strNeedItems = strNeedItems .. R13_PC51 .. name .. " " .. tostring(itemNeedCount) .. " "
+      local itemNeedCount = upgradeStaticWrapper:getSourceItemNeedCount(index)
+      local itemName = iessw:getName()
+      local territoryComma = ", "
+      if tempStr == "" then
+        territoryComma = ""
+      end
+      tempStr = tempStr .. " " .. territoryComma .. "[<PAColor0xFFE49800>" .. itemName .. " " .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_ITEMCOUNT", "count", tostring(itemNeedCount)) .. "<PAOldColor>]"
     end
   end
   _buildingUpgradeActoKeyRaw = actorKeyRaw
-  local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_UPGRADE_BARRICADE_NEEDITEMS", "strNeedItems", strNeedItems)
+  local messageBoxMemo = strNeedItems .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INTERACTION_UPGRADE_BARRICADE_NEEDITEMS", "strNeedItems", tempStr)
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_INTERACTION_UPGRADE_MESSAGEBOX_TITLE"), content = messageBoxMemo, functionYes = InteractionBuildingUpgrade_Confirm, functionNo = MessageBox_Empty_function, priority = UI_PP.PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)

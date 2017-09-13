@@ -33,15 +33,13 @@ PaGlobal_LatestQuest.initialize = function(self)
     (element._uiGroupTitle):SetIgnore(true)
     ;
     (element._uiQuestIcon):SetIgnore(true)
-    ;
-    (element._uiCompleteNpc):SetIgnore(true)
     element._uiConditions = (Array.new)()
     for jj = 0, self._maxConditionCnt - 1 do
-      -- DECOMPILER ERROR at PC137: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC133: Confused about usage of register: R10 in 'UnsetPending'
 
       (element._uiConditions)[jj] = (UI.createAndCopyBasePropertyControl)(Panel_CheckedQuest, "StaticText_Quest_Demand", element._uiGroupBG, "uiConditions_" .. ii .. "_" .. jj)
     end
-    -- DECOMPILER ERROR at PC140: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC136: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._uiList)[ii] = element
@@ -341,6 +339,8 @@ PaGlobal_LatestQuest.setConditions = function(self, index, PosY, uiQuestInfo)
     else
       do
         do
+          ;
+          (questEntry._uiCompleteNpc):SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
           if uiQuestInfo:getQuestType() == 0 then
             (questEntry._uiQuestIcon):AddEffect("UI_Quest_Complete_GoldAura", true, 130, 0)
             ;
@@ -356,10 +356,18 @@ PaGlobal_LatestQuest.setConditions = function(self, index, PosY, uiQuestInfo)
               (questEntry._uiCompleteNpc):SetFontColor((Defines.Color).C_FFF26A6A)
             end
           end
+          if (questEntry._uiCompleteNpc):GetSizeX() < (questEntry._uiCompleteNpc):GetTextSizeX() + 5 then
+            (questEntry._uiCompleteNpc):addInputEvent("Mouse_On", "PaGlobal_LatestQuest:textModeLimitTooltip(" .. index .. ", true)")
+            ;
+            (questEntry._uiCompleteNpc):addInputEvent("Mouse_Out", "PaGlobal_LatestQuest:textModeLimitTooltip(" .. index .. ", false)")
+            ;
+            (questEntry._uiCompleteNpc):SetIgnore(false)
+          else
+            ;
+            (questEntry._uiCompleteNpc):SetIgnore(true)
+          end
           ;
           (questEntry._uiCompleteNpc):SetLineRender(true)
-          ;
-          (questEntry._uiCompleteNpc):SetIgnore(true)
           ;
           (questEntry._uiCompleteNpc):SetShow(true)
           if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
@@ -382,8 +390,22 @@ end
 
 -- DECOMPILER ERROR at PC62: Confused about usage of register: R7 in 'UnsetPending'
 
-PaGlobal_LatestQuest.setButtons = function(self, index, uiQuestInfo)
+PaGlobal_LatestQuest.textModeLimitTooltip = function(self, index, isShow)
   -- function num : 0_8
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name = (((self._uiList)[index])._uiCompleteNpc):GetText()
+  local control = ((self._uiList)[index])._uiCompleteNpc
+  local desc = ""
+  TooltipSimple_Show(control, name, desc)
+end
+
+-- DECOMPILER ERROR at PC65: Confused about usage of register: R7 in 'UnsetPending'
+
+PaGlobal_LatestQuest.setButtons = function(self, index, uiQuestInfo)
+  -- function num : 0_9
   if index < self._maxVisibleCnt then
     local questEntry = (self._uiList)[index]
     local questNo = uiQuestInfo:getQuestNo()
@@ -452,10 +474,10 @@ PaGlobal_LatestQuest.setButtons = function(self, index, uiQuestInfo)
   -- DECOMPILER ERROR: 4 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC65: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC68: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.refreshNaviButtonCheckState = function(self, index, questNo)
-  -- function num : 0_9
+  -- function num : 0_10
   if index < self._maxVisibleCnt then
     local questEntry = (self._uiList)[index]
     local questGroup, questId, naviInfoAgain = FGlobal_QuestWidget_GetSelectedNaviInfo()
@@ -491,10 +513,10 @@ PaGlobal_LatestQuest.refreshNaviButtonCheckState = function(self, index, questNo
   end
 end
 
--- DECOMPILER ERROR at PC68: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC71: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.isHitTestInLatestQuestGroup = function(self, control)
-  -- function num : 0_10
+  -- function num : 0_11
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local panelPosX = Panel_CheckedQuest:GetPosX()
@@ -509,10 +531,10 @@ PaGlobal_LatestQuest.isHitTestInLatestQuestGroup = function(self, control)
   return false
 end
 
--- DECOMPILER ERROR at PC71: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.setSizeConvenienceButtons = function(self, index, isMouseOver)
-  -- function num : 0_11
+  -- function num : 0_12
   if index < self._maxVisibleCnt then
     local questEntry = (self._uiList)[index]
     ;
@@ -550,10 +572,10 @@ PaGlobal_LatestQuest.setSizeConvenienceButtons = function(self, index, isMouseOv
   end
 end
 
--- DECOMPILER ERROR at PC74: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.getTitle = function(self, groupId, questId)
-  -- function num : 0_12
+  -- function num : 0_13
   local questTitle, questLevel = nil, nil
   local uiQuestInfo = ToClient_GetQuestInfo(groupId, questId)
   if uiQuestInfo ~= nil then
@@ -566,10 +588,10 @@ PaGlobal_LatestQuest.getTitle = function(self, groupId, questId)
   return questTitle
 end
 
--- DECOMPILER ERROR at PC77: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.clearAll = function(self)
-  -- function num : 0_13
+  -- function num : 0_14
   for ii = 0, self._maxVisibleCnt - 1 do
     (((self._uiList)[ii])._uiGroupBG):SetShow(false)
     ;
@@ -594,10 +616,10 @@ PaGlobal_LatestQuest.clearAll = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC80: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.setTooltipPos = function(self, posY, idx)
-  -- function num : 0_14
+  -- function num : 0_15
   local questEntry = (self._uiList)[idx]
   local uiTooltip = self._uiTooltip
   local screenY = getScreenSizeY()
@@ -612,19 +634,19 @@ PaGlobal_LatestQuest.setTooltipPos = function(self, posY, idx)
   uiTooltip:SetPosX(Panel_CheckedQuest:GetSizeX() - uiTooltip:GetSizeX() + 5)
 end
 
--- DECOMPILER ERROR at PC83: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC86: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.setVisibleConvenienceButtonGroup = function(self, show)
-  -- function num : 0_15
+  -- function num : 0_16
   for ii = 0, self._maxVisibleCnt - 1 do
     self:setVisibleConvenienceButtons(ii, show)
   end
 end
 
--- DECOMPILER ERROR at PC86: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC89: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.setVisibleConvenienceButtons = function(self, idx, show)
-  -- function num : 0_16
+  -- function num : 0_17
   if idx < self._maxVisibleCnt then
     if show == true then
       local isMouseOn = FGlobal_QuestWidget_IsMouseOn()
@@ -650,48 +672,48 @@ PaGlobal_LatestQuest.setVisibleConvenienceButtons = function(self, idx, show)
   end
 end
 
--- DECOMPILER ERROR at PC89: Confused about usage of register: R7 in 'UnsetPending'
-
-PaGlobal_LatestQuest.setWidgetMouseOver = function(self, isMouseOver)
-  -- function num : 0_17
-  FGlobal_QuestWidget_MouseOver(isMouseOver)
-end
-
 -- DECOMPILER ERROR at PC92: Confused about usage of register: R7 in 'UnsetPending'
 
-PaGlobal_LatestQuest.getLatestGroupPosX = function(self)
+PaGlobal_LatestQuest.setWidgetMouseOver = function(self, isMouseOver)
   -- function num : 0_18
-  return (self._uiLatestGroup):GetPosX()
+  FGlobal_QuestWidget_MouseOver(isMouseOver)
 end
 
 -- DECOMPILER ERROR at PC95: Confused about usage of register: R7 in 'UnsetPending'
 
-PaGlobal_LatestQuest.getLatestGroupPosY = function(self)
+PaGlobal_LatestQuest.getLatestGroupPosX = function(self)
   -- function num : 0_19
-  return (self._uiLatestGroup):GetPosY()
+  return (self._uiLatestGroup):GetPosX()
 end
 
 -- DECOMPILER ERROR at PC98: Confused about usage of register: R7 in 'UnsetPending'
 
-PaGlobal_LatestQuest.getLatestGroupSizeX = function(self)
+PaGlobal_LatestQuest.getLatestGroupPosY = function(self)
   -- function num : 0_20
-  return (self._uiLatestGroup):GetSizeX()
+  return (self._uiLatestGroup):GetPosY()
 end
 
 -- DECOMPILER ERROR at PC101: Confused about usage of register: R7 in 'UnsetPending'
 
-PaGlobal_LatestQuest.getLatestGroupSizeY = function(self)
+PaGlobal_LatestQuest.getLatestGroupSizeX = function(self)
   -- function num : 0_21
+  return (self._uiLatestGroup):GetSizeX()
+end
+
+-- DECOMPILER ERROR at PC104: Confused about usage of register: R7 in 'UnsetPending'
+
+PaGlobal_LatestQuest.getLatestGroupSizeY = function(self)
+  -- function num : 0_22
   if (self._uiLatestGroup):GetShow() == false then
     return 5
   end
   return (self._uiLatestGroup):GetSizeY()
 end
 
--- DECOMPILER ERROR at PC104: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC107: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_LatestQuest.findShownIndexInLatestQuest = function(self, questGroupNo, questId)
-  -- function num : 0_22
+  -- function num : 0_23
   local uiIndex = -1
   local latestQuestShowCount = FGlobal_CheckedQuestOptionPanel_GetLatestQuestShowCount()
   if latestQuestShowCount == 0 then
@@ -713,7 +735,7 @@ PaGlobal_LatestQuest.findShownIndexInLatestQuest = function(self, questGroupNo, 
 end
 
 HandleMouseOver_QuestGroup = function(isMouseOver, index, groupId, questId)
-  -- function num : 0_23
+  -- function num : 0_24
   if index < PaGlobal_LatestQuest._maxVisibleCnt then
     local questEntry = (PaGlobal_LatestQuest._uiList)[index]
     if isMouseOver == true then
@@ -737,7 +759,7 @@ HandleMouseOver_QuestGroup = function(isMouseOver, index, groupId, questId)
 end
 
 HandleMouseOver_LatestQuestGroupButtons = function(isMouseOver, posY, target, index)
-  -- function num : 0_24
+  -- function num : 0_25
   local uiTooltip = PaGlobal_LatestQuest._uiTooltip
   if isMouseOver == true then
     if target == "navi" then
@@ -761,28 +783,28 @@ end
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_LatestQuest")
 registerEvent("FromClient_ChangeLatestQuestShowCount", "FromClient_ChangeLatestQuestShowCount")
 FGlobal_LatestQuest_UpdateList = function()
-  -- function num : 0_25
+  -- function num : 0_26
   PaGlobal_LatestQuest:update()
 end
 
 FGlobal_ChangeLatestQuestShowCount = function()
-  -- function num : 0_26
+  -- function num : 0_27
   PaGlobal_LatestQuest:update()
   FromClient_QuestWidget_Update(false)
 end
 
 FGlobal_LatestQuestWidget_MouseOver = function(isMouseOver)
-  -- function num : 0_27
+  -- function num : 0_28
   PaGlobal_LatestQuest:setVisibleConvenienceButtonGroup(isMouseOver)
 end
 
 FromClient_ChangeLatestQuestShowCount = function()
-  -- function num : 0_28
+  -- function num : 0_29
   FGlobal_ChangeLatestQuestShowCount()
 end
 
 FromClient_luaLoadComplete_LatestQuest = function()
-  -- function num : 0_29
+  -- function num : 0_30
 end
 
 local viewCount = PaGlobal_LatestQuest._maxVisibleCnt

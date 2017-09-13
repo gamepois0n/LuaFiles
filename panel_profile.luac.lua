@@ -101,7 +101,7 @@ Profile_DataSet = function(content, key)
         _count = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_ITEMCOUNT", "count", makeDotMoney(_count))
       else
         if (CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount == _key then
-          _count = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_WEIGHT", "count", (string.format)("%.2f", Int64toInt32(_count) / 10000))
+          _count = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_WEIGHT", "count", makeWeightString(_count))
         else
           _count = makeDotMoney(_count)
         end

@@ -155,6 +155,7 @@ PaGlobal_Enchant.clear = function(self)
   (self._uiProtectItem_Btn):SetIgnore(true)
   ;
   (self._uiProtectItem_Btn):SetMonoTone(true)
+  self._isCronEnchant = false
 end
 
 -- DECOMPILER ERROR at PC8: Confused about usage of register: R0 in 'UnsetPending'
@@ -601,6 +602,7 @@ PaGlobal_Enchant.cancelEnchant = function(self)
   ToClient_BlackspiritEnchantCancel()
   ;
   (self._uiCheckBtn_CronEnchnt):SetCheck(false)
+  self._isCronEnchant = false
 end
 
 -- DECOMPILER ERROR at PC44: Confused about usage of register: R0 in 'UnsetPending'

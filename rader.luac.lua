@@ -2541,15 +2541,17 @@ end
 
   RaderResizeByReset = function()
   -- function num : 0_86 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
-  Panel_Radar:SetSize(Panel_OrigSizeX, Panel_OrigSizeY)
+  local raderCurrentSizeX = Panel_Radar:GetSizeX()
+  local raderCurrentSizeY = Panel_Radar:GetSizeY()
+  Panel_Radar:SetSize(raderCurrentSizeX, raderCurrentSizeY)
   ;
   ((radarMap.controls).rader_Background):SetPosX(0)
   ;
   ((radarMap.controls).rader_Background):SetSize(Panel_OrigSizeX, Panel_OrigSizeY)
-  -- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC30: Confused about usage of register: R2 in 'UnsetPending'
 
   radarMap.scaleRateWidth = Panel_Radar:GetSizeX() / Panel_OrigSizeX
-  -- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC37: Confused about usage of register: R2 in 'UnsetPending'
 
   radarMap.scaleRateHeight = Panel_Radar:GetSizeY() / Panel_OrigSizeY
   local SPI = (radarMap.controls).icon_SelfPlayer
@@ -2559,11 +2561,11 @@ end
   local halfSizeY = Panel_Radar:GetSizeY() / 2
   SPI:SetPosX(halfSizeX - halfSelfSizeX)
   SPI:SetPosY(halfSizeY - halfSelfSizeY)
-  -- DECOMPILER ERROR at PC60: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC66: Confused about usage of register: R7 in 'UnsetPending'
 
   ;
   (radarMap.pcPosBaseControl).x = SPI:GetPosX() + halfSelfSizeX
-  -- DECOMPILER ERROR at PC66: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC72: Confused about usage of register: R7 in 'UnsetPending'
 
   ;
   (radarMap.pcPosBaseControl).y = SPI:GetPosY() + halfSelfSizeY

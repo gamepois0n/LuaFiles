@@ -176,8 +176,26 @@ PaGlobal_Repair.repair_BtnResize = function(self)
   (self._uiRepairExitButton):SetTextSpan(btnExitTextPosX, 5)
 end
 
+-- DECOMPILER ERROR at PC148: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_Repair.repair_BtnResize_Camping = function(self)
+  -- function num : 0_5
+  local btnRepairCenterPosX = Panel_Window_Repair:GetSizeX() / 2
+  local btnRepairLeftCenterPosX = btnRepairCenterPosX / 2
+  local btnRepairRightCenterPosX = btnRepairCenterPosX + btnRepairCenterPosX / 2
+  local EquippedItemButtonPosX = btnRepairLeftCenterPosX - (self._uiRepairAllEquippedItemButton):GetSizeX() / 2
+  local InvenItemButtonPosX = btnRepairCenterPosX - (self._uiRepairAllInvenItemButton):GetSizeX() / 2
+  local ExitButtonPosX = btnRepairRightCenterPosX - (self._uiRepairExitButton):GetSizeX() / 2
+  ;
+  (self._uiRepairAllEquippedItemButton):SetPosX(EquippedItemButtonPosX)
+  ;
+  (self._uiRepairAllInvenItemButton):SetPosX(InvenItemButtonPosX)
+  ;
+  (self._uiRepairExitButton):SetPosX(ExitButtonPosX)
+end
+
 Repair_Resize = function()
-  -- function num : 0_5 , upvalues : UI_color
+  -- function num : 0_6 , upvalues : UI_color
   local self = PaGlobal_Repair
   self._screenX = getScreenSizeX()
   self._screenY = getScreenSizeY()
@@ -222,10 +240,10 @@ Repair_Resize = function()
   ((self._luckyRepairMSG).MSGBG):SetVertexAniRun("Ani_Scale_0", true)
 end
 
--- DECOMPILER ERROR at PC151: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC154: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
-  -- function num : 0_6
+  -- function num : 0_7
   self._isCamping = PaGlobal_Camp:getIsCamping()
   if isShow == true then
     SetUIMode((Defines.UIMode).eUIMode_Repair)
@@ -315,6 +333,7 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     (self._uiRepairMessageBG):SetShow(false)
   end
   self:Repair_Money_SetPos()
+  Repair_Resize()
   if self._isCamping then
     (self._uiRepairStableEquippedItemButton):SetIgnore(true)
     ;
@@ -323,6 +342,15 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     (self._uiRepairElephantButton):SetIgnore(true)
     ;
     (self._uiFixEquipItemButton):SetIgnore(true)
+    ;
+    (self._uiRepairStableEquippedItemButton):SetShow(false)
+    ;
+    (self._uiRepairWharfEquippedItemButton):SetShow(false)
+    ;
+    (self._uiRepairElephantButton):SetShow(false)
+    ;
+    (self._uiFixEquipItemButton):SetShow(false)
+    PaGlobal_Repair:repair_BtnResize_Camping()
   else
     ;
     (self._uiRepairStableEquippedItemButton):SetIgnore(false)
@@ -332,18 +360,27 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     (self._uiRepairElephantButton):SetIgnore(false)
     ;
     (self._uiFixEquipItemButton):SetIgnore(false)
+    ;
+    (self._uiRepairStableEquippedItemButton):SetShow(true)
+    ;
+    (self._uiRepairWharfEquippedItemButton):SetShow(true)
+    ;
+    (self._uiRepairElephantButton):SetShow(true)
+    ;
+    (self._uiFixEquipItemButton):SetShow(true)
+    PaGlobal_Repair:repair_BtnResize()
   end
 end
 
--- DECOMPILER ERROR at PC154: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC157: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repairMoneyUpdate = function(self)
-  -- function num : 0_7
+  -- function num : 0_8
   Repair_Money_Update()
 end
 
 Repair_Money_Update = function()
-  -- function num : 0_8
+  -- function num : 0_9
   local self = PaGlobal_Repair
   ;
   (self._uiRepairInven):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
@@ -351,19 +388,19 @@ Repair_Money_Update = function()
   (self._uiRepairWareHouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
 end
 
--- DECOMPILER ERROR at PC159: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC162: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.cursor_PosUpdate = function(self)
-  -- function num : 0_9
+  -- function num : 0_10
   (self._uiRepairCursor):SetPosX(getMousePosX() - Panel_Window_Repair:GetPosX())
   ;
   (self._uiRepairCursor):SetPosY(getMousePosY() - Panel_Window_Repair:GetPosY())
 end
 
--- DECOMPILER ERROR at PC162: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC165: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.Repair_Money_SetPos = function(self)
-  -- function num : 0_10
+  -- function num : 0_11
   if (self._uiRepairInven):GetPosX() - (self._uiRepairInvenMoney):GetPosX() - 24 < self._uiRepairTextSizeX then
     local sizeX = self._uiRepairTextSizeX - (self._uiRepairInven):GetPosX() - (self._uiRepairInvenMoney):GetPosX() + 36
     ;
@@ -373,20 +410,20 @@ PaGlobal_Repair.Repair_Money_SetPos = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC165: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repair_registMessageHandler = function(self)
-  -- function num : 0_11
+  -- function num : 0_12
   registerEvent("onScreenResize", "Repair_Resize")
   registerEvent("FromClient_MaxEnduranceLuckyRepairEvent", "FromClient_LuckyRepair_resultShow")
   registerEvent("EventWarehouseUpdate", "Repair_Money_Update")
   Panel_LuckyRepair_Result:RegisterUpdateFunc("Chk_LuckyRepair_ResultMsg_ShowTime")
 end
 
--- DECOMPILER ERROR at PC168: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.setIsCamping = function(self, isCamping)
-  -- function num : 0_12
+  -- function num : 0_13
   self._isCamping = isCamping
 end
 

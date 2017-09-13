@@ -73,7 +73,7 @@ wharfInfo.update = function(self)
   (self._staticText_Cornering):SetText((string.format)("%.1f", servantInfo:getStat((CppEnums.ServantStatType).Type_CorneringSpeed) / 10000) .. "%")
   ;
   (self._staticText_BrakeSpeed):SetText((string.format)("%.1f", servantInfo:getStat((CppEnums.ServantStatType).Type_BrakeSpeed) / 10000) .. "%")
-  if (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType then
+  if (CppEnums.VehicleType).Type_SailingBoat == vehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == vehicleType or (CppEnums.VehicleType).Type_PersonTradeShip == vehicleType then
     (self._mp):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_SHIPINFO_MP"))
   else
     ;

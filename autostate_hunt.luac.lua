@@ -9,7 +9,7 @@ AutoState_Hunt = {_state = AutoStateType.HUNT, _reserveReason = AutoHuntState_Ty
 
 AutoState_Hunt.init = function(self)
   -- function num : 0_0
-  _reserveReason = AutoHuntState_Type.NONE
+  self._reserveReason = AutoHuntState_Type.NONE
 end
 
 -- DECOMPILER ERROR at PC19: Confused about usage of register: R0 in 'UnsetPending'
@@ -33,7 +33,7 @@ AutoState_Hunt.update = function(self, deltaTime)
   self._pressDelay = 0
   FGlobal_AutoQuestBlackSpiritMessage("자동 사냥 중입니다")
   local questList = ToClient_GetQuestList()
-  if questList:isMainQuestClearAll() == true then
+  if questList == nil or questList:isMainQuestClearAll() == true then
     return 
   end
   local uiQuestInfo = questList:getMainQuestInfo()
@@ -42,12 +42,13 @@ AutoState_Hunt.update = function(self, deltaTime)
     _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(uiQuestInfo:isSatisfied)")
     return 
   end
-  -- DECOMPILER ERROR at PC48: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC50: Unhandled construct in 'MakeBoolean' P1
 
-  if _reserveReason == AutoHuntState_Type.EXISTNEARMONSTER and ToClient_Auto_CheckExistNearMonster(300) == false then
+  if self._reserveReason == AutoHuntState_Type.EXISTNEARMONSTER and ToClient_Auto_CheckExistNearMonster(300) == false then
     FGlobal_AutoQuestBlackSpiritMessage("주변�\144 �\128상이 없어�\156 상태�\188 전환합니�\164")
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
     _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(ToClient_Auto_CheckExistNearMonster(300))")
+    return 
   end
   local selfPlayer = (getSelfPlayer()):get()
   if Auto_FindNearQuestMonster() == false then
@@ -63,14 +64,14 @@ end
 AutoState_Hunt.endProc = function(self)
   -- function num : 0_3
   ToClient_changeAutoMode((CppEnums.Client_AutoControlStateType).NONE)
-  _reserveReason = AutoHuntState_Type.NONE
+  self._reserveReason = AutoHuntState_Type.NONE
 end
 
 -- DECOMPILER ERROR at PC28: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_Hunt.setReserveReason = function(self, reason)
   -- function num : 0_4
-  _reserveReason = reason
+  self._reserveReason = reason
 end
 
 

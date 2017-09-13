@@ -30,7 +30,7 @@ skillCommandControl = {}
 skillCommandIndex = {}
 , 
 skillCommandShowkeep = {}
-, color = (Defines.Color).C_FF444444, viewableMaxSkillCount = 11, skillNameSizeX = 0, isLevelUp = false, sizeUpCount = 0}
+, color = (Defines.Color).C_FF444444, viewableMaxSkillCount = 11, skillNameSizeX = 0, isLevelUp = false, sizeUpCount = 0, _weaponType = 0}
 Panel_SkkillCommand_ShowAni = function()
   -- function num : 0_0
 end
@@ -98,62 +98,85 @@ skillCommand.Open = function(self)
     (slot._blueBG):SetShow(false)
   end
   self.sizeUpCount = 0
+  Panel_SkillCommand:SetSize(300, 250)
   skillCommand:SetSkill()
   Panel_SkillCommand:SetShow(true)
 end
 
-FromClient_SkillCommandList = function(skillNo)
+FromClient_SkillCommandList = function(skillNo, isAwaken)
   -- function num : 0_4 , upvalues : skillCommand
   local self = skillCommand
-  if #self.skilldatatable > 0 then
-    local skillCheck = false
-    for index = 1, #self.skilldatatable do
-      if (self.skilldatatable)[index] == skillNo then
-        skillCheck = true
-      end
-    end
-    if not skillCheck then
-      (table.insert)(self.skilldatatable, skillNo)
-      self.recommandSkillCount = self.recommandSkillCount + 1
-    end
-  else
-    do
-      ;
-      (table.insert)(self.skilldatatable, skillNo)
-      self.recommandSkillCount = self.recommandSkillCount + 1
-      -- DECOMPILER ERROR at PC41: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC6: Unhandled construct in 'MakeBoolean' P1
 
-      ;
-      (self.skillCommandShowkeep)[self.lvupSkillCount + self.recommandSkillCount - 1] = false
-      self.elapsedTime = 0
+  if isAwaken and self._weaponType ~= 2 then
+    return 
+  end
+  if self._weaponType ~= 1 then
+    if self._weaponType == 0 then
+      do return  end
+      if #self.skilldatatable > 0 then
+        local skillCheck = false
+        for index = 1, #self.skilldatatable do
+          if (self.skilldatatable)[index] == skillNo then
+            skillCheck = true
+          end
+        end
+        if not skillCheck then
+          (table.insert)(self.skilldatatable, skillNo)
+          self.recommandSkillCount = self.recommandSkillCount + 1
+        end
+      else
+        do
+          ;
+          (table.insert)(self.skilldatatable, skillNo)
+          self.recommandSkillCount = self.recommandSkillCount + 1
+          -- DECOMPILER ERROR at PC56: Confused about usage of register: R3 in 'UnsetPending'
+
+          ;
+          (self.skillCommandShowkeep)[self.lvupSkillCount + self.recommandSkillCount - 1] = false
+          self.elapsedTime = 0
+        end
+      end
     end
   end
 end
 
-FromClient_SkillCommandListonLevelUp = function(skillNo)
+FromClient_SkillCommandListonLevelUp = function(skillNo, isAwaken)
   -- function num : 0_5 , upvalues : skillCommand
   local self = skillCommand
-  if #self.skilldatatable > 0 then
-    local skillCheck = false
-    for index = 1, #self.skilldatatable do
-      if (self.skilldatatable)[index] == skillNo then
-        skillCheck = true
-      end
+  if isAwaken then
+    if self._weaponType == 2 then
+      FromClient_SkillCommandDataSet()
     end
-    if not skillCheck then
-      (table.insert)(self.skilldatatable, skillNo)
-      self.lvupSkillCount = self.lvupSkillCount + 1
-    end
+    return 
   else
-    do
-      ;
-      (table.insert)(self.skilldatatable, skillNo)
-      self.lvupSkillCount = self.lvupSkillCount + 1
-      -- DECOMPILER ERROR at PC39: Confused about usage of register: R2 in 'UnsetPending'
+  end
+  if self._weaponType ~= 1 then
+    if self._weaponType == 0 then
+      do return  end
+      if #self.skilldatatable > 0 then
+        local skillCheck = false
+        for index = 1, #self.skilldatatable do
+          if (self.skilldatatable)[index] == skillNo then
+            skillCheck = true
+          end
+        end
+        if not skillCheck then
+          (table.insert)(self.skilldatatable, skillNo)
+          self.lvupSkillCount = self.lvupSkillCount + 1
+        end
+      else
+        do
+          ;
+          (table.insert)(self.skilldatatable, skillNo)
+          self.lvupSkillCount = self.lvupSkillCount + 1
+          -- DECOMPILER ERROR at PC56: Confused about usage of register: R3 in 'UnsetPending'
 
-      ;
-      (self.skillCommandShowkeep)[self.lvupSkillCount - 1] = true
-      self.elapsedTime = 0
+          ;
+          (self.skillCommandShowkeep)[self.lvupSkillCount - 1] = true
+          self.elapsedTime = 0
+        end
+      end
     end
   end
 end
@@ -221,6 +244,9 @@ skillCommand.SetSkill = function(self)
     ;
     (((self._slots)[i])._mainBG):SetPosY(0 + (i + self.sizeUpCount) * 30 + i * 2)
     if Panel_SkillCommand:GetSizeX() < (slot._skillCommandBody):GetPosX() + (slot._skillCommandBody):GetSizeX() then
+      if (slot._skillCommandBody):GetPosX() + (slot._skillCommandBody):GetSizeX() > 500 then
+        Panel_SkillCommand:SetSize(400, 250)
+      end
       skillCommand:CommandControl_RePos(i)
       ;
       (slot._skillIcon):SetPosY(17)
@@ -534,6 +560,20 @@ SkillCommand_Effect = function(skillWrapper)
   end
 end
 
+FromClient_SkillCommandWeaponType = function(weaponType)
+  -- function num : 0_22 , upvalues : skillCommand
+  local self = skillCommand
+  if self._weaponType == weaponType or weaponType == 0 then
+    self._weaponType = weaponType
+    return 
+  else
+    self._weaponType = weaponType
+    if Panel_SkillCommand:GetShow() == true then
+      FromClient_SkillCommandDataSet()
+    end
+  end
+end
+
 skillCommand:Init()
 Panel_SkillCommand:RegisterUpdateFunc("SkillCommand_UpdateTime")
 registerEvent("FromClient_CheckLevelUpforSkillCommand", "FromClient_CheckLevelUpforSkillCommand")
@@ -543,4 +583,5 @@ registerEvent("FromClient_SkillCommandList", "FromClient_SkillCommandList")
 registerEvent("onScreenResize", "FGlobal_SkillCommand_ResetPosition")
 registerEvent("selfPlayer_regionChanged", "FromClient_RegionChange")
 registerEvent("FromClient_RenderModeChangeState", "FGlobal_SkillCommand_ResetPosition")
+registerEvent("FromClient_SkillCommandWeaponType", "FromClient_SkillCommandWeaponType")
 

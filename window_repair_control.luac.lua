@@ -32,11 +32,10 @@ end
 
 handleMClickedRepairExitButton = function()
   -- function num : 0_3
-  PaGlobal_Repair:setIsCamping(false)
-  npcShop:setIsCamping(false)
-  PaGlobal_Camp:setIsCamping(false)
   PaGlobal_Repair:repair_OpenPanel(false)
   PaGlobal_FixEquip:fixEquipExit()
+  PaGlobal_Repair:setIsCamping(false)
+  npcShop:setIsCamping(false)
   PaGlobal_Camp:setIsCamping(false)
 end
 
@@ -62,7 +61,7 @@ Repair_InvenRClick = function(slotNo, itemWrapper, s64_itemCount, itemWhereType)
   local repairPrice = repair_getRepairPrice_s64(itemWhereType, slotNo, (CppEnums.ServantType).Type_Count)
   if (Defines.s64_const).s64_0 < repairPrice then
     local strPrice = (string.format)("%d", Int64toInt32(repairPrice))
-    local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", strPrice)
+    local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
     local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = Repair_Item_MessageBox_Confirm, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageboxData)
@@ -85,7 +84,7 @@ PaGlobal_Repair.repair_EquipWindowRClick = function(self, equipSlotNo, itemWrapp
   local repairPrice = repair_getRepairPrice_s64((CppEnums.ItemWhereType).eEquip, equipSlotNo, (CppEnums.ServantType).Type_Count)
   if (Defines.s64_const).s64_0 < repairPrice then
     local strPrice = (string.format)("%d", Int64toInt32(repairPrice))
-    local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", strPrice)
+    local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
     local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = Repair_Item_MessageBox_Confirm, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageboxData)

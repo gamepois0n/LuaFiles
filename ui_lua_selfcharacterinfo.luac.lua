@@ -831,7 +831,7 @@ SelfCharacterInfo_UpdateMainStatus = function()
               else
                 do
                   if UI_classType.ClassType_DarkElf == player:getClassType() then
-                    (CharacterInfo._mpTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_EP"))
+                    (CharacterInfo._mpTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_TEXT_MP_DARKELF"))
                     ;
                     (CharacterInfo._progress2_mp):ChangeTextureInfoName("new_ui_common_forlua/default/default_gauges_03.dds")
                     local x1, y1, x2, y2 = setTextureUV_Func(CharacterInfo._progress2_mp, 1, 1, 256, 10)

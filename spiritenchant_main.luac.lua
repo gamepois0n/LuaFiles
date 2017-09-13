@@ -509,7 +509,17 @@ PaGlobal_Enchant.handleMClickedEnchantApplyButton = function(self)
     if skipCheck then
       PaGlobal_Enchant:handleMClickedSkipEnchant()
     else
-      self:startEnchant(false)
+      local itemWrapper = getInventoryItemByType((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
+      local upgradeItem = itemWrapper:checkToUpgradeItem()
+      if (self._uiCheckBtn_CronEnchnt):IsCheck() then
+        if upgradeItem then
+          self:startEnchant(false)
+        else
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_NOT_CRONESTONEUPGRADE"))
+        end
+      else
+        self:startEnchant(false)
+      end
     end
   end
 end
@@ -743,6 +753,8 @@ UpdateFunc_DoingEnchant = function(deltaTime)
     end
     ;
     (self._uiProtectItem_Btn):SetIgnore(true)
+    ;
+    (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
   end
 end
 

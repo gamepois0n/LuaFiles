@@ -1600,6 +1600,13 @@ FGlobal_UiSet_Open = function()
       -- DECOMPILER ERROR at PC155: Confused about usage of register: R6 in 'UnsetPending'
 
       ChatPanelIsOpenState[chattingPanelindex + 1] = false
+      local curIndex = panelID.Chat0 + chattingPanelindex
+      -- DECOMPILER ERROR at PC162: Confused about usage of register: R7 in 'UnsetPending'
+
+      ;
+      ((UiSet.panelPool)[curIndex]).isShow = false
+      ;
+      (((UiSet.panelPool)[curIndex]).control):SetShow(false)
     end
   end
 end

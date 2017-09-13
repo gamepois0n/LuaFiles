@@ -331,8 +331,16 @@ SavageDefenceMember_TooltipButtonDesc = function(isShow, tipType)
   TooltipSimple_Show(control, name, desc)
 end
 
+SavageDefenceShop_CloseByKey = function()
+  -- function num : 0_13 , upvalues : savageDefenceMember
+  local self = savageDefenceMember
+  ;
+  (self.chk_Shop):SetCheck(false)
+  FGlobal_SavageDefenceShop_Close()
+end
+
 FromClient_refreshSavageDefencePlayer = function(isListUpdate)
-  -- function num : 0_13
+  -- function num : 0_14
   SavageDefenceMember_Open(isListUpdate)
   FGlobal_SavageDefenceShop_coinUpdate()
 end

@@ -354,6 +354,9 @@ _list_LinkedAtMessageIndex = {}
       ;
       ((self._list_ChattingSender)[index]):addInputEvent("Mouse_RPress", "Chatting_Transparency(" .. poolIndex .. ")")
     end
+    for index = 0, self._maxcount_ChattingIcon do
+      ((self._list_ChattingIcon)[index]):SetIgnore(false)
+    end
     ChatUIPool:clear()
   end
 
@@ -417,8 +420,23 @@ _list_LinkedAtMessageIndex = {}
     return (self._list_ChattingIcon)[self._count_ChattingIcon - 1]
   end
 
-  ChatUIPool.newChattingSender = function(self, messageIndex)
+  ChatUIPool.getCurrentChattingIconIndex = function(self)
     -- function num : 0_6_12
+    return self._count_ChattingIcon - 1
+  end
+
+  PaGlobal_getChattingIconByIndex = function(index)
+    -- function num : 0_6_13 , upvalues : ChatUIPool
+    return ChatUIPool:getChattingIconByIndex(index)
+  end
+
+  ChatUIPool.getChattingIconByIndex = function(self, index)
+    -- function num : 0_6_14
+    return (self._list_ChattingIcon)[index]
+  end
+
+  ChatUIPool.newChattingSender = function(self, messageIndex)
+    -- function num : 0_6_15
     self._count_ChattingSender = self._count_ChattingSender + 1
     -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -428,13 +446,13 @@ _list_LinkedAtMessageIndex = {}
   end
 
   ChatUIPool.newChattingContents = function(self)
-    -- function num : 0_6_13
+    -- function num : 0_6_16
     self._count_ChattingContents = self._count_ChattingContents + 1
     return (self._list_ChattingContents)[self._count_ChattingContents - 1]
   end
 
   ChatUIPool.newChattingLinkedItem = function(self, messageIndex)
-    -- function num : 0_6_14
+    -- function num : 0_6_17
     self._count_ChattingLinkedItem = self._count_ChattingLinkedItem + 1
     -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -444,13 +462,13 @@ _list_LinkedAtMessageIndex = {}
   end
 
   ChatUIPool.newChattingEmoticon = function(self)
-    -- function num : 0_6_15
+    -- function num : 0_6_18
     self._count_Emoticon = self._count_Emoticon + 1
     return (self._list_Emoticon)[self._count_Emoticon - 1]
   end
 
   ChatUIPool.newChattingLinkedWebSite = function(self, messageIndex)
-    -- function num : 0_6_16
+    -- function num : 0_6_19
     self._count_ChattingLinkedWebSite = self._count_ChattingLinkedWebSite + 1
     -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -460,7 +478,7 @@ _list_LinkedAtMessageIndex = {}
   end
 
   ChatUIPool.newChattingAt = function(self, messageIndex)
-    -- function num : 0_6_17
+    -- function num : 0_6_20
     self._count_At = self._count_At + 1
     -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -470,66 +488,66 @@ _list_LinkedAtMessageIndex = {}
   end
 
   ChatUIPool.newScroll = function(self)
-    -- function num : 0_6_18
+    -- function num : 0_6_21
     self._count_Scroll = self._count_Scroll + 1
     return (self._list_Scroll)[self._count_Scroll - 1]
   end
 
   ChatUIPool.newCloseButton = function(self)
-    -- function num : 0_6_19
+    -- function num : 0_6_22
     self._count_CloseButton = self._count_CloseButton + 1
     return (self._list_CloseButton)[self._count_CloseButton - 1]
   end
 
   ChatUIPool.newScrollReset = function(self)
-    -- function num : 0_6_20
+    -- function num : 0_6_23
     self._count_ScrollReset = self._count_ScrollReset + 1
     return (self._list_ScrollReset)[self._count_ScrollReset - 1]
   end
 
   ChatUIPool.newMorelist = function(self)
-    -- function num : 0_6_21
+    -- function num : 0_6_24
     self._count_MoreList = self._count_MoreList + 1
     return (self._list_MoreList)[self._count_MoreList - 1]
   end
 
   ChatUIPool.clearChattingIcon = function(self)
-    -- function num : 0_6_22
+    -- function num : 0_6_25
     self._count_ChattingIcon = 0
   end
 
   ChatUIPool.clearChattingSender = function(self, messageIndex)
-    -- function num : 0_6_23
+    -- function num : 0_6_26
     self._count_ChattingSender = 0
   end
 
   ChatUIPool.clearChattingContents = function(self)
-    -- function num : 0_6_24
+    -- function num : 0_6_27
     self._count_ChattingContents = 0
   end
 
   ChatUIPool.clearChattingLinkedItem = function(self, messageIndex)
-    -- function num : 0_6_25
+    -- function num : 0_6_28
     self._count_ChattingLinkedItem = 0
   end
 
   ChatUIPool.clearChattingLinkedwebsite = function(self, messageIndex)
-    -- function num : 0_6_26
+    -- function num : 0_6_29
     self._count_ChattingLinkedWebSite = 0
   end
 
   ChatUIPool.clearEmoticon = function(self)
-    -- function num : 0_6_27
+    -- function num : 0_6_30
     self._count_Emoticon = 0
   end
 
   ChatUIPool.clearAt = function(self)
-    -- function num : 0_6_28
+    -- function num : 0_6_31
     self._count_At = 0
   end
 
   ChatUIPool.clear = function(self)
-    -- function num : 0_6_29 , upvalues : ChatUIPool
+    -- function num : 0_6_32 , upvalues : ChatUIPool
     self._count_PanelBG = 0
     self._count_TitleTab = 0
     self._count_TitleTabText = 0
@@ -559,7 +577,7 @@ _list_LinkedAtMessageIndex = {}
   end
 
   ChatUIPool.drawclear = function(self)
-    -- function num : 0_6_30
+    -- function num : 0_6_33
     (self.clearChattingIcon)()
     ;
     (self.clearChattingContents)()
@@ -576,7 +594,7 @@ _list_LinkedAtMessageIndex = {}
   end
 
   ChatUIPool.hideNotUse = function(self)
-    -- function num : 0_6_31
+    -- function num : 0_6_34
     for index = self._count_PanelBG, self._maxcount_PanelBG do
       ((self._list_PanelBG)[index]):SetShow(false)
     end
@@ -2198,6 +2216,9 @@ HandleClicked_Chatting_AddTab = function()
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
 
   ChattingViewManager._addChattingIdx = ToClient_openChattingPanel()
+  local mainPaenl = ToClient_getChattingPanel(0)
+  local mainPanelTransparency = mainPaenl:getTransparency()
+  FGlobal_Chatting_PanelTransparency(ChattingViewManager._addChattingIdx, mainPanelTransparency, false)
   FromClient_ChatUpdate(true)
   ToClient_SaveUiInfo(false)
 end
@@ -2299,8 +2320,12 @@ end
 
 HandleClicked_Chatting_CombineTab = function(panelIndex)
   -- function num : 0_29
-  local penel = ToClient_getChattingPanel(panelIndex)
-  penel:combineToMainPanel()
+  local panel = ToClient_getChattingPanel(panelIndex)
+  local mainPaenl = ToClient_getChattingPanel(0)
+  local mainPanelTransparency = mainPaenl:getTransparency()
+  panel:combineToMainPanel()
+  panel:setTransparency(mainPanelTransparency)
+  FGlobal_Chatting_PanelTransparency(panelIndex, mainPanelTransparency, false)
   FromClient_ChatUpdate(true)
   ToClient_SaveUiInfo(false)
 end
@@ -2824,7 +2849,7 @@ ChatPanel_Update = function()
     local chatPanel = ToClient_getChattingPanel(panelIndex)
     local chatUI = ChatUIPoolManager:getPool(panelIndex)
     for chattingContents_idx = 0, chatUI._maxcount_ChattingContents - 1 do
-      ((chatUI._list_ChattingSender)[chattingContents_idx]):SetText("")
+      ((chatUI._list_ChattingSender)[chattingContents_idx]):SetText(" ")
       ;
       ((chatUI._list_ChattingSender)[chattingContents_idx]):SetSize(((chatUI._list_ChattingSender)[chattingContents_idx]):GetSizeX(), ((chatUI._list_ChattingSender)[chattingContents_idx]):GetSizeY())
     end

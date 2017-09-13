@@ -379,7 +379,7 @@ WharfList_ButtonOpen = function(eType, slotNo)
       if #buttonList > 0 then
         for index,button in pairs(buttonList) do
           button:SetShow(true)
-          button:SetPosX(buttonConfig.startButtonX)
+          button:SetPosX(buttonConfig.startButtonX - 5)
           button:SetPosY(buttonConfig.startButtonY + buttonConfig.gapY * index)
           sizeY = sizeY + buttonConfig.sizeY
         end
@@ -484,6 +484,7 @@ WharfList_Recovery = function()
   end
   local needMoney = 0
   local confirmFunction = nil
+  local isVehicleType = servantInfo:getVehicleType()
   if servantInfo:getHp() == 0 then
     needMoney = Int64toInt32(servantInfo:getReviveCost_s64())
     confirmFunction = WharfList_ReviveXXX
@@ -491,7 +492,11 @@ WharfList_Recovery = function()
     needMoney = Int64toInt32(servantInfo:getRecoveryCost_s64())
     confirmFunction = WharfList_RecoveryXXX
   end
-  Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_CARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", needMoney), confirmFunction, MessageBox_Empty_function)
+  if (CppEnums.VehicleType).Type_SailingBoat == isVehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == isVehicleType or (CppEnums.VehicleType).Type_PersonTradeShip == isVehicleType then
+    Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_SHIP_RECOVERY_NOTIFY_MSG", "needMoney", needMoney), confirmFunction, MessageBox_Empty_function)
+  else
+    Servant_Confirm(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_RECOVERY_NOTIFY_TITLE"), PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_STABEL_CARRIAGE_RECOVERY_NOTIFY_MSG", "needMoney", needMoney), confirmFunction, MessageBox_Empty_function)
+  end
 end
 
 WharfList_RecoveryXXX = function()

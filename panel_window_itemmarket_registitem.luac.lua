@@ -93,39 +93,50 @@ ItemMarketRegistItem.Update = function(self)
         return 
       end
       local regionInfoWrapper = getRegionInfoWrapper(regionInfo:getAffiliatedTownRegionKey())
-      local regionKey = getCurrentWaypointKey()
-      local warehouseWrapper = warehouse_get(regionKey)
-      itemWrapper = warehouseWrapper:getItem(self._invenSlotNo)
-    end
-  end
-  do
-    if itemWrapper == nil then
-      _PA_ASSERT(false, "itemWrapper 없습니다. 비정상입니다.")
-      return 
-    end
-    local itemSS = itemWrapper:getStaticStatus()
-    local itemKey = ((itemSS:get())._key):get()
-    local summaryInfo = getItemMarketSummaryInClientByItemEnchantKey(((itemSS:get())._key):get())
-    local masterInfo = getItemMarketMasterByItemEnchantKey(((itemSS:get())._key):get())
-    if summaryInfo == nil or masterInfo == nil then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_NOREGISTITEM_ACK"))
-      return 
-    end
-    local registHighPrice = summaryInfo:getDisplayedHighestOnePrice()
-    local registLowPrice = summaryInfo:getDisplayedLowestOnePrice()
-    local marketConditions = (masterInfo:getMinPrice() + masterInfo:getMaxPrice()) / toInt64(0, 2)
-    local recentPrice = summaryInfo:getLastTradedOnePrice()
-    local registListCount = summaryInfo:getTradedTotalAmount()
-    local registItemCount = summaryInfo:getDisplayedTotalAmount()
-    local itemMaxPrice = masterInfo:getMaxPrice()
-    local itemMinPrice = masterInfo:getMinPrice()
-    self._minPrice = masterInfo:getMinPrice()
-    self._maxPrice = masterInfo:getMaxPrice()
-    ;
-    ((self.itemSlot).icon):addInputEvent("Mouse_On", "_ItemMarketRegistItem_ShowToolTip( " .. self._invenSlotNo .. ", " .. self._invenWhereType .. " )")
-    ;
-    ((self.itemSlot).icon):addInputEvent("Mouse_Out", "_ItemMarketRegistItem_HideToolTip()")
-    local replaceCount = function(num)
+      local wayKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
+      if ToClient_IsAccessibleRegionKey(regionInfo:getAffiliatedTownRegionKey()) == false then
+        local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
+        local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
+        if newRegionInfo == nil then
+          return 
+        end
+        wayKey = (newRegionInfo:get())._waypointKey
+        if wayKey == 0 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+          return 
+        end
+      end
+      do
+        do
+          local warehouseWrapper = warehouse_get(wayKey)
+          itemWrapper = warehouseWrapper:getItem(self._invenSlotNo)
+          if itemWrapper == nil then
+            _PA_ASSERT(false, "itemWrapper 없습니다. 비정상입니다.")
+            return 
+          end
+          local itemSS = itemWrapper:getStaticStatus()
+          local itemKey = ((itemSS:get())._key):get()
+          local summaryInfo = getItemMarketSummaryInClientByItemEnchantKey(((itemSS:get())._key):get())
+          local masterInfo = getItemMarketMasterByItemEnchantKey(((itemSS:get())._key):get())
+          if summaryInfo == nil or masterInfo == nil then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_NOREGISTITEM_ACK"))
+            return 
+          end
+          local registHighPrice = summaryInfo:getDisplayedHighestOnePrice()
+          local registLowPrice = summaryInfo:getDisplayedLowestOnePrice()
+          local marketConditions = (masterInfo:getMinPrice() + masterInfo:getMaxPrice()) / toInt64(0, 2)
+          local recentPrice = summaryInfo:getLastTradedOnePrice()
+          local registListCount = summaryInfo:getTradedTotalAmount()
+          local registItemCount = summaryInfo:getDisplayedTotalAmount()
+          local itemMaxPrice = masterInfo:getMaxPrice()
+          local itemMinPrice = masterInfo:getMinPrice()
+          self._minPrice = masterInfo:getMinPrice()
+          self._maxPrice = masterInfo:getMaxPrice()
+          ;
+          ((self.itemSlot).icon):addInputEvent("Mouse_On", "_ItemMarketRegistItem_ShowToolTip( " .. self._invenSlotNo .. ", " .. self._invenWhereType .. " )")
+          ;
+          ((self.itemSlot).icon):addInputEvent("Mouse_Out", "_ItemMarketRegistItem_HideToolTip()")
+          local replaceCount = function(num)
     -- function num : 0_5_0
     local count = Int64toInt32(num)
     if count == 0 then
@@ -136,33 +147,36 @@ ItemMarketRegistItem.Update = function(self)
     return count
   end
 
-    if (self._lastRegistPrice)[itemKey] ~= nil then
-      recentPrice = toInt64(0, (self._lastRegistPrice)[itemKey])
-    end
-    self._itemKey = itemKey
-    ;
-    (self.registHighPrice_Value):SetText(replaceCount(registHighPrice))
-    ;
-    (self.registLowPrice_Value):SetText(replaceCount(registLowPrice))
-    ;
-    (self.averagePrice_Value):SetText(replaceCount(marketConditions))
-    ;
-    (self.recentPrice_Value):SetText(replaceCount(recentPrice))
-    ;
-    (self.registListCount_Value):SetText(replaceCount(registListCount))
-    ;
-    (self.registItemCount_Value):SetText(replaceCount(registItemCount))
-    ;
-    (self.max_Value):SetText(makeDotMoney(itemMaxPrice))
-    ;
-    (self.minPrice_Value):SetText(makeDotMoney(itemMinPrice))
-    local highAndLowAvgPrice = (masterInfo:getMaxPrice() + masterInfo:getMinPrice()) / toInt64(0, 2)
-    if toInt64(0, 0) < recentPrice then
-      (self.priceEdit):SetEditText(tostring(makeDotMoney(recentPrice)), true)
-    end
-    self._averagePrice = highAndLowAvgPrice
-    if itemMaxPrice < recentPrice or recentPrice < itemMinPrice then
-      (self.priceEdit):SetEditText(tostring(makeDotMoney(highAndLowAvgPrice)), true)
+          if (self._lastRegistPrice)[itemKey] ~= nil then
+            recentPrice = toInt64(0, (self._lastRegistPrice)[itemKey])
+          end
+          self._itemKey = itemKey
+          ;
+          (self.registHighPrice_Value):SetText(replaceCount(registHighPrice))
+          ;
+          (self.registLowPrice_Value):SetText(replaceCount(registLowPrice))
+          ;
+          (self.averagePrice_Value):SetText(replaceCount(marketConditions))
+          ;
+          (self.recentPrice_Value):SetText(replaceCount(recentPrice))
+          ;
+          (self.registListCount_Value):SetText(replaceCount(registListCount))
+          ;
+          (self.registItemCount_Value):SetText(replaceCount(registItemCount))
+          ;
+          (self.max_Value):SetText(makeDotMoney(itemMaxPrice))
+          ;
+          (self.minPrice_Value):SetText(makeDotMoney(itemMinPrice))
+          local highAndLowAvgPrice = (masterInfo:getMaxPrice() + masterInfo:getMinPrice()) / toInt64(0, 2)
+          if toInt64(0, 0) < recentPrice then
+            (self.priceEdit):SetEditText(tostring(makeDotMoney(recentPrice)), true)
+          end
+          self._averagePrice = highAndLowAvgPrice
+          if itemMaxPrice < recentPrice or recentPrice < itemMinPrice then
+            (self.priceEdit):SetEditText(tostring(makeDotMoney(highAndLowAvgPrice)), true)
+          end
+        end
+      end
     end
   end
 end
@@ -192,51 +206,65 @@ ItemMarketRegistItem.RegistDO = function(self)
         return 
       end
       local regionInfoWrapper = getRegionInfoWrapper(regionInfo:getAffiliatedTownRegionKey())
-      local regionKey = getCurrentWaypointKey()
-      local warehouseWrapper = warehouse_get(regionKey)
-      itemWrapper = warehouseWrapper:getItem(self._invenSlotNo)
-    end
-  end
-  do
-    if itemWrapper == nil then
-      _PA_ASSERT(false, "itemWrapper 없습니다. 비정상입니다.")
-      return 
-    end
-    local itemSS = itemWrapper:getStaticStatus()
-    local masterInfo = getItemMarketMasterByItemEnchantKey(((itemSS:get())._key):get())
-    if masterInfo:getMaxPrice() < pricePerOne or pricePerOne < masterInfo:getMinPrice() then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_ERRORPRICE_ACK"))
-      return 
-    end
-    local doBroadCast = requestDoBroadcastRegister(pricePerOne)
-    if toInt64(0, 0) < pricePerOne then
-      local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_MESSAGEBOX_ALERT")
-      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_CANCELITEM_MSGBOX")
-      local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = ItemMarketItemSet_RegistDo_FromDoBroadcast, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-      ;
-      (MessageBox.showMessageBox)(messageBoxData, "top")
-      return 
-    end
-    do
-      if itemWrapper:isCash() then
-        PaymentPassword(ItemMarketItemSet_RegistDo_FromPaymentPassword)
-      else
-        if self._isByMaid then
-          local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
-          if regionInfo == nil then
+      local wayKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
+      if ToClient_IsAccessibleRegionKey(regionInfo:getAffiliatedTownRegionKey()) == false then
+        local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
+        local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
+        if newRegionInfo == nil then
+          return 
+        end
+        wayKey = (newRegionInfo:get())._waypointKey
+        if wayKey == 0 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+          return 
+        end
+      end
+      do
+        do
+          local warehouseWrapper = warehouse_get(wayKey)
+          itemWrapper = warehouseWrapper:getItem(self._invenSlotNo)
+          if itemWrapper == nil then
+            _PA_ASSERT(false, "itemWrapper 없습니다. 비정상입니다.")
             return 
           end
-          if checkMaid_SubmitMarket(true) then
-            requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
-          else
-            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_COOLTIME"))
+          local itemSS = itemWrapper:getStaticStatus()
+          local masterInfo = getItemMarketMasterByItemEnchantKey(((itemSS:get())._key):get())
+          if masterInfo:getMaxPrice() < pricePerOne or pricePerOne < masterInfo:getMinPrice() then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_ERRORPRICE_ACK"))
             return 
           end
-        else
+          local doBroadCast = requestDoBroadcastRegister(pricePerOne)
+          if toInt64(0, 0) < pricePerOne then
+            local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_MESSAGEBOX_ALERT")
+            local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_CANCELITEM_MSGBOX")
+            local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = ItemMarketItemSet_RegistDo_FromDoBroadcast, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+            ;
+            (MessageBox.showMessageBox)(messageBoxData, "top")
+            return 
+          end
           do
-            requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
-            self._priceCheck = false
-            itemMarket_afterRegist()
+            if itemWrapper:isCash() then
+              PaymentPassword(ItemMarketItemSet_RegistDo_FromPaymentPassword)
+            else
+              if self._isByMaid then
+                local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
+                if regionInfo == nil then
+                  return 
+                end
+                if checkMaid_SubmitMarket(true) then
+                  requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+                else
+                  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_COOLTIME"))
+                  return 
+                end
+              else
+                do
+                  requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+                  self._priceCheck = false
+                  itemMarket_afterRegist()
+                end
+              end
+            end
           end
         end
       end
@@ -277,7 +305,7 @@ ItemMarketItemSet_RegistDo_FromDoBroadcast = function()
         return 
       end
       local regionInfoWrapper = getRegionInfoWrapper(regionInfo:getAffiliatedTownRegionKey())
-      local regionKey = getCurrentWaypointKey()
+      local regionKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
       local warehouseWrapper = warehouse_get(regionKey)
       itemWrapper = warehouseWrapper:getItem(self._invenSlotNo)
     end
@@ -434,7 +462,7 @@ HandleClicked_ItemMarketRegistItem_SellPriceMinOrMax = function(index)
         return 
       end
       local regionInfoWrapper = getRegionInfoWrapper(regionInfo:getAffiliatedTownRegionKey())
-      local regionKey = getCurrentWaypointKey()
+      local regionKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
       local warehouseWrapper = warehouse_get(regionKey)
       itemWrapper = warehouseWrapper:getItem(self._invenSlotNo)
     end
@@ -665,67 +693,81 @@ FGlobal_ItemMarketRegistItemFromInventory = function(s64_count, slotNo, inventor
         return 
       end
       local regionInfoWrapper = getRegionInfoWrapper(regionInfo:getAffiliatedTownRegionKey())
-      local regionKey = getCurrentWaypointKey()
-      local warehouseWrapper = warehouse_get(regionKey)
-      itemWrapper = warehouseWrapper:getItem(slotNo)
-    end
-  end
-  do
-    if itemWrapper == nil then
-      _PA_ASSERT(false, "itemWrapper 없습니다. 비정상입니다.")
-      return 
-    end
-    local itemSS = itemWrapper:getStaticStatus()
-    local summaryInfo = getItemMarketSummaryInClientByItemEnchantKey(((itemSS:get())._key):get())
-    if summaryInfo == nil then
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_VENDINGMACHINE_REGISTERITEM_MESSAGE_1"))
-      return 
-    end
-    local iconPath = itemSS:getIconPath()
-    ;
-    (self.itemSlot):setItemByStaticStatus(itemWrapper:getStaticStatus(), Int64toInt32(s64_count))
-    local nameColorGrade = (itemSS:getGradeType())
-    local nameColor = nil
-    if nameColorGrade == 0 then
-      nameColor = UI_color.C_FFEFEFEF
-    else
-      if nameColorGrade == 1 then
-        nameColor = 4284350320
-      else
-        if nameColorGrade == 2 then
-          nameColor = 4283144191
-        else
-          if nameColorGrade == 3 then
-            nameColor = 4294953010
+      local wayKey = (regionInfoWrapper:getPlantKeyByWaypointKey()):getWaypointKey()
+      if ToClient_IsAccessibleRegionKey(regionInfo:getAffiliatedTownRegionKey()) == false then
+        local plantWayKey = ToClient_GetOtherRegionKey_NeerByTownRegionKey()
+        local newRegionInfo = ToClient_getRegionInfoWrapperByWaypoint(plantWayKey)
+        if newRegionInfo == nil then
+          return 
+        end
+        wayKey = (newRegionInfo:get())._waypointKey
+        if wayKey == 0 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANTFIND_WAREHOUSE_INTERRITORY"))
+          return 
+        end
+      end
+      do
+        do
+          local warehouseWrapper = warehouse_get(wayKey)
+          itemWrapper = warehouseWrapper:getItem(slotNo)
+          if itemWrapper == nil then
+            _PA_ASSERT(false, "itemWrapper 없습니다. 비정상입니다.")
+            return 
+          end
+          local itemSS = itemWrapper:getStaticStatus()
+          local summaryInfo = getItemMarketSummaryInClientByItemEnchantKey(((itemSS:get())._key):get())
+          if summaryInfo == nil then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_VENDINGMACHINE_REGISTERITEM_MESSAGE_1"))
+            return 
+          end
+          local iconPath = itemSS:getIconPath()
+          ;
+          (self.itemSlot):setItemByStaticStatus(itemWrapper:getStaticStatus(), Int64toInt32(s64_count))
+          local nameColorGrade = (itemSS:getGradeType())
+          local nameColor = nil
+          if nameColorGrade == 0 then
+            nameColor = UI_color.C_FFEFEFEF
           else
-            if nameColorGrade == 4 then
-              nameColor = 4294929408
+            if nameColorGrade == 1 then
+              nameColor = 4284350320
             else
-              nameColor = UI_color.C_FFFFFFFF
+              if nameColorGrade == 2 then
+                nameColor = 4283144191
+              else
+                if nameColorGrade == 3 then
+                  nameColor = 4294953010
+                else
+                  if nameColorGrade == 4 then
+                    nameColor = 4294929408
+                  else
+                    nameColor = UI_color.C_FFFFFFFF
+                  end
+                end
+              end
             end
           end
+          ;
+          (self.itemName):SetFontColor(nameColor)
+          ;
+          (self.itemName):SetTextMode(UI_TM.eTextMode_AutoWrap)
+          local enchantLevel = ((itemSS:get())._key):getEnchantLevel()
+          if itemSS:getItemType() == 1 and enchantLevel > 15 then
+            (self.itemName):SetText(HighEnchantLevel_ReplaceString(enchantLevel) .. " " .. itemSS:getName())
+          else
+            if enchantLevel > 0 and (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSS:getItemClassify() then
+              (self.itemName):SetText(HighEnchantLevel_ReplaceString(enchantLevel + 15) .. " " .. itemSS:getName())
+            else
+              ;
+              (self.itemName):SetText(itemSS:getName())
+            end
+          end
+          self._invenWhereType = inventoryType
+          self._invenSlotNo = slotNo
+          self._registerCount = Int64toInt32(s64_count)
+          self:Update()
         end
       end
     end
-    ;
-    (self.itemName):SetFontColor(nameColor)
-    ;
-    (self.itemName):SetTextMode(UI_TM.eTextMode_AutoWrap)
-    local enchantLevel = ((itemSS:get())._key):getEnchantLevel()
-    if itemSS:getItemType() == 1 and enchantLevel > 15 then
-      (self.itemName):SetText(HighEnchantLevel_ReplaceString(enchantLevel) .. " " .. itemSS:getName())
-    else
-      if enchantLevel > 0 and (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSS:getItemClassify() then
-        (self.itemName):SetText(HighEnchantLevel_ReplaceString(enchantLevel + 15) .. " " .. itemSS:getName())
-      else
-        ;
-        (self.itemName):SetText(itemSS:getName())
-      end
-    end
-    self._invenWhereType = inventoryType
-    self._invenSlotNo = slotNo
-    self._registerCount = Int64toInt32(s64_count)
-    self:Update()
   end
 end
 

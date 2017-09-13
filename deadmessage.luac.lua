@@ -833,11 +833,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
               if attackerActorProxyWrapper ~= nil then
                 local isAttackPlayer = (attackerActorProxyWrapper:get()):isPlayer()
                 if isAttackPlayer then
-                  if ToClient_isDontPvPDecreaseTendency() then
-                    _deadQuestion:SetShow(false)
-                  else
-                    _deadQuestion:SetShow(true)
-                  end
+                  _deadQuestion:SetShow(true)
                 else
                   _deadQuestion:SetShow(false)
                 end
@@ -1244,17 +1240,17 @@ deadMessage_ButtonPushed_Immediate = function()
   local isGuildBattle = ToClient_getJoinGuildBattle()
   local freeRevivalLevel = FromClient_getFreeRevivalLevel()
   local isFreeArea = (regionInfo:get()):isFreeRevivalArea()
-  if isArena == true then
-    deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+  if isGuildBattle then
+    deadMessage_Revival(enRespawnType.respawnType_GuildBatle, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
   else
-    if isFreeArea and (selfProxy:get()):getLevel() <= freeRevivalLevel then
+    if isArena == true then
       deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
     else
-      if isPvPMatchRevive == true or isCompetition == true then
-        deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), isPvPMatchRevive, toInt64(0, 0))
+      if isFreeArea and (selfProxy:get()):getLevel() <= freeRevivalLevel then
+        deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
       else
-        if isGuildBattle then
-          deadMessage_Revival(enRespawnType.respawnType_GuildBatle, 255, 0, (getSelfPlayer()):getRegionKey(), false, toInt64(0, 0))
+        if isPvPMatchRevive == true or isCompetition == true then
+          deadMessage_Revival(enRespawnType.respawnType_Immediate, 0, (CppEnums.ItemWhereType).eCashInventory, (getSelfPlayer()):getRegionKey(), isPvPMatchRevive, toInt64(0, 0))
         else
           if revivalItemCount == 1 then
             HandleClicked_Apply_CashRevivalItem(enRespawnType.respawnType_Immediate)
@@ -1418,7 +1414,11 @@ deadMessage_PkPenalty_Tooltip = function(isShow)
   end
   local name, desc, control = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_TITLE")
-  desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_DESC")
+  if isGameTypeKorea() or isGameTypeJapan() then
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_DESC")
+  else
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_PK_PENALTY_TOOLTIP_DESC_OTHER")
+  end
   control = _deadQuestion
   TooltipSimple_Show(control, name, desc)
 end

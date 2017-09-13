@@ -142,9 +142,9 @@ npcShop.createSlot = function(self)
     local enable = (_const.s64_0 ~= s64_stackCount and not disable)
     local hasIntimacy = itemStaticWrapper:hasMenatlCardKey()
     ;
-    (self.button):SetText(itemStaticWrapper:getName())
+    (self.button):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
     ;
-    (self.button):SetTextMode(UI_TM.eTextMode_AutoWrap)
+    (self.button):SetText(itemStaticWrapper:getName())
     if enable then
       (self.button):SetFontColor(UI_color.C_FFFFFFFF)
     else
@@ -389,11 +389,11 @@ npcShop.controlInit = function(self)
   else
     do
       if self._isCamping then
-        ((self.radioButtons)[self.tabIndexSell]):SetShow(true)
+        ((self.radioButtons)[self.tabIndexSell]):SetShow(false)
         ;
-        ((self.radioButtons)[self.tabIndexRepurchase]):SetShow(true)
+        ((self.radioButtons)[self.tabIndexRepurchase]):SetShow(false)
         ;
-        ((self.radioButtons)[self.tabIndexBuy]):SetPosX(npcShop_BuyBtn_PosX)
+        ((self.radioButtons)[self.tabIndexBuy]):SetPosX(npcShop_SellBtn_PosX)
       end
       local screenSizeX = getScreenSizeX()
       local screenSizeY = getScreenSizeY()

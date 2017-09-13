@@ -19,7 +19,7 @@ SkillEvent_SkillWindow_ControlInitialize = function()
   end
   self:initTabControl_Combat()
   self:initTabControl_AwakeningWeapon()
-  self:initTabControl_Combination()
+  self:initTabControl_Combination(true)
   ;
   (((self.slotConfig).template).effect):SetShow(false)
   ;

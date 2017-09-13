@@ -2644,6 +2644,10 @@ GlobalKeyBinder_Update = function(deltaTime)
                                             FGlobal_SavageDefenceInfo_Close()
                                             return 
                                           end
+                                          if Panel_SavageDefenceShop:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                            SavageDefenceShop_CloseByKey()
+                                            return 
+                                          end
                                           if _ChattingMacro_Process() == true then
                                             return 
                                           end

@@ -159,8 +159,20 @@ for index = 0, _maxSelectSlotCount - 1 do
   _listSelectRewardSlots[index] = slot
   Panel_Tooltip_Item_SetPosition(index, slot, "QuestReward_Select")
 end
+limitTextTooltip = function(isShow)
+  -- function num : 0_2 , upvalues : questInfoWindow_groupTitle
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name = questInfoWindow_groupTitle:GetText()
+  local control = questInfoWindow_groupTitle
+  local desc = ""
+  TooltipSimple_Show(control, name, desc)
+end
+
 FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, questGroupCount, fromQuestWidget, isRecommand, isNextQuest)
-  -- function num : 0_2 , upvalues : questInfoWindow_groupTitle, UI_color, questInfoWindow_questTitleBG, questInfoWindow_questTitle, questInfoWindow_naviButton, questInfoWindow_giveupButton, button_Giveup_QuestInfoWindow, button_CallSpirit_QuestInfoWindow, button_Navi_QuestInfoWindow, button_AutoNavi_QuestInfoWindow, questInfoWindow_questIcon, questInfoWindow_questIconBG, questInfoWindow_completeNpc, questInfoWindow_questCondition, UI_TM, questInfoWindow_questDesc
+  -- function num : 0_3 , upvalues : questInfoWindow_groupTitle, UI_color, questInfoWindow_questTitleBG, questInfoWindow_questTitle, questInfoWindow_naviButton, questInfoWindow_giveupButton, button_Giveup_QuestInfoWindow, button_CallSpirit_QuestInfoWindow, button_Navi_QuestInfoWindow, button_AutoNavi_QuestInfoWindow, questInfoWindow_questIcon, questInfoWindow_questIconBG, questInfoWindow_completeNpc, questInfoWindow_questCondition, UI_TM, questInfoWindow_questDesc
   if Panel_CheckedQuestInfo:IsUISubApp() then
     Panel_CheckedQuestInfo:CloseUISubApp()
   end
@@ -183,6 +195,7 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
   end
   local PosY = 45
   questInfoWindow_groupTitle:SetShow(true)
+  questInfoWindow_groupTitle:SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
   if groupTitle ~= "nil" then
     local tempValue = groupTitle .. " (" .. questId .. "/" .. questGroupCount .. " "
     questInfoWindow_groupTitle:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_QUESTWIDGET_QUESTINFO_GROUP_TITLE", "value", tempValue))
@@ -192,6 +205,10 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
         questInfoWindow_groupTitle:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_QUESTWINDOW_TAB_RECOMMAND"))
       else
         questInfoWindow_groupTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTWIDGET_QUESTINFO_NORMAL_TITLE"))
+      end
+      if questInfoWindow_groupTitle:GetSizeX() < questInfoWindow_groupTitle:GetTextSizeX() + 20 then
+        questInfoWindow_groupTitle:addInputEvent("Mouse_On", "limitTextTooltip(true)")
+        questInfoWindow_groupTitle:addInputEvent("Mouse_Out", "limitTextTooltip(false)")
       end
       questInfoWindow_groupTitle:SetPosY(PosY)
       questInfoWindow_groupTitle:SetFontColor(UI_color.C_FFEEBA3E)
@@ -340,7 +357,7 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
 end
 
 HandleClicked_CallSpirit = function()
-  -- function num : 0_3
+  -- function num : 0_4
   if not IsSelfPlayerWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_SUMMON_BLACKSPIRIT"))
     return 
@@ -350,7 +367,7 @@ HandleClicked_CallSpirit = function()
 end
 
 FGlobal_QuestInfoDetail_Close = function()
-  -- function num : 0_4 , upvalues : expTooltip
+  -- function num : 0_5 , upvalues : expTooltip
   if Panel_CheckedQuestInfo:IsUISubApp() then
     Panel_CheckedQuestInfo:CloseUISubApp()
   end
@@ -362,13 +379,13 @@ FGlobal_QuestInfoDetail_Close = function()
 end
 
 FGlobal_QuestInfoDetail_ResetInfo = function()
-  -- function num : 0_5
+  -- function num : 0_6
   _questInfoDetailGroupId = 0
   _questInfoDetailQuestId = 0
 end
 
 _QuestDetail_ShowReward = function(questInfo, PosY)
-  -- function num : 0_6 , upvalues : _baseReward, _selectReward, reward_TitleBG, reward_Title, baseRewardBG, lineHeight, baseRewardTitle, baseSlotBG0, baseSlotBG1, baseSlotBG2, baseSlotBG3, baseSlotBG4, baseSlotBG5, baseSlotBG6, baseSlotBG7, baseSlotBG8, baseSlotBG9, baseSlotBG10, baseSlotBG11, baseSlot0, baseSlot1, baseSlot2, baseSlot3, baseSlot4, baseSlot5, baseSlot6, baseSlot7, baseSlot8, baseSlot9, baseSlot10, baseSlot11, lineWidth, selectRewardTitle, selectRewardBG, selectSlotBG0, selectSlotBG1, selectSlotBG2, selectSlotBG3, selectSlotBG4, selectSlotBG5, selectSlot0, selectSlot1, selectSlot2, selectSlot3, selectSlot4, selectSlot5
+  -- function num : 0_7 , upvalues : _baseReward, _selectReward, reward_TitleBG, reward_Title, baseRewardBG, lineHeight, baseRewardTitle, baseSlotBG0, baseSlotBG1, baseSlotBG2, baseSlotBG3, baseSlotBG4, baseSlotBG5, baseSlotBG6, baseSlotBG7, baseSlotBG8, baseSlotBG9, baseSlotBG10, baseSlotBG11, baseSlot0, baseSlot1, baseSlot2, baseSlot3, baseSlot4, baseSlot5, baseSlot6, baseSlot7, baseSlot8, baseSlot9, baseSlot10, baseSlot11, lineWidth, selectRewardTitle, selectRewardBG, selectSlotBG0, selectSlotBG1, selectSlotBG2, selectSlotBG3, selectSlotBG4, selectSlotBG5, selectSlot0, selectSlot1, selectSlot2, selectSlot3, selectSlot4, selectSlot5
   local baseCount = questInfo:getQuestBaseRewardCount()
   local selectCount = questInfo:getQuestSelectRewardCount()
   _baseReward = {}
@@ -532,7 +549,7 @@ _QuestDetail_ShowReward = function(questInfo, PosY)
 end
 
 rewardTooltip_ForQuestWidgetInfo = function(type, show, questtype, index, mentalCardKey)
-  -- function num : 0_7 , upvalues : expTooltip, _uiBackBaseReward, _uiButtonSelectRewardSlots
+  -- function num : 0_8 , upvalues : expTooltip, _uiBackBaseReward, _uiButtonSelectRewardSlots
   if show == true then
     if type == "Exp" then
       expTooltip:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUESTREWARD_SIMPLE_TOOLTIP_EXP"))
@@ -571,7 +588,7 @@ rewardTooltip_ForQuestWidgetInfo = function(type, show, questtype, index, mental
 end
 
 local setReward = function(uiSlot, reward, index, questType)
-  -- function num : 0_8 , upvalues : UI_RewardType
+  -- function num : 0_9 , upvalues : UI_RewardType
   uiSlot._type = reward._type
   if UI_RewardType.RewardType_Exp == reward._type then
     (uiSlot.count):SetText("")
@@ -650,7 +667,7 @@ local setReward = function(uiSlot, reward, index, questType)
 end
 
 _questWidget_SetRewardList = function(baseReward, selectReward)
-  -- function num : 0_9 , upvalues : _selectRewardCount, _maxBaseSlotCount, setReward, _listBaseRewardSlots, _uiBackBaseReward, _maxSelectSlotCount, _listSelectRewardSlots, _uiButtonSelectRewardSlots
+  -- function num : 0_10 , upvalues : _selectRewardCount, _maxBaseSlotCount, setReward, _listBaseRewardSlots, _uiBackBaseReward, _maxSelectSlotCount, _listSelectRewardSlots, _uiButtonSelectRewardSlots
   _baseRewardCount = #baseReward
   _selectRewardCount = #selectReward
   for index = 0, _maxBaseSlotCount - 1 do

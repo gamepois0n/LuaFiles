@@ -115,7 +115,7 @@ nodeStableInfo.update = function(self)
   ;
   (self._Info_Grade_Value):SetShow(false)
   Panel_NodeStableInfo:SetSize(Panel_NodeStableInfo:GetSizeX(), 415)
-  if (CppEnums.VehicleType).Type_Horse == servantInfo:getVehicleType() then
+  if (CppEnums.VehicleType).Type_Horse == servantInfo:getVehicleType() or (CppEnums.VehicleType).Type_RidableBabyElephant == servantInfo:getVehicleType() then
     (self._SkillTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_NODESTABLEINFO_SKILL"))
     ;
     (self._Info_Grade_Value):SetShow(true)

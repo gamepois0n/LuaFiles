@@ -118,8 +118,8 @@ AutoState_WaitForPressButton.update = function(self, deltaTime)
     do
       if uiQuestInfo:isjustMeetNpc() == true then
         local meetToggle = ToClient_checkNearMeetNPC()
-        if _meetToggle ~= meetToggle then
-          _meetToggle = meetToggle
+        if self._meetToggle ~= meetToggle then
+          self._meetToggle = meetToggle
           return 
         end
       end
@@ -226,6 +226,7 @@ AutoState_WaitForPressButton.checkChangeState = function(self)
         self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_MOVING)
         self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
       end
+      _PA_LOG("�\128규보", "self._subState : " .. tostring(self._subState))
       -- DECOMPILER ERROR: 14 unprocessed JMP targets
     end
   end

@@ -6,7 +6,7 @@
 local IM = CppEnums.EProcessorInputMode
 local UI_TM = CppEnums.TextMode
 Panel_Window_Arsha:SetShow(false)
-local arshaPvP = {btn_Close = (UI.getChildControl)(Panel_Window_Arsha, "Button_Close"), arshaManagementTitle = (UI.getChildControl)(Panel_Window_Arsha, "StaticText_ArshaManagementTitle"), img_NotAdmin = (UI.getChildControl)(Panel_Window_Arsha, "Static_NotAdminBG"), list2_ArshaWait = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaWait"), list2_ArshaObserver = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaObserver"), roundWing = (UI.getChildControl)(Panel_Window_Arsha, "Static_RoundWing"), freeWing = (UI.getChildControl)(Panel_Window_Arsha, "Static_FreeWing"), list2_ArshaTeamA = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaTeamA"), list2_ArshaTeamB = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaTeamB"), btn_AllResurrection = (UI.getChildControl)(Panel_Window_Arsha, "Button_AllResurrection"), btn_InviteList = (UI.getChildControl)(Panel_Window_Arsha, "Button_InviteList"), btn_GoA = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoA"), btn_GoB = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoB"), btn_GameStart = (UI.getChildControl)(Panel_Window_Arsha, "Button_GameStart"), btn_GameStop = (UI.getChildControl)(Panel_Window_Arsha, "Button_GameStop"), btn_GoWait = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoWait"), btn_Exit = (UI.getChildControl)(Panel_Window_Arsha, "Button_Exit"), rdo_SelectWait = (UI.getChildControl)(Panel_Window_Arsha, "Radiobutton_SelectWait"), rdo_SelectWatch = (UI.getChildControl)(Panel_Window_Arsha, "Radiobutton_SelectWatch"), txt_bottomDesc = (UI.getChildControl)(Panel_Window_Arsha, "StaticText_BottomDesc"), btn_Kick_A = (UI.getChildControl)(Panel_Window_Arsha, "Button_Kick_A"), btn_Kick_B = (UI.getChildControl)(Panel_Window_Arsha, "Button_Kick_B"), _isOpen = false, _targetScore = 3, _timeLimit = 300, _levelLimit = 58, _maxPartyMemberCount = 5, _maxWaitTime = 20}
+local arshaPvP = {btn_Close = (UI.getChildControl)(Panel_Window_Arsha, "Button_Close"), arshaManagementTitle = (UI.getChildControl)(Panel_Window_Arsha, "StaticText_ArshaManagementTitle"), img_NotAdmin = (UI.getChildControl)(Panel_Window_Arsha, "Static_NotAdminBG"), list2_ArshaWait = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaWait"), list2_ArshaObserver = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaObserver"), roundWing = (UI.getChildControl)(Panel_Window_Arsha, "Static_RoundWing"), freeWing = (UI.getChildControl)(Panel_Window_Arsha, "Static_FreeWing"), list2_ArshaTeamA = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaTeamA"), list2_ArshaTeamB = (UI.getChildControl)(Panel_Window_Arsha, "List2_ArshaTeamB"), btn_AllResurrection = (UI.getChildControl)(Panel_Window_Arsha, "Button_AllResurrection"), btn_InviteList = (UI.getChildControl)(Panel_Window_Arsha, "Button_InviteList"), btn_GoA = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoA"), btn_GoB = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoB"), btn_GameStart = (UI.getChildControl)(Panel_Window_Arsha, "Button_GameStart"), btn_GameStop = (UI.getChildControl)(Panel_Window_Arsha, "Button_GameStop"), btn_GoWait = (UI.getChildControl)(Panel_Window_Arsha, "Button_GoWait"), btn_Exit = (UI.getChildControl)(Panel_Window_Arsha, "Button_Exit"), rdo_SelectWait = (UI.getChildControl)(Panel_Window_Arsha, "Radiobutton_SelectWait"), rdo_SelectWatch = (UI.getChildControl)(Panel_Window_Arsha, "Radiobutton_SelectWatch"), txt_bottomDesc = (UI.getChildControl)(Panel_Window_Arsha, "StaticText_BottomDesc"), btn_Kick_A = (UI.getChildControl)(Panel_Window_Arsha, "Button_Kick_A"), btn_Kick_B = (UI.getChildControl)(Panel_Window_Arsha, "Button_Kick_B"), _isOpen = false, _targetScore = 3, _timeLimit = ToClient_CompetitionMatchTimeLimit(), _levelLimit = 58, _maxPartyMemberCount = 5, _maxWaitTime = 20}
 local checkPopUp = (UI.getChildControl)(Panel_Window_Arsha, "CheckButton_PopUp")
 local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
 checkPopUp:SetShow(false)
@@ -32,7 +32,6 @@ arshaPvP.txt_PartyMemberLimitTItle = (UI.getChildControl)(arshaPvP.arshaManageme
 arshaPvP.txt_PartyMemberLimitCount = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "StaticText_PartyMemberLimitCount")
 arshaPvP.btn_PartyMemberLimit = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Button_PartyMemberLimit")
 arshaPvP.chk_WatchMemberInvite = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Checkbox_WatchMemberInvite")
-arshaPvP.chk_Assistant = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Checkbox_SubMasterInvite")
 arshaPvP.edit_InviteMemberEdit = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Edit_CharacterName")
 arshaPvP.btn_Invite = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Button_Invite")
 arshaPvP.btn_NameChange = (UI.getChildControl)(arshaPvP.arshaManagementTitle, "Button_ChangeTeamName")
@@ -223,10 +222,6 @@ ArshaPvP_init = function()
   (self.chk_WatchMemberInvite):addInputEvent("Mouse_On", "ArshaPvP_Simpletooltip(true, " .. 7 .. ")")
   ;
   (self.chk_WatchMemberInvite):addInputEvent("Mouse_Out", "ArshaPvP_Simpletooltip()")
-  ;
-  (self.chk_Assistant):addInputEvent("Mouse_On", "ArshaPvP_Simpletooltip(true, " .. 8 .. ")")
-  ;
-  (self.chk_Assistant):addInputEvent("Mouse_Out", "ArshaPvP_Simpletooltip()")
   ;
   (self.btn_AllResurrection):addInputEvent("Mouse_On", "ArshaPvP_Simpletooltip(true, " .. 9 .. ")")
   ;
@@ -960,12 +955,11 @@ HandleClicked_ArshaPvP_Summon = function()
   local self = arshaPvP
   local characterName = (self.edit_InviteMemberEdit):GetEditText()
   local isObserver = (self.chk_WatchMemberInvite):IsCheck()
-  local isAssistant = (self.chk_Assistant):IsCheck()
   if characterName == nil or characterName == "" then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SUMMON_ACK"))
     return 
   end
-  ToClient_RequestInviteCompetition(characterName, isObserver, isAssistant)
+  ToClient_RequestInviteCompetition(characterName, isObserver)
   ClearFocusEdit()
 end
 
@@ -1350,46 +1344,40 @@ ArshaPvP_Simpletooltip = function(isShow, tipType)
                   desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WATCHINVITE_DESC")
                   control = self.chk_WatchMemberInvite
                 else
-                  if tipType == 8 then
-                    name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_SUBMASTER_NAME")
-                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_SUBMASTER_DESC")
-                    control = self.chk_Assistant
+                  if tipType == 9 then
+                    name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_RESURRECTION_NAME")
+                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_RESURRECTION_DESC")
+                    control = self.btn_AllResurrection
                   else
-                    if tipType == 9 then
-                      name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_RESURRECTION_NAME")
-                      desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_RESURRECTION_DESC")
-                      control = self.btn_AllResurrection
+                    if tipType == 10 then
+                      name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_INVITELIST_NAME")
+                      desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_INVITELIST_DESC")
+                      control = self.btn_InviteList
                     else
-                      if tipType == 10 then
-                        name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_INVITELIST_NAME")
-                        desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_INVITELIST_DESC")
-                        control = self.btn_InviteList
+                      if tipType == 11 then
+                        name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTART_NAME")
+                        desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTART_DESC")
+                        control = self.btn_GameStart
                       else
-                        if tipType == 11 then
-                          name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTART_NAME")
-                          desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTART_DESC")
-                          control = self.btn_GameStart
+                        if tipType == 12 then
+                          name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTOP_NAME")
+                          desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTOP_DESC")
+                          control = self.btn_GameStop
                         else
-                          if tipType == 12 then
-                            name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTOP_NAME")
-                            desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_GAMESTOP_DESC")
-                            control = self.btn_GameStop
+                          if tipType == 13 then
+                            name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_EXIT_NAME")
+                            desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_EXIT_DESC")
+                            control = self.btn_Exit
                           else
-                            if tipType == 13 then
-                              name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_EXIT_NAME")
-                              desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_EXIT_DESC")
-                              control = self.btn_Exit
+                            if tipType == 14 then
+                              name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WAIT_NAME")
+                              desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WAIT_DESC")
+                              control = self.rdo_SelectWait
                             else
-                              if tipType == 14 then
-                                name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WAIT_NAME")
-                                desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WAIT_DESC")
-                                control = self.rdo_SelectWait
-                              else
-                                if tipType == 15 then
-                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WATCH_NAME")
-                                  desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WATCH_DESC")
-                                  control = self.rdo_SelectWatch
-                                end
+                              if tipType == 15 then
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WATCH_NAME")
+                                desc = PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_SIMPLETOOLTIP_WATCH_DESC")
+                                control = self.rdo_SelectWatch
                               end
                             end
                           end
@@ -1448,8 +1436,6 @@ FGlobal_ArshaPvP_Open = function()
   ;
   (self.chk_WatchMemberInvite):SetIgnore(false)
   ;
-  (self.chk_Assistant):SetIgnore(false)
-  ;
   (self.rdo_RoundMode):SetMonoTone(false)
   ;
   (self.rdo_FreeMode):SetMonoTone(false)
@@ -1475,8 +1461,6 @@ FGlobal_ArshaPvP_Open = function()
   (self.btn_PartyMemberLimit):SetMonoTone(false)
   ;
   (self.chk_WatchMemberInvite):SetMonoTone(false)
-  ;
-  (self.chk_Assistant):SetMonoTone(false)
   if isHost then
     (self.arshaManagementTitle):SetShow(true)
     ;
@@ -1511,8 +1495,6 @@ FGlobal_ArshaPvP_Open = function()
       ;
       (self.btn_PartyMemberLimit):SetIgnore(true)
       ;
-      (self.chk_Assistant):SetIgnore(true)
-      ;
       (self.rdo_RoundMode):SetMonoTone(true)
       ;
       (self.rdo_FreeMode):SetMonoTone(true)
@@ -1536,8 +1518,6 @@ FGlobal_ArshaPvP_Open = function()
       (self.txt_PartyMemberLimitCount):SetMonoTone(true)
       ;
       (self.btn_PartyMemberLimit):SetMonoTone(true)
-      ;
-      (self.chk_Assistant):SetMonoTone(true)
     else
       ;
       (self.arshaManagementTitle):SetShow(false)
@@ -1905,6 +1885,19 @@ FromClient_ChangeTeamName = function()
   ArshaPvP_SelectedUpdate_Round()
   ArshaPvP_Widget_Init()
   ArshaPvP_Widget_Update()
+end
+
+getArshaPvpOption = function()
+  -- function num : 0_63 , upvalues : arshaPvP
+  local self = arshaPvP
+  local option = {}
+  option._isOpen = self._isOpen
+  option._timeLimit = self._timeLimit
+  option._targetScore = self._targetScore
+  option._levelLimit = self._levelLimit
+  option._maxPartyMemberCount = self._maxPartyMemberCount
+  option._maxWaitTime = self._maxWaitTime
+  return option
 end
 
 ArshaPvP_init()

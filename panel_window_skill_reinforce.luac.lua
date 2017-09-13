@@ -371,27 +371,51 @@ OptionListControlCreate = function(content, key)
   local self = skillReinforce
   local skillSSW = getSkillStaticStatus(self._currentSkillNo, 1)
   local activeSkillSS = skillSSW:getActiveSkillStatus()
+  optionListDesc:SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
   if activeSkillSS ~= nil then
     local optionCount = activeSkillSS:getSkillAwakenInfoCount()
     local count = 0
     local _key = Int64toInt32(key)
     for index = 0, optionCount - 1 do
-      -- DECOMPILER ERROR at PC40: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC45: Unhandled construct in 'MakeBoolean' P1
 
       if self._currentOptionIndex2 == nil and index == _key then
         optionListDesc:SetText(tostring(activeSkillSS:getSkillAwakenDescription(index)))
         optionListBg:addInputEvent("Mouse_LUp", "skillReinforce_OptionSet(" .. index .. ")")
+        if optionListDesc:GetSizeX() < optionListDesc:GetTextSizeX() + 10 then
+          optionListBg:addInputEvent("Mouse_On", "limitTextOptionListTooltip(true, " .. index .. ")")
+          optionListBg:addInputEvent("Mouse_Out", "limitTextOptionListTooltip(false, " .. index .. ")")
+        end
       end
       if index == _key and self._currentOptionIndex2 ~= _key then
         optionListDesc:SetText(tostring(activeSkillSS:getSkillAwakenDescription(index)))
         optionListBg:addInputEvent("Mouse_LUp", "skillReinforce_OptionSet(" .. index .. ")")
+        if optionListDesc:GetSizeX() < optionListDesc:GetTextSizeX() + 10 then
+          optionListBg:addInputEvent("Mouse_On", "limitTextOptionListTooltip(true, " .. index .. ")")
+          optionListBg:addInputEvent("Mouse_Out", "limitTextOptionListTooltip(false, " .. index .. ")")
+        end
       end
     end
   end
 end
 
-skillReinforce_OptionSet = function(index)
+limitTextOptionListTooltip = function(isShow, index)
   -- function num : 0_11 , upvalues : skillReinforce
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = skillReinforce
+  local skillSSW = getSkillStaticStatus(self._currentSkillNo, 1)
+  local activeSkillSS = skillSSW:getActiveSkillStatus()
+  local name = tostring(activeSkillSS:getSkillAwakenDescription(index))
+  local control = Panel_SkillReinforce
+  local desc = ""
+  TooltipSimple_Show(control, name, desc)
+end
+
+skillReinforce_OptionSet = function(index)
+  -- function num : 0_12 , upvalues : skillReinforce
   local self = skillReinforce
   ;
   (self.btnOptionListShow):SetShow(false)
@@ -408,10 +432,11 @@ skillReinforce_OptionSet = function(index)
   (self.optionListDesc):SetText(tostring(activeSkillSS:getSkillAwakenDescription(index)))
   activeSkillSS:getSkillAwakenDescription(index)
   Panel_SkillTooltip_Hide()
+  TooltipSimple_Hide()
 end
 
 SkillReinforce_OptionList2_Show = function()
-  -- function num : 0_12 , upvalues : skillReinforce
+  -- function num : 0_13 , upvalues : skillReinforce
   local self = skillReinforce
   if self._currentSkillNo == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTSKILL_2"))
@@ -443,7 +468,7 @@ SkillReinforce_OptionList2_Show = function()
 end
 
 OptionListControlCreate2 = function(content, key)
-  -- function num : 0_13 , upvalues : skillReinforce
+  -- function num : 0_14 , upvalues : skillReinforce
   local optionListBg = (UI.getChildControl)(content, "List2_OptionList_Bg")
   local optionListDesc = (UI.getChildControl)(content, "List2_OptionList_Desc")
   local self = skillReinforce
@@ -465,7 +490,7 @@ OptionListControlCreate2 = function(content, key)
 end
 
 skillReinforce_OptionSet2 = function(index)
-  -- function num : 0_14 , upvalues : skillReinforce
+  -- function num : 0_15 , upvalues : skillReinforce
   local self = skillReinforce
   ;
   (self.btnOptionListShow2):SetShow(false)
@@ -486,7 +511,7 @@ end
 
 local _isAddOption = false
 SkillReinforce_Do = function(isAddOption)
-  -- function num : 0_15 , upvalues : skillReinforce, _isAddOption
+  -- function num : 0_16 , upvalues : skillReinforce, _isAddOption
   if skillReinforce._currentSkillIndex == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SKILLREINFORCE_SELECTSKILL"))
     return 
@@ -504,7 +529,7 @@ SkillReinforce_Do = function(isAddOption)
 end
 
 SkillReinforce_Doit = function()
-  -- function num : 0_16 , upvalues : _isAddOption, skillReinforce
+  -- function num : 0_17 , upvalues : _isAddOption, skillReinforce
   local haveOptionIndex = -1
   local skillSSW = nil
   if _isAddOption then
@@ -530,7 +555,7 @@ SkillReinforce_Doit = function()
 end
 
 Panel_SkillReinforce_Show = function(skillType, skillNo, skillIndex)
-  -- function num : 0_17 , upvalues : UI_BUFFTYPE, skillReinforce
+  -- function num : 0_18 , upvalues : UI_BUFFTYPE, skillReinforce
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -571,7 +596,7 @@ Panel_SkillReinforce_Show = function(skillType, skillNo, skillIndex)
 end
 
 Panel_SkillReinforce_Change = function(skillType, skillNo, skillIndex)
-  -- function num : 0_18 , upvalues : UI_BUFFTYPE, skillReinforce
+  -- function num : 0_19 , upvalues : UI_BUFFTYPE, skillReinforce
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -598,7 +623,7 @@ Panel_SkillReinforce_Change = function(skillType, skillNo, skillIndex)
 end
 
 Panel_SkillReinforce_Open = function()
-  -- function num : 0_19 , upvalues : skillReinforce, _isAddOption, currentTimer, currentRate, isStartAwaken
+  -- function num : 0_20 , upvalues : skillReinforce, _isAddOption, currentTimer, currentRate, isStartAwaken
   Panel_Window_ReinforceSkill_Close()
   Panel_SkillReinforce:SetShow(true, true)
   ;
@@ -643,14 +668,14 @@ Panel_SkillReinforce_Open = function()
 end
 
 Panel_SkillReinforce_Close = function()
-  -- function num : 0_20
+  -- function num : 0_21
   Panel_SkillReinforce:SetShow(false, true)
   Panel_SkillTooltip_Hide()
   TooltipSimple_Hide()
 end
 
 FromClient_SuccessSkillReinforce = function(skillNo, level)
-  -- function num : 0_21 , upvalues : result
+  -- function num : 0_22 , upvalues : result
   if not ToClient_IsContentsGroupOpen("203") then
     return 
   end
@@ -695,7 +720,7 @@ FromClient_SuccessSkillReinforce = function(skillNo, level)
 end
 
 Reinforcable_SkillCount = function(_type)
-  -- function num : 0_22
+  -- function num : 0_23
   local reinforcableCount = ToClient_GetAwakeningListCount()
   if reinforcableCount > 0 then
     local count = 0
@@ -714,7 +739,7 @@ Reinforcable_SkillCount = function(_type)
 end
 
 animateSkillReinforceEffect = function()
-  -- function num : 0_23 , upvalues : currentTimer, isStartAwaken, skillReinforce
+  -- function num : 0_24 , upvalues : currentTimer, isStartAwaken, skillReinforce
   audioPostEvent_SystemUi(3, 10)
   currentTimer = 0
   isStartAwaken = true
@@ -739,7 +764,7 @@ animateSkillReinforceEffect = function()
 end
 
 SkillReinforce_EffectGo = function(deltaTime)
-  -- function num : 0_24 , upvalues : isStartAwaken, currentTimer, isCompleteCircular, currentRate, tmpValue, skillReinforce, isEndCircular, _endCircular
+  -- function num : 0_25 , upvalues : isStartAwaken, currentTimer, isCompleteCircular, currentRate, tmpValue, skillReinforce, isEndCircular, _endCircular
   if isStartAwaken == true and currentTimer < 3 and isCompleteCircular == false then
     currentTimer = currentTimer + deltaTime
     currentRate = currentRate + tmpValue * deltaTime
@@ -786,7 +811,7 @@ end
 
 local isResultHideTime = 0
 SkillReinforceResult_Hide = function(deltaTime)
-  -- function num : 0_25 , upvalues : isResultHideTime
+  -- function num : 0_26 , upvalues : isResultHideTime
   isResultHideTime = isResultHideTime + deltaTime
   if isResultHideTime > 5 then
     Panel_SkillAwaken_ResultOption:SetShow(false, true)
@@ -795,7 +820,7 @@ SkillReinforceResult_Hide = function(deltaTime)
 end
 
 SkillReinforce_DoInit = function()
-  -- function num : 0_26 , upvalues : skillReinforce
+  -- function num : 0_27 , upvalues : skillReinforce
   skillReinforce:Init()
 end
 

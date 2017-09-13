@@ -25,18 +25,21 @@ SocialAction_Icon_Initialize = function()
   local iconGap = 55
   local _columnCount = 0
   local _rowCount = 0
+  if socialIconCount == 0 then
+    return 
+  end
   socialActioncontent:DestroyAllChild()
   for index = 0, socialIconCount do
-    -- DECOMPILER ERROR at PC14: Confused about usage of register: R8 in 'UnsetPending'
-
-    _socialIconSlotBG[index] = {}
     -- DECOMPILER ERROR at PC17: Confused about usage of register: R8 in 'UnsetPending'
 
+    _socialIconSlotBG[index] = {}
+    -- DECOMPILER ERROR at PC20: Confused about usage of register: R8 in 'UnsetPending'
+
     _socialIconSlot[index] = {}
-    -- DECOMPILER ERROR at PC27: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC30: Confused about usage of register: R8 in 'UnsetPending'
 
     _socialIconSlotBG[index] = createControl(UI_PUCT.PA_UI_CONTROL_STATIC, socialActioncontent, "Static_SocialIconSlotBG_" .. index)
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC40: Confused about usage of register: R8 in 'UnsetPending'
 
     _socialIconSlot[index] = createControl(UI_PUCT.PA_UI_CONTROL_STATIC, socialActioncontent, "Static_SocialIconSlot_" .. index)
     CopyBaseProperty(socialIconSlotBG, _socialIconSlotBG[index])
@@ -101,11 +104,11 @@ SocialAction_Icon_Initialize = function()
           (_socialIconSlot[index]):SetIgnore(true)
           ;
           (_socialIconSlotBG[index]):SetIgnore(true)
-          -- DECOMPILER ERROR at PC226: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC226: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC226: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC229: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -233,9 +236,9 @@ SocialAction.Description_Setting = function(self, index)
     ;
     (self._conditionText):SetShow(true)
     if (self._conditionText):GetSizeX() < (self._conditionText):GetTextSizeX() then
-      isConditionGap = 50
+      isConditionGap = 60
     else
-      isConditionGap = 25
+      isConditionGap = 35
     end
     Panel_Chat_SocialMenu:SetSize(cls._panelSizeX, cls._panelSizeY + isConditionGap)
     ;

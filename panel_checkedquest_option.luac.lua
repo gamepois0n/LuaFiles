@@ -76,6 +76,8 @@ CheckedQuestOptionPanel.Initialize = function(self)
   local QuestListInfo = ToClient_GetQuestList()
   for ii = 0, _favorType.Count - 1 do
     ((self._favorCheckBoxButton)[ii]):SetCheck(QuestListInfo:isQuestSelectType(ii))
+    ;
+    ((self._favorCheckBoxButton)[ii]):SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
   end
   CheckedQuestOptionPanel:UpdateFavorButton()
   for ii = 0, _latestQuestCount.Count - 1 do

@@ -94,7 +94,19 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
       _PA_LOG("cylee", "FromClient_ShowInventoryBag() itemWrapper is nil, fromWhereType:" .. tostring(fromWhereType) .. ",fromSlotNo:" .. tostring(fromSlotNo) .. ",index:" .. tostring(index))
       ;
       ((self.slot)[index]):clearItem()
+      ;
+      (((self.slot)[index]).icon):removeInputEvent("Mouse_On")
+      ;
+      (((self.slot)[index]).icon):removeInputEvent("Mouse_Out")
+      ;
+      (((self.slot)[index]).icon):removeInputEvent("Mouse_RUp")
     end
+  end
+  for bgIndex,bg in pairs(self.bg) do
+    bg:SetShow(bgIndex < bagSize)
+  end
+  for slotIndex,slot in pairs(self.slot) do
+    (slot.icon):SetShow(slotIndex < bagSize)
   end
   ;
   (self.textureBg):SetSize((self.textureBg):GetSizeX(), (math.ceil)(bagSize / 4) * 45 + ((math.ceil)(bagSize / 4) - 1) * 5 + 10)
@@ -120,7 +132,7 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
     self.fromSlotNo = fromSlotNo
     Inventory_SetFunctor(ClothInven_Filter, ClothInven_HandleInventorySlotRClick, nil, nil)
     Panel_Tooltip_Item_hideTooltip()
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+    -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
 
@@ -141,6 +153,15 @@ ClothInven_ChangeItem = function()
       (((self.slot)[index]).icon):addInputEvent("Mouse_Out", "ShowTooltip_ClothInven()")
       ;
       (((self.slot)[index]).icon):addInputEvent("Mouse_RUp", "ClothInven_HandleInventoryBagSlotRClick(" .. self.fromWhereType .. ", " .. self.fromSlotNo .. ", " .. index .. ", " .. self.bagWhereType .. ")")
+    else
+      ;
+      ((self.slot)[index]):clearItem()
+      ;
+      (((self.slot)[index]).icon):removeInputEvent("Mouse_On")
+      ;
+      (((self.slot)[index]).icon):removeInputEvent("Mouse_Out")
+      ;
+      (((self.slot)[index]).icon):removeInputEvent("Mouse_RUp")
     end
   end
   FGlobal_UpdateInventoryWeight()
@@ -153,11 +174,14 @@ ClothInven_Filter = function(slotNo, itemWrapper, count, inventoryType)
     return true
   end
   local self = clothInven
+  local itemSSW = itemWrapper:getStaticStatus()
+  if not (itemSSW:get()):checkToPushToInventoryBag() then
+    return true
+  end
   if self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_Misc or self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_MiscForCash then
     return false
   end
   local myClass = selfPlayer:getClassType()
-  local itemSSW = itemWrapper:getStaticStatus()
   local isEuqipItem = itemSSW:isEquipable()
   local isUsableItem = ((itemSSW:get())._usableClassType):isOn(myClass)
   local isPushableItem = itemWrapper:isPushableInventoryBag()

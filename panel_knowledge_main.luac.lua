@@ -1070,7 +1070,11 @@ end
 
 Panel_Knowledge_Hide = function()
   -- function num : 0_29 , upvalues : IM, onHideCloseControls
-  local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local knowledge = (selfPlayer:get()):getMentalKnowledge()
   if knowledge:isShow() == false then
     return 
   end

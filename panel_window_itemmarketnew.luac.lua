@@ -431,8 +431,12 @@ ItemMarket.Initialize = function(self)
   (tree2:getElementManager()):refillKeyList()
   ;
   (self._btn_CategoryAll):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_AllCategory()")
-  ;
-  (self.btn_BidDesc):SetSize(135, 32)
+  if isGameTypeRussia() then
+    (self.btn_BidDesc):SetSize(235, 32)
+  else
+    ;
+    (self.btn_BidDesc):SetSize(135, 32)
+  end
   ;
   (self.btn_BidDesc):SetPosX(830)
   ;
@@ -3268,6 +3272,11 @@ HandleClicked_ItemMarket_UnSetGroupItem = function()
     (self.btn_InMarketRegist):SetShow(true)
     ;
     (self.btn_BidDesc):SetPosX(700)
+    if isGameTypeRussia() then
+      (self.btn_BidDesc):SetSize(235, 32)
+      ;
+      (self.btn_BidDesc):SetPosX(600)
+    end
   end
   if Panel_Tooltip_Item:GetShow() or Panel_Tooltip_Item_equipped:GetShow() or Panel_Tooltip_SimpleText:GetShow() then
     Panel_Tooltip_Item_hideTooltip()
@@ -3638,6 +3647,9 @@ FGlobal_ItemMarketNew_Open = function()
   (self.btn_InMarketRegist):SetShow(true)
   ;
   (self.btn_BidDesc):SetPosX(700)
+  if isGameTypeRussia() then
+    (self.btn_BidDesc):SetPosX(600)
+  end
   self.curTerritoryKeyRaw = regionInfoWrapper:getTerritoryKeyRaw()
   ;
   (self.panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_NAMING"))
@@ -3747,6 +3759,9 @@ FGlobal_ItemMarket_Open_ForWorldMap = function(territoryKeyRaw, escMenu)
   (self.btn_InMarketRegist):SetShow(false)
   ;
   (self.btn_BidDesc):SetPosX(830)
+  if isGameTypeRussia() then
+    (self.btn_BidDesc):SetPosX(740)
+  end
   ;
   (self.invenMoney):SetShow(false)
   ;
@@ -3868,6 +3883,9 @@ FGlobal_ItemMarket_OpenByMaid = function()
   (self.btn_InMarketRegist):SetShow(false)
   ;
   (self.btn_BidDesc):SetPosX(830)
+  if isGameTypeRussia() then
+    (self.btn_BidDesc):SetPosX(740)
+  end
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
   if regionInfo == nil then
     return 
@@ -4131,7 +4149,9 @@ FGlobal_HandleClicked_ItemMarketBackPage = function()
     ;
     (self.btn_BidDesc):SetPosX(700)
     if isGameTypeRussia() then
-      (self.btn_BidDesc):SetSize(135, 32)
+      (self.btn_BidDesc):SetSize(235, 32)
+      ;
+      (self.btn_BidDesc):SetPosX(600)
     end
   end
   local text = self.txt_ItemNameBackPage

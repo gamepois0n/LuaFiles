@@ -119,7 +119,7 @@ CompetitionGameTeam_TimeUpdate = function(deltaTime)
   -- function num : 0_5 , upvalues : competitionGameDeltaTime, delayTime, saveLocalWarTime, _txt_LocalWarTime
   competitionGameDeltaTime = competitionGameDeltaTime + deltaTime
   if delayTime <= competitionGameDeltaTime then
-    local warTime = ToClient_CompetitionMatchTimeLimit() - ToClient_CompetitionMatchTime()
+    local warTime = ToClient_CompetitionRemainMatchTime()
     if saveLocalWarTime > 0 and warTime == 0 then
       _txt_LocalWarTime:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
     end
@@ -130,16 +130,8 @@ CompetitionGameTeam_TimeUpdate = function(deltaTime)
       end
       return 
     end
-    local warTimeMinute = (math.floor)(warTime / 60)
-    local warTimeSecond = warTime % 60
-    if warTimeMinute < 10 then
-      warTimeMinute = "0" .. warTimeMinute
-    end
-    if warTimeSecond < 10 then
-      warTimeSecond = "0" .. warTimeSecond
-    end
     competitionGameDeltaTime = 0
-    _txt_LocalWarTime:SetText(tostring(warTimeMinute) .. " : " .. tostring(warTimeSecond))
+    _txt_LocalWarTime:SetText(convertSecondsToClockTime(warTime))
   end
 end
 

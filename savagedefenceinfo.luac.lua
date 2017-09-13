@@ -199,40 +199,41 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
       isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_WAITING")
       savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FF3B8BBE)
       savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FF3B8BBE)
+      savageDefenceListJoinBtn:SetClickFontColor((Defines.Color).C_FF3B8BBE)
       savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
       savageDefenceListJoinBtn:SetIgnore(false)
       getWave = 0
     else
       if getCurrentState == 1 then
         isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ING")
-        isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
         savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF0EF9D)
         savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF0EF9D)
+        savageDefenceListJoinBtn:SetClickFontColor((Defines.Color).C_FFF0EF9D)
         savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GAMING"))
         savageDefenceListJoinBtn:SetIgnore(false)
       else
         if getCurrentState == 2 then
           isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_SOONFINISH")
-          isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
           savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
           savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF26A6A)
+          savageDefenceListJoinBtn:SetClickFontColor((Defines.Color).C_FFF26A6A)
           savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_GAMING"))
           savageDefenceListJoinBtn:SetIgnore(true)
         else
           if getCurrentState == 3 then
             isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
-            isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
             savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
             savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF26A6A)
+            savageDefenceListJoinBtn:SetClickFontColor((Defines.Color).C_FFF26A6A)
             savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
             savageDefenceListJoinBtn:SetIgnore(true)
             getWave = 0
           else
             if getCurrentState == 4 then
               isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
-              isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
               savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FFF26A6A)
               savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FFF26A6A)
+              savageDefenceListJoinBtn:SetClickFontColor((Defines.Color).C_FFF26A6A)
               savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
               savageDefenceListJoinBtn:SetIgnore(true)
               getWave = 0

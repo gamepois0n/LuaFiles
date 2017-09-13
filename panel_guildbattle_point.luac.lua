@@ -26,8 +26,17 @@ PaGlobal_GuildBattlePoint.guildBattleTimer = function(self, time)
   -- function num : 0_1
   local min = (math.floor)(time / 60)
   local sec = time % 60
-  ;
-  ((self._round)._timer):SetText(tostring(min) .. tostring(" : ") .. tostring(sec))
+  local zero = "0"
+  if sec < 10 then
+    ((self._round)._timer):SetText(tostring(min) .. tostring(" : ") .. zero .. tostring(sec))
+  else
+    ;
+    ((self._round)._timer):SetText(tostring(min) .. tostring(" : ") .. tostring(sec))
+  end
+  local state = ToClient_getGuildBattleState()
+  if state ~= 1 and state ~= 2 then
+    ((self._round)._timer):SetText("00 : 00")
+  end
   if not self._isShow then
     self:changeState()
   end
@@ -44,12 +53,15 @@ PaGlobal_GuildBattlePoint.changeState = function(self)
     self._isShow = true
   end
   if state == 1 then
-    ((self._round)._bg):SetText("�\128비중")
+    ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_READY"))
   else
     if state == 2 then
       self._roundNumber = self._roundNumber + 1
       ;
-      ((self._round)._bg):SetText("라운�\156 " .. tostring(self._roundNumber))
+      ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", self._roundNumber))
+    else
+      ;
+      ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
     end
   end
   local guildA = ToClient_getCurrentServerGuildBattleInfo(0)

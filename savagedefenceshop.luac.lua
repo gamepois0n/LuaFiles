@@ -5,6 +5,8 @@
 -- function num : 0
 local UI_TM = CppEnums.TextMode
 Panel_SavageDefenceShop:SetShow(false)
+Panel_SavageDefenceShop:SetDragEnable(true)
+Panel_SavageDefenceShop:SetDragAll(true)
 local PaGlobal_SavageDefenceShop = {_myCoin = (UI.getChildControl)(Panel_SavageDefenceShop, "StaticText_Coin"), _list2 = (UI.getChildControl)(Panel_SavageDefenceShop, "List2_SavageDefenceShopList"), 
 _listPool = {}
 , _listCount = 0, 

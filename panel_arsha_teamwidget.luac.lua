@@ -9,7 +9,7 @@ local UI_color = Defines.Color
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local IM = CppEnums.EProcessorInputMode
 Panel_Arsha_TeamWidget:SetShow(false)
-local arshaPvPWidget = {roundWing = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_RoundWing"), freeWing = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_FreeWing"), roundCenter = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_RoundCenter"), freeCenter = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_FreeCenter")}
+local arshaPvPWidget = {roundWing = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_RoundWing"), freeWing = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_FreeWing"), roundCenter = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_RoundCenter"), freeCenter = (UI.getChildControl)(Panel_Arsha_TeamWidget, "Static_FreeCenter"), fightState = (CppEnums.CompetitionFightState).eCompetitionFightState_Done, matchType = (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Round}
 arshaPvPWidget.roundTime = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_RoundTime")
 arshaPvPWidget.roundCount = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_RoundCount")
 arshaPvPWidget.leftPoint = (UI.getChildControl)(arshaPvPWidget.roundCenter, "StaticText_LeftPoint")
@@ -133,6 +133,7 @@ ArshaPvP_Widget_Update = function()
   ;
   (self.rightPoint):SetShow(true)
   savedMatchType = ToClient_CompetitionMatchType()
+  self.matchType = savedMatchType
   if ToClient_CompetitionMatchType() == 0 then
     teamA = ToClient_GetRoundTeamScore(1)
     teamB = ToClient_GetRoundTeamScore(2)
@@ -292,6 +293,11 @@ ArshaPvP_Widget_Update = function()
       (self.rightPoint):SetText(teamB)
       ;
       (self.roundCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ARSHA_USER_OPTION_ROUND_FORCOUNT", "targetScore", ToClient_GetTargetScore()))
+      local option = getArshaPvpOption()
+      ;
+      (self.freeTime):SetText(convertSecondsToClockTime(option._timeLimit))
+      ;
+      (self.roundTime):SetText(convertSecondsToClockTime(option._timeLimit))
     end
   end
 end
@@ -309,85 +315,54 @@ local saveLocalWarTime = 0
 local delayTime = 1
 local competitionGameDeltaTime = 0
 ArshaPvP_Widget_PerframeMain = function(deltaTime)
-  -- function num : 0_6 , upvalues : savedMatchType
-  if savedMatchType == 0 then
-    ArshaPvP_Widget_Round_Per(deltaTime)
+  -- function num : 0_6 , upvalues : arshaPvPWidget, delayTime, competitionGameDeltaTime
+  local self = arshaPvPWidget
+  do
+    local isPlaying = self.fightState == (CppEnums.CompetitionFightState).eCompetitionFightState_Fight
+    if not isPlaying then
+      return 
+    end
+    if competitionGameDeltaTime + deltaTime < delayTime then
+      competitionGameDeltaTime = competitionGameDeltaTime + deltaTime
+      return 
+    end
+    competitionGameDeltaTime = 0
+    self:updateTimerWidget()
+    -- DECOMPILER ERROR: 3 unprocessed JMP targets
+  end
+end
+
+arshaPvPWidget.updateTimerWidget = function(self)
+  -- function num : 0_7
+  if self.matchType == (CppEnums.CompetitionMatchType).eCompetitionMatchMode_Round then
+    self:_upadteTimerWidget(self.roundTime)
   else
-    if savedMatchType == 1 then
-      ArshaPvP_Widget_Free_Per(deltaTime)
+    if self.matchType == (CppEnums.CompetitionMatchType).eCompetitionMatchMode_FreeForAll then
+      self:_upadteTimerWidget(self.freeTime)
     end
+  end
+  Panel_Arsha_TeamWidget:ComputePos()
+end
+
+arshaPvPWidget._upadteTimerWidget = function(self, targetControl)
+  -- function num : 0_8
+  local warTime = ToClient_CompetitionRemainMatchTime()
+  if warTime > 0 then
+    targetControl:SetText(convertSecondsToClockTime(warTime))
+  else
+    targetControl:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
   end
 end
 
-ArshaPvP_Widget_Round_Per = function(deltaTime)
-  -- function num : 0_7 , upvalues : arshaPvPWidget, competitionGameDeltaTime, delayTime, saveLocalWarTime
-  local self = arshaPvPWidget
-  competitionGameDeltaTime = competitionGameDeltaTime + deltaTime
-  if delayTime <= competitionGameDeltaTime then
-    local warTime = ToClient_CompetitionMatchTimeLimit() - ToClient_CompetitionMatchTime()
-    if saveLocalWarTime > 0 and warTime == 0 then
-      (self.roundTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
-    end
-    saveLocalWarTime = warTime
-    if warTime == 0 then
-      if ToClient_GetLocalwarState() == 1 then
-        (self.roundTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
-      end
-      return 
-    end
-    local warTimeMinute = (math.floor)(warTime / 60)
-    local warTimeSecond = warTime % 60
-    if warTimeMinute < 10 then
-      warTimeMinute = "0" .. warTimeMinute
-    end
-    if warTimeSecond < 10 then
-      warTimeSecond = "0" .. warTimeSecond
-    end
-    competitionGameDeltaTime = 0
-    ;
-    (self.roundTime):SetText(tostring(warTimeMinute) .. ":" .. tostring(warTimeSecond))
-  end
-end
-
-ArshaPvP_Widget_Free_Per = function(deltaTime)
-  -- function num : 0_8 , upvalues : arshaPvPWidget, competitionGameDeltaTime, delayTime, saveLocalWarTime
-  local self = arshaPvPWidget
-  competitionGameDeltaTime = competitionGameDeltaTime + deltaTime
-  if delayTime <= competitionGameDeltaTime then
-    local warTime = ToClient_CompetitionMatchTimeLimit() - ToClient_CompetitionMatchTime()
-    if saveLocalWarTime > 0 and warTime == 0 then
-      (self.freeTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
-    end
-    saveLocalWarTime = warTime
-    if warTime == 0 then
-      if ToClient_GetLocalwarState() == 1 then
-        (self.freeTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
-      end
-      return 
-    end
-    local warTimeMinute = (math.floor)(warTime / 60)
-    local warTimeSecond = warTime % 60
-    if warTimeMinute < 10 then
-      warTimeMinute = "0" .. warTimeMinute
-    end
-    if warTimeSecond < 10 then
-      warTimeSecond = "0" .. warTimeSecond
-    end
-    Panel_Arsha_TeamWidget:ComputePos()
-    competitionGameDeltaTime = 0
-    ;
-    (self.freeTime):SetText(tostring(warTimeMinute) .. ":" .. tostring(warTimeSecond))
-  end
-end
-
-FromClient_UpdateFightState = function(isFight)
+FromClient_UpdateFightState = function(fightState)
   -- function num : 0_9 , upvalues : arshaPvPWidget
   local self = arshaPvPWidget
-  if isFight == nil or isFight == "" then
+  if fightState == nil or fightState == "" then
     return 
   end
+  self.fightState = fightState
   ArshaPvP_Widget_Init()
-  if (CppEnums.CompetitionFightState).eCompetitionFightState_Fight == isFight then
+  if (CppEnums.CompetitionFightState).eCompetitionFightState_Fight == fightState then
     local isShowTeamInfo = true
     if ToClient_CompetitionMatchType() == 1 then
       isShowTeamInfo = false
@@ -423,7 +398,7 @@ FromClient_UpdateFightState = function(isFight)
     Proc_ShowMessage_Ack_For_RewardSelect(message, 5, 56, false)
   else
     do
-      if (CppEnums.CompetitionFightState).eCompetitionFightState_Done == isFight then
+      if (CppEnums.CompetitionFightState).eCompetitionFightState_Done == fightState then
         Panel_Arsha_TeamWidget:SetShow(true)
         CompetitionGameTeamUI_Close()
         local message = {main = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_MAIN"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_COMPETITIONGAME_FIGHTSTATE_STOP_SUB"), addMsg = ""}
@@ -458,7 +433,7 @@ FromClient_UpdateFightState = function(isFight)
         end
       else
         do
-          if (CppEnums.CompetitionFightState).eCompetitionFightState_Wait == isFight then
+          if (CppEnums.CompetitionFightState).eCompetitionFightState_Wait == fightState then
             if ToClient_CompetitionMatchType() == 1 then
               (self.roundWing):SetShow(false)
               ;
@@ -542,7 +517,10 @@ end
 
 FromClient_WaitTimeAlert = function(second)
   -- function num : 0_12
-  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_WAIT_BEFORE_FIGHT", "waitTime", second))
+  local msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_WAIT_BEFORE_FIGHT", "waitTime", second)
+  if msg ~= nil and msg ~= "" then
+    Proc_ShowMessage_Ack(msg)
+  end
 end
 
 ArshaPvP_Widget_LualoadComplete = function()

@@ -13,29 +13,25 @@ Panel_Improvement:SetDragAll(true)
 Panel_Improvement:RegisterShowEventFunc(true, "Improvement_ShowAni()")
 Panel_Improvement:RegisterShowEventFunc(false, "Improvement_HideAni()")
 Improvement_ShowAni = function()
-  -- function num : 0_0 , upvalues : UI_ANI_ADV
-  audioPostEvent_SystemUi(1, 0)
-  local aniInfo1 = Panel_Improvement:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
-  aniInfo1:SetStartScale(0.5)
-  aniInfo1:SetEndScale(1.13)
-  aniInfo1.AxisX = Panel_Improvement:GetSizeX() / 2
-  aniInfo1.AxisY = Panel_Improvement:GetSizeY() / 2
-  aniInfo1.ScaleType = 2
-  aniInfo1.IsChangeChild = true
-  local aniInfo2 = Panel_Improvement:addScaleAnimation(0.08, 0.1, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
-  aniInfo2:SetStartScale(1.13)
-  aniInfo2:SetEndScale(1)
-  aniInfo2.AxisX = Panel_Improvement:GetSizeX() / 2
-  aniInfo2.AxisY = Panel_Improvement:GetSizeY() / 2
-  aniInfo2.ScaleType = 2
-  aniInfo2.IsChangeChild = true
+  -- function num : 0_0
+  local ImageMoveAni = Panel_Improvement:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  ImageMoveAni:SetStartPosition(getScreenSizeX() / 2 - Panel_Improvement:GetSizeX() / 2, 0 - Panel_Improvement:GetSizeY())
+  ImageMoveAni:SetEndPosition(getScreenSizeX() / 2 - Panel_Improvement:GetSizeX() / 2, getScreenSizeY() - getScreenSizeY() / 2 - Panel_Improvement:GetSizeY() / 2)
+  ImageMoveAni.IsChangeChild = true
+  Panel_Improvement:CalcUIAniPos(ImageMoveAni)
+  ImageMoveAni:SetDisableWhileAni(true)
 end
 
 Improvement_HideAni = function()
   -- function num : 0_1
-  local enchantHide = (UIAni.AlphaAnimation)(0, Panel_Improvement, 0, 0.2)
-  enchantHide:SetHideAtEnd(true)
-  audioPostEvent_SystemUi(1, 1)
+  local ImageMoveAni = Panel_Improvement:addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
+  ImageMoveAni:SetStartPosition(getScreenSizeX() / 2 - Panel_Improvement:GetSizeX() / 2, getScreenSizeY() - getScreenSizeY() / 2 - Panel_Improvement:GetSizeY() / 2)
+  ImageMoveAni:SetEndPosition(getScreenSizeX() / 2 - Panel_Improvement:GetSizeX() / 2, 0 - Panel_Improvement:GetSizeY())
+  ImageMoveAni.IsChangeChild = true
+  Panel_Improvement:CalcUIAniPos(ImageMoveAni)
+  ImageMoveAni:SetDisableWhileAni(true)
+  ImageMoveAni:SetHideAtEnd(true)
+  ImageMoveAni:SetDisableWhileAni(true)
 end
 
 local improvement = {title = (UI.getChildControl)(Panel_Improvement, "Static_Text_Title"), effectControl = (UI.getChildControl)(Panel_Improvement, "Static_AddEffect"), slot_0 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_0"), slot_1 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_1"), descBg = (UI.getChildControl)(Panel_Improvement, "Static_CommentBG"), desc = (UI.getChildControl)(Panel_Improvement, "StaticText_Comment"), btnApply = (UI.getChildControl)(Panel_Improvement, "Button_Apply"), equipItem = nil, materialItem = nil, 
@@ -124,6 +120,10 @@ end
   (improvement.materialSlot):clearItem()
   Inventory_SetFunctor(ImproveInvenFilerMainItem, ImproveSetMainItemFromInventory, Panel_Improvement_Hide, nil)
   FGlobal_SetInventoryDragNoUse(Panel_Improvement)
+  Equipment_PosSaveMemory()
+  Panel_Equipment:SetShow(true, true)
+  Panel_Equipment:SetPosX(10)
+  Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
   audioPostEvent_SystemUi(1, 0)
 end
 
@@ -147,6 +147,7 @@ end
   (getImproveInformation()):clearData()
   ToClient_BlackspiritEnchantClose()
   Panel_Improvement:SetShow(false, true)
+  Equipment_PosLoadMemory()
 end
 
   ImproveInvenFilerMainItem = function(slotNo, notUse_itemWrappers, whereType)

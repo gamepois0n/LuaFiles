@@ -25,7 +25,7 @@ local searchFailText = (UI.getChildControl)(Panel_EnableSkill, "StaticText_Searc
 local radio = {_radioButton_LearnSkill = (UI.getChildControl)(Panel_EnableSkill, "RadioButton_Tab_LearnSkill"), _radioButton_AllSkill = (UI.getChildControl)(Panel_EnableSkill, "RadioButton_Tab_AllSkill")}
 local CopyUI = {_base_SkillBG = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillBG"), _base_SkillBlueBG = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillBlueBG"), _base_SkillYellowBG = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillYellowBG"), _base_SkillIcon = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillIcon"), _base_SkillName = (UI.getChildControl)(Panel_EnableSkill, "StaticText_C_SkillName"), _base_SkillNeedSP = (UI.getChildControl)(Panel_EnableSkill, "StaticText_C_NeedSP"), _base_LearnButton = (UI.getChildControl)(Panel_EnableSkill, "Button_LearnSkill")}
 local CopyString = {_base_StringName = (UI.getChildControl)(Panel_EnableSkill, "StaticText_C_SkillName")}
-local comboBoxUI = {_comboBox = (UI.getChildControl)(Panel_EnableSkill, "Combobox_Sort")}
+local comboBoxUI = {_comboBox = (UI.getChildControl)(Panel_EnableSkill, "Combobox_Sort"), _comboBoxText = (UI.getChildControl)(Panel_EnableSkill, "StaticText_ComboBox")}
 local editSearch = {_editSearchText = (UI.getChildControl)(Panel_EnableSkill, "EditSearchText"), _editSearchButton = (UI.getChildControl)(Panel_EnableSkill, "BtnSearch")}
 local comboBoxString = {[-1] = PAGetString(Defines.StringSheet_GAME, "LUA_ENABLESKILL_RECOMMENDSKILL"), [0] = PAGetString(Defines.StringSheet_GAME, "LUA_ENABLESKILL_SKILLPOINT_HIGHORDER"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_ENABLESKILL_SKILLPOINT_LOWORDER")}
 local IM = CppEnums.EProcessorInputMode
@@ -281,7 +281,7 @@ EnableSkillShowFunc = function()
     ;
     (comboBoxUI._comboBox):SetSelectItemIndex(0)
     ;
-    (comboBoxUI._comboBox):SetText(comboBoxString[-1])
+    (comboBoxUI._comboBoxText):SetText(comboBoxString[-1])
     Panel_EnableSkill_SetPosition()
     ;
     (radio._radioButton_LearnSkill):SetCheck(true)
@@ -562,7 +562,10 @@ enableSkill_Init = function()
   enableSkill_UpdateData(isEditCheck)
   ;
   (comboBoxUI._comboBox):SetShow(true)
-  Panel_EnableSkill:SetChildIndex(comboBoxUI._comboBox, 9999)
+  ;
+  (comboBoxUI._comboBoxText):SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
+  Panel_EnableSkill:SetChildIndex(comboBoxUI._comboBox, 9998)
+  Panel_EnableSkill:SetChildIndex(comboBoxUI._comboBoxText, 9999)
 end
 
 FromClient_EventSkillWindowUpdate = function()
@@ -706,7 +709,7 @@ RadioButton_Click = function(radioIndex)
   if radioIndex == learnSkillTabIndex then
     (comboBoxUI._comboBox):SetSelectItemIndex(-1)
     ;
-    (comboBoxUI._comboBox):SetText(comboBoxString[-1])
+    (comboBoxUI._comboBoxText):SetText(comboBoxString[-1])
     ;
     (radio._radioButton_LearnSkill):SetCheck(true)
     ;
@@ -715,7 +718,7 @@ RadioButton_Click = function(radioIndex)
     if radioIndex == allSkillTabIndex then
       (comboBoxUI._comboBox):SetSelectItemIndex(0)
       ;
-      (comboBoxUI._comboBox):SetText(comboBoxString[0])
+      (comboBoxUI._comboBoxText):SetText(comboBoxString[0])
       ;
       (radio._radioButton_LearnSkill):SetCheck(false)
       ;
@@ -767,7 +770,7 @@ ComboBox_Init = function()
   ;
   (comboBoxUI._comboBox):SetSelectItemIndex(0)
   ;
-  (comboBoxUI._comboBox):SetText(comboBoxString[-1])
+  (comboBoxUI._comboBoxText):SetText(comboBoxString[-1])
 end
 
 ComboBox_show = function(RadioClickInit)
@@ -812,7 +815,7 @@ ComboBox_Set = function()
     index = 1
   end
   ;
-  (comboBoxUI._comboBox):SetText(comboBoxString[selectIndex - 1 + index])
+  (comboBoxUI._comboBoxText):SetText(comboBoxString[selectIndex - 1 + index])
   ;
   (comboBoxUI._comboBox):ToggleListbox()
   enableSkill_UpdateData(isEditCheck)

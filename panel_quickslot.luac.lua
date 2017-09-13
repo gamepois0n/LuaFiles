@@ -348,8 +348,11 @@ quickSlot.createSlot = function(self)
                                               local itemStaticWrapper = getItemEnchantStaticStatus(quickSlotInfo._itemKey)
                                               local _const = Defines.s64_const
                                               local s64_stackCount = _const.s64_0
+                                              local targetItemNotFound = false
                                               if UI_TISNU ~= invenSlotNo then
                                                 s64_stackCount = ((getInventoryItemByType(inventoryType, invenSlotNo)):get()):getCount_s64()
+                                              else
+                                                targetItemNotFound = true
                                               end
                                               ;
                                               (slot.background):SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -360,6 +363,8 @@ quickSlot.createSlot = function(self)
                                                   itemStaticWrapper = itemWrapper:getStaticStatus()
                                                   ;
                                                   (self.item):setItem(itemWrapper, invenSlotNo)
+                                                else
+                                                  targetItemNotFound = true
                                                 end
                                               else
                                                 do
@@ -367,7 +372,7 @@ quickSlot.createSlot = function(self)
                                                   (self.item):setItemByStaticStatus(itemStaticWrapper, s64_stackCount)
                                                   self.keyValue = invenSlotNo
                                                   ;
-                                                  ((self.item).icon):SetMonoTone(_const.s64_0 == s64_stackCount)
+                                                  ((self.item).icon):SetMonoTone(targetItemNotFound or _const.s64_0 == s64_stackCount)
                                                   do
                                                     local itemSlot = self.item
                                                     ;
@@ -377,7 +382,7 @@ quickSlot.createSlot = function(self)
                                                     Panel_Tooltip_Item_SetPosition(slotNo, self.item, "QuickSlot")
                                                     ;
                                                     (self.toggle):SetShow(false)
-                                                    -- DECOMPILER ERROR: 1 unprocessed JMP targets
+                                                    -- DECOMPILER ERROR: 2 unprocessed JMP targets
                                                   end
                                                 end
                                               end

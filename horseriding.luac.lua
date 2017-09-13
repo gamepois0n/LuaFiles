@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 local enStatus = {CALL = 0, RIDE = 1, RUN = 2, END = 3}
-local HorseRiding = {_preTick = 0, _isStartHorseRiding = false, _nowStatus = enStatus.CALL, _oldStatus = enStatus.CALL}
+local HorseRiding = {_preTick = 0, _isStartHorseRiding = false, _nowStatus = enStatus.CALL, _oldStatus = enStatus.CALL, _isWaitingForStart = false}
 FromClient_StartReconnectAtion = function()
   -- function num : 0_0 , upvalues : HorseRiding, enStatus
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
@@ -25,16 +25,31 @@ ReconnectAction_HorseRide = function()
   interaction_processInteraction((CppEnums.InteractionType).InteractionType_Ride)
 end
 
-ReconnectAction_HorseRun = function()
-  -- function num : 0_3
+ReconnectAction_HorseGoToStart = function()
+  -- function num : 0_3 , upvalues : HorseRiding
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+
+  HorseRiding._isWaitingForStart = true
+  ToClient_GotoStartPosForReconnect(NavigationGuideParam())
+end
+
+FromClient_ReconnectHorseRun = function()
+  -- function num : 0_4 , upvalues : HorseRiding
+  if HorseRiding._isWaitingForStart == false then
+    return 
+  end
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
+
+  HorseRiding._isWaitingForStart = false
   ToClient_SettingLoopNavi(NavigationGuideParam())
   ToClient_NaviReStart()
   FGlobal_ToggleServantAutoCarrot()
 end
 
 registerEvent("FromClient_StartReconnectAtion", "FromClient_StartReconnectAtion")
+registerEvent("FromClient_ReconnectHorseRun", "FromClient_ReconnectHorseRun")
 Update_ReconnectHorse = function()
-  -- function num : 0_4 , upvalues : HorseRiding, enStatus
+  -- function num : 0_5 , upvalues : HorseRiding, enStatus
   if HorseRiding._isStartHorseRiding == false then
     return 
   end
@@ -51,10 +66,11 @@ Update_ReconnectHorse = function()
       self._nowStatus = enStatus.RUN
     else
       if enStatus.RUN == self._nowStatus then
-        ReconnectAction_HorseRun()
+        ReconnectAction_HorseGoToStart()
         self._nowStatus = enStatus.END
       else
         if enStatus.END == self._nowStatus then
+          FromClient_ReconnectHorseRun()
           self._isStartHorseRiding = false
         end
       end
@@ -63,7 +79,7 @@ Update_ReconnectHorse = function()
 end
 
 FrameControl_FiveSecond = function()
-  -- function num : 0_5 , upvalues : HorseRiding
+  -- function num : 0_6 , upvalues : HorseRiding
   local self = HorseRiding
   local nowTick = (os.time)()
   if self._preTick == 0 then
@@ -80,7 +96,7 @@ end
 registerEvent("FromClient_ReconnectAlert_Show", "FromClient_ReconnectAlert_Show")
 registerEvent("FromClient_ReconnectAlert_Hide", "FromClient_ReconnectAlert_Hide")
 FromClient_ReconnectAlert_Show = function()
-  -- function num : 0_6
+  -- function num : 0_7
   local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "GUILD_MESSAGEBOX_TITLE")
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_AUTO_RECONNECT")
   local messageBoxData = {title = messageBoxtitle, content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_HIGH}
@@ -88,8 +104,7 @@ FromClient_ReconnectAlert_Show = function()
 end
 
 FromClient_ReconnectAlert_Hide = function()
-  -- function num : 0_7
-  _PA_LOG("민혁", "FromClient_ReconnectAlert_Hide 호출되었습니�\164.")
+  -- function num : 0_8
   postProcessMessageData()
 end
 

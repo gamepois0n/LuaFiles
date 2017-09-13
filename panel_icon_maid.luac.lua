@@ -458,8 +458,13 @@ FGlobal_WarehouseOpenByMaid = function(index)
   end
 end
 
-FGlobal_MaidIcon_SetPos = function()
-  -- function num : 0_9 , upvalues : MaidControl, maidList
+maidList.setPosAndScrollReset = function(self)
+  -- function num : 0_9
+  FGlobal_MaidIcon_SetPos(true)
+end
+
+FGlobal_MaidIcon_SetPos = function(resetScroll)
+  -- function num : 0_10 , upvalues : MaidControl, maidList
   if isFlushedUI() or ((getSelfPlayer()):get()):getLevel() < 7 then
     return 
   end
@@ -501,9 +506,9 @@ FGlobal_MaidIcon_SetPos = function()
     Panel_Icon_Maid:SetPosX(posX)
     Panel_Icon_Maid:SetPosY(posY)
     MaidList_SetScroll()
-    -- DECOMPILER ERROR at PC156: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC158: Confused about usage of register: R7 in 'UnsetPending'
 
-    if Panel_Window_MaidList:GetShow() then
+    if resetScroll == true and Panel_Window_MaidList:GetShow() then
       maidList.startIndex = 0
       MaidList_Set(maidList.startIndex)
       ;
@@ -518,7 +523,7 @@ FGlobal_MaidIcon_SetPos = function()
 end
 
 MaidFunc_ShowTooltip = function(isShow)
-  -- function num : 0_10 , upvalues : MaidControl
+  -- function num : 0_11 , upvalues : MaidControl
   if isShow == nil then
     TooltipSimple_Hide()
     return 
@@ -593,7 +598,7 @@ MaidFunc_ShowTooltip = function(isShow)
 end
 
 LogInMaidShow = function()
-  -- function num : 0_11
+  -- function num : 0_12
   if ((getSelfPlayer()):get()):getLevel() > 6 and getTotalMaidList() > 0 then
     ToClient_CallHandlerMaid("_StrAllmaidLogOut")
     local randomMaidIndex = (math.random)(getTotalMaidList()) - 1
@@ -607,19 +612,18 @@ LogInMaidShow = function()
 end
 
 renderModeChange_FGlobal_MaidIcon_SetPos = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_12
+  -- function num : 0_13
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
-  FGlobal_MaidIcon_SetPos()
+  FGlobal_MaidIcon_SetPos(true)
 end
 
-registerEvent("FromClient_RenderModeChangeState", "renderModeChange_FGlobal_MaidIcon_SetPos")
 Panel_Window_MaidList:RegisterUpdateFunc("MaidCoolTime_Update")
-registerEvent("FromClient_RefreshMaidList", "FGlobal_MaidIcon_SetPos")
+registerEvent("FromClient_RefreshMaidList", "maidList:setPosAndScrollReset")
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Icon_Maid")
 FromClient_luaLoadComplete_Icon_Maid = function()
-  -- function num : 0_13
+  -- function num : 0_14
   Panel_MyHouseNavi_Update(true)
   LogInMaidShow()
 end

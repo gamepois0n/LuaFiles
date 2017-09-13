@@ -1042,7 +1042,11 @@ end
   if targetPanel == nil then
     return 
   end
-  local useTab = (UI.getChildControl)(targetPanel, "StaticText_UseTab")
+  local useTab = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseTab")
+  local x = getScreenSizeX() * 0.5 - useTab:GetSizeX()
+  local y = getScreenSizeY() * 0.5 + useTab:GetSizeY() * 7
+  useTab:SetPosX(x)
+  useTab:SetPosY(y)
   if IsChecked_WeaponOut == true then
     useTab:SetShow(true)
   else
@@ -1056,7 +1060,7 @@ end
   if targetPanel == nil then
     return 
   end
-  local useTab = (UI.getChildControl)(targetPanel, "StaticText_UseTab")
+  local useTab = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseTab")
   useTab:SetShow(false)
 end
 
@@ -1066,7 +1070,11 @@ end
   if targetPanel == nil then
     return 
   end
-  local useLantern = (UI.getChildControl)(targetPanel, "StaticText_UseLantern")
+  local useLantern = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseLantern")
+  local x = getScreenSizeX() * 0.5 - useLantern:GetSizeX()
+  local y = getScreenSizeY() * 0.5 + useLantern:GetSizeY() * 7
+  useLantern:SetPosX(x)
+  useLantern:SetPosY(y)
   if param == true then
     useLantern:SetShow(true)
   else

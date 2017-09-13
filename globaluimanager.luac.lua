@@ -99,6 +99,9 @@ close_WindowPanelList = function()
   if Panel_Window_Skill:IsShow() then
     HandleMLUp_SkillWindow_Close()
   end
+  if Panel_EventNotify:GetShow() then
+    FGlobal_EventNotifyClose()
+  end
   if Panel_SetVoiceChat:GetShow() then
     FGlobal_SetVoiceChat_Close()
   end

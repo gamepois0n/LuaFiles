@@ -35,15 +35,15 @@ end
 
 FromClient_UpdateSavageDefenceData = function(remainTime)
   -- function num : 0_3 , upvalues : nextWaveCount
-  nextWaveCount = ToClient_SavageDefenceNextWave()
   SavageDefenceWave_UpdateWaveTime(remainTime, nextWaveCount)
 end
 
 FromClient_OpenSavageDefenceUI = function()
-  -- function num : 0_4
+  -- function num : 0_4 , upvalues : nextWaveCount
   SavageDefenceMember_Open(true)
   SavageDefenceTowerHp_Open()
   SavageDefenceWave_Open()
+  nextWaveCount = ToClient_SavageDefenceNextWave()
 end
 
 FromClient_OpenSavageDefenceUI()

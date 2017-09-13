@@ -590,8 +590,42 @@ convertStringFromDatetimeOverHourForFriends = function(s64_datetime)
   return strDate
 end
 
-convertStringFromMillisecondtime = function(u64_Millisecondtime)
+convertSecondsToClockTime = function(seconds)
   -- function num : 0_45
+  local clockTime = ""
+  local clockHours = (math.floor)(seconds / 3600)
+  local clockMinutes = (math.floor)(seconds % 3600 / 60)
+  local clockSeconds = seconds % 60
+  if clockHours > 0 then
+    if clockHours < 10 then
+      clockTime = clockTime .. "0" .. tostring(clockHours)
+    else
+      clockTime = clockTime .. tostring(clockHours)
+    end
+    clockTime = clockTime .. ":"
+  end
+  if clockMinutes < 0 then
+    clockMinutes = 0
+  end
+  if clockMinutes < 10 then
+    clockTime = clockTime .. "0" .. tostring(clockMinutes)
+  else
+    clockTime = clockTime .. tostring(clockMinutes)
+  end
+  clockTime = clockTime .. ":"
+  if clockSeconds < 0 then
+    clockSeconds = 0
+  end
+  if clockSeconds < 10 then
+    clockTime = clockTime .. "0" .. tostring(clockSeconds)
+  else
+    clockTime = clockTime .. tostring(clockSeconds)
+  end
+  return clockTime
+end
+
+convertStringFromMillisecondtime = function(u64_Millisecondtime)
+  -- function num : 0_46
   local u64_dayCycle = toUint64(0, 86400000)
   local u64_houseCycle = toUint64(0, 3600000)
   local u64_minuteCycle = toUint64(0, 60000)
@@ -625,7 +659,7 @@ local UI_CT = CppEnums.ChatType
 local UI_CNT = CppEnums.EChatNoticeType
 teamColorSettingList = {UI_color.C_FF84FFF5, UI_color.C_FF5922a3, UI_color.C_FF160929, UI_color.C_FFfdc9c8, UI_color.C_FFfa5d59, UI_color.C_FF7c1311, UI_color.C_FF80b9e6, UI_color.C_FF55a1dd, UI_color.C_FF014d89, UI_color.C_FF003966, UI_color.C_FFfef2b2, UI_color.C_FFbea216, UI_color.C_FFc1f8d1, UI_color.C_FF09e447, UI_color.C_FF023912, UI_color.C_FFfc5b95, UI_color.C_FFfb2472, UI_color.C_FF3f091d, UI_color.C_FFff8f59, UI_color.C_FFa2a2a2, UI_color.C_FF000000, UI_color.C_FF906bc1, UI_color.C_FFfa6e6b, UI_color.C_FFa61a17, UI_color.C_FFa8cfee, UI_color.C_FF015699, UI_color.C_FFfee568, UI_color.C_FFfdd81e, UI_color.C_FFfd92b9; [0] = UI_color.C_FFff6922}
 FGlobal_TeamColorList = function(index)
-  -- function num : 0_46 , upvalues : UI_color
+  -- function num : 0_47 , upvalues : UI_color
   if index < 0 or index >= 30 then
     return UI_color.C_FFC4BEBE
   end
@@ -634,7 +668,7 @@ end
 
 colorSettingList = {UI_color.C_FFc6b4e0, UI_color.C_FFac91d1, UI_color.C_FF906bc1, UI_color.C_FF8359ba, UI_color.C_FF5922a3, UI_color.C_FF43197a, UI_color.C_FF3c176d, UI_color.C_FF2c1151, UI_color.C_FF1e0c38, UI_color.C_FF160929, UI_color.C_FFfdc9c8, UI_color.C_FFfdb5b4, UI_color.C_FFfc9391, UI_color.C_FFfa6e6b, UI_color.C_FFfa5d59, UI_color.C_FFf82722, UI_color.C_FFba1d19, UI_color.C_FFa61a17, UI_color.C_FF7c1311, UI_color.C_FF550d0c, UI_color.C_FF3e0a09, UI_color.C_FFbfdcf2, UI_color.C_FFa8cfee, UI_color.C_FF80b9e6, UI_color.C_FF55a1dd, UI_color.C_FF4196d9, UI_color.C_FF0173cc, UI_color.C_FF015699, UI_color.C_FF014d89, UI_color.C_FF003966, UI_color.C_FF002746, UI_color.C_FF001d33, UI_color.C_FFfef5c7, UI_color.C_FFfef2b2, UI_color.C_FFfeec8f, UI_color.C_FFfee568, UI_color.C_FFfee256, UI_color.C_FFfdd81e, UI_color.C_FFbea216, UI_color.C_FFaa9114, UI_color.C_FF7e6c0f, UI_color.C_FF564a0a, UI_color.C_FF3f3608, UI_color.C_FFc1f8d1, UI_color.C_FFabf6c0, UI_color.C_FF84f2a3, UI_color.C_FF5aed84, UI_color.C_FF47eb75, UI_color.C_FF09e447, UI_color.C_FF07ab35, UI_color.C_FF069930, UI_color.C_FF047223, UI_color.C_FF034e18, UI_color.C_FF023912, UI_color.C_FFfec8dc, UI_color.C_FFfeb4cf, UI_color.C_FFfd92b9, UI_color.C_FFfc6ca0, UI_color.C_FFfc5b95, UI_color.C_FFfb2472, UI_color.C_FFbc1b55, UI_color.C_FFa8184c, UI_color.C_FF7d1239, UI_color.C_FF560c27, UI_color.C_FF3f091d, UI_color.C_FFffd9c8, UI_color.C_FFffccb4, UI_color.C_FFffb491, UI_color.C_FFff9a6b, UI_color.C_FFff8f59, UI_color.C_FFff6922, UI_color.C_FFbf4f19, UI_color.C_FFab4617, UI_color.C_FF7f3411, UI_color.C_FF57240c, UI_color.C_FF401a09, UI_color.C_FFfefefe, UI_color.C_FFcbcbcb, UI_color.C_FFa2a2a2, UI_color.C_FF828282, UI_color.C_FF656565, UI_color.C_FF474747, UI_color.C_FF323232, UI_color.C_FF232323, UI_color.C_FF181818, UI_color.C_FF111111, UI_color.C_FF000000; [0] = UI_color.C_FFd5c8e8}
 FGlobal_ColorList = function(index)
-  -- function num : 0_47 , upvalues : UI_color
+  -- function num : 0_48 , upvalues : UI_color
   if index < 0 or index >= 88 then
     return UI_color.C_FFC4BEBE
   end
@@ -642,7 +676,7 @@ FGlobal_ColorList = function(index)
 end
 
 Chatting_MessageColor = function(msgChatType, msgNoticeType, panelIndex)
-  -- function num : 0_48 , upvalues : UI_color, UI_CT, UI_CNT
+  -- function num : 0_49 , upvalues : UI_color, UI_CT, UI_CNT
   local msgColor = UI_color.C_FFE7E7E7
   if msgChatType == nil or msgChatType < -1 or msgChatType > 18 then
     return UI_color.C_FFC4BEBE
@@ -757,12 +791,12 @@ Chatting_MessageColor = function(msgChatType, msgNoticeType, panelIndex)
 end
 
 getUseMemory = function()
-  -- function num : 0_49
+  -- function num : 0_50
   return collectgarbage("count", 0)
 end
 
 in_array = function(e, t)
-  -- function num : 0_50
+  -- function num : 0_51
   for _,v in pairs(t) do
     if v == e then
       return true
@@ -772,7 +806,7 @@ in_array = function(e, t)
 end
 
 getContryTypeLua = function()
-  -- function num : 0_51
+  -- function num : 0_52
   local returnValue = -1
   local gameServiceType = getGameServiceType()
   local eCountryType = CppEnums.CountryType
@@ -825,7 +859,7 @@ getContryTypeLua = function()
 end
 
 isGameTypeThisCountry = function(country)
-  -- function num : 0_52
+  -- function num : 0_53
   if country == getContryTypeLua() then
     return true
   end
@@ -833,7 +867,7 @@ isGameTypeThisCountry = function(country)
 end
 
 getContryDetailTypeLua = function()
-  -- function num : 0_53
+  -- function num : 0_54
   local returnValue = -1
   local gameServiceType = getGameServiceType()
   local eCountryType = CppEnums.CountryType
@@ -886,7 +920,7 @@ getContryDetailTypeLua = function()
 end
 
 isGameDetailTypeThisCountry = function(country)
-  -- function num : 0_54
+  -- function num : 0_55
   if country == getContryDetailTypeLua() then
     return true
   end
@@ -894,7 +928,7 @@ isGameDetailTypeThisCountry = function(country)
 end
 
 getGameContentsServiceType = function()
-  -- function num : 0_55
+  -- function num : 0_56
   local returnValue = -1
   local gameContentServiceType = getContentsServiceType()
   local eContentType = CppEnums.ContentsServiceType
@@ -923,7 +957,7 @@ getGameContentsServiceType = function()
 end
 
 isGameContentServiceType = function(serviceType)
-  -- function num : 0_56
+  -- function num : 0_57
   if serviceType == getGameContentsServiceType() then
     return true
   end
@@ -931,62 +965,62 @@ isGameContentServiceType = function(serviceType)
 end
 
 isGameTypeKorea = function()
-  -- function num : 0_57
+  -- function num : 0_58
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR)
 end
 
 isGameTypeRussia = function()
-  -- function num : 0_58
+  -- function num : 0_59
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_RUS)
 end
 
 isGameTypeJapan = function()
-  -- function num : 0_59
+  -- function num : 0_60
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP)
 end
 
 isGameTypeEnglish = function()
-  -- function num : 0_60
+  -- function num : 0_61
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_NA)
 end
 
 isGameTypeTaiwan = function()
-  -- function num : 0_61
+  -- function num : 0_62
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TW)
 end
 
 isGameTypeSA = function()
-  -- function num : 0_62
+  -- function num : 0_63
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_SA)
 end
 
 isGameTypeKR2 = function()
-  -- function num : 0_63
+  -- function num : 0_64
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KR2)
 end
 
 isGameTypeTH = function()
-  -- function num : 0_64
+  -- function num : 0_65
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TH)
 end
 
 isGameTypeID = function()
-  -- function num : 0_65
+  -- function num : 0_66
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_ID)
 end
 
 isGameTypeTR = function()
-  -- function num : 0_66
+  -- function num : 0_67
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TR)
 end
 
 isGameTypeAE = function()
-  -- function num : 0_67
+  -- function num : 0_68
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_AE)
 end
 
 isCommonGameType = function()
-  -- function num : 0_68
+  -- function num : 0_69
   local returnValue = false
   if isGameTypeJapan() then
     returnValue = true
@@ -1017,7 +1051,7 @@ isCommonGameType = function()
 end
 
 isItemMarketSecureCode = function()
-  -- function num : 0_69
+  -- function num : 0_70
   local isSecureCode = false
   if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA()) and isSecureCode == true then
     return true
@@ -1031,7 +1065,7 @@ local g_TimerNo = 0
 local g_Timerlist = {}
 local g_TimerCount = 0
 luaTimer_UpdatePerFrame = function(fDelta)
-  -- function num : 0_70 , upvalues : g_TimerCount, g_Timerlist
+  -- function num : 0_71 , upvalues : g_TimerCount, g_Timerlist
   if g_TimerCount <= 0 then
     return 
   end
@@ -1072,7 +1106,7 @@ luaTimer_UpdatePerFrame = function(fDelta)
 end
 
 luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
-  -- function num : 0_71 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
+  -- function num : 0_72 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
   g_TimerNo = g_TimerNo + 1
   local tempTimer = {}
   tempTimer._timerNo = g_TimerNo
@@ -1091,7 +1125,7 @@ luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
 end
 
 luaTimer_RemoveEvent = function(timerNo)
-  -- function num : 0_72 , upvalues : g_Timerlist, g_TimerCount
+  -- function num : 0_73 , upvalues : g_Timerlist, g_TimerCount
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
   if g_Timerlist[timerNo] ~= nil then

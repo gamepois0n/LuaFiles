@@ -54,6 +54,9 @@ local channel_SystemPartyItem = false
 local channel_SystemMarket = false
 local channel_SystemWorker = false
 local channel_SystemHarvest = false
+local _prevTransparency = -1
+local _openOptionPanelIndex = -1
+local _prevMainTransparency = -1
 local _alphaPosX = 0
 local eChatButtonType = {eChatNotice = 0, eChatWorldWithItem = 1, eChatWorld = 2, eChatGuild = 3, eChatParty = 5, eChatBattle = 4, eChatPublic = 6, eChatPrivate = 7, eChatRolePlay = 8, eChatArsha = 9, eChatTeam = 10}
 local eChatSystemButtonType = {eChatSystem = 0, eChatSystemUndefine = 1, eChatSystemPrivateItem = 2, eChatSystemPartyItem = 3, eChatSystemMarket = 4, eChatSystemWorker = 5, eChatSystemHarvest = 6}
@@ -412,7 +415,7 @@ end
 
 local optionCount = 0
 ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPanel)
-  -- function num : 0_35 , upvalues : chatOptionData, _ChatOption_Title, selectColor_btn, onlySystemSelectColor, _msgFilter_BG, chatPanel, msgFilter_Chkbox, eChatButtonType, roleplayTypeOpen, isArshaOpen, isLocalWarOpen, btnFilter, UI_color, UI_CT, isSavageDefenceOpen, btnSystemFilter, eChatSystemButtonType, UI_CST, optionCount, panelSizeY, msgFilterBg_SizeY, _button_Confirm, buttonSizeY, _button_Cancle, _button_blockList, _button_resetColor, fontSizeTitleBg, fontSizeBG, rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, stringHeadTitleBg, stringHeadBg, channel_Notice, channel_World, channel_Public, channel_Private, channel_Party, channel_Guild, channel_WorldWithItem, channel_Battle, channel_Arsha, channel_Team, channel_RolePlay, channel_System, channel_SystemUndefine, channel_SystemPrivateItem, channel_SystemPartyItem, channel_SystemMarket, channel_SystemWorker, channel_SystemHarvest, _alphaSlider_ControlBTN, _alphaSlider_Control, _alpha_0, _alpha_50, _alpha_100, _check_Division, _button_Close
+  -- function num : 0_35 , upvalues : chatOptionData, _ChatOption_Title, selectColor_btn, onlySystemSelectColor, _msgFilter_BG, chatPanel, msgFilter_Chkbox, eChatButtonType, roleplayTypeOpen, isArshaOpen, isLocalWarOpen, btnFilter, UI_color, UI_CT, isSavageDefenceOpen, btnSystemFilter, eChatSystemButtonType, UI_CST, optionCount, panelSizeY, msgFilterBg_SizeY, _button_Confirm, buttonSizeY, _button_Cancle, _button_blockList, _button_resetColor, fontSizeTitleBg, fontSizeBG, rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, stringHeadTitleBg, stringHeadBg, channel_Notice, channel_World, channel_Public, channel_Private, channel_Party, channel_Guild, channel_WorldWithItem, channel_Battle, channel_Arsha, channel_Team, channel_RolePlay, channel_System, channel_SystemUndefine, channel_SystemPrivateItem, channel_SystemPartyItem, channel_SystemMarket, channel_SystemWorker, channel_SystemHarvest, _alphaSlider_Control, _alphaSlider_ControlBTN, _alpha_0, _alpha_50, _alpha_100, _check_Division, _button_Close
   local self = chatOptionData
   _ChatOption_Title:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHATTING_OPTION_TITLE", "panel_Index", panelIdex + 1))
   local chat = ToClient_getChattingPanel(panelIdex)
@@ -945,6 +948,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     channel_SystemMarket = chat:isShowChatSystemType(UI_CST.Market)
     channel_SystemWorker = chat:isShowChatSystemType(UI_CST.Worker)
     channel_SystemHarvest = chat:isShowChatSystemType(UI_CST.Harvest)
+    _alphaSlider_Control:addInputEvent("Mouse_LPress", "HandleClicked_ChattingSetTransparency(" .. panelIdex .. ")")
     _alphaSlider_ControlBTN:addInputEvent("Mouse_LPress", "HandleClicked_ChattingSetTransparency(" .. panelIdex .. ")")
     _alphaSlider_ControlBTN:SetPosX((_alphaSlider_Control:GetSizeX() - _alphaSlider_ControlBTN:GetSizeX()) / 100 * _transparency * 100)
     if isCombinedMainPanel == true and panelIdex ~= 0 then
@@ -1265,14 +1269,24 @@ HandleClicked_ChattingOption_SetFilter = function(panelIdex)
   prevFontSizeType = currentFontSize
   local _transparency = _alphaSlider_ControlBTN:GetPosX() / (_alphaSlider_Control:GetSizeX() - _alphaSlider_ControlBTN:GetSizeX())
   chat:setTransparency(_transparency)
-  FGlobal_ChatOption_SetIsShowTimeString(panelIdex, _checkButton_ChatTime:IsCheck())
-  -- DECOMPILER ERROR at PC138: Confused about usage of register: R5 in 'UnsetPending'
+  if panelIdex == 0 then
+    for idx = 1, count - 1 do
+      local chatPanel = ToClient_getChattingPanel(idx)
+      if chatPanel:isCombinedToMainPanel() == true then
+        FGlobal_Chatting_PanelTransparency(idx, _transparency, false)
+      end
+    end
+  end
+  do
+    FGlobal_ChatOption_SetIsShowTimeString(panelIdex, _checkButton_ChatTime:IsCheck())
+    -- DECOMPILER ERROR at PC157: Confused about usage of register: R5 in 'UnsetPending'
 
-  _prevIsCheckChatTime[panelIdex] = _checkButton_ChatTime:IsCheck()
-  ToClient_SaveUiInfo(false)
-  Panel_ChatOption:SetShow(false, false)
-  Panel_ChatOption:SetIgnore(true)
-  ChattingColor_Hide()
+    _prevIsCheckChatTime[panelIdex] = _checkButton_ChatTime:IsCheck()
+    ToClient_SaveUiInfo(false)
+    Panel_ChatOption:SetShow(false, false)
+    Panel_ChatOption:SetIgnore(true)
+    ChattingColor_Hide()
+  end
 end
 
 FGlobal_ChattingOption_SettingColor = function(index, chatType, panelIndex, isSystem)
@@ -1290,7 +1304,7 @@ FGlobal_ChattingOption_SettingColor = function(index, chatType, panelIndex, isSy
 end
 
 ChattingOption_Open = function(penelIdex, drawPanelIndex, isCombinedMainPanel)
-  -- function num : 0_40 , upvalues : rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, preNameType, rdo_CharacterName, rdo_FamilyName, prevFontSizeType
+  -- function num : 0_40 , upvalues : rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, preNameType, rdo_CharacterName, rdo_FamilyName, prevFontSizeType, _prevMainTransparency, _prevTransparency, _openOptionPanelIndex
   if Panel_ChatOption:GetShow() == false then
     Panel_ChatOption:SetShow(true, true)
     Panel_ChatOption:SetSpanSize(0, 0)
@@ -1350,10 +1364,18 @@ ChattingOption_Open = function(penelIdex, drawPanelIndex, isCombinedMainPanel)
   prevFontSizeType = ChattingOption_convertFontSizeToChatFontType(thisFontSize)
   local _transparency = FGlobal_Chatting_PanelTransparency_Chk(drawPanelIndex)
   ChattingOption_Initialize(penelIdex, _transparency, isCombinedMainPanel)
+  _prevMainTransparency = -1
+  _prevTransparency = -1
+  _openOptionPanelIndex = -1
+  _openOptionPanelIndex = penelIdex
+  _prevTransparency = _transparency
+  if penelIdex == 0 then
+    _prevMainTransparency = _transparency
+  end
 end
 
 ChattingOption_Close = function()
-  -- function num : 0_41 , upvalues : prevFontSizeType, _prevIsCheckChatTime, _checkButton_ChatTime, preNameType, preChattingAnimation
+  -- function num : 0_41 , upvalues : prevFontSizeType, _prevIsCheckChatTime, _checkButton_ChatTime, preNameType, preChattingAnimation, _openOptionPanelIndex, _prevTransparency, _prevMainTransparency
   local chatCount = ToClient_getChattingPanelCount()
   for panelIdex = 0, chatCount - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIdex)
@@ -1367,9 +1389,22 @@ ChattingOption_Close = function()
   FromClient_ChatUpdate(true)
   ToClient_setChatNameType(preNameType)
   ChattingOption_ChatiingAnimation(preChattingAnimation)
-  Panel_ChatOption:SetShow(false, false)
-  Panel_ChatOption:SetIgnore(true)
-  ChattingColor_Hide()
+  if _openOptionPanelIndex ~= -1 then
+    FGlobal_Chatting_PanelTransparency(_openOptionPanelIndex, _prevTransparency, true)
+  end
+  if _prevMainTransparency ~= -1 then
+    for idx = 0, chatCount - 1 do
+      local chatPanel = ToClient_getChattingPanel(idx)
+      if chatPanel:isCombinedToMainPanel() == true then
+        FGlobal_Chatting_PanelTransparency(idx, _prevMainTransparency, true)
+      end
+    end
+  end
+  do
+    Panel_ChatOption:SetShow(false, false)
+    Panel_ChatOption:SetIgnore(true)
+    ChattingColor_Hide()
+  end
 end
 
 ChatOption_ShowAni = function()
