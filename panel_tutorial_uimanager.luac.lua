@@ -228,6 +228,7 @@ PaGlobal_TutorialUiManager.showConditionalUi = function(self)
   Panel_Widget_TownNpcNavi:SetShow(true, true)
   FGlobal_PetControl_CheckUnSealPet()
   FGlobal_Party_ConditionalShow()
+  PaGlobal_BlackSpiritIcon_UpdateVisibleState()
   if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_GameTips, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow) == 1 then
     GameTips_Show()
     GameTips_Reposition()
@@ -273,6 +274,7 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
     FGlobal_MyHouseNavi_Update()
     Panel_NewEventProduct_Alarm:SetShow(isShow)
     FGlobal_PetControl_CheckUnSealPet()
+    PaGlobal_BlackSpiritIcon_UpdateVisibleState()
   else
     if isShow == false then
       local navi = FGlobal_GetPersonalIconControl(0)
@@ -292,6 +294,8 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
       Panel_Window_PetControl:SetShow(false)
       Panel_ChallengeReward_Alert:SetShow(false)
       Panel_Movie_KeyViewer:SetShow(false)
+      ;
+      (PaGlobal_Camp._btn_Camp):SetShow(false)
     end
   end
   do

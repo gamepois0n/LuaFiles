@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 Panel_Window_Profile:SetShow(false)
-local myProfile = {
+local myProfile = {_rewardBG; 
 _control = {_topBg = (UI.getChildControl)(Panel_Window_Profile, "Static_TopBg"), _list2Profile = (UI.getChildControl)(Panel_Window_Profile, "List2_LeftContent"), _rightDescBg = (UI.getChildControl)(Panel_Window_Profile, "Static_RightDescBg"), 
 _radioBtn = {[0] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Daily"), [1] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Weekly"), [2] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Monthly"), [3] = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_SumAll")}
 }
@@ -16,6 +16,10 @@ _termDesc = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DAY"), 
 _string = {[(CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_1"), [(CppEnums.ProfileIndex).eUserProfileValueType_FishingSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_2"), [(CppEnums.ProfileIndex).eUserProfileValueType_ItemGainCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_3"), [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_TITLE_4"), [(CppEnums.ProfileIndex).eUserProfileValueType_Count] = 4}
 , 
 _desc = {[(CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_1"), [(CppEnums.ProfileIndex).eUserProfileValueType_FishingSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_2"), [(CppEnums.ProfileIndex).eUserProfileValueType_ItemGainCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_3"), [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = PAGetString(Defines.StringSheet_GAME, "LUA_ACHIVEMENT_DESC_4")}
+, 
+_rewardKey = {[(CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_FishingSuccessCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_ItemGainCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_Count] = 4}
+, 
+_rewardIndex = {[(CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_FishingSuccessCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_ItemGainCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = -1, [(CppEnums.ProfileIndex).eUserProfileValueType_Count] = 4}
 , _iconPath = "New_UI_Common_forLua/Window/CharacterInfo/my_info_achievement_00.dds", 
 _iconCoordinate = {
 [(CppEnums.ProfileIndex).eUserProfileValueType_MonsterKillCount] = {x1 = 72, y1 = 109, x2 = 142, y2 = 179}
@@ -26,10 +30,17 @@ _iconCoordinate = {
 , 
 [(CppEnums.ProfileIndex).eUserProfileValueType_ProductSuccessCount] = {x1 = 1, y1 = 109, x2 = 71, y2 = 179}
 }
-}
+, 
+slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true}
+, 
+_rewardSlot = {}
+, 
+_rewardSlotBG = {}
+, _periodType = 0}
 local group_2 = nil
+local RewardSlotCount = 4
 myProfile.Init = function(self)
-  -- function num : 0_0
+  -- function num : 0_0 , upvalues : RewardSlotCount
   local control = self._control
   control._playTime = (UI.getChildControl)(control._topBg, "StaticText_PlayTime")
   control._pcRoolTime = (UI.getChildControl)(control._topBg, "StaticText_PcRoomTime")
@@ -38,14 +49,62 @@ myProfile.Init = function(self)
   control._name = (UI.getChildControl)(control._rightDescBg, "StaticText_Name")
   control._period = (UI.getChildControl)(control._rightDescBg, "StaticText_Period")
   control._desc = (UI.getChildControl)(control._rightDescBg, "StaticText_Desc")
+  control._slotBG = (UI.getChildControl)(control._rightDescBg, "Static_RewardsBG")
   ;
   (control._period):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
   (control._desc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  local radiobutton = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Daily")
+  radiobutton:addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_PeriodUpdate(" .. 1 .. ")")
+  radiobutton:SetCheck(true)
+  radiobutton = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Weekly")
+  radiobutton:addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_PeriodUpdate(" .. 7 .. ")")
+  radiobutton = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_Monthly")
+  radiobutton:addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_PeriodUpdate(" .. 30 .. ")")
+  radiobutton = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_SumAll")
+  radiobutton:addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_PeriodUpdate(" .. 0 .. ")")
+  for index = 0, RewardSlotCount - 1 do
+    -- DECOMPILER ERROR at PC130: Confused about usage of register: R7 in 'UnsetPending'
+
+    (self._rewardSlotBG)[index] = (UI.getChildControl)(control._slotBG, "Static_RewardItemSlotBg_" .. tostring(index))
+    ;
+    ((self._rewardSlotBG)[index]):SetShow(true)
+    local createSlot = {}
+    ;
+    (SlotItem.new)(createSlot, "Reward_SlotItem" .. tostring(index), 0, (self._rewardSlotBG)[index], self.slotConfig)
+    createSlot:createChild()
+    local sizeX = (createSlot.icon):GetSizeX()
+    local sizeY = (createSlot.icon):GetSizeY()
+    ;
+    (createSlot.icon):SetShow(true)
+    ;
+    (createSlot.icon):SetSize(sizeX * 0.8, sizeY * 0.8)
+    -- DECOMPILER ERROR at PC168: Confused about usage of register: R10 in 'UnsetPending'
+
+    ;
+    (self._rewardSlot)[index] = createSlot
+  end
+  ;
+  (control._slotBG):SetShow(false)
+  self._periodType = 1
+end
+
+FGlobal_ProfileReward_ApplyGetReward = function(type, index)
+  -- function num : 0_1 , upvalues : myProfile
+  ToClient_sendApplyGetProfileReward((myProfile._rewardKey)[type], index)
+end
+
+FGlobal_ProfileReward_PeriodUpdate = function(period)
+  -- function num : 0_2 , upvalues : myProfile
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
+
+  myProfile._periodType = period
+  FGlobal_ProfileReward_AllUpdate()
+  ProfileReward_RightDataSet(0)
 end
 
 FGlobal_Profile_Update = function(tabBtnInit)
-  -- function num : 0_1 , upvalues : myProfile
+  -- function num : 0_3 , upvalues : myProfile
   local self = myProfile
   self._selecteIndex = 0
   if not tabBtnInit then
@@ -57,7 +116,7 @@ FGlobal_Profile_Update = function(tabBtnInit)
 end
 
 myProfile.RadioBtn_Init = function(self)
-  -- function num : 0_2
+  -- function num : 0_4
   for index = 0, (CppEnums.ProfileInitTermType).eProfileInitTermType_Maxcount - 1 do
     (((self._control)._radioBtn)[index]):SetCheck(self._radioBtnIndex == index)
   end
@@ -65,7 +124,7 @@ myProfile.RadioBtn_Init = function(self)
 end
 
 Profile_Update = function()
-  -- function num : 0_3 , upvalues : myProfile
+  -- function num : 0_5 , upvalues : myProfile
   local self = myProfile
   local control = self._control
   ;
@@ -76,14 +135,14 @@ Profile_Update = function()
 end
 
 HandleClicked_RadioButton = function(index)
-  -- function num : 0_4 , upvalues : myProfile
+  -- function num : 0_6 , upvalues : myProfile
   local self = myProfile
   self._radioBtnIndex = index
   FGlobal_Profile_Update(true)
 end
 
 Profile_DataSet = function(content, key)
-  -- function num : 0_5 , upvalues : myProfile
+  -- function num : 0_7 , upvalues : myProfile
   local self = myProfile
   local contentBg = (UI.getChildControl)(content, "RadioButton_ContentBg")
   local title = (UI.getChildControl)(content, "StaticText_Title")
@@ -119,7 +178,7 @@ Profile_DataSet = function(content, key)
 end
 
 Profile_TimeSet = function()
-  -- function num : 0_6 , upvalues : myProfile
+  -- function num : 0_8 , upvalues : myProfile
   local self = myProfile
   local control = self._control
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
@@ -143,27 +202,64 @@ Profile_TimeSet = function()
 end
 
 Profile_RightDataSet = function(index)
-  -- function num : 0_7 , upvalues : myProfile
+  -- function num : 0_9 , upvalues : myProfile, RewardSlotCount
   local self = myProfile
   local control = self._control
   self._selecteIndex = index
   ;
   (control._icon):ChangeTextureInfoName(self._iconPath)
-  local x1, y1, x2, y2 = setTextureUV_Func(control._icon, ((self._iconCoordinate)[index]).x1, ((self._iconCoordinate)[index]).y1, ((self._iconCoordinate)[index]).x2, ((self._iconCoordinate)[index]).y2)
-  ;
-  ((control._icon):getBaseTexture()):setUV(x1, y1, x2, y2)
-  ;
-  (control._icon):setRenderTexture((control._icon):getBaseTexture())
-  ;
-  (control._name):SetText((self._string)[index])
-  ;
-  (control._period):SetText((self._termDesc)[self._radioBtnIndex])
-  ;
-  (control._desc):SetText((self._desc)[index])
+  do
+    local x1, y1, x2, y2 = setTextureUV_Func(control._icon, ((self._iconCoordinate)[index]).x1, ((self._iconCoordinate)[index]).y1, ((self._iconCoordinate)[index]).x2, ((self._iconCoordinate)[index]).y2)
+    ;
+    ((control._icon):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    (control._icon):setRenderTexture((control._icon):getBaseTexture())
+    ;
+    (control._name):SetText((self._string)[index])
+    ;
+    (control._period):SetText((self._termDesc)[self._radioBtnIndex])
+    ;
+    (control._desc):SetText((self._desc)[index])
+    if ToClient_IsDevelopment() then
+      (control._slotBG):SetShow(true)
+      local profilerewardwrapper = ToClient_getProfileRewardItem(self._periodType, index)
+      if profilerewardwrapper ~= nil then
+        local isIgnore = profilerewardwrapper:getUserProfileRewardFlag()
+        -- DECOMPILER ERROR at PC72: Confused about usage of register: R9 in 'UnsetPending'
+
+        ;
+        (self._rewardKey)[index] = profilerewardwrapper:getUserProfileRewardKey()
+        for arrindex = 0, RewardSlotCount - 1 do
+          local itemStatic = getItemEnchantStaticStatus(profilerewardwrapper:getUserProfileRewardItemkey(arrindex))
+          local rewardkey = 0
+          if itemStatic ~= nil then
+            _PA_LOG("오명�\128", "_rewardSlotBG,_rewardSlot")
+            ;
+            ((myProfile._rewardSlotBG)[arrindex]):SetShow(true)
+            ;
+            (((myProfile._rewardSlot)[arrindex]).icon):SetShow(true)
+            ;
+            (((myProfile._rewardSlot)[arrindex]).icon):SetIgnore(isIgnore == true)
+            ;
+            (((myProfile._rewardSlot)[arrindex]).icon):addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_ApplyGetReward(" .. index .. "," .. arrindex .. ")")
+            ;
+            ((myProfile._rewardSlot)[arrindex]):setItemByStaticStatus(itemStatic, profilerewardwrapper:getUserProfileRewardItemCount(arrindex))
+          else
+            (((myProfile._rewardSlot)[arrindex]).icon):SetShow(false)
+            ;
+            ((myProfile._rewardSlotBG)[arrindex]):SetShow(false)
+          end
+        end
+      end
+    else
+      (control._slotBG):SetShow(false)
+    end
+    -- DECOMPILER ERROR: 5 unprocessed JMP targets
+  end
 end
 
 myProfile.registEvent = function(self)
-  -- function num : 0_8
+  -- function num : 0_10
   registerEvent("Profile_Updatelist", "Profile_Update")
   for index = 0, (CppEnums.ProfileInitTermType).eProfileInitTermType_Maxcount - 1 do
     (((self._control)._radioBtn)[index]):addInputEvent("Mouse_LUp", "HandleClicked_RadioButton(" .. index .. ")")

@@ -284,7 +284,10 @@ Panel_MyHouseNavi_Update = function(init, listCount)
       return 
     end
     FGlobal_PetListNew_NoPet()
-    -- DECOMPILER ERROR: 17 unprocessed JMP targets
+    if PaGlobal_BlackSpiritIcon:showAble() then
+      PaGlobal_BlackSpiritIcon_UpdateVisibleState()
+    end
+    -- DECOMPILER ERROR: 18 unprocessed JMP targets
   end
 end
 

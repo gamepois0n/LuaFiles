@@ -139,18 +139,21 @@ ExchangeNumberHideAni = function()
   aniInfo1:SetDisableWhileAni(true)
 end
 
-Panel_NumberPad_Init = function(param0, confirmFunction, isShow, param1)
+Panel_NumberPad_Init = function(param0, confirmFunction, isShow, param1, param2)
   -- function num : 0_4 , upvalues : numberPad, realNumber, _textNumber, _buttonConfirm, UI_color
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R5 in 'UnsetPending'
 
   numberPad.param0 = param0
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R5 in 'UnsetPending'
 
   numberPad.param1 = param1
-  -- DECOMPILER ERROR at PC5: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R5 in 'UnsetPending'
+
+  numberPad.param2 = param2
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R5 in 'UnsetPending'
 
   numberPad.confirmFunction = confirmFunction
-  -- DECOMPILER ERROR at PC7: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC9: Confused about usage of register: R5 in 'UnsetPending'
 
   numberPad.init_Number = true
   realNumber = numberPad.s64_inputNumber
@@ -202,6 +205,9 @@ Panel_NumberPad_Close = function()
     numberPad.param1 = nil
     -- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
 
+    numberPad.param2 = nil
+    -- DECOMPILER ERROR at PC22: Confused about usage of register: R0 in 'UnsetPending'
+
     numberPad.confirmFunction = nil
     Panel_Window_Exchange_Number:SetShow(false, true)
   end
@@ -234,7 +240,7 @@ Panel_NumberPad_Show_Min = function(isShow, s64_minNumber, param0, confirmFuncti
 end
 
 local _isExchange = nil
-Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1, isItemMarket)
+Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1, isItemMarket, param2)
   -- function num : 0_8 , upvalues : _isExchange, _textNumber, IM, numberPad, _checkButtonMaxCount, realNumber
   _isExchange = isExchange
   local maxLength = (string.len)(tostring(s64_maxNumber))
@@ -248,29 +254,29 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
     end
   else
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC33: Confused about usage of register: R9 in 'UnsetPending'
 
     numberPad.s64_maxNumber = s64_maxNumber
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC37: Confused about usage of register: R9 in 'UnsetPending'
 
     if isItemMarket == true then
       numberPad.s64_inputNumber = s64_maxNumber
     else
-      -- DECOMPILER ERROR at PC45: Confused about usage of register: R8 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC45: Confused about usage of register: R9 in 'UnsetPending'
 
       if _checkButtonMaxCount:IsCheck() then
         numberPad.s64_inputNumber = s64_maxNumber
       else
-        -- DECOMPILER ERROR at PC51: Confused about usage of register: R8 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC51: Confused about usage of register: R9 in 'UnsetPending'
 
         numberPad.s64_inputNumber = (Defines.s64_const).s64_1
       end
     end
     if (Defines.s64_const).s64_1 == s64_maxNumber then
-      Panel_NumberPad_Init(param0, confirmFunction, false, param1)
+      Panel_NumberPad_Init(param0, confirmFunction, false, param1, param2)
       Panel_NumberPad_ButtonConfirm_Mouse_Click()
     else
-      Panel_NumberPad_Init(param0, confirmFunction, true, param1)
+      Panel_NumberPad_Init(param0, confirmFunction, true, param1, param2)
       ;
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
       SetFocusEdit(_textNumber)
@@ -481,7 +487,7 @@ Panel_NumberPad_ButtonConfirm_Mouse_Click = function()
   -- function num : 0_17 , upvalues : numberPad, _isExchange
   if (Defines.s64_const).s64_0 < numberPad.s64_inputNumber or _isExchange == true then
     if numberPad.confirmFunction ~= nil then
-      (numberPad.confirmFunction)(numberPad.s64_inputNumber, numberPad.param0, numberPad.param1)
+      (numberPad.confirmFunction)(numberPad.s64_inputNumber, numberPad.param0, numberPad.param1, numberPad.param2)
     end
     Panel_NumberPad_Show(false, (Defines.s64_const).s64_0, 0, nil)
   end
@@ -494,15 +500,15 @@ Panel_NumberPad_ButtonAllSelect_Mouse_Click = function(isType)
   numberPad.s64_inputNumber = numberPad.s64_maxNumber
   if isType == 1 then
     if not _checkButtonMaxCount:IsCheck() then
-      Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+      Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
       SetFocusEdit(_textNumber)
       _textNumber:SetEditText(tostring((Defines.s64_const).s64_1))
       realNumber = (Defines.s64_const).s64_1
-      -- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
 
       numberPad.s64_inputNumber = (Defines.s64_const).s64_1
     else
-      Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+      Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
       ;
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
       SetFocusEdit(_textNumber)
@@ -512,10 +518,10 @@ Panel_NumberPad_ButtonAllSelect_Mouse_Click = function(isType)
   else
     if isType == 0 then
       if (Defines.s64_const).s64_1 == s64_maxNumber then
-        Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+        Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
         Panel_NumberPad_ButtonConfirm_Mouse_Click()
       else
-        Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1)
+        Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
         ;
         (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
         SetFocusEdit(_textNumber)

@@ -50,7 +50,7 @@ AlchemyStone_CheckEventForSave = function(isShow)
     isCheck = isShow
   end
   ;
-  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).AlchemyStone, isCheck)
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).AlchemyStone, isCheck, (CppEnums.VariableStorageType).eVariableStorageType_Character)
 end
 
 local _buttonQuestion = (UI.getChildControl)(Panel_Equipment, "Button_Question")
@@ -289,6 +289,10 @@ HandleClicked_EquipmentWindow_Close = function()
   (equip.checkPopUp):SetCheck(false)
   Panel_Equipment:CloseUISubApp()
   EquipmentWindow_Close()
+  if PaGlobal_Camp:getIsCamping() then
+    InventoryWindow_Close()
+    PaGlobal_Camp:open()
+  end
 end
 
 EquipmentWindow_Close = function()

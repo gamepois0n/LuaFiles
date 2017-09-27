@@ -22,21 +22,37 @@ HandleClicked_FishCheck = function()
   FGlobal_RemoteControl_FishCheck((fishing_UI._fishCheckBtn):IsCheck())
 end
 
-FGlobal_FishCheck = function()
+HandleClicked_FishDropTrash = function(isShow)
   -- function num : 0_1 , upvalues : fishing_UI
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GLOBAL_MANUAL_CHECKBUTTON")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_CHECKBUTTON")
+  control = fishing_UI._fishCheckBtn
+  TooltipSimple_Show(control, name, desc)
+end
+
+FGlobal_FishCheck = function()
+  -- function num : 0_2 , upvalues : fishing_UI
   return (fishing_UI._fishCheckBtn):IsCheck()
 end
 
 FGlobal_SetFishCheck = function(check)
-  -- function num : 0_2 , upvalues : fishing_UI
+  -- function num : 0_3 , upvalues : fishing_UI
   (fishing_UI._fishCheckBtn):SetCheck(check)
   HandleClicked_FishCheck()
 end
 
 ;
 (fishing_UI._fishCheckBtn):addInputEvent("Mouse_LUp", "HandleClicked_FishCheck()")
+;
+(fishing_UI._fishCheckBtn):addInputEvent("Mouse_On", "HandleClicked_FishDropTrash(true)")
+;
+(fishing_UI._fishCheckBtn):addInputEvent("Mouse_Out", "HandleClicked_FishDropTrash(false)")
 local IsHideMiniGameManual = function()
-  -- function num : 0_3
+  -- function num : 0_4
   do
     local uiMode = GetUIMode()
     do return (getCustomizingManager()):isShow() or uiMode == (Defines.UIMode).eUIMode_NpcDialog or uiMode == (Defines.UIMode).eUIMode_InGameCashShop or uiMode == (Defines.UIMode).eUIMode_Mental or uiMode == (Defines.UIMode).eUIMode_DyeNew end
@@ -45,7 +61,7 @@ local IsHideMiniGameManual = function()
 end
 
 fishingGame_Initialize = function()
-  -- function num : 0_4 , upvalues : fishing_UI, uiPress
+  -- function num : 0_5 , upvalues : fishing_UI, uiPress
   Panel_Fishing:SetShow(false)
   local scrX = getScreenSizeX()
   local scrY = getScreenSizeY()
@@ -63,7 +79,7 @@ fishingGame_Initialize = function()
 end
 
 setFishingResourcePool_text = function()
-  -- function num : 0_5 , upvalues : fishing_UI, UI_TM, uiPress
+  -- function num : 0_6 , upvalues : fishing_UI, UI_TM, uiPress
   local fishComment_head = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FISH_POOL_HEAD")
   local fishingPercent = (math.floor)(ToClient_CurrentFishingData() * 100)
   if fishingPercent >= 71 and fishingPercent <= 100 then
@@ -130,9 +146,23 @@ setFishingResourcePool_text = function()
   (fishing_UI._fishWpDesc):SetPosY((uiPress._button_Space):GetPosY() + (uiPress._button_Space):GetSizeY() + 10)
 end
 
+FromClient_ReconnectCheckItemGrade = function(itemgrade)
+  -- function num : 0_7 , upvalues : fishing_UI
+  if itemgrade == 1 then
+    (fishing_UI._fishCheckBtn):SetCheck(true)
+  else
+    ;
+    (fishing_UI._fishCheckBtn):SetCheck(false)
+  end
+  ;
+  (getSelfPlayer()):setFishingAutoItemGrade(itemGrade)
+  FGlobal_RemoteControl_FishCheck((fishing_UI._fishCheckBtn):IsCheck())
+end
+
+registerEvent("FromClient_ReconnectCheckItemGrade", "FromClient_ReconnectCheckItemGrade")
 fishingGame_Initialize()
 local IsHideFishingGame = function()
-  -- function num : 0_6
+  -- function num : 0_8
   do
     local uiMode = GetUIMode()
     do return (getCustomizingManager()):isShow() or uiMode == (Defines.UIMode).eUIMode_NpcDialog or uiMode == (Defines.UIMode).eUIMode_InGameCashShop or uiMode == (Defines.UIMode).eUIMode_Mental or uiMode == (Defines.UIMode).eUIMode_DyeNew end
@@ -141,7 +171,7 @@ local IsHideFishingGame = function()
 end
 
 local FishingGame_Manual_Fishing_Start = function(actorKeyRaw, isSelf)
-  -- function num : 0_7 , upvalues : ui_Value, IsHideFishingGame, uiPress, fishing_UI, gameOptionActionKey
+  -- function num : 0_9 , upvalues : ui_Value, IsHideFishingGame, uiPress, fishing_UI, gameOptionActionKey
   if ui_Value.isFirstTime_Manual_Fishing_Start == true and not IsHideFishingGame() then
     for _,v in pairs(uiPress) do
       v:SetShow(false)
@@ -193,7 +223,7 @@ local FishingGame_Manual_Fishing_Start = function(actorKeyRaw, isSelf)
 end
 
 local FishingGame_Manual_Fishing_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_8 , upvalues : ui_Value, fishing_UI, uiPress
+  -- function num : 0_10 , upvalues : ui_Value, fishing_UI, uiPress
   FGlobal_PowerGauge_Close()
   if ui_Value.isFirstTime_Manual_Fishing_0 == true then
     for _,v in pairs(fishing_UI) do
@@ -235,7 +265,7 @@ local FishingGame_Manual_Fishing_0 = function(actorKeyRaw, isSelf)
 end
 
 local FishingGame_Manual_Fishing_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_9 , upvalues : ui_Value, uiPress, fishing_UI, gameOptionActionKey
+  -- function num : 0_11 , upvalues : ui_Value, uiPress, fishing_UI, gameOptionActionKey
   local selfplayer = getSelfPlayer()
   if selfplayer == nil then
     return 
@@ -300,7 +330,7 @@ local FishingGame_Manual_Fishing_1 = function(actorKeyRaw, isSelf)
 end
 
 local FishingGame_Manual_Fishing_2 = function(actorKeyRaw, isSelf)
-  -- function num : 0_10 , upvalues : ui_Value, uiPress, fishing_UI, gameOptionActionKey
+  -- function num : 0_12 , upvalues : ui_Value, uiPress, fishing_UI, gameOptionActionKey
   if ui_Value.isFirstTime_Manual_Fishing_2 == true then
     for _,v in pairs(uiPress) do
       v:SetShow(false)
@@ -365,7 +395,7 @@ local FishingGame_Manual_Fishing_2 = function(actorKeyRaw, isSelf)
 end
 
 local FishingGame_Manual_Fishing_3 = function(actorKeyRaw, isSelf)
-  -- function num : 0_11 , upvalues : ui_Value, uiPress, fishing_UI, gameOptionActionKey
+  -- function num : 0_13 , upvalues : ui_Value, uiPress, fishing_UI, gameOptionActionKey
   local selfplayer = getSelfPlayer()
   if selfplayer == nil then
     return 
@@ -427,7 +457,7 @@ local FishingGame_Manual_Fishing_3 = function(actorKeyRaw, isSelf)
 end
 
 local FishingGame_Manual_Fishing_Auto = function()
-  -- function num : 0_12 , upvalues : uiPress, fishing_UI
+  -- function num : 0_14 , upvalues : uiPress, fishing_UI
   local selfplayer = getSelfPlayer()
   if selfplayer == nil then
     return 
@@ -446,26 +476,26 @@ local FishingGame_Manual_Fishing_Auto = function()
 end
 
 local FishingGame_Manual_CommonGaugeOpen = function()
-  -- function num : 0_13
+  -- function num : 0_15
   FGlobal_PowerGuage_StatCheck()
 end
 
 local FishingGame_Manual_Fishing_Wait = function(aaa)
-  -- function num : 0_14
+  -- function num : 0_16
   if not Panel_PowerGauge:GetShow() then
     FGlobal_PowerGauge_Open()
   end
 end
 
 FGlobal_MiniGame_FishingCheck = function()
-  -- function num : 0_15 , upvalues : fishing_UI, uiPress
+  -- function num : 0_17 , upvalues : fishing_UI, uiPress
   (fishing_UI._purposeText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_2"))
   ;
   (uiPress._button_Space):SetShow(false)
 end
 
 MiniGame_FishingDescInit = function()
-  -- function num : 0_16 , upvalues : fishing_UI, UI_TM
+  -- function num : 0_18 , upvalues : fishing_UI, UI_TM
   (fishing_UI._fishWpDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   (fishing_UI._fishWpDesc):SetSize((fishing_UI._fishWpDesc):GetTextSizeX() + 10, (fishing_UI._fishWpDesc):GetTextSizeY() + 10)
@@ -473,7 +503,7 @@ end
 
 MiniGame_FishingDescInit()
 local MiniGame_Manual_Jaksal_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_17 , upvalues : ui_Value, IsHideMiniGameManual, fishing_UI, uiPress
+  -- function num : 0_19 , upvalues : ui_Value, IsHideMiniGameManual, fishing_UI, uiPress
   if ui_Value.isFirstTime_Manual_Jaksal_0 == true and not IsHideMiniGameManual() then
     for _,v in pairs(fishing_UI) do
       v:SetShow(false)
@@ -514,7 +544,7 @@ local MiniGame_Manual_Jaksal_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Jaksal_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_18 , upvalues : ui_Value, uiPress, fishing_UI
+  -- function num : 0_20 , upvalues : ui_Value, uiPress, fishing_UI
   if ui_Value.isFirstTime_Manual_Jaksal_1 == true then
     for _,v in pairs(uiPress) do
       v:SetShow(false)
@@ -563,7 +593,7 @@ local MiniGame_Manual_Jaksal_1 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Jaksal_2 = function(actorKeyRaw, isSelf)
-  -- function num : 0_19 , upvalues : ui_Value, uiPress, fishing_UI
+  -- function num : 0_21 , upvalues : ui_Value, uiPress, fishing_UI
   if ui_Value.isFirstTime_Manual_Jaksal_2 == true then
     for _,v in pairs(uiPress) do
       v:SetShow(false)
@@ -609,7 +639,7 @@ local MiniGame_Manual_Jaksal_2 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Jaksal_3 = function(actorKeyRaw, isSelf)
-  -- function num : 0_20 , upvalues : ui_Value, uiPress, fishing_UI
+  -- function num : 0_22 , upvalues : ui_Value, uiPress, fishing_UI
   if ui_Value.isFirstTime_Manual_Jaksal_3 == true then
     for _,v in pairs(uiPress) do
       v:SetShow(false)
@@ -658,7 +688,7 @@ local MiniGame_Manual_Jaksal_3 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Jaksal_4 = function(actorKeyRaw, isSelf)
-  -- function num : 0_21 , upvalues : ui_Value, uiPress, fishing_UI
+  -- function num : 0_23 , upvalues : ui_Value, uiPress, fishing_UI
   if ui_Value.isFirstTime_Manual_Jaksal_4 == true then
     for _,v in pairs(uiPress) do
       v:SetShow(false)
@@ -710,7 +740,7 @@ local MiniGame_Manual_Jaksal_4 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Jaksal_5 = function(actorKeyRaw, isSelf)
-  -- function num : 0_22 , upvalues : ui_Value, uiPress, fishing_UI
+  -- function num : 0_24 , upvalues : ui_Value, uiPress, fishing_UI
   if ui_Value.isFirstTime_Manual_Jaksal_5 == true then
     for _,v in pairs(uiPress) do
       v:SetShow(false)
@@ -765,7 +795,7 @@ local MiniGame_Manual_Jaksal_5 = function(actorKeyRaw, isSelf)
 end
 
 Panel_Fishing_End = function(actorKeyRaw, isSelf)
-  -- function num : 0_23 , upvalues : uiPress, ui_Value
+  -- function num : 0_25 , upvalues : uiPress, ui_Value
   if isSelf == false then
     return 
   end
@@ -816,7 +846,7 @@ Panel_Fishing_End = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_CannonGaugeOpen = function()
-  -- function num : 0_24
+  -- function num : 0_26
   if not Panel_Stamina:GetShow() then
     FGlobal_CannonGauge_Open()
   end

@@ -824,6 +824,7 @@ end
   if ToClient_GetMyTeamNoLocalWar() > 0 or ToClient_IsMyselfInEntryUser() == true then
     return 
   end
+  local isRankShow = ToClient_getLifeRankNameTag()
   local lifeRankIcon = {}
   for i = 0, lifeContentCount - 1 do
     lifeRankIcon[i] = nil
@@ -862,7 +863,7 @@ end
       local rankNumer = 0
       if FGlobal_LifeRanking_CheckEnAble(lifeContentIndex) and hasRank == true and lifeContentIndex < 10 then
         local rankNumer = (FromClient_GetTopRankListForNameTag()):getRank(lifeContentIndex, actorKeyRaw) + 1
-        -- DECOMPILER ERROR at PC108: Confused about usage of register: R18 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC110: Confused about usage of register: R19 in 'UnsetPending'
 
         ;
         (lifeContent[lifeContentIndex])[rankNumer] = rankNumer
@@ -891,7 +892,7 @@ end
           (lifeRankIcon[lifeContentIndex]):SetShow(false)
         else
           ;
-          (lifeRankIcon[lifeContentIndex]):SetShow(true)
+          (lifeRankIcon[lifeContentIndex]):SetShow(isRankShow)
         end
         insertedArray:push_back(lifeRankIcon[lifeContentIndex])
       end
@@ -901,7 +902,7 @@ end
       hasContentRank = (FromClient_GetTopRankListForNameTag()):hasContentsRank(rankerType, actorKeyRaw)
       if FGlobal_LifeRanking_CheckEnAble(lifeContentIndex) and hasContentRank == true and lifeContentIndex >= 10 then
         local rankNumer = (FromClient_GetTopRankListForNameTag()):getContentsRank(rankerType, actorKeyRaw) + 1
-        -- DECOMPILER ERROR at PC266: Confused about usage of register: R17 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC268: Confused about usage of register: R18 in 'UnsetPending'
 
         ;
         (lifeContent[lifeContentIndex])[rankNumer] = rankNumer
@@ -930,14 +931,14 @@ end
           (lifeRankIcon[lifeContentIndex]):SetShow(false)
         else
           ;
-          (lifeRankIcon[lifeContentIndex]):SetShow(true)
+          (lifeRankIcon[lifeContentIndex]):SetShow(isRankShow)
         end
         insertedArray:push_back(lifeRankIcon[lifeContentIndex])
       end
       do
         do
           rankerType = rankerType + 1
-          -- DECOMPILER ERROR at PC392: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC394: LeaveBlock: unexpected jumping out DO_STMT
 
         end
       end
@@ -948,7 +949,7 @@ end
     hasMatchRank = (FromClient_GetTopRankListForNameTag()):hasMatchRank(matchType, actorKeyRaw)
     if hasMatchRank == true and isEnableContentsPvP then
       local rankNumer = (FromClient_GetTopRankListForNameTag()):getMatchRank(matchType, actorKeyRaw) + 1
-      -- DECOMPILER ERROR at PC420: Confused about usage of register: R16 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC422: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       (lifeContent[lifeContent.match])[rankNumer] = rankNumer
@@ -977,7 +978,7 @@ end
         (lifeRankIcon[lifeContent.match]):SetShow(false)
       else
         ;
-        (lifeRankIcon[lifeContent.match]):SetShow(true)
+        (lifeRankIcon[lifeContent.match]):SetShow(isRankShow)
       end
       insertedArray:push_back(lifeRankIcon[lifeContent.match])
     end
@@ -1738,7 +1739,6 @@ end
                                       hpLater:SetShow(true)
                                       hpMain:SetShow(true)
                                     else
-                                      _PA_LOG("LUA", "name hide : " .. tostring(actorProxyWrapper:getName()))
                                       hpBack:SetShow(false)
                                       hpLater:SetShow(false)
                                       hpMain:SetShow(false)
@@ -3706,6 +3706,24 @@ end
   settingGuildInfo(actorKeyRaw, panel, actorProxyWrapper)
 end
 
+  FromClient_ShowOverheadRank = function(actorKeyRaw)
+  -- function num : 0_109 , upvalues : settingLifeRankIcon
+  if actorKeyRaw == nil then
+    return 
+  end
+  local actorProxyWrapper = getActor(actorKeyRaw)
+  if actorProxyWrapper == nil then
+    return 
+  end
+  local panel = (actorProxyWrapper:get()):getUIPanel()
+  if panel == nil then
+    return 
+  end
+  local insertedArray = (Array.new)()
+  settingLifeRankIcon(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  isOptionChange = true
+end
+
   registerEvent("EventActorCreated", "EventActorCreated_NameTag")
   registerEvent("FromClient_TendencyChanged", "FromClient_NameTag_TendencyChanged")
   registerEvent("EventFirstTalk", "EventActorFirsttalk")
@@ -3749,5 +3767,6 @@ end
   registerEvent("EventPvPModeChanged", "EventActorPvpModeChange")
   registerEvent("FromClient_ObjectInstanceMpChanged", "FromClient_ObjectInstanceMpChanged")
   registerEvent("FromClient_ChangeVolunteerNameTag", "FromClient_ChangeMilitiaNameTag")
+  registerEvent("FromClient_ShowOverheadRank", "FromClient_ShowOverheadRank")
 end
 

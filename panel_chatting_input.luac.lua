@@ -218,7 +218,7 @@ ChatInput_TypeButtonClicked = function(chatType)
         chatInput:clearLinkedItem()
       end
       ;
-      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, chatType)
+      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, chatType, (CppEnums.VariableStorageType).eVariableStorageType_User)
       self.lastChatType = chatType
       toChangeChatType = chatType
       ;
@@ -258,7 +258,7 @@ ChatInput_TypeButtonClicked = function(chatType)
     do
       local posY = (self.config).startPosY
       for idx,btn in pairs((self.control).buttons) do
-        -- DECOMPILER ERROR at PC254: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC257: Unhandled construct in 'MakeBoolean' P1
 
         if isWolrdChat == true and idx ~= chatType and (self.permissions)[idx] then
           posY = posY - (self.config).btnPosYGap
@@ -298,7 +298,7 @@ ChatInput_ChangeChatType_Immediately = function(chatType)
       chatInput:clearLinkedItem()
     end
     ;
-    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, chatType)
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, chatType, (CppEnums.VariableStorageType).eVariableStorageType_User)
     self.lastChatType = chatType
     ;
     ((self.control).macroButton):SetPosX(((self.control).edit):GetPosX() + ((self.control).edit):GetSizeX() + 10)
@@ -706,49 +706,49 @@ ChatInput_CheckInstantCommand = function()
   if ChatInput_IsInstantCommand_Normal(chatMessage) then
     toChangeChatType = (CppEnums.ChatType).Public
     ;
-    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Public)
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Public, (CppEnums.VariableStorageType).eVariableStorageType_User)
     isProcess = true
   else
     if ChatInput_IsInstantCommand_World(chatMessage) then
       toChangeChatType = (CppEnums.ChatType).World
       ;
-      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).World)
+      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).World, (CppEnums.VariableStorageType).eVariableStorageType_User)
       isProcess = true
     else
       if ChatInput_IsInstantCommand_Party(chatMessage) then
         toChangeChatType = (CppEnums.ChatType).Party
         ;
-        (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Party)
+        (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Party, (CppEnums.VariableStorageType).eVariableStorageType_User)
         isProcess = true
       else
         if ChatInput_IsInstantCommand_Guild(chatMessage) then
           toChangeChatType = (CppEnums.ChatType).Guild
           ;
-          (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Guild)
+          (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Guild, (CppEnums.VariableStorageType).eVariableStorageType_User)
           isProcess = true
         else
           if ChatInput_IsInstantCommand_WithItem(chatMessage) then
             toChangeChatType = (CppEnums.ChatType).WorldWithItem
             ;
-            (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).WorldWithItem)
+            (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).WorldWithItem, (CppEnums.VariableStorageType).eVariableStorageType_User)
             isProcess = true
           else
             if ChatInput_IsInstantCommand_Arsha(chatMessage) then
               toChangeChatType = (CppEnums.ChatType).Arsha
               ;
-              (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Arsha)
+              (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Arsha, (CppEnums.VariableStorageType).eVariableStorageType_User)
               isProcess = true
             else
               if ChatInput_IsInstantCommand_Team(chatMessage) then
                 toChangeChatType = (CppEnums.ChatType).Team
                 ;
-                (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Team)
+                (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Team, (CppEnums.VariableStorageType).eVariableStorageType_User)
                 isProcess = true
               else
                 if isWhisper or isReply then
                   toChangeChatType = (CppEnums.ChatType).Private
                   ;
-                  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Private)
+                  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MemoryRecentChat, (CppEnums.ChatType).Private, (CppEnums.VariableStorageType).eVariableStorageType_User)
                   isProcess = true
                 else
                   if UI_CT.Private == self.lastChatType and checkFocusWhisperEdit then

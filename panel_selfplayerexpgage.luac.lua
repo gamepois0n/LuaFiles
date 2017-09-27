@@ -334,7 +334,7 @@ end
   if _lastSkillPoint < player:getRemainSkillPoint() and _lastSkillPoint ~= -1 then
     audioPostEvent_SystemUi(3, 7)
     ;
-    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).SkillIconCheck, true)
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).SkillIconCheck, true, (CppEnums.VariableStorageType).eVariableStorageType_User)
     _staticSkillPointMain:EraseAllEffect()
     _staticSkillPointMain:AddEffect("UI_LevelUP_Skill", false, -28, 1)
     _staticSkillPointMain:AddEffect("fUI_LevelUP_Skill02", false, -28, 1)

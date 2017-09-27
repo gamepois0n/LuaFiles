@@ -46,7 +46,6 @@ npcShop.init = function(self)
   (self.config).slotRows = (self.config).slotCount / (self.config).slotCols
   self.lastTabIndex = self.tabIndexBuy
   _npcShopHelp:SetTextMode(UI_TM.eTextMode_AutoWrap)
-  _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HELPDESC"))
 end
 
 local _const = Defines.s64_const
@@ -339,10 +338,10 @@ BuySome_ShowToggle = function()
   end
 end
 
--- DECOMPILER ERROR at PC290: Confused about usage of register: R11 in 'UnsetPending'
+-- DECOMPILER ERROR at PC291: Confused about usage of register: R11 in 'UnsetPending'
 
 npcShop.controlInit = function(self)
-  -- function num : 0_5 , upvalues : npcShop_BuyBtn_PosX, npcShop_SellBtn_PosX
+  -- function num : 0_5 , upvalues : npcShop_BuyBtn_PosX, npcShop_SellBtn_PosX, _npcShopHelp
   ((self.radioButtons)[self.tabIndexBuy]):SetCheck(true)
   ;
   ((self.radioButtons)[self.tabIndexSell]):SetCheck(false)
@@ -385,6 +384,7 @@ npcShop.controlInit = function(self)
         ;
         ((self.radioButtons)[self.tabIndexBuy]):SetPosX(npcShop_SellBtn_PosX)
       end
+      _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NPCSHOP_HELPDESC"))
     end
   else
     do
@@ -394,6 +394,7 @@ npcShop.controlInit = function(self)
         ((self.radioButtons)[self.tabIndexRepurchase]):SetShow(false)
         ;
         ((self.radioButtons)[self.tabIndexBuy]):SetPosX(npcShop_SellBtn_PosX)
+        _npcShopHelp:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CAMPNPCSHOP_HELPDESC"))
       end
       local screenSizeX = getScreenSizeX()
       local screenSizeY = getScreenSizeY()
@@ -406,7 +407,7 @@ npcShop.controlInit = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC295: Confused about usage of register: R11 in 'UnsetPending'
+-- DECOMPILER ERROR at PC296: Confused about usage of register: R11 in 'UnsetPending'
 
 npcShop.updateContent = function(self, updateForce)
   -- function num : 0_6 , upvalues : _const, UI_color
@@ -1206,7 +1207,7 @@ NpcShop_BuySome_Do = function()
   npcShop_doBuy(slot.slotNo, buyCount, fromWhereType, 0, self._isCamping)
 end
 
--- DECOMPILER ERROR at PC325: Confused about usage of register: R11 in 'UnsetPending'
+-- DECOMPILER ERROR at PC326: Confused about usage of register: R11 in 'UnsetPending'
 
 npcShop.registEventHandler = function(self)
   -- function num : 0_20
@@ -1270,9 +1271,6 @@ end
 
 NpcShop_WindowClose = function()
   -- function num : 0_25
-  PaGlobal_Repair:setIsCamping(false)
-  npcShop:setIsCamping(false)
-  PaGlobal_Camp:setIsCamping(false)
   if Panel_Window_NpcShop:GetShow() then
     Panel_Window_NpcShop:SetShow(false, false)
     InventoryWindow_Close()
@@ -1289,7 +1287,10 @@ handleClickedNpcShow_WindowClose = function()
     audioPostEvent_SystemUi(1, 1)
     ReqeustDialog_retryTalk()
     PaGlobal_TutorialManager:handleNpcShopWindowClose()
-    PaGlobal_Camp:setIsCamping(false)
+    if PaGlobal_Camp:getIsCamping() then
+      InventoryWindow_Close()
+      PaGlobal_Camp:open()
+    end
   end
 end
 
@@ -1434,7 +1435,7 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC356: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC357: Confused about usage of register: R12 in 'UnsetPending'
 
 npcShop.registMessageHandler = function(self)
   -- function num : 0_32
@@ -1514,7 +1515,7 @@ npcShop_GuildCheckByBuy = function()
   return true
 end
 
--- DECOMPILER ERROR at PC365: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC366: Confused about usage of register: R12 in 'UnsetPending'
 
 npcShop.setIsCamping = function(self, isCamping)
   -- function num : 0_36

@@ -1228,6 +1228,11 @@ PaGlobal_Enchant.show = function(self)
     ;
     (self._uiEnchantFailDesc):SetSpanSize(((self._uiEnchantFailDesc):GetSpanSize()).x, 170)
   end
+  local sizeX = getScreenSizeX()
+  local sizeY = getScreenSizeY()
+  Panel_Window_Enchant:SetPosX(sizeX / 2 - Panel_Window_Enchant:GetSizeX() / 2)
+  Panel_Window_Enchant:SetPosY(sizeY - 350 - Panel_Window_Enchant:GetSizeY())
+  Panel_Window_Enchant:ComputePos()
 end
 
 FromClient_EnchantResultShow = function(resultType, mainWhereType, mainSlotNo, subWhereType, subSlotNo)

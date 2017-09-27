@@ -530,7 +530,7 @@ PaGlobal_Enchant.handleMClickedEnchantType = function(self)
   -- function num : 0_19
   local isEasy = (self._uiDrasticEnchant):IsCheck()
   ;
-  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).EnchantType, not isEasy)
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).EnchantType, not isEasy, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
 -- DECOMPILER ERROR at PC407: Confused about usage of register: R0 in 'UnsetPending'

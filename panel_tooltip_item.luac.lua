@@ -678,67 +678,87 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                                   do
                                                                                                     showTooltip_Item(equippedTooltip, itemWrapper, false, true)
                                                                                                     if isEquipalbeItem and not isEquipOn then
-                                                                                                      local equipItemWrapper = nil
+                                                                                                      local equipItemWrapper, campingItemWrapper = nil, nil
                                                                                                       if servantItem or isServantEquipOn then
                                                                                                         local temporaryWrapper = getTemporaryInformationWrapper()
                                                                                                         if temporaryWrapper ~= nil then
                                                                                                           local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
-                                                                                                          if servantWrapper ~= nil then
-                                                                                                            local servantKind = servantWrapper:getServantKind()
-                                                                                                            if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
-                                                                                                              equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                            end
-                                                                                                          end
-                                                                                                        end
-                                                                                                      else
-                                                                                                        do
                                                                                                           do
-                                                                                                            local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
-                                                                                                            -- DECOMPILER ERROR at PC653: Confused about usage of register: R15 in 'UnsetPending'
-
-                                                                                                            if accSlotNo ~= nil then
-                                                                                                              EquipItem_Lock.itemAccNo = accSlotNo
-                                                                                                              equipItemWrapper = getEquipmentItem(accSlotNo)
-                                                                                                            else
-                                                                                                              -- DECOMPILER ERROR at PC660: Confused about usage of register: R15 in 'UnsetPending'
-
-                                                                                                              EquipItem_Lock.itemAccNo = -1
-                                                                                                              equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+                                                                                                            if servantWrapper ~= nil then
+                                                                                                              local servantKind = servantWrapper:getServantKind()
+                                                                                                              if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+                                                                                                                equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+                                                                                                              end
                                                                                                             end
-                                                                                                            if equipItemWrapper ~= nil and slotType ~= "Enchant" then
-                                                                                                              showTooltip_Item(equippedTooltip, equipItemWrapper, false, true)
-                                                                                                              ;
-                                                                                                              (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                              local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
-                                                                                                              ;
-                                                                                                              ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                              ;
-                                                                                                              (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
-                                                                                                            end
+                                                                                                            local campingWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_CampingTent)
                                                                                                             do
-                                                                                                              if slotType == "Enchant" then
-                                                                                                                local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
-                                                                                                                if isCash == false then
-                                                                                                                  showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true)
+                                                                                                              if campingWrapper ~= nil then
+                                                                                                                local servantKind = campingWrapper:getServantKind()
+                                                                                                                if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+                                                                                                                  campingItemWrapper = campingWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
                                                                                                                 end
-                                                                                                                ;
-                                                                                                                (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
-                                                                                                                ;
-                                                                                                                ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                ;
-                                                                                                                (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
                                                                                                               end
                                                                                                               do
-                                                                                                                if ((slot.icon):getParent()):IsUISubApp() then
-                                                                                                                  Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
-                                                                                                                  ;
-                                                                                                                  (equippedTooltip.mainPanel):OpenUISubApp()
-                                                                                                                  if not isEquipOn then
-                                                                                                                    (normalTooltip.mainPanel):OpenUISubApp()
-                                                                                                                  end
+                                                                                                                local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
+                                                                                                                -- DECOMPILER ERROR at PC678: Confused about usage of register: R16 in 'UnsetPending'
+
+                                                                                                                if accSlotNo ~= nil then
+                                                                                                                  EquipItem_Lock.itemAccNo = accSlotNo
+                                                                                                                  equipItemWrapper = getEquipmentItem(accSlotNo)
                                                                                                                 else
-                                                                                                                  Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+                                                                                                                  -- DECOMPILER ERROR at PC685: Confused about usage of register: R16 in 'UnsetPending'
+
+                                                                                                                  EquipItem_Lock.itemAccNo = -1
+                                                                                                                  equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+                                                                                                                end
+                                                                                                                if equipItemWrapper ~= nil and slotType ~= "Enchant" then
+                                                                                                                  showTooltip_Item(equippedTooltip, equipItemWrapper, false, true)
+                                                                                                                  ;
+                                                                                                                  (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+                                                                                                                  local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
+                                                                                                                  ;
+                                                                                                                  ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                  ;
+                                                                                                                  (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                end
+                                                                                                                do
+                                                                                                                  if campingItemWrapper ~= nil and slotType ~= "Enchant" then
+                                                                                                                    showTooltip_Item(equippedTooltip, campingItemWrapper, false, true)
+                                                                                                                    ;
+                                                                                                                    (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+                                                                                                                    local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
+                                                                                                                    ;
+                                                                                                                    ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                    ;
+                                                                                                                    (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                  end
+                                                                                                                  do
+                                                                                                                    if slotType == "Enchant" then
+                                                                                                                      local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
+                                                                                                                      if isCash == false then
+                                                                                                                        showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true)
+                                                                                                                      end
+                                                                                                                      ;
+                                                                                                                      (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+                                                                                                                      local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
+                                                                                                                      ;
+                                                                                                                      ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                      ;
+                                                                                                                      (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                    end
+                                                                                                                    do
+                                                                                                                      if ((slot.icon):getParent()):IsUISubApp() then
+                                                                                                                        Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
+                                                                                                                        ;
+                                                                                                                        (equippedTooltip.mainPanel):OpenUISubApp()
+                                                                                                                        if not isEquipOn then
+                                                                                                                          (normalTooltip.mainPanel):OpenUISubApp()
+                                                                                                                        end
+                                                                                                                      else
+                                                                                                                        Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+                                                                                                                      end
+                                                                                                                    end
+                                                                                                                  end
                                                                                                                 end
                                                                                                               end
                                                                                                             end
@@ -1666,7 +1686,7 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
               end
               local changeItemNamePos = 25
               if (target.itemName):GetLineCount() > 1 then
-                changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + 25
+                changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + (target.itemName):GetTextSizeY()
               end
               local item_type = itemSSW:getItemType()
               local isTradeItem = itemSSW:isTradeAble()
@@ -1880,6 +1900,10 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
               (target.cronStoneValue):SetSize(300, (target.cronStoneValue):GetSizeY())
               ;
               (target.cronStoneValue):SetTextMode(UI_TM.eTextMode_AutoWrap)
+              local itemaddedDD = 0
+              local itemaddedHit = 0
+              local itemaddedDV = 0
+              local itemaddedPV = 0
               if (equippedTooltip ~= target or isNextEnchantInfo ~= true) and (ItemMarket_getIsMarketItem() ~= true or equippedTooltip == target) then
                 local currentEnchantFailCount = 0
                 if itemWrapper ~= nil then
@@ -1935,10 +1959,10 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                     end
                     do
                       local bonusText = ""
-                      local itemaddedDD = itemEnchantWrapper:getAddedDD()
-                      local itemaddedHit = itemEnchantWrapper:getAddedHIT()
-                      local itemaddedDV = itemEnchantWrapper:getAddedDV()
-                      local itemaddedPV = itemEnchantWrapper:getAddedPV()
+                      itemaddedDD = itemEnchantWrapper:getAddedDD()
+                      itemaddedHit = itemEnchantWrapper:getAddedHIT()
+                      itemaddedDV = itemEnchantWrapper:getAddedDV()
+                      itemaddedPV = itemEnchantWrapper:getAddedPV()
                       local itemMaxHp = itemEnchantWrapper:getAddedMaxHP()
                       do
                         local itemMaxMp = itemEnchantWrapper:getAddedMaxMP()
@@ -2137,11 +2161,11 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                                             _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
                                             ;
                                             ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetShow(true)
-                                            -- DECOMPILER ERROR at PC2089: LeaveBlock: unexpected jumping out DO_STMT
+                                            -- DECOMPILER ERROR at PC2100: LeaveBlock: unexpected jumping out DO_STMT
 
-                                            -- DECOMPILER ERROR at PC2089: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                            -- DECOMPILER ERROR at PC2100: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                            -- DECOMPILER ERROR at PC2089: LeaveBlock: unexpected jumping out IF_STMT
+                                            -- DECOMPILER ERROR at PC2100: LeaveBlock: unexpected jumping out IF_STMT
 
                                           end
                                         end
@@ -2261,7 +2285,7 @@ extendedSlotInfoArray = {}
                                               local compareSlot = {}
                                               for i = 1, slotNoMax do
                                                 local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                -- DECOMPILER ERROR at PC2608: Confused about usage of register: R54 in 'UnsetPending'
+                                                -- DECOMPILER ERROR at PC2619: Confused about usage of register: R58 in 'UnsetPending'
 
                                                 if slotNoMax ~= extendSlotNo then
                                                   (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2279,7 +2303,7 @@ extendedSlotInfoArray = {}
                                               end
                                               if 1 == equip.checkExtendedSlot then
                                                 local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                -- DECOMPILER ERROR at PC2643: Confused about usage of register: R50 in 'UnsetPending'
+                                                -- DECOMPILER ERROR at PC2654: Confused about usage of register: R54 in 'UnsetPending'
 
                                                 ;
                                                 (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2301,7 +2325,7 @@ extendedSlotInfoArray = {}
                                                     if nil ~= servantKindType then
                                                       for i = 1, slotNoMax do
                                                         local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                        -- DECOMPILER ERROR at PC2698: Confused about usage of register: R55 in 'UnsetPending'
+                                                        -- DECOMPILER ERROR at PC2709: Confused about usage of register: R59 in 'UnsetPending'
 
                                                         if slotNoMax ~= extendSlotNo then
                                                           (equip.extendedSlotInfoArray)[extendSlotNo] = i
@@ -2321,7 +2345,7 @@ extendedSlotInfoArray = {}
                                                     do
                                                       if 1 == equip.checkExtendedSlot then
                                                         local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                        -- DECOMPILER ERROR at PC2733: Confused about usage of register: R51 in 'UnsetPending'
+                                                        -- DECOMPILER ERROR at PC2744: Confused about usage of register: R55 in 'UnsetPending'
 
                                                         ;
                                                         (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
@@ -2452,6 +2476,8 @@ extendedSlotInfoArray = {}
                                                                       minAttack = itemSSW:getMinDamage(0)
                                                                       maxAttack = itemSSW:getMaxDamage(0)
                                                                     end
+                                                                    minAttack = minAttack + itemaddedDD
+                                                                    maxAttack = maxAttack + itemaddedDD
                                                                     attackString = tostring(minAttack) .. " ~ " .. tostring(maxAttack)
                                                                     ;
                                                                     (target.attack_value):SetText(attackString)
@@ -2459,7 +2485,7 @@ extendedSlotInfoArray = {}
                                                                     (target.attack_value):SetShow(attackShow)
                                                                     ;
                                                                     (target.attack):SetShow(attackShow)
-                                                                    target.att_Value = (maxAttack + minAttack) / 2
+                                                                    target.att_Value = (maxAttack + (minAttack)) / 2
                                                                     local defenseString = ""
                                                                     local def_value = 0
                                                                     if item_type == 1 then
@@ -2492,6 +2518,7 @@ extendedSlotInfoArray = {}
                                                                           hit = currentHit
                                                                         end
                                                                       end
+                                                                      hit = hit + itemaddedHit
                                                                       if 0 ~= hit then
                                                                         hitShow = true
                                                                       end
@@ -2517,6 +2544,7 @@ extendedSlotInfoArray = {}
                                                                         end
                                                                       end
                                                                       do
+                                                                        dv = dv + itemaddedDV
                                                                         if 0 ~= dv then
                                                                           dvShow = true
                                                                         end
@@ -2539,6 +2567,7 @@ extendedSlotInfoArray = {}
                                                                           end
                                                                         end
                                                                         do
+                                                                          pv = pv + itemaddedPV
                                                                           if 0 ~= pv then
                                                                             pvShow = true
                                                                           end
@@ -2755,9 +2784,9 @@ extendedSlotInfoArray = {}
                                                                                                       else
                                                                                                         buffList = buffList .. " / " .. desc
                                                                                                       end
-                                                                                                      -- DECOMPILER ERROR at PC4000: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                      -- DECOMPILER ERROR at PC4016: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                      -- DECOMPILER ERROR at PC4000: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                      -- DECOMPILER ERROR at PC4016: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                     end
                                                                                                   end
@@ -2786,21 +2815,21 @@ extendedSlotInfoArray = {}
                                                                                                   ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
                                                                                                   ;
                                                                                                   ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                  -- DECOMPILER ERROR at PC4091: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                  -- DECOMPILER ERROR at PC4107: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                 end
                                                                                               end

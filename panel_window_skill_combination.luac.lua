@@ -31,6 +31,8 @@ PaGlobal_SkillCombination.initalize = function(self)
     control:SetShow(false)
   end
   ;
+  ((self._ui)._staticTextDesc):SetShow(false)
+  ;
   ((self._ui)._staticTextDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
   ((self._ui)._staticTextDesc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_COMBINATIONSKILL_TIP"))

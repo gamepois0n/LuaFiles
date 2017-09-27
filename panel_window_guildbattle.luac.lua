@@ -379,7 +379,10 @@ PaGlobal_GuildBattle.changeState = function(self, guild)
     return 
   end
   local state = ToClient_getGuildBattleState()
-  local guildName = ToClient_guild_getGuildName(guild)
+  local guildName = ""
+  if guild ~= nil then
+    guildName = ToClient_guild_getGuildName(guild)
+  end
   local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_USE_GUILDWINDOW"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE"), addMsg = ""}
   if guildName ~= "" then
     msg = {main = tostring(guildName) .. tostring(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WINNER")), sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_END"), addMsg = ""}

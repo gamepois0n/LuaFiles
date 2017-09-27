@@ -27,7 +27,7 @@ WhereUseItemDirectionInit = function()
   ;
   ((self.slot).count):SetVerticalBottom()
   ;
-  ((self.slot).count):SetSpanSize(-10, -24)
+  ((self.slot).count):SetSpanSize(0, -24)
   if Panel_HorseEndurance:GetShow() or Panel_CarriageEndurance:GetShow() or Panel_ShipEndurance:GetShow() then
     if PcEnduranceToggle() then
       Panel_WhereUseItemDirection:SetPosX(getScreenSizeX() - FGlobal_Panel_Radar_GetSizeX() - 280)
@@ -47,6 +47,12 @@ WhereUseItemDirectionRestore = function(itemKey, slotNo, itemCount)
   local self = whereUseItem
   self.widgetItemKey = itemKey
   WhereUseItemDirectionUpdate(self.saveItemSSW, self.slotNo)
+  ;
+  ((self.slot).count):SetHorizonCenter()
+  ;
+  ((self.slot).count):SetVerticalBottom()
+  ;
+  ((self.slot).count):SetSpanSize(0, -24)
 end
 
 local _key = nil
@@ -64,7 +70,7 @@ WhereUseItemDirectionUpdate = function(itemSSW, slotNo, isShow)
     return 
   end
   local itemSSWrapper = itemWrapper:getStaticStatus()
-  if not itemSSWrapper:isExchangeItemNPC() then
+  if not itemSSWrapper:isExchangeItemNPC() and not itemWrapper:isSoulCollector() then
     return 
   end
   self.saveItemSSW = itemSSW
@@ -83,8 +89,19 @@ WhereUseItemDirectionUpdate = function(itemSSW, slotNo, isShow)
     if toInt64(0, 0) == s64_inventoryItemCount then
       WhereUseItemDirectionClose()
     end
-    ;
-    (self.slot):setItemByStaticStatus(itemSSW, Int64toInt32(s64_inventoryItemCount))
+    local countSoul = nil
+    if itemWrapper:isSoulCollector() then
+      if itemWrapper:getSoulCollectorMaxCount() < itemWrapper:getSoulCollectorCount() then
+        countSoul = itemWrapper:getSoulCollectorMaxCount()
+      else
+        countSoul = itemWrapper:getSoulCollectorCount()
+      end
+      ;
+      (self.slot):setItemByStaticStatus(itemWrapper:getStaticStatus(), (itemWrapper:get()):getCount_s64(), -1, false, false, true, itemWrapper:getSoulCollectorCount(), itemWrapper:getSoulCollectorMaxCount(), true)
+    else
+      ;
+      (self.slot):setItemByStaticStatus(itemSSW, Int64toInt32(s64_inventoryItemCount))
+    end
     if self.widgetItemKey == _key then
       ((self.slot).icon):EraseAllEffect()
       ;
@@ -126,6 +143,14 @@ FGlobal_WhereUseITemDirectionOpen = function(itemSSW, slotNo)
   self.slotNo = slotNo
   whereUseItemDirectionPosition()
   WhereUseItemDirectionUpdate(itemSSW, slotNo, true)
+  ;
+  ((self.slot).count):SetHorizonCenter()
+  ;
+  ((self.slot).count):SetVerticalBottom()
+  ;
+  ((self.slot).count):SetTextHorizonCenter()
+  ;
+  ((self.slot).count):SetSpanSize(0, -24)
 end
 
 WhereUseItemDirectionClose = function()

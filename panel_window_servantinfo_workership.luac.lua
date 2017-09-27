@@ -46,7 +46,7 @@ _slotEmptyBG = {[3] = (UI.getChildControl)(Panel_WorkerShipInfo, "equipIconEmpty
 , 
 _skill = {startX = 1, startY = 7, startIconX = 10, startIconY = 5, startNameX = 64, startNameY = 3, startConditionX = 64, startConditionY = 21, startDecX = 64, startDecY = 35, startExpBGX = 4, startExpBGY = -1, startExpX = 6, startExpY = 1, startExpStrX = 18, startExpStrY = 35, gapY = 57, count = 4}
 }
-, _buttonClose = (UI.getChildControl)(Panel_WorkerShipInfo, "close_button"), _buttonQuestion = (UI.getChildControl)(Panel_WorkerShipInfo, "Button_Question"), _staticName = (UI.getChildControl)(Panel_WorkerShipInfo, "name_value"), _lv_Title = (UI.getChildControl)(Panel_WorkerShipInfo, "Lv"), _staticLevel = (UI.getChildControl)(Panel_WorkerShipInfo, "Level_value"), _staticGaugeBar_Hp = (UI.getChildControl)(Panel_WorkerShipInfo, "HP_GaugeBar"), _staticTextValue_Hp = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_HP_Value"), _staticGaugeBar_Mp = (UI.getChildControl)(Panel_WorkerShipInfo, "MP_GaugeBar"), _staticTextValue_Mp = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_MP_Value"), _sus_Title = (UI.getChildControl)(Panel_WorkerShipInfo, "Sus"), _staticTextValue_Sus = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_Sus_Value"), _staticGaugeBar_Weight = (UI.getChildControl)(Panel_WorkerShipInfo, "Weight_Gauge"), _staticTextValue_Weight = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_Weight_Value"), _staticText_MaxMoveSpeedValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_MaxMoveSpeedValue"), _staticText_AccelerationValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_AccelerationValue"), _staticText_CorneringSpeedValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_CorneringSpeedValue"), _staticText_BrakeSpeedValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_BrakeSpeedValue"), _staticText_Value_Def = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_DefenceValue"), _staticSkilltitle = (UI.getChildControl)(Panel_WorkerShipInfo, "category_skillList"), _staticSkillBG = (UI.getChildControl)(Panel_WorkerShipInfo, "panel_skillInfo"), _skillScroll = (UI.getChildControl)(Panel_WorkerShipInfo, "skill_scroll"), _deadCountTitle = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_DeadCount"), _deadCountValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_DeadCountValue"), _vehicleAlert = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_Alert"), _skillStart = 0, _skillCount = 0, _actorKeyRaw = nil, _itemSlots = (Array.new)(), _skillSlots = (Array.new)()}
+, _buttonClose = (UI.getChildControl)(Panel_WorkerShipInfo, "close_button"), _buttonQuestion = (UI.getChildControl)(Panel_WorkerShipInfo, "Button_Question"), _staticName = (UI.getChildControl)(Panel_WorkerShipInfo, "name_value"), _lv_Title = (UI.getChildControl)(Panel_WorkerShipInfo, "Lv"), _staticLevel = (UI.getChildControl)(Panel_WorkerShipInfo, "Level_value"), _staticGaugeBar_Hp = (UI.getChildControl)(Panel_WorkerShipInfo, "HP_GaugeBar"), _staticTextValue_Hp = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_HP_Value"), _staticGaugeBar_Mp = (UI.getChildControl)(Panel_WorkerShipInfo, "MP_GaugeBar"), _staticTextValue_Mp = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_MP_Value"), _sus_Title = (UI.getChildControl)(Panel_WorkerShipInfo, "Sus"), _staticTextValue_Sus = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_Sus_Value"), _staticGaugeBar_Weight = (UI.getChildControl)(Panel_WorkerShipInfo, "Weight_Gauge"), _staticTextValue_Weight = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_Weight_Value"), _staticText_MaxMoveSpeedValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_MaxMoveSpeedValue"), _staticText_AccelerationValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_AccelerationValue"), _staticText_CorneringSpeedValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_CorneringSpeedValue"), _staticText_BrakeSpeedValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_BrakeSpeedValue"), _staticText_Value_Def = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_DefenceValue"), _staticSkilltitle = (UI.getChildControl)(Panel_WorkerShipInfo, "category_skillList"), _staticSkillBG = (UI.getChildControl)(Panel_WorkerShipInfo, "panel_skillInfo"), _skillScroll = (UI.getChildControl)(Panel_WorkerShipInfo, "skill_scroll"), _deadCountTitle = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_DeadCount"), _deadCountValue = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_DeadCountValue"), _vehicleAlert = (UI.getChildControl)(Panel_WorkerShipInfo, "StaticText_Alert"), _vehicleDescIcon = (UI.getChildControl)(Panel_WorkerShipInfo, "Static_DescIcon"), _skillStart = 0, _skillCount = 0, _actorKeyRaw = nil, _itemSlots = (Array.new)(), _skillSlots = (Array.new)()}
 local skillCondition = {}
 local skillDescArray = {}
 ;
@@ -234,6 +234,15 @@ workerShipInfo.update = function(self)
     ;
     (self._deadCountValue):SetText(deadCount)
   end
+  if UI_VT.Type_SailingBoat == vehicleType then
+    (self._deadCountTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SHIPINFO_WOUNDEDPERCENT"))
+  end
+  if UI_VT.Type_PersonalBoat == vehicleType then
+    (self._vehicleDescIcon):SetShow(true)
+  else
+    ;
+    (self._vehicleDescIcon):SetShow(false)
+  end
   for index,value in pairs((self._config)._slotNo) do
     local slot = (self._itemSlots)[value]
     local itemWrapper = servantWrapper:getEquipItem(value)
@@ -272,7 +281,7 @@ workerShipInfo.update = function(self)
           startIndex = 1
         end
         local onlySkillName = (string.sub)(skillName, 1, startIndex - 1)
-        -- DECOMPILER ERROR at PC344: Confused about usage of register: R22 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC369: Confused about usage of register: R22 in 'UnsetPending'
 
         if startIndex ~= nil and endIndex ~= nil then
           skillCondition[ii] = (string.sub)(skillWrapper:getName(), startIndex + 2, endIndex - 1)
@@ -293,7 +302,7 @@ workerShipInfo.update = function(self)
         end
         ;
         (slot.dec):SetText(skillWrapper:getDescription())
-        -- DECOMPILER ERROR at PC398: Confused about usage of register: R22 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC423: Confused about usage of register: R22 in 'UnsetPending'
 
         skillDescArray[ii] = skillWrapper:getDescription()
         if (slot.dec):GetTextSizeX() > 140 then
@@ -327,11 +336,11 @@ workerShipInfo.update = function(self)
       do
         do
           self._skillCount = self._skillCount + 1
-          -- DECOMPILER ERROR at PC484: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC509: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC484: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC509: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC484: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC509: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -377,11 +386,29 @@ workerShipInfo.registEventHandler = function(self)
   ;
   (self._staticSkillBG):addInputEvent("Mouse_DownScroll", "WorkerShipInfo_ScrollEvent( false )")
   ;
+  (self._vehicleDescIcon):addInputEvent("Mouse_On", "workerShipInfo_DescIcon(true)")
+  ;
+  (self._vehicleDescIcon):addInputEvent("Mouse_Out", "workerShipInfo_DescIcon(false)")
+  ;
   (UIScroll.InputEvent)(self._skillScroll, "WorkerShipInfo_ScrollEvent")
 end
 
+workerShipInfo_DescIcon = function(isShow)
+  -- function num : 0_9 , upvalues : workerShipInfo
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = workerShipInfo
+  local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORKERSHIPINFO_WARNNING")
+  control = self._vehicleDescIcon
+  TooltipSimple_Show(control, name, desc)
+end
+
 workerShipInfo.registMessageHandler = function(self)
-  -- function num : 0_9
+  -- function num : 0_10
   registerEvent("EventSelfServantUpdate", "WorkerShipInfo_Update()")
   registerEvent("EventSelfServantUpdateOnlyHp", "WorkerShipInfo_UpdateHp")
   registerEvent("EventSelfServantUpdateOnlyMp", "WorkerShipInfo_UpdateMp")
@@ -390,7 +417,7 @@ workerShipInfo.registMessageHandler = function(self)
 end
 
 WorkerShipInfo_ChangeEquipItem = function(slotNo)
-  -- function num : 0_10 , upvalues : workerShipInfo, UI_VT
+  -- function num : 0_11 , upvalues : workerShipInfo, UI_VT
   local self = workerShipInfo
   local slot = (self._itemSlots)[slotNo]
   if self._actorKeyRaw == nil then
@@ -421,7 +448,7 @@ WorkerShipInfo_ChangeEquipItem = function(slotNo)
 end
 
 WorkerShipInfo_RClick = function(slotNo)
-  -- function num : 0_11 , upvalues : workerShipInfo
+  -- function num : 0_12 , upvalues : workerShipInfo
   local self = workerShipInfo
   local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
   if servantWrapper == nil then
@@ -435,7 +462,7 @@ WorkerShipInfo_RClick = function(slotNo)
 end
 
 WorkerShipInfo_LClick = function(slotNo)
-  -- function num : 0_12
+  -- function num : 0_13
   if DragManager.dragStartPanel == Panel_Window_Inventory then
     Inventory_SlotRClick(DragManager.dragSlotInfo)
     ;
@@ -444,7 +471,7 @@ WorkerShipInfo_LClick = function(slotNo)
 end
 
 WorkerShipInfo_EquipItem_MouseOn = function(slotNo, isOn)
-  -- function num : 0_13 , upvalues : workerShipInfo
+  -- function num : 0_14 , upvalues : workerShipInfo
   local self = workerShipInfo
   local slot = (self._itemSlots)[slotNo]
   Panel_Tooltip_Item_SetPosition(slotNo, slot, "ServantShipEquipment")
@@ -452,7 +479,7 @@ WorkerShipInfo_EquipItem_MouseOn = function(slotNo, isOn)
 end
 
 WorkerShipInfo_ScrollEvent = function(isScrollUp)
-  -- function num : 0_14 , upvalues : workerShipInfo
+  -- function num : 0_15 , upvalues : workerShipInfo
   local self = workerShipInfo
   self._skillStart = (UIScroll.ScrollEvent)(self._skillScroll, isScrollUp, ((self._config)._skill).count, self._skillCount, self._skillStart, 1)
   self:update()
@@ -460,20 +487,20 @@ WorkerShipInfo_ScrollEvent = function(isScrollUp)
 end
 
 WorkerShipInfo_OpenByActorKeyRaw = function(actorKeyRaw)
-  -- function num : 0_15 , upvalues : workerShipInfo
+  -- function num : 0_16 , upvalues : workerShipInfo
   local self = workerShipInfo
   self._actorKeyRaw = actorKeyRaw
   WorkerShipInfo_Open()
 end
 
 WorkerShipInfo_GetActorKey = function()
-  -- function num : 0_16 , upvalues : workerShipInfo
+  -- function num : 0_17 , upvalues : workerShipInfo
   local self = workerShipInfo
   return self._actorKeyRaw
 end
 
 WorkerShipInfo_Update = function()
-  -- function num : 0_17 , upvalues : workerShipInfo
+  -- function num : 0_18 , upvalues : workerShipInfo
   if not Panel_WorkerShipInfo:GetShow() then
     return 
   end
@@ -482,7 +509,7 @@ WorkerShipInfo_Update = function()
 end
 
 WorkerShipInfo_UpdateHp = function()
-  -- function num : 0_18 , upvalues : workerShipInfo
+  -- function num : 0_19 , upvalues : workerShipInfo
   if Panel_WorkerShipInfo:GetShow() == false then
     return 
   end
@@ -491,7 +518,7 @@ WorkerShipInfo_UpdateHp = function()
 end
 
 WorkerShipInfo_UpdateMp = function()
-  -- function num : 0_19 , upvalues : workerShipInfo
+  -- function num : 0_20 , upvalues : workerShipInfo
   if Panel_WorkerShipInfo:GetShow() == false then
     return 
   end
@@ -500,7 +527,7 @@ WorkerShipInfo_UpdateMp = function()
 end
 
 WorkerShipInfo_Open = function()
-  -- function num : 0_20 , upvalues : workerShipInfo, skillCondition, skillDescArray
+  -- function num : 0_21 , upvalues : workerShipInfo, skillCondition, skillDescArray
   local self = workerShipInfo
   self:clear()
   skillCondition = {}
@@ -517,7 +544,7 @@ WorkerShipInfo_Open = function()
 end
 
 WorkerShipInfo_Close = function()
-  -- function num : 0_21
+  -- function num : 0_22
   if not Panel_WorkerShipInfo:GetShow() then
     return 
   end

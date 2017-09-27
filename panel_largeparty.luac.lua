@@ -274,7 +274,7 @@ end
 
 PaGlobal_LargeParty.ButtonAction = function(self, isShow, index)
   -- function num : 0_5
-  if (((self._uiPartyMemberList)[index])._actionBtn):GetShow() then
+  if (((self._uiPartyMemberList)[index])._actionBtn):GetShow() and index == self._selectIndex then
     return 
   end
   if isShow then
@@ -284,6 +284,12 @@ PaGlobal_LargeParty.ButtonAction = function(self, isShow, index)
       else
         ;
         (((self._uiPartyMemberList)[count])._actionBtn):SetShow(false)
+        ;
+        ((self._ui)._btn_Mandate):SetShow(false)
+        ;
+        ((self._ui)._btn_Exile):SetShow(false)
+        ;
+        ((self._ui)._btn_Exit):SetShow(false)
       end
     end
   else

@@ -1663,6 +1663,12 @@ local updateCenterUIPos = function(deltaTime)
   end
   local basePos = mentalObject:getCardPos()
   local count = mentalObject:getPointCount()
+  local gameOptionSetting = ToClient_getGameOptionControllerWrapper()
+  local CropModeEnable = gameOptionSetting:getCropModeEnable()
+  local CropModeScaleX = gameOptionSetting:getCropModeScaleX()
+  local CropModeScaleY = gameOptionSetting:getCropModeScaleY()
+  local screenX = getScreenSizeX() - getScreenSizeX() * CropModeScaleX
+  local screenY = getScreenSizeY() - getScreenSizeY() * CropModeScaleY
   for index = 0, count - 1 do
     local starPos = mentalObject:getPoint(index)
     local float3Pos = ((Util.Math).AddVectorToVector)(basePos, starPos)
@@ -1674,8 +1680,13 @@ local updateCenterUIPos = function(deltaTime)
       local scaleSize = 100000 / cameraDistance * 0.85
       panel:SetSize(scaleSize, scaleSize)
       progress:ComputePos()
-      panel:SetPosX(transformData.x - panel:GetSizeX() / 2)
-      panel:SetPosY(transformData.y - panel:GetSizeY() / 2)
+      if CropModeEnable == true then
+        panel:SetPosX(transformData.x * CropModeScaleX + screenX / 2 - panel:GetSizeX() / 2)
+        panel:SetPosY(transformData.y * CropModeScaleY + screenY / 2 - panel:GetSizeY() / 2)
+      else
+        panel:SetPosX(transformData.x - panel:GetSizeX() / 2)
+        panel:SetPosY(transformData.y - panel:GetSizeY() / 2)
+      end
       panel:SetAlpha(1)
       panel:SetDepth(cameraDistance)
     end

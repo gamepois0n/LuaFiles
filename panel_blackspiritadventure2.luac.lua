@@ -125,43 +125,43 @@ blackSpirit2UrlByServiceType = function()
       else
         if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
           if getServiceNationType() == 0 then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_ALPHA_NA", "port", worldNo)
+            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_NA_ALPHA_NA", "port", worldNo)
           else
             if getServiceNationType() == 1 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_ALPHA_EU", "port", worldNo)
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_NA_ALPHA_EU", "port", worldNo)
             end
           end
         else
           if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
             if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_REAL_NA", "port", worldNo)
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_NA_REAL_NA", "port", worldNo)
             else
               if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_REAL_EU", "port", worldNo)
+                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_NA_REAL_EU", "port", worldNo)
               end
             end
           else
             if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_JP_ALPHA")
+              url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_JP_ALPHA")
             else
               if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_JP_REAL")
+                url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_JP_REAL")
               else
                 if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_ALPHA")
+                  url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_RUS_ALPHA")
                 else
                   if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
                     if isServerFixedCharge() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_REAL_P2P")
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_RUS_REAL_P2P")
                     else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_REAL_F2P")
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_RUS_REAL_F2P")
                     end
                   else
                     if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TW_ALPHA")
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_TW_ALPHA")
                     else
                       if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TW_REAL")
+                        url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE2_URL_TW_REAL")
                       end
                     end
                   end

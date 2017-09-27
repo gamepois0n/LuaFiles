@@ -4,11 +4,11 @@
 -- params : ...
 -- function num : 0
 local CT = CppEnums.ClassType
-local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [CT.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914")}
+local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901"), [CT.ClassType_Ranger] = ToClient_IsContentsGroupOpen("902"), [CT.ClassType_Sorcerer] = ToClient_IsContentsGroupOpen("903"), [CT.ClassType_Giant] = ToClient_IsContentsGroupOpen("904"), [CT.ClassType_Tamer] = ToClient_IsContentsGroupOpen("905"), [CT.ClassType_BladeMaster] = ToClient_IsContentsGroupOpen("906"), [CT.ClassType_BladeMasterWomen] = ToClient_IsContentsGroupOpen("907"), [CT.ClassType_Valkyrie] = ToClient_IsContentsGroupOpen("908"), [CT.ClassType_Wizard] = ToClient_IsContentsGroupOpen("909"), [CT.ClassType_WizardWomen] = ToClient_IsContentsGroupOpen("910"), [CT.ClassType_NinjaMan] = ToClient_IsContentsGroupOpen("911"), [CT.ClassType_NinjaWomen] = ToClient_IsContentsGroupOpen("912"), [CT.ClassType_DarkElf] = ToClient_IsContentsGroupOpen("913"), [CT.ClassType_Combattant] = ToClient_IsContentsGroupOpen("914"), [CT.ClassType_CombattantWomen] = ToClient_IsContentsGroupOpen("918")}
 local classType = (getSelfPlayer()):getClassType()
 FromClient_EnduranceUpdate = function(enduranceType)
   -- function num : 0_0 , upvalues : awakenWeapon, classType
-  if Panel_Window_StableList:GetShow() or Panel_Window_WharfList:GetShow() or Panel_Window_Repair:GetShow() then
+  if (Panel_Window_StableList:GetShow() or Panel_Window_WharfList:GetShow() or Panel_Window_Repair:GetShow()) and PaGlobal_Camp:getIsCamping() == false then
     return 
   end
   local self = PaGlobalPlayerEnduranceList
@@ -52,28 +52,28 @@ FromClient_EnduranceUpdate = function(enduranceType)
     end
     ;
     (((self.enduranceInfo)[index]).control):ResetVertexAni()
-    -- DECOMPILER ERROR at PC107: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC112: Confused about usage of register: R10 in 'UnsetPending'
 
     if enduranceLevel < 0 then
       ((self.enduranceInfo)[index]).itemEquiped = false
-      -- DECOMPILER ERROR at PC113: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC118: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       ((self.enduranceInfo)[index]).color = (Defines.Color).C_FF000000
-      -- DECOMPILER ERROR at PC116: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC121: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       ((self.enduranceInfo)[index]).isBroken = false
     else
-      -- DECOMPILER ERROR at PC120: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC125: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       ((self.enduranceInfo)[index]).itemEquiped = true
-      -- DECOMPILER ERROR at PC128: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC133: Confused about usage of register: R10 in 'UnsetPending'
 
       if enduranceLevel > 1 then
         ((self.enduranceInfo)[index]).color = (Defines.Color).C_FF444444
-        -- DECOMPILER ERROR at PC131: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC136: Confused about usage of register: R10 in 'UnsetPending'
 
         ;
         ((self.enduranceInfo)[index]).isBroken = false
@@ -317,7 +317,7 @@ FromClient_EnduranceUpdate = function(enduranceType)
             end
           end
         end
-        -- DECOMPILER ERROR at PC710: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC715: Confused about usage of register: R10 in 'UnsetPending'
 
         ;
         ((self.enduranceInfo)[index]).isBroken = true

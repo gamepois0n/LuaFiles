@@ -10,7 +10,7 @@ end
 
 FromClient_AutoStop = function()
   -- function num : 0_1
-  FGlobal_AutoQuestBlackSpiritMessage("오토 종료")
+  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_END"))
   PaGlobal_AutoManager:stop()
 end
 
@@ -29,7 +29,7 @@ FromClient_Auto_EndNaviMove = function()
     return 
   end
   if PaGlobal_AutoManager._stateUnit ~= nil and (PaGlobal_AutoManager._stateUnit)._state == AutoStateType.MOVE and AutoState_Move:isReservation() == true then
-    FGlobal_AutoQuestBlackSpiritMessage("예외상황으로 인해 마을�\156 �\128환되�\180 오토�\128 종료되었습니다~")
+    FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_EXCEPTIONCONDITION"))
     PaGlobal_AutoManager:stop()
     return 
   end

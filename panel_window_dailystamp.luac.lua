@@ -40,13 +40,19 @@ DailyStampHideAni = function()
   aniInfo:SetHideAtEnd(true)
 end
 
+TabSort = function(lhs, rhs)
+  -- function num : 0_2
+  do return rhs[2] < lhs[2] end
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
+end
+
 local dailyStamp = {tempDailySlot = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_DaySlot"), tempDay = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_Day"), tempStamp = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_Stamp"), tempName = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_RewardName"), eventEntry = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_EventEntry"), dailyStampTap = (UI.getChildControl)(Panel_Window_DailyStamp, "RadioButton_Tap"), 
 entryIcon = {[0] = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_EventEntryComplete1"), [1] = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_EventEntryComplete2"), [2] = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_EventEntryComplete3")}
 , mainBg = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_Bg"), eventDescBg = (UI.getChildControl)(Panel_Window_DailyStamp, "Static_EventPeriodBg"), eventPeriodTitle = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_EventPeriodTitle"), eventPeriod = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_EventPeriodValue"), acceptPeriodTitle = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_RewardAcceptPeriodTitle"), acceptPeriod = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_RewardAcceptPeriodValue"), weekEndDesc = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_WeekEndDesc"), attendanceTimeTitle = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_AttendanceTimeCheckTitle"), attendanceTime = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_AttendanceTimeCheckValue"), eventDesc = (UI.getChildControl)(Panel_Window_DailyStamp, "StaticText_EventPeriodAlert"), btnClose = (UI.getChildControl)(Panel_Window_DailyStamp, "Button_Win_Close"), 
 slotConfig = {createIcon = true, createBorder = true, createCount = true, createClassEquipBG = true, createCash = true}
 , 
 goodItemSlotConfig = {createIcon = true, createBorder = false, createCount = true, createClassEquipBG = true, createCash = true}
-, rewardCount = 35, tapIndex = 0, 
+, rewardCount = 35, tapIndex = 1, 
 dayControl = {}
 , 
 eventEntryCount = {}
@@ -64,7 +70,7 @@ goodDay = {}
 animationdayIndex = {}
 , animationTime = 0, nextDayShow = false, secondAttendanceCheck = false}
 DailyStamp_DescSet = function()
-  -- function num : 0_2 , upvalues : dailyStamp, UI_TM
+  -- function num : 0_3 , upvalues : dailyStamp, UI_TM
   local _eventPeriodTitle = (dailyStamp.eventPeriodTitle):GetText()
   local _eventPeriod = (dailyStamp.eventPeriod):GetText()
   local _acceptPeriodTitle = (dailyStamp.acceptPeriodTitle):GetText()
@@ -131,22 +137,25 @@ if isGameTypeKorea() then
   (dailyStamp.eventEntry):SetShow(false)
 end
 local dailyStampCount = ToClient_GetAttendanceInfoCount()
-local dailyStampKeys = {}
-local dailyStampReciveAttendance = {}
-for index = 0, dailyStampCount - 1 do
-  dailyStampKeys[index] = ToClient_GetAttendanceInfoWrapper(index)
-  dailyStampReciveAttendance[index] = false
-  if dailyStampKeys[index] ~= nil and (dailyStampKeys[index]):isPossibleOverlapAttendance() == false and (dailyStampKeys[index]):isPossibleAttendance() == false then
-    dailyStampReciveAttendance[index] = true
+local dailyStampKeys = (Array.new)()
+for index = 1, dailyStampCount do
+  local attendancSS = ToClient_GetAttendanceInfoWrapper(index - 1)
+  dailyStampKeys[index] = {attendancSS, attendancSS:getDisplayOrder(), false}
+  -- DECOMPILER ERROR at PC257: Confused about usage of register: R14 in 'UnsetPending'
+
+  if (dailyStampKeys[index])[1] ~= nil and ((dailyStampKeys[index])[1]):isPossibleOverlapAttendance() == false and ((dailyStampKeys[index])[1]):isPossibleAttendance() == false then
+    (dailyStampKeys[index])[3] = true
   end
 end
+;
+(table.sort)(dailyStampKeys, TabSort)
 local yesterdayTabCount = dailyStampCount
 dailyStamp.TapInit = function(self)
-  -- function num : 0_3 , upvalues : dailyStampCount, yesterdayTabCount, dailyStampKeys
+  -- function num : 0_4 , upvalues : dailyStampCount, yesterdayTabCount, dailyStampKeys
   if dailyStampCount < yesterdayTabCount then
-    for index = 0, yesterdayTabCount - 1 do
+    for index = 1, yesterdayTabCount do
       if index < dailyStampCount then
-        local dailyStampTapName = (dailyStampKeys[index]):getName()
+        local dailyStampTapName = ((dailyStampKeys[index])[1]):getName()
         -- DECOMPILER ERROR at PC27: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
@@ -164,11 +173,11 @@ dailyStamp.TapInit = function(self)
 
         ;
         (self.prevAttendanceCount)[index] = nil
-        if dailyStampCount >= 4 then
+        if dailyStampCount > 4 then
           ((self.tapControl)[index]):SetSize(155, 40)
         end
         ;
-        ((self.tapControl)[index]):SetPosX(((self.tapControl)[index]):GetPosX() + (((self.tapControl)[index]):GetSizeX() + 5) * index)
+        ((self.tapControl)[index]):SetPosX(((self.tapControl)[index]):GetPosX() + (((self.tapControl)[index]):GetSizeX() + 5) * (index - 1))
         ;
         ((self.tapControl)[index]):SetPosY(62)
       else
@@ -176,11 +185,11 @@ dailyStamp.TapInit = function(self)
           do
             ;
             ((self.tapControl)[index]):SetShow(false)
-            -- DECOMPILER ERROR at PC94: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC95: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC94: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC95: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC94: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC95: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -188,9 +197,9 @@ dailyStamp.TapInit = function(self)
     end
     yesterdayTabCount = dailyStampCount
   else
-    for index = 0, dailyStampCount - 1 do
-      local dailyStampTapName = (dailyStampKeys[index]):getName()
-      -- DECOMPILER ERROR at PC118: Confused about usage of register: R6 in 'UnsetPending'
+    for index = 1, dailyStampCount do
+      local dailyStampTapName = ((dailyStampKeys[index])[1]):getName()
+      -- DECOMPILER ERROR at PC119: Confused about usage of register: R6 in 'UnsetPending'
 
       ;
       (self.tapControl)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON, Panel_Window_DailyStamp, "DailyStamp_Tap_" .. index)
@@ -203,7 +212,7 @@ dailyStamp.TapInit = function(self)
       ((self.tapControl)[index]):SetText(dailyStampTapName)
       ;
       ((self.tapControl)[index]):addInputEvent("Mouse_LUp", "DailyStamp_TapClicked(" .. index .. ")")
-      -- DECOMPILER ERROR at PC149: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC150: Confused about usage of register: R6 in 'UnsetPending'
 
       ;
       (self.prevAttendanceCount)[index] = nil
@@ -211,7 +220,7 @@ dailyStamp.TapInit = function(self)
         ((self.tapControl)[index]):SetSize(155, 40)
       end
       ;
-      ((self.tapControl)[index]):SetPosX(((self.tapControl)[index]):GetPosX() + (((self.tapControl)[index]):GetSizeX() + 5) * index)
+      ((self.tapControl)[index]):SetPosX(((self.tapControl)[index]):GetPosX() + (((self.tapControl)[index]):GetSizeX() + 5) * (index - 1))
       ;
       ((self.tapControl)[index]):SetPosY(62)
     end
@@ -219,10 +228,10 @@ dailyStamp.TapInit = function(self)
 end
 
 dailyStamp.TabUpdate = function(self)
-  -- function num : 0_4 , upvalues : dailyStampCount, dailyStampKeys
-  for index = 0, dailyStampCount - 1 do
-    local dailyStampTapName = (dailyStampKeys[index]):getName()
-    local attendanceKey = (dailyStampKeys[index]):getKey()
+  -- function num : 0_5 , upvalues : dailyStampCount, dailyStampKeys
+  for index = 1, dailyStampCount do
+    local dailyStampTapName = ((dailyStampKeys[index])[1]):getName()
+    local attendanceKey = ((dailyStampKeys[index])[1]):getKey()
     local myAttendanceCount = ToClient_getAttendanceCount(attendanceKey)
     local rewardCount = ToClient_getReceivedRewardCount(attendanceKey)
     if myAttendanceCount - rewardCount > 0 then
@@ -238,7 +247,7 @@ local basePosY = (dailyStamp.tempDailySlot):GetPosY() + 40
 local gapX = 10
 local gapY = 10
 dailyStamp.Init = function(self)
-  -- function num : 0_5 , upvalues : basePosX, gapX, basePosY, gapY, UI_TM
+  -- function num : 0_6 , upvalues : basePosX, gapX, basePosY, gapY, UI_TM
   for index = 0, self.rewardCount - 1 do
     local temp = {}
     temp._dayControl = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_DailyStamp, "Static_DailyStamp_Day_" .. index)
@@ -310,7 +319,7 @@ dailyStamp.Init = function(self)
 end
 
 convertYYMMDDString = function(str)
-  -- function num : 0_6
+  -- function num : 0_7
   if not isGameTypeKorea() then
     return 
   end
@@ -330,31 +339,31 @@ end
 dailyStamp:TapInit()
 dailyStamp:Init()
 DailyStamp_SetData = function(rewardIndex)
-  -- function num : 0_7 , upvalues : dailyStamp, dailyStampCount, dailyStampKeys, UI_color
+  -- function num : 0_8 , upvalues : dailyStamp, dailyStampCount, dailyStampKeys, UI_color
   local self = dailyStamp
-  if rewardIndex >= 0 and rewardIndex < dailyStampCount == false then
+  if rewardIndex >= 1 and rewardIndex <= dailyStampCount == false then
     return 
   end
   self.tapIndex = rewardIndex
-  for index = 0, dailyStampCount - 1 do
+  for index = 1, dailyStampCount do
     if rewardIndex == index then
       ((self.tapControl)[index]):SetCheck(true)
     else
       ((self.tapControl)[index]):SetCheck(false)
     end
   end
-  local totalDayCount = (dailyStampKeys[rewardIndex]):getRewardCount()
+  local totalDayCount = ((dailyStampKeys[rewardIndex])[1]):getRewardCount()
   self.goodDay = {totalDayCount}
-  local attendanceKey = (dailyStampKeys[rewardIndex]):getKey()
+  local attendanceKey = ((dailyStampKeys[rewardIndex])[1]):getKey()
   local myAttendanceCount = ToClient_getAttendanceCount(attendanceKey)
   local recieveCount = ToClient_getReceivedRewardCount(attendanceKey)
-  local yesterdayRecieveCount = (dailyStampKeys[rewardIndex]):getAttendanceYesterdayCount()
-  -- DECOMPILER ERROR at PC58: Confused about usage of register: R7 in 'UnsetPending'
+  local yesterdayRecieveCount = ((dailyStampKeys[rewardIndex])[1]):getAttendanceYesterdayCount()
+  -- DECOMPILER ERROR at PC60: Confused about usage of register: R7 in 'UnsetPending'
 
   if (self.prevAttendanceCount)[rewardIndex] == nil then
     (self.prevAttendanceCount)[rewardIndex] = myAttendanceCount
   end
-  if not (dailyStampKeys[rewardIndex]):isPossibleAttendance() and not (dailyStampKeys[rewardIndex]):isPossibleOverlapAttendance() then
+  if not ((dailyStampKeys[rewardIndex])[1]):isPossibleAttendance() and not ((dailyStampKeys[rewardIndex])[1]):isPossibleOverlapAttendance() then
     (dailyStamp.attendanceTime):SetFontColor(UI_color.C_FFC4BEBE)
     ;
     (dailyStamp.attendanceTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_TODAY_ATTENDANCE_COMPLETE"))
@@ -405,252 +414,243 @@ DailyStamp_SetData = function(rewardIndex)
   end
   self.animationdayIndex = {}
   for index = 0, totalDayCount - 1 do
-    local itemWrapper = (dailyStampKeys[rewardIndex]):getRewardItem(R13_PC246)
+    local itemWrapper = ((dailyStampKeys[rewardIndex])[1]):getRewardItem(R13_PC251)
     ;
     ((((self.dayControl)[index]).slot).icon):SetShow(true)
-    -- DECOMPILER ERROR at PC257: Overwrote pending register: R13 in 'AssignReg'
+    -- DECOMPILER ERROR at PC262: Overwrote pending register: R13 in 'AssignReg'
 
     ;
     (((self.dayControl)[index])._dayControl):SetShow(true)
-    -- DECOMPILER ERROR at PC263: Overwrote pending register: R13 in 'AssignReg'
+    -- DECOMPILER ERROR at PC268: Overwrote pending register: R13 in 'AssignReg'
 
     ;
     (((self.dayControl)[index]).slot):setItem(itemWrapper)
-    -- DECOMPILER ERROR at PC270: Overwrote pending register: R13 in 'AssignReg'
+    -- DECOMPILER ERROR at PC275: Overwrote pending register: R13 in 'AssignReg'
 
     ;
-    ((((self.dayControl)[index]).slot).icon):addInputEvent("Mouse_On", "DailyStamp_Tooltip_Show(" .. R16_PC277 .. "," .. rewardIndex .. ")")
-    -- DECOMPILER ERROR at PC283: Overwrote pending register: R13 in 'AssignReg'
+    ((((self.dayControl)[index]).slot).icon):addInputEvent("Mouse_On", "DailyStamp_Tooltip_Show(" .. R16_PC282 .. "," .. rewardIndex .. ")")
+    -- DECOMPILER ERROR at PC288: Overwrote pending register: R13 in 'AssignReg'
 
     ;
     ((((self.dayControl)[index]).slot).icon):addInputEvent("Mouse_Out", "DailyStamp_Tooltip_Show()")
-    -- DECOMPILER ERROR at PC290: Overwrote pending register: R13 in 'AssignReg'
+    -- DECOMPILER ERROR at PC295: Overwrote pending register: R13 in 'AssignReg'
 
     ;
     (((self.dayControl)[index])._dayText):SetFontColor((Defines.Color).C_FFEFEFEF)
-    -- DECOMPILER ERROR at PC300: Overwrote pending register: R13 in 'AssignReg'
+    -- DECOMPILER ERROR at PC305: Overwrote pending register: R13 in 'AssignReg'
 
     if index < myAttendanceCount then
       (((self.dayControl)[index])._stamp):SetShow(true)
-      -- DECOMPILER ERROR at PC309: Overwrote pending register: R13 in 'AssignReg'
+      -- DECOMPILER ERROR at PC314: Overwrote pending register: R13 in 'AssignReg'
 
       if index < recieveCount then
         ((((self.dayControl)[index]).slot).icon):SetMonoTone(true)
-        -- DECOMPILER ERROR at PC316: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC321: Overwrote pending register: R13 in 'AssignReg'
 
         ;
         ((((self.dayControl)[index]).goodItemSlot).icon):SetMonoTone(true)
-        -- DECOMPILER ERROR at PC324: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC329: Overwrote pending register: R13 in 'AssignReg'
 
         if yesterdayRecieveCount <= index then
           (((self.dayControl)[index])._stamp):SetShow(false)
           self.animationTime = 0
-          -- DECOMPILER ERROR at PC331: Overwrote pending register: R13 in 'AssignReg'
+          -- DECOMPILER ERROR at PC336: Overwrote pending register: R13 in 'AssignReg'
 
           ;
           (((self.dayControl)[index])._stamp):SetScale(1, 1)
-          -- DECOMPILER ERROR at PC336: Overwrote pending register: R13 in 'AssignReg'
+          -- DECOMPILER ERROR at PC341: Overwrote pending register: R13 in 'AssignReg'
 
-          DailyStamp_SetAnimation(R13_PC246, R14_PC338)
-          -- DECOMPILER ERROR at PC340: Overwrote pending register: R13 in 'AssignReg'
+          DailyStamp_SetAnimation(R13_PC251, R14_PC343)
+          -- DECOMPILER ERROR at PC345: Overwrote pending register: R13 in 'AssignReg'
 
-          DailyStamp_ChangeTexture(R13_PC246, R14_PC338)
-          -- DECOMPILER ERROR at PC346: Overwrote pending register: R13 in 'AssignReg'
+          DailyStamp_ChangeTexture(R13_PC251, R14_PC343)
+          -- DECOMPILER ERROR at PC351: Overwrote pending register: R13 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC347: Overwrote pending register: R14 in 'AssignReg'
-
-          ;
-          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, "DailyStamp_TodayAttendance_TooltipShow(" .. R16_PC277 .. ")")
-          -- DECOMPILER ERROR at PC356: Overwrote pending register: R13 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC357: Overwrote pending register: R14 in 'AssignReg'
+          -- DECOMPILER ERROR at PC352: Overwrote pending register: R14 in 'AssignReg'
 
           ;
-          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, "DailyStamp_TodayAttendance_TooltipHide()")
+          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, "DailyStamp_TodayAttendance_TooltipShow(" .. R16_PC282 .. ")")
+          -- DECOMPILER ERROR at PC361: Overwrote pending register: R13 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC362: Overwrote pending register: R14 in 'AssignReg'
+
+          ;
+          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, "DailyStamp_TodayAttendance_TooltipHide()")
         else
-          -- DECOMPILER ERROR at PC362: Overwrote pending register: R13 in 'AssignReg'
+          -- DECOMPILER ERROR at PC367: Overwrote pending register: R13 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC363: Overwrote pending register: R14 in 'AssignReg'
+          -- DECOMPILER ERROR at PC368: Overwrote pending register: R14 in 'AssignReg'
 
-          DailyStamp_ChangeTexture(R13_PC246, R14_PC338)
+          DailyStamp_ChangeTexture(R13_PC251, R14_PC343)
         end
       else
-        -- DECOMPILER ERROR at PC369: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC374: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC370: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC375: Overwrote pending register: R14 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC372: Overwrote pending register: R16 in 'AssignReg'
+        -- DECOMPILER ERROR at PC377: Overwrote pending register: R16 in 'AssignReg'
 
-        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, "DailyStamp_AcceptReward(" .. R16_PC277 .. ")")
-        -- DECOMPILER ERROR at PC379: Overwrote pending register: R13 in 'AssignReg'
+        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, "DailyStamp_AcceptReward(" .. R16_PC282 .. ")")
+        -- DECOMPILER ERROR at PC384: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC380: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC385: Overwrote pending register: R14 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC382: Overwrote pending register: R16 in 'AssignReg'
-
-        ;
-        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, "DailyStamp_AcceptReward(" .. R16_PC277 .. ")")
-        -- DECOMPILER ERROR at PC390: Overwrote pending register: R13 in 'AssignReg'
-
-        -- DECOMPILER ERROR at PC391: Overwrote pending register: R14 in 'AssignReg'
-
-        -- DECOMPILER ERROR at PC393: Overwrote pending register: R16 in 'AssignReg'
+        -- DECOMPILER ERROR at PC387: Overwrote pending register: R16 in 'AssignReg'
 
         ;
-        ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC338, "DailyStamp_AcceptReward(" .. R16_PC277 .. ")")
-        -- DECOMPILER ERROR at PC401: Overwrote pending register: R13 in 'AssignReg'
+        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, "DailyStamp_AcceptReward(" .. R16_PC282 .. ")")
+        -- DECOMPILER ERROR at PC395: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC402: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC396: Overwrote pending register: R14 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC404: Overwrote pending register: R16 in 'AssignReg'
-
-        ;
-        ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC338, "DailyStamp_AcceptReward(" .. R16_PC277 .. ")")
-        -- DECOMPILER ERROR at PC412: Overwrote pending register: R13 in 'AssignReg'
-
-        -- DECOMPILER ERROR at PC413: Overwrote pending register: R14 in 'AssignReg'
-
-        -- DECOMPILER ERROR at PC415: Overwrote pending register: R16 in 'AssignReg'
+        -- DECOMPILER ERROR at PC398: Overwrote pending register: R16 in 'AssignReg'
 
         ;
-        ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC338, "DailyStamp_AcceptReward(" .. R16_PC277 .. ")")
-        -- DECOMPILER ERROR at PC423: Overwrote pending register: R13 in 'AssignReg'
+        ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC343, "DailyStamp_AcceptReward(" .. R16_PC282 .. ")")
+        -- DECOMPILER ERROR at PC406: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC424: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC407: Overwrote pending register: R14 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC426: Overwrote pending register: R16 in 'AssignReg'
-
-        ;
-        ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC338, "DailyStamp_AcceptReward(" .. R16_PC277 .. ")")
-        -- DECOMPILER ERROR at PC433: Overwrote pending register: R13 in 'AssignReg'
-
-        -- DECOMPILER ERROR at PC434: Overwrote pending register: R14 in 'AssignReg'
-
-        -- DECOMPILER ERROR at PC436: Overwrote pending register: R16 in 'AssignReg'
+        -- DECOMPILER ERROR at PC409: Overwrote pending register: R16 in 'AssignReg'
 
         ;
-        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, "DailyStamp_AcceptReward_TooltipShow(" .. R16_PC277 .. ")")
-        -- DECOMPILER ERROR at PC443: Overwrote pending register: R13 in 'AssignReg'
+        ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC343, "DailyStamp_AcceptReward(" .. R16_PC282 .. ")")
+        -- DECOMPILER ERROR at PC417: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC444: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC418: Overwrote pending register: R14 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC420: Overwrote pending register: R16 in 'AssignReg'
 
         ;
-        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, "DailyStamp_AcceptReward_TooltipShow()")
+        ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC343, "DailyStamp_AcceptReward(" .. R16_PC282 .. ")")
+        -- DECOMPILER ERROR at PC428: Overwrote pending register: R13 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC429: Overwrote pending register: R14 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC431: Overwrote pending register: R16 in 'AssignReg'
+
+        ;
+        ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC343, "DailyStamp_AcceptReward(" .. R16_PC282 .. ")")
+        -- DECOMPILER ERROR at PC438: Overwrote pending register: R13 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC439: Overwrote pending register: R14 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC441: Overwrote pending register: R16 in 'AssignReg'
+
+        ;
+        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, "DailyStamp_AcceptReward_TooltipShow(" .. R16_PC282 .. ")")
         -- DECOMPILER ERROR at PC448: Overwrote pending register: R13 in 'AssignReg'
 
         -- DECOMPILER ERROR at PC449: Overwrote pending register: R14 in 'AssignReg'
 
-        DailyStamp_ChangeTexture(R13_PC246, R14_PC338)
+        ;
+        (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, "DailyStamp_AcceptReward_TooltipShow()")
+        -- DECOMPILER ERROR at PC453: Overwrote pending register: R13 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC454: Overwrote pending register: R14 in 'AssignReg'
+
+        DailyStamp_ChangeTexture(R13_PC251, R14_PC343)
         local waitingTime = 0
-        -- DECOMPILER ERROR at PC452: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC457: Overwrote pending register: R13 in 'AssignReg'
 
-        local possibleAttendance = R13_PC246
-        -- DECOMPILER ERROR at PC453: Overwrote pending register: R14 in 'AssignReg'
+        local possibleAttendance = R13_PC251
+        -- DECOMPILER ERROR at PC458: Overwrote pending register: R14 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC456: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC461: Overwrote pending register: R14 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC457: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC462: Overwrote pending register: R14 in 'AssignReg'
 
-        R14_PC338 = R14_PC338(R14_PC338)
-        if R14_PC338 then
-          R14_PC338 = ToClient_getWaitingTimeForAttendance
-          R14_PC338 = R14_PC338()
-          waitingTime = R14_PC338
-          -- DECOMPILER ERROR at PC464: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC463: Overwrote pending register: R14 in 'AssignReg'
+
+        R14_PC343 = R14_PC343(R14_PC343)
+        if R14_PC343 then
+          R14_PC343 = ToClient_getWaitingTimeForAttendance
+          R14_PC343 = R14_PC343()
+          waitingTime = R14_PC343
+          -- DECOMPILER ERROR at PC470: Overwrote pending register: R13 in 'AssignReg'
 
         end
-        R14_PC338 = dailyStampKeys
-        R14_PC338 = R14_PC338[dailyStamp.tapIndex]
-        R14_PC338 = R14_PC338(R14_PC338)
-        if R14_PC338 then
-          R14_PC338 = ToClient_getWaitingTimeForNextAttendance
-          -- DECOMPILER ERROR at PC475: Overwrote pending register: R16 in 'AssignReg'
+        R14_PC343 = dailyStampKeys
+        R14_PC343 = R14_PC343[dailyStamp.tapIndex]
+        R14_PC343 = R14_PC343[1]
+        R14_PC343 = R14_PC343(R14_PC343)
+        if R14_PC343 then
+          R14_PC343 = ToClient_getWaitingTimeForNextAttendance
+          -- DECOMPILER ERROR at PC482: Overwrote pending register: R16 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC476: Overwrote pending register: R16 in 'AssignReg'
+          -- DECOMPILER ERROR at PC483: Overwrote pending register: R16 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC478: Overwrote pending register: R16 in 'AssignReg'
+          -- DECOMPILER ERROR at PC486: Overwrote pending register: R16 in 'AssignReg'
 
-          R14_PC338 = R14_PC338((dailyStampKeys[R16_PC277]):getKey())
-          waitingTime = R14_PC338
-          -- DECOMPILER ERROR at PC482: Overwrote pending register: R13 in 'AssignReg'
+          R14_PC343 = R14_PC343(((dailyStampKeys[R16_PC282])[1]):getKey())
+          waitingTime = R14_PC343
+          -- DECOMPILER ERROR at PC490: Overwrote pending register: R13 in 'AssignReg'
 
         end
         if waitingTime == 0 and not possibleAttendance then
-          R14_PC338 = myAttendanceCount - 1
-          if index == R14_PC338 then
-            R14_PC338 = DailyStamp_ChangeTexture
-            R14_PC338(R15_PC493, 0)
-            R14_PC338 = self.dayControl
-            R14_PC338 = R14_PC338[index]
-            R14_PC338 = R14_PC338._dayControl
-            R14_PC338, R15_PC493 = R14_PC338:SetVertexAniRun, R14_PC338
-            R14_PC338(R15_PC493, "Ani_Color_New", true)
-            R14_PC338 = dailyStamp
-            R14_PC338 = R14_PC338.attendanceTime
-            R14_PC338, R15_PC493 = R14_PC338:SetText, R14_PC338
-            R14_PC338(R15_PC493, PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_TODAY_ATTENDANCE_COMPLETE"))
+          R14_PC343 = myAttendanceCount - 1
+          if index == R14_PC343 then
+            R14_PC343 = DailyStamp_ChangeTexture
+            R14_PC343(R15_PC501, 0)
+            R14_PC343 = self.dayControl
+            R14_PC343 = R14_PC343[index]
+            R14_PC343 = R14_PC343._dayControl
+            R14_PC343, R15_PC501 = R14_PC343:SetVertexAniRun, R14_PC343
+            R14_PC343(R15_PC501, "Ani_Color_New", true)
+            R14_PC343 = dailyStamp
+            R14_PC343 = R14_PC343.attendanceTime
+            R14_PC343, R15_PC501 = R14_PC343:SetText, R14_PC343
+            R14_PC343(R15_PC501, PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_TODAY_ATTENDANCE_COMPLETE"))
           end
         end
       end
     else
-      -- DECOMPILER ERROR at PC515: Overwrote pending register: R13 in 'AssignReg'
+      -- DECOMPILER ERROR at PC524: Overwrote pending register: R13 in 'AssignReg'
 
       if index == myAttendanceCount then
-        if (dailyStampKeys[rewardIndex]):isPossibleAttendance() or (dailyStampKeys[rewardIndex]):isPossibleOverlapAttendance() then
+        if ((dailyStampKeys[rewardIndex])[1]):isPossibleAttendance() or ((dailyStampKeys[rewardIndex])[1]):isPossibleOverlapAttendance() then
           if isPossibleAttandanceCheck() then
-            DailyStamp_ChangeTexture(R13_PC532, R14_PC338)
-            -- DECOMPILER ERROR at PC537: Overwrote pending register: R14 in 'AssignReg'
-
-            -- DECOMPILER ERROR at PC541: Overwrote pending register: R15 in 'AssignReg'
-
-            ;
-            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, R15_PC493)
-            -- DECOMPILER ERROR at PC546: Overwrote pending register: R13 in 'AssignReg'
-
+            DailyStamp_ChangeTexture(R13_PC542, R14_PC343)
             -- DECOMPILER ERROR at PC547: Overwrote pending register: R14 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC548: Overwrote pending register: R15 in 'AssignReg'
+            -- DECOMPILER ERROR at PC551: Overwrote pending register: R15 in 'AssignReg'
 
             ;
-            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, R15_PC493)
+            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, R15_PC501)
+            -- DECOMPILER ERROR at PC556: Overwrote pending register: R13 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC557: Overwrote pending register: R14 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC558: Overwrote pending register: R15 in 'AssignReg'
+
+            ;
+            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, R15_PC501)
           else
-            -- DECOMPILER ERROR at PC552: Overwrote pending register: R13 in 'AssignReg'
+            -- DECOMPILER ERROR at PC562: Overwrote pending register: R13 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC553: Overwrote pending register: R14 in 'AssignReg'
+            -- DECOMPILER ERROR at PC563: Overwrote pending register: R14 in 'AssignReg'
 
-            DailyStamp_ChangeTexture(R13_PC532, R14_PC338)
-            -- DECOMPILER ERROR at PC558: Overwrote pending register: R13 in 'AssignReg'
-
-            -- DECOMPILER ERROR at PC559: Overwrote pending register: R14 in 'AssignReg'
-
-            -- DECOMPILER ERROR at PC560: Overwrote pending register: R15 in 'AssignReg'
-
-            -- DECOMPILER ERROR at PC563: Overwrote pending register: R15 in 'AssignReg'
-
-            ;
-            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, R15_PC493)
+            DailyStamp_ChangeTexture(R13_PC542, R14_PC343)
             -- DECOMPILER ERROR at PC568: Overwrote pending register: R13 in 'AssignReg'
 
             -- DECOMPILER ERROR at PC569: Overwrote pending register: R14 in 'AssignReg'
 
             -- DECOMPILER ERROR at PC570: Overwrote pending register: R15 in 'AssignReg'
 
+            -- DECOMPILER ERROR at PC573: Overwrote pending register: R15 in 'AssignReg'
+
             ;
-            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, R15_PC493)
+            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, R15_PC501)
+            -- DECOMPILER ERROR at PC578: Overwrote pending register: R13 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC579: Overwrote pending register: R14 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC580: Overwrote pending register: R15 in 'AssignReg'
+
+            ;
+            (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, R15_PC501)
             self.secondAttendanceCheck = true
           end
-          -- DECOMPILER ERROR at PC576: Overwrote pending register: R13 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC577: Overwrote pending register: R14 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC578: Overwrote pending register: R15 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC579: Overwrote pending register: R16 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC581: Overwrote pending register: R15 in 'AssignReg'
-
-          ;
-          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, R15_PC493)
           -- DECOMPILER ERROR at PC586: Overwrote pending register: R13 in 'AssignReg'
 
           -- DECOMPILER ERROR at PC587: Overwrote pending register: R14 in 'AssignReg'
@@ -662,162 +662,174 @@ DailyStamp_SetData = function(rewardIndex)
           -- DECOMPILER ERROR at PC591: Overwrote pending register: R15 in 'AssignReg'
 
           ;
-          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC338, R15_PC493)
-          -- DECOMPILER ERROR at PC597: Overwrote pending register: R13 in 'AssignReg'
+          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, R15_PC501)
+          -- DECOMPILER ERROR at PC596: Overwrote pending register: R13 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC598: Overwrote pending register: R14 in 'AssignReg'
+          -- DECOMPILER ERROR at PC597: Overwrote pending register: R14 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC599: Overwrote pending register: R15 in 'AssignReg'
+          -- DECOMPILER ERROR at PC598: Overwrote pending register: R15 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC600: Overwrote pending register: R16 in 'AssignReg'
+          -- DECOMPILER ERROR at PC599: Overwrote pending register: R16 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC602: Overwrote pending register: R15 in 'AssignReg'
-
-          ;
-          ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC338, R15_PC493)
-          -- DECOMPILER ERROR at PC608: Overwrote pending register: R13 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC609: Overwrote pending register: R14 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC610: Overwrote pending register: R15 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC611: Overwrote pending register: R16 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC613: Overwrote pending register: R15 in 'AssignReg'
+          -- DECOMPILER ERROR at PC601: Overwrote pending register: R15 in 'AssignReg'
 
           ;
-          ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC338, R15_PC493)
-          -- DECOMPILER ERROR at PC619: Overwrote pending register: R13 in 'AssignReg'
+          (((self.dayControl)[index])._dayControl):addInputEvent(R14_PC343, R15_PC501)
+          -- DECOMPILER ERROR at PC607: Overwrote pending register: R13 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC620: Overwrote pending register: R14 in 'AssignReg'
+          -- DECOMPILER ERROR at PC608: Overwrote pending register: R14 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC621: Overwrote pending register: R15 in 'AssignReg'
+          -- DECOMPILER ERROR at PC609: Overwrote pending register: R15 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC622: Overwrote pending register: R16 in 'AssignReg'
+          -- DECOMPILER ERROR at PC610: Overwrote pending register: R16 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC624: Overwrote pending register: R15 in 'AssignReg'
-
-          ;
-          ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC338, R15_PC493)
-          -- DECOMPILER ERROR at PC630: Overwrote pending register: R13 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC631: Overwrote pending register: R14 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC632: Overwrote pending register: R15 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC633: Overwrote pending register: R16 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC635: Overwrote pending register: R15 in 'AssignReg'
+          -- DECOMPILER ERROR at PC612: Overwrote pending register: R15 in 'AssignReg'
 
           ;
-          ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC338, R15_PC493)
+          ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC343, R15_PC501)
+          -- DECOMPILER ERROR at PC618: Overwrote pending register: R13 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC619: Overwrote pending register: R14 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC620: Overwrote pending register: R15 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC621: Overwrote pending register: R16 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC623: Overwrote pending register: R15 in 'AssignReg'
+
+          ;
+          ((((self.dayControl)[index]).slot).icon):addInputEvent(R14_PC343, R15_PC501)
+          -- DECOMPILER ERROR at PC629: Overwrote pending register: R13 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC630: Overwrote pending register: R14 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC631: Overwrote pending register: R15 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC632: Overwrote pending register: R16 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC634: Overwrote pending register: R15 in 'AssignReg'
+
+          ;
+          ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC343, R15_PC501)
+          -- DECOMPILER ERROR at PC640: Overwrote pending register: R13 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC641: Overwrote pending register: R14 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC642: Overwrote pending register: R15 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC643: Overwrote pending register: R16 in 'AssignReg'
+
+          -- DECOMPILER ERROR at PC645: Overwrote pending register: R15 in 'AssignReg'
+
+          ;
+          ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent(R14_PC343, R15_PC501)
         else
-          -- DECOMPILER ERROR at PC639: Overwrote pending register: R13 in 'AssignReg'
+          -- DECOMPILER ERROR at PC649: Overwrote pending register: R13 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC640: Overwrote pending register: R14 in 'AssignReg'
+          -- DECOMPILER ERROR at PC650: Overwrote pending register: R14 in 'AssignReg'
 
-          DailyStamp_ChangeTexture(R13_PC532, R14_PC338)
+          DailyStamp_ChangeTexture(R13_PC542, R14_PC343)
         end
       else
-        -- DECOMPILER ERROR at PC644: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC654: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC645: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC655: Overwrote pending register: R14 in 'AssignReg'
 
-        DailyStamp_ChangeTexture(R13_PC532, R14_PC338)
+        DailyStamp_ChangeTexture(R13_PC542, R14_PC343)
       end
     end
-    -- DECOMPILER ERROR at PC648: Overwrote pending register: R13 in 'AssignReg'
+    -- DECOMPILER ERROR at PC658: Overwrote pending register: R13 in 'AssignReg'
 
-    for R15_PC493,R16_PC541 in pairs(R13_PC532) do
+    for R15_PC501,R16_PC551 in pairs(R13_PC542) do
       if gIndex == index + 1 then
-        local goodItemWrapper = (dailyStampKeys[rewardIndex]):getRewardItem(R19_PC658)
+        local goodItemWrapper = ((dailyStampKeys[rewardIndex])[1]):getRewardItem(R19_PC669)
         ;
         ((((self.dayControl)[index]).slot).icon):SetShow(false)
-        -- DECOMPILER ERROR at PC670: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC681: Overwrote pending register: R19 in 'AssignReg'
 
         ;
         ((((self.dayControl)[index]).goodItemSlot).icon):SetShow(true)
-        -- DECOMPILER ERROR at PC676: Overwrote pending register: R19 in 'AssignReg'
-
-        ;
-        (((self.dayControl)[index]).goodItemSlot):setItem((dailyStampKeys[rewardIndex]):getRewardItem(R22_PC681))
         -- DECOMPILER ERROR at PC687: Overwrote pending register: R19 in 'AssignReg'
 
         ;
-        ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent("Mouse_On", "DailyStamp_Tooltip_Show(" .. R22_PC681 .. "," .. rewardIndex .. ")")
-        -- DECOMPILER ERROR at PC700: Overwrote pending register: R19 in 'AssignReg'
+        (((self.dayControl)[index]).goodItemSlot):setItem(((dailyStampKeys[rewardIndex])[1]):getRewardItem(R22_PC693))
+        -- DECOMPILER ERROR at PC699: Overwrote pending register: R19 in 'AssignReg'
+
+        ;
+        ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent("Mouse_On", "DailyStamp_Tooltip_Show(" .. R22_PC693 .. "," .. rewardIndex .. ")")
+        -- DECOMPILER ERROR at PC712: Overwrote pending register: R19 in 'AssignReg'
 
         ;
         ((((self.dayControl)[index]).goodItemSlot).icon):addInputEvent("Mouse_Out", "DailyStamp_Tooltip_Show()")
-        -- DECOMPILER ERROR at PC707: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC719: Overwrote pending register: R19 in 'AssignReg'
 
         ;
         (((self.dayControl)[index])._rewardName):SetShow(true)
-        -- DECOMPILER ERROR at PC713: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC725: Overwrote pending register: R19 in 'AssignReg'
 
         ;
         (((self.dayControl)[index])._rewardName):SetText((goodItemWrapper:getStaticStatus()):getName())
-        -- DECOMPILER ERROR at PC723: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC735: Overwrote pending register: R19 in 'AssignReg'
 
         ;
         ((((self.dayControl)[index]).goodItemSlot).icon):SetPosX(43)
-        -- DECOMPILER ERROR at PC730: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC742: Overwrote pending register: R19 in 'AssignReg'
 
         ;
         ((((self.dayControl)[index]).goodItemSlot).icon):SetPosY(13)
-        -- DECOMPILER ERROR at PC743: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC755: Overwrote pending register: R19 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC750: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC762: Overwrote pending register: R19 in 'AssignReg'
 
         if isGameTypeEnglish() or isGameTypeRussia() or (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
           (((self.dayControl)[index])._rewardName):SetShow(false)
-          -- DECOMPILER ERROR at PC757: Overwrote pending register: R19 in 'AssignReg'
+          -- DECOMPILER ERROR at PC769: Overwrote pending register: R19 in 'AssignReg'
 
           ;
           ((((self.dayControl)[index]).goodItemSlot).icon):SetPosX(47)
-          -- DECOMPILER ERROR at PC764: Overwrote pending register: R19 in 'AssignReg'
+          -- DECOMPILER ERROR at PC776: Overwrote pending register: R19 in 'AssignReg'
 
           ;
           ((((self.dayControl)[index]).goodItemSlot).icon):SetPosY(47)
         end
-        -- DECOMPILER ERROR at PC770: Overwrote pending register: R19 in 'AssignReg'
+        -- DECOMPILER ERROR at PC782: Overwrote pending register: R19 in 'AssignReg'
 
         ;
         (((self.dayControl)[index])._dayText):SetFontColor((Defines.Color).C_FFFFCE22)
       end
     end
-    -- DECOMPILER ERROR at PC777: Confused about usage of register R14 for local variables in 'ReleaseLocals'
+    -- DECOMPILER ERROR at PC789: Confused about usage of register R14 for local variables in 'ReleaseLocals'
 
   end
   ;
-  (self.eventPeriod):SetText((dailyStampKeys[rewardIndex]):getPeriodDate())
+  (self.eventPeriod):SetText(((dailyStampKeys[rewardIndex])[1]):getPeriodDate())
   ;
-  (self.acceptPeriod):SetText((dailyStampKeys[rewardIndex]):getExpireDate())
-  -- DECOMPILER ERROR at PC807: Overwrote pending register: R11 in 'AssignReg'
+  (self.acceptPeriod):SetText(((dailyStampKeys[rewardIndex])[1]):getExpireDate())
+  -- DECOMPILER ERROR at PC821: Overwrote pending register: R11 in 'AssignReg'
 
-  -- DECOMPILER ERROR at PC808: Overwrote pending register: R11 in 'AssignReg'
+  -- DECOMPILER ERROR at PC822: Overwrote pending register: R11 in 'AssignReg'
 
   if (self.eventPeriod):GetTextSizeY() > 25 then
     (self.acceptPeriodTitle):SetSpanSize(((self.acceptPeriodTitle):GetSpanSize()).x, ((self.eventPeriod):GetSpanSize()).y - itemWrapper)
-    -- DECOMPILER ERROR at PC819: Overwrote pending register: R11 in 'AssignReg'
+    -- DECOMPILER ERROR at PC833: Overwrote pending register: R11 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC822: Overwrote pending register: R11 in 'AssignReg'
+    -- DECOMPILER ERROR at PC836: Overwrote pending register: R11 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC823: Overwrote pending register: R11 in 'AssignReg'
+    -- DECOMPILER ERROR at PC837: Overwrote pending register: R11 in 'AssignReg'
 
     ;
     (self.acceptPeriod):SetSpanSize(((self.acceptPeriod):GetSpanSize()).x, ((self.eventPeriod):GetSpanSize()).y - itemWrapper)
     local titleSizeX = nil
     local baseSizeX = nil
-    -- DECOMPILER ERROR at PC848: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC862: Confused about usage of register: R8 in 'UnsetPending'
 
-    -- DECOMPILER ERROR at PC848: Overwrote pending register: R11 in 'AssignReg'
+    -- DECOMPILER ERROR at PC862: Overwrote pending register: R11 in 'AssignReg'
 
     if (self.acceptPeriod):GetPosX() < (self.eventPeriodTitle):GetPosX() + (math.max)((self.eventPeriodTitle):GetTextSizeX(), (self.acceptPeriodTitle):GetTextSizeX()) + 10 then
       (self.eventPeriod):SetPosX(itemWrapper)
-      -- DECOMPILER ERROR at PC852: Confused about usage of register: R8 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC866: Confused about usage of register: R8 in 'UnsetPending'
 
-      -- DECOMPILER ERROR at PC852: Overwrote pending register: R11 in 'AssignReg'
+      -- DECOMPILER ERROR at PC866: Overwrote pending register: R11 in 'AssignReg'
 
       ;
       (self.acceptPeriod):SetPosX(itemWrapper)
@@ -825,44 +837,44 @@ DailyStamp_SetData = function(rewardIndex)
   end
   if false then
     for index = 0, #self.eventEntryCount do
-      local l_0_7_30, l_0_7_31, l_0_7_32, index = nil
-      -- DECOMPILER ERROR at PC862: Overwrote pending register: R11 in 'AssignReg'
+      local l_0_8_30, l_0_8_31, l_0_8_32, index = nil
+      -- DECOMPILER ERROR at PC876: Overwrote pending register: R11 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC863: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC877: Confused about usage of register: R10 in 'UnsetPending'
 
-      -- DECOMPILER ERROR at PC863: Overwrote pending register: R11 in 'AssignReg'
+      -- DECOMPILER ERROR at PC877: Overwrote pending register: R11 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC866: Overwrote pending register: R11 in 'AssignReg'
+      -- DECOMPILER ERROR at PC880: Overwrote pending register: R11 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC867: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC881: Confused about usage of register: R10 in 'UnsetPending'
 
-      -- DECOMPILER ERROR at PC867: Overwrote pending register: R11 in 'AssignReg'
+      -- DECOMPILER ERROR at PC881: Overwrote pending register: R11 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC868: Overwrote pending register: R11 in 'AssignReg'
+      -- DECOMPILER ERROR at PC882: Overwrote pending register: R11 in 'AssignReg'
 
       if itemWrapper <= myAttendanceCount then
         itemWrapper(itemWrapper, true)
       else
-        -- DECOMPILER ERROR at PC872: Overwrote pending register: R11 in 'AssignReg'
+        -- DECOMPILER ERROR at PC886: Overwrote pending register: R11 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC873: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC887: Confused about usage of register: R10 in 'UnsetPending'
 
-        -- DECOMPILER ERROR at PC873: Overwrote pending register: R11 in 'AssignReg'
+        -- DECOMPILER ERROR at PC887: Overwrote pending register: R11 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC874: Overwrote pending register: R11 in 'AssignReg'
+        -- DECOMPILER ERROR at PC888: Overwrote pending register: R11 in 'AssignReg'
 
         itemWrapper(itemWrapper, false)
       end
     end
   end
   dailyStamp:TabUpdate()
-  -- DECOMPILER ERROR at PC881: Confused about usage of register R13 for local variables in 'ReleaseLocals'
+  -- DECOMPILER ERROR at PC895: Confused about usage of register R13 for local variables in 'ReleaseLocals'
 
   -- DECOMPILER ERROR: 24 unprocessed JMP targets
 end
 
 DailyStamp_ChangeTexture = function(index, recieveType)
-  -- function num : 0_8 , upvalues : dailyStamp
+  -- function num : 0_9 , upvalues : dailyStamp
   local self = dailyStamp
   if recieveType == 0 then
     (((self.dayControl)[index])._dayControl):ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/DailyCheck_00.dds")
@@ -1028,19 +1040,19 @@ DailyStamp_ChangeTexture = function(index, recieveType)
 end
 
 DailyStamp_RecieveReward = function(index, rewardIndex)
-  -- function num : 0_9 , upvalues : dailyStampKeys
+  -- function num : 0_10 , upvalues : dailyStampKeys
   local recieveReward = function()
-    -- function num : 0_9_0 , upvalues : dailyStampKeys, rewardIndex
-    ToClient_takeRewardItem((dailyStampKeys[rewardIndex]):getKey())
+    -- function num : 0_10_0 , upvalues : dailyStampKeys, rewardIndex
+    ToClient_takeRewardItem(((dailyStampKeys[rewardIndex])[1]):getKey())
   end
 
-  local receiveItemIndex = ToClient_getReceivedRewardCount((dailyStampKeys[rewardIndex]):getKey())
+  local receiveItemIndex = ToClient_getReceivedRewardCount(((dailyStampKeys[rewardIndex])[1]):getKey())
   if receiveItemIndex == 0 then
     receiveItemIndex = 0
   end
   TooltipSimple_Hide()
   local title = PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_MSGTITLE")
-  local itemWrapper = (dailyStampKeys[rewardIndex]):getRewardItem(receiveItemIndex)
+  local itemWrapper = ((dailyStampKeys[rewardIndex])[1]):getRewardItem(receiveItemIndex)
   local content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_MSGCONTENT", "name", tostring((itemWrapper:getStaticStatus()):getName()))
   messageBoxData = {title = title, content = content, functionYes = recieveReward, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1048,7 +1060,7 @@ DailyStamp_RecieveReward = function(index, rewardIndex)
 end
 
 DailyStamp_TodayAttendance_TooltipShow = function(index)
-  -- function num : 0_10 , upvalues : dailyStamp
+  -- function num : 0_11 , upvalues : dailyStamp
   local uiControl = ((dailyStamp.dayControl)[index])._dayControl
   local name = PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_TODAYATTENDANCE_NAME")
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_TODAYATTENDANCE_DESC")
@@ -1056,12 +1068,12 @@ DailyStamp_TodayAttendance_TooltipShow = function(index)
 end
 
 DailyStamp_TodayAttendance_TooltipHide = function()
-  -- function num : 0_11
+  -- function num : 0_12
   TooltipSimple_Hide()
 end
 
 DailyStamp_AcceptReward_TooltipShow = function(index)
-  -- function num : 0_12 , upvalues : dailyStamp
+  -- function num : 0_13 , upvalues : dailyStamp
   if index == nil then
     TooltipSimple_Hide()
     return 
@@ -1073,7 +1085,7 @@ DailyStamp_AcceptReward_TooltipShow = function(index)
 end
 
 DailyStamp_Attendance_TooltipShow = function(index, isPossible)
-  -- function num : 0_13 , upvalues : dailyStamp
+  -- function num : 0_14 , upvalues : dailyStamp
   if index == nil then
     TooltipSimple_Hide()
     return 
@@ -1089,7 +1101,7 @@ DailyStamp_Attendance_TooltipShow = function(index, isPossible)
 end
 
 DailyStamp_TapClicked = function(rewardIndex)
-  -- function num : 0_14 , upvalues : dailyStamp
+  -- function num : 0_15 , upvalues : dailyStamp
   local self = dailyStamp
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -1098,33 +1110,33 @@ DailyStamp_TapClicked = function(rewardIndex)
 end
 
 DailyStamp_SetAttendance = function(rewardIndex)
-  -- function num : 0_15 , upvalues : dailyStampKeys
+  -- function num : 0_16 , upvalues : dailyStampKeys
   do
     if not isPossibleAttandanceCheck() then
       local waitingTime = -1
-      if (dailyStampKeys[rewardIndex]):isPossibleAttendance() then
+      if ((dailyStampKeys[rewardIndex])[1]):isPossibleAttendance() then
         waitingTime = ToClient_getWaitingTimeForAttendance()
       end
-      if (dailyStampKeys[rewardIndex]):isPossibleOverlapAttendance() then
-        waitingTime = ToClient_getWaitingTimeForNextAttendance((dailyStampKeys[rewardIndex]):getKey())
+      if ((dailyStampKeys[rewardIndex])[1]):isPossibleOverlapAttendance() then
+        waitingTime = ToClient_getWaitingTimeForNextAttendance(((dailyStampKeys[rewardIndex])[1]):getKey())
       end
       Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_STILL_CHECK_IMPOSSIBLE_REMAINTIME", "remainTime", ((Util.Time).timeFormatting_Minute)(waitingTime)))
       return false
     end
-    local attendanceKey = (dailyStampKeys[rewardIndex]):getKey()
+    local attendanceKey = ((dailyStampKeys[rewardIndex])[1]):getKey()
     ToClient_onAttendance(attendanceKey)
     return true
   end
 end
 
 FGlobal_DailyStamp_SetAttendanceAll = function()
-  -- function num : 0_16 , upvalues : dailyStampCount, dailyStampKeys, dailyStampReciveAttendance
+  -- function num : 0_17 , upvalues : dailyStampCount, dailyStampKeys
   local openDailyStamp = false
-  for index = dailyStampCount - 1, 0, -1 do
-    -- DECOMPILER ERROR at PC27: Confused about usage of register: R5 in 'UnsetPending'
+  for index = 1, dailyStampCount do
+    -- DECOMPILER ERROR at PC31: Confused about usage of register: R5 in 'UnsetPending'
 
-    if dailyStampKeys[index] ~= nil and ((dailyStampKeys[index]):isPossibleAttendance() or (dailyStampKeys[index]):isPossibleOverlapAttendance()) and dailyStampReciveAttendance[index] == false then
-      dailyStampReciveAttendance[index] = true
+    if (dailyStampKeys[index])[1] ~= nil and (((dailyStampKeys[index])[1]):isPossibleAttendance() or ((dailyStampKeys[index])[1]):isPossibleOverlapAttendance()) and (dailyStampKeys[index])[3] == false then
+      (dailyStampKeys[index])[3] = true
       if DailyStamp_SetAttendance(index) == true then
         openDailyStamp = true
       end
@@ -1136,10 +1148,10 @@ FGlobal_DailyStamp_SetAttendanceAll = function()
 end
 
 DailyStamp_AcceptReward = function(rewardIndex)
-  -- function num : 0_17 , upvalues : dailyStampKeys
-  local attendanceKey = (dailyStampKeys[rewardIndex]):getKey()
+  -- function num : 0_18 , upvalues : dailyStampKeys
+  local attendanceKey = ((dailyStampKeys[rewardIndex])[1]):getKey()
   local recieveReward = function()
-    -- function num : 0_17_0 , upvalues : attendanceKey
+    -- function num : 0_18_0 , upvalues : attendanceKey
     ToClient_takeRewardItem(attendanceKey)
   end
 
@@ -1153,7 +1165,7 @@ DailyStamp_AcceptReward = function(rewardIndex)
     receiveItemIndex = 0
   end
   local title = PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_MSGTITLE")
-  local itemWrapper = (dailyStampKeys[rewardIndex]):getRewardItem(receiveItemIndex)
+  local itemWrapper = ((dailyStampKeys[rewardIndex])[1]):getRewardItem(receiveItemIndex)
   local content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_MSGCONTENT", "name", tostring((itemWrapper:getStaticStatus()):getName()))
   messageBoxData = {title = title, content = content, functionYes = recieveReward, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1161,34 +1173,36 @@ DailyStamp_AcceptReward = function(rewardIndex)
 end
 
 DailyStamp_Tooltip_Show = function(index, rewardIndex)
-  -- function num : 0_18 , upvalues : dailyStampKeys, dailyStamp
+  -- function num : 0_19 , upvalues : dailyStampKeys, dailyStamp
   if index == nil then
     Panel_Tooltip_Item_hideTooltip()
     return 
   end
-  local itemWrapper = (dailyStampKeys[rewardIndex]):getRewardItem(index)
+  local itemWrapper = ((dailyStampKeys[rewardIndex])[1]):getRewardItem(index)
   local itemSSW = itemWrapper:getStaticStatus()
   local uiBase = (((dailyStamp.dayControl)[index]).slot).icon
   Panel_Tooltip_Item_Show(itemSSW, uiBase, true, false)
 end
 
 DailyStamp_ShowToggle = function(showType)
-  -- function num : 0_19 , upvalues : dailyStampCount, dailyStampKeys, dailyStampReciveAttendance, dailyStamp
-  if dailyStampCount ~= ToClient_GetAttendanceInfoCount() then
-    dailyStampCount = ToClient_GetAttendanceInfoCount()
-    for index = 0, dailyStampCount - 1 do
-      -- DECOMPILER ERROR at PC17: Confused about usage of register: R5 in 'UnsetPending'
+  -- function num : 0_20 , upvalues : dailyStampCount, dailyStampKeys, dailyStamp
+  local currentCount = ToClient_GetAttendanceInfoCount()
+  if dailyStampCount ~= currentCount then
+    dailyStampCount = currentCount
+    dailyStampKeys = (Array.new)()
+    for index = 1, dailyStampCount do
+      local attendaceSS = ToClient_GetAttendanceInfoWrapper(index - 1)
+      -- DECOMPILER ERROR at PC24: Confused about usage of register: R7 in 'UnsetPending'
 
-      dailyStampKeys[index] = ToClient_GetAttendanceInfoWrapper(index)
-      -- DECOMPILER ERROR at PC19: Confused about usage of register: R5 in 'UnsetPending'
+      dailyStampKeys[index] = {attendaceSS, attendaceSS:getDisplayOrder(), false}
+      -- DECOMPILER ERROR at PC46: Confused about usage of register: R7 in 'UnsetPending'
 
-      dailyStampReciveAttendance[index] = false
-      -- DECOMPILER ERROR at PC37: Confused about usage of register: R5 in 'UnsetPending'
-
-      if dailyStampKeys[index] ~= nil and (dailyStampKeys[index]):isPossibleOverlapAttendance() == false and (dailyStampKeys[index]):isPossibleAttendance() == false then
-        dailyStampReciveAttendance[index] = true
+      if (dailyStampKeys[index])[1] ~= nil and ((dailyStampKeys[index])[1]):isPossibleOverlapAttendance() == false and ((dailyStampKeys[index])[1]):isPossibleAttendance() == false then
+        (dailyStampKeys[index])[3] = true
       end
     end
+    ;
+    (table.sort)(orderStamp, TabSort)
     dailyStamp:TapInit()
   end
   if dailyStampCount <= 0 then
@@ -1199,20 +1213,20 @@ DailyStamp_ShowToggle = function(showType)
     FGlobal_LevelupGuide_PowerClose()
   end
   if not Panel_Window_DailyStamp:GetShow() then
-    for index = 0, dailyStampCount - 1 do
+    for index = 1, dailyStampCount do
       ((self.tapControl)[index]):SetCheck(false)
     end
     Panel_Window_DailyStamp:SetShow(true, true)
     ;
-    ((self.tapControl)[0]):SetCheck(true)
-    DailyStamp_SetData(0)
+    ((self.tapControl)[1]):SetCheck(true)
+    DailyStamp_SetData(1)
     Panel_Window_DailyStamp_RePos()
   end
   TooltipSimple_Hide()
 end
 
 DailStamp_Hide = function()
-  -- function num : 0_20
+  -- function num : 0_21
   Panel_Window_DailyStamp:SetShow(false, true)
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
@@ -1232,15 +1246,15 @@ DailStamp_Hide = function()
 end
 
 Panel_Window_DailyStamp_RePos = function()
-  -- function num : 0_21
+  -- function num : 0_22
   Panel_Window_DailyStamp:SetPosX(getScreenSizeX() / 2 - Panel_Window_DailyStamp:GetSizeX() / 2)
   Panel_Window_DailyStamp:SetPosY(getScreenSizeY() / 2 - Panel_Window_DailyStamp:GetSizeY() / 2)
 end
 
 FromClient_receiveAttendanceReward = function(attendanceKey)
-  -- function num : 0_22 , upvalues : dailyStampCount, dailyStampKeys
-  for index = 0, dailyStampCount - 1 do
-    local dailyKey = (dailyStampKeys[index]):getKey()
+  -- function num : 0_23 , upvalues : dailyStampCount, dailyStampKeys
+  for index = 1, dailyStampCount do
+    local dailyKey = ((dailyStampKeys[index])[1]):getKey()
     if dailyKey:get() == attendanceKey:get() then
       DailyStamp_SetData(index)
       return 
@@ -1250,20 +1264,21 @@ end
 
 local secondAttendanceCheck = false
 FromClient_AttendanceUpdate = function(attendanceKey)
-  -- function num : 0_23 , upvalues : secondAttendanceCheck, dailyStamp, dailyStampCount, dailyStampKeys, dailyStampReciveAttendance
+  -- function num : 0_24 , upvalues : secondAttendanceCheck, dailyStamp, dailyStampCount, dailyStampKeys
   secondAttendanceCheck = dailyStamp.secondAttendanceCheck
-  for index = 0, dailyStampCount - 1 do
-    local dailyKey = (dailyStampKeys[index]):getKey()
+  for index = 1, dailyStampCount do
+    local dailyKey = ((dailyStampKeys[index])[1]):getKey()
     if dailyKey:get() == attendanceKey:get() then
       DailyStamp_AcceptRewardAll(index)
       DailyStamp_SetData(index)
-      -- DECOMPILER ERROR at PC25: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC26: Confused about usage of register: R6 in 'UnsetPending'
 
-      dailyStampReciveAttendance[index] = false
-      -- DECOMPILER ERROR at PC43: Confused about usage of register: R6 in 'UnsetPending'
+      ;
+      (dailyStampKeys[index])[3] = false
+      -- DECOMPILER ERROR at PC48: Confused about usage of register: R6 in 'UnsetPending'
 
-      if dailyStampKeys[index] ~= nil and (dailyStampKeys[index]):isPossibleOverlapAttendance() == false and (dailyStampKeys[index]):isPossibleAttendance() == false then
-        dailyStampReciveAttendance[index] = true
+      if (dailyStampKeys[index])[1] ~= nil and ((dailyStampKeys[index])[1]):isPossibleOverlapAttendance() == false and ((dailyStampKeys[index])[1]):isPossibleAttendance() == false then
+        (dailyStampKeys[index])[3] = true
       end
       break
     end
@@ -1279,7 +1294,7 @@ FromClient_AttendanceUpdate = function(attendanceKey)
       if isSafeZone == false then
         return 
       end
-      -- DECOMPILER ERROR at PC72: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC77: Confused about usage of register: R4 in 'UnsetPending'
 
       dailyStamp.nextDayShow = false
     end
@@ -1292,25 +1307,28 @@ FromClient_AttendanceUpdate = function(attendanceKey)
 end
 
 FromClient_AttendanceUpdateAll = function(isNextDay)
-  -- function num : 0_24 , upvalues : dailyStamp, dailyStampCount, dailyStampKeys
+  -- function num : 0_25 , upvalues : dailyStamp, dailyStampCount, dailyStampKeys
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
 
   if isNextDay then
     dailyStamp.nextDayShow = isNextDay
   end
   dailyStampCount = ToClient_GetAttendanceInfoCount()
-  dailyStampKeys = {}
-  for index = 0, dailyStampCount - 1 do
-    -- DECOMPILER ERROR at PC18: Confused about usage of register: R5 in 'UnsetPending'
+  dailyStampKeys = (Array.new)()
+  for index = 1, dailyStampCount do
+    local attendaceSS = ToClient_GetAttendanceInfoWrapper(index - 1)
+    -- DECOMPILER ERROR at PC25: Confused about usage of register: R6 in 'UnsetPending'
 
-    dailyStampKeys[index] = ToClient_GetAttendanceInfoWrapper(index)
+    dailyStampKeys[index] = {attendaceSS, attendaceSS:getDisplayOrder(), false}
   end
+  ;
+  (table.sort)(dailyStampKeys, TabSort)
   dailyStamp:TapInit()
   dailyStamp:Init()
 end
 
 FromClient_DailyStampRegionCheck = function(regionData)
-  -- function num : 0_25 , upvalues : dailyStamp, secondAttendanceCheck
+  -- function num : 0_26 , upvalues : dailyStamp, secondAttendanceCheck
   do
     if dailyStamp.nextDayShow then
       local isSafeZone = (regionData:get()):isSafeZone()
@@ -1334,8 +1352,8 @@ FromClient_DailyStampRegionCheck = function(regionData)
 end
 
 DailyStamp_AcceptRewardAll = function(tabIndex)
-  -- function num : 0_26 , upvalues : dailyStampKeys
-  local attendanceKey = (dailyStampKeys[tabIndex]):getKey()
+  -- function num : 0_27 , upvalues : dailyStampKeys
+  local attendanceKey = ((dailyStampKeys[tabIndex])[1]):getKey()
   local myAttendanceCount = ToClient_getAttendanceCount(attendanceKey)
   local receiveItemIndex = ToClient_getReceivedRewardCount(attendanceKey)
   if receiveItemIndex < myAttendanceCount then
@@ -1348,18 +1366,18 @@ end
 local attendanceTimeCheck = false
 local timercount = 0
 isPossibleAttandanceCheck = function()
-  -- function num : 0_27 , upvalues : dailyStampKeys, dailyStamp, UI_color, attendanceTimeCheck
-  if dailyStampKeys[dailyStamp.tapIndex] == nil then
+  -- function num : 0_28 , upvalues : dailyStampKeys, dailyStamp, UI_color, attendanceTimeCheck
+  if (dailyStampKeys[dailyStamp.tapIndex])[1] == nil then
     return false
   end
   local waitingTime = -1
   local possibleAttendance = false
-  if (dailyStampKeys[dailyStamp.tapIndex]):isPossibleAttendance() then
+  if ((dailyStampKeys[dailyStamp.tapIndex])[1]):isPossibleAttendance() then
     waitingTime = ToClient_getWaitingTimeForAttendance()
     possibleAttendance = true
   end
-  if (dailyStampKeys[dailyStamp.tapIndex]):isPossibleOverlapAttendance() then
-    waitingTime = ToClient_getWaitingTimeForNextAttendance((dailyStampKeys[dailyStamp.tapIndex]):getKey())
+  if ((dailyStampKeys[dailyStamp.tapIndex])[1]):isPossibleOverlapAttendance() then
+    waitingTime = ToClient_getWaitingTimeForNextAttendance(((dailyStampKeys[dailyStamp.tapIndex])[1]):getKey())
     possibleAttendance = true
   end
   if waitingTime < 0 then
@@ -1404,10 +1422,10 @@ isPossibleAttandanceCheck = function()
 end
 
 isPossibleAttendance_AnyType = function(waitingTime)
-  -- function num : 0_28 , upvalues : dailyStampCount, dailyStampKeys
+  -- function num : 0_29 , upvalues : dailyStampCount, dailyStampKeys
   local isPossible = false
-  for index = 0, dailyStampCount - 1 do
-    if dailyStampKeys[index] ~= nil and waitingTime == 0 and ((dailyStampKeys[index]):isPossibleAttendance() or (dailyStampKeys[index]):isPossibleOverlapAttendance()) then
+  for index = 1, dailyStampCount do
+    if (dailyStampKeys[index])[1] ~= nil and waitingTime == 0 and (((dailyStampKeys[index])[1]):isPossibleAttendance() or ((dailyStampKeys[index])[1]):isPossibleOverlapAttendance()) then
       isPossible = true
     end
   end
@@ -1415,18 +1433,18 @@ isPossibleAttendance_AnyType = function(waitingTime)
 end
 
 FromClient_AttendanceTimer = function()
-  -- function num : 0_29 , upvalues : dailyStampCount, dailyStampKeys, dailyStamp, UI_color
+  -- function num : 0_30 , upvalues : dailyStampCount, dailyStampKeys, dailyStamp, UI_color
   if ((getSelfPlayer()):get()):getLevel() < 6 then
     return 
   end
   local waitingTime = -1
   local attendance = false
   local remainTimeText = ""
-  for index = 0, dailyStampCount - 1 do
-    if dailyStampKeys[index] ~= nil and (dailyStampKeys[index]):isPossibleAttendance() then
+  for index = 1, dailyStampCount do
+    if (dailyStampKeys[index])[1] ~= nil and ((dailyStampKeys[index])[1]):isPossibleAttendance() then
       waitingTime = ToClient_getWaitingTimeForAttendance()
       if waitingTime == 0 then
-        local attendanceKey = (dailyStampKeys[index]):getKey()
+        local attendanceKey = ((dailyStampKeys[index])[1]):getKey()
         ToClient_onAttendance(attendanceKey)
         attendance = true
       else
@@ -1443,15 +1461,15 @@ FromClient_AttendanceTimer = function()
               ;
               (dailyStamp.attendanceTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_DONOT_ATTENDANCE_AFTERPOSSIBLE", "remainTimeText", remainTimeText))
             end
-            -- DECOMPILER ERROR at PC82: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC84: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC82: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC84: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC82: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC84: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC82: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC84: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC82: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC84: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1459,11 +1477,11 @@ FromClient_AttendanceTimer = function()
     end
   end
   waitingTime = -1
-  for index = 0, dailyStampCount - 1 do
-    if dailyStampKeys[index] ~= nil and (dailyStampKeys[index]):isPossibleOverlapAttendance() then
-      waitingTime = ToClient_getWaitingTimeForNextAttendance((dailyStampKeys[index]):getKey())
+  for index = 1, dailyStampCount do
+    if (dailyStampKeys[index])[1] ~= nil and ((dailyStampKeys[index])[1]):isPossibleOverlapAttendance() then
+      waitingTime = ToClient_getWaitingTimeForNextAttendance(((dailyStampKeys[index])[1]):getKey())
       if waitingTime == 0 then
-        local attendanceKey = (dailyStampKeys[index]):getKey()
+        local attendanceKey = ((dailyStampKeys[index])[1]):getKey()
         ToClient_onAttendance(attendanceKey)
         attendance = true
       else
@@ -1481,15 +1499,15 @@ FromClient_AttendanceTimer = function()
                 (dailyStamp.attendanceTime):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_DONOT_ATTENDANCE_AFTERPOSSIBLE", "remainTimeText", remainTimeText))
               end
             end
-            -- DECOMPILER ERROR at PC162: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC167: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC162: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC167: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC162: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC167: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC162: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC167: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC162: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC167: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1499,14 +1517,14 @@ FromClient_AttendanceTimer = function()
 end
 
 FGlobal_DailyStamp_ShowCheck = function()
-  -- function num : 0_30
+  -- function num : 0_31
   if ToClient_IsContentsGroupOpen("1025") then
     DailyStamp_ShowToggle()
   end
 end
 
 DailyStamp_SetAnimation = function(tabIndex, dayIndex)
-  -- function num : 0_31 , upvalues : dailyStamp
+  -- function num : 0_32 , upvalues : dailyStamp
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R2 in 'UnsetPending'
 
   dailyStamp.animationTabIndex = tabIndex
@@ -1523,7 +1541,7 @@ DailyStamp_SetAnimation = function(tabIndex, dayIndex)
 end
 
 DailStamp_StampAnimation = function(deltaTime)
-  -- function num : 0_32 , upvalues : dailyStamp
+  -- function num : 0_33 , upvalues : dailyStamp
   local self = dailyStamp
   self.animationTime = self.animationTime + deltaTime
   if self.tapIndex == self.animationTabIndex and self.animationTime > 0.3 and self.animationTime < 1 then

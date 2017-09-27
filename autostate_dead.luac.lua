@@ -25,7 +25,7 @@ AutoState_Dead.update = function(self, deltaTime)
   self._pressDelay = self._pressDelay + deltaTime
   if self._printTime < self._pressDelay then
     self._pressDelay = 0
-    FGlobal_AutoQuestBlackSpiritMessage("죽으셨습니다, 조건�\132 확인�\132 �\128활해주세�\148")
+    FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_DIE"))
   end
 end
 

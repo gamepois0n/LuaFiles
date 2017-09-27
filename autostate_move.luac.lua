@@ -32,12 +32,12 @@ AutoState_Move.update = function(self, deltaTime)
   if self._printTime < self._pressDelay then
     self._pressDelay = 0
     if self._moveflag == AutoMoveState_Type.TO_TOWN_DUE_FULLINVEN then
-      FGlobal_AutoQuestBlackSpiritMessage("인벤토리�\128 �\128득차�\156 안전�\156 장소�\156 �\128환중입니다~")
+      FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_MOVE_DUETO_FULLINVEN"))
     else
       if self._moveflag == AutoMoveState_Type.TO_TOWN_DUE_TOOHEAVY then
-        FGlobal_AutoQuestBlackSpiritMessage("소지 무게량이 너무 무거�\140 안전�\156 장소�\156 �\128환중입니다~")
+        FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_MOVE_DUETO_TOOHEAVY"))
       else
-        FGlobal_AutoQuestBlackSpiritMessage("오토�\156 인한 이동중입니다~")
+        FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_MOVE_MOVING"))
       end
     end
   end
@@ -78,6 +78,10 @@ AutoState_Move.endProc = function(self)
   self._reserveReason = AutoMoveState_Type.None
   ToClient_StopNavi()
   ToClient_changeAutoMode((CppEnums.Client_AutoControlStateType).NONE)
+  ;
+  ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):EraseAllEffect()
+  ;
+  ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):AddEffect("fN_DarkSpirit_Idle_2_AutoQuest", true, -50, -70)
 end
 
 -- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'

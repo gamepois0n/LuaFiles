@@ -38,6 +38,9 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   if ChattingViewManager_UpdatePerFrame ~= nil then
     ChattingViewManager_UpdatePerFrame(deltaTime)
   end
+  if Panel_WhereUseItemDirection:GetShow() then
+    WhereUseItemDirectionRestore()
+  end
   do
     if FGlobal_AlchemyStonCheck() ~= nil then
       local cooltime = FGlobal_AlchemyStonCheck()

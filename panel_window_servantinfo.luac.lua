@@ -640,7 +640,7 @@ ServantInfo_BeforOpenByActorKeyRaw = function(actorKeyRaw)
         self._functionGet = ShipInfo_GetActorKey
         ShipInfo_OpenByActorKeyRaw(actorKeyRaw)
       else
-        if UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType then
+        if UI_VT.Type_SailingBoat == vehicleType or UI_VT.Type_PersonalBattleShip == vehicleType or UI_VT.Type_PersonTradeShip == vehicleType or UI_VT.Type_PersonalBoat == vehicleType then
           self._functionGet = WorkerShipInfo_GetActorKey
           WorkerShipInfo_OpenByActorKeyRaw(actorKeyRaw)
         end

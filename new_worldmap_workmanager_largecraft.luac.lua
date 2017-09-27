@@ -1205,13 +1205,9 @@ Worker_List._updateSlot = function(self)
   end
   do
     if isSelectedWorker == false then
-      self._selected_Worker = nil
-      self._selected_WorkerKey = nil
-      self._selected_Index = nil
+      ((defalut_Control._worker_List)._Scroll):SetControlPos(self._offsetIndex / self._offset_Max)
+      HandleOn_LargerCraft_Worker_List_Refresh()
     end
-    ;
-    ((defalut_Control._worker_List)._Scroll):SetControlPos(self._offsetIndex / self._offset_Max)
-    HandleOn_LargerCraft_Worker_List_Refresh()
   end
 end
 

@@ -35,7 +35,9 @@ handleMClickedRepairExitButton = function()
   PaGlobal_Repair:repair_OpenPanel(false)
   PaGlobal_FixEquip:fixEquipExit()
   PaGlobal_Repair:setIsCamping(false)
-  npcShop:setIsCamping(false)
+  if Panel_Window_NpcShop:GetShow() == false then
+    npcShop:setIsCamping(false)
+  end
   PaGlobal_Camp:setIsCamping(false)
 end
 
@@ -58,7 +60,7 @@ Repair_InvenRClick = function(slotNo, itemWrapper, s64_itemCount, itemWhereType)
   PaGlobal_Repair:cursor_PosUpdate()
   ;
   (self._uiRepairCursor):AddEffect("fUI_Repair01", false, -8, -8)
-  local repairPrice = repair_getRepairPrice_s64(itemWhereType, slotNo, (CppEnums.ServantType).Type_Count)
+  local repairPrice = repair_getRepairPrice_s64(itemWhereType, slotNo, (CppEnums.ServantType).Type_Count, PaGlobal_Camp:getIsCamping())
   if (Defines.s64_const).s64_0 < repairPrice then
     local strPrice = (string.format)("%d", Int64toInt32(repairPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
@@ -81,7 +83,7 @@ PaGlobal_Repair.repair_EquipWindowRClick = function(self, equipSlotNo, itemWrapp
   PaGlobal_Repair:cursor_PosUpdate()
   ;
   (self._uiRepairCursor):AddEffect("fUI_Repair01", false, -8, -8)
-  local repairPrice = repair_getRepairPrice_s64((CppEnums.ItemWhereType).eEquip, equipSlotNo, (CppEnums.ServantType).Type_Count)
+  local repairPrice = repair_getRepairPrice_s64((CppEnums.ItemWhereType).eEquip, equipSlotNo, (CppEnums.ServantType).Type_Count, PaGlobal_Camp:getIsCamping())
   if (Defines.s64_const).s64_0 < repairPrice then
     local strPrice = (string.format)("%d", Int64toInt32(repairPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
@@ -97,7 +99,7 @@ end
 
 PaGlobal_Repair.messageBoxRepairAllEquippedItem = function(self)
   -- function num : 0_7
-  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eEquip, true, (CppEnums.ServantType).Type_Count, false)
+  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eEquip, true, (CppEnums.ServantType).Type_Count, false, PaGlobal_Camp:getIsCamping())
   if (Defines.s64_const).s64_0 < s64_totalPrice then
     local strPrice = (string.format)("%d", Int64toInt32(s64_totalPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_EQUIP_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
@@ -118,7 +120,7 @@ end
 
 PaGlobal_Repair.handleMClickedHorseItemRepairButton = function(self)
   -- function num : 0_8
-  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Vehicle, false)
+  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Vehicle, false, false)
   if (Defines.s64_const).s64_0 < s64_totalPrice then
     local strPrice = (string.format)("%d", Int64toInt32(s64_totalPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_EQUIP_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
@@ -139,7 +141,7 @@ end
 
 PaGlobal_Repair.handleMClickedShipItemRepairButton = function(self)
   -- function num : 0_9
-  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Ship, false)
+  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Ship, false, false)
   if (Defines.s64_const).s64_0 < s64_totalPrice then
     local strPrice = (string.format)("%d", Int64toInt32(s64_totalPrice))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_EQUIP_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))
@@ -160,7 +162,7 @@ end
 
 PaGlobal_Repair.handleMClickedElephantRepairButton = function(self)
   -- function num : 0_10
-  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Vehicle, true)
+  local s64_totalPrice = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eServantEquip, true, (CppEnums.ServantType).Type_Vehicle, true, false)
   local GuildMoneyRepairElephant = function()
     -- function num : 0_10_0
     repair_AllItem((CppEnums.ItemWhereType).eGuildWarehouse)
@@ -186,8 +188,8 @@ end
 
 PaGlobal_Repair.messageBoxRepairAllInvenItem = function(self)
   -- function num : 0_11
-  local inventory_s64 = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eInventory, true, (CppEnums.ServantType).Type_Count, false)
-  local totalPrices_64 = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eCashInventory, false, (CppEnums.ServantType).Type_Count, false)
+  local inventory_s64 = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eInventory, true, (CppEnums.ServantType).Type_Count, false, PaGlobal_Camp:getIsCamping())
+  local totalPrices_64 = repair_RepairAllPrice_s64((CppEnums.ItemWhereType).eCashInventory, false, (CppEnums.ServantType).Type_Count, false, PaGlobal_Camp:getIsCamping())
   if (Defines.s64_const).s64_0 < totalPrices_64 then
     local strPrice = (string.format)("%d", Int64toInt32(totalPrices_64))
     local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "REPAIR_INVENTORY_MESSAGEBOX_MEMO", "price", makeDotMoney(strPrice))

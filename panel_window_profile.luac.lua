@@ -46,6 +46,9 @@ Profile_Updatelist = function()
     strSet = strSet .. "\n\n"
   end
   labelStatic:SetText(strSet)
+  if FGlobal_ProfileReward_IsShow() then
+    FGlobal_ProfileReward_AllUpdate()
+  end
 end
 
 Profile_registEventHandler()

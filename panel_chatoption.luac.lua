@@ -91,6 +91,10 @@ local rdo_CharacterName = (UI.getChildControl)(stringHeadBg, "RadioButton_Charac
 local rdo_FamilyName = (UI.getChildControl)(stringHeadBg, "RadioButton_FamilyName")
 rdo_CharacterName:addInputEvent("Mouse_LUp", "ChattingOption_SelectNameType( 0 )")
 rdo_FamilyName:addInputEvent("Mouse_LUp", "ChattingOption_SelectNameType( 1 )")
+rdo_CharacterName:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 23)")
+rdo_CharacterName:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+rdo_FamilyName:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 24)")
+rdo_FamilyName:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
 local preNameType = nil
 local msgFilterBg_SizeY = _msgFilter_BG:GetSizeY()
 local panelSizeY = Panel_ChatOption:GetSizeY()
@@ -101,7 +105,11 @@ _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"Chatting\
 _buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"Chatting\", \"false\")")
 local _check_Division = (UI.getChildControl)(Panel_ChatOption, "Checkbox_DivisionOption")
 _check_Division:addInputEvent("Mouse_LUp", "HandleClicked_ChattingDivision()")
+_check_Division:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 29)")
+_check_Division:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
 local _checkButton_ChatTime = (UI.getChildControl)(Panel_ChatOption, "CheckButton_ChatTime")
+_checkButton_ChatTime:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 30)")
+_checkButton_ChatTime:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
 local _prevIsCheckChatTime = {}
 local btnFilter = (Array.new)()
 local btnSystemFilter = (Array.new)()
@@ -119,6 +127,7 @@ HandleClicked_ChattingTypeFilter_Notice = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatNotice]).chatFilter):IsCheck()
   channel_Notice = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_WorldWithItem = function(panelIdex)
@@ -126,6 +135,7 @@ HandleClicked_ChattingTypeFilter_WorldWithItem = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatWorldWithItem]).chatFilter):IsCheck()
   channel_WorldWithItem = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_World = function(panelIdex)
@@ -133,6 +143,7 @@ HandleClicked_ChattingTypeFilter_World = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatWorld]).chatFilter):IsCheck()
   channel_World = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_Guild = function(panelIdex)
@@ -140,6 +151,7 @@ HandleClicked_ChattingTypeFilter_Guild = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatGuild]).chatFilter):IsCheck()
   channel_Guild = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_Battle = function(panelIndex)
@@ -147,6 +159,7 @@ HandleClicked_ChattingTypeFilter_Battle = function(panelIndex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatBattle]).chatFilter):IsCheck()
   channel_Battle = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_Party = function(panelIdex)
@@ -154,6 +167,7 @@ HandleClicked_ChattingTypeFilter_Party = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatParty]).chatFilter):IsCheck()
   channel_Party = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_Public = function(panelIdex)
@@ -161,6 +175,7 @@ HandleClicked_ChattingTypeFilter_Public = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatPublic]).chatFilter):IsCheck()
   channel_Public = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_RolePlay = function(panelIndex)
@@ -168,6 +183,7 @@ HandleClicked_ChattingTypeFilter_RolePlay = function(panelIndex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatRolePlay]).chatFilter):IsCheck()
   channel_RolePlay = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_Private = function(panelIdex)
@@ -175,6 +191,7 @@ HandleClicked_ChattingTypeFilter_Private = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatPrivate]).chatFilter):IsCheck()
   channel_Private = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_Arsha = function(panelIdex)
@@ -182,6 +199,7 @@ HandleClicked_ChattingTypeFilter_Arsha = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatArsha]).chatFilter):IsCheck()
   channel_Arsha = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingTypeFilter_Team = function(panelIdex)
@@ -189,6 +207,7 @@ HandleClicked_ChattingTypeFilter_Team = function(panelIdex)
   local self = chatOptionData
   local check = ((btnFilter[eChatButtonType.eChatTeam]).chatFilter):IsCheck()
   channel_Team = check
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_Notice = function(panelIndex)
@@ -197,6 +216,7 @@ HandleClicked_ChattingColor_Notice = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatNotice]).chatColor):SetColor(UI_color.C_FFFFEF82)
   color_Notice = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Notice, eChatButtonType.eChatNotice, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_WorldWithItem = function(panelIndex)
@@ -205,6 +225,7 @@ HandleClicked_ChattingColor_WorldWithItem = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatWorldWithItem]).chatColor):SetColor(UI_color.C_FF00F3A0)
   color_WorldWithItem = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.WorldWithItem, eChatButtonType.eChatWorldWithItem, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_World = function(panelIndex)
@@ -213,6 +234,7 @@ HandleClicked_ChattingColor_World = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatWorld]).chatColor):SetColor(UI_color.C_FFFF973A)
   color_World = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.World, eChatButtonType.eChatWorld, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_Guild = function(panelIndex)
@@ -222,6 +244,7 @@ HandleClicked_ChattingColor_Guild = function(panelIndex)
   local checkColor = chat:getChatColorIndex(UI_CT.Guild)
   color_Guild = FGlobal_ColorList(checkColor)
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Guild, eChatButtonType.eChatGuild, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_Party = function(panelIndex)
@@ -230,6 +253,7 @@ HandleClicked_ChattingColor_Party = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatParty]).chatColor):SetColor(UI_color.C_FF8EBD00)
   color_Party = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Party, eChatButtonType.eChatParty, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_Public = function(panelIndex)
@@ -238,6 +262,7 @@ HandleClicked_ChattingColor_Public = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatPublic]).chatColor):SetColor(UI_color.C_FFE7E7E7)
   color_Public = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Public, eChatButtonType.eChatPublic, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_RolePlay = function(panelIndex)
@@ -246,6 +271,7 @@ HandleClicked_ChattingColor_RolePlay = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatRolePlay]).chatColor):SetColor(UI_color.C_FF00B4FF)
   color_RolePlay = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.RolePlay, eChatButtonType.eChatRolePlay, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_Private = function(panelIndex)
@@ -254,6 +280,7 @@ HandleClicked_ChattingColor_Private = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatPrivate]).chatColor):SetColor(UI_color.C_FFF601FF)
   color_Private = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Private, eChatButtonType.eChatPrivate, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_Arsha = function(panelIndex)
@@ -262,6 +289,7 @@ HandleClicked_ChattingColor_Arsha = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatArsha]).chatColor):SetColor(UI_color.C_FFFFD237)
   color_Arsha = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Arsha, eChatButtonType.eChatArsha, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_Team = function(panelIndex)
@@ -270,19 +298,21 @@ HandleClicked_ChattingColor_Team = function(panelIndex)
   local checkColor = ((btnFilter[eChatButtonType.eChatTeam]).chatColor):SetColor(UI_color.C_FFB97FEF)
   color_Team = checkColor
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.Team, eChatButtonType.eChatTeam, false)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingColor_MainSystem = function(panelIndex)
   -- function num : 0_21 , upvalues : chatOptionData, UI_CT
   local self = chatOptionData
   FGlobal_ChattingColor_GetColor(panelIndex, UI_CT.System, 0, true)
+  TooltipSimple_Hide()
 end
 
 HandleClicked_ChattingDivision = function()
   -- function num : 0_22 , upvalues : _check_Division
   local isCheck = _check_Division:IsCheck()
   ;
-  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision, isCheck)
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision, isCheck, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
 HandleClicked_ChatTime = function(panelIndex)
@@ -513,6 +543,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Notice( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 0, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatWorldWithItem == idx then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF00F3A0)
         ;
@@ -523,6 +557,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(not isOpen)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_WorldWithItem( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 1, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatWorld == idx then
         ((btnFilter[idx]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.World))
         ;
@@ -536,6 +574,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_World( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 2, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatGuild == idx then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF84FFF5)
         ;
@@ -546,6 +588,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Guild( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 3, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatParty == idx then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF8EBD00)
         ;
@@ -556,6 +602,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Party( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 4, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatBattle == idx then
         ((btnFilter[idx]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.Battle))
         ;
@@ -564,6 +614,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Battle( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 5, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
         ;
         ((btnFilter[idx]).chatColor):SetShow(false)
         ;
@@ -578,6 +632,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Public( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 6, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatRolePlay == idx then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FF00B4FF)
         ;
@@ -586,6 +644,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetText("RolePlay")
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_RolePlay( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 7, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
         ;
         ((btnFilter[idx]).chatFilter):SetShow(roleplayTypeOpen)
         ;
@@ -600,6 +662,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Private( " .. panelIdex .. " )")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 8, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatArsha == idx then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFFFD237)
         ;
@@ -612,6 +678,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Arsha( " .. panelIdex .. " )")
         ;
         ((btnFilter[idx]).chatColor):addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Arsha( " .. panelIdex .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 9, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatButtonType.eChatTeam == idx then
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFB97FEF)
         ;
@@ -624,22 +694,34 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_Team( " .. panelIdex .. " )")
         ;
         ((btnFilter[idx]).chatColor):addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_Team( " .. panelIdex .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 10, " .. idx .. ")")
+        ;
+        ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       end
       ;
       ((btnFilter[idx]).chatColor):SetPosY(self.slotStartY + self.slotGapY * row)
+      ;
+      ((btnFilter[idx]).chatColor):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 99, " .. idx .. ")")
+      ;
+      ((btnFilter[idx]).chatColor):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
     end
     local posX = 0
     local posY = 0
     for idx = 0, self.chatSystemFilterCount - 1 do
       posX = self.slotSystemTypeStartX
       posY = self.slotSystemTypeStartY + idx * self.slotGapY
-      -- DECOMPILER ERROR at PC818: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1022: Confused about usage of register: R14 in 'UnsetPending'
 
       btnSystemFilter[idx] = {}
       if eChatSystemButtonType.eChatSystem == idx then
         createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SYSTEM"), chat:isShowChatType(UI_CT.System), posX, posY, UI_color.C_FFEFEFEF, idx)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_System( " .. panelIdex .. " )")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 11, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
         createRadioButton(btnSystemFilter[idx], "ChatSystemOption_Color_" .. idx .. "_" .. panelIdex, posX, posY, UI_color.C_FFEFEFEF, idx)
         local chatColorIndex = chat:getChatSystemColorIndex(UI_CT.System)
         if chatColorIndex == -1 then
@@ -654,6 +736,10 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ;
         ((btnSystemFilter[idx]).chatColor):addInputEvent("Mouse_LUp", "HandleClicked_ChattingColor_MainSystem( " .. panelIdex .. " )")
         ;
+        ((btnSystemFilter[idx]).chatColor):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 98, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatColor):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+        ;
         ((btnSystemFilter[idx]).chatColor):SetPosY(posY)
         ;
         ((btnSystemFilter[idx]).chatColor):SetPosX(((btnSystemFilter[idx]).chatFilter):GetPosX() + ((btnSystemFilter[idx]).chatFilter):GetSizeX() + ((btnSystemFilter[idx]).chatFilter):GetTextSizeX() + 10)
@@ -661,31 +747,55 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_UNDEFINE"), chat:isShowChatSystemType(UI_CST.Undefine), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Undefine( " .. panelIdex .. " )")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 12, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatSystemButtonType.eChatSystemPrivateItem == idx then
         createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_PRIVATEITEM"), chat:isShowChatSystemType(UI_CST.PrivateItem), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_PrivateItem( " .. panelIdex .. " )")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 13, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatSystemButtonType.eChatSystemPartyItem == idx then
         createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_PARTYITEM"), chat:isShowChatSystemType(UI_CST.PartyItem), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_PartyItem( " .. panelIdex .. " )")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 14, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatSystemButtonType.eChatSystemMarket == idx then
         createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_MARKET"), chat:isShowChatSystemType(UI_CST.Market), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Market( " .. panelIdex .. " )")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 15, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatSystemButtonType.eChatSystemWorker == idx then
         createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_WORKER"), chat:isShowChatSystemType(UI_CST.Worker), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Worker( " .. panelIdex .. " )")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 16, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       elseif eChatSystemButtonType.eChatSystemHarvest == idx then
         createCheckBoxButton(btnSystemFilter[idx], "ChatSystemOption_Btn_" .. idx .. "_" .. panelIdex, PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_TAB_SYSTEM_HARVEST"), chat:isShowChatSystemType(UI_CST.Harvest), posX + self.slotSystemTypeChildButtonGapX, posY, UI_color.C_FFC4BEBE)
         ;
         ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingSystemTypeFilter_Harvest( " .. panelIdex .. " )")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 17, " .. idx .. ")")
+        ;
+        ((btnSystemFilter[idx]).chatFilter):addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
       else
         _PA_LOG("�\128형욱", "처리되지 않은 eChatSystemButtonType Index : " .. idx)
       end
     end
-    -- DECOMPILER ERROR at PC1183: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1523: Confused about usage of register: R10 in 'UnsetPending'
 
     chatPanel[panelIdex] = true
   end
@@ -971,20 +1081,34 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     if not (ToClient_getGameUIManagerWrapper()):hasLuaCacheDataList((CppEnums.GlobalUIOptionType).ChatDivision) then
       _check_Division:SetCheck(true)
       ;
-      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision, true)
+      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision, true, (CppEnums.VariableStorageType).eVariableStorageType_User)
     else
       _check_Division:SetCheck((ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision))
     end
     _button_resetColor:addInputEvent("Mouse_LUp", "HandledClicked_ChattingColorReset(" .. panelIdex .. ")")
+    _button_resetColor:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 28)")
+    _button_resetColor:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
     _button_Confirm:addInputEvent("Mouse_LUp", "HandleClicked_ChattingOption_SetFilter( " .. panelIdex .. " )")
     _button_Cancle:addInputEvent("Mouse_LUp", "ChattingOption_Close()")
     _button_Close:addInputEvent("Mouse_LUp", "ChattingOption_Close()")
     _button_blockList:addInputEvent("Mouse_LUp", "ChattingOption_ShowBlockList()")
+    _button_blockList:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 27)")
+    _button_blockList:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
     rdo_FontSizeSmall:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 10 )")
     rdo_FontSizeSmall2:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 12 )")
     rdo_FontSizeNormal:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 14 )")
     rdo_FontSizeNormal2:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 18 )")
     rdo_FontSizeBig:addInputEvent("Mouse_LUp", "ChattingOption_SelectFontSize( 20 )")
+    rdo_FontSizeSmall:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 18)")
+    rdo_FontSizeSmall:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    rdo_FontSizeSmall2:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 19)")
+    rdo_FontSizeSmall2:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    rdo_FontSizeNormal:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 20)")
+    rdo_FontSizeNormal:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    rdo_FontSizeNormal2:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 21)")
+    rdo_FontSizeNormal2:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+    rdo_FontSizeBig:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 22)")
+    rdo_FontSizeBig:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
     ChattingOption_InitailizeChattingAnimationControl()
     FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
     -- DECOMPILER ERROR: 87 unprocessed JMP targets
@@ -1651,8 +1775,215 @@ clickRequestShowBlockList = function()
   end
 end
 
+HandleOn_ChattingOption_Tooltip = function(isShow, tipType, idx)
+  -- function num : 0_66 , upvalues : btnFilter, btnSystemFilter, rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, rdo_CharacterName, rdo_FamilyName, rdo_ChattingAnimationOn, rdo_ChattingAnimationOff, _button_blockList, _button_resetColor, _check_Division, _checkButton_ChatTime
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_NOTICE_TITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_NOTICE_DESC")
+    control = (btnFilter[idx]).chatFilter
+  else
+    if tipType == 1 then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_WORLD_TITLE")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_WORLD_DESC")
+      control = (btnFilter[idx]).chatFilter
+    else
+      if tipType == 2 then
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SERVER_TITLE")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SERVER_DESC")
+        control = (btnFilter[idx]).chatFilter
+      else
+        if tipType == 3 then
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_GUILD_TITLE")
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_GUILD_DESC")
+          control = (btnFilter[idx]).chatFilter
+        else
+          if tipType == 4 then
+            name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_PARTY_TITLE")
+            desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_PARTY_DESC")
+            control = (btnFilter[idx]).chatFilter
+          else
+            if tipType == 5 then
+              name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_COMBAT_TITLE")
+              desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_COMBAT_DESC")
+              control = (btnFilter[idx]).chatFilter
+            else
+              if tipType == 6 then
+                name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_NORMAL_TITLE")
+                desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_NORMAL_DESC")
+                control = (btnFilter[idx]).chatFilter
+              else
+                if tipType == 7 then
+                  name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_ROLEPLAY_TITLE")
+                  desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_ROLEPLAY_DESC")
+                  control = (btnFilter[idx]).chatFilter
+                else
+                  if tipType == 8 then
+                    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_WHISPER_TITLE")
+                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_WHISPER_DESC")
+                    control = (btnFilter[idx]).chatFilter
+                  else
+                    if tipType == 9 then
+                      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_ARSHA_TITLE")
+                      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_ARSHA_DESC")
+                      control = (btnFilter[idx]).chatFilter
+                    else
+                      if tipType == 10 then
+                        name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_TEAM_TITLE")
+                        desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_TEAM_DESC")
+                        control = (btnFilter[idx]).chatFilter
+                      else
+                        if tipType == 11 then
+                          name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_TITLE")
+                          desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_DESC")
+                          control = (btnSystemFilter[idx]).chatFilter
+                        else
+                          if tipType == 12 then
+                            name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_NORMAL_TITLE")
+                            desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_NORMAL_DESC")
+                            control = (btnSystemFilter[idx]).chatFilter
+                          else
+                            if tipType == 13 then
+                              name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_PERSONITEM_TITLE")
+                              desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_PERSONITEM_DESC")
+                              control = (btnSystemFilter[idx]).chatFilter
+                            else
+                              if tipType == 14 then
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_PARTYITEM_TITLE")
+                                desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_PARTYITEM_DESC")
+                                control = (btnSystemFilter[idx]).chatFilter
+                              else
+                                if tipType == 15 then
+                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_ITEMMARKET_TITLE")
+                                  desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_ITEMMARKET_DESC")
+                                  control = (btnSystemFilter[idx]).chatFilter
+                                else
+                                  if tipType == 16 then
+                                    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_WORKER_TITLE")
+                                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_WORKER_DESC")
+                                    control = (btnSystemFilter[idx]).chatFilter
+                                  else
+                                    if tipType == 17 then
+                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_HARVEST_TITLE")
+                                      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SYSTEM_HARVEST_DESC")
+                                      control = (btnSystemFilter[idx]).chatFilter
+                                    else
+                                      if tipType == 18 then
+                                        name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_VERYSMALL_TITLE")
+                                        desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_VERYSMALL_DESC")
+                                        control = rdo_FontSizeSmall
+                                      else
+                                        if tipType == 19 then
+                                          name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_SMALL_TITLE")
+                                          desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_SMALL_DESC")
+                                          control = rdo_FontSizeSmall2
+                                        else
+                                          if tipType == 20 then
+                                            name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_NORMAL_TITLE")
+                                            desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_NORMAL_DESC")
+                                            control = rdo_FontSizeNormal
+                                          else
+                                            if tipType == 21 then
+                                              name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_BIG_TITLE")
+                                              desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_BIG_DESC")
+                                              control = rdo_FontSizeNormal2
+                                            else
+                                              if tipType == 22 then
+                                                name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_VERYBIG_TITLE")
+                                                desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FONT_VERYBIG_DESC")
+                                                control = rdo_FontSizeBig
+                                              else
+                                                if tipType == 23 then
+                                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHARACTERNAME_TITLE")
+                                                  desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHARACTERNAME_DESC")
+                                                  control = rdo_CharacterName
+                                                else
+                                                  if tipType == 24 then
+                                                    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FAMILYNAME_TITLE")
+                                                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_FAMILYNAME_DESC")
+                                                    control = rdo_FamilyName
+                                                  else
+                                                    if tipType == 25 then
+                                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SCROLLANIMATION_USE_TITLE")
+                                                      desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SCROLLANIMATION_USE_DESC")
+                                                      control = rdo_ChattingAnimationOn
+                                                    else
+                                                      if tipType == 26 then
+                                                        name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SCROLLANIMATION_NONEUSE_TITLE")
+                                                        desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_SCROLLANIMATION_NONEUSE_DESC")
+                                                        control = rdo_ChattingAnimationOff
+                                                      else
+                                                        if tipType == 27 then
+                                                          name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATBLOCKLIST_TITLE")
+                                                          desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATBLOCKLIST_DESC")
+                                                          control = _button_blockList
+                                                        else
+                                                          if tipType == 28 then
+                                                            name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_COLORRESET_TITLE")
+                                                            desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_COLORRESET_DESC")
+                                                            control = _button_resetColor
+                                                          else
+                                                            if tipType == 29 then
+                                                              name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATOPTION_CHATDIVISION_HEAD")
+                                                              desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATHEAD_DESC")
+                                                              control = _check_Division
+                                                            else
+                                                              if tipType == 30 then
+                                                                name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTINGOPTION_CHATTIME")
+                                                                desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATTIME_DESC")
+                                                                control = _checkButton_ChatTime
+                                                              else
+                                                                if tipType == 98 then
+                                                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATCOLORSET_TITLE")
+                                                                  desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATCOLORSET_DESC")
+                                                                  control = (btnSystemFilter[idx]).chatColor
+                                                                else
+                                                                  if tipType == 99 then
+                                                                    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATCOLORSET_TITLE")
+                                                                    desc = PAGetString(Defines.StringSheet_GAME, "LUA_CHATOPTION_TOOLTIP_CHATCOLORSET_DESC")
+                                                                    control = (btnFilter[idx]).chatColor
+                                                                  end
+                                                                end
+                                                              end
+                                                            end
+                                                          end
+                                                        end
+                                                      end
+                                                    end
+                                                  end
+                                                end
+                                              end
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
+                                  end
+                                end
+                              end
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  TooltipSimple_Show(control, name, desc)
+end
+
 ChattingOption_SelectNameType = function(nameType)
-  -- function num : 0_66
+  -- function num : 0_67
   if nameType == nil then
     return 
   end
@@ -1661,13 +1992,17 @@ ChattingOption_SelectNameType = function(nameType)
 end
 
 ChattingOption_InitailizeChattingAnimationControl = function()
-  -- function num : 0_67 , upvalues : ChattingAnimationTitleBg, ChattingAnimationOptionBg, rdo_ChattingAnimationOn, rdo_ChattingAnimationOff, preChattingAnimation
+  -- function num : 0_68 , upvalues : ChattingAnimationTitleBg, ChattingAnimationOptionBg, rdo_ChattingAnimationOn, rdo_ChattingAnimationOff, preChattingAnimation
   ChattingAnimationTitleBg:ComputePos()
   ChattingAnimationOptionBg:ComputePos()
   rdo_ChattingAnimationOn:ComputePos()
   rdo_ChattingAnimationOff:ComputePos()
   rdo_ChattingAnimationOn:addInputEvent("Mouse_LUp", "ChattingOption_ChatiingAnimation( true )")
   rdo_ChattingAnimationOff:addInputEvent("Mouse_LUp", "ChattingOption_ChatiingAnimation( false )")
+  rdo_ChattingAnimationOn:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 25)")
+  rdo_ChattingAnimationOn:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+  rdo_ChattingAnimationOff:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 26)")
+  rdo_ChattingAnimationOff:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
   local ChattingAnimationflag = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChattingAnimation)
   if ChattingAnimationflag == true then
     rdo_ChattingAnimationOn:SetCheck(true)
@@ -1683,7 +2018,7 @@ ChattingOption_InitailizeChattingAnimationControl = function()
 end
 
 ChattingOption_UpdateChattingAnimationControl = function(isUsedChattingAnimation)
-  -- function num : 0_68 , upvalues : rdo_ChattingAnimationOn, rdo_ChattingAnimationOff, preChattingAnimation
+  -- function num : 0_69 , upvalues : rdo_ChattingAnimationOn, rdo_ChattingAnimationOff, preChattingAnimation
   if isUsedChattingAnimation == true then
     rdo_ChattingAnimationOn:SetCheck(true)
     rdo_ChattingAnimationOff:SetCheck(false)
@@ -1698,12 +2033,12 @@ ChattingOption_UpdateChattingAnimationControl = function(isUsedChattingAnimation
 end
 
 ChattingOption_ChatiingAnimation = function(ChattingAniFlag)
-  -- function num : 0_69
+  -- function num : 0_70
   if ChattingAniFlag == nil then
     return 
   end
   ;
-  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChattingAnimation, ChattingAniFlag)
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChattingAnimation, ChattingAniFlag, (CppEnums.VariableStorageType).eVariableStorageType_User)
   Chatting_setUsedSmoothChattingUp(ChattingAniFlag)
 end
 

@@ -53,7 +53,7 @@ PearlCharge.update = function(self)
   local productCount = ((getIngameCashMall()):getCashProductListCountByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, 0))
   local product = nil
   for productIdx = 0, productCount - 1 do
-    product = (getIngameCashMall()):getCashProductStaticStatusByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, 0, productIdx)
+    product = (getIngameCashMall()):getCashProductStaticStatusByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, CppEnums.CashProductCategoryNo_Undefined, productIdx)
     if product ~= nil then
       local slot = (self.goodsListPool)[productIdx]
       ;
@@ -159,7 +159,7 @@ end
 HandleClicked_PearlCharge_SelectedProduct = function(productIndex)
   -- function num : 0_6 , upvalues : PearlCharge
   local self = PearlCharge
-  local product = (getIngameCashMall()):getCashProductStaticStatusByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, 0, productIndex)
+  local product = (getIngameCashMall()):getCashProductStaticStatusByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, CppEnums.CashProductCategoryNo_Undefined, productIndex)
   self.selected_productNoRaw = product:getNoRaw()
 end
 

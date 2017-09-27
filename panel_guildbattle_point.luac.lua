@@ -27,6 +27,10 @@ PaGlobal_GuildBattlePoint.guildBattleTimer = function(self, time)
   local min = (math.floor)(time / 60)
   local sec = time % 60
   local zero = "0"
+  if time <= 0 then
+    min = 0
+    sec = 0
+  end
   if sec < 10 then
     ((self._round)._timer):SetText(tostring(min) .. tostring(" : ") .. zero .. tostring(sec))
   else

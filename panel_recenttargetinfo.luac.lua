@@ -688,13 +688,17 @@ _recentTargetInfo_TendencyOnDead_MSG = function(targetActor, actorKey)
         -- DECOMPILER ERROR at PC34: Confused about usage of register: R4 in 'UnsetPending'
 
         nowTarget[actorKey] = 0
-        Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_CHARACTERTOD", "getName", targetName))
+        if not ToClient_isDontPvPDecreaseTendency() then
+          Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_CHARACTERTOD", "getName", targetName))
+        end
       end
     else
-      -- DECOMPILER ERROR at PC46: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC50: Confused about usage of register: R4 in 'UnsetPending'
 
       nowTarget[actorKey] = 0
-      Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_CHARACTERTOD", "getName", targetName))
+      if not ToClient_isDontPvPDecreaseTendency() then
+        Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_RECENTTARGETINFO_CHARACTERTOD", "getName", targetName))
+      end
     end
   end
 end

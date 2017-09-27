@@ -449,7 +449,13 @@ SkillCommand_Reset = function()
     for index = 0, self.skillCount - 1 do
       if (self.skillCommandControl)[index] ~= nil then
         for controlCountIndex = 0, #(self.skillCommandControl)[index] do
-          (UI.deleteControl)(((self.skillCommandControl)[index])[controlCountIndex])
+          if ((self.skillCommandControl)[index])[controlCountIndex] ~= nil then
+            (UI.deleteControl)(((self.skillCommandControl)[index])[controlCountIndex])
+            -- DECOMPILER ERROR at PC83: Confused about usage of register: R9 in 'UnsetPending'
+
+            ;
+            ((self.skillCommandControl)[index])[controlCountIndex] = nil
+          end
         end
       end
     end

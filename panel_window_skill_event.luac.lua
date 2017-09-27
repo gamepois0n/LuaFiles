@@ -424,9 +424,9 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     end
     HelpMessageQuestion_Out()
     local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
-    -- DECOMPILER ERROR at PC56: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
 
-    PaGlobal_Skill.scrollPos = vScroll:GetControlPos()
+    PaGlobal_Skill.scrollPos = 0
     FGlobal_ResetUrl_Tooltip_SkillForLearning()
     TooltipSimple_Hide()
   end

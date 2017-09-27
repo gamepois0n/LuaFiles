@@ -34,7 +34,7 @@ Improvement_HideAni = function()
   ImageMoveAni:SetDisableWhileAni(true)
 end
 
-local improvement = {title = (UI.getChildControl)(Panel_Improvement, "Static_Text_Title"), effectControl = (UI.getChildControl)(Panel_Improvement, "Static_AddEffect"), slot_0 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_0"), slot_1 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_1"), descBg = (UI.getChildControl)(Panel_Improvement, "Static_CommentBG"), desc = (UI.getChildControl)(Panel_Improvement, "StaticText_Comment"), btnApply = (UI.getChildControl)(Panel_Improvement, "Button_Apply"), equipItem = nil, materialItem = nil, 
+local improvement = {title = (UI.getChildControl)(Panel_Improvement, "Static_Text_Title"), effectControl = (UI.getChildControl)(Panel_Improvement, "Static_AddEffect"), slot_0 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_0"), slot_1 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_1"), descBg = (UI.getChildControl)(Panel_Improvement, "Static_CommentBG"), desc = (UI.getChildControl)(Panel_Improvement, "StaticText_Comment"), btnApply = (UI.getChildControl)(Panel_Improvement, "Button_Apply"), _chk_Skip = (UI.getChildControl)(Panel_Improvement, "CheckButton_SkipImprovement"), equipItem = nil, materialItem = nil, 
 equipSlot = {}
 , 
 materialSlot = {}
@@ -91,6 +91,8 @@ do
   ((self.materialSlot).icon):addInputEvent("Mouse_Out", "Improvement_Tooltip( false, " .. 1 .. " )")
   ;
   ((self.materialSlot).icon):addInputEvent("Mouse_RUp", "Improvement_SlotInit()")
+  ;
+  (self._chk_Skip):SetCheck(false)
 end
 
   improvement:Init()
@@ -125,6 +127,8 @@ end
   Panel_Equipment:SetPosX(10)
   Panel_Equipment:SetPosY(getScreenSizeY() - getScreenSizeY() / 2 - Panel_Equipment:GetSizeY() / 2)
   audioPostEvent_SystemUi(1, 0)
+  ;
+  (improvement._chk_Skip):SetCheck(false)
 end
 
   Panel_Improvement_Hide = function()
@@ -303,6 +307,31 @@ end
   end
   audioPostEvent_SystemUi(5, 6)
   audioPostEvent_SystemUi(5, 9)
+  if (self._chk_Skip):IsCheck() then
+    (getImproveInformation()):doImprove()
+    ;
+    ((self.equipSlot).icon):EraseAllEffect()
+    ;
+    ((self.equipSlot).icon):AddEffect("UI_ItemEnchant01", false, -6, -6)
+    ToClient_BlackspiritEnchantClose()
+    self._doImprove = false
+    self._doAnimation = false
+    self.animationTime = 0
+    ;
+    (self.equipSlot):clearItem()
+    ;
+    (self.materialSlot):clearItem()
+    ;
+    (self.effectControl):EraseAllEffect()
+    ;
+    ((self.materialSlot).icon):EraseAllEffect()
+    ;
+    (getImproveInformation()):clearData()
+    self.equipItem = nil
+    self.materialItem = nil
+    Inventory_SetFunctor(ImproveInvenFilerMainItem, ImproveSetMainItemFromInventory, Panel_Improvement_Hide, nil)
+    return 
+  end
   ;
   (self.effectControl):EraseAllEffect()
   ;

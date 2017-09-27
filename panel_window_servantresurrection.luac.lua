@@ -90,27 +90,29 @@ end
 
 FromClient_UseServantRespawnItem = function(fromWhereType, fromSlotNo, contentsEventParam1)
   -- function num : 0_5 , upvalues : deadServantInfoArray, _fromWhereType, _fromSlotNo
-  local totalDeadServantCount = 0
-  deadServantInfoArray = {}
-  local count = ToClient_GetLastUnsealServantDataCount()
-  for ii = 0, count - 1 do
-    local servantInfo = ToClient_GetLastUnsealVehicleCaheDataAt(ii)
-    if servantInfo ~= nil and servantInfo:getHp() == 0 then
-      totalDeadServantCount = totalDeadServantCount + 1
-      -- DECOMPILER ERROR at PC22: Confused about usage of register: R10 in 'UnsetPending'
+  if contentsEventParam1 ~= (CppEnums.ServantWhereType).ServantWhereTypeGuild then
+    local totalDeadServantCount = 0
+    deadServantInfoArray = {}
+    local count = ToClient_GetLastUnsealServantDataCount()
+    for ii = 0, count - 1 do
+      local servantInfo = ToClient_GetLastUnsealVehicleCaheDataAt(ii)
+      if servantInfo ~= nil and servantInfo:getHp() == 0 then
+        totalDeadServantCount = totalDeadServantCount + 1
+        -- DECOMPILER ERROR at PC27: Confused about usage of register: R10 in 'UnsetPending'
 
-      deadServantInfoArray[totalDeadServantCount] = servantInfo:getServantNo()
+        deadServantInfoArray[totalDeadServantCount] = servantInfo:getServantNo()
+      end
     end
-  end
-  if totalDeadServantCount == 1 then
-    local servantNo = deadServantInfoArray[totalDeadServantCount]
-    ToClient_RequestResurrectionServant(servantNo, fromWhereType, fromSlotNo)
-  else
-    do
-      if totalDeadServantCount >= 2 then
-        _fromWhereType = fromWhereType
-        _fromSlotNo = fromSlotNo
-        Panel_ServantResurrection_Show()
+    if totalDeadServantCount == 1 then
+      local servantNo = deadServantInfoArray[totalDeadServantCount]
+      ToClient_RequestResurrectionServant(servantNo, fromWhereType, fromSlotNo)
+    else
+      do
+        if totalDeadServantCount >= 2 then
+          _fromWhereType = fromWhereType
+          _fromSlotNo = fromSlotNo
+          Panel_ServantResurrection_Show()
+        end
       end
     end
   end
@@ -118,9 +120,11 @@ end
 
 FromClient_ServantResurrectionAck = function(servantNo, servantWhereType)
   -- function num : 0_6
-  local servantInfo = stable_getServantByServantNo(servantNo)
-  if servantInfo ~= nil then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTRESURRECTION_MSG"))
+  if servantWhereType ~= (CppEnums.ServantWhereType).ServantWhereTypeGuild then
+    local servantInfo = stable_getServantByServantNo(servantNo)
+    if servantInfo ~= nil then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTRESURRECTION_MSG"))
+    end
   end
 end
 

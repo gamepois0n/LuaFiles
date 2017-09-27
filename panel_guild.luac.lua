@@ -33,6 +33,7 @@ local btn_GuildMasterMandate = (UI.getChildControl)(Panel_Window_Guild, "Button_
 local notice_title = (UI.getChildControl)(Panel_Window_Guild, "StaticText_NoticeTitle")
 local notice_edit = (UI.getChildControl)(Panel_Window_Guild, "Edit_Notice")
 local notice_btn = (UI.getChildControl)(Panel_Window_Guild, "Button_Notice")
+local promote_btn = (UI.getChildControl)(Panel_Window_Guild, "Button_Promote")
 local introduce_btn = (UI.getChildControl)(Panel_Window_Guild, "Button_Introduce")
 local introduce_Reset = (UI.getChildControl)(Panel_Window_Guild, "Button_IntroReset")
 local introduce_edit = (UI.getChildControl)(Panel_Window_Guild, "MultilineEdit_Introduce")
@@ -1394,7 +1395,7 @@ local _txt_Help_GuildMember = (UI.getChildControl)(Panel_Window_Guild, "StaticTe
 local _txt_Help_GuildQuest = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildQuest")
 local _txt_Help_GuildSkill = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildSkill")
 local _txt_Help_WarInfo = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_WarInfo")
--- DECOMPILER ERROR at PC372: Confused about usage of register: R45 in 'UnsetPending'
+-- DECOMPILER ERROR at PC377: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.initialize = function(self)
   -- function num : 0_33 , upvalues : GuildInfoPage, GuildLetsWarPage, GuildWarInfoPage
@@ -1679,7 +1680,7 @@ GuildSimplTooltips = function(isShow, tipType)
 end
 
 local _index = nil
--- DECOMPILER ERROR at PC395: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC400: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.TabToggle = function(self, index)
   -- function num : 0_37 , upvalues : tabNumber, _Web, btn_GuildMasterMandateBG, btn_GuildMasterMandate, _index
@@ -1864,7 +1865,7 @@ GuildManager.TabToggle = function(self, index)
   -- DECOMPILER ERROR: 34 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC400: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC405: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.Hide = function(self)
   -- function num : 0_38 , upvalues : IM, _Web
@@ -1900,7 +1901,7 @@ GuildManager.Hide = function(self)
   _Web:ResetUrl()
 end
 
--- DECOMPILER ERROR at PC406: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC411: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.Show = function(self)
   -- function num : 0_39 , upvalues : GuildWarInfoPage, GuildInfoPage, GuildLetsWarPage
@@ -2126,7 +2127,7 @@ GuildMainInfo_MandateBtn = function()
 end
 
 GuildMainInfo_Show = function()
-  -- function num : 0_42 , upvalues : tabNumber, GuildWarInfoPage, GuildInfoPage, notice_btn, introduce_btn, introduce_Reset, isProtectGuildMember, introduce_edit_TW, introduce_edit, notice_title, notice_edit, isContentsGuildHouse, isContentsGuildInfo, isContentsArsha, isCanDoReservation, guildCommentsWebUrl, _Web
+  -- function num : 0_42 , upvalues : tabNumber, GuildWarInfoPage, GuildInfoPage, notice_btn, introduce_btn, introduce_Reset, isProtectGuildMember, introduce_edit_TW, introduce_edit, notice_title, notice_edit, isContentsGuildHouse, isContentsGuildInfo, isContentsArsha, isCanDoReservation, guildCommentsWebUrl, _Web, promote_btn
   if tabNumber ~= 99 then
     return 
   end
@@ -2297,6 +2298,7 @@ GuildMainInfo_Show = function()
   if guildCommentsWebUrl ~= nil then
     _Web:SetShow(true)
   end
+  promote_btn:SetShow(false)
 end
 
 guildCommentsUrlByServiceType = function()
@@ -2383,12 +2385,13 @@ guildCommentsUrlByServiceType = function()
 end
 
 GuildMainInfo_Hide = function()
-  -- function num : 0_44 , upvalues : GuildWarInfoPage, _Web, notice_title, notice_edit, notice_btn, introduce_btn, introduce_Reset, introduce_edit_TW, introduce_edit, GuildInfoPage
+  -- function num : 0_44 , upvalues : GuildWarInfoPage, _Web, notice_title, notice_edit, notice_btn, promote_btn, introduce_btn, introduce_Reset, introduce_edit_TW, introduce_edit, GuildInfoPage
   (GuildWarInfoPage._txtWarInfoTitle):SetShow(false)
   _Web:SetShow(false)
   notice_title:SetShow(false)
   notice_edit:SetShow(false)
   notice_btn:SetShow(false)
+  promote_btn:SetShow(false)
   introduce_btn:SetShow(false)
   introduce_Reset:SetShow(false)
   introduce_edit_TW:SetShow(false)
@@ -3570,7 +3573,7 @@ FGlobal_CheckGuildNoticeUiEdit = function(targetUI)
 end
 
 Introduce_Init = function()
-  -- function num : 0_79 , upvalues : introduce_edit_TW, introduce_edit, introduce_btn, introduce_Reset
+  -- function num : 0_79 , upvalues : introduce_edit_TW, introduce_edit, promote_btn, introduce_btn, introduce_Reset
   if isGameTypeTaiwan() then
     introduce_edit_TW:SetMaxEditLine(7)
   else
@@ -3578,6 +3581,9 @@ Introduce_Init = function()
   end
   introduce_edit:SetMaxInput(200)
   introduce_edit_TW:SetMaxInput(200)
+  promote_btn:addInputEvent("Mouse_LUp", "Promote()")
+  promote_btn:addInputEvent("Mouse_On", "Promote_Tooltip(true)")
+  promote_btn:addInputEvent("Mouse_Out", "Promote_Tooltip(false)")
   introduce_btn:addInputEvent("Mouse_LUp", "Introduce_Regist()")
   introduce_Reset:addInputEvent("Mouse_LUp", "Introduce_Reset()")
   introduce_edit:addInputEvent("Mouse_LUp", "HandleClicked_IntroduceEditSetFocus()")
@@ -3611,15 +3617,42 @@ FGlobal_GuildIntroduceClearFocusEdit = function()
   end
 end
 
+Promote = function()
+  -- function num : 0_82
+  local selfProxy = (getSelfPlayer()):get()
+  local isGuildMaster = selfProxy:isGuildMaster()
+  local isGuildSubMaster = selfProxy:isGuildSubMaster()
+  if isGuildMaster == false and isGuildSubMaster == false then
+    return 
+  end
+  local guildWrapper = ToClient_GetMyGuildInfoWrapper()
+  local guildIntroduce = guildWrapper:getGuildIntrodution()
+  ToClient_SetLinkedGuildInfoByGuild()
+  chatting_sendMessageNoMatterEmpty("", guildIntroduce, (CppEnums.ChatType).World)
+end
+
+Promote_Tooltip = function(isShow)
+  -- function num : 0_83 , upvalues : promote_btn
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROMOTE_BTN_TITLE")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROMOTE_BTN_DESC")
+  control = promote_btn
+  TooltipSimple_Show(control, name, desc)
+end
+
 Introduce_Regist = function()
-  -- function num : 0_82 , upvalues : IM, introduce_edit_TW, introduce_edit
+  -- function num : 0_84 , upvalues : IM, introduce_edit_TW, introduce_edit
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if isGuildMaster == false and isGuildSubMaster == false then
     return 
   end
   local close_function = function()
-    -- function num : 0_82_0 , upvalues : IM
+    -- function num : 0_84_0 , upvalues : IM
     if AllowChangeInputMode() then
       if (UI.checkShowWindow)() then
         (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -3642,7 +3675,7 @@ Introduce_Regist = function()
 end
 
 Introduce_Reset = function()
-  -- function num : 0_83 , upvalues : introduce_edit_TW, introduce_edit
+  -- function num : 0_85 , upvalues : introduce_edit_TW, introduce_edit
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if isGuildMaster == false and isGuildSubMaster == false then
@@ -3657,7 +3690,7 @@ Introduce_Reset = function()
 end
 
 GuildIntroduce_Update = function()
-  -- function num : 0_84 , upvalues : introduce_edit_TW, introduce_edit
+  -- function num : 0_86 , upvalues : introduce_edit_TW, introduce_edit
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   if guildWrapper == nil then
     return 
@@ -3671,7 +3704,7 @@ GuildIntroduce_Update = function()
 end
 
 FGlobal_CheckGuildIntroduceUiEdit = function(targetUI)
-  -- function num : 0_85 , upvalues : introduce_edit_TW, introduce_edit
+  -- function num : 0_87 , upvalues : introduce_edit_TW, introduce_edit
   if targetUI == nil or targetUI:GetKey() ~= introduce_edit_TW:GetKey() then
     do return not isGameTypeTaiwan() end
     do return targetUI ~= nil and targetUI:GetKey() == introduce_edit:GetKey() end
@@ -3680,7 +3713,7 @@ FGlobal_CheckGuildIntroduceUiEdit = function(targetUI)
 end
 
 FromWeb_WebPageError = function(url, statusCode)
-  -- function num : 0_86 , upvalues : _urlCache, _Web
+  -- function num : 0_88 , upvalues : _urlCache, _Web
   if statusCode ~= 200 then
     return 
   end
@@ -3701,14 +3734,14 @@ FromWeb_WebPageError = function(url, statusCode)
 end
 
 HandleClickedGetArshaHost = function()
-  -- function num : 0_87 , upvalues : isContentsArsha, isCanDoReservation
+  -- function num : 0_89 , upvalues : isContentsArsha, isCanDoReservation
   if isContentsArsha == false or isCanDoReservation == false then
     return 
   end
   local isHost = ToClient_IsCompetitionHost()
   local messageBoxMemo = ""
   local func = function()
-    -- function num : 0_87_0
+    -- function num : 0_89_0
     ToClient_RequestGetHostByReservationInfo()
   end
 
@@ -3723,7 +3756,7 @@ HandleClickedGetArshaHost = function()
 end
 
 Guild_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_88 , upvalues : checkPopUp
+  -- function num : 0_90 , upvalues : checkPopUp
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""
@@ -3757,7 +3790,7 @@ registerEvent("FromWeb_WebPageError", "FromWeb_WebPageError")
 registerEvent("onScreenResize", "Guild_onScreenResize")
 registerEvent("FromClient_luaLoadComplete", "Guild_Init")
 Guild_Init = function()
-  -- function num : 0_89 , upvalues : isGuildBattle
+  -- function num : 0_91 , upvalues : isGuildBattle
   GuildManager:initialize()
   GuildMainInfo_Show()
   Notice_Init()
@@ -3767,7 +3800,7 @@ Guild_Init = function()
 end
 
 Test_GiveMeGuildWelfare = function()
-  -- function num : 0_90
+  -- function num : 0_92
   ToClient_RequestguildWelfare()
 end
 

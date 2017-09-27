@@ -10,6 +10,12 @@ local static_Daum = (UI.getChildControl)(Panel_Logo, "Static_Daum")
 local static_Grade = (UI.getChildControl)(Panel_Logo, "Static_Grade")
 local staticText_Warning = ((UI.getChildControl)(Panel_Logo, "MultilineText_Warning"))
 local static_Movie = nil
+local setDivisionTime = 6
+if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+  setDivisionTime = 14.5
+else
+  setDivisionTime = 6
+end
 Panel_Logo_Init = function()
   -- function num : 0_0 , upvalues : static_Daum, static_Grade, staticText_Warning, static_PearlAbyss
   static_Daum:SetShow(true)
@@ -34,7 +40,7 @@ Panel_Logo_Init = function()
         staticText_Warning:SetShow(false)
       else
         do
-          if isGameTypeTaiwan() then
+          if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
             static_Grade:SetSize(130, 129)
             static_Grade:ChangeTextureInfoName("GameGradeIcon18.dds")
             local x1, y1, x2, y2 = setTextureUV_Func(static_Grade, 0, 0, 130, 129)
@@ -100,6 +106,8 @@ Panel_Logo_Init = function()
                                   else
                                     if isGameTypeKR2() then
                                       staticText_Warning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_A"))
+                                    else
+                                      staticText_Warning:SetText("")
                                     end
                                   end
                                 end
@@ -197,16 +205,19 @@ else
               aniInfo5:SetEndColor((Defines.Color).C_00FFFFFF)
               aniInfo5.IsChangeChild = true
             else
-              do
-                local aniInfo11 = static_Daum:addColorAnimation(startAniTime + 0, startAniTime + 3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
-                aniInfo11:SetStartColor((Defines.Color).C_00FFFFFF)
-                aniInfo11:SetEndColor((Defines.Color).C_FFFFFFFF)
-                do
-                  local aniInfo1 = static_Daum:addColorAnimation(startAniTime + 3, startAniTime + 8, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
-                  aniInfo1:SetStartColor((Defines.Color).C_FFFFFFFF)
-                  aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)
-                  local updateTime = 0
-                  Panel_Logo_Update = function()
+            end
+            do
+              if not isGameTypeTR() and not isGameTypeTH() then
+                if isGameTypeID() then
+                  local aniInfo11 = static_Daum:addColorAnimation(startAniTime + 0, startAniTime + 3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+                  aniInfo11:SetStartColor((Defines.Color).C_00FFFFFF)
+                  aniInfo11:SetEndColor((Defines.Color).C_FFFFFFFF)
+                  do
+                    local aniInfo1 = static_Daum:addColorAnimation(startAniTime + 3, startAniTime + 8, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
+                    aniInfo1:SetStartColor((Defines.Color).C_FFFFFFFF)
+                    aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)
+                    local updateTime = 0
+                    Panel_Logo_Update = function()
   -- function num : 0_1 , upvalues : static_Movie
   static_Movie = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_Logo, "WebControl_Movie")
   local sizeX = getScreenSizeX()
@@ -223,17 +234,18 @@ else
   end
 end
 
-                  Panel_Logo_Pause = function(deltaTime)
-  -- function num : 0_2 , upvalues : updateTime, static_Movie
+                    Panel_Logo_Pause = function(deltaTime)
+  -- function num : 0_2 , upvalues : updateTime, setDivisionTime, static_Movie
   updateTime = updateTime + deltaTime
-  if updateTime > 6 then
+  if setDivisionTime < updateTime then
     static_Movie:ResetUrl()
     static_Movie:SetShow(false)
   end
 end
 
-                  Panel_Logo_Update()
-                  Panel_Logo:RegisterUpdateFunc("Panel_Logo_Pause")
+                    Panel_Logo_Update()
+                    Panel_Logo:RegisterUpdateFunc("Panel_Logo_Pause")
+                  end
                 end
               end
             end

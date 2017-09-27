@@ -10,6 +10,7 @@ Panel_Chat_SocialMenu:SetDragEnable(true)
 Panel_Chat_SocialMenu:SetDragAll(true)
 Panel_Chat_SocialMenu:SetPosX(getScreenSizeX() / 2 + Panel_Chat_SocialMenu:GetSizeX() / 2)
 Panel_Chat_SocialMenu:SetPosY(getScreenSizeY() / 2 - Panel_Chat_SocialMenu:GetSizeY() / 2)
+local btn_winClose = (UI.getChildControl)(Panel_Chat_SocialMenu, "Button_WinClose")
 local socialIconSlotBG = (UI.getChildControl)(Panel_Chat_SocialMenu, "Static_C_IconBG")
 local socialIconSlot = (UI.getChildControl)(Panel_Chat_SocialMenu, "Static_C_SocialIcon")
 local selectedSlotBG = (UI.getChildControl)(Panel_Chat_SocialMenu, "Static_C_IconSelect")
@@ -20,7 +21,7 @@ local _socialIconSlot = {}
 local _socialIconSlotBG = {}
 local _selectedSlotBG = nil
 SocialAction_Icon_Initialize = function()
-  -- function num : 0_0 , upvalues : socialActioncontent, _socialIconSlotBG, _socialIconSlot, UI_PUCT, socialIconSlotBG, socialIconSlot, _selectedSlotBG, selectedSlotBG, frameSocialAction, _scroll
+  -- function num : 0_0 , upvalues : socialActioncontent, _socialIconSlotBG, _socialIconSlot, UI_PUCT, socialIconSlotBG, socialIconSlot, _selectedSlotBG, selectedSlotBG, frameSocialAction, _scroll, btn_winClose
   local socialIconCount = ToClient_getSocialActionInfoList()
   local iconGap = 55
   local _columnCount = 0
@@ -123,6 +124,7 @@ SocialAction_Icon_Initialize = function()
   else
     _scroll:SetShow(false)
   end
+  btn_winClose:addInputEvent("Mouse_LUp", "HandleClicked_Button(1,0)")
 end
 
 Panel_SocialMenu_ResetVertexAni = function()

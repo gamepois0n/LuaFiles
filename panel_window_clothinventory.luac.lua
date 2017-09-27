@@ -38,18 +38,30 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   if (CppEnums.InventoryBagType).eInventoryBagType_Cash == bagType then
     bagType = (CppEnums.ItemWhereType).eCashInventory
     _title = PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_PEARLTITLE")
+    ;
+    (self.descBg):SetShow(true)
+    ;
+    (self.desc):SetShow(true)
   else
     if (CppEnums.InventoryBagType).eInventoryBagType_Equipment == bagType then
       bagType = (CppEnums.ItemWhereType).eInventory
       _title = PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_TITLE")
+      ;
+      (self.descBg):SetShow(true)
+      ;
+      (self.desc):SetShow(true)
     else
       if (CppEnums.InventoryBagType).eInventoryBagType_Misc == bagType then
         bagType = (CppEnums.ItemWhereType).eInventory
         _title = PAGetString(Defines.StringSheet_GAME, "LUA_MISC_INVENTORY_TITLE")
+        ;
+        (self.descBg):SetShow(false)
+        ;
+        (self.desc):SetShow(false)
       else
         if (CppEnums.InventoryBagType).eInventoryBagType_MiscForCash == bagType then
           bagType = (CppEnums.ItemWhereType).eCashInventory
-          _title = PAGetString(Defines.StringSheet_GAME, "LUA_MISC_INVENTORY_TITLE")
+          _title = PAGetString(Defines.StringSheet_GAME, "LUA_MISC_INVENTORY_FORPEARL_TITLE")
         end
       end
     end
@@ -59,14 +71,14 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   self.bagWhereType = bagType
   _PA_LOG("cylee", "FromClient_ShowInventoryBag() bagType:" .. tostring(bagType))
   for index = 0, bagSize - 1 do
-    -- DECOMPILER ERROR at PC81: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC105: Confused about usage of register: R10 in 'UnsetPending'
 
     (self.bg)[index] = {}
-    -- DECOMPILER ERROR at PC84: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC108: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.slot)[index] = {}
-    -- DECOMPILER ERROR at PC96: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC120: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.bg)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_ClothInventory, "ColothInventory_SlotBg_" .. index)
@@ -116,7 +128,11 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   (self.descBg):SetPosY((self.textureBg):GetPosY() + (self.textureBg):GetSizeY() + 5)
   ;
   (self.desc):SetPosY((self.descBg):GetPosY() + 5)
-  Panel_Window_ClothInventory:SetSize(Panel_Window_ClothInventory:GetSizeX(), (self.descBg):GetPosY() + (self.descBg):GetSizeY() + 60)
+  if (self.descBg):GetShow() then
+    Panel_Window_ClothInventory:SetSize(Panel_Window_ClothInventory:GetSizeX(), (self.descBg):GetPosY() + (self.desc):GetTextSizeY() + 60)
+  else
+    Panel_Window_ClothInventory:SetSize(Panel_Window_ClothInventory:GetSizeX(), (self.textureBg):GetPosY() + (self.textureBg):GetSizeY() + 60)
+  end
   do
     local useChangeAllButton = self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_Equipment or self.inventoryBagType == (CppEnums.InventoryBagType).eInventoryBagType_Cash
     ;
@@ -124,6 +140,8 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
     if not useChangeAllButton then
       Panel_Window_ClothInventory:SetSize(Panel_Window_ClothInventory:GetSizeX(), Panel_Window_ClothInventory:GetSizeY() - (self.btnChangeAll):GetSizeY())
     end
+    ;
+    (self.btnChangeAll):ComputePos()
     Panel_Window_ClothInventory:SetPosX(Panel_Window_Inventory:GetPosX() - Panel_Window_ClothInventory:GetSizeX())
     Panel_Window_ClothInventory:SetPosY(Panel_Window_Inventory:GetPosY() + 80)
     Panel_Window_ClothInventory:SetShow(true, true)
@@ -132,7 +150,7 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
     self.fromSlotNo = fromSlotNo
     Inventory_SetFunctor(ClothInven_Filter, ClothInven_HandleInventorySlotRClick, nil, nil)
     Panel_Tooltip_Item_hideTooltip()
-    -- DECOMPILER ERROR: 6 unprocessed JMP targets
+    -- DECOMPILER ERROR: 8 unprocessed JMP targets
   end
 end
 

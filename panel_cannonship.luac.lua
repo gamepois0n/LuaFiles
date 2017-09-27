@@ -283,9 +283,9 @@ CannonShip_Show = function(actorKeyRaw)
   end
   local seatPosition = (selfPlayer:get()):getVehicleSeatIndex()
   local isVehicleType = ((getVehicleActor(actorKeyRaw)):get()):getVehicleType()
-  -- DECOMPILER ERROR at PC47: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC52: Unhandled construct in 'MakeBoolean' P1
 
-  if ((CppEnums.VehicleType).Type_SailingBoat == isVehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == isVehicleType or (CppEnums.VehicleType).Type_PersonTradeShip == isVehicleType) and seatPosition ~= 0 and seatPosition ~= 13 and seatPosition ~= 4 and seatPosition ~= 3 and seatPosition ~= 1 and seatPosition ~= 2 then
+  if ((CppEnums.VehicleType).Type_SailingBoat == isVehicleType or (CppEnums.VehicleType).Type_PersonalBattleShip == isVehicleType or (CppEnums.VehicleType).Type_PersonTradeShip == isVehicleType or (CppEnums.VehicleType).Type_PersonalBoat == isVehicleType) and seatPosition ~= 0 and seatPosition ~= 13 and seatPosition ~= 4 and seatPosition ~= 3 and seatPosition ~= 1 and seatPosition ~= 2 then
     Panel_CannonShip:SetShow(true, true)
     progresssBG:SetShow(true)
     progresss:SetShow(true)
@@ -341,7 +341,7 @@ end
 
 FromClient_UpdateCannonShipBallCount = function(count, VehicleTpye)
   -- function num : 0_11 , upvalues : UI_VT, shootCount
-  if UI_VT.Type_SailingBoat ~= VehicleTpye and UI_VT.Type_PersonalBattleShip ~= VehicleTpye and UI_VT.Type_PersonTradeShip ~= VehicleTpye then
+  if UI_VT.Type_SailingBoat ~= VehicleTpye and UI_VT.Type_PersonalBattleShip ~= VehicleTpye and UI_VT.Type_PersonTradeShip ~= VehicleTpye and UI_VT.Type_PersonalBoat ~= VehicleTpye then
     return 
   end
   local shootCountValue = Int64toInt32(count)

@@ -833,7 +833,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
               if attackerActorProxyWrapper ~= nil then
                 local isAttackPlayer = (attackerActorProxyWrapper:get()):isPlayer()
                 if isAttackPlayer then
-                  _deadQuestion:SetShow(true)
+                  if ToClient_isDontPvPDecreaseTendency() then
+                    _deadQuestion:SetShow(false)
+                  else
+                    _deadQuestion:SetShow(true)
+                  end
                 else
                   _deadQuestion:SetShow(false)
                 end

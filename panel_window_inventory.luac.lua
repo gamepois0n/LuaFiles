@@ -36,6 +36,12 @@ local _btn_Widget = (UI.getChildControl)(Panel_Invertory_ExchangeButton, "Button
 local btn_AlchemyStone = (UI.getChildControl)(Panel_Window_Inventory, "Button_AlchemyStone")
 local btn_AlchemyFigureHead = (UI.getChildControl)(Panel_Window_Inventory, "Button_AlchemyFigureHead")
 local btn_DyePalette = (UI.getChildControl)(Panel_Window_Inventory, "Button_Palette")
+local btn_BuyWeight = (UI.getChildControl)(Panel_Window_Inventory, "Button_BuyWeight")
+if isGameServiceTypeDev() then
+  btn_BuyWeight:SetShow(true)
+else
+  btn_BuyWeight:SetShow(false)
+end
 local icon_TrashOn = (UI.getChildControl)(Panel_Window_Inventory, "Button_TrashOn")
 local icon_TrashSequence = (UI.getChildControl)(Panel_Window_Inventory, "Button_TrashAlert")
 local isAlchemyStoneEnble = ToClient_IsContentsGroupOpen("35")
@@ -61,7 +67,7 @@ slotConfig = {createIcon = true, createBorder = true, createCount = true, create
 config = {slotCount = 64, slotCols = 8, slotRows = 0, slotStartX = 19, slotStartY = 93, slotGapX = 48, slotGapY = 47, slotEnchantX = 13, slotEnchantY = 76}
 , startSlotIndex = 0, _slotsBackground = (Array.new)(), slots = (Array.new)(), 
 slotEtcData = {}
-, staticTitle = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Title"), staticCapacity = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Capacity"), buttonClose = (UI.getChildControl)(Panel_Window_Inventory, "Button_Win_Close"), staticMoney = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Money"), buttonMoney = (UI.getChildControl)(Panel_Window_Inventory, "Button_Money"), buttonPearl = (UI.getChildControl)(Panel_Window_Inventory, "Static_PearlIcon"), valuePearl = (UI.getChildControl)(Panel_Window_Inventory, "StaticText_PearlValue"), buttonMileage = (UI.getChildControl)(Panel_Window_Inventory, "Static_MileageIcon"), valueMileage = (UI.getChildControl)(Panel_Window_Inventory, "StaticText_MileageValue"), checkButton_Sort = (UI.getChildControl)(Panel_Window_Inventory, "CheckButton_ItemSort"), staticTxtWeight = (UI.getChildControl)(Panel_Window_Inventory, "StaticText_Weight"), staticWeight = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Weight"), weightGaugeBG = (UI.getChildControl)(Panel_Window_Inventory, "Static_Texture_Weight_Background"), weightItem = (UI.getChildControl)(Panel_Window_Inventory, "Progress2_Weight"), weightEquipment = (UI.getChildControl)(Panel_Window_Inventory, "Progress2_Equipment"), weightMoney = (UI.getChildControl)(Panel_Window_Inventory, "Progress2_Money"), weightIcon = (UI.getChildControl)(Panel_Window_Inventory, "Static_WeightIcon"), enchantNumber = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Slot_Enchant_value"), slotBackground = (UI.getChildControl)(Panel_Window_Inventory, "Static_Slot_BG"), button_Puzzle = (UI.getChildControl)(Panel_Window_Inventory, "Button_Puzzle"), radioButtonNormaiInven = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_NormalInventory"), radioButtonCashInven = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_CashInventory"), radioButtonStd = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Std"), radioButtonTransport = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Transport"), radioButtonHousing = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Housing"), _baseSlot = (UI.getChildControl)(Panel_Window_Inventory, "Static_Slot"), _baseLockSlot = (UI.getChildControl)(Panel_Window_Inventory, "Static_LockedSlot"), _expire2h = (UI.getChildControl)(Panel_Window_Inventory, "Static_Expire_2h"), _scroll = (UI.getChildControl)(Panel_Window_Inventory, "Scroll_CashInven"), cashScrollArea = (UI.getChildControl)(Panel_Window_Inventory, "Scroll_Area"), trashArea = (UI.getChildControl)(Panel_Window_Inventory, "Button_Trash"), filterFunc = nil, rClickFunc = nil, otherWindowOpenFunc = nil, isHiding = false, effect = nil, _tooltipWhereType = nil, _tooltipSlotNo = nil, orgPosX = Panel_Window_Inventory:GetPosX(), orgPosY = Panel_Window_Inventory:GetPosY()}
+, staticTitle = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Title"), staticCapacity = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Capacity"), buttonClose = (UI.getChildControl)(Panel_Window_Inventory, "Button_Win_Close"), staticMoney = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Money"), buttonMoney = (UI.getChildControl)(Panel_Window_Inventory, "Button_Money"), buttonPearl = (UI.getChildControl)(Panel_Window_Inventory, "Static_PearlIcon"), valuePearl = (UI.getChildControl)(Panel_Window_Inventory, "StaticText_PearlValue"), buttonMileage = (UI.getChildControl)(Panel_Window_Inventory, "Static_MileageIcon"), valueMileage = (UI.getChildControl)(Panel_Window_Inventory, "StaticText_MileageValue"), checkButton_Sort = (UI.getChildControl)(Panel_Window_Inventory, "CheckButton_ItemSort"), staticTxtWeight = (UI.getChildControl)(Panel_Window_Inventory, "StaticText_Weight"), staticWeight = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Weight"), weightGaugeBG = (UI.getChildControl)(Panel_Window_Inventory, "Static_Texture_Weight_Background"), weightItem = (UI.getChildControl)(Panel_Window_Inventory, "Progress2_Weight"), weightEquipment = (UI.getChildControl)(Panel_Window_Inventory, "Progress2_Equipment"), weightMoney = (UI.getChildControl)(Panel_Window_Inventory, "Progress2_Money"), weightIcon = (UI.getChildControl)(Panel_Window_Inventory, "Static_WeightIcon"), enchantNumber = (UI.getChildControl)(Panel_Window_Inventory, "Static_Text_Slot_Enchant_value"), slotBackground = (UI.getChildControl)(Panel_Window_Inventory, "Static_Slot_BG"), button_Puzzle = (UI.getChildControl)(Panel_Window_Inventory, "Button_Puzzle"), radioButtonNormaiInven = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_NormalInventory"), radioButtonCashInven = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_CashInventory"), radioButtonStd = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Std"), radioButtonTransport = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Transport"), radioButtonHousing = (UI.getChildControl)(Panel_Window_Inventory, "RadioButton_Housing"), _baseSlot = (UI.getChildControl)(Panel_Window_Inventory, "Static_Slot"), _baseLockSlot = (UI.getChildControl)(Panel_Window_Inventory, "Static_LockedSlot"), _basePlusSlot = (UI.getChildControl)(Panel_Window_Inventory, "Static_PlusSlot"), _baseOnlyPlus = (UI.getChildControl)(Panel_Window_Inventory, "Static_OnlyPlus"), _expire2h = (UI.getChildControl)(Panel_Window_Inventory, "Static_Expire_2h"), _scroll = (UI.getChildControl)(Panel_Window_Inventory, "Scroll_CashInven"), cashScrollArea = (UI.getChildControl)(Panel_Window_Inventory, "Scroll_Area"), trashArea = (UI.getChildControl)(Panel_Window_Inventory, "Button_Trash"), filterFunc = nil, rClickFunc = nil, otherWindowOpenFunc = nil, isHiding = false, effect = nil, _tooltipWhereType = nil, _tooltipSlotNo = nil, orgPosX = Panel_Window_Inventory:GetPosX(), orgPosY = Panel_Window_Inventory:GetPosY()}
 FGlobal_Inventory_GetInven = function()
   -- function num : 0_0 , upvalues : inven
   return inven
@@ -89,7 +95,7 @@ FilterRadioTooltip:SetAutoResize(true)
 FilterRadioTooltip:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 FilterRadioTooltip:SetShow(false)
 PaGlobal_Inventory = {_itemKeyForTutorial = nil, _isItemSlotRClickedForTutorial = false}
--- DECOMPILER ERROR at PC482: Confused about usage of register: R36 in 'UnsetPending'
+-- DECOMPILER ERROR at PC510: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString, isLoop, posX, posY)
   -- function num : 0_1
@@ -98,28 +104,28 @@ PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString,
   (PaGlobal_TutorialUiManager:getUiMasking()):showInventoryMasking((slot.icon):GetPosX(), (slot.icon):GetPosY())
 end
 
--- DECOMPILER ERROR at PC485: Confused about usage of register: R36 in 'UnsetPending'
+-- DECOMPILER ERROR at PC513: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.setItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_2
   self._itemKeyForTutorial = itemKey
 end
 
--- DECOMPILER ERROR at PC488: Confused about usage of register: R36 in 'UnsetPending'
+-- DECOMPILER ERROR at PC516: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.clearItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_3
   self._itemKeyForTutorial = nil
 end
 
--- DECOMPILER ERROR at PC491: Confused about usage of register: R36 in 'UnsetPending'
+-- DECOMPILER ERROR at PC519: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.isItemSlotRClickedForTutorial = function(self)
   -- function num : 0_4
   return self._isItemSlotRClickedForTutorial
 end
 
--- DECOMPILER ERROR at PC494: Confused about usage of register: R36 in 'UnsetPending'
+-- DECOMPILER ERROR at PC522: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   -- function num : 0_5
@@ -128,7 +134,7 @@ PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   PaGlobal_Inventory._isItemSlotRClickedForTutorial = bool
 end
 
--- DECOMPILER ERROR at PC497: Confused about usage of register: R36 in 'UnsetPending'
+-- DECOMPILER ERROR at PC525: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.findItemWrapper = function(self, itemWhereType, targetItemKey, targetEnchantLevel)
   -- function num : 0_6
@@ -433,8 +439,12 @@ inven.createSlot = function(self)
     local slot = {}
     slot.empty = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_Inventory, "Inventory_Slot_Base_" .. ii)
     slot.lock = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_Inventory, "Inventory_Slot_Lock_" .. ii)
+    slot.plus = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_Window_Inventory, "Inventory_Slot_Plus_" .. ii)
+    slot.onlyPlus = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_Window_Inventory, "Inventory_Slot_OnlyPlus_" .. ii)
     CopyBaseProperty(self._baseSlot, slot.empty)
     CopyBaseProperty(self._baseLockSlot, slot.lock)
+    CopyBaseProperty(self._basePlusSlot, slot.plus)
+    CopyBaseProperty(self._baseOnlyPlus, slot.onlyPlus)
     ;
     (UIScroll.InputEventByControl)(slot.empty, "Inventory_CashTabScroll")
     local row = (math.floor)(ii / (self.config).slotCols)
@@ -448,10 +458,22 @@ inven.createSlot = function(self)
     ;
     (slot.lock):SetPosY((self.config).slotStartY + (self.config).slotGapY * row)
     ;
+    (slot.plus):SetPosX((self.config).slotStartX + (self.config).slotGapX * col - 4)
+    ;
+    (slot.plus):SetPosY((self.config).slotStartY + (self.config).slotGapY * row - 4)
+    ;
+    (slot.onlyPlus):SetPosX((self.config).slotStartX + (self.config).slotGapX * col)
+    ;
+    (slot.onlyPlus):SetPosY((self.config).slotStartY + (self.config).slotGapY * row)
+    ;
     (slot.empty):SetShow(false)
     ;
     (slot.lock):SetShow(false)
-    -- DECOMPILER ERROR at PC96: Confused about usage of register: R8 in 'UnsetPending'
+    ;
+    (slot.plus):SetShow(false)
+    ;
+    (slot.onlyPlus):SetShow(false)
+    -- DECOMPILER ERROR at PC172: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self._slotsBackground)[ii] = slot
@@ -510,7 +532,7 @@ inven.createSlot = function(self)
     (slot.background):SetPosY((slot.icon):GetPosY())
     ;
     (slot.background):SetShow(false)
-    -- DECOMPILER ERROR at PC281: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC357: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.slots)[ii] = slot
@@ -525,7 +547,7 @@ inven.createSlot = function(self)
     Panel_Window_Inventory:SetChildIndex(((self.slots)[ii]).icon, 9998)
     effectSlot.isFirstItem = false
     effectSlot.puzzleControl = puzzle
-    -- DECOMPILER ERROR at PC336: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC412: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (self.slotEtcData)[ii] = effectSlot
@@ -756,6 +778,13 @@ Inventory_SlotLClick = function(index)
   local self = inven
   local slotNo = ((self.slots)[index])._slotNo
   local inventoryType = Inventory_GetCurrentInventoryType()
+  local selfProxy = (getSelfPlayer()):get()
+  if selfProxy == nil then
+    return 
+  end
+  local inventory = selfProxy:getInventory()
+  local useStartSlot = inventorySlotNoUserStart()
+  local invenUseSize = selfProxy:getInventorySlotCount(not (self.radioButtonNormaiInven):IsChecked())
   if Panel_Chatting_Input:IsShow() and isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT) then
     local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
     if itemWrapper == nil then
@@ -774,6 +803,12 @@ Inventory_SlotLClick = function(index)
         local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
         if itemWrapper ~= nil then
           Note_On(((itemWrapper:get()):getKey()):getItemKey())
+        end
+      else
+        do
+          if invenUseSize - useStartSlot - self.startSlotIndex == index and isGameServiceTypeDev() then
+            PaGlobal_EasyBuy:Open(3, 2)
+          end
         end
       end
     end
@@ -946,7 +981,7 @@ Inventory_SlotRClickXXX = function(slotNo, equipSlotNo, index)
                           if itemEnchantWrapper:isPopupItem() then
                             Panel_UserItem_PopupItem(itemEnchantWrapper, inventoryType, slotNo, equipSlotNo)
                           else
-                            if itemEnchantWrapper:isExchangeItemNPC() then
+                            if itemEnchantWrapper:isExchangeItemNPC() or itemWrapper:isSoulCollector() then
                               Panel_Invertory_ExchangeButton:SetShow(true)
                               Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "inventory", false, false)
                               local row = (math.floor)((slotNo - 1) / (inven.config).slotCols)
@@ -1733,11 +1768,30 @@ Inventory_updateSlotData = function()
       (slot.empty):SetShow(false)
       ;
       (slot.lock):SetShow(false)
+      ;
+      (slot.plus):SetShow(false)
+      ;
+      (slot.onlyPlus):SetShow(false)
       if ii < invenUseSize - useStartSlot - self.startSlotIndex then
         (slot.empty):SetShow(true)
       else
-        ;
-        (slot.lock):SetShow(true)
+        if ii == invenUseSize - useStartSlot - self.startSlotIndex then
+          if isGameServiceTypeDev() then
+            if (((self.slots)[ii]).icon):GetShow() then
+              (slot.onlyPlus):SetShow(true)
+            else
+              ;
+              (slot.plus):SetShow(true)
+            end
+          end
+          ;
+          (slot.lock):SetShow(true)
+          Panel_Window_Inventory:SetChildIndex(slot.plus, 15099)
+          Panel_Window_Inventory:SetChildIndex(slot.onlyPlus, 15100)
+        else
+          ;
+          (slot.lock):SetShow(true)
+        end
       end
     end
     local isFiltered = false
@@ -1837,9 +1891,9 @@ Inventory_updateSlotData = function()
             end
             do
               do
-                if ((self.slotEtcData)[ii]).isFirstItem == true and ((inven.slotEtcData)[ii]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
+                if ((inven.slotEtcData)[ii]).isFirstItem == true and ((inven.slotEtcData)[ii]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
                   local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem01", true, 0, 0)
-                  -- DECOMPILER ERROR at PC532: Confused about usage of register: R47 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC581: Confused about usage of register: R47 in 'UnsetPending'
 
                   ;
                   (effectScene.newItem)[slotNo] = newItemEffectSceneId
@@ -1894,21 +1948,21 @@ Inventory_updateSlotData = function()
                       (slot.icon):SetIgnore(false)
                       slot.isEmpty = true
                     end
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC663: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC712: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -1944,6 +1998,10 @@ Inventory_updateSlotData = function()
     FGlobal_Inventory_WeightCheck()
     if Panel_Window_Servant:GetShow() then
       Panel_Window_Servant_Update()
+    end
+    if Panel_IngameCashShop_EasyPayment:IsShow() then
+      PaGlobal_EasyBuy:MyPearlUpdate()
+      PaGlobal_EasyBuy:Update()
     end
     FGlobal_WhereUseItemExecute()
     PaGlobal_FixEquip:fixEquipMoneyUpdate()

@@ -333,27 +333,27 @@ CashCumaBuy.Update = function(self, applyType)
   else
     do
       if applyType == "pearl" then
-        local productSize = ((getIngameCashMall()):getCashProductListCountByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, 0))
+        local productSize = ((getIngameCashMall()):getCashProductListCountByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, CppEnums.CashProductCategoryNo_Undefined))
         local product = nil
         for productIdx = 0, productSize - 1 do
-          product = (getIngameCashMall()):getCashProductStaticStatusByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, 0, productIdx)
-          -- DECOMPILER ERROR at PC153: Confused about usage of register: R9 in 'UnsetPending'
+          product = (getIngameCashMall()):getCashProductStaticStatusByCategory((CppEnums.CashProductCategory).eCashProductCategory_Pearl, CppEnums.CashProductCategoryNo_Undefined, productIdx)
+          -- DECOMPILER ERROR at PC155: Confused about usage of register: R9 in 'UnsetPending'
 
           if product ~= nil then
             CashCustomizationData[idx] = {}
-            -- DECOMPILER ERROR at PC158: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC160: Confused about usage of register: R9 in 'UnsetPending'
 
             ;
             (CashCustomizationData[idx]).name = product:getName()
-            -- DECOMPILER ERROR at PC163: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC165: Confused about usage of register: R9 in 'UnsetPending'
 
             ;
             (CashCustomizationData[idx]).productNo = product:getNoRaw()
-            -- DECOMPILER ERROR at PC168: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC170: Confused about usage of register: R9 in 'UnsetPending'
 
             ;
             (CashCustomizationData[idx]).cashPrice = product:getCashPrice()
-            -- DECOMPILER ERROR at PC171: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC173: Confused about usage of register: R9 in 'UnsetPending'
 
             ;
             (CashCustomizationData[idx]).count = 0
@@ -368,23 +368,23 @@ CashCumaBuy.Update = function(self, applyType)
             local product = nil
             for productIdx = 0, productSize - 1 do
               product = (getIngameCashMall()):getCashProductStaticStatusByCategory((CppEnums.CashProductCategory).eCashProductCategory_Beauty, 2, productIdx)
-              -- DECOMPILER ERROR at PC206: Confused about usage of register: R9 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC208: Confused about usage of register: R9 in 'UnsetPending'
 
               if product ~= nil then
                 CashCustomizationData[idx] = {}
-                -- DECOMPILER ERROR at PC211: Confused about usage of register: R9 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC213: Confused about usage of register: R9 in 'UnsetPending'
 
                 ;
                 (CashCustomizationData[idx]).name = product:getName()
-                -- DECOMPILER ERROR at PC216: Confused about usage of register: R9 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC218: Confused about usage of register: R9 in 'UnsetPending'
 
                 ;
                 (CashCustomizationData[idx]).productNo = product:getNoRaw()
-                -- DECOMPILER ERROR at PC221: Confused about usage of register: R9 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC223: Confused about usage of register: R9 in 'UnsetPending'
 
                 ;
                 (CashCustomizationData[idx]).pearlPrice = product:getPrice()
-                -- DECOMPILER ERROR at PC224: Confused about usage of register: R9 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC226: Confused about usage of register: R9 in 'UnsetPending'
 
                 ;
                 (CashCustomizationData[idx]).count = 0
@@ -450,7 +450,7 @@ CashCumaBuy.Update = function(self, applyType)
                 CreateItemPrice:SetPosY(47)
                 CreateItemPrice:SetShow(true)
                 tempSlot.ItemPrice = CreateItemPrice
-                -- DECOMPILER ERROR at PC440: Confused about usage of register: R21 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC442: Confused about usage of register: R21 in 'UnsetPending'
 
                 ;
                 (self.ItemUiPOOL)[cumaIdx] = tempSlot
@@ -514,7 +514,7 @@ CashCumaBuy.Update = function(self, applyType)
                   (UiBase.ItemName):addInputEvent("Mouse_LUp", "HandleClicked_CashCustomization_SelectItem( " .. cumaIdx .. " )")
                   ;
                   (UiBase.ItemNameBG):addInputEvent("Mouse_LUp", "HandleClicked_CashCustomization_SelectItem( " .. cumaIdx .. " )")
-                  -- DECOMPILER ERROR at PC587: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC589: LeaveBlock: unexpected jumping out DO_STMT
 
                 end
               end

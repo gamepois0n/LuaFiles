@@ -32,7 +32,7 @@ staticSocketBackground = {(UI.getChildControl)(Panel_Window_Socket, "Static_Sock
 text = {[1] = PAGetString(Defines.StringSheet_GAME, "LUA_SOCKET_EMPTYSLOT")}
 , 
 desc = {[1] = PAGetString(Defines.StringSheet_GAME, "LUA_SOCKET_EMPTYSLOT_DESC")}
-, slotMain = nil, slotSocket = (Array.new)(), _indexSocket = nil, _jewelInvenSlotNo = nil}
+, slotMain = nil, slotSocket = (Array.new)(), _indexSocket = nil, _jewelInvenSlotNo = nil, _posX = 0, _posY = 0}
 local commentBG = (UI.getChildControl)(Panel_Window_Socket, "Static_CommentBG")
 local isItemLock = false
 local _buttonQuestion = (UI.getChildControl)(Panel_Window_Socket, "Button_Question")
@@ -40,6 +40,8 @@ _buttonQuestion:addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"Socket
 _buttonQuestion:addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"Socket\", \"true\")")
 _buttonQuestion:addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"Socket\", \"false\")")
 local onlySocketListBG = {[1] = (UI.getChildControl)(Panel_Window_Socket, "Static_SocketBG_0"), [2] = (UI.getChildControl)(Panel_Window_Socket, "Static_SocketBG_1"), [3] = (UI.getChildControl)(Panel_Window_Socket, "Static_SocketBG_2")}
+socket._posX = Panel_Window_Socket:GetPosX()
+socket._posY = Panel_Window_Socket:GetPosY()
 socket.init = function(self)
   -- function num : 0_0 , upvalues : commentBG
   for _,control in ipairs((self.control).staticSocketName) do
@@ -648,6 +650,8 @@ Socket_Window_Show = function()
   SkillAwaken_Close()
   Panel_Join_Close()
   FGlobal_LifeRanking_Close()
+  Panel_Window_Socket:SetPosX(socket._posX)
+  Panel_Window_Socket:SetPosY(socket._posY)
 end
 
 Socket_ShowToggle = function()

@@ -247,7 +247,7 @@ LevelupGuide_CheckForDay = function()
   local _month = ToClient_GetThisMonth()
   local _day = ToClient_GetToday()
   ;
-  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListTime((CppEnums.GlobalUIOptionType).LevelUpGuideDayCheck, _year, _month, _day, 0, 0, 0)
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListTime((CppEnums.GlobalUIOptionType).LevelUpGuideDayCheck, _year, _month, _day, 0, 0, 0, (CppEnums.VariableStorageType).eVariableStorageType_User)
   Panel_LevelupGuide:SetShow(false, false)
 end
 

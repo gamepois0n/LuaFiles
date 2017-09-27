@@ -12,7 +12,7 @@ Panel_TransferLifeExperience:ActiveMouseEventEffect(true)
 Panel_TransferLifeExperience:setGlassBackground(true)
 local TransferLife = {itemWhereType = nil, itemSlotNo = nil, itemLifeType = nil, characterIndex = nil, characterNo_64 = nil, title = (UI.getChildControl)(Panel_TransferLifeExperience, "StaticText_Title"), panelBG = (UI.getChildControl)(Panel_TransferLifeExperience, "Static_PanelBG"), btn_Confirm = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Confirm"), btn_Cancel = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Cancel"), btn_Close = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Win_Close"), _scroll = (UI.getChildControl)(Panel_TransferLifeExperience, "Scroll_TransferLife"), notify = (UI.getChildControl)(Panel_TransferLifeExperience, "Static_Notify"), maxSlotCount = 4, listCount = 0, startPos_characterBtn = 5, startCharacterIdx = 0, 
 Slot = {}
-, _selectCharacterIndex = -1}
+, _selectCharacterIndex = -1, _posX = 0, _posY = 0}
 TransferLife._scrollBtn = (UI.getChildControl)(TransferLife._scroll, "Scroll_CtrlButton")
 ;
 (TransferLife.btn_Cancel):addInputEvent("Mouse_LUp", "TransferLife_Close()")
@@ -70,6 +70,8 @@ local TransferLife_Initialize = function()
   ;
   (UIScroll.InputEvent)(self._scroll, "TransferLife_ScrollEvent")
   self.characterNo_64 = (getSelfPlayer()):getCharacterNo_64()
+  self._posX = Panel_TransferLifeExperience:GetPosX()
+  self._posY = Panel_TransferLifeExperience:GetPosY()
 end
 
 TransferLife_Initialize()
@@ -406,12 +408,14 @@ end
 TransferLife_Open = function()
   -- function num : 0_5 , upvalues : TransferLife
   Panel_TransferLifeExperience:SetShow(true, true)
+  Panel_TransferLifeExperience:SetPosX(TransferLife._posX)
+  Panel_TransferLifeExperience:SetPosY(TransferLife._posY)
   ;
   (TransferLife._scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC21: Confused about usage of register: R0 in 'UnsetPending'
 
   TransferLife._selectCharacterIndex = -1
-  -- DECOMPILER ERROR at PC13: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
 
   TransferLife.characterIndex = nil
 end

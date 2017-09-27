@@ -1529,9 +1529,12 @@ local _keyBinder_UIMode_MiniGame = function(deltaTime)
   -- function num : 0_29 , upvalues : escHandle, GlobalKeyBinder_CheckKeyPressed, VCK
   local MiniGame_BattleGauge_Space = Panel_BattleGauge:IsShow()
   local MiniGame_FillGauge_Mouse = Panel_FillGauge:IsShow()
-  if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) and Panel_Window_DailyStamp:GetShow() then
-    DailStamp_Hide()
-    return 
+  if not escHandle and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    close_WindowPanelList()
+    if Panel_Window_DailyStamp:GetShow() then
+      DailStamp_Hide()
+      return 
+    end
   end
   if MiniGame_FillGauge_Mouse then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_LBUTTON) then
@@ -2334,6 +2337,14 @@ GlobalKeyBinder_Update = function(deltaTime)
   end
   if Panel_RandomBoxSelect:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     FGlobal_Gacha_Roulette_Close()
+    return 
+  end
+  if Panel_IngameCashShop_EasyPayment:IsShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    if Panel_IngameCashShop_BuyOrGift:GetShow() then
+      InGameShopBuy_Close()
+      return 
+    end
+    PaGlobal_EasyBuy:Close()
     return 
   end
   if UIMode.eUIMode_Housing == _uiMode then

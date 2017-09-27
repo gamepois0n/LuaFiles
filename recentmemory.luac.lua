@@ -71,7 +71,7 @@ RecentMemory_Close = function()
   local _month = ToClient_GetThisMonth()
   local _day = ToClient_GetToday()
   ;
-  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListTime((CppEnums.GlobalUIOptionType).RecentMemoryCheck, _year, _month, _day, 0, 0, 0)
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListTime((CppEnums.GlobalUIOptionType).RecentMemoryCheck, _year, _month, _day, 0, 0, 0, (CppEnums.VariableStorageType).eVariableStorageType_User)
   Panel_RecentMemory:SetShow(false, false)
 end
 

@@ -6,14 +6,15 @@
 local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
 local UI_TM = CppEnums.TextMode
+local isOpenReservation = true
 Panel_SavageDefenceInfo:SetShow(false)
 Panel_SavageDefenceInfo:setMaskingChild(true)
 Panel_SavageDefenceInfo:ActiveMouseEventEffect(true)
 Panel_SavageDefenceInfo:setGlassBackground(true)
 local PaGlobal_SavegeDefenceInfo = {_blackBG = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BlackBG"), _txtTitle = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Title"), _btnClose = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Win_Close"), _btnHelp = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_Question"), _listBg = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_SavageDefenceListBG"), _scroll = (UI.getChildControl)(Panel_SavageDefenceInfo, "Scroll_SavageDefenceList"), _txtRule = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RuleContent"), _txtReward = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_RewardContent"), _txtInfo = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_InfoContent"), _btnInmy = (UI.getChildControl)(Panel_SavageDefenceInfo, "Button_InmyChannel"), _list2 = (UI.getChildControl)(Panel_SavageDefenceInfo, "List2_SavageDefenceList"), _desc_Rule_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Rule"), _desc_rule = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_1"), 
-desc_Rule = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_6"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_7"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_8"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_9"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1")}
+desc_Rule = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_6"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_7"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_8"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_9"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_10"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Rule_1")}
 , 
-desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_6"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_7"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_8"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_9"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_1")}
+desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_6"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_7"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_8"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_9"), PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_10"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_DESC_RULETEXT_1")}
 , _desc_Reward_Title = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_SavageDefence_Reward"), _desc_Reward = (UI.getChildControl)(Panel_SavageDefenceInfo, "Static_BG_2"), 
 desc_Reward = {(UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_2"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_3"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_4"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_5"), (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_6"); [0] = (UI.getChildControl)(Panel_SavageDefenceInfo, "StaticText_Desc_Reward_1")}
 , 
@@ -115,6 +116,8 @@ FGlobal_SavegeDefenceInfo_Initionalize = function()
   ((self.desc_Rule)[7]):SetPosY(((self.desc_Rule)[6]):GetPosY() + ((self.desc_Rule)[6]):GetTextSizeY() + 2)
   ;
   ((self.desc_Rule)[8]):SetPosY(((self.desc_Rule)[7]):GetPosY() + ((self.desc_Rule)[7]):GetTextSizeY() + 2)
+  ;
+  ((self.desc_Rule)[9]):SetPosY(((self.desc_Rule)[8]):GetPosY() + ((self.desc_Rule)[8]):GetTextSizeY() + 2)
   for index = 0, #self.desc_RewardText do
     ((self.desc_Reward)[index]):SetPosX(5)
   end
@@ -154,7 +157,7 @@ FGlobal_SavegeDefenceInfo_Initionalize = function()
 end
 
 FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
-  -- function num : 0_1 , upvalues : PaGlobal_SavegeDefenceInfo
+  -- function num : 0_1 , upvalues : PaGlobal_SavegeDefenceInfo, isOpenReservation
   local self = PaGlobal_SavegeDefenceInfo
   local idx = Int64toInt32(key)
   local savageDefenceListBG = (UI.getChildControl)(contents, "StaticText_ListBG")
@@ -169,6 +172,7 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
   savageDefenceListWave:SetShow(true)
   local savageDefenceListJoinBtn = (UI.getChildControl)(contents, "Button_Join")
   savageDefenceListJoinBtn:SetShow(true)
+  local savageDefenceListReserveBtn = (UI.getChildControl)(contents, "Button_Reserve")
   local curChannelData = getCurrentChannelServerData()
   local worldServerData = getGameWorldServerDataByWorldNo(curChannelData._worldNo)
   local restrictedServerNo = worldServerData._restrictedServerNo
@@ -196,7 +200,6 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
     end
     if getCurrentState == 0 then
       isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN_WAITING")
-      isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_WAITING")
       savageDefenceListJoinBtn:SetFontColor((Defines.Color).C_FF3B8BBE)
       savageDefenceListJoinBtn:SetOverFontColor((Defines.Color).C_FF3B8BBE)
       savageDefenceListJoinBtn:SetClickFontColor((Defines.Color).C_FF3B8BBE)
@@ -247,11 +250,17 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
       savageDefenceListJoinBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_ISADMISSION_LIMIT"))
       savageDefenceListJoinBtn:SetIgnore(true)
     end
+    if getServerNo ~= curChannelData._serverNo or isOpenReservation == false then
+      savageDefenceListReserveBtn:SetShow(false)
+    else
+      savageDefenceListReserveBtn:SetShow(true)
+    end
     savageDefenceListServer:SetText(channelName)
     savageDefenceListJoinMember:SetText(getJoinMemberCount)
     savageDefenceListStatus:SetText(isCurrentState)
     savageDefenceListWave:SetText(getWave)
     savageDefenceListJoinBtn:addInputEvent("Mouse_LUp", "FGlobal_SavegeDefenceInfo_join(" .. idx .. ")")
+    savageDefenceListReserveBtn:addInputEvent("Mouse_LUp", "FGlobal_SavegeDefenceInfo_Reserve(" .. idx .. ")")
   end
 end
 
@@ -333,15 +342,25 @@ FGlobal_SavegeDefenceInfo_join = function(idx)
   end
 end
 
-FGlobal_SavegeDefenceInfo_tossCoin = function(index, coin)
+FGlobal_SavegeDefenceInfo_Reserve = function(idx)
   -- function num : 0_4
+  local getLevel = ((getSelfPlayer()):get()):getLevel()
+  if getLevel >= 56 then
+    ToClient_SavageDefenceReserve()
+  else
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCantJoinUserLevelIsTooLow"))
+  end
+end
+
+FGlobal_SavegeDefenceInfo_tossCoin = function(index, coin)
+  -- function num : 0_5
   ToClient_SavageDefenceCoinToss(index, coin)
 end
 
 FGlobal_SavegeDefenceInfo_unjoin = function()
-  -- function num : 0_5
+  -- function num : 0_6
   local SavageUnJoin = function()
-    -- function num : 0_5_0
+    -- function num : 0_6_0
     ToClient_SavageDefenceUnJoin()
   end
 
@@ -352,12 +371,12 @@ FGlobal_SavegeDefenceInfo_unjoin = function()
 end
 
 FGlobal_SavageDefenceInfo_Open = function()
-  -- function num : 0_6
+  -- function num : 0_7
   ToClient_SavageDefenceStatusRefreshReq()
 end
 
 FGlobal_SavageDefenceInfo_Close = function()
-  -- function num : 0_7 , upvalues : PaGlobal_SavegeDefenceInfo
+  -- function num : 0_8 , upvalues : PaGlobal_SavegeDefenceInfo
   local self = PaGlobal_SavegeDefenceInfo
   self._openDesc = -1
   ;
@@ -383,7 +402,7 @@ FGlobal_SavageDefenceInfo_Close = function()
 end
 
 FGlobal_SavageDefenceInfo_Repos = function()
-  -- function num : 0_8 , upvalues : PaGlobal_SavegeDefenceInfo
+  -- function num : 0_9 , upvalues : PaGlobal_SavegeDefenceInfo
   local self = PaGlobal_SavegeDefenceInfo
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
@@ -401,7 +420,7 @@ end
 local rule_ani_SpeedTime = 5
 local _desc_Rule_TitleSize = 0
 FGlobal_SavegeDefenceInfo_InformationOpen = function(deltaTime)
-  -- function num : 0_9 , upvalues : PaGlobal_SavegeDefenceInfo, rule_ani_SpeedTime
+  -- function num : 0_10 , upvalues : PaGlobal_SavegeDefenceInfo, rule_ani_SpeedTime
   local self = PaGlobal_SavegeDefenceInfo
   if (self._desc_Rule_Title):IsCheck() then
     local value = (self._desc_rule):GetSizeY() + (self._maxDescRuleSize - (self._desc_rule):GetSizeY()) * deltaTime * rule_ani_SpeedTime
@@ -506,7 +525,7 @@ FGlobal_SavegeDefenceInfo_InformationOpen = function(deltaTime)
 end
 
 FromClient_UpdateSavageDefenceStatus = function()
-  -- function num : 0_10 , upvalues : PaGlobal_SavegeDefenceInfo
+  -- function num : 0_11 , upvalues : PaGlobal_SavegeDefenceInfo
   local self = PaGlobal_SavegeDefenceInfo
   Panel_SavageDefenceInfo:SetShow(true)
   ;
@@ -531,12 +550,36 @@ FromClient_UpdateSavageDefenceStatus = function()
 end
 
 FromClient_luaLoadComplete_SavageDefence = function()
-  -- function num : 0_11
+  -- function num : 0_12
   FGlobal_SavegeDefenceInfo_Initionalize()
+end
+
+FromClient_ReserveComplete = function()
+  -- function num : 0_13
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_RESERVECOMPLETE"))
+end
+
+FromClient_ReserveInvite = function()
+  -- function num : 0_14
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEINFO_RESERVEINVITE")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = messageBoxMemo, functionYes = ReserveInvite_OK, functionNo = ReserveInvite_Cancel, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
+end
+
+ReserveInvite_OK = function()
+  -- function num : 0_15
+  ToClient_SavageDefenceJoin()
+end
+
+ReserveInvite_Cancel = function()
+  -- function num : 0_16
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_SavageDefence")
 registerEvent("FromClient_UpdateSavageDefenceStatus", "FromClient_UpdateSavageDefenceStatus")
 registerEvent("FromClient_refreshSavageDefencePlayer", "FromClient_refreshSavageDefencePlayer")
+registerEvent("FromClient_ReserveComplete", "FromClient_ReserveComplete")
+registerEvent("FromClient_ReserveInvite", "FromClient_ReserveInvite")
 Panel_SavageDefenceInfo:RegisterUpdateFunc("FGlobal_SavegeDefenceInfo_InformationOpen")
 

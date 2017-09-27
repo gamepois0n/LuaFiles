@@ -3675,6 +3675,7 @@ FGlobal_HideDialog = function()
   if Panel_Win_System:GetShow() then
     return 
   end
+  Auto_NotifyChangeDialog()
   dialogShowCheck_Once = false
   ToClient_PopDialogueFlush()
   FromClient_WarehouseUpdate()

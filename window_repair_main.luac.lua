@@ -365,9 +365,13 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
     ;
     (self._uiRepairWharfEquippedItemButton):SetShow(true)
     ;
-    (self._uiRepairElephantButton):SetShow(true)
-    ;
     (self._uiFixEquipItemButton):SetShow(true)
+    if self._isContentsEnable then
+      (self._uiRepairElephantButton):SetShow(true)
+    else
+      ;
+      (self._uiRepairElephantButton):SetShow(false)
+    end
     PaGlobal_Repair:repair_BtnResize()
   end
 end

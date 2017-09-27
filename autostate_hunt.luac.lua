@@ -19,7 +19,12 @@ AutoState_Hunt.start = function(self)
   if ToClient_getAutoMode() ~= (CppEnums.Client_AutoControlStateType).BATTLE then
     ToClient_changeAutoMode((CppEnums.Client_AutoControlStateType).BATTLE)
   end
-  FGlobal_AutoQuestBlackSpiritMessage("자동 사냥 시작")
+  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_HUNT_START"))
+  PaGlobal_AutoQuestMsg:AniStart()
+  FGlobal_AutoQuest_KeyViewer_Show()
+  -- DECOMPILER ERROR at PC26: Confused about usage of register: R1 in 'UnsetPending'
+
+  PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_StopHunt_AccessBlackSpiritclick
 end
 
 -- DECOMPILER ERROR at PC22: Confused about usage of register: R0 in 'UnsetPending'
@@ -31,7 +36,7 @@ AutoState_Hunt.update = function(self, deltaTime)
     return 
   end
   self._pressDelay = 0
-  FGlobal_AutoQuestBlackSpiritMessage("자동 사냥 중입니다")
+  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_HUNT_HUNTING"))
   local questList = ToClient_GetQuestList()
   if questList == nil or questList:isMainQuestClearAll() == true then
     return 
@@ -42,17 +47,17 @@ AutoState_Hunt.update = function(self, deltaTime)
     _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(uiQuestInfo:isSatisfied)")
     return 
   end
-  -- DECOMPILER ERROR at PC50: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC58: Unhandled construct in 'MakeBoolean' P1
 
   if self._reserveReason == AutoHuntState_Type.EXISTNEARMONSTER and ToClient_Auto_CheckExistNearMonster(300) == false then
-    FGlobal_AutoQuestBlackSpiritMessage("주변�\144 �\128상이 없어�\156 상태�\188 전환합니�\164")
+    FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_HUNT_CHANGESTATE_DUETO_CANTFIND_TARGET"))
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
     _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(ToClient_Auto_CheckExistNearMonster(300))")
     return 
   end
   local selfPlayer = (getSelfPlayer()):get()
   if Auto_FindNearQuestMonster() == false then
-    FGlobal_AutoQuestBlackSpiritMessage("주변�\144 �\128상이 없어�\156 상태�\188 전환합니�\164")
+    FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_HUNT_CHANGESTATE_DUETO_CANTFIND_TARGET"))
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
     _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(findNearQuestMonster())")
     return 
@@ -65,6 +70,12 @@ AutoState_Hunt.endProc = function(self)
   -- function num : 0_3
   ToClient_changeAutoMode((CppEnums.Client_AutoControlStateType).NONE)
   self._reserveReason = AutoHuntState_Type.NONE
+  PaGlobal_AutoQuestMsg:AniStop()
+  ;
+  ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):EraseAllEffect()
+  ;
+  ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):AddEffect("fN_DarkSpirit_Idle_2_AutoQuest", true, -50, -70)
+  FGlobal_AutoQuest_KeyViewer_Hide()
 end
 
 -- DECOMPILER ERROR at PC28: Confused about usage of register: R0 in 'UnsetPending'
@@ -72,6 +83,11 @@ end
 AutoState_Hunt.setReserveReason = function(self, reason)
   -- function num : 0_4
   self._reserveReason = reason
+end
+
+AutoState_StopHunt_AccessBlackSpiritclick = function()
+  -- function num : 0_5
+  Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
 end
 
 

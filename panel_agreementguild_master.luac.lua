@@ -501,6 +501,7 @@ HandleClicked_AgreementGuild_Master_Renew = function()
   (self.btn_Send):SetShow(true)
   ;
   (self.btn_Refuse):SetShow(true)
+  HandleClicked_AgreementGuild_Master_SetData(4)
 end
 
 AgreementGuild_Master.registEventHandler = function(self)

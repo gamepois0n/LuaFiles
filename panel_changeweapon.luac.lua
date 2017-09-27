@@ -123,13 +123,30 @@ WeaponChange_SetFilter = function(slotNo, itemWrapper, whereType)
     return true
   else
     local itemSSW = changeItemWrapper:getStaticStatus()
+    local equipType = itemSSW:getEquipType()
     local itemWrapper = getInventoryItemByType(materialWhereType, materialSlotno)
     local filterClassType = (itemWrapper:getStaticStatus()):getContentsEventParam1()
     local classType = (getSelfPlayer()):getClassType()
     local itemStaticStatus = (getInventoryItemByType(whereType, slotNo)):getStaticStatus()
     if filterClassType == -1 then
+      -- DECOMPILER ERROR at PC47: Unhandled construct in 'MakeBoolean' P1
+
+      if (CppEnums.ClassType).ClassType_NinjaMan == classType and equipType == 56 then
+        return false
+      end
+      if (CppEnums.ClassType).ClassType_NinjaWomen == classType and equipType == 55 then
+        return false
+      end
       return ((itemStaticStatus:get())._usableClassType):isOn(classType)
     else
+      -- DECOMPILER ERROR at PC74: Unhandled construct in 'MakeBoolean' P1
+
+      if (CppEnums.ClassType).ClassType_NinjaMan == filterClassType and equipType == 56 then
+        return false
+      end
+      if (CppEnums.ClassType).ClassType_NinjaWomen == filterClassType and equipType == 55 then
+        return false
+      end
       return ((itemStaticStatus:get())._usableClassType):isOn(filterClassType)
     end
   end

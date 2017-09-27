@@ -307,128 +307,145 @@ HouseInstallation.CheckFilter = function(self, objectStaticStatusWrapper, itemSS
   return isFilterPass
 end
 
-HouseInstallation.SetData = function(self)
-  -- function num : 0_3 , upvalues : furnitureData, HouseInstallation, UI_CCC, UI_CIT
-  furnitureData = (Array.new)()
-  if HouseInstallation._isMyHouse == true or self.houseInstallationMode == false then
-    local houseWrapper = housing_getHouseholdActor_CurrentPosition()
-    if houseWrapper ~= nil then
-      local installedItemCount = houseWrapper:getInstallationCount()
-      do
-        for installed_Idx = 0, installedItemCount do
-          do
-            local actorKeyRaw = houseWrapper:getInstallationActorKeyRaw(installed_Idx)
-            do
-              local installationActorWrapper = getInstallationActor(actorKeyRaw)
-              do
-                if installationActorWrapper ~= nil then
-                  local cssWrapper = installationActorWrapper:getStaticStatusWrapper()
-                  local itemSSW = cssWrapper:getItemEnchantStatcStaticWrapper()
-                  local objectStaticStatus = cssWrapper:getObjectStaticStatus()
-                  if self:CheckFilter(objectStaticStatus, itemSSW) == true then
-                    do
-                      furnitureData:push_back({name = itemSSW:getName(), iconPath = itemSSW:getIconPath(), installPos = installPosition, desc = nil, isCashProduct = false, isInstalled = true, productNoRaw = 0, invenType = 0, invenSlotNo = installed_Idx})
-                      -- DECOMPILER ERROR at PC59: LeaveBlock: unexpected jumping out IF_THEN_STMT
+HouseInstallation.SetInstalledData = function(self, houseWrapper)
+  -- function num : 0_3 , upvalues : furnitureData
+  local installedItemCount = houseWrapper:getInstallationCount()
+  for installed_Idx = 0, installedItemCount do
+    local actorKeyRaw = houseWrapper:getInstallationActorKeyRaw(installed_Idx)
+    local installationActorWrapper = getInstallationActor(actorKeyRaw)
+    if installationActorWrapper ~= nil then
+      local cssWrapper = installationActorWrapper:getStaticStatusWrapper()
+      local itemSSW = cssWrapper:getItemEnchantStatcStaticWrapper()
+      local objectStaticStatus = cssWrapper:getObjectStaticStatus()
+      if self:CheckFilter(objectStaticStatus, itemSSW) == true then
+        furnitureData:push_back({name = itemSSW:getName(), iconPath = itemSSW:getIconPath(), installPos = installPosition, desc = nil, isCashProduct = false, isInstalled = true, productNoRaw = 0, invenType = 0, invenSlotNo = installed_Idx})
+      end
+    end
+  end
+end
 
-                      -- DECOMPILER ERROR at PC59: LeaveBlock: unexpected jumping out IF_STMT
-
-                      -- DECOMPILER ERROR at PC59: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                      -- DECOMPILER ERROR at PC59: LeaveBlock: unexpected jumping out IF_STMT
-
-                    end
-                  end
-                end
-              end
-              -- DECOMPILER ERROR at PC59: LeaveBlock: unexpected jumping out DO_STMT
-
-              -- DECOMPILER ERROR at PC59: LeaveBlock: unexpected jumping out DO_STMT
-
-            end
-          end
-        end
-        local inven_normalNo = 0
-        local inven_cashNo = 17
-        local selfPlayerWrapper = getSelfPlayer()
-        local selfPlayer = selfPlayerWrapper:get()
-        local get_inventoryInfo = function(invenType)
-    -- function num : 0_3_0 , upvalues : selfPlayer
+HouseInstallation.SetNonInstalledData = function(self, houseWrapper)
+  -- function num : 0_4 , upvalues : furnitureData
+  local inven_normalNo = 0
+  local inven_cashNo = 17
+  local selfPlayerWrapper = getSelfPlayer()
+  local selfPlayer = selfPlayerWrapper:get()
+  local get_inventoryInfo = function(invenType)
+    -- function num : 0_4_0 , upvalues : selfPlayer
     local inventory = selfPlayer:getInventoryByType(invenType)
     local inventorySize = inventory:size()
     return inventory, inventorySize
   end
 
-        local inven_Normal, invenSize_Normal = get_inventoryInfo(inven_normalNo)
-        local inven_Cash, invenSize_Cash = get_inventoryInfo(inven_cashNo)
-        for normal_Idx = 0, invenSize_Normal - 1 do
-          local itemWrapper = getInventoryItemByType(inven_normalNo, normal_Idx)
-          if itemWrapper ~= nil then
-            local itemSSW = itemWrapper:getStaticStatus()
-            local cssWrapper = itemSSW:getCharacterStaticStatus()
-            if ((itemWrapper:getStaticStatus()):get()):isItemInstallation() then
-              local objectStaticStatus = cssWrapper:getObjectStaticStatus()
-              local isFixedHouseElement = (CppEnums.InstallationType).eType_Havest ~= objectStaticStatus:getInstallationType() and (CppEnums.InstallationType).eType_LivestockHarvest ~= objectStaticStatus:getInstallationType() and (CppEnums.InstallationType).eType_Scarecrow ~= objectStaticStatus:getInstallationType() and (CppEnums.InstallationType).eType_Waterway ~= objectStaticStatus:getInstallationType()
-              if isFixedHouseElement == self.houseInstallationMode then
-                local itemSS = itemWrapper:getStaticStatus()
-                if self:CheckFilter(objectStaticStatus, itemSS) == true then
-                  furnitureData:push_back({name = itemSS:getName(), iconPath = itemSS:getIconPath(), installPos = installPosition, desc = itemSS:getDescription(), isCashProduct = false, isInstalled = false, productNoRaw = 0, invenType = inven_normalNo, invenSlotNo = normal_Idx})
-                end
-              end
-            end
-          end
-        end
-        for cash_Idx = 0, invenSize_Cash - 1 do
-          local itemWrapper = getInventoryItemByType(inven_cashNo, cash_Idx)
-          if itemWrapper ~= nil and ((itemWrapper:getStaticStatus()):get()):isItemInstallation() and not (((itemWrapper:getStaticStatus()):getCharacterStaticStatus()):getObjectStaticStatus()):isHarvest() then
-            local itemSS = itemWrapper:getStaticStatus()
-            local objectStaticStatus = ((itemWrapper:getStaticStatus()):getCharacterStaticStatus()):getObjectStaticStatus()
-            if self:CheckFilter(objectStaticStatus, itemSS) == true then
-              furnitureData:push_back({name = itemSS:getName(), iconPath = itemSS:getIconPath(), installPos = installPosition, desc = itemSS:getDescription(), isCashProduct = false, isInstalled = false, productNoRaw = 0, invenType = inven_cashNo, invenSlotNo = cash_Idx})
-            end
+  local inven_Normal, invenSize_Normal = get_inventoryInfo(inven_normalNo)
+  local inven_Cash, invenSize_Cash = get_inventoryInfo(inven_cashNo)
+  for normal_Idx = 0, invenSize_Normal - 1 do
+    local itemWrapper = getInventoryItemByType(inven_normalNo, normal_Idx)
+    if itemWrapper ~= nil then
+      local itemSSW = itemWrapper:getStaticStatus()
+      local cssWrapper = itemSSW:getCharacterStaticStatus()
+      if ((itemWrapper:getStaticStatus()):get()):isItemInstallation() then
+        local objectStaticStatus = cssWrapper:getObjectStaticStatus()
+        local isFixedHouseElement = (CppEnums.InstallationType).eType_Havest ~= objectStaticStatus:getInstallationType() and (CppEnums.InstallationType).eType_LivestockHarvest ~= objectStaticStatus:getInstallationType() and (CppEnums.InstallationType).eType_Scarecrow ~= objectStaticStatus:getInstallationType() and (CppEnums.InstallationType).eType_Waterway ~= objectStaticStatus:getInstallationType()
+        if isFixedHouseElement == self.houseInstallationMode then
+          local itemSS = itemWrapper:getStaticStatus()
+          if self:CheckFilter(objectStaticStatus, itemSS) == true then
+            furnitureData:push_back({name = itemSS:getName(), iconPath = itemSS:getIconPath(), installPos = installPosition, desc = itemSS:getDescription(), isCashProduct = false, isInstalled = false, productNoRaw = 0, invenType = inven_normalNo, invenSlotNo = normal_Idx})
           end
         end
       end
     end
   end
-  if FGlobal_IsCommercialService() then
-    local count = (getIngameCashMall()):getCashProductStaticStatusListCount()
-    for index = 0, count - 1 do
-      local cashProductStaticStatus = (getIngameCashMall()):getCashProductStaticStatusByIndex(index)
+  for cash_Idx = 0, invenSize_Cash - 1 do
+    local itemWrapper = getInventoryItemByType(inven_cashNo, cash_Idx)
+    if itemWrapper ~= nil and ((itemWrapper:getStaticStatus()):get()):isItemInstallation() and not (((itemWrapper:getStaticStatus()):getCharacterStaticStatus()):getObjectStaticStatus()):isHarvest() then
+      local itemSS = itemWrapper:getStaticStatus()
+      local objectStaticStatus = ((itemWrapper:getStaticStatus()):getCharacterStaticStatus()):getObjectStaticStatus()
+      if self:CheckFilter(objectStaticStatus, itemSS) == true then
+        furnitureData:push_back({name = itemSS:getName(), iconPath = itemSS:getIconPath(), installPos = installPosition, desc = itemSS:getDescription(), isCashProduct = false, isInstalled = false, productNoRaw = 0, invenType = inven_cashNo, invenSlotNo = cash_Idx})
+      end
+    end
+  end
+  -- DECOMPILER ERROR: 3 unprocessed JMP targets
+end
+
+HouseInstallation.SetPearlData = function(self)
+  -- function num : 0_5 , upvalues : UI_CCC, furnitureData, UI_CIT, HouseInstallation
+  local count = (getIngameCashMall()):getCashProductStaticStatusListCount()
+  for index = 0, count - 1 do
+    local cashProductStaticStatus = (getIngameCashMall()):getCashProductStaticStatusByIndex(index)
+    do
       if UI_CCC.eCashProductCategory_Furniture == cashProductStaticStatus:getMainCategory() and cashProductStaticStatus:getItemListCount() < 2 then
-        local itemSS = cashProductStaticStatus:getItemByIndex(0)
-        if itemSS ~= nil and (itemSS:get()):isItemInstallation() then
-          local objectStaticStatus = (itemSS:getCharacterStaticStatus()):getObjectStaticStatus()
-          local installationType = objectStaticStatus:getInstallationType()
-          local startSaleTime = cashProductStaticStatus:getStartSellTime()
-          local startSaleTime_s32 = Int64toInt32(getLeftSecond_TTime64(startSaleTime))
-          local endSaleTime = cashProductStaticStatus:getEndSellTime()
-          local endSaleTime_s32 = Int64toInt32(getLeftSecond_TTime64(endSaleTime))
-          local isSellTimePass = (not cashProductStaticStatus:isSellTimeBefore() and not cashProductStaticStatus:isSellTimeOver())
-          local setDataDo = function()
-    -- function num : 0_3_1 , upvalues : isSellTimePass, self, objectStaticStatus, itemSS, furnitureData, cashProductStaticStatus
+        do
+          local itemSS = cashProductStaticStatus:getItemByIndex(0)
+          do
+            if itemSS ~= nil and (itemSS:get()):isItemInstallation() then
+              local objectStaticStatus = (itemSS:getCharacterStaticStatus()):getObjectStaticStatus()
+              do
+                local installationType = objectStaticStatus:getInstallationType()
+                local startSaleTime = cashProductStaticStatus:getStartSellTime()
+                local startSaleTime_s32 = Int64toInt32(getLeftSecond_TTime64(startSaleTime))
+                local endSaleTime = cashProductStaticStatus:getEndSellTime()
+                local endSaleTime_s32 = Int64toInt32(getLeftSecond_TTime64(endSaleTime))
+                local isSellTimePass = (not cashProductStaticStatus:isSellTimeBefore() and not cashProductStaticStatus:isSellTimeOver())
+                local setDataDo = function()
+    -- function num : 0_5_0 , upvalues : isSellTimePass, self, objectStaticStatus, itemSS, furnitureData, cashProductStaticStatus
     if isSellTimePass == true and self:CheckFilter(objectStaticStatus, itemSS) == true then
       furnitureData:push_back({name = itemSS:getName(), iconPath = itemSS:getIconPath(), installPos = installPosition, desc = itemSS:getDescription(), isCashProduct = true, isInstalled = false, productNoRaw = cashProductStaticStatus:getNoRaw(), invenType = 0, invenSlotNo = 0})
     end
   end
 
-          -- DECOMPILER ERROR at PC316: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC88: Unhandled construct in 'MakeBoolean' P1
 
-          -- DECOMPILER ERROR at PC316: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC88: Unhandled construct in 'MakeBoolean' P1
 
-          if cashProductStaticStatus:isMallDisplayable() and (UI_CIT.eType_WallPaper == installationType or UI_CIT.eType_FloorMaterial == installationType) and HouseInstallation._isMyHouse == true then
-            setDataDo()
+                if cashProductStaticStatus:isMallDisplayable() and (UI_CIT.eType_WallPaper == installationType or UI_CIT.eType_FloorMaterial == installationType) and HouseInstallation._isMyHouse == true then
+                  setDataDo()
+                end
+                setDataDo()
+              end
+              -- DECOMPILER ERROR at PC93: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+              -- DECOMPILER ERROR at PC93: LeaveBlock: unexpected jumping out IF_STMT
+
+            end
           end
-          setDataDo()
+          -- DECOMPILER ERROR at PC94: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+          -- DECOMPILER ERROR at PC94: LeaveBlock: unexpected jumping out IF_STMT
+
         end
       end
     end
   end
-  self.dataCount = #furnitureData
-  -- DECOMPILER ERROR: 12 unprocessed JMP targets
+  -- DECOMPILER ERROR: 7 unprocessed JMP targets
+end
+
+HouseInstallation.SetData = function(self)
+  -- function num : 0_6 , upvalues : furnitureData, HouseInstallation
+  furnitureData = (Array.new)()
+  if not HouseInstallation._isMyHouse then
+    local showMyInstallation = not self.houseInstallationMode
+  end
+  if showMyInstallation then
+    self:SetNonInstalledData()
+  end
+  if FGlobal_IsCommercialService() then
+    self:SetPearlData()
+  end
+  do
+    if showMyInstallation then
+      local houseWrapper = housing_getHouseholdActor_CurrentPosition()
+      if houseWrapper then
+        self:SetInstalledData(houseWrapper)
+      end
+    end
+    self.dataCount = #furnitureData
+  end
 end
 
 HouseInstallation.SetScroll = function(self)
-  -- function num : 0_4
+  -- function num : 0_7
   local dataCount = self.dataCount
   local hideCount = dataCount - self.maxSlotCount
   local countByline = self.maxSlotCount / 2
@@ -456,7 +473,7 @@ HouseInstallation.SetScroll = function(self)
 end
 
 HouseInstallation.Update = function(self, nowInterval)
-  -- function num : 0_5 , upvalues : HouseInstallation, furnitureData
+  -- function num : 0_8 , upvalues : HouseInstallation, furnitureData
   for slot_Idx = 0, self.maxSlotCount - 1 do
     local Uislot = (self.slotUIPool)[slot_Idx]
     ;
@@ -587,7 +604,7 @@ HouseInstallation.Update = function(self, nowInterval)
 end
 
 HouseInstallation.Open = function(self)
-  -- function num : 0_6 , upvalues : HouseInstallation, renderMode
+  -- function num : 0_9 , upvalues : HouseInstallation, renderMode
   ToClient_SaveUiInfo(false)
   if not IsSelfPlayerWaitAction() and not IsSelfPlayerBattleWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_ONLYWAITSTENCE"))
@@ -621,7 +638,7 @@ HouseInstallation.Open = function(self)
 end
 
 HouseInstallation.Open_ObjectInstallMode = function(self, isShow)
-  -- function num : 0_7 , upvalues : HouseInstallation
+  -- function num : 0_10 , upvalues : HouseInstallation
   if not IsSelfPlayerWaitAction() and not IsSelfPlayerBattleWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_ONLYWAITSTENCE"))
     return 
@@ -703,7 +720,7 @@ HouseInstallation.Open_ObjectInstallMode = function(self, isShow)
 end
 
 HouseInstallation.Open_ItemInstallMode = function(self, isShow)
-  -- function num : 0_8
+  -- function num : 0_11
   (self.panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_SETUP"))
   ;
   (self.btn_ExitInstallMode):SetShow(true)
@@ -741,7 +758,7 @@ HouseInstallation.Open_ItemInstallMode = function(self, isShow)
 end
 
 HouseInstallation.ShowFloorStatic = function(self, isShow)
-  -- function num : 0_9
+  -- function num : 0_12
   if isShow == false then
     (self._staticBackFloor):SetShow(false)
     return 
@@ -841,12 +858,12 @@ HouseInstallation.ShowFloorStatic = function(self, isShow)
 end
 
 HouseInstallation.Close = function(self)
-  -- function num : 0_10
+  -- function num : 0_13
   HouseInstallation_Hide()
 end
 
 HouseInstallation_Hide = function()
-  -- function num : 0_11 , upvalues : renderMode
+  -- function num : 0_14 , upvalues : renderMode
   SetUIMode((Defines.UIMode).eUIMode_Default)
   renderMode:reset()
   crossHair_SetShow(true)
@@ -861,7 +878,7 @@ HouseInstallation_Hide = function()
 end
 
 _houseInstallation_UpdateScroll = function(isDown)
-  -- function num : 0_12 , upvalues : HouseInstallation
+  -- function num : 0_15 , upvalues : HouseInstallation
   local self = HouseInstallation
   local max = self.maxInterval
   local now = self.nowInterval
@@ -888,7 +905,7 @@ _houseInstallation_UpdateScroll = function(isDown)
 end
 
 _houseInstallation_SetPosition = function()
-  -- function num : 0_13
+  -- function num : 0_16
   local houseActorWrapper = housing_getHouseholdActor_CurrentPosition()
   local css = (houseActorWrapper:getStaticStatusWrapper()):get()
   local max = css:getInstallationMaxCount()
@@ -901,7 +918,7 @@ _houseInstallation_SetPosition = function()
 end
 
 _houseInstallation_ShowToolTip = function(invenType, invenSlotNo, slot_Idx)
-  -- function num : 0_14 , upvalues : HouseInstallation
+  -- function num : 0_17 , upvalues : HouseInstallation
   local self = HouseInstallation
   local itemWrapper = getInventoryItemByType(invenType, invenSlotNo)
   local Uislot = (self.slotUIPool)[slot_Idx]
@@ -909,7 +926,7 @@ _houseInstallation_ShowToolTip = function(invenType, invenSlotNo, slot_Idx)
 end
 
 _houseInstallation_ShowInstalledItemToolTip = function(invenSlotNo, slot_Idx)
-  -- function num : 0_15 , upvalues : HouseInstallation
+  -- function num : 0_18 , upvalues : HouseInstallation
   local self = HouseInstallation
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   local actorKeyRaw = houseWrapper:getInstallationActorKeyRaw(invenSlotNo)
@@ -924,7 +941,7 @@ _houseInstallation_ShowInstalledItemToolTip = function(invenSlotNo, slot_Idx)
 end
 
 _houseInstallation_CashItemShowToolTip = function(productNoRaw, uiIdx)
-  -- function num : 0_16 , upvalues : HouseInstallation
+  -- function num : 0_19 , upvalues : HouseInstallation
   local self = HouseInstallation
   local cPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(productNoRaw)
   local itemSSW = cPSSW:getItemByIndex(0)
@@ -936,12 +953,12 @@ _houseInstallation_CashItemShowToolTip = function(productNoRaw, uiIdx)
 end
 
 _houseInstallation_HideToolTip = function()
-  -- function num : 0_17
+  -- function num : 0_20
   Panel_Tooltip_Item_hideTooltip()
 end
 
 _houseInstallation_InstallFurniture = function(invenType, invenSlotNo, iscash, productNo)
-  -- function num : 0_18
+  -- function num : 0_21
   PAHousing_FarmInfo_Close()
   FGlobal_HouseInstallationControl_CloseOuter()
   if Panel_Win_System:GetShow() then
@@ -955,7 +972,7 @@ _houseInstallation_InstallFurniture = function(invenType, invenSlotNo, iscash, p
 end
 
 _houseInstallation_Delete_InstalledObjectDO = function()
-  -- function num : 0_19 , upvalues : HouseInstallation
+  -- function num : 0_22 , upvalues : HouseInstallation
   PAHousing_FarmInfo_Close()
   FGlobal_HouseInstallationControl_CloseOuter()
   local self = HouseInstallation
@@ -963,7 +980,7 @@ _houseInstallation_Delete_InstalledObjectDO = function()
 end
 
 _houseInstallation_Default_Cancel_function = function()
-  -- function num : 0_20
+  -- function num : 0_23
   if housing_isInstallMode() and housing_isTemporaryObject() then
     housing_moveObject()
   end
@@ -971,7 +988,7 @@ _houseInstallation_Default_Cancel_function = function()
 end
 
 _houseInstallation_IconTooltip = function(isShow, iconType)
-  -- function num : 0_21 , upvalues : HouseInstallation, buttonEum
+  -- function num : 0_24 , upvalues : HouseInstallation, buttonEum
   local self = HouseInstallation
   local control = nil
   local name = ""
@@ -1049,7 +1066,7 @@ _houseInstallation_IconTooltip = function(isShow, iconType)
 end
 
 HandleClicked_HouseInstallation_ItemFilter = function(itemType)
-  -- function num : 0_22 , upvalues : HouseInstallation
+  -- function num : 0_25 , upvalues : HouseInstallation
   local self = HouseInstallation
   self.filter_ItemType = itemType
   self.filter_SearchKeyword = ""
@@ -1061,7 +1078,7 @@ HandleClicked_HouseInstallation_ItemFilter = function(itemType)
 end
 
 HandleClicked_HouseInstallation_EditItemNameClear = function()
-  -- function num : 0_23 , upvalues : HouseInstallation, IM
+  -- function num : 0_26 , upvalues : HouseInstallation, IM
   local self = HouseInstallation
   ;
   (self.edit_ItemName):SetEditText("", true)
@@ -1071,7 +1088,7 @@ HandleClicked_HouseInstallation_EditItemNameClear = function()
 end
 
 HandleClicked_HouseInstallation_FindItemName = function()
-  -- function num : 0_24 , upvalues : IM, HouseInstallation
+  -- function num : 0_27 , upvalues : IM, HouseInstallation
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   local self = HouseInstallation
   local inputKeyword = (self.edit_ItemName):GetEditText()
@@ -1088,13 +1105,13 @@ HandleClicked_HouseInstallation_FindItemName = function()
 end
 
 HandleClicked_HouseInstallation_Rotate45 = function()
-  -- function num : 0_25 , upvalues : HouseInstallation
+  -- function num : 0_28 , upvalues : HouseInstallation
   local isCheck = (HouseInstallation.btn_RotateAngle):IsCheck()
   housing_setRestrictedRatateObject(isCheck)
 end
 
 HandleClicked_HouseInstallation_RotateCamera = function(isLeft)
-  -- function num : 0_26
+  -- function num : 0_29
   if isLeft == true then
     local xDegree = -0.5
     local yDegree = 0
@@ -1109,7 +1126,7 @@ HandleClicked_HouseInstallation_RotateCamera = function(isLeft)
 end
 
 HandleClicked_HouseInstallation_Reset = function()
-  -- function num : 0_27
+  -- function num : 0_30
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1140,7 +1157,7 @@ HandleClicked_HouseInstallation_Reset = function()
   end
   FGlobal_HouseInstallationControl_Close()
   local installed_Delete_All = function()
-    -- function num : 0_27_0 , upvalues : installedItemCount
+    -- function num : 0_30_0 , upvalues : installedItemCount
     for idx = 0, installedItemCount - 1 do
       housing_deleteObject_InstalledObjectList(idx)
     end
@@ -1179,25 +1196,25 @@ HandleClicked_HouseInstallation_Reset = function()
 end
 
 HandleClicked_HouseInstallation_Exit = function()
-  -- function num : 0_28
+  -- function num : 0_31
   FGlobal_AlertHouseLightingReset()
   FromClient_CancelInstallModeMessageBox()
 end
 
 HandleClicked_HouseInstallation_Exit_DO = function()
-  -- function num : 0_29 , upvalues : HouseInstallation
+  -- function num : 0_32 , upvalues : HouseInstallation
   HouseInstallation:Close()
 end
 
 HandleClicked_HouseInstallation_Exit_ByAttacked = function()
-  -- function num : 0_30 , upvalues : HouseInstallation
+  -- function num : 0_33 , upvalues : HouseInstallation
   if housing_isBuildMode() or housing_isInstallMode() then
     HouseInstallation:Close()
   end
 end
 
 HandleClicked_HouseInstallation_Delete_InstalledObject = function(dataIdx, idx)
-  -- function num : 0_31 , upvalues : HouseInstallation, furnitureData, UI_CIT
+  -- function num : 0_34 , upvalues : HouseInstallation, furnitureData, UI_CIT
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1234,7 +1251,7 @@ HandleClicked_HouseInstallation_Delete_InstalledObject = function(dataIdx, idx)
 end
 
 HandleClicked_HouseInstallation_ScrollBtn = function()
-  -- function num : 0_32 , upvalues : HouseInstallation
+  -- function num : 0_35 , upvalues : HouseInstallation
   local posPer = (HouseInstallation.scroll):GetControlPos()
   local viewRow = 2
   local totalRow = (math.ceil)(HouseInstallation.dataCount / (HouseInstallation.maxSlotCount / 2))
@@ -1246,7 +1263,7 @@ HandleClicked_HouseInstallation_ScrollBtn = function()
 end
 
 HandleClicked_HouseInstallation_FirstFloor_MouseLUp = function()
-  -- function num : 0_33 , upvalues : HouseInstallation
+  -- function num : 0_36 , upvalues : HouseInstallation
   housing_selectHouseFloor(0)
   ;
   (HouseInstallation._radioBtnFirstFloor):SetCheck(true)
@@ -1259,7 +1276,7 @@ HandleClicked_HouseInstallation_FirstFloor_MouseLUp = function()
 end
 
 HandleClicked_HouseInstallation_SecondFloor_MouseLUp = function()
-  -- function num : 0_34 , upvalues : HouseInstallation
+  -- function num : 0_37 , upvalues : HouseInstallation
   housing_selectHouseFloor(1)
   ;
   (HouseInstallation._radioBtnFirstFloor):SetCheck(false)
@@ -1272,7 +1289,7 @@ HandleClicked_HouseInstallation_SecondFloor_MouseLUp = function()
 end
 
 HandleClicked_HouseInstallation_ThirdFloor_MouseLUp = function()
-  -- function num : 0_35 , upvalues : HouseInstallation
+  -- function num : 0_38 , upvalues : HouseInstallation
   housing_selectHouseFloor(2)
   ;
   (HouseInstallation._radioBtnFirstFloor):SetCheck(false)
@@ -1285,7 +1302,7 @@ HandleClicked_HouseInstallation_ThirdFloor_MouseLUp = function()
 end
 
 HandleClicked_HouseInstallation_FourFloor_MouseLUp = function()
-  -- function num : 0_36 , upvalues : HouseInstallation
+  -- function num : 0_39 , upvalues : HouseInstallation
   housing_selectHouseFloor(3)
   ;
   (HouseInstallation._radioBtnFirstFloor):SetCheck(false)
@@ -1298,7 +1315,7 @@ HandleClicked_HouseInstallation_FourFloor_MouseLUp = function()
 end
 
 FromClient_ShowInstallationMenu = function(installMode, isShow, isShowMove, isShowFix, isShowDelete, isShowCancel)
-  -- function num : 0_37
+  -- function num : 0_40
   local posX = housing_getInstallationMenuPosX()
   local posY = housing_getInstallationMenuPosY()
   if isShow == true then
@@ -1310,17 +1327,17 @@ FromClient_ShowInstallationMenu = function(installMode, isShow, isShowMove, isSh
 end
 
 FromClient_CancelInstallObject = function()
-  -- function num : 0_38
+  -- function num : 0_41
   FGlobal_HouseInstallationControl_Close()
 end
 
 FromClient_CancelInstallMode = function()
-  -- function num : 0_39
+  -- function num : 0_42
   FGlobal_HouseInstallationControl_Close()
 end
 
 FromClient_UpdateInventory = function()
-  -- function num : 0_40 , upvalues : HouseInstallation
+  -- function num : 0_43 , upvalues : HouseInstallation
   HouseInstallation:SetData()
   HouseInstallation:SetScroll()
   ;
@@ -1330,19 +1347,19 @@ FromClient_UpdateInventory = function()
 end
 
 FromClient_UpdateInstallationActor = function(isAdd)
-  -- function num : 0_41 , upvalues : HouseInstallation
+  -- function num : 0_44 , upvalues : HouseInstallation
   HouseInstallation:SetData()
   HouseInstallation:SetScroll()
   HouseInstallation:Update(HouseInstallation.nowInterval)
 end
 
 FromClient_ShowHousingModeUI = function(isShow)
-  -- function num : 0_42 , upvalues : HouseInstallation
+  -- function num : 0_45 , upvalues : HouseInstallation
   HouseInstallation:Open(isShow)
 end
 
 FromClient_CancelInstallModeMessageBox = function()
-  -- function num : 0_43 , upvalues : IM
+  -- function num : 0_46 , upvalues : IM
   audioPostEvent_SystemUi(1, 33)
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_MEMO")
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_TITLE"), content = messageBoxMemo, functionYes = HandleClicked_HouseInstallation_Exit_DO, functionCancel = _houseInstallation_Default_Cancel_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -1355,14 +1372,14 @@ FromClient_CancelInstallModeMessageBox = function()
 end
 
 FGlobal_House_InstallationMode_Update = function()
-  -- function num : 0_44 , upvalues : HouseInstallation
+  -- function num : 0_47 , upvalues : HouseInstallation
   HouseInstallation:SetData()
   HouseInstallation:SetScroll()
   HouseInstallation:Update(HouseInstallation.nowInterval)
 end
 
 FGlobal_House_InstallationMode_Open = function()
-  -- function num : 0_45 , upvalues : HouseInstallation, IM
+  -- function num : 0_48 , upvalues : HouseInstallation, IM
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   HouseInstallation.filter_ItemType = -1
@@ -1394,7 +1411,7 @@ FGlobal_House_InstallationMode_Open = function()
 end
 
 EventHousingPointUpdate = function()
-  -- function num : 0_46 , upvalues : HouseInstallation
+  -- function num : 0_49 , upvalues : HouseInstallation
   local self = HouseInstallation
   local iptBaseValue = toClient_GetVisitingBaseInteriorPoint()
   local iptOptionValue = toClient_GetVisitingSetOptionInteriorPoint()
@@ -1464,7 +1481,7 @@ EventHousingPointUpdate = function()
 end
 
 EventHousingPointUpdateClear = function()
-  -- function num : 0_47 , upvalues : HouseInstallation
+  -- function num : 0_50 , upvalues : HouseInstallation
   (HouseInstallation.InteriorPointBaseValueText):SetShow(false)
   ;
   (HouseInstallation.InteriorPointOptionValueText):SetShow(false)
@@ -1485,12 +1502,12 @@ EventHousingPointUpdateClear = function()
 end
 
 FGlobal_House_InstallationMode_Close = function()
-  -- function num : 0_48 , upvalues : HouseInstallation
+  -- function num : 0_51 , upvalues : HouseInstallation
   HouseInstallation:Close()
 end
 
 House_InstallationMode_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_49 , upvalues : HouseInstallation
+  -- function num : 0_52 , upvalues : HouseInstallation
   local self = HouseInstallation
   if self.isInstallMode == false or self.houseInstallationMode == false then
     return 
@@ -1524,7 +1541,7 @@ end
 
 Panel_House_InstallationMode:RegisterUpdateFunc("House_InstallationMode_UpdatePerFrame")
 HouseInstallation.registEventHandler = function(self)
-  -- function num : 0_50 , upvalues : buttonEum
+  -- function num : 0_53 , upvalues : buttonEum
   (self.bg_List):addInputEvent("Mouse_DownScroll", "_houseInstallation_UpdateScroll( true )")
   ;
   (self.bg_List):addInputEvent("Mouse_UpScroll", "_houseInstallation_UpdateScroll( false )")
@@ -1619,7 +1636,7 @@ HouseInstallation.registEventHandler = function(self)
 end
 
 HouseInstallation.registMessageHandler = function(self)
-  -- function num : 0_51
+  -- function num : 0_54
   registerEvent("EventHousingShowInstallationMenu", "FromClient_ShowInstallationMenu")
   registerEvent("EventHousingCancelInstallObjectMessageBox", "FromClient_CancelInstallObject")
   registerEvent("EventHousingCancelInstallModeMessageBox", "FromClient_CancelInstallMode")

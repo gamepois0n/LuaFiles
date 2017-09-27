@@ -47,6 +47,10 @@ PaGlobal_AutoManager.init = function(self)
   self._ActiveState = false
   self._stateUnit = AutoState_WaitForPressButton
   _questNo = -1
+  _PA_LOG("�\128규보", "_ActiveState�\128 false�\168!!!")
+  local traceString = (debug.traceback)()
+  traceString = (string.gsub)(traceString, "d:/output/dev/UI_Data/Script/", "")
+  _PA_LOG("�\128규보", "traceBack:" .. traceString)
 end
 
 -- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
@@ -74,6 +78,12 @@ PaGlobal_AutoManager.start = function(self)
     _PA_ASSERT(false, "Quest 정보�\128 nil입니�\164..AutoState_WaitForPressButton:start")
     return 
   end
+  ;
+  ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):SetShow(true)
+  ;
+  ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):EraseAllEffect()
+  ;
+  ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):AddEffect("fN_DarkSpirit_Idle_2_AutoQuest", true, -50, -70)
   local uiQuestInfo = questList:getMainQuestInfo()
   if uiQuestInfo == nil then
     FGlobal_AutoQuestBlackSpiritMessage(" 현재로서�\148 메인퀘스�\184 동선으로 오토�\128 진행된다;메인퀘스�\184 없다�\180 시작�\160 �\152 없다;")
@@ -87,15 +97,21 @@ PaGlobal_AutoManager.start = function(self)
   local questList = ToClient_GetQuestList()
   local uiQuestInfo = questList:getMainQuestInfo()
   self._questNo = uiQuestInfo:getQuestNo()
-  FGlobal_AutoQuestBlackSpiritMessage("오토�\128 시작 되었습니�\164")
+  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_START"))
+  PaGlobal_AutoQuestMsg:AniStop()
+  FGlobal_AutoQuestBlakcSpirit_Hide()
+  ToClient_AutoPlayerStart()
 end
 
 -- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.stop = function(self)
   -- function num : 0_3
+  _PA_LOG("�\128규보", "Auto stop")
   self._ActiveState = false
   ToClient_changeAutoMode((CppEnums.Client_AutoControlStateType).NONE)
+  ToClient_AutoPlayerStop()
+  FGlobal_AutoQuestBlakcSpirit_Hide()
 end
 
 Auto_FrameMove = function(deltaTime)
@@ -150,9 +166,8 @@ PaGlobal_AutoManager.checkUseToRecoverPosion = function(self)
       if quickSlotInfo ~= nil and ((CppEnums.QuickSlotType).eItem == quickSlotInfo._type or (CppEnums.QuickSlotType).eCashItem == quickSlotInfo._type) then
         local itemKey = (quickSlotInfo._itemKey):get()
         for hpIdx = 0, #potionData.hp - 1 do
-          if itemKey == (potionData.hp)[hpIdx] then
-            quickSlot_UseSlot(i)
-            FGlobal_AutoQuestBlackSpiritMessage("오토�\156 인한 물약 사용, 설정�\156 수치보다 HP�\128 떨어�\184 물약�\132 사용했습니다.")
+          if itemKey == (potionData.hp)[hpIdx] and quickSlot_UseSlot(i) == true then
+            FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_DRUG_POTION"))
           end
         end
       end
@@ -162,7 +177,9 @@ end
 
 Auto_TransferState = function(typeState)
   -- function num : 0_8
-  _PA_LOG("�\128규보", "before: " .. AutoStateName[(PaGlobal_AutoManager._stateUnit)._state] .. "    after: " .. AutoStateName[typeState])
+  if PaGlobal_AutoManager._stateUnit ~= nil then
+    _PA_LOG("�\128규보", "before: " .. AutoStateName[(PaGlobal_AutoManager._stateUnit)._state] .. "    after: " .. AutoStateName[typeState])
+  end
   local traceString = (debug.traceback)()
   traceString = (string.gsub)(traceString, "d:/output/dev/UI_Data/Script/", "")
   _PA_LOG("�\128규보", "traceBack:" .. traceString)
@@ -171,7 +188,7 @@ Auto_TransferState = function(typeState)
   end
   ;
   (PaGlobal_AutoManager._stateUnit):endProc()
-  -- DECOMPILER ERROR at PC43: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
 
   PaGlobal_AutoManager._stateUnit = (PaGlobal_AutoManager._storageStateUnit)[typeState]
   ;
@@ -191,16 +208,6 @@ Auto_NotifyChangeDialog = function()
   if PaGlobal_AutoManager._ActiveState and (PaGlobal_AutoManager._stateUnit)._state == AutoStateType.DIALOG_INTERACTION then
     AutoState_DialogInteraction:NotifyChangeDialog()
   end
-end
-
--- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_AutoManager.isDialoging = function(self)
-  -- function num : 0_11
-  if self._ActiveState == true and self._stateUnit ~= nil and (PaGlobal_AutoManager._stateUnit)._state == AutoStateType.DIALOG_INTERACTION then
-    return true
-  end
-  return false
 end
 
 

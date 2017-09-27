@@ -399,9 +399,6 @@ end
 PaGlobal_TutorialManager.startTutorial = function(self, phaseNo, stepNo, typeNo)
   -- function num : 0_15
   _PA_LOG("곽민�\176", "#####튜토리얼 시작시도#####")
-  if PaGlobal_AutoManager._ActiveState == true then
-    PaGlobal_AutoManager:stop()
-  end
   if self:checkPossibleTutorial(phaseNo) == false then
     _PA_LOG("곽민�\176", "튜토리얼 시작 조건�\132 만족하지 못해�\156 시작하지 않습니다. phaseNo : " .. tostring(phaseNo))
     return 

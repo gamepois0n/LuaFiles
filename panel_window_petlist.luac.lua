@@ -34,7 +34,7 @@ local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
 if isPremiumPcRoom then
   maxUnsealCount = maxUnsealCount + ToClient_getPetUseMaxCountPcRoom()
 end
-local petRaceCount = {[1] = "고양�\180", [2] = "�\156", [3] = "�\164", [4] = "펭귄", [5] = "사막여우", [6] = "고슴도치", [7] = "눈사�\140", [8] = "고슴도치", [9] = "오목눈이", [10] = "렛서팬더", [11] = "앵무�\136", [12] = "북극�\176", [13] = "돌맨�\140", [14] = "이벤트할로윈1", [15] = "이벤트할로윈2", [16] = "이벤트할로윈3", [17] = "이벤트할로윈4", [18] = "이벤트할로윈5", [19] = "이벤트할로윈6", [99] = "합성�\169 �\171"}
+local petRaceCount = {[1] = "고양�\180", [2] = "�\156", [3] = "�\164", [4] = "펭귄", [5] = "사막여우", [6] = "고슴도치", [7] = "눈사�\140", [8] = "고슴도치", [9] = "오목눈이", [10] = "렛서팬더", [11] = "앵무�\136", [12] = "북극�\176", [13] = "돌맨�\140", [14] = "이벤트할로윈1", [15] = "이벤트할로윈2", [16] = "이벤트할로윈3", [17] = "이벤트할로윈4", [18] = "이벤트할로윈5", [19] = "이벤트할로윈6", [20] = "어린 �\145", [99] = "합성�\169 �\171"}
 local isPetFlyPet = {[1] = 3, [2] = 9, [3] = 11, [4] = 15}
 local checkUnSealList = {}
 local PetList = {BTN_Close = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Win_Close"), BTN_Compose = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Compose"), BTN_AllUnSeal = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllUnSeal"), BTN_AllSeal = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllSeal"), BTN_Market = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Market"), list2_PetList = (UI.getChildControl)(Panel_Window_PetListNew, "List2_PetList"), listMaxCount = 5, 
@@ -554,6 +554,10 @@ PetList.SetPetList = function(self, noclearscroll)
     end
   end
   if noclearscroll then
+    if self.UnSealDATACount == 0 and toIndex == (self.list2_PetList):getEndIndex() - 1 then
+      toIndex = toIndex + 1
+    end
+    ;
     (self.list2_PetList):setCurrenttoIndex(toIndex)
     if (self.list2_PetList):IsIgnoreVerticalScroll() == false then
       vscroll:SetControlPos(scrollvalue)
@@ -664,7 +668,7 @@ petListNew_Compose_Set = function(petNoStr, petRace, sealPetIndex)
       PetCompose_SkillSet(sealPetIndex, 2)
     end
   end
-  PetList:SetPetList()
+  PetList:SetPetList(true)
 end
 
 local petSkillCheck = nil
@@ -746,7 +750,7 @@ petListNew_Save = function()
     local petData = ToClient_getPetSealedDataByIndex(petIndex)
     local petNo_s32 = Int64toInt32(petData._petNo)
     if checkUnSealList[petNo_s32] then
-      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType)["PetAllSeal" .. tostring(idx)], petNo_s32)
+      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType)["PetAllSeal" .. tostring(idx)], petNo_s32, (CppEnums.VariableStorageType).eVariableStorageType_User)
       idx = idx + 1
       if idx >= 9 then
         return 
@@ -754,7 +758,7 @@ petListNew_Save = function()
     end
   end
   for index = idx, maxCount do
-    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType)["PetAllSeal" .. index], 0)
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType)["PetAllSeal" .. index], 0, (CppEnums.VariableStorageType).eVariableStorageType_User)
   end
 end
 
@@ -1269,6 +1273,7 @@ FGlobal_PetListNew_NoPet = function()
   end
   do
     FGlobal_MaidIcon_SetPos(false)
+    PaGlobal_Camp:setPos()
   end
 end
 
@@ -1298,6 +1303,10 @@ PetListControlCreate = function(control, key)
   local orderGetItem = (UI.getChildControl)(control, "CheckButton_GetItem")
   local orderPlay = (UI.getChildControl)(control, "CheckButton_Play")
   local noUnsealpet = (UI.getChildControl)(control, "StaticText_NoneUnsealPet")
+  local btnUp = (UI.getChildControl)(control, "Button_Up")
+  local btnDown = (UI.getChildControl)(control, "Button_Down")
+  btnUp:SetShow(false)
+  btnDown:SetShow(false)
   local skillIcon = {[0] = (UI.getChildControl)(control, "Static_SkillIcon_0"), [1] = (UI.getChildControl)(control, "Static_SkillIcon_1"), [2] = (UI.getChildControl)(control, "Static_SkillIcon_2"), [3] = (UI.getChildControl)(control, "Static_SkillIcon_3")}
   local sealPetCount = ToClient_getPetSealedList()
   local unsealPetCount = ToClient_getPetUnsealedList()
@@ -1397,10 +1406,10 @@ PetListControlCreate = function(control, key)
         orderFind:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderGetItem:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderPlay:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
-        -- DECOMPILER ERROR at PC451: Confused about usage of register: R52 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC467: Confused about usage of register: R54 in 'UnsetPending'
 
         PetList.orderList = PetControl_UnsealPetOrderInfo(tostring(petNo_s64))
-        -- DECOMPILER ERROR at PC460: Confused about usage of register: R52 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC476: Confused about usage of register: R54 in 'UnsetPending'
 
         if isPassive then
           ((PetList.orderList)._find)[tostring(petNo_s64)] = true
@@ -1429,20 +1438,20 @@ PetListControlCreate = function(control, key)
         if petLootingType == 0 then
           x1 = setTextureUV_Func(orderPlay, 140, 280, 172, 312)
         else
-          -- DECOMPILER ERROR at PC548: Overwrote pending register: R56 in 'AssignReg'
+          -- DECOMPILER ERROR at PC564: Overwrote pending register: R58 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC549: Overwrote pending register: R55 in 'AssignReg'
+          -- DECOMPILER ERROR at PC565: Overwrote pending register: R57 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC550: Overwrote pending register: R54 in 'AssignReg'
+          -- DECOMPILER ERROR at PC566: Overwrote pending register: R56 in 'AssignReg'
 
           if petLootingType == 1 then
             x1 = setTextureUV_Func(orderPlay, 104, 280, 136, 312)
           else
-            -- DECOMPILER ERROR at PC562: Overwrote pending register: R56 in 'AssignReg'
+            -- DECOMPILER ERROR at PC578: Overwrote pending register: R58 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC563: Overwrote pending register: R55 in 'AssignReg'
+            -- DECOMPILER ERROR at PC579: Overwrote pending register: R57 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC564: Overwrote pending register: R54 in 'AssignReg'
+            -- DECOMPILER ERROR at PC580: Overwrote pending register: R56 in 'AssignReg'
 
             if petLootingType == 2 then
               x1 = setTextureUV_Func(orderPlay, 176, 280, 208, 312)
@@ -1503,11 +1512,11 @@ PetListControlCreate = function(control, key)
             end
           end
           do
-            -- DECOMPILER ERROR at PC729: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC729: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC729: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC745: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1520,7 +1529,7 @@ PetListControlCreate = function(control, key)
     btnUnsealAll:SetShow(false)
     btnInfo:addInputEvent("Mouse_LUp", "petListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
     local uiIndex = 0
-    -- DECOMPILER ERROR at PC763: Overwrote pending register: R54 in 'AssignReg'
+    -- DECOMPILER ERROR at PC779: Overwrote pending register: R56 in 'AssignReg'
 
     btnSeal:addInputEvent("Mouse_LUp", "petListNew_Seal( \"" .. tostring(petNo_s64) .. "\" ," .. uiIndex .. y1)
   else
@@ -1546,10 +1555,10 @@ PetListControlCreate = function(control, key)
             isPassive = (pcPetData:getSkillParam(1)):isPassiveSkill()
           end
           local hungryPercent = pethungry / petMaxHungry * 100
-          -- DECOMPILER ERROR at PC820: Overwrote pending register: R55 in 'AssignReg'
+          -- DECOMPILER ERROR at PC836: Overwrote pending register: R57 in 'AssignReg'
 
           hungryProgress:SetProgressRate(x2)
-          -- DECOMPILER ERROR at PC825: Overwrote pending register: R56 in 'AssignReg'
+          -- DECOMPILER ERROR at PC841: Overwrote pending register: R58 in 'AssignReg'
 
           hungryPercentText:SetText((string.format)(y2, hungryPercent) .. "%")
           local isCheck = checkUnSealList[Int64toInt32(petNo_s64)]
@@ -1559,15 +1568,15 @@ PetListControlCreate = function(control, key)
           checkBtn:SetCheck(isCheck)
           checkBtn:addInputEvent("Mouse_LUp", "petListNew_AllSealCheck(" .. Int64toInt32(petNo_s64) .. ")")
           checkBtn:SetShow(true)
-          -- DECOMPILER ERROR at PC857: Confused about usage of register: R54 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC873: Confused about usage of register: R56 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._follow)[petNo_s64] = true
-          -- DECOMPILER ERROR at PC861: Confused about usage of register: R54 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC877: Confused about usage of register: R56 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._find)[petNo_s64] = isPassive
-          -- DECOMPILER ERROR at PC865: Confused about usage of register: R54 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC881: Confused about usage of register: R56 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._getItem)[petNo_s64] = true
@@ -1581,6 +1590,10 @@ PetListControlCreate = function(control, key)
             name:addInputEvent("Mouse_Out", "")
           end
           unsealPetIndex = index
+          btnUp:addInputEvent("Mouse_LUp", "PetList_ChangePosition(true," .. index .. ")")
+          btnDown:addInputEvent("Mouse_LUp", "PetList_ChangePosition(false," .. index .. ")")
+          btnUp:SetShow(true)
+          btnDown:SetShow(true)
         end
       end
       btnInfo:SetShow(false)
@@ -1608,6 +1621,7 @@ PetListControlCreate = function(control, key)
           btnFusion:addInputEvent("Mouse_LUp", "petListNew_Compose_Set( \"" .. tostring(petNo_s64) .. "\" ," .. petRace .. ", " .. unsealPetIndex .. " )")
           btnSeal:setNotImpactScrollEvent(true)
           btnUnseal:setNotImpactScrollEvent(true)
+          btnFusion:setNotImpactScrollEvent(true)
           icon:ChangeTextureInfoName(iconPath)
           level:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. tostring(petLevel))
           tier:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_TIER", "tier", petTier))
@@ -1840,6 +1854,12 @@ end
 PetList_VScroll_MoveTop = function()
   -- function num : 0_65 , upvalues : PetList
   (PetList.list2_PetList):moveTopIndex()
+end
+
+PetList_ChangePosition = function(isUp, index)
+  -- function num : 0_66 , upvalues : PetList
+  ToClient_changePetListOrder(isUp, index)
+  PetList:SetPetList(true)
 end
 
 

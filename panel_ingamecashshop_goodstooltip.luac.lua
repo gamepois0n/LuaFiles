@@ -11,7 +11,7 @@ Panel_IngameCashShop_GoodsTooltip:setGlassBackground(true)
 Panel_IngameCashShop_GoodsTooltip:ActiveMouseEventEffect(true)
 local GoodsTooltipInfo = {SlotBG = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "Static_GoodsSlotBG"), Slot = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "Static_GoodsSlot"), Name = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_GoodsName"), BindType = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_GoodsBindType"), ClassType = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_GoodsClassType"), EnchantLimitedType = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_GoodsLimitedType"), SalesPeriod = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_GoodsSalesPeriod"), DiscountPeriod = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_GoodsDiscountPeriod"), Desc = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_GoodsDesc"), Warning = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_Warning"), ItemListTitle = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_ItemListTitle"), 
 PackingItemUIPool = {}
-, PackingItemUIMaxCount = 0, SelectedProductKeyRaw = -1}
+, PackingItemUIMaxCount = 0, itemSlotMaxCount = 20, SelectedProductKeyRaw = -1}
 local TemplateTooltipInfo = {PackingItemSlotBG = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "Static_ItemSlotBG"), PackingItemSlot = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "Static_ItemSlot"), PackingItemName = (UI.getChildControl)(Panel_IngameCashShop_GoodsTooltip, "StaticText_ItemName")}
 GoodsTooltipInfo.Initialize = function(self)
   -- function num : 0_0 , upvalues : UI_TM, UI_color, UI_PUCT, TemplateTooltipInfo
@@ -47,7 +47,7 @@ GoodsTooltipInfo.Initialize = function(self)
   local startPosY = 25
   local PosYGap = 25
   local itemNamePosX = 40
-  for itemIdx = 0, 9 do
+  for itemIdx = 0, self.itemSlotMaxCount do
     local tempSlot = {}
     local CreatePackingItemBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, self.ItemListTitle, "CashShop_GoodsTooltipInfo_PackingItemBG_" .. itemIdx)
     CopyBaseProperty(TemplateTooltipInfo.PackingItemSlotBG, CreatePackingItemBG)
@@ -80,7 +80,7 @@ end
 
 GoodsTooltipInfo.Update = function(self)
   -- function num : 0_1 , upvalues : UI_color
-  for itemIdx = 0, 9 do
+  for itemIdx = 0, self.itemSlotMaxCount do
     local itemUI = (self.PackingItemUIPool)[itemIdx]
     ;
     (itemUI.SlotBG):SetShow(false)
@@ -162,6 +162,76 @@ GoodsTooltipInfo.Update = function(self)
         ;
         (itemUI.ItemName):SetShow(true)
         -- DECOMPILER ERROR at PC181: LeaveBlock: unexpected jumping out DO_STMT
+
+      end
+    end
+  end
+  local itemListCount = cashProduct:getItemListCount()
+  local subItemListCount = itemListCount + cashProduct:getSubItemListCount()
+  for itemIdx = itemListCount, subItemListCount - 1 do
+    local itemSSW = cashProduct:getSubItemByIndex(itemIdx - itemListCount)
+    do
+      if itemSSW:isEquipable() then
+        local _isEnchantable = (itemSSW:get()):isEnchantable()
+        if _isEnchantable then
+          isEnchantable = isEnchantable + 1
+        end
+      end
+      local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
+      if itemBindType == 1 or itemBindType == 2 then
+        isBind = isBind + 1
+      end
+      local isAllClass = true
+      local classNameList = nil
+      for idx = 0, getCharacterClassCount() - 1 do
+        local className = getCharacterClassName(idx)
+        if className ~= nil and className ~= "" and className ~= " " and ((itemSSW:get())._usableClassType):isOn(idx) then
+          isEnableClass = isEnableClass + 1
+        end
+      end
+      local itemUI = (self.PackingItemUIPool)[itemIdx]
+      local itemCount_S64 = cashProduct:getSubItemCountByIndex(itemIdx - itemListCount)
+      local itemCount_S32 = Int64toInt32(itemCount_S64)
+      if itemCount_S32 == 1 then
+        itemCount_S32 = ""
+      end
+      ;
+      (itemUI.SlotBG):SetShow(true)
+      ;
+      (itemUI.Slot):ChangeTextureInfoName("icon/" .. itemSSW:getIconPath())
+      ;
+      (itemUI.Slot):SetText(tostring(itemCount_S32))
+      ;
+      (itemUI.Slot):SetShow(true)
+      do
+        local nameColorGrade = itemSSW:getGradeType()
+        if nameColorGrade == 0 then
+          (itemUI.ItemName):SetFontColor(UI_color.C_FFFFFFFF)
+        else
+          if nameColorGrade == 1 then
+            (itemUI.ItemName):SetFontColor(4284350320)
+          else
+            if nameColorGrade == 2 then
+              (itemUI.ItemName):SetFontColor(4283144191)
+            else
+              if nameColorGrade == 3 then
+                (itemUI.ItemName):SetFontColor(4294953010)
+              else
+                if nameColorGrade == 4 then
+                  (itemUI.ItemName):SetFontColor(4294929408)
+                else
+                  ;
+                  (itemUI.ItemName):SetFontColor(UI_color.C_FFFFFFFF)
+                end
+              end
+            end
+          end
+        end
+        ;
+        (itemUI.ItemName):SetText(itemSSW:getName())
+        ;
+        (itemUI.ItemName):SetShow(true)
+        -- DECOMPILER ERROR at PC326: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end
@@ -262,7 +332,7 @@ GoodsTooltipInfo.Update = function(self)
           controlPosY = controlPosY + (self.ItemListTitle):GetSizeY()
         end
         local itemListStartPosY = 22
-        for itemIdx = 0, cashProduct:getItemListCount() - 1 do
+        for itemIdx = 0, subItemListCount - 1 do
           local itemUI = (self.PackingItemUIPool)[itemIdx]
           if (itemUI.SlotBG):GetShow() then
             (itemUI.SlotBG):SetPosY(itemListStartPosY)

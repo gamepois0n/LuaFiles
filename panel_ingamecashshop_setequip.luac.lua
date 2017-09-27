@@ -1621,6 +1621,10 @@ FGlobal_SpecialMoveSettingCheck = function()
   (self.btn_SpecialMove1):SetShow(false)
   ;
   (self.btn_SpecialMove2):SetShow(false)
+  ;
+  (self.btn_SpecialMove):SetShow(false)
+  ;
+  (self.btn_Coupon):SetSpanSize(10, 90)
 end
 
 FGlobal_SpecialMoveSettingNoShow = function()

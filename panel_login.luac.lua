@@ -28,7 +28,7 @@ Button_GameOption:SetEnable(true)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
-local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only"}
+local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "TROnly", "THOnly", "KR2Only"}
 local bgIndex = {}
 for k,v in pairs(bgItem) do
   bgIndex[v] = k
@@ -69,6 +69,10 @@ local bgManager = {
 , 
 [bgIndex.TaiwanOnly] = {isOpen = not isGameTypeTaiwan() or false, imageCount = 0, iconPath = "bgTaiwanOnly_"}
 , 
+[bgIndex.TROnly] = {isOpen = not isGameTypeTR() or false, imageCount = 0, iconPath = "bgTROnly_"}
+, 
+[bgIndex.THOnly] = {isOpen = not isGameTypeTH() or false, imageCount = 0, iconPath = "bgTHOnly_"}
+, 
 [bgIndex.KR2Only] = {isOpen = not isGameTypeKR2() or false, imageCount = 0, iconPath = "bgKR2Only_"}
 }
 local totalBG = 0
@@ -89,7 +93,7 @@ for _,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_Login:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC374: Confused about usage of register: R35 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC398: Confused about usage of register: R35 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex
@@ -163,7 +167,7 @@ LogInPanel_Resize = function()
             Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
           else
             do
-              if isGameTypeTaiwan() then
+              if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
                 Static_DaumCI:SetShow(false)
                 Static_CI:SetSpanSize(10, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
               else
