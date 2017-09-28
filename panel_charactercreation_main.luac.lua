@@ -88,7 +88,7 @@ if isGameTypeTR() then
   link2:SetSize(321, 90)
   link1:SetSpanSize(0, 140)
   link2:SetSpanSize(0, 240)
-  if getGameServiceResType() == 2 then
+  if getGameServiceResType() == 2 or getGameServiceResType() == 6 then
     link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_en.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
     ;
@@ -1591,11 +1591,43 @@ end
                       url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_REAL_F2P")
                     end
                   else
-                    if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_ALPHA")
+                    if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
+                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_SA_ALPHA")
                     else
-                      if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_REAL")
+                      if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
+                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_SA_REAL")
+                      else
+                        if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
+                          url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_ALPHA")
+                        else
+                          if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
+                            url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_REAL")
+                          else
+                            if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                              url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TR_ALPHA")
+                            else
+                              if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TR_REAL")
+                              else
+                                if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TH_ALPHA")
+                                else
+                                  if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TH_REAL")
+                                  else
+                                    if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_ID_ALPHA")
+                                    else
+                                      if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_ID_REAL")
+                                      end
+                                    end
+                                  end
+                                end
+                              end
+                            end
+                          end
+                        end
                       end
                     end
                   end

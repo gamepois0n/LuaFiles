@@ -1796,15 +1796,45 @@ FGlobal_InGameShop_OpenByEventAlarm = function()
           categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_KR2")
         else
           if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-            promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA_ALPHA", "lang", SALangType)
-            categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA_ALPHA", "lang", SALangType)
+            promotionUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA_ALPHA", "lang", SALangType)
+            categoryUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA_ALPHA", "lang", SALangType)
           else
             if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA", "lang", SALangType)
-              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA", "lang", SALangType)
+              promotionUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA", "lang", SALangType)
+              categoryUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA", "lang", SALangType)
             else
-              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
-              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+              if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TR_ALPHA")
+                categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TR_ALPHA")
+              else
+                if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                  promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TR")
+                  categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TR")
+                else
+                  if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TH_ALPHA")
+                    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TH_ALPHA")
+                  else
+                    if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                      promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TH")
+                      categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TH")
+                    else
+                      if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                        promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_ID_ALPHA")
+                        categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_ID_ALPHA")
+                      else
+                        if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                          promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_ID")
+                          categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_ID")
+                        else
+                          promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
+                          categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+                        end
+                      end
+                    end
+                  end
+                end
+              end
             end
           end
         end
@@ -3475,15 +3505,45 @@ end
           categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_KR2")
         else
           if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-            promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA_ALPHA", "lang", SALangType)
-            categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA_ALPHA", "lang", SALangType)
+            promotionUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA_ALPHA", "lang", SALangType)
+            categoryUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA_ALPHA", "lang", SALangType)
           else
             if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA", "lang", SALangType)
-              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA", "lang", SALangType)
+              promotionUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_SA", "lang", SALangType)
+              categoryUrl = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_SA", "lang", SALangType)
             else
-              promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
-              categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+              if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TR_ALPHA")
+                categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TR_ALPHA")
+              else
+                if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                  promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TR")
+                  categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TR")
+                else
+                  if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                    promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TH_ALPHA")
+                    categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TH_ALPHA")
+                  else
+                    if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                      promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_TH")
+                      categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_TH")
+                    else
+                      if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                        promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_ID_ALPHA")
+                        categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_ID_ALPHA")
+                      else
+                        if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                          promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL_ID")
+                          categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL_ID")
+                        else
+                          promotionUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_PROMOTIONURL")
+                          categoryUrl = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_URL_CATEGORYURL")
+                        end
+                      end
+                    end
+                  end
+                end
+              end
             end
           end
         end

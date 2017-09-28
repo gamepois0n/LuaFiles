@@ -179,6 +179,30 @@ PaGlobal_SaveSettingUrlByServiceType = function()
                             else
                               if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
                                 url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KR2_REAL")
+                              else
+                                if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TR_ALPHA")
+                                else
+                                  if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TR_REAL")
+                                  else
+                                    if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TH_ALPHA")
+                                    else
+                                      if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TH_REAL")
+                                      else
+                                        if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_ID_ALPHA")
+                                        else
+                                          if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_ID_REAL")
+                                          end
+                                        end
+                                      end
+                                    end
+                                  end
+                                end
                               end
                             end
                           end

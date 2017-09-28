@@ -114,6 +114,30 @@ ScreenshotAlbum_Open = function()
                           else
                             if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
                               url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_KR2")
+                            else
+                              if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                                url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_TR")
+                              else
+                                if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_TR")
+                                else
+                                  if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_TH")
+                                  else
+                                    if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_TH")
+                                    else
+                                      if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_ID")
+                                      else
+                                        if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_ID")
+                                        end
+                                      end
+                                    end
+                                  end
+                                end
+                              end
                             end
                           end
                         end

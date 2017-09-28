@@ -202,7 +202,31 @@ FGlobal_GuildWebInfo_Open = function(listIdx)
                                   if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
                                     url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
                                   else
-                                    return 
+                                    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
+                                    else
+                                      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
+                                      else
+                                        if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
+                                        else
+                                          if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
+                                          else
+                                            if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
+                                            else
+                                              if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
+                                              else
+                                                return 
+                                              end
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
                                   end
                                 end
                               end
@@ -332,7 +356,31 @@ FGlobal_GuildWebInfoForGuildRank_Open = function(guildNo_string)
                               if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
                                 url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
                               else
-                                return 
+                                if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
+                                else
+                                  if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
+                                  else
+                                    if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
+                                    else
+                                      if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
+                                      else
+                                        if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
+                                        else
+                                          if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
+                                          else
+                                            return 
+                                          end
+                                        end
+                                      end
+                                    end
+                                  end
+                                end
                               end
                             end
                           end
@@ -510,7 +558,31 @@ FGlobal_GuildWebInfoByName_Open = function()
                                   if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
                                     url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
                                   else
-                                    return 
+                                    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
+                                    else
+                                      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
+                                      else
+                                        if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
+                                        else
+                                          if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
+                                          else
+                                            if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
+                                            else
+                                              if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
+                                              else
+                                                return 
+                                              end
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
                                   end
                                 end
                               end
@@ -703,7 +775,31 @@ FGlobal_GuildWebInfoFromGuildMain_Open = function()
                                   if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
                                     url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
                                   else
-                                    return 
+                                    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
+                                    else
+                                      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
+                                      else
+                                        if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
+                                        else
+                                          if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
+                                          else
+                                            if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
+                                            else
+                                              if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
+                                              else
+                                                return 
+                                              end
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
                                   end
                                 end
                               end

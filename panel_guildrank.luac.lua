@@ -731,8 +731,32 @@ GuildRank_Web_Show = function()
                                 if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
                                   url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_KR2_REAL")
                                 else
-                                  _PA_LOG("정태�\164", "한국, 일본, 러시�\132, 북미&유럽, �\128�\140 �\184 다른 국가�\152 �\128입이 존재한다!!!! 수정해야�\168!!")
-                                  return 
+                                  if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TR_ALPHA")
+                                  else
+                                    if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TR_REAL")
+                                    else
+                                      if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TH_ALPHA")
+                                      else
+                                        if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TH_REAL")
+                                        else
+                                          if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_ID_ALPHA")
+                                          else
+                                            if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_ID_REAL")
+                                            else
+                                              _PA_LOG("정태�\164", "한국, 일본, 러시�\132, 북미&유럽, �\128�\140 �\184 다른 국가�\152 �\128입이 존재한다!!!! 수정해야�\168!!")
+                                              return 
+                                            end
+                                          end
+                                        end
+                                      end
+                                    end
+                                  end
                                 end
                               end
                             end
