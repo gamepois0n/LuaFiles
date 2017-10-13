@@ -1345,7 +1345,15 @@ end
       ;
       (frame_Sound._btn_NpcVoice3):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
     else
-      _PA_LOG("LUA", "�\173 국가 리소스가 추가되면 �\180 곳도 수정 판단 해주어야합니�\164.")
+      if isGameTypeTR() then
+        (frame_Sound._btn_NpcVoice1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+        ;
+        (frame_Sound._btn_NpcVoice2):SetShow(false)
+        ;
+        (frame_Sound._btn_NpcVoice3):SetShow(false)
+      else
+        _PA_LOG("LUA", "�\173 국가 리소스가 추가되면 �\180 곳도 수정 판단 해주어야합니�\164.")
+      end
     end
   end
   ;
@@ -1404,9 +1412,9 @@ end
 , 
 [(CppEnums.GameServiceType).eGameServiceType_ID_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_ID, (CppEnums.ServiceResourceType).eServiceResourceType_EN}
 , 
-[(CppEnums.GameServiceType).eGameServiceType_TR_ALPHA] = {(CppEnums.ServiceResourceType).eServiceResourceType_TR, (CppEnums.ServiceResourceType).eServiceResourceType_EN, (CppEnums.ServiceResourceType).eServiceResourceType_FR}
+[(CppEnums.GameServiceType).eGameServiceType_TR_ALPHA] = {(CppEnums.ServiceResourceType).eServiceResourceType_TR, (CppEnums.ServiceResourceType).eServiceResourceType_EN}
 , 
-[(CppEnums.GameServiceType).eGameServiceType_TR_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_TR, (CppEnums.ServiceResourceType).eServiceResourceType_EN, (CppEnums.ServiceResourceType).eServiceResourceType_FR}
+[(CppEnums.GameServiceType).eGameServiceType_TR_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_TR, (CppEnums.ServiceResourceType).eServiceResourceType_EN}
 }
   local isOnServiceChatTypeList = {
 [(CppEnums.GameServiceType).eGameServiceType_DEV] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_French, (CppEnums.LangType).LangType_German}
@@ -1427,12 +1435,12 @@ end
 , 
 [(CppEnums.GameServiceType).eGameServiceType_ID_REAL] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_ID}
 , 
-[(CppEnums.GameServiceType).eGameServiceType_TR_ALPHA] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_TR, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_French}
+[(CppEnums.GameServiceType).eGameServiceType_TR_ALPHA] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_TR, (CppEnums.LangType).LangType_English}
 , 
-[(CppEnums.GameServiceType).eGameServiceType_TR_REAL] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_TR, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_French}
+[(CppEnums.GameServiceType).eGameServiceType_TR_REAL] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_TR, (CppEnums.LangType).LangType_English}
 }
-  local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.ServiceResourceType).eServiceResourceType_PT] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.ServiceResourceType).eServiceResourceType_TH] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TH"), [(CppEnums.ServiceResourceType).eServiceResourceType_ID] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ID"), [(CppEnums.ServiceResourceType).eServiceResourceType_TR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TR")}
-  local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = "International", [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TR")}
+  local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.ServiceResourceType).eServiceResourceType_PT] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.ServiceResourceType).eServiceResourceType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.ServiceResourceType).eServiceResourceType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.ServiceResourceType).eServiceResourceType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
+  local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = "International", [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
   local _btn_ServiceResourceType = {}
   local serviceResEnumsNumber = {}
   local serviceResCount = 0
@@ -1921,6 +1929,7 @@ end
   local TYPE = CppEnums.CountryType
   if isGameTypeTR() or isGameServiceTypeDev() then
     ((frame_Display._btn_WatermarkService)[7]):SetShow(true)
+    setWatermarkService(7)
   else
     ;
     ((frame_Display._btn_WatermarkService)[7]):SetShow(false)
@@ -3137,8 +3146,9 @@ end
   (frame_Game._btn_ComboMode):addInputEvent("Mouse_Out", "Button_Simpletooltips( false )")
 end
 
+  local isFirst = true
   InitGraphicOptionAll = function(gameOptionSetting, optionType)
-  -- function num : 0_29 , upvalues : chk_Option, currentResolutionX, currentResolutionY
+  -- function num : 0_29 , upvalues : chk_Option, currentResolutionX, currentResolutionY, isFirst
   local screenModeIdx = gameOptionSetting:getScreenMode()
   GameOption_InitScreenMode(screenModeIdx)
   GameOption_SetScreenModeButtons(chk_Option.currentScreenModeIdx)
@@ -3166,8 +3176,15 @@ end
   GameOption_InitEffectLODLevel(effectLODLevel)
   GameOption_CheckEffectLODLevel(effectLODLevel)
   local WatermarkService = gameOptionSetting:getWatermarkService()
-  GameOption_InitWatermarkService(WatermarkService)
-  GameOption_CheckWatermarkService(WatermarkService)
+  if isGameTypeTR() and isFirst == true then
+    isFirst = false
+    GameOption_InitWatermarkService(7)
+    GameOption_CheckWatermarkService(7)
+    setWatermarkService(7)
+  else
+    GameOption_InitWatermarkService(WatermarkService)
+    GameOption_CheckWatermarkService(WatermarkService)
+  end
   local WatermarkPosition = gameOptionSetting:getWatermarkPosition()
   GameOption_InitWatermarkPosition(WatermarkPosition)
   GameOption_CheckWatermarkPosition(WatermarkPosition)
@@ -5689,14 +5706,17 @@ end
         ;
         (frame_Sound._btn_NpcVoice3):SetCheck((CppEnums.ServiceResourceType).eServiceResourceType_KR == npcVoiceType)
         if (CppEnums.ServiceResourceType).eServiceResourceType_TW ~= npcVoiceType then
-          do
-            (frame_Sound._btn_NpcVoice1):SetCheck(not isGameTypeTaiwan())
-            ;
-            (frame_Sound._btn_NpcVoice2):SetCheck((CppEnums.ServiceResourceType).eServiceResourceType_JP == npcVoiceType)
-            ;
-            (frame_Sound._btn_NpcVoice3):SetCheck((CppEnums.ServiceResourceType).eServiceResourceType_KR == npcVoiceType)
-            _PA_LOG("LUA", "�\173 국가 리소스가 추가되면 �\180 곳도 수정 판단 해주어야합니�\164.")
-            -- DECOMPILER ERROR: 21 unprocessed JMP targets
+          (frame_Sound._btn_NpcVoice1):SetCheck(not isGameTypeTaiwan())
+          ;
+          (frame_Sound._btn_NpcVoice2):SetCheck((CppEnums.ServiceResourceType).eServiceResourceType_JP == npcVoiceType)
+          ;
+          (frame_Sound._btn_NpcVoice3):SetCheck((CppEnums.ServiceResourceType).eServiceResourceType_KR == npcVoiceType)
+          if (CppEnums.ServiceResourceType).eServiceResourceType_TR ~= npcVoiceType then
+            do
+              (frame_Sound._btn_NpcVoice1):SetCheck(not isGameTypeTR())
+              _PA_LOG("LUA", "�\173 국가 리소스가 추가되면 �\180 곳도 수정 판단 해주어야합니�\164.")
+              -- DECOMPILER ERROR: 23 unprocessed JMP targets
+            end
           end
         end
       end
@@ -5939,7 +5959,11 @@ end
       if isGameTypeTaiwan() then
         self.currentCheckNpcVoice = (CppEnums.ServiceResourceType).eServiceResourceType_TW
       else
-        _PA_LOG("LUA", "�\173 국가 리소스가 추가되면 �\180 곳도 수정 판단 해주어야합니�\164.")
+        if isGameTypeTR() then
+          self.currentCheckNpcVoice = (CppEnums.ServiceResourceType).eServiceResourceType_TR
+        else
+          _PA_LOG("LUA", "�\173 국가 리소스가 추가되면 �\180 곳도 수정 판단 해주어야합니�\164.")
+        end
       end
     end
   else
@@ -7726,6 +7750,8 @@ end
     (gamePanel_Main._btn_KeyConfig):SetShow(false)
     ;
     (gamePanel_Main._btn_KeyConfig_UI):SetShow(false)
+    ;
+    (gamePanel_Main._btn_Optimization):SetShow(false)
     local serviceType = getGameServiceType()
     if serviceType ~= (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_NA_REAL and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_TH_ALPHA and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_TH_REAL and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_TR_REAL and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_ID_REAL and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_SA_REAL and serviceType ~= (CppEnums.GameServiceType).eGameServiceType_DEV then
       (gamePanel_Main._btn_Language):SetShow(false)
@@ -9720,7 +9746,7 @@ end
                   else
                   end
                 end
-                if not isGameTypeRussia() or isGameTypeEnglish() then
+                if (isGameTypeRussia() and isGameTypeEnglish()) or isGameTypeTR() then
                   name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH")
                   desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH_DESC")
                   uiControl = frame_Sound._btn_NpcVoice1

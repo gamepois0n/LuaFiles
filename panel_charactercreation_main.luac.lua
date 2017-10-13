@@ -88,64 +88,62 @@ if isGameTypeTR() then
   link2:SetSize(321, 90)
   link1:SetSpanSize(0, 140)
   link2:SetSpanSize(0, 240)
-  if getGameServiceResType() == 2 or getGameServiceResType() == 6 then
-    link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_en.dds")
+  if getGameServiceResType() == 14 then
+    link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_tr.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
     ;
     (link1:getBaseTexture()):setUV(x1, y1, x2, y2)
     link1:setRenderTexture(link1:getBaseTexture())
-    link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_en.dds")
+    link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_tr.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
     ;
     (link1:getOnTexture()):setUV(x1, y1, x2, y2)
-    link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_en.dds")
+    link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_tr.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
     ;
     (link1:getClickTexture()):setUV(x1, y1, x2, y2)
-    link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_en.dds")
+    link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_tr.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
     ;
     (link2:getBaseTexture()):setUV(x1, y1, x2, y2)
     link2:setRenderTexture(link2:getBaseTexture())
-    link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_en.dds")
+    link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_tr.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
     ;
     (link2:getOnTexture()):setUV(x1, y1, x2, y2)
-    link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_en.dds")
+    link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_tr.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
     ;
     (link2:getClickTexture()):setUV(x1, y1, x2, y2)
   else
     do
-      if getGameServiceResType() == 14 then
-        link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
-        ;
-        (link1:getBaseTexture()):setUV(x1, y1, x2, y2)
-        link1:setRenderTexture(link1:getBaseTexture())
-        link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
-        ;
-        (link1:getOnTexture()):setUV(x1, y1, x2, y2)
-        link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
-        ;
-        (link1:getClickTexture()):setUV(x1, y1, x2, y2)
-        link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
-        ;
-        (link2:getBaseTexture()):setUV(x1, y1, x2, y2)
-        link2:setRenderTexture(link2:getBaseTexture())
-        link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
-        ;
-        (link2:getOnTexture()):setUV(x1, y1, x2, y2)
-        link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_tr.dds")
+      link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
+      ;
+      (link1:getBaseTexture()):setUV(x1, y1, x2, y2)
+      link1:setRenderTexture(link1:getBaseTexture())
+      link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
+      ;
+      (link1:getOnTexture()):setUV(x1, y1, x2, y2)
+      link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
+      ;
+      (link1:getClickTexture()):setUV(x1, y1, x2, y2)
+      link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
+      ;
+      (link2:getBaseTexture()):setUV(x1, y1, x2, y2)
+      link2:setRenderTexture(link2:getBaseTexture())
+      link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
+      ;
+      (link2:getOnTexture()):setUV(x1, y1, x2, y2)
+      link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_en.dds")
+      do
         local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
         ;
         (link2:getClickTexture()):setUV(x1, y1, x2, y2)
-      end
-      do
         if isGameTypeTR() then
           link1:SetShow(true)
           link2:SetShow(true)
