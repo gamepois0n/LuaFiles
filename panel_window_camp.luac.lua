@@ -126,7 +126,7 @@ end
 
 PaGlobal_Camp.sealTent = function(self)
   -- function num : 0_6
-  ToClient_requestServantSealCampingTent()
+  PaGlobal_BuildingBuff:open()
   PaGlobal_Camp:close()
 end
 
@@ -245,6 +245,8 @@ PaGlobal_Camp.update = function(self)
     ((self._ui)._btn_Seal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:sealTent()")
     ;
     ((self._ui)._btn_RemoteSeal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:remoteSeal()")
+    ;
+    ((self._ui)._btn_Seal):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_BUILDINGBUFFLIST_BUTTON_TEXT"))
   else
     ;
     ((self._ui)._btn_UnSealTent):SetShow(true)
@@ -341,7 +343,7 @@ PaGlobal_Camp.setPos = function(self)
   end
   Panel_Icon_Camp:SetPosX(posX)
   Panel_Icon_Camp:SetPosY(posY)
-  PaGlobal_BlackSpiritIcon:setPosIcon()
+  PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
 end
 
 -- DECOMPILER ERROR at PC210: Confused about usage of register: R0 in 'UnsetPending'
@@ -385,22 +387,27 @@ end
 
 PaGlobal_Camp.changeEquipItem = function(self, slotNo)
   -- function num : 0_22
-  local self = PaGlobal_Camp
-  local slot = (self._itemSlots)[slotNo]
-  if self._actorKeyRaw == nil then
-    return 
-  end
-  local campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
-  if campWrapper == nil then
-    return 
-  end
-  ;
-  (slot.icon):AddEffect("UI_ItemInstall", false, 0, 0)
-  ;
-  (slot.icon):AddEffect("fUI_SkillButton01", false, 0, 0)
-  local itemWrapper = campWrapper:getEquipItem(slotNo + 1)
-  if itemWrapper == nil then
-    return 
+  if slotNo == 4 or slotNo == 5 or slotNo == 6 then
+    local self = PaGlobal_Camp
+    local slot = (self._itemSlots)[slotNo]
+    if slot == nil then
+      return 
+    end
+    if self._actorKeyRaw == nil then
+      return 
+    end
+    local campWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+    if campWrapper == nil then
+      return 
+    end
+    ;
+    (slot.icon):AddEffect("UI_ItemInstall", false, 0, 0)
+    ;
+    (slot.icon):AddEffect("fUI_SkillButton01", false, 0, 0)
+    local itemWrapper = campWrapper:getEquipItem(slotNo + 1)
+    if itemWrapper == nil then
+      return 
+    end
   end
 end
 

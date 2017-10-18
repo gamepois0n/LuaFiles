@@ -82,6 +82,7 @@ Panel_Minigame_GradientY_Start = function()
   -- function num : 0_1 , upvalues : ui, _math_randomseed, _math_random, data, KeyDirection, isGradientYPlay
   Panel_MiniGame_Gradient_Y:SetShow(true, false)
   Panel_MiniGame_Gradient_Y:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
+  local centerPos = getScreenSizeX() / 2 - Panel_MiniGame_Gradient_Y:GetSizeX() / 2
   ;
   (ui._keyUp_Eff):SetShow(false)
   ;
@@ -90,16 +91,16 @@ Panel_Minigame_GradientY_Start = function()
   (ui._gaugeCursor):SetPosY(centerPos)
   _math_randomseed((os.time)())
   local speed = _math_random()
-  -- DECOMPILER ERROR at PC34: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC42: Confused about usage of register: R2 in 'UnsetPending'
 
   data.currentSpeed = (speed - 0.35) / 1.6
-  -- DECOMPILER ERROR at PC38: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
 
   data.lastKeyDirection = KeyDirection.None
-  -- DECOMPILER ERROR at PC40: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC48: Confused about usage of register: R2 in 'UnsetPending'
 
   data.lastClickTime = 0
-  -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC50: Confused about usage of register: R2 in 'UnsetPending'
 
   data.currentPos = 0.5
   isGradientYPlay = true
@@ -107,7 +108,6 @@ end
 
 Panel_Minigame_GradientY_End = function()
   -- function num : 0_2 , upvalues : isGradientYPlay
-  Panel_MiniGame_Gradient_Y:RegisterUpdateFunc("")
   Panel_MiniGame_Gradient_Y:SetShow(false, false)
   isGradientYPlay = false
 end

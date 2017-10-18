@@ -24,6 +24,7 @@ local isContentsArsha = ToClient_IsContentsGroupOpen("227")
 local partyListOpen = ToClient_IsContentsGroupOpen("254")
 local isFreeFight = ToClient_IsContentsGroupOpen("255")
 local isBlackSpiritAdventure2 = ToClient_IsContentsGroupOpen("277")
+local isActionUiOpen = ToClient_IsContentsGroupOpen("315")
 Panel_Menu:SetShow(false)
 Panel_Menu:setGlassBackground(true)
 Panel_Menu:ActiveMouseEventEffect(true)
@@ -74,6 +75,7 @@ local menuNew = (UI.getChildControl)(Panel_Menu, "Static_New")
 local menuHotkey = (UI.getChildControl)(Panel_Menu, "StaticText_MenuHotkey")
 local menuTitleBar = (UI.getChildControl)(Panel_Menu, "StaticText_Title")
 local menuText = (UI.getChildControl)(Panel_Menu, "StaticText_MenuText")
+local changeMenu = (UI.getChildControl)(Panel_Menu, "Button_UIChange")
 local maxButtonCount = #MenuButtonTextId
 local menuButtonBG = {}
 local menuButtonIcon = {}
@@ -601,6 +603,7 @@ GameMenu_Init = function()
     (menuTextPool[index]):SetText(MenuButtonTextId[index])
     GameMenu_ChangeButtonTexture(index)
   end
+  FGlobal_MenuType_Check()
 end
 
 GameMenu_CheckEnAble = function(buttonType)
@@ -1078,7 +1081,7 @@ Panel_Menu_ShowToggle = function()
 end
 
 _Panel_Menu_OpenLimit = function()
-  -- function num : 0_19 , upvalues : maxButtonCount, menuButtonBG, menuButtonIcon, menuButtonHotkey, countrySizeNum, iconBgPosX, iconBgPosY, menu_Bg, menuTitleBar, MenuButtonId
+  -- function num : 0_19 , upvalues : maxButtonCount, menuButtonBG, menuButtonIcon, menuButtonHotkey, countrySizeNum, iconBgPosX, iconBgPosY, isActionUiOpen, menu_Bg, menuTitleBar, changeMenu, MenuButtonId
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   for index = 1, maxButtonCount do
     (menuButtonBG[index]):SetShow(false)
@@ -1141,9 +1144,20 @@ _Panel_Menu_OpenLimit = function()
     local buttonSizeX = (menuButtonBG[2]):GetSizeX()
     local buttonGapX = 7
     local bgSizeX = buttonSizeX * columnCountByRaw
-    menu_Bg:SetSize(bgSizeX + buttonGapX * 2, (countrySizeNum + 2) * totalRaw + buttonGapX)
-    Panel_Menu:SetSize(menu_Bg:GetSizeX() + buttonGapX * 6, menu_Bg:GetSizeY() + 70)
-    menuTitleBar:SetSize(Panel_Menu:GetSizeX() - 16, menuTitleBar:GetSizeY())
+    if isActionUiOpen or isGameTypeKorea() then
+      menu_Bg:SetSize(bgSizeX + buttonGapX * 2, (countrySizeNum + 2) * totalRaw + buttonGapX - 12)
+      Panel_Menu:SetSize(menu_Bg:GetSizeX() + buttonGapX * 6 - 10, menu_Bg:GetSizeY() + 110)
+      menuTitleBar:SetSize(Panel_Menu:GetSizeX() - 16, menuTitleBar:GetSizeY())
+      menu_Bg:ComputePos()
+      changeMenu:ComputePos()
+      changeMenu:SetShow(true)
+    else
+      menu_Bg:SetSize(bgSizeX + buttonGapX * 2, (countrySizeNum + 2) * totalRaw + buttonGapX - 12)
+      Panel_Menu:SetSize(menu_Bg:GetSizeX() + buttonGapX * 6 - 10, menu_Bg:GetSizeY() + 75)
+      menuTitleBar:SetSize(Panel_Menu:GetSizeX() - 16, menuTitleBar:GetSizeY())
+      menu_Bg:ComputePos()
+      changeMenu:SetShow(false)
+    end
     if CheckTutorialEnd() == false then
       (menuButtonBG[MenuButtonId.btn_UiSetting]):SetEnable(false)
       ;
@@ -1234,6 +1248,11 @@ end
 
 Panel_Menu_Close = function()
   -- function num : 0_20 , upvalues : IM
+  local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)
+  if currentMenuType == 2 then
+    Panel_Menu_Close_New()
+    return 
+  end
   Panel_Menu:SetShow(false, true)
   Panel_Menu:SetDragAll(false)
   Panel_Menu:SetIgnore(true)
@@ -1272,6 +1291,30 @@ FGlobal_GetGameExitIndex = function()
   return exitIndex
 end
 
+ChangeUI_Menu = function()
+  -- function num : 0_25
+  Panel_Menu_Close()
+  ;
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType, 2, (CppEnums.VariableStorageType).eVariableStorageType_User)
+  Panel_Menu_ShowToggle()
+end
+
+FGlobal_MenuType_Check = function()
+  -- function num : 0_26
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local userType = temporaryWrapper:getMyAdmissionToSpeedServer()
+  local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)
+  if currentMenuType == 0 then
+    if userType == 2 then
+      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType, 2, (CppEnums.VariableStorageType).eVariableStorageType_User)
+    else
+      ;
+      (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType, 1, (CppEnums.VariableStorageType).eVariableStorageType_User)
+    end
+  end
+end
+
 GameMenu_Init()
 registerEvent("onScreenResize", "panelMenu_OnScreenResize")
+changeMenu:addInputEvent("Mouse_LUp", "ChangeUI_Menu()")
 

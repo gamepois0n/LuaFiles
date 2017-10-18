@@ -216,10 +216,6 @@ PaGlobal_CheckedQuest.subscribeEvents = function(self)
   ;
   (self._uiTransBG):addInputEvent("Mouse_UpScroll", "QuestWidget_ScrollEvent( false )")
   ;
-  (self._uiTransBG):addInputEvent("Mouse_On", "FGlobal_QuestWidget_MouseOver( true )")
-  ;
-  (self._uiTransBG):addInputEvent("Mouse_Out", "FGlobal_QuestWidget_MouseOver( false )")
-  ;
   (self._uiNormalQuestGroup):addInputEvent("Mouse_DownScroll", "QuestWidget_ScrollEvent( true )")
   ;
   (self._uiNormalQuestGroup):addInputEvent("Mouse_UpScroll", "QuestWidget_ScrollEvent( false )")
@@ -261,10 +257,6 @@ PaGlobal_CheckedQuest.subscribeEvents = function(self)
   (self._uiFindGuild):addInputEvent("Mouse_On", "HandleOn_CheckedQuest_WantJoinGuild( true )")
   ;
   (self._uiFindGuild):addInputEvent("Mouse_Out", "HandleOn_CheckedQuest_WantJoinGuild( false )")
-  ;
-  (self._uiFindGuild):addInputEvent("Mouse_On", "FindGuild_Button_Simpletooltips( true )")
-  ;
-  (self._uiFindGuild):addInputEvent("Mouse_Out", "FindGuild_Button_Simpletooltips( false )")
   ;
   (self._uiFindGuild):addInputEvent("Mouse_LUp", "HandleClieked_CheckedQuest_WantJoinGuild()")
   ;
@@ -1235,6 +1227,9 @@ PaGlobal_CheckedQuest.updateQuestList = function(self, startPosition)
       ;
       (self._uiNormalQuestGroup):SetShow(true)
     end
+  end
+  do
+    Panel_CheckedQuest:SetEnableArea(0, 0, Panel_CheckedQuest:GetSizeX(), Panel_CheckedQuest:GetSizeY() + (PaGlobal_CheckedQuest._uiHistoryButton):GetSizeY())
   end
 end
 
@@ -3273,6 +3268,7 @@ end
 HandleOn_CheckedQuest_WantJoinGuild = function(isShow)
   -- function num : 0_119
   FGlobal_QuestWidget_MouseOver(isShow)
+  FindGuild_Button_Simpletooltips(isShow)
 end
 
 EventRadingOnQuest = function(questStaticWrapper, index)

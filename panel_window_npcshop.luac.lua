@@ -1276,6 +1276,10 @@ NpcShop_WindowClose = function()
     InventoryWindow_Close()
     audioPostEvent_SystemUi(1, 1)
     PaGlobal_TutorialManager:handleNpcShopWindowClose()
+    if PaGlobal_Camp:getIsCamping() then
+      InventoryWindow_Close()
+      PaGlobal_Camp:open()
+    end
   end
 end
 

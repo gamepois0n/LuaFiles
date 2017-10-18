@@ -277,28 +277,42 @@ PKChannelInfo_Init = function()
   (self._pkMainBG):SetSize((self._pkMainBG):GetSizeX(), (self._pkTitle):GetSizeY() + (self._pkDesc):GetTextSizeY() + 50)
   ;
   (self._pkSubBG):SetSize((self._pkSubBG):GetSizeX(), (self._pkDesc):GetTextSizeY())
-  if isGameTypeKorea() or isGameTypeJapan() or isGameTypeTaiwan() then
+  if isGameTypeKorea() then
     ChannelSelectInfo_Show()
     SpeedChannelInfo_Show()
+    PKChannelInfo_Show()
     warInfo_Show()
-    PKChannelInfo_Hide()
   else
-    if isGameTypeRussia() then
-      ChannelSelectInfo_Hide()
+    if isGameTypeJapan() or isGameTypeTaiwan() then
+      ChannelSelectInfo_Show()
       SpeedChannelInfo_Show()
-      PKChannelInfo_Show()
       warInfo_Show()
+      PKChannelInfo_Hide()
     else
-      if isGameTypeSA() then
-        SpeedChannelInfo_Hide()
-        ChannelSelectInfo_Show()
-        warInfo_Show()
-        PKChannelInfo_Hide()
-      else
+      if isGameTypeRussia() then
         ChannelSelectInfo_Hide()
-        SpeedChannelInfo_Hide()
-        warInfo_Hide()
-        PKChannelInfo_Hide()
+        SpeedChannelInfo_Show()
+        PKChannelInfo_Show()
+        warInfo_Show()
+      else
+        if isGameTypeSA() then
+          SpeedChannelInfo_Hide()
+          ChannelSelectInfo_Show()
+          warInfo_Show()
+          PKChannelInfo_Hide()
+        else
+          if isGameTypeEnglish() then
+            ChannelSelectInfo_Show()
+            SpeedChannelInfo_Show()
+            PKChannelInfo_Show()
+            warInfo_Show()
+          else
+            ChannelSelectInfo_Hide()
+            SpeedChannelInfo_Hide()
+            warInfo_Hide()
+            PKChannelInfo_Hide()
+          end
+        end
       end
     end
   end
@@ -878,17 +892,19 @@ Panel_SelectServer_Delta = function(deltaTime)
         _PA_ASSERT(channelName ~= nil, "서버 이름�\128 존재해야합니�\164.")
         if isGameServiceTypeDev() then
           channelName = channelName .. " " .. getDotIp(serverData) .. admissionDesc
+          ;
+          ((((_worldServerCtrls[index])._channelCtrls)[idx])._warIcon):SetShow(isBeingWar)
         elseif isBeingWar then
           if isVillageStart then
             channelName = channelName .. " " .. admissionDesc
             ;
-            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_On", "ServerSelect_Simpletooltip(true, 0, " .. R29_PC195 .. ", " .. idx .. ")")
+            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_On", "ServerSelect_Simpletooltip(true, 0, " .. R29_PC203 .. ", " .. idx .. ")")
             ;
             ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_Out", "ServerSelect_Simpletooltip(false)")
           else
             channelName = channelName .. " " .. admissionDesc
             ;
-            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_On", "ServerSelect_Simpletooltip(true, 1, " .. R29_PC195 .. ", " .. idx .. ")")
+            ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_On", "ServerSelect_Simpletooltip(true, 1, " .. R29_PC203 .. ", " .. idx .. ")")
             ;
             ((((_worldServerCtrls[index])._channelCtrls)[idx])._bgStatic):addInputEvent("Mouse_Out", "ServerSelect_Simpletooltip(false)")
           end
@@ -997,17 +1013,17 @@ Panel_SelectServer_Delta = function(deltaTime)
                                       if busyState == 0 then
                                         ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetShow(false)
                                       end
-                                      -- DECOMPILER ERROR at PC727: Overwrote pending register: R29 in 'AssignReg'
+                                      -- DECOMPILER ERROR at PC735: Overwrote pending register: R29 in 'AssignReg'
 
                                       ;
-                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetText(PAGetStringParam1(Defines.StringSheet_GAME, R29_PC195, "changeRealChannelTime", changeRealChannelTime))
+                                      ((((_worldServerCtrls[index])._channelCtrls)[idx])._changeChannel):SetText(PAGetStringParam1(Defines.StringSheet_GAME, R29_PC203, "changeRealChannelTime", changeRealChannelTime))
                                       local mainServerNo = ServerList_GetMainServerNo()
-                                      -- DECOMPILER ERROR at PC742: Overwrote pending register: R29 in 'AssignReg'
+                                      -- DECOMPILER ERROR at PC750: Overwrote pending register: R29 in 'AssignReg'
 
-                                      -- DECOMPILER ERROR at PC743: Overwrote pending register: R29 in 'AssignReg'
+                                      -- DECOMPILER ERROR at PC751: Overwrote pending register: R29 in 'AssignReg'
 
                                       if mainServerNo ~= -1 and serverData._serverNo == mainServerNo then
-                                        mainServerText:SetText(PAGetStringParam1(R29_PC195, "LUA_SERVERSELECT_SETMAINSERVER", "serverName", tostring(getChannelName(worldServerData._worldNo, serverData._serverNo))))
+                                        mainServerText:SetText(PAGetStringParam1(R29_PC203, "LUA_SERVERSELECT_SETMAINSERVER", "serverName", tostring(getChannelName(worldServerData._worldNo, serverData._serverNo))))
                                       end
                                       do
                                         local lastServerNo = temporaryWrapper:getLastServerNo()
@@ -1017,70 +1033,70 @@ Panel_SelectServer_Delta = function(deltaTime)
                                           txt_EnterLastJoinServer:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVERSELECT_LASTJOINSERVER_NUMBER", "lastJoinServer", tostring(getChannelName(worldServerData._worldNo, lastServerNo))))
                                         end
                                         ;
-                                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):addInputEvent("Mouse_LUp", "ServerList_SetMainServer(" .. R31_PC798 .. "," .. idx .. ")")
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        ((((_worldServerCtrls[index])._channelCtrls)[idx])._radioBtnMain):addInputEvent("Mouse_LUp", "ServerList_SetMainServer(" .. R31_PC806 .. "," .. idx .. ")")
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                        -- DECOMPILER ERROR at PC800: LeaveBlock: unexpected jumping out IF_STMT
+                                        -- DECOMPILER ERROR at PC808: LeaveBlock: unexpected jumping out IF_STMT
 
                                       end
                                     end
@@ -1300,7 +1316,7 @@ warInfo_onScreenResize = function()
   if isGameTypeSA() then
     (self._uiWarInfo):SetPosY((channelSelectInfo._mainBG):GetPosY() + (channelSelectInfo._mainBG):GetSizeY() + 10)
   else
-    if isGameTypeRussia() then
+    if isGameTypeRussia() or isGameTypeKorea() or isGameTypeEnglish() then
       (self._uiWarInfo):SetPosY((channelPKInfo._pkMainBG):GetPosY() + (channelPKInfo._pkMainBG):GetSizeY() + 10)
     else
       ;

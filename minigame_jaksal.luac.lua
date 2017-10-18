@@ -84,7 +84,6 @@ Panel_MiniGame_Jaksal_End = function()
   ;
   (ui._water):EraseAllEffect()
   Panel_MiniGame_Jaksal:SetShow(false, false)
-  Panel_MiniGame_Jaksal:RegisterUpdateFunc("")
   isStoppedGame = false
   jaksalFailCheck = true
   setForceMoveCamera(false)

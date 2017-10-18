@@ -262,7 +262,6 @@ end
 
 Panel_Minigame_Command_End = function()
   -- function num : 0_4 , upvalues : _commandEffectBG, isCommandFinished
-  Panel_Command:RegisterUpdateFunc("")
   _commandEffectBG:EraseAllEffect()
   Panel_Command:SetShow(false, false)
   isCommandFinished = true
@@ -273,7 +272,6 @@ local MiniGame_Command_OnSuccess = function()
   audioPostEvent_SystemUi(11, 13)
   ;
   ((getSelfPlayer()):get()):SetMiniGameResult(2)
-  Panel_Command:RegisterUpdateFunc("")
   isCommandFinished = true
   _sinGauge_Result_Perfect:ResetVertexAni()
   _sinGauge_Result_Perfect:SetVertexAniRun("Perfect_Ani", true)
@@ -294,7 +292,6 @@ local MiniGame_Command_OnFailed = function()
   ;
   ((getSelfPlayer()):get()):SetMiniGameResult(0)
   isCommandFinished = true
-  Panel_Command:RegisterUpdateFunc("")
   textControl:SetColor(UIColor.C_FFFF0000)
   textControl:SetFontColor(UIColor.C_FFFF0000)
   _sinGauge_Result_Bad:ResetVertexAni()

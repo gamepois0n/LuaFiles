@@ -237,8 +237,8 @@ SocialAction.Description_Setting = function(self, index)
   else
     ;
     (self._conditionText):SetShow(true)
-    if (self._conditionText):GetSizeX() < (self._conditionText):GetTextSizeX() then
-      isConditionGap = 60
+    if (self._conditionText):GetSizeY() < (self._conditionText):GetTextSizeY() then
+      isConditionGap = (self._conditionText):GetTextSizeY() + 10
     else
       isConditionGap = 35
     end

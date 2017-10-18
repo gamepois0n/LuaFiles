@@ -682,48 +682,37 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                                       if servantItem or isServantEquipOn then
                                                                                                         local temporaryWrapper = getTemporaryInformationWrapper()
                                                                                                         if temporaryWrapper ~= nil then
-                                                                                                          local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
-                                                                                                          do
-                                                                                                            if servantWrapper ~= nil then
-                                                                                                              local servantKind = servantWrapper:getServantKind()
-                                                                                                              if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
-                                                                                                                equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                              end
+                                                                                                          local campingWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_CampingTent)
+                                                                                                          if campingWrapper ~= nil then
+                                                                                                            local servantKind = campingWrapper:getServantKind()
+                                                                                                            if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+                                                                                                              campingItemWrapper = campingWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
                                                                                                             end
-                                                                                                            local campingWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_CampingTent)
+                                                                                                          else
                                                                                                             do
-                                                                                                              if campingWrapper ~= nil then
-                                                                                                                local servantKind = campingWrapper:getServantKind()
-                                                                                                                if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
-                                                                                                                  campingItemWrapper = campingWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                                end
-                                                                                                              end
+                                                                                                              local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
                                                                                                               do
-                                                                                                                local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
-                                                                                                                -- DECOMPILER ERROR at PC678: Confused about usage of register: R16 in 'UnsetPending'
-
-                                                                                                                if accSlotNo ~= nil then
-                                                                                                                  EquipItem_Lock.itemAccNo = accSlotNo
-                                                                                                                  equipItemWrapper = getEquipmentItem(accSlotNo)
-                                                                                                                else
-                                                                                                                  -- DECOMPILER ERROR at PC685: Confused about usage of register: R16 in 'UnsetPending'
-
-                                                                                                                  EquipItem_Lock.itemAccNo = -1
-                                                                                                                  equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                                end
-                                                                                                                if equipItemWrapper ~= nil and slotType ~= "Enchant" then
-                                                                                                                  showTooltip_Item(equippedTooltip, equipItemWrapper, false, true)
-                                                                                                                  ;
-                                                                                                                  (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                  local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
-                                                                                                                  ;
-                                                                                                                  ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                  ;
-                                                                                                                  (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                if servantWrapper ~= nil then
+                                                                                                                  local servantKind = servantWrapper:getServantKind()
+                                                                                                                  if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+                                                                                                                    equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+                                                                                                                  end
                                                                                                                 end
                                                                                                                 do
-                                                                                                                  if campingItemWrapper ~= nil and slotType ~= "Enchant" then
-                                                                                                                    showTooltip_Item(equippedTooltip, campingItemWrapper, false, true)
+                                                                                                                  local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
+                                                                                                                  -- DECOMPILER ERROR at PC679: Confused about usage of register: R16 in 'UnsetPending'
+
+                                                                                                                  if accSlotNo ~= nil then
+                                                                                                                    EquipItem_Lock.itemAccNo = accSlotNo
+                                                                                                                    equipItemWrapper = getEquipmentItem(accSlotNo)
+                                                                                                                  else
+                                                                                                                    -- DECOMPILER ERROR at PC686: Confused about usage of register: R16 in 'UnsetPending'
+
+                                                                                                                    EquipItem_Lock.itemAccNo = -1
+                                                                                                                    equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+                                                                                                                  end
+                                                                                                                  if equipItemWrapper ~= nil and slotType ~= "Enchant" then
+                                                                                                                    showTooltip_Item(equippedTooltip, equipItemWrapper, false, true)
                                                                                                                     ;
                                                                                                                     (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
                                                                                                                     local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
@@ -733,29 +722,41 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                                                     (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
                                                                                                                   end
                                                                                                                   do
-                                                                                                                    if slotType == "Enchant" then
-                                                                                                                      local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
-                                                                                                                      if isCash == false then
-                                                                                                                        showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true)
-                                                                                                                      end
+                                                                                                                    if campingItemWrapper ~= nil and slotType ~= "Enchant" then
+                                                                                                                      showTooltip_Item(equippedTooltip, campingItemWrapper, false, true)
                                                                                                                       ;
                                                                                                                       (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                      local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
+                                                                                                                      local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
                                                                                                                       ;
                                                                                                                       ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                                                       ;
                                                                                                                       (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
                                                                                                                     end
                                                                                                                     do
-                                                                                                                      if ((slot.icon):getParent()):IsUISubApp() then
-                                                                                                                        Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
-                                                                                                                        ;
-                                                                                                                        (equippedTooltip.mainPanel):OpenUISubApp()
-                                                                                                                        if not isEquipOn then
-                                                                                                                          (normalTooltip.mainPanel):OpenUISubApp()
+                                                                                                                      if slotType == "Enchant" then
+                                                                                                                        local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
+                                                                                                                        if isCash == false then
+                                                                                                                          showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true)
                                                                                                                         end
-                                                                                                                      else
-                                                                                                                        Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+                                                                                                                        ;
+                                                                                                                        (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+                                                                                                                        local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
+                                                                                                                        ;
+                                                                                                                        ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                        ;
+                                                                                                                        (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                      end
+                                                                                                                      do
+                                                                                                                        if ((slot.icon):getParent()):IsUISubApp() then
+                                                                                                                          Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
+                                                                                                                          ;
+                                                                                                                          (equippedTooltip.mainPanel):OpenUISubApp()
+                                                                                                                          if not isEquipOn then
+                                                                                                                            (normalTooltip.mainPanel):OpenUISubApp()
+                                                                                                                          end
+                                                                                                                        else
+                                                                                                                          Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+                                                                                                                        end
                                                                                                                       end
                                                                                                                     end
                                                                                                                   end

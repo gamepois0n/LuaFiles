@@ -65,14 +65,11 @@ IngameCustomize_Hide = function()
   else
     do
       HandleClicked_CloseIngameCustomization()
-      do
-        if gameExitPhoto == true then
-          local gameExitIndex = FGlobal_GetGameExitIndex()
-          TargetWindow_ShowToggle(gameExitIndex)
-          refreshCharacterInfoData(CharacterSlotIndex + 1)
-        end
-        gameExitPhoto = false
+      if gameExitPhoto == true then
+        GameExitShowToggle(false)
+        refreshCharacterInfoData(CharacterSlotIndex + 1)
       end
+      gameExitPhoto = false
     end
   end
 end

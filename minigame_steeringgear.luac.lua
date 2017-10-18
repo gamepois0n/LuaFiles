@@ -104,7 +104,6 @@ Panel_Minigame_SteeringWheel_End = function()
     ;
     ((getSelfPlayer()):get()):SetMiniGameResult(1)
   end
-  Panel_SteeringWheel:RegisterUpdateFunc("")
   Panel_SteeringWheel:SetShow(false, false)
 end
 

@@ -856,6 +856,7 @@ ChatInput_Show = function()
     chatting_startAction()
     curChatMsgCnt = chatting_getMessageHistoryCount()
     curWhisperMsgCnt = chatting_getTargetHistoryCount()
+    ToClient_ClearLinkedGuildList()
   end
 end
 
@@ -872,6 +873,7 @@ ChatInput_Close = function()
   -- function num : 0_45 , upvalues : chatInput
   ClearFocusEdit()
   ToClient_ClearLinkedItemList()
+  ToClient_ClearLinkedGuildList()
   chatInput:clearLinkedItem()
   if Panel_Chatting_Input:IsShow() then
     Panel_Chatting_Input:SetShow(false, true)

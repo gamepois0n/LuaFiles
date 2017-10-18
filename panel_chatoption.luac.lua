@@ -1390,7 +1390,7 @@ HandleClicked_ChattingOption_SetFilter = function(panelIdex)
     local chatPanel = ToClient_getChattingPanel(panelIdx)
     chatPanel:setChatFontSizeType(ChattingOption_convertFontSizeToChatFontType(currentFontSize))
   end
-  prevFontSizeType = currentFontSize
+  prevFontSizeType = ChattingOption_convertFontSizeToChatFontType(currentFontSize)
   local _transparency = _alphaSlider_ControlBTN:GetPosX() / (_alphaSlider_Control:GetSizeX() - _alphaSlider_ControlBTN:GetSizeX())
   chat:setTransparency(_transparency)
   if panelIdex == 0 then
@@ -1403,7 +1403,7 @@ HandleClicked_ChattingOption_SetFilter = function(panelIdex)
   end
   do
     FGlobal_ChatOption_SetIsShowTimeString(panelIdex, _checkButton_ChatTime:IsCheck())
-    -- DECOMPILER ERROR at PC157: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC160: Confused about usage of register: R5 in 'UnsetPending'
 
     _prevIsCheckChatTime[panelIdex] = _checkButton_ChatTime:IsCheck()
     ToClient_SaveUiInfo(false)

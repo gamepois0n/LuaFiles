@@ -558,6 +558,14 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             FGlobal_MonsterRanking_Close()
             return 
           end
+          if Panel_ChatOption:GetShow() then
+            ChattingOption_Close()
+            return 
+          end
+          if Panel_Window_BuildingBuff:GetShow() then
+            PaGlobal_BuildingBuff:close()
+            return 
+          end
           if check_ShowWindow() then
             close_WindowPanelList()
             ;
@@ -594,7 +602,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             return 
           end
         end
-        -- DECOMPILER ERROR at PC784: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC801: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Help) and Panel_KeyboardHelp ~= nil then
           if FGlobal_KeyboardHelpShow() then
@@ -604,7 +612,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
         end
         do return  end
-        -- DECOMPILER ERROR at PC819: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC836: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           if Panel_ProductNote_ShowToggle() then
@@ -666,7 +674,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC987: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC1004: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -824,7 +832,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
               return 
             end
-            -- DECOMPILER ERROR at PC1423: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1440: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -841,7 +849,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            -- DECOMPILER ERROR at PC1466: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1483: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -938,7 +946,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               Panel_NaviButton:SetShow(false)
               audioPostEvent_SystemUi(0, 15)
             end
-            -- DECOMPILER ERROR: 134 unprocessed JMP targets
+            -- DECOMPILER ERROR: 136 unprocessed JMP targets
           end
         end
       end
@@ -2345,6 +2353,11 @@ GlobalKeyBinder_Update = function(deltaTime)
       return 
     end
     PaGlobal_EasyBuy:Close()
+    return 
+  end
+  if Panel_Window_StampCoupon:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+    FGlobal_PearlStamp_Close()
+    GlobalKeyBinder_Clear()
     return 
   end
   if UIMode.eUIMode_Housing == _uiMode then

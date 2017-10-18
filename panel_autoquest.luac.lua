@@ -176,7 +176,7 @@ end
 FGlobal_MouseclickTest = function()
   -- function num : 0_7
   self = PaGlobal_AutoQuestMsg
-  FGlobal_AutoQuestBlackSpiritMessage("ì™\128ì•™~")
+  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WANG"))
   if PaGlobal_AutoQuestMsg._accessBlackSpiritClick ~= nil then
     (PaGlobal_AutoQuestMsg._accessBlackSpiritClick)()
     PaGlobal_AutoQuestMsg:AniStart()

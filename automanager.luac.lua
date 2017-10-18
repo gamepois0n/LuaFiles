@@ -3,14 +3,14 @@
 
 -- params : ...
 -- function num : 0
-AutoStateType = {IDLE = 1, MOVE = 2, WAIT_FOR_PRESSBUTTON = 3, HUNT = 4, DIALOG_INTERACTION = 5, DEAD = 6}
-AutoStateName = {"IDLE", "MOVE", "Wait_For_PressButton", "Hunt", "Dialog_Interaction", "Dead"}
+AutoStateType = {IDLE = 1, MOVE = 2, WAIT_FOR_PRESSBUTTON = 3, HUNT = 4, DIALOG_INTERACTION = 5, DEAD = 6, EXCEPTION_GUIDE = 7}
+AutoStateName = {"IDLE", "MOVE", "WAIT_FOR_PRESSBUTTON", "HUNT", "DIALOG_INTERACTION", "DEAD", "EXCEPTION_GUIDE"}
 PaGlobal_AutoManager = {_ActiveState = false, 
 _stateUnit = {}
 , 
 _storageStateUnit = {}
 , _questNo = -1, _updateDelay = 0, _updateTime = 3}
--- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.init = function(self)
   -- function num : 0_0
@@ -20,40 +20,41 @@ PaGlobal_AutoManager.init = function(self)
   AutoState_WaitForPressButton:init()
   AutoState_DialogInteraction:init()
   AutoState_Dead:init()
-  -- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+  AutoState_ExceptionGuide:init()
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._storageStateUnit)[AutoStateType.IDLE] = AutoState_Idle
-  -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._storageStateUnit)[AutoStateType.MOVE] = AutoState_Move
-  -- DECOMPILER ERROR at PC32: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._storageStateUnit)[AutoStateType.HUNT] = AutoState_Hunt
-  -- DECOMPILER ERROR at PC37: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC40: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._storageStateUnit)[AutoStateType.WAIT_FOR_PRESSBUTTON] = AutoState_WaitForPressButton
-  -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC45: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._storageStateUnit)[AutoStateType.DIALOG_INTERACTION] = AutoState_DialogInteraction
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC50: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._storageStateUnit)[AutoStateType.DEAD] = AutoState_Dead
+  -- DECOMPILER ERROR at PC55: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._storageStateUnit)[AutoStateType.EXCEPTION_GUIDE] = AutoState_ExceptionGuide
   self._ActiveState = false
-  self._stateUnit = AutoState_WaitForPressButton
+  self._stateUnit = {}
   _questNo = -1
-  _PA_LOG("Íπ\128Í∑úÎ≥¥", "_ActiveStateÍ∞\128 falseÎê\168!!!")
-  local traceString = (debug.traceback)()
-  traceString = (string.gsub)(traceString, "d:/output/dev/UI_Data/Script/", "")
-  _PA_LOG("Íπ\128Í∑úÎ≥¥", "traceBack:" .. traceString)
 end
 
--- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC34: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.frameMove = function(self, deltaTime)
   -- function num : 0_1
@@ -69,10 +70,13 @@ PaGlobal_AutoManager.frameMove = function(self, deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC37: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.start = function(self)
   -- function num : 0_2
+  if ToClient_IsContentsGroupOpen("301") == false then
+    return 
+  end
   local questList = ToClient_GetQuestList()
   if questList == nil then
     _PA_ASSERT(false, "Quest Ï†ïÎ≥¥Í∞\128 nilÏûÖÎãàÎã\164..AutoState_WaitForPressButton:start")
@@ -92,6 +96,7 @@ PaGlobal_AutoManager.start = function(self)
   end
   self:init()
   self._ActiveState = true
+  self._stateUnit = AutoState_WaitForPressButton
   ;
   (self._stateUnit):start()
   local questList = ToClient_GetQuestList()
@@ -103,7 +108,7 @@ PaGlobal_AutoManager.start = function(self)
   ToClient_AutoPlayerStart()
 end
 
--- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC40: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.stop = function(self)
   -- function num : 0_3
@@ -119,7 +124,7 @@ Auto_FrameMove = function(deltaTime)
   PaGlobal_AutoManager:frameMove(deltaTime)
 end
 
--- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.checkException = function(self)
   -- function num : 0_5
@@ -127,7 +132,7 @@ PaGlobal_AutoManager.checkException = function(self)
   PaGlobal_AutoManager:checkUseToRecoverPosion()
 end
 
--- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.checkReturnToTown = function(self)
   -- function num : 0_6
@@ -153,7 +158,7 @@ PaGlobal_AutoManager.checkReturnToTown = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoManager.checkUseToRecoverPosion = function(self)
   -- function num : 0_7
@@ -166,8 +171,18 @@ PaGlobal_AutoManager.checkUseToRecoverPosion = function(self)
       if quickSlotInfo ~= nil and ((CppEnums.QuickSlotType).eItem == quickSlotInfo._type or (CppEnums.QuickSlotType).eCashItem == quickSlotInfo._type) then
         local itemKey = (quickSlotInfo._itemKey):get()
         for hpIdx = 0, #potionData.hp - 1 do
-          if itemKey == (potionData.hp)[hpIdx] and quickSlot_UseSlot(i) == true then
-            FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_DRUG_POTION"))
+          if itemKey == (potionData.hp)[hpIdx] then
+            local inventoryType = QuickSlot_GetInventoryTypeFrom(quickSlotInfo._type)
+            local inventory = selfPlayer:getInventoryByType(inventoryType)
+            local invenSlotNo = inventory:getSlot(quickSlotInfo._itemKey)
+            local itemInfoWrapper = (getInventoryItemByType(inventoryType, invenSlotNo))
+            local itemInfo = nil
+            if itemInfoWrapper ~= nil then
+              itemInfo = itemInfoWrapper:get()
+            end
+            if itemInfo ~= nil and itemInfo:getCount_s64() ~= 0 and quickSlot_UseSlot(i) == false then
+              FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_DRUG_POTION"))
+            end
           end
         end
       end
@@ -177,6 +192,9 @@ end
 
 Auto_TransferState = function(typeState)
   -- function num : 0_8
+  if PaGlobal_AutoManager._stateUnit == false then
+    return 
+  end
   if PaGlobal_AutoManager._stateUnit ~= nil then
     _PA_LOG("Íπ\128Í∑úÎ≥¥", "before: " .. AutoStateName[(PaGlobal_AutoManager._stateUnit)._state] .. "    after: " .. AutoStateName[typeState])
   end
@@ -188,7 +206,7 @@ Auto_TransferState = function(typeState)
   end
   ;
   (PaGlobal_AutoManager._stateUnit):endProc()
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC52: Confused about usage of register: R2 in 'UnsetPending'
 
   PaGlobal_AutoManager._stateUnit = (PaGlobal_AutoManager._storageStateUnit)[typeState]
   ;

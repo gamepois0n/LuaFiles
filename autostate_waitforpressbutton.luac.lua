@@ -9,28 +9,29 @@ AutoState_WaitForPressButton = {_state = AutoStateType.WAIT_FOR_PRESSBUTTON,
 MAINSTATE = {NONE = 0, NORMAL = 1, NEED_TO_MOVE = 2, NEED_TO_HUNT = 3}
 , 
 SUBSTATE = {NONE = 0, MOUSE_L = 1, MOUSE_L_FOR_DIALOG = 2, KEYBOARD_R = 3, MOUSE_MOVING = 4, SELET_REWARD = 5, SHOW_MOUSE = 6, ESCAPE = 7, NAVIGATION_T = 8, AUTONAVIMOVE_CLICK = 9, MOUSE_L_FOR_ACCEPT = 10, NPC_INTERACTION_R = 11}
-, _mainState = 0, _subState = 0, _pressDelay = 0, _printTime = 3, _updateChangeDelay = 0, _updateChangeTime = 1, _mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE, _mouseVisible = false, _meetToggle = false}
--- DECOMPILER ERROR at PC42: Confused about usage of register: R2 in 'UnsetPending'
+, _mainState = 0, _subState = 0, _pressDelay = 0, _printTime = 3, _updateChangeDelay = 0, _updateChangeTime = 1, _mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE, _mouseVisible = false, _meetToggle = false, _meetNpcActorKey = 0, _meetNpcActorName = ""}
+-- DECOMPILER ERROR at PC44: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.init = function(self)
   -- function num : 0_0
 end
 
--- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC49: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.start = function(self)
   -- function num : 0_1 , upvalues : AutoState_MouseMoving_TargetButton, IM
   self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
   self._mainState = (self.MAINSTATE).NONE
   self._subState = (self.SUBSTATE).NONE
-  self:checkChangeState()
   self._mouseVisible = (UI.Get_ProcessorInputMode)() == IM.eProcessorInputMode_GameMode
+  self._meetNpcActorKey = 0
+  self:checkChangeState()
   self._renderingModeChange = ToClient_isCheckRenderModeDialog()
   self._meetToggle = ToClient_checkNearMeetNPC()
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC50: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC52: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.printMessage = function(self)
   -- function num : 0_2
@@ -60,7 +61,7 @@ AutoState_WaitForPressButton.printMessage = function(self)
                     FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_MOVE_POSSESSEDBY_BLACKSPIRIT"))
                   else
                     if self._subState == (AutoState_WaitForPressButton.SUBSTATE).NPC_INTERACTION_R then
-                      FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_NPC_INTERACTION_R"))
+                      FGlobal_AutoQuestBlackSpiritMessage(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_NPC_INTERACTION_R", "characterKey", self._meetNpcActorName, "InteractionKey", keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction)))
                     end
                   end
                 end
@@ -73,7 +74,7 @@ AutoState_WaitForPressButton.printMessage = function(self)
   else
     if self._mainState == (AutoState_WaitForPressButton.MAINSTATE).NEED_TO_MOVE then
       if self._subState == (AutoState_WaitForPressButton.SUBSTATE).NPC_INTERACTION_R then
-        FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_NPC_INTERACTION_R"))
+        FGlobal_AutoQuestBlackSpiritMessage(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_NPC_INTERACTION_R", "characterKey", self._meetNpcActorName, "InteractionKey", keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction)))
       else
         FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_MOVE_POSSESSEDBY_BLACKSPIRIT"))
       end
@@ -84,11 +85,11 @@ AutoState_WaitForPressButton.printMessage = function(self)
     end
   end
   if self._subState == (AutoState_WaitForPressButton.SUBSTATE).NPC_INTERACTION_R then
-    FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_NPC_INTERACTION_R"))
+    FGlobal_AutoQuestBlackSpiritMessage(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WAITFORBUTTON_NPC_INTERACTION_R", "characterKey", self._meetNpcActorName, "InteractionKey", keyCustom_GetString_ActionKey((CppEnums.ActionInputType).ActionInputType_Interaction)))
   end
 end
 
--- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC56: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.update = function(self, deltaTime)
   -- function num : 0_3 , upvalues : IM
@@ -103,7 +104,7 @@ AutoState_WaitForPressButton.update = function(self, deltaTime)
     self._updateChangeDelay = 0
     local questList = ToClient_GetQuestList()
     local uiQuestInfo = questList:getMainQuestInfo()
-    if self._mainState == (self.MAINSTATE).NEED_TO_MOVE and Auto_IsPlayerInsideQuestArea(uiQuestInfo) == 0 then
+    if self._mainState == (self.MAINSTATE).NEED_TO_MOVE and (Auto_IsPlayerInsideQuestArea(uiQuestInfo) == 0 or Auto_FindNearQuestMonster() == true) then
       self:checkChangeState()
       return 
     else
@@ -112,14 +113,13 @@ AutoState_WaitForPressButton.update = function(self, deltaTime)
         return 
       end
     end
-    local uiQuestInfo = questList:getMainQuestInfo()
     if uiQuestInfo._isCleared then
       local isAccepted = uiQuestInfo._isProgressing
     end
     if self._subState == (AutoState_WaitForPressButton.SUBSTATE).NPC_INTERACTION_R and ToClient_checkNearMeetNPC() == false then
       self:checkChangeState()
     else
-      if (uiQuestInfo:isSatisfied() == 0 or isAccepted == false) and ToClient_checkNearMeetNPC() == true then
+      if (uiQuestInfo:isSatisfied() == 0 or isAccepted == false) and ToClient_checkNearMeetNPC() ~= 0 then
         self:checkChangeState()
       end
     end
@@ -150,7 +150,7 @@ AutoState_WaitForPressButton.update = function(self, deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC57: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC59: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.endProc = function(self)
   -- function num : 0_4
@@ -160,7 +160,7 @@ AutoState_WaitForPressButton.endProc = function(self)
   PaGlobal_AutoQuestMsg._accessBlackSpiritClick = nil
 end
 
--- DECOMPILER ERROR at PC62: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC64: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.checkChangeState = function(self)
   -- function num : 0_5 , upvalues : IM, AutoState_MouseMoving_TargetButton
@@ -193,81 +193,96 @@ AutoState_WaitForPressButton.checkChangeState = function(self)
   local isComplete = questCondition == QuestConditionCheckType.eQuestConditionCheckType_Complete
   local questStatic = questList_getQuestStatic((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest)
   local accecptNpc = (questStatic:getAccecptNpc()):get()
+  local isCompleteBlackSpirit = questStatic:isCompleteBlackSpirit()
+  local resIsPlayerInsideQuestArea = Auto_IsPlayerInsideQuestArea(uiQuestInfo)
   do
-    do
-      local isCompleteBlackSpirit = questStatic:isCompleteBlackSpirit()
-      if isComplete == false and Auto_IsPlayerInsideQuestArea(uiQuestInfo) == 0 then
-        if Auto_FindNearQuestMonster() == true then
-          self:setMainState((self.MAINSTATE).NEED_TO_HUNT)
-          -- DECOMPILER ERROR at PC82: Confused about usage of register: R11 in 'UnsetPending'
-
-          PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToHunt_AccessBlackSpiritclick
-        else
-          self:setMainState((self.MAINSTATE).NEED_TO_MOVE)
-          if navi == false then
-            HandleClicked_QuestWindow_FindWay((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest, questCondition, false)
-            -- DECOMPILER ERROR at PC102: Confused about usage of register: R11 in 'UnsetPending'
-
-            PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToMove_AccessBlackSpiritclick
-          end
-        end
-      elseif isAccepted == 0 and accecptNpc ~= 0 then
+    local isPlayerInsideQuestArea = resIsPlayerInsideQuestArea == 0
+    if isAccepted == 0 then
+      if accecptNpc ~= 0 then
         self:setMainState((self.MAINSTATE).NEED_TO_MOVE)
-        _PA_LOG("�\128규보", tostring(navi) .. ", " .. tostring(questStatic:isCompleteBlackSpirit()))
-        if navi == false and questStatic:isCompleteBlackSpirit() == false then
-          HandleClicked_QuestWindow_FindWay((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest, questCondition, false)
-        end
       else
-        -- DECOMPILER ERROR at PC158: Unhandled construct in 'MakeBoolean' P3
-
-        if (isComplete == true and isCompleteBlackSpirit) or isComplete ~= false or isComplete == false and accecptNpc == 0 and isCompleteBlackSpirit then
-          self:setMainState((self.MAINSTATE).NORMAL)
-        elseif Auto_IsPlayerInsideQuestArea(uiQuestInfo) == -1 then
-          self:setMainState((self.MAINSTATE).NEED_TO_MOVE)
-          if navi == false and questStatic:isCompleteBlackSpirit() == false then
-            HandleClicked_QuestWindow_FindWay((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest, questCondition, false)
-          end
-          -- DECOMPILER ERROR at PC187: Confused about usage of register: R11 in 'UnsetPending'
-
-          PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToMove_AccessBlackSpiritclick
-        else
-          _PA_LOG("�\128규보", "else�\184")
-          self:setMainState((self.MAINSTATE).NORMAL)
+        self:setMainState((self.MAINSTATE).NORMAL)
+      end
+    elseif isComplete == false then
+      if Auto_FindNearQuestMonster() == true then
+        self:setMainState((self.MAINSTATE).NEED_TO_HUNT)
+      else
+        self:setMainState((self.MAINSTATE).NEED_TO_MOVE)
+        if isPlayerInsideQuestArea == true and AutoState_ExceptionGuide:checkException((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest) == true then
+          Auto_TransferState(AutoStateType.EXCEPTION_GUIDE)
+          return 
         end
       end
-      self._pressDelay = self._printTime
-      if navi == true and ToClient_getNaviEndPointDist() > 200 and (self.MAINSTATE).NEED_TO_HUNT ~= self._mainState then
-        self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).NAVIGATION_T)
-        -- DECOMPILER ERROR at PC217: Confused about usage of register: R4 in 'UnsetPending'
+    else
+      -- DECOMPILER ERROR at PC137: Unhandled construct in 'MakeBoolean' P3
 
-        PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToMove_AccessBlackSpiritclick
-        return 
+      if (isComplete == true and isCompleteBlackSpirit == true) or isComplete ~= false or isComplete == false and accecptNpc == 0 and isCompleteBlackSpirit == true then
+        self:setMainState((self.MAINSTATE).NORMAL)
+      else
+        self:setMainState((self.MAINSTATE).NORMAL)
       end
-      if (self._mainState == (self.MAINSTATE).NEED_TO_MOVE and isAccepted == 0 and accecptNpc == 0) or ToClient_checkNearMeetNPC() == true then
-        self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).NPC_INTERACTION_R)
-        return 
+    end
+    self._pressDelay = self._printTime
+    if navi == true and ToClient_getNaviEndPointDist() > 200 and (self.MAINSTATE).NEED_TO_HUNT ~= self._mainState then
+      self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).NAVIGATION_T)
+      -- DECOMPILER ERROR at PC163: Confused about usage of register: R4 in 'UnsetPending'
+
+      PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToMove_AccessBlackSpiritclick
+      return 
+    end
+    if self._mainState ~= (self.MAINSTATE).NEED_TO_MOVE or isAccepted ~= 0 or accecptNpc ~= 0 then
+      do
+        local meetNpcKey = ToClient_checkNearMeetNPC()
+        if meetNpcKey ~= 0 then
+          self._meetNpcActorKey = meetNpcKey
+          self._meetNpcActorName = (getNpcActor(self._meetNpcActorKey)):getName()
+          self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).NPC_INTERACTION_R)
+          return 
+        end
+        if (UI.Get_ProcessorInputMode)() == IM.eProcessorInputMode_GameMode then
+          self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).SHOW_MOUSE)
+          return 
+        end
+        if uiQuestInfo:isSatisfied() == 0 then
+          self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_MOVING)
+          self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
+          return 
+        end
+        if self._mainState == (self.MAINSTATE).NORMAL then
+          self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_MOVING)
+          self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
+        end
+        -- DECOMPILER ERROR: 17 unprocessed JMP targets
       end
-      if (UI.Get_ProcessorInputMode)() == IM.eProcessorInputMode_GameMode then
-        self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).SHOW_MOUSE)
-        return 
-      end
-      if uiQuestInfo:isSatisfied() == 0 then
-        self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_MOVING)
-        self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
-        return 
-      end
-      if self._mainState == (self.MAINSTATE).NORMAL then
-        self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_MOVING)
-        self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON
-      end
-      -- DECOMPILER ERROR: 17 unprocessed JMP targets
     end
   end
 end
 
 AutoState_NeedToMove_AccessBlackSpiritclick = function()
   -- function num : 0_6
-  ToClient_NaviReStart()
+  local questList = ToClient_GetQuestList()
+  local uiQuestInfo = questList:getMainQuestInfo()
+  local resIsPlayerInsideQuestArea = Auto_IsPlayerInsideQuestArea(uiQuestInfo)
+  local isPlayerInsideQuestArea = resIsPlayerInsideQuestArea == 0
+  local questStatic = (questList_getQuestStatic((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest))
+  do
+    local questCondition = nil
+    if uiQuestInfo:isSatisfied() == true then
+      questCondition = QuestConditionCheckType.eQuestConditionCheckType_Complete
+    elseif isAccepted == 0 then
+      questCondition = QuestConditionCheckType.eQuestConditionCheckType_NotAccept
+    else
+      questCondition = QuestConditionCheckType.eQuestConditionCheckType_Progress
+    end
+    if ToClient_currentNaviisMainQuest() == false then
+      _QuestWidget_FindTarget_DrawMapPath((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest, questCondition, false)
+    elseif ToClient_getNaviEndPointDist() < 500 then
+      ToClient_DeleteNaviGuideByGroup(0)
+      _QuestWidget_FindTarget_DrawMapPath((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest, questCondition, false)
+    end
+    ToClient_NaviReStart()
+    -- DECOMPILER ERROR: 6 unprocessed JMP targets
+  end
 end
 
 AutoState_NeedToHunt_AccessBlackSpiritclick = function()
@@ -275,7 +290,7 @@ AutoState_NeedToHunt_AccessBlackSpiritclick = function()
   Auto_TransferState(AutoStateType.HUNT)
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC72: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.MouseUpdate = function(self)
   -- function num : 0_8 , upvalues : AutoState_MouseMoving_TargetButton
@@ -284,12 +299,20 @@ AutoState_WaitForPressButton.MouseUpdate = function(self)
   end
   if self._mouseMovingTargetButton == AutoState_MouseMoving_TargetButton.AUTO_NAVI_BUTTON then
     local questWidget = PaGlobal_MainQuest._uiAutoNaviBtn
-    local posX = Panel_MainQuest:GetPosX() + questWidget:GetPosX() + questWidget:GetSizeX() / 2
-    local posY = Panel_MainQuest:GetPosY() + questWidget:GetPosY() + questWidget:GetSizeY() / 2
+    local posX = Panel_MainQuest:GetPosX()
+    local posY = Panel_MainQuest:GetPosY()
+    if questWidget:GetShow() == true then
+      posX = posX + questWidget:GetPosX() + questWidget:GetSizeX() / 2
+      posY = posY + questWidget:GetPosY() + questWidget:GetSizeY() / 2
+    else
+      posX = posX + 25
+      posY = posY + 10
+      _PA_LOG("�\128규보", "MouseUpdate, 오토네비 버튼�\132 찾을 �\152 없다")
+    end
     if Auto_MouseMove(posX, posY) == false then
       local questList = ToClient_GetQuestList()
       local uiQuestInfo = questList:getMainQuestInfo()
-      if uiQuestInfo:isSatisfied() == true then
+      if uiQuestInfo:isSatisfied() == true or not uiQuestInfo._isCleared and not uiQuestInfo._isProgressing then
         self:setWaitState((AutoState_WaitForPressButton.SUBSTATE).MOUSE_L_FOR_DIALOG)
       else
         if isVisibleAcceptButton() == true then
@@ -303,7 +326,7 @@ AutoState_WaitForPressButton.MouseUpdate = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC75: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.setWaitState = function(self, waitState)
   -- function num : 0_9
@@ -313,16 +336,27 @@ AutoState_WaitForPressButton.setWaitState = function(self, waitState)
   _PA_LOG("�\128규보", "Wait_Change : " .. tostring(self._subState) .. "   " .. tostring(strSUBSTATE[waitState]))
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC78: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.setMainState = function(self, mainState)
   -- function num : 0_10
   self._mainState = mainState
+  -- DECOMPILER ERROR at PC7: Confused about usage of register: R2 in 'UnsetPending'
+
+  if (self.MAINSTATE).NEED_TO_MOVE == mainState then
+    PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToMove_AccessBlackSpiritclick
+  else
+    -- DECOMPILER ERROR at PC15: Confused about usage of register: R2 in 'UnsetPending'
+
+    if (self.MAINSTATE).NEED_TO_HUNT == mainState then
+      PaGlobal_AutoQuestMsg._accessBlackSpiritClick = AutoState_NeedToHunt_AccessBlackSpiritclick
+    end
+  end
   local strMainState = {"NORMAL", "NEED_TO_MOVE", "NEED_TO_HUNT"; [0] = "NONE"}
   _PA_LOG("�\128규보", "Main_Change : " .. tostring(self._mainState) .. "   " .. tostring(strMainState[mainState]))
 end
 
--- DECOMPILER ERROR at PC80: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC82: Confused about usage of register: R2 in 'UnsetPending'
 
 AutoState_WaitForPressButton.statesInit = function(self)
   -- function num : 0_11 , upvalues : AutoState_MouseMoving_TargetButton

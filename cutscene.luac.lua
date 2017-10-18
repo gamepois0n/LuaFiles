@@ -127,6 +127,5 @@ registerEvent("FromClient_PlayCutScene", "FromClient_PlayCutScene")
 registerEvent("FromClient_StopCutScene", "FromClient_StopCutScene")
 registerEvent("FromClient_SetScreenAlpha", "FromClient_SetScreenAlpha")
 registerEvent("FromClient_SetSubtitle", "FromClient_SetSubtitle")
-Panel_Cutscene:RegisterUpdateFunc("Update_Subtitle")
 renderMode:setClosefunctor(renderMode, FromClient_StopCutScene)
 

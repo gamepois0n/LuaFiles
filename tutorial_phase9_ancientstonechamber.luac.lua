@@ -14,6 +14,7 @@ _regionKeyRawList = {[1] = 137}
 
 PaGlobal_TutorialPhase_AncientStoneChamber.checkPossibleForPhaseStart = function(self, stepNo)
   -- function num : 0_0
+  do return false end
   if self._isPhaseOpen == false then
     _PA_LOG("곽민�\176", "튜토리얼 Phase�\128 닫혀있으�\128�\156 튜토리얼�\132 시작하지 않습니다. _phaseNo : " .. tostring(self._phaseNo))
     return false

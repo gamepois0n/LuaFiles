@@ -16,6 +16,19 @@ local IM = CppEnums.EProcessorInputMode
 local _math_AddVectorToVector = (Util.Math).AddVectorToVector
 local _math_MulNumberToVector = (Util.Math).MulNumberToVector
 local UILink = {treeView = (UI.getChildControl)(Panel_NpcNavi, "Tree_View"), closeNpcNavi = (UI.getChildControl)(Panel_NpcNavi, "Button_Win_Close"), staticSearchBack = (UI.getChildControl)(Panel_NpcNavi, "StaticSearchBack"), editSearchText = (UI.getChildControl)(Panel_NpcNavi, "EditSearchText"), btnSearch = (UI.getChildControl)(Panel_NpcNavi, "BtnSearch"), textSubject = (UI.getChildControl)(Panel_NpcNavi, "StaticText_Subject"), errorMessage = (UI.getChildControl)(Panel_NpcNavi, "StaticText_ErrorNotice"), tooltip = Panel_Tooltip_NpcNavigation, tooltip_NpcName = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Tooltip_NpcName"), tooltip_text = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Tooltip_NpcDescription"), tooltip_itemName = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_ItemName"), tooltip_Icon = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Static_Icon"), tooltip_NeedExplorePoint = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_NeedExplorePoint"), tooltip_Description = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_Description"), tooltip_NotFind = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_NotFound"), tooltip_ProgressBG = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Static_ProgressBG"), tooltip_CircularProgress = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "CircularProgress_Current"), tooltip_FruitageValue = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "StaticText_Fruitage_Value"), tooltip_GiftIcon = (UI.getChildControl)(Panel_Tooltip_NpcNavigation, "Static_GiftIcon"), initPosX = Panel_NpcNavi:GetPosX(), initPosY = Panel_NpcNavi:GetPosY()}
+local townBg = (UI.getChildControl)(Panel_NpcNavi, "Static_Bg3")
+local townNavi = {[5] = (UI.getChildControl)(townBg, "Button_1"), [32] = (UI.getChildControl)(townBg, "Button_2"), [77] = (UI.getChildControl)(townBg, "Button_3"), [202] = (UI.getChildControl)(townBg, "Button_4"), [701] = (UI.getChildControl)(townBg, "Button_6")}
+local territoryTownData = {
+[5] = {_x = 8489.57, _y = -7818.84, _z = 82973.3, _cardKey = 3001, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_1"), _isOpen = true}
+, 
+[32] = {_x = 40853.2, _y = -3474.33, _z = -50928, _cardKey = 3058, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_2"), _isOpen = true}
+, 
+[77] = {_x = -254083, _y = -2754.48, _z = -40846.4, _cardKey = 3177, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_3"), _isOpen = ToClient_IsContentsGroupOpen("2")}
+, 
+[202] = {_x = 364177, _y = -4957.73, _z = -74140.1, _cardKey = 3188, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_4"), _isOpen = ToClient_IsContentsGroupOpen("3")}
+, 
+[701] = {_x = -514130, _y = 8984.42, _z = -455421, _cardKey = 3454, _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_WAREHOUSE_6"), _isOpen = ToClient_IsContentsGroupOpen("5")}
+}
 local resizingGap = {treeGap = Panel_NpcNavi:GetSizeX() - (UILink.treeView):GetSizeX(), tooltipDescExplorePointGap = (UILink.tooltip_NeedExplorePoint):GetPosY() - (UILink.tooltip_Description):GetPosY() - (UILink.tooltip_Description):GetTextSizeY(), tooltipExplorePointPanelGap = Panel_Tooltip_NpcNavigation:GetSizeY() - (UILink.tooltip_NeedExplorePoint):GetPosY() - (UILink.tooltip_NeedExplorePoint):GetTextSizeY()}
 local naviDesc = (UI.getChildControl)(Panel_NpcNavi, "StaticText_NpcNavi_Desc")
 naviDesc:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
@@ -40,7 +53,7 @@ end
 local isChecked_AddEffect = 0
 local isChecked_EffectReset = 0
 local initialize = function()
-  -- function num : 0_1 , upvalues : UILink, preLoadTextureKey, preLoadTextureKey_territory
+  -- function num : 0_1 , upvalues : UILink, preLoadTextureKey, preLoadTextureKey_territory, townNavi, territoryTownData
   Panel_NpcNavi:SetShow(false, false)
   Panel_Tooltip_NpcNavigation:SetShow(false, false)
   Panel_NpcNavi:SetAlpha(1)
@@ -107,17 +120,46 @@ local initialize = function()
       preLoadTextureKey_territory[territoryInfoWrapper:getKeyRaw()] = preLoadTexture(territoryInfoWrapper:getTerritorySmallImage())
     end
   end
+  for index,control in pairs(townNavi) do
+    control:addInputEvent("Mouse_LUp", "HandleClicked_TownNavi(" .. index .. ")")
+    control:addInputEvent("Mouse_On", "TownWarehouse_TooltipSimpleShow(" .. index .. ")")
+    control:addInputEvent("Mouse_Out", "TownWarehouse_TooltipSimpleHide()")
+    control:SetShow((territoryTownData[index])._isOpen)
+  end
+end
+
+HandleClicked_TownNavi = function(index)
+  -- function num : 0_2 , upvalues : territoryTownData
+  NpcNavi_Clear()
+  worldmapNavigatorStart(float3((territoryTownData[index])._x, (territoryTownData[index])._y, (territoryTownData[index])._z), NavigationGuideParam(), false, false, true)
+end
+
+TownWarehouse_TooltipSimpleShow = function(index)
+  -- function num : 0_3 , upvalues : territoryTownData, townNavi
+  local name = (territoryTownData[index])._desc
+  local uiControl = townNavi[index]
+  local desc = nil
+  if index == nil then
+    TooltipSimple_Hide()
+  else
+    TooltipSimple_Show(uiControl, name, desc)
+  end
+end
+
+TownWarehouse_TooltipSimpleHide = function()
+  -- function num : 0_4
+  TooltipSimple_Hide()
 end
 
 FGlobal_NpcNavi_HideAni = function()
-  -- function num : 0_2
+  -- function num : 0_5
   Panel_NpcNavi:SetAlpha(1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_NpcNavi, 0, 0.75)
   aniInfo:SetHideAtEnd(true)
 end
 
 local AddEffectList = function(list)
-  -- function num : 0_3 , upvalues : UILink
+  -- function num : 0_6 , upvalues : UILink
   local itemHeight = (UILink.treeView):GetSizeY() / (UILink.treeView):GetItemQuantity()
   for keyRaw,index in pairs(list) do
     local pos = (UILink.treeView):getViewIndex(index)
@@ -128,7 +170,7 @@ local AddEffectList = function(list)
 end
 
 local checkIsNewAdd = function(index, key)
-  -- function num : 0_4 , upvalues : cachingCharacterData
+  -- function num : 0_7 , upvalues : cachingCharacterData
   if cachingCharacterData[key] == true then
     return false
   else
@@ -140,7 +182,7 @@ local checkIsNewAdd = function(index, key)
 end
 
 local clearFocusEdit = function()
-  -- function num : 0_5 , upvalues : searchGroupShow, UILink, IM
+  -- function num : 0_8 , upvalues : searchGroupShow, UILink, IM
   if NpcNavi_CheckCurrentUiEdit(GetFocusEdit()) then
     ClearFocusEdit()
     searchGroupShow(false)
@@ -155,7 +197,7 @@ local clearFocusEdit = function()
 end
 
 local getCacheDialogData = function(characterKeyRaw, dialogIndex)
-  -- function num : 0_6 , upvalues : cacheExecuteDialogData
+  -- function num : 0_9 , upvalues : cacheExecuteDialogData
   if cacheExecuteDialogData[characterKeyRaw] == nil then
     local executeDisplayData = dialog_getExecuteDisplayDataWithoutActor(characterKeyRaw, dialogIndex)
     if executeDisplayData ~= nil then
@@ -181,7 +223,7 @@ local getCacheDialogData = function(characterKeyRaw, dialogIndex)
 end
 
 local getByKey = function(key, list)
-  -- function num : 0_7
+  -- function num : 0_10
   for k,v in pairs(list) do
     if v.key == key then
       return v
@@ -191,7 +233,7 @@ local getByKey = function(key, list)
 end
 
 local getByName = function(name, list)
-  -- function num : 0_8
+  -- function num : 0_11
   for k,v in pairs(list) do
     if v.name == name then
       return v
@@ -201,7 +243,7 @@ local getByName = function(name, list)
 end
 
 local getByCharacterGroupByTreeKey = function(treeKey)
-  -- function num : 0_9 , upvalues : treeGroupData
+  -- function num : 0_12 , upvalues : treeGroupData
   for _,territoryGroup in pairs(treeGroupData) do
     for _,regionGroup in pairs(territoryGroup.child) do
       if (regionGroup.child)[treeKey] ~= nil then
@@ -213,7 +255,7 @@ local getByCharacterGroupByTreeKey = function(treeKey)
 end
 
 local insertData = function(treeIndex, parentLuaGroup, treeElement, objectkey, name)
-  -- function num : 0_10
+  -- function num : 0_13
   local tempGroup = {index = treeIndex, element = treeElement, 
 child = {}
 , key = objectkey, name = name}
@@ -222,7 +264,7 @@ child = {}
 end
 
 local insertTreeRoot = function(parentLuaGroup, text, key, imageKey, color)
-  -- function num : 0_11 , upvalues : getByKey, treeGroupData, UILink, insertData
+  -- function num : 0_14 , upvalues : getByKey, treeGroupData, UILink, insertData
   local childItemGroup = (getByKey(key, treeGroupData))
   local rv = nil
   if childItemGroup == nil or childItemGroup.element == nil then
@@ -245,7 +287,7 @@ local insertTreeRoot = function(parentLuaGroup, text, key, imageKey, color)
 end
 
 local insertTreeVertex = function(parentTreeVertex, parentLuaGroup, text, key, imageKey, color)
-  -- function num : 0_12 , upvalues : getByName, UILink, insertData
+  -- function num : 0_15 , upvalues : getByName, UILink, insertData
   local childItemGroup = getByName(text, parentLuaGroup)
   if childItemGroup == nil or childItemGroup.element == nil then
     local childItem = (UILink.treeView):createRootItem()
@@ -267,7 +309,7 @@ local insertTreeVertex = function(parentTreeVertex, parentLuaGroup, text, key, i
 end
 
 local insertTreeLeaf = function(parentTreeVertex, parentLuaGroup, text, key, imageKey, color)
-  -- function num : 0_13 , upvalues : getByKey, UILink, insertData
+  -- function num : 0_16 , upvalues : getByKey, UILink, insertData
   local childItemGroup = getByKey(key, parentLuaGroup)
   if childItemGroup == nil or childItemGroup.element == nil then
     local childItem = (UILink.treeView):createChildItem()
@@ -289,7 +331,7 @@ local insertTreeLeaf = function(parentTreeVertex, parentLuaGroup, text, key, ima
 end
 
 local getCharacterString = function(npcData)
-  -- function num : 0_14 , upvalues : getCacheDialogData
+  -- function num : 0_17 , upvalues : getCacheDialogData
   local inputString = ""
   if npcData:getTitle() == "" or npcData:getTitle() == nil then
     inputString = "<PAColor0xffefefef>" .. npcData:getName() .. " "
@@ -322,7 +364,7 @@ local getCharacterString = function(npcData)
 end
 
 local createListElement = function(index, npcData, parentTreeVertex, parentLuaGroup, key, colorKey)
-  -- function num : 0_15 , upvalues : preLoadTextureKey, getCharacterString, insertTreeLeaf
+  -- function num : 0_18 , upvalues : preLoadTextureKey, getCharacterString, insertTreeLeaf
   local baseIcon = nil
   local getSpawnType = npcData:getSpawnType()
   local iconHide = getSpawnType > 5 or getSpawnType < 0
@@ -340,7 +382,7 @@ local createListElement = function(index, npcData, parentTreeVertex, parentLuaGr
 end
 
 local naviPathClear = function()
-  -- function num : 0_16 , upvalues : UILink, selectIndex
+  -- function num : 0_19 , upvalues : UILink, selectIndex
   ToClient_DeleteNaviGuideByGroup(0)
   ;
   (UILink.treeView):ResetSelectItem()
@@ -348,13 +390,13 @@ local naviPathClear = function()
 end
 
 local treeClear = function()
-  -- function num : 0_17 , upvalues : UILink, treeGroupData
+  -- function num : 0_20 , upvalues : UILink, treeGroupData
   (UILink.treeView):ClearTree()
   treeGroupData = {}
 end
 
 NpcNavi_TreeViewInOut = function(isIn)
-  -- function num : 0_18 , upvalues : isMouseOnTreeView, searchGroupShow
+  -- function num : 0_21 , upvalues : isMouseOnTreeView, searchGroupShow
   NpcNavi_UpdateSize()
   do
     local IsMouseOver = Panel_NpcNavi:GetPosX() < getMousePosX() and getMousePosX() < Panel_NpcNavi:GetPosX() + Panel_NpcNavi:GetSizeX() and Panel_NpcNavi:GetPosY() < getMousePosY() and getMousePosY() < Panel_NpcNavi:GetPosY() + Panel_NpcNavi:GetSizeY()
@@ -368,11 +410,11 @@ NpcNavi_TreeViewInOut = function(isIn)
 end
 
 NpcNavi_UpdateSize = function()
-  -- function num : 0_19
+  -- function num : 0_22
 end
 
 NpcNavi_OverBarUpdatePerFrame = function(deltaTime)
-  -- function num : 0_20 , upvalues : isChecked_AddEffect, isChecked_EffectReset, selectIndex, naviPathClear
+  -- function num : 0_23 , upvalues : isChecked_AddEffect, isChecked_EffectReset, selectIndex, naviPathClear
   NpcNavi_OverBarUpdate(true)
   if getSelfPlayer() == nil then
     return 
@@ -411,7 +453,7 @@ local uv = {
 }
 local _npcNavi_Target = nil
 Panel_NpcNavi_updateIntimacyCircle = function(characterKeyRaw)
-  -- function num : 0_21 , upvalues : UILink, giftIcon, _npcNavi_Target, _math_AddVectorToVector, _math_MulNumberToVector, UCT, uv
+  -- function num : 0_24 , upvalues : UILink, giftIcon, _npcNavi_Target, _math_AddVectorToVector, _math_MulNumberToVector, UCT, uv
   local intimacy = getIntimacyByCharacterKey(characterKeyRaw)
   ;
   (UILink.tooltip_FruitageValue):SetText(tostring(intimacy))
@@ -464,7 +506,7 @@ Panel_NpcNavi_updateIntimacyCircle = function(characterKeyRaw)
 end
 
 NpcNavi_OverBarUpdate = function(isShow)
-  -- function num : 0_22 , upvalues : UILink, overIndex, getByCharacterGroupByTreeKey, getCharacterString, _npcNavi_Target, resizingGap, getCacheDialogData
+  -- function num : 0_25 , upvalues : UILink, overIndex, getByCharacterGroupByTreeKey, getCharacterString, _npcNavi_Target, resizingGap, getCacheDialogData
   local index = (UILink.treeView):GetOverItmeIndex()
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == getInputMode()
   if index == -1 or isUiMode == false or isShow == false then
@@ -651,7 +693,7 @@ NpcNavi_OverBarUpdate = function(isShow)
 end
 
 NpcNavi_ShowToggle = function()
-  -- function num : 0_23 , upvalues : clearFocusEdit, lazyUpdate
+  -- function num : 0_26 , upvalues : clearFocusEdit, lazyUpdate
   local isShow = not Panel_NpcNavi:IsShow()
   if isShow then
     NpcNavi_Reset_Posistion()
@@ -683,7 +725,7 @@ NpcNavi_ShowToggle = function()
 end
 
 FGlobal_NpcNavi_Hide = function()
-  -- function num : 0_24 , upvalues : clearFocusEdit
+  -- function num : 0_27 , upvalues : clearFocusEdit
   local isShow = Panel_NpcNavi:IsShow()
   if isShow then
     clearFocusEdit()
@@ -693,23 +735,23 @@ FGlobal_NpcNavi_Hide = function()
 end
 
 FGlobal_NpcNavi_IsShowCheck = function()
-  -- function num : 0_25
+  -- function num : 0_28
   return Panel_NpcNavi:IsShow()
 end
 
 FGlobal_NpcNavi_ShowRequestOuter = function()
-  -- function num : 0_26 , upvalues : clearFocusEdit
+  -- function num : 0_29 , upvalues : clearFocusEdit
   clearFocusEdit()
 end
 
 NpcNavi_Reset_Posistion = function()
-  -- function num : 0_27
+  -- function num : 0_30
   Panel_NpcNavi:SetPosX(FGlobal_Panel_Radar_GetPosX() - Panel_NpcNavi:GetSizeX())
   Panel_NpcNavi:SetPosY(FGlobal_Panel_Radar_GetPosY())
 end
 
 NpcNavi_ShowRequestOuter = function(isShow)
-  -- function num : 0_28 , upvalues : lazyUpdate
+  -- function num : 0_31 , upvalues : lazyUpdate
   Panel_NpcNavi:SetShow(isShow, false)
   if isShow == false then
     Panel_Tooltip_NpcNavigation:SetShow(false, false)
@@ -722,7 +764,7 @@ NpcNavi_ShowRequestOuter = function(isShow)
 end
 
 NpcNavi_OnInputMode = function()
-  -- function num : 0_29 , upvalues : IM, UILink, searchGroupShow
+  -- function num : 0_32 , upvalues : IM, UILink, searchGroupShow
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(UILink.editSearchText)
   ;
@@ -731,13 +773,13 @@ NpcNavi_OnInputMode = function()
 end
 
 NpcNavi_CheckCurrentUiEdit = function(_npcNavi_TargetUI)
-  -- function num : 0_30 , upvalues : UILink
+  -- function num : 0_33 , upvalues : UILink
   do return _npcNavi_TargetUI ~= nil and _npcNavi_TargetUI:GetKey() == (UILink.editSearchText):GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 NpcNavi_OutInputMode = function(isOk)
-  -- function num : 0_31 , upvalues : UILink, searchGroupShow
+  -- function num : 0_34 , upvalues : UILink, searchGroupShow
   if isOk ~= true then
     (UILink.editSearchText):SetEditText("")
   end
@@ -747,12 +789,12 @@ NpcNavi_OutInputMode = function(isOk)
 end
 
 local stringMatching = function(dstString, filterString)
-  -- function num : 0_32
+  -- function num : 0_35
   return stringSearch(dstString, filterString)
 end
 
 local sortComparer = function(lhs, rhs)
-  -- function num : 0_33
+  -- function num : 0_36
   if stringCompare(lhs.areaName, rhs.areaName) >= 0 then
     do return lhs.territoryName ~= rhs.territoryName end
     do return stringCompare(lhs.territoryName, rhs.territoryName) < 0 end
@@ -761,7 +803,7 @@ local sortComparer = function(lhs, rhs)
 end
 
 NpcListUpdate_selfPlayer_regionChanged = function()
-  -- function num : 0_34 , upvalues : lazyUpdate
+  -- function num : 0_37 , upvalues : lazyUpdate
   if Panel_NpcNavi:IsShow() == false then
     lazyUpdate = true
     return 
@@ -770,7 +812,7 @@ NpcListUpdate_selfPlayer_regionChanged = function()
 end
 
 NpcListUpdate_EventMentalCardUpdate = function()
-  -- function num : 0_35 , upvalues : lazyUpdate
+  -- function num : 0_38 , upvalues : lazyUpdate
   if Panel_NpcNavi:IsShow() == false then
     lazyUpdate = true
     return 
@@ -779,7 +821,7 @@ NpcListUpdate_EventMentalCardUpdate = function()
 end
 
 NpcListUpdate_EventExplorePointUpdate = function()
-  -- function num : 0_36 , upvalues : lazyUpdate
+  -- function num : 0_39 , upvalues : lazyUpdate
   if Panel_NpcNavi:IsShow() == false then
     lazyUpdate = true
     return 
@@ -788,7 +830,7 @@ NpcListUpdate_EventExplorePointUpdate = function()
 end
 
 NpcListUpdate = function()
-  -- function num : 0_37 , upvalues : sortComparer, stringMatching, filterText, getCharacterString, insertTreeRoot, treeGroupData, preLoadTextureKey_territory, UI_color, insertTreeVertex, createListElement, UILink, checkIsNewAdd, errorMessageShow, selectIndex, isFirstUpdate, AddEffectList
+  -- function num : 0_40 , upvalues : sortComparer, stringMatching, filterText, getCharacterString, insertTreeRoot, treeGroupData, preLoadTextureKey_territory, UI_color, insertTreeVertex, createListElement, UILink, checkIsNewAdd, errorMessageShow, selectIndex, isFirstUpdate, AddEffectList
   local newList = {}
   local regionInfoCount = getRegionInfoCount()
   local regionInfoList = {}
@@ -908,7 +950,7 @@ NpcListUpdate = function()
 end
 
 NpcNavi_SearchBtn = function()
-  -- function num : 0_38 , upvalues : IM, filterText, UILink, treeClear
+  -- function num : 0_41 , upvalues : IM, filterText, UILink, treeClear
   if AllowChangeInputMode() then
     (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     ClearFocusEdit()
@@ -922,7 +964,7 @@ NpcNavi_SearchBtn = function()
 end
 
 NpcNavi_DrawLine = function()
-  -- function num : 0_39 , upvalues : UILink, naviPathClear, getByCharacterGroupByTreeKey, selectIndex
+  -- function num : 0_42 , upvalues : UILink, naviPathClear, getByCharacterGroupByTreeKey, selectIndex
   NpcNavi_UpdateSize()
   local selectItem = (UILink.treeView):GetSelectItem()
   if selectItem == nil then
@@ -951,12 +993,12 @@ NpcNavi_DrawLine = function()
 end
 
 NpcNavi_Clear = function()
-  -- function num : 0_40
+  -- function num : 0_43
   ToClient_DeleteNaviGuideByGroup(0)
 end
 
 NpcNavi_ChangeTexture_On = function()
-  -- function num : 0_41 , upvalues : isMouseOnPanel, searchGroupShow, npcNaviText
+  -- function num : 0_44 , upvalues : isMouseOnPanel, searchGroupShow, npcNaviText
   isMouseOnPanel = true
   searchGroupShow(true)
   npcNaviText:SetText(PAGetString(Defines.StringSheet_GAME, "NPCNAVIGATION_DRAGABLE"))
@@ -965,7 +1007,7 @@ NpcNavi_ChangeTexture_On = function()
 end
 
 NpcNavi_ChangeTexture_Off = function()
-  -- function num : 0_42 , upvalues : isMouseOnPanel, searchGroupShow, npcNaviText
+  -- function num : 0_45 , upvalues : isMouseOnPanel, searchGroupShow, npcNaviText
   do
     local IsMouseOver = Panel_NpcNavi:GetPosX() < getMousePosX() and getMousePosX() < Panel_NpcNavi:GetPosX() + Panel_NpcNavi:GetSizeX() and Panel_NpcNavi:GetPosY() < getMousePosY() and getMousePosY() < Panel_NpcNavi:GetPosY() + Panel_NpcNavi:GetSizeY()
     if IsMouseOver then
@@ -981,7 +1023,7 @@ NpcNavi_ChangeTexture_Off = function()
 end
 
 NpcListUpdate_ScreenResize = function()
-  -- function num : 0_43 , upvalues : UILink
+  -- function num : 0_46 , upvalues : UILink
   local self = UILink
   if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
     (self.treeView):SetItemQuantity((self.treeView):GetSizeY() / 195 * 8)

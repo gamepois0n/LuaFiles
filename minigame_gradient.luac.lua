@@ -75,31 +75,58 @@ MiniGame_GaugeBarMoveCalc = function(fDeltaTime)
   _gaugeBar:SetPosX(controlPos)
 end
 
-Panel_Minigame_Gradient_Start = function()
-  -- function num : 0_1 , upvalues : _gaugeBar, _math_randomseed, _math_random, data, ClickDirection, isGradientPlay
+Panel_Minigame_Gradient_Start = function(isRace)
+  -- function num : 0_1 , upvalues : _gaugeBar, _math_randomseed, _math_random, data, ClickDirection, isGradientPlay, define
   Panel_Minigame_Gradient:SetShow(true, false)
   Panel_Minigame_Gradient:RegisterUpdateFunc("Panel_Minigame_UpdateFunc")
+  local centerPos = getScreenSizeX() / 2 - Panel_Minigame_Gradient:GetSizeX() / 2
   _gaugeBar:SetPosX(centerPos)
   _math_randomseed((os.time)())
   local speed = _math_random()
-  -- DECOMPILER ERROR at PC23: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R3 in 'UnsetPending'
 
   data.currentSpeed = (speed - 0.5) / 4
-  -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC35: Confused about usage of register: R3 in 'UnsetPending'
 
   data.lastClickDirection = ClickDirection.None
-  -- DECOMPILER ERROR at PC29: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC37: Confused about usage of register: R3 in 'UnsetPending'
 
   data.lastClickTime = 0
-  -- DECOMPILER ERROR at PC31: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC39: Confused about usage of register: R3 in 'UnsetPending'
 
   data.currentPos = 0.5
   isGradientPlay = true
+  -- DECOMPILER ERROR at PC45: Confused about usage of register: R3 in 'UnsetPending'
+
+  if isRace == true then
+    define.sequenceClickTimeSpan = 1
+    -- DECOMPILER ERROR at PC47: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.ClickTimeSpanMaxWeight = 0.35
+    -- DECOMPILER ERROR at PC49: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.ClickTimeSpanMinWeight = 0.15
+    -- DECOMPILER ERROR at PC51: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.speedWeight = 1
+  else
+    -- DECOMPILER ERROR at PC54: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.sequenceClickTimeSpan = 1
+    -- DECOMPILER ERROR at PC56: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.ClickTimeSpanMaxWeight = 0.35
+    -- DECOMPILER ERROR at PC58: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.ClickTimeSpanMinWeight = 0.15
+    -- DECOMPILER ERROR at PC60: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.speedWeight = 1
+  end
 end
 
 Panel_Minigame_Gradient_End = function()
   -- function num : 0_2 , upvalues : isGradientPlay
-  Panel_Minigame_Gradient:RegisterUpdateFunc("")
   Panel_Minigame_Gradient:SetShow(false, false)
   isGradientPlay = false
 end

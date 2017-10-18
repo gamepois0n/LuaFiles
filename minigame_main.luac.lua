@@ -9,7 +9,7 @@ local currentMiniGame = -1
 local lastUIMode = nil
 ActionMiniGame_Main = function(gameIndex)
   -- function num : 0_0 , upvalues : MGT, currentMiniGame, lastUIMode
-  if gameIndex < MGT.MiniGameType_0 or MGT.MiniGameType_17 < gameIndex or currentMiniGame == gameIndex then
+  if gameIndex < MGT.MiniGameType_0 or MGT.MiniGameType_17 == gameIndex or MGT.MiniGameType_18 < gameIndex or currentMiniGame == gameIndex then
     return 
   end
   if MGT.MiniGameType_0 == gameIndex then
@@ -67,6 +67,10 @@ ActionMiniGame_Main = function(gameIndex)
               else
                 if MGT.MiniGameType_17 == gameIndex then
                   Panel_Minigame_SteeringWheel_Start()
+                else
+                  if MGT.MiniGameType_0 == gameIndex then
+                    Panel_Minigame_Gradient_Start(true)
+                  end
                 end
               end
             end
@@ -82,7 +86,7 @@ end
 
 ActionMiniGame_Stop = function()
   -- function num : 0_1 , upvalues : currentMiniGame, MGT, IM, lastUIMode
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_17 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_18 < currentMiniGame then
     return 
   end
   if MGT.MiniGameType_0 == currentMiniGame then
@@ -140,6 +144,10 @@ ActionMiniGame_Stop = function()
               else
                 if MGT.MiniGameType_17 == currentMiniGame then
                   Panel_Minigame_SteeringWheel_End()
+                else
+                  if MGT.MiniGameType_18 == currentMiniGame then
+                    Panel_Minigame_Gradient_End()
+                  end
                 end
               end
             end
@@ -165,7 +173,7 @@ end
 
 Panel_Minigame_EventKeyPress = function(keyType)
   -- function num : 0_2 , upvalues : currentMiniGame, MGT
-  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_17 < currentMiniGame then
+  if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_18 < currentMiniGame then
     return 
   end
   if ((((((MGT.MiniGameType_0 ~= currentMiniGame or MGT.MiniGameType_1 == currentMiniGame) and MGT.MiniGameType_2 ~= currentMiniGame) or MGT.MiniGameType_3 == currentMiniGame) and MGT.MiniGameType_4 ~= currentMiniGame) or MGT.MiniGameType_5 == currentMiniGame) and MGT.MiniGameType_6 ~= currentMiniGame) or MGT.MiniGameType_7 == currentMiniGame then

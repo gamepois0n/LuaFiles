@@ -104,14 +104,17 @@ local updatePanel = function()
 end
 
 local updateMapImage = function(position, deltaTime)
-  -- function num : 0_2 , upvalues : currentAlpha, currentPosition, currentRate, currentSelfPos, const
+  -- function num : 0_2 , upvalues : currentPosition, currentRate, currentSelfPos, currentAlpha, const
+  if position.x == currentPosition.x and position.z == currentPosition.z and currentRate == RaderMap_GetDistanceToPixelRate() and currentSelfPos.x == (RaderMap_GetSelfPosInRader()).x and currentSelfPos.y == (RaderMap_GetSelfPosInRader()).y and Panel_RadarRealLine.maxAlphaDesert == prevMaxAlpha then
+    return 
+  end
   local prevMaxAlpha = Panel_RadarRealLine.maxAlphaDesert
   local regionInfoWrapper = (getSelfPlayer()):getRegionInfoWrapper()
-  -- DECOMPILER ERROR at PC25: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC60: Confused about usage of register: R4 in 'UnsetPending'
 
   if (regionInfoWrapper:isDesert() and (getSelfPlayer()):isResistDesert() == false) or regionInfoWrapper:isOcean() then
     Panel_RadarRealLine.maxAlphaDesert = Panel_RadarRealLine.maxAlphaDesert + deltaTime / 2
-    -- DECOMPILER ERROR at PC31: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC66: Confused about usage of register: R4 in 'UnsetPending'
 
     if Panel_RadarRealLine.maxAlphaDesert > 1 then
       Panel_RadarRealLine.maxAlphaDesert = 1
@@ -122,11 +125,11 @@ local updateMapImage = function(position, deltaTime)
     end
   else
     do
-      -- DECOMPILER ERROR at PC58: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC93: Confused about usage of register: R4 in 'UnsetPending'
 
       if Panel_RadarRealLine.maxAlphaDesert > 0 then
         Panel_RadarRealLine.maxAlphaDesert = Panel_RadarRealLine.maxAlphaDesert - deltaTime / 2
-        -- DECOMPILER ERROR at PC64: Confused about usage of register: R4 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC99: Confused about usage of register: R4 in 'UnsetPending'
 
         if Panel_RadarRealLine.maxAlphaDesert < 0 then
           Panel_RadarRealLine.maxAlphaDesert = 0
@@ -142,22 +145,21 @@ local updateMapImage = function(position, deltaTime)
             value:SetAlpha(0)
           end
           do
-            if position.x == currentPosition.x and position.z == currentPosition.z and currentRate == RaderMap_GetDistanceToPixelRate() and currentSelfPos.x == (RaderMap_GetSelfPosInRader()).x and currentSelfPos.y == (RaderMap_GetSelfPosInRader()).y and Panel_RadarRealLine.maxAlphaDesert == prevMaxAlpha then
-              return 
-            end
             currentSelfPos = {x = (RaderMap_GetSelfPosInRader()).x, y = (RaderMap_GetSelfPosInRader()).y}
             currentRate = RaderMap_GetDistanceToPixelRate()
-            -- DECOMPILER ERROR at PC148: Confused about usage of register: R4 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC149: Confused about usage of register: R4 in 'UnsetPending'
 
             const.imageSize = (math.floor)(currentRate * 256)
             currentPosition = position
             local currentSector = convertPosToSector(currentPosition)
-            -- DECOMPILER ERROR at PC154: Confused about usage of register: R5 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC155: Confused about usage of register: R5 in 'UnsetPending'
 
             int3Value.y = 0
             local inSectorPos = convertPosToInSectorPos(currentPosition)
             local startX = (math.floor)(-(inSectorPos.x / 100 * currentRate) * 2 - const.imageSize * 2 + currentSelfPos.x)
             local startY = (math.floor)(inSectorPos.z / 100 * currentRate * 2 - const.imageSize * 3 + currentSelfPos.y)
+            local xValue = 0
+            local zValue = 0
             for index = 0, const.size * const.size - 1 do
               local filePath = ToClient_getRadarPath() .. "Rader_" .. currentSector.x - (math.floor)(const.size / 2) + index % const.size .. "_" .. currentSector.z + (math.floor)(const.size / 2) - (math.floor)(index / const.size) .. ".dds"
               ;
@@ -172,8 +174,8 @@ local updateMapImage = function(position, deltaTime)
               ((Panel_RadarRealLine.mapImage)[index]):SetAlpha((1 - Panel_RadarRealLine.maxAlphaDesert) * currentAlpha)
               ;
               ((Panel_RadarRealLine.mapImage)[index]):SetShow(true)
-              local xValue = (currentSector.x + index) % const.size
-              local zValue = const.size - (currentSector.z - (math.floor)(index / const.size)) % const.size - 1
+              xValue = (currentSector.x + index) % const.size
+              zValue = const.size - (currentSector.z - (math.floor)(index / const.size)) % const.size - 1
               if regionInfoWrapper:isDesert() and (getSelfPlayer()):isResistDesert() == false then
                 ((Panel_RadarRealLine.desertMapImage)[index]):ChangeTextureInfoName("New_UI_Common_forLua/Widget/Rader/Rader_Desert_" .. xValue .. "_" .. zValue .. ".dds")
               else

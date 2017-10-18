@@ -1415,7 +1415,7 @@ FromClient_UpdatePartyExperiencePenalty = function(isPenalty)
     return 
   end
   if isPenalty then
-    partyPenalty:SetShow(true)
+    partyPenalty:SetShow(false)
     partyPenalty:SetPosX((Match_Button_Info:GetSpanSize()).x + 60)
     partyPenalty:SetPosY((Match_Button_Info:GetSpanSize()).y - 1)
   else

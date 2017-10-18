@@ -293,7 +293,6 @@ end
 Panel_Lobby_SelectCharacter_EnableSelectButton = function(enableValue)
   -- function num : 0_3 , upvalues : configData, SelectCharacter
   for slotIdx = 0, configData._listCount - 1 do
-    _PA_LOG("�\128규보", "Idx:" .. tostring(slotIdx) .. "     " .. tostring(_btnCount))
     local slot = (configData.slotUiPool)[slotIdx]
     ;
     (slot._btn_Slot):SetEnable(enableValue)

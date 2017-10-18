@@ -320,7 +320,6 @@ Update_StepComplete = function(deltaTime)
     _updateTime = 0
     if Tutorial._pushed_time > 3 then
       TutorialUI:Hide()
-      Panel_KeyTutorial:RegisterUpdateFunc("")
     end
   end
 end

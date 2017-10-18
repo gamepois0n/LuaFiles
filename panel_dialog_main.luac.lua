@@ -541,6 +541,9 @@ local PreclosePanel_OpenDialog = function()
   if Panel_Menu:GetShow() then
     Panel_Menu_Close()
   end
+  if Panel_Window_Camp:GetShow() then
+    PaGlobal_Camp:close()
+  end
   DetectPlayer_Close()
   if Panel_Window_ItemMarket:GetShow() then
     if isNewItemmarket_chk() then

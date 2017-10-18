@@ -43,7 +43,6 @@ local SinGaugeBar_OnFail = function()
   -- function num : 0_1 , upvalues : isFinished, _sinGauge_Result_Bad
   audioPostEvent_SystemUi(11, 7)
   isFinished = true
-  Panel_SinGauge:RegisterUpdateFunc("")
   ;
   ((getSelfPlayer()):get()):SetMiniGameResult(0)
   _sinGauge_Result_Bad:ResetVertexAni()
@@ -118,7 +117,6 @@ end
 
 Panel_Minigame_SinGauge_End = function()
   -- function num : 0_4 , upvalues : _sinGaugeBarEffect, isFinished, sinGaugeBarStart
-  Panel_SinGauge:RegisterUpdateFunc("")
   Panel_SinGauge:SetShow(false, false)
   _sinGaugeBarEffect:EraseAllEffect()
   isFinished = true
@@ -133,7 +131,6 @@ MiniGame_SinGauge_KeyPress = function(keyType)
   if MGKT.MiniGameKeyType_Space == keyType then
     _sinGaugeBar:SetSize(gaugeBarSizeX, 20)
     sinGaugeBarStart = false
-    Panel_SinGauge:RegisterUpdateFunc("")
     if gaugeBarSizeX == 273 then
       audioPostEvent_SystemUi(11, 0)
       audioPostEvent_SystemUi(11, 13)
