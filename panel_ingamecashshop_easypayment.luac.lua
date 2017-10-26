@@ -256,6 +256,9 @@ PaGlobal_EasyBuy.Open = function(self, mainCategory, middleCategory, smallCatego
   if smallCategory == nil then
     smallCategory = -1
   end
+  if waypointKey == nil then
+    waypointKey = -1
+  end
   self.savedMainCategory = mainCategory
   self.savedMiddleCategory = middleCategory
   self.savedSmallCategory = smallCategory

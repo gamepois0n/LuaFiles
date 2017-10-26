@@ -1225,6 +1225,29 @@ Equipment__PopUp_ShowIconToolTip = function(isShow)
   end
 end
 
+EquipMent_BulletCheck = function()
+  -- function num : 0_40
+  local itemWrapper = getEquipmentItem(1)
+  if itemWrapper == nil then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_BULLETALERT_0")
+  else
+    local itemSSW = itemWrapper:getStaticStatus()
+    local equipType = itemSSW:getEquipType()
+    if equipType == 68 then
+      local endurance = (itemWrapper:get()):getEndurance()
+      if endurance == 0 then
+        return PAGetString(Defines.StringSheet_GAME, "LUA_BULLETALERT_1")
+      else
+        return ""
+      end
+    else
+      do
+        do return PAGetString(Defines.StringSheet_GAME, "LUA_BULLETALERT_2") end
+      end
+    end
+  end
+end
+
 equip:initControl()
 equip:registEventHandler()
 equip:registMessageHandler()

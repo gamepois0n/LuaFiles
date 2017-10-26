@@ -1019,8 +1019,18 @@ isGameTypeAE = function()
   return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_AE)
 end
 
-isCommonGameType = function()
+isGameTypeTH = function()
   -- function num : 0_69
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_TH)
+end
+
+isGameTypeID = function()
+  -- function num : 0_70
+  return isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_ID)
+end
+
+isCommonGameType = function()
+  -- function num : 0_71
   local returnValue = false
   if isGameTypeJapan() then
     returnValue = true
@@ -1051,7 +1061,7 @@ isCommonGameType = function()
 end
 
 isItemMarketSecureCode = function()
-  -- function num : 0_70
+  -- function num : 0_72
   local isSecureCode = false
   if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA()) and isSecureCode == true then
     return true
@@ -1065,7 +1075,7 @@ local g_TimerNo = 0
 local g_Timerlist = {}
 local g_TimerCount = 0
 luaTimer_UpdatePerFrame = function(fDelta)
-  -- function num : 0_71 , upvalues : g_TimerCount, g_Timerlist
+  -- function num : 0_73 , upvalues : g_TimerCount, g_Timerlist
   if g_TimerCount <= 0 then
     return 
   end
@@ -1106,7 +1116,7 @@ luaTimer_UpdatePerFrame = function(fDelta)
 end
 
 luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
-  -- function num : 0_72 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
+  -- function num : 0_74 , upvalues : g_TimerNo, g_Timerlist, g_TimerCount
   g_TimerNo = g_TimerNo + 1
   local tempTimer = {}
   tempTimer._timerNo = g_TimerNo
@@ -1125,7 +1135,7 @@ luaTimer_AddEvent = function(func, endTime, isRepeat, repeatTime)
 end
 
 luaTimer_RemoveEvent = function(timerNo)
-  -- function num : 0_73 , upvalues : g_Timerlist, g_TimerCount
+  -- function num : 0_75 , upvalues : g_Timerlist, g_TimerCount
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
   if g_Timerlist[timerNo] ~= nil then

@@ -146,8 +146,13 @@ if isGameTypeTR() then
         (link2:getClickTexture()):setUV(x1, y1, x2, y2)
       end
       do
-        link1:SetShow(false)
-        link2:SetShow(false)
+        if isGameTypeTR() then
+          link1:SetShow(true)
+          link2:SetShow(true)
+        else
+          link1:SetShow(false)
+          link2:SetShow(false)
+        end
         japanEventBanner:SetShow(false)
         local historyButtons = {}
         local _classIndex = nil
@@ -1449,7 +1454,7 @@ end
   -- function num : 0_56
   local linkURL = ""
   if isType == 0 then
-    linkURL = "https://www.tr.playblackdesert.com/intro/cbt_signup"
+    linkURL = "https://www.tr.playblackdesert.com/Intro/Event/cbt_signup"
   else
     if isType == 1 then
       linkURL = "https://payment.tr.playblackdesert.com/Pay/Package/"

@@ -1378,7 +1378,7 @@ HandleClicked_UiSet_ConfirmSetting = function(isReset)
   setUIScale(scale)
   GameOption_SetUIMode(scale)
   saveGameOption(false)
-  Panel_Menu:SetShow(true)
+  Panel_Menu_ShowToggle()
 end
 
 UiSet_Panel_ShowValueUpdate = function()
@@ -1621,11 +1621,11 @@ FGlobal_UiSet_Close = function()
   SetUIMode((Defines.UIMode).eUIMode_Default)
   renderMode:reset()
   Panel_UI_Setting:SetShow(false)
-  Panel_Menu:SetShow(true)
+  Panel_Menu_ShowToggle()
   local count = ToClient_getChattingPanelCount()
   for chattingPanelindex = 0, count - 1 do
     Chatting_setIsOpenValue(chattingPanelindex, ChatPanelIsOpenState[chattingPanelindex + 1])
-    -- DECOMPILER ERROR at PC40: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC38: Confused about usage of register: R5 in 'UnsetPending'
 
     ChatPanelIsOpenState[chattingPanelindex + 1] = false
   end
@@ -1633,7 +1633,7 @@ FGlobal_UiSet_Close = function()
     if closePanelState[idx] == true then
       HandleClicked_Chatting_Close(idx)
     end
-    -- DECOMPILER ERROR at PC54: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC52: Confused about usage of register: R5 in 'UnsetPending'
 
     closePanelState[idx] = false
   end

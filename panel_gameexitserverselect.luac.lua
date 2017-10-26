@@ -237,7 +237,7 @@ ChannelSelect_Init = function()
             (channelMainDesc._scheduleNodeWar):SetShow(false)
             sizeControl = channelMainDesc._serverDesc
           else
-            if ToClient_isDontPvPDecreaseTendency() then
+            if isGameTypeKorea() or isGameTypeRussia() then
               (channelMainDesc._pkTitle):SetShow(true)
               ;
               (channelMainDesc._pkDesc):SetShow(true)
@@ -314,7 +314,7 @@ ChannelSelect_Init = function()
         ;
         (self._PKIcon):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PK"))
         if isChannelCountLow then
-          if ToClient_isDontPvPDecreaseTendency() then
+          if isGameTypeRussia() or isGameTypeKorea() then
             Panel_ChannelSelect:SetSize(410, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 90)
           else
             Panel_ChannelSelect:SetSize(410, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 70)
@@ -358,7 +358,7 @@ ChannelSelect_Init = function()
           ;
           (self._PKIcon):SetPosY(((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 55)
         else
-          if ToClient_isDontPvPDecreaseTendency() then
+          if isGameTypeKorea() or isGameTypeRussia() then
             Panel_ChannelSelect:SetSize(796, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 70)
           else
             Panel_ChannelSelect:SetSize(796, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 50)
@@ -404,7 +404,7 @@ ChannelSelect_Init = function()
           ;
           (self._PremiumIcon):SetShow(false)
         end
-        if ToClient_isDontPvPDecreaseTendency() then
+        if isGameTypeKorea() or isGameTypeRussia() then
           (self._PKIcon):SetShow(true)
         else
           ;
@@ -807,7 +807,6 @@ HandleClicked_ChannelSelect = function(selectChannel)
     local channelName = getChannelName(tempChannel._worldNo, tempChannel._serverNo)
     local changeChannelTime = getChannelMoveableRemainTime(curChannelData._worldNo)
     local changeRealChannelTime = convertStringFromDatetime(changeChannelTime)
-    _PA_LOG("�\128규보", "테스�\184 : " .. tostring(changeChannelTime))
     local isSiegeBeing = deadMessage_isSiegeBeingMyChannel()
     local isInSiegeBattle = deadMessage_isInSiegeBattle()
     if tempChannel ~= nil then

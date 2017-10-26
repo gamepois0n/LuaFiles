@@ -14,28 +14,40 @@ _ui = {_staticBlackSpirit = (UI.getChildControl)(Panel_AutoQuest, "Static_BlackS
 -- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
-(PaGlobal_AutoQuestMsg._ui)._static_OutLine = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_OutLineDefault")
+(PaGlobal_AutoQuestMsg._ui)._btn_StartGray = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Button_BlackSpiritGray")
 -- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
-(PaGlobal_AutoQuestMsg._ui)._static_MainLightBG = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_MainLightBG")
+(PaGlobal_AutoQuestMsg._ui)._btn_StartLight = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Button_BlackSpiritLight")
 -- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
-(PaGlobal_AutoQuestMsg._ui)._static_Over = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_Over")
+(PaGlobal_AutoQuestMsg._ui)._static_OutLine = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_OutLineDefault")
 -- DECOMPILER ERROR at PC71: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
-(PaGlobal_AutoQuestMsg._ui)._static_Under = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_Under")
+(PaGlobal_AutoQuestMsg._ui)._static_MainLightBG = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_MainLightBG")
 -- DECOMPILER ERROR at PC81: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
-(PaGlobal_AutoQuestMsg._ui)._static_StarBG1 = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_StarBG1")
+(PaGlobal_AutoQuestMsg._ui)._static_Over = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_Over")
 -- DECOMPILER ERROR at PC91: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
+(PaGlobal_AutoQuestMsg._ui)._static_Under = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_Under")
+-- DECOMPILER ERROR at PC101: Confused about usage of register: R0 in 'UnsetPending'
+
+;
+(PaGlobal_AutoQuestMsg._ui)._static_StarBG1 = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_StarBG1")
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R0 in 'UnsetPending'
+
+;
 (PaGlobal_AutoQuestMsg._ui)._static_StarBG2 = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Static_StarBG2")
--- DECOMPILER ERROR at PC94: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC121: Confused about usage of register: R0 in 'UnsetPending'
+
+;
+(PaGlobal_AutoQuestMsg._ui)._btn_Win_Close = (UI.getChildControl)((PaGlobal_AutoQuestMsg._ui)._staticStartAutoBG, "Button_WinClose")
+-- DECOMPILER ERROR at PC124: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoQuestMsg.Initialize = function(self)
   -- function num : 0_0
@@ -44,6 +56,20 @@ PaGlobal_AutoQuestMsg.Initialize = function(self)
   (self._ui)._staticTextStartAuto = (UI.getChildControl)((self._ui)._staticStartAutoBG, "StaticText_StartAutoText")
   ;
   ((self._ui)._btn_Start):addInputEvent("Mouse_LUp", "FGlobal_MouseclickTest()")
+  ;
+  ((self._ui)._btn_Win_Close):addInputEvent("Mouse_LUp", "PaGlobal_AutoManager:stop()")
+  ;
+  ((self._ui)._static_OutLine):SetShow(false)
+  ;
+  ((self._ui)._btn_StartLight):SetShow(false)
+  ;
+  ((self._ui)._static_MainLightBG):SetShow(true)
+  ;
+  ((self._ui)._static_StarBG1):SetShow(true)
+  ;
+  ((self._ui)._static_StarBG2):SetShow(true)
+  ;
+  ((self._ui)._btn_StartGray):SetShow(true)
   ;
   ((self._ui)._static_Over):SetPosX(((self._ui)._static_OutLine):GetPosX() + ((self._ui)._static_OutLine):GetSizeX() / 2 - ((self._ui)._static_Over):GetSizeX() / 2)
   ;
@@ -54,7 +80,7 @@ PaGlobal_AutoQuestMsg.Initialize = function(self)
   ((self._ui)._static_Under):SetPosY(((self._ui)._static_OutLine):GetPosY() + ((self._ui)._static_OutLine):GetSizeY() - 5)
 end
 
--- DECOMPILER ERROR at PC97: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC127: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoQuestMsg.AniShow = function(self)
   -- function num : 0_1
@@ -80,7 +106,7 @@ PaGlobal_AutoQuestMsg.AniShow = function(self)
   fadeColor2:SetEndColor((Defines.Color).C_FF24e8ff)
 end
 
--- DECOMPILER ERROR at PC100: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC130: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoQuestMsg.AniHide = function(self)
   -- function num : 0_2
@@ -92,7 +118,6 @@ PaGlobal_AutoQuestMsg.AniHide = function(self)
   ((self._ui)._static_Over):CalcUIAniPos(ImageMoveAni1)
   ImageMoveAni1:SetDisableWhileAni(true)
   ImageMoveAni1:SetHideAtEnd(false)
-  ImageMoveAni1:SetDisableWhileAni(true)
   local ImageMoveAni2 = ((self._ui)._static_Under):addMoveAnimation(0, 0.3, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   ImageMoveAni2:SetStartPosition(((self._ui)._static_OutLine):GetPosX() + ((self._ui)._static_OutLine):GetSizeX() / 2 - ((self._ui)._static_Over):GetSizeX() / 2, ((self._ui)._static_OutLine):GetPosY() + ((self._ui)._static_OutLine):GetSizeY())
   ImageMoveAni2:SetEndPosition(((self._ui)._static_OutLine):GetPosX() + ((self._ui)._static_OutLine):GetSizeX() / 2 - ((self._ui)._static_Over):GetSizeX() / 2, ((self._ui)._static_OutLine):GetPosY() + ((self._ui)._static_OutLine):GetSizeY() - 5)
@@ -101,7 +126,6 @@ PaGlobal_AutoQuestMsg.AniHide = function(self)
   ((self._ui)._static_Under):CalcUIAniPos(ImageMoveAni2)
   ImageMoveAni2:SetDisableWhileAni(true)
   ImageMoveAni2:SetHideAtEnd(false)
-  ImageMoveAni2:SetDisableWhileAni(true)
   local fadeColor1 = ((self._ui)._static_Over):addColorAnimation(0, 1.5, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
   fadeColor1:SetStartColor((Defines.Color).C_FF24e8ff)
   fadeColor1:SetEndColor((Defines.Color).C_FFFFFFFF)
@@ -114,12 +138,6 @@ FGlobal_AutoQuestBlackSpiritMessage = function(message)
   -- function num : 0_3
   self = PaGlobal_AutoQuestMsg
   ;
-  ((self._ui)._btn_Start):SetShow(true)
-  ;
-  ((self._ui)._staticStartAutoBG):SetShow(true)
-  ;
-  ((self._ui)._staticTextStartAuto):SetShow(true)
-  ;
   ((self._ui)._staticTextStartAuto):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
   ((self._ui)._staticTextStartAuto):SetText(message)
@@ -129,21 +147,27 @@ FGlobal_AutoQuestBlackSpiritMessage = function(message)
     ;
     ((self._ui)._staticStartAutoBG):SetSize(((self._ui)._staticTextStartAuto):GetTextSizeX() + 150, ((self._ui)._staticTextStartAuto):GetTextSizeY() + 45)
   end
-  Panel_AutoQuest:SetShow(true)
 end
 
-FGlobal_AutoQuestBlakcSpirit_Hide = function()
-  -- function num : 0_4
-  Panel_AutoQuest:SetShow(false)
-end
-
--- DECOMPILER ERROR at PC107: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC135: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoQuestMsg.AniStart = function(self)
-  -- function num : 0_5
+  -- function num : 0_4
+  ((self._ui)._static_OutLine):SetShow(true)
+  ;
+  ((self._ui)._static_MainLightBG):SetShow(true)
+  ;
+  ((self._ui)._static_StarBG1):SetShow(true)
+  ;
+  ((self._ui)._static_StarBG2):SetShow(true)
+  ;
+  ((self._ui)._btn_StartLight):SetShow(true)
+  ;
   ((self._ui)._static_OutLine):ResetVertexAni()
   ;
-  ((self._ui)._static_OutLine):SetVertexAniRun("Ani_Rotate_New", true)
+  ((self._ui)._btn_StartLight):SetVertexAniRun("Ani_Color_Light", true)
+  ;
+  ((self._ui)._static_OutLine):SetVertexAniRun("Ani_Color_Change", true)
   ;
   ((self._ui)._static_MainLightBG):SetVertexAniRun("Ani_Rotate_New", true)
   ;
@@ -157,26 +181,50 @@ PaGlobal_AutoQuestMsg.AniStart = function(self)
   ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):AddEffect("fN_DarkSpirit_Idle_2_AutoQuest_02A", false, -50, -70)
 end
 
--- DECOMPILER ERROR at PC110: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_AutoQuestMsg.AniStop = function(self)
-  -- function num : 0_6
-  ((self._ui)._static_OutLine):ResetVertexAni()
+  -- function num : 0_5
+  ((self._ui)._btn_StartLight):ResetVertexAni()
   ;
-  ((self._ui)._static_OutLine):SetVertexAniRun("Ani_Rotate_Reset", true)
+  ((self._ui)._static_OutLine):ResetVertexAni()
   ;
   ((self._ui)._static_MainLightBG):ResetVertexAni()
   ;
   ((self._ui)._static_StarBG1):ResetVertexAni()
   ;
   ((self._ui)._static_StarBG2):ResetVertexAni()
-  PaGlobal_AutoQuestMsg:AniHide()
+  ;
+  ((self._ui)._btn_StartLight):SetShow(false)
+  ;
+  ((self._ui)._static_MainLightBG):SetShow(false)
+  ;
+  ((self._ui)._static_StarBG1):SetShow(false)
+  ;
+  ((self._ui)._static_StarBG2):SetShow(false)
+end
+
+-- DECOMPILER ERROR at PC141: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_AutoQuestMsg.StartGrayAniHide = function(self)
+  -- function num : 0_6
+  ((self._ui)._btn_StartGray):ResetVertexAni()
+  ;
+  ((self._ui)._btn_StartGray):SetVertexAniRun("Ani_Color_Hide", true)
+end
+
+-- DECOMPILER ERROR at PC144: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_AutoQuestMsg.StartGrayAniShow = function(self)
+  -- function num : 0_7
+  ((self._ui)._btn_StartGray):ResetVertexAni()
+  ;
+  ((self._ui)._btn_StartGray):SetVertexAniRun("Ani_Color_Show", true)
 end
 
 FGlobal_MouseclickTest = function()
-  -- function num : 0_7
+  -- function num : 0_8
   self = PaGlobal_AutoQuestMsg
-  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_WANG"))
   if PaGlobal_AutoQuestMsg._accessBlackSpiritClick ~= nil then
     (PaGlobal_AutoQuestMsg._accessBlackSpiritClick)()
     PaGlobal_AutoQuestMsg:AniStart()
@@ -184,13 +232,27 @@ FGlobal_MouseclickTest = function()
 end
 
 FGlobal_EndBlackSpiritMessage = function()
-  -- function num : 0_8
+  -- function num : 0_9
   self = PaGlobal_AutoQuestMsg
   ;
   ((self._ui)._staticTextStartAuto):SetText("")
   ;
   ((self._ui)._staticStartAutoBG):SetShow(false)
   PaGlobal_AutoQuestMsg:AniStop()
+end
+
+-- DECOMPILER ERROR at PC151: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_AutoQuestMsg.SetShow = function(self, isShow)
+  -- function num : 0_10
+  ((self._ui)._btn_Start):SetShow(isShow)
+  ;
+  ((self._ui)._staticBlackSpirit):SetShow(isShow)
+  ;
+  ((self._ui)._staticStartAutoBG):SetShow(isShow)
+  ;
+  ((self._ui)._staticTextStartAuto):SetShow(isShow)
+  Panel_AutoQuest:SetShow(isShow)
 end
 
 PaGlobal_AutoQuestMsg:Initialize()

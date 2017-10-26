@@ -31,7 +31,16 @@ Panel_TranslationReport.Open = function(self, translationKey)
   if selfPlayer == nil then
     return 
   end
-  local url = "http://10.32.129.20/Translation"
+  local url = ""
+  if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+    url = "http://game-qa.tr.playblackdesert.com/Translation"
+  else
+    if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+      url = "https://game.tr.playblackdesert.com/Translation"
+    else
+      return 
+    end
+  end
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
   local languageType = ToClient_GetLanguageType()

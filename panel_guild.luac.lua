@@ -2127,7 +2127,7 @@ GuildMainInfo_MandateBtn = function()
 end
 
 GuildMainInfo_Show = function()
-  -- function num : 0_42 , upvalues : tabNumber, GuildWarInfoPage, GuildInfoPage, notice_btn, introduce_btn, introduce_Reset, isProtectGuildMember, introduce_edit_TW, introduce_edit, notice_title, notice_edit, isContentsGuildHouse, isContentsGuildInfo, isContentsArsha, isCanDoReservation, guildCommentsWebUrl, _Web, promote_btn
+  -- function num : 0_42 , upvalues : tabNumber, GuildWarInfoPage, GuildInfoPage, notice_btn, promote_btn, introduce_btn, introduce_Reset, isProtectGuildMember, introduce_edit_TW, introduce_edit, notice_title, notice_edit, isContentsGuildHouse, isContentsGuildInfo, isContentsArsha, isCanDoReservation, guildCommentsWebUrl, _Web
   if tabNumber ~= 99 then
     return 
   end
@@ -2143,6 +2143,7 @@ GuildMainInfo_Show = function()
   if isGuildMaster then
     (GuildInfoPage._btnChangeMark):SetShow(true)
     notice_btn:SetShow(true)
+    promote_btn:SetShow(true)
     introduce_btn:SetShow(true)
     introduce_Reset:SetShow(true)
     ;
@@ -2161,6 +2162,7 @@ GuildMainInfo_Show = function()
     if isGuildSubMaster then
       (GuildInfoPage._btnChangeMark):SetShow(false)
       notice_btn:SetShow(true)
+      promote_btn:SetShow(true)
       introduce_btn:SetShow(true)
       introduce_Reset:SetShow(true)
       ;
@@ -2178,6 +2180,7 @@ GuildMainInfo_Show = function()
       ;
       (GuildInfoPage._btnChangeMark):SetShow(false)
       notice_btn:SetShow(false)
+      promote_btn:SetShow(false)
       introduce_btn:SetShow(false)
       introduce_Reset:SetShow(false)
       ;

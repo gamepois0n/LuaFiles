@@ -46,9 +46,15 @@ FromClient_OpenSavageDefenceUI = function()
   nextWaveCount = ToClient_SavageDefenceNextWave()
 end
 
+FromClient_AlertAbusingRound = function()
+  -- function num : 0_5
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SAVAGEDEFENCEGAME_ROUNDALERT"))
+end
+
 FromClient_OpenSavageDefenceUI()
 registerEvent("FromClient_joinSavageDefence", "FromClient_OpenSavageDefenceUI")
 registerEvent("FromClient_StartSavageDefenceWave", "FromClient_StartSavageDefenceWave")
+registerEvent("FromClient_AlertAbusingRound", "FromClient_AlertAbusingRound")
 registerEvent("FromClient_EndSavageDefenceWave", "FromClient_EndSavageDefenceWave")
 registerEvent("FromClient_SavageDefenceNotifyBossMonster", "FromClient_SavageDefenceNotifyBossMonster")
 registerEvent("FromClient_UpdateSavageDefenceData", "FromClient_UpdateSavageDefenceData")

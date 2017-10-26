@@ -309,14 +309,16 @@ workerTradeCaravan.SetData = function(self, index)
               (((control._worker)._image)[2]):setRenderTexture((((control._worker)._image)[2]):getBaseTexture())
               self:AssetUpdate(index)
               local startRegionInfo = tradeGroupWrapper:getStartRegion()
-              ;
-              ((control._routerNode)._btnStartNode):SetText(startRegionInfo:getAreaName())
-              local arrivalRegionInfo = tradeCompanyWrapper:ToClient_getTempDestinationRegion()
-              ;
-              ((control._routerNode)._btnArrivalNode):SetText(arrivalRegionInfo:getAreaName())
-              local routeNodeCount = tradeCompanyWrapper:ToClient_getTempEventNodeCount()
+              if startRegionInfo ~= nil then
+                ((control._routerNode)._btnStartNode):SetText(startRegionInfo:getAreaName())
+              end
+              local arrivalRegionInfo = tradeCompanyWrapper:ToClient_getDestinationRegion()
+              if arrivalRegionInfo ~= nil then
+                ((control._routerNode)._btnArrivalNode):SetText(arrivalRegionInfo:getAreaName())
+              end
+              local routeNodeCount = tradeCompanyWrapper:ToClient_getEventNodeCount()
               for rIndex = 1, routeNodeCount do
-                local routeNodeInfo = tradeCompanyWrapper:ToClient_getTempEventNodeRegion(rIndex - 1)
+                local routeNodeInfo = tradeCompanyWrapper:ToClient_getEventNodeRegion(rIndex - 1)
                 ;
                 (((control._routerNode)._btnRouterNode)[rIndex]):SetText(routeNodeInfo:getAreaName())
               end
@@ -386,15 +388,15 @@ workerTradeCaravan.SetData = function(self, index)
                             (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_LUp", "WorkerTradeCaravan_SelectItem(" .. itemIndex .. ")")
                             ;
                             (((((control._itemSet)._itemSetBg)[iIndex])._itemSlot)[slotIndex]):addInputEvent("Mouse_RUp", "WorkerTradeCaravan_DecreaseItem(" .. itemIndex .. ")")
-                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC535: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC535: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC535: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC535: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC531: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC535: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end

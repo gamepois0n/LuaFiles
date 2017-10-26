@@ -659,7 +659,7 @@ HandleClicked_TradeItem_AllSell = function()
                   realPrice = 150000
                 end
                 local myInvenMoney = Int64toInt32((((getSelfPlayer()):get()):getInventory()):getMoney_s64())
-                local limitCount = (math.floor)(LIMITEDSELLMONEY - myInvenMoney) / realPrice
+                local limitCount = (math.floor)((LIMITEDSELLMONEY - myInvenMoney) / realPrice)
                 priceIndex = priceIndex + 1
                 if limitCount < vehicleItemCount then
                   if limitCount > 0 then

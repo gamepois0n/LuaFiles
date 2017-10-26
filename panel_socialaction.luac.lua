@@ -345,6 +345,10 @@ end
 
 HandleClicked_SocialIcon = function(iconIndex)
   -- function num : 0_6 , upvalues : _socialIconSlot, _selectedSlotBG, _socialIconSlotBG, SocialAction
+  local socialIconCount = ToClient_getSocialActionInfoList()
+  if socialIconCount == 0 then
+    return 
+  end
   Panel_SocialMenu_ResetVertexAni()
   ;
   (_socialIconSlot[iconIndex]):ResetVertexAni()

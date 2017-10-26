@@ -44,22 +44,18 @@ AutoState_Hunt.update = function(self, deltaTime)
   local uiQuestInfo = questList:getMainQuestInfo()
   if uiQuestInfo ~= nil and uiQuestInfo:isSatisfied() == true then
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
-    _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(uiQuestInfo:isSatisfied)")
     return 
   end
-  -- DECOMPILER ERROR at PC58: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC54: Unhandled construct in 'MakeBoolean' P1
 
   if self._reserveReason == AutoHuntState_Type.EXISTNEARMONSTER and ToClient_Auto_CheckExistNearMonster(300) == false then
     FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_HUNT_CHANGESTATE_DUETO_CANTFIND_TARGET"))
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
-    _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(ToClient_Auto_CheckExistNearMonster(300))")
     return 
   end
-  local selfPlayer = (getSelfPlayer()):get()
   if Auto_FindNearQuestMonster() == false then
     FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_HUNT_CHANGESTATE_DUETO_CANTFIND_TARGET"))
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
-    _PA_LOG("�\128규보", "AutoState_Hunt - TransterState -> WAIT_FOR_PRESSBUTTON(findNearQuestMonster())")
     return 
   end
 end

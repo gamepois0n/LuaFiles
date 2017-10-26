@@ -1007,8 +1007,20 @@ FGlobal_ChattingInput_ShowWhisper = function(characterName)
   (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
 end
 
+PaGlobal_ChattingInput_SendWhisper = function(whisperCharacterName, whisperFamilyname)
+  -- function num : 0_55
+  local nameType = ToClient_getChatNameType()
+  if nameType == 0 then
+    FGlobal_ChattingInput_ShowWhisper(whisperCharacterName)
+  else
+    if nameType == 1 then
+      FGlobal_ChattingInput_ShowWhisper(whisperFamilyname)
+    end
+  end
+end
+
 ChatInput_CheckRemoveLinkedItem = function()
-  -- function num : 0_55 , upvalues : UI_CT, chatInput
+  -- function num : 0_56 , upvalues : UI_CT, chatInput
   if UI_CT.World ~= chatInput.lastChatType and UI_CT.Guild ~= chatInput.lastChatType and UI_CT.Public ~= chatInput.lastChatType and UI_CT.Party ~= chatInput.lastChatType and UI_CT.WorldWithItem ~= chatInput.lastChatType and UI_CT.Private ~= chatInput.lastChatType then
     return 
   end
@@ -1030,7 +1042,7 @@ ChatInput_CheckRemoveLinkedItem = function()
 end
 
 ChatInput_Resize = function()
-  -- function num : 0_56
+  -- function num : 0_57
   Panel_Chatting_Input:SetSize(352, 30)
   Panel_Chatting_Input:ComputePos()
 end
@@ -1049,7 +1061,7 @@ chatInput:registEventHandler()
 ;
 ((chatInput.control).edit):addInputEvent("Mouse_LUp", "HandleClicked_ChatInputEdit()")
 HandleClicked_ChatInputEdit = function()
-  -- function num : 0_57 , upvalues : IM
+  -- function num : 0_58 , upvalues : IM
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 

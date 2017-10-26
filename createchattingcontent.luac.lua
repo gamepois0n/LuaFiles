@@ -53,6 +53,7 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
   local isLinkedItem = chattingMessage:isLinkedItem()
   local isLinkedGuild = chattingMessage:isLinkedGuild()
   local isLinkedWebSite = chattingMessage:isLinkedWebsite()
+  local isLinkedMentalCard = chattingMessage:isLinkedMentalCard()
   local chatting_Icon = poolCurrentUI:newChattingIcon()
   local chatting_GuildMark = poolCurrentUI:newChattingGuildMark()
   local chatting_sender = poolCurrentUI:newChattingSender(messageIndex)
@@ -66,6 +67,7 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
   local itemGradeType = chattingMessage:getItemGradeType()
   local itemGradeColor = ConvertFromItemGradeColor(itemGradeType)
   local itemIconPath = chattingMessage:getIconPath()
+  local mentalCardKey = chattingMessage:getMantalCardKey()
   if isGameManager == true and not isDev then
     msgColor = 4282515258
   end
@@ -227,7 +229,12 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   emoticonContentIndex = contentindex
                   chatting_contents[contentindex] = poolCurrentUI:newChattingEmoticon()
                   if itemIconPath ~= nil then
-                    (chatting_contents[contentindex]):ChangeTextureInfoName("Icon/" .. itemIconPath)
+                    if isLinkedMentalCard == false then
+                      (chatting_contents[contentindex]):ChangeTextureInfoName("Icon/" .. itemIconPath)
+                    else
+                      ;
+                      (chatting_contents[contentindex]):ChangeTextureInfoName(itemIconPath)
+                    end
                   else
                     ;
                     (chatting_contents[contentindex]):ChangeTextureInfoName(chattingMessage:getEmoticonPath(emoNum - 1))
@@ -268,21 +275,21 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                     (chatting_contents[contentindex]):SetPosX(textStaticPosX)
                     emoNum = emoNum + 1
                     contentindex = contentindex + 1
-                    -- DECOMPILER ERROR at PC588: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC599: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC588: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC599: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC588: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC599: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC588: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC599: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC588: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC599: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
               end
             end
-            if isChattingAt == false and isLinkedItem == false and isLinkedGuild == false and isLinkedWebSite == false then
+            if isChattingAt == false and isLinkedItem == false and isLinkedGuild == false and isLinkedWebSite == false and isLinkedMentalCard == false then
               local msgData = (string.sub)(msg, msgstartindex + 1, emoticonindex)
               local msgDataLen = (string.len)(msgData)
               local checkmsg = {}
@@ -336,15 +343,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                       do
                         msgDataLen = 0
                         contentindex = contentindex + 1
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
+                        -- DECOMPILER ERROR at PC777: LeaveBlock: unexpected jumping out DO_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                        -- DECOMPILER ERROR at PC777: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC777: LeaveBlock: unexpected jumping out IF_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                        -- DECOMPILER ERROR at PC777: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC777: LeaveBlock: unexpected jumping out IF_STMT
 
                       end
                     end
@@ -357,9 +364,9 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   (chatting_contents[contentindex - 1]):SetSize((chatting_contents[contentindex - 1]):GetSizeX(), chatting_sender:GetSizeY())
                 end
                 msgstartindex = emoticonindex
-                -- DECOMPILER ERROR at PC789: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                -- DECOMPILER ERROR at PC802: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC789: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC802: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -487,20 +494,24 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   end
                 end
               else
-                if isChattingAt and chattingatNum <= chattingatCount then
-                  atStart = chattingMessage:getChattingAtStartIndex(chattingatNum - 1)
-                  atEnd = chattingMessage:getChattingAtEndIndex(chattingatNum - 1)
-                  if drawstart <= atStart and atEnd <= drawend then
-                    if drawstart == atStart then
-                      drawend = atEnd - 1
-                      checkitemwebat = 3
-                      chattingatNum = chattingatNum + 1
+                if isLinkedMentalCard then
+                  checkitemwebat = 5
+                else
+                  if isChattingAt and chattingatNum <= chattingatCount then
+                    atStart = chattingMessage:getChattingAtStartIndex(chattingatNum - 1)
+                    atEnd = chattingMessage:getChattingAtEndIndex(chattingatNum - 1)
+                    if drawstart <= atStart and atEnd <= drawend then
+                      if drawstart == atStart then
+                        drawend = atEnd - 1
+                        checkitemwebat = 3
+                        chattingatNum = chattingatNum + 1
+                      else
+                        drawend = atStart - 1
+                        checkitemwebat = 0
+                      end
                     else
-                      drawend = atStart - 1
                       checkitemwebat = 0
                     end
-                  else
-                    checkitemwebat = 0
                   end
                 end
               end
@@ -537,6 +548,8 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                 (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                 ;
                 (chatting_contents[contentindex]):SetShow(true)
+                ;
+                (chatting_contents[contentindex]):SetIgnore(true)
               else
                 if checkitemwebat == 1 then
                   chatting_contents[contentindex] = poolCurrentUI:newChattingLinkedItem(messageIndex)
@@ -574,6 +587,24 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                         (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                         ;
                         (chatting_contents[contentindex]):SetIgnore(false)
+                      else
+                        if checkitemwebat == 5 then
+                          chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+                          ;
+                          (chatting_contents[contentindex]):SetFontColor(UI_color.C_FFFFFFFF)
+                          ;
+                          (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
+                          ;
+                          (chatting_contents[contentindex]):addInputEvent("Mouse_On", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",true )")
+                          ;
+                          (chatting_contents[contentindex]):addInputEvent("Mouse_Out", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",false )")
+                          ;
+                          (chatting_contents[contentindex]):addInputEvent("Mouse_LUp", "PaGlobal_HandleClicked_MentalCard(" .. chattingMessage:getMantalCardKey() .. ")")
+                          ;
+                          (chatting_contents[contentindex]):SetShow(true)
+                          ;
+                          (chatting_contents[contentindex]):SetIgnore(false)
+                        end
                       end
                     end
                   end
@@ -620,15 +651,15 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   do
                     msgDataLen = 0
                     contentindex = contentindex + 1
-                    -- DECOMPILER ERROR at PC1295: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC1365: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC1295: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC1365: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC1295: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC1365: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC1295: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC1365: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC1295: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC1365: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -644,7 +675,7 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
           msgstartindex = drawend
         end
         do
-          chatting_contents = CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedGuild, isLinkedWebSite, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, checkFinishItemWebSite, messageIndex, itemGradeColor, guildMarkSize)
+          chatting_contents = CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedGuild, isLinkedWebSite, isLinkedMentalCard, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, checkFinishItemWebSite, messageIndex, itemGradeColor)
           do
             local isPrevContent = false
             for index = contentindex - 1, 1, -1 do
@@ -695,9 +726,9 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
             chatting_sender:SetPosY(PosY - (deltaPosY))
             chatting_GuildMark:SetPosY(PosY - (deltaPosY) - guildMarkAdjY)
             PosY = PosY - 3
-            -- DECOMPILER ERROR at PC1500: Overwrote pending register: R41 in 'AssignReg'
+            -- DECOMPILER ERROR at PC1570: Overwrote pending register: R43 in 'AssignReg'
 
-            chatting_contents = CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedGuild, isLinkedWebSite, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, true, messageIndex, itemGradeColor, guildMarkSize)
+            chatting_contents = CreateContentWithMsgLength(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedGuild, isLinkedWebSite, isLinkedMentalCard, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, true, messageIndex, itemGradeColor)
             for index = contentindex - 1, 1, -1 do
               (chatting_contents[index]):SetPosY(PosY - (chatting_contents[index]):GetSizeY() - (deltaPosY))
               ;
@@ -739,6 +770,7 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                   do
                     if LinkedGuildCache ~= nil then
                       LinkedGuildCache:SetPosX(LinkedGuildCache:GetPosX() + (guildMarkSize))
+                      LinkedGuildCache:SetFontColor(UI_color.C_FF84FFF5)
                     end
                     return PosY - 3
                   end
@@ -977,7 +1009,7 @@ GetMessageFontColor = function(msg, color)
   end
 end
 
-CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedGuild, isLinkedWebSite, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, isFinishItemWebSite, messageIndex, itemGradeColor, guildMarkSize)
+CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chattingMessage, isChattingAt, isLinkedItem, isLinkedGuild, isLinkedWebSite, isLinkedMentalCard, contentindex, chatting_contents, chatting_Icon, chatting_sender, msg, msgColor, msgstartindex, panelSizeX, chattingatNum, chattingatCount, isFinishItemWebSite, messageIndex, itemGradeColor)
   -- function num : 0_4 , upvalues : UI_TM, UI_CT, UI_color, LinkedGuildCache
   local checkFinishItemWebSite = false
   local atStart = 1000000
@@ -1011,6 +1043,8 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
     checkFinishItemWebSite = true
   end
   if isFinishItemWebSite == false then
+    LinkedwebStart = 1
+    LinkedwebEnd = 2
     checkFinishItemWebSite = false
   end
   local j = 1
@@ -1026,7 +1060,7 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
   while 1 do
     while 1 do
       if msgstartindex < (string.len)(msg) then
-        if isChattingAt == false and isLinkedItem == false and isLinkedGuild == false and isLinkedWebSite == false then
+        if isChattingAt == false and isLinkedItem == false and isLinkedGuild == false and isLinkedWebSite == false and isLinkedMentalCard == false then
           local msgData = (string.sub)(msg, msgstartindex + 1, (string.len)(msg))
           local msgDataLen = (string.len)(msgData)
           local checkmsg = {}
@@ -1042,6 +1076,8 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
                 (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                 ;
                 (chatting_contents[contentindex]):SetShow(true)
+                ;
+                (chatting_contents[contentindex]):SetIgnore(true)
                 textStaticSizeX = panelSizeX - chatting_Icon:GetSizeX() - chatting_sender:GetTextSizeX()
                 textStaticPosX = chatting_Icon:GetSizeX() + chatting_sender:GetTextSizeX() + chat_contentAddPosX
                 j = 1
@@ -1086,15 +1122,15 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
                   do
                     msgDataLen = 0
                     contentindex = contentindex + 1
-                    -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -1107,13 +1143,13 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
               (chatting_contents[contentindex - 1]):SetSize((chatting_contents[contentindex - 1]):GetSizeX(), chatting_sender:GetSizeY())
             end
             msgstartindex = (string.len)(msg)
-            -- DECOMPILER ERROR at PC293: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC293: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC293: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC293: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC301: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1257,6 +1293,10 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
             else
               checkitemwebat = 0
             end
+          else
+            if isLinkedMentalCard then
+              checkitemwebat = 5
+            end
           end
         end
       end
@@ -1290,6 +1330,8 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
           (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
           ;
           (chatting_contents[contentindex]):SetShow(true)
+          ;
+          (chatting_contents[contentindex]):SetIgnore(true)
         else
           if checkitemwebat == 1 then
             chatting_contents[contentindex] = poolCurrentUI:newChattingLinkedItem(messageIndex)
@@ -1327,6 +1369,24 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
                   (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                   ;
                   (chatting_contents[contentindex]):SetIgnore(false)
+                else
+                  if checkitemwebat == 5 then
+                    chatting_contents[contentindex] = poolCurrentUI:newChattingContents()
+                    ;
+                    (chatting_contents[contentindex]):SetFontColor(UI_color.C_FFFFFFFF)
+                    ;
+                    (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
+                    ;
+                    (chatting_contents[contentindex]):addInputEvent("Mouse_On", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",true )")
+                    ;
+                    (chatting_contents[contentindex]):addInputEvent("Mouse_Out", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",false )")
+                    ;
+                    (chatting_contents[contentindex]):addInputEvent("Mouse_LUp", "PaGlobal_HandleClicked_MentalCard(" .. chattingMessage:getMantalCardKey() .. ")")
+                    ;
+                    (chatting_contents[contentindex]):SetShow(true)
+                    ;
+                    (chatting_contents[contentindex]):SetIgnore(false)
+                  end
                 end
               end
             end
@@ -1369,15 +1429,15 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
           do
             msgDataLen = 0
             contentindex = contentindex + 1
-            -- DECOMPILER ERROR at PC838: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC905: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC838: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC905: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC838: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC905: LeaveBlock: unexpected jumping out IF_STMT
 
-            -- DECOMPILER ERROR at PC838: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC905: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC838: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC905: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1396,55 +1456,21 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
   end
 end
 
-PaGlobal_ChattingType_ToolTip = function(index, isOn, Type)
-  -- function num : 0_5 , upvalues : UI_CT
-  local name, desc, control = nil, nil, nil
-  control = PaGlobal_getChattingIconByIndex(index)
-  if UI_CT.Private == Type then
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_WHISPER")
-  else
-    if UI_CT.System == Type then
-      name = "[" .. PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_SYSTEM") .. "]"
-    else
-      if UI_CT.World == Type then
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_CHANNEL")
-      else
-        if UI_CT.Public == Type then
-          name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_NORMAL")
-        else
-          if UI_CT.Party == Type then
-            name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_PARTY")
-          else
-            if UI_CT.Guild == Type then
-              name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_GUILD")
-            else
-              if UI_CT.WorldWithItem == Type then
-                name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_WORLD")
-              else
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-  if (UI_CT.Battle == Type and UI_CT.LocalWar ~= Type) or UI_CT.RolePlay == Type then
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_ROLEPLAY")
-  else
-    if UI_CT.Arsha == Type then
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_ARSHA")
-    else
-      if UI_CT.Team == Type then
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_CHATNEW_DIVISION_TEAM")
-      end
-    end
-  end
-  registTooltipControl(control, Panel_Tooltip_SimpleText)
-  if isOn == true then
-    TooltipSimple_Show(control, name, desc)
-  else
+PaGlobal_HanldeOnOut_MentalCard = function(index, isShow)
+  -- function num : 0_5
+  if isShow == false then
     TooltipSimple_Hide()
   end
+  local control = PaGlobal_getChattingContentsByIndex(index)
+  local name = (PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_MENTALCARD_TOOLTIP_NAME"))
+  local desc = nil
+  TooltipSimple_Show(control, name, desc)
+end
+
+PaGlobal_HandleClicked_MentalCard = function(mentalCardKey)
+  -- function num : 0_6
+  Panel_Knowledge_Show()
+  Panel_Knowledge_SelectAnotherCard(mentalCardKey)
 end
 
 

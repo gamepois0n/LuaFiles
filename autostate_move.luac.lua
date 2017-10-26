@@ -4,8 +4,8 @@
 -- params : ...
 -- function num : 0
 AutoMoveState_Type = {NONE = 0, TO_NPC_FOR_START_QUEST = 1, TO_NPC_FOR_FINISH_QUEST = 2, SANDWICHED = 3, TO_TOWN_DUE_FULLINVEN = 4, TO_TOWN_DUE_TOOHEAVY = 5}
-AutoState_Move = {_state = AutoStateType.MOVE, _moveflag = AutoMoveState_Type.None, _reserveReason = AutoMoveState_Type.None, _pressDelay = 0, _pressDelay_forHalfSecond = 0, _printTime = 3}
--- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
+AutoState_Move = {_state = AutoStateType.MOVE, _moveflag = AutoMoveState_Type.None, _reserveReason = AutoMoveState_Type.None, _pressDelay = 0, _pressDelay_forHalfSecond = 0, _printTime = 3, _exceptionGuideStart = false, _exceptionGuideString = nil}
+-- DECOMPILER ERROR at PC26: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_Move.init = function(self)
   -- function num : 0_0
@@ -13,7 +13,7 @@ AutoState_Move.init = function(self)
   self._reserveReason = AutoMoveState_Type.None
 end
 
--- DECOMPILER ERROR at PC27: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_Move.start = function(self)
   -- function num : 0_1
@@ -22,9 +22,15 @@ AutoState_Move.start = function(self)
     self._pressDelay = self._printTime
   end
   self._pressDelay_forHalfSecond = 0
+  local questList = ToClient_GetQuestList()
+  local uiQuestInfo = questList:getMainQuestInfo()
+  self._exceptionGuideStart = AutoState_ExceptionGuide:checkException((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest)
+  if self._exceptionGuideStart == true then
+    self._exceptionGuideString = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_EXCEPTIONGUIDE_" .. tostring((uiQuestInfo:getQuestNo())._group) .. "_" .. tostring((uiQuestInfo:getQuestNo())._quest) .. "_1")
+  end
 end
 
--- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_Move.update = function(self, deltaTime)
   -- function num : 0_2
@@ -37,7 +43,11 @@ AutoState_Move.update = function(self, deltaTime)
       if self._moveflag == AutoMoveState_Type.TO_TOWN_DUE_TOOHEAVY then
         FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_MOVE_DUETO_TOOHEAVY"))
       else
-        FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_MOVE_MOVING"))
+        if self._exceptionGuideStart == true then
+          FGlobal_AutoQuestBlackSpiritMessage(self._exceptionGuideString)
+        else
+          FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_MOVE_MOVING"))
+        end
       end
     end
   end
@@ -71,7 +81,7 @@ AutoState_Move.update = function(self, deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_Move.endProc = function(self)
   -- function num : 0_3
@@ -84,14 +94,14 @@ AutoState_Move.endProc = function(self)
   ((PaGlobal_AutoQuestMsg._ui)._staticBlackSpirit):AddEffect("fN_DarkSpirit_Idle_2_AutoQuest", true, -50, -70)
 end
 
--- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_Move.setReserveReason = function(self, reason)
   -- function num : 0_4
   self._reserveReason = reason
 end
 
--- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_Move.isReservation = function(self)
   -- function num : 0_5

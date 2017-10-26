@@ -43,11 +43,11 @@ end
 FGlobal_TerritoryWar_Caution = function()
   -- function num : 0_2
   local isCaution = ToClient_IsDangerBySiegeSelf()
-  local isGameMaster = ToClient_SelfPlayerIsGM()
   Panel_TerritoryWar_Caution:SetShow(false)
-  Panel_TerritoryWar_Caution:SetPosX(getScreenSizeX() / 2 - Panel_TerritoryWar_Caution:GetSizeX() / 2)
-  Panel_TerritoryWar_Caution:SetPosY(230)
   if isCaution then
+    Panel_TerritoryWar_Caution:SetPosX(getScreenSizeX() / 2 - Panel_TerritoryWar_Caution:GetSizeX() / 2)
+    Panel_TerritoryWar_Caution:SetPosY(230)
+    local isGameMaster = ToClient_SelfPlayerIsGM()
     if isGameMaster then
       Panel_TerritoryWar_Caution:SetShow(false, false)
     else

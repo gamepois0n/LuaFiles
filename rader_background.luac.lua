@@ -6,59 +6,77 @@
 Panel_RadarRealLine = {panel = nil, 
 mapImage = {}
 , 
+mapValue = {}
+, 
 desertMapImage = {}
+, 
+desertMapValue = {}
 , maxAlphaDesert = 0}
 local const = {imageSize = 256, size = 5}
 local currentPosition = int3(0, 0, 0)
 local currentRate = 0
 local currentSelfPos = {x = 0, y = 0}
 local currentAlpha = 1
+local PIM = CppEnums.EProcessorInputMode
+local floor = math.floor
 RadarMap_Init = function()
-  -- function num : 0_0 , upvalues : const
+  -- function num : 0_0 , upvalues : const, floor
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R0 in 'UnsetPending'
 
   Panel_RadarRealLine.panel = Panel_Radar
-  for index = 0, const.size * const.size - 1 do
-    -- DECOMPILER ERROR at PC24: Confused about usage of register: R4 in 'UnsetPending'
+  local constImageSize = const.imageSize
+  local constSize = const.size
+  local reciprocalConstSize = 1 / constSize
+  local loopCount = constSize * constSize - 1
+  for index = 0, loopCount do
+    -- DECOMPILER ERROR at PC26: Confused about usage of register: R8 in 'UnsetPending'
 
     (Panel_RadarRealLine.mapImage)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Radar, "Static_minimap_Image_" .. index)
     ;
     ((Panel_RadarRealLine.mapImage)[index]):SetShow(true)
     ;
-    ((Panel_RadarRealLine.mapImage)[index]):SetSize(const.imageSize, const.imageSize)
+    ((Panel_RadarRealLine.mapImage)[index]):SetSize(constImageSize, constImageSize)
     ;
     ((Panel_RadarRealLine.mapImage)[index]):SetIgnore(true)
     ;
-    ((Panel_RadarRealLine.mapImage)[index]):SetPosX(index % const.size * const.imageSize)
+    ((Panel_RadarRealLine.mapImage)[index]):SetPosX(index % constSize * constImageSize)
     ;
-    ((Panel_RadarRealLine.mapImage)[index]):SetPosY((math.floor)(index / const.size) * const.imageSize)
+    ((Panel_RadarRealLine.mapImage)[index]):SetPosY(floor(index * reciprocalConstSize) * constImageSize)
     ;
     ((Panel_RadarRealLine.mapImage)[index]):SetColor((Defines.Color).C_FFFFFFFF)
     ;
     ((Panel_RadarRealLine.mapImage)[index]):SetDepth(2)
+    -- DECOMPILER ERROR at PC82: Confused about usage of register: R8 in 'UnsetPending'
+
+    ;
+    (Panel_RadarRealLine.mapValue)[index] = int2(9999, 9999)
     ;
     (Panel_RadarRealLine.panel):SetChildIndex((Panel_RadarRealLine.mapImage)[index], index)
   end
-  for index = 0, const.size * const.size - 1 do
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R4 in 'UnsetPending'
+  for index = 0, loopCount do
+    -- DECOMPILER ERROR at PC108: Confused about usage of register: R8 in 'UnsetPending'
 
     (Panel_RadarRealLine.desertMapImage)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Radar, "Static_minimap_ImageDesert_" .. index)
     ;
     ((Panel_RadarRealLine.desertMapImage)[index]):SetShow(false)
     ;
-    ((Panel_RadarRealLine.desertMapImage)[index]):SetSize(const.imageSize, const.imageSize)
+    ((Panel_RadarRealLine.desertMapImage)[index]):SetSize(constImageSize, constImageSize)
     ;
     ((Panel_RadarRealLine.desertMapImage)[index]):SetIgnore(true)
     ;
-    ((Panel_RadarRealLine.desertMapImage)[index]):SetPosX(index % const.size * const.imageSize)
+    ((Panel_RadarRealLine.desertMapImage)[index]):SetPosX(index % constSize * constImageSize)
     ;
-    ((Panel_RadarRealLine.desertMapImage)[index]):SetPosY((math.floor)(index / const.size) * const.imageSize)
+    ((Panel_RadarRealLine.desertMapImage)[index]):SetPosY(floor(index * reciprocalConstSize) * constImageSize)
     ;
     ((Panel_RadarRealLine.desertMapImage)[index]):SetColor((Defines.Color).C_FFFFFFFF)
     ;
     ((Panel_RadarRealLine.desertMapImage)[index]):SetDepth(1)
+    -- DECOMPILER ERROR at PC164: Confused about usage of register: R8 in 'UnsetPending'
+
     ;
-    (Panel_RadarRealLine.panel):SetChildIndex((Panel_RadarRealLine.desertMapImage)[index], index + const.size * const.size)
+    (Panel_RadarRealLine.desertMapValue)[index] = int2(9999, 9999)
+    ;
+    (Panel_RadarRealLine.panel):SetChildIndex((Panel_RadarRealLine.desertMapImage)[index], index + constSize * constSize)
   end
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
@@ -68,20 +86,21 @@ RadarMap_Init = function()
   if regionInfoWrapper == nil then
     return 
   end
-  -- DECOMPILER ERROR at PC213: Confused about usage of register: R2 in 'UnsetPending'
+  local desertMapImageContainer = Panel_RadarRealLine.desertMapImage
+  -- DECOMPILER ERROR at PC200: Confused about usage of register: R7 in 'UnsetPending'
 
   if (regionInfoWrapper:isDesert() and selfPlayerWrapper:isResistDesert() == false) or regionInfoWrapper:isOcean() then
     Panel_RadarRealLine.maxAlphaDesert = 1
-    for key,value in pairs(Panel_RadarRealLine.desertMapImage) do
+    for key,value in pairs(desertMapImageContainer) do
       value:SetShow(true)
       value:SetAlpha(1)
     end
   else
     do
-      -- DECOMPILER ERROR at PC229: Confused about usage of register: R2 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC215: Confused about usage of register: R7 in 'UnsetPending'
 
       Panel_RadarRealLine.maxAlphaDesert = 0
-      for key,value in pairs(Panel_RadarRealLine.desertMapImage) do
+      for key,value in pairs(desertMapImageContainer) do
         value:SetShow(false)
         value:SetAlpha(0)
       end
@@ -90,105 +109,123 @@ RadarMap_Init = function()
 end
 
 local updatePanel = function()
-  -- function num : 0_1
-  if (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode ~= getInputMode() and (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode ~= getInputMode() then
-    local isUiMode = not getEnableSimpleUI()
-    do
-      local IsMouseOver = Panel_Radar:GetPosX() < getMousePosX() and getMousePosX() < Panel_Radar:GetPosX() + Panel_Radar:GetSizeX() and Panel_Radar:GetPosY() < getMousePosY() and getMousePosY() < Panel_Radar:GetPosY() + Panel_Radar:GetSizeY()
-      if isUiMode then
-        isUiMode = IsMouseOver
-      end
-      -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  -- function num : 0_1 , upvalues : PIM
+  if getEnableSimpleUI() then
+    local inputMode = getInputMode()
+    local isUiMode = PIM.eProcessorInputMode_UiMode == inputMode or PIM.eProcessorInputMode_ChattingInputMode == inputMode
+    local radarPosX = Panel_Radar:GetPosX()
+    local radarPosY = Panel_Radar:GetPosY()
+    local mousePosX = getMousePosX()
+    local mousePosY = getMousePosY()
+    local IsMouseOver = radarPosX < mousePosX and mousePosX < radarPosX + Panel_Radar:GetSizeX() and radarPosY < mousePosY and mousePosY < radarPosY + Panel_Radar:GetSizeY()
+    if isUiMode then
+      isUiMode = IsMouseOver
     end
   end
+  -- DECOMPILER ERROR: 4 unprocessed JMP targets
 end
 
+local prevMaxAlpha = nil
 local updateMapImage = function(position, deltaTime)
-  -- function num : 0_2 , upvalues : currentPosition, currentRate, currentSelfPos, currentAlpha, const
+  -- function num : 0_2 , upvalues : currentPosition, currentRate, currentSelfPos, prevMaxAlpha, currentAlpha, const, floor
   if position.x == currentPosition.x and position.z == currentPosition.z and currentRate == RaderMap_GetDistanceToPixelRate() and currentSelfPos.x == (RaderMap_GetSelfPosInRader()).x and currentSelfPos.y == (RaderMap_GetSelfPosInRader()).y and Panel_RadarRealLine.maxAlphaDesert == prevMaxAlpha then
     return 
   end
-  local prevMaxAlpha = Panel_RadarRealLine.maxAlphaDesert
+  prevMaxAlpha = Panel_RadarRealLine.maxAlphaDesert
   local regionInfoWrapper = (getSelfPlayer()):getRegionInfoWrapper()
-  -- DECOMPILER ERROR at PC60: Confused about usage of register: R4 in 'UnsetPending'
+  local isResistDesert = (getSelfPlayer()):isResistDesert()
+  local isDesert = regionInfoWrapper:isDesert()
+  local isOcean = regionInfoWrapper:isOcean()
+  local desertMapImageContainer = Panel_RadarRealLine.desertMapImage
+  -- DECOMPILER ERROR at PC63: Confused about usage of register: R7 in 'UnsetPending'
 
-  if (regionInfoWrapper:isDesert() and (getSelfPlayer()):isResistDesert() == false) or regionInfoWrapper:isOcean() then
+  if (isDesert and isResistDesert == false) or isOcean then
     Panel_RadarRealLine.maxAlphaDesert = Panel_RadarRealLine.maxAlphaDesert + deltaTime / 2
-    -- DECOMPILER ERROR at PC66: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC69: Confused about usage of register: R7 in 'UnsetPending'
 
     if Panel_RadarRealLine.maxAlphaDesert > 1 then
       Panel_RadarRealLine.maxAlphaDesert = 1
     end
-    for key,value in pairs(Panel_RadarRealLine.desertMapImage) do
+    local calcAlpha = Panel_RadarRealLine.maxAlphaDesert * currentAlpha
+    for key,value in pairs(desertMapImageContainer) do
       value:SetShow(true)
-      value:SetAlpha(Panel_RadarRealLine.maxAlphaDesert * currentAlpha)
+      value:SetAlpha(calcAlpha)
     end
   else
     do
-      -- DECOMPILER ERROR at PC93: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC96: Confused about usage of register: R7 in 'UnsetPending'
 
       if Panel_RadarRealLine.maxAlphaDesert > 0 then
         Panel_RadarRealLine.maxAlphaDesert = Panel_RadarRealLine.maxAlphaDesert - deltaTime / 2
-        -- DECOMPILER ERROR at PC99: Confused about usage of register: R4 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC102: Confused about usage of register: R7 in 'UnsetPending'
 
         if Panel_RadarRealLine.maxAlphaDesert < 0 then
           Panel_RadarRealLine.maxAlphaDesert = 0
         end
-        for key,value in pairs(Panel_RadarRealLine.desertMapImage) do
+        local calcAlpha = Panel_RadarRealLine.maxAlphaDesert * currentAlpha
+        for key,value in pairs(desertMapImageContainer) do
           value:SetShow(true)
-          value:SetAlpha(Panel_RadarRealLine.maxAlphaDesert * currentAlpha)
+          value:SetAlpha(calcAlpha)
         end
       else
         do
-          for key,value in pairs(Panel_RadarRealLine.desertMapImage) do
+          for key,value in pairs(desertMapImageContainer) do
             value:SetShow(false)
             value:SetAlpha(0)
           end
           do
             currentSelfPos = {x = (RaderMap_GetSelfPosInRader()).x, y = (RaderMap_GetSelfPosInRader()).y}
             currentRate = RaderMap_GetDistanceToPixelRate()
-            -- DECOMPILER ERROR at PC149: Confused about usage of register: R4 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC150: Confused about usage of register: R7 in 'UnsetPending'
 
-            const.imageSize = (math.floor)(currentRate * 256)
+            const.imageSize = floor(currentRate * 256)
+            local constImageSize = const.imageSize
+            local constSize = const.size
+            local halfConstSize = floor(constSize / 2)
+            local reciprocalConstSize = 1 / constSize
             currentPosition = position
             local currentSector = convertPosToSector(currentPosition)
-            -- DECOMPILER ERROR at PC155: Confused about usage of register: R5 in 'UnsetPending'
-
-            int3Value.y = 0
             local inSectorPos = convertPosToInSectorPos(currentPosition)
-            local startX = (math.floor)(-(inSectorPos.x / 100 * currentRate) * 2 - const.imageSize * 2 + currentSelfPos.x)
-            local startY = (math.floor)(inSectorPos.z / 100 * currentRate * 2 - const.imageSize * 3 + currentSelfPos.y)
-            local xValue = 0
-            local zValue = 0
-            for index = 0, const.size * const.size - 1 do
-              local filePath = ToClient_getRadarPath() .. "Rader_" .. currentSector.x - (math.floor)(const.size / 2) + index % const.size .. "_" .. currentSector.z + (math.floor)(const.size / 2) - (math.floor)(index / const.size) .. ".dds"
-              ;
-              ((Panel_RadarRealLine.mapImage)[index]):ChangeTextureInfoName(filePath)
-              ;
-              ((Panel_RadarRealLine.mapImage)[index]):SetPosX(startX + index % const.size * const.imageSize)
-              ;
-              ((Panel_RadarRealLine.mapImage)[index]):SetPosY(startY + (math.floor)(index / const.size) * const.imageSize)
-              ;
-              ((Panel_RadarRealLine.mapImage)[index]):SetSize(const.imageSize, const.imageSize)
-              ;
-              ((Panel_RadarRealLine.mapImage)[index]):SetAlpha((1 - Panel_RadarRealLine.maxAlphaDesert) * currentAlpha)
-              ;
-              ((Panel_RadarRealLine.mapImage)[index]):SetShow(true)
-              xValue = (currentSector.x + index) % const.size
-              zValue = const.size - (currentSector.z - (math.floor)(index / const.size)) % const.size - 1
-              if regionInfoWrapper:isDesert() and (getSelfPlayer()):isResistDesert() == false then
-                ((Panel_RadarRealLine.desertMapImage)[index]):ChangeTextureInfoName("New_UI_Common_forLua/Widget/Rader/Rader_Desert_" .. xValue .. "_" .. zValue .. ".dds")
-              else
-                if regionInfoWrapper:isOcean() then
-                  ((Panel_RadarRealLine.desertMapImage)[index]):ChangeTextureInfoName("New_UI_Common_forLua/Widget/Rader/Rader_Ocean_" .. xValue .. "_" .. zValue .. ".dds")
+            local startX = floor(-(inSectorPos.x * 0.01 * currentRate) * 2 - constImageSize * 2 + currentSelfPos.x)
+            local startY = floor(inSectorPos.z * 0.01 * currentRate * 2 - constImageSize * 3 + currentSelfPos.y)
+            local calcAlpha = (1 - Panel_RadarRealLine.maxAlphaDesert) * currentAlpha
+            local radarPath = ToClient_getRadarPath() .. "Rader_"
+            local loopCount = constSize * constSize - 1
+            for index = 0, loopCount do
+              local indexModConstSize = index % constSize
+              local floorIndexDivConstSize = floor(index * reciprocalConstSize)
+              local xSector = currentSector.x - halfConstSize + indexModConstSize
+              local zSector = currentSector.z + halfConstSize - floorIndexDivConstSize
+              local mapImage = (Panel_RadarRealLine.mapImage)[index]
+              local mapValue = (Panel_RadarRealLine.mapValue)[index]
+              if mapValue.x ~= xSector or mapValue.y ~= zSector then
+                mapValue.x = xSector
+                mapValue.y = zSector
+                mapImage:ChangeTextureInfoName(radarPath .. xSector .. "_" .. zSector .. ".dds")
+              end
+              mapImage:SetPosX(startX + indexModConstSize * constImageSize)
+              mapImage:SetPosY(startY + floorIndexDivConstSize * constImageSize)
+              mapImage:SetSize(constImageSize, constImageSize)
+              mapImage:SetAlpha(calcAlpha)
+              mapImage:SetShow(true)
+              local xValue = (currentSector.x + index) % constSize
+              local zValue = constSize - (currentSector.z - floorIndexDivConstSize) % constSize - 1
+              local desertMapImage = (Panel_RadarRealLine.desertMapImage)[index]
+              local desertMapValue = (Panel_RadarRealLine.desertMapValue)[index]
+              if desertMapValue.x ~= xValue or desertMapValue.y ~= zValue then
+                desertMapValue.x = xValue
+                desertMapValue.y = zValue
+                if isDesert and not isResistDesert then
+                  desertMapImage:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Rader/Rader_Desert_" .. xValue .. "_" .. zValue .. ".dds")
+                else
+                  if isOcean then
+                    desertMapImage:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Rader/Rader_Ocean_" .. xValue .. "_" .. zValue .. ".dds")
+                  end
                 end
               end
-              ;
-              ((Panel_RadarRealLine.desertMapImage)[index]):SetPosX(startX + index % const.size * const.imageSize)
-              ;
-              ((Panel_RadarRealLine.desertMapImage)[index]):SetPosY(startY + (math.floor)(index / const.size) * const.imageSize)
-              ;
-              ((Panel_RadarRealLine.desertMapImage)[index]):SetSize(const.imageSize, const.imageSize)
+              desertMapImage:SetPosX(startX + indexModConstSize * constImageSize)
+              desertMapImage:SetPosY(startY + floorIndexDivConstSize * constImageSize)
+              desertMapImage:SetSize(constImageSize, constImageSize)
             end
           end
         end
@@ -224,7 +261,8 @@ end
 
 RadarBackground_SetRotateMode = function(isRotateMode)
   -- function num : 0_7 , upvalues : const
-  for index = 0, const.size * const.size - 1 do
+  local loopCount = const.size * const.size - 1
+  for index = 0, loopCount do
     ((Panel_RadarRealLine.mapImage)[index]):SetParentRotCalc(isRotateMode)
   end
 end
@@ -236,7 +274,8 @@ RaderMapBG_SetAlphaValue = function(alpha)
     isShowFront = false
   end
   currentAlpha = alpha
-  for index = 0, const.size * const.size - 1 do
+  local loopCount = const.size * const.size - 1
+  for index = 0, loopCount do
     ((Panel_RadarRealLine.mapImage)[index]):SetAlpha((1 - Panel_RadarRealLine.maxAlphaDesert) * currentAlpha)
     ;
     ((Panel_RadarRealLine.mapImage)[index]):SetShow(isShowFront)

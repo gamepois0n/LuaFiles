@@ -389,6 +389,9 @@ local TransferLife_Update = function()
     slotBtn:SetMonoTone(false)
     slotBtn:SetEnable(true)
     local characterData = getCharacterDataByIndex(slotIdx)
+    if characterData == nil then
+      return 
+    end
     local characterName = getCharacterName(characterData)
     local classType = getCharacterClassType(characterData)
     local characterLevel = (string.format)("%d", characterData._level)

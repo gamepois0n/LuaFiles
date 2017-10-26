@@ -93,6 +93,10 @@ do
   ((self.materialSlot).icon):addInputEvent("Mouse_RUp", "Improvement_SlotInit()")
   ;
   (self._chk_Skip):SetCheck(false)
+  ;
+  (self._chk_Skip):addInputEvent("Mouse_On", "Improvement_SimpleTooltip(true, 0)")
+  ;
+  (self._chk_Skip):addInputEvent("Mouse_Out", "Improvement_SimpleTooltip(false)")
 end
 
   improvement:Init()
@@ -287,8 +291,22 @@ end
   end
 end
 
-  DoImprove = function()
+  Improvement_SimpleTooltip = function(isShow, tipType)
   -- function num : 0_12 , upvalues : improvement
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = improvement
+  local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_SIMPLETOOLTIP_SKIP_NAME")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_SIMPLETOOLTIP_SKIP_DESC")
+  control = self._chk_Skip
+  TooltipSimple_Show(control, name, desc)
+end
+
+  DoImprove = function()
+  -- function num : 0_13 , upvalues : improvement
   local self = improvement
   if self._doImprove then
     (self.effectControl):EraseAllEffect()
@@ -354,7 +372,7 @@ end
 end
 
   UpdateFunc_DoingImprove = function(deltaTime)
-  -- function num : 0_13 , upvalues : improvement
+  -- function num : 0_14 , upvalues : improvement
   local self = improvement
   self.animationTime = self.animationTime + deltaTime
   if self._doImprove then
@@ -402,7 +420,7 @@ end
 end
 
   FromClient_ResponseImporve = function(itemEnchantKey)
-  -- function num : 0_14
+  -- function num : 0_15
   local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(itemEnchantKey))
   Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_SUCCESSMSG", "itemName", tostring(itemSSW:getName())))
 end

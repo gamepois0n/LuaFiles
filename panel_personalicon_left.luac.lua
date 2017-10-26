@@ -13,6 +13,7 @@ Panel_PersonalIcon_Left:SetShow(true, false)
 Panel_PersonalIcon_Left:SetIgnore(true)
 Panel_PersonalIcon_Left:ActiveMouseEventEffect(false)
 local _defaultEventExp = 1000000
+local isBlackSpiritEnable = ToClient_IsContentsGroupOpen("1015")
 local _btn_NewSkill = (UI.getChildControl)(Panel_PersonalIcon_Left, "Button_NewSkill")
 local _txt_NewSkill = (UI.getChildControl)(Panel_PersonalIcon_Left, "StaticText_Number")
 local _txt_NewSkillDesc = (UI.getChildControl)(Panel_PersonalIcon_Left, "StaticText_NewSkillHelp")
@@ -37,10 +38,12 @@ local _blackSpiritTraining = (UI.getChildControl)(Panel_PersonalIcon_Left, "Stat
 local _expVehicleEvent = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_HorseExpUp")
 local _pcRoomUserHomeBuff = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_PcRoomBuff")
 local _goldPremiumBuff = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_GoldPremiumBuff")
+local _challengeReward = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_Challenge")
+local _challengeNumber = (UI.getChildControl)(_challengeReward, "StaticText_ChallengeNumber")
 local _russiaKamasilv = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_RussiaKamasilv")
 local _russiaPack3 = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_RussiaPack3")
 local registEventHandler = function()
-  -- function num : 0_0 , upvalues : _btn_NewSkill, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _NodeLvBuffIcon, _pearlPackage, _expEvent, _dropEvent, _customize, _pearlPallete, _goldenBell, _skillReset, _awakenSkillReset, _blackSpiritTraining, _expVehicleEvent, _pcRoomUserHomeBuff, _goldPremiumBuff, _btnCashShop, _btnAlertClose, _russiaPack3, _russiaKamasilv
+  -- function num : 0_0 , upvalues : _btn_NewSkill, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _NodeLvBuffIcon, _pearlPackage, _expEvent, _dropEvent, _customize, _pearlPallete, _goldenBell, _skillReset, _awakenSkillReset, _blackSpiritTraining, _expVehicleEvent, _pcRoomUserHomeBuff, _goldPremiumBuff, _challengeReward, _btnCashShop, _btnAlertClose, _russiaPack3, _russiaKamasilv
   _btn_NewSkill:addInputEvent("Mouse_LUp", "HandleMLUp_SkillWindow_OpenForLearn()")
   _btn_NewSkill:addInputEvent("Mouse_RUp", "Panel_SelfPlayer_EnableSkillCheck_Close()")
   _btn_NewSkill:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 0 )")
@@ -79,6 +82,9 @@ local registEventHandler = function()
   _pcRoomUserHomeBuff:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false )")
   _goldPremiumBuff:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip(true, 19)")
   _goldPremiumBuff:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip(false)")
+  _challengeReward:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip(true, 20)")
+  _challengeReward:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip(false)")
+  _challengeReward:addInputEvent("Mouse_LUp", "_challengeCall_byNewChallengeAlarm()")
   _btnCashShop:addInputEvent("Mouse_LUp", "PearlShop_Open()")
   _btnAlertClose:addInputEvent("Mouse_LUp", "PremiumNotice_Close()")
   _russiaPack3:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 15 )")
@@ -93,7 +99,7 @@ _ExpFix:SetShow(false)
 _btn_NewSkill:ActiveMouseEventEffect(true)
 local _buffIconPosX = 0
 PackageIconPosition = function()
-  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _goldPremiumBuff, _buffIconPosX
+  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _challengeReward, _goldPremiumBuff, _buffIconPosX
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -104,6 +110,7 @@ PackageIconPosition = function()
   local iconBackPosX = nil
   local player = selfPlayer:get()
   local goldenBellTime_s64 = player:getGoldenbellExpirationTime_s64()
+  local remainRewardCount = ToClient_GetChallengeRewardInfoCount()
   local tmpTime = convertStringFromDatetime(goldenBellTime_s64)
   local starter = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_StarterPackage)
   local premium = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
@@ -239,7 +246,12 @@ PackageIconPosition = function()
     _blackSpiritTraining:SetPosY(iconPosY)
     iconPosX = iconPosX + _blackSpiritTraining:GetSizeX() + iconGapX
   end
-  -- DECOMPILER ERROR at PC572: Unhandled construct in 'MakeBoolean' P3
+  if remainRewardCount > 0 then
+    _challengeReward:SetPosX(iconPosX)
+    _challengeReward:SetPosY(iconPosY)
+    iconPosX = iconPosX + _challengeReward:GetSizeX() + iconGapX
+  end
+  -- DECOMPILER ERROR at PC589: Unhandled construct in 'MakeBoolean' P3
 
   if (((_pcRoomIcon:GetShow() and not applyPcRoomUserHomeBuff)) or applyPremiumValueBuff) and premiumValueBuff > 0 then
     _goldPremiumBuff:SetPosX(iconPosX)
@@ -256,7 +268,7 @@ local pcRoomNeedTime = ToClient_GetPcRoomUserHomeBuffLimitTime()
 local needTime = Int64toInt32(pcRoomNeedTime)
 local useTime = 0
 BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
-  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _btn_NewSkill, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff, needTime, useTime, _goldPremiumBuff
+  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _btn_NewSkill, isBlackSpiritEnable, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff, needTime, useTime, _goldPremiumBuff, _challengeReward
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -275,6 +287,7 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
   local goldenBellPercentString = tostring((math.floor)(goldenBellPercent / 10000))
   local goldenBellCharacterName = player:getGoldenbellItemOwnerCharacterName()
   local goldenBellGuildName = player:getGoldenbellItemOwnerGuildName()
+  local remainRewardCount = ToClient_GetChallengeRewardInfoCount()
   local starter = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_StarterPackage)
   local premium = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
   local pearl = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PearlPackage)
@@ -308,8 +321,13 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
         name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_TITLE_NA")
         desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_DESC_NA")
       else
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_TITLE")
-        desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_DESC")
+        if isBlackSpiritEnable then
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_TITLE")
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_DESC")
+        else
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_TITLE")
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOM_DESC_NONEBLACKSPIRIT")
+        end
       end
       uiControl = _pcRoomIcon
     else
@@ -515,6 +533,12 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                                                                   name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PREMIUMVALUE_TITLE")
                                                                   desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PREMIUMVALUE_DESC", "time", convertStringFromDatetime(toInt64(0, premiumValueTime)))
                                                                   uiControl = _goldPremiumBuff
+                                                                else
+                                                                  if iconType == 20 then
+                                                                    name = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_NAME")
+                                                                    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_DESC", "count", remainRewardCount)
+                                                                    uiControl = _challengeReward
+                                                                  end
                                                                 end
                                                                 if isShow == true then
                                                                   TooltipSimple_Show(uiControl, name, desc)
@@ -582,9 +606,14 @@ Panel_SelfPlayer_EnableSkillCheck_Close = function()
   FromClient_PackageIconUpdate()
 end
 
+PaGlobal_SelfPlayer_Expgage = function()
+  -- function num : 0_5 , upvalues : _challengeReward
+  _challengeReward:SetShow(false)
+end
+
 local valuePackCheck = false
 FromClient_PackageIconUpdate = function()
-  -- function num : 0_5 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _pcRoomUserHomeBuff
+  -- function num : 0_6 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, _challengeReward, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _pcRoomUserHomeBuff, _challengeNumber
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local selfPlayer = getSelfPlayer()
@@ -598,6 +627,7 @@ FromClient_PackageIconUpdate = function()
   local customize = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_CustomizationPackage)
   local dyeingPackage = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_DyeingPackage)
   local russiaKamasilv = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_Kamasilve)
+  local remainRewardCount = ToClient_GetChallengeRewardInfoCount()
   local applyStarter = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_StarterPackage)
   local applyPremium = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
   local applyPearl = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PearlPackage)
@@ -622,6 +652,7 @@ FromClient_PackageIconUpdate = function()
   _awakenSkillReset:SetShow(false)
   _russiaPack3:SetShow(false)
   _goldPremiumBuff:SetShow(false)
+  _challengeReward:SetShow(false)
   if valuePackCheck then
     valuePackCheck = false
     PremiumPackageBuyNotice()
@@ -706,6 +737,12 @@ FromClient_PackageIconUpdate = function()
           else
             _goldPremiumBuff:SetShow(false)
           end
+          if remainRewardCount > 0 then
+            _challengeReward:SetShow(true)
+            _challengeNumber:SetText(remainRewardCount)
+          else
+            _challengeReward:SetShow(false)
+          end
           FGlobal_PersonalIcon_ButtonPosUpdate()
           PackageIconPosition()
         end
@@ -715,7 +752,7 @@ FromClient_PackageIconUpdate = function()
 end
 
 FromClient_ResponseChangeExpAndDropPercent = function()
-  -- function num : 0_6 , upvalues : _expEvent, _dropEvent, _defaultEventExp, _expVehicleEvent
+  -- function num : 0_7 , upvalues : _expEvent, _dropEvent, _defaultEventExp, _expVehicleEvent
   local curChannelData = getCurrentChannelServerData()
   local expEventShow = IsWorldServerEventTypeByWorldNo(curChannelData._worldNo, curChannelData._serverNo, 0)
   local dropEventShow = IsWorldServerEventTypeByWorldNo(curChannelData._worldNo, curChannelData._serverNo, 1)
@@ -740,7 +777,7 @@ FromClient_ResponseChangeExpAndDropPercent = function()
 end
 
 _premiumAlert_ShowAni = function(control, showTime)
-  -- function num : 0_7 , upvalues : UI_ANI_ADV, UI_color
+  -- function num : 0_8 , upvalues : UI_ANI_ADV, UI_color
   control:SetShow(true)
   local closeAni = control:addColorAnimation(showTime, showTime + 0.55, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   closeAni:SetStartColor(UI_color.C_FFFFFFFF)
@@ -753,7 +790,7 @@ _premiumAlert_ShowAni = function(control, showTime)
 end
 
 PremiumPackageBuyNotice = function()
-  -- function num : 0_8 , upvalues : _premiumText, _btnCashShop, _btnAlertClose
+  -- function num : 0_9 , upvalues : _premiumText, _btnCashShop, _btnAlertClose
   if _premiumText:GetShow() then
     return 
   end
@@ -765,20 +802,20 @@ PremiumPackageBuyNotice = function()
 end
 
 PearlShop_Open = function()
-  -- function num : 0_9
+  -- function num : 0_10
   PremiumNotice_Close()
   InGameShop_Open()
 end
 
 PremiumNotice_Close = function()
-  -- function num : 0_10 , upvalues : _premiumText, _btnCashShop, _btnAlertClose
+  -- function num : 0_11 , upvalues : _premiumText, _btnCashShop, _btnAlertClose
   _premiumText:SetShow(false)
   _btnCashShop:SetShow(false)
   _btnAlertClose:SetShow(false)
 end
 
 CharacterExpFix = function()
-  -- function num : 0_11 , upvalues : _ExpFix
+  -- function num : 0_12 , upvalues : _ExpFix
   if ((getSelfPlayer()):get()):getLevel() < 11 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_NOTYETUSE"))
     _ExpFix:SetCheck(false)
@@ -789,7 +826,7 @@ end
 
 local saveWayPoint = nil
 eventChangedExplorationNode = function(wayPointKey)
-  -- function num : 0_12 , upvalues : saveWayPoint, _NodeLvBuffIcon
+  -- function num : 0_13 , upvalues : saveWayPoint, _NodeLvBuffIcon
   local nodeLv = ToClient_GetNodeLevel(wayPointKey)
   local nodeName = ToClient_GetNodeNameByWaypointKey(wayPointKey)
   local nodeExp = ToClient_GetNodeExperience_s64(wayPointKey)
@@ -819,24 +856,24 @@ eventChangedExplorationNode = function(wayPointKey)
 end
 
 FGlobal_NodeLvBuffIcon_SetShow = function(isShow)
-  -- function num : 0_13 , upvalues : _NodeLvBuffIcon
+  -- function num : 0_14 , upvalues : _NodeLvBuffIcon
   _NodeLvBuffIcon:SetShow(isShow)
 end
 
 eventChangedExplorationNodeCheck = function(wayPointKey)
-  -- function num : 0_14
+  -- function num : 0_15
   eventChangedExplorationNode(wayPointKey)
 end
 
 eventChangeExplorationNode = function(wayPointKey)
-  -- function num : 0_15 , upvalues : saveWayPoint
+  -- function num : 0_16 , upvalues : saveWayPoint
   if saveWayPoint == wayPointKey then
     eventChangedExplorationNode(wayPointKey)
   end
 end
 
 FromClient_ResponseGoldenbellItemInfo = function(goldenbellPercent, goldenbellExpirationTime_s64, goldenbellOwnerCharacterName, goldenbellOwnerGuildName)
-  -- function num : 0_16 , upvalues : _goldenBell
+  -- function num : 0_17 , upvalues : _goldenBell
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -864,13 +901,13 @@ FromClient_ResponseGoldenbellItemInfo = function(goldenbellPercent, goldenbellEx
 end
 
 FGlobal_PackageIconUpdate = function()
-  -- function num : 0_17
+  -- function num : 0_18
   FromClient_PackageIconUpdate()
   FromClient_ResponseChangeExpAndDropPercent()
 end
 
 PCRomm_UpdateTime = function()
-  -- function num : 0_18 , upvalues : needTime, useTime
+  -- function num : 0_19 , upvalues : needTime, useTime
   if needTime < useTime then
     return 
   end
@@ -884,7 +921,7 @@ PCRomm_UpdateTime = function()
 end
 
 local registMessageHandler = function()
-  -- function num : 0_19
+  -- function num : 0_20
   registerEvent("FromClient_SelfPlayerCombatSkillPointChanged", "UserSkillPoint_Update")
   registerEvent("FromClient_SelfPlayerCombatSkillPointChanged", "Panel_SelfPlayer_EnableSkillCheck_Func")
   registerEvent("FromClient_EnableSkillCheck", "Panel_SelfPlayer_EnableSkillCheck_Func")

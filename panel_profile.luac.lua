@@ -89,9 +89,10 @@ myProfile.Init = function(self)
   self._periodType = 1
 end
 
-FGlobal_ProfileReward_ApplyGetReward = function(type, index)
+FGlobal_ProfileReward_ApplyGetReward = function(index)
   -- function num : 0_1 , upvalues : myProfile
-  ToClient_sendApplyGetProfileReward((myProfile._rewardKey)[type], index)
+  _PA_LOG("오명�\128", tostring(index) .. tostring((myProfile._rewardKey)[index]))
+  ToClient_sendApplyGetProfileReward((myProfile._rewardKey)[index])
 end
 
 FGlobal_ProfileReward_PeriodUpdate = function(period)
@@ -224,27 +225,35 @@ Profile_RightDataSet = function(index)
       (control._slotBG):SetShow(true)
       local profilerewardwrapper = ToClient_getProfileRewardItem(self._periodType, index)
       if profilerewardwrapper ~= nil then
-        local isIgnore = profilerewardwrapper:getUserProfileRewardFlag()
-        -- DECOMPILER ERROR at PC72: Confused about usage of register: R9 in 'UnsetPending'
-
-        ;
-        (self._rewardKey)[index] = profilerewardwrapper:getUserProfileRewardKey()
+        local userProfileValue = profilerewardwrapper:getUserProfileValue()
+        local userProfileRewardFlag = profilerewardwrapper:getRewardFlag()
         for arrindex = 0, RewardSlotCount - 1 do
           local itemStatic = getItemEnchantStaticStatus(profilerewardwrapper:getUserProfileRewardItemkey(arrindex))
           local rewardkey = 0
           if itemStatic ~= nil then
-            _PA_LOG("오명�\128", "_rewardSlotBG,_rewardSlot")
-            ;
             ((myProfile._rewardSlotBG)[arrindex]):SetShow(true)
             ;
             (((myProfile._rewardSlot)[arrindex]).icon):SetShow(true)
+            if userProfileRewardFlag == true then
+              (((myProfile._rewardSlot)[arrindex]).icon):SetIgnore(true)
+            else
+              ;
+              (((myProfile._rewardSlot)[arrindex]).icon):SetIgnore(userProfileValue < profilerewardwrapper:getUserProfileRewardGoal(arrindex))
+            end
+            -- DECOMPILER ERROR at PC125: Confused about usage of register: R16 in 'UnsetPending'
+
             ;
-            (((myProfile._rewardSlot)[arrindex]).icon):SetIgnore(isIgnore == true)
+            (myProfile._rewardKey)[arrindex] = profilerewardwrapper:getUserProfileRewardKey(arrindex)
+            local keyindex = arrindex
             ;
-            (((myProfile._rewardSlot)[arrindex]).icon):addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_ApplyGetReward(" .. index .. "," .. arrindex .. ")")
+            (((myProfile._rewardSlot)[arrindex]).icon):addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_ApplyGetReward(" .. keyindex .. ")")
             ;
             ((myProfile._rewardSlot)[arrindex]):setItemByStaticStatus(itemStatic, profilerewardwrapper:getUserProfileRewardItemCount(arrindex))
           else
+            -- DECOMPILER ERROR at PC150: Confused about usage of register: R16 in 'UnsetPending'
+
+            (myProfile._rewardKey)[arrindex] = 0
+            ;
             (((myProfile._rewardSlot)[arrindex]).icon):SetShow(false)
             ;
             ((myProfile._rewardSlotBG)[arrindex]):SetShow(false)
@@ -254,7 +263,7 @@ Profile_RightDataSet = function(index)
     else
       (control._slotBG):SetShow(false)
     end
-    -- DECOMPILER ERROR: 5 unprocessed JMP targets
+    -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
 

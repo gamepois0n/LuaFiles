@@ -542,7 +542,7 @@ local Acquire_SetData = function(notifyMsg)
                                                                                                       end
                                                                                                       if isShowChatMsg and (preDefaultMsg ~= defaultMsg or preArcObjectMsg ~= arcObjectMsg) then
                                                                                                         chatting_sendMessage("", defaultMsg, (CppEnums.ChatType).System)
-                                                                                                        if arcObjectMsg ~= nil and arcObjectMsg ~= "" then
+                                                                                                        if arcObjectMsg ~= nil and arcObjectMsg ~= "" and Acquire_Enum.LearnMentalCard ~= arcType then
                                                                                                           chatting_sendMessage("", "[ " .. tostring(arcObjectMsg) .. " ]", (CppEnums.ChatType).System)
                                                                                                         end
                                                                                                       end

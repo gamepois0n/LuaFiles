@@ -73,6 +73,8 @@ end
 raderAlert_Resize()
 local Panel_OrigSizeX = 320
 local Panel_OrigSizeY = 280
+local Panel_ReciprocalOrigSizeX = 1 / Panel_OrigSizeX
+local Panel_ReciprocalOrigSizeY = 1 / Panel_OrigSizeY
 local wheelCount = 0.5
 local cacheSimpleUI_ShowButton = true
 local isMouseOn = false
@@ -109,7 +111,10 @@ CopyBaseProperty(terrainNoticeStyle, terrainNoticeText)
 terrainNoticeStyle = nil
 terrainNoticeText:SetSpanSize(10, 0)
 local floor = math.floor
-local sqrt = math.sqrt
+local atan2 = math.atan2
+local max = math.max
+local min = math.min
+local PI = math.pi
 local RegionData_IngameTime = 0
 local RegionData_RealIngameTime = 0
 local dayCycle = 86400
@@ -126,13 +131,13 @@ local checkLoad = function()
 end
 
 local updateWorldMapDistance = function(mapRadius)
-  -- function num : 0_2 , upvalues : scaleMinValue, scaleMaxValue, RadarMap_UpdatePixelRate
+  -- function num : 0_2 , upvalues : min, max, scaleMinValue, scaleMaxValue, RadarMap_UpdatePixelRate
   local config = radarMap.config
-  config.mapRadius = (math.min)((math.max)(mapRadius, scaleMinValue), scaleMaxValue)
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
+  config.mapRadius = min(max(mapRadius, scaleMinValue), scaleMaxValue)
+  -- DECOMPILER ERROR at PC14: Confused about usage of register: R2 in 'UnsetPending'
 
   radarMap.worldDistanceToPixelRate = config.mapRadiusByPixel / config.mapRadius
-  ToClient_setRadorUIDistanceToPixelRate(radarMap.worldDistanceToPixelRate / 100 * 2)
+  ToClient_setRadorUIDistanceToPixelRate(radarMap.worldDistanceToPixelRate * 0.02)
   RadarMap_UpdatePixelRate()
 end
 
@@ -145,10 +150,10 @@ Rader_updateWorldMapDistance_Reset = function()
 end
 
 FGlobal_Rader_updateWorldMapDistance_Relative = function(value)
-  -- function num : 0_4 , upvalues : updateWorldMapDistance, scaleMinValue, radar_SizeSlider
+  -- function num : 0_4 , upvalues : updateWorldMapDistance, scaleMinValue, max, min, radar_SizeSlider
   updateWorldMapDistance((radarMap.config).mapRadius + (radarMap.config).constMapRadius * value)
   local percents = (radarMap.config).mapRadius - scaleMinValue
-  percents = (math.max)((math.min)(percents, 100), 0)
+  percents = max(min(percents, 100), 0)
   radar_SizeSlider:SetControlPos(100 - percents)
   ToClient_SetRaderScale(radar_SizeSlider:GetControlPos())
   ToClient_SaveUiInfo(false)
@@ -159,13 +164,13 @@ FGlobal_Rader_UpdateWorldMapDistance = function(value)
 end
 
 local controlAlign = function()
-  -- function num : 0_6 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, radar_SizeSlider, radar_AlphaScrl, radar_MiniMapScl, radar_DangerIcon, radar_regionWarName
+  -- function num : 0_6 , upvalues : Panel_ReciprocalOrigSizeX, Panel_ReciprocalOrigSizeY, radar_SizeSlider, radar_AlphaScrl, radar_MiniMapScl, radar_DangerIcon, radar_regionWarName
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
 
-  radarMap.scaleRateWidth = Panel_Radar:GetSizeX() / Panel_OrigSizeX
+  radarMap.scaleRateWidth = Panel_Radar:GetSizeX() * Panel_ReciprocalOrigSizeX
   -- DECOMPILER ERROR at PC13: Confused about usage of register: R0 in 'UnsetPending'
 
-  radarMap.scaleRateHeight = Panel_Radar:GetSizeY() / Panel_OrigSizeY
+  radarMap.scaleRateHeight = Panel_Radar:GetSizeY() * Panel_ReciprocalOrigSizeY
   local scl_minus = (radarMap.controls).rader_Minus
   local scl_plus = (radarMap.controls).rader_Plus
   radar_SizeSlider:SetScale(radarMap.scaleRateWidth, 1)
@@ -187,18 +192,20 @@ local MAX_HEIGHT = 512
 FromClient_MapSizeScale = function()
   -- function num : 0_7 , upvalues : MAX_WIDTH, Panel_OrigSizeX, MAX_HEIGHT, Panel_OrigSizeY, controlAlign, raderAlert_Resize
   local origEndX = Panel_Radar:GetPosX() + Panel_Radar:GetSizeX()
-  if origEndX - getMousePosX() <= MAX_WIDTH and Panel_OrigSizeX <= origEndX - getMousePosX() then
-    Panel_Radar:SetPosX(getMousePosX())
-    Panel_Radar:SetSize(origEndX - getMousePosX(), Panel_Radar:GetSizeY())
+  local mousePosX = getMousePosX()
+  local mousePosY = getMousePosY()
+  if origEndX - mousePosX <= MAX_WIDTH and Panel_OrigSizeX <= origEndX - mousePosX then
+    Panel_Radar:SetPosX(mousePosX)
+    Panel_Radar:SetSize(origEndX - mousePosX, Panel_Radar:GetSizeY())
     ;
     ((radarMap.controls).rader_Background):SetPosX(0)
     ;
-    ((radarMap.controls).rader_Background):SetSize(origEndX - getMousePosX(), Panel_Radar:GetSizeY())
+    ((radarMap.controls).rader_Background):SetSize(origEndX - mousePosX, Panel_Radar:GetSizeY())
   end
-  if getMousePosY() - Panel_Radar:GetPosY() <= MAX_HEIGHT and Panel_OrigSizeY <= getMousePosY() - Panel_Radar:GetPosY() then
-    Panel_Radar:SetSize(Panel_Radar:GetSizeX(), getMousePosY() - Panel_Radar:GetPosY())
+  if mousePosY - Panel_Radar:GetPosY() <= MAX_HEIGHT and Panel_OrigSizeY <= mousePosY - Panel_Radar:GetPosY() then
+    Panel_Radar:SetSize(Panel_Radar:GetSizeX(), mousePosY - Panel_Radar:GetPosY())
     ;
-    ((radarMap.controls).rader_Background):SetSize(Panel_Radar:GetSizeX(), getMousePosY() - Panel_Radar:GetPosY())
+    ((radarMap.controls).rader_Background):SetSize(Panel_Radar:GetSizeX(), mousePosY - Panel_Radar:GetPosY())
   end
   local SPI = (radarMap.controls).icon_SelfPlayer
   local halfSelfSizeX = SPI:GetSizeX() / 2
@@ -207,11 +214,11 @@ FromClient_MapSizeScale = function()
   local halfSizeY = Panel_Radar:GetSizeY() / 2
   SPI:SetPosX(halfSizeX - halfSelfSizeX)
   SPI:SetPosY(halfSizeY - halfSelfSizeY)
-  -- DECOMPILER ERROR at PC122: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC109: Confused about usage of register: R8 in 'UnsetPending'
 
   ;
   (radarMap.pcPosBaseControl).x = SPI:GetPosX() + halfSelfSizeX
-  -- DECOMPILER ERROR at PC128: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC115: Confused about usage of register: R8 in 'UnsetPending'
 
   ;
   (radarMap.pcPosBaseControl).y = SPI:GetPosY() + halfSelfSizeY
@@ -229,8 +236,8 @@ FromClient_MapSizeScale = function()
 end
 
 Rader_IconsSetAlpha = function(alpha)
-  -- function num : 0_8 , upvalues : alphaValue
-  local actorAlpha = (math.max)((math.min)(alpha + 0.2, 1), 0.7)
+  -- function num : 0_8 , upvalues : max, min, alphaValue
+  local actorAlpha = max(min(alpha + 0.2, 1), 0.7)
   for _,areaQuest in pairs(radarMap.areaQuests) do
     (areaQuest.icon_QuestArea):SetAlpha(actorAlpha)
     ;
@@ -243,8 +250,8 @@ Rader_IconsSetAlpha = function(alpha)
 end
 
 Radar_CalcAlaphValue = function(alpha)
-  -- function num : 0_9 , upvalues : alphaValue, radar_AlphaScrl
-  alphaValue = (math.max)((math.min)(alpha, 1), 0)
+  -- function num : 0_9 , upvalues : alphaValue, max, min, radar_AlphaScrl
+  alphaValue = max(min(alpha, 1), 0)
   radar_AlphaScrl:SetControlPos(100 * (1 - alphaValue))
   alphaValue = alphaValue + (1 - alphaValue) * 0.5
   return alphaValue
@@ -306,13 +313,13 @@ Rader_updateWorldMap_ScaleControl_Wheel = function(isUp)
 end
 
 Radar_SetRotateMode = function(isRotate)
-  -- function num : 0_16
+  -- function num : 0_16 , upvalues : PI
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   radarMap.isRotateMode = isRotate
   local rot = 0
   if isRotate then
-    rot = math.pi
+    rot = PI
   else
     resetRadorActorListRotateValue()
     resetPinRotate()
@@ -352,7 +359,7 @@ FGlobal_Radar_HandleMouseOn = function()
 end
 
 RadarMap_Background_MouseRUp = function()
-  -- function num : 0_21 , upvalues : radar_MiniMapScl
+  -- function num : 0_21 , upvalues : radar_MiniMapScl, PI
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local posX = mousePosX - Panel_Radar:GetPosX()
@@ -374,8 +381,8 @@ RadarMap_Background_MouseRUp = function()
     ToClient_DeleteNaviGuideByGroup(0)
   else
     radar_MiniMapScl:AddEffect("fUI_Button_Hide", false, posX, posZ)
-    local posX = getMousePosX() - Panel_Radar:GetPosX()
-    local posY = getMousePosY() - Panel_Radar:GetPosY()
+    local posX = mousePosX - Panel_Radar:GetPosX()
+    local posY = mousePosY - Panel_Radar:GetPosY()
     local intervalX = posX - (((radarMap.controls).icon_SelfPlayer):GetPosX() + ((radarMap.controls).icon_SelfPlayer):GetSizeX() / 2)
     local intervalZ = ((radarMap.controls).icon_SelfPlayer):GetPosY() + ((radarMap.controls).icon_SelfPlayer):GetSizeY() / 2 - posY
     intervalX = intervalX * (100 / (radarMap.worldDistanceToPixelRate * 2))
@@ -386,7 +393,7 @@ RadarMap_Background_MouseRUp = function()
     local tempPos = float2(dist, disty)
     local camRot = getCameraRotation()
     if radarMap.isRotateMode then
-      tempPos:rotate(camRot + math.pi)
+      tempPos:rotate(camRot + PI)
     end
     local selfPosition = (getSelfPlayer()):get3DPos()
     local float3Pos = float3(selfPosition.x + tempPos.x, 0, selfPosition.z + tempPos.y)
@@ -397,7 +404,7 @@ RadarMap_Background_MouseRUp = function()
 end
 
 local controlInit = function()
-  -- function num : 0_22 , upvalues : radarTime, radar_DangerIcon, radar_SizeBtn, radar_SizeSlider, radar_AlphaBtn, radar_AlphaScrl, alphaValue, radar_MiniMapScl, controlAlign, updateWorldMapDistance, scaleMinValue
+  -- function num : 0_22 , upvalues : radarTime, radar_DangerIcon, radar_SizeBtn, radar_SizeSlider, radar_AlphaBtn, radar_AlphaScrl, alphaValue, radar_MiniMapScl, controlAlign, PI, updateWorldMapDistance, scaleMinValue
   local radarControl = radarMap.controls
   ;
   (radarControl.timeNum):SetShow(false)
@@ -512,7 +519,7 @@ local controlInit = function()
   (radarControl.rader_Close):SetAlpha(0)
   radar_MiniMapScl:SetAlpha(0)
   ;
-  (radarControl.icon_SelfPlayer):SetRotate(math.pi)
+  (radarControl.icon_SelfPlayer):SetRotate(PI)
   radar_AlphaScrl:SetControlPos(ToClient_GetRaderAlpha() * 100)
   Rader_updateWorldMap_AlphaControl_Init()
   radar_SizeSlider:SetControlPos(ToClient_GetRaderScale() * 100)
@@ -735,7 +742,7 @@ SortRador_IconIndex = function()
   Panel_Radar:SetChildIndex(radar_MiniMapScl, 9999)
 end
 
--- DECOMPILER ERROR at PC1206: Confused about usage of register: R72 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1230: Confused about usage of register: R77 in 'UnsetPending'
 
 radarMap.getIdleIcon = function(self)
   -- function num : 0_29
@@ -749,14 +756,14 @@ radarMap.getIdleIcon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1210: Confused about usage of register: R72 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1234: Confused about usage of register: R77 in 'UnsetPending'
 
 radarMap.returnIconToPool = function(self, icon)
   -- function num : 0_30
   (self.iconPool):push_back(icon)
 end
 
--- DECOMPILER ERROR at PC1215: Confused about usage of register: R72 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1239: Confused about usage of register: R77 in 'UnsetPending'
 
 radarMap.getIdleQuest = function(self)
   -- function num : 0_31 , upvalues : QuestArrowHalfSize
@@ -781,7 +788,7 @@ radarMap.getIdleQuest = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1219: Confused about usage of register: R72 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1243: Confused about usage of register: R77 in 'UnsetPending'
 
 radarMap.returnQuestToPool = function(self, questIcon)
   -- function num : 0_32
@@ -1134,7 +1141,7 @@ Rader_NightAlert_HideAni = function()
 end
 
 local RadarMap_UpdateSelfPlayerPerFrame = function()
-  -- function num : 0_42
+  -- function num : 0_42 , upvalues : PI
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
     return 
@@ -1147,7 +1154,7 @@ local RadarMap_UpdateSelfPlayerPerFrame = function()
   if radarMap.isRotateMode == false then
     selfPlayerIcon:SetRotate(getCameraRotation())
   else
-    Panel_Radar:SetRotate(-getCameraRotation() + math.pi)
+    Panel_Radar:SetRotate(-getCameraRotation() + PI)
   end
   local pcInfo = radarMap.pcInfo
   local selfPlayerPos = pcInfo.position
@@ -1166,31 +1173,34 @@ FromClient_setSiegeAttackAreaPosition = function(position)
 end
 
 local getPosBaseControl = function(actorPosition)
-  -- function num : 0_44 , upvalues : sqrt
+  -- function num : 0_44
   local selfPlayerPos = (radarMap.pcInfo).position
   local selfPlayerControlPos = radarMap.pcPosBaseControl
-  local dx = (actorPosition.x - selfPlayerPos.x) / 100
-  local dz = (selfPlayerPos.z - actorPosition.z) / 100
-  local distance = sqrt(dx * dx + dz * dz)
+  local dx = (actorPosition.x - selfPlayerPos.x) * 0.01
+  local dz = (selfPlayerPos.z - actorPosition.z) * 0.01
+  local distanceSq = dx * dx + dz * dz
   local dxPerPixel = dx * radarMap.worldDistanceToPixelRate + selfPlayerControlPos.x
+  local dyPerPixel = dz * radarMap.worldDistanceToPixelRate + selfPlayerControlPos.y
+  local radius = (radarMap.config).mapRadius
   do
-    local dyPerPixel = dz * radarMap.worldDistanceToPixelRate + selfPlayerControlPos.y
-    do return distance < (radarMap.config).mapRadius, dxPerPixel, dyPerPixel end
+    local radiusSq = radius * radius
+    do return distanceSq < radiusSq, dxPerPixel, dyPerPixel end
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
 
 local getPosQuestControl = function(areaQuest)
-  -- function num : 0_45 , upvalues : sqrt
+  -- function num : 0_45
   local selfPlayerPos = (radarMap.pcInfo).position
   local selfPlayerControlPos = radarMap.pcPosBaseControl
-  local dx = (areaQuest.x - selfPlayerPos.x) / 100
-  local dz = (selfPlayerPos.z - areaQuest.z) / 100
-  local distance = sqrt(dx * dx + dz * dz)
+  local dx = (areaQuest.x - selfPlayerPos.x) * 0.01
+  local dz = (selfPlayerPos.z - areaQuest.z) * 0.01
+  local distanceSq = dx * dx + dz * dz
   local dxPerPixel = dx * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.x
+  local dyPerPixel = dz * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.y
   do
-    local dyPerPixel = dz * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.y
-    do return distance <= (radarMap.config).mapRadius + areaQuest.radius / 100, dxPerPixel, dyPerPixel end
+    local radius = (radarMap.config).mapRadius + areaQuest.radius * 0.01
+    do return distanceSq <= radius * radius, dxPerPixel, dyPerPixel end
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
@@ -1232,7 +1242,7 @@ Radar_UpdateQuestList = function()
   RadarMap_DestoryQuestIcons()
   local questCount = questList_getCheckedProgressQuestCount()
   local controlCount = 1
-  local pixelRate = radarMap.worldDistanceToPixelRate / 100 * 2
+  local pixelRate = radarMap.worldDistanceToPixelRate * 0.02
   for index = 1, questCount do
     local progressQuest = questList_getCheckedProgressQuestAt(index - 1)
     if progressQuest ~= nil then
@@ -1279,7 +1289,7 @@ Radar_UpdateQuestList = function()
           (areaQuest.icon_QuestArea):SetSize(size, size)
           ;
           (areaQuest.icon_QuestArea):SetParentRotCalc(radarMap.isRotateMode)
-          -- DECOMPILER ERROR at PC162: Confused about usage of register: R19 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC161: Confused about usage of register: R19 in 'UnsetPending'
 
           ;
           (radarMap.areaQuests)[controlCount] = areaQuest
@@ -1302,71 +1312,78 @@ end
 RadarMap_UpdatePixelRate = function()
   -- function num : 0_50 , upvalues : floor
   for _,areaQuest in pairs(radarMap.areaQuests) do
-    local size = floor(radarMap.worldDistanceToPixelRate * areaQuest.radius / 100 * 2)
+    local size = floor(radarMap.worldDistanceToPixelRate * areaQuest.radius * 0.02)
     ;
     (areaQuest.icon_QuestArea):SetSize(size, size)
   end
 end
 
 local RadarMap_UpdateQuestAreaPositionPerFrame = function()
-  -- function num : 0_51 , upvalues : getPosQuestControl, floor, QuestArrowHalfSize, sqrt
-  local self = radarMap
+  -- function num : 0_51 , upvalues : PI, getPosQuestControl, floor, atan2, QuestArrowHalfSize
   local enableHalfSize = 12
   local sizeX = Panel_Radar:GetSizeX()
-  local sizeY = Panel_Radar:GetSizeY() * 0.9
+  local sizeY = Panel_Radar:GetSizeY()
+  local halfSizeX = sizeX * 0.5
+  local halfSizeY = sizeY * 0.5
+  local halfSizeXSq = halfSizeX * halfSizeX
+  sizeY = sizeY * 0.9
   local camRot = getCameraRotation()
-  local halfSizeX = Panel_Radar:GetSizeX() * 0.5
-  local halfSizeY = Panel_Radar:GetSizeY() * 0.5
+  local camRotAddedPI = camRot + PI
   local radarPosX = Panel_Radar:GetPosX()
   local radarPosY = Panel_Radar:GetPosY()
   local selfPlayerControlPos = radarMap.pcPosBaseControl
-  local selfPlayerPos = (radarMap.pcInfo).position
-  for _,areaQuest in pairs(self.areaQuests) do
+  local rotateMode = radarMap.isRotateMode
+  local selfPcInfo = radarMap.pcInfo
+  local selfPlayerPos = selfPcInfo.position
+  local mousePosX = getMousePosX()
+  local mousePosY = getMousePosY()
+  local centerPosX = radarPosX + halfSizeX - 5
+  local centerPosY = radarPosY + halfSizeY + 15
+  local distancex = mousePosX - centerPosX
+  local distancey = mousePosY - centerPosY
+  local distanceSq = distancex * distancex + distancey * distancey
+  local IsViewSelfPlayerFunc = ToClient_IsViewSelfPlayer
+  local areaQuestsContainer = radarMap.areaQuests
+  for _,areaQuest in pairs(areaQuestsContainer) do
     local questAreaIcon = areaQuest.icon_QuestArea
     local questArrowIcon = areaQuest.icon_QuestArrow
     local isShow, posX, posY = getPosQuestControl(areaQuest)
     if isShow then
       local areaSize = questAreaIcon:GetSizeX()
       local areaHalfSize = areaSize * 0.5
-      local dist = posX - selfPlayerControlPos.x
+      local distx = posX - selfPlayerControlPos.x
       local disty = posY - selfPlayerControlPos.y
-      local tempPos = float2(dist, disty)
-      if radarMap.isRotateMode then
-        tempPos:rotate(camRot + math.pi)
+      local tempPos = float2(distx, disty)
+      if rotateMode then
+        tempPos:rotate(camRotAddedPI)
       end
-      posX = posX - floor(areaHalfSize)
-      posY = posY - floor(areaHalfSize)
+      local floorAreaHalfSize = floor(areaHalfSize)
+      posX = posX - floorAreaHalfSize
+      posY = posY - floorAreaHalfSize
       questAreaIcon:SetPosX(posX)
       questAreaIcon:SetPosY(posY)
-      questAreaIcon:SetEnableArea(tempPos.x - dist, tempPos.y - disty, tempPos.x - dist + areaSize, tempPos.y - disty + areaSize)
-      questAreaIcon:SetRectClip(float2(-(posX), -(posY)), float2(Panel_Radar:GetPosX() + sizeX - questAreaIcon:GetParentPosX(), Panel_Radar:GetPosY() + sizeY - questAreaIcon:GetPosY()))
+      questAreaIcon:SetEnableArea(tempPos.x - distx, tempPos.y - disty, tempPos.x - distx + areaSize, tempPos.y - disty + areaSize)
+      questAreaIcon:SetRectClip(float2(-(posX), -(posY)), float2(radarPosX + sizeX - questAreaIcon:GetParentPosX(), radarPosY + sizeY - questAreaIcon:GetPosY()))
     else
       do
-        questArrowIcon:SetPosX((Panel_Radar:GetSizeX() - questArrowIcon:GetSizeX()) / 2)
-        questArrowIcon:SetPosY((Panel_Radar:GetSizeY() - questArrowIcon:GetSizeY()) / 2)
-        local dx = ((self.pcInfo).position).x - areaQuest.x
-        local dy = ((self.pcInfo).position).z - areaQuest.z
-        local radian = (math.atan2)(dx, dy)
+        questArrowIcon:SetPosX((sizeX - questArrowIcon:GetSizeX()) * 0.5)
+        questArrowIcon:SetPosY((sizeY - questArrowIcon:GetSizeY()) * 0.5)
+        local dx = selfPlayerPos.x - areaQuest.x
+        local dy = selfPlayerPos.z - areaQuest.z
+        local radian = atan2(dx, dy)
         local arrowIconRotate = radian
         local arrowCalcRotate = -radian
-        if radarMap.isRotateMode then
-          arrowIconRotate = radian - camRot + math.pi
-          arrowCalcRotate = -radian - camRot + math.pi
+        if rotateMode then
+          arrowIconRotate = radian - camRotAddedPI
+          arrowCalcRotate = -radian - camRotAddedPI
         end
         questArrowIcon:SetRotate(arrowIconRotate)
-        questAreaIcon:SetParentRotCalc(radarMap.isRotateMode)
+        questAreaIcon:SetParentRotCalc(rotateMode)
         do
           local tempPos = float2(0, QuestArrowHalfSize)
           tempPos:rotate(-(arrowIconRotate))
           questArrowIcon:SetEnableArea(QuestArrowHalfSize + tempPos.x - enableHalfSize, QuestArrowHalfSize + tempPos.y - enableHalfSize, QuestArrowHalfSize + tempPos.x + enableHalfSize, QuestArrowHalfSize + tempPos.y + enableHalfSize)
-          local sizeX = Panel_Radar:GetSizeX() / 2
-          local sizeY = Panel_Radar:GetSizeY() / 2
-          local centerPosX = Panel_Radar:GetPosX() + sizeX - 5
-          local centerPosY = Panel_Radar:GetPosY() + sizeY + 15
-          local dx = getMousePosX() - centerPosX
-          local dy = getMousePosY() - centerPosY
-          local distance = sqrt(dx * dx + dy * dy)
-          if distance < sizeX then
+          if distanceSq < halfSizeXSq then
             questAreaIcon:SetIgnore(false)
             if isQuestDescShow then
               Panel_QuestInfo:SetShow(true, true)
@@ -1375,22 +1392,27 @@ local RadarMap_UpdateQuestAreaPositionPerFrame = function()
             questAreaIcon:SetIgnore(true)
           end
           questAreaIcon:SetShow(isShow)
-          questArrowIcon:SetShow(false)
+          local questArrowIconShow = false
           do
-            if not isShow then
-              local pos = float3(((self.pcInfo).position).x, ((self.pcInfo).position).y, ((self.pcInfo).position).z)
-              if ToClient_IsViewSelfPlayer(pos) == true then
-                questArrowIcon:SetShow(not isShow)
+            do
+              if not isShow then
+                local pos = float3(selfPlayerPos.x, selfPlayerPos.y, selfPlayerPos.z)
+                if IsViewSelfPlayerFunc(pos) == true then
+                  questArrowIconShow = not isShow
+                end
               end
+              questArrowIcon:SetShow(questArrowIconShow)
+              -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out DO_STMT
+
+              -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out DO_STMT
+
+              -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out DO_STMT
+
+              -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+              -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out IF_STMT
+
             end
-            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out DO_STMT
-
-            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out DO_STMT
-
-            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out IF_STMT
-
           end
         end
       end
@@ -1433,7 +1455,7 @@ Panel_Radar_ShowToggle = function()
   end
 end
 
-RadarMap_UpdateTerrainInfo = function()
+local RadarMap_UpdateTerrainInfo = function()
   -- function num : 0_56 , upvalues : radarTime, textInfo
   local terraintype = selfPlayerNaviMaterial()
   local radarControl = (radarTime.controls).terrainInfo
@@ -1769,11 +1791,13 @@ RadarMap_UpdatePosition = function()
 end
 
 RadarMap_UpdatePosition()
-RadarMap_MouseOnOffAnimation = function(deltaTime)
+local RadarMap_MouseOnOffAnimation = function(deltaTime)
   -- function num : 0_58 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl
+  local mousePosX = getMousePosX()
+  local mousePosY = getMousePosY()
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == getInputMode() or (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == getInputMode()
   do
-    local IsMouseOver = Panel_Radar:GetPosX() - 20 < getMousePosX() and getMousePosX() < Panel_Radar:GetPosX() + Panel_Radar:GetSizeX() + 20 and Panel_Radar:GetPosY() - 20 < getMousePosY() and getMousePosY() < Panel_Radar:GetPosY() + Panel_Radar:GetSizeY() + 20
+    local IsMouseOver = Panel_Radar:GetPosX() - 20 < mousePosX and mousePosX < Panel_Radar:GetPosX() + Panel_Radar:GetSizeX() + 20 and Panel_Radar:GetPosY() - 20 < mousePosY and mousePosY < Panel_Radar:GetPosY() + Panel_Radar:GetSizeY() + 20
     if IsMouseOver and isUiMode then
       simpleUIAlpha = 1
     else
@@ -1807,7 +1831,7 @@ end
 
 local iconPartyMemberArrow = {}
 local partyMemberArrowIcon = function(index, isShow)
-  -- function num : 0_59 , upvalues : iconPartyMemberArrow
+  -- function num : 0_59 , upvalues : iconPartyMemberArrow, atan2
   if iconPartyMemberArrow[index] == nil then
     if isShow == false then
       return 
@@ -1837,7 +1861,7 @@ local partyMemberArrowIcon = function(index, isShow)
     local memberData = RequestParty_getPartyMemberAt(index)
     local dx = ((radarMap.pcInfo).position).x - memberData:getPositionX()
     local dy = ((radarMap.pcInfo).position).z - memberData:getPositionZ()
-    local radian = (math.atan2)(dx, dy)
+    local radian = atan2(dx, dy)
     ;
     (iconPartyMemberArrow[index]):SetRotate(radian)
     ;
@@ -1883,44 +1907,55 @@ local partyMemberIconPerFrame = function()
 end
 
 local getPosBaseControl2 = function(actorPosition)
-  -- function num : 0_61 , upvalues : sqrt
+  -- function num : 0_61
   local selfPlayerPos = (radarMap.pcInfo).position
   local selfPlayerControlPos = radarMap.pcPosBaseControl
-  local dx = (actorPosition.x - selfPlayerPos.x) / 100
-  local dz = (selfPlayerPos.z - actorPosition.z) / 100
-  local distance = sqrt(dx * dx + dz * dz) * 2
+  local dx = (actorPosition.x - selfPlayerPos.x) * 0.01
+  local dz = (selfPlayerPos.z - actorPosition.z) * 0.01
+  local distanceSq = (dx * dx + dz * dz) * 2
   local dxPerPixel = dx * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.x
+  local dyPerPixel = dz * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.y
+  local radius = (radarMap.config).mapRadius
   do
-    local dyPerPixel = dz * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.y
-    do return distance < (radarMap.config).mapRadius, dxPerPixel, dyPerPixel end
+    local radiusSq = radius * radius
+    do return distanceSq < radiusSq, dxPerPixel, dyPerPixel end
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
 
-RadarMap_UpdateSelfPlayerNavigationGuide = function()
+local RadarMap_UpdateSelfPlayerNavigationGuide = function()
   -- function num : 0_62 , upvalues : getPosBaseControl2
   local color = float4(1, 0.8, 0.6, 1)
   local colorBG = float4(0.6, 0.2, 0.2, 0.3)
-  ;
-  ((radarMap.controls).rader_Background):ClearShowAALineList()
+  local radarBackground = (radarMap.controls).rader_Background
+  radarBackground:ClearShowAALineList()
   local pathSize = ToClient_getRenderPathSize()
+  local getRenderPathByIndexFunc = ToClient_getRenderPathByIndex
+  local unRenderCount = 0
   for ii = 0, pathSize - 1 do
-    local pathPosition = ToClient_getRenderPathByIndex(ii)
+    local pathPosition = getRenderPathByIndexFunc(ii)
     local isShow, posX, posY = getPosBaseControl2(pathPosition)
-    ;
-    ((radarMap.controls).rader_Background):AddShowAALineList(float3(posX, posY, 0))
+    radarBackground:AddShowAALineList(float3(posX, posY, 0))
+    if not isShow then
+      unRenderCount = unRenderCount + 1
+      if unRenderCount >= 5 then
+        break
+      end
+    else
+      unRenderCount = 0
+    end
   end
-  ;
-  ((radarMap.controls).rader_Background):SetColorShowAALineList(color)
-  ;
-  ((radarMap.controls).rader_Background):SetBGColorShowAALineList(colorBG)
+  do
+    radarBackground:SetColorShowAALineList(color)
+    radarBackground:SetBGColorShowAALineList(colorBG)
+  end
 end
 
 local whaleTimeCheck = 0
 local chattingAlertTimeCheck = 60
 local strongMonsterCheckDistance = 3500
 RadarMap_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_63 , upvalues : RadarMap_UpdateSelfPlayerPerFrame, RadarMap_UpdateQuestAreaPositionPerFrame, partyMemberIconPerFrame, whaleTimeCheck, _OnSiegeRide, strongMonsterCheckDistance, chattingAlertTimeCheck, redar_DangerAletText, radar_DangetAlertBg
+  -- function num : 0_63 , upvalues : RadarMap_UpdateSelfPlayerPerFrame, RadarMap_UpdateSelfPlayerNavigationGuide, RadarMap_UpdateQuestAreaPositionPerFrame, RadarMap_UpdateTerrainInfo, RadarMap_MouseOnOffAnimation, partyMemberIconPerFrame, whaleTimeCheck, _OnSiegeRide, strongMonsterCheckDistance, chattingAlertTimeCheck, redar_DangerAletText, radar_DangetAlertBg
   RadarMap_UpdateSelfPlayerPerFrame()
   RadarMap_UpdateSelfPlayerNavigationGuide()
   RadarMap_UpdateQuestAreaPositionPerFrame()
@@ -2031,8 +2066,8 @@ RadarMap_UpdateSiegeAttackArea = function()
   local hitArea = (radarMap.template).area_siegeAttackHit
   local selfPlayerPos = (radarMap.pcInfo).position
   local selfPlayerControlPos = radarMap.pcPosBaseControl
-  local dx = (position.x - selfPlayerPos.x) / 100
-  local dz = (selfPlayerPos.z - position.z) / 100
+  local dx = (position.x - selfPlayerPos.x) * 0.01
+  local dz = (selfPlayerPos.z - position.z) * 0.01
   local dxPerPixel = dx * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.x
   local dyPerPixel = dz * radarMap.worldDistanceToPixelRate * 2 + selfPlayerControlPos.y
   local areaSize = hitArea:GetSizeX()
@@ -2040,7 +2075,7 @@ RadarMap_UpdateSiegeAttackArea = function()
   local posX = dxPerPixel - floor(areaHalfSize)
   local posY = dyPerPixel - floor(areaHalfSize)
   local currentRate = RaderMap_GetDistanceToPixelRate()
-  _const_siegeAttackHitArea = (math.floor)(currentRate * 48)
+  _const_siegeAttackHitArea = floor(currentRate * 48)
   hitArea:SetSize(_const_siegeAttackHitArea, _const_siegeAttackHitArea)
   hitArea:SetPosX(posX)
   hitArea:SetPosY(posY)
@@ -2050,9 +2085,11 @@ end
 
 RadarMap_SimpleUIUpdatePerFrame = function(deltaTime)
   -- function num : 0_68 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl
+  local mousePosX = getMousePosX()
+  local mousePosY = getMousePosY()
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == getInputMode() or (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == getInputMode()
   do
-    local IsMouseOver = Panel_Radar:GetPosX() - 20 < getMousePosX() and getMousePosX() < Panel_Radar:GetPosX() + Panel_Radar:GetSizeX() + 20 and Panel_Radar:GetPosY() - 20 < getMousePosY() and getMousePosY() < Panel_Radar:GetPosY() + Panel_Radar:GetSizeY() + 20
+    local IsMouseOver = Panel_Radar:GetPosX() - 20 < mousePosX and mousePosX < Panel_Radar:GetPosX() + Panel_Radar:GetSizeX() + 20 and Panel_Radar:GetPosY() - 20 < mousePosY and mousePosY < Panel_Radar:GetPosY() + Panel_Radar:GetSizeY() + 20
     if isUiMode then
       isUiMode = IsMouseOver
     end

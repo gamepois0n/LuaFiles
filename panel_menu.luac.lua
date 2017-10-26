@@ -25,15 +25,16 @@ local partyListOpen = ToClient_IsContentsGroupOpen("254")
 local isFreeFight = ToClient_IsContentsGroupOpen("255")
 local isBlackSpiritAdventure2 = ToClient_IsContentsGroupOpen("277")
 local isActionUiOpen = ToClient_IsContentsGroupOpen("315")
+local isMasterPiece = ToClient_IsContentsGroupOpen("270")
 Panel_Menu:SetShow(false)
 Panel_Menu:setGlassBackground(true)
 Panel_Menu:ActiveMouseEventEffect(true)
 Panel_Menu:RegisterShowEventFunc(true, "Panel_Menu_ShowAni()")
 Panel_Menu:RegisterShowEventFunc(false, "Panel_Menu_HideAni()")
 local userConnectionType = 0
-local MenuButtonId = {btn_HelpGuide = 1, btn_KeyboardHelp = 2, btn_Productnote = 3, btn_CashShop = 4, btn_Beauty = 5, btn_Dye = 6, btn_ColorMix = 7, btn_Pet = 8, btn_PlayerInfo = 9, btn_Inventory = 10, btn_BlackSpirit = 11, btn_Quest = 12, btn_Skill = 13, btn_Guild = 14, btn_Manufacture = 15, btn_FishEncyclopedia = 16, btn_Knowledge = 17, btn_WorldMap = 18, btn_Rescue = 19, btn_FriendList = 20, btn_Mail = 21, btn_Worker = 22, btn_Itemmarket = 23, btn_TradeEvent = 24, btn_UiSetting = 25, btn_GuildRanker = 26, btn_LifeRanker = 27, btn_MonsterRanking = 28, btn_Event = 29, btn_DailyCheck = 30, btn_Notice = 31, btn_BlackSpritAdventure = 32, btn_BSAdventure2 = 33, btn_WebAlbum = 34, btn_ScreenShotAlbum = 35, btn_Siege = 36, btn_LocalWar = 37, btn_FreeFight = 38, btn_SavageDefence = 39, btn_GameOption = 40, btn_ChattingFilter = 41, btn_Language = 42, btn_Channel = 43, btn_Competition = 44, btn_Steam = 45, btn_Update = 46, btn_Mercenary = 47, btn_PartyList = 48, btn_Twitch = 49, btn_SocialAction = 50, btn_GameExit = 51}
-local MenuButtonTextId = {[MenuButtonId.btn_HelpGuide] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_HELP"), [MenuButtonId.btn_KeyboardHelp] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_KEY"), [MenuButtonId.btn_PlayerInfo] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_MYINFO"), [MenuButtonId.btn_Inventory] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BAG"), [MenuButtonId.btn_Skill] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_SKILL"), [MenuButtonId.btn_Guild] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_GUILD"), [MenuButtonId.btn_WorldMap] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_WORLDMAP"), [MenuButtonId.btn_BlackSpirit] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BLACKSPIRIT"), [MenuButtonId.btn_Quest] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_QUESTHISTORY"), [MenuButtonId.btn_Knowledge] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_MENTALKNOWLEDGE"), [MenuButtonId.btn_Productnote] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_PRODUCTIONNOTE"), [MenuButtonId.btn_FriendList] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_FRIENDLIST"), [MenuButtonId.btn_Mail] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_MAIL"), [MenuButtonId.btn_Pet] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_PET"), [MenuButtonId.btn_Dye] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_DYE"), [MenuButtonId.btn_CashShop] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_CASHSHOP"), [MenuButtonId.btn_Beauty] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BEAUTY"), [MenuButtonId.btn_GameOption] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_OPTION"), [MenuButtonId.btn_Language] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_LANGUAGE"), [MenuButtonId.btn_GameExit] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_EXIT"), [MenuButtonId.btn_Rescue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_ESCAPE"), [MenuButtonId.btn_UiSetting] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_INTERFACEMOVE"), [MenuButtonId.btn_Manufacture] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_MANUFACTURE"), [MenuButtonId.btn_FishEncyclopedia] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_FISHENCYCLOPEDIA"), [MenuButtonId.btn_ColorMix] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_COLORMIX"), [MenuButtonId.btn_Event] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_EVENT"), [MenuButtonId.btn_BlackSpritAdventure] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BLACKSPIRIT_TRESURE"), [MenuButtonId.btn_GuildRanker] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_GUILDRANKER"), [MenuButtonId.btn_LifeRanker] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_LIFERANKER"), [MenuButtonId.btn_Siege] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_SIEGE"), [MenuButtonId.btn_Worker] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_WORKERTITLE"), [MenuButtonId.btn_TradeEvent] = PAGetString(Defines.StringSheet_RESOURCE, "TRADEMARKET_GRAPH_TXT_COMMERCE"), [MenuButtonId.btn_Channel] = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), [MenuButtonId.btn_Notice] = PAGetString(Defines.StringSheet_GAME, "CHATTING_NOTICE"), [MenuButtonId.btn_LocalWar] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_LOCALWAR_INFO"), [MenuButtonId.btn_FreeFight] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_FREEFIGHT"), [MenuButtonId.btn_Itemmarket] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_ITEMMARKET"), [MenuButtonId.btn_ChattingFilter] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CHATTING_FILTER"), [MenuButtonId.btn_WebAlbum] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BEAUTYALBUM"), [MenuButtonId.btn_DailyCheck] = PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_MSGTITLE"), [MenuButtonId.btn_Competition] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_COMPETITIONGAME"), [MenuButtonId.btn_ScreenShotAlbum] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SCREENSHOTALBUM_TITLE"), [MenuButtonId.btn_Mercenary] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MILITIA"), [MenuButtonId.btn_SavageDefence] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_WAVE"), [MenuButtonId.btn_PartyList] = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLIST_TITLE"), [MenuButtonId.btn_MonsterRanking] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MONSTERRANKING"), [MenuButtonId.btn_Steam] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_EXTRACTIONGAME"), [MenuButtonId.btn_Update] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_UPDATE"), [MenuButtonId.btn_BSAdventure2] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BLACKSPIRITADVANTURE2"), [MenuButtonId.btn_Twitch] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_TWITCH"), [MenuButtonId.btn_SocialAction] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_SOCIALACTION")}
-local MenuButtonHotKeyID = {[MenuButtonId.btn_HelpGuide] = "", [MenuButtonId.btn_KeyboardHelp] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Help), [MenuButtonId.btn_PlayerInfo] = keyCustom_GetString_UiKey(UI_IT.UiInputType_PlayerInfo), [MenuButtonId.btn_Inventory] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Inventory), [MenuButtonId.btn_Skill] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Skill), [MenuButtonId.btn_Guild] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Guild), [MenuButtonId.btn_WorldMap] = keyCustom_GetString_UiKey(UI_IT.UiInputType_WorldMap), [MenuButtonId.btn_BlackSpirit] = keyCustom_GetString_UiKey(UI_IT.UiInputType_BlackSpirit), [MenuButtonId.btn_Quest] = keyCustom_GetString_UiKey(UI_IT.UiInputType_QuestHistory), [MenuButtonId.btn_Knowledge] = keyCustom_GetString_UiKey(UI_IT.UiInputType_MentalKnowledge), [MenuButtonId.btn_Productnote] = keyCustom_GetString_UiKey(UI_IT.UiInputType_ProductionNote), [MenuButtonId.btn_FriendList] = keyCustom_GetString_UiKey(UI_IT.UiInputType_FriendList), [MenuButtonId.btn_Mail] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Mail), [MenuButtonId.btn_Pet] = "", [MenuButtonId.btn_Dye] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Dyeing), [MenuButtonId.btn_CashShop] = keyCustom_GetString_UiKey(UI_IT.UiInputType_CashShop), [MenuButtonId.btn_Beauty] = "F4", [MenuButtonId.btn_GameOption] = "", [MenuButtonId.btn_Language] = "", [MenuButtonId.btn_GameExit] = "", [MenuButtonId.btn_Rescue] = "", [MenuButtonId.btn_UiSetting] = "", [MenuButtonId.btn_Manufacture] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Manufacture), [MenuButtonId.btn_FishEncyclopedia] = "", [MenuButtonId.btn_ColorMix] = "", [MenuButtonId.btn_Event] = "", [MenuButtonId.btn_BlackSpritAdventure] = "", [MenuButtonId.btn_GuildRanker] = "", [MenuButtonId.btn_LifeRanker] = "", [MenuButtonId.btn_Siege] = "", [MenuButtonId.btn_Worker] = "", [MenuButtonId.btn_TradeEvent] = "", [MenuButtonId.btn_Channel] = "", [MenuButtonId.btn_Notice] = "", [MenuButtonId.btn_LocalWar] = "", [MenuButtonId.btn_FreeFight] = "", [MenuButtonId.btn_Itemmarket] = "", [MenuButtonId.btn_ChattingFilter] = "", [MenuButtonId.btn_WebAlbum] = "", [MenuButtonId.btn_DailyCheck] = "", [MenuButtonId.btn_Competition] = "", [MenuButtonId.btn_ScreenShotAlbum] = "", [MenuButtonId.btn_Mercenary] = "", [MenuButtonId.btn_SavageDefence] = "", [MenuButtonId.btn_PartyList] = "", [MenuButtonId.btn_MonsterRanking] = "", [MenuButtonId.btn_Steam] = "", [MenuButtonId.btn_Update] = "", [MenuButtonId.btn_BSAdventure2] = "", [MenuButtonId.btn_Twitch] = "", [MenuButtonId.btn_SocialAction] = ""}
+local MenuButtonId = {btn_HelpGuide = 1, btn_KeyboardHelp = 2, btn_Productnote = 3, btn_CashShop = 4, btn_Beauty = 5, btn_Dye = 6, btn_ColorMix = 7, btn_Pet = 8, btn_PlayerInfo = 9, btn_Inventory = 10, btn_BlackSpirit = 11, btn_Quest = 12, btn_Skill = 13, btn_Guild = 14, btn_Manufacture = 15, btn_FishEncyclopedia = 16, btn_Knowledge = 17, btn_WorldMap = 18, btn_Rescue = 19, btn_FriendList = 20, btn_Mail = 21, btn_Worker = 22, btn_Itemmarket = 23, btn_TradeEvent = 24, btn_UiSetting = 25, btn_GuildRanker = 26, btn_LifeRanker = 27, btn_MonsterRanking = 28, btn_Event = 29, btn_DailyCheck = 30, btn_Notice = 31, btn_BlackSpritAdventure = 32, btn_BSAdventure2 = 33, btn_WebAlbum = 34, btn_ScreenShotAlbum = 35, btn_Siege = 36, btn_LocalWar = 37, btn_FreeFight = 38, btn_SavageDefence = 39, btn_GameOption = 40, btn_ChattingFilter = 41, btn_Language = 42, btn_Channel = 43, btn_Competition = 44, btn_Steam = 45, btn_Update = 46, btn_Mercenary = 47, btn_PartyList = 48, btn_Twitch = 49, btn_SocialAction = 50, btn_LuxuryAuction = 51, btn_GameExit = 52}
+local MenuButtonTextId = {[MenuButtonId.btn_HelpGuide] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_HELP"), [MenuButtonId.btn_KeyboardHelp] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_KEY"), [MenuButtonId.btn_PlayerInfo] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_MYINFO"), [MenuButtonId.btn_Inventory] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BAG"), [MenuButtonId.btn_Skill] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_SKILL"), [MenuButtonId.btn_Guild] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_GUILD"), [MenuButtonId.btn_WorldMap] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_WORLDMAP"), [MenuButtonId.btn_BlackSpirit] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BLACKSPIRIT"), [MenuButtonId.btn_Quest] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_QUESTHISTORY"), [MenuButtonId.btn_Knowledge] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_MENTALKNOWLEDGE"), [MenuButtonId.btn_Productnote] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_PRODUCTIONNOTE"), [MenuButtonId.btn_FriendList] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_FRIENDLIST"), [MenuButtonId.btn_Mail] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_MAIL"), [MenuButtonId.btn_Pet] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_PET"), [MenuButtonId.btn_Dye] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_DYE"), [MenuButtonId.btn_CashShop] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_CASHSHOP"), [MenuButtonId.btn_Beauty] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_BEAUTY"), [MenuButtonId.btn_GameOption] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_OPTION"), [MenuButtonId.btn_Language] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_LANGUAGE"), [MenuButtonId.btn_GameExit] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_EXIT"), [MenuButtonId.btn_Rescue] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_ESCAPE"), [MenuButtonId.btn_UiSetting] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_INTERFACEMOVE"), [MenuButtonId.btn_Manufacture] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_MANUFACTURE"), [MenuButtonId.btn_FishEncyclopedia] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_FISHENCYCLOPEDIA"), [MenuButtonId.btn_ColorMix] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_COLORMIX"), [MenuButtonId.btn_Event] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_EVENT"), [MenuButtonId.btn_BlackSpritAdventure] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BLACKSPIRIT_TRESURE"), [MenuButtonId.btn_GuildRanker] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_GUILDRANKER"), [MenuButtonId.btn_LifeRanker] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_LIFERANKER"), [MenuButtonId.btn_Siege] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_SIEGE"), [MenuButtonId.btn_Worker] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_WORKERTITLE"), [MenuButtonId.btn_TradeEvent] = PAGetString(Defines.StringSheet_RESOURCE, "TRADEMARKET_GRAPH_TXT_COMMERCE"), [MenuButtonId.btn_Channel] = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), [MenuButtonId.btn_Notice] = PAGetString(Defines.StringSheet_GAME, "CHATTING_NOTICE"), [MenuButtonId.btn_LocalWar] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_LOCALWAR_INFO"), [MenuButtonId.btn_FreeFight] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_FREEFIGHT"), [MenuButtonId.btn_Itemmarket] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_ITEMMARKET"), [MenuButtonId.btn_ChattingFilter] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CHATTING_FILTER"), [MenuButtonId.btn_WebAlbum] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BEAUTYALBUM"), [MenuButtonId.btn_DailyCheck] = PAGetString(Defines.StringSheet_GAME, "LUA_DAILYSTAMP_MSGTITLE"), [MenuButtonId.btn_Competition] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_COMPETITIONGAME"), [MenuButtonId.btn_ScreenShotAlbum] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SCREENSHOTALBUM_TITLE"), [MenuButtonId.btn_Mercenary] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MILITIA"), [MenuButtonId.btn_SavageDefence] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_WAVE"), [MenuButtonId.btn_PartyList] = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLIST_TITLE"), [MenuButtonId.btn_MonsterRanking] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MONSTERRANKING"), [MenuButtonId.btn_Steam] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_EXTRACTIONGAME"), [MenuButtonId.btn_Update] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_UPDATE"), [MenuButtonId.btn_BSAdventure2] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BLACKSPIRITADVANTURE2"), [MenuButtonId.btn_Twitch] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_TWITCH"), [MenuButtonId.btn_SocialAction] = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_SOCIALACTION"), [MenuButtonId.btn_LuxuryAuction] = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MASTERPIECEAUCTION_TITLE")}
+local MenuButtonHotKeyID = {[MenuButtonId.btn_HelpGuide] = "", [MenuButtonId.btn_KeyboardHelp] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Help), [MenuButtonId.btn_PlayerInfo] = keyCustom_GetString_UiKey(UI_IT.UiInputType_PlayerInfo), [MenuButtonId.btn_Inventory] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Inventory), [MenuButtonId.btn_Skill] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Skill), [MenuButtonId.btn_Guild] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Guild), [MenuButtonId.btn_WorldMap] = keyCustom_GetString_UiKey(UI_IT.UiInputType_WorldMap), [MenuButtonId.btn_BlackSpirit] = keyCustom_GetString_UiKey(UI_IT.UiInputType_BlackSpirit), [MenuButtonId.btn_Quest] = keyCustom_GetString_UiKey(UI_IT.UiInputType_QuestHistory), [MenuButtonId.btn_Knowledge] = keyCustom_GetString_UiKey(UI_IT.UiInputType_MentalKnowledge), [MenuButtonId.btn_Productnote] = keyCustom_GetString_UiKey(UI_IT.UiInputType_ProductionNote), [MenuButtonId.btn_FriendList] = keyCustom_GetString_UiKey(UI_IT.UiInputType_FriendList), [MenuButtonId.btn_Mail] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Mail), [MenuButtonId.btn_Pet] = "", [MenuButtonId.btn_Dye] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Dyeing), [MenuButtonId.btn_CashShop] = keyCustom_GetString_UiKey(UI_IT.UiInputType_CashShop), [MenuButtonId.btn_Beauty] = "F4", [MenuButtonId.btn_GameOption] = "", [MenuButtonId.btn_Language] = "", [MenuButtonId.btn_GameExit] = "", [MenuButtonId.btn_Rescue] = "", [MenuButtonId.btn_UiSetting] = "", [MenuButtonId.btn_Manufacture] = keyCustom_GetString_UiKey(UI_IT.UiInputType_Manufacture), [MenuButtonId.btn_FishEncyclopedia] = "", [MenuButtonId.btn_ColorMix] = "", [MenuButtonId.btn_Event] = "", [MenuButtonId.btn_BlackSpritAdventure] = "", [MenuButtonId.btn_GuildRanker] = "", [MenuButtonId.btn_LifeRanker] = "", [MenuButtonId.btn_Siege] = "", [MenuButtonId.btn_Worker] = "", [MenuButtonId.btn_TradeEvent] = "", [MenuButtonId.btn_Channel] = "", [MenuButtonId.btn_Notice] = "", [MenuButtonId.btn_LocalWar] = "", [MenuButtonId.btn_FreeFight] = "", [MenuButtonId.btn_Itemmarket] = "", [MenuButtonId.btn_ChattingFilter] = "", [MenuButtonId.btn_WebAlbum] = "", [MenuButtonId.btn_DailyCheck] = "", [MenuButtonId.btn_Competition] = "", [MenuButtonId.btn_ScreenShotAlbum] = "", [MenuButtonId.btn_Mercenary] = "", [MenuButtonId.btn_SavageDefence] = "", [MenuButtonId.btn_PartyList] = "", [MenuButtonId.btn_MonsterRanking] = "", [MenuButtonId.btn_Steam] = "", [MenuButtonId.btn_Update] = "", [MenuButtonId.btn_BSAdventure2] = "", [MenuButtonId.btn_Twitch] = "", [MenuButtonId.btn_SocialAction] = "", [MenuButtonId.btn_LuxuryAuction] = ""}
 local contry = {kr = 0, jp = 1, ru = 2, cn = 3, tw = 4}
 local cashIconTexture = {
 {232, 357, 276, 401}
@@ -190,6 +191,8 @@ local buttonTexture = {
 [MenuButtonId.btn_Twitch] = {370, 81, 414, 125}
 , 
 [MenuButtonId.btn_SocialAction] = {370, 127, 414, 171}
+, 
+[MenuButtonId.btn_LuxuryAuction] = {370, 173, 414, 217}
 }
 TargetWindow_ShowToggle = function(index)
   -- function num : 0_1 , upvalues : MenuButtonId, UI_IT
@@ -328,6 +331,10 @@ TargetWindow_ShowToggle = function(index)
                                                                                   local player = (getSelfPlayer()):get()
                                                                                   local maxHp = player:getMaxHp()
                                                                                   local playerHp = player:getHp()
+                                                                                  if player:getLevel() < 50 then
+                                                                                    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_FREEFIGHTALERT"))
+                                                                                    return 
+                                                                                  end
                                                                                   if ToClient_IsJoinPvpBattleGround() then
                                                                                     local FunctionYesUnJoinPvpBattle = function()
     -- function num : 0_1_0
@@ -422,6 +429,10 @@ TargetWindow_ShowToggle = function(index)
                                                                                                                   else
                                                                                                                     if MenuButtonId.btn_SocialAction == index then
                                                                                                                       FGlobal_SocialAction_ShowToggle()
+                                                                                                                    else
+                                                                                                                      if MenuButtonId.btn_LuxuryAuction == index then
+                                                                                                                        FGlobal_MasterpieceAuction_OpenAuctionItemNotNpc()
+                                                                                                                      end
                                                                                                                     end
                                                                                                                   end
                                                                                                                 end
@@ -675,132 +686,132 @@ GameMenu_CheckEnAble = function(buttonType)
       returnValue = true
     end
   end
-  do
-    if buttonType == MenuButtonId.btn_FreeFight then
-      local playerLevel = ((getSelfPlayer()):get()):getLevel()
-      if isFreeFight and playerLevel >= 50 then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_CashShop or buttonType == MenuButtonId.btn_Beauty then
-      if getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
-        returnValue = false
-      else
-        returnValue = true
-      end
-    end
-    if buttonType == MenuButtonId.btn_TradeEvent then
-      if isTradeEventOpen then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_Language then
-      if isGameTypeEnglish() or isGameServiceTypeDev() then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_ChattingFilter then
+  if buttonType == MenuButtonId.btn_FreeFight then
+    if isFreeFight then
       returnValue = true
-    end
-    if buttonType == MenuButtonId.btn_WebAlbum then
-      if webAlbumOpen or isGameServiceTypeDev() then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_BlackSpritAdventure then
-      if isBlackSpiritAdventure then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_DailyCheck then
-      if joinCheckOpen then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_Competition then
-      if isContentsArsha == false then
-        returnValue = false
-      else
-        returnValue = true
-      end
-    end
-    if buttonType == MenuButtonId.btn_Mercenary then
-      if isMercenaryOpen then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_Steam then
-      if isGameTypeEnglish() or isGameServiceTypeDev() then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_Update then
-      if isGameTypeKorea() or isGameServiceTypeDev() then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_SavageDefence then
-      if isSavageOpen then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_ScreenShotAlbum then
-      returnValue = photoGalleryOpen
-    end
-    if buttonType == MenuButtonId.btn_PartyList then
-      returnValue = partyListOpen
-    end
-    if buttonType == MenuButtonId.btn_MonsterRanking then
-      if isMonsterRanking then
-        returnValue = true
-      else
-        returnValue = false
-      end
-    end
-    if buttonType == MenuButtonId.btn_Twitch then
-      returnValue = true
-    end
-    if buttonType == MenuButtonId.btn_BSAdventure2 then
-      returnValue = isBlackSpiritAdventure2
-    end
-    if (buttonType == MenuButtonId.btn_Siege or buttonType == MenuButtonId.btn_HelpGuide or buttonType == MenuButtonId.btn_Productnote or buttonType == MenuButtonId.btn_Event or buttonType == MenuButtonId.btn_Notice) and isGameTypeKR2() then
+    else
       returnValue = false
     end
-    if not isGameTypeKR2() then
-      (menuNewPool[buttonType]):ResetVertexAni()
-      if buttonType == MenuButtonId.btn_Twitch or buttonType == MenuButtonId.btn_SavageDefence or buttonType == MenuButtonId.btn_SocialAction then
-        (menuNewPool[buttonType]):SetShow(true)
-        ;
-        (menuNewPool[buttonType]):SetVertexAniRun("Ani_Color_New", true)
-      else
-        ;
-        (menuNewPool[buttonType]):SetShow(false)
-        ;
-        (menuNewPool[buttonType]):ResetVertexAni()
-      end
-    end
-    return returnValue
   end
+  if buttonType == MenuButtonId.btn_CashShop or buttonType == MenuButtonId.btn_Beauty then
+    if getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
+      returnValue = false
+    else
+      returnValue = true
+    end
+  end
+  if buttonType == MenuButtonId.btn_TradeEvent then
+    if isTradeEventOpen then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_Language then
+    if isGameTypeEnglish() or isGameServiceTypeDev() then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_ChattingFilter then
+    returnValue = true
+  end
+  if buttonType == MenuButtonId.btn_WebAlbum then
+    if webAlbumOpen or isGameServiceTypeDev() then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_BlackSpritAdventure then
+    if isBlackSpiritAdventure then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_DailyCheck then
+    if joinCheckOpen then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_Competition then
+    if isContentsArsha == false then
+      returnValue = false
+    else
+      returnValue = true
+    end
+  end
+  if buttonType == MenuButtonId.btn_Mercenary then
+    if isMercenaryOpen then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_Steam then
+    if isGameTypeEnglish() or isGameServiceTypeDev() then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_Update then
+    if isGameTypeKorea() or isGameServiceTypeDev() then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_SavageDefence then
+    if isSavageOpen then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_ScreenShotAlbum then
+    returnValue = photoGalleryOpen
+  end
+  if buttonType == MenuButtonId.btn_PartyList then
+    returnValue = partyListOpen
+  end
+  if buttonType == MenuButtonId.btn_MonsterRanking then
+    if isMonsterRanking then
+      returnValue = true
+    else
+      returnValue = false
+    end
+  end
+  if buttonType == MenuButtonId.btn_Twitch then
+    returnValue = true
+  end
+  if buttonType == MenuButtonId.btn_LuxuryAuction then
+    returnValue = false
+  end
+  if buttonType == MenuButtonId.btn_BSAdventure2 then
+    returnValue = isBlackSpiritAdventure2
+  end
+  if (buttonType == MenuButtonId.btn_Siege or buttonType == MenuButtonId.btn_HelpGuide or buttonType == MenuButtonId.btn_Productnote or buttonType == MenuButtonId.btn_Event or buttonType == MenuButtonId.btn_Notice) and isGameTypeKR2() then
+    returnValue = false
+  end
+  if not isGameTypeKR2() then
+    (menuNewPool[buttonType]):ResetVertexAni()
+    if buttonType == MenuButtonId.btn_Twitch or buttonType == MenuButtonId.btn_SavageDefence or buttonType == MenuButtonId.btn_SocialAction or buttonType == MenuButtonId.btn_LuxuryAuction then
+      (menuNewPool[buttonType]):SetShow(true)
+      ;
+      (menuNewPool[buttonType]):SetVertexAniRun("Ani_Color_New", true)
+    else
+      ;
+      (menuNewPool[buttonType]):SetShow(false)
+      ;
+      (menuNewPool[buttonType]):ResetVertexAni()
+    end
+  end
+  return returnValue
 end
 
 GameMenu_ChangeButtonTexture = function(index)
@@ -1054,30 +1065,39 @@ UIMain_SkillPointUpdateRemove = function()
 end
 
 Panel_Menu_ShowToggle = function()
-  -- function num : 0_18
-  if isDeadInWatchingMode() then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENUOPENALERT_INDEAD"))
-    return 
-  end
-  local scrSizeX = getScreenSizeX()
-  local scrSizeY = getScreenSizeY()
-  if GetUIMode() == (Defines.UIMode).eUIMode_Gacha_Roulette then
-    return 
-  end
-  if Panel_Menu:IsShow() == true then
-    Panel_Menu_Close()
+  -- function num : 0_18 , upvalues : isActionUiOpen
+  do
+    if isActionUiOpen or isGameTypeKorea() then
+      local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)
+      if currentMenuType == 2 then
+        Panel_Menu_ShowToggle_New()
+        return 
+      end
+    end
+    if isDeadInWatchingMode() then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENUOPENALERT_INDEAD"))
+      return 
+    end
+    local scrSizeX = getScreenSizeX()
+    local scrSizeY = getScreenSizeY()
+    if GetUIMode() == (Defines.UIMode).eUIMode_Gacha_Roulette then
+      return 
+    end
+    if Panel_Menu:IsShow() == true then
+      Panel_Menu_Close()
+      return false
+    else
+      _Panel_Menu_OpenLimit()
+      Panel_Menu:SetPosX(scrSizeX - scrSizeX / 2 - Panel_Menu:GetSizeX() / 2)
+      Panel_Menu:SetPosY(scrSizeY - scrSizeY / 2 - Panel_Menu:GetSizeY() / 2)
+      Panel_Menu:SetShow(true, true)
+      Panel_Menu:SetDragAll(true)
+      Panel_Menu:SetIgnore(false)
+      audioPostEvent_SystemUi(1, 37)
+      return true
+    end
     return false
-  else
-    _Panel_Menu_OpenLimit()
-    Panel_Menu:SetPosX(scrSizeX - scrSizeX / 2 - Panel_Menu:GetSizeX() / 2)
-    Panel_Menu:SetPosY(scrSizeY - scrSizeY / 2 - Panel_Menu:GetSizeY() / 2)
-    Panel_Menu:SetShow(true, true)
-    Panel_Menu:SetDragAll(true)
-    Panel_Menu:SetIgnore(false)
-    audioPostEvent_SystemUi(1, 37)
-    return true
   end
-  return false
 end
 
 _Panel_Menu_OpenLimit = function()
@@ -1247,17 +1267,21 @@ _Panel_Menu_OpenLimit = function()
 end
 
 Panel_Menu_Close = function()
-  -- function num : 0_20 , upvalues : IM
-  local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)
-  if currentMenuType == 2 then
-    Panel_Menu_Close_New()
-    return 
-  end
-  Panel_Menu:SetShow(false, true)
-  Panel_Menu:SetDragAll(false)
-  Panel_Menu:SetIgnore(true)
-  if check_ShowWindow() == false then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+  -- function num : 0_20 , upvalues : isActionUiOpen, IM
+  do
+    if isActionUiOpen or isGameTypeKorea() then
+      local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)
+      if currentMenuType == 2 then
+        Panel_Menu_Close_New()
+        return 
+      end
+    end
+    Panel_Menu:SetShow(false, true)
+    Panel_Menu:SetDragAll(false)
+    Panel_Menu:SetIgnore(true)
+    if check_ShowWindow() == false then
+      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+    end
   end
 end
 
@@ -1300,11 +1324,13 @@ ChangeUI_Menu = function()
 end
 
 FGlobal_MenuType_Check = function()
-  -- function num : 0_26
+  -- function num : 0_26 , upvalues : isActionUiOpen
   local temporaryWrapper = getTemporaryInformationWrapper()
   local userType = temporaryWrapper:getMyAdmissionToSpeedServer()
   local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)
-  if currentMenuType == 0 then
+  -- DECOMPILER ERROR at PC32: Unhandled construct in 'MakeBoolean' P1
+
+  if (isActionUiOpen or isGameTypeKorea()) and currentMenuType == 0 then
     if userType == 2 then
       (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType, 2, (CppEnums.VariableStorageType).eVariableStorageType_User)
     else
@@ -1312,6 +1338,8 @@ FGlobal_MenuType_Check = function()
       (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType, 1, (CppEnums.VariableStorageType).eVariableStorageType_User)
     end
   end
+  ;
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType, 1, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
 GameMenu_Init()

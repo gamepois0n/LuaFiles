@@ -1231,7 +1231,7 @@ PaGlobal_Enchant.show = function(self)
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   Panel_Window_Enchant:SetPosX(sizeX / 2 - Panel_Window_Enchant:GetSizeX() / 2)
-  Panel_Window_Enchant:SetPosY(sizeY - 350 - Panel_Window_Enchant:GetSizeY())
+  Panel_Window_Enchant:SetPosY(sizeY - sizeY / 2 - Panel_Window_Enchant:GetSizeY() / 2)
   Panel_Window_Enchant:ComputePos()
 end
 

@@ -3188,7 +3188,7 @@ InGameShop_OuterEventForDead = function()
 end
 
 InGameShop_Resize = function()
-  -- function num : 0_87 , upvalues : inGameShop, isKorea, isNaver, tabId
+  -- function num : 0_87 , upvalues : inGameShop, isKorea, isNaver, tabId, _AllBG
   local self = inGameShop
   local slotConfig = (self._config)._slot
   local tabConfig = (self._config)._tab
@@ -3283,6 +3283,7 @@ InGameShop_Resize = function()
   ;
   (self._static_GradationBottom):SetPosY((self._static_ScrollArea):GetSizeY() + (self._static_ScrollArea):GetPosY() - (self._static_GradationBottom):GetSizeY())
   Panel_IngameCashShop:SetChildIndex(self._promotionWeb, 9900)
+  _AllBG:SetSize(_AllBG:GetSizeX(), getScreenSizeY() - 95)
   local _btn_SizeX = (self._btn_HowUsePearl):GetSizeX() + 23
   local _btn_TextSizeX = _btn_SizeX - _btn_SizeX / 2 - (self._btn_HowUsePearl):GetTextSizeX() / 2
   ;

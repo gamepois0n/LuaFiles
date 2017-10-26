@@ -4,15 +4,15 @@
 -- params : ...
 -- function num : 0
 BlackSpiritIcon = {buttonBlackSpiritIcon = (UI.getChildControl)(Panel_Blackspirit_OnOff, "Button_Blackspirt")}
-PaGlobal_BlackSpiritIcon = {}
+PaGlobal_PossessByBlackSpiritIcon = {}
 -- DECOMPILER ERROR at PC12: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_BlackSpiritIcon.Init = function(self)
+PaGlobal_PossessByBlackSpiritIcon.Init = function(self)
   -- function num : 0_0
-  (BlackSpiritIcon.buttonBlackSpiritIcon):addInputEvent("Mouse_LUp", "PaGlobal_BlackSpiritIcon_OnOffToggle()")
+  (BlackSpiritIcon.buttonBlackSpiritIcon):addInputEvent("Mouse_LUp", "PaGlobal_PossessByBlackSpiritIcon_OnOffToggle()")
 end
 
-PaGlobal_BlackSpiritIcon_OnOffToggle = function()
+PaGlobal_PossessByBlackSpiritIcon_OnOffToggle = function()
   -- function num : 0_1
   if PaGlobal_AutoManager._ActiveState == false then
     FromClient_AutoStart()
@@ -23,7 +23,7 @@ end
 
 -- DECOMPILER ERROR at PC17: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_BlackSpiritIcon.showAble = function(self)
+PaGlobal_PossessByBlackSpiritIcon.showAble = function(self)
   -- function num : 0_2
   if isFlushedUI() or ToClient_IsContentsGroupOpen("301") == false then
     return false
@@ -36,7 +36,7 @@ end
 
 -- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_BlackSpiritIcon.setPosIcon = function(self)
+PaGlobal_PossessByBlackSpiritIcon.setPosIcon = function(self)
   -- function num : 0_3
   if isFlushedUI() then
     return 
@@ -85,11 +85,20 @@ PaGlobal_BlackSpiritIcon.setPosIcon = function(self)
   end
 end
 
-PaGlobal_BlackSpiritIcon_UpdateVisibleState = function()
+PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState = function()
   -- function num : 0_4
-  PaGlobal_BlackSpiritIcon:setPosIcon()
+  PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
 end
 
-PaGlobal_BlackSpiritIcon:Init()
-registerEvent("BlackSpiritIcon_UpdateVisibleState", "PaGlobal_BlackSpiritIcon_UpdateVisibleState")
+PaGlobal_PossessByBlackSpirit_Open = function()
+  -- function num : 0_5
+  PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
+  if PaGlobal_AutoManager._ActiveState == false then
+    PaGlobal_AutoManager:start()
+  end
+end
+
+PaGlobal_PossessByBlackSpiritIcon:Init()
+registerEvent("FromClient_PossessByBlackSpiritIcon_UpdateVisibleState", "PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState")
+registerEvent("FromClient_PossessByBlackSpirit_Open", "PaGlobal_PossessByBlackSpirit_Open")
 

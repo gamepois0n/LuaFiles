@@ -1527,7 +1527,7 @@ HandleClicked_SunShineSetting = function(weatherType)
 end
 
 HandleClicked_SpecialMoveSetting = function(moveType)
-  -- function num : 0_58
+  -- function num : 0_58 , upvalues : CashShopController
   local animationValue = 0
   if moveType == 1 then
     animationValue = 1
@@ -1544,6 +1544,10 @@ HandleClicked_SpecialMoveSetting = function(moveType)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_SPECIALACTION"))
     return 
   end
+  ;
+  (CashShopController.btn_WarStance):SetCheck(false)
+  ;
+  (getIngameCashMall()):setBattleView(false)
   ;
   (getIngameCashMall()):setCharacterActionKey((getIngameCashMall()):getCharacterActionCount() - 1, animationValue)
 end

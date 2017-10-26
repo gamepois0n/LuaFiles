@@ -11,7 +11,7 @@ local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901
 local isKR2 = isGameTypeKR2()
 local enControlValue = {MaxCharacterTypeListCount = 7, MaxEquipSlotCount = 18, MaxPartCount = 8, MaxPartSlotCount = 3, MaxAmpuleRowsCount = 3, MaxAmpuleColsCount = 7}
 local enToggleIndex = {Underwear = 0, Avater = 1, Helmet = 2, AwakenWeapon = 3, FaceViewHair = 4, FaceGuard = 5, WarStance = 6}
-local enCharacterType = {Character = 0, Horse = 1, Car = 2, Camel = 3}
+local enCharacterType = {Character = 0, Horse = 1, Car = 2, Camel = 3, Tent = 4}
 local EquipSlotIcon = {
 [enCharacterType.Character] = {
 {0, 166, 123, 194, 151}
@@ -139,6 +139,36 @@ local EquipSlotIcon = {
 {20, 0, 0, 0, 0}
 , 
 {21, 0, 0, 0, 0}
+}
+, 
+[enCharacterType.Tent] = {
+{3, 136, 147, 164, 175}
+, 
+{4, 105, 147, 133, 175}
+, 
+{5, 198, 147, 226, 175}
+, 
+{0, 0, 0, 0, 0}
+, 
+{0, 0, 0, 0, 0}
+, 
+{0, 0, 0, 0, 0}
+, 
+{0, 0, 0, 0, 0}
+, 
+{14, 136, 177, 164, 205}
+, 
+{15, 105, 177, 133, 205}
+, 
+{16, 198, 177, 226, 205}
+, 
+{0, 0, 0, 0, 0}
+, 
+{0, 0, 0, 0, 0}
+, 
+{0, 0, 0, 0, 0}
+, 
+{0, 0, 0, 0, 0}
 }
 }
 local DyeReNew = {_classType = -1, _selected_CharacterTarget = 0, _selected_EquipSlotNo = -1, _nowClickPartId = 0, _nowClickPartSlotId = 0, _isPearlPalette = false, _paletteShowAll = false, _nowPaletteCategoryIndex = 0, _nowPaletteDataIndex = 0, _scrollStartIndex = 0, _scrollMaxRow = 0, _bShowUnderwear = false, _bShowAvater = false, _bFaceVeiwHair = false, _bHideHelmet = false, _bOpenFaceGuard = false, _bWarStance = false, _bShowAwakenWeapon = false, _ampuleCountCheck = false, _MaxEquipSlotItem = 18, 
@@ -356,7 +386,7 @@ DyeReNew.Change_EquipIcon = function(self)
   if enCharacterType.Character == characterType then
     textureInfoName = "New_UI_Common_forLua/Window/Dye/Dye_New_00.dds"
   else
-    if enCharacterType.Horse == characterType or enCharacterType.Camel == characterType then
+    if enCharacterType.Horse == characterType or enCharacterType.Camel == characterType or enCharacterType.Tent == characterType then
       textureInfoName = "New_UI_Common_forLua/Window/Dye/Dye_New_01.dds"
     end
   end
@@ -593,9 +623,6 @@ FGlobal_Panel_DyeReNew_Show = function()
     return 
   end
   ToClient_SaveUiInfo(false)
-  if isGameTypeRussia() and (getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_OBT) then
-    return 
-  end
   if isFlushedUI() then
     return 
   end
@@ -758,4 +785,5 @@ end
 renderMode:setClosefunctor(renderMode, FGlobal_Panel_DyeReNew_Hide)
 Panel_Dye_ReNew:SetShow(false)
 DyeReNew:Initialize()
+registerEvent("FromClient_updateDyeingTargetList", "FromClient_updateDyeingTargetList")
 

@@ -3,34 +3,44 @@
 
 -- params : ...
 -- function num : 0
+Panel_TutorialMenu:RegisterShowEventFunc(true, "TutorialMenuShowAni()")
+Panel_TutorialMenu:RegisterShowEventFunc(false, "TutorialMenuHideAni()")
 PaGlobal_TutorialMenu = {_isFold = true, _lastButtonPosY = 0, _topMarginSize = 20, _marginSize = 10, 
 _ui = {_panel = Panel_TutorialMenu, _buttonTutorialMenu = nil, _staticTutorialMenuBg = nil, _buttonTutorialStart1 = nil, _buttonTutorialStart2 = nil}
 , _refWeightOverUi = nil}
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_TutorialMenu")
 registerEvent("onScreenResize", "FromClient_onScreenResize_TutorialMenu")
-FromClient_luaLoadComplete_TutorialMenu = function()
+TutorialMenuShowAni = function()
   -- function num : 0_0
+end
+
+TutorialMenuHideAni = function()
+  -- function num : 0_1
+end
+
+FromClient_luaLoadComplete_TutorialMenu = function()
+  -- function num : 0_2
   PaGlobal_TutorialMenu:initialize()
 end
 
 FromClient_onScreenResize_TutorialMenu = function()
-  -- function num : 0_1
+  -- function num : 0_3
   PaGlobal_TutorialMenu:onScreenResize()
 end
 
--- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.onScreenResize = function(self)
-  -- function num : 0_2
+  -- function num : 0_4
   if ((self._ui)._panel):GetShow() == true then
     self:alignPosByPivotUi()
   end
 end
 
--- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.initialize = function(self)
-  -- function num : 0_3
+  -- function num : 0_5
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   (self._ui)._buttonTutorialMenu = (UI.getChildControl)(Panel_TutorialMenu, "Button_TutorialMenu")
@@ -58,34 +68,34 @@ PaGlobal_TutorialMenu.initialize = function(self)
   ((self._ui)._buttonTutorialStart2):addInputEvent("Mouse_LUp", "PaGlobal_TutorialMenu:handleClickedTutorialStartButton(2)")
 end
 
--- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.setPosX = function(self, posX)
-  -- function num : 0_4
+  -- function num : 0_6
   ((self._ui)._panel):SetPosX(posX)
 end
 
--- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.setPosY = function(self, posY)
-  -- function num : 0_5
+  -- function num : 0_7
   ((self._ui)._panel):SetPosY(posY)
 end
 
--- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.setShow = function(self, bShow, bShowAni)
-  -- function num : 0_6
+  -- function num : 0_8
   if bShow == true then
     self:alignPosByPivotUi()
   end
   Panel_TutorialMenu:SetShow(bShow, bShowAni)
 end
 
--- DECOMPILER ERROR at PC44: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.checkShowCondition = function(self)
-  -- function num : 0_7
+  -- function num : 0_9
   local selfPlayer = getSelfPlayer()
   local playerLevel = (selfPlayer:get()):getLevel()
   if self._refWeightOverUi ~= nil and (self._refWeightOverUi):GetShow() == true and PaGlobal_TutorialPhase_ItemSell._isPhaseOpen == true and playerLevel >= 10 and playerLevel <= 40 then
@@ -97,10 +107,10 @@ PaGlobal_TutorialMenu.checkShowCondition = function(self)
   return false
 end
 
--- DECOMPILER ERROR at PC47: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.alignPosByPivotUi = function(self)
-  -- function num : 0_8
+  -- function num : 0_10
   local pivotUi = nil
   local posX = 0
   local posY = 0
@@ -118,10 +128,10 @@ PaGlobal_TutorialMenu.alignPosByPivotUi = function(self)
   self:setPosY(posY)
 end
 
--- DECOMPILER ERROR at PC50: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.handleClickedMenuButton = function(self)
-  -- function num : 0_9
+  -- function num : 0_11
   if self._isFold == true then
     self:unfoldTutorialMenu()
   else
@@ -131,10 +141,10 @@ PaGlobal_TutorialMenu.handleClickedMenuButton = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC53: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC67: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.handleClickedTutorialStartButton = function(self, buttonIndex)
-  -- function num : 0_10
+  -- function num : 0_12
   if buttonIndex == 1 then
     PaGlobal_TutorialManager:startTutorial(16)
   else
@@ -145,10 +155,10 @@ PaGlobal_TutorialMenu.handleClickedTutorialStartButton = function(self, buttonIn
   self:foldTutorialMenu()
 end
 
--- DECOMPILER ERROR at PC56: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.foldTutorialMenu = function(self)
-  -- function num : 0_11
+  -- function num : 0_13
   self._isFold = true
   ;
   ((self._ui)._staticTutorialMenuBg):SetShow(false, true)
@@ -158,10 +168,10 @@ PaGlobal_TutorialMenu.foldTutorialMenu = function(self)
   ((self._ui)._buttonTutorialStart2):SetShow(false, true)
 end
 
--- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.unfoldTutorialMenu = function(self)
-  -- function num : 0_12
+  -- function num : 0_14
   self._isFold = false
   ;
   ((self._ui)._staticTutorialMenuBg):SetShow(true, true)
@@ -181,10 +191,10 @@ PaGlobal_TutorialMenu.unfoldTutorialMenu = function(self)
   ((self._ui)._staticTutorialMenuBg):SetSize(bgSizeX, bgSizeY)
 end
 
--- DECOMPILER ERROR at PC62: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC76: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialMenu.alignPosTutorialStartButton = function(self, tutorialStartButton, orderNum)
-  -- function num : 0_13
+  -- function num : 0_15
   if tutorialStartButton == nil then
     _PA_LOG("곽민�\176", "튜토리얼 시작 버튼 정렬 : tutorialStartButton�\180 nil 입니�\164.")
     return 

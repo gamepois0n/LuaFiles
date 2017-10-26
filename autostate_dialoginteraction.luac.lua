@@ -174,6 +174,10 @@ AutoState_DialogInteraction.MouseUpdate = function(self)
   if FromClient_IsClientFocused() == false then
     return 
   end
+  if isMouseMove() == true then
+    self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
+    return 
+  end
   if self._mouseMovingTargetButton == AutoState_MouseMoving_TargetButton.DIALOG_ACCEPT_BUTTON then
     local pos = FGlobal_Dialog_GetFuncPositionNewQuestButton((CppEnums.ContentsType).Contents_NewQuest)
     local posX = pos._PosX + 10

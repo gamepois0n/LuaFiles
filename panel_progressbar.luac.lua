@@ -566,6 +566,7 @@ EventProgressBarShow = function(isShow, progressTime, barType, param)
   -- function num : 0_46 , upvalues : castingBar, collectBar
   local endFunction, checkActionFunction = nil
   if isShow then
+    Global_SetShowDrawWaterRepeat(false)
     if barType == 0 then
       castingBar:Show(isShow, progressTime, nil)
     else
@@ -573,7 +574,6 @@ EventProgressBarShow = function(isShow, progressTime, barType, param)
         ProgressBar_Product_Show(isShow, progressTime, nil)
       else
         if barType == 2 then
-          Global_SetShowDrawWaterRepeat(false)
           if param == 0 then
             (collectBar._titleText):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PROGRESSBAR_COLLECTING") .. "..")
           else

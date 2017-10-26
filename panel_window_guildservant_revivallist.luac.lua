@@ -10,15 +10,15 @@ _guildServantNoArray = {}
 _ui = {_contentBg = (UI.getChildControl)(Panel_GuildServant_RevivalList, "Template_Static_ListContentBG"), _buttonClose = (UI.getChildControl)(Panel_GuildServant_RevivalList, "Button_CloseIcon"), _buttonApply = (UI.getChildControl)(Panel_GuildServant_RevivalList, "Button_Apply"), _radioGroupNum = ((UI.getChildControl)(Panel_GuildServant_RevivalList, "RadioButton_ServantTemplete")):GetGroupNumber(), 
 _list = {}
 }
-}
--- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
+, originalPosX = Panel_GuildServant_RevivalList:GetPosX(), originalPosY = Panel_GuildServant_RevivalList:GetPosY()}
+-- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.init = function(self)
   -- function num : 0_0
   ((UI.getChildControl)(Panel_GuildServant_RevivalList, "RadioButton_ServantTemplete")):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.update = function(self)
   -- function num : 0_1
@@ -27,7 +27,7 @@ PaGlobal_GuildServant_RevivalList.update = function(self)
   PaGlobal_GuildServant_RevivalList:bgSetting()
 end
 
--- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.itemHideAll = function(self)
   -- function num : 0_2
@@ -38,7 +38,7 @@ PaGlobal_GuildServant_RevivalList.itemHideAll = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.listSetting = function(self)
   -- function num : 0_3
@@ -54,7 +54,7 @@ PaGlobal_GuildServant_RevivalList.listSetting = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.itemSetting = function(self, index, servantWrapper)
   -- function num : 0_4
@@ -76,7 +76,7 @@ PaGlobal_GuildServant_RevivalList.itemSetting = function(self, index, servantWra
   end
 end
 
--- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.bgSetting = function(self)
   -- function num : 0_5
@@ -88,7 +88,7 @@ PaGlobal_GuildServant_RevivalList.bgSetting = function(self)
   ((self._ui)._buttonApply):SetPosY(self._applyBtnDefaultPosY + itemTotalHeight)
 end
 
--- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC72: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.selectFirstItem = function(self)
   -- function num : 0_6
@@ -98,7 +98,7 @@ PaGlobal_GuildServant_RevivalList.selectFirstItem = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC75: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.getSelectedIndex = function(self)
   -- function num : 0_7
@@ -110,34 +110,36 @@ PaGlobal_GuildServant_RevivalList.getSelectedIndex = function(self)
   return -1
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC78: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.open = function(self)
   -- function num : 0_8
   local isShow = Panel_GuildServant_RevivalList:GetShow()
   if isShow == false then
     Panel_GuildServant_RevivalList:SetShow(true)
-    PaGlobal_GuildServant_RevivalList:update()
+    PaGlobal_GuildServant_RevivalList:refresh()
   end
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC81: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.close = function(self)
   -- function num : 0_9
   Panel_GuildServant_RevivalList:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC84: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.refresh = function(self)
   -- function num : 0_10
   PaGlobal_GuildServant_RevivalList:selectFirstItem()
   PaGlobal_GuildServant_RevivalList:update()
+  Panel_GuildServant_RevivalList:SetPosX(PaGlobal_GuildServant_RevivalList.originalPosX)
+  Panel_GuildServant_RevivalList:SetPosY(PaGlobal_GuildServant_RevivalList.originalPosY)
 end
 
 local _fromWhereType, _fromSlotNo = nil, nil
--- DECOMPILER ERROR at PC82: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC90: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.apply = function(self)
   -- function num : 0_11 , upvalues : _fromWhereType, _fromSlotNo
@@ -148,7 +150,7 @@ PaGlobal_GuildServant_RevivalList.apply = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.registMessageHandler = function(self)
   -- function num : 0_12
@@ -157,7 +159,7 @@ PaGlobal_GuildServant_RevivalList.registMessageHandler = function(self)
   ((self._ui)._buttonClose):addInputEvent("Mouse_LUp", "PaGlobal_GuildServant_RevivalList:close()")
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC96: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_GuildServant_RevivalList.registEventHandler = function(self)
   -- function num : 0_13

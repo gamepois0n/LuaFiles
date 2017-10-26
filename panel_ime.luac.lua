@@ -6,6 +6,7 @@
 Panel_IME:SetShow(true, false)
 Panel_IME:SetDragEnable(false)
 Panel_IME:SetIgnore(true)
+Panel_IME:SetSize(1, 1)
 local updateTime = 0
 local static_IntroMovie = nil
 local IM = CppEnums.EProcessorInputMode

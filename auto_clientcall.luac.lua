@@ -33,12 +33,6 @@ FromClient_Auto_EndNaviMove = function()
     PaGlobal_AutoManager:stop()
     return 
   end
-  local selfPlayer = (getSelfPlayer()):get()
-  local questList = ToClient_GetQuestList()
-  local uiQuestInfo = questList:getMainQuestInfo()
-  _PA_LOG("�\128규보", "NaviEndPosDist: " .. tostring(ToClient_getNaviEndPointDist()))
-  _PA_LOG("�\128규보", "isKillMonster: " .. tostring(uiQuestInfo:isKillMonster()))
-  _PA_LOG("�\128규보", "FindMonster: " .. tostring(Auto_FindNearQuestMonster()))
   if ToClient_getNaviEndPointDist() < 200 and Auto_FindNearQuestMonster() == true then
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
   else

@@ -78,7 +78,7 @@ wharfRegister.update = function(self)
   if servantInfo == nil then
     return 
   end
-  if (CppEnums.VehicleType).Type_PersonTradeShip == servantInfo:getVehicleType() then
+  if (CppEnums.VehicleType).Type_PersonTradeShip == servantInfo:getVehicleType() or (CppEnums.VehicleType).Type_PersonalBoat == servantInfo:getVehicleType() or (CppEnums.VehicleType).Type_PersonalBattleShip == servantInfo:getVehicleType() then
     (self._staticStamina):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANT_SHIPINFO_MP"))
   else
     ;

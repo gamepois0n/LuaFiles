@@ -1647,6 +1647,12 @@ end
 
 FGlobal_ChatOption_SetIsShowTimeString = function(panelIndex, isShowTimeString)
   -- function num : 0_53
+  if panelIndex == nil then
+    return 
+  end
+  if isShowTimeString == nil then
+    return 
+  end
   local chatPanel = ToClient_getChattingPanel(panelIndex)
   if chatPanel == nil then
     _PA_ASSERT(false, "없는 번호�\152 채팅 패널입니�\164.(" .. tostring(panelIndex) .. ")")

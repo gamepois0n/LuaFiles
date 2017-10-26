@@ -244,51 +244,35 @@ Proc_ShowMessage_Ack_For_RewardSelect = function(message, showRate, msgType, exp
     if messageType.itemMarket == msgType or ((messageType.territoryWar_Start <= msgType and msgType <= messageType.guildWar_End) or messageType.guildBattleEnd == msgType) then
       chatting_sendMessage("", message.main .. " " .. message.sub, (CppEnums.ChatType).System)
     else
-      if messageType.anotherPlayerGotItem == msgType then
+    end
+    if (messageType.anotherPlayerGotItem == msgType and messageType.enchantFail ~= msgType) or messageType.playerKiller == msgType then
+      if message.sub == "" then
+        chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
+      else
+        chatting_sendMessage("", message.main .. "(" .. message.sub .. ")", (CppEnums.ChatType).System)
+      end
+    else
+      if messageType.servantMarket == msgType then
         if message.sub == "" then
           chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
         else
           chatting_sendMessage("", message.main .. "(" .. message.sub .. ")", (CppEnums.ChatType).System)
         end
       else
-        if messageType.enchantFail == msgType then
+        if messageType.workerMarket == msgType then
           if message.sub == "" then
             chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
           else
             chatting_sendMessage("", message.main .. "(" .. message.sub .. ")", (CppEnums.ChatType).System)
           end
         else
-          if messageType.playerKiller == msgType then
+          if messageType.guildBattleNormal == msgType then
+            chatting_sendMessage("", message.main, (CppEnums.ChatType).guildBattleNormal)
+          else
             if message.sub == "" then
               chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
             else
-              chatting_sendMessage("", message.main .. "(" .. message.sub .. ")", (CppEnums.ChatType).System)
-            end
-          else
-            if messageType.servantMarket == msgType then
-              if message.sub == "" then
-                chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
-              else
-                chatting_sendMessage("", message.main .. "(" .. message.sub .. ")", (CppEnums.ChatType).System)
-              end
-            else
-              if messageType.workerMarket == msgType then
-                if message.sub == "" then
-                  chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
-                else
-                  chatting_sendMessage("", message.main .. "(" .. message.sub .. ")", (CppEnums.ChatType).System)
-                end
-              else
-                if messageType.guildBattleNormal == msgType then
-                  chatting_sendMessage("", message.main, (CppEnums.ChatType).guildBattleNormal)
-                else
-                  if message.sub == "" then
-                    chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
-                  else
-                    chatting_sendMessage("", message.sub, (CppEnums.ChatType).System)
-                  end
-                end
-              end
+              chatting_sendMessage("", message.sub, (CppEnums.ChatType).System)
             end
           end
         end

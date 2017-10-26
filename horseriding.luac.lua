@@ -7,7 +7,6 @@ local enStatus = {CALL = 0, RIDE = 1, RUN = 2, END = 3}
 local HorseRiding = {_preTick = 0, _isStartHorseRiding = false, _nowStatus = enStatus.CALL, _oldStatus = enStatus.CALL, _isWaitingForStart = false}
 FromClient_StartReconnectFishing = function()
   -- function num : 0_0
-  _PA_LOG("오명�\128", "FromClient_StartReconnectFishing")
   ToClient_StartFishingReconnect()
 end
 

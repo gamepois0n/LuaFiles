@@ -195,8 +195,12 @@ FGlobal_SavegeDefenceInfo_ListUpdate = function(contents, key)
     local getCurrentState = savageDefenceStatusData:getState()
     local getWave = savageDefenceStatusData:getWave()
     local channelName = getChannelName(curChannelData._worldNo, getServerNo)
+    local getIsStopByGM = savageDefenceStatusData:getIsStopByGM()
     if getJoinMemberCount < 0 then
       getJoinMemberCount = 0
+    end
+    if getIsStopByGM == true then
+      getCurrentState = 4
     end
     if getCurrentState == 0 then
       isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN_WAITING")

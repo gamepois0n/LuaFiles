@@ -110,7 +110,7 @@ end
 
 Auto_FindNearQuestMonster = function()
   -- function num : 0_5
-  return findNearQuestMonster(Auto_GetPlayerPos_Float3(), 2000)
+  return findNearQuestMonster(Auto_GetPlayerPos_Float3(), 4000)
 end
 
 
