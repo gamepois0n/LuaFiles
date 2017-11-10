@@ -203,9 +203,6 @@ PaGlobal_AutoQuestManager.mouseProgress = function(self)
                   end
                   if selCount ~= 0 then
                     local buttonPosition = FGlobal_getSelectRewardPosition()
-                    if buttonPosition._Return == false then
-                      return 
-                    end
                     if self:moveMouse(buttonPosition._PosX, buttonPosition._PosY) == false then
                       self._stateType = stateTypeValue.idle
                       self._pressButton = pressButton.selectreward

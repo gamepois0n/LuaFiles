@@ -253,7 +253,7 @@ HandleMLUp_SkillWindow_UpdateData = function(tabIndex, isLearnMode, doForce)
     (self.staticSkillLevel):SetShow(false)
     ;
     (self.progressSkillExp):SetShow(false)
-    local skillPointInfo = getSkillPointInfo(0)
+    local skillPointInfo = ToClient_getSkillPointInfo(0)
     if skillPointInfo ~= nil then
       (self.staticRemainPoint):SetText(tostring(skillPointInfo._remainPoint .. " / " .. skillPointInfo._acquirePoint))
       ;
@@ -639,10 +639,16 @@ Skill_RegistEventHandler = function()
   ((PaGlobal_Skill.frames)[0]):addInputEvent("Mouse_On", "HandleMScroll_SkillWindow_ScrollEvent(true)")
   ;
   ((PaGlobal_Skill.frames)[0]):addInputEvent("Mouse_Out", "HandleMScroll_SkillWindow_ScrollEvent(false)")
-  ;
-  (PaGlobal_Skill._btn_MovieToolTip):addInputEvent("Mouse_LUp", "Panel_Window_SkillGuide_ShowToggle()")
-  ;
-  (PaGlobal_Skill._btn_MovieToolTip2):addInputEvent("Mouse_LUp", "Panel_Window_SkillGuide_ShowToggle()")
+  if isGameTypeKorea() then
+    (PaGlobal_Skill._btn_MovieToolTip):addInputEvent("Mouse_LUp", "PaGlobal_MovieSkillGuide_Web:Open()")
+    ;
+    (PaGlobal_Skill._btn_MovieToolTip2):addInputEvent("Mouse_LUp", "PaGlobal_MovieSkillGuide_Web:Open()")
+  else
+    ;
+    (PaGlobal_Skill._btn_MovieToolTip):addInputEvent("Mouse_LUp", "Panel_Window_SkillGuide_ShowToggle()")
+    ;
+    (PaGlobal_Skill._btn_MovieToolTip2):addInputEvent("Mouse_LUp", "Panel_Window_SkillGuide_ShowToggle()")
+  end
   ;
   ((PaGlobal_Skill.radioButtons)[PaGlobal_Skill.combatTabIndex]):addInputEvent("Mouse_LUp", "HandleMLUp_SkillWindow_UpdateData(" .. PaGlobal_Skill.combatTabIndex .. ")")
   ;

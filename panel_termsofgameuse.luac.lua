@@ -45,7 +45,7 @@ Panel_TermsofGameUse_Initialize = function()
   _Web:SetShow(true)
   _Web:SetPosX(43)
   _Web:SetPosY(63)
-  _Web:SetSize(917, 586)
+  _Web:SetSize(900, 586)
   _Web:ResetUrl()
 end
 
@@ -70,7 +70,7 @@ FGlobal_TermsofGameUse_Open = function()
   end
   audioPostEvent_SystemUi(13, 6)
   Panel_TermsofGameUse:SetShow(true, true)
-  _Web:SetUrl(917, 586, isTermsString)
+  _Web:SetUrl(900, 586, isTermsString, false, false)
 end
 
 TermsofGameUse_Close = function()

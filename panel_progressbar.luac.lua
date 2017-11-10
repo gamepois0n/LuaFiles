@@ -649,13 +649,17 @@ EventProgressBarShow = function(isShow, progressTime, barType, param)
                     -- DECOMPILER ERROR at PC229: Confused about usage of register: R6 in 'UnsetPending'
 
                     collectBar._useType = 0
-                    endFunction = Alchemy_Do
+                    if GlobalSwitch_UseOldAlchemy == true then
+                      endFunction = Alchemy_Do
+                    else
+                      endFunction = FGlobal_Alchemy_DoAlchemy
+                    end
                     checkActionFunction = checkCookAction
                     collectBar:Show(isShow, progressTime, endFunction, checkActionFunction)
                   else
                     if barType == 8 then
                       (collectBar._titleText):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PROGRESSBAR_READING") .. "..")
-                      -- DECOMPILER ERROR at PC254: Confused about usage of register: R6 in 'UnsetPending'
+                      -- DECOMPILER ERROR at PC259: Confused about usage of register: R6 in 'UnsetPending'
 
                       collectBar._useType = 0
                       endFunction = nil
@@ -664,16 +668,20 @@ EventProgressBarShow = function(isShow, progressTime, barType, param)
                     else
                       if barType == 9 then
                         (collectBar._titleText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PROGRESSBAR_COLLECTBAR_TITLE"))
-                        -- DECOMPILER ERROR at PC277: Confused about usage of register: R6 in 'UnsetPending'
+                        -- DECOMPILER ERROR at PC282: Confused about usage of register: R6 in 'UnsetPending'
 
                         collectBar._useType = 0
-                        endFunction = Alchemy_Do
+                        if GlobalSwitch_UseOldAlchemy == true then
+                          endFunction = Alchemy_Do
+                        else
+                          endFunction = FGlobal_Alchemy_DoAlchemy
+                        end
                         checkActionFunction = checkAlchemyAction
                         collectBar:Show(isShow, progressTime, endFunction, checkActionFunction)
                       else
                         if barType == 10 then
                           (collectBar._titleText):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PROGRESSBAR_REMOVE_CANNON") .. "..")
-                          -- DECOMPILER ERROR at PC302: Confused about usage of register: R6 in 'UnsetPending'
+                          -- DECOMPILER ERROR at PC312: Confused about usage of register: R6 in 'UnsetPending'
 
                           collectBar._useType = 0
                           endFunction = nil
@@ -682,7 +690,7 @@ EventProgressBarShow = function(isShow, progressTime, barType, param)
                         else
                           if barType == 11 then
                             (collectBar._titleText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PROGRESSBAR_REPAIR"))
-                            -- DECOMPILER ERROR at PC325: Confused about usage of register: R6 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC335: Confused about usage of register: R6 in 'UnsetPending'
 
                             collectBar._useType = 0
                             endFunction = nil
@@ -691,7 +699,7 @@ EventProgressBarShow = function(isShow, progressTime, barType, param)
                           else
                             if barType == 12 then
                               (collectBar._titleText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PROGRESSBAR_UPGRADING"))
-                              -- DECOMPILER ERROR at PC348: Confused about usage of register: R6 in 'UnsetPending'
+                              -- DECOMPILER ERROR at PC358: Confused about usage of register: R6 in 'UnsetPending'
 
                               collectBar._useType = 0
                               endFunction = nil
@@ -700,7 +708,7 @@ EventProgressBarShow = function(isShow, progressTime, barType, param)
                             else
                               if barType == 13 then
                                 (collectBar._titleText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PROGRESSBAR_REPAIRSHIP"))
-                                -- DECOMPILER ERROR at PC371: Confused about usage of register: R6 in 'UnsetPending'
+                                -- DECOMPILER ERROR at PC381: Confused about usage of register: R6 in 'UnsetPending'
 
                                 collectBar._useType = 0
                                 endFunction = nil

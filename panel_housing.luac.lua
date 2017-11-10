@@ -1000,10 +1000,14 @@ Event_Housing_ShowHousingModeUI = function(isShow)
     crossHair_SetShow(true)
     setShowLine(true)
     InventoryWindow_Close()
-    HandleClicked_HouseInstallation_Exit_DO()
+    if not isNewHousing_chk() then
+      HandleClicked_HouseInstallation_Exit_DO()
+    else
+      FGlobal_House_InstallationMode_Close()
+    end
   end
   housing:ShowMode(isShow)
-  -- DECOMPILER ERROR at PC40: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
 
   housing._isShow = isShow
 end

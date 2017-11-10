@@ -79,8 +79,20 @@ PaGlobal_Twitch.TwitchUrlReturn = function(self)
                 end
               end
             else
-              _PA_LOG("정태�\164", "새로�\180 국가 �\128입이 추가되었으니 �\180 로그�\188 발견하면 해당 담당자에�\140 알려주세�\148 �\173!!!")
-              isNationType = "kr"
+              if isGameTypeTR() then
+                isNationType = "tr"
+              else
+                if isGameTypeTH() then
+                  isNationType = "th"
+                else
+                  if isGameTypeID() then
+                    isNationType = "id"
+                  else
+                    _PA_LOG("정태�\164", "새로�\180 국가 �\128입이 추가되었으니 �\180 로그�\188 발견하면 해당 담당자에�\140 알려주세�\148 �\173!!!")
+                    isNationType = "kr"
+                  end
+                end
+              end
             end
           end
         end

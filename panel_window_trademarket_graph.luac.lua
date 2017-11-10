@@ -3,6 +3,7 @@
 
 -- params : ...
 -- function num : 0
+local UI_LifeString = CppEnums.LifeExperienceString
 local debugValue = 0
 local last_Tooltip = nil
 local index_Tooltip = {}
@@ -77,7 +78,7 @@ end
 
 local territoryCount = 5
 for countIndex = 1, territoryCount do
-  -- DECOMPILER ERROR at PC459: Confused about usage of register: R10 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC461: Confused about usage of register: R11 in 'UnsetPending'
 
   (tradeGraph._buttonTerritory)[countIndex] = (UI.getChildControl)(Panel_Trade_Market_Graph_Window, "Button_category_Territory_" .. countIndex - 1)
   ;
@@ -632,8 +633,8 @@ tradeGraph.updateTradeProduct = function()
     local characterStaticStatus = characterStaticStatusWrapper:get()
     if characterStaticStatus ~= nil then
       if characterStaticStatus:isSupplyMerchant() then
-        local territoryKeyRaw = getDefaultTerritoryKey()
-        local explorePoint = getExplorePointByTerritoryRaw(territoryKeyRaw)
+        local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
+        local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
         local maxExpPoint = explorePoint:getAquiredPoint()
         local leftCount = tostring(((getSelfPlayer()):get()):getTradeSupplyCount()) .. " / " .. tostring((math.floor)(maxExpPoint / FromClient_getTradeSupplyCount()))
         ;
@@ -679,7 +680,7 @@ end
 
 local miniPanelSizeY = (tradeGraph._staticMiniPanel):GetSizeY()
 tradeGraph.tradeMarket_DrawGraph = function(commerceIndexForGraph, itemKey, UIIndex, itemOrderIndex)
-  -- function num : 0_15 , upvalues : tradeGraph, itemset, itemsetIndex, index_Tooltip, territorySupplyCheck, _miniPanel, miniPanelSizeY, miniPanelPosY, _graphPosY, _byWorldmap, debugValue
+  -- function num : 0_15 , upvalues : tradeGraph, itemset, itemsetIndex, index_Tooltip, territorySupplyCheck, _miniPanel, miniPanelSizeY, miniPanelPosY, _graphPosY, _byWorldmap, UI_LifeString, debugValue
   local commerceUI = (tradeGraph._staticCommerceGraphs)[UIIndex]
   commerceUI:ClearGraphList()
   local intervalPosY = tradeGraph._graphBackSizeY / 2
@@ -741,9 +742,15 @@ tradeGraph.tradeMarket_DrawGraph = function(commerceIndexForGraph, itemKey, UIIn
           ;
           ((tradeGraph._static_SupplyCount)[UIIndex]):SetShow(true)
           local needLifeType = (tradeItemWrapper:get()):getNeedLifeType()
-          local needLifeLevel = (tradeItemWrapper:get()):getNeedLifeLevel()
-          local conditionLevel = FGlobal_CraftLevel_Replace(needLifeLevel + 1, needLifeType)
-          local conditionTypeName = FGlobal_CraftType_ReplaceName(needLifeType)
+          local needLifeLevel = ((tradeItemWrapper:get()):getNeedLifeLevel())
+          local conditionLevel, conditionTypeName = nil, nil
+          if isNewCharacterInfo() == false then
+            conditionLevel = FGlobal_CraftLevel_Replace(needLifeLevel + 1, needLifeType)
+            conditionTypeName = FGlobal_CraftType_ReplaceName(needLifeType)
+          else
+            conditionLevel = FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(needLifeLevel + 1)
+            conditionTypeName = UI_LifeString[needLifeType]
+          end
           local buyingConditionValue = ""
           if needLifeLevel == 0 or needLifeLevel == nil then
             buyingConditionValue = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_GRAPH_NOPE")

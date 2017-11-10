@@ -88,7 +88,6 @@ PaGlobal_EasyBuy_Update = function(contents, key)
       (createSlot.icon):addInputEvent("Mouse_On", "PaGlobal_EasyBuy_ItemTooltip(true, " .. productInfo:getNoRaw() .. ", " .. idx .. ")")
       ;
       (createSlot.icon):addInputEvent("Mouse_Out", "PaGlobal_EasyBuy_ItemTooltip(false)")
-      _PA_LOG("정태�\164", "productInfo:getName() : " .. tostring(productInfo:getName()))
       itemName:SetShow(true)
       itemName:SetText(productInfo:getName())
       itemPrice:SetShow(true)
@@ -121,15 +120,12 @@ local easyBuyCountCache = 0
 
 PaGlobal_EasyBuy.Update = function(self)
   -- function num : 0_4 , upvalues : easyBuyCountCache
-  _PA_LOG("정태�\164", "self.savedWayPointKey : " .. tostring(self.savedWayPointKey))
   local productCount = (getIngameCashMall()):getListCountByCategoryLevel4(self.savedMainCategory, self.savedMiddleCategory, self.savedSmallCategory, self.savedWayPointKey)
-  _PA_LOG("정태�\164", "productCount- : " .. tostring(productCount))
   ;
   (((self._ui)._list2):getElementManager()):clearKey()
   if easyBuyCountCache < productCount then
     for idx = easyBuyCountCache, productCount - 1 do
       local productInfo = (getIngameCashMall()):getByCategoryLevel4(self.savedMainCategory, self.savedMiddleCategory, self.savedSmallCategory, self.savedWayPointKey, idx)
-      _PA_LOG("정태�\164", "productInfo: " .. tostring(productInfo))
       if CheckCashProduct(productInfo) then
         (((self._ui)._list2):getElementManager()):pushKey(toInt64(0, idx))
       end

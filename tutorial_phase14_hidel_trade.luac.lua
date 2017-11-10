@@ -41,7 +41,7 @@ PaGlobal_TutorialPhase_Hidel_Trade.checkPossibleForPhaseStart = function(self, s
       _PA_LOG("곽민�\176", "튜토리얼�\180 �\128능한 �\128역이 아니�\128�\156 튜토리얼�\132 실행하지 않습니다. _phaseNo : " .. tostring(self._phaseNo))
       return false
     end
-    local explorePoint = getExplorePointByTerritoryRaw(getDefaultTerritoryKey())
+    local explorePoint = ToClient_getExplorePointByTerritoryRaw(ToClient_getDefaultTerritoryKey())
     if explorePoint == nil then
       _PA_LOG("곽민�\176", "explorePoint�\128 nil 입니�\164. _phaseNo : " .. tostring(self._phaseNo))
       return false

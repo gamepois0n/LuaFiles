@@ -1129,7 +1129,10 @@ NpcShop_BuySome = function()
   local self = npcShop
   local shopItemWrapper = npcShop_getItemBuy(self._startSlotIndex + self.selectedSlotIndex - 1)
   local shopItem = shopItemWrapper:get()
+  local itemEnchantStaticStatus = (shopItemWrapper:getStaticStatus()):get()
   local money_s64 = (((getSelfPlayer()):get()):getInventory()):getMoney_s64()
+  local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
+  local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if (self.checkButton_Warehouse):IsCheck() then
     money_s64 = warehouse_moneyFromNpcShop_s64()
@@ -1140,18 +1143,29 @@ NpcShop_BuySome = function()
     end
     money_s64 = myGuildListInfo:getGuildBusinessFunds_s64()
   end
-  local s64_maxNumber = money_s64 / shopItem:getItemPriceWithOption()
+  local s64_maxMoneyNumber = money_s64 / shopItem:getItemPriceWithOption()
+  local s64_maxWeightNumber = (Defines.s64_const).s64_0
+  local itemWeight = itemEnchantStaticStatus._weight - Int64toInt32(shopItem:getItemPriceWithOption()) * 2
+  if s64_allWeight < s64_maxWeight then
+    s64_maxWeightNumber = toInt64(0, (math.floor)((s64_maxWeight - s64_allWeight) / itemWeight))
+  end
+  if s64_maxMoneyNumber < s64_maxWeightNumber then
+    s64_maxWeightNumber = s64_maxMoneyNumber
+  end
   if shopItem:getNeedIntimacy() > 0 then
     local talker = dialog_getTalker()
     local intimacyValue = talker:getIntimacy()
     local reduceIntimacyValue = (math.abs)(shopItem:getItemIntimacy())
     local maxNumber = toInt64(0, (math.floor)(intimacyValue / reduceIntimacyValue))
-    if maxNumber < s64_maxNumber then
-      s64_maxNumber = maxNumber
+    if maxNumber < s64_maxMoneyNumber then
+      s64_maxMoneyNumber = maxNumber
+    end
+    if maxNumber < s64_maxWeightNumber then
+      s64_maxWeightNumber = maxNumber
     end
   end
   do
-    Panel_NumberPad_Show(true, s64_maxNumber, param, NpcShop_BuySome_ConfirmFunction)
+    Panel_NumberPad_Show(true, s64_maxMoneyNumber, param, NpcShop_BuySome_ConfirmFunction, nil, nil, nil, nil, s64_maxWeightNumber)
   end
 end
 

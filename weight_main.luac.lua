@@ -3,24 +3,25 @@
 
 -- params : ...
 -- function num : 0
-PaGlobalPlayerWeightList = {weight, weightText; panel = Panel_Endurance, repair_AutoNavi = (UI.getChildControl)(Panel_Endurance, "CheckButton_Repair_AutoNavi")}
--- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobalPlayerWeightList = {panel = Panel_Endurance, weight = (UI.getChildControl)(Panel_Endurance, "StaticText_WeightOver"), weightText = (UI.getChildControl)(Panel_Endurance, "StaticText_NoticeWeight"), repair_AutoNavi = (UI.getChildControl)(Panel_Endurance, "CheckButton_Repair_AutoNavi")}
+-- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobalPlayerWeightList.initialize = function(self)
   -- function num : 0_0
-  self.weight = (UI.getChildControl)(self.panel, "StaticText_WeightOver")
-  self.weightText = (UI.getChildControl)(self.panel, "StaticText_NoticeWeight")
-  ;
   (self.weight):SetShow(false)
   ;
   (self.weightText):SetShow(false)
   ;
-  (self.weight):addInputEvent("Mouse_On", "HandleMPcWeightOver( true )")
+  (self.weightText):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_ENDURANCE_STCTXT_NOTICEWEIGHT"))
   ;
-  (self.weight):addInputEvent("Mouse_Out", "HandleMPcWeightOver( false )")
+  (self.weight):addInputEvent("Mouse_On", "PaGlobalPlayerWeightList_MouseOver(true)")
+  ;
+  (self.weight):addInputEvent("Mouse_Out", "PaGlobalPlayerWeightList_MouseOver(false)")
+  ;
+  (self.weight):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 3, 1 )")
 end
 
-HandleMPcWeightOver = function(isShow)
+PaGlobalPlayerWeightList_MouseOver = function(isShow)
   -- function num : 0_1
   local self = PaGlobalPlayerWeightList
   if isShow == true then
@@ -33,6 +34,12 @@ HandleMPcWeightOver = function(isShow)
     ;
     (self.weightText):SetShow(false)
   end
+end
+
+PcEnduranceToggle = function()
+  -- function num : 0_2
+  local self = PaGlobalPlayerWeightList
+  return (self.weight):GetShow()
 end
 
 PaGlobalPlayerWeightList:initialize()

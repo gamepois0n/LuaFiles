@@ -324,11 +324,11 @@ PaGlobal_SummonBossTutorial_Manager.updatePerFrame = function(self, deltaTime)
 end
 
 local summonBossQuest = {
-groupId = {654, 655, 658, 682, 661, 662, 663, 664, 667, 669, 671, 672, 673, 674, 675, 675, 677, 678}
+groupId = {654, 655, 658, 682, 661, 662, 663, 664, 667, 669, 671, 672, 673, 674, 675, 675, 677, 678, 690, 212, 212, 351, 4019, 4020}
 , 
-questId = {3, 5, 6, 1, 3, 4, 10, 6, 6, 5, 9, 1, 3, 6, 4, 5, 1, 6}
+questId = {3, 5, 6, 1, 3, 4, 10, 6, 6, 5, 9, 1, 3, 6, 4, 5, 1, 6, 23, 1, 2, 3, 1, 1}
 }
--- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC97: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SummonBossTutorial_Manager.checkQuestCondition = function(self)
   -- function num : 0_9 , upvalues : summonBossQuest
@@ -345,7 +345,7 @@ PaGlobal_SummonBossTutorial_Manager.checkQuestCondition = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC100: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SummonBossTutorial_Manager.endTutorial = function(self)
   -- function num : 0_10

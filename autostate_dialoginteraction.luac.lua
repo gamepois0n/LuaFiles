@@ -192,10 +192,7 @@ AutoState_DialogInteraction.MouseUpdate = function(self)
     do
       if self._mouseMovingTargetButton == AutoState_MouseMoving_TargetButton.DIALOG_REWARD_BUTTON then
         local pos = FGlobal_getSelectRewardPosition()
-        if pos._Return == false then
-          _PA_LOG("�\128규보", "MouseUpdate, 보상 버튼�\132 찾을 �\152 없다")
-        end
-        if pos._Return == false or Auto_MouseMove(pos._PosX, pos._PosY) == false then
+        if Auto_MouseMove(pos._PosX, pos._PosY) == false then
           self._interactionState = AutoDialogInteractionState_Type.COMPLETE_QUEST
           self._mouseMovingTargetButton = AutoState_MouseMoving_TargetButton.NONE
           _PA_LOG("�\128규보", "DIALOG_REWARD_BUTTON NONE")

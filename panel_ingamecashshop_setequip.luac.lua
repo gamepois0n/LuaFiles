@@ -12,6 +12,7 @@ local CT = CppEnums.ClassType
 Panel_IngameCashShop_SetEquip:SetShow(false)
 local awakenWeaponContentsOpen = ToClient_IsContentsGroupOpen("901")
 local isCouponOpen = ToClient_IsContentsGroupOpen("224")
+local isStampCouponOpen = ToClient_IsContentsGroupOpen("308")
 local CashShopSetEquip = {BTN_BuyAll = (UI.getChildControl)(Panel_IngameCashShop_SetEquip, "Button_BuyAll"), BTN_Exit = (UI.getChildControl)(Panel_IngameCashShop_SetEquip, "Button_Exit"), BTN_QNA = (UI.getChildControl)(Panel_IngameCashShop_SetEquip, "Button_QNA"), 
 SlotUIPool = {}
 , beforProductNoRaw = -1, nowProductNoRaw = -1, beforSetClass = -1, nowSetClass = -1, 
@@ -490,7 +491,7 @@ CashShopSetEquip:registEventHandler()
 Panel_IngameCashShop_Controller:SetShow(false)
 Panel_CustomizationMessage:SetShow(false, false)
 Panel_CustomizationMessage:SetIgnore(true)
-local CashShopController = {GameTime_Slider = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Slider_GameTime"), BTN_Light = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_Light"), BTN_EyeSee = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_EyeSee"), BTN_ShowUI = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_ShowUI"), SunIcon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_Sun"), btn_SpecialMove = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_SpecialMove"), MoonIcon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_Moon"), SunShine1 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine1"), SunShine2 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine2"), SunShine3 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine3"), SunShine4 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine4"), SunShine5 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine5"), SunShine6 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine6"), btn_SpecialMove1 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SpecialMove1"), btn_SpecialMove2 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SpecialMove2"), ChaCTR_Area = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CharacterController"), RotateArrow_L = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_Left_RotateArrow"), RotateArrow_R = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_Right_RotateArrow"), static_SetOptionBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_SetOptionBG"), static_SetOptionEnduranceBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_SetOptionEnduranceBG"), txt_Endurance = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_Endurance"), Slider_Endurance = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Slider_Endurance"), btn_ShowUnderwear = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_ShowUnderWear"), btn_HideAvatar = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_HideAvatar"), btn_HideHair = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_HideHair"), btn_HideHelm = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_HideHelm"), btn_AwakenWeapon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_AwakenWeapon"), btn_WarStance = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_WarStance"), btn_OpenHelm = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_OpenHelm"), cameraControlBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlBG"), cameraControlTitle = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlTitle"), cameraControlMoveBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlMoveBG"), cameraControlWheelBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlWheelBG"), cameraControlRotateBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlRotateBG"), cameraControlMove = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlMove"), cameraControlWheel = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlWheel"), cameraControlRotate = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlRotate"), petLookBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_SetPetLookBG"), btn_Coupon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_Coupon"), btn_AllDoff = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_AllDoff"), isLdown = false, isRdown = false, lMovePos = 0, yMovePos = 0, isShowUI = true, xStartPos = 0, yStartPos = 0, savedTabType = 0}
+local CashShopController = {GameTime_Slider = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Slider_GameTime"), BTN_Light = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_Light"), BTN_EyeSee = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_EyeSee"), BTN_ShowUI = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_ShowUI"), SunIcon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_Sun"), btn_SpecialMove = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_SpecialMove"), MoonIcon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_Moon"), SunShine1 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine1"), SunShine2 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine2"), SunShine3 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine3"), SunShine4 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine4"), SunShine5 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine5"), SunShine6 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SunShine6"), btn_SpecialMove1 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SpecialMove1"), btn_SpecialMove2 = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_SpecialMove2"), ChaCTR_Area = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CharacterController"), RotateArrow_L = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_Left_RotateArrow"), RotateArrow_R = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_Right_RotateArrow"), static_SetOptionBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_SetOptionBG"), static_SetOptionEnduranceBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_SetOptionEnduranceBG"), txt_Endurance = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_Endurance"), Slider_Endurance = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Slider_Endurance"), btn_ShowUnderwear = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_ShowUnderWear"), btn_HideAvatar = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_HideAvatar"), btn_HideHair = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_HideHair"), btn_HideHelm = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_HideHelm"), btn_AwakenWeapon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_AwakenWeapon"), btn_WarStance = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_WarStance"), btn_OpenHelm = (UI.getChildControl)(Panel_IngameCashShop_Controller, "CheckButton_OpenHelm"), cameraControlBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlBG"), cameraControlTitle = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlTitle"), cameraControlMoveBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlMoveBG"), cameraControlWheelBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlWheelBG"), cameraControlRotateBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_CameraControlRotateBG"), cameraControlMove = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlMove"), cameraControlWheel = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlWheel"), cameraControlRotate = (UI.getChildControl)(Panel_IngameCashShop_Controller, "StaticText_CameraControlRotate"), petLookBG = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Static_SetPetLookBG"), btn_Coupon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_Coupon"), btn_StampCoupon = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_StampCoupon"), btn_AllDoff = (UI.getChildControl)(Panel_IngameCashShop_Controller, "Button_AllDoff"), isLdown = false, isRdown = false, lMovePos = 0, yMovePos = 0, isShowUI = true, xStartPos = 0, yStartPos = 0, savedTabType = 0}
 CashShopController.btn_petLookBefore = (UI.getChildControl)(CashShopController.petLookBG, "Button_Before")
 CashShopController.btn_petLookNext = (UI.getChildControl)(CashShopController.petLookBG, "Button_Next")
 CashShopController.txt_petLookNameMain = (UI.getChildControl)(CashShopController.petLookBG, "StaticText_PetLookNameMain")
@@ -674,6 +675,10 @@ CashShopController.Initialize = function(self)
   local _btn_TextSizeX = _btn_SizeX - _btn_SizeX / 2 - (self.btn_Coupon):GetTextSizeX() / 2
   ;
   (self.btn_Coupon):SetTextSpan(_btn_TextSizeX, 4)
+  local _btn_StampCouponSizeX = (self.btn_StampCoupon):GetSizeX() + 23
+  local _btn_StampCouponTextSizeX = _btn_StampCouponSizeX - _btn_StampCouponSizeX / 2 - (self.btn_StampCoupon):GetTextSizeX() / 2
+  ;
+  (self.btn_StampCoupon):SetTextSpan(_btn_StampCouponTextSizeX, 4)
   if isGameTypeKR2() then
     (self.static_SetOptionEnduranceBG):SetShow(false)
     ;
@@ -722,8 +727,18 @@ FGlobal_CashShop_SetEquip_CouponEffectCheck = function()
   end
 end
 
+CashShopController.StampCoupon_Init = function(self)
+  -- function num : 0_21 , upvalues : isStampCouponOpen
+  if isStampCouponOpen then
+    (self.btn_StampCoupon):SetShow(true)
+  else
+    ;
+    (self.btn_StampCoupon):SetShow(false)
+  end
+end
+
 CashShopController.Open = function(self)
-  -- function num : 0_21 , upvalues : StaticText_CustomizationMessage
+  -- function num : 0_22 , upvalues : StaticText_CustomizationMessage
   local nowTime = (getIngameCashMall()):getWeatherTime()
   ;
   (getIngameCashMall()):setWeatherTime(6, nowTime)
@@ -759,6 +774,8 @@ CashShopController.Open = function(self)
   (self.btn_OpenHelm):SetCheck(isHelmOpen)
   ;
   (self.btn_Coupon):SetSpanSize(10, 90)
+  ;
+  (self.btn_StampCoupon):SetSpanSize(10, 130)
   Panel_IngameCashShop_Controller:SetShow(true)
   Panel_CustomizationMessage:SetShow(true, false)
   local message = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_CONTROLLER_MSG")
@@ -775,7 +792,7 @@ CashShopController.Open = function(self)
 end
 
 CashShopController.Close = function(self)
-  -- function num : 0_22
+  -- function num : 0_23
   Panel_IngameCashShop_Controller:SetShow(false)
   Panel_CustomizationMessage:SetShow(false, false)
   ;
@@ -800,7 +817,7 @@ end
 
 local tabIndexList = (Array.new)()
 FGlobal_CashShop_SetEquip_BGToggle = function(tabType)
-  -- function num : 0_23 , upvalues : CashShopController, tabIndexList
+  -- function num : 0_24 , upvalues : CashShopController, tabIndexList
   local self = CashShopController
   ;
   (self.cameraControlBG):SetSpanSize(17, 60)
@@ -844,7 +861,7 @@ FGlobal_CashShop_SetEquip_BGToggle = function(tabType)
 end
 
 FGlobal_CashShop_SetEquip_SelectedItem = function(productNoRaw)
-  -- function num : 0_24 , upvalues : CashShopController, UI_TM
+  -- function num : 0_25 , upvalues : CashShopController, UI_TM
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNoRaw)
   if cashProduct == nil then
     return 
@@ -922,7 +939,7 @@ FGlobal_CashShop_SetEquip_SelectedItem = function(productNoRaw)
 end
 
 CashShopController.SetPosition = function(self)
-  -- function num : 0_25 , upvalues : CashShopController
+  -- function num : 0_26 , upvalues : CashShopController
   local scrSizeX = getScreenSizeX()
   local scrSizeY = getScreenSizeY()
   local panelSizeX = Panel_IngameCashShop_Controller:GetSizeX()
@@ -1003,12 +1020,14 @@ CashShopController.SetPosition = function(self)
   ;
   (self.btn_Coupon):ComputePos()
   ;
+  (self.btn_StampCoupon):ComputePos()
+  ;
   (self.cameraControlBG):ComputePos()
   CashShopController:ResetViewCharacterPosition()
 end
 
 CashShopController.ResetViewCharacterPosition = function(self)
-  -- function num : 0_26
+  -- function num : 0_27
   if self.isShowUI then
     local leftWindowSize = Panel_IngameCashShop:GetSizeX()
     local screenSize = getScreenSizeX()
@@ -1023,7 +1042,7 @@ CashShopController.ResetViewCharacterPosition = function(self)
 end
 
 HandleClicked_CashShopController_SetTime = function()
-  -- function num : 0_27 , upvalues : CashShopController
+  -- function num : 0_28 , upvalues : CashShopController
   local self = CashShopController
   local ttIndex = (self.GameTime_Slider):GetSelectIndex()
   ;
@@ -1031,7 +1050,7 @@ HandleClicked_CashShopController_SetTime = function()
 end
 
 HandleClicked_CashShopController_SetLight = function()
-  -- function num : 0_28 , upvalues : CashShopController
+  -- function num : 0_29 , upvalues : CashShopController
   local self = CashShopController
   if not (self.BTN_Light):IsCheck() then
     (getIngameCashMall()):setLight(false)
@@ -1042,14 +1061,14 @@ HandleClicked_CashShopController_SetLight = function()
 end
 
 HandleClicked_CashShopController_SetCharacterViewCamera = function()
-  -- function num : 0_29 , upvalues : CashShopController
+  -- function num : 0_30 , upvalues : CashShopController
   local self = CashShopController
   ;
   (getIngameCashMall()):setCharacterViewCamera((self.BTN_EyeSee):IsCheck())
 end
 
 HandleClicked_CashShopController_SetSpecialMove = function()
-  -- function num : 0_30 , upvalues : CashShopController
+  -- function num : 0_31 , upvalues : CashShopController
   local self = CashShopController
   local specialMoveCheck = (self.btn_SpecialMove):IsCheck()
   local sunShineCheck = (self.SunIcon):IsCheck()
@@ -1058,13 +1077,17 @@ HandleClicked_CashShopController_SetSpecialMove = function()
   if specialMoveCheck or sunShineCheck then
     (self.btn_Coupon):SetSpanSize(10, 140)
     ;
+    (self.btn_StampCoupon):SetSpanSize(10, 180)
+    ;
     (self.SunIcon):SetCheck(false)
     HandleClicked_SunShineToggle()
   else
     ;
     (self.btn_Coupon):SetSpanSize(10, 90)
+    ;
+    (self.btn_StampCoupon):SetSpanSize(10, 130)
   end
-  -- DECOMPILER ERROR at PC50: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC60: Unhandled construct in 'MakeBoolean' P1
 
   if not (self.btn_SpecialMove1):GetShow() or characterAnimationCount == 1 then
     if specialMoveCheck then
@@ -1104,7 +1127,7 @@ HandleClicked_CashShopController_SetSpecialMove = function()
 end
 
 HandleClicked_CashShopController_SetShowUIToggle = function()
-  -- function num : 0_31 , upvalues : CashShopController
+  -- function num : 0_32 , upvalues : CashShopController
   local self = CashShopController
   if self.isShowUI == true then
     Panel_IngameCashShop:SetShow(false)
@@ -1129,7 +1152,7 @@ HandleClicked_CashShopController_SetShowUIToggle = function()
 end
 
 HandleClicked_CashShopController_SetCharacterRotate_Start = function(isLDown)
-  -- function num : 0_32 , upvalues : CashShopController
+  -- function num : 0_33 , upvalues : CashShopController
   local self = CashShopController
   if isLDown then
     self.isLdown = true
@@ -1143,7 +1166,7 @@ HandleClicked_CashShopController_SetCharacterRotate_Start = function(isLDown)
 end
 
 HandleClicked_CashShopController_SetCharacterRotate_End = function(isLDown)
-  -- function num : 0_33 , upvalues : CashShopController
+  -- function num : 0_34 , upvalues : CashShopController
   local self = CashShopController
   if isLDown == nil then
     self.isLdown = false
@@ -1164,7 +1187,7 @@ HandleClicked_CashShopController_SetCharacterRotate_End = function(isLDown)
 end
 
 HandleClicked_CashShopController_SetCharacterScroll = function(isUp)
-  -- function num : 0_34
+  -- function num : 0_35
   local upValue = 25
   if isUp == true then
     upValue = -upValue
@@ -1174,7 +1197,7 @@ HandleClicked_CashShopController_SetCharacterScroll = function(isUp)
 end
 
 HandleClicked_CashShopController_UpdateEndurance = function()
-  -- function num : 0_35 , upvalues : CashShopController
+  -- function num : 0_36 , upvalues : CashShopController
   local self = CashShopController
   local ttIndex = (self.Slider_Endurance):GetSelectIndex()
   ;
@@ -1182,12 +1205,12 @@ HandleClicked_CashShopController_UpdateEndurance = function()
 end
 
 HandleClicked_CashShopController_OffAllEquip = function()
-  -- function num : 0_36
+  -- function num : 0_37
   (getIngameCashMall()):clearEquipViewList()
 end
 
 HandleClicked_CashShopController_ToggleUnderWear = function()
-  -- function num : 0_37 , upvalues : CashShopController
+  -- function num : 0_38 , upvalues : CashShopController
   local self = CashShopController
   local isChecked = (self.btn_ShowUnderwear):IsCheck()
   ;
@@ -1198,7 +1221,7 @@ HandleClicked_CashShopController_ToggleUnderWear = function()
 end
 
 HandleClicked_CashShopController_ToggleAvatar = function()
-  -- function num : 0_38 , upvalues : CashShopController
+  -- function num : 0_39 , upvalues : CashShopController
   local self = CashShopController
   local isChecked = (self.btn_HideAvatar):IsCheck()
   ;
@@ -1209,7 +1232,7 @@ HandleClicked_CashShopController_ToggleAvatar = function()
 end
 
 HandleClicked_CashShopController_ToggleHideHair = function()
-  -- function num : 0_39 , upvalues : CashShopController
+  -- function num : 0_40 , upvalues : CashShopController
   local self = CashShopController
   local isChecked = (self.btn_HideHair):IsCheck()
   if isChecked then
@@ -1220,7 +1243,7 @@ HandleClicked_CashShopController_ToggleHideHair = function()
 end
 
 CashShopController_HideHairBtnCheck = function(isUpHairMode)
-  -- function num : 0_40 , upvalues : CashShopController
+  -- function num : 0_41 , upvalues : CashShopController
   local self = CashShopController
   if isUpHairMode then
     if not (self.btn_HideHair):IsCheck() then
@@ -1239,7 +1262,7 @@ CashShopController_HideHairBtnCheck = function(isUpHairMode)
 end
 
 HandleClicked_CashShopController_ToggleHideHelm = function()
-  -- function num : 0_41 , upvalues : CashShopController
+  -- function num : 0_42 , upvalues : CashShopController
   local self = CashShopController
   local isChecked = (self.btn_HideHelm):IsCheck()
   ;
@@ -1247,7 +1270,7 @@ HandleClicked_CashShopController_ToggleHideHelm = function()
 end
 
 HandleClicked_CashShopController_ToggleOpenHelm = function()
-  -- function num : 0_42 , upvalues : CashShopController
+  -- function num : 0_43 , upvalues : CashShopController
   local self = CashShopController
   local isChecked = (self.btn_OpenHelm):IsCheck()
   ;
@@ -1255,21 +1278,21 @@ HandleClicked_CashShopController_ToggleOpenHelm = function()
 end
 
 HandleClicked_CashShopController_ToggleAwakenWeapon = function()
-  -- function num : 0_43 , upvalues : CashShopController
+  -- function num : 0_44 , upvalues : CashShopController
   local isChecked = (CashShopController.btn_AwakenWeapon):IsCheck()
   ;
   (getIngameCashMall()):setAwakenWeaponView(isChecked)
 end
 
 HandleClicked_CashShopController_ToggleWarStance = function()
-  -- function num : 0_44 , upvalues : CashShopController
+  -- function num : 0_45 , upvalues : CashShopController
   local isChecked = (CashShopController.btn_WarStance):IsCheck()
   ;
   (getIngameCashMall()):setBattleView(isChecked)
 end
 
 HandleClicked_CashShopController_AutoToggleUnderWear = function()
-  -- function num : 0_45 , upvalues : CashShopController
+  -- function num : 0_46 , upvalues : CashShopController
   local self = CashShopController
   ;
   (self.btn_ShowUnderwear):SetCheck(true)
@@ -1280,7 +1303,7 @@ HandleClicked_CashShopController_AutoToggleUnderWear = function()
 end
 
 HandleClicked_CashShopController_AutoToggleOffAll = function()
-  -- function num : 0_46 , upvalues : CashShopController
+  -- function num : 0_47 , upvalues : CashShopController
   local self = CashShopController
   ;
   (self.btn_ShowUnderwear):SetCheck(false)
@@ -1293,7 +1316,7 @@ HandleClicked_CashShopController_AutoToggleOffAll = function()
 end
 
 HandleClicked_CashShopController_AutoToggleUpHair = function(isUpHairMode)
-  -- function num : 0_47 , upvalues : CashShopController
+  -- function num : 0_48 , upvalues : CashShopController
   local self = CashShopController
   ;
   (self.btn_HideHair):SetCheck(isUpHairMode)
@@ -1302,7 +1325,7 @@ HandleClicked_CashShopController_AutoToggleUpHair = function(isUpHairMode)
 end
 
 CashShopController_ForceOffAllButton = function()
-  -- function num : 0_48 , upvalues : CashShopController
+  -- function num : 0_49 , upvalues : CashShopController
   local self = CashShopController
   if (self.btn_HideHelm):IsCheck() then
     (self.btn_HideHelm):SetCheck(false)
@@ -1342,7 +1365,7 @@ CashShopController_ForceOffAllButton = function()
 end
 
 cashShop_Controller_UpdateCharacterRotate = function(deltatime)
-  -- function num : 0_49 , upvalues : CashShopController
+  -- function num : 0_50 , upvalues : CashShopController
   local self = CashShopController
   if self.isLdown == false and self.isRdown == false then
     return 
@@ -1367,7 +1390,7 @@ cashShop_Controller_UpdateCharacterRotate = function(deltatime)
 end
 
 cashShop_Controller_Open = function()
-  -- function num : 0_50 , upvalues : CashShopController
+  -- function num : 0_51 , upvalues : CashShopController
   CashShopController:Open()
   ;
   (CashShopController.petLookBG):SetShow(false)
@@ -1376,12 +1399,12 @@ cashShop_Controller_Open = function()
 end
 
 cashShop_Controller_Close = function()
-  -- function num : 0_51 , upvalues : CashShopController
+  -- function num : 0_52 , upvalues : CashShopController
   CashShopController:Close()
 end
 
 _cashShopController_ButtonTooltip = function(isShow, buttonType)
-  -- function num : 0_52 , upvalues : CashShopController
+  -- function num : 0_53 , upvalues : CashShopController
   local self = CashShopController
   local uiControl, name, desc = nil, nil, nil
   if buttonType == 0 then
@@ -1451,30 +1474,34 @@ _cashShopController_ButtonTooltip = function(isShow, buttonType)
 end
 
 FromClient_CashShopController_Resize = function()
-  -- function num : 0_53 , upvalues : CashShopController
+  -- function num : 0_54 , upvalues : CashShopController
   CashShopController:SetPosition()
 end
 
 FromClient_ChangeAwakenWeapon = function(isAwakenWeaponView)
-  -- function num : 0_54 , upvalues : CashShopController
+  -- function num : 0_55 , upvalues : CashShopController
   (CashShopController.btn_AwakenWeapon):SetCheck(isAwakenWeaponView)
 end
 
 FromClient_ChangeCashshopBattle = function(isBattle)
-  -- function num : 0_55 , upvalues : CashShopController
+  -- function num : 0_56 , upvalues : CashShopController
   (CashShopController.btn_WarStance):SetCheck(isBattle)
 end
 
 HandleClicked_SunShineToggle = function()
-  -- function num : 0_56 , upvalues : CashShopController
+  -- function num : 0_57 , upvalues : CashShopController
   local self = CashShopController
   local sunShineCheck = (self.SunIcon):IsCheck()
   local specialMoveCheck = (self.btn_SpecialMove):IsCheck()
   if sunShineCheck or specialMoveCheck then
     (self.btn_Coupon):SetSpanSize(10, 140)
+    ;
+    (self.btn_StampCoupon):SetSpanSize(10, 180)
   else
     ;
     (self.btn_Coupon):SetSpanSize(10, 90)
+    ;
+    (self.btn_StampCoupon):SetSpanSize(10, 130)
   end
   if (self.btn_SpecialMove1):GetShow() then
     (self.btn_SpecialMove1):SetShow(false)
@@ -1498,7 +1525,7 @@ HandleClicked_SunShineToggle = function()
 end
 
 HandleClicked_SunShineSetting = function(weatherType)
-  -- function num : 0_57
+  -- function num : 0_58
   if weatherType == 1 then
     weatherIndex = 0
   else
@@ -1527,7 +1554,7 @@ HandleClicked_SunShineSetting = function(weatherType)
 end
 
 HandleClicked_SpecialMoveSetting = function(moveType)
-  -- function num : 0_58 , upvalues : CashShopController
+  -- function num : 0_59 , upvalues : CashShopController
   local animationValue = 0
   if moveType == 1 then
     animationValue = 1
@@ -1553,7 +1580,7 @@ HandleClicked_SpecialMoveSetting = function(moveType)
 end
 
 HandleClicked_PetLookChangeTier = function(isBefore)
-  -- function num : 0_59 , upvalues : CashShopController
+  -- function num : 0_60 , upvalues : CashShopController
   local self = CashShopController
   local cashMallInfo = getIngameCashMall()
   if isBefore then
@@ -1604,7 +1631,7 @@ HandleClicked_PetLookChangeTier = function(isBefore)
 end
 
 FromClient_ChangeSpecialMove = function()
-  -- function num : 0_60 , upvalues : CashShopController
+  -- function num : 0_61 , upvalues : CashShopController
   local self = CashShopController
   local action = (getIngameCashMall()):getCharacterActionCount() - 1
   local animation = (getIngameCashMall()):getCharacterAnimationCount(action)
@@ -1617,7 +1644,7 @@ FromClient_ChangeSpecialMove = function()
 end
 
 FGlobal_SpecialMoveSettingCheck = function()
-  -- function num : 0_61 , upvalues : CashShopController
+  -- function num : 0_62 , upvalues : CashShopController
   local self = CashShopController
   local action = (getIngameCashMall()):getCharacterActionCount() - 1
   local characterAnimationCount = (getIngameCashMall()):getCharacterAnimationCount(action)
@@ -1629,10 +1656,12 @@ FGlobal_SpecialMoveSettingCheck = function()
   (self.btn_SpecialMove):SetShow(false)
   ;
   (self.btn_Coupon):SetSpanSize(10, 90)
+  ;
+  (self.btn_StampCoupon):SetSpanSize(10, 130)
 end
 
 FGlobal_SpecialMoveSettingNoShow = function()
-  -- function num : 0_62 , upvalues : CashShopController
+  -- function num : 0_63 , upvalues : CashShopController
   local self = CashShopController
   ;
   (self.btn_SpecialMove1):SetShow(false)
@@ -1641,7 +1670,7 @@ FGlobal_SpecialMoveSettingNoShow = function()
 end
 
 IngameCashShop_CameraHelp = function(isShow)
-  -- function num : 0_63 , upvalues : CashShopController, UI_color
+  -- function num : 0_64 , upvalues : CashShopController, UI_color
   local self = CashShopController
   if isShow then
     (self.cameraControlBG):SetAlpha(1)
@@ -1696,7 +1725,7 @@ IngameCashShop_CameraHelp = function(isShow)
 end
 
 CashShopController.registEventHandler = function(self)
-  -- function num : 0_64
+  -- function num : 0_65
   (self.GameTime_Slider):addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_SetTime()")
   ;
   (self.GameTime_SliderCtrlBTN):addInputEvent("Mouse_LUp", "HandleClicked_CashShopController_SetTime()")
@@ -1821,10 +1850,12 @@ CashShopController.registEventHandler = function(self)
   (self.btn_petLookNext):addInputEvent("Mouse_LUp", "HandleClicked_PetLookChangeTier(false)")
   ;
   (self.btn_Coupon):addInputEvent("Mouse_LUp", "IngameCashShopCoupon_Open()")
+  ;
+  (self.btn_StampCoupon):addInputEvent("Mouse_LUp", "FromClient_PearlStampShow()")
 end
 
 CashShopController.registMessageHandler = function(self)
-  -- function num : 0_65
+  -- function num : 0_66
   registerEvent("onScreenResize", "FromClient_CashShopController_Resize")
   registerEvent("FromClient_ChangeAwakenWeapon", "FromClient_ChangeAwakenWeapon")
   registerEvent("FromClient_ChangeSpecialMove", "FromClient_ChangeSpecialMove")
@@ -1833,4 +1864,5 @@ end
 CashShopController:Initialize()
 CashShopController:registEventHandler()
 CashShopController:registMessageHandler()
+CashShopController:StampCoupon_Init()
 

@@ -1774,6 +1774,10 @@ LimitWorkableCount_LargeCraft = function()
   local workingCount = ((((SubWork_List._data_Table)[workIndex])._resource)[subWorkIndex])._workingCount
   local workableCount = totalWorkCount - currentWorkCount - workingCount
   local resourceCount = ((((SubWork_List._data_Table)[workIndex])._resource)[subWorkIndex])._haveCount
+  if (Worker_List._data_Table)[Worker_List._selected_Index] == nil then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_RentHouseNoWorkingByWorkerNotSelect"))
+    return 
+  end
   local workerActionPoint = ((Worker_List._data_Table)[Worker_List._selected_Index])._currentPoint
   local ongoingCount = ((SubWork_List._data_Table)[workIndex])._onGoingCount
   local limitWorkableCount = 1

@@ -49,7 +49,7 @@ slot = {startX = 5, startY = 5, startBGX = 10, startBGY = 38, startScrollX = 319
 , 
 skill = {startIconX = 5, startIconY = 7, startNameX = 59, startNameY = 2, startDecX = 59, startDecY = 23, startExpBGX = 0, startExpBGY = 2, startExpX = 2, startExpY = 4, startButtonX = 251, startButtonY = 4}
 }
-, _maleIcon = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MaleIcon"), _femaleIcon = (UI.getChildControl)(Panel_Window_StableInfo, "Static_FemaleIcon"), _iconStallion = (UI.getChildControl)(Panel_Window_StableInfo, "Static_iconStallion"), _staticName = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_Name"), _staticLevel = (UI.getChildControl)(Panel_Window_StableInfo, "Static_Text_Level"), _staticHpGauge = (UI.getChildControl)(Panel_Window_StableInfo, "HP_GaugeBar"), _staticMpGauge = (UI.getChildControl)(Panel_Window_StableInfo, "MP_GaugeBar"), _staticExpGauge = (UI.getChildControl)(Panel_Window_StableInfo, "EXP_GaugeBar"), _staticWeightGauge = (UI.getChildControl)(Panel_Window_StableInfo, "Weight_GaugeBar"), _staticHPTitle = (UI.getChildControl)(Panel_Window_StableInfo, "HP"), _staticMPTitle = (UI.getChildControl)(Panel_Window_StableInfo, "MP"), _staticHP = (UI.getChildControl)(Panel_Window_StableInfo, "HP_CountData"), _staticMP = (UI.getChildControl)(Panel_Window_StableInfo, "MP_CountData"), _staticEXP = (UI.getChildControl)(Panel_Window_StableInfo, "EXP_CountData"), _staticWeight = (UI.getChildControl)(Panel_Window_StableInfo, "WHT_CountData"), _staticTitleMaxMoveSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "MaxMoveSpeed"), _staticTitleAcceleration = (UI.getChildControl)(Panel_Window_StableInfo, "Acceleration"), _staticTitleCorneringSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "CorneringSpeed"), _staticTitleBrakeSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "BrakeSpeed"), _staticMoveSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "MaxMoveSpeedValue"), _staticAcceleration = (UI.getChildControl)(Panel_Window_StableInfo, "AccelerationValue"), _staticCornering = (UI.getChildControl)(Panel_Window_StableInfo, "CorneringSpeedValue"), _staticBrakeSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "BrakeSpeedValue"), _staticMatingCount = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingCount"), _staticMatingCountValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingCountValue"), _staticMatingtime = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingTime"), _staticMatingtimeValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingTimeValue"), _staticTrainingTime = (UI.getChildControl)(Panel_Window_StableInfo, "Static_TrainingTime"), _staticTrainingTimeValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_TrainingTimeValue"), _btnMatingImmediately = (UI.getChildControl)(Panel_Window_StableInfo, "Button_MatingImmediately"), _staticLife = (UI.getChildControl)(Panel_Window_StableInfo, "Static_LifeCount"), _staticLifeValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_LifeCountValue"), _staticImprint = (UI.getChildControl)(Panel_Window_StableInfo, "Static_Imprint"), _staticImprintValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_ImprintValue"), _staticSkillPanel = (UI.getChildControl)(Panel_Window_StableInfo, "Panel_Skill"), _deadCount = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_DeadCount"), _deadCountValue = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_DeadCountValue"), panel_abillity = (UI.getChildControl)(Panel_Window_StableInfo, "Stable_Info_Ability"), _staticWantSkillBG = (UI.getChildControl)(Panel_Window_StableInfo, "Static_WantSkillBG"), _staticChangeBG = (UI.getChildControl)(Panel_Window_StableInfo, "Static_ChangeSkillBG"), _staticChangeTitle = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillTitle"), _staticSkillTargetName = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillName"), _staticSkillTargetIcon = (UI.getChildControl)(Panel_Window_StableInfo, "Static_ChangeSkillIcon"), _staticSkillTargetCount = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillCount"), _staticTextChangeDesc = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillDesc"), _startSlotIndex = 0, _temporaySlotCount = 0, _temporayLearnSkillCount = 0, currentServantType = nil, _skill = (Array.new)(), _fromSkillKey = nil, _toSkillKey = nil}
+, _maleIcon = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MaleIcon"), _femaleIcon = (UI.getChildControl)(Panel_Window_StableInfo, "Static_FemaleIcon"), _iconStallion = (UI.getChildControl)(Panel_Window_StableInfo, "Static_iconStallion"), _staticName = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_Name"), _staticLevel = (UI.getChildControl)(Panel_Window_StableInfo, "Static_Text_Level"), _staticHpGauge = (UI.getChildControl)(Panel_Window_StableInfo, "HP_GaugeBar"), _staticMpGauge = (UI.getChildControl)(Panel_Window_StableInfo, "MP_GaugeBar"), _staticExpGauge = (UI.getChildControl)(Panel_Window_StableInfo, "EXP_GaugeBar"), _staticWeightGauge = (UI.getChildControl)(Panel_Window_StableInfo, "Weight_GaugeBar"), _staticHPTitle = (UI.getChildControl)(Panel_Window_StableInfo, "HP"), _staticMPTitle = (UI.getChildControl)(Panel_Window_StableInfo, "MP"), _staticHP = (UI.getChildControl)(Panel_Window_StableInfo, "HP_CountData"), _staticMP = (UI.getChildControl)(Panel_Window_StableInfo, "MP_CountData"), _staticEXP = (UI.getChildControl)(Panel_Window_StableInfo, "EXP_CountData"), _staticWeight = (UI.getChildControl)(Panel_Window_StableInfo, "WHT_CountData"), _staticTitleMaxMoveSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "MaxMoveSpeed"), _staticTitleAcceleration = (UI.getChildControl)(Panel_Window_StableInfo, "Acceleration"), _staticTitleCorneringSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "CorneringSpeed"), _staticTitleBrakeSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "BrakeSpeed"), _staticMoveSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "MaxMoveSpeedValue"), _staticAcceleration = (UI.getChildControl)(Panel_Window_StableInfo, "AccelerationValue"), _staticCornering = (UI.getChildControl)(Panel_Window_StableInfo, "CorneringSpeedValue"), _staticBrakeSpeed = (UI.getChildControl)(Panel_Window_StableInfo, "BrakeSpeedValue"), _staticMatingCount = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingCount"), _staticMatingCountValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingCountValue"), _staticMatingtime = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingTime"), _staticMatingtimeValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_MatingTimeValue"), _staticTrainingTime = (UI.getChildControl)(Panel_Window_StableInfo, "Static_TrainingTime"), _staticTrainingTimeValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_TrainingTimeValue"), _btnMatingImmediately = (UI.getChildControl)(Panel_Window_StableInfo, "Button_MatingImmediately"), _staticLife = (UI.getChildControl)(Panel_Window_StableInfo, "Static_LifeCount"), _staticLifeValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_LifeCountValue"), _staticImprint = (UI.getChildControl)(Panel_Window_StableInfo, "Static_Imprint"), _staticImprintValue = (UI.getChildControl)(Panel_Window_StableInfo, "Static_ImprintValue"), _staticSkillPanel = (UI.getChildControl)(Panel_Window_StableInfo, "Panel_Skill"), _deadCount = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_DeadCount"), _deadCountValue = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_DeadCountValue"), panel_abillity = (UI.getChildControl)(Panel_Window_StableInfo, "Stable_Info_Ability"), _staticWantSkillBG = (UI.getChildControl)(Panel_Window_StableInfo, "Static_WantSkillBG"), _staticChangeBG = (UI.getChildControl)(Panel_Window_StableInfo, "Static_ChangeSkillBG"), _staticChangeTitle = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillTitle"), _staticSkillTargetName = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillName"), _staticSkillTargetIcon = (UI.getChildControl)(Panel_Window_StableInfo, "Static_ChangeSkillIcon"), _staticSkillTargetCount = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillCount"), _staticTextChangeDesc = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_ChangeSkillDesc"), _buttonAllSkillTraining = (UI.getChildControl)(Panel_Window_StableInfo, "Button_AllSkillTraining"), _startSlotIndex = 0, _temporaySlotCount = 0, _temporayLearnSkillCount = 0, currentServantType = nil, _skill = (Array.new)(), _fromSkillKey = nil, _toSkillKey = nil}
 local carrageInfo = {_panel = (UI.getChildControl)(Panel_Window_StableInfo, "Carriage_Info"), _title = (UI.getChildControl)(Panel_Window_StableInfo, "Static_CarriageInfo_Title"), _bg = (UI.getChildControl)(Panel_Window_StableInfo, "Static_AddHorseBG"), _maxCount = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_CarriageSlotMaxCount"), _maxCountValue = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_MaxCountValue"), _horseSlot = (UI.getChildControl)(Panel_Window_StableInfo, "Static_CarriageHorse"), _name = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_CarriageHorse_Name"), _level = (UI.getChildControl)(Panel_Window_StableInfo, "StaticText_Horse_Level"), _btnRelease = (UI.getChildControl)(Panel_Window_StableInfo, "Button_ReleaseHorse"), _expText = (UI.getChildControl)(Panel_Window_StableInfo, "Horse_EXP_CountData"), _expBg = (UI.getChildControl)(Panel_Window_StableInfo, "Horse_EXP_Bg"), _expGauge = (UI.getChildControl)(Panel_Window_StableInfo, "Horse_EXP_GaugeBar"), slotCount = 4, gapY = 68, 
 baseSlot = {}
 }
@@ -676,42 +676,48 @@ stableInfo.updateSkill = function(self, unsealType)
                 (self._staticTrainingTimeValue):SetShow(false)
               end
             end
+            if servantInfo:isPossibleTrainingSkill() == true and regionName == servantRegionName and isGameServiceTypeDev() == true then
+              (self._buttonAllSkillTraining):SetShow(true)
+            else
+              ;
+              (self._buttonAllSkillTraining):SetShow(false)
+            end
             for ii = 1, self._temporaySlotCount - 1 do
-              local skillWrapper = servantInfo:getSkill(R14_PC165)
+              local skillWrapper = servantInfo:getSkill(R14_PC184)
               if skillWrapper ~= nil and skillWrapper:isTrainingSkill() == false then
                 if slotNo < ((self._config).slot).count then
                   if self._startSlotIndex <= temporarySlotIndex then
                     local slot = (self._skill)[slotNo]
                     slot.key = ii
-                    -- DECOMPILER ERROR at PC183: Overwrote pending register: R14 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC202: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC184: Overwrote pending register: R14 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC203: Overwrote pending register: R14 in 'AssignReg'
 
-                    R14_PC165(R14_PC165, "Icon/" .. skillWrapper:getIconPath())
-                    -- DECOMPILER ERROR at PC190: Overwrote pending register: R14 in 'AssignReg'
-
-                    -- DECOMPILER ERROR at PC191: Overwrote pending register: R14 in 'AssignReg'
-
-                    R14_PC165(R14_PC165, skillWrapper:getName())
-                    -- DECOMPILER ERROR at PC195: Overwrote pending register: R14 in 'AssignReg'
-
-                    -- DECOMPILER ERROR at PC196: Overwrote pending register: R14 in 'AssignReg'
-
-                    R14_PC165(R14_PC165, servantInfo:getSkillExp(R18_PC199) / (skillWrapper:getMaxExp() / 100))
-                    -- DECOMPILER ERROR at PC205: Overwrote pending register: R14 in 'AssignReg'
-
-                    -- DECOMPILER ERROR at PC206: Overwrote pending register: R14 in 'AssignReg'
-
-                    R14_PC165(R14_PC165, 0)
+                    R14_PC184(R14_PC184, "Icon/" .. skillWrapper:getIconPath())
                     -- DECOMPILER ERROR at PC209: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC213: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC210: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC216: Overwrote pending register: R18 in 'AssignReg'
+                    R14_PC184(R14_PC184, skillWrapper:getName())
+                    -- DECOMPILER ERROR at PC214: Overwrote pending register: R14 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC218: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC215: Overwrote pending register: R14 in 'AssignReg'
 
-                    R14_PC165 = R14_PC165((string.format)("%.0f", servantInfo:getSkillExp(R19_PC215) / R18_PC199))
+                    R14_PC184(R14_PC184, servantInfo:getSkillExp(R18_PC218) / (skillWrapper:getMaxExp() / 100))
+                    -- DECOMPILER ERROR at PC224: Overwrote pending register: R14 in 'AssignReg'
+
+                    -- DECOMPILER ERROR at PC225: Overwrote pending register: R14 in 'AssignReg'
+
+                    R14_PC184(R14_PC184, 0)
+                    -- DECOMPILER ERROR at PC228: Overwrote pending register: R14 in 'AssignReg'
+
+                    -- DECOMPILER ERROR at PC232: Overwrote pending register: R18 in 'AssignReg'
+
+                    -- DECOMPILER ERROR at PC235: Overwrote pending register: R18 in 'AssignReg'
+
+                    -- DECOMPILER ERROR at PC237: Overwrote pending register: R18 in 'AssignReg'
+
+                    R14_PC184 = R14_PC184((string.format)("%.0f", servantInfo:getSkillExp(R19_PC234) / R18_PC218))
                     local expTxt = nil
                     if expTxt >= 100 then
                       expTxt = 100
@@ -728,17 +734,17 @@ stableInfo.updateSkill = function(self, unsealType)
                         end
                       end
                     end
-                    -- DECOMPILER ERROR at PC313: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC332: Overwrote pending register: R18 in 'AssignReg'
 
                     if (slot.buttonTraining):GetShow() then
-                      (slot.dec):SetSize(150, R18_PC199)
+                      (slot.dec):SetSize(150, R18_PC218)
                     else
-                      -- DECOMPILER ERROR at PC319: Overwrote pending register: R18 in 'AssignReg'
+                      -- DECOMPILER ERROR at PC338: Overwrote pending register: R18 in 'AssignReg'
 
                       ;
-                      (slot.dec):SetSize(200, R18_PC199)
+                      (slot.dec):SetSize(200, R18_PC218)
                     end
-                    -- DECOMPILER ERROR at PC323: Overwrote pending register: R18 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC342: Overwrote pending register: R18 in 'AssignReg'
 
                     ;
                     (slot.dec):SetText(skillWrapper:getDescription())
@@ -748,65 +754,65 @@ stableInfo.updateSkill = function(self, unsealType)
                     (slot.exp):SetShow(true)
                     ;
                     (slot.expStr):SetShow(true)
-                    -- DECOMPILER ERROR at PC359: Unhandled construct in 'MakeBoolean' P1
+                    -- DECOMPILER ERROR at PC378: Unhandled construct in 'MakeBoolean' P1
 
-                    if FGlobal_IsCommercialService() and servantInfo:isSkillLock(R17_PC346) and servantInfo:getStateType() ~= (CppEnums.ServantStateType).Type_SkillTraining then
-                      (slot.buttonLock):SetShow(R17_PC346)
+                    if FGlobal_IsCommercialService() and servantInfo:isSkillLock(R17_PC365) and servantInfo:getStateType() ~= (CppEnums.ServantStateType).Type_SkillTraining then
+                      (slot.buttonLock):SetShow(R17_PC365)
                     end
-                    -- DECOMPILER ERROR at PC368: Overwrote pending register: R17 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC387: Overwrote pending register: R17 in 'AssignReg'
 
-                    -- DECOMPILER ERROR at PC375: Overwrote pending register: R17 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC394: Overwrote pending register: R17 in 'AssignReg'
 
                     if not servantInfo:isSeized() then
                       if (CppEnums.ServantStateType).Type_SkillTraining == servantInfo:getStateType() then
                         do
                           do
-                            (slot.button):SetShow(R17_PC346)
-                            -- DECOMPILER ERROR at PC379: Overwrote pending register: R17 in 'AssignReg'
+                            (slot.button):SetShow(R17_PC365)
+                            -- DECOMPILER ERROR at PC398: Overwrote pending register: R17 in 'AssignReg'
 
                             ;
-                            (slot.buttonDel):SetShow(R17_PC346)
-                            -- DECOMPILER ERROR at PC384: Overwrote pending register: R17 in 'AssignReg'
+                            (slot.buttonDel):SetShow(R17_PC365)
+                            -- DECOMPILER ERROR at PC403: Overwrote pending register: R17 in 'AssignReg'
 
-                            -- DECOMPILER ERROR at PC391: Overwrote pending register: R17 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC410: Overwrote pending register: R17 in 'AssignReg'
 
-                            -- DECOMPILER ERROR at PC397: Overwrote pending register: R17 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC416: Overwrote pending register: R17 in 'AssignReg'
 
                             if (CppEnums.VehicleType).Type_Carriage ~= servantInfo:getVehicleType() and (CppEnums.VehicleType).Type_Donkey ~= servantInfo:getVehicleType() then
-                              (slot.button):SetShow(R17_PC346)
-                              -- DECOMPILER ERROR at PC401: Overwrote pending register: R17 in 'AssignReg'
+                              (slot.button):SetShow(R17_PC365)
+                              -- DECOMPILER ERROR at PC420: Overwrote pending register: R17 in 'AssignReg'
 
                               ;
-                              (slot.buttonDel):SetShow(R17_PC346)
+                              (slot.buttonDel):SetShow(R17_PC365)
                             end
-                            -- DECOMPILER ERROR at PC405: Overwrote pending register: R17 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC424: Overwrote pending register: R17 in 'AssignReg'
 
                             ;
-                            (slot.base):SetShow(R17_PC346)
+                            (slot.base):SetShow(R17_PC365)
                             slotNo = slotNo + 1
                             temporarySlotIndex = temporarySlotIndex + 1
                             self._temporayLearnSkillCount = self._temporayLearnSkillCount + 1
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC412: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC431: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end
@@ -817,81 +823,81 @@ stableInfo.updateSkill = function(self, unsealType)
               end
             end
             for ii = 1, self._temporaySlotCount - 1 do
-              local skillWrapper = servantInfo:getSkillXXX(R14_PC420)
-              -- DECOMPILER ERROR at PC425: Overwrote pending register: R14 in 'AssignReg'
+              local skillWrapper = servantInfo:getSkillXXX(R14_PC439)
+              -- DECOMPILER ERROR at PC444: Overwrote pending register: R14 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC426: Overwrote pending register: R14 in 'AssignReg'
+              -- DECOMPILER ERROR at PC445: Overwrote pending register: R14 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC427: Overwrote pending register: R14 in 'AssignReg'
+              -- DECOMPILER ERROR at PC446: Overwrote pending register: R14 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC430: Overwrote pending register: R14 in 'AssignReg'
+              -- DECOMPILER ERROR at PC449: Overwrote pending register: R14 in 'AssignReg'
 
-              if skillWrapper ~= nil and servantInfo:getStateType() ~= R14_PC420 and skillWrapper:isTrainingSkill() == false then
+              if skillWrapper ~= nil and servantInfo:getStateType() ~= R14_PC439 and skillWrapper:isTrainingSkill() == false then
                 if slotNo < ((self._config).slot).count then
                   do
                     do
                       if self._startSlotIndex <= temporarySlotIndex then
                         local slot = (self._skill)[slotNo]
                         slot.key = ii
-                        -- DECOMPILER ERROR at PC445: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC464: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC446: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC465: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC448: Overwrote pending register: R17 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC467: Overwrote pending register: R17 in 'AssignReg'
 
-                        R14_PC420(R14_PC420, "Icon/" .. R17_PC346)
-                        -- DECOMPILER ERROR at PC452: Overwrote pending register: R14 in 'AssignReg'
+                        R14_PC439(R14_PC439, "Icon/" .. R17_PC365)
+                        -- DECOMPILER ERROR at PC471: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC453: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC472: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC454: Overwrote pending register: R17 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC473: Overwrote pending register: R17 in 'AssignReg'
 
-                        R14_PC420(R14_PC420, skillWrapper:getName())
-                        -- DECOMPILER ERROR at PC457: Overwrote pending register: R14 in 'AssignReg'
+                        R14_PC439(R14_PC439, skillWrapper:getName())
+                        -- DECOMPILER ERROR at PC476: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC458: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC477: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC420(R14_PC420, skillWrapper:getDescription())
-                        -- DECOMPILER ERROR at PC462: Overwrote pending register: R14 in 'AssignReg'
+                        R14_PC439(R14_PC439, skillWrapper:getDescription())
+                        -- DECOMPILER ERROR at PC481: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC463: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC482: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC420(R14_PC420, false)
-                        -- DECOMPILER ERROR at PC466: Overwrote pending register: R14 in 'AssignReg'
+                        R14_PC439(R14_PC439, false)
+                        -- DECOMPILER ERROR at PC485: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC420 = R14_PC420()
-                        if R14_PC420 then
-                          R14_PC420 = CppEnums
-                          R14_PC420 = R14_PC420.VehicleType
-                          R14_PC420 = R14_PC420.Type_Carriage
-                          if R14_PC420 ~= servantInfo:getVehicleType() then
-                            R14_PC420 = CppEnums
-                            R14_PC420 = R14_PC420.VehicleType
-                            R14_PC420 = R14_PC420.Type_Donkey
-                            if R14_PC420 ~= servantInfo:getVehicleType() then
-                              R14_PC420 = slot.buttonTarget
-                              R14_PC420(R14_PC420, true)
+                        R14_PC439 = R14_PC439()
+                        if R14_PC439 then
+                          R14_PC439 = CppEnums
+                          R14_PC439 = R14_PC439.VehicleType
+                          R14_PC439 = R14_PC439.Type_Carriage
+                          if R14_PC439 ~= servantInfo:getVehicleType() then
+                            R14_PC439 = CppEnums
+                            R14_PC439 = R14_PC439.VehicleType
+                            R14_PC439 = R14_PC439.Type_Donkey
+                            if R14_PC439 ~= servantInfo:getVehicleType() then
+                              R14_PC439 = slot.buttonTarget
+                              R14_PC439(R14_PC439, true)
                             end
                           end
                         end
-                        -- DECOMPILER ERROR at PC488: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC507: Overwrote pending register: R14 in 'AssignReg'
 
-                        -- DECOMPILER ERROR at PC489: Overwrote pending register: R14 in 'AssignReg'
+                        -- DECOMPILER ERROR at PC508: Overwrote pending register: R14 in 'AssignReg'
 
-                        R14_PC420(R14_PC420, true)
+                        R14_PC439(R14_PC439, true)
                         slotNo = slotNo + 1
                       end
                       temporarySlotIndex = temporarySlotIndex + 1
                       self._temporayLearnSkillCount = self._temporayLearnSkillCount + 1
-                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC516: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC516: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC516: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC516: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC497: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC516: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end
@@ -957,6 +963,8 @@ stableInfo.registEventHandler = function(self)
   (self._staticSkillPanel):addInputEvent("Mouse_DownScroll", "StableInfo_ScrollEvent( false )")
   ;
   (self._btnMatingImmediately):addInputEvent("Mouse_LUp", "StableInfo_MatingImmediately_Confirm()")
+  ;
+  (self._buttonAllSkillTraining):addInputEvent("Mouse_LUp", "Button_AllSkillTraining()")
   ;
   (UIScroll.InputEvent)(self._scrollSkill, "StableInfo_ScrollEvent")
 end
@@ -1077,8 +1085,37 @@ Button_SkillTraining = function(slotNo)
   (MessageBox.showMessageBox)(messageboxData)
 end
 
+Button_AllSkillTraining = function()
+  -- function num : 0_19
+  if StableList_SelectSlotNo() == nil then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_STABLE_ALERT"))
+    return 
+  end
+  local servantInfo = stable_getServant(StableList_SelectSlotNo())
+  if servantInfo == nil then
+    return 
+  end
+  if (CppEnums.ServantStateType).Type_StallionTraining == servantInfo:getStateType() then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLELIST_CONDITION_STALLIONDESC"))
+    return 
+  end
+  if Panel_Win_System:GetShow() then
+    return 
+  end
+  local trainHorse = function()
+    -- function num : 0_19_0
+    stable_startServantSkillExpTraining(StableList_SelectSlotNo(), 0)
+  end
+
+  local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_SKILLTRAININGTITLE")
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_ALLSKILLTRAININGCONTENT")
+  local messageboxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = trainHorse, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageboxData)
+end
+
 Button_SkillChange = function(slotNo)
-  -- function num : 0_19 , upvalues : stableInfo
+  -- function num : 0_20 , upvalues : stableInfo
   if StableList_SelectSlotNo() == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_STABLE_ALERT"))
     return 
@@ -1119,14 +1156,14 @@ Button_SkillChange = function(slotNo)
 end
 
 Button_SkillChangeXXX = function()
-  -- function num : 0_20 , upvalues : stableInfo
+  -- function num : 0_21 , upvalues : stableInfo
   audioPostEvent_SystemUi(3, 19)
   local self = stableInfo
   stable_changeSkill(StableList_SelectSlotNo(), self._fromSkillKey, self._toSkillKey)
 end
 
 StableInfo_ScrollEvent = function(isScrollUp)
-  -- function num : 0_21 , upvalues : stableInfo
+  -- function num : 0_22 , upvalues : stableInfo
   local self = stableInfo
   self._startSlotIndex = (UIScroll.ScrollEvent)(self._scrollSkill, isScrollUp, ((self._config).slot).count, self._temporayLearnSkillCount, self._startSlotIndex, 1)
   if self.currentServantType ~= nil then
@@ -1137,7 +1174,7 @@ StableInfo_ScrollEvent = function(isScrollUp)
 end
 
 StableInfo_MatingImmediately_Confirm = function()
-  -- function num : 0_22 , upvalues : stableInfo
+  -- function num : 0_23 , upvalues : stableInfo
   local self = stableInfo
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
   if servantInfo == nil then
@@ -1151,7 +1188,7 @@ StableInfo_MatingImmediately_Confirm = function()
 end
 
 StableInfo_MatingImmediatelyYes = function()
-  -- function num : 0_23 , upvalues : stableInfo
+  -- function num : 0_24 , upvalues : stableInfo
   local self = stableInfo
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
   if servantInfo == nil then
@@ -1161,7 +1198,7 @@ StableInfo_MatingImmediatelyYes = function()
 end
 
 ServantChangeSkill_Complete = function(oldSkillKey, newSkillKey)
-  -- function num : 0_24 , upvalues : stableInfo
+  -- function num : 0_25 , upvalues : stableInfo
   local self = stableInfo
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantInfo = stable_getServant(StableList_SelectSlotNo())
@@ -1178,7 +1215,7 @@ ServantChangeSkill_Complete = function(oldSkillKey, newSkillKey)
 end
 
 Panel_StableInfo_EffectFunc = function()
-  -- function num : 0_25 , upvalues : stableInfo
+  -- function num : 0_26 , upvalues : stableInfo
   local self = stableInfo
   ;
   (self._staticSkillEffect):EraseAllEffect()
@@ -1187,7 +1224,7 @@ Panel_StableInfo_EffectFunc = function()
 end
 
 FromClient_ForgetServantSkill = function(servantNo, skillKey)
-  -- function num : 0_26 , upvalues : deleteSkillName, stableInfo
+  -- function num : 0_27 , upvalues : deleteSkillName, stableInfo
   local msg = nil
   if deleteSkillName ~= nil then
     msg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SERVANT_SKILLINFO_3", "deleteSkillName", deleteSkillName)
@@ -1205,7 +1242,7 @@ FromClient_ForgetServantSkill = function(servantNo, skillKey)
 end
 
 StableInfo_Open = function(unsealType)
-  -- function num : 0_27 , upvalues : stableInfo
+  -- function num : 0_28 , upvalues : stableInfo
   if not Panel_Window_StableInfo:GetShow() then
     Panel_Window_StableInfo:SetShow(true)
   end
@@ -1223,14 +1260,14 @@ StableInfo_Open = function(unsealType)
 end
 
 StableInfo_Close = function()
-  -- function num : 0_28
+  -- function num : 0_29
   if not Panel_Window_StableInfo:GetShow() then
     Panel_Window_StableInfo:SetShow(false)
   end
 end
 
 StableServantInfo_StallionToolTip = function(isOn)
-  -- function num : 0_29 , upvalues : stableInfo, isContentsStallionEnable, isContentsNineTierEnable
+  -- function num : 0_30 , upvalues : stableInfo, isContentsStallionEnable, isContentsNineTierEnable
   if isOn == false then
     TooltipSimple_Hide()
     return 

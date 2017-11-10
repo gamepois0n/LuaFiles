@@ -119,8 +119,12 @@ CraftLevInfo.Update = function(self)
   local gatherCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.gather)
   local gatherMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.gather)
   local gatherExpRate = Int64toInt32(gatherCurrentExp * toInt64(0, 100) / gatherMaxExp)
-  ;
-  (self.gathering_LevText):SetText(FGlobal_CraftLevel_Replace(gatherLevel, craftType.gather))
+  if isNewCharacterInfo() == false then
+    (self.gathering_LevText):SetText(FGlobal_CraftLevel_Replace(gatherLevel, craftType.gather))
+  else
+    ;
+    (self.gathering_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(gatherLevel))
+  end
   ;
   (self.gathering_Progress):SetProgressRate(gatherExpRate)
   ;
@@ -137,8 +141,12 @@ CraftLevInfo.Update = function(self)
   local manufatureCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.manufacture)
   local manufatureMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.manufacture)
   local manufatureExpRate = Int64toInt32(manufatureCurrentExp * toInt64(0, 100) / manufatureMaxExp)
-  ;
-  (self.manufacture_LevText):SetText(FGlobal_CraftLevel_Replace(manufatureLevel, craftType.manufacture))
+  if isNewCharacterInfo() == false then
+    (self.manufacture_LevText):SetText(FGlobal_CraftLevel_Replace(manufatureLevel, craftType.manufacture))
+  else
+    ;
+    (self.manufacture_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(manufatureLevel))
+  end
   ;
   (self.manufacture_Progress):SetProgressRate(manufatureExpRate)
   ;
@@ -155,8 +163,12 @@ CraftLevInfo.Update = function(self)
   local cookingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.cooking)
   local cookingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.cooking)
   local cookingExpRate = Int64toInt32(cookingCurrentExp * toInt64(0, 100) / cookingMaxExp)
-  ;
-  (self.cook_LevText):SetText(FGlobal_CraftLevel_Replace(cookingLevel, craftType.cooking))
+  if isNewCharacterInfo() == false then
+    (self.cook_LevText):SetText(FGlobal_CraftLevel_Replace(cookingLevel, craftType.cooking))
+  else
+    ;
+    (self.cook_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(cookingLevel))
+  end
   ;
   (self.cook_Progress):SetProgressRate(cookingExpRate)
   ;
@@ -173,8 +185,12 @@ CraftLevInfo.Update = function(self)
   local alchemyCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.alchemy)
   local alchemyMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.alchemy)
   local alchemyExpRate = Int64toInt32(alchemyCurrentExp * toInt64(0, 100) / alchemyMaxExp)
-  ;
-  (self.alchemy_LevText):SetText(FGlobal_CraftLevel_Replace(alchemyLevel, craftType.alchemy))
+  if isNewCharacterInfo() == false then
+    (self.alchemy_LevText):SetText(FGlobal_CraftLevel_Replace(alchemyLevel, craftType.alchemy))
+  else
+    ;
+    (self.alchemy_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(alchemyLevel))
+  end
   ;
   (self.alchemy_Progress):SetProgressRate(alchemyExpRate)
   ;
@@ -191,8 +207,12 @@ CraftLevInfo.Update = function(self)
   local fishingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.fishing)
   local fishingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.fishing)
   local fishingExpRate = Int64toInt32(fishingCurrentExp * toInt64(0, 100) / fishingMaxExp)
-  ;
-  (self.fishing_LevText):SetText(FGlobal_CraftLevel_Replace(fishingLevel, craftType.fishing))
+  if isNewCharacterInfo() == false then
+    (self.fishing_LevText):SetText(FGlobal_CraftLevel_Replace(fishingLevel, craftType.fishing))
+  else
+    ;
+    (self.fishing_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(fishingLevel))
+  end
   ;
   (self.fishing_Progress):SetProgressRate(fishingExpRate)
   ;
@@ -209,8 +229,12 @@ CraftLevInfo.Update = function(self)
   local huntingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.hunting)
   local huntingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.hunting)
   local huntingExpRate = Int64toInt32(huntingCurrentExp * toInt64(0, 100) / huntingMaxExp)
-  ;
-  (self.hunting_LevText):SetText(FGlobal_CraftLevel_Replace(huntingLevel, craftType.hunting))
+  if isNewCharacterInfo() == false then
+    (self.hunting_LevText):SetText(FGlobal_CraftLevel_Replace(huntingLevel, craftType.hunting))
+  else
+    ;
+    (self.hunting_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(huntingLevel))
+  end
   ;
   (self.hunting_Progress):SetProgressRate(huntingExpRate)
   ;
@@ -227,8 +251,12 @@ CraftLevInfo.Update = function(self)
   local trainingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.training)
   local trainingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.training)
   local trainingExpRate = Int64toInt32(trainingCurrentExp * toInt64(0, 100) / trainingMaxExp)
-  ;
-  (self.training_LevText):SetText(FGlobal_CraftLevel_Replace(trainingLevel, craftType.training))
+  if isNewCharacterInfo() == false then
+    (self.training_LevText):SetText(FGlobal_CraftLevel_Replace(trainingLevel, craftType.training))
+  else
+    ;
+    (self.training_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(trainingLevel))
+  end
   ;
   (self.training_Progress):SetProgressRate(trainingExpRate)
   ;
@@ -245,8 +273,12 @@ CraftLevInfo.Update = function(self)
   local tradeCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.trade)
   local tradeMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.trade)
   local tradeExpRate = Int64toInt32(tradeCurrentExp * toInt64(0, 100) / tradeMaxExp)
-  ;
-  (self.trade_LevText):SetText(FGlobal_CraftLevel_Replace(tradeLevel, craftType.trade))
+  if isNewCharacterInfo() == false then
+    (self.trade_LevText):SetText(FGlobal_CraftLevel_Replace(tradeLevel, craftType.trade))
+  else
+    ;
+    (self.trade_LevText):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(tradeLevel))
+  end
   ;
   (self.trade_Progress):SetProgressRate(tradeExpRate)
   ;

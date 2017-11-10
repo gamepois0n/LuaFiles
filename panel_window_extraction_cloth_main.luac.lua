@@ -109,7 +109,7 @@ PaGlobal_ExtractionCloth.clear = function(self)
   ;
   ((self._equipItem).slot_Nil):SetShow(true)
   ;
-  (getEnchantInformation()):clearData()
+  (getEnchantInformation()):ToClient_clearData()
 end
 
 ExtractionCloth_WindowOpen = function()

@@ -1147,8 +1147,8 @@ end
 
 worldmapGrand.UpdateExplorePoint = function(self)
   -- function num : 0_49
-  local territoryKeyRaw = getDefaultTerritoryKey()
-  local explorePoint = getExplorePointByTerritoryRaw(territoryKeyRaw)
+  local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
+  local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
   ;
   ((self.ui).explorePointIcon):SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))

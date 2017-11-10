@@ -140,9 +140,6 @@ ItemMarketRegistItem.Update = function(self)
     return count
   end
 
-  if (self._lastRegistPrice)[itemKey] ~= nil then
-    recentPrice = toInt64(0, (self._lastRegistPrice)[itemKey])
-  end
   self._itemKey = itemKey
   ;
   (self.registHighPrice_Value):SetText(replaceCount(registHighPrice))
@@ -160,6 +157,9 @@ ItemMarketRegistItem.Update = function(self)
   (self.max_Value):SetText(makeDotMoney(itemMaxPrice))
   ;
   (self.minPrice_Value):SetText(makeDotMoney(itemMinPrice))
+  if (self._lastRegistPrice)[itemKey] ~= nil then
+    recentPrice = toInt64(0, (self._lastRegistPrice)[itemKey])
+  end
   local highAndLowAvgPrice = (masterInfo:getMaxPrice() + masterInfo:getMinPrice()) / toInt64(0, 2)
   if toInt64(0, 0) < recentPrice then
     (self.priceEdit):SetEditText(tostring(makeDotMoney(recentPrice)), true)

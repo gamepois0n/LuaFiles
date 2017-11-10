@@ -23,9 +23,15 @@ MovieGuide_DisableSimpleUI = function()
 end
 
 registerEvent("EventSimpleUIDisable", "MovieGuide_DisableSimpleUI")
-_btn_MovieGuide:addInputEvent("Mouse_LUp", "Panel_MovieGuide_ShowToggle()")
-;
-(ui_PanelWindow._btn_Close):addInputEvent("Mouse_LUp", "Panel_MovieGuide_ShowToggle()")
+if isGameTypeKorea() then
+  _btn_MovieGuide:addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Open()")
+  ;
+  (ui_PanelWindow._btn_Close):addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Open()")
+else
+  _btn_MovieGuide:addInputEvent("Mouse_LUp", "Panel_MovieGuide_ShowToggle()")
+  ;
+  (ui_PanelWindow._btn_Close):addInputEvent("Mouse_LUp", "Panel_MovieGuide_ShowToggle()")
+end
 local movieDesc = {PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_1"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_2"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_3"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_4"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_640_MOVIEDESC_DEFAULT"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVIETHEATER_640_MOVIEDESC_SKILLCOMBO"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_10"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_11"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_12"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_13"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_14"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_15"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_16"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_17"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_18"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_19"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_20"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_21"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_22"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_23"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_24"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_25"), PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_26"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_MOVEITHEATER_640_MOVIEDESC_0")}
 Panel_MovieGuide_ShowAni = function()
   -- function num : 0_1 , upvalues : UI_ANI_ADV
@@ -127,7 +133,7 @@ MovieGuide_ListUpdate = function(contents, key)
 
   -- DECOMPILER ERROR at PC89: Unhandled construct in 'MakeBoolean' P1
 
-  if playerLevel <= 20 and playerLevel >= 1 and playerLevel <= 4 and idx <= 4 then
+  if playerLevel <= 22 and playerLevel >= 1 and playerLevel <= 4 and idx <= 4 then
     isEnableBtn()
   end
   -- DECOMPILER ERROR at PC98: Unhandled construct in 'MakeBoolean' P1

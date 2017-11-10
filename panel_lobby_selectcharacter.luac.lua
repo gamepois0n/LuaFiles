@@ -65,6 +65,8 @@ local SelectCharacter_Init = function()
   ;
   (SelectCharacter.radioBtn_SpecialCharacterList):addInputEvent("Mouse_LUp", "RadioButton_Click( 1 )")
   ;
+  (SelectCharacter.static_PenelBG):AddChild(SelectCharacter.radioBtnBG)
+  ;
   (SelectCharacter.static_PenelBG):AddChild(SelectCharacter.btn_ServerSelect)
   ;
   (SelectCharacter.static_PenelBG):AddChild(SelectCharacter.btn_EndGame)
@@ -72,6 +74,7 @@ local SelectCharacter_Init = function()
   (SelectCharacter.static_PenelBG):AddChild(SelectCharacter.btn_ChangeLocate)
   ;
   (SelectCharacter.static_PenelBG):AddChild(SelectCharacter.static_FamilyName)
+  Panel_CharacterSelectNew:RemoveControl(SelectCharacter.radioBtnBG)
   Panel_CharacterSelectNew:RemoveControl(SelectCharacter.btn_ServerSelect)
   Panel_CharacterSelectNew:RemoveControl(SelectCharacter.btn_EndGame)
   Panel_CharacterSelectNew:RemoveControl(SelectCharacter.btn_ChangeLocate)
@@ -82,6 +85,8 @@ local SelectCharacter_Init = function()
   (SelectCharacter.static_PenelBG):ComputePos()
   ;
   (SelectCharacter.static_FamilyName):ComputePos()
+  ;
+  (SelectCharacter.radioBtnBG):ComputePos()
   ;
   (SelectCharacter.btn_ServerSelect):ComputePos()
   ;
@@ -169,6 +174,8 @@ local SelectCharacter_Init = function()
     (SelectCharacter.radioBtn_CharacterList):SetShow(false)
     ;
     (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(false)
+    ;
+    (SelectCharacter.radioBtnBG):SetShow(false)
   end
   local scrSizeY = getScreenSizeY()
   local scrSizeSumY = scrSizeY - (SelectCharacter.static_FamilyName):GetSizeY() - (SelectCharacter.btn_EndGame):GetSizeY() - (SelectCharacter.btn_ChangeLocate):GetSizeY() - 25 - self.premiumPcRoomSizeY + 5
@@ -176,7 +183,7 @@ local SelectCharacter_Init = function()
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   ;
   (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount - self.premiumPcRoomSizeY)
-  -- DECOMPILER ERROR at PC423: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC443: Confused about usage of register: R5 in 'UnsetPending'
 
   configData._listCount = _btnCount
   for slotIdx = 0, configData._listCount - 1 do
@@ -214,7 +221,7 @@ local SelectCharacter_Init = function()
     ;
     (slot._btnCreate):SetPosY(5)
     ;
-    (slot._btnStart):SetPosX(280)
+    (slot._btnStart):SetPosX(285)
     ;
     (slot._btnStart):SetPosY(5)
     ;
@@ -249,12 +256,11 @@ local SelectCharacter_Init = function()
     (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC666: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC686: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (configData.slotUiPool)[slotIdx] = slot
   end
-  Panel_CharacterSelectNew:SetChildIndex(self.radioBtnBG, 0)
   ;
   (SelectCharacter.btn_Link1):ComputePos()
   ;
@@ -1110,6 +1116,12 @@ local CharacterList_Update = function(isChangeSpecialTab)
     (slot._btn_Slot):SetTextVerticalTop()
     ;
     (slot._btn_Slot):SetTextSpan(70, 7)
+    if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() then
+      (slot._btn_Slot):SetPosX(16)
+    else
+      ;
+      (slot._btn_Slot):SetPosX(12)
+    end
     if slotIdx < configData.freeCount then
       ChangeTexture_Slot(true, slot._btn_Slot)
     else
@@ -1183,7 +1195,7 @@ local CharacterList_Update = function(isChangeSpecialTab)
             ;
             (slot._btnCreate):SetPosY(5)
             ;
-            (slot._btnStart):SetPosX(280)
+            (slot._btnStart):SetPosX(285)
             ;
             (slot._btnStart):SetPosY(5)
             ;
@@ -1224,7 +1236,7 @@ local CharacterList_Update = function(isChangeSpecialTab)
             ;
             (slot._btnCreate):SetPosY(5)
             ;
-            (slot._btnStart):SetPosX(280)
+            (slot._btnStart):SetPosX(285)
             ;
             (slot._btnStart):SetPosY(5)
             ;
@@ -1326,11 +1338,11 @@ local CharacterList_Update = function(isChangeSpecialTab)
             (slot._btnCreate):SetShow(false)
           end
           scrollListIndex = scrollListIndex + 1
-          -- DECOMPILER ERROR at PC691: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC706: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC691: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC706: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC691: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC706: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -1769,6 +1781,10 @@ RadioButton_Click = function(radioIndex)
       isChangeCharacterTab = true
     end
     ;
+    (SelectCharacter.btn_EndGame):SetSpanSize(215, 10)
+    ;
+    (SelectCharacter.btn_ServerSelect):SetSpanSize(55, 10)
+    ;
     (SelectCharacter.radioBtn_CharacterList):SetCheck(true)
     ;
     (SelectCharacter.radioBtn_SpecialCharacterList):SetCheck(false)
@@ -1786,16 +1802,20 @@ RadioButton_Click = function(radioIndex)
       ;
       (SelectCharacter.radioBtn_SpecialCharacterList):SetCheck(true)
       ;
+      (SelectCharacter.btn_EndGame):SetSpanSize(230, 30)
+      ;
+      (SelectCharacter.btn_ServerSelect):SetSpanSize(40, 30)
+      ;
       (SelectCharacter.btn_ChangeLocate):SetShow(false)
       if (SelectCharacter.btn_ChangeLocate):IsCheck() then
         (SelectCharacter.btn_ChangeLocate):SetCheck(false)
       end
     end
   end
-  -- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
 
   configData.selectCaracterIdx = 0
-  -- DECOMPILER ERROR at PC73: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC97: Confused about usage of register: R1 in 'UnsetPending'
 
   configData._startIndex = 0
   ;
@@ -1838,11 +1858,17 @@ UpdateSpecialCharacterTab = function()
   (SelectCharacter.radioBtn_SpecialCharacterList):SetShow(true)
   ;
   (SelectCharacter.radioBtn_SpecialCharacterList):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + (SelectCharacter.radioBtn_CharacterList):GetSizeX() + 5)
-  ;
-  (SelectCharacter.radioBtnBG):SetPosX((SelectCharacter.static_PenelBG):GetPosX() + 5)
-  ;
-  (SelectCharacter.radioBtnBG):SetShow(true)
-  -- DECOMPILER ERROR at PC66: Confused about usage of register: R3 in 'UnsetPending'
+  if (SelectCharacter.radioBtn_SpecialCharacterList):GetShow() then
+    (SelectCharacter.radioBtnBG):SetPosX(5)
+    ;
+    (SelectCharacter.radioBtnBG):SetShow(true)
+  else
+    ;
+    (SelectCharacter.radioBtnBG):SetPosX(5)
+    ;
+    (SelectCharacter.radioBtnBG):SetShow(false)
+  end
+  -- DECOMPILER ERROR at PC79: Confused about usage of register: R3 in 'UnsetPending'
 
   SelectCharacter.premiumPcRoomSizeY = (SelectCharacter.radioBtn_CharacterList):GetSizeY()
   ;
@@ -1853,10 +1879,10 @@ UpdateSpecialCharacterTab = function()
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   ;
   (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount - self.premiumPcRoomSizeY)
-  -- DECOMPILER ERROR at PC120: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC133: Confused about usage of register: R7 in 'UnsetPending'
 
   configData._listCount = _btnCount
-  -- DECOMPILER ERROR at PC123: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC136: Confused about usage of register: R7 in 'UnsetPending'
 
   configData.slotUiPool = {}
   for slotIdx = 0, configData._listCount - 1 do
@@ -1873,8 +1899,12 @@ UpdateSpecialCharacterTab = function()
     slot._possibleStat = (UI.createAndCopyBasePropertyControl)(Panel_CharacterSelectNew, "StaticText_PossibleEnter", slot._btn_Slot, "SelectCharacter_PossibleEnter_" .. slotIdx)
     ;
     (slot._btn_Slot):SetText("")
-    ;
-    (slot._btn_Slot):SetPosX(12)
+    if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() then
+      (slot._btn_Slot):SetPosX(12)
+    else
+      ;
+      (slot._btn_Slot):SetPosX(16)
+    end
     ;
     (slot._btn_Slot):SetPosY((SelectCharacter.static_FamilyName):GetSizeY() + 5 + ((slot._btn_Slot):GetSizeY() + 5) * slotIdx + self.premiumPcRoomSizeY + 5)
     ;
@@ -1894,7 +1924,7 @@ UpdateSpecialCharacterTab = function()
     ;
     (slot._btnCreate):SetPosY(5)
     ;
-    (slot._btnStart):SetPosX(280)
+    (slot._btnStart):SetPosX(285)
     ;
     (slot._btnStart):SetPosY(5)
     ;
@@ -1929,7 +1959,7 @@ UpdateSpecialCharacterTab = function()
     (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC366: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC390: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (configData.slotUiPool)[slotIdx] = slot

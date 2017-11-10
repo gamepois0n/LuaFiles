@@ -86,10 +86,10 @@ local beforTime = 0
 recentMemory_OpenTimeCheck = function(deltaTime)
   -- function num : 0_4 , upvalues : openTime, RecentMemory
   openTime = openTime + deltaTime
-  local sumTime = 30 - (math.ceil)(openTime)
+  local sumTime = 35 - (math.ceil)(openTime)
   ;
   (RecentMemory._closeNotify):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_RECENTMEMORY_CLOSETIME", "sumTime", convertStringFromDatetime(toInt64(0, sumTime))))
-  if openTime > 31 then
+  if openTime > 35 then
     RecentMemory_Close()
     openTime = 0
   end

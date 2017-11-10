@@ -330,7 +330,7 @@ PaGlobal_TutorialPhase_BasicMove.updateBasicMove = function(self, deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC192: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC201: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_BasicMove._classStringData = {
 [(CppEnums.ClassType).ClassType_Warrior] = {"TUTORIAL_MOVE_WARRIOR_TALK1", "TUTORIAL_MOVE_WARRIOR_TALK2", "TUTORIAL_MOVE_WARRIOR_TALK3"}
@@ -362,5 +362,7 @@ PaGlobal_TutorialPhase_BasicMove._classStringData = {
 [(CppEnums.ClassType).ClassType_Combattant] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
 , 
 [(CppEnums.ClassType).ClassType_CombattantWomen] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
+, 
+[(CppEnums.ClassType).ClassType_Angle] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
 }
 

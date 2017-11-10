@@ -9,8 +9,8 @@ _talkerCharacterKeyData = {[1] = 0}
 _questData = {
 [1] = {_questGroupNo = 653, _questId = 6}
 }
-, _equipSlotIcon = nil, _materialSlotIcon = nil, _staticTextEnchantFailCount = nil, _staticTextValksCount = nil}
--- DECOMPILER ERROR at PC25: Confused about usage of register: R0 in 'UnsetPending'
+, _equipSlotIcon = nil, _materialSlotIcon = nil}
+-- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.checkPossibleForPhaseStart = function(self, stepNo)
   -- function num : 0_0
@@ -45,7 +45,7 @@ PaGlobal_TutorialPhase_EnchantStack.checkPossibleForPhaseStart = function(self, 
   return true
 end
 
--- DECOMPILER ERROR at PC28: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC26: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.checkSkippablePhase = function(self)
   -- function num : 0_1
@@ -55,7 +55,7 @@ PaGlobal_TutorialPhase_EnchantStack.checkSkippablePhase = function(self)
   return false
 end
 
--- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.startPhase = function(self, stepNo)
   -- function num : 0_2
@@ -70,7 +70,7 @@ PaGlobal_TutorialPhase_EnchantStack.startPhase = function(self, stepNo)
   end
 end
 
--- DECOMPILER ERROR at PC34: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.startPhaseXXX = function(self, stepNo)
   -- function num : 0_3
@@ -94,7 +94,7 @@ PaGlobal_TutorialPhase_EnchantStack.startPhaseXXX = function(self, stepNo)
   Panel_Tutorial:SetShow(true, true)
 end
 
--- DECOMPILER ERROR at PC37: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.endPhase = function(self)
   -- function num : 0_4
@@ -102,17 +102,13 @@ PaGlobal_TutorialPhase_EnchantStack.endPhase = function(self)
   if funcButtonIndex ~= -1 then
     FGlobal_EraseAllEffect_DialogButton(funcButtonIndex)
   end
-  if self._staticTextEnchantFailCount ~= nil then
-    (self._staticTextEnchantFailCount):EraseAllEffect()
-  end
-  if self._staticTextValksCount ~= nil then
-    (self._staticTextValksCount):EraseAllEffect()
-  end
+  PaGlobal_Enchant:removeFailCountEffect()
+  PaGlobal_Enchant:removeValksCountEffect()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(true)
   PaGlobal_TutorialManager:endTutorial()
 end
 
--- DECOMPILER ERROR at PC40: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.updatePerFrame = function(self, deltaTime)
   -- function num : 0_5
@@ -122,7 +118,7 @@ PaGlobal_TutorialPhase_EnchantStack.updatePerFrame = function(self, deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.handleChangeStep = function(self, currentStep)
   -- function num : 0_6
@@ -131,7 +127,7 @@ PaGlobal_TutorialPhase_EnchantStack.handleChangeStep = function(self, currentSte
   end
 end
 
--- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC44: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.toNextProgress = function(self)
   -- function num : 0_7
@@ -144,7 +140,7 @@ PaGlobal_TutorialPhase_EnchantStack.toNextProgress = function(self)
   self:handleChangeStep(self._currentStep)
 end
 
--- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC47: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.toNextStep = function(self)
   -- function num : 0_8
@@ -157,7 +153,7 @@ PaGlobal_TutorialPhase_EnchantStack.toNextStep = function(self)
   self._nextStep = self._nextStep + 1
 end
 
--- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC50: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.toStep = function(self, destStep, destProgress)
   -- function num : 0_9
@@ -172,7 +168,7 @@ PaGlobal_TutorialPhase_EnchantStack.toStep = function(self, destStep, destProgre
   end
 end
 
--- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC53: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.setEffectDialogButtonByType = function(self, funcButtonType)
   -- function num : 0_10
@@ -185,7 +181,7 @@ PaGlobal_TutorialPhase_EnchantStack.setEffectDialogButtonByType = function(self,
   return true
 end
 
--- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC56: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.changeStep1 = function(self)
   -- function num : 0_11
@@ -208,12 +204,7 @@ PaGlobal_TutorialPhase_EnchantStack.changeStep1 = function(self)
       if funcButtonIndex ~= -1 then
         FGlobal_EraseAllEffect_DialogButton(funcButtonIndex)
       end
-      self._staticTextEnchantFailCount = PaGlobal_Enchant._uiHelpEnchantFailCnt
-      if self._staticTextEnchantFailCount ~= nil then
-        (self._staticTextEnchantFailCount):AddEffect("UI_QustComplete01", true, 0, 0)
-        ;
-        (self._staticTextEnchantFailCount):AddEffect("UI_ArrowMark06", true, (self._staticTextEnchantFailCount):GetSizeX() * -0.9, 0)
-      end
+      PaGlobal_Enchant:addFailCountEffectForTutorial()
       PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_11_1
     (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_101"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_102"), true, Panel_Window_Enchant:GetPosX() + Panel_Window_Enchant:GetSizeX() * 1.1, Panel_Window_Enchant:GetPosY() - Panel_Window_Enchant:GetSizeY() * 0.025, false)
@@ -236,15 +227,8 @@ PaGlobal_TutorialPhase_EnchantStack.changeStep1 = function(self)
 )
           else
             if self._currentProgress == 5 then
-              self._staticTextValksCount = PaGlobal_Enchant._uiEnchantPcroomFailCnt
-              if self._staticTextValksCount ~= nil then
-                (self._staticTextValksCount):AddEffect("UI_QustComplete02", true, 0, 0)
-                ;
-                (self._staticTextValksCount):AddEffect("UI_ArrowMark06", true, (self._staticTextValksCount):GetSizeX() * -0.9, 0)
-              end
-              if self._staticTextEnchantFailCount ~= nil then
-                (self._staticTextEnchantFailCount):EraseAllEffect()
-              end
+              PaGlobal_Enchant:addValksCountEffectForTutorial()
+              PaGlobal_Enchant:removeFailCountEffect()
               PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_11_4
     (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_107"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_108"), true, Panel_Window_Enchant:GetPosX() + Panel_Window_Enchant:GetSizeX() * 1.1, Panel_Window_Enchant:GetPosY() - Panel_Window_Enchant:GetSizeY() * 0.025, false)
@@ -266,11 +250,7 @@ PaGlobal_TutorialPhase_EnchantStack.changeStep1 = function(self)
 )
                 else
                   if self._currentProgress == 8 then
-                    if self._staticTextEnchantFailCount ~= nil then
-                      (self._staticTextEnchantFailCount):AddEffect("UI_QustComplete01", true, 0, 0)
-                      ;
-                      (self._staticTextEnchantFailCount):AddEffect("UI_ArrowMark06", true, (self._staticTextEnchantFailCount):GetSizeX() * -0.9, 0)
-                    end
+                    PaGlobal_Enchant:addFailCountEffectForTutorial()
                     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_11_7
     (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_113"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_A_114"), true, Panel_Window_Enchant:GetPosX() + Panel_Window_Enchant:GetSizeX() * 1.1, Panel_Window_Enchant:GetPosY() - Panel_Window_Enchant:GetSizeY() * 0.025, false)
@@ -295,7 +275,7 @@ PaGlobal_TutorialPhase_EnchantStack.changeStep1 = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.eventCallStep1ShowDialog = function(self, dialogData)
   -- function num : 0_12
@@ -304,7 +284,7 @@ PaGlobal_TutorialPhase_EnchantStack.eventCallStep1ShowDialog = function(self, di
   end
 end
 
--- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC62: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.eventCallStep1ClickedExitButton = function(self, talker)
   -- function num : 0_13
@@ -313,7 +293,7 @@ PaGlobal_TutorialPhase_EnchantStack.eventCallStep1ClickedExitButton = function(s
   end
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC65: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.eventCallStep1ClickedDialogFuncButton = function(self, funcButtonType)
   -- function num : 0_14
@@ -326,7 +306,7 @@ PaGlobal_TutorialPhase_EnchantStack.eventCallStep1ClickedDialogFuncButton = func
   end
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC68: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.eventCallStep1CloseEnchantWindow = function(self)
   -- function num : 0_15
@@ -335,7 +315,7 @@ PaGlobal_TutorialPhase_EnchantStack.eventCallStep1CloseEnchantWindow = function(
   end
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC71: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.eventCallStep1MouseLUpBubble = function(self)
   -- function num : 0_16
@@ -346,7 +326,7 @@ PaGlobal_TutorialPhase_EnchantStack.eventCallStep1MouseLUpBubble = function(self
   end
 end
 
--- DECOMPILER ERROR at PC76: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.handleShowDialog = function(self, dialogData)
   -- function num : 0_17
@@ -355,7 +335,7 @@ PaGlobal_TutorialPhase_EnchantStack.handleShowDialog = function(self, dialogData
   end
 end
 
--- DECOMPILER ERROR at PC79: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.handleClickedExitButton = function(self, talker)
   -- function num : 0_18
@@ -364,7 +344,7 @@ PaGlobal_TutorialPhase_EnchantStack.handleClickedExitButton = function(self, tal
   end
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.handleClickedDialogFuncButton = function(self, funcButtonType)
   -- function num : 0_19
@@ -373,7 +353,7 @@ PaGlobal_TutorialPhase_EnchantStack.handleClickedDialogFuncButton = function(sel
   end
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.handleCloseEnchantWindow = function(self)
   -- function num : 0_20
@@ -382,7 +362,7 @@ PaGlobal_TutorialPhase_EnchantStack.handleCloseEnchantWindow = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC86: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialPhase_EnchantStack.handleMouseLUpBubble = function(self)
   -- function num : 0_21

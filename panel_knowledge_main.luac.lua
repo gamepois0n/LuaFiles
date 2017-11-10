@@ -843,6 +843,8 @@ local settingCardInfo = function()
     ;
     (uiConst.info_Story):SetText(card:getDescription())
     ;
+    (uiConst.info_Story):setLocalizedStaticType(34)
+    ;
     (uiConst.info_Story):setLocalizedKey(card:getDescriptionLocalizedKey())
     ;
     (uiConst.info_Story):SetIgnore(false)

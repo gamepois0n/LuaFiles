@@ -13,6 +13,9 @@ FGlobal_Inventory_WeightCheck = function()
   end
   local self = PaGlobalPlayerWeightList
   local selfPlayerWrapper = getSelfPlayer()
+  if selfPlayerWrapper == nil then
+    return 
+  end
   local selfPlayer = selfPlayerWrapper:get()
   local s64_allWeight = selfPlayer:getCurrentWeight_s64()
   local s64_maxWeight = selfPlayer:getPossessableWeight_s64()

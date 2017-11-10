@@ -3,6 +3,7 @@
 
 -- params : ...
 -- function num : 0
+local UI_LifeString = CppEnums.LifeExperienceString
 local VCK = CppEnums.VirtualKeyCode
 Panel_Trade_Market_BuyItemList:SetShow(false, false)
 Panel_Trade_Market_BuyItemList:SetAlpha(1)
@@ -153,44 +154,60 @@ global_setBuyList = function()
         ((tradeBuyMarket.expiration)[commerceIndex]):addInputEvent("Mouse_On", "TradeBuyMarket_SimpleTooltip( true, " .. commerceIndex .. ", 0 )")
         ;
         ((tradeBuyMarket.expiration)[commerceIndex]):addInputEvent("Mouse_Out", "TradeBuyMarket_SimpleTooltip( false, " .. commerceIndex .. ", 0 )")
-        local territorySupplyKey = FGlobal_TradeSupplyItemInfo_Compare((tradeBuyMarket.itemEnchantKey)[commerceIndex])
-        if territorySupplyKey ~= nil then
-          ((tradeBuyMarket.supply)[commerceIndex]):SetShow(true)
-          local supplyText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_SUPPLY", "territoryName", territoryName[territorySupplyKey])
-          ;
-          ((tradeBuyMarket.supply)[commerceIndex]):SetText("")
-          ;
-          ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_On", "TradeBuyMarket_SimpleTooltip( true, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
-          ;
-          ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_Out", "TradeBuyMarket_SimpleTooltip( false, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
+        if isUsedNewTradeEventNotice_chk() then
+          local territorySupplyKey = FGlobal_TradeEventNotice_Renewal_GetTerritorySupplyIndex((tradeBuyMarket.itemEnchantKey)[commerceIndex])
         else
           do
-            ;
-            ((tradeBuyMarket.supply)[commerceIndex]):SetShow(false)
-            ;
-            (((tradeBuyMarket.icons)[commerceIndex]).icon):SetShow(true)
-            local iconPosX = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosX()
             do
-              local iconPosY = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosY()
-              ;
-              (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosX(14)
-              ;
-              (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosY(11)
-              commerceIndex = commerceIndex + 1
-              -- DECOMPILER ERROR at PC261: LeaveBlock: unexpected jumping out DO_STMT
+              local territorySupplyKey = FGlobal_TradeSupplyItemInfo_Compare((tradeBuyMarket.itemEnchantKey)[commerceIndex])
+              if territorySupplyKey ~= nil then
+                ((tradeBuyMarket.supply)[commerceIndex]):SetShow(true)
+                local supplyText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_SUPPLY", "territoryName", territoryName[territorySupplyKey])
+                ;
+                ((tradeBuyMarket.supply)[commerceIndex]):SetText("")
+                ;
+                ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_On", "TradeBuyMarket_SimpleTooltip( true, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
+                ;
+                ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_Out", "TradeBuyMarket_SimpleTooltip( false, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
+              else
+                do
+                  ;
+                  ((tradeBuyMarket.supply)[commerceIndex]):SetShow(false)
+                  ;
+                  (((tradeBuyMarket.icons)[commerceIndex]).icon):SetShow(true)
+                  local iconPosX = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosX()
+                  do
+                    local iconPosY = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosY()
+                    ;
+                    (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosX(14)
+                    ;
+                    (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosY(11)
+                    commerceIndex = commerceIndex + 1
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC261: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC261: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC261: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC261: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC261: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC261: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
 
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
+
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
+
+                  end
+                end
+              end
             end
           end
         end
@@ -200,7 +217,7 @@ global_setBuyList = function()
 end
 
 tradeBuyMarket.setBuyItemDataInfo = function(self, index, itemName, leftCount, tradeItemWrapper, buyableStackCount, sellRate)
-  -- function num : 0_5 , upvalues : tradeBuyMarket, UI_TM, _descBg, _desc
+  -- function num : 0_5 , upvalues : tradeBuyMarket, UI_TM, UI_LifeString, _descBg, _desc
   ((tradeBuyMarket.itemName)[index]):SetAutoResize(true)
   ;
   ((tradeBuyMarket.itemName)[index]):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
@@ -219,9 +236,15 @@ tradeBuyMarket.setBuyItemDataInfo = function(self, index, itemName, leftCount, t
     ;
     ((tradeBuyMarket.AddCart)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_TradeMarketBuyList_AddtoCart"))
     local needLifeType = (tradeItemWrapper:get()):getNeedLifeType()
-    local needLifeLevel = (tradeItemWrapper:get()):getNeedLifeLevel()
-    local conditionLevel = FGlobal_CraftLevel_Replace(needLifeLevel + 1, needLifeType)
-    local conditionTypeName = FGlobal_CraftType_ReplaceName(needLifeType)
+    local needLifeLevel = ((tradeItemWrapper:get()):getNeedLifeLevel())
+    local conditionLevel, conditionTypeName = nil, nil
+    if isNewCharacterInfo() == false then
+      conditionLevel = FGlobal_CraftLevel_Replace(needLifeLevel + 1, needLifeType)
+      conditionTypeName = FGlobal_CraftType_ReplaceName(needLifeType)
+    else
+      conditionLevel = FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(needLifeLevel + 1)
+      conditionTypeName = UI_LifeString[needLifeType]
+    end
     local buyingConditionValue = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_BUYING_CONDITIONTITLE") .. " "
     if needLifeLevel == 0 or needLifeLevel == nil then
       buyingConditionValue = buyingConditionValue .. PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_BUYING_CONDITION_NIL")
@@ -575,7 +598,7 @@ eventBuyFromNpcListRefesh = function()
 end
 
 TradeMarket_BuyList_SimpleTooltip = function(isShow, index, lifeType, lifeLevel)
-  -- function num : 0_17 , upvalues : tradeBuyMarket
+  -- function num : 0_17 , upvalues : UI_LifeString, tradeBuyMarket
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -586,9 +609,14 @@ TradeMarket_BuyList_SimpleTooltip = function(isShow, index, lifeType, lifeLevel)
   local player = getSelfPlayer()
   local playerGet = player:get()
   local playerThisCraftLevel = (playerGet:getLifeExperienceLevel(lifeType))
-  local name, desc, control = nil, nil, nil
-  local conditionLevel = FGlobal_CraftLevel_Replace(lifeLevel + 1, lifeType)
-  local conditionTypeName = FGlobal_CraftType_ReplaceName(lifeType)
+  local name, desc, control, conditionLevel, conditionTypeName = nil, nil, nil, nil, nil
+  if isNewCharacterInfo() == false then
+    conditionLevel = FGlobal_CraftLevel_Replace(lifeLevel + 1, lifeType)
+    conditionTypeName = FGlobal_CraftType_ReplaceName(lifeType)
+  else
+    conditionLevel = FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeLevel + 1)
+    conditionTypeName = UI_LifeString[lifeType]
+  end
   if lifeLevel < playerThisCraftLevel then
     name = "<PAColor0xFFC4BEBE>" .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_BUYING_CONDITION", "craftName", conditionTypeName, "craftLevel", conditionLevel) .. "<PAOldColor>"
   else

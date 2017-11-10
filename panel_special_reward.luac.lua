@@ -13,7 +13,7 @@ local messagePosition = function()
   -- function num : 0_0
   Panel_ChallengeReward_Alert:SetSpanSize(0, 10)
   Panel_SpecialReward_Alert:SetSpanSize(50, 10)
-  Panel_NewEventProduct_Alarm:SetSpanSize(70, 10)
+  Panel_NewEventProduct_Alarm:SetSpanSize(10, 10)
   Panel_ChallengeReward_Alert:ComputePos()
   Panel_SpecialReward_Alert:ComputePos()
   Panel_NewMail_Alarm:ComputePos()
@@ -110,11 +110,13 @@ FromClient_CompleteChallengeReward = function()
   local rewardCount = ToClient_GetChallengeRewardInfoCount()
   self.currentRewardCount = rewardCount - 1
   if isNewbie() or ((getSelfPlayer()):get()):getLevel() > 5 then
-    Panel_ChallengeReward_Alert:SetShow(true)
+    Panel_ChallengeReward_Alert:SetShow(false)
     completeChallengeReward_ShowMessage()
     FromClient_ChallengeReward_UpdateText()
     FGlobal_RightBottomIconReposition()
     PcRoomGift_TimeCheck()
+    PackageIconPosition()
+    FromClient_PackageIconUpdate()
   end
   messagePosition()
 end
@@ -128,7 +130,6 @@ check_CompleteChallengeRewardAlert_Hide = function(prevRenderModeList, nextRende
   if ((getSelfPlayer()):get()):getLevel() > 1 then
     return 
   end
-  Panel_ChallengeReward_Alert:SetShow(false)
 end
 
 registerEvent("FromClient_RenderModeChangeState", "check_CompleteChallengeRewardAlert_Hide")
@@ -227,10 +228,18 @@ end
 HandleClicked_PcRoomJackPotBox = function()
   -- function num : 0_13
   if not Panel_Window_CharInfo_Status:GetShow() then
-    FGlobal_CharInfoStatusShowAni()
+    if isNewCharacterInfo() == false then
+      FGlobal_CharInfoStatusShowAni()
+    else
+      PaGlobal_CharacterInfo:showAni()
+    end
     Panel_Window_CharInfo_Status:SetShow(true)
   end
-  HandleClicked_CharacterInfo_Tab(3)
+  if isNewCharacterInfo() == false then
+    HandleClicked_CharacterInfo_Tab(3)
+  else
+    PaGlobal_CharacterInfo:showWindow(3)
+  end
   HandleClickedTapButton(5)
 end
 

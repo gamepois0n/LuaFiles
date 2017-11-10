@@ -119,28 +119,54 @@ end
                 if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
                   url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TW_REAL")
                 else
-                  if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_SA_TEST", "lang", SALangType)
+                  if isGameTypeSA() then
+                    local ticket = ToClient_GetAuthToken()
+                    local isUserID = ToClient_GetUserId()
+                    url = "https://blackdesert.playredfox.com/black_desert/shop?i=" .. isUserID .. "&t=" .. ticket .. "&locale=" .. SALangType
+                    ToClient_OpenChargeWebPage(url, false)
+                    return 
                   else
-                    if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                      url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_SA_REAL", "lang", SALangType)
-                    else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+                    do
+                      if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+                        url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TR_TEST")
+                      else
+                        if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+                          url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TR_REAL")
+                        else
+                          if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+                            url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TH_TEST")
+                          else
+                            if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                              url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_TH_REAL")
+                            else
+                              if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                                url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_TEST")
+                              else
+                                if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_ID_REAL")
+                                else
+                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_URL_URL2")
+                                end
+                              end
+                            end
+                          end
+                        end
+                      end
+                      local exeIE = true
+                      if isGameTypeKorea() then
+                        exeIE = true
+                      else
+                        exeIE = false
+                      end
+                      ToClient_OpenChargeWebPage(url, exeIE)
+                      local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH")
+                      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = IngameCashShop_ChargeComplete, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                      ;
+                      (MessageBox.showMessageBox)(messageBoxData)
                     end
                   end
                 end
               end
-              local exeIE = true
-              if isGameTypeKorea() then
-                exeIE = true
-              else
-                exeIE = false
-              end
-              ToClient_OpenChargeWebPage(url, exeIE)
-              local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH")
-              local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = IngameCashShop_ChargeComplete, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-              ;
-              (MessageBox.showMessageBox)(messageBoxData)
             end
           end
         end

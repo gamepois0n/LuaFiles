@@ -9,7 +9,7 @@ local _btn_Close = (UI.getChildControl)(Panel_TranslationReport, "Button_Close")
 local _translationReportWebControl = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_TranslationReport, "WebControl_TranslationReport")
 -- DECOMPILER ERROR at PC23: Confused about usage of register: R3 in 'UnsetPending'
 
-Panel_TranslationReport.Initialize = function(self)
+Panel_TranslationReport.init = function(self)
   -- function num : 0_0 , upvalues : _translationReportWebControl
   _translationReportWebControl:SetShow(true)
   _translationReportWebControl:SetPosX(15)
@@ -20,11 +20,8 @@ end
 
 -- DECOMPILER ERROR at PC27: Confused about usage of register: R3 in 'UnsetPending'
 
-Panel_TranslationReport.Open = function(self, translationKey)
+Panel_TranslationReport.Open = function(self, staticType, key1, key2, key3, textNo)
   -- function num : 0_1 , upvalues : _translationReportWebControl
-  if ToClient_IsDevelopment() == false then
-    return 
-  end
   audioPostEvent_SystemUi(13, 6)
   Panel_TranslationReport:SetShow(true, true)
   local selfPlayer = getSelfPlayer()
@@ -32,20 +29,23 @@ Panel_TranslationReport.Open = function(self, translationKey)
     return 
   end
   local url = ""
-  if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-    url = "http://game-qa.tr.playblackdesert.com/Translation"
+  if (CppEnums.CountryType).DEV == getGameServiceType() then
+    url = "http://10.32.129.20/Translation"
   else
-    if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-      url = "https://game.tr.playblackdesert.com/Translation"
+    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+      url = "http://game-qa.tr.playblackdesert.com/Translation"
     else
-      return 
+      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+        url = "https://game.tr.playblackdesert.com/Translation"
+      else
+        return 
+      end
     end
   end
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
   local languageType = ToClient_GetLanguageType()
-  local staticStatusType = ToClient_GetStaticTypeFromLocalizedKey(translationKey)
-  url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey=" .. tostring(translationKey) .. "&languageType=" .. tostring(languageType) .. "&staticType=" .. tostring(staticStatusType)
+  url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey1=" .. tostring(key1) .. "&translationKey2=" .. tostring(key2) .. "&translationKey3=" .. tostring(key3) .. "&textNo=" .. tostring(textNo) .. "&languageType=" .. tostring(languageType) .. "&staticType=" .. tostring(staticType)
   _translationReportWebControl:SetUrl(700, 610, url, false, true)
   _translationReportWebControl:SetIME(true)
   Panel_TranslationReport:SetPosX(getScreenSizeX() / 2 - Panel_TranslationReport:GetSizeX() / 2, getScreenSizeY() / 2 - Panel_TranslationReport:GetSizeY() / 2)
@@ -60,9 +60,9 @@ Panel_TranslationReport.Close = function(self)
   Panel_TranslationReport:SetShow(false, false)
 end
 
-TranslationReport_Opne = function(translationKey)
+TranslationReport_Opne = function(staticType, key1, key2, key3, textNo)
   -- function num : 0_3
-  Panel_TranslationReport:Open(translationKey)
+  Panel_TranslationReport:Open(staticType, key1, key2, key3, textNo)
 end
 
 TranslationReport_Close = function()
@@ -78,6 +78,6 @@ Panel_TranslationReport.RegisterEvent = function(self)
   registerEvent("FromClient_TranslationReport", "TranslationReport_Opne")
 end
 
-Panel_TranslationReport:Initialize()
+Panel_TranslationReport:init()
 Panel_TranslationReport:RegisterEvent()
 

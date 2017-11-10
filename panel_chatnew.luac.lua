@@ -223,17 +223,17 @@ _listPanel = {}
 _listChatUIPool = {}
 , 
 _listPopupNameMenu = {}
-, _maxListCount = 100}
+, _maxListCount = 100, _defaultPanelSizeX = 420, _defaultPanelSizeY = 222}
 local _currentInitPool = 0
 local ChatRenderMode = PAUIRenderModeBitSet({(Defines.RenderMode).eRenderMode_Default, (Defines.RenderMode).eRenderMode_WorldMap})
 ChatUIPoolManager.createPanel = function(self, poolIndex, stylePanel)
-  -- function num : 0_5 , upvalues : UI_Group, ChatRenderMode, UI_color
+  -- function num : 0_5 , upvalues : UI_Group, ChatRenderMode, ChatUIPoolManager, UI_color
   local panel = (UI.createPanelAndSetPanelRenderMode)("Panel_Chat" .. poolIndex, UI_Group.PAGameUIGroup_Chatting, ChatRenderMode)
   CopyBaseProperty(stylePanel, panel)
   panel:ChangeSpecialTextureInfoName("new_ui_common_forlua/Window/Chatting/Chatting_Win_transparency.dds")
   panel:setMaskingChild(true)
   panel:setGlassBackground(true)
-  panel:SetSize(420, 222)
+  panel:SetSize(ChatUIPoolManager._defaultPanelSizeX, ChatUIPoolManager._defaultPanelSizeY)
   panel:SetPosX(0)
   panel:SetPosY(getScreenSizeY() - panel:GetSizeY() - 35)
   panel:SetColor(UI_color.C_FFFFFFFF)
@@ -751,7 +751,7 @@ Chatting_Transparency = function(index)
 end
 
 ChatUIPoolManager.initialize = function(self)
-  -- function num : 0_8 , upvalues : ChattingViewManager
+  -- function num : 0_8 , upvalues : ChatUIPoolManager, ChattingViewManager
   local divisionPanel, panel, panelSizeX, panelSizeY, chatUI = nil, nil, nil, nil, nil
   for poolIndex = 0, self._poolCount - 1 do
     -- DECOMPILER ERROR at PC10: Confused about usage of register: R10 in 'UnsetPending'
@@ -782,8 +782,8 @@ ChatUIPoolManager.initialize = function(self)
       ;
       ((chatUI._list_Scroll)[0]):SetControlBottom()
     else
-      panelSizeX = 420
-      panelSizeY = 222
+      panelSizeX = ChatUIPoolManager._defaultPanelSizeX
+      panelSizeY = ChatUIPoolManager._defaultPanelSizeY
       panel:SetSize(panelSizeX, panelSizeY)
       ;
       ((chatUI._list_PanelBG)[0]):SetSize(panelSizeX, panelSizeY)
@@ -806,7 +806,7 @@ ChatUIPoolManager.initialize = function(self)
       panel:SetPosX(divisionPanel:getPositionX())
       panel:SetPosY(divisionPanel:getPositionY())
     end
-    -- DECOMPILER ERROR at PC188: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC190: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (ChattingViewManager._transparency)[poolIndex] = divisionPanel:getTransparency()
@@ -2156,8 +2156,8 @@ Chatting_OnResize = function()
           ;
           ((chatUI._list_Scroll)[0]):SetControlBottom()
         else
-          panelSizeX = 420
-          panelSizeY = 222
+          panelSizeX = ChatUIPoolManager._defaultPanelSizeX
+          panelSizeY = ChatUIPoolManager._defaultPanelSizeY
           panel:SetSize(panelSizeX, panelSizeY)
           ;
           ((chatUI._list_PanelBG)[0]):SetSize(panelSizeX, panelSizeY)
@@ -2209,6 +2209,9 @@ Chatting_OnResize = function()
             end
           end
         end
+        if ChatUIPoolManager._poolCount - 1 == poolIndex and panelPosY == defaultPosY then
+          panelPosY = panelPosY - ChatUIPoolManager._defaultPanelSizeY
+        end
         panel:SetPosX(panelPosX)
         panel:SetPosY(panelPosY)
         do
@@ -2217,11 +2220,11 @@ Chatting_OnResize = function()
           if isCombinePanel then
             divisionPanel:combineToMainPanel()
           end
-          -- DECOMPILER ERROR at PC363: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC375: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC363: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC375: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC363: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC375: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -2623,7 +2626,9 @@ HandleOn_ChattingAddTabToolTip = function(isShow, poolIndex, tipType)
       end
     end
   end
-  TooltipSimple_Show(control, name, desc)
+  if control ~= nil then
+    TooltipSimple_Show(control, name, desc)
+  end
 end
 
 HandleClicked_ChattingSender = function(poolIndex, senderStaticIndex)
@@ -2719,10 +2724,18 @@ HandleClicked_ChatSubMenu_AddFriend = function()
   if clickedName ~= nil and clickedUserNickName ~= nil then
     local nameType = ToClient_getChatNameType()
     if nameType == 0 then
-      requestFriendList_addFriend(clickedName, true)
+      if isNewFriendList_chk() == true then
+        ToClient_AddFriend(clickedName, true)
+      else
+        requestFriendList_addFriend(clickedName, true)
+      end
     else
       if nameType == 1 then
-        requestFriendList_addFriend(clickedUserNickName, false)
+        if isNewFriendList_chk() == true then
+          ToClient_AddFriend(clickedUserNickName, false)
+        else
+          requestFriendList_addFriend(clickedUserNickName, false)
+        end
       end
     end
     ChatSubMenu:SetShow(false)
@@ -2901,15 +2914,8 @@ end
 
 FGlobal_ChattingPanel_Reset = function()
   -- function num : 0_54 , upvalues : ChatUIPoolManager
-  for index = 0, ChatUIPoolManager._poolCount - 1 do
-    local panel = ToClient_getChattingPanel(index)
-    panel:setPosition(-1, -1, -1, -1)
-    if index ~= 0 then
-      panel:combineToMainPanel()
-    end
-    ChattingOption_SelectFontSize(14)
-    setisChangeFontSize(true)
-  end
+  ToClient_setDefaultChattingPanel()
+  setisChangeFontSize(true)
   local baseChatPanel = ChatUIPoolManager:getPanel(0)
   baseChatPanel:SetShow(true)
   FromClient_ChatUpdate()
@@ -3126,11 +3132,11 @@ FromClient_ChatUpdate = function(isShow, currentPanelIndex)
     end
   end
   do
-    if ChattingViewManager._addChattingIdx ~= nil and Panel_UI_Setting:GetShow() == false then
+    if ChattingViewManager._addChattingIdx ~= nil then
       if ChattingViewManager._addChattingPreset == false then
         ChattingOption_Open(ChattingViewManager._addChattingIdx, 0, true)
       end
-      -- DECOMPILER ERROR at PC191: Confused about usage of register: R4 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC186: Confused about usage of register: R4 in 'UnsetPending'
 
       ChattingViewManager._addChattingIdx = nil
     end

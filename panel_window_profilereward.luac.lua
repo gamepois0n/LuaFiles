@@ -44,7 +44,6 @@ end
 
 ProfileReward.Init = function(self)
   -- function num : 0_1 , upvalues : RewardSlotCount
-  _PA_LOG("오명�\128", "ProfileReward:Init")
   local control = self._control
   control._playTime = (UI.getChildControl)(control._topBg, "StaticText_PlayTime")
   control._pcRoolTime = (UI.getChildControl)(control._topBg, "StaticText_PcRoomTime")
@@ -70,7 +69,7 @@ ProfileReward.Init = function(self)
   radiobutton = (UI.getChildControl)(Panel_Window_Profile, "RadioButton_SumAll")
   radiobutton:addInputEvent("Mouse_LUp", "FGlobal_ProfileReward_PeriodUpdate(" .. 0 .. ")")
   for index = 0, RewardSlotCount - 1 do
-    -- DECOMPILER ERROR at PC146: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC142: Confused about usage of register: R7 in 'UnsetPending'
 
     (self._rewardSlotBG)[index] = (UI.getChildControl)(control._slotBG, "Static_RewardItemSlotBg_" .. tostring(index))
     ;
@@ -81,7 +80,7 @@ ProfileReward.Init = function(self)
     createSlot:createChild()
     ;
     (createSlot.icon):SetShow(true)
-    -- DECOMPILER ERROR at PC173: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC169: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self._rewardSlot)[index] = createSlot
@@ -252,8 +251,6 @@ ProfileReward_RightDataSet = function(index)
       local itemStatic = getItemEnchantStaticStatus(profilerewardwrapper:getUserProfileRewardItemkey(arrindex))
       local rewardkey = 0
       if itemStatic ~= nil then
-        _PA_LOG("오명�\128", "_rewardSlotBG,_rewardSlot")
-        ;
         ((ProfileReward._rewardSlotBG)[arrindex]):SetShow(true)
         ;
         (((ProfileReward._rewardSlot)[arrindex]).icon):SetShow(true)

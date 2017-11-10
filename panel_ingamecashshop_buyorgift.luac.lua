@@ -509,13 +509,17 @@ end
   local userStampCount = ToClient_GetPearlStampCount()
   local buyConfig = (self._config)._buy
   if self._isGift == true then
+    (self._radioButtonSelectPearl):SetCheck(false)
+    ;
+    (self._radioButtonSelectStamp):SetCheck(false)
+    ;
     (self._static_selectStampBG):SetShow(false)
     ;
     (self._pearlStampCount):SetShow(false)
     Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + (self._config)._sizePanel + (self._static_PearlBG):GetSizeY() + giftGap + 20)
     return 
   end
-  if stampCount <= userStampCount and isOpenPearlStamp == true and moneyType ~= UI_CCC.eCashProductCategory_Pearl and moneyType ~= UI_CCC.eCashProductCategory_Mileage then
+  if (self._static_CouponApplyBG):GetShow() == false and stampCount <= userStampCount and isOpenPearlStamp == true and moneyType ~= UI_CCC.eCashProductCategory_Pearl and moneyType ~= UI_CCC.eCashProductCategory_Mileage then
     (self._static_selectStampBG):SetShow(true)
     local pearlIconPriceByCoupon = (self._static_PearlBG):GetPosY() + (self._static_PearlBG):GetSizeY() / 2 - (self._txt_PearlIconPrice):GetSizeY() / 2
     local stampBgPosY = pearlIconPriceByCoupon + (self._static_selectStampBG):GetSizeY()
@@ -562,6 +566,10 @@ end
       (self._radioButtonSelectPearl):SetShow(false)
       ;
       (self._pearlStampCount):SetShow(false)
+      ;
+      (self._radioButtonSelectPearl):SetCheck(false)
+      ;
+      (self._radioButtonSelectStamp):SetCheck(false)
       Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), buyConfig._startY + buyConfig._gapX + (self._config)._sizePanel + (self._static_PearlBG):GetSizeY() + 20)
       self._usePearlStampCount = -1
       ;
@@ -656,9 +664,19 @@ end
   local userCount = 0
   local isFriend = (self._buttonFriendList):IsCheck()
   if isFriend then
-    local friendGroupCount = RequestFriends_getFriendGroupCount()
+    local friendGroupCount = nil
+    if isNewFriendList_chk() == true then
+      friendGroupCount = ToClient_GetFriendGroupCount()
+    else
+      friendGroupCount = RequestFriends_getFriendGroupCount()
+    end
     for groupIndex = 0, friendGroupCount - 1 do
-      local friendGroup = RequestFriends_getFriendGroupAt(groupIndex)
+      local friendGroup = nil
+      if isNewFriendList_chk() == true then
+        friendGroup = ToClient_GetFriendGroupAt(groupIndex)
+      else
+        friendGroup = RequestFriends_getFriendGroupAt(groupIndex)
+      end
       local friendCount = friendGroup:getFriendCount()
       for friendIndex = 0, friendCount - 1 do
         local friendInfo = friendGroup:getFriendAt(friendIndex)
@@ -668,16 +686,16 @@ end
             do
               local s64_lastLogoutTime = friendInfo:getLastLogoutTime_s64()
               friendName = friendName .. "(" .. convertStringFromDatetimeOverHour(s64_lastLogoutTime) .. ")"
-              -- DECOMPILER ERROR at PC66: Confused about usage of register: R16 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC87: Confused about usage of register: R16 in 'UnsetPending'
 
               ;
               (self.giftUserList)[userCount] = {name = friendInfo:getName(), userNo = friendInfo:getUserNo(), sendType = giftSendType.userNo}
               userCount = userCount + 1
-              -- DECOMPILER ERROR at PC68: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC89: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC68: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC89: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC68: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC89: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -702,23 +720,23 @@ end
               end
               do
                 do
-                  -- DECOMPILER ERROR at PC120: Confused about usage of register: R11 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC141: Confused about usage of register: R11 in 'UnsetPending'
 
                   ;
                   (self.giftUserList)[userCount] = {name = myGuildMemberInfo:getName(), userNo = myGuildMemberInfo:getUserNo(), sendType = giftSendType.userNo}
                   userCount = userCount + 1
-                  -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC143: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC143: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC122: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC143: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
             end
           end
         end
-        -- DECOMPILER ERROR at PC124: Confused about usage of register: R3 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC145: Confused about usage of register: R3 in 'UnsetPending'
 
         ;
         (self._config)._giftBotListCount = userCount
@@ -739,7 +757,7 @@ end
             do
               ;
               (UIScroll.SetButtonSize)(self._scroll_GiftBotList, (self._config)._giftBotListMaxCount, (self._config)._giftBotListCount)
-              -- DECOMPILER ERROR at PC173: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out DO_STMT
 
             end
           end
@@ -951,7 +969,6 @@ end
         messageBoxMemo = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_CONFIRM_REALBUY", "addmathClassString", addmathClassString, "getName", cashProduct:getName(), "count", count) .. "\n" .. addpearlMsg
       end
     end
-    _PA_LOG("오명�\128", "2.PearUseCount : " .. tostring(self._usePearlStampCount))
     messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = InGameShopBuy_ConfirmDo, functionNo = _InGameShopBuy_Confirm_Cancel, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)
@@ -1299,6 +1316,8 @@ end
     (self._buttonFriendList):SetCheck(true)
     ;
     (self._buttonGuildList):SetCheck(false)
+    ;
+    (self._radioButtonSelectPearl):SetShow(false)
   else
     ;
     (self._panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_BUYPRODUCT"))
@@ -1306,19 +1325,19 @@ end
     (self._button_Confirm):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_BUY"))
   end
   self.giftUserList = {}
-  -- DECOMPILER ERROR at PC61: Confused about usage of register: R5 in 'UnsetPending'
-
-  ;
-  (self._config)._giftTopListCount = 0
-  -- DECOMPILER ERROR at PC63: Confused about usage of register: R5 in 'UnsetPending'
-
-  ;
-  (self._config)._giftBotListCount = 0
   -- DECOMPILER ERROR at PC65: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
-  (self._config)._giftTopListStart = 0
+  (self._config)._giftTopListCount = 0
   -- DECOMPILER ERROR at PC67: Confused about usage of register: R5 in 'UnsetPending'
+
+  ;
+  (self._config)._giftBotListCount = 0
+  -- DECOMPILER ERROR at PC69: Confused about usage of register: R5 in 'UnsetPending'
+
+  ;
+  (self._config)._giftTopListStart = 0
+  -- DECOMPILER ERROR at PC71: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (self._config)._giftBotListStart = 0
@@ -1326,7 +1345,11 @@ end
   (self._scroll_GiftTopList):SetControlTop()
   ;
   (self._scroll_GiftBotList):SetControlTop()
-  RequestFriendList_getFriendList()
+  if isNewFriendList_chk() == true then
+    ToClient_GetFriendList()
+  else
+    RequestFriendList_getFriendList()
+  end
   ;
   (getIngameCashMall()):clearGift()
   self:update()

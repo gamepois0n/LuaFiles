@@ -6,8 +6,8 @@
 Panel_GuidlBattle_Point:SetShow(false)
 PaGlobal_GuildBattlePoint = {_guildAName = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_Left"), _guildBName = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_Right"), _guildAPoint = nil, _guildBPoint = nil, 
 _round = {}
-, _roundNumber = 0, _isShow = false}
--- DECOMPILER ERROR at PC26: Confused about usage of register: R0 in 'UnsetPending'
+, _isShow = false}
+-- DECOMPILER ERROR at PC25: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.initilize = function(self)
   -- function num : 0_0
@@ -20,7 +20,7 @@ PaGlobal_GuildBattlePoint.initilize = function(self)
   self._guildBPoint = (UI.getChildControl)(self._guildBName, "StaticText_RightPoint")
 end
 
--- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC28: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.guildBattleTimer = function(self, time)
   -- function num : 0_1
@@ -46,7 +46,7 @@ PaGlobal_GuildBattlePoint.guildBattleTimer = function(self, time)
   end
 end
 
--- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.changeState = function(self)
   -- function num : 0_2
@@ -60,28 +60,30 @@ PaGlobal_GuildBattlePoint.changeState = function(self)
     ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_READY"))
   else
     if state == 2 then
-      self._roundNumber = self._roundNumber + 1
+      local round = ToClient_getGuildBattleCurrentRound()
       ;
-      ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", self._roundNumber))
+      ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
     else
-      ;
-      ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
+      do
+        ;
+        ((self._round)._bg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWAR_SOONFINISH"))
+        local guildA = ToClient_getCurrentServerGuildBattleInfo(0)
+        local guildB = ToClient_getCurrentServerGuildBattleInfo(1)
+        if guildA ~= nil and guildB ~= nil then
+          (self._guildAName):SetText(guildA:getName())
+          ;
+          (self._guildBName):SetText(guildB:getName())
+          ;
+          (self._guildAPoint):SetText(guildA:winPoint())
+          ;
+          (self._guildBPoint):SetText(guildB:winPoint())
+        end
+      end
     end
-  end
-  local guildA = ToClient_getCurrentServerGuildBattleInfo(0)
-  local guildB = ToClient_getCurrentServerGuildBattleInfo(1)
-  if guildA ~= nil and guildB ~= nil then
-    (self._guildAName):SetText(guildA:getName())
-    ;
-    (self._guildBName):SetText(guildB:getName())
-    ;
-    (self._guildAPoint):SetText(guildA:winPoint())
-    ;
-    (self._guildBPoint):SetText(guildB:winPoint())
   end
 end
 
--- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC34: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.Close = function(self)
   -- function num : 0_3

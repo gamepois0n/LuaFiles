@@ -605,6 +605,7 @@ end
 
 HouseInstallation.Open = function(self)
   -- function num : 0_9 , upvalues : HouseInstallation, renderMode
+  _PA_LOG("�\128민혁", "HouseInstallation:Open()")
   ToClient_SaveUiInfo(false)
   if not IsSelfPlayerWaitAction() and not IsSelfPlayerBattleWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_ONLYWAITSTENCE"))
@@ -617,6 +618,7 @@ HouseInstallation.Open = function(self)
   else
     local rv = housing_changeHousingMode(true, HouseInstallation._isMyHouse)
     if rv ~= 0 then
+      _PA_LOG("�\128민혁", "housing_changeHousingMode Failed...")
       return 
     end
     self.isInstallMode = true
@@ -1417,6 +1419,12 @@ EventHousingPointUpdate = function()
   local iptOptionValue = toClient_GetVisitingSetOptionInteriorPoint()
   local iptBonusValue = toClient_GetVisitingBonusInteriorPoint()
   local iptTotalValue = toClient_GetVisitingTotalInteriorPoint()
+  if PaGlobal_GetHouseNamePoint() == 0 then
+    iptBaseValue = 0
+    iptOptionValue = 0
+    iptBonusValue = 0
+    iptTotalValue = 0
+  end
   if iptBaseValue < 0 then
     iptBaseValue = 0
   end

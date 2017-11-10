@@ -5,6 +5,7 @@
 -- function num : 0
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
+local UI_LifeString = CppEnums.LifeExperienceString
 local UI_VT = CppEnums.VehicleType
 local MessageData = {
 _Msg = {}
@@ -266,8 +267,8 @@ Proc_ShowMessage_Ack_For_RewardSelect = function(message, showRate, msgType, exp
             chatting_sendMessage("", message.main .. "(" .. message.sub .. ")", (CppEnums.ChatType).System)
           end
         else
-          if messageType.guildBattleNormal == msgType then
-            chatting_sendMessage("", message.main, (CppEnums.ChatType).guildBattleNormal)
+          if messageType.guildBattleNormal == msgType or messageType.guildBattleStart == msgType or messageType.guildBattleEnd == msgType then
+            chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
           else
             if message.sub == "" then
               chatting_sendMessage("", message.main, (CppEnums.ChatType).System)
@@ -442,7 +443,11 @@ FGlobal_FitnessLevelUp = function(addSp, addWeight, addHp, addMp, _type)
       end
       set_subString = set_subString .. comma .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LEVELUP_REWARD_LvupStatus2", "AddWeight", addWeight / 10000, "UserWeight", Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64()) / 10000)
       FGlobal_UpdateInventorySlotData()
-      FGlobal_MaxWeightChanged()
+      if isNewCharacterInfo() == false then
+        FGlobal_MaxWeightChanged()
+      else
+        FromClient_UI_CharacterInfo_Basic_WeightChanged()
+      end
     end
     do
       if addHp > 0 then
@@ -1167,11 +1172,17 @@ end
 
 Panel_RewardSelect_NakMessage:RegisterUpdateFunc("NakMessageUpdate_For_RewardSelect")
 FromClient_notifyBroadcastLifeLevelUp = function(_notifyType, userNickName, characterName, _param1, _param2)
-  -- function num : 0_18 , upvalues : messageType
+  -- function num : 0_18 , upvalues : UI_LifeString, messageType
   local lifeType_s32 = Int64toInt32(_param2)
-  local lifeLevel_s32 = Int64toInt32(_param1)
-  local lifeType = FGlobal_CraftType_ReplaceName(lifeType_s32)
-  local lifeLev = FGlobal_CraftLevel_Replace(lifeLevel_s32, lifeType_s32)
+  local lifeLevel_s32 = (Int64toInt32(_param1))
+  local lifeType, lifeLev = nil, nil
+  if isNewCharacterInfo() == false then
+    lifeLev = FGlobal_CraftLevel_Replace(lifeLevel_s32, lifeType_s32)
+    lifeType = FGlobal_CraftType_ReplaceName(lifeType_s32)
+  else
+    lifeLev = FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeLevel_s32)
+    lifeType = UI_LifeString[lifeType_s32]
+  end
   local message = userNickName .. "(" .. characterName .. ")"
   local subMessage = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_LIFELEVEL_SUBMSG", "lifeType", lifeType, "lifeLev", lifeLev)
   local itemIcon = ""

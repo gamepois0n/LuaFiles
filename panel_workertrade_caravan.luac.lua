@@ -577,6 +577,8 @@ workerTradeCaravan.Hide = function(self)
   -- function num : 0_10
   WorldMapPopupManager:pop()
   WorkerTradeCaravan_TooltipHide()
+  ;
+  (((self.control)._routerNode)._btnArrivalNode):SetText("목적�\128")
 end
 
 FGlobal_WorkerTradeCaravan_Hide = function()

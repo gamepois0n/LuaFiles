@@ -336,7 +336,7 @@ ChatInput_ChangeChatType_Immediately = function(chatType)
 end
 
 ChatInput_UpdatePermission = function()
-  -- function num : 0_13 , upvalues : chatInput, UI_CT, isArsha, isLocalWar, isSavageDefence
+  -- function num : 0_13 , upvalues : chatInput, UI_CT, isWolrdChat, isArsha, isLocalWar, isSavageDefence
   local self = chatInput
   local selfPlayerWrapper = getSelfPlayer()
   ;
@@ -404,26 +404,26 @@ ChatInput_UpdatePermission = function()
                 end
               else
                 do
-                  -- DECOMPILER ERROR at PC105: Confused about usage of register: R2 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC106: Confused about usage of register: R2 in 'UnsetPending'
 
                   ;
-                  (self.permissions)[UI_CT.WorldWithItem] = false
-                  -- DECOMPILER ERROR at PC115: Confused about usage of register: R2 in 'UnsetPending'
+                  (self.permissions)[UI_CT.WorldWithItem] = isWolrdChat
+                  -- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
 
                   if (selfPlayerWrapper:get()):isGuildMember() then
                     (self.permissions)[UI_CT.Guild] = true
                   end
-                  -- DECOMPILER ERROR at PC125: Confused about usage of register: R2 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
 
                   if (selfPlayerWrapper:get()):hasParty() then
                     (self.permissions)[UI_CT.Party] = true
                   end
-                  -- DECOMPILER ERROR at PC132: Confused about usage of register: R2 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC133: Confused about usage of register: R2 in 'UnsetPending'
 
                   if isArsha then
                     (self.permissions)[UI_CT.Arsha] = true
                   end
-                  -- DECOMPILER ERROR at PC145: Confused about usage of register: R2 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC146: Confused about usage of register: R2 in 'UnsetPending'
 
                   if isLocalWar == true or isArsha == true or isSavageDefence == true then
                     (self.permissions)[UI_CT.Team] = true
@@ -999,6 +999,9 @@ FGlobal_ChattingInput_ShowWhisper = function(characterName)
   -- function num : 0_54 , upvalues : chatInput
   ChatInput_Show()
   ChatInput_ChangeChatType_Immediately(4)
+  if characterName == "$Unknown$" then
+    characterName = " "
+  end
   ;
   ((chatInput.control).whisperEdit):SetEditText(characterName, true)
   ;

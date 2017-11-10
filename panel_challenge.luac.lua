@@ -65,7 +65,11 @@ expTooltip:SetShow(false)
 Panel_ChallengeReward_Alert:SetShow(false)
 HandleClicked_challengeRewardAlert_Open = function()
   -- function num : 0_0 , upvalues : IM
-  CharacterInfoWindow_Show()
+  if isNewCharacterInfo() == false then
+    CharacterInfoWindow_Show()
+  else
+    PaGlobal_CharacterInfo:showWindow(0)
+  end
   ;
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
@@ -155,17 +159,17 @@ Challenge_TapMenu_Create = function()
   if isGameTypeRussia() then
     countrySet = true
   else
-    if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA() or isGameTypeKR2() then
+    if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA() or isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
       countrySet = false
     else
       countrySet = true
     end
   end
   for index = 0, tapCount - 1 do
-    -- DECOMPILER ERROR at PC35: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC47: Confused about usage of register: R4 in 'UnsetPending'
 
     _tapMenu[index] = {}
-    -- DECOMPILER ERROR at PC46: Confused about usage of register: R4 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC58: Confused about usage of register: R4 in 'UnsetPending'
 
     _tapMenu[index] = (UI.createControl)(UCT.PA_UI_CONTROL_RADIOBUTTON, Panel_Window_Challenge, "Challenge_Tapmenu_" .. index)
     CopyBaseProperty(radioBtn_TapMenu, _tapMenu[index])
@@ -179,7 +183,7 @@ Challenge_TapMenu_Create = function()
       if isGameTypeRussia() then
         (_tapMenu[index]):SetShow(true)
       else
-        if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA() or isGameTypeKR2() then
+        if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeSA() or isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
           (_tapMenu[index]):SetShow(false)
         else
           ;
@@ -713,14 +717,13 @@ Challenge_Update = function()
     remainRewardCountValue:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHALLENGE_REWARDCOUNTVALUE_EMPTY"))
     remainRewardCountValue:SetFontColor(UI_color.C_FF888888)
     Panel_ChallengeReward_Alert:SetShow(false)
+    PaGlobal_SelfPlayer_Expgage()
   else
     remainRewardCountValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHALLENGE_REWARDCOUNTVALUE_HAVE", "remainRewardCount", remainRewardCount))
     remainRewardCountValue:SetFontColor(UI_color.C_FFFFFFFF)
-    if (getGameServiceType() == 7 or getGameServiceType() == 8) and getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
-      Panel_ChallengeReward_Alert:SetShow(false)
-    else
-      Panel_ChallengeReward_Alert:SetShow(true)
-    end
+    Panel_ChallengeReward_Alert:SetShow(false)
+    PackageIconPosition()
+    FromClient_PackageIconUpdate()
   end
   local viewCount = 4
   for list_Idx = 0, viewCount - 1 do

@@ -283,6 +283,8 @@ ItemmarketItemSet_ListUpdate = function(contents, key)
       SellCompleteValue:SetText(makeDotMoney(myItemInfo:getTradedTotalPrice()))
       BTN_RegistCancle:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketItemSet_RegistCancle( " .. ((iess:get())._key):get() .. "," .. idx .. " )")
       BTN_Settlement:addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketItemSet_ItemSettlement( " .. ((iess:get())._key):get() .. "," .. idx .. " )")
+      BTN_RegistCancle:addInputEvent("Mouse_On", "")
+      BTN_RegistCancle:addInputEvent("Mouse_Out", "")
       local leftBeginDate_s64 = converStringFromLeftDateTime(myItemInfo:getDisplayedBeginDate())
       if myItemInfo:isTraded() and Int64toInt32(myItemInfo:getTotalPrice()) == 0 then
         _ItemMarketItemSet_ChangeBgTexture(1, idx)
@@ -308,6 +310,9 @@ ItemmarketItemSet_ListUpdate = function(contents, key)
           BTN_RegistCancle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_REGISTCANCEL"))
           BTN_RegistCancle:SetFontColor(UI_color.C_FFF03838)
         else
+          BTN_RegistCancle:addInputEvent("Mouse_LUp", "")
+          BTN_RegistCancle:addInputEvent("Mouse_On", "_ItemMarketItemSet_SimpleToolTip(true, " .. idx .. ")")
+          BTN_RegistCancle:addInputEvent("Mouse_Out", "_ItemMarketItemSet_SimpleToolTip(false)")
           BTN_RegistCancle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_REGISTWAITCANCEL"))
           BTN_RegistCancle:SetFontColor(UI_color.C_FFEF5378)
         end
@@ -1008,8 +1013,25 @@ ItemMarketSetItem_GetAllItem_Simpletooltip = function(isShow)
   TooltipSimple_Show(control, name, desc)
 end
 
+_ItemMarketItemSet_SimpleToolTip = function(isShow, idx)
+  -- function num : 0_30 , upvalues : ItemMarketItemSet
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = ItemMarketItemSet
+  local name, desc, control = nil, nil, nil
+  local control = self._list2
+  local contents = control:GetContentByKey(toInt64(0, idx))
+  local BTN_RegistCancle = (UI.getChildControl)(contents, "Template_Button_RegistCancle")
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_REGISTWAITCANCEL")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_TOOLTIP_REGISTWAIT_DESC")
+  control = BTN_RegistCancle
+  TooltipSimple_Show(control, name, desc)
+end
+
 ItemMarketItemSet.registEventHandler = function(self)
-  -- function num : 0_30
+  -- function num : 0_31
   (self.btn_Close):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketItemSet_Close()")
   ;
   (self.btn_RegistItem):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketRegistItem_Open()")
@@ -1034,7 +1056,7 @@ ItemMarketItemSet.registEventHandler = function(self)
 end
 
 ItemMarketItemSet.registMessageHandler = function(self)
-  -- function num : 0_31
+  -- function num : 0_32
   registerEvent("FromClient_InventoryUpdate", "ItemMarketItemSet_UpdateMoneyByWarehouse")
   registerEvent("EventWarehouseUpdate", "ItemMarketItemSet_UpdateMoneyByWarehouse")
   registerEvent("FromClient_WarehousePushMoney", "ItemMarketItemSet_UpdateMoney")

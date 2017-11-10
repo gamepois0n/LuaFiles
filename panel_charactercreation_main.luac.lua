@@ -83,76 +83,69 @@ local StaticText_AuthorTitle = (UI.getChildControl)(Panel_CustomizationMain, "St
 local link1 = (UI.getChildControl)(Panel_CustomizationMain, "Button_Link1")
 local link2 = (UI.getChildControl)(Panel_CustomizationMain, "Button_Link2")
 local japanEventBanner = (UI.getChildControl)(Panel_CustomizationMain, "Button_JapanEvent")
-if isGameTypeTR() then
+if false then
   link1:SetSize(321, 90)
   link2:SetSize(321, 90)
   link1:SetSpanSize(0, 140)
   link2:SetSpanSize(0, 240)
-  if getGameServiceResType() == 2 or getGameServiceResType() == 6 then
-    link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_en.dds")
+  if getGameServiceResType() == 12 then
+    link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_th.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
     ;
     (link1:getBaseTexture()):setUV(x1, y1, x2, y2)
     link1:setRenderTexture(link1:getBaseTexture())
-    link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_en.dds")
+    link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_th.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
     ;
     (link1:getOnTexture()):setUV(x1, y1, x2, y2)
-    link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_en.dds")
+    link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_th.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
     ;
     (link1:getClickTexture()):setUV(x1, y1, x2, y2)
-    link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_en.dds")
+    link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_th.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
     ;
     (link2:getBaseTexture()):setUV(x1, y1, x2, y2)
     link2:setRenderTexture(link2:getBaseTexture())
-    link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_en.dds")
+    link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_th.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
     ;
     (link2:getOnTexture()):setUV(x1, y1, x2, y2)
-    link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_en.dds")
+    link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_th.dds")
     local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
     ;
     (link2:getClickTexture()):setUV(x1, y1, x2, y2)
   else
     do
-      if getGameServiceResType() == 14 then
-        link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
-        ;
-        (link1:getBaseTexture()):setUV(x1, y1, x2, y2)
-        link1:setRenderTexture(link1:getBaseTexture())
-        link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
-        ;
-        (link1:getOnTexture()):setUV(x1, y1, x2, y2)
-        link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
-        ;
-        (link1:getClickTexture()):setUV(x1, y1, x2, y2)
-        link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
-        ;
-        (link2:getBaseTexture()):setUV(x1, y1, x2, y2)
-        link2:setRenderTexture(link2:getBaseTexture())
-        link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_tr.dds")
-        local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
-        ;
-        (link2:getOnTexture()):setUV(x1, y1, x2, y2)
-        link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_tr.dds")
+      link1:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_base_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
+      ;
+      (link1:getBaseTexture()):setUV(x1, y1, x2, y2)
+      link1:setRenderTexture(link1:getBaseTexture())
+      link1:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_over_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
+      ;
+      (link1:getOnTexture()):setUV(x1, y1, x2, y2)
+      link1:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/Apply_click_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link1, 0, 0, 321, 90)
+      ;
+      (link1:getClickTexture()):setUV(x1, y1, x2, y2)
+      link2:ChangeTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_base_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
+      ;
+      (link2:getBaseTexture()):setUV(x1, y1, x2, y2)
+      link2:setRenderTexture(link2:getBaseTexture())
+      link2:ChangeOnTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_over_en.dds")
+      local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
+      ;
+      (link2:getOnTexture()):setUV(x1, y1, x2, y2)
+      link2:ChangeClickTextureInfoName("new_ui_common_forlua/Window/Cash_Customization/PreOrder_click_en.dds")
+      do
         local x1, y1, x2, y2 = setTextureUV_Func(link2, 0, 0, 321, 90)
         ;
         (link2:getClickTexture()):setUV(x1, y1, x2, y2)
-      end
-      do
-        if isGameTypeTR() then
-          link1:SetShow(true)
-          link2:SetShow(true)
-        else
-          link1:SetShow(false)
-          link2:SetShow(false)
-        end
+        link1:SetShow(false)
+        link2:SetShow(false)
         japanEventBanner:SetShow(false)
         local historyButtons = {}
         local _classIndex = nil
@@ -234,6 +227,7 @@ end
         Button_ScreenShotFolder:addInputEvent("Mouse_On", "overToggleButton(\"" .. Button_ScreenShotFolder:GetID() .. "\"" .. ")")
         Button_ProfileScreenShot:addInputEvent("Mouse_LUp", "TakeFaceScreenShot()")
         Button_ProfileScreenShot:addInputEvent("Mouse_On", "overToggleButton(\"" .. Button_ProfileScreenShot:GetID() .. "\"" .. ")")
+        Button_ProfileScreenShot:addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
         CheckButton_ImagePreset:SetShow(false)
         Button_SaveHistory:addInputEvent("Mouse_LUp", "HandleClicked_CustomizationAddHistory()")
         registerEvent("EventSetMainButtonPosition", "SetMainButtonPosition")
@@ -606,8 +600,15 @@ end
   ToClient_setCaptureUpdateState(true)
 end
 
+        FGlobal_TakeScreenShotByHotKey = function()
+  -- function num : 0_15 , upvalues : Button_ProfileScreenShot
+  if Button_ProfileScreenShot:GetShow() then
+    TakeFaceScreenShot()
+  end
+end
+
         FGlobal_Customization_UiShow = function()
-  -- function num : 0_15 , upvalues : StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_CashCustom
+  -- function num : 0_16 , upvalues : StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_CashCustom
   StaticText_CustomizationMessage:SetShow(isShow_CustomizationMessage)
   Panel_CustomizationCloth:SetShow(isShow_CustomizationCloth)
   Panel_CustomizationMotion:SetShow(isShow_CustomizationMotion)
@@ -621,7 +622,7 @@ end
 end
 
         FGlobal_Customization_UiClose = function()
-  -- function num : 0_16 , upvalues : isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_CashCustom
+  -- function num : 0_17 , upvalues : isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_CashCustom
   isShow_CustomizationMessage = StaticText_CustomizationMessage:GetShow()
   isShow_CustomizationCloth = Panel_CustomizationCloth:GetShow()
   isShow_CustomizationMotion = Panel_CustomizationMotion:GetShow()
@@ -643,7 +644,7 @@ end
 end
 
         local _takeScreenShot = function()
-  -- function num : 0_17 , upvalues : isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_CashCustom
+  -- function num : 0_18 , upvalues : isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, isShow_CashCustom
   ToClient_Capture()
   Panel_CustomizationCloth:SetShow(isShow_CustomizationCloth)
   Panel_CustomizationMotion:SetShow(isShow_CustomizationMotion)
@@ -657,7 +658,7 @@ end
 end
 
         local _takeFaceScreenShot = function()
-  -- function num : 0_18 , upvalues : isShow_CashCustom
+  -- function num : 0_19 , upvalues : isShow_CashCustom
   ToClientEnd_CaptureFace()
   if not ToClient_isLobbyProcessor() then
     Panel_Cash_Customization:SetShow(isShow_CashCustom)
@@ -665,7 +666,7 @@ end
 end
 
         local _UIShowInterface = function()
-  -- function num : 0_19 , upvalues : StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title
+  -- function num : 0_20 , upvalues : StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizingAlbum, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title
   StaticText_CustomizationMessage:SetShow(isShow_CustomizationMessage)
   Panel_CustomizationCloth:SetShow(isShow_CustomizationCloth)
   Panel_CustomizationMotion:SetShow(isShow_CustomizationMotion)
@@ -690,12 +691,12 @@ end
         local timerForSS = 0
         local subTime = 0
         OpenScreenShotFolder = function()
-  -- function num : 0_20
+  -- function num : 0_21
   ToClient_OpenDirectory((CppEnums.OpenDirectoryType).DirectoryType_ScreenShot)
 end
 
         CustomizationStatic_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_21 , upvalues : doScreenShot, timerForSS, _takeScreenShot, screenShotButtonUse, screenShotTime, screenShotReady, doScreenShotSub, subTime, StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_HistoryTable, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface, Edit_CharName
+  -- function num : 0_22 , upvalues : doScreenShot, timerForSS, _takeScreenShot, screenShotButtonUse, screenShotTime, screenShotReady, doScreenShotSub, subTime, StaticText_CustomizationMessage, isShow_CustomizationMessage, isShow_HistoryTable, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, doScreenShotInFrame, doScreenCapture, EndScreenCapture, _takeFaceScreenShot, _UIShowInterface, Edit_CharName
   if doScreenShot then
     if timerForSS > 0.3 then
       timerForSS = 0
@@ -773,7 +774,7 @@ end
 
         Panel_CustomizationStatic:RegisterUpdateFunc("CustomizationStatic_UpdatePerFrame")
         MainPanel_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_22 , upvalues : initialized, mainButtonNum, mainButtonInfo, Edit_CharName, isSubEffectPlay, timer
+  -- function num : 0_23 , upvalues : initialized, mainButtonNum, mainButtonInfo, Edit_CharName, isSubEffectPlay, timer
   if initialized == true then
     for index = 1, mainButtonNum do
       if index ~= 3 then
@@ -821,18 +822,22 @@ end
 end
 
         overToggleButton = function(name)
-  -- function num : 0_23
+  -- function num : 0_24 , upvalues : Button_ProfileScreenShot
   local control = (UI.getChildControl)(Panel_CustomizationStatic, name)
   control:EraseAllEffect()
   control:AddEffect("UI_Customize_Button01_Mini", false, 0, 0)
+  if Button_ProfileScreenShot:GetID() == name then
+    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_FACEPHOTOBUTTON_TOOLTIP")
+    TooltipSimple_Show(Button_ProfileScreenShot, desc)
+  end
 end
 
         clickSubButton = function()
-  -- function num : 0_24
+  -- function num : 0_25
 end
 
         overSubButton = function(parent, name)
-  -- function num : 0_25 , upvalues : isSubEffectPlay
+  -- function num : 0_26 , upvalues : isSubEffectPlay
   if isSubEffectPlay == true then
     local controlParent = (UI.getChildControl)(Panel_CustomizationMain, parent)
     local control = (UI.getChildControl)(controlParent, name)
@@ -843,7 +848,7 @@ end
 
         local selected_zodiacIndex = nil
         overSubButton_Zodiac = function(parent, name, zodiacIndex)
-  -- function num : 0_26 , upvalues : selected_zodiacIndex, Static_ZodiacITooltip, isSubEffectPlay
+  -- function num : 0_27 , upvalues : selected_zodiacIndex, Static_ZodiacITooltip, isSubEffectPlay
   selected_zodiacIndex = zodiacIndex
   local zodiacInfo = getZodiac(zodiacIndex)
   local zodiacName = zodiacInfo:getZodiacName()
@@ -861,18 +866,18 @@ end
 end
 
         clickSubButton_Zodiac = function()
-  -- function num : 0_27
+  -- function num : 0_28
 end
 
         outSubButton_Zodiac = function(zodiacIndex)
-  -- function num : 0_28 , upvalues : selected_zodiacIndex, Static_ZodiacITooltip
+  -- function num : 0_29 , upvalues : selected_zodiacIndex, Static_ZodiacITooltip
   if selected_zodiacIndex == zodiacIndex then
     Static_ZodiacITooltip:SetShow(false)
   end
 end
 
         overMainButton = function(idx)
-  -- function num : 0_29 , upvalues : mainButtonInfo, isSubEffectPlay, mainButtonNum
+  -- function num : 0_30 , upvalues : mainButtonInfo, isSubEffectPlay, mainButtonNum
   if (mainButtonInfo[idx]).isOpen == false then
     ((mainButtonInfo[idx]).tree):update()
     ;
@@ -909,13 +914,13 @@ end
 end
 
         mouseOnGroupButton = function(control)
-  -- function num : 0_30
+  -- function num : 0_31
   control:EraseAllEffect()
   control:AddEffect("UI_Customize_Button01", false, 0, 0)
 end
 
         SetMainButtonPosition = function(index, x, y, buttonRelativeX, buttonRelativeY)
-  -- function num : 0_31 , upvalues : InGameMode, mainButtonInfo, rotationPointNormalize
+  -- function num : 0_32 , upvalues : InGameMode, mainButtonInfo, rotationPointNormalize
   if InGameMode == true and index == 5 then
     return 
   end
@@ -975,14 +980,14 @@ end
 end
 
         SelectCustomizationGroup = function(idx)
-  -- function num : 0_32
+  -- function num : 0_33
   selectCustomizationControlGroup(idx)
   CustomizationMainUIShow(false)
   closeExplorer()
 end
 
         SelectCustomizationVoice = function()
-  -- function num : 0_33 , upvalues : InGameMode
+  -- function num : 0_34 , upvalues : InGameMode
   CustomizationMainUIShow(false)
   createVoiceList(InGameMode, selectedClassType)
   showVoiceUI(true)
@@ -990,19 +995,19 @@ end
 end
 
         SelectPoseControl = function(idx)
-  -- function num : 0_34
+  -- function num : 0_35
   selectPoseControl(idx)
   CustomizationMainUIShow(false)
   closeExplorer()
 end
 
         FGlobal_IsInGameMode = function()
-  -- function num : 0_35 , upvalues : InGameMode
+  -- function num : 0_36 , upvalues : InGameMode
   return InGameMode
 end
 
         InitCustomizationMainUI = function()
-  -- function num : 0_36 , upvalues : initialized, createUI, updateComputePos, InitZodiac, Edit_CharName, CheckButton_CameraLook
+  -- function num : 0_37 , upvalues : initialized, createUI, updateComputePos, InitZodiac, Edit_CharName, CheckButton_CameraLook
   Panel_CustomizationMain:SetSize(getScreenSizeX(), getScreenSizeY())
   if initialized == false then
     createUI()
@@ -1020,7 +1025,7 @@ end
 end
 
         showAllUI = function(show)
-  -- function num : 0_37 , upvalues : CheckButton_ToggleUi, InGameMode
+  -- function num : 0_38 , upvalues : CheckButton_ToggleUi, InGameMode
   CheckButton_ToggleUi:SetCheck(show)
   ToggleUi()
   showStaticUI(show)
@@ -1031,7 +1036,7 @@ end
 
         local isShow_WebAlbum = false
         CustomizationMainUIShow = function(show)
-  -- function num : 0_38 , upvalues : closeCustomizationMode, initialized, mainButtonNum, mainButtonInfo, isShow_WebAlbum
+  -- function num : 0_39 , upvalues : closeCustomizationMode, initialized, mainButtonNum, mainButtonInfo, isShow_WebAlbum
   if closeCustomizationMode == false then
     if show == true then
       Panel_CustomizationMain:SetShow(true)
@@ -1061,19 +1066,19 @@ end
 end
 
         CameraLookCheck = function()
-  -- function num : 0_39 , upvalues : CheckButton_CameraLook
+  -- function num : 0_40 , upvalues : CheckButton_CameraLook
   setCharacterLookAtCamera(CheckButton_CameraLook:IsCheck())
 end
 
         CameraLookEnable = function(lookEnable)
-  -- function num : 0_40 , upvalues : CheckButton_CameraLook
+  -- function num : 0_41 , upvalues : CheckButton_CameraLook
   setCharacterLookAtCamera(lookEnable)
   CheckButton_CameraLook:SetCheck(lookEnable)
 end
 
         local hideUIIndex = 0
         ToggleUi = function()
-  -- function num : 0_41 , upvalues : CheckButton_ToggleUi, StaticText_CustomizationMessage, hideUIIndex, InGameMode, mainButtonNum, mainButtonInfo, isFristAddHistory
+  -- function num : 0_42 , upvalues : CheckButton_ToggleUi, StaticText_CustomizationMessage, hideUIIndex, InGameMode, mainButtonNum, mainButtonInfo, isFristAddHistory
   if CheckButton_ToggleUi:IsCheck() then
     StaticText_CustomizationMessage:SetShow(true)
     if hideUIIndex == 2 then
@@ -1135,7 +1140,7 @@ end
 end
 
         ToggleImageUI = function()
-  -- function num : 0_42
+  -- function num : 0_43
   if Panel_CustomizationImage:IsShow() then
     CloseTextureUi()
   else
@@ -1144,7 +1149,7 @@ end
 end
 
         initToggleIndex = function()
-  -- function num : 0_43 , upvalues : hideUIIndex, CheckButton_ToggleUi, StaticText_CustomizationMessage
+  -- function num : 0_44 , upvalues : hideUIIndex, CheckButton_ToggleUi, StaticText_CustomizationMessage
   if Panel_CustomizationImage:IsShow() then
     CloseTextureUi()
   end
@@ -1154,7 +1159,7 @@ end
 end
 
         showStaticUI = function(show)
-  -- function num : 0_44 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, Button_ScreenShot, isShowScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title
+  -- function num : 0_45 , upvalues : CheckButton_CameraLook, CheckButton_ToggleUi, Button_ScreenShot, isShowScreenShot, Button_ScreenShotFolder, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title
   if show == true then
     Panel_CustomizationStatic:SetShow(true, false)
     CheckButton_CameraLook:SetShow(true)
@@ -1211,15 +1216,15 @@ end
 
         local currentCameraIndex = -1
         SetPresetCamNext = function()
-  -- function num : 0_45
-end
-
-        SetPresetCam = function(index)
   -- function num : 0_46
 end
 
+        SetPresetCam = function(index)
+  -- function num : 0_47
+end
+
         SetPresetCamText = function(index)
-  -- function num : 0_47 , upvalues : CheckButton_ImagePreset
+  -- function num : 0_48 , upvalues : CheckButton_ImagePreset
   if index == -1 then
     CheckButton_ImagePreset:SetText("user")
   else
@@ -1246,7 +1251,7 @@ end
 end
 
         CustomizationMessage = function(message)
-  -- function num : 0_48 , upvalues : StaticText_CustomizationMessage
+  -- function num : 0_49 , upvalues : StaticText_CustomizationMessage
   if message ~= nil then
     StaticText_CustomizationMessage:SetText(message)
     StaticText_CustomizationMessage:SetSize(StaticText_CustomizationMessage:GetTextSizeX() + 10 + (StaticText_CustomizationMessage:GetSpanSize()).x, 30)
@@ -1259,7 +1264,7 @@ end
 end
 
         CreateHistoryButton = function()
-  -- function num : 0_49 , upvalues : historyButtons, Button_SaveHistory, RadioButton_HistoryTemp
+  -- function num : 0_50 , upvalues : historyButtons, Button_SaveHistory, RadioButton_HistoryTemp
   for _,v in pairs(historyButtons) do
     v:SetShow(false)
     ;
@@ -1298,7 +1303,7 @@ end
 
         local historyIndex = 0
         HandleClicked_ApplyHistory = function(index)
-  -- function num : 0_50 , upvalues : historyIndex
+  -- function num : 0_51 , upvalues : historyIndex
   historyIndex = index
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MESSAGEBOX_APPLY")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = ApplyHistory, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -1307,18 +1312,18 @@ end
 end
 
         ApplyHistory = function()
-  -- function num : 0_51 , upvalues : historyIndex
+  -- function num : 0_52 , upvalues : historyIndex
   applyHistory(historyIndex)
 end
 
         CustomizationAddHistory = function()
-  -- function num : 0_52
+  -- function num : 0_53
   addHistory()
   CreateHistoryButton()
 end
 
         HandleClicked_CustomizationAddHistory = function()
-  -- function num : 0_53
+  -- function num : 0_54
   if getHistoryCount() > 9 then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MESSAGEBOX_ADD_PRESET")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = CustomizationAddHistory, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -1332,7 +1337,7 @@ end
 end
 
         CloseCharacterCustomization = function()
-  -- function num : 0_54 , upvalues : closeCustomizationMode, CheckButton_ToggleUi, isFristAddHistory
+  -- function num : 0_55 , upvalues : closeCustomizationMode, CheckButton_ToggleUi, isFristAddHistory
   closeCustomizationMode = true
   CheckButton_ToggleUi:SetCheck(false)
   if Panel_CustomizationCloth:GetShow() then
@@ -1352,7 +1357,7 @@ end
 end
 
         ShowCharacterCustomization = function(customizationData, classIndex, isInGame)
-  -- function num : 0_55 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, btn_RandomBeauty, webAlbumOpen, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
+  -- function num : 0_56 , upvalues : closeCustomizationMode, InGameMode, _classIndex, mainButtonNum, Button_Char, Button_SelectClass, Button_Back, btn_CharacterNameCreateRule, btn_RandomBeauty, webAlbumOpen, Static_CharName, Edit_CharName, staticMainImage, StaticText_Zodiac, Static_ZodiacImage, StaticText_ZodiacName, StaticText_ZodiacDescription, Static_ZodiacIcon, Static_ZodiacITooltip, StaticText_FamilyNameTitle, StaticText_FamilyName, link1, link2, japanEventBanner, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, UI_classType, StaticText_CustomizationInfo, StaticText_AuthorName, StaticText_AuthorTitle
   closeCustomizationMode = false
   InGameMode = isInGame
   _classIndex = classIndex
@@ -1451,7 +1456,7 @@ end
 end
 
         HandleClicked_NationalOption = function(isType)
-  -- function num : 0_56
+  -- function num : 0_57
   local linkURL = ""
   if isType == 0 then
     linkURL = "https://www.tr.playblackdesert.com/Intro/Event/cbt_signup"
@@ -1464,23 +1469,23 @@ end
 end
 
         HandleClicked_JapanEventExecute = function()
-  -- function num : 0_57
+  -- function num : 0_58
   applyPreSetCustomizationParams()
 end
 
         EventApplyDefaultParams = function()
-  -- function num : 0_58
+  -- function num : 0_59
   applyDefaultCustomizationParams()
 end
 
         EventSelectClass = function()
-  -- function num : 0_59
+  -- function num : 0_60
   restoreUIScale()
   changeCreateCharacterMode_SelectClass(FGlobal_getIsSpecialCharacter())
 end
 
         EventSelectBack = function()
-  -- function num : 0_60
+  -- function num : 0_61
   showStaticUI(false)
   Panel_CustomizationMain:SetShow(false)
   restoreUIScale()
@@ -1489,7 +1494,7 @@ end
 end
 
         HandleClicked_CustomizationMain_applyDefaultCustomizationParams = function()
-  -- function num : 0_61
+  -- function num : 0_62
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_APPLYDEFAULTPARAMS")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = EventApplyDefaultParams, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1497,7 +1502,7 @@ end
 end
 
         HandleClicked_CustomizationMain_SelectClass = function()
-  -- function num : 0_62
+  -- function num : 0_63
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_CANCEL")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = EventSelectClass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1507,7 +1512,7 @@ end
 end
 
         HandleClicked_CustomizationMain_Back = function()
-  -- function num : 0_63
+  -- function num : 0_64
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MSGBOX_CANCEL")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = EventSelectBack, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1517,12 +1522,12 @@ end
 end
 
         HandleClicked_saveCustomizationData = function()
-  -- function num : 0_64
+  -- function num : 0_65
   OpenExplorerSaveCustomizing()
 end
 
         HandleClicked_RuleShow = function()
-  -- function num : 0_65
+  -- function num : 0_66
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_RESOURCE, "COMMON_CHARACTERCREATEPOLICY_TITLE_EN"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1530,7 +1535,7 @@ end
 end
 
         HandleClicked_RandomBeautyMSG = function()
-  -- function num : 0_66
+  -- function num : 0_67
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_MAIN_RANDOMBEAUTY_MSG")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = HandleClicked_RandomBeauty, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -1538,7 +1543,7 @@ end
 end
 
         HandleClicked_RandomBeauty = function()
-  -- function num : 0_67 , upvalues : _web_RandomBeauty
+  -- function num : 0_68 , upvalues : _web_RandomBeauty
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   _web_RandomBeauty:SetIgnore(true)
@@ -1656,22 +1661,22 @@ end
 end
 
         HandleClicked_loadCustomizationData = function()
-  -- function num : 0_68
+  -- function num : 0_69
   OpenExplorerLoadCustomizing()
 end
 
         CustomizationAuthorName = function(authorName)
-  -- function num : 0_69 , upvalues : StaticText_AuthorName
+  -- function num : 0_70 , upvalues : StaticText_AuthorName
   StaticText_AuthorName:SetText(authorName)
 end
 
         isShowCustomizationMain = function()
-  -- function num : 0_70
+  -- function num : 0_71
   return Panel_CustomizationMain:GetShow()
 end
 
         CustomizationMain_PanelResize_ByFontSize = function()
-  -- function num : 0_71 , upvalues : StaticText_CustomizationInfo, Button_SaveHistory, UI_TM, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
+  -- function num : 0_72 , upvalues : StaticText_CustomizationInfo, Button_SaveHistory, UI_TM, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
   StaticText_CustomizationInfo:SetSize((math.max)(210, StaticText_CustomizationInfo:GetTextSizeX() + 10), StaticText_CustomizationInfo:GetSizeY())
   Button_SaveHistory:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
   Button_SaveCustomization:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
@@ -1692,7 +1697,7 @@ end
 end
 
         CustomizationMain_ButtonTooltip = function(_type)
-  -- function num : 0_72 , upvalues : Button_SaveHistory, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
+  -- function num : 0_73 , upvalues : Button_SaveHistory, Button_SaveCustomization, Button_LoadCustomization, Button_ApplyDefaultCustomization
   if _type == nil then
     TooltipSimple_Hide()
     return 
@@ -1722,7 +1727,7 @@ end
 
         CustomizationMain_PanelResize_ByFontSize()
         FromClient_CustomizationHistoryApplyUpdate = function()
-  -- function num : 0_73
+  -- function num : 0_74
   HairShapeHistoryApplyUpdate()
   MeshHistoryApplyUpdate()
   BodyBoneHistoryApplyUpdate()
@@ -1732,7 +1737,7 @@ end
 end
 
         FromClient_customzationGamePadInput = function(currentScene, moveScene)
-  -- function num : 0_74
+  -- function num : 0_75
   if (CppEnums.CountryType).DEV == getGameServiceType() then
     _PA_LOG("광운", "currentScene : " .. tostring(currentScene))
     _PA_LOG("광운", "currentScene : " .. tostring(moveScene))

@@ -62,6 +62,10 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
         if (CppEnums.InventoryBagType).eInventoryBagType_MiscForCash == bagType then
           bagType = (CppEnums.ItemWhereType).eCashInventory
           _title = PAGetString(Defines.StringSheet_GAME, "LUA_MISC_INVENTORY_FORPEARL_TITLE")
+          ;
+          (self.descBg):SetShow(false)
+          ;
+          (self.desc):SetShow(false)
         end
       end
     end
@@ -71,14 +75,14 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   self.bagWhereType = bagType
   _PA_LOG("cylee", "FromClient_ShowInventoryBag() bagType:" .. tostring(bagType))
   for index = 0, bagSize - 1 do
-    -- DECOMPILER ERROR at PC105: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC113: Confused about usage of register: R10 in 'UnsetPending'
 
     (self.bg)[index] = {}
-    -- DECOMPILER ERROR at PC108: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC116: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.slot)[index] = {}
-    -- DECOMPILER ERROR at PC120: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC128: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.bg)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_ClothInventory, "ColothInventory_SlotBg_" .. index)
@@ -103,7 +107,6 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
       ;
       (((self.slot)[index]).icon):addInputEvent("Mouse_RUp", "ClothInven_HandleInventoryBagSlotRClick(" .. fromWhereType .. ", " .. fromSlotNo .. ", " .. index .. ", " .. bagType .. ")")
     else
-      _PA_LOG("cylee", "FromClient_ShowInventoryBag() itemWrapper is nil, fromWhereType:" .. tostring(fromWhereType) .. ",fromSlotNo:" .. tostring(fromSlotNo) .. ",index:" .. tostring(index))
       ;
       ((self.slot)[index]):clearItem()
       ;
@@ -211,13 +214,14 @@ end
 
 ClothInven_HandleInventorySlotRClick = function(slotNo, itemWrapper, count, inventoryType)
   -- function num : 0_5 , upvalues : clothInven
-  if (((itemWrapper:getStaticStatus()):get())._vestedType):getItemKey() == 2 and (itemWrapper:get()):isVested() == false then
+  local itemStatic = itemWrapper:getStaticStatus()
+  if not (itemStatic:get()):checkToPushToInventoryBag() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CLOTHINVENTORY_INPUTALERT"))
     return 
   end
   local itemCount = (itemWrapper:get()):getCount_s64()
   do
-    local useNumberPad = not (itemWrapper:getStaticStatus()):isStackable() or Int64toInt32(itemCount) > 1
+    local useNumberPad = not itemStatic:isStackable() or Int64toInt32(itemCount) > 1
     _PA_LOG("cylee", "ClothInven_HandleInventorySlotRClick() useNumberPad:" .. tostring(useNumberPad))
     if useNumberPad then
       Panel_NumberPad_Show(true, itemCount, nil, function(inputNumber)

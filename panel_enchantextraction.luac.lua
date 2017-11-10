@@ -95,7 +95,9 @@ Panel_EnchantExtraction_Show = function()
   -- function num : 0_4 , upvalues : enchantExtraction
   local self = enchantExtraction
   if not Panel_EnchantExtraction:GetShow() then
-    PaGlobal_Enchant:show()
+    if isNewEnchant_chk() == false then
+      PaGlobal_Enchant:show()
+    end
     Panel_EnchantExtraction:SetShow(true)
     Inventory_SetFunctor(EnchantExtraction_Filter, EnchantExtraction_SetItem, nil, nil)
   end
@@ -103,9 +105,11 @@ Panel_EnchantExtraction_Show = function()
   ;
   ((self.control).enchantCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ENCHANTCOUNTEXTRACTION_2", "count", "+" .. failCount))
   enchantExtraction:DataInit()
-  local isHave, isExistCash = PaGlobal_Enchant:SecretExtractionCheck()
-  if isExistCash then
-    FGlobal_CashInventoryOpen_ByEnchant()
+  if isNewEnchant_chk() == false then
+    local isHave, isExistCash = PaGlobal_Enchant:SecretExtractionCheck()
+    if isExistCash then
+      FGlobal_CashInventoryOpen_ByEnchant()
+    end
   end
 end
 
@@ -173,8 +177,11 @@ end
 Panel_EnchantExtraction_Close = function()
   -- function num : 0_8
   Panel_EnchantExtraction:SetShow(false)
-  PaGlobal_Enchant:show()
-  PaGlobal_Enchant:enchantFailCount()
+  if isNewEnchant_chk() == true then
+    PaGlobal_Enchant:didShowEnchantTab()
+  else
+    PaGlobal_Enchant:enchantFailCount()
+  end
 end
 
 FGlobal_EnchantExtraction_JustClose = function()

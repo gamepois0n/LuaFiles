@@ -11,6 +11,7 @@ local UI_TM = CppEnums.TextMode
 Panel_Window_SkillGuide:setMaskingChild(true)
 Panel_Window_SkillGuide:ActiveMouseEventEffect(true)
 Panel_Window_SkillGuide:setGlassBackground(true)
+Panel_Window_SkillGuide:SetDragAll(true)
 Panel_Window_SkillGuide:RegisterShowEventFunc(true, "Panel_Window_SkillGuide_ShowAni()")
 Panel_Window_SkillGuide:RegisterShowEventFunc(false, "Panel_Window_SkillGuide_HideAni()")
 local isBeastMasterOpen = ToClient_IsContentsGroupOpen("11")

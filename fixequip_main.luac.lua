@@ -354,6 +354,7 @@ PaGlobal_FixEquip.useCashBtnEffectDelete = function(self)
   (self._uiButtonApplyCash):SetAlpha(0.85)
   ;
   (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
+  local hasCashItem = doHaveContentsItem(27, 0, false)
   local isReady = PaGlobal_FixEquip:isReadyToReapirMaxEndurance()
   if isReady == true then
     (self._uiButtonApply):AddEffect("UI_Equip_Repair", true, 0, 0)
@@ -367,7 +368,6 @@ PaGlobal_FixEquip.useCashBtnEffectDelete = function(self)
     (self._uiButtonApply):SetAlpha(1)
     ;
     (self._uiButtonApply):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( false )")
-    local hasCashItem = doHaveContentsItem(27, 0, false)
     if hasCashItem == true then
       (self._uiButtonApplyCash):AddEffect("UI_Equip_Repair", true, 0, 0)
       ;
@@ -376,22 +376,29 @@ PaGlobal_FixEquip.useCashBtnEffectDelete = function(self)
       (self._uiButtonApplyCash):SetAlpha(1)
       ;
       (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")
+    else
+      ;
+      (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 3, 6, 1)")
     end
   else
-    do
+    ;
+    (self._uiButtonApply):EraseAllEffect()
+    ;
+    (self._uiButtonApply):SetIgnore(true)
+    ;
+    (self._uiButtonApply):SetMonoTone(true)
+    ;
+    (self._uiButtonApply):SetEnable(false)
+    ;
+    (self._uiButtonApply):SetAlpha(0.85)
+    if hasCashItem == true then
+      (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
+    else
       ;
-      (self._uiButtonApply):EraseAllEffect()
-      ;
-      (self._uiButtonApply):SetIgnore(true)
-      ;
-      (self._uiButtonApply):SetMonoTone(true)
-      ;
-      (self._uiButtonApply):SetEnable(false)
-      ;
-      (self._uiButtonApply):SetAlpha(0.85)
-      ;
-      (self._uiButtonApply):addInputEvent("Mouse_LUp", "")
+      (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6,1)")
     end
+    ;
+    (self._uiButtonApply):addInputEvent("Mouse_LUp", "")
   end
 end
 
@@ -432,7 +439,7 @@ PaGlobal_FixEquip.fixEquipContinue = function(self, slotNo)
         ;
         (self._uiButtonApplyCash):SetAlpha(0.85)
         ;
-        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
+        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6, 1)")
         return 
       end
     end
@@ -548,14 +555,6 @@ PaGlobal_FixEquip.fixEquipItem_registEventHandler = function(self)
   ;
   (self._uiStreamRecovery):addInputEvent("Mouse_Out", "FixEquip_SimpleTooltips( false )")
   ;
-  (self._uiMoneyItemFix):setTooltipEventRegistFunc("FixEquip_SimpleTooltips( true, 0 )")
-  ;
-  (self._uiItemFix):setTooltipEventRegistFunc("FixEquip_SimpleTooltips( true, 1 )")
-  ;
-  (self._uiButtonApplyCash):setTooltipEventRegistFunc("FixEquip_SimpleTooltips( true, 2 )")
-  ;
-  (self._uiStreamRecovery):setTooltipEventRegistFunc("FixEquip_SimpleTooltips( true, 3 )")
-  ;
   (self._enduranceIcon):addInputEvent("Mouse_On", "FixEquip_SimpleTooltips( true, 4 )")
   ;
   (self._enduranceIcon):addInputEvent("Mouse_Out", "FixEquip_SimpleTooltips( false, 4 )")
@@ -634,7 +633,6 @@ FixEquip_SimpleTooltips = function(isShow, fixType)
     end
   end
   if isShow == true then
-    registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
     TooltipSimple_Show(uiControl, name, desc)
   else
     TooltipSimple_Hide()

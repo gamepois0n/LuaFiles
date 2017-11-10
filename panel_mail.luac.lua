@@ -403,23 +403,19 @@ end
 
 Mail_Open = function()
   -- function num : 0_12 , upvalues : _mail_Data
-  if isAutoTraining() then
-    Proc_ShowMessage_Ack("흑정령의 수련중에�\148 편지창을 �\180 �\152 없습니다.")
-    return 
-  end
   if not Panel_Mail_Main:IsShow() then
     Panel_Mail_Main:SetShow(true, true)
   end
   if Panel_NewMail_Alarm:IsShow() then
     Panel_NewMail_Alarm:SetShow(false)
   end
-  -- DECOMPILER ERROR at PC28: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
 
   _mail_Data._Page_Current = 1
-  -- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC22: Confused about usage of register: R0 in 'UnsetPending'
 
   _mail_Data._Page_Total = 0
-  -- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC25: Confused about usage of register: R0 in 'UnsetPending'
 
   _mail_Data._Selected = {}
   _mail_Data:clear()

@@ -394,9 +394,7 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, panel, isRight, i
     (controlWorkerTooltip._workingNameValue):SetShow(true)
     ;
     (controlWorkerTooltip._workingNameBG):SetShow(true)
-    ;
-    (controlWorkerTooltip._panelBG):SetSize((controlWorkerTooltip._panelBG):GetSizeX(), tempPenelSizeY)
-    Panel_Worker_Tooltip:SetSize(Panel_Worker_Tooltip:GetSizeX(), tempPenelSizeY)
+    tempPenelSizeY = tempPenelSizeY + 50
   else
     do
       ;
@@ -405,9 +403,7 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, panel, isRight, i
       (controlWorkerTooltip._workingNameValue):SetShow(false)
       ;
       (controlWorkerTooltip._workingNameBG):SetShow(false)
-      ;
-      (controlWorkerTooltip._panelBG):SetSize((controlWorkerTooltip._panelBG):GetSizeX(), tempPenelSizeY - 40)
-      Panel_Worker_Tooltip:SetSize(Panel_Worker_Tooltip:GetSizeX(), tempPenelSizeY - 40)
+      tempPenelSizeY = tempPenelSizeY - 10
       ;
       (controlWorkerTooltip._icon):ChangeTextureInfoName(workerIcon)
       local workerGrade = workerWrapperLua:getGrade()
@@ -501,8 +497,8 @@ FGlobal_ShowWorkerTooltipByWorkerNoRaw = function(workerNoRaw, panel, isRight, i
     if (((controlWorkerTooltip._skill)[index]).desc):GetTextSizeY() ~= 21 then
       sizeOverCount = sizeOverCount + 21
       ;
-      (controlWorkerTooltip._panelBG):SetSize((controlWorkerTooltip._panelBG):GetSizeX(), tempPenelSizeY - 40 + sizeOverCount)
-      Panel_Worker_Tooltip:SetSize(Panel_Worker_Tooltip:GetSizeX(), tempPenelSizeY - 40 + sizeOverCount)
+      (controlWorkerTooltip._panelBG):SetSize((controlWorkerTooltip._panelBG):GetSizeX(), tempPenelSizeY)
+      Panel_Worker_Tooltip:SetSize(Panel_Worker_Tooltip:GetSizeX(), tempPenelSizeY)
     end
     return false
   end

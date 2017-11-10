@@ -89,7 +89,7 @@ end
 remoteEquip.Update = function(self)
   -- function num : 0_1 , upvalues : remoteEquipSlotId
   for index = 1, #remoteEquipSlotId.normal do
-    local itemWrapper = getEquipmentItem((remoteEquipSlotId.normal)[index])
+    local itemWrapper = ToClient_getEquipmentItem((remoteEquipSlotId.normal)[index])
     if itemWrapper ~= nil then
       local slot = (self.normalEquipSlot)[index]
       slot:setItem(itemWrapper)
@@ -113,7 +113,7 @@ remoteEquip.Update = function(self)
     end
   end
   for index = 1, #remoteEquipSlotId.cash do
-    local itemWrapper = getEquipmentItem((remoteEquipSlotId.cash)[index])
+    local itemWrapper = ToClient_getEquipmentItem((remoteEquipSlotId.cash)[index])
     if itemWrapper ~= nil then
       local slot = (self.cashEquipSlot)[index]
       slot:setItem(itemWrapper)
@@ -147,7 +147,7 @@ RemoteEquip_Unequip = function(index, isCash)
   else
     slotNo = (remoteEquipSlotId.normal)[index]
   end
-  local itemWrapper = getEquipmentItem(slotNo)
+  local itemWrapper = ToClient_getEquipmentItem(slotNo)
   if itemWrapper ~= nil then
     equipmentDoUnequip(slotNo)
   end
@@ -183,16 +183,16 @@ end
 RemoteEquip_UpdateStat = function()
   -- function num : 0_7 , upvalues : remoteEquip
   local self = remoteEquip
-  local attackValue = getOffence()
-  local deffenceValue = getDefence()
-  local awakenValue = getAwakenOffence()
+  local attackValue = ToClient_getOffence()
+  local deffenceValue = ToClient_getDefence()
+  local awakenValue = ToClient_getAwakenOffence()
   ;
   (self.attackValue):SetText("공격�\165 : " .. attackValue)
   ;
   (self.deffenceValue):SetText("방어�\165 : " .. deffenceValue)
   ;
   (self.awakenValue):SetText("각성무기 공격�\165 : " .. awakenValue)
-  local isSetAwakenWeapon = getEquipmentItem((CppEnums.EquipSlotNo).awakenWeapon)
+  local isSetAwakenWeapon = ToClient_getEquipmentItem((CppEnums.EquipSlotNo).awakenWeapon)
   if isSetAwakenWeapon ~= nil then
     (self.awakenValue):SetShow(true)
   else

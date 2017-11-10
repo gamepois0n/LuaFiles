@@ -174,29 +174,19 @@ ToClient_SelfPlayerLevelUp = function(hp, mp, stun, weight)
 
     isUpdateList[2] = false
   end
-  if stun > 0 then
-    (_txt_lvupStatus[3]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LEVELUP_REWARD_MAXSTUNRESISTUP") .. "<PAColor0xFFFFBD2E>+" .. stun .. "<PAOldColor>")
-    ;
-    (_txt_lvupStatus[3]):SetPosY(positionY + posY_gab)
-    positionY = GetBottomPos(_txt_lvupStatus[3])
-    -- DECOMPILER ERROR at PC159: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC133: Confused about usage of register: R7 in 'UnsetPending'
 
-    isUpdateList[3] = true
-  else
-    -- DECOMPILER ERROR at PC162: Confused about usage of register: R7 in 'UnsetPending'
-
-    isUpdateList[3] = false
-  end
+  isUpdateList[3] = false
   if (Defines.s64_const).s64_0 < weight then
     (_txt_lvupStatus[4]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LEVELUP_REWARD_MAXWEIGHTUP") .. "<PAColor0xFFFFBD2E>+" .. Int64toInt32(weight) / 10000 .. "<PAOldColor>")
     ;
     (_txt_lvupStatus[4]):SetPosY(positionY + posY_gab)
     positionY = GetBottomPos(_txt_lvupStatus[4])
-    -- DECOMPILER ERROR at PC196: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC167: Confused about usage of register: R7 in 'UnsetPending'
 
     isUpdateList[4] = true
   else
-    -- DECOMPILER ERROR at PC199: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC170: Confused about usage of register: R7 in 'UnsetPending'
 
     isUpdateList[4] = false
   end

@@ -182,6 +182,8 @@ Mail_Detail_Open = function(mailNo)
       cPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(mailCashProductNoRaw)
     end
     if cPSSW ~= nil then
+      (self._itemSlot):clearItem()
+      ;
       (self._itemSlot):setItemByCashProductStaticStatus(cPSSW, RequestMail_getMailItemCount())
       ;
       (self._iconBase):SetShow(true)
@@ -223,6 +225,8 @@ Mail_Detail_Open = function(mailNo)
     do
       local mailItem = mail_getMailItemStatic()
       if mailItem ~= nil then
+        (self._itemSlot):clearItem()
+        ;
         (self._itemSlot):setItemByStaticStatus(mailItem, RequestMail_getMailItemCount())
         ;
         (self._iconBase):SetShow(true)

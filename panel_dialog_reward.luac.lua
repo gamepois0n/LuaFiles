@@ -390,10 +390,9 @@ end
 
 FGlobal_getSelectRewardPosition = function()
   -- function num : 0_9 , upvalues : _uiButtonSelectRewardSlots
-  local Position = {_Return = false, _PosX = -1, _PosY = -1}
-  Position._Return = true
-  Position._PosX = (_uiButtonSelectRewardSlots[0]):GetPosX() + Panel_Npc_Quest_Reward:GetPosX()
-  Position._PosY = (_uiButtonSelectRewardSlots[0]):GetPosY() + Panel_Npc_Quest_Reward:GetPosY()
+  local Position = {_PosX = 0, _PosY = 0}
+  Position._PosX = (_uiButtonSelectRewardSlots[0]):GetPosX() + Panel_Npc_Quest_Reward:GetPosX() + (_uiButtonSelectRewardSlots[0]):GetSizeX() / 2
+  Position._PosY = (_uiButtonSelectRewardSlots[0]):GetPosY() + Panel_Npc_Quest_Reward:GetPosY() + (_uiButtonSelectRewardSlots[0]):GetSizeY() / 2
   return Position
 end
 

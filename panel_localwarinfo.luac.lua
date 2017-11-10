@@ -604,7 +604,7 @@ LocalWawrInfo_ClickedJoinLocalWar = function(index, isLimitLocalWar)
   local limitAttack = ToClient_GetAttackForLimitedLocalWar()
   local limitDefence = ToClient_GetDefenseForLimitedLocalWar()
   local limitADSum = ToClient_GetADSummaryForLimitedLocalWar()
-  local isMineADSum = getOffence() + getDefence()
+  local isMineADSum = ToClient_getOffence() + ToClient_getDefence()
   if not isLimitLocalWar and getLevel < 50 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_LEVELLIMIT"))
     return 
@@ -613,10 +613,10 @@ LocalWawrInfo_ClickedJoinLocalWar = function(index, isLimitLocalWar)
     if litmitLevel <= getLevel then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_LEVEL_LIMIT"))
     else
-      if limitAttack <= getOffence() then
+      if limitAttack <= ToClient_getOffence() then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ATTACK_LIMIT"))
       else
-        if limitDefence <= getDefence() then
+        if limitDefence <= ToClient_getDefence() then
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DEFENCE_LIMIT"))
         else
           if limitADSum <= isMineADSum then

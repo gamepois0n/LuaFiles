@@ -106,8 +106,13 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
             (self._uiButtonApplyCash):SetMonoTone(true)
             ;
             (self._uiButtonApplyCash):SetAlpha(0.85)
-            ;
-            (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
+            local hasCashItem = doHaveContentsItem(27, 0, false)
+            if hasCashItem then
+              (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
+            else
+              ;
+              (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6, 1 )")
+            end
             local isReady = PaGlobal_FixEquip:isReadyToReapirMaxEndurance()
             if isReady == true then
               (self._uiButtonApply):AddEffect("UI_Equip_Repair", true, 0, 0)
@@ -121,7 +126,6 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
               (self._uiButtonApply):SetAlpha(1)
               ;
               (self._uiButtonApply):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( false )")
-              local hasCashItem = doHaveContentsItem(27, 0, false)
               if hasCashItem == true then
                 (self._uiButtonApplyCash):AddEffect("UI_Equip_Repair", true, 0, 0)
                 ;
@@ -130,25 +134,26 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
                 (self._uiButtonApplyCash):SetAlpha(1)
                 ;
                 (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_FixEquip:fixEquip_ApplyButton( true )")
+              else
+                ;
+                (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open(3,6,1 )")
               end
               PaGlobal_FixEquip:fixEquip_clearDataStreamRecovery(true, "Panel_FixEquip_InteractortionFromInventory")
             else
-              do
-                ;
-                (self._uiButtonApply):EraseAllEffect()
-                ;
-                (self._uiButtonApply):SetIgnore(true)
-                ;
-                (self._uiButtonApply):SetMonoTone(true)
-                ;
-                (self._uiButtonApply):SetEnable(false)
-                ;
-                (self._uiButtonApply):SetAlpha(0.85)
-                ;
-                (self._uiButtonApply):addInputEvent("Mouse_LUp", "")
-                PaGlobal_FixEquip:fixEquip_MouseEvent_OutSlots_Done(true)
-              end
+              ;
+              (self._uiButtonApply):EraseAllEffect()
+              ;
+              (self._uiButtonApply):SetIgnore(true)
+              ;
+              (self._uiButtonApply):SetMonoTone(true)
+              ;
+              (self._uiButtonApply):SetEnable(false)
+              ;
+              (self._uiButtonApply):SetAlpha(0.85)
+              ;
+              (self._uiButtonApply):addInputEvent("Mouse_LUp", "")
             end
+            PaGlobal_FixEquip:fixEquip_MouseEvent_OutSlots_Done(true)
           end
         end
       end
@@ -311,7 +316,7 @@ PaGlobal_FixEquip.fixEquip_ApplyButton = function(self, isHelpRepair)
         ;
         (self._uiButtonApplyCash):SetAlpha(0.85)
         ;
-        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "")
+        (self._uiButtonApplyCash):addInputEvent("Mouse_LUp", "PaGlobal_EasyBuy:Open( 3, 6, 1 )")
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_USECASHALL"))
         return 
       end

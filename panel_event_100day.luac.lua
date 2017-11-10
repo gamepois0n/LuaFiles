@@ -56,7 +56,11 @@ HandleClickedChallengeReward = function()
     Panel_Window_CharInfo_Status:SetShow(true)
     audioPostEvent_SystemUi(1, 34)
   end
-  HandleClicked_CharacterInfo_Tab(3)
+  if isNewCharacterInfo() == false then
+    HandleClicked_CharacterInfo_Tab(3)
+  else
+    PaGlobal_CharacterInfo:showWindow(3)
+  end
   HandleClickedTapButton(2)
   Panel_Event_100Day:SetShow(false)
 end

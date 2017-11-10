@@ -712,7 +712,7 @@ HandleClicked_petControl_Seal = function(index)
   end
 end
 
-HandleClicked_petControl_AllUnSeal = function()
+HandleClicked_petControl_AllUnSeal = function(groupIndex)
   -- function num : 0_21 , upvalues : maxUnsealCount, petIcon
   for index = 0, maxUnsealCount - 1 do
     local self = petIcon[index]
@@ -720,15 +720,20 @@ HandleClicked_petControl_AllUnSeal = function()
     local PetUnSealData = ToClient_getPetUnsealedDataByIndex(index)
     if PetUnSealData ~= nil then
       local unsealPetNo_s64 = PetUnSealData:getPcPetNo()
-      FGlobal_petListNew_Seal(tostring(unsealPetNo_s64), index)
+      -- DECOMPILER ERROR at PC31: Unhandled construct in 'MakeBoolean' P1
+
+      if groupIndex ~= nil and (checkUnSealGroupList[groupIndex])[Int64toInt32(unsealPetNo_s64)] ~= true then
+        FGlobal_petListNew_Seal(tostring(unsealPetNo_s64), index)
+      end
     end
+    FGlobal_petListNew_Seal(tostring(unsealPetNo_s64), index)
   end
   PetList_VScroll_MoveTop()
 end
 
-FGlobal_HandleClicked_petControl_AllUnSeal = function()
+FGlobal_HandleClicked_petControl_AllUnSeal = function(groupIndex)
   -- function num : 0_22
-  HandleClicked_petControl_AllUnSeal()
+  HandleClicked_petControl_AllUnSeal(groupIndex)
 end
 
 local unSealPetCounting = 0

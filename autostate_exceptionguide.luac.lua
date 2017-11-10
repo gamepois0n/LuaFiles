@@ -3,28 +3,40 @@
 
 -- params : ...
 -- function num : 0
-AutoState_ExceptionGuide = {_state = AutoStateType.DEAD, _pressDelay = 0, _printTime = 3, 
+AutoState_ExceptionGuide = {_state = AutoStateType.DEAD, 
 _targetQuestList = {
+{652, 2}
+, 
 {655, 5}
+, 
+{652, 8}
+, 
+{653, 6}
+, 
+{653, 7}
+, 
+{657, 2}
+, 
+{658, 2}
+, 
+{658, 3}
 }
 , 
-_uiQuestInfo = {}
-, 
-_currentQuest = {}
+_targetQuestListNoHunt = {
+{652, 3}
 }
--- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
+, _uiQuestInfo = nil}
+-- DECOMPILER ERROR at PC50: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_ExceptionGuide.init = function(self)
   -- function num : 0_0
-  self._currentQuest = {}
-  self._uiQuestInfo = {}
+  self._uiQuestInfo = nil
 end
 
--- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC53: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_ExceptionGuide.start = function(self)
   -- function num : 0_1
-  self._pressDelay = self._printTime
   local questList = ToClient_GetQuestList()
   local uiQuestInfo = questList:getMainQuestInfo()
   if uiQuestInfo == nil or self:checkException((uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest) == false then
@@ -32,60 +44,52 @@ AutoState_ExceptionGuide.start = function(self)
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
     return 
   end
-  self._currentQuest = {(uiQuestInfo:getQuestNo())._group, (uiQuestInfo:getQuestNo())._quest}
   self._uiQuestInfo = uiQuestInfo
+  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_EXCEPTIONGUIDE_" .. tostring((uiQuestInfo:getQuestNo())._group) .. "_" .. tostring((uiQuestInfo:getQuestNo())._quest) .. "_2"))
 end
 
--- DECOMPILER ERROR at PC26: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC56: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_ExceptionGuide.update = function(self, deltaTime)
   -- function num : 0_2
-  self._pressDelay = self._pressDelay + deltaTime
-  if self._printTime < self._pressDelay then
-    self._pressDelay = 0
-    FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_EXCEPTIONGUIDE_" .. tostring((self._currentQuest)[1]) .. "_" .. tostring((self._currentQuest)[2])))
-  end
   if (self._uiQuestInfo):isSatisfied() == true then
     Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
     return 
   end
-  local questCondition = nil
-  if isAccepted == 0 then
-    questCondition = QuestConditionCheckType.eQuestConditionCheckType_NotAccept
-  else
-    questCondition = QuestConditionCheckType.eQuestConditionCheckType_Progress
+  if Auto_FindNearQuestMonster() == true then
+    Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
+    return 
   end
-  do
-    local isComplete = questCondition == QuestConditionCheckType.eQuestConditionCheckType_Complete
-    if isComplete == true then
-      Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
-      return 
-    end
-    if Auto_FindNearQuestMonster() == true then
-      Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
-      return 
-    end
-    if Auto_IsPlayerInsideQuestArea(self._uiQuestInfo) ~= 0 then
-      Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
-      return 
-    end
-    -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  if Auto_IsPlayerInsideQuestArea(self._uiQuestInfo) ~= 0 then
+    Auto_TransferState(AutoStateType.WAIT_FOR_PRESSBUTTON)
+    return 
   end
 end
 
--- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_ExceptionGuide.endProc = function(self)
   -- function num : 0_3
-  self._currentQuest = {}
-  self._uiQuestInfo = {}
+  self._uiQuestInfo = nil
 end
 
--- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC62: Confused about usage of register: R0 in 'UnsetPending'
 
 AutoState_ExceptionGuide.checkException = function(self, groupNo, questNo)
   -- function num : 0_4
   for _,tempQuest in pairs(self._targetQuestList) do
+    if tempQuest[1] == groupNo and tempQuest[2] == questNo then
+      return true
+    end
+  end
+  return false
+end
+
+-- DECOMPILER ERROR at PC65: Confused about usage of register: R0 in 'UnsetPending'
+
+AutoState_ExceptionGuide.noHunt = function(self, groupNo, questNo)
+  -- function num : 0_5
+  for _,tempQuest in pairs(self._targetQuestListNoHunt) do
     if tempQuest[1] == groupNo and tempQuest[2] == questNo then
       return true
     end

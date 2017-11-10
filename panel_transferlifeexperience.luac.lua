@@ -10,6 +10,8 @@ Panel_TransferLifeExperience:RegisterShowEventFunc(true, "TransferLife_ShowAni()
 Panel_TransferLifeExperience:RegisterShowEventFunc(false, "TransferLife_HideAni()")
 Panel_TransferLifeExperience:ActiveMouseEventEffect(true)
 Panel_TransferLifeExperience:setGlassBackground(true)
+local itemEquipType_FishingRod = 44
+local TransferLifeType_Fishing = 1
 local TransferLife = {itemWhereType = nil, itemSlotNo = nil, itemLifeType = nil, characterIndex = nil, characterNo_64 = nil, title = (UI.getChildControl)(Panel_TransferLifeExperience, "StaticText_Title"), panelBG = (UI.getChildControl)(Panel_TransferLifeExperience, "Static_PanelBG"), btn_Confirm = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Confirm"), btn_Cancel = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Cancel"), btn_Close = (UI.getChildControl)(Panel_TransferLifeExperience, "Button_Win_Close"), _scroll = (UI.getChildControl)(Panel_TransferLifeExperience, "Scroll_TransferLife"), notify = (UI.getChildControl)(Panel_TransferLifeExperience, "Static_Notify"), maxSlotCount = 4, listCount = 0, startPos_characterBtn = 5, startCharacterIdx = 0, 
 Slot = {}
 , _selectCharacterIndex = -1, _posX = 0, _posY = 0}
@@ -474,18 +476,34 @@ registerEvent("FromClient_TransferLifeExperience", "FromClient_TransferLifeExper
 registerEvent("FromClient_RequestUseExchangeBattleAndSkillExp", "FromClient_RequestUseExchangeBattleAndSkillExp")
 registerEvent("FromClient_ResponseExchangeBattleAndSkillExp", "FromClient_ResponseExchangeBattleAndSkillExp")
 FromClient_RequestUseTransferLifeExperience = function(fromWhereType, fromSlotNo, lifeType)
-  -- function num : 0_11 , upvalues : TransferLife, TransferLife_Update
-  local self = TransferLife
-  self.itemWhereType = fromWhereType
-  self.itemSlotNo = fromSlotNo
-  self.itemLifeType = lifeType
-  self.startCharacterIdx = 0
-  TransferLife_Update()
-  TransferLife_Open()
-  ;
-  (TransferLife.btn_Confirm):addInputEvent("Mouse_LUp", "TransferLife_Confirm(" .. 0 .. ")")
-  ;
-  (self.title):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TRANSFERLIFEXPERIENCE_TITLE"))
+  -- function num : 0_11 , upvalues : TransferLifeType_Fishing, itemEquipType_FishingRod, TransferLife, TransferLife_Update
+  if TransferLifeType_Fishing == lifeType then
+    local itemWrapper = ToClient_getEquipmentItem(0)
+    if itemWrapper ~= nil then
+      local itemSSW = itemWrapper:getStaticStatus()
+      if itemEquipType_FishingRod == itemSSW:getEquipType() then
+        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TRANSFER_LIFE_CANTUSE_EQUIPFISHINGITEM"))
+        return 
+      end
+    end
+  end
+  do
+    if ToClient_getEquipmentItem(2) ~= nil then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TRANSFER_LIFE_CANTUSE_EQUIPLIFEITEM"))
+      return 
+    end
+    local self = TransferLife
+    self.itemWhereType = fromWhereType
+    self.itemSlotNo = fromSlotNo
+    self.itemLifeType = lifeType
+    self.startCharacterIdx = 0
+    TransferLife_Update()
+    TransferLife_Open()
+    ;
+    (TransferLife.btn_Confirm):addInputEvent("Mouse_LUp", "TransferLife_Confirm(" .. 0 .. ")")
+    ;
+    (self.title):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TRANSFERLIFEXPERIENCE_TITLE"))
+  end
 end
 
 FromClient_TransferLifeExperience = function(lifeType)

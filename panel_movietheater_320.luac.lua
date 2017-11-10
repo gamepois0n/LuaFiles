@@ -84,7 +84,7 @@ Panel_MovieTheater320_ShowToggle = function()
   if Panel_MovieTheater_MessageBox:IsShow() == true then
     return 
   end
-  if isGameTypeKR2() then
+  if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     return 
   end
   value_Panel_MovieTheater_320_IsCheckedShow = true

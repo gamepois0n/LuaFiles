@@ -1298,6 +1298,10 @@ PaGlobal_CheckedQuest.doGuideQuest = function(self)
   ;
   (self._uiHistoryButton):SetPosY(Panel_CheckedQuest:GetSizeY())
   ;
+  (self._uiGuideButton):SetPosX((self._uiHistoryButton):GetPosX() - (self._uiGuideButton):GetSizeX() - 5)
+  ;
+  (self._uiGuideButton):SetPosY(Panel_CheckedQuest:GetSizeY())
+  ;
   (self._uiFindGuild):SetPosX(0)
   ;
   (self._uiFindGuild):SetPosY(Panel_CheckedQuest:GetSizeY())

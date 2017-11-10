@@ -52,9 +52,12 @@ ItemMarket.edit_SpecialItemName = (UI.getChildControl)(ItemMarket.specialListHea
 ItemMarket.btn_SpecialSearch = (UI.getChildControl)(ItemMarket.specialListHeadBG, "Button_Search")
 ItemMarket.btn_Sort_AverageTradePrice = (UI.getChildControl)(ItemMarket.static_ListHeadBG, "Button_SortAverageTradePrice")
 ItemMarket.btn_Sort_RecentRegistDate = (UI.getChildControl)(ItemMarket.static_ListHeadBG, "Button_SortRecentRegistDate")
+ItemMarket.btn_Sort_RegistItemCount = (UI.getChildControl)(ItemMarket.static_ListHeadBG, "Button_SortRegistItemCount")
 ItemMarket.btn_FavoriteOnOff = (UI.getChildControl)(ItemMarket.static_ListHeadBG, "Button_FavoriteOnOff")
 ;
 (ItemMarket.btn_Sort_AverageTradePrice):setNotImpactScrollEvent(true)
+;
+(ItemMarket.btn_Sort_RegistItemCount):setNotImpactScrollEvent(true)
 ;
 (ItemMarket.btn_Sort_RecentRegistDate):setNotImpactScrollEvent(true)
 ItemMarket.combobox_Filter_Sort1 = (UI.getChildControl)(ItemMarket.static_ListHeadBG, "Combobox_Sort1")
@@ -2405,29 +2408,35 @@ end
 
 _itemMarket_ShowIconToolTip = function(isShow, iconType)
   -- function num : 0_30 , upvalues : ItemMarket
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
   local self = ItemMarket
-  if iconType == 13 then
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_AVGTRADEITEM_NAME")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_AVGTRADEITEM_DESC")
-    uiControl = self.btn_Sort_AverageTradePrice
+  if iconType == 12 then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_REGISTITEMCOUNT_NAME")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_REGISTITEMCOUNT_DESC")
+    uiControl = self.btn_Sort_RegistItemCount
   else
-    if iconType == 14 then
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_RECENTREGISTDATE_NAME")
-      desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_RECENTREGISTDATE_DESC")
-      uiControl = self.btn_Sort_RecentRegistDate
+    if iconType == 13 then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_AVGTRADEITEM_NAME")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_AVGTRADEITEM_DESC")
+      uiControl = self.btn_Sort_AverageTradePrice
     else
-      if iconType == 15 then
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_BACKPAGE_NAME")
-        desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_BACKPAGE_DESC")
-        uiControl = self.btn_BackPage
+      if iconType == 14 then
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_RECENTREGISTDATE_NAME")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_SORT_RECENTREGISTDATE_DESC")
+        uiControl = self.btn_Sort_RecentRegistDate
+      else
+        if iconType == 15 then
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_BACKPAGE_NAME")
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_BACKPAGE_DESC")
+          uiControl = self.btn_BackPage
+        end
       end
     end
   end
-  if isShow == true then
-    TooltipSimple_Show(uiControl, name, desc)
-  else
-    TooltipSimple_Hide()
-  end
+  TooltipSimple_Show(uiControl, name, desc)
 end
 
 _itemMarket_MoneyToolTip = function(isShow, tipType)
@@ -3372,27 +3381,38 @@ HandleClicked_ItemMarket_ItemSort = function(sortTarget)
   -- function num : 0_49 , upvalues : ItemMarket
   local self = ItemMarket
   self.selectItemSort = sortTarget
+  _itemMarket_ChangeTextureBySort(self.btn_Sort_RegistItemCount, 2, true)
   _itemMarket_ChangeTextureBySort(self.btn_Sort_AverageTradePrice, 3, true)
   _itemMarket_ChangeTextureBySort(self.btn_Sort_RecentRegistDate, 4, true)
   local sortValue = false
   local control = nil
-  if sortTarget == 3 then
+  if sortTarget == 2 then
     self.isSort_ItemName = true
     self.isSort_RecentPrice = true
-    self.isSort_RegistItemCount = true
-    self.isSort_AverageTradePrice = not self.isSort_AverageTradePrice
+    self.isSort_RegistItemCount = not self.isSort_RegistItemCount
+    self.isSort_AverageTradePrice = true
     self.isSort_RecentRegistDate = true
-    sortValue = self.isSort_AverageTradePrice
-    control = self.btn_Sort_AverageTradePrice
+    sortValue = self.isSort_RegistItemCount
+    control = self.btn_Sort_RegistItemCount
   else
-    if sortTarget == 4 then
+    if sortTarget == 3 then
       self.isSort_ItemName = true
       self.isSort_RecentPrice = true
       self.isSort_RegistItemCount = true
-      self.isSort_AverageTradePrice = true
-      self.isSort_RecentRegistDate = not self.isSort_RecentRegistDate
-      sortValue = self.isSort_RecentRegistDate
-      control = self.btn_Sort_RecentRegistDate
+      self.isSort_AverageTradePrice = not self.isSort_AverageTradePrice
+      self.isSort_RecentRegistDate = true
+      sortValue = self.isSort_AverageTradePrice
+      control = self.btn_Sort_AverageTradePrice
+    else
+      if sortTarget == 4 then
+        self.isSort_ItemName = true
+        self.isSort_RecentPrice = true
+        self.isSort_RegistItemCount = true
+        self.isSort_AverageTradePrice = true
+        self.isSort_RecentRegistDate = not self.isSort_RecentRegistDate
+        sortValue = self.isSort_RecentRegistDate
+        control = self.btn_Sort_RecentRegistDate
+      end
     end
   end
   self.isChangeSort = true
@@ -3417,6 +3437,7 @@ _itemMarket_ResetTextureBySort = function(control)
   self.isSort_RegistItemCount = true
   self.isSort_AverageTradePrice = true
   self.isSort_RecentRegistDate = true
+  _itemMarket_ChangeTextureBySort(self.btn_Sort_RegistItemCount, 2, true)
   _itemMarket_ChangeTextureBySort(self.btn_Sort_AverageTradePrice, 3, true)
   _itemMarket_ChangeTextureBySort(self.btn_Sort_RecentRegistDate, 4, true)
 end
@@ -4248,6 +4269,8 @@ ItemMarket.registEventHandler = function(self)
   ;
   (self.edit_SpecialItemName):RegistReturnKeyEvent("FGolbal_ItemMarketNew_SpecialSearch()")
   ;
+  (self.btn_Sort_RegistItemCount):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_ItemSort( " .. 2 .. " )")
+  ;
   (self.btn_Sort_AverageTradePrice):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_ItemSort( " .. 3 .. " )")
   ;
   (self.btn_Sort_RecentRegistDate):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarket_ItemSort( " .. 4 .. " )")
@@ -4277,6 +4300,10 @@ ItemMarket.registEventHandler = function(self)
   (self._buttonQuestion):addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"ItemMarket\", \"true\")")
   ;
   (self._buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"ItemMarket\", \"false\")")
+  ;
+  (self.btn_Sort_RegistItemCount):addInputEvent("Mouse_On", "_itemMarket_ShowIconToolTip( true, " .. 12 .. " )")
+  ;
+  (self.btn_Sort_RegistItemCount):addInputEvent("Mouse_Out", "_itemMarket_ShowIconToolTip( false )")
   ;
   (self.btn_Sort_AverageTradePrice):addInputEvent("Mouse_On", "_itemMarket_ShowIconToolTip( true, " .. 13 .. " )")
   ;

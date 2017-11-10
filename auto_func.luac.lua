@@ -8,9 +8,9 @@ Auto_MouseMove = function(posX, posY)
   if posX < 0 or posY < 0 then
     return true
   end
+  local updateMoveSize = 10
   local nowX = getMousePosX()
   local nowY = getMousePosY()
-  local updateMoveSize = 8
   if updateMoveSize < (math.abs)(nowX - posX) then
     if nowX < posX then
       nowX = nowX + updateMoveSize

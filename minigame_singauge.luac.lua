@@ -41,6 +41,9 @@ end
 
 local SinGaugeBar_OnFail = function()
   -- function num : 0_1 , upvalues : isFinished, _sinGauge_Result_Bad
+  if isFinished then
+    return 
+  end
   audioPostEvent_SystemUi(11, 7)
   isFinished = true
   ;
@@ -54,7 +57,7 @@ end
 
 local gaugeSpeed = 0.8
 SinGaugeBar_UpdateGauge = function()
-  -- function num : 0_2 , upvalues : preTick, gaugeSpeed, sinGaugeBarStart, gaugeBarSizeX, gaugeIsGrowing, _sinGaugeBar, checkGaugeCount, isFinished, SinGaugeBar_OnFail
+  -- function num : 0_2 , upvalues : preTick, gaugeSpeed, sinGaugeBarStart, gaugeBarSizeX, gaugeIsGrowing, _sinGaugeBar, checkGaugeCount, SinGaugeBar_OnFail
   local currentTick = getTickCount32()
   local deltaTick = currentTick - preTick
   local deltaTime = deltaTick / 1000 * gaugeSpeed
@@ -91,7 +94,6 @@ SinGaugeBar_UpdateGauge = function()
   end
   preTick = currentTick
   if checkGaugeCount == 3 then
-    isFinished = true
     SinGaugeBar_OnFail()
   end
 end
@@ -155,7 +157,6 @@ MiniGame_SinGauge_KeyPress = function(keyType)
         _sinGauge_Result_Good:SetVertexAniRun("Good_AniEnd", true)
         _sinGauge_Result_Good:SetShow(true)
       else
-        isFinished = true
         SinGaugeBar_OnFail()
       end
     end

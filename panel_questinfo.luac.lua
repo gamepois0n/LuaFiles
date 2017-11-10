@@ -289,6 +289,7 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
       questInfoWindow_questDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
       questInfoWindow_questDesc:SetAutoResize(true)
       questInfoWindow_questDesc:SetText(tostring(questInfo:getDesc()))
+      questInfoWindow_questDesc:setLocalizedStaticType(18)
       questInfoWindow_questDesc:setLocalizedKey(questInfo:getDescLocalizedKey())
       questInfoWindow_questDesc:SetIgnore(false)
       questInfoWindow_questDesc:SetSize(questInfoWindow_questDesc:GetSizeX(), questInfoWindow_questDesc:GetSizeY() + 10)

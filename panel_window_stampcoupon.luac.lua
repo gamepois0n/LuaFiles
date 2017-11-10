@@ -4,29 +4,45 @@
 -- params : ...
 -- function num : 0
 Panel_Window_StampCoupon:SetShow(false, false)
+Panel_Window_StampCoupon:SetDragEnable(true)
+Panel_Window_StampCoupon:SetDragAll(true)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_TM = CppEnums.TextMode
 local UI_TT = CppEnums.PAUI_TEXTURE_TYPE
-local PearlStamp = {tempStampSlot = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_DaySlot"), tempStamp = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_Stamp"), btnClose = (UI.getChildControl)(Panel_Window_StampCoupon, "Button_Win_Close"), staticPageNoText = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_PageNo"), 
+local PearlStamp = {tempStampSlot = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_StampBG"), tempStamp = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_Stamp"), btnClose = (UI.getChildControl)(Panel_Window_StampCoupon, "Button_Win_Close"), staticPageNoText = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_PageNo"), staticBG = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_Bg"), 
 pearlStampControl = {}
 , 
 slotConfig = {createIcon = true, createBorder = true, createCount = true, createClassEquipBG = true, createCash = true}
 , pearlStampCount = 10, userPearlStampCount = 0, prevPearlStampCount = 0, pearlStampWrapper = nil, maxPageNo = 0, currentPageNo = 0}
-local basePosX = (PearlStamp.tempStampSlot):GetPosX() + 30
-local basePosY = (PearlStamp.tempStampSlot):GetPosY() + 10
-local gapX = 10
-local gapY = 10
+PearlStamp.staticBG2 = (UI.getChildControl)(PearlStamp.staticBG, "Static_Bg2")
+local basePosX = (PearlStamp.tempStampSlot):GetPosX()
+local basePosY = (PearlStamp.tempStampSlot):GetPosY()
+local gapX = 2
+local gapY = 2
 local isOpenPearlStamp = ToClient_IsContentsGroupOpen("308")
 PearlStamp.Init = function(self)
   -- function num : 0_0 , upvalues : basePosX, gapX, basePosY, gapY
   self.pearlStampWrapper = ToClient_GetPearlStampWrapper()
-  local staticBottom = (UI.getChildControl)(Panel_Window_StampCoupon, "Static_BottomDesc")
-  local textStampEtc = (UI.getChildControl)(staticBottom, "StaticText_BottomDesc")
+  local staticBottom = (UI.getChildControl)(Panel_Window_StampCoupon, "StaticText_BottomDesc")
   local pearlstandvalue = (self.pearlStampWrapper):getUsePearlStampStandard()
   local text = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PEARLSTAMP_DESC", "pearlCount", tostring(pearlstandvalue))
-  textStampEtc:SetText(text)
+  staticBottom:setPadding((CppEnums.Padding).ePadding_Left, 10)
+  staticBottom:setPadding((CppEnums.Padding).ePadding_Top, 10)
+  staticBottom:setPadding((CppEnums.Padding).ePadding_Right, 10)
+  staticBottom:setPadding((CppEnums.Padding).ePadding_Bottom, 10)
+  staticBottom:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  staticBottom:SetText(text)
+  staticBottom:SetSize(staticBottom:GetSizeX(), staticBottom:GetTextSizeY() + 20)
+  Panel_Window_StampCoupon:SetSize(Panel_Window_StampCoupon:GetSizeX(), 310 + staticBottom:GetSizeY())
+  ;
+  (self.staticBG):SetSize((self.staticBG):GetSizeX(), Panel_Window_StampCoupon:GetSizeY() - 70)
+  ;
+  (self.staticBG2):SetSize((self.staticBG2):GetSizeX(), (self.staticBG):GetSizeY())
+  staticBottom:ComputePos()
+  ;
+  (self.staticBG2):ComputePos()
   local prevButton = (UI.getChildControl)(Panel_Window_StampCoupon, "Button_Prev")
   prevButton:addInputEvent("Mouse_LUp", "FGlobal_PearlStamp_ShowPrevPage()")
   local prevButton = (UI.getChildControl)(Panel_Window_StampCoupon, "Button_Next")
@@ -41,15 +57,6 @@ PearlStamp.Init = function(self)
     (temp._dayControl):SetPosY(basePosY + ((self.tempStampSlot):GetSizeY() + gapY) * (math.floor)(index / 5))
     ;
     (temp._dayControl):ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/StampCoupon_00.dds")
-    temp.slot = {}
-    ;
-    (SlotItem.new)(temp.slot, "PearlStamp_Reward_", index, temp._dayControl, self.slotConfig)
-    ;
-    (temp.slot):createChild()
-    ;
-    ((temp.slot).icon):SetPosX(40)
-    ;
-    ((temp.slot).icon):SetPosY(50)
     temp._stamp = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, temp._dayControl, "Static_DailyStamp_StampIcon_" .. index)
     CopyBaseProperty(self.tempStamp, temp._stamp)
     ;
@@ -58,6 +65,15 @@ PearlStamp.Init = function(self)
     (temp._stamp):SetPosY(0)
     ;
     (temp._stamp):ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/StampCoupon_00.dds")
+    temp.slot = {}
+    ;
+    (SlotItem.new)(temp.slot, "PearlStamp_Reward_", index, temp._dayControl, self.slotConfig)
+    ;
+    (temp.slot):createChild()
+    ;
+    ((temp.slot).icon):SetPosX(40)
+    ;
+    ((temp.slot).icon):SetPosY(40)
     local pearlcount = Int64toInt32((self.pearlStampWrapper):getUsePearlStampCount(index + 1))
     local isSpecial = false
     if pearlcount > 0 then
@@ -66,7 +82,7 @@ PearlStamp.Init = function(self)
     temp._isSpecial = isSpecial
     ;
     (temp._dayControl):SetShow(true)
-    -- DECOMPILER ERROR at PC164: Confused about usage of register: R14 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC228: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self.pearlStampControl)[index] = temp
@@ -122,10 +138,19 @@ FGlobal_PearlStamp_ShowNextPage = function()
   end
 end
 
-FGlboal_PearlStamp_UpdatePage = function(pageno, from, to)
+FGlobal_PearlStamp_ShowTooltip = function(index, pearlCount)
   -- function num : 0_5 , upvalues : PearlStamp
   local self = PearlStamp
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_PEARLSTAMP_SLOT_TOOLTIP_TITLE")
+  local desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PEARLSTAMP_SLOT_TOOLTIP_DESC", "pearl", pearlCount)
+  TooltipSimple_Show((((self.pearlStampControl)[index]).slot).icon, name, desc)
+end
+
+FGlboal_PearlStamp_UpdatePage = function(pageno, from, to)
+  -- function num : 0_6 , upvalues : PearlStamp
+  local self = PearlStamp
   local prevPageCount = (pageno - 1) * self.pearlStampCount
+  local originalPageCount = prevPageCount
   local addedPearlCount = prevPageCount / (self.pearlStampWrapper):getPearlStampMax()
   local maxcount = (self.pearlStampWrapper):getUsePearlStampCount((self.pearlStampWrapper):getPearlStampMax())
   addedPearlCount = Int64toInt32(addedPearlCount) * Int64toInt32(maxcount)
@@ -150,52 +175,57 @@ FGlboal_PearlStamp_UpdatePage = function(pageno, from, to)
     if pearlcount > 0 then
       isSpecial = true
     end
+    originalPageCount = index + originalPageCount + 1
     if to < index then
       (((self.pearlStampControl)[index])._dayControl):SetShow(true)
       ;
       (((self.pearlStampControl)[index])._stamp):SetShow(false)
       ;
       ((((self.pearlStampControl)[index]).slot).icon):SetShow(false)
-      FGlobal_PearlStamp_UpdateSlotTexture(R14_PC110, false, isSpecial)
-      FGlobal_PearlStamp_UpdateStampTexture(R14_PC110, isSpecial)
+      FGlobal_PearlStamp_UpdateSlotTexture(R15_PC113, false, isSpecial)
+      FGlobal_PearlStamp_UpdateStampTexture(R15_PC113, isSpecial)
     else
-      -- DECOMPILER ERROR at PC119: Overwrote pending register: R14 in 'AssignReg'
+      -- DECOMPILER ERROR at PC122: Overwrote pending register: R15 in 'AssignReg'
 
       ;
       (((self.pearlStampControl)[index])._dayControl):SetShow(true)
-      -- DECOMPILER ERROR at PC125: Overwrote pending register: R14 in 'AssignReg'
+      -- DECOMPILER ERROR at PC128: Overwrote pending register: R15 in 'AssignReg'
 
       ;
       (((self.pearlStampControl)[index])._dayControl):SetColor((Defines.Color).C_FFFFFFFF)
-      -- DECOMPILER ERROR at PC134: Overwrote pending register: R14 in 'AssignReg'
+      -- DECOMPILER ERROR at PC137: Overwrote pending register: R15 in 'AssignReg'
 
       ;
       ((((self.pearlStampControl)[index]).slot).icon):SetShow(false)
-      -- DECOMPILER ERROR at PC140: Overwrote pending register: R14 in 'AssignReg'
+      -- DECOMPILER ERROR at PC143: Overwrote pending register: R15 in 'AssignReg'
 
       ;
       (((self.pearlStampControl)[index])._stamp):SetPosX(0)
-      -- DECOMPILER ERROR at PC146: Overwrote pending register: R14 in 'AssignReg'
+      -- DECOMPILER ERROR at PC149: Overwrote pending register: R15 in 'AssignReg'
 
       ;
       (((self.pearlStampControl)[index])._stamp):SetPosY(0)
-      -- DECOMPILER ERROR at PC152: Overwrote pending register: R14 in 'AssignReg'
+      -- DECOMPILER ERROR at PC155: Overwrote pending register: R15 in 'AssignReg'
 
       ;
       (((self.pearlStampControl)[index])._stamp):SetScale(1, 1)
-      -- DECOMPILER ERROR at PC162: Overwrote pending register: R14 in 'AssignReg'
+      -- DECOMPILER ERROR at PC165: Overwrote pending register: R15 in 'AssignReg'
 
       if isSpecial then
         ((((self.pearlStampControl)[index]).slot).icon):SetShow(true)
-        -- DECOMPILER ERROR at PC166: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC169: Overwrote pending register: R15 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC167: Overwrote pending register: R14 in 'AssignReg'
+        -- DECOMPILER ERROR at PC170: Overwrote pending register: R15 in 'AssignReg'
 
-        local pearlcount = Int64toInt32(R14_PC110(R14_PC110, prevPageCount + index + 1))
+        local pearlcount = Int64toInt32(R15_PC113(R15_PC113, prevPageCount + index + 1))
         pearlcount = pearlcount + addedPearlCount
         local itemStatic = getItemEnchantStaticStatus((self.pearlStampWrapper):getPearlEnchantkey())
         ;
         (((self.pearlStampControl)[index]).slot):setItemByStaticStatus(itemStatic, pearlcount)
+        ;
+        ((((self.pearlStampControl)[index]).slot).icon):addInputEvent("Mouse_On", "FGlobal_PearlStamp_ShowTooltip(" .. R20_PC199 .. "," .. pearlcount .. ")")
+        ;
+        ((((self.pearlStampControl)[index]).slot).icon):addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
       end
       do
         do
@@ -224,13 +254,13 @@ FGlboal_PearlStamp_UpdatePage = function(pageno, from, to)
           (((self.pearlStampControl)[index])._stamp):SetScale(1, 1)
           ;
           (((self.pearlStampControl)[index])._stamp):SetShow(true)
-          FGlobal_PearlStamp_UpdateSlotTexture(R14_PC267, true, isSpecial)
-          FGlobal_PearlStamp_UpdateStampTexture(R14_PC267, isSpecial)
-          -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out DO_STMT
+          FGlobal_PearlStamp_UpdateSlotTexture(R15_PC291, true, isSpecial)
+          FGlobal_PearlStamp_UpdateStampTexture(R15_PC291, isSpecial)
+          -- DECOMPILER ERROR at PC296: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC296: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC272: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC296: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -239,7 +269,7 @@ FGlboal_PearlStamp_UpdatePage = function(pageno, from, to)
 end
 
 PearlStamp.GetIndex = function(self, pearlCount)
-  -- function num : 0_6
+  -- function num : 0_7
   if pearlCount <= 0 then
     return 0
   end
@@ -248,7 +278,7 @@ PearlStamp.GetIndex = function(self, pearlCount)
 end
 
 FGlobal_PearlStamp_Show = function()
-  -- function num : 0_7 , upvalues : PearlStamp
+  -- function num : 0_8 , upvalues : PearlStamp
   local self = PearlStamp
   local prevStampCount = self.prevPearlStampCount
   self.userPearlStampCount = ToClient_GetPearlStampCount()
@@ -282,12 +312,12 @@ FGlobal_PearlStamp_Show = function()
 end
 
 FGlobal_PearlStamp_Close = function()
-  -- function num : 0_8
+  -- function num : 0_9
   Panel_Window_StampCoupon:SetShow(false)
 end
 
 FGlobal_PearlStamp_ShowAni = function()
-  -- function num : 0_9 , upvalues : UI_ANI_ADV, UI_TT
+  -- function num : 0_10 , upvalues : UI_ANI_ADV, UI_TT
   Panel_Window_StampCoupon:ChangeSpecialTextureInfoName("new_ui_common_forlua/Default/Mask_MidHorizon.dds")
   local FadeMaskAni = Panel_Window_StampCoupon:addTextureUVAnimation(0, 0.2, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   FadeMaskAni:SetTextureType(UI_TT.PAUI_TEXTURE_TYPE_MASK)
@@ -303,24 +333,24 @@ FGlobal_PearlStamp_ShowAni = function()
 end
 
 FGlobal_PearlStamp_HideAni = function()
-  -- function num : 0_10
+  -- function num : 0_11
   Panel_Window_StampCoupon:SetAlpha(1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_Window_StampCoupon, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end
 
 FGlobal_PearlStamp_UpdateSlotTexture = function(index, isReceive, isSpecial)
-  -- function num : 0_11 , upvalues : PearlStamp
+  -- function num : 0_12 , upvalues : PearlStamp
   local self = PearlStamp
   ;
   (((self.pearlStampControl)[index])._dayControl):ChangeTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/StampCoupon_00.dds")
   ;
-  (((self.pearlStampControl)[index])._dayControl):ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/StampCoupon_00.dds")
-  ;
   (((self.pearlStampControl)[index])._dayControl):ChangeOnTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/StampCoupon_00.dds")
+  ;
+  (((self.pearlStampControl)[index])._dayControl):ChangeClickTextureInfoName("New_UI_Common_ForLua/Window/DailyCheck/StampCoupon_00.dds")
   if isReceive == false then
     if isSpecial == false then
-      local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 1, 165, 75, 239)
+      local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 159, 153, 244, 238)
       ;
       ((((self.pearlStampControl)[index])._dayControl):getBaseTexture()):setUV(x1, y1, x2, y2)
       ;
@@ -330,11 +360,11 @@ FGlobal_PearlStamp_UpdateSlotTexture = function(index, isReceive, isSpecial)
       ;
       (((self.pearlStampControl)[index])._dayControl):setRenderTexture((((self.pearlStampControl)[index])._dayControl):getBaseTexture())
       ;
-      (((self.pearlStampControl)[index])._dayControl):SetSize(74, 74)
+      (((self.pearlStampControl)[index])._dayControl):SetSize(85, 85)
     else
       do
         do
-          local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 76, 165, 158, 247)
+          local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 245, 153, 330, 238)
           ;
           ((((self.pearlStampControl)[index])._dayControl):getBaseTexture()):setUV(x1, y1, x2, y2)
           ;
@@ -344,9 +374,9 @@ FGlobal_PearlStamp_UpdateSlotTexture = function(index, isReceive, isSpecial)
           ;
           (((self.pearlStampControl)[index])._dayControl):setRenderTexture((((self.pearlStampControl)[index])._dayControl):getBaseTexture())
           ;
-          (((self.pearlStampControl)[index])._dayControl):SetSize(82, 82)
+          (((self.pearlStampControl)[index])._dayControl):SetSize(85, 85)
           if isSpecial == false then
-            local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 1, 250, 75, 324)
+            local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 159, 239, 244, 324)
             ;
             ((((self.pearlStampControl)[index])._dayControl):getBaseTexture()):setUV(x1, y1, x2, y2)
             ;
@@ -356,10 +386,10 @@ FGlobal_PearlStamp_UpdateSlotTexture = function(index, isReceive, isSpecial)
             ;
             (((self.pearlStampControl)[index])._dayControl):setRenderTexture((((self.pearlStampControl)[index])._dayControl):getBaseTexture())
             ;
-            (((self.pearlStampControl)[index])._dayControl):SetSize(74, 74)
+            (((self.pearlStampControl)[index])._dayControl):SetSize(85, 85)
           else
             do
-              local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 76, 250, 158, 332)
+              local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._dayControl, 245, 239, 330, 324)
               ;
               ((((self.pearlStampControl)[index])._dayControl):getBaseTexture()):setUV(x1, y1, x2, y2)
               ;
@@ -369,7 +399,7 @@ FGlobal_PearlStamp_UpdateSlotTexture = function(index, isReceive, isSpecial)
               ;
               (((self.pearlStampControl)[index])._dayControl):setRenderTexture((((self.pearlStampControl)[index])._dayControl):getBaseTexture())
               ;
-              (((self.pearlStampControl)[index])._dayControl):SetSize(82, 82)
+              (((self.pearlStampControl)[index])._dayControl):SetSize(85, 85)
             end
           end
         end
@@ -379,25 +409,25 @@ FGlobal_PearlStamp_UpdateSlotTexture = function(index, isReceive, isSpecial)
 end
 
 FGlobal_PearlStamp_UpdateStampTexture = function(index, isSpecial)
-  -- function num : 0_12 , upvalues : PearlStamp
+  -- function num : 0_13 , upvalues : PearlStamp
   local self = PearlStamp
   if isSpecial == false then
-    local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._stamp, 1, 79, 75, 153)
+    local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._stamp, 159, 72, 239, 152)
     ;
     ((((self.pearlStampControl)[index])._stamp):getBaseTexture()):setUV(x1, y1, x2, y2)
     ;
     (((self.pearlStampControl)[index])._stamp):setRenderTexture((((self.pearlStampControl)[index])._stamp):getBaseTexture())
     ;
-    (((self.pearlStampControl)[index])._stamp):SetSize(74, 74)
+    (((self.pearlStampControl)[index])._stamp):SetSize(80, 80)
   else
     do
-      local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._stamp, 76, 79, 158, 161)
+      local x1, y1, x2, y2 = setTextureUV_Func(((self.pearlStampControl)[index])._stamp, 240, 72, 320, 152)
       ;
       ((((self.pearlStampControl)[index])._stamp):getBaseTexture()):setUV(x1, y1, x2, y2)
       ;
       (((self.pearlStampControl)[index])._stamp):setRenderTexture((((self.pearlStampControl)[index])._stamp):getBaseTexture())
       ;
-      (((self.pearlStampControl)[index])._stamp):SetSize(82, 82)
+      (((self.pearlStampControl)[index])._stamp):SetSize(80, 80)
     end
   end
 end

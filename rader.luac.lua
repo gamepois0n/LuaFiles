@@ -43,6 +43,7 @@ local radar_regionWarName = (UI.getChildControl)(Panel_Radar, "StaticText_Region
 local radar_DangerIcon = (UI.getChildControl)(Panel_Radar, "Static_DangerArea")
 local redar_DangerAletText = (UI.getChildControl)(Panel_Radar, "StaticText_MonsterAlert")
 local radar_DangetAlertBg = (UI.getChildControl)(Panel_Radar, "Static_Alert")
+local radar_WarAlert = (UI.getChildControl)(Panel_Radar, "StaticText_WarAlert")
 radar_regionName:SetAutoResize(true)
 radar_regionName:SetNotAbleMasking(true)
 radar_regionNodeName:SetAutoResize(true)
@@ -56,16 +57,28 @@ redar_DangerAletText:SetShow(false)
 redar_DangerAletText:SetDepth(-9999)
 radar_DangetAlertBg:SetShow(false)
 radar_DangetAlertBg:SetDepth(-9998)
+radar_WarAlert:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+radar_WarAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADAR_WAR_NO_MONSTER"))
+radar_WarAlert:SetShow(false)
+radar_WarAlert:SetDepth(-9999)
 local raderAlert_Resize = function()
-  -- function num : 0_0 , upvalues : redar_DangerAletText, radar_DangetAlertBg
+  -- function num : 0_0 , upvalues : redar_DangerAletText, radar_WarAlert, radar_DangetAlertBg
   if redar_DangerAletText:GetSizeY() < redar_DangerAletText:GetTextSizeY() then
     redar_DangerAletText:SetSize(Panel_Radar:GetSizeX() - 60, redar_DangerAletText:GetSizeY() + 20)
   else
     redar_DangerAletText:SetSize(Panel_Radar:GetSizeX() - 60, redar_DangerAletText:GetSizeY())
   end
+  if radar_WarAlert:GetSizeY() < radar_WarAlert:GetTextSizeY() then
+    radar_WarAlert:SetSize(Panel_Radar:GetSizeX() - 60, radar_WarAlert:GetSizeY() + 20)
+  else
+    radar_WarAlert:SetSize(Panel_Radar:GetSizeX() - 60, radar_WarAlert:GetSizeY())
+  end
   redar_DangerAletText:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   redar_DangerAletText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTERALERT"))
   redar_DangerAletText:ComputePos()
+  radar_WarAlert:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  radar_WarAlert:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADAR_WAR_NO_MONSTER"))
+  radar_WarAlert:ComputePos()
   radar_DangetAlertBg:SetSize(Panel_Radar:GetSizeX() - 25, Panel_Radar:GetSizeY() - 25)
   radar_DangetAlertBg:ComputePos()
 end
@@ -742,7 +755,7 @@ SortRador_IconIndex = function()
   Panel_Radar:SetChildIndex(radar_MiniMapScl, 9999)
 end
 
--- DECOMPILER ERROR at PC1230: Confused about usage of register: R77 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1259: Confused about usage of register: R78 in 'UnsetPending'
 
 radarMap.getIdleIcon = function(self)
   -- function num : 0_29
@@ -756,14 +769,14 @@ radarMap.getIdleIcon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1234: Confused about usage of register: R77 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1263: Confused about usage of register: R78 in 'UnsetPending'
 
 radarMap.returnIconToPool = function(self, icon)
   -- function num : 0_30
   (self.iconPool):push_back(icon)
 end
 
--- DECOMPILER ERROR at PC1239: Confused about usage of register: R77 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1268: Confused about usage of register: R78 in 'UnsetPending'
 
 radarMap.getIdleQuest = function(self)
   -- function num : 0_31 , upvalues : QuestArrowHalfSize
@@ -788,7 +801,7 @@ radarMap.getIdleQuest = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1243: Confused about usage of register: R77 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1272: Confused about usage of register: R78 in 'UnsetPending'
 
 radarMap.returnQuestToPool = function(self, questIcon)
   -- function num : 0_32
@@ -1068,7 +1081,7 @@ end
 
 showUseLanternToolTip = function(param)
   -- function num : 0_37 , upvalues : useLanternAlertTime
-  local itemWrapper = getEquipmentItem(13)
+  local itemWrapper = ToClient_getEquipmentItem(13)
   if itemWrapper == nil and param == true and useLanternAlertTime < 100 then
     FGlobal_ShowUseLantern(true)
     useLanternAlertTime = useLanternAlertTime + 1
@@ -2580,8 +2593,13 @@ end
   end
 end
 
+  PaGlobal_Radar_WarAlert = function(isShow)
+  -- function num : 0_86 , upvalues : radar_WarAlert
+  radar_WarAlert:SetShow(isShow)
+end
+
   RaderResizeByReset = function()
-  -- function num : 0_86 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
+  -- function num : 0_87 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
   local raderCurrentSizeX = Panel_Radar:GetSizeX()
   local raderCurrentSizeY = Panel_Radar:GetSizeY()
   Panel_Radar:SetSize(raderCurrentSizeX, raderCurrentSizeY)
@@ -2618,7 +2636,7 @@ end
 end
 
   FGlobal_ResetRadarUI = function()
-  -- function num : 0_87 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
+  -- function num : 0_88 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
   RaderResizeByReset()
   radar_AlphaScrl:SetControlPos(ToClient_GetRaderAlpha() * 100)
   Rader_updateWorldMap_AlphaControl_Init()

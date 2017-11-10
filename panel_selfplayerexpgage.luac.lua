@@ -342,7 +342,7 @@ end
   _staticSkillPointMain:SetPosX(_staticSkillPoint:GetSizeX() + _staticSkillPoint:GetPosX() + 5)
   _staticSkillPointMain:SetText(tostring(player:getRemainSkillPoint()))
   if (CppEnums.CountryType).DEV == getGameServiceType() then
-    local skillPointInfo = getSkillPointInfo(0)
+    local skillPointInfo = ToClient_getSkillPointInfo(0)
     local skillPointLev = tostring(skillPointInfo._pointLevel)
     _staticSkillPointMain:SetText("(" .. skillPointLev .. ")" .. tostring(player:getRemainSkillPoint()))
   end
@@ -357,11 +357,8 @@ end
       _staticSkillExp_Head:AddEffect("fUI_Repair01", false, 0, 0)
     end
     local _tempSkillPoint = skillExpRate * 100
-    if _tempSkillPoint < 10 then
-      _staticSkillPointSub:SetText(".0" .. (string.format)("%.0f", _tempSkillPoint))
-    else
-      _staticSkillPointSub:SetText("." .. (string.format)("%.0f", _tempSkillPoint))
-    end
+    local skillPointExp = (string.format)("%.3f", _tempSkillPoint)
+    _staticSkillPointSub:SetText(" (" .. skillPointExp .. "%)")
     _lastSkillPoint = player:getRemainSkillPoint()
     _lastSkillExp = skillExpRate
     if ((selfPlayer:get()):getReservedLearningSkillKey()):isDefined() then
@@ -480,8 +477,8 @@ end
   Panel_Expgauge_MyContributeValue = 0
   contributePoint_UpdateFunc = function()
   -- function num : 0_17 , upvalues : _contribute_Main, _contribute_progress, _contribute_txt, isFirstExplore, lastRemainExplorePoint, lastExplorePoint, lastContRate, _contribute_progress_Head
-  local territoryKeyRaw = getDefaultTerritoryKey()
-  local explorePoint = getExplorePointByTerritoryRaw(territoryKeyRaw)
+  local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
+  local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   if explorePoint == nil then
     _contribute_Main:SetText("")
     _contribute_progress:SetProgressRate(0)
@@ -523,7 +520,7 @@ end
   if lastExplorePoint ~= nowExpPoint and isFirstExplore == true then
     audioPostEvent_SystemUi(3, 7)
     _contribute_Main:EraseAllEffect()
-    _contribute_Main:AddEffect("UI_LevelUP_Skill", false, -38, 1)
+    _contribute_Main:AddEffect("UI_LevelUP_Skill", false, -88, 0)
   end
   _contribute_Main:SetFontColor(4294899677)
   _contribute_Main:useGlowFont(true, "BaseFont_Glow", 4289951243)
@@ -565,7 +562,7 @@ end
   local _staticSkillPoint_p = (UI.getChildControl)(Panel_SelfPlayerExpGage, "StaticText_SkillPoint_p")
   Panel_User_ProductSkillPoint_Update = function()
   -- function num : 0_21 , upvalues : _staticSkillPoint_p, _staticSkillExp_p
-  local skillPointInfo = getSkillPointInfo(2)
+  local skillPointInfo = ToClient_getSkillPointInfo(2)
   _staticSkillPoint_p:SetText(tostring(skillPointInfo._remainPoint))
   local skillExpRate_p = skillPointInfo._currentExp / skillPointInfo._nextLevelExp
   _staticSkillExp_p:SetProgressRate(skillExpRate_p * 100)

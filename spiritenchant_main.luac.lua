@@ -28,7 +28,7 @@ PaGlobal_Enchant.initialize = function(self)
   ;
   (self._uiHelpPerfectEnchant):SetSize(220, 60)
   ;
-  (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY() + 50)
+  (self._uiHelpPerfectEnchant):SetPosY((self._uiButtonSureSuccess):GetPosY() - (self._uiHelpPerfectEnchant):GetSizeY())
   ;
   (self._uiEnchantFailDesc):SetShow(false)
   ;
@@ -67,7 +67,7 @@ PaGlobal_Enchant.initialize = function(self)
   (self._uiDrasticEnchant):SetEnableArea(0, 0, (self._uiDrasticEnchant):GetTextSizeX() + 60, (self._uiDrasticEnchant):GetSizeY())
   ;
   (self._uiMeticulousEnchant):SetEnableArea(0, 0, (self._uiMeticulousEnchant):GetTextSizeX() + 60, (self._uiMeticulousEnchant):GetSizeY())
-  -- DECOMPILER ERROR at PC144: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC145: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotTargetItem).icon = (UI.getChildControl)(Panel_Window_Enchant, "Static_Slot_0")
@@ -75,12 +75,12 @@ PaGlobal_Enchant.initialize = function(self)
   (SlotItem.new)(self._slotTargetItem, "Slot_0", 0, Panel_Window_Enchant, self._slotConfig)
   ;
   (self._slotTargetItem):createChild()
-  -- DECOMPILER ERROR at PC157: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC158: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotTargetItem).empty = true
   Panel_Tooltip_Item_SetPosition(0, self._slotTargetItem, "Enchant")
-  -- DECOMPILER ERROR at PC169: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC170: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotEnchantItem).icon = (UI.getChildControl)(Panel_Window_Enchant, "Static_Slot_1")
@@ -88,7 +88,7 @@ PaGlobal_Enchant.initialize = function(self)
   (SlotItem.new)(self._slotEnchantItem, "Slot_1", 1, Panel_Window_Enchant, self._slotConfig)
   ;
   (self._slotEnchantItem):createChild()
-  -- DECOMPILER ERROR at PC182: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC183: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._slotEnchantItem).empty = true
@@ -161,6 +161,8 @@ PaGlobal_Enchant.initialize = function(self)
     end
   end
   ;
+  (self._uiCheckBtn_CronEnchnt):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_TITLE"))
+  ;
   (self._uiCheckBtn_CronEnchnt):SetShow(self._isCronEnchantOpen)
   ;
   (self._uiCron_StackCount):SetShow(self._isCronEnchantOpen)
@@ -197,22 +199,40 @@ PaGlobal_Enchant.initialize = function(self)
   (self._uiEnchantBottomDesc):SetSize((self._uiEnchantBottomDesc):GetSizeX(), (self._uiEnchantBottomDesc):GetTextSizeY())
   ;
   (self._descBg):SetSize((self._descBg):GetSizeX(), (self._uiEnchantBottomDesc):GetTextSizeY() + 5)
-  Panel_Window_Enchant:SetSize(Panel_Window_Enchant:GetSizeX(), (self._descBg):GetPosY() + (self._descBg):GetSizeY() + 10)
+  if self._isContentsEnable then
+    Panel_Window_Enchant:SetSize(Panel_Window_Enchant:GetSizeX(), (self._descBg):GetPosY() + (self._descBg):GetSizeY() + 10)
+  else
+    Panel_Window_Enchant:SetSize(Panel_Window_Enchant:GetSizeX(), 220 + (self._descBg):GetSizeY() + 15)
+  end
   ;
   (self._descBg):ComputePos()
   ;
   (self._uiEnchantBottomDesc):ComputePos()
+  ;
+  (self._buttonSecretExtraction):SetSpanSize(0, 155)
+  ;
+  (self._buttonSecretExtraction):ComputePos()
   PaGlobal_Enchant:enchantFailCount()
   if isGameTypeKR2() then
     (self._uiButtonApply):SetSpanSize(-80, 150)
     ;
     (self._uiButtonSureSuccess):SetSpanSize(80, 150)
   else
-    ;
-    (self._uiButtonApply):SetSpanSize(-80, 300)
-    ;
-    (self._uiButtonSureSuccess):SetSpanSize(80, 300)
+    if self._isContentsEnable then
+      (self._uiButtonApply):SetSpanSize(-80, 300)
+      ;
+      (self._uiButtonSureSuccess):SetSpanSize(80, 300)
+    else
+      ;
+      (self._uiButtonApply):SetSpanSize(-80, 180)
+      ;
+      (self._uiButtonSureSuccess):SetSpanSize(80, 180)
+    end
   end
+  ;
+  (self._uiButtonApply):ComputePos()
+  ;
+  (self._uiButtonSureSuccess):ComputePos()
   Panel_Window_Enchant:RegisterUpdateFunc("UpdateFunc_DoingEnchant")
   registerEvent("EventEnchantResultShow", "FromClient_EnchantResultShow")
   registerEvent("FromClient_UpgradeItem", "FromClient_UpgradeItem")
@@ -293,6 +313,12 @@ end
 
 PaGlobal_Enchant.SetTextStartBtn = function(self)
   -- function num : 0_7
+  if (self._uiCheckBtn_CronEnchnt):IsCheck() then
+    (self._uiButtonApply):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENCHANT_GRANT"))
+  else
+    ;
+    (self._uiButtonApply):SetText(PAGetString(Defines.StringSheet_RESOURCE, "ENCHANT_TEXT_TITLE"))
+  end
 end
 
 -- DECOMPILER ERROR at PC372: Confused about usage of register: R0 in 'UnsetPending'
@@ -323,16 +349,16 @@ end
 Enchant_Close = function()
   -- function num : 0_9
   local self = PaGlobal_Enchant
-  Equipment_PosLoadMemory()
-  Panel_Window_Enchant:SetShow(false, false)
   self:clear()
+  Equipment_PosLoadMemory()
   ;
   (self._uiHelpEnchantBtn):SetShow(false)
   InventoryWindow_Close()
   Panel_Equipment:SetShow(false, false)
   ToClient_BlackspiritEnchantClose()
   PaGlobal_TutorialManager:handleCloseEnchantWindow()
-  FGlobal_EnchantExtraction_JustClose()
+  Panel_EnchantExtraction_Close()
+  Panel_Window_Enchant:SetShow(false, false)
 end
 
 -- DECOMPILER ERROR at PC377: Confused about usage of register: R0 in 'UnsetPending'
@@ -444,28 +470,38 @@ end
 
 -- DECOMPILER ERROR at PC392: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.handleMOnSureSuccessButton = function(self)
+PaGlobal_Enchant.enchantItem_ToItemNo = function(self)
   -- function num : 0_15
+  if (self._slotTargetItem).slotNo == nil then
+    return nil
+  end
+  return getTItemNoBySlotNo((self._slotTargetItem).slotNo, false)
+end
+
+-- DECOMPILER ERROR at PC395: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.handleMOnSureSuccessButton = function(self)
+  -- function num : 0_16
   (self._uiHelpPerfectEnchant):SetShow(true)
   ;
   (self._uiHelpEnchantBtn):SetShow(false)
   ;
   (self._uiHelpPerfectEnchant):SetSize(220, self.savedBoxSizeY)
   ;
-  (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY() + 50)
-end
-
--- DECOMPILER ERROR at PC395: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_Enchant.handleMOutSureSuccessButton = function(self)
-  -- function num : 0_16
-  (self._uiHelpPerfectEnchant):SetShow(false)
+  (self._uiHelpPerfectEnchant):SetPosY((self._uiButtonSureSuccess):GetPosY() - (self._uiHelpPerfectEnchant):GetSizeY())
 end
 
 -- DECOMPILER ERROR at PC398: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.handleMClickedEnchantSlotCancel = function(self)
+PaGlobal_Enchant.handleMOutSureSuccessButton = function(self)
   -- function num : 0_17
+  (self._uiHelpPerfectEnchant):SetShow(false)
+end
+
+-- DECOMPILER ERROR at PC401: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.handleMClickedEnchantSlotCancel = function(self)
+  -- function num : 0_18
   self:cancelEnchant()
   self:handleMOnShowHelpDesc(false)
   ;
@@ -486,10 +522,10 @@ PaGlobal_Enchant.handleMClickedEnchantSlotCancel = function(self)
   (self._uiMeticulousEnchant):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC401: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC404: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMClickedEnchantApplyButton = function(self)
-  -- function num : 0_18
+  -- function num : 0_19
   if self:isDoingEnchant() then
     self:cancelEnchant()
   else
@@ -524,19 +560,19 @@ PaGlobal_Enchant.handleMClickedEnchantApplyButton = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC404: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC407: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMClickedEnchantType = function(self)
-  -- function num : 0_19
+  -- function num : 0_20
   local isEasy = (self._uiDrasticEnchant):IsCheck()
   ;
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).EnchantType, not isEasy, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
--- DECOMPILER ERROR at PC407: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC410: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMClickedSureSuccessButton = function(self)
-  -- function num : 0_20
+  -- function num : 0_21
   local skipCheck = (self._uiSkipEnchant):IsCheck()
   if skipCheck then
     if self:isDoingEnchant() then
@@ -553,10 +589,10 @@ PaGlobal_Enchant.handleMClickedSureSuccessButton = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC410: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC413: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOnTargetItemTooltip = function(self)
-  -- function num : 0_21
+  -- function num : 0_22
   if (self._slotEnchantItem).empty == true then
     (self._uiHelpTargetItem):SetShow(true)
     ;
@@ -567,15 +603,18 @@ PaGlobal_Enchant.handleMOnTargetItemTooltip = function(self)
     (self._uiHelpTargetItem):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_HELPMESSAGE1"))
     ;
     (self._uiHelpTargetItem):SetSize((self._uiHelpTargetItem):GetSizeX() + self._Xgap, (self._uiHelpTargetItem):GetSizeY() + 30)
+    if not self._isContentsEnable then
+      (self._uiHelpTargetItem):SetPosY(((self._slotEnchantItem).icon):GetPosY() + 100)
+    end
   else
     Panel_Tooltip_Item_Show_GeneralNormal(1, "Enchant", true)
   end
 end
 
--- DECOMPILER ERROR at PC413: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC416: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOutTargetItemTooltip = function(self)
-  -- function num : 0_22
+  -- function num : 0_23
   if (self._slotEnchantItem).empty == true then
     (self._uiHelpTargetItem):SetShow(false)
     ;
@@ -585,10 +624,10 @@ PaGlobal_Enchant.handleMOutTargetItemTooltip = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC416: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC419: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOnEnchantItemTooltip = function(self)
-  -- function num : 0_23
+  -- function num : 0_24
   if (self._slotTargetItem).empty == true then
     (self._uiHelpEnchantItem):SetShow(true)
     ;
@@ -604,10 +643,10 @@ PaGlobal_Enchant.handleMOnEnchantItemTooltip = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC419: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC422: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOutEnchantItemTooltip = function(self)
-  -- function num : 0_24
+  -- function num : 0_25
   if (self._slotTargetItem).empty == true then
     (self._uiHelpEnchantItem):SetShow(false)
     ;
@@ -617,10 +656,10 @@ PaGlobal_Enchant.handleMOutEnchantItemTooltip = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC422: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC425: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOnoutSkipEnchantTooltip = function(self, isShow)
-  -- function num : 0_25
+  -- function num : 0_26
   local name, desc, control = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_SPRITENCHANT_SKIPENCHANT_TOOLTIP_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_SPRITENCHANT_SKIPENCHANT_TOOLTIP_DESC")
@@ -633,10 +672,10 @@ PaGlobal_Enchant.handleMOnoutSkipEnchantTooltip = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC425: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC428: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOnoutDifficultyEnchantTooltip = function(self, isShow, tipType)
-  -- function num : 0_26
+  -- function num : 0_27
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -656,10 +695,10 @@ PaGlobal_Enchant.handleMOnoutDifficultyEnchantTooltip = function(self, isShow, t
   TooltipSimple_Show(control, name, desc)
 end
 
--- DECOMPILER ERROR at PC428: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC431: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOnShowHelpDesc = function(self, isShow)
-  -- function num : 0_27
+  -- function num : 0_28
   if self._enchantCountValue >= 16 and not isGameTypeEnglish() then
     return 
   end
@@ -737,14 +776,94 @@ PaGlobal_Enchant.handleMOnShowHelpDesc = function(self, isShow)
   ;
   (self._uiHelpEnchantBtn):SetSize((self._uiHelpEnchantBtn):GetSizeX(), boxSizeY)
   ;
-  (self._uiHelpEnchantBtn):SetPosY(self._bubbleBasePosY - (self._uiHelpEnchantBtn):GetSizeY() + 50)
+  (self._uiHelpEnchantBtn):SetPosY((self._uiButtonApply):GetPosY() - (self._uiHelpEnchantBtn):GetSizeY())
   if isShow == true then
     self._btnMouseOnCount = self._btnMouseOnCount + 1
   end
 end
 
+-- DECOMPILER ERROR at PC434: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.addFailCountEffectForTutorial = function(self)
+  -- function num : 0_29
+  (self._uiEnchantFailDesc):AddEffect("UI_QustComplete01", true, 0, 0)
+  ;
+  (self._uiEnchantFailDesc):AddEffect("UI_ArrowMark06", true, (self._ui)._statictext_EnchantFailCount * -0.9, 0)
+end
+
+-- DECOMPILER ERROR at PC437: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.removeFailCountEffect = function(self)
+  -- function num : 0_30
+  (self._uiEnchantFailDesc):EraseAllEffect()
+end
+
+-- DECOMPILER ERROR at PC440: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.addValksCountEffectForTutorial = function(self)
+  -- function num : 0_31
+  (self._uiEnchantPcroomFailCnt):AddEffect("UI_QustComplete02", true, 0, 0)
+  ;
+  (self._uiEnchantPcroomFailCnt):AddEffect("UI_ArrowMark06", true, (self._ui)._statictext_ValksCount * -0.9, 0)
+end
+
+-- DECOMPILER ERROR at PC443: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.removeValksCountEffect = function(self)
+  -- function num : 0_32
+  (self._uiEnchantPcroomFailCnt):EraseAllEffect()
+end
+
+-- DECOMPILER ERROR at PC446: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.addTargetSlotEffectForTutorial = function(self)
+  -- function num : 0_33
+  ((self._slotTargetItem).icon):AddEffect("UI_ArrowMark02", true, 0, -50)
+  ;
+  ((self._slotTargetItem).icon):AddEffect("UI_WorldMap_Ping01", true, 0, 0)
+end
+
+-- DECOMPILER ERROR at PC449: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.removeTargetSlotEffect = function(self)
+  -- function num : 0_34
+  ((self._slotTargetItem).icon):EraseAllEffect()
+end
+
+-- DECOMPILER ERROR at PC452: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.addMaterialSlotEffectForTutorial = function(self)
+  -- function num : 0_35
+  ((self._slotEnchantItem).icon):AddEffect("UI_ArrowMark02", true, 0, -50)
+  ;
+  ((self._slotEnchantItem).icon):AddEffect("UI_WorldMap_Ping01", true, 0, 0)
+end
+
+-- DECOMPILER ERROR at PC455: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.removeMaterialSlotEffect = function(self)
+  -- function num : 0_36
+  ((self._slotEnchantItem).icon):EraseAllEffect()
+end
+
+-- DECOMPILER ERROR at PC458: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.addApplyButtonEffectForTutorial = function(self)
+  -- function num : 0_37
+  (self._uiButtonApply):AddEffect("UI_ArrowMark02", true, 0, -50)
+  ;
+  (self._uiButtonApply):AddEffect("UI_WorldMap_Ping01", true, 0, 0)
+end
+
+-- DECOMPILER ERROR at PC461: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.removeApplyButtonEffect = function(self)
+  -- function num : 0_38
+  (self._uiButtonApply):EraseAllEffect()
+end
+
 UpdateFunc_DoingEnchant = function(deltaTime)
-  -- function num : 0_28
+  -- function num : 0_39
   local self = PaGlobal_Enchant
   if self:isDoingEnchant() == true then
     self._currentTime = self._currentTime + deltaTime
@@ -759,7 +878,7 @@ UpdateFunc_DoingEnchant = function(deltaTime)
 end
 
 OnScreenEvent = function()
-  -- function num : 0_29
+  -- function num : 0_40
   local self = PaGlobal_Enchant
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()

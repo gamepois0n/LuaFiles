@@ -12,12 +12,11 @@ SlotConfig = {createIcon = true, createBorder = true, createCount = true, create
 , 
 slotUIPool = {}
 , maxSlotCount = 14, hasItemCount = 0, nowInterval = 0, maxInterval = 0}
-HouseInstallationCart.scrollCtrlBTN = (UI.getChildControl)(HouseInstallationCart.scroll, "Scroll_CtrlButton")
 local Template = {cashIconBG = (UI.getChildControl)(Panel_House_InstallationMode_Cart, "Template_Static_CashIconBG")}
 HouseInstallationCart.Initialize = function(self)
-  -- function num : 0_0 , upvalues : UI_PUCT, Template
+  -- function num : 0_0 , upvalues : HouseInstallationCart, UI_PUCT, Template
   local setGroup = function()
-    -- function num : 0_0_0 , upvalues : self
+    -- function num : 0_0_0 , upvalues : self, HouseInstallationCart
     (self.bg_BuyPearl):AddChild(self.have_PearlIcon)
     ;
     (self.bg_BuyPearl):AddChild(self.have_PearlValue)
@@ -110,6 +109,9 @@ HouseInstallationCart.Initialize = function(self)
     (self.sum_PearlValue):SetPosX(80)
     ;
     (self.sum_PearlValue):SetPosY(5)
+    -- DECOMPILER ERROR at PC285: Confused about usage of register: R0 in 'UnsetPending'
+
+    HouseInstallationCart.scrollCtrlBTN = (UI.getChildControl)(HouseInstallationCart.scroll, "Scroll_CtrlButton")
   end
 
   setGroup()
@@ -145,7 +147,7 @@ HouseInstallationCart.Initialize = function(self)
     ;
     (slot.icon):addInputEvent("Mouse_UpScroll", "_InstallationModeCart_ScrollUpdate( false )")
     tempArray.slotItem = slot
-    -- DECOMPILER ERROR at PC89: Confused about usage of register: R18 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC90: Confused about usage of register: R18 in 'UnsetPending'
 
     ;
     (self.slotUIPool)[slot_Idx] = tempArray

@@ -105,7 +105,7 @@ setFishingResourcePool_text = function()
   (fishing_UI._fishComment):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   (fishing_UI._fishComment):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_FISHING_FISHERY_COMMENT"))
-  local itemWrapper = getEquipmentItem(0)
+  local itemWrapper = ToClient_getEquipmentItem(0)
   if itemWrapper == nil then
     (fishing_UI._fishWpDesc):SetShow(false)
     ;

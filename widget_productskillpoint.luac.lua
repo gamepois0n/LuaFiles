@@ -8,7 +8,7 @@ local _staticSkillExp = (UI.getChildControl)(Panel_MainStatus_User_ProductSkillP
 local _staticSkillPoint = (UI.getChildControl)(Panel_MainStatus_User_ProductSkillPoint, "StaticText_SkillPoint_p")
 Panel_User_ProductSkillPoint_Update = function()
   -- function num : 0_0 , upvalues : _staticSkillPoint, _staticSkillExp
-  local skillPointInfo = getSkillPointInfo(2)
+  local skillPointInfo = ToClient_getSkillPointInfo(2)
   _staticSkillPoint:SetText(tostring(skillPointInfo._remainPoint))
   local skillExpRate = skillPointInfo._currentExp / skillPointInfo._nextLevelExp
   _staticSkillExp:SetProgressRate(skillExpRate * 100)

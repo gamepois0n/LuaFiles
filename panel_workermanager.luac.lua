@@ -1874,7 +1874,7 @@ Push_Work_ResultItem_Message = function(WorkerNoRaw)
       local ItemEnchantSSW = itemWrapper:getStaticStatus()
       local name = ItemEnchantSSW:getName()
       local count = Int64toInt32((itemWrapper:get()):getCount_s64())
-      Proc_ShowMessage_Ack_With_ChatType((PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLD_MAP_TOWN_WORKER_GOT_RESULT", "name", name, "count", count)), nil, (CppEnums.ChatType).System, (CppEnums.ChatSystemType).Worker)
+      Proc_ShowMessage_Ack_WithOut_ChattingMessage((PAGetStringParam2(Defines.StringSheet_GAME, "LUA_WORLD_MAP_TOWN_WORKER_GOT_RESULT", "name", name, "count", count)), nil)
     end
   end
 end

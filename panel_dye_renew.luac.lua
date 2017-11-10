@@ -11,7 +11,7 @@ local awakenWeapon = {[CT.ClassType_Warrior] = ToClient_IsContentsGroupOpen("901
 local isKR2 = isGameTypeKR2()
 local enControlValue = {MaxCharacterTypeListCount = 7, MaxEquipSlotCount = 18, MaxPartCount = 8, MaxPartSlotCount = 3, MaxAmpuleRowsCount = 3, MaxAmpuleColsCount = 7}
 local enToggleIndex = {Underwear = 0, Avater = 1, Helmet = 2, AwakenWeapon = 3, FaceViewHair = 4, FaceGuard = 5, WarStance = 6}
-local enCharacterType = {Character = 0, Horse = 1, Car = 2, Camel = 3, Tent = 4}
+local enCharacterType = {Character = 0, Horse = 1, Car = 2, Camel = 3, Tent = 6}
 local EquipSlotIcon = {
 [enCharacterType.Character] = {
 {0, 166, 123, 194, 151}
@@ -142,27 +142,27 @@ local EquipSlotIcon = {
 }
 , 
 [enCharacterType.Tent] = {
-{3, 136, 147, 164, 175}
+{3, 451, 35, 479, 63}
 , 
-{4, 105, 147, 133, 175}
+{4, 451, 6, 479, 34}
 , 
-{5, 198, 147, 226, 175}
+{5, 480, 6, 508, 34}
 , 
-{0, 0, 0, 0, 0}
-, 
-{0, 0, 0, 0, 0}
+{6, 480, 35, 508, 63}
 , 
 {0, 0, 0, 0, 0}
 , 
 {0, 0, 0, 0, 0}
 , 
-{14, 136, 177, 164, 205}
-, 
-{15, 105, 177, 133, 205}
-, 
-{16, 198, 177, 226, 205}
-, 
 {0, 0, 0, 0, 0}
+, 
+{14, 0, 0, 0, 0}
+, 
+{15, 0, 0, 0, 0}
+, 
+{16, 0, 0, 0, 0}
+, 
+{17, 0, 0, 0, 0}
 , 
 {0, 0, 0, 0, 0}
 , 
@@ -187,7 +187,7 @@ _arrAmpuleSlotColor = {}
 _arrAmpuleSlotButton = {}
 , _AmpuleScroll = nil, 
 _selectedDyePart = {}
-, _enableDyePearl = false, _enableCamel = false, _enableAwaken = false}
+, _enableDyePearl = false, _enableCamel = false, _enableAwaken = false, _enableTent = false}
 FGlobal_DyeReNew_GetInstance = function()
   -- function num : 0_0 , upvalues : DyeReNew
   return DyeReNew
@@ -208,16 +208,22 @@ FGlobal_DyeReNew_GetEnableCamel = function()
   return DyeReNew._enableCamel
 end
 
+FGlobal_DyeReNew_GetEnableTent = function()
+  -- function num : 0_4 , upvalues : DyeReNew
+  return DyeReNew._enableTent
+end
+
 FGlobal_DyeReNew_GetEnableKR2 = function()
-  -- function num : 0_4 , upvalues : isKR2
+  -- function num : 0_5 , upvalues : isKR2
   return isKR2
 end
 
 DyeReNew.Initialize = function(self)
-  -- function num : 0_5 , upvalues : awakenWeapon, enControlValue
+  -- function num : 0_6 , upvalues : awakenWeapon, enControlValue
   self._classType = (getSelfPlayer()):getClassType()
   self._enableDyePearl = ToClient_IsContentsGroupOpen("82")
   self._enableCamel = ToClient_IsContentsGroupOpen("4")
+  self._enableTent = ToClient_IsContentsGroupOpen("253")
   self._enableAwaken = awakenWeapon[self._classType]
   local numbering = 0
   local ampuleSlotConfig = {createIcon = true, createBorder = true, createCount = true, createCash = true, createEnchant = true}
@@ -229,7 +235,7 @@ DyeReNew.Initialize = function(self)
     ;
     (SlotItem.new)(equipSlot, "Dye_ReNew_equipSlotItem_" .. ii, 0, UIEquipBG, ampuleSlotConfig)
     equipSlot:createChild()
-    -- DECOMPILER ERROR at PC58: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC62: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self._arrEquipSlotItem)[ii] = equipSlot
@@ -241,11 +247,11 @@ DyeReNew.Initialize = function(self)
     for kk = 0, enControlValue.MaxPartSlotCount - 1 do
       local UIEquipSlotPart = (UI.getChildControl)(UIEquipPartArea, "Static_Radiobutton_PartColor_" .. jj .. "_" .. kk)
       local UIEquipSlotReset = (UI.getChildControl)(UIEquipSlotPart, "Static_Button_PartColorReset_" .. jj .. "_" .. kk)
-      -- DECOMPILER ERROR at PC104: Confused about usage of register: R16 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC108: Confused about usage of register: R16 in 'UnsetPending'
 
       ;
       (self._arrEquipPartSlot)[numbering] = UIEquipSlotPart
-      -- DECOMPILER ERROR at PC106: Confused about usage of register: R16 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC110: Confused about usage of register: R16 in 'UnsetPending'
 
       ;
       (self._arrEquipPartReset)[numbering] = UIEquipSlotReset
@@ -260,15 +266,15 @@ DyeReNew.Initialize = function(self)
       local UIAmpuleSlotBG = (UI.getChildControl)(UIAmpuleBG, "Static_AmpuleSlotBG_" .. kk .. "_" .. ll)
       local UIAmpuleSlotColor = (UI.getChildControl)(UIAmpuleSlotBG, "Static_AmplueSlotColor_" .. kk .. "_" .. ll)
       local UIAmpuleSlotButton = (UI.getChildControl)(UIAmpuleSlotBG, "RadioButton_AmplueSlotButton_" .. kk .. "_" .. ll)
-      -- DECOMPILER ERROR at PC159: Confused about usage of register: R17 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC163: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       (self._arrAmpuleSlotBG)[numbering] = UIAmpuleSlotBG
-      -- DECOMPILER ERROR at PC161: Confused about usage of register: R17 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC165: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       (self._arrAmpuleSlotColor)[numbering] = UIAmpuleSlotColor
-      -- DECOMPILER ERROR at PC163: Confused about usage of register: R17 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC167: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       (self._arrAmpuleSlotButton)[numbering] = UIAmpuleSlotButton
@@ -294,7 +300,7 @@ DyeReNew.Initialize = function(self)
 end
 
 DyeReNew.Open = function(self)
-  -- function num : 0_6 , upvalues : enControlValue
+  -- function num : 0_7 , upvalues : enControlValue
   self._selected_CharacterTarget = 0
   self._selected_EquipSlotNo = -1
   ToClient_DyeingManagerShow()
@@ -320,7 +326,7 @@ DyeReNew.Open = function(self)
 end
 
 DyeReNew.Close = function(self)
-  -- function num : 0_7
+  -- function num : 0_8
   audioPostEvent_SystemUi(1, 23)
   Panel_Dye_ReNew:SetShow(false)
   if Panel_ChangeWeapon:GetShow() then
@@ -333,7 +339,7 @@ DyeReNew.Close = function(self)
 end
 
 DyeReNew.Reset_Position = function(self)
-  -- function num : 0_8 , upvalues : enControlValue
+  -- function num : 0_9 , upvalues : enControlValue
   local UIStaticBG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
   local UIPartTitle = (UI.getChildControl)(UIStaticBG, "StaticText_PartTarget_Title")
   local UIPartBG = (UI.getChildControl)(UIStaticBG, "Static_PartTartget_BG")
@@ -350,7 +356,7 @@ DyeReNew.Reset_Position = function(self)
 end
 
 DyeReNew.Update_Position = function(self)
-  -- function num : 0_9 , upvalues : enControlValue
+  -- function num : 0_10 , upvalues : enControlValue
   local UIStaticBG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
   local UIPartTitle = (UI.getChildControl)(UIStaticBG, "StaticText_PartTarget_Title")
   local UIPartBG = (UI.getChildControl)(UIStaticBG, "Static_PartTartget_BG")
@@ -359,6 +365,9 @@ DyeReNew.Update_Position = function(self)
   if self._selected_CharacterTarget ~= 0 then
     for ii = 14, enControlValue.MaxEquipSlotCount - 1 do
       local UIEquipBG = (UI.getChildControl)(UIStaticBG, "Static_EquipSlotBG_" .. ii)
+      if UIEquipBG:GetShow() == false then
+        return 
+      end
       UIEquipBG:SetShow(false)
     end
     UIPartTitle:SetPosY(UIPartTitle:GetPosY() - 45)
@@ -378,15 +387,15 @@ DyeReNew.Update_Position = function(self)
 end
 
 DyeReNew.Change_EquipIcon = function(self)
-  -- function num : 0_10 , upvalues : enCharacterType, EquipSlotIcon
+  -- function num : 0_11 , upvalues : enCharacterType, EquipSlotIcon
   self:DeleteAll_EquipIcon()
   local textureInfoName = ""
   local characterType = self._selected_CharacterTarget
   local targetSlot = nil
-  if enCharacterType.Character == characterType then
+  if enCharacterType.Character == characterType or enCharacterType.Tent == characterType then
     textureInfoName = "New_UI_Common_forLua/Window/Dye/Dye_New_00.dds"
   else
-    if enCharacterType.Horse == characterType or enCharacterType.Camel == characterType or enCharacterType.Tent == characterType then
+    if enCharacterType.Horse == characterType or enCharacterType.Camel == characterType then
       textureInfoName = "New_UI_Common_forLua/Window/Dye/Dye_New_01.dds"
     end
   end
@@ -403,7 +412,7 @@ DyeReNew.Change_EquipIcon = function(self)
 end
 
 DyeReNew.DeleteAll_EquipIcon = function(self)
-  -- function num : 0_11 , upvalues : enControlValue
+  -- function num : 0_12 , upvalues : enControlValue
   for ii = 0, enControlValue.MaxEquipSlotCount - 1 do
     local UIEquipIcon = self:GetUIEquipIconByIndex(ii)
     UIEquipIcon:ChangeTextureInfoName("")
@@ -411,7 +420,7 @@ DyeReNew.DeleteAll_EquipIcon = function(self)
 end
 
 DyeReNew.GetUIEquipIconByIndex = function(self, Index)
-  -- function num : 0_12
+  -- function num : 0_13
   local UIStaticBG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
   local UIEquipBG = (UI.getChildControl)(UIStaticBG, "Static_EquipSlotBG_" .. Index)
   local UIEquipIcon = (UI.getChildControl)(UIEquipBG, "Static_EquipSlotIcon_" .. Index)
@@ -419,14 +428,14 @@ DyeReNew.GetUIEquipIconByIndex = function(self, Index)
 end
 
 DyeReNew.GetUIEquipBGByIndex = function(self, Index)
-  -- function num : 0_13
+  -- function num : 0_14
   local UIStaticBG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
   local UIEquipBG = (UI.getChildControl)(UIStaticBG, "Static_EquipSlotBG_" .. Index)
   return UIEquipBG
 end
 
 FromClient_updateDyeingTargetList = function()
-  -- function num : 0_14 , upvalues : DyeReNew, EquipSlotIcon
+  -- function num : 0_15 , upvalues : DyeReNew, EquipSlotIcon
   local self = DyeReNew
   local haveNormalEquip, haveAvartarEquip = nil, nil
   for idx,equipSlotWarraper in pairs(EquipSlotIcon[self._selected_CharacterTarget]) do
@@ -469,7 +478,7 @@ FromClient_updateDyeingTargetList = function()
 end
 
 DyeReNew.Reset_Part = function(self, isClearCheck)
-  -- function num : 0_15
+  -- function num : 0_16
   for ii = 0, self._MaxEquipPartSlot - 1 do
     ((self._arrEquipPartSlot)[ii]):SetShow(false)
     ;
@@ -481,12 +490,12 @@ DyeReNew.Reset_Part = function(self, isClearCheck)
 end
 
 FromClient_updateDyeingPartList = function()
-  -- function num : 0_16 , upvalues : DyeReNew
+  -- function num : 0_17 , upvalues : DyeReNew
   DyeReNew:Update_Part()
 end
 
 DyeReNew.Update_Part = function(self)
-  -- function num : 0_17
+  -- function num : 0_18
   self:Reset_Part(false)
   local equipSlotNo = self._selected_EquipSlotNo
   if equipSlotNo == -1 then
@@ -518,7 +527,7 @@ DyeReNew.Update_Part = function(self)
 end
 
 DyeReNew.Reset_AmpuleList = function(self, isClearCheck)
-  -- function num : 0_18
+  -- function num : 0_19
   local clearColor = 16777215
   for ii = 0, self._MaxPaletteSlotBG - 1 do
     ((self._arrAmpuleSlotButton)[ii]):addInputEvent("Mouse_LUp", "")
@@ -539,7 +548,7 @@ DyeReNew.Reset_AmpuleList = function(self, isClearCheck)
 end
 
 DyeReNew.Update_AmpuleList = function(self)
-  -- function num : 0_19
+  -- function num : 0_20
   self:Reset_AmpuleList(false)
   local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex, self._paletteShowAll)
   if DyeingPaletteCategoryInfo ~= nil then
@@ -591,7 +600,7 @@ DyeReNew.Update_AmpuleList = function(self)
 end
 
 DyeReNew.SetAmpuleScrollSize = function(self)
-  -- function num : 0_20
+  -- function num : 0_21
   if getScreenSizeY() < 900 then
     self._MaxPaletteSlotBG = 14
     ;
@@ -604,7 +613,7 @@ DyeReNew.SetAmpuleScrollSize = function(self)
 end
 
 FGlobal_Panel_Dye_ReNew_Open = function()
-  -- function num : 0_21
+  -- function num : 0_22
   if FGlobal_Panel_DyeReNew_Show() ~= true then
     return 
   end
@@ -612,12 +621,12 @@ FGlobal_Panel_Dye_ReNew_Open = function()
 end
 
 FGlobal_Panel_Dye_ReNew_Close = function()
-  -- function num : 0_22
+  -- function num : 0_23
   Panel_Dye_ReNew:SetShow(false)
 end
 
 FGlobal_Panel_DyeReNew_Show = function()
-  -- function num : 0_23 , upvalues : renderMode, DyeReNew
+  -- function num : 0_24 , upvalues : renderMode, DyeReNew
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYEOPENALERT_INDEAD"))
     return 
@@ -659,7 +668,7 @@ FGlobal_Panel_DyeReNew_Show = function()
 end
 
 FGlobal_Panel_DyeReNew_Hide = function()
-  -- function num : 0_24 , upvalues : renderMode, DyeReNew
+  -- function num : 0_25 , upvalues : renderMode, DyeReNew
   if Panel_Win_System:GetShow() then
     Proc_ShowMessage_Ack("알림창을 먼저 닫아주세�\148.")
     return 
@@ -691,7 +700,7 @@ FGlobal_Panel_DyeReNew_Hide = function()
 end
 
 Dye_ReNew_IsDyeableEquipment = function(equipSlotNo)
-  -- function num : 0_25 , upvalues : DyeReNew, ENUM_EQUIP, enCharacterType
+  -- function num : 0_26 , upvalues : DyeReNew, ENUM_EQUIP, enCharacterType
   local self = DyeReNew
   if Dye_ReNew_IsAvatar(equipSlotNo) then
     return true
@@ -712,7 +721,7 @@ Dye_ReNew_IsDyeableEquipment = function(equipSlotNo)
 end
 
 Dye_ReNew_IsAvatar = function(equipSlotNo)
-  -- function num : 0_26 , upvalues : DyeReNew, enCharacterType, ENUM_EQUIP
+  -- function num : 0_27 , upvalues : DyeReNew, enCharacterType, ENUM_EQUIP
   local self = DyeReNew
   -- DECOMPILER ERROR at PC35: Unhandled construct in 'MakeBoolean' P1
 
@@ -726,7 +735,7 @@ Dye_ReNew_IsAvatar = function(equipSlotNo)
 end
 
 Dye_ReNew_IsNormal = function(equipSlotNo)
-  -- function num : 0_27 , upvalues : DyeReNew, ENUM_EQUIP
+  -- function num : 0_28 , upvalues : DyeReNew, ENUM_EQUIP
   local self = DyeReNew
   -- DECOMPILER ERROR at PC33: Unhandled construct in 'MakeBoolean' P1
 
@@ -740,7 +749,7 @@ Dye_ReNew_IsNormal = function(equipSlotNo)
 end
 
 FGlobal_Panel_DyeReNew_InventoryFilter = function(InvenSlotNo, itemWrapper, currentWhereType)
-  -- function num : 0_28 , upvalues : DyeReNew, enCharacterType
+  -- function num : 0_29 , upvalues : DyeReNew, enCharacterType
   local self = DyeReNew
   if itemWrapper == nil then
     return true
@@ -749,7 +758,7 @@ FGlobal_Panel_DyeReNew_InventoryFilter = function(InvenSlotNo, itemWrapper, curr
   if self._selected_CharacterTarget == 0 and isServantUseable then
     return true
   else
-    if (enCharacterType.Horse == self._selected_CharacterTarget or enCharacterType.Camel == self._selected_CharacterTarget) and not isServantUseable then
+    if (enCharacterType.Horse == self._selected_CharacterTarget or enCharacterType.Camel == self._selected_CharacterTarget or enCharacterType.Tent) and not isServantUseable then
       return true
     end
   end
@@ -768,18 +777,23 @@ FGlobal_Panel_DyeReNew_InventoryFilter = function(InvenSlotNo, itemWrapper, curr
 end
 
 FGlobal_Panel_DyeReNew_Reset_SetFunctor = function()
-  -- function num : 0_29
+  -- function num : 0_30
   Inventory_SetFunctor(FGlobal_Panel_DyeReNew_InventoryFilter, FGlobal_Panel_DyeReNew_Interaction_FromInventory, nil, nil)
 end
 
 FGlobal_Panel_DyeReNew_Interaction_FromInventory = function(invenSlotNo, itemWrapper, count_s64, inventoryType)
-  -- function num : 0_30
+  -- function num : 0_31
   ToClient_RequestSetDyeTargetSlotByInventorySlotNo(Inventory_GetCurrentInventoryType(), invenSlotNo)
 end
 
 FromClient_Dyeing_AddDamage = function()
-  -- function num : 0_31
+  -- function num : 0_32
   FGlobal_Panel_DyeReNew_Hide()
+end
+
+FGlobal_Panel_DyeReNew_updateColorAmpuleList = function()
+  -- function num : 0_33 , upvalues : DyeReNew
+  DyeReNew:Update_AmpuleList()
 end
 
 renderMode:setClosefunctor(renderMode, FGlobal_Panel_DyeReNew_Hide)

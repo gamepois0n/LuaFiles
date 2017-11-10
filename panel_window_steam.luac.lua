@@ -16,6 +16,14 @@ PaGlobal_Steam_Redemption = function()
     else
       if UI_SERVICE_RESOURCE.eServiceResourceType_DE == getGameServiceResType() then
         langType = "DE"
+      else
+        if UI_SERVICE_RESOURCE.eServiceResourceType_ES == getGameServiceResType() then
+          langType = "es"
+        else
+          if UI_SERVICE_RESOURCE.eServiceResourceType_PT == getGameServiceResType() then
+            langType = "pt"
+          end
+        end
       end
     end
   end
@@ -27,17 +35,26 @@ PaGlobal_Steam_Redemption = function()
     return 
   end
   do
-    if isSteamClient() then
-      ToClient_requestRedeemAuthSessionTicket()
-      local ticket = getSteamAuthSessionTicket()
-      url = "https://www.blackdesertonline.com/steam/UserInfo.html?appId=582660&steamTicket=" .. ticket .. "&lang=" .. langType
-      steamOverlayToWebPage(url)
-      return 
-    else
-      do
-        url = "https://www.blackdesertonline.com/myinfo/"
-        ToClient_OpenChargeWebPage(url, false)
-        do return  end
+    if isGameTypeEnglish() then
+      if isSteamClient() then
+        ToClient_requestRedeemAuthSessionTicket()
+        local ticket = getSteamAuthSessionTicket()
+        url = "https://www.blackdesertonline.com/steam/UserInfo.html?appId=582660&steamTicket=" .. ticket .. "&lang=" .. langType
+        steamOverlayToWebPage(url)
+        return 
+      else
+        do
+          url = "https://www.blackdesertonline.com/myinfo/"
+          ToClient_OpenChargeWebPage(url, false)
+          do return  end
+          if isGameTypeSA() then
+            local ticket = ToClient_GetAuthToken()
+            local isUserID = ToClient_GetUserId()
+            url = "https://blackdesert.playredfox.com/black_desert/myaccount?i=" .. isUserID .. "&t=" .. ticket .. "&locale=" .. langType
+            ToClient_OpenChargeWebPage(url, false)
+            return 
+          end
+        end
       end
     end
   end
@@ -58,9 +75,11 @@ FromClient_SteamRedeemAuthTicketReady = function()
       end
     end
   end
-  local ticket = getSteamAuthSessionTicket()
-  url = "https://www.blackdesertonline.com/steam/UserInfo.html?appId=582660&steamTicket=" .. ticket .. "&lang=" .. langType
-  steamOverlayToWebPage(url)
+  if isGameTypeEnglish() then
+    local ticket = getSteamAuthSessionTicket()
+    url = "https://www.blackdesertonline.com/steam/UserInfo.html?appId=582660&steamTicket=" .. ticket .. "&lang=" .. langType
+    steamOverlayToWebPage(url)
+  end
 end
 
 registerEvent("FromClient_SteamRedeemAuthTicketReady", "FromClient_SteamRedeemAuthTicketReady")

@@ -95,7 +95,19 @@ end
             end
           end
         else
-          ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL"), false)
+          if isGameTypeTR() then
+            ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL_TR_REAL"), false)
+          else
+            if isGameTypeTH() then
+              ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL_TH_REAL"), false)
+            else
+              if isGameTypeID() then
+                ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL_ID_REAL"), false)
+              else
+                ToClient_OpenChargeWebPage(PAGetString(Defines.StringSheet_GAME, "LUA_QNAWEBLINK_URL"), false)
+              end
+            end
+          end
         end
       end
     end

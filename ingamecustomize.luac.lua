@@ -5,6 +5,7 @@
 -- function num : 0
 local renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_IngameCustomize}, false)
 local gameExitPhoto = false
+local characterInfoPhoto = false
 local CharacterSlotIndex = 0
 IngameCustomize_Show = function()
   -- function num : 0_0 , upvalues : renderMode
@@ -50,7 +51,7 @@ IngameCustomize_Show = function()
 end
 
 IngameCustomize_Hide = function()
-  -- function num : 0_1 , upvalues : gameExitPhoto, CharacterSlotIndex
+  -- function num : 0_1 , upvalues : gameExitPhoto, CharacterSlotIndex, characterInfoPhoto
   if getCustomizingManager() == nil then
     return 
   end
@@ -69,7 +70,11 @@ IngameCustomize_Hide = function()
         GameExitShowToggle(false)
         refreshCharacterInfoData(CharacterSlotIndex + 1)
       end
+      if characterInfoPhoto == true then
+        PaGlobal_CharacterInfoBasic:updateFacePhoto()
+      end
       gameExitPhoto = false
+      characterInfoPhoto = false
     end
   end
 end
@@ -100,6 +105,11 @@ end
 characterSlot_Index = function(index)
   -- function num : 0_4 , upvalues : CharacterSlotIndex
   CharacterSlotIndex = index
+end
+
+FGlobal_InGameCustomize_SetCharacterInfo = function(isCheck)
+  -- function num : 0_5 , upvalues : characterInfoPhoto
+  characterInfoPhoto = isCheck
 end
 
 renderMode:setClosefunctor(renderMode, IngameCustomize_Hide)

@@ -16,7 +16,7 @@ local VCK = CppEnums.VirtualKeyCode
 local UI_color = Defines.Color
 local strlen = string.len
 local substring = string.sub
-local numberPad = {confirmFunction; MAX_NUMBER_BTN_COUNT = 10, s64_maxNumber = (Defines.s64_const).s64_0, s64_inputNumber = (Defines.s64_const).s64_0, param0 = nil, param1 = nil, init_Number = false, _buttonNumber = (Array.new)(), numberPadUiModeNotInput = false}
+local numberPad = {confirmFunction; MAX_NUMBER_BTN_COUNT = 10, s64_moneyMaxNumber = (Defines.s64_const).s64_0, s64_weightMaxNumber = (Defines.s64_const).s64_0, s64_inputNumber = (Defines.s64_const).s64_0, param0 = nil, param1 = nil, init_Number = false, _buttonNumber = (Array.new)(), numberPadUiModeNotInput = false}
 local numberKeyCode = {VCK.KeyCode_0, VCK.KeyCode_1, VCK.KeyCode_2, VCK.KeyCode_3, VCK.KeyCode_4, VCK.KeyCode_5, VCK.KeyCode_6, VCK.KeyCode_7, VCK.KeyCode_8, VCK.KeyCode_9, VCK.KeyCode_NUMPAD0, VCK.KeyCode_NUMPAD1, VCK.KeyCode_NUMPAD2, VCK.KeyCode_NUMPAD3, VCK.KeyCode_NUMPAD4, VCK.KeyCode_NUMPAD5, VCK.KeyCode_NUMPAD6, VCK.KeyCode_NUMPAD7, VCK.KeyCode_NUMPAD8, VCK.KeyCode_NUMPAD9}
 local realNumber = nil
 local _textNumber = (UI.getChildControl)(Panel_Window_Exchange_Number, "Static_DisplayNumber")
@@ -42,10 +42,14 @@ local _buttonConfirm = (UI.getChildControl)(Panel_Window_Exchange_Number, "Butto
 _buttonConfirm:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonConfirm_Mouse_Click()")
 _buttonConfirm:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
 _buttonConfirm:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
-local _buttonAllSelect = (UI.getChildControl)(Panel_Window_Exchange_Number, "Button_AllSelect")
-_buttonAllSelect:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click(0)")
-_buttonAllSelect:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
-_buttonAllSelect:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
+local _buttonMoneyAllSelect = (UI.getChildControl)(Panel_Window_Exchange_Number, "Button_MoneyAllSelect")
+_buttonMoneyAllSelect:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click(0)")
+_buttonMoneyAllSelect:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
+_buttonMoneyAllSelect:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
+local _buttonWeightAllSelect = (UI.getChildControl)(Panel_Window_Exchange_Number, "Button_WeightAllSelect")
+_buttonWeightAllSelect:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click(2)")
+_buttonWeightAllSelect:addInputEvent("Mouse_UpScroll", "Panel_NumberPad_Mouse_Scroll_Event(true)")
+_buttonWeightAllSelect:addInputEvent("Mouse_DownScroll", "Panel_NumberPad_Mouse_Scroll_Event(false)")
 local _checkButtonMaxCount = (UI.getChildControl)(Panel_Window_Exchange_Number, "CheckButton_MaxCount")
 _checkButtonMaxCount:addInputEvent("Mouse_LUp", "Panel_NumberPad_ButtonAllSelect_Mouse_Click(1)")
 _checkButtonMaxCount:SetCheck(false)
@@ -65,7 +69,7 @@ numberPad.init = function(self)
 end
 
 Panel_NumberPad_CheckButtonShow = function(isShow)
-  -- function num : 0_1 , upvalues : numberPad, _buttonBackSpace, _buttonClear, _buttonAllSelect, _buttonConfirm, _buttonCancel, _checkButtonMaxCount
+  -- function num : 0_1 , upvalues : numberPad, _buttonBackSpace, _buttonClear, _buttonMoneyAllSelect, _buttonWeightAllSelect, _buttonConfirm, _buttonCancel, _checkButtonMaxCount
   if isShow then
     ((numberPad._buttonNumber)[1]):SetPosY(180)
     ;
@@ -88,7 +92,8 @@ Panel_NumberPad_CheckButtonShow = function(isShow)
     ((numberPad._buttonNumber)[10]):SetPosY(84)
     _buttonBackSpace:SetPosY(180)
     _buttonClear:SetPosY(180)
-    _buttonAllSelect:SetPosY(216)
+    _buttonMoneyAllSelect:SetPosY(216)
+    _buttonWeightAllSelect:SetPosY(216)
     _buttonConfirm:SetPosY(237)
     _buttonCancel:SetPosY(237)
   else
@@ -114,7 +119,8 @@ Panel_NumberPad_CheckButtonShow = function(isShow)
     ((numberPad._buttonNumber)[10]):SetPosY(64)
     _buttonBackSpace:SetPosY(160)
     _buttonClear:SetPosY(160)
-    _buttonAllSelect:SetPosY(196)
+    _buttonMoneyAllSelect:SetPosY(196)
+    _buttonWeightAllSelect:SetPosY(196)
     _buttonConfirm:SetPosY(217)
     _buttonCancel:SetPosY(217)
   end
@@ -193,20 +199,23 @@ Panel_NumberPad_Close = function()
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
 
   if Panel_Window_Exchange_Number:IsShow() then
-    numberPad.s64_maxNumber = (Defines.s64_const).s64_0
+    numberPad.s64_moneyMaxNumber = (Defines.s64_const).s64_0
     -- DECOMPILER ERROR at PC14: Confused about usage of register: R0 in 'UnsetPending'
 
+    numberPad.s64_weightMaxNumber = (Defines.s64_const).s64_0
+    -- DECOMPILER ERROR at PC19: Confused about usage of register: R0 in 'UnsetPending'
+
     numberPad.s64_inputNumber = (Defines.s64_const).s64_0
-    -- DECOMPILER ERROR at PC16: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC21: Confused about usage of register: R0 in 'UnsetPending'
 
     numberPad.param0 = nil
-    -- DECOMPILER ERROR at PC18: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
 
     numberPad.param1 = nil
-    -- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC25: Confused about usage of register: R0 in 'UnsetPending'
 
     numberPad.param2 = nil
-    -- DECOMPILER ERROR at PC22: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC27: Confused about usage of register: R0 in 'UnsetPending'
 
     numberPad.confirmFunction = nil
     Panel_Window_Exchange_Number:SetShow(false, true)
@@ -226,7 +235,7 @@ Panel_NumberPad_Show_Min = function(isShow, s64_minNumber, param0, confirmFuncti
   else
     -- DECOMPILER ERROR at PC25: Confused about usage of register: R5 in 'UnsetPending'
 
-    numberPad.s64_maxNumber = (Defines.s64_const).s64_max
+    numberPad.s64_moneyMaxNumber = (Defines.s64_const).s64_max
     -- DECOMPILER ERROR at PC27: Confused about usage of register: R5 in 'UnsetPending'
 
     numberPad.s64_inputNumber = s64_minNumber
@@ -234,16 +243,31 @@ Panel_NumberPad_Show_Min = function(isShow, s64_minNumber, param0, confirmFuncti
     ;
     (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
     SetFocusEdit(_textNumber)
-    realNumber = numberPad.s64_maxNumber
-    _textNumber:SetEditText(makeDotMoney(numberPad.s64_maxNumber))
+    realNumber = numberPad.s64_moneyMaxNumber
+    _textNumber:SetEditText(makeDotMoney(numberPad.s64_moneyMaxNumber))
   end
 end
 
 local _isExchange = nil
-Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, isExchange, param1, isItemMarket, param2)
-  -- function num : 0_8 , upvalues : _isExchange, _textNumber, IM, numberPad, _checkButtonMaxCount, realNumber
+Panel_NumberPad_Show = function(isShow, s64_moneyMaxNumber, param0, confirmFunction, isExchange, param1, isItemMarket, param2, s64_weightMaxNumber)
+  -- function num : 0_8 , upvalues : numberPad, _buttonMoneyAllSelect, _buttonWeightAllSelect, _isExchange, _textNumber, IM, _checkButtonMaxCount, realNumber
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R9 in 'UnsetPending'
+
+  if s64_weightMaxNumber ~= nil then
+    numberPad.s64_weightMaxNumber = s64_weightMaxNumber
+    _buttonMoneyAllSelect:SetSize(90, 20)
+    _buttonMoneyAllSelect:SetEnableArea(0, 0, 90, 20)
+    _buttonWeightAllSelect:SetShow(true)
+  else
+    -- DECOMPILER ERROR at PC25: Confused about usage of register: R9 in 'UnsetPending'
+
+    numberPad.s64_weightMaxNumber = (Defines.s64_const).s64_0
+    _buttonMoneyAllSelect:SetSize(187, 20)
+    _buttonMoneyAllSelect:SetEnableArea(0, 0, 187, 20)
+    _buttonWeightAllSelect:SetShow(false)
+  end
   _isExchange = isExchange
-  local maxLength = (string.len)(tostring(s64_maxNumber))
+  local maxLength = (string.len)(tostring(s64_moneyMaxNumber))
   _textNumber:SetMaxInput(maxLength + 1)
   if not isShow then
     Panel_NumberPad_Close()
@@ -254,25 +278,28 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
     end
   else
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC75: Confused about usage of register: R10 in 'UnsetPending'
 
-    numberPad.s64_maxNumber = s64_maxNumber
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R9 in 'UnsetPending'
+    numberPad.s64_moneyMaxNumber = s64_moneyMaxNumber
+    -- DECOMPILER ERROR at PC77: Confused about usage of register: R10 in 'UnsetPending'
+
+    numberPad.s64_weightMaxNumber = s64_weightMaxNumber
+    -- DECOMPILER ERROR at PC81: Confused about usage of register: R10 in 'UnsetPending'
 
     if isItemMarket == true then
-      numberPad.s64_inputNumber = s64_maxNumber
+      numberPad.s64_inputNumber = s64_moneyMaxNumber
     else
-      -- DECOMPILER ERROR at PC45: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC89: Confused about usage of register: R10 in 'UnsetPending'
 
       if _checkButtonMaxCount:IsCheck() then
-        numberPad.s64_inputNumber = s64_maxNumber
+        numberPad.s64_inputNumber = s64_moneyMaxNumber
       else
-        -- DECOMPILER ERROR at PC51: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC95: Confused about usage of register: R10 in 'UnsetPending'
 
         numberPad.s64_inputNumber = (Defines.s64_const).s64_1
       end
     end
-    if (Defines.s64_const).s64_1 == s64_maxNumber then
+    if (Defines.s64_const).s64_1 == s64_moneyMaxNumber then
       Panel_NumberPad_Init(param0, confirmFunction, false, param1, param2)
       Panel_NumberPad_ButtonConfirm_Mouse_Click()
     else
@@ -281,12 +308,12 @@ Panel_NumberPad_Show = function(isShow, s64_maxNumber, param0, confirmFunction, 
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
       SetFocusEdit(_textNumber)
       if isItemMarket == true then
-        realNumber = s64_maxNumber
-        _textNumber:SetEditText(makeDotMoney(s64_maxNumber))
+        realNumber = s64_moneyMaxNumber
+        _textNumber:SetEditText(makeDotMoney(s64_moneyMaxNumber))
       else
         if _checkButtonMaxCount:IsCheck() then
-          realNumber = s64_maxNumber
-          _textNumber:SetEditText(makeDotMoney(s64_maxNumber))
+          realNumber = s64_moneyMaxNumber
+          _textNumber:SetEditText(makeDotMoney(s64_moneyMaxNumber))
         else
           realNumber = (Defines.s64_const).s64_1
           _textNumber:SetEditText("1")
@@ -315,7 +342,7 @@ Panel_NumberPad_Show_MaxCount = function(isShow, s64_maxNumber, param0, confirmF
   else
     -- DECOMPILER ERROR at PC33: Confused about usage of register: R8 in 'UnsetPending'
 
-    numberPad.s64_maxNumber = s64_maxNumber
+    numberPad.s64_moneyMaxNumber = s64_maxNumber
     -- DECOMPILER ERROR at PC40: Confused about usage of register: R8 in 'UnsetPending'
 
     if _checkButtonMaxCount:IsCheck() then
@@ -350,7 +377,7 @@ end
 
 Panel_NumberPad_SetMaxCount = function()
   -- function num : 0_10 , upvalues : numberPad, slotNo, whereType
-  Panel_NumberPad_Show_MaxCount(true, numberPad.s64_maxNumber, slotNo, Warehouse_PushFromInventoryItemXXX, nil, whereType)
+  Panel_NumberPad_Show_MaxCount(true, numberPad.s64_moneyMaxNumber, slotNo, Warehouse_PushFromInventoryItemXXX, nil, whereType)
 end
 
 FGlobal_SetNumberPadUiModeNotInput = function(isSet)
@@ -392,7 +419,7 @@ Panel_NumberPad_ButtonNumber_Mouse_Click = function(number)
   end
   newStr = (string.gsub)(newStr, ",", "")
   local s64_newNumber = tonumber64(newStr)
-  local s64_MAX = numberPad.s64_maxNumber
+  local s64_MAX = numberPad.s64_moneyMaxNumber
   -- DECOMPILER ERROR at PC27: Confused about usage of register: R4 in 'UnsetPending'
 
   if numberPad.init_Number == true then
@@ -407,7 +434,7 @@ Panel_NumberPad_ButtonNumber_Mouse_Click = function(number)
         -- DECOMPILER ERROR at PC52: Confused about usage of register: R4 in 'UnsetPending'
 
         if s64_MAX < s64_newNumber then
-          numberPad.s64_inputNumber = numberPad.s64_maxNumber
+          numberPad.s64_inputNumber = numberPad.s64_moneyMaxNumber
         else
           if (string.len)(newStr) == 0 then
             _textNumber:SetEditText("0")
@@ -495,10 +522,10 @@ end
 
 Panel_NumberPad_ButtonAllSelect_Mouse_Click = function(isType)
   -- function num : 0_18 , upvalues : numberPad, _checkButtonMaxCount, _textNumber, realNumber, IM
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
-  numberPad.s64_inputNumber = numberPad.s64_maxNumber
   if isType == 1 then
+    numberPad.s64_inputNumber = numberPad.s64_moneyMaxNumber
     if not _checkButtonMaxCount:IsCheck() then
       Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
       SetFocusEdit(_textNumber)
@@ -512,12 +539,15 @@ Panel_NumberPad_ButtonAllSelect_Mouse_Click = function(isType)
       ;
       (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
       SetFocusEdit(_textNumber)
-      _textNumber:SetEditText(makeDotMoney(numberPad.s64_maxNumber))
-      realNumber = numberPad.s64_maxNumber
+      _textNumber:SetEditText(makeDotMoney(numberPad.s64_moneyMaxNumber))
+      realNumber = numberPad.s64_moneyMaxNumber
     end
   else
+    -- DECOMPILER ERROR at PC78: Confused about usage of register: R1 in 'UnsetPending'
+
     if isType == 0 then
-      if (Defines.s64_const).s64_1 == s64_maxNumber then
+      numberPad.s64_inputNumber = numberPad.s64_moneyMaxNumber
+      if (Defines.s64_const).s64_1 == numberPad.s64_maxNumber then
         Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
         Panel_NumberPad_ButtonConfirm_Mouse_Click()
       else
@@ -525,8 +555,25 @@ Panel_NumberPad_ButtonAllSelect_Mouse_Click = function(isType)
         ;
         (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
         SetFocusEdit(_textNumber)
-        _textNumber:SetEditText(makeDotMoney(numberPad.s64_maxNumber))
-        realNumber = numberPad.s64_maxNumber
+        _textNumber:SetEditText(makeDotMoney(numberPad.s64_moneyMaxNumber))
+        realNumber = numberPad.s64_moneyMaxNumber
+      end
+    else
+      -- DECOMPILER ERROR at PC135: Confused about usage of register: R1 in 'UnsetPending'
+
+      if isType == 2 then
+        numberPad.s64_inputNumber = numberPad.s64_weightMaxNumber
+        if (Defines.s64_const).s64_1 == numberPad.s64_weightMaxNumber then
+          Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
+          Panel_NumberPad_ButtonConfirm_Mouse_Click()
+        else
+          Panel_NumberPad_Init(numberPad.param0, numberPad.confirmFunction, false, numberPad.param1, numberPad.param2)
+          ;
+          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+          SetFocusEdit(_textNumber)
+          _textNumber:SetEditText(makeDotMoney(numberPad.s64_weightMaxNumber))
+          realNumber = numberPad.s64_weightMaxNumber
+        end
       end
     end
   end
@@ -538,7 +585,7 @@ Panel_NumberPad_Mouse_Scroll_Event = function(isUp)
   local currentNumber_s64 = toInt64(0, currentNumber_s32)
   local inputNumber_s64 = currentNumber_s64
   if isUp == true then
-    if numberPad.s64_maxNumber <= currentNumber_s64 then
+    if numberPad.s64_moneyMaxNumber <= currentNumber_s64 then
       return 
     end
     inputNumber_s64 = currentNumber_s64 + toInt64(0, 1)

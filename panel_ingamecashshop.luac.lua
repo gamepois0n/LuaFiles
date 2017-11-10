@@ -63,6 +63,8 @@ local tagTexture = {
 {4, 204, 238, 268}
 , 
 {274, 443, 508, 507}
+, 
+{278, 246, 512, 310}
 ; 
 [0] = {0, 0, 0, 0}
 }
@@ -497,7 +499,7 @@ inGameShop.init = function(self)
           ;
           (self._staticText_CashCount):SetShow(false)
         else
-          if isGameTypeTaiwan() then
+          if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
             cashIcon_changeTexture(self._nowCash, contry.tw)
           else
             cashIcon_changeTexture(self._nowCash, contry.kr)
@@ -2890,7 +2892,7 @@ IngameCashShop_GiftItem = function(index)
   end
   local limitLevel = 56
   local myLevel = (selfplayer:get()):getLevel()
-  if myLevel < limitLevel and isGameTypeEnglish() then
+  if myLevel < limitLevel and (isGameTypeEnglish() or isGameTypeSA()) then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 
   end
@@ -2925,7 +2927,7 @@ IngameCashShop_DescSelectedGiftItem = function(productNoRaw)
   end
   local limitLevel = 56
   local myLevel = (selfplayer:get()):getLevel()
-  if myLevel < limitLevel and isGameTypeEnglish() then
+  if myLevel < limitLevel and (isGameTypeEnglish() or isGameTypeSA()) then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 
   end
@@ -3398,6 +3400,9 @@ end
 
   InGameShop_Open = function()
   -- function num : 0_92 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG
+  if isGameTypeTR() then
+    return 
+  end
   if Panel_IngameCashShop_EasyPayment:IsShow() then
     Panel_IngameCashShop_EasyPayment:SetShow(false, false)
   end

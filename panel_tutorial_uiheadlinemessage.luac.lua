@@ -4,9 +4,9 @@
 -- params : ...
 -- function num : 0
 PaGlobal_TutorialUiHeadlineMessage = {
-_ui = {_purposeText = (UI.getChildControl)(Panel_Tutorial, "StaticText_Purpose"), _nextStep_1 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_1"), _nextStep_2 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_2"), _nextStep_3 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_3"), _nextStep_4 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_4"), _nextArrow_0 = (UI.getChildControl)(Panel_Tutorial, "Static_NextArrow_0"), _nextArrow_1 = (UI.getChildControl)(Panel_Tutorial, "Static_NextArrow_1"), _nextArrow_2 = (UI.getChildControl)(Panel_Tutorial, "Static_NextArrow_2"), _clearStep_1 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step1"), _clearStep_2 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step2"), _clearStep_3 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step3"), _clearStep_4 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step4")}
+_ui = {_purposeText = (UI.getChildControl)(Panel_Tutorial, "StaticText_Purpose"), _nextStep_1 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_1"), _nextStep_2 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_2"), _nextStep_3 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_3"), _nextStep_4 = (UI.getChildControl)(Panel_Tutorial, "StaticText_Step_4"), _nextArrow_0 = (UI.getChildControl)(Panel_Tutorial, "Static_NextArrow_0"), _nextArrow_1 = (UI.getChildControl)(Panel_Tutorial, "Static_NextArrow_1"), _nextArrow_2 = (UI.getChildControl)(Panel_Tutorial, "Static_NextArrow_2"), _clearStep_1 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step1"), _clearStep_2 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step2"), _clearStep_3 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step3"), _clearStep_4 = (UI.getChildControl)(Panel_Tutorial, "Static_Clear_Step4"), _mainBG = (UI.getChildControl)(Panel_Tutorial, "Static_MainBG")}
 }
--- DECOMPILER ERROR at PC78: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC84: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.setPurposeText = function(self, string)
   -- function num : 0_0
@@ -18,28 +18,28 @@ PaGlobal_TutorialUiHeadlineMessage.setPurposeText = function(self, string)
   end
 end
 
--- DECOMPILER ERROR at PC81: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC87: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.setShow = function(self, key, isShow)
   -- function num : 0_1
   ((self._ui)[key]):SetShow(isShow)
 end
 
--- DECOMPILER ERROR at PC84: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC90: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.setAlpha = function(self, key, value)
   -- function num : 0_2
   ((self._ui)[key]):SetAlpha(value)
 end
 
--- DECOMPILER ERROR at PC87: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.addEffect = function(self, key, effectName, isLoop, posX, posY)
   -- function num : 0_3
   ((self._ui)[key]):AddEffect(effectName, isLoop, posX, posY)
 end
 
--- DECOMPILER ERROR at PC90: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC96: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.setShowAll = function(self, isShow)
   -- function num : 0_4
@@ -48,7 +48,7 @@ PaGlobal_TutorialUiHeadlineMessage.setShowAll = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC93: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.setAlphaAll = function(self, value)
   -- function num : 0_5
@@ -57,14 +57,14 @@ PaGlobal_TutorialUiHeadlineMessage.setAlphaAll = function(self, value)
   end
 end
 
--- DECOMPILER ERROR at PC96: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.setTextPurposeText = function(self, text)
   -- function num : 0_6
   ((self._ui)._purposeText):SetText(text)
 end
 
--- DECOMPILER ERROR at PC99: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.computePosAll = function(self)
   -- function num : 0_7
@@ -91,9 +91,11 @@ PaGlobal_TutorialUiHeadlineMessage.computePosAll = function(self)
   ((self._ui)._clearStep_3):ComputePos()
   ;
   ((self._ui)._clearStep_4):ComputePos()
+  ;
+  ((self._ui)._mainBG):ComputePos()
 end
 
--- DECOMPILER ERROR at PC102: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC108: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.resetShowAll = function(self)
   -- function num : 0_8
@@ -106,6 +108,8 @@ PaGlobal_TutorialUiHeadlineMessage.resetShowAll = function(self)
   ((self._ui)._nextStep_3):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_STEP3"))
   ;
   ((self._ui)._nextStep_4):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_STEP4"))
+  ;
+  ((self._ui)._mainBG):SetSize(1000, 150)
   ;
   ((self._ui)._nextStep_1):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
@@ -139,7 +143,7 @@ PaGlobal_TutorialUiHeadlineMessage.resetShowAll = function(self)
   ((self._ui)._clearStep_4):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC105: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.addClearStepEffect = function(self, clearCount)
   -- function num : 0_9
@@ -183,7 +187,7 @@ PaGlobal_TutorialUiHeadlineMessage.addClearStepEffect = function(self, clearCoun
   end
 end
 
--- DECOMPILER ERROR at PC108: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_TutorialUiHeadlineMessage.resetClearStepEffect = function(self)
   -- function num : 0_10

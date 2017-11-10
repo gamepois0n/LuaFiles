@@ -349,7 +349,7 @@ end
 
 HandleClickedIncreaseMember = function()
   -- function num : 0_13
-  local skillPointInfo = getSkillPointInfo(3)
+  local skillPointInfo = ToClient_getSkillPointInfo(3)
   if skillPointInfo._remainPoint < 2 then
     local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_NEED_GUILDSKILLPOINT") .. tostring(skillPointInfo._remainPoint) .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_EXPAND_POINT_LACK")
     local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_EXPAND_MAX_COUNT"), content = messageContent, functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -372,7 +372,7 @@ end
 
 HandleClickedIncreaseProtectMember = function()
   -- function num : 0_15
-  local skillPointInfo = getSkillPointInfo(3)
+  local skillPointInfo = ToClient_getSkillPointInfo(3)
   if skillPointInfo._remainPoint < 3 then
     local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROTECTADD_MOREPOINT") .. tostring(skillPointInfo._remainPoint) .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_EXPAND_POINT_LACK")
     local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROTECTADD_TITLE"), content = messageContent, functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -421,7 +421,7 @@ GuildInfoPage.UpdateData = function(self)
         end
       end
     end
-    local skillPointInfo = getSkillPointInfo(3)
+    local skillPointInfo = ToClient_getSkillPointInfo(3)
     local skillPointPercent = (string.format)("%.0f", skillPointInfo._currentExp / skillPointInfo._nextLevelExp * 100)
     if tonumber(skillPointPercent) > 100 then
       skillPointPercent = 100
@@ -607,7 +607,7 @@ GuildInfoPage.UpdateData = function(self)
     if isGuildMaster == true then
       self:SetShow(true)
       if myGuildInfo:getGuildGrade() == 0 then
-        local skillPointInfo = getSkillPointInfo(3)
+        local skillPointInfo = ToClient_getSkillPointInfo(3)
         do
           local isEnable = ToClient_GetGuildSkillPointPerIncreaseMember() <= skillPointInfo._remainPoint
           ;
@@ -2301,7 +2301,6 @@ GuildMainInfo_Show = function()
   if guildCommentsWebUrl ~= nil then
     _Web:SetShow(true)
   end
-  promote_btn:SetShow(false)
 end
 
 guildCommentsUrlByServiceType = function()
@@ -3113,7 +3112,12 @@ FromClient_NotifyGuildMessage = function(msgType, strParam1, strParam2, s64_para
                                           if msgType == 10 then
                                             local message = {}
                                             if param1 <= 8 then
-                                              local lifeLevel = FGlobal_CraftLevel_Replace(param2, param1)
+                                              local lifeLevel = nil
+                                              if isNewCharacterInfo() == false then
+                                                lifeLevel = FGlobal_CraftLevel_Replace(param2, param1)
+                                              else
+                                                lifeLevel = FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(param2)
+                                              end
                                               message.main = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMEMBERLIFELEVELUP_MAIN", "strParam1", strParam1, "param1", lifeType[param1], "lifeLevel", lifeLevel)
                                               message.sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMEMBER_CHEER")
                                               message.addMsg = ""
@@ -3608,7 +3612,7 @@ Introduce_Init = function()
   end
   introduce_edit:SetMaxInput(200)
   introduce_edit_TW:SetMaxInput(200)
-  promote_btn:addInputEvent("Mouse_LUp", "Promote()")
+  promote_btn:addInputEvent("Mouse_LUp", "Guild_Promote_Confirm()")
   promote_btn:addInputEvent("Mouse_On", "Promote_Tooltip(true)")
   promote_btn:addInputEvent("Mouse_Out", "Promote_Tooltip(false)")
   introduce_btn:addInputEvent("Mouse_LUp", "Introduce_Regist()")
@@ -3644,8 +3648,16 @@ FGlobal_GuildIntroduceClearFocusEdit = function()
   end
 end
 
-Promote = function()
+Guild_Promote_Confirm = function()
   -- function num : 0_82
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_PROMOTE_BTN_MESSAGE_DESC")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = Guild_Promote, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
+end
+
+Guild_Promote = function()
+  -- function num : 0_83
   local selfProxy = (getSelfPlayer()):get()
   local isGuildMaster = selfProxy:isGuildMaster()
   local isGuildSubMaster = selfProxy:isGuildSubMaster()
@@ -3659,7 +3671,7 @@ Promote = function()
 end
 
 Promote_Tooltip = function(isShow)
-  -- function num : 0_83 , upvalues : promote_btn
+  -- function num : 0_84 , upvalues : promote_btn
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -3672,14 +3684,14 @@ Promote_Tooltip = function(isShow)
 end
 
 Introduce_Regist = function()
-  -- function num : 0_84 , upvalues : IM, introduce_edit_TW, introduce_edit
+  -- function num : 0_85 , upvalues : IM, introduce_edit_TW, introduce_edit
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if isGuildMaster == false and isGuildSubMaster == false then
     return 
   end
   local close_function = function()
-    -- function num : 0_84_0 , upvalues : IM
+    -- function num : 0_85_0 , upvalues : IM
     if AllowChangeInputMode() then
       if (UI.checkShowWindow)() then
         (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -3702,7 +3714,7 @@ Introduce_Regist = function()
 end
 
 Introduce_Reset = function()
-  -- function num : 0_85 , upvalues : introduce_edit_TW, introduce_edit
+  -- function num : 0_86 , upvalues : introduce_edit_TW, introduce_edit
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if isGuildMaster == false and isGuildSubMaster == false then
@@ -3717,7 +3729,7 @@ Introduce_Reset = function()
 end
 
 GuildIntroduce_Update = function()
-  -- function num : 0_86 , upvalues : introduce_edit_TW, introduce_edit
+  -- function num : 0_87 , upvalues : introduce_edit_TW, introduce_edit
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   if guildWrapper == nil then
     return 
@@ -3731,7 +3743,7 @@ GuildIntroduce_Update = function()
 end
 
 FGlobal_CheckGuildIntroduceUiEdit = function(targetUI)
-  -- function num : 0_87 , upvalues : introduce_edit_TW, introduce_edit
+  -- function num : 0_88 , upvalues : introduce_edit_TW, introduce_edit
   if targetUI == nil or targetUI:GetKey() ~= introduce_edit_TW:GetKey() then
     do return not isGameTypeTaiwan() end
     do return targetUI ~= nil and targetUI:GetKey() == introduce_edit:GetKey() end
@@ -3740,7 +3752,7 @@ FGlobal_CheckGuildIntroduceUiEdit = function(targetUI)
 end
 
 FromWeb_WebPageError = function(url, statusCode)
-  -- function num : 0_88 , upvalues : _urlCache, _Web
+  -- function num : 0_89 , upvalues : _urlCache, _Web
   if statusCode ~= 200 then
     return 
   end
@@ -3761,14 +3773,14 @@ FromWeb_WebPageError = function(url, statusCode)
 end
 
 HandleClickedGetArshaHost = function()
-  -- function num : 0_89 , upvalues : isContentsArsha, isCanDoReservation
+  -- function num : 0_90 , upvalues : isContentsArsha, isCanDoReservation
   if isContentsArsha == false or isCanDoReservation == false then
     return 
   end
   local isHost = ToClient_IsCompetitionHost()
   local messageBoxMemo = ""
   local func = function()
-    -- function num : 0_89_0
+    -- function num : 0_90_0
     ToClient_RequestGetHostByReservationInfo()
   end
 
@@ -3783,7 +3795,7 @@ HandleClickedGetArshaHost = function()
 end
 
 Guild_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_90 , upvalues : checkPopUp
+  -- function num : 0_91 , upvalues : checkPopUp
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""
@@ -3817,7 +3829,7 @@ registerEvent("FromWeb_WebPageError", "FromWeb_WebPageError")
 registerEvent("onScreenResize", "Guild_onScreenResize")
 registerEvent("FromClient_luaLoadComplete", "Guild_Init")
 Guild_Init = function()
-  -- function num : 0_91 , upvalues : isGuildBattle
+  -- function num : 0_92 , upvalues : isGuildBattle
   GuildManager:initialize()
   GuildMainInfo_Show()
   Notice_Init()
@@ -3827,7 +3839,7 @@ Guild_Init = function()
 end
 
 Test_GiveMeGuildWelfare = function()
-  -- function num : 0_92
+  -- function num : 0_93
   ToClient_RequestguildWelfare()
 end
 

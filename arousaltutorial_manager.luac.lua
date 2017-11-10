@@ -94,11 +94,11 @@ end
 local SkillComboCheck = {
 [UI_classType.ClassType_Warrior] = {
 [0] = {
-{349, 350, 351, 705}
+{349, 350, 351, 705, 2847}
 , 
 {1712}
 ; 
-[0] = {349, 350, 351, 705}
+[0] = {349, 350, 351, 705, 2847}
 }
 , 
 [1] = {
@@ -106,7 +106,7 @@ local SkillComboCheck = {
 , 
 {1765, 1766, 1767, 1768}
 ; 
-[0] = {385}
+[0] = {385, 2848}
 }
 }
 , 
@@ -114,7 +114,7 @@ local SkillComboCheck = {
 [0] = {
 {1855}
 ; 
-[0] = {1006, 1091, 1092, 1093, 375, 1102}
+[0] = {1006, 1091, 1092, 1093, 375, 1102, 2855}
 }
 , 
 [1] = {
@@ -122,7 +122,7 @@ local SkillComboCheck = {
 , 
 {1875, 1876, 1877, 1878}
 ; 
-[0] = {1029, 1119, 1250, 1251}
+[0] = {1029, 1119, 1250, 1251, 2864}
 }
 }
 , 
@@ -130,7 +130,7 @@ local SkillComboCheck = {
 [0] = {
 {1769}
 ; 
-[0] = {1056, 1202, 1203, 583}
+[0] = {1056, 1202, 1203, 583, 2876}
 }
 , 
 [1] = {
@@ -138,7 +138,7 @@ local SkillComboCheck = {
 , 
 {1785, 1786, 1787, 1788}
 ; 
-[0] = {1056, 1202, 1203, 583}
+[0] = {1056, 1202, 1203, 583, 2876}
 }
 }
 , 
@@ -146,7 +146,7 @@ local SkillComboCheck = {
 [0] = {
 {1812}
 ; 
-[0] = {1041, 1163, 1164, 1165, 1166, 296}
+[0] = {1041, 1163, 1164, 1165, 1166, 296, 2895}
 }
 , 
 [1] = {
@@ -154,7 +154,7 @@ local SkillComboCheck = {
 , 
 {1830, 1831, 1832, 1833}
 ; 
-[0] = {1042, 1167, 1168, 1169, 1170, 1171}
+[0] = {1042, 1167, 1168, 1169, 1170, 1171, 2896}
 }
 }
 , 
@@ -162,7 +162,7 @@ local SkillComboCheck = {
 [0] = {
 {1898}
 ; 
-[0] = {1070, 1232, 1233, 1234}
+[0] = {1070, 1232, 1233, 1234, 2926}
 }
 , 
 [1] = {
@@ -170,7 +170,7 @@ local SkillComboCheck = {
 , 
 {1913, 1914, 1915, 1916}
 ; 
-[0] = {129, 130, 131, 132, 205}
+[0] = {129, 130, 131, 132, 205, 2930}
 }
 }
 , 
@@ -258,7 +258,7 @@ local SkillComboCheck = {
 [0] = {
 {2077}
 ; 
-[0] = {962, 963, 964, 965}
+[0] = {962, 963, 964, 965, 3111}
 }
 , 
 [1] = {
@@ -266,7 +266,7 @@ local SkillComboCheck = {
 , 
 {2104, 2105, 2106, 2107}
 ; 
-[0] = {966, 967, 968, 969, 970}
+[0] = {966, 967, 968, 969, 970, 3112}
 }
 }
 , 
@@ -274,7 +274,7 @@ local SkillComboCheck = {
 [0] = {
 {2120}
 ; 
-[0] = {962, 963, 964, 965}
+[0] = {962, 963, 964, 965, 3111}
 }
 , 
 [1] = {
@@ -282,7 +282,7 @@ local SkillComboCheck = {
 , 
 {2154, 2155, 2156, 2157}
 ; 
-[0] = {966, 967, 968, 969, 970}
+[0] = {966, 967, 968, 969, 970, 3112}
 }
 }
 , 
@@ -789,7 +789,7 @@ local updateDeltaTime_ComboTutorial = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC2062: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2081: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
   -- function num : 0_13 , upvalues : questCheck, classType, comboQuestClear, UI_TM, UI_color, baseComboCount, usedSkillKey, usedSkillMatch, _stepNo
@@ -804,6 +804,7 @@ PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
   end
   Panel_ArousalTutorial:SetShow(true, true)
   PaGlobal_ArousalTutorial_Manager:setDoingArousalTutorial(true)
+  PaGlobal_ArousalTutorial_UiHeadlineMessage:mainBGShow()
   ;
   (PaGlobal_ArousalTutorial_UiManager:getUiHeadlineMessage()):computePosAll()
   ;
@@ -884,49 +885,49 @@ PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
   (PaGlobal_ArousalTutorial_UiManager:getUiKeyButton()):ButtonToggle("_button_D", false)
   ;
   (PaGlobal_ArousalTutorial_UiManager:getUiKeyButton()):ButtonToggle("_button_Shift", false)
-  -- DECOMPILER ERROR at PC335: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC338: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._button_Q = false
-  -- DECOMPILER ERROR at PC341: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC344: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._button_W = false
-  -- DECOMPILER ERROR at PC347: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC350: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._button_A = false
-  -- DECOMPILER ERROR at PC353: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC356: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._button_S = false
-  -- DECOMPILER ERROR at PC359: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC362: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._button_D = false
-  -- DECOMPILER ERROR at PC365: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC368: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._button_F = false
-  -- DECOMPILER ERROR at PC371: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC374: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._button_Shift = false
-  -- DECOMPILER ERROR at PC377: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC380: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._m0 = false
-  -- DECOMPILER ERROR at PC383: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC386: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (((PaGlobal_ArousalTutorial_UiManager:getUiKeyButton())._ui)._prevUsingKey)._m1 = false
   for index = 0, #questCheck[classType] do
     if questList_hasProgressQuest(((questCheck[classType])[index]).questGroup, ((questCheck[classType])[index]).questId) then
       (((PaGlobal_ArousalTutorial_UiManager:getUiHeadlineMessage())._ui)._purposeText):SetText(((questCheck[classType])[index]).purposeText)
-      -- DECOMPILER ERROR at PC423: Confused about usage of register: R5 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC426: Confused about usage of register: R5 in 'UnsetPending'
 
       progressQuestNo._group = ((questCheck[classType])[index]).questGroup
-      -- DECOMPILER ERROR at PC430: Confused about usage of register: R5 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC433: Confused about usage of register: R5 in 'UnsetPending'
 
       progressQuestNo._id = ((questCheck[classType])[index]).questId
       comboQuestClear = false
@@ -982,17 +983,17 @@ PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
     end
   end
   for index = 0, baseComboCount - 1 do
-    -- DECOMPILER ERROR at PC689: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC692: Confused about usage of register: R5 in 'UnsetPending'
 
     usedSkillKey[index] = nil
-    -- DECOMPILER ERROR at PC691: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC694: Confused about usage of register: R5 in 'UnsetPending'
 
     usedSkillMatch[index] = false
   end
   _stepNo = 101
 end
 
--- DECOMPILER ERROR at PC2068: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2087: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_ArousalTutorial_Manager.updatePerFrame = function(self, deltaTime)
   -- function num : 0_14 , upvalues : _stepNo, updateDeltaTime_ComboTutorial

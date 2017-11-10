@@ -190,7 +190,7 @@ end
 GuildSkillFrame_UpdateData = function(isLearnMode, doForce)
   -- function num : 0_6 , upvalues : GuildSkill, _staticText_GuildPoint_Value, _staticText_GuildPoint_Percent
   local self = GuildSkill
-  local skillPointInfo = getSkillPointInfo(3)
+  local skillPointInfo = ToClient_getSkillPointInfo(3)
   local skillPointPercent = (string.format)("%.0f", skillPointInfo._currentExp / skillPointInfo._nextLevelExp * 100)
   _staticText_GuildPoint_Value:SetText(tostring(skillPointInfo._remainPoint))
   if tonumber(skillPointPercent) > 100 then

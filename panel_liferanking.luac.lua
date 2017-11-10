@@ -64,6 +64,7 @@ local tooltip = {_bg = (UI.getChildControl)(Panel_LifeRanking, "Static_TooltipBG
 (tooltip._desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
 ;
 (tooltip._bg):SetIgnore(true)
+local requestCount = 0
 LifeRanking_Initionalize = function()
   -- function num : 0_2 , upvalues : LifeRanking, tooltip
   for listIdx = 0, LifeRanking._createListCount - 1 do
@@ -278,7 +279,12 @@ LifeRanking.Update = function(self)
         ;
         (LifeRanking.firstRankerGuild):SetText(lifeRankerGuild)
         if LifeRanking._selectedTabIdx <= 9 then
-          ((LifeRanking._topGrade)[1]):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+          if isNewCharacterInfo() == false then
+            ((LifeRanking._topGrade)[1]):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+          else
+            ;
+            ((LifeRanking._topGrade)[1]):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeRankerLv))
+          end
         else
           if LifeRanking._selectedTabIdx == 10 then
             ((LifeRanking._topGrade)[1]):SetShow(false)
@@ -325,7 +331,12 @@ LifeRanking.Update = function(self)
                   ;
                   (LifeRanking.secondRankerGuild):SetText(lifeRankerGuild)
                   if LifeRanking._selectedTabIdx <= 9 then
-                    ((LifeRanking._topGrade)[2]):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+                    if isNewCharacterInfo() == false then
+                      ((LifeRanking._topGrade)[2]):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+                    else
+                      ;
+                      ((LifeRanking._topGrade)[2]):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeRankerLv))
+                    end
                   else
                     if LifeRanking._selectedTabIdx == 10 then
                       ((LifeRanking._topGrade)[2]):SetShow(false)
@@ -372,7 +383,12 @@ LifeRanking.Update = function(self)
                             ;
                             (LifeRanking.thirdRankerGuild):SetText(lifeRankerGuild)
                             if LifeRanking._selectedTabIdx <= 9 then
-                              ((LifeRanking._topGrade)[3]):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+                              if isNewCharacterInfo() == false then
+                                ((LifeRanking._topGrade)[3]):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+                              else
+                                ;
+                                ((LifeRanking._topGrade)[3]):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeRankerLv))
+                              end
                             else
                               if LifeRanking._selectedTabIdx == 10 then
                                 ((LifeRanking._topGrade)[3]):SetShow(false)
@@ -427,7 +443,12 @@ LifeRanking.Update = function(self)
                                     ;
                                     (list.guild):SetText(lifeRankerGuild)
                                     if LifeRanking._selectedTabIdx <= 9 then
-                                      (list.grade):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+                                      if isNewCharacterInfo() == false then
+                                        (list.grade):SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, LifeRanking._selectedTabIdx))
+                                      else
+                                        ;
+                                        (list.grade):SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeRankerLv))
+                                      end
                                     else
                                       if LifeRanking._selectedTabIdx == 10 then
                                         (list.grade):SetShow(false)
@@ -453,77 +474,77 @@ LifeRanking.Update = function(self)
                                               ;
                                               (list.name):addInputEvent("Mouse_Out", "LifeRanking_Tooltip()")
                                               count = count + 1
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out DO_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out DO_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                              -- DECOMPILER ERROR at PC947: LeaveBlock: unexpected jumping out IF_STMT
+                                              -- DECOMPILER ERROR at PC997: LeaveBlock: unexpected jumping out IF_STMT
 
                                             end
                                           end
@@ -603,7 +624,11 @@ LifeRanking.Update = function(self)
 end
 
 FromClient_ShowLifeRank = function()
-  -- function num : 0_4 , upvalues : LifeRanking
+  -- function num : 0_4 , upvalues : requestCount, LifeRanking
+  if isNewCharacterInfo() == true and requestCount > 0 then
+    requestCount = requestCount - 1
+    return 
+  end
   audioPostEvent_SystemUi(1, 0)
   Panel_LifeRanking:SetShow(true, true)
   LifeRanking:Update()
@@ -685,13 +710,19 @@ FGlobal_LifeRanking_Open = function()
   ToClient_RequestLifeRanker(LifeRanking._selectedTabIdx)
 end
 
+FGlobal_LifeRanking_RequestRank = function(rankType)
+  -- function num : 0_8 , upvalues : requestCount
+  requestCount = requestCount + 1
+  ToClient_RequestLifeRanker(rankType)
+end
+
 FGlobal_LifeRanking_Close = function()
-  -- function num : 0_8
+  -- function num : 0_9
   Panel_LifeRanking:SetShow(false, false)
 end
 
 LifeRanking_RankerWhisper = function(rankIdx)
-  -- function num : 0_9 , upvalues : LifeRanking, IM
+  -- function num : 0_10 , upvalues : LifeRanking, IM
   local lifeRanker = nil
   if LifeRanking._selectedTabIdx <= 9 then
     lifeRanker = ToClient_GetLifeRankerAt(rankIdx)
@@ -719,7 +750,7 @@ LifeRanking_RankerWhisper = function(rankIdx)
 end
 
 LifeRanking_Simpletooltips = function(isShow, contolNo)
-  -- function num : 0_10 , upvalues : LifeRanking
+  -- function num : 0_11 , upvalues : LifeRanking
   local control, name = nil
   if isShow == true then
     contol = (LifeRanking._tab)[contolNo]
@@ -732,7 +763,7 @@ LifeRanking_Simpletooltips = function(isShow, contolNo)
 end
 
 LifeRanking_Repos = function()
-  -- function num : 0_11
+  -- function num : 0_12
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
   Panel_LifeRanking:SetPosX((screenSizeX - Panel_LifeRanking:GetSizeX()) / 2)
@@ -740,7 +771,7 @@ LifeRanking_Repos = function()
 end
 
 LifeRanking_registEventHandler = function()
-  -- function num : 0_12 , upvalues : LifeRanking
+  -- function num : 0_13 , upvalues : LifeRanking
   (LifeRanking._btnClose):addInputEvent("Mouse_LUp", "FGlobal_LifeRanking_Close()")
   for idx,value in pairs(LifeRanking._tab) do
     ((LifeRanking._tab)[idx]):addInputEvent("Mouse_LUp", "LifeRanking_SelectTab( " .. idx .. " )")
@@ -754,12 +785,12 @@ LifeRanking_registEventHandler = function()
 end
 
 FromClient_ResponseMatchRank_ = function()
-  -- function num : 0_13 , upvalues : LifeRanking
+  -- function num : 0_14 , upvalues : LifeRanking
   LifeRanking:Update()
 end
 
 FGlobal_LifeRanking_CheckEnAble = function(rankType)
-  -- function num : 0_14 , upvalues : rankingTabId
+  -- function num : 0_15 , upvalues : rankingTabId
   local self = rankingTabId
   local returnValue = true
   if self.tab_Hunting == rankType then
@@ -797,7 +828,7 @@ FGlobal_LifeRanking_CheckEnAble = function(rankType)
 end
 
 FGlobal_LifeRanking_Show = function(index)
-  -- function num : 0_15 , upvalues : LifeRanking
+  -- function num : 0_16 , upvalues : LifeRanking
   local rankType = nil
   if index == 0 then
     rankType = 12
@@ -818,7 +849,7 @@ FGlobal_LifeRanking_Show = function(index)
 end
 
 LifeRanking_registMessageHandler = function()
-  -- function num : 0_16
+  -- function num : 0_17
   registerEvent("onScreenResize", "LifeRanking_Repos")
   registerEvent("FromClient_ShowLifeRank", "FromClient_ShowLifeRank")
   registerEvent("FromClient_ShowContentsRank", "FromClient_ShowContentsRank")
@@ -826,7 +857,7 @@ LifeRanking_registMessageHandler = function()
 end
 
 local lifeRanking_TooltipHide = function()
-  -- function num : 0_17 , upvalues : tooltip
+  -- function num : 0_18 , upvalues : tooltip
   local self = tooltip
   ;
   (self._bg):SetShow(false)
@@ -837,7 +868,7 @@ local lifeRanking_TooltipHide = function()
 end
 
 local lifeRanking_TooltipShow = function(uiControl, name, desc, index)
-  -- function num : 0_18 , upvalues : lifeRanking_TooltipHide, tooltip
+  -- function num : 0_19 , upvalues : lifeRanking_TooltipHide, tooltip
   lifeRanking_TooltipHide()
   local self = tooltip
   ;
@@ -879,7 +910,7 @@ local lifeRanking_TooltipShow = function(uiControl, name, desc, index)
 end
 
 LifeRanking_Tooltip = function(index)
-  -- function num : 0_19 , upvalues : lifeRanking_TooltipHide, rankerData, LifeRanking, lifeRanking_TooltipShow
+  -- function num : 0_20 , upvalues : lifeRanking_TooltipHide, rankerData, LifeRanking, lifeRanking_TooltipShow
   if index == nil then
     lifeRanking_TooltipHide()
     return 

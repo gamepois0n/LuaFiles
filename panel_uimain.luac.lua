@@ -129,8 +129,8 @@ local buttonAni = (UI.getChildControl)(Panel_UIMain, "Static_NewEffect_Ani")
 local MenuButton_CheckEnAble = function(buttonType)
   -- function num : 0_7 , upvalues : MenuButtonId
   local returnValue = false
-  if buttonType == MenuButtonId.Btn_CashShop or buttonType == MenuButtonId.Btn_Beauty then
-    if getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
+  if buttonType == MenuButtonId.Btn_CashShop then
+    if isGameTypeTR() then
       returnValue = false
     else
       returnValue = true
@@ -159,50 +159,50 @@ initMenuButtons = function()
     if MenuButtonId.Btn_CashShop == idx then
       button:ChangeTextureInfoName("New_UI_Common_forLua/Widget/UIControl/UI_Control_00.dds")
       local x1, y1, x2, y2 = 0, 0, 0, 0
-      if getGameServiceType() == 0 or getGameServiceType() == 1 or getGameServiceType() == 2 or getGameServiceType() == 3 or getGameServiceType() == 4 then
+      if isGameTypeKorea() then
         x1 = cashIcon_UiMainchangeButtonTexture(button, contry.kr)
       else
-        -- DECOMPILER ERROR at PC175: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC155: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC176: Overwrote pending register: R12 in 'AssignReg'
+        -- DECOMPILER ERROR at PC156: Overwrote pending register: R12 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC177: Overwrote pending register: R11 in 'AssignReg'
+        -- DECOMPILER ERROR at PC157: Overwrote pending register: R11 in 'AssignReg'
 
-        if getGameServiceType() == 5 or getGameServiceType() == 6 then
+        if isGameTypeJapan() then
           x1 = cashIcon_UiMainchangeButtonTexture(button, contry.jp)
         else
-          -- DECOMPILER ERROR at PC193: Overwrote pending register: R13 in 'AssignReg'
+          -- DECOMPILER ERROR at PC169: Overwrote pending register: R13 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC194: Overwrote pending register: R12 in 'AssignReg'
+          -- DECOMPILER ERROR at PC170: Overwrote pending register: R12 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC195: Overwrote pending register: R11 in 'AssignReg'
+          -- DECOMPILER ERROR at PC171: Overwrote pending register: R11 in 'AssignReg'
 
-          if getGameServiceType() == 7 or getGameServiceType() == 8 then
+          if isGameTypeRussia() then
             x1 = cashIcon_UiMainchangeButtonTexture(button, contry.ru)
           else
-            -- DECOMPILER ERROR at PC211: Overwrote pending register: R13 in 'AssignReg'
+            -- DECOMPILER ERROR at PC183: Overwrote pending register: R13 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC212: Overwrote pending register: R12 in 'AssignReg'
+            -- DECOMPILER ERROR at PC184: Overwrote pending register: R12 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC213: Overwrote pending register: R11 in 'AssignReg'
+            -- DECOMPILER ERROR at PC185: Overwrote pending register: R11 in 'AssignReg'
 
-            if getGameServiceType() == 9 or getGameServiceType() == 10 then
+            if isGameTypeKR2() then
               x1 = cashIcon_UiMainchangeButtonTexture(button, contry.cn)
             else
-              -- DECOMPILER ERROR at PC225: Overwrote pending register: R13 in 'AssignReg'
+              -- DECOMPILER ERROR at PC209: Overwrote pending register: R13 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC226: Overwrote pending register: R12 in 'AssignReg'
+              -- DECOMPILER ERROR at PC210: Overwrote pending register: R12 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC227: Overwrote pending register: R11 in 'AssignReg'
+              -- DECOMPILER ERROR at PC211: Overwrote pending register: R11 in 'AssignReg'
 
-              if isGameTypeTaiwan() then
+              if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
                 x1 = cashIcon_UiMainchangeButtonTexture(button, contry.tw)
               else
-                -- DECOMPILER ERROR at PC235: Overwrote pending register: R13 in 'AssignReg'
+                -- DECOMPILER ERROR at PC219: Overwrote pending register: R13 in 'AssignReg'
 
-                -- DECOMPILER ERROR at PC236: Overwrote pending register: R12 in 'AssignReg'
+                -- DECOMPILER ERROR at PC220: Overwrote pending register: R12 in 'AssignReg'
 
-                -- DECOMPILER ERROR at PC237: Overwrote pending register: R11 in 'AssignReg'
+                -- DECOMPILER ERROR at PC221: Overwrote pending register: R11 in 'AssignReg'
 
                 x1 = cashIcon_UiMainchangeButtonTexture(button, contry.kr)
               end
@@ -216,13 +216,13 @@ initMenuButtons = function()
     end
     do
       do
-        -- DECOMPILER ERROR at PC252: Overwrote pending register: R11 in 'AssignReg'
+        -- DECOMPILER ERROR at PC236: Overwrote pending register: R11 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC254: Overwrote pending register: R12 in 'AssignReg'
+        -- DECOMPILER ERROR at PC238: Overwrote pending register: R12 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC256: Overwrote pending register: R13 in 'AssignReg'
+        -- DECOMPILER ERROR at PC240: Overwrote pending register: R13 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC261: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC245: Confused about usage of register: R10 in 'UnsetPending'
 
         buttonAni[idx] = (y1.createControl)(x2.PA_UI_CONTROL_STATIC, y2, "Static_ButtonAni" .. idx)
         CopyBaseProperty(buttonAni, buttonAni[idx])
@@ -237,10 +237,10 @@ initMenuButtons = function()
         else
           button:SetShow(false)
         end
-        -- DECOMPILER ERROR at PC299: Confused about usage of register: R10 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC283: Confused about usage of register: R10 in 'UnsetPending'
 
         MenuButtons[idx] = button
-        -- DECOMPILER ERROR at PC300: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC284: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end
@@ -475,10 +475,18 @@ _challengeCall_byNewChallengeAlarm = function()
   end
   if not Panel_Window_CharInfo_Status:GetShow() then
     Panel_Window_CharInfo_Status:SetShow(true)
-    FGlobal_CharInfoStatusShowAni()
+    if isNewCharacterInfo() == false then
+      FGlobal_CharInfoStatusShowAni()
+    else
+      PaGlobal_CharacterInfo:showAni()
+    end
     audioPostEvent_SystemUi(1, 34)
   end
-  HandleClicked_CharacterInfo_Tab(3)
+  if isNewCharacterInfo() == false then
+    HandleClicked_CharacterInfo_Tab(3)
+  else
+    PaGlobal_CharacterInfo:showWindow(3)
+  end
   HandleClickedTapButton(5)
 end
 
@@ -619,7 +627,7 @@ FGlobal_NewFriendAlertOff = function()
 end
 
 FromClient_RegisterCoupon = function()
-  -- function num : 0_27 , upvalues : couponIcon, couponCount
+  -- function num : 0_27 , upvalues : couponIcon, isCouponOpen, couponCount
   local count = ToClient_GetCouponInfoUsableCount()
   Panel_Coupon_Alert:SetShow(false)
   local iconPosX = 60
@@ -634,7 +642,7 @@ FromClient_RegisterCoupon = function()
   end
   couponIcon:EraseAllEffect()
   if count > 0 then
-    Panel_Coupon_Alert:SetShow(true)
+    Panel_Coupon_Alert:SetShow(isCouponOpen)
     couponIcon:addInputEvent("Mouse_LUp", "IngameCashShopCoupon_Open()")
     couponCount:SetText(count)
     couponIcon:AddEffect("fUI_Coupon_01A", true, 0, 0)

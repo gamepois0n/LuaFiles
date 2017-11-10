@@ -3,13 +3,23 @@
 
 -- params : ...
 -- function num : 0
+Panel_Blackspirit_OnOff:setGlassBackground(true)
+Panel_Blackspirit_OnOff:ActiveMouseEventEffect(true)
 BlackSpiritIcon = {buttonBlackSpiritIcon = (UI.getChildControl)(Panel_Blackspirit_OnOff, "Button_Blackspirt")}
 PaGlobal_PossessByBlackSpiritIcon = {}
--- DECOMPILER ERROR at PC12: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_PossessByBlackSpiritIcon.Init = function(self)
   -- function num : 0_0
   (BlackSpiritIcon.buttonBlackSpiritIcon):addInputEvent("Mouse_LUp", "PaGlobal_PossessByBlackSpiritIcon_OnOffToggle()")
+  ;
+  (BlackSpiritIcon.buttonBlackSpiritIcon):setGlassBackground(true)
+  ;
+  (BlackSpiritIcon.buttonBlackSpiritIcon):ActiveMouseEventEffect(true)
+  ;
+  (BlackSpiritIcon.buttonBlackSpiritIcon):addInputEvent("Mouse_On", "PaGlobal_PossessByBlackSpiritIcon_MouseToolTip(true)")
+  ;
+  (BlackSpiritIcon.buttonBlackSpiritIcon):addInputEvent("Mouse_Out", "PaGlobal_PossessByBlackSpiritIcon_MouseToolTip(false)")
 end
 
 PaGlobal_PossessByBlackSpiritIcon_OnOffToggle = function()
@@ -21,10 +31,24 @@ PaGlobal_PossessByBlackSpiritIcon_OnOffToggle = function()
   end
 end
 
--- DECOMPILER ERROR at PC17: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobal_PossessByBlackSpiritIcon_MouseToolTip = function(isShow)
+  -- function num : 0_2
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  local self = BlackSpiritIcon
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_ICON_AUTO_BLACKSPIRIT_TOOLTIP_NAME")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_ICON_AUTO_BLACKSPIRIT_TOOLTIP_DESC")
+  control = self.buttonBlackSpiritIcon
+  TooltipSimple_Show(control, name, desc)
+end
+
+-- DECOMPILER ERROR at PC27: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_PossessByBlackSpiritIcon.showAble = function(self)
-  -- function num : 0_2
+  -- function num : 0_3
   if isFlushedUI() or ToClient_IsContentsGroupOpen("301") == false then
     return false
   end
@@ -34,10 +58,10 @@ PaGlobal_PossessByBlackSpiritIcon.showAble = function(self)
   return true
 end
 
--- DECOMPILER ERROR at PC20: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_PossessByBlackSpiritIcon.setPosIcon = function(self)
-  -- function num : 0_3
+  -- function num : 0_4
   if isFlushedUI() then
     return 
   end
@@ -86,12 +110,12 @@ PaGlobal_PossessByBlackSpiritIcon.setPosIcon = function(self)
 end
 
 PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState = function()
-  -- function num : 0_4
+  -- function num : 0_5
   PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
 end
 
 PaGlobal_PossessByBlackSpirit_Open = function()
-  -- function num : 0_5
+  -- function num : 0_6
   PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
   if PaGlobal_AutoManager._ActiveState == false then
     PaGlobal_AutoManager:start()

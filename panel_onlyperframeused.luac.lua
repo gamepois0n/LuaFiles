@@ -71,6 +71,12 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     if (CppEnums.CountryType).DEV == getGameServiceType() and ConsoleUISimplifyPerFrameUpdate ~= nil then
       ConsoleUISimplifyPerFrameUpdate(deltaTime)
     end
+    if FGlobal_GuildBattle_IsOpen() and FGlobal_GuildBattle_UpdatePerFrame ~= nil then
+      FGlobal_GuildBattle_UpdatePerFrame(deltaTime)
+    end
+    if Panel_GuidlBattle_Point:GetShow() and FGlobal_GuildBattlePoint_UpdatePerFrame ~= nil then
+      FGlobal_GuildBattlePoint_UpdatePerFrame(deltaTime)
+    end
   end
 end
 

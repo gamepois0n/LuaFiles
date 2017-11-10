@@ -38,8 +38,12 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     if isGameTypeKR2() then
       (self._btn_MovieGuide):SetShow(false)
     else
-      ;
-      (self._btn_MovieGuide):SetShow(not isRecordMode)
+      if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+        (self._btn_MovieGuide):SetShow(false)
+      else
+        ;
+        (self._btn_MovieGuide):SetShow(true)
+      end
     end
   end
   if playerLV > 51 then
@@ -111,7 +115,7 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     (self._btn_SiegeArea):SetPosY(10)
     showIconCount = showIconCount + 1
     if ToClient_IsContentsGroupOpen("28") then
-      (self._btn_Hunting):SetShow(not isRecordMode)
+      (self._btn_Hunting):SetShow(true)
       ;
       (self._btn_Hunting):SetPosX((sizeX + controlGapX) * (showIconCount))
       ;
@@ -122,7 +126,7 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
       (self._btn_Hunting):SetShow(false)
     end
     if ToClient_IsContentsGroupOpen("75") then
-      (self._btn_VoiceChat):SetShow(not isRecordMode)
+      (self._btn_VoiceChat):SetShow(true)
       ;
       (self._btn_VoiceChat):SetPosX((sizeX + controlGapX) * (showIconCount))
       ;
@@ -376,8 +380,12 @@ PersonalIcon_Tooltip = function()
   (self._btn_NpcNavi):addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
   ;
   (self._btn_NpcNaviTW):addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
-  ;
-  (self._btn_MovieGuide):addInputEvent("Mouse_LUp", "Panel_MovieGuide_ShowToggle()")
+  if isGameTypeKorea() then
+    (self._btn_MovieGuide):addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Open()")
+  else
+    ;
+    (self._btn_MovieGuide):addInputEvent("Mouse_LUp", "Panel_MovieGuide_ShowToggle()")
+  end
   ;
   (self._btn_VoiceChat):addInputEvent("Mouse_On", "HandleOnOut_SetVoiceChat_Tooltip(true)")
   ;

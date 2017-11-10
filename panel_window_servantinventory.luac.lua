@@ -497,17 +497,17 @@ ServantInventory_getInventoryFromType = function(index)
 end
 
 ServantInventory_OpenAll = function()
-  -- function num : 0_21 , upvalues : servantInventory
+  -- function num : 0_21 , upvalues : servantInventory, UI_VT
   local self = servantInventory
   local index = 0
   for ii = 0, (self._config).inventoryCount do
     if servant_checkDistance(ii) then
       local vehicle = (getTemporaryInformationWrapper()):getUnsealVehicle(ii)
-      -- DECOMPILER ERROR at PC29: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC35: Confused about usage of register: R7 in 'UnsetPending'
 
-      if vehicle ~= nil and (vehicle:getInventory()):size() > 0 then
+      if vehicle ~= nil and (vehicle:getInventory()):size() > 0 and vehicle:getVehicleType() ~= UI_VT.Type_CampingTent then
         ((self._inventory)[ii])._actorKeyRaw = vehicle:getActorKeyRaw()
-        -- DECOMPILER ERROR at PC32: Confused about usage of register: R7 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC38: Confused about usage of register: R7 in 'UnsetPending'
 
         ;
         ((self._inventory)[ii])._type = ii

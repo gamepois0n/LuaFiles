@@ -67,7 +67,7 @@ PaGlobal_Enchant.setNeedPerfectEnchantItemCount = function(self, needCount, ench
         ;
         (self._uiHelpPerfectEnchant):SetSize(220, boxSizeY)
         ;
-        (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY() + 50)
+        (self._uiHelpPerfectEnchant):SetPosY((self._uiButtonSureSuccess):GetPosY() - (self._uiHelpPerfectEnchant):GetSizeY())
       end
     end
   end
@@ -150,7 +150,7 @@ PaGlobal_Enchant.clear = function(self)
   (self._uiProtectItem_Count):SetText(tostring(cronCount) .. "/" .. tostring(0))
   FGlobal_EnchantArrowSet(true)
   ;
-  (getEnchantInformation()):clearData()
+  (getEnchantInformation()):ToClient_clearData()
   ;
   (self._uiProtectItem_Btn):SetIgnore(true)
   ;
@@ -322,10 +322,16 @@ FGlobal_EnchantArrowSet = function(isTop)
     (self._uiCronDescArrow):SetPosY(210)
     self:SetCronDesc()
   end
-  if not self._isCronEnchantOpen then
-    (self._uiProtectItem_Desc):SetShow(isTop)
-    self:CronDescSetShow(not isTop)
+  if self._isContentsEnable then
+    (self._uiProtectItem_Desc):SetShow(true)
+    if not isTop then
+      (self._uiProtectItem_Desc):SetShow(false)
+    end
+  else
+    ;
+    (self._uiProtectItem_Desc):SetShow(false)
   end
+  self:CronDescSetShow(not isTop)
 end
 
 -- DECOMPILER ERROR at PC23: Confused about usage of register: R0 in 'UnsetPending'
@@ -548,7 +554,7 @@ PaGlobal_Enchant.doEnchant = function(self)
   else
     local checkEasy = (self._uiDrasticEnchant):IsCheck()
     ;
-    (getEnchantInformation()):doEnchant(self._isStartEnchantSureSuccess, not checkEasy)
+    (getEnchantInformation()):ToClient_doEnchant(self._isStartEnchantSureSuccess, not checkEasy)
   end
 end
 
@@ -562,7 +568,7 @@ PaGlobal_Enchant.handleMClickedSkipEnchant = function(self)
   else
     local checkEasy = (self._uiDrasticEnchant):IsCheck()
     ;
-    (getEnchantInformation()):doEnchant(false, not checkEasy)
+    (getEnchantInformation()):ToClient_doEnchant(false, not checkEasy)
   end
 end
 
@@ -572,7 +578,7 @@ PaGlobal_Enchant.handleMClickedSkipPerfectEnchant = function(self)
   -- function num : 0_13
   self._isDoingEnchant = false
   ;
-  (getEnchantInformation()):doEnchant(true, false)
+  (getEnchantInformation()):ToClient_doEnchant(true, false)
 end
 
 -- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
@@ -710,7 +716,7 @@ FGlobal_InvenFilterCronEnchant = function()
       Inventory_SetFunctor(EnchantInvenFilerMainItem, EnchantInteractionFromInventory, Enchant_Close, nil)
     else
       local enchantInfo = getEnchantInformation()
-      local rv = enchantInfo:SetEnchantSlot((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
+      local rv = enchantInfo:ToClient_setEnchantSlot((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
       local itemWrapper = getInventoryItemByType((self._slotTargetItem).inventoryType, (self._slotTargetItem).slotNo)
       self:clear()
       Inventory_SetFunctor(EnchantInvenFilerMainItem, EnchantInteractionFromInventory, Enchant_Close, nil)
@@ -860,7 +866,7 @@ Enchat_CronStoneCountCheck = function()
   if (self._uiCheckBtn_CronEnchnt):IsCheck() then
     (self._uiProtectItem_Count):SetText(tostring(cronCount) .. "/" .. tostring(needCronCount))
   end
-  if Int64toInt32(needCronCount) <= 0 then
+  if Int64toInt32(needCronCount) <= 1 then
     return false
   end
   if needCronCount <= cronCount then
@@ -899,7 +905,7 @@ EnchantInvenFilerSubItem = function(slotNo, notUse_itemWrappers, whereType)
     return true
   end
   local returnValue = true
-  if (getEnchantInformation()):checkIsValidSubItem(slotNo) ~= 0 then
+  if slotNo ~= (getEnchantInformation()):ToClient_getNeedItemSlotNo() then
     returnValue = true
   else
     returnValue = false
@@ -998,7 +1004,7 @@ EnchantInteractionFromInventory = function(slotNo, itemWrapper, count, inventory
   -- function num : 0_28
   local self = PaGlobal_Enchant
   local enchantInfo = getEnchantInformation()
-  local rv = enchantInfo:SetEnchantSlot(inventoryType, slotNo)
+  local rv = enchantInfo:ToClient_setEnchantSlot(inventoryType, slotNo)
   if rv ~= 0 then
     if itemWrapper ~= nil and itemWrapper:checkToUpgradeItem() and self._isCronEnchantOpen then
       self:SetMainAndCronStone(slotNo, itemWrapper, count, inventoryType)
@@ -1218,6 +1224,12 @@ PaGlobal_Enchant.show = function(self)
   (self._uiProtectItem_Count):SetShow(self._isContentsEnable)
   ;
   (self._uiProtectItem_Btn):SetShow(self._isContentsEnable)
+  ;
+  (self._uiCronDescBg):SetShow(self._isContentsEnable)
+  ;
+  (self._uiCronDescArrow):SetShow(self._isContentsEnable)
+  ;
+  (self._uiProtectItem_Desc):SetShow(self._isContentsEnable)
   ;
   (self._uiButtonApply):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DOENCHANT"))
   ;

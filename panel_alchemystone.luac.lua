@@ -915,6 +915,10 @@ AlchemyStone_StoneFilter = function(slotNo, itemWrapper, count, inventoryType)
     return returnValue
   end
   if ((itemWrapper:getStaticStatus()):get()):getContentsEventType() == 32 then
+    local alchemyStoneType = ((itemWrapper:getStaticStatus()):get())._contentsEventParam1
+    if alchemyStoneType > 2 then
+      return true
+    end
     if ((AlchemyStone.control).tab_Upgrade):IsCheck() then
       local itemContentsParam2 = ((itemWrapper:getStaticStatus()):get())._contentsEventParam2
       if itemContentsParam2 == 7 then
@@ -924,16 +928,18 @@ AlchemyStone_StoneFilter = function(slotNo, itemWrapper, count, inventoryType)
       end
     else
       do
-        if ((AlchemyStone.control).tab_Charge):IsCheck() then
-          if (itemWrapper:get()):getEndurance() == (itemWrapper:get()):getMaxEndurance() then
-            returnValue = true
+        do
+          if ((AlchemyStone.control).tab_Charge):IsCheck() then
+            if (itemWrapper:get()):getEndurance() == (itemWrapper:get()):getMaxEndurance() then
+              returnValue = true
+            else
+              returnValue = false
+            end
           else
             returnValue = false
           end
-        else
-          returnValue = false
+          return returnValue
         end
-        return returnValue
       end
     end
   end
@@ -1309,7 +1315,7 @@ end
 
 FGlobal_AlchemyStone_Use = function()
   -- function num : 0_18
-  local itemWrapper = getEquipmentItem((CppEnums.EquipSlotNo).alchemyStone)
+  local itemWrapper = ToClient_getEquipmentItem((CppEnums.EquipSlotNo).alchemyStone)
   if itemWrapper ~= nil and (itemWrapper:get()):getEndurance() > 0 then
     useAlchemyStone()
   end

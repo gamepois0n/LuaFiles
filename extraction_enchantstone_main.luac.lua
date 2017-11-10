@@ -133,7 +133,7 @@ PaGlobal_ExtractionEnchantStone.clear = function(self)
   ;
   ((self._uiEquipItem).slot_Nil):SetShow(true)
   ;
-  (getEnchantInformation()):clearData()
+  (getEnchantInformation()):ToClient_clearData()
 end
 
 ExtractionEnchantStone_WindowOpen = function()

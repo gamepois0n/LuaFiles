@@ -5,12 +5,11 @@
 -- function num : 0
 FromClient_AutoStart = function()
   -- function num : 0_0
-  PaGlobal_AutoManager:start()
+  PaGlobal_AutoManager:start(false)
 end
 
 FromClient_AutoStop = function()
   -- function num : 0_1
-  FGlobal_AutoQuestBlackSpiritMessage(PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRIT_POSSESS_END"))
   PaGlobal_AutoManager:stop()
 end
 

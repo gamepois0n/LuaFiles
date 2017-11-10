@@ -18,7 +18,7 @@ local UI_color = Defines.Color
 local UIMode = Defines.UIMode
 local territorySupply = ToClient_IsContentsGroupOpen("22")
 local contentsOption = ToClient_IsContentsGroupOpen("36")
-local enableCraft = ToClient_IsContentsGroupOpen("239")
+local enableCraft = ToClient_IsContentsGroupOpen("285")
 local manufacture_Init = function()
   -- function num : 0_0
   local screenSizeX = getScreenSizeX()
@@ -1521,7 +1521,7 @@ Material_Mouse_On = function(index)
     do
       itemWrapper = (Warehouse_GetWarehouseWarpper()):getItem(_materialSlotNoList[index])
       local slot = (_slotList[index]).icon
-      Panel_Tooltip_Item_Show(itemWrapper, slot, false, true, false, nil, nil)
+      Panel_Tooltip_Item_Show(itemWrapper, slot, false, true, nil, nil, nil)
     end
   end
 end
@@ -1955,10 +1955,14 @@ Manufacture_Button_LUp_Cook = function(isClear)
   end
   StopManufactureAction()
   _actionIndex = 9
-  if ToClient_IsContentsGroupOpen("228") then
-    _usingItemSlotCount = 3
+  if ToClient_IsContentsGroupOpen("327") then
+    _usingItemSlotCount = 4
   else
-    _usingItemSlotCount = 2
+    if ToClient_IsContentsGroupOpen("228") then
+      _usingItemSlotCount = 3
+    else
+      _usingItemSlotCount = 2
+    end
   end
   Manufacture_UpdateSlotPos()
   Manufacture_ShowPointEffect()

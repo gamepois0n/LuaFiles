@@ -60,24 +60,40 @@ end
 
 -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.createCustomControl = function(typeStr, parent, strID)
+UI.cloneControl = function(controlToClone, parent, strID)
   -- function num : 0_4
+  if controlToClone == nil then
+    (UI.ASSERT)(false, "clone하려�\148 rootUI�\128 nil입니�\164")
+    return nil
+  end
   tempUIBaseForLua = nil
-  createCustomControl(typeStr, parent, strID)
+  cloneControl(controlToClone, parent, strID)
+  if tempUIBaseForLua == nil then
+    (UI.ASSERT)(false, "Control�\132 복제�\128 실패하였습니�\164.")
+  end
   return tempUIBaseForLua
 end
 
 -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.deleteControl = function(conrol)
+UI.createCustomControl = function(typeStr, parent, strID)
   -- function num : 0_5
-  deleteControl(conrol)
+  tempUIBaseForLua = nil
+  createCustomControl(typeStr, parent, strID)
+  return tempUIBaseForLua
 end
 
 -- DECOMPILER ERROR at PC33: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.getChildControl = function(parent, strID)
+UI.deleteControl = function(conrol)
   -- function num : 0_6
+  deleteControl(conrol)
+end
+
+-- DECOMPILER ERROR at PC36: Confused about usage of register: R1 in 'UnsetPending'
+
+UI.getChildControl = function(parent, strID)
+  -- function num : 0_7
   tempUIBaseForLua = nil
   parent:getChildControl(strID)
   if tempUIBaseForLua == nil or type(tempUIBaseForLua) == "number" then
@@ -88,56 +104,56 @@ UI.getChildControl = function(parent, strID)
   end
 end
 
--- DECOMPILER ERROR at PC36: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
 
 UI.getChildControlByIndex = function(parent, index)
-  -- function num : 0_7
+  -- function num : 0_8
   tempUIBaseForLua = nil
   parent:getChildControlByIndex(index)
   return tempUIBaseForLua
 end
 
--- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
 
 UI.deletePanel = function(strID)
-  -- function num : 0_8
+  -- function num : 0_9
   deletePanel(strID, groupID)
 end
 
--- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R1 in 'UnsetPending'
 
 UI.createOtherPanel = function(strID, groupID)
-  -- function num : 0_9
+  -- function num : 0_10
   tempUIBaseForLua = nil
   createOtherPanel(strID, groupID)
   return tempUIBaseForLua
 end
 
--- DECOMPILER ERROR at PC45: Confused about usage of register: R1 in 'UnsetPending'
-
-UI.deleteOtherPanel = function(strID)
-  -- function num : 0_10
-  deleteOtherPanel(strID)
-end
-
 -- DECOMPILER ERROR at PC48: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.deleteOtherControl = function(panel, control)
+UI.deleteOtherPanel = function(strID)
   -- function num : 0_11
-  deleteOtherControl(panel, control)
+  deleteOtherPanel(strID)
 end
 
 -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.isFlushedUI = function()
+UI.deleteOtherControl = function(panel, control)
   -- function num : 0_12
-  return isFlushedUI()
+  deleteOtherControl(panel, control)
 end
 
 -- DECOMPILER ERROR at PC54: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.ASSERT = function(test, message)
+UI.isFlushedUI = function()
   -- function num : 0_13
+  return isFlushedUI()
+end
+
+-- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+
+UI.ASSERT = function(test, message)
+  -- function num : 0_14
   if not message then
     message = tostring(test)
   end
@@ -149,32 +165,49 @@ UI.ASSERT = function(test, message)
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R1 in 'UnsetPending'
 
 UI.Set_ProcessorInputMode = function(UIModeType)
-  -- function num : 0_14
+  -- function num : 0_15
   if getInputMode() ~= UIModeType then
     setInputMode(UIModeType)
   end
 end
 
--- DECOMPILER ERROR at PC60: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R1 in 'UnsetPending'
+
+UI.ClearFocusEdit = function()
+  -- function num : 0_16
+  ClearFocusEdit()
+  if AllowChangeInputMode() then
+    if check_ShowWindow then
+      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
+    else
+      ;
+      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
+    end
+  else
+    SetFocusChatting()
+  end
+end
+
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'
 
 UI.isGameOptionMouseMode = function()
-  -- function num : 0_15
+  -- function num : 0_17
   do return getOptionMouseMode() == true end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC63: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R1 in 'UnsetPending'
 
 UI.Get_ProcessorInputMode = function()
-  -- function num : 0_16
+  -- function num : 0_18
   return getInputMode()
 end
 
 setTextureUV_Func = function(control, pixX, pixY, pixEndX, pixEndY)
-  -- function num : 0_17
+  -- function num : 0_19
   local sizeX = control:getTextureWidth()
   local sizeY = control:getTextureHeight()
   if sizeX == 0 and sizeY == 0 then
@@ -183,31 +216,31 @@ setTextureUV_Func = function(control, pixX, pixY, pixEndX, pixEndY)
   return pixX / sizeX, pixY / sizeY, pixEndX / sizeX, pixEndY / sizeY
 end
 
--- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
-
-UI.getFocusEdit = function()
-  -- function num : 0_18
-  return GetFocusEdit()
-end
-
--- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
-
-UI.isInPositionForLua = function(control, posX, posY)
-  -- function num : 0_19
-  return isInPostion(control, posX, posY)
-end
-
 -- DECOMPILER ERROR at PC74: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.checkShowWindow = function()
+UI.getFocusEdit = function()
   -- function num : 0_20
-  return check_ShowWindow()
+  return GetFocusEdit()
 end
 
 -- DECOMPILER ERROR at PC77: Confused about usage of register: R1 in 'UnsetPending'
 
-UI.checkIsInMouse = function(panel)
+UI.isInPositionForLua = function(control, posX, posY)
   -- function num : 0_21
+  return isInPostion(control, posX, posY)
+end
+
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R1 in 'UnsetPending'
+
+UI.checkShowWindow = function()
+  -- function num : 0_22
+  return check_ShowWindow()
+end
+
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R1 in 'UnsetPending'
+
+UI.checkIsInMouse = function(panel)
+  -- function num : 0_23
   do
     local IsMouseOver = panel:GetPosX() < getMousePosX() and getMousePosX() < panel:GetPosX() + panel:GetSizeX() and panel:GetPosY() < getMousePosY() and getMousePosY() < panel:GetPosY() + panel:GetSizeY() and (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == (UI.Get_ProcessorInputMode)()
     do return not IsMouseOver or isCharacterCameraRotateMode() == false end
@@ -215,10 +248,10 @@ UI.checkIsInMouse = function(panel)
   end
 end
 
--- DECOMPILER ERROR at PC80: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC86: Confused about usage of register: R1 in 'UnsetPending'
 
 UI.checkIsInMouseAndEventPanel = function(panel)
-  -- function num : 0_22
+  -- function num : 0_24
   local isOverEvent = (UI.checkIsInMouse)(panel)
   local eventControl = getEventControl()
   do

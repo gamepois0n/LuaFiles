@@ -225,6 +225,9 @@ end
 
 PaGlobal_SkillCombination.UpdateSkillMonoTone = function(self, mainSkillNo, subSkillNo, fusionSkillNo, index)
   -- function num : 0_11
+  if index == nil then
+    return 
+  end
   local self = PaGlobal_SkillCombination
   local fusionMonoTone = false
   if ToClient_isLearnedSkill(mainSkillNo) == false then

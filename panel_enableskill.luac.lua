@@ -61,9 +61,10 @@ recommendSkill[UI_classType.ClassType_WizardWomen] = {[0] = 834, [1] = 835, [2] 
 recommendSkill[UI_classType.ClassType_NinjaWomen] = {[0] = 949, [1] = 950, [2] = 951, [3] = 1624, [4] = 1625, [5] = 958, [6] = 959, [7] = 960, [8] = 961, [9] = 966, [10] = 967, [11] = 968, [12] = 969, [13] = 970, [14] = 972, [15] = 973, [16] = 974, [17] = 1654, [18] = 1655, [19] = 1656, [20] = 1657, [21] = 1658}
 recommendSkill[UI_classType.ClassType_NinjaMan] = {[0] = 949, [1] = 950, [2] = 951, [3] = 1624, [4] = 1625, [5] = 958, [6] = 959, [7] = 960, [8] = 961, [9] = 966, [10] = 967, [11] = 968, [12] = 969, [13] = 970, [14] = 972, [15] = 973, [16] = 974, [17] = 1698, [18] = 1699, [19] = 1700}
 recommendSkill[UI_classType.ClassType_DarkElf] = {[0] = 2269, [1] = 2270, [2] = 2271, [3] = 2272, [4] = 2273, [5] = 2267, [6] = 2338, [7] = 2362, [8] = 2268, [9] = 2340, [10] = 2363, [11] = 2263, [12] = 2264, [13] = 2265, [14] = 2361, [15] = 2266, [16] = 2296, [17] = 2297, [18] = 2379, [19] = 2352, [20] = 2353, [21] = 2354, [22] = 2355, [23] = 2356, [24] = 2359, [25] = 2367, [26] = 2368, [27] = 2369, [28] = 2370}
-recommendSkill[UI_classType.ClassType_Angle] = {}
 recommendSkill[UI_classType.ClassType_Combattant] = {[0] = 2449, [1] = 2450, [2] = 2451, [3] = 2501, [4] = 2502, [5] = 2503, [6] = 2504, [7] = 2508, [8] = 2509, [9] = 2510, [10] = 2511, [11] = 2519, [12] = 2520, [13] = 2521, [14] = 2532, [15] = 2533, [16] = 2534, [17] = 2535, [18] = 2536, [19] = 2443, [20] = 2444, [21] = 2445, [22] = 2446, [23] = 2447, [24] = 2448}
-recommendSkill[UI_classType.ClassType_CombattantWomen] = {}
+recommendSkill[UI_classType.ClassType_CombattantWomen] = {[0] = 2723, [1] = 2724, [2] = 2725, [3] = 2726, [4] = 2727, [5] = 2718, [6] = 2719, [7] = 2720, [8] = 2721, [9] = 2722, [10] = 2706, [11] = 2707, [12] = 2708, [13] = 2709, [14] = 2710, [15] = 2711, [16] = 2712, [17] = 2713, [18] = 2714, [19] = 2715, [20] = 2716, [21] = 2691, [22] = 2692, [23] = 2693, [24] = 2694, [25] = 2695, [26] = 2696, [27] = 2697, [28] = 2698, [29] = 2699, [30] = 2674, [31] = 2675, [32] = 2676, [33] = 2677, [34] = 2631, [35] = 2632, [36] = 2633, [37] = 2637, [38] = 2638, [39] = 2639}
+recommendSkill[UI_classType.ClassType_Angle] = {}
+recommendSkill[UI_classType.ClassType_ShyWomen] = {}
 recommendSkill[22] = {}
 EnableSkill_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
@@ -322,7 +323,7 @@ Panel_EnableSkill_SetPosition = function()
 end
 
 enableSkill_MakeControl = function(index)
-  -- function num : 0_7 , upvalues : UI_PUCT, CopyUI, recommendSkill, mousePosBG, radio, comboBoxUI
+  -- function num : 0_7 , upvalues : UI_PUCT, CopyUI, recommendSkill, mousePosBG, comboBoxUI
   local ui = {}
   ui._IconBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_EnableSkill, "Static_SkillBG_" .. index)
   CopyBaseProperty(CopyUI._base_SkillBG, ui._IconBG)
@@ -426,10 +427,6 @@ enableSkill_MakeControl = function(index)
   ;
   (ui._skillIcon):addInputEvent("Mouse_DownScroll", "enableSkill_Scroll( false )")
   ;
-  (radio._radioButton_LearnSkill):addInputEvent("Mouse_LUp", "RadioButton_Click( 0 )")
-  ;
-  (radio._radioButton_AllSkill):addInputEvent("Mouse_LUp", "RadioButton_Click( 1 )")
-  ;
   (comboBoxUI._comboBox):addInputEvent("Mouse_LUp", "ComboBox_show()")
   ;
   ((comboBoxUI._comboBox):GetListControl()):addInputEvent("Mouse_LUp", "ComboBox_Set()")
@@ -455,7 +452,13 @@ enableSkill_BackgroundOverEvent = function(index, isOn)
   local rowNumber = (skillNumber[index + slideIndex])._row
   local colNumber = (skillNumber[index + slideIndex])._col
   local skillNoNumber = (skillNumber[index + slideIndex])._skillNo
-  PaGlobal_Skill:SkillWindowEffect(rowNumber, colNumber, skillNoNumber, isOn)
+  if (skillNumber[index + slideIndex])._awaken == 0 then
+    PaGlobal_Skill:SkillWindowEffect(rowNumber, colNumber, skillNoNumber, isOn, true)
+  else
+    if (skillNumber[index + slideIndex])._awaken == 1 then
+      PaGlobal_Skill:SkillWindowEffect(rowNumber, colNumber, skillNoNumber, isOn, false)
+    end
+  end
   if isOn then
     onIndex = index
   else
@@ -504,7 +507,7 @@ isSkillLearnTutorialClick_check = function()
 end
 
 enableSkill_Init = function()
-  -- function num : 0_14 , upvalues : mousePosBG, UI_PUCT, CopyUI, enableSkillList_MaxCount, uiData, editSearch, _slide, _frameBG, radio, isEditCheck, comboBoxUI
+  -- function num : 0_14 , upvalues : mousePosBG, UI_PUCT, CopyUI, enableSkillList_MaxCount, uiData, radio, editSearch, _slide, _frameBG, isEditCheck, comboBoxUI
   mousePosBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_EnableSkill, "Static_SkillYellowBG_")
   CopyBaseProperty(CopyUI._base_SkillYellowBG, mousePosBG)
   mousePosBG:SetShow(false)
@@ -514,6 +517,10 @@ enableSkill_Init = function()
 
     uiData[index] = enableSkill_MakeControl(index)
   end
+  ;
+  (radio._radioButton_LearnSkill):addInputEvent("Mouse_LUp", "RadioButton_Click( 0 )")
+  ;
+  (radio._radioButton_AllSkill):addInputEvent("Mouse_LUp", "RadioButton_Click( 1 )")
   if isGameTypeKorea() then
     (editSearch._editSearchText):SetMaxInput(20)
   else
@@ -525,23 +532,23 @@ enableSkill_Init = function()
   ;
   (editSearch._editSearchButton):SetShow(true)
   Panel_EnableSkill:RemoveControl(CopyUI._base_SkillBG)
-  -- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC75: Confused about usage of register: R0 in 'UnsetPending'
 
   CopyUI._base_SkillBG = nil
   Panel_EnableSkill:RemoveControl(CopyUI._base_SkillBlueBG)
-  -- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC82: Confused about usage of register: R0 in 'UnsetPending'
 
   CopyUI._base_SkillBlueBG = nil
   Panel_EnableSkill:RemoveControl(CopyUI._base_SkillYellowBG)
-  -- DECOMPILER ERROR at PC77: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC89: Confused about usage of register: R0 in 'UnsetPending'
 
   CopyUI._base_SkillYellowBG = nil
   Panel_EnableSkill:RemoveControl(CopyUI._base_SkillIcon)
-  -- DECOMPILER ERROR at PC84: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC96: Confused about usage of register: R0 in 'UnsetPending'
 
   CopyUI._base_SkillIcon = nil
   Panel_EnableSkill:RemoveControl(CopyUI._base_SkillName)
-  -- DECOMPILER ERROR at PC91: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC103: Confused about usage of register: R0 in 'UnsetPending'
 
   CopyUI._base_SkillName = nil
   ;
@@ -600,26 +607,25 @@ EnableSkill_Setting = function()
   if selfPlayer == nil then
     return 
   end
-  local cellTable = nil
-  do
-    if selfPlayer ~= nil then
-      local classType = selfPlayer:getClassType()
-      if classType >= 0 then
-        cellTable = getCombatSkillTree(classType)
-      else
-        return 
-      end
-    end
-    local isLearnCheck = (radio._radioButton_LearnSkill):IsCheck()
-    local isAllCheck = (radio._radioButton_AllSkill):IsCheck()
-    local cols = cellTable:capacityX()
-    local rows = cellTable:capacityY()
-    local selectIndex = (comboBoxUI._comboBox):GetSelectIndex()
-    Panel_EnableSkill_Value_elementCount = 0
-    recommendSkillCount = 0
+  local cellTable = {[0] = nil, [1] = nil}
+  local classType = selfPlayer:getClassType()
+  if classType >= 0 then
+    cellTable[0] = getAwakeningWeaponSkillTree(classType)
+    cellTable[1] = getCombatSkillTree(classType)
+  else
+    return 
+  end
+  local isLearnCheck = (radio._radioButton_LearnSkill):IsCheck()
+  local isAllCheck = (radio._radioButton_AllSkill):IsCheck()
+  local selectIndex = (comboBoxUI._comboBox):GetSelectIndex()
+  Panel_EnableSkill_Value_elementCount = 0
+  recommendSkillCount = 0
+  for iii = 0, 1 do
+    local cols = (cellTable[iii]):capacityX()
+    local rows = (cellTable[iii]):capacityY()
     for row = 0, rows - 1 do
       for col = 0, cols - 1 do
-        local cell = cellTable:atPointer(col, row)
+        local cell = (cellTable[iii]):atPointer(col, row)
         local skillNo = cell._skillNo
         if cell:isSkillType() then
           local skillLevelInfo = getSkillLevelInfo(skillNo)
@@ -627,16 +633,16 @@ EnableSkill_Setting = function()
           local needSp = (skillStaticWrapper:get())._needSkillPointForLearning
           local recommendCheck = false
           local skillType = getSkillTypeStaticStatus(skillNo)
-          -- DECOMPILER ERROR at PC84: Confused about usage of register: R22 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC96: Confused about usage of register: R27 in 'UnsetPending'
 
-          -- DECOMPILER ERROR at PC84: Unhandled construct in 'MakeBoolean' P1
+          -- DECOMPILER ERROR at PC96: Unhandled construct in 'MakeBoolean' P1
 
           if skillType:isValidLocalizing() and isAllCheck == true and not recommendCheck then
-            skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col}
-            -- DECOMPILER ERROR at PC89: Confused about usage of register: R22 in 'UnsetPending'
+            skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
+            -- DECOMPILER ERROR at PC101: Confused about usage of register: R27 in 'UnsetPending'
 
             editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-            -- DECOMPILER ERROR at PC92: Confused about usage of register: R22 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC104: Confused about usage of register: R27 in 'UnsetPending'
 
             editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
             Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
@@ -647,21 +653,21 @@ EnableSkill_Setting = function()
             for i = 0, maxRecommendCount - 1 do
               if skillNo == (recommendSkill[selfPlayer:getClassType()])[i] then
                 for ii = Panel_EnableSkill_Value_elementCount + 1, recommendSkillCount, -1 do
-                  -- DECOMPILER ERROR at PC132: Confused about usage of register: R30 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC145: Confused about usage of register: R35 in 'UnsetPending'
 
                   if recommendSkillCount == ii then
-                    skillNumber[ii] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col}
+                    skillNumber[ii] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
                   else
-                    -- DECOMPILER ERROR at PC138: Confused about usage of register: R30 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC151: Confused about usage of register: R35 in 'UnsetPending'
 
                     skillNumber[ii] = skillNumber[ii - 1]
                   end
                 end
                 recommendSkillCount = recommendSkillCount + 1
-                -- DECOMPILER ERROR at PC147: Confused about usage of register: R26 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC160: Confused about usage of register: R31 in 'UnsetPending'
 
                 editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-                -- DECOMPILER ERROR at PC150: Confused about usage of register: R26 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC163: Confused about usage of register: R31 in 'UnsetPending'
 
                 editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
                 Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
@@ -671,31 +677,31 @@ EnableSkill_Setting = function()
           end
           do
             do
-              -- DECOMPILER ERROR at PC165: Confused about usage of register: R22 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC179: Confused about usage of register: R27 in 'UnsetPending'
 
               if not recommendCheck then
-                skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col}
-                -- DECOMPILER ERROR at PC170: Confused about usage of register: R22 in 'UnsetPending'
+                skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
+                -- DECOMPILER ERROR at PC184: Confused about usage of register: R27 in 'UnsetPending'
 
                 editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-                -- DECOMPILER ERROR at PC173: Confused about usage of register: R22 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC187: Confused about usage of register: R27 in 'UnsetPending'
 
                 editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
                 Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
               end
-              -- DECOMPILER ERROR at PC177: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC191: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC177: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC191: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC177: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC191: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
         end
       end
     end
-    return skillNumber
   end
+  return skillNumber
 end
 
 FGlobal_IsLearn = function()
@@ -880,37 +886,36 @@ EnableSearchSkill_Setting = function()
   if selfPlayer == nil then
     return 
   end
-  local cellTable = nil
-  do
-    if selfPlayer ~= nil then
-      local classType = selfPlayer:getClassType()
-      if classType >= 0 then
-        cellTable = getCombatSkillTree(classType)
-      else
-        return 
-      end
+  local cellTable = {[0] = nil, [1] = nil}
+  local classType = selfPlayer:getClassType()
+  if classType >= 0 then
+    cellTable[0] = getAwakeningWeaponSkillTree(classType)
+    cellTable[1] = getCombatSkillTree(classType)
+  else
+    return 
+  end
+  local editSkillMatchNo = {}
+  local editSkillCount = 0
+  for i = 1, Panel_EnableSkill_Value_elementCount do
+    local stringMatch = stringMatching(editSkillName[i - 1], filterText)
+    if filterText ~= nil and filterText:len() ~= 0 and stringMatch == true then
+      editSkillMatchNo[editSkillCount] = editSkillNo[i - 1]
+      editSkillCount = editSkillCount + 1
     end
-    local editSkillMatchNo = {}
-    local editSkillCount = 0
-    for i = 1, Panel_EnableSkill_Value_elementCount do
-      local stringMatch = stringMatching(editSkillName[i - 1], filterText)
-      if filterText ~= nil and filterText:len() ~= 0 and stringMatch == true then
-        editSkillMatchNo[editSkillCount] = editSkillNo[i - 1]
-        editSkillCount = editSkillCount + 1
-      end
-    end
-    local cols = cellTable:capacityX()
-    local rows = cellTable:capacityY()
-    local allSkillCount = 0
+  end
+  local allSkillCount = 0
+  for iii = 0, 1 do
+    local cols = (cellTable[iii]):capacityX()
+    local rows = (cellTable[iii]):capacityY()
     if filterText ~= nil and filterText:len() ~= 0 then
       for row = 0, rows - 1 do
         for col = 0, cols - 1 do
-          local cell = cellTable:atPointer(col, row)
+          local cell = (cellTable[iii]):atPointer(col, row)
           local skillNo = cell._skillNo
           allSkillCount = allSkillCount + 1
           if cell:isSkillType() then
             for i = 0, editSkillCount do
-              -- DECOMPILER ERROR at PC92: Confused about usage of register: R21 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC103: Confused about usage of register: R26 in 'UnsetPending'
 
               if skillNo == editSkillMatchNo[i] then
                 skillNumber[i] = {_skillNo = skillNo, _row = row, _col = col}
@@ -920,11 +925,9 @@ EnableSearchSkill_Setting = function()
         end
       end
     end
-    do
-      isEditCheck = true
-      return skillNumber, editSkillCount, allSkillCount
-    end
   end
+  isEditCheck = true
+  return skillNumber, editSkillCount, allSkillCount
 end
 
 enableSkill_Init()

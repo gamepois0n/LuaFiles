@@ -13,7 +13,7 @@ local countryType = true
 if (isGameTypeJapan() or isGameTypeRussia() or isGameTypeEnglish() or isGameTypeTaiwan()) and getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
   countryType = false
 else
-  if isGameTypeKR2() then
+  if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     countryType = false
   else
     countryType = true
@@ -507,7 +507,7 @@ UpdateMovieTheaterLowLevel = function(deltaTime)
     return 
   end
   updateTime = updateTime + deltaTime
-  if updateTime > 0.5 and _movieTheater_640:isReadyView() then
+  if updateTime > 1 and _movieTheater_640:isReadyView() then
     Panel_MovieTheater_LowLevel_TriggerEvent()
     isMoviePlay = false
     updateTime = 0

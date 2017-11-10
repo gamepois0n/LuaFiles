@@ -20,7 +20,7 @@ local _constCollectionY = 80
 local _selectIndex = 0
 local _onlineGuildMember = 0
 local _initMoney = false
-local _UI_Menu_Button = {Type_Deportation = 0, Type_AppointCommander = 1, Type_CancelAppoint = 2, Type_ChangeMaster = 3, Type_ProtectMember = 4, Type_CancelProtectMember = 5, Type_PartyInvite = 6, Type_Supply = 7, Type_Count = 8}
+local _UI_Menu_Button = {Type_Whisper = 0, Type_AppointCommander = 1, Type_CancelAppoint = 2, Type_ChangeMaster = 3, Type_ProtectMember = 4, Type_CancelProtectMember = 5, Type_PartyInvite = 6, Type_Supply = 7, Type_Deportation = 8, Type_Count = 9}
 local numberKeyCode = {VCK.KeyCode_0, VCK.KeyCode_1, VCK.KeyCode_2, VCK.KeyCode_3, VCK.KeyCode_4, VCK.KeyCode_5, VCK.KeyCode_6, VCK.KeyCode_7, VCK.KeyCode_8, VCK.KeyCode_9, VCK.KeyCode_NUMPAD0, VCK.KeyCode_NUMPAD1, VCK.KeyCode_NUMPAD2, VCK.KeyCode_NUMPAD3, VCK.KeyCode_NUMPAD4, VCK.KeyCode_NUMPAD5, VCK.KeyCode_NUMPAD6, VCK.KeyCode_NUMPAD7, VCK.KeyCode_NUMPAD8, VCK.KeyCode_NUMPAD9}
 local inputGuildDepositNum_s64 = toInt64(0, 0)
 local inputGuildDepositMaxNum_s64 = toInt64(0, 0)
@@ -207,7 +207,7 @@ GuildLogoutTimeConvert = function(s64_datetime)
   return strDate
 end
 
--- DECOMPILER ERROR at PC453: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC454: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.initialize = function(self)
   -- function num : 0_3 , upvalues : UCT, _constStartY, isVoiceOpen, _constStartButtonX, _constGuildListMaxCount, _UI_Menu_Button, staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, frameSizeY
@@ -468,7 +468,6 @@ GuildListInfoPage.initialize = function(self)
     local rtGuildListInfoButton = {}
     local rtGuildListInfoButton = (UI.createControl)(UCT.PA_UI_CONTROL_BUTTON, self._buttonListBG, "Guild_Menu_Button_" .. pIndex)
     CopyBaseProperty(_copyButton, rtGuildListInfoButton)
-    rtGuildListInfoButton:SetText(PAGetString(Defines.StringSheet_GAME, "GULD_BUTTON" .. tostring(pIndex)))
     rtGuildListInfoButton:SetPosX(_constStartButtonX)
     rtGuildListInfoButton:SetShow(true)
     rtGuildListInfoButton:addInputEvent("Mouse_LUp", "HandleClickedGuildMenuButton(" .. pIndex .. ")")
@@ -496,7 +495,7 @@ GuildListInfoPage.initialize = function(self)
   Panel_Guild_List:SetChildIndex(staticText_activity, 9999)
   Panel_Guild_List:SetChildIndex(staticText_contract, 9999)
   ;
-  ((GuildListInfoPage._buttonList)[0]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_1"))
+  ((GuildListInfoPage._buttonList)[0]):SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WHISPER"))
   ;
   ((GuildListInfoPage._buttonList)[1]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_2"))
   ;
@@ -509,6 +508,10 @@ GuildListInfoPage.initialize = function(self)
   ((GuildListInfoPage._buttonList)[5]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_5"))
   ;
   ((GuildListInfoPage._buttonList)[6]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_6"))
+  ;
+  ((GuildListInfoPage._buttonList)[7]):SetText(PAGetString(Defines.StringSheet_GAME, "GULD_BUTTON7"))
+  ;
+  ((GuildListInfoPage._buttonList)[8]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDLIST_BUTTONLIST_TEXT_1"))
   ;
   (UI.deleteControl)(_copyGrade)
   ;
@@ -549,8 +552,98 @@ GuildListInfoPage.initialize = function(self)
   Panel_Guild_List = nil
 end
 
+authorityCheck = function(memberType, gradeType, buttonType, isProtect)
+  -- function num : 0_4
+  local returnValue = false
+  if memberType == 0 then
+    if gradeType == 0 then
+      returnValue = false
+    else
+      -- DECOMPILER ERROR at PC21: Unhandled construct in 'MakeBoolean' P1
+
+      if gradeType == 1 and (buttonType == 0 or buttonType == 2 or buttonType == 3 or buttonType == 6 or buttonType == 7 or buttonType == 8) then
+        returnValue = true
+      end
+    end
+    if gradeType == 2 then
+      if buttonType == 0 then
+        returnValue = true
+      else
+        if buttonType == 1 then
+          if isProtect then
+            returnValue = false
+          else
+            returnValue = true
+          end
+        else
+          if buttonType == 4 then
+            if isProtect then
+              returnValue = false
+            else
+              returnValue = true
+            end
+          else
+            if buttonType == 5 then
+              if isProtect then
+                returnValue = true
+              else
+                returnValue = false
+              end
+            else
+              if buttonType == 6 then
+                returnValue = true
+              else
+                if buttonType == 7 then
+                  if isProtect then
+                    returnValue = false
+                  else
+                    returnValue = true
+                  end
+                else
+                  if buttonType == 8 then
+                    returnValue = true
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    else
+      if gradeType == 3 and (buttonType == 0 or buttonType == 1 or buttonType == 2 or buttonType == 6 or buttonType == 8) then
+        returnValue = true
+      end
+    end
+  else
+    -- DECOMPILER ERROR at PC91: Unhandled construct in 'MakeBoolean' P1
+
+    -- DECOMPILER ERROR at PC91: Unhandled construct in 'MakeBoolean' P1
+
+    if memberType == 1 and gradeType == 0 and (buttonType == 6 or buttonType == 0) then
+      returnValue = true
+    end
+  end
+  -- DECOMPILER ERROR at PC99: Unhandled construct in 'MakeBoolean' P1
+
+  if gradeType == 1 and (buttonType == 0 or buttonType == 6) then
+    returnValue = true
+  end
+  -- DECOMPILER ERROR at PC109: Unhandled construct in 'MakeBoolean' P1
+
+  if gradeType == 2 and (buttonType == 0 or buttonType == 6 or buttonType == 8) then
+    returnValue = true
+  end
+  if gradeType == 3 and (buttonType == 0 or buttonType == 6 or buttonType == 8) then
+    returnValue = true
+  end
+  if memberType == 2 and (buttonType == 0 or buttonType == 6) then
+    returnValue = true
+  end
+  return returnValue
+end
+
 HandleClickedGuildMemberMenuButton = function(index)
-  -- function num : 0_4 , upvalues : tempGuildList, _constCollectionY, _UI_Menu_Button, _constStartButtonY, _constStartButtonGapY, _selectIndex
+  -- function num : 0_5 , upvalues : tempGuildList, _constCollectionY, _UI_Menu_Button, _selectIndex
   local self = GuildListInfoPage
   local dataIdx = (tempGuildList[index + 1]).idx
   local guildMember = (ToClient_GetMyGuildInfoWrapper()):getMember(dataIdx)
@@ -559,6 +652,8 @@ HandleClickedGuildMemberMenuButton = function(index)
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   local isSupplyOfficer = ((getSelfPlayer()):get()):isGuildSupplyOfficer()
+  local buttonPosY = 5
+  local savedMemberNum = 0
   local buttonListBgX = (((self._list)[index])._charName):GetParentPosX() - Panel_Window_Guild:GetPosX()
   local buttonListBgY = (((self._list)[index])._charName):GetParentPosY() - Panel_Window_Guild:GetPosY() - _constCollectionY
   ;
@@ -568,171 +663,34 @@ HandleClickedGuildMemberMenuButton = function(index)
   for dataIdx = 0, _UI_Menu_Button.Type_Count - 1 do
     ((GuildListInfoPage._buttonList)[dataIdx]):SetShow(false)
   end
-  if isGuildMaster == true then
-    if grade == 0 then
-      (GuildListInfoPage._buttonListBG):SetShow(false)
-    else
-      if grade == 1 then
-        (GuildListInfoPage._buttonListBG):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-        ;
-        ((GuildListInfoPage._buttonList)[0]):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[0]):SetPosY(_constStartButtonY + _constStartButtonGapY)
-        ;
-        ((GuildListInfoPage._buttonList)[2]):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[2]):SetPosY(_constStartButtonY + _constStartButtonGapY * 2)
-        ;
-        ((GuildListInfoPage._buttonList)[7]):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[7]):SetPosY(_constStartButtonY + _constStartButtonGapY * 3)
-        ;
-        ((GuildListInfoPage._buttonList)[3]):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[3]):SetPosY(_constStartButtonY + _constStartButtonGapY * 4)
-        ;
-        (GuildListInfoPage._buttonListBG):SetSize(140, 160)
-        _selectIndex = dataIdx
-      else
-        if grade == 2 then
-          (GuildListInfoPage._buttonListBG):SetShow(true)
-          ;
-          ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-          ;
-          ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-          if isProtect == false then
-            ((GuildListInfoPage._buttonList)[7]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[7]):SetPosY(_constStartButtonY + _constStartButtonGapY)
-            ;
-            ((GuildListInfoPage._buttonList)[1]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[1]):SetPosY(_constStartButtonY + _constStartButtonGapY * 2)
-            ;
-            ((GuildListInfoPage._buttonList)[4]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[4]):SetPosY(_constStartButtonY + _constStartButtonGapY * 3)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetPosY(_constStartButtonY + _constStartButtonGapY * 4)
-            ;
-            (GuildListInfoPage._buttonListBG):SetSize(140, 160)
-          else
-            ;
-            ((GuildListInfoPage._buttonList)[5]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[5]):SetPosY(_constStartButtonY + _constStartButtonGapY)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetPosY(_constStartButtonY + _constStartButtonGapY * 2)
-            ;
-            (GuildListInfoPage._buttonListBG):SetSize(140, 100)
-          end
-          _selectIndex = dataIdx
-        else
-          if grade == 3 then
-            (GuildListInfoPage._buttonListBG):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-            ;
-            ((GuildListInfoPage._buttonList)[2]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[2]):SetPosY(_constStartButtonY + _constStartButtonGapY)
-            ;
-            ((GuildListInfoPage._buttonList)[1]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[1]):SetPosY(_constStartButtonY + _constStartButtonGapY * 2)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetPosY(_constStartButtonY + _constStartButtonGapY * 3)
-            ;
-            (GuildListInfoPage._buttonListBG):SetSize(140, 130)
-            _selectIndex = dataIdx
-          end
-        end
-      end
-    end
+  if isGuildMaster then
+    savedMemberNum = 0
   else
-    if isGuildSubMaster == true then
-      if grade == 0 then
-        (GuildListInfoPage._buttonListBG):SetSize(140, 40)
-        ;
-        (GuildListInfoPage._buttonListBG):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-        ;
-        ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-        _selectIndex = dataIdx
-      else
-        if grade == 1 then
-          (GuildListInfoPage._buttonListBG):SetSize(140, 40)
-          ;
-          (GuildListInfoPage._buttonListBG):SetShow(true)
-          ;
-          ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-          ;
-          ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-          _selectIndex = dataIdx
-        else
-          if grade == 2 then
-            (GuildListInfoPage._buttonListBG):SetSize(140, 70)
-            ;
-            (GuildListInfoPage._buttonListBG):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetShow(true)
-            ;
-            ((GuildListInfoPage._buttonList)[0]):SetPosY(_constStartButtonY + _constStartButtonGapY)
-            _selectIndex = dataIdx
-          else
-            if grade == 3 then
-              (GuildListInfoPage._buttonListBG):SetShow(true)
-              ;
-              ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-              ;
-              ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-              ;
-              ((GuildListInfoPage._buttonList)[0]):SetShow(true)
-              ;
-              ((GuildListInfoPage._buttonList)[0]):SetPosY(_constStartButtonY + _constStartButtonGapY)
-              ;
-              (GuildListInfoPage._buttonListBG):SetSize(140, 70)
-              _selectIndex = dataIdx
-            else
-              ;
-              (GuildListInfoPage._buttonListBG):SetShow(false)
-            end
-          end
-        end
-      end
+    if isGuildSubMaster then
+      savedMemberNum = 1
     else
-      ;
-      (GuildListInfoPage._buttonListBG):SetSize(140, 40)
-      ;
-      (GuildListInfoPage._buttonListBG):SetShow(true)
-      ;
-      ((GuildListInfoPage._buttonList)[6]):SetShow(true)
-      ;
-      ((GuildListInfoPage._buttonList)[6]):SetPosY(_constStartButtonY)
-      _selectIndex = dataIdx
+      savedMemberNum = 2
     end
   end
+  ;
+  (GuildListInfoPage._buttonListBG):SetShow(false)
+  for idx = 0, _UI_Menu_Button.Type_Count - 1 do
+    if authorityCheck(savedMemberNum, grade, idx, false) then
+      (GuildListInfoPage._buttonListBG):SetShow(true)
+      ;
+      ((GuildListInfoPage._buttonList)[idx]):SetShow(true)
+      ;
+      ((GuildListInfoPage._buttonList)[idx]):SetPosY(buttonPosY)
+      buttonPosY = buttonPosY + ((GuildListInfoPage._buttonList)[idx]):GetSizeY() + 5
+    end
+  end
+  ;
+  (GuildListInfoPage._buttonListBG):SetSize(140, buttonPosY)
+  _selectIndex = dataIdx
 end
 
 HandleClickedGuildMemberContractButton = function(index)
-  -- function num : 0_5 , upvalues : tempGuildList
+  -- function num : 0_6 , upvalues : tempGuildList
   local memberIndex = index
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
@@ -755,7 +713,7 @@ HandleClickedGuildMemberContractButton = function(index)
 end
 
 HandleCLicked_IncentiveOption = function()
-  -- function num : 0_6
+  -- function num : 0_7
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -771,7 +729,7 @@ HandleCLicked_IncentiveOption = function()
 end
 
 HandleCLicked_GuildListIncentive_Open = function()
-  -- function num : 0_7 , upvalues : _incentivePanelType, incentive_InputMoney, txt_incentive_Title, txt_incentive_Deposit, txt_incentive_Notify
+  -- function num : 0_8 , upvalues : _incentivePanelType, incentive_InputMoney, txt_incentive_Title, txt_incentive_Deposit, txt_incentive_Notify
   _incentivePanelType = 0
   incentive_InputMoney:SetEditText("", true)
   Panel_GuildIncentive:SetShow(true)
@@ -781,7 +739,7 @@ HandleCLicked_GuildListIncentive_Open = function()
 end
 
 HandleCLicked_GuildListIncentive_Deposit = function()
-  -- function num : 0_8 , upvalues : _incentivePanelType, inputGuildDepositMaxNum_s64, incentive_InputMoney, txt_incentive_Title, txt_incentive_Deposit, txt_incentive_Notify
+  -- function num : 0_9 , upvalues : _incentivePanelType, inputGuildDepositMaxNum_s64, incentive_InputMoney, txt_incentive_Title, txt_incentive_Deposit, txt_incentive_Notify
   _incentivePanelType = 1
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
@@ -807,7 +765,7 @@ HandleCLicked_GuildListIncentive_Deposit = function()
 end
 
 HandleCLicked_GuildListIncentive_Paypal = function()
-  -- function num : 0_9
+  -- function num : 0_10
   local hasWareHouse = ToClient_HasWareHouseFromNpc()
   if hasWareHouse then
     FGlobal_GetDailyPay_Show()
@@ -817,7 +775,7 @@ HandleCLicked_GuildListIncentive_Paypal = function()
 end
 
 checkVoiceChatMicTexture = function(idx, onOff)
-  -- function num : 0_10
+  -- function num : 0_11
   local sayControl = ((GuildListInfoPage._list)[idx])._saying
   if onOff then
     local x1, y1, x2, y2 = setTextureUV_Func(sayControl, 452, 70, 481, 93)
@@ -835,7 +793,7 @@ checkVoiceChatMicTexture = function(idx, onOff)
 end
 
 checkVoiceChatListenTexture = function(idx, onOff)
-  -- function num : 0_11
+  -- function num : 0_12
   local listenControl = ((GuildListInfoPage._list)[idx])._listening
   if onOff then
     local x1, y1, x2, y2 = setTextureUV_Func(listenControl, 422, 94, 451, 117)
@@ -853,7 +811,7 @@ checkVoiceChatListenTexture = function(idx, onOff)
 end
 
 checkVoiceChatListenOtherTexture = function(onOff)
-  -- function num : 0_12 , upvalues : listening_VolumeButton
+  -- function num : 0_13 , upvalues : listening_VolumeButton
   listening_VolumeButton:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
   if onOff then
     local x1, y1, x2, y2 = setTextureUV_Func(listening_VolumeButton, 422, 94, 451, 117)
@@ -871,7 +829,7 @@ checkVoiceChatListenOtherTexture = function(onOff)
 end
 
 HandleClickedVoiceChatSaying = function(index)
-  -- function num : 0_13 , upvalues : tempGuildList, isVoiceOpen
+  -- function num : 0_14 , upvalues : tempGuildList, isVoiceOpen
   local self = GuildListInfoPage
   local memberIndex = index
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
@@ -918,7 +876,7 @@ HandleClickedVoiceChatSaying = function(index)
       local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
       if isGuildMaster == true or isGuildSubMaster == true then
         local handle_SendForceState = function()
-    -- function num : 0_13_0 , upvalues : index, tempGuildList, isListening
+    -- function num : 0_14_0 , upvalues : index, tempGuildList, isListening
     checkVoiceChatMicTexture(index, false)
     ToClient_VoiceChatChangeState((CppEnums.VoiceChatType).eVoiceChatType_Guild, (tempGuildList[index + 1]).userNo, false, isListening, true)
   end
@@ -937,7 +895,7 @@ HandleClickedVoiceChatSaying = function(index)
 end
 
 HandleClicked_VoiceChatListening = function()
-  -- function num : 0_14 , upvalues : setVol_selectedMemberIdx, tempGuildList, listening_VolumeSlider, listening_VolumeValue
+  -- function num : 0_15 , upvalues : setVol_selectedMemberIdx, tempGuildList, listening_VolumeSlider, listening_VolumeValue
   local self = GuildListInfoPage
   local memberIndex = setVol_selectedMemberIdx
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
@@ -966,7 +924,7 @@ end
 
 local prevVoiceChatListen = false
 HandleClicked_VoiceChatListeningVolume = function()
-  -- function num : 0_15 , upvalues : tempGuildList, setVol_selectedMemberIdx, prevVoiceChatListen, listening_VolumeSlider, listening_VolumeValue
+  -- function num : 0_16 , upvalues : tempGuildList, setVol_selectedMemberIdx, prevVoiceChatListen, listening_VolumeSlider, listening_VolumeValue
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   local dataIdx = (tempGuildList[setVol_selectedMemberIdx + 1]).idx
   local myGuildMemberInfo = myGuildListInfo:getMember(dataIdx)
@@ -996,7 +954,7 @@ HandleClicked_VoiceChatListeningVolume = function()
 end
 
 HandleClickedGuildMenuButton = function(index)
-  -- function num : 0_16 , upvalues : _selectIndex, _UI_Menu_Button
+  -- function num : 0_17 , upvalues : _selectIndex, _UI_Menu_Button
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
     return 
@@ -1058,7 +1016,7 @@ HandleClickedGuildMenuButton = function(index)
                 else
                   if index == _UI_Menu_Button.Type_PartyInvite then
                     local guildMemberPartyInvite = function()
-    -- function num : 0_16_0 , upvalues : characterName
+    -- function num : 0_17_0 , upvalues : characterName
     RequestParty_inviteCharacter(characterName)
   end
 
@@ -1084,9 +1042,14 @@ HandleClickedGuildMenuButton = function(index)
                             messageContent = "\'" .. tostring(targetName) .. "\'" .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_SUPPLYOFFICER_APPOINTMENT_MEMO")
                             yesFunction = MessageBoxYesFunction_AppointSupply
                           else
-                            ;
-                            (UI.ASSERT)(false, "작업해야합니�\164!")
-                            return 
+                            if index == _UI_Menu_Button.Type_Whisper then
+                              PaGlobal_ChattingInput_SendWhisper(characterName, targetName)
+                              return 
+                            else
+                              ;
+                              (UI.ASSERT)(false, "작업해야합니�\164!")
+                              return 
+                            end
                           end
                           ;
                           (GuildListInfoPage._buttonListBG):SetShow(false)
@@ -1108,7 +1071,7 @@ HandleClickedGuildMenuButton = function(index)
 end
 
 HandleToolTipCharacterName = function(isShow, index, uiIndex)
-  -- function num : 0_17 , upvalues : tempGuildList
+  -- function num : 0_18 , upvalues : tempGuildList
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -1131,7 +1094,7 @@ HandleToolTipCharacterName = function(isShow, index, uiIndex)
 end
 
 HandleToolTipChannelName = function(isShow, index)
-  -- function num : 0_18 , upvalues : tempGuildList
+  -- function num : 0_19 , upvalues : tempGuildList
   local self = GuildListInfoPage
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
@@ -1158,7 +1121,7 @@ HandleToolTipChannelName = function(isShow, index)
 end
 
 HandleToolTipVoiceIcon = function(isShow, index, tipType)
-  -- function num : 0_19
+  -- function num : 0_20
   local self = GuildListInfoPage
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_LIST_VOICECHATICON_TOOLTIP_VOICE_NAME")
@@ -1180,7 +1143,7 @@ HandleToolTipVoiceIcon = function(isShow, index, tipType)
 end
 
 HandleClick_GuildMemberList_Listening = function(index)
-  -- function num : 0_20 , upvalues : tempGuildList, listening_Volume, setVol_selectedMemberVol, listening_VolumeSlider, listening_VolumeValue, setVol_selectedMemberIdx
+  -- function num : 0_21 , upvalues : tempGuildList, listening_Volume, setVol_selectedMemberVol, listening_VolumeSlider, listening_VolumeValue, setVol_selectedMemberIdx
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
     return 
@@ -1210,52 +1173,52 @@ HandleClick_GuildMemberList_Listening = function(index)
 end
 
 HandleOnOut_GuildMemberList_VolumeClose = function()
-  -- function num : 0_21 , upvalues : listening_Volume, setVol_selectedMemberIdx
+  -- function num : 0_22 , upvalues : listening_Volume, setVol_selectedMemberIdx
   listening_Volume:SetShow(false)
   setVol_selectedMemberIdx = 0
 end
 
 MessageBoxYesFunction_ChangeGuildMaster = function()
-  -- function num : 0_22 , upvalues : _selectIndex
+  -- function num : 0_23 , upvalues : _selectIndex
   ToClient_RequestChangeGuildMemberGradeForMaster(_selectIndex)
   FGlobal_Notice_AuthorizationUpdate()
 end
 
 MessageBoxYesFunction_ExpelMember = function()
-  -- function num : 0_23 , upvalues : _selectIndex
+  -- function num : 0_24 , upvalues : _selectIndex
   ToClient_RequestExpelMemberFromGuild(_selectIndex)
 end
 
 MessageBoxYesFunction_AppointCommander = function()
-  -- function num : 0_24 , upvalues : _selectIndex
+  -- function num : 0_25 , upvalues : _selectIndex
   ToClient_RequestChangeGuildMemberGrade(_selectIndex, 1)
   FGlobal_Notice_AuthorizationUpdate()
 end
 
 MessageBoxYesFunction_CancelAppoint = function()
-  -- function num : 0_25 , upvalues : _selectIndex
+  -- function num : 0_26 , upvalues : _selectIndex
   ToClient_RequestChangeGuildMemberGrade(_selectIndex, 2)
   FGlobal_Notice_AuthorizationUpdate()
 end
 
 MessageBoxYesFunction_AppointSupply = function()
-  -- function num : 0_26 , upvalues : _selectIndex
+  -- function num : 0_27 , upvalues : _selectIndex
   ToClient_RequestChangeGuildMemberGrade(_selectIndex, 3)
   FGlobal_Notice_AuthorizationUpdate()
 end
 
 MessageBoxYesFunction_ProtectMember = function()
-  -- function num : 0_27 , upvalues : _selectIndex
+  -- function num : 0_28 , upvalues : _selectIndex
   ToClient_RequestChangeProtectMember(_selectIndex, true)
 end
 
 MessageBoxYesFunction_CancelProtectMember = function()
-  -- function num : 0_28 , upvalues : _selectIndex
+  -- function num : 0_29 , upvalues : _selectIndex
   ToClient_RequestChangeProtectMember(_selectIndex, false)
 end
 
 MouseOutGuildMenuButton = function()
-  -- function num : 0_29 , upvalues : _constCollectionX, _constCollectionY
+  -- function num : 0_30 , upvalues : _constCollectionX, _constCollectionY
   local self = GuildListInfoPage
   local sizeX = (self._buttonListBG):GetSizeX()
   local sizeY = (self._buttonListBG):GetSizeY()
@@ -1271,7 +1234,7 @@ MouseOutGuildMenuButton = function()
 end
 
 GuildListMouseScrollEvent = function(isUpScroll)
-  -- function num : 0_30
+  -- function num : 0_31
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   local memberCount = guildWrapper:getMemberCount()
   ;
@@ -1279,10 +1242,10 @@ GuildListMouseScrollEvent = function(isUpScroll)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC570: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC571: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.TitleLineReset = function(self)
-  -- function num : 0_31 , upvalues : staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, staticText_contributedTendency, text_contributedTendency
+  -- function num : 0_32 , upvalues : staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, staticText_contributedTendency, text_contributedTendency
   staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION"))
   staticText_Level:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_LEVEL"))
   staticText_Class:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_CLASS"))
@@ -1292,10 +1255,10 @@ GuildListInfoPage.TitleLineReset = function(self)
   staticText_contributedTendency:SetText(text_contributedTendency)
 end
 
--- DECOMPILER ERROR at PC574: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC575: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.SetGuildList = function(self)
-  -- function num : 0_32 , upvalues : tempGuildList
+  -- function num : 0_33 , upvalues : tempGuildList
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
     return 
@@ -1311,7 +1274,7 @@ GuildListInfoPage.SetGuildList = function(self)
 end
 
 local guildListCompareGrade = function(w1, w2)
-  -- function num : 0_33 , upvalues : _listSort
+  -- function num : 0_34 , upvalues : _listSort
   local w1Grade = w1.grade
   local w2Grade = w2.grade
   if w1Grade == 2 then
@@ -1338,7 +1301,7 @@ local guildListCompareGrade = function(w1, w2)
 end
 
 local guildListCompareLev = function(w1, w2)
-  -- function num : 0_34 , upvalues : _listSort
+  -- function num : 0_35 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.level == true and w2.level < w1.level then
@@ -1350,7 +1313,7 @@ local guildListCompareLev = function(w1, w2)
 end
 
 local guildListCompareClass = function(w1, w2)
-  -- function num : 0_35 , upvalues : _listSort
+  -- function num : 0_36 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.class == true and w2.class < w1.class then
@@ -1362,7 +1325,7 @@ local guildListCompareClass = function(w1, w2)
 end
 
 local guildListCompareName = function(w1, w2)
-  -- function num : 0_36 , upvalues : _listSort
+  -- function num : 0_37 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.name == true and w1.name < w2.name then
@@ -1374,7 +1337,7 @@ local guildListCompareName = function(w1, w2)
 end
 
 local guildListCompareAp = function(w1, w2)
-  -- function num : 0_37 , upvalues : _listSort
+  -- function num : 0_38 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.ap == true and w2.ap < w1.ap then
@@ -1386,7 +1349,7 @@ local guildListCompareAp = function(w1, w2)
 end
 
 local guildListCompareExpiration = function(w1, w2)
-  -- function num : 0_38 , upvalues : _listSort
+  -- function num : 0_39 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.expiration == true and w2.expiration < w1.expiration then
@@ -1398,7 +1361,7 @@ local guildListCompareExpiration = function(w1, w2)
 end
 
 local guildListCompareWp = function(w1, w2)
-  -- function num : 0_39 , upvalues : _listSort
+  -- function num : 0_40 , upvalues : _listSort
   -- DECOMPILER ERROR at PC9: Unhandled construct in 'MakeBoolean' P1
 
   if _listSort.wp == true and w2.wp < w1.wp then
@@ -1415,7 +1378,7 @@ local guildListCompareWp = function(w1, w2)
 end
 
 HandleClicked_GuildListSort = function(sortType)
-  -- function num : 0_40 , upvalues : _selectSortType, _listSort, staticText_Grade, tempGuildList, guildListCompareGrade, staticText_Level, guildListCompareLev, staticText_Class, guildListCompareClass, staticText_charName, guildListCompareName, staticText_activity, guildListCompareAp, staticText_contract, guildListCompareExpiration, staticText_contributedTendency, text_contributedTendency, guildListCompareWp
+  -- function num : 0_41 , upvalues : _selectSortType, _listSort, staticText_Grade, tempGuildList, guildListCompareGrade, staticText_Level, guildListCompareLev, staticText_Class, guildListCompareClass, staticText_charName, guildListCompareName, staticText_activity, guildListCompareAp, staticText_contract, guildListCompareExpiration, staticText_contributedTendency, text_contributedTendency, guildListCompareWp
   _selectSortType = sortType
   GuildListInfoPage:TitleLineReset()
   if sortType == 0 then
@@ -1542,10 +1505,10 @@ HandleClicked_GuildListSort = function(sortType)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC615: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC616: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.GuildListSortSet = function(self)
-  -- function num : 0_41 , upvalues : staticText_Grade, _listSort, tempGuildList, guildListCompareGrade
+  -- function num : 0_42 , upvalues : staticText_Grade, _listSort, tempGuildList, guildListCompareGrade
   GuildListInfoPage:TitleLineReset()
   staticText_Grade:SetText(PAGetString(Defines.StringSheet_RESOURCE, "GUILD_TEXT_POSITION") .. "�\178")
   -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
@@ -1555,10 +1518,10 @@ GuildListInfoPage.GuildListSortSet = function(self)
   (table.sort)(tempGuildList, guildListCompareGrade)
 end
 
--- DECOMPILER ERROR at PC627: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC628: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.updateSort = function(self)
-  -- function num : 0_42 , upvalues : _selectSortType, tempGuildList, guildListCompareGrade, guildListCompareLev, guildListCompareClass, guildListCompareName, guildListCompareAp, guildListCompareExpiration, guildListCompareWp
+  -- function num : 0_43 , upvalues : _selectSortType, tempGuildList, guildListCompareGrade, guildListCompareLev, guildListCompareClass, guildListCompareName, guildListCompareAp, guildListCompareExpiration, guildListCompareWp
   if _selectSortType == 0 then
     (table.sort)(tempGuildList, guildListCompareGrade)
   else
@@ -1588,10 +1551,10 @@ GuildListInfoPage.updateSort = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC641: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC642: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateData = function(self)
-  -- function num : 0_43 , upvalues : _initMoney, contentSizeY, _constGuildListMaxCount, tempGuildUserNolist, tempGuildList, UI_Class, isVoiceOpen, UI_color, btn_GuildMasterMandate, frameSizeY, notice_title
+  -- function num : 0_44 , upvalues : _initMoney, contentSizeY, _constGuildListMaxCount, tempGuildUserNolist, tempGuildList, UI_Class, isVoiceOpen, UI_color, btn_GuildMasterMandate, frameSizeY, notice_title
   GuildListInfoPage:SetGuildList()
   GuildListInfoPage:updateSort()
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
@@ -1959,7 +1922,7 @@ GuildListInfoPage.UpdateData = function(self)
 end
 
 GuildListInfoTooltip_Grade = function(isShow, index, gradeType)
-  -- function num : 0_44
+  -- function num : 0_45
   if index == nil then
     return 
   end
@@ -1992,10 +1955,10 @@ GuildListInfoTooltip_Grade = function(isShow, index, gradeType)
   end
 end
 
--- DECOMPILER ERROR at PC647: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC648: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateVoiceDataByUserNo = function(self, userNo)
-  -- function num : 0_45 , upvalues : tempGuildUserNolist
+  -- function num : 0_46 , upvalues : tempGuildUserNolist
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
     return 
@@ -2037,7 +2000,7 @@ GuildListInfoPage.UpdateVoiceDataByUserNo = function(self, userNo)
 end
 
 FGlobal_GuildListOnlineCheck = function()
-  -- function num : 0_46 , upvalues : _onlineGuildMember
+  -- function num : 0_47 , upvalues : _onlineGuildMember
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildListInfo == nil then
     return 
@@ -2055,7 +2018,7 @@ FGlobal_GuildListOnlineCheck = function()
 end
 
 HandleClicked_GuildMasterMandate = function(index)
-  -- function num : 0_47
+  -- function num : 0_48
   local self = GuildListInfoPage
   if not ToClient_IsAbleChangeMaster() then
     return 
@@ -2065,7 +2028,7 @@ HandleClicked_GuildMasterMandate = function(index)
 end
 
 GuildListControl_ChangeTexture_Expiration = function(control, state)
-  -- function num : 0_48
+  -- function num : 0_49
   control:ChangeTextureInfoName("new_ui_common_forlua/window/guild/guild_00.dds")
   if state == 2 then
     local x1, y1, x2, y2 = setTextureUV_Func(control, 376, 24, 398, 46)
@@ -2111,10 +2074,10 @@ GuildListControl_ChangeTexture_Expiration = function(control, state)
   end
 end
 
--- DECOMPILER ERROR at PC659: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC660: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Show = function(self)
-  -- function num : 0_49 , upvalues : _selectSortType, listening_Volume
+  -- function num : 0_50 , upvalues : _selectSortType, listening_Volume
   if (self._frameDefaultBG):GetShow() == false then
     (self._frameDefaultBG):SetShow(true)
     ;
@@ -2130,10 +2093,10 @@ GuildListInfoPage.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC663: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC664: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Hide = function(self)
-  -- function num : 0_50 , upvalues : IM
+  -- function num : 0_51 , upvalues : IM
   if (self._frameDefaultBG):GetShow() == true then
     (self._frameDefaultBG):SetShow(false)
     if AllowChangeInputMode() then
@@ -2151,14 +2114,14 @@ GuildListInfoPage.Hide = function(self)
 end
 
 FGlobal_GuildListScrollTop = function()
-  -- function num : 0_51
+  -- function num : 0_52
   local self = GuildListInfoPage
   ;
   (self._scrollBar):SetControlTop()
 end
 
 HandleClicked_SetIncentive = function()
-  -- function num : 0_52 , upvalues : IM, incentive_InputMoney, inputGuildDepositNum_s64
+  -- function num : 0_53 , upvalues : IM, incentive_InputMoney, inputGuildDepositNum_s64
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(incentive_InputMoney)
   inputGuildDepositNum_s64 = toInt64(0, 0)
@@ -2167,7 +2130,7 @@ HandleClicked_SetIncentive = function()
 end
 
 FGlobal_GuildIncentive_Close = function()
-  -- function num : 0_53 , upvalues : IM
+  -- function num : 0_54 , upvalues : IM
   if not Panel_GuildIncentive:GetShow() then
     return 
   end
@@ -2186,7 +2149,7 @@ FGlobal_GuildIncentive_Close = function()
 end
 
 HandleClicked_GuildIncentive_Close = function()
-  -- function num : 0_54 , upvalues : IM
+  -- function num : 0_55 , upvalues : IM
   if not Panel_GuildIncentive:GetShow() then
     return 
   end
@@ -2205,7 +2168,7 @@ HandleClicked_GuildIncentive_Close = function()
 end
 
 HandleClicked_GuildIncentive_Send = function()
-  -- function num : 0_55 , upvalues : incentive_InputMoney, _incentivePanelType
+  -- function num : 0_56 , upvalues : incentive_InputMoney, _incentivePanelType
   local tempMoney = tonumber(incentive_InputMoney:GetEditText())
   if tempMoney == nil or tempMoney <= 0 or tempMoney == "" then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_VENDINGMACHINE_PERFORM_MESSAGE_0"))
@@ -2220,18 +2183,18 @@ HandleClicked_GuildIncentive_Send = function()
 end
 
 FGlobal_SaveGuildMoney_Send = function()
-  -- function num : 0_56
+  -- function num : 0_57
   HandleClicked_GuildIncentive_Send()
 end
 
 FGlobal_CheckSaveGuildMoneyUiEdit = function(targetUI)
-  -- function num : 0_57 , upvalues : incentive_InputMoney
+  -- function num : 0_58 , upvalues : incentive_InputMoney
   do return targetUI ~= nil and targetUI:GetKey() == incentive_InputMoney:GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 FGlobal_GuildDeposit_InputCheck = function()
-  -- function num : 0_58 , upvalues : numberKeyCode, VCK
+  -- function num : 0_59 , upvalues : numberKeyCode, VCK
   for idx,val in ipairs(numberKeyCode) do
     if isKeyDown_Once(val) then
       if idx > 10 then
@@ -2247,7 +2210,7 @@ FGlobal_GuildDeposit_InputCheck = function()
 end
 
 _GuildDeposit_InputCheck_Command = function(number)
-  -- function num : 0_59 , upvalues : inputGuildDepositNum_s64, inputGuildDepositMaxNum_s64, incentive_InputMoney
+  -- function num : 0_60 , upvalues : inputGuildDepositNum_s64, inputGuildDepositMaxNum_s64, incentive_InputMoney
   local str = tostring(inputGuildDepositNum_s64)
   local newStr = str .. tostring(number)
   local s64_newNumber = tonumber64(newStr)
@@ -2261,7 +2224,7 @@ _GuildDeposit_InputCheck_Command = function(number)
 end
 
 _GuildDeposit_InputCheck_BackSpaceCommand = function()
-  -- function num : 0_60 , upvalues : inputGuildDepositNum_s64, incentive_InputMoney
+  -- function num : 0_61 , upvalues : inputGuildDepositNum_s64, incentive_InputMoney
   local str = tostring(inputGuildDepositNum_s64)
   local length = strlen(str)
   local newStr = ""
@@ -2276,12 +2239,12 @@ _GuildDeposit_InputCheck_BackSpaceCommand = function()
 end
 
 FGlobal_GuildMenuButtonHide = function()
-  -- function num : 0_61
+  -- function num : 0_62
   (GuildListInfoPage._buttonListBG):SetShow(false)
 end
 
 GuildList_PanelResize_ByFontSize = function()
-  -- function num : 0_62 , upvalues : isVoiceOpen, staticText_charName, staticText_activity, staticText_contributedTendency, staticText_Voice, _constGuildListMaxCount
+  -- function num : 0_63 , upvalues : isVoiceOpen, staticText_charName, staticText_activity, staticText_contributedTendency, staticText_Voice, _constGuildListMaxCount
   if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 and isVoiceOpen then
     staticText_charName:SetSize(135, 20)
     staticText_charName:SetPosX(210)
@@ -2338,7 +2301,7 @@ registerEvent("FromClient_RequestExpelMemberFromGuild", "FromClient_RequestExpel
 registerEvent("FromClient_RequestChangeGuildMemberGrade", "FromClient_RequestChangeGuildMemberGrade")
 registerEvent("FromClient_ResponseChangeProtectGuildMember", "FromClient_ResponseChangeProtectGuildMember")
 FromClient_ResponseGuildMasterChange = function(userNo, targetNo)
-  -- function num : 0_63
+  -- function num : 0_64
   local userNum = Int64toInt32(((getSelfPlayer()):get()):getUserNo())
   if userNum == Int64toInt32(userNo) then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_MASTERCHANGE_MESSAGE_0"))
@@ -2351,7 +2314,7 @@ FromClient_ResponseGuildMasterChange = function(userNo, targetNo)
 end
 
 FromClient_ResponseChangeGuildMemberGrade = function(targetNo, grade)
-  -- function num : 0_64
+  -- function num : 0_65
   local userNum = Int64toInt32(((getSelfPlayer()):get()):getUserNo())
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   do
@@ -2389,7 +2352,7 @@ FromClient_ResponseChangeGuildMemberGrade = function(targetNo, grade)
 end
 
 FromClient_ResponseChangeProtectGuildMember = function(targetNo, isProtectable)
-  -- function num : 0_65
+  -- function num : 0_66
   local userNum = Int64toInt32(((getSelfPlayer()):get()):getUserNo())
   if userNum == Int64toInt32(targetNo) then
     if isProtectable == true then
@@ -2404,7 +2367,7 @@ FromClient_ResponseChangeProtectGuildMember = function(targetNo, isProtectable)
 end
 
 FromClient_RequestExpelMemberFromGuild = function()
-  -- function num : 0_66
+  -- function num : 0_67
   if Panel_Window_Guild:GetShow() == true then
     GuildListInfoPage:UpdateData()
   else
@@ -2417,7 +2380,7 @@ FromClient_RequestExpelMemberFromGuild = function()
 end
 
 FromClient_RequestChangeGuildMemberGrade = function(grade)
-  -- function num : 0_67
+  -- function num : 0_68
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   do
     if guildWrapper ~= nil then
@@ -2451,7 +2414,7 @@ FromClient_RequestChangeGuildMemberGrade = function(grade)
 end
 
 HandleClicked_GuildListWelfare_Request = function()
-  -- function num : 0_68
+  -- function num : 0_69
   ToClient_RequestGuildWelfare()
 end
 

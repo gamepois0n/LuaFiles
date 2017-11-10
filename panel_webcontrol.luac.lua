@@ -115,6 +115,21 @@ local isIME = false
 if isGameTypeTaiwan() then
   countryType = "_TW"
   isIME = true
+else
+  if isGameTypeTR() then
+    countryType = "_TR"
+    isIME = true
+  else
+    if isGameTypeTH() then
+      countryType = "_TH"
+      isIME = true
+    else
+      if isGameTypeID() then
+        countryType = "_ID"
+        isIME = true
+      end
+    end
+  end
 end
 Panel_WebControl_TakeAndShow = function(helpType)
   -- function num : 0_5 , upvalues : html_WebHelper_Control, countryType

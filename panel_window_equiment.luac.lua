@@ -302,17 +302,21 @@ EquipmentWindow_Close = function()
   end
   if Panel_Equipment:IsShow() then
     Panel_Equipment:SetShow(false, false)
-    CharacterInfoWindow_Hide()
+    if isNewCharacterInfo() == false then
+      CharacterInfoWindow_Hide()
+    else
+      PaGlobal_CharacterInfo:hideWindow()
+    end
     if ToClient_IsSavedUi() then
       ToClient_SaveUiInfo(false)
       ToClient_SetSavedUi(false)
     end
   end
   HelpMessageQuestion_Out()
-  -- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
 
   equip.slotRingIndex = 0
-  -- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
 
   equip.slotEaringIndex = 0
 end
@@ -371,7 +375,7 @@ end
 local _offenceValue, _awakenOffecnValue, _defenceValue = nil, nil, nil
 Equipment_RClick = function(slotNo)
   -- function num : 0_9 , upvalues : equip
-  local itemWrapper = getEquipmentItem(slotNo)
+  local itemWrapper = ToClient_getEquipmentItem(slotNo)
   if itemWrapper ~= nil then
     Equipment_Checkbutton(slotNo, true, equip.checkUnderwear)
     if Panel_Window_Repair:IsShow() and not Panel_FixEquip:GetShow() then
@@ -659,7 +663,7 @@ Equipment_updateSlotData = function()
   self.checkExtendedSlot = 0
   for v = EquipNoMin, EquipNoMax do
     if equip_checkUseableSlot(v) == true then
-      local itemWrapper = getEquipmentItem(v)
+      local itemWrapper = ToClient_getEquipmentItem(v)
       local slot = (self.slots)[v]
       local slotBG = (self.slotBGs)[v]
       if itemWrapper ~= nil then
@@ -712,7 +716,7 @@ Equipment_updateSlotData = function()
       end
     end
   end
-  local isSetAwakenWeapon = getEquipmentItem((CppEnums.EquipSlotNo).awakenWeapon)
+  local isSetAwakenWeapon = ToClient_getEquipmentItem((CppEnums.EquipSlotNo).awakenWeapon)
   local titleSpanSizeY = (math.max)(((equip.attackText):GetSpanSize()).y, 95)
   local valueSpanSizeY = (math.max)(((equip.attackValue):GetSpanSize()).y, 70)
   if awakenWeaponContentsOpen and isSetAwakenWeapon ~= nil then
@@ -747,7 +751,7 @@ Equipment_updateSlotData = function()
   end
   if self.checkExtendedSlot == 1 then
     for extendSlotNo,parentSlotNo in pairs(self.extendedSlotInfoArray) do
-      local itemWrapper = getEquipmentItem(parentSlotNo)
+      local itemWrapper = ToClient_getEquipmentItem(parentSlotNo)
       local setSlotBG = (self.slotBGs)[extendSlotNo]
       slot = (self.slots)[extendSlotNo]
       setSlotBG:SetShow(false)
@@ -762,23 +766,23 @@ Equipment_updateSlotData = function()
       alchemyStoneQuickKey:SetShow(false)
     end
     interaction_Forceed()
-    updateAttackStat()
+    ToClient_updateAttackStat()
     ;
-    (self.attackValue):SetText(tostring(getOffence()))
+    (self.attackValue):SetText(tostring(ToClient_getOffence()))
     ;
-    (self.defenceValue):SetText(tostring(getDefence()))
+    (self.defenceValue):SetText(tostring(ToClient_getDefence()))
     ;
-    (self.awakenValue):SetText(tostring(getAwakenOffence()))
-    _offenceValue = getOffence()
-    _awakenOffecnValue = getAwakenOffence()
-    _defenceValue = getDefence()
+    (self.awakenValue):SetText(tostring(ToClient_getAwakenOffence()))
+    _offenceValue = ToClient_getOffence()
+    _awakenOffecnValue = ToClient_getAwakenOffence()
+    _defenceValue = ToClient_getDefence()
     if Panel_Global_Manual:GetShow() then
       setFishingResourcePool_text()
     end
     if Panel_Fishing:GetShow() then
       setFishingResourcePool_text()
     end
-    if getEquipmentItem(27) == nil then
+    if ToClient_getEquipmentItem(27) == nil then
       (equip.checkBox_AlchemyStone):SetShow(false)
       ;
       (equip.checkBox_AlchemyStone):SetCheck(false)
@@ -815,20 +819,20 @@ Equipment_equipItem = function(slotNo)
     ;
     (self.effectBG):AddEffect("UI_ItemInstall_BigRing02", false, -0.9, -58)
   end
-  updateAttackStat()
-  local itemWrapper = getEquipmentItem(slotNo)
+  ToClient_updateAttackStat()
+  local itemWrapper = ToClient_getEquipmentItem(slotNo)
   if itemWrapper ~= nil then
-    if _offenceValue ~= getOffence() then
+    if _offenceValue ~= ToClient_getOffence() then
       (self.attackValue):AddEffect("fUI_SkillButton01", false, 0, 0)
       ;
       (self.attackValue):AddEffect("UI_SkillButton01", false, 0, 0)
     end
-    if _awakenOffecnValue ~= getAwakenOffence() and awakenWeaponContentsOpen then
+    if _awakenOffecnValue ~= ToClient_getAwakenOffence() and awakenWeaponContentsOpen then
       (self.awakenValue):AddEffect("fUI_SkillButton01", false, 0, 0)
       ;
       (self.awakenValue):AddEffect("UI_SkillButton01", false, 0, 0)
     end
-    if _defenceValue ~= getDefence() then
+    if _defenceValue ~= ToClient_getDefence() then
       (self.defenceValue):AddEffect("fUI_SkillButton01", false, 0, 0)
       ;
       (self.defenceValue):AddEffect("UI_SkillButton01", false, 0, 0)
@@ -1045,7 +1049,7 @@ end
 
 FGlobal_AlchemyStonCheck = function()
   -- function num : 0_35 , upvalues : equip
-  local itemWrapper = getEquipmentItem(27)
+  local itemWrapper = ToClient_getEquipmentItem(27)
   local coolTime = 0
   do
     if itemWrapper ~= nil and (equip.checkBox_AlchemyStone):IsCheck() then
@@ -1079,8 +1083,8 @@ FGlobal_AccSlotNo = function(itemWrapper, isChange)
   local secondRingDeffence = 0
   local acc = nil
   if equipType == 16 then
-    equipItemWrapper = getEquipmentItem(8)
-    equipItemWrapper2 = getEquipmentItem(9)
+    equipItemWrapper = ToClient_getEquipmentItem(8)
+    equipItemWrapper2 = ToClient_getEquipmentItem(9)
     if equipItemWrapper ~= nil and equipItemWrapper2 ~= nil then
       acc = 8 + equip.slotRingIndex
       -- DECOMPILER ERROR at PC35: Confused about usage of register: R8 in 'UnsetPending'
@@ -1116,8 +1120,8 @@ FGlobal_AccSlotNo = function(itemWrapper, isChange)
     end
   else
     if equipType == 17 then
-      equipItemWrapper = getEquipmentItem(10)
-      equipItemWrapper2 = getEquipmentItem(11)
+      equipItemWrapper = ToClient_getEquipmentItem(10)
+      equipItemWrapper2 = ToClient_getEquipmentItem(11)
       if equipItemWrapper ~= nil and equipItemWrapper2 ~= nil then
         acc = 10 + equip.slotEaringIndex
         -- DECOMPILER ERROR at PC90: Confused about usage of register: R8 in 'UnsetPending'
@@ -1187,7 +1191,7 @@ Equipment_Checkbutton = function(index, isShow, controlBtn)
     return 
   end
   if isShow == false then
-    local itemWrapper = getEquipmentItem(index)
+    local itemWrapper = ToClient_getEquipmentItem(index)
     if itemWrapper == nil then
       controlBtn:SetCheck(false)
       return 
@@ -1227,7 +1231,7 @@ end
 
 EquipMent_BulletCheck = function()
   -- function num : 0_40
-  local itemWrapper = getEquipmentItem(1)
+  local itemWrapper = ToClient_getEquipmentItem(1)
   if itemWrapper == nil then
     return PAGetString(Defines.StringSheet_GAME, "LUA_BULLETALERT_0")
   else

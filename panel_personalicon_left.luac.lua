@@ -40,10 +40,11 @@ local _pcRoomUserHomeBuff = (UI.getChildControl)(Panel_PersonalIcon_Left, "Stati
 local _goldPremiumBuff = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_GoldPremiumBuff")
 local _challengeReward = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_Challenge")
 local _challengeNumber = (UI.getChildControl)(_challengeReward, "StaticText_ChallengeNumber")
+local _blackSpiritSkillTraining = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_BlackSpiritSkillTraining")
 local _russiaKamasilv = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_RussiaKamasilv")
 local _russiaPack3 = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_RussiaPack3")
 local registEventHandler = function()
-  -- function num : 0_0 , upvalues : _btn_NewSkill, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _NodeLvBuffIcon, _pearlPackage, _expEvent, _dropEvent, _customize, _pearlPallete, _goldenBell, _skillReset, _awakenSkillReset, _blackSpiritTraining, _expVehicleEvent, _pcRoomUserHomeBuff, _goldPremiumBuff, _challengeReward, _btnCashShop, _btnAlertClose, _russiaPack3, _russiaKamasilv
+  -- function num : 0_0 , upvalues : _btn_NewSkill, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _NodeLvBuffIcon, _pearlPackage, _expEvent, _dropEvent, _customize, _pearlPallete, _goldenBell, _skillReset, _awakenSkillReset, _blackSpiritTraining, _expVehicleEvent, _pcRoomUserHomeBuff, _goldPremiumBuff, _challengeReward, _blackSpiritSkillTraining, _btnCashShop, _btnAlertClose, _russiaPack3, _russiaKamasilv
   _btn_NewSkill:addInputEvent("Mouse_LUp", "HandleMLUp_SkillWindow_OpenForLearn()")
   _btn_NewSkill:addInputEvent("Mouse_RUp", "Panel_SelfPlayer_EnableSkillCheck_Close()")
   _btn_NewSkill:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 0 )")
@@ -85,6 +86,8 @@ local registEventHandler = function()
   _challengeReward:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip(true, 20)")
   _challengeReward:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip(false)")
   _challengeReward:addInputEvent("Mouse_LUp", "_challengeCall_byNewChallengeAlarm()")
+  _blackSpiritSkillTraining:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 21 )")
+  _blackSpiritSkillTraining:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 21 )")
   _btnCashShop:addInputEvent("Mouse_LUp", "PearlShop_Open()")
   _btnAlertClose:addInputEvent("Mouse_LUp", "PremiumNotice_Close()")
   _russiaPack3:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 15 )")
@@ -99,7 +102,7 @@ _ExpFix:SetShow(false)
 _btn_NewSkill:ActiveMouseEventEffect(true)
 local _buffIconPosX = 0
 PackageIconPosition = function()
-  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _challengeReward, _goldPremiumBuff, _buffIconPosX
+  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _blackSpiritSkillTraining, _challengeReward, _goldPremiumBuff, _buffIconPosX
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -124,6 +127,7 @@ PackageIconPosition = function()
   local blackSpiritTrainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritTraining)
   local pcRoomUserHomeBuff = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local premiumValueBuff = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
+  local blackSpiritSkillTrainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   local applyStarter = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_StarterPackage)
   local applyPremium = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
   local applyPearl = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PearlPackage)
@@ -136,6 +140,7 @@ PackageIconPosition = function()
   local applyBlackSpiritTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritTraining)
   local applyPcRoomUserHomeBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local applyPremiumValueBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
+  local applyBlackSpiritSkillTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   if _pcRoomIcon:GetShow() then
     _pcRoomIcon:SetPosX(iconPosX)
     iconPosX = iconPosX + _pcRoomIcon:GetSizeX() + iconGapX
@@ -246,12 +251,17 @@ PackageIconPosition = function()
     _blackSpiritTraining:SetPosY(iconPosY)
     iconPosX = iconPosX + _blackSpiritTraining:GetSizeX() + iconGapX
   end
+  if applyBlackSpiritSkillTraining and blackSpiritSkillTrainingTime > 0 then
+    _blackSpiritSkillTraining:SetPosX(iconPosX)
+    _blackSpiritSkillTraining:SetPosY(iconPosY)
+    iconPosX = iconPosX + _blackSpiritSkillTraining:GetSizeX() + iconGapX
+  end
   if remainRewardCount > 0 then
     _challengeReward:SetPosX(iconPosX)
     _challengeReward:SetPosY(iconPosY)
     iconPosX = iconPosX + _challengeReward:GetSizeX() + iconGapX
   end
-  -- DECOMPILER ERROR at PC589: Unhandled construct in 'MakeBoolean' P3
+  -- DECOMPILER ERROR at PC614: Unhandled construct in 'MakeBoolean' P3
 
   if (((_pcRoomIcon:GetShow() and not applyPcRoomUserHomeBuff)) or applyPremiumValueBuff) and premiumValueBuff > 0 then
     _goldPremiumBuff:SetPosX(iconPosX)
@@ -268,7 +278,7 @@ local pcRoomNeedTime = ToClient_GetPcRoomUserHomeBuffLimitTime()
 local needTime = Int64toInt32(pcRoomNeedTime)
 local useTime = 0
 BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
-  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _btn_NewSkill, isBlackSpiritEnable, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff, needTime, useTime, _goldPremiumBuff, _challengeReward
+  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _btn_NewSkill, isBlackSpiritEnable, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff, needTime, useTime, _goldPremiumBuff, _challengeReward, _blackSpiritSkillTraining
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -298,7 +308,7 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
   local awakenSkillResetTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_UnlimitedSkillAwakening)
   local russiaPack3Time = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_RussiaPack3)
   local trainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritTraining)
-  local trainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritTraining)
+  local skilltrainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   local pcRoomHomeTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local premiumValueTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
   local expEventPercent = getEventExpPercentByWorldNo(curChannelData._worldNo, curChannelData._serverNo)
@@ -538,6 +548,12 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                                                                     name = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_NAME")
                                                                     desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_DESC", "count", remainRewardCount)
                                                                     uiControl = _challengeReward
+                                                                  else
+                                                                    if iconType == 21 then
+                                                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITSKILLTRAINING_TOOLTIP_NAME")
+                                                                      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITSKILLTRAINING_TOOLTIP_DESC", "skilltrainingTime", convertStringFromDatetime(toInt64(0, skilltrainingTime)))
+                                                                      uiControl = _blackSpiritSkillTraining
+                                                                    end
                                                                   end
                                                                 end
                                                                 if isShow == true then
@@ -613,7 +629,7 @@ end
 
 local valuePackCheck = false
 FromClient_PackageIconUpdate = function()
-  -- function num : 0_6 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, _challengeReward, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _pcRoomUserHomeBuff, _challengeNumber
+  -- function num : 0_6 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, _challengeReward, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _blackSpiritSkillTraining, _pcRoomUserHomeBuff, _challengeNumber
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local selfPlayer = getSelfPlayer()
@@ -640,6 +656,7 @@ FromClient_PackageIconUpdate = function()
   local blackSpiritTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritTraining)
   local pcRoomUserHomeBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local premiumValueBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
+  local blackSpiritSkillTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   _pcRoomIcon:SetShow(false)
   _fixedChargeIcon:SetShow(false)
   _starterPackage:SetShow(false)
@@ -722,6 +739,11 @@ FromClient_PackageIconUpdate = function()
             _blackSpiritTraining:SetShow(true)
           else
             _blackSpiritTraining:SetShow(false)
+          end
+          if blackSpiritSkillTraining then
+            _blackSpiritSkillTraining:SetShow(true)
+          else
+            _blackSpiritSkillTraining:SetShow(false)
           end
           if isPremiumPcRoom then
             _pcRoomUserHomeBuff:SetShow(false)

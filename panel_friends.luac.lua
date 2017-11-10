@@ -505,8 +505,8 @@ FromClient_FriendListUpdateLogOnOffForMessanger = function(messangerId, isOnline
   end
 end
 
-registerEvent("FromClient_FriendListUpdateMessanger", "FromClient_FriendListUpdateMessanger")
-registerEvent("FromClient_FriendListOpenMessanger", "FromClient_FriendListOpenMessanger")
+registerEvent("FromClient_UpdateFriendMessanger", "FromClient_FriendListUpdateMessanger")
+registerEvent("FromClient_OpenMessanger", "FromClient_FriendListOpenMessanger")
 local styleFriendGroup = (UI.getChildControl)(Panel_FriendList, "Style_FriendGroup")
 local styleFriendGroupName = (UI.getChildControl)(Panel_FriendList, "StyleGroupName")
 local styleName = (UI.getChildControl)(Panel_FriendList, "Style_Name")
@@ -666,7 +666,7 @@ FriendList.updateList = function(self)
 end
 
 FriendList:initialize()
-registerEvent("ResponseFriendList_updateFriends", "ResponseFriendList_updateFriends")
+registerEvent("FromClient_UpdateFriendList", "ResponseFriendList_updateFriends")
 registerEvent("FromClient_NoticeNewMessage", "FromClient_NoticeNewMessage")
 ResponseFriendList_updateFriends = function()
   -- function num : 0_19 , upvalues : FriendList
@@ -770,7 +770,7 @@ RequestFriendList.updateList = function(self)
 end
 
 RequestFriendList:initialize()
-registerEvent("ResponseFriendList_updateAddFriends", "ResponseFriendList_updateAddFriends")
+registerEvent("FromClient_UpdateFriendRequestList", "ResponseFriendList_updateAddFriends")
 AddFriendList_show = function()
   -- function num : 0_29 , upvalues : RequestFriendList
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'

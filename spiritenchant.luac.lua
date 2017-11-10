@@ -3,7 +3,4 @@
 
 -- params : ...
 -- function num : 0
-runLua("UI_Data/Script/Window/Enchant/SpiritEnchant_Main.lua")
-runLua("UI_Data/Script/Window/Enchant/SpiritEnchant_Control.lua")
-runLua("UI_Data/Script/Window/Enchant/SpiritEnchant_Animation.lua")
 

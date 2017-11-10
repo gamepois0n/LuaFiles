@@ -91,7 +91,6 @@ end
 
 FGlobal_ProfileReward_ApplyGetReward = function(index)
   -- function num : 0_1 , upvalues : myProfile
-  _PA_LOG("오명�\128", tostring(index) .. tostring((myProfile._rewardKey)[index]))
   ToClient_sendApplyGetProfileReward((myProfile._rewardKey)[index])
 end
 

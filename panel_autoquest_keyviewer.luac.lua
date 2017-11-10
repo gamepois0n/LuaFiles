@@ -299,11 +299,13 @@ end
 FGlobal_AutoQuest_KeyViewer_Show = function()
   -- function num : 0_5
   Panel_Widget_Keyboard:SetShow(true)
+  PaGlobal_AutoQuestMsg:StartGrayAniHide()
   Panel_AutoQuest_KeyViewer_KeyUpdate()
 end
 
 FGlobal_AutoQuest_KeyViewer_Hide = function()
   -- function num : 0_6
+  PaGlobal_AutoQuestMsg:StartGrayAniShow()
   Panel_Widget_Keyboard:SetShow(false)
 end
 

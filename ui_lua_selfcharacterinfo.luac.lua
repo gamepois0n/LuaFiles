@@ -718,8 +718,8 @@ SelfCharacterInfo_UpdateExplorePoint = function()
   if player == nil then
     return 
   end
-  local territoryKeyRaw = getDefaultTerritoryKey()
-  local explorePoint = getExplorePointByTerritoryRaw(territoryKeyRaw)
+  local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
+  local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   ;
   (CharacterInfo._contribution):SetText(tostring(explorePoint:getRemainedPoint()) .. " / " .. tostring(explorePoint:getAquiredPoint()))
 end
@@ -984,12 +984,12 @@ SelfCharacterInfo_UpdateAttackStat = function()
   if player == nil then
     return 
   end
-  updateAttackStat()
-  local ChaAttack = getOffence()
+  ToClient_updateAttackStat()
+  local ChaAttack = ToClient_getOffence()
   ;
   (CharacterInfo._attack):SetText(tostring(ChaAttack))
-  local ChaAwakenAttack = getAwakenOffence()
-  local isSetAwakenWeapon = getEquipmentItem((CppEnums.EquipSlotNo).awakenWeapon)
+  local ChaAwakenAttack = ToClient_getAwakenOffence()
+  local isSetAwakenWeapon = ToClient_getEquipmentItem((CppEnums.EquipSlotNo).awakenWeapon)
   if isSetAwakenWeapon ~= nil then
     (CharacterInfo._awakenAttackTitle):SetShow(true)
     ;
@@ -1010,7 +1010,7 @@ SelfCharacterInfo_UpdateAttackStat = function()
     ;
     (CharacterInfo._stamina):SetSpanSize(490, 177)
   end
-  local ChaDefence = getDefence()
+  local ChaDefence = ToClient_getDefence()
   ;
   (CharacterInfo._defence):SetText(tostring(ChaDefence))
 end

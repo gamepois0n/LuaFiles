@@ -295,7 +295,7 @@ FromClient_ColorBalance_SlotUpdate = function(itemWhereType, itemSlotNo)
   (_slotList[3]).itemWhereType = itemWhereType
   ;
   (ui._static_colorArrow):SetColor(((itemWrapper:getStaticStatus()):get()):getItemColor())
-  FGlobal_Panel_DyeNew_updateColorAmpuleList()
+  FGlobal_Panel_DyeReNew_updateColorAmpuleList()
   FGlobal_UpdateInventorySlotData()
 end
 

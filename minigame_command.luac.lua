@@ -228,14 +228,14 @@ Panel_Minigame_Command_Start = function()
       end
     end
   end
-  _Result_Failed:SetShow(false)
   _Result_Failed:ResetVertexAni()
+  _Result_Failed:SetShow(false)
   _Result_Failed:SetAlpha(0)
-  _Result_Success:SetShow(false)
   _Result_Success:ResetVertexAni()
+  _Result_Success:SetShow(false)
   _Result_Success:SetAlpha(0)
-  _Command_CurrentKey_Eff0:SetShow(false)
   _Command_CurrentKey_Eff0:ResetVertexAni()
+  _Command_CurrentKey_Eff0:SetShow(false)
   _Command_CurrentKey_Eff0:SetAlpha(0)
   _math_randomSeed((os.time)())
   Command_CreateRandomText()
@@ -268,7 +268,7 @@ Panel_Minigame_Command_End = function()
 end
 
 local MiniGame_Command_OnSuccess = function()
-  -- function num : 0_5 , upvalues : isCommandFinished, _sinGauge_Result_Perfect, _Result_Success
+  -- function num : 0_5 , upvalues : isCommandFinished, _sinGauge_Result_Perfect, _Result_Failed, _Result_Success
   audioPostEvent_SystemUi(11, 13)
   ;
   ((getSelfPlayer()):get()):SetMiniGameResult(2)
@@ -277,8 +277,10 @@ local MiniGame_Command_OnSuccess = function()
   _sinGauge_Result_Perfect:SetVertexAniRun("Perfect_Ani", true)
   _sinGauge_Result_Perfect:SetVertexAniRun("Perfect_ScaleAni", true)
   _sinGauge_Result_Perfect:SetVertexAniRun("Perfect_AniEnd", true)
-  _Result_Success:SetShow(true)
+  _Result_Failed:ResetVertexAni()
+  _Result_Failed:SetShow(false)
   _Result_Success:ResetVertexAni()
+  _Result_Success:SetShow(true)
   _Result_Success:SetVertexAniRun("Ani_Scale_Result_Success_empty", true)
   _Result_Success:SetVertexAniRun("Ani_Scale_Result_Success", true)
   _Result_Success:SetVertexAniRun("Ani_Color_Result_Success_empty", true)
@@ -286,7 +288,7 @@ local MiniGame_Command_OnSuccess = function()
 end
 
 local MiniGame_Command_OnFailed = function()
-  -- function num : 0_6 , upvalues : CommandText, currentCommandIndex, isCommandFinished, UIColor, _sinGauge_Result_Bad, _Result_Failed
+  -- function num : 0_6 , upvalues : CommandText, currentCommandIndex, isCommandFinished, UIColor, _sinGauge_Result_Bad, _Result_Success, _Result_Failed
   audioPostEvent_SystemUi(11, 7)
   local textControl = CommandText[currentCommandIndex]
   ;
@@ -298,8 +300,10 @@ local MiniGame_Command_OnFailed = function()
   _sinGauge_Result_Bad:SetVertexAniRun("Bad_Ani", true)
   _sinGauge_Result_Bad:SetVertexAniRun("Bad_ScaleAni", true)
   _sinGauge_Result_Bad:SetVertexAniRun("Bad_AniEnd", true)
-  _Result_Failed:SetShow(true)
+  _Result_Success:ResetVertexAni()
+  _Result_Success:SetShow(false)
   _Result_Failed:ResetVertexAni()
+  _Result_Failed:SetShow(true)
   _Result_Failed:SetVertexAniRun("Ani_Scale_Result_Failed_empty", true)
   _Result_Failed:SetVertexAniRun("Ani_Scale_Result_Failed", true)
   _Result_Failed:SetVertexAniRun("Ani_Color_Result_Failed_empty", true)
@@ -335,14 +339,17 @@ MiniGame_Command_ddukdition = function(keyType)
 end
 
 Command_UpdateText = function(deltaTime)
-  -- function num : 0_8 , upvalues : passedTimePerNext, _CommandTimerBar, MiniGame_Command_OnFailed
+  -- function num : 0_8 , upvalues : passedTimePerNext, _CommandTimerBar, isCommandFinished, MiniGame_Command_OnFailed
   passedTimePerNext = passedTimePerNext + deltaTime
   local rate = passedTimePerNext / 6
   if rate > 1 then
     rate = 1
   end
   _CommandTimerBar:SetSize((1 - rate) * 271, 18)
-  if passedTimePerNext > 6 then
+  if isCommandFinished then
+    return 
+  end
+  if rate >= 1 then
     MiniGame_Command_OnFailed()
   end
 end

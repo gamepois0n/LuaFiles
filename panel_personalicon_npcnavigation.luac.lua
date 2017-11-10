@@ -75,7 +75,7 @@ local initialize = function()
   ;
   (UILink.closeNpcNavi):SetShow(false)
   Panel_NpcNavi:RegisterUpdateFunc("NpcNavi_OverBarUpdatePerFrame")
-  registerEvent("selfPlayer_regionChanged", "NpcListUpdate_selfPlayer_regionChanged")
+  NpcListUpdate()
   registerEvent("EventMentalCardUpdate", "NpcListUpdate_EventMentalCardUpdate")
   registerEvent("EventExplorePointUpdate", "NpcListUpdate_EventExplorePointUpdate")
   registerEvent("onScreenResize", "NpcListUpdate_ScreenResize")
@@ -93,28 +93,28 @@ local initialize = function()
   (UILink.editSearchText):addInputEvent("Mouse_LUp", "NpcNavi_OnInputMode()")
   ;
   (UILink.editSearchText):RegistReturnKeyEvent("NpcNavi_OutInputMode( true )")
-  -- DECOMPILER ERROR at PC128: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC126: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[0] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_general.dds")
-  -- DECOMPILER ERROR at PC133: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC131: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[1] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_skill.dds")
-  -- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC136: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[2] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_artisan.dds")
-  -- DECOMPILER ERROR at PC143: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC141: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[3] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_store_liquid.dds")
-  -- DECOMPILER ERROR at PC148: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC146: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[4] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_general.dds")
-  -- DECOMPILER ERROR at PC153: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC151: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[5] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_store_liquid.dds")
   local territoryCount = getTerritoryInfoCount()
   for i = 1, territoryCount do
     local territoryInfoWrapper = getTerritoryInfoWrapperByIndex(i - 1)
-    -- DECOMPILER ERROR at PC172: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC170: Confused about usage of register: R6 in 'UnsetPending'
 
     if territoryInfoWrapper ~= nil then
       preLoadTextureKey_territory[territoryInfoWrapper:getKeyRaw()] = preLoadTexture(territoryInfoWrapper:getTerritorySmallImage())
@@ -341,7 +341,7 @@ local getCharacterString = function(npcData)
   local executeDialogData = getCacheDialogData(npcData:getKeyRaw(), npcData:getDialogIndex())
   do
     if executeDialogData ~= nil then
-      local explorePointInfo = getExplorePointByTerritoryRaw(executeDialogData.territoryKey)
+      local explorePointInfo = ToClient_getExplorePointByTerritoryRaw(executeDialogData.territoryKey)
       if explorePointInfo ~= nil and executeDialogData.needPoint <= explorePointInfo:getRemainedPoint() then
         inputString = inputString .. "(<PAColor0xffe0d5a7>" .. executeDialogData.itemName .. ":" .. executeDialogData.needPoint .. "<PAOldColor>)"
       else
@@ -574,7 +574,7 @@ NpcNavi_OverBarUpdate = function(isShow)
         local executeDialogData = (getCacheDialogData(characterGroup.key))
         local explorePointInfo = nil
         if executeDialogData ~= nil then
-          explorePointInfo = getExplorePointByTerritoryRaw(executeDialogData.territoryKey)
+          explorePointInfo = ToClient_getExplorePointByTerritoryRaw(executeDialogData.territoryKey)
         end
         ;
         (UILink.tooltip_NeedExplorePoint):SetShow(true)
@@ -702,6 +702,9 @@ NpcNavi_ShowToggle = function()
   end
   Panel_NpcNavi:SetShow(isShow, false)
   if isShow == false then
+    if ToClient_WorldMapIsShow() then
+      WorldMapPopupManager:pop()
+    end
     Panel_Tooltip_NpcNavigation:SetShow(false, false)
   else
     if lazyUpdate then
@@ -881,7 +884,7 @@ NpcListUpdate = function()
       end
       if filterStrCountOverOne and regionInfo.isAccessible and canActive then
         local territoryKeyRaw = regionInfo.territoryKey
-        local explorePointInfo = getExplorePointByTerritoryRaw(territoryKeyRaw)
+        local explorePointInfo = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
         local territoryName = regionInfo.territoryName
         if explorePointInfo ~= nil then
           territoryName = PAGetStringParam1(Defines.StringSheet_GAME, "NPCNAVIGATION_TERRITORYNAME", "territoryName", territoryName)

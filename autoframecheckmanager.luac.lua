@@ -57,8 +57,8 @@ AutoFrameCheckManager.FrameCheck = function(self)
     local logString = (string.format)("NowCycle[%d] FrameLow[%d] Position[%f/%f/%f] CameraYaw[%f] avgFrame[%d]", self._nowRepeatCount + 1, nowFrame, nowPositionX, nowPositionY, nowPositionZ, self._cameraYaw, self._accumulateFrame / self._accumulateCount)
     local logString2 = (string.format)("TargetPosition[%f/%f/%f] (%s)", TargetPosition._goalX, TargetPosition._goalY, TargetPosition._goalZ, TargetPosition._where)
     local screenShotString = (string.format)("_Position(%f/%f/%f)", nowPositionX, nowPositionY, nowPositionZ)
-    _PA_SVN_LOG(logString)
-    _PA_SVN_LOG(logString2)
+    _PA_SVC_LOG(logString)
+    _PA_SVC_LOG(logString2)
     if self._isCaptured == false then
       ToClient_CaptureByFrameCheck()
       self._isCaptured = true
@@ -244,7 +244,7 @@ FGlobal_AutoFrameCheck_Start = function()
   local Z = ((AutoFrameCheckManager._PositionList)[AutoFrameCheckManager._index])._goalZ
   local Position = float3(X, Y, Z)
   ToClient_WorldMapNaviStart(Position, NavigationGuideParam(), false, true)
-  _PA_SVN_LOG("############################ AutoFrameCheck Start!! ####################################")
+  _PA_SVC_LOG("############################ AutoFrameCheck Start!! ####################################")
   -- DECOMPILER ERROR at PC46: Confused about usage of register: R4 in 'UnsetPending'
 
   AutoFrameCheckManager._isOn = true
@@ -260,7 +260,7 @@ end
 FGlobal_setAutoFrameCheckRepeat = function(value)
   -- function num : 0_13 , upvalues : AutoFrameCheckManager
   if value < 0 then
-    _PA_SVN_LOG("FGlobal_setAutoFrameCheckRepeat 함수�\144 0 이하 값이 들어오면 안됩니다!!!")
+    _PA_SVC_LOG("FGlobal_setAutoFrameCheckRepeat 함수�\144 0 이하 값이 들어오면 안됩니다!!!")
   end
   -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -291,7 +291,7 @@ OffFrameCheck = function()
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   AutoFrameCheckManager._isOn = false
-  _PA_SVN_LOG("############################ AutoFrameCheck End!! ####################################")
+  _PA_SVC_LOG("############################ AutoFrameCheck End!! ####################################")
 end
 
 testAutoQuestStart = function()

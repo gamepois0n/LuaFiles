@@ -1147,7 +1147,7 @@ Panel_SelectServer_RePositioningCtrls = function()
   posY = 0
   local count = _worldServerCount
   for idx = 0, count - 1 do
-    ((_worldServerCtrls[idx])._bgButton):SetPosX(posX)
+    ((_worldServerCtrls[idx])._bgButton):SetPosX(posX + 4)
     ;
     ((_worldServerCtrls[idx])._bgButton):SetPosY(posY + 5)
     local varyY = Panel_SelectServer_GetVariableSizeY(posX + 5, posY, idx)

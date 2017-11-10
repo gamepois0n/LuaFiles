@@ -970,6 +970,9 @@ deadMessage_UpdatePerFrame = function(deltaTime)
       _button_Volunteer:SetEnable(true)
     end
   end
+  if ResurrectionTime == nil then
+    return 
+  end
   if ResurrectionTime > 0 then
     ResurrectionTime = ResurrectionTime - deltaTime
     local regenTime = (math.floor)(ResurrectionTime)

@@ -213,7 +213,7 @@ ChannelSelect_Init = function()
           (channelMainDesc._speedDesc):SetShow(false)
           sizeControl = channelMainDesc._serverDesc
         else
-          if isGameTypeKR2() then
+          if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
             (channelMainDesc._speedTitle):SetShow(false)
             ;
             (channelMainDesc._speedDesc):SetShow(false)
@@ -237,7 +237,7 @@ ChannelSelect_Init = function()
             (channelMainDesc._scheduleNodeWar):SetShow(false)
             sizeControl = channelMainDesc._serverDesc
           else
-            if isGameTypeKorea() or isGameTypeRussia() then
+            if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() then
               (channelMainDesc._pkTitle):SetShow(true)
               ;
               (channelMainDesc._pkDesc):SetShow(true)
@@ -293,7 +293,7 @@ ChannelSelect_Init = function()
         (channelMainDesc._scheduleSiege):SetPosY((channelMainDesc._scheduleTitle):GetPosY() + 20)
         ;
         (channelMainDesc._scheduleNodeWar):SetPosY((channelMainDesc._scheduleSiege):GetPosY() + 20)
-        if isGameTypeKR2() then
+        if isGameTypeKR2() or isGameTypeTR() or isGameTypeTR() or isGameTypeID() then
           (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._serverDesc):GetPosY() + (channelMainDesc._serverDesc):GetTextSizeY())
         else
           ;
@@ -314,7 +314,7 @@ ChannelSelect_Init = function()
         ;
         (self._PKIcon):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_SEVERSELECT_PK"))
         if isChannelCountLow then
-          if isGameTypeRussia() or isGameTypeKorea() then
+          if isGameTypeRussia() or isGameTypeKorea() or isGameTypeEnglish() then
             Panel_ChannelSelect:SetSize(410, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 90)
           else
             Panel_ChannelSelect:SetSize(410, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 70)
@@ -358,7 +358,7 @@ ChannelSelect_Init = function()
           ;
           (self._PKIcon):SetPosY(((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 55)
         else
-          if isGameTypeKorea() or isGameTypeRussia() then
+          if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() then
             Panel_ChannelSelect:SetSize(796, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 70)
           else
             Panel_ChannelSelect:SetSize(796, ((self.groupBg)[0]):GetPosY() + ((self.groupBg)[0]):GetSizeY() + 50)
@@ -404,7 +404,7 @@ ChannelSelect_Init = function()
           ;
           (self._PremiumIcon):SetShow(false)
         end
-        if isGameTypeKorea() or isGameTypeRussia() then
+        if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() then
           (self._PKIcon):SetShow(true)
         else
           ;
