@@ -6,7 +6,7 @@
 local UI_PLT = CppEnums.CashPurchaseLimitType
 Panel_IngameCashShop_EasyPayment:SetShow(false, false)
 PaGlobal_EasyBuy = {
-_ui = {_btn_Close = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Button_Cancel"), _btn_WinClose = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Button_Win_Close"), _itemBG = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Template_Static_ItemSlotBG"), _txt_InmyPearlCount = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "StaticText_GoodsTotalPearlIcon"), _mainBG = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Static_LeftBG"), _bottom_LineBG = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Static_BuyLineBG"), _bottom_HavePearl = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "StaticText_TotalPrice"), _list2 = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "List2_EasyBuy"), SlotBG = nil, Slot = nil, ItemName = nil, ItemPrice = nil, ItemCount = nil, ItemBuy = nil, _list2_Content = nil}
+_ui = {_btn_Close = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Button_Cancel"), _btn_WinClose = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Button_Win_Close"), _txt_InmyPearlCount = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "StaticText_GoodsTotalPearlIcon"), _mainBG = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Static_LeftBG"), _bottom_LineBG = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "Static_BuyLineBG"), _bottom_HavePearl = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "StaticText_TotalPrice"), _list2 = (UI.getChildControl)(Panel_IngameCashShop_EasyPayment, "List2_EasyBuy"), SlotBG = nil, Slot = nil, ItemName = nil, ItemPrice = nil, ItemCount = nil, ItemBuy = nil, _list2_Content = nil}
 , _listCount = 20, 
 _itemListPool = {}
 , savedMainCategory = nil, savedMiddleCategory = nil, savedSmallCategory = -1, savedWayPointKey = -1, slotStartX = 15, slotStartY = 50, slotGapX = 335, slotGapY = 60, 
@@ -34,7 +34,7 @@ EasybuyHideAni = function()
   ImageMoveAni:SetDisableWhileAni(true)
 end
 
--- DECOMPILER ERROR at PC91: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC85: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_EasyBuy.Init = function(self)
   -- function num : 0_2
@@ -116,7 +116,7 @@ PaGlobal_EasyBuy_Update = function(contents, key)
 end
 
 local easyBuyCountCache = 0
--- DECOMPILER ERROR at PC99: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_EasyBuy.Update = function(self)
   -- function num : 0_4 , upvalues : easyBuyCountCache
@@ -151,12 +151,12 @@ PaGlobal_EasyBuy_BuyItem = function(productRaw)
   IngameCashShopCoupon_Open(0, productRaw)
 end
 
--- DECOMPILER ERROR at PC104: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC98: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_EasyBuy.MyPearlUpdate = function(self)
   -- function num : 0_6
-  local pearlItemWrapper = (getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, getPearlSlotNo()))
-  local pearl = nil
+  local pearlItemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, getPearlSlotNo())
+  local pearl = 0
   if pearlItemWrapper ~= nil then
     pearl = (pearlItemWrapper:get()):getCount_s64()
   end
@@ -180,7 +180,7 @@ PaGlobal_EasyBuy_ItemTooltip = function(isShow, productKeyRaw, index)
   end
 end
 
--- DECOMPILER ERROR at PC109: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC103: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_EasyBuy.WindowResize = function(self)
   -- function num : 0_8
@@ -214,7 +214,7 @@ PaGlobal_EasyBuy.WindowResize = function(self)
   ((self._ui)._bottom_HavePearl):ComputePos()
 end
 
--- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC106: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_EasyBuy.Open = function(self, mainCategory, middleCategory, smallCategory, waypointKey)
   -- function num : 0_9
@@ -264,7 +264,7 @@ PaGlobal_EasyBuy.Open = function(self, mainCategory, middleCategory, smallCatego
   Panel_IngameCashShop_EasyPayment:SetShow(true, true)
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC109: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_EasyBuy.Close = function(self)
   -- function num : 0_10
@@ -287,7 +287,7 @@ PaGlobal_EasyBuy_Close = function()
   PaGlobal_EasyBuy:Close()
 end
 
--- DECOMPILER ERROR at PC122: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_EasyBuy.Event = function(self)
   -- function num : 0_13

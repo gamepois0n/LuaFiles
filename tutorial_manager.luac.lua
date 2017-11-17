@@ -566,18 +566,28 @@ PaGlobal_TutorialManager.questionPhaseSkip = function(self, phase, stepNo, typeN
   local askYesButton = function()
     -- function num : 0_29_0 , upvalues : phase, stepNo, typeNo
     phase:startPhaseXXX(stepNo, typeNo)
+    ;
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).TutorialSkip, 0, (CppEnums.VariableStorageType).eVariableStorageType_User)
   end
 
   local askNoButton = function()
     -- function num : 0_29_1 , upvalues : phase
     _PA_LOG("곽민�\176", "튜토리얼�\180 사용자에 의해 스킵되었습니�\164. phase : " .. tostring(phase._phaseNo))
     PaGlobal_TutorialManager:endTutorial()
+    ;
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).TutorialSkip, 1, (CppEnums.VariableStorageType).eVariableStorageType_User)
   end
 
-  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_29")
-  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_30"), content = messageBoxMemo, functionYes = askYesButton, functionNo = askNoButton, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-  ;
-  (MessageBox.showMessageBox)(messageBoxData)
+  local isTutorialSkip = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).TutorialSkip) == 1
+  if isTutorialSkip then
+    askNoButton()
+  else
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_29")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_NEW_KR_30"), content = messageBoxMemo, functionYes = askYesButton, functionNo = askNoButton, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+  end
+  -- DECOMPILER ERROR: 3 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC219: Confused about usage of register: R0 in 'UnsetPending'

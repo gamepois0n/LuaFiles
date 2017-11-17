@@ -129,8 +129,8 @@ local buttonAni = (UI.getChildControl)(Panel_UIMain, "Static_NewEffect_Ani")
 local MenuButton_CheckEnAble = function(buttonType)
   -- function num : 0_7 , upvalues : MenuButtonId
   local returnValue = false
-  if buttonType == MenuButtonId.Btn_CashShop then
-    if isGameTypeTR() then
+  if buttonType == MenuButtonId.Btn_CashShop or buttonType == MenuButtonId.Btn_Beauty then
+    if getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
       returnValue = false
     else
       returnValue = true

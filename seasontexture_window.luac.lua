@@ -11,7 +11,7 @@ local currentMonth = ToClient_GetThisMonth()
 local currentDay = (ToClient_GetToday())
 local isSpring, isSummer, isAutumn = nil, nil, nil
 local isWinter = currentMonth == 1 or currentMonth == 12 or currentMonth == 11
-local contentOpen = false
+local contentOpen = ToClient_isEventOn("Winter_Looting")
 local textureSize = {[0] = 300, [1] = 450, [2] = 900}
 local panelList = {
 [0] = {[0] = Panel_EnableSkill, [1] = nil, [2] = Panel_ItemMarket_Alarm}
@@ -20,12 +20,12 @@ local panelList = {
 , 
 [2] = {[0] = Panel_Window_Guild, [1] = Panel_Window_CharInfo_Status, [2] = Panel_WebControl, [3] = Panel_KeyboardHelp, [4] = Panel_ProductNote, [5] = Panel_Window_Skill, [6] = Panel_Manufacture, [7] = Panel_FishEncyclopedia, [8] = Panel_Window_ItemMarket, [9] = Panel_GuildRank_Web, [10] = Panel_LifeRanking, [11] = Panel_EventNotify, [12] = Panel_Window_DailyStamp, [13] = Panel_Window_BlackSpiritAdventure, [14] = Panel_LocalWarInfo, [15] = Panel_GameExit, [16] = Panel_CustomizingAlbum, [17] = Panel_ScreenShotAlbum}
 }
--- DECOMPILER ERROR at PC131: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC133: Confused about usage of register: R12 in 'UnsetPending'
 
 if isUsedNewTradeEventNotice_chk() then
   (panelList[0])[1] = Panel_TradeEventNotice_Renewal
 else
-  -- DECOMPILER ERROR at PC135: Confused about usage of register: R12 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC137: Confused about usage of register: R12 in 'UnsetPending'
 
   (panelList[0])[1] = Panel_TradeMarket_EventInfo
 end
@@ -118,12 +118,12 @@ local panelInfo = {
 [17] = {posX = 8, posY = -14, sizeX = 15}
 }
 }
--- DECOMPILER ERROR at PC354: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC356: Confused about usage of register: R13 in 'UnsetPending'
 
 if isGameTypeEnglish() then
   ((panelInfo[1])[5]).sizeX = -157
 end
--- DECOMPILER ERROR at PC363: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC365: Confused about usage of register: R13 in 'UnsetPending'
 
 if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
   ((panelInfo[1])[5]).sizeX = -207

@@ -65,8 +65,20 @@ termsofDaumCash_FirstUsePearl_Open = function(type)
   end
   _Web:SetSize(500, 552)
   _Web:SetUrl(500, 552, url)
+  local panelTitleString = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_TERMSOFDAUMCASH")
+  if isGameTypeTR() then
+    panelTitleString = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_TERMSOFDAUMCASH_TR")
+  else
+    if isGameTypeTH() then
+      panelTitleString = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_TERMSOFDAUMCASH_TH")
+    else
+      if isGameTypeID() then
+        panelTitleString = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_TERMSOFDAUMCASH_ID")
+      end
+    end
+  end
   ;
-  (self.panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_TERMSOFDAUMCASH"))
+  (self.panelTitle):SetText(panelTitleString)
   Panel_IngameCashShop_TermsofDaumCash:SetShow(true, true)
 end
 

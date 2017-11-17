@@ -75,7 +75,7 @@ local initialize = function()
   ;
   (UILink.closeNpcNavi):SetShow(false)
   Panel_NpcNavi:RegisterUpdateFunc("NpcNavi_OverBarUpdatePerFrame")
-  NpcListUpdate()
+  registerEvent("selfPlayer_regionChanged", "NpcListUpdate_selfPlayer_regionChanged")
   registerEvent("EventMentalCardUpdate", "NpcListUpdate_EventMentalCardUpdate")
   registerEvent("EventExplorePointUpdate", "NpcListUpdate_EventExplorePointUpdate")
   registerEvent("onScreenResize", "NpcListUpdate_ScreenResize")
@@ -93,28 +93,28 @@ local initialize = function()
   (UILink.editSearchText):addInputEvent("Mouse_LUp", "NpcNavi_OnInputMode()")
   ;
   (UILink.editSearchText):RegistReturnKeyEvent("NpcNavi_OutInputMode( true )")
-  -- DECOMPILER ERROR at PC126: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC128: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[0] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_general.dds")
-  -- DECOMPILER ERROR at PC131: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC133: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[1] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_skill.dds")
-  -- DECOMPILER ERROR at PC136: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC138: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[2] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_artisan.dds")
-  -- DECOMPILER ERROR at PC141: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC143: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[3] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_store_liquid.dds")
-  -- DECOMPILER ERROR at PC146: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC148: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[4] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_general.dds")
-  -- DECOMPILER ERROR at PC151: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC153: Confused about usage of register: R0 in 'UnsetPending'
 
   preLoadTextureKey[5] = preLoadTexture("new_ui_common_forlua/widget/minimap/icon/minimap_icon_npc_store_liquid.dds")
   local territoryCount = getTerritoryInfoCount()
   for i = 1, territoryCount do
     local territoryInfoWrapper = getTerritoryInfoWrapperByIndex(i - 1)
-    -- DECOMPILER ERROR at PC170: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC172: Confused about usage of register: R6 in 'UnsetPending'
 
     if territoryInfoWrapper ~= nil then
       preLoadTextureKey_territory[territoryInfoWrapper:getKeyRaw()] = preLoadTexture(territoryInfoWrapper:getTerritorySmallImage())
@@ -810,8 +810,11 @@ NpcListUpdate_selfPlayer_regionChanged = function()
   if Panel_NpcNavi:IsShow() == false then
     lazyUpdate = true
     return 
+  else
+    if lazyUpdate then
+      NpcListUpdate()
+    end
   end
-  NpcListUpdate()
 end
 
 NpcListUpdate_EventMentalCardUpdate = function()

@@ -4,23 +4,15 @@
 -- params : ...
 -- function num : 0
 local IM = CppEnums.EProcessorInputMode
-local _btn_AutoTraining = FGlobal_GetPersonalIconControl(5)
-local _trainingText = FGlobal_GetPersonalText(5)
-_btn_AutoTraining:SetShow(false)
-_btn_AutoTraining:ActiveMouseEventEffect(true)
-_btn_AutoTraining:setGlassBackground(true)
-_trainingText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_9"))
 local autoTrain = ToClient_IsAutoLevelUp()
 local autoTraining_Init = function()
-  -- function num : 0_0 , upvalues : autoTrain, _trainingText, _btn_AutoTraining
+  -- function num : 0_0 , upvalues : autoTrain
   if not ToClient_IsContentsGroupOpen("57") then
     return 
   end
   if autoTrain then
     ToClient_RequestSetAutoLevelUp(false)
   end
-  _trainingText:SetShow(autoTrain)
-  _btn_AutoTraining:EraseAllEffect()
   FGlobal_PersonalIcon_ButtonPosUpdate()
 end
 
@@ -82,28 +74,24 @@ AutoTraining_Set = function()
 end
 
 AutoTraining_Stop = function()
-  -- function num : 0_2 , upvalues : autoTrain, _btn_AutoTraining, _trainingText
+  -- function num : 0_2 , upvalues : autoTrain
   autoTrain = ToClient_IsAutoLevelUp()
-  _btn_AutoTraining:EraseAllEffect()
-  _trainingText:SetShow(autoTrain)
 end
 
 AutoTraining_ToolTip = function(isShow)
-  -- function num : 0_3 , upvalues : _btn_AutoTraining, autoTrain
+  -- function num : 0_3 , upvalues : autoTrain
   if isShow == false then
     TooltipSimple_Hide()
     return 
   end
   local currentLevel = ((getSelfPlayer()):get()):getLevel()
-  local name, desc, uiControl = (PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_8")), nil, _btn_AutoTraining
+  local name, desc = (PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_8")), nil
   local maxExpPercent = ToClient_GetAutoLevelUpMaxExpPercent(currentLevel) / 10000
   if autoTrain then
     desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_6", "percent", maxExpPercent)
   else
     desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_7", "percent", maxExpPercent)
   end
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
-  TooltipSimple_Show(uiControl, name, desc)
 end
 
 Init_AutoTraining = function()
@@ -117,15 +105,12 @@ isAutoTraining = function()
 end
 
 FromClient_SetAutoLevelUp = function(isAuto)
-  -- function num : 0_6 , upvalues : autoTrain, _trainingText, _btn_AutoTraining
+  -- function num : 0_6 , upvalues : autoTrain
   autoTrain = isAuto
-  _trainingText:SetShow(autoTrain)
   if autoTrain then
     msg = PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_3")
-    _btn_AutoTraining:AddEffect("fUI_Soul_Training01", true, 0, 0)
   else
     msg = PAGetString(Defines.StringSheet_GAME, "LUA_AUTOTRAINING_MESSAGE_4")
-    _btn_AutoTraining:EraseAllEffect()
   end
   Proc_ShowMessage_Ack(msg)
 end

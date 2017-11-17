@@ -37,7 +37,6 @@ local btn_AlchemyStone = (UI.getChildControl)(Panel_Window_Inventory, "Button_Al
 local btn_AlchemyFigureHead = (UI.getChildControl)(Panel_Window_Inventory, "Button_AlchemyFigureHead")
 local btn_DyePalette = (UI.getChildControl)(Panel_Window_Inventory, "Button_Palette")
 local btn_BuyWeight = (UI.getChildControl)(Panel_Window_Inventory, "Button_BuyWeight")
-btn_BuyWeight:SetShow(not isGameTypeTR())
 local icon_TrashOn = (UI.getChildControl)(Panel_Window_Inventory, "Button_TrashOn")
 local icon_TrashSequence = (UI.getChildControl)(Panel_Window_Inventory, "Button_TrashAlert")
 local isAlchemyStoneEnble = ToClient_IsContentsGroupOpen("35")
@@ -91,7 +90,7 @@ FilterRadioTooltip:SetAutoResize(true)
 FilterRadioTooltip:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 FilterRadioTooltip:SetShow(false)
 PaGlobal_Inventory = {_itemKeyForTutorial = nil, _isItemSlotRClickedForTutorial = false}
--- DECOMPILER ERROR at PC504: Confused about usage of register: R37 in 'UnsetPending'
+-- DECOMPILER ERROR at PC499: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString, isLoop, posX, posY)
   -- function num : 0_1
@@ -100,28 +99,28 @@ PaGlobal_Inventory.addSlotEffectForTutorial = function(self, slot, effectString,
   (PaGlobal_TutorialUiManager:getUiMasking()):showInventoryMasking((slot.icon):GetPosX(), (slot.icon):GetPosY())
 end
 
--- DECOMPILER ERROR at PC507: Confused about usage of register: R37 in 'UnsetPending'
+-- DECOMPILER ERROR at PC502: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.setItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_2
   self._itemKeyForTutorial = itemKey
 end
 
--- DECOMPILER ERROR at PC510: Confused about usage of register: R37 in 'UnsetPending'
+-- DECOMPILER ERROR at PC505: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.clearItemKeyForTutorial = function(self, itemKey)
   -- function num : 0_3
   self._itemKeyForTutorial = nil
 end
 
--- DECOMPILER ERROR at PC513: Confused about usage of register: R37 in 'UnsetPending'
+-- DECOMPILER ERROR at PC508: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.isItemSlotRClickedForTutorial = function(self)
   -- function num : 0_4
   return self._isItemSlotRClickedForTutorial
 end
 
--- DECOMPILER ERROR at PC516: Confused about usage of register: R37 in 'UnsetPending'
+-- DECOMPILER ERROR at PC511: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   -- function num : 0_5
@@ -130,7 +129,7 @@ PaGlobal_Inventory.setIsitemSlotRClickedForTutorial = function(self, bool)
   PaGlobal_Inventory._isItemSlotRClickedForTutorial = bool
 end
 
--- DECOMPILER ERROR at PC519: Confused about usage of register: R37 in 'UnsetPending'
+-- DECOMPILER ERROR at PC514: Confused about usage of register: R37 in 'UnsetPending'
 
 PaGlobal_Inventory.findItemWrapper = function(self, itemWhereType, targetItemKey, targetEnchantLevel)
   -- function num : 0_6
@@ -1300,16 +1299,14 @@ Inventory_IconOver = function(index)
   if (effectScene.newItem)[index] ~= nil then
     (((self.slots)[index]).icon):EraseEffect((effectScene.newItem)[index])
   end
-  if not isGameTypeTR() then
-    local useStartSlot = inventorySlotNoUserStart()
-    local invenUseSize = (selfPlayer:get()):getInventorySlotCount(not (self.radioButtonNormaiInven):IsChecked())
-    if invenUseSize - useStartSlot - self.startSlotIndex == index then
-      local name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_NAME")
-      local desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_DESC")
-      local control = ((self.slots)[index]).icon
-      TooltipSimple_Show(control, name, desc)
-      return 
-    end
+  local useStartSlot = inventorySlotNoUserStart()
+  local invenUseSize = (selfPlayer:get()):getInventorySlotCount(not (self.radioButtonNormaiInven):IsChecked())
+  if invenUseSize - useStartSlot - self.startSlotIndex == index then
+    local name = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_NAME")
+    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_ADDINVENTORY_TOOLTIP_DESC")
+    local control = ((self.slots)[index]).icon
+    TooltipSimple_Show(control, name, desc)
+    return 
   end
   do
     if over_SlotEffect ~= nil then
@@ -1799,10 +1796,10 @@ Inventory_updateSlotData = function()
       else
         if ii == invenUseSize - useStartSlot - self.startSlotIndex then
           if (((self.slots)[ii]).icon):GetShow() then
-            (slot.onlyPlus):SetShow(not isGameTypeTR())
+            (slot.onlyPlus):SetShow(true)
           else
             ;
-            (slot.plus):SetShow(not isGameTypeTR())
+            (slot.plus):SetShow(true)
           end
           ;
           (slot.lock):SetShow(true)
@@ -1916,7 +1913,7 @@ Inventory_updateSlotData = function()
               do
                 if ((inven.slotEtcData)[ii]).isFirstItem == true and ((inven.slotEtcData)[ii]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
                   local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem02", true, 0, 0)
-                  -- DECOMPILER ERROR at PC640: Confused about usage of register: R47 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC636: Confused about usage of register: R47 in 'UnsetPending'
 
                   ;
                   (effectScene.newItem)[slotNo] = newItemEffectSceneId
@@ -1971,21 +1968,21 @@ Inventory_updateSlotData = function()
                       (slot.icon):SetIgnore(false)
                       slot.isEmpty = true
                     end
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -3019,9 +3016,6 @@ end
 
 Panel_Inventory_SimpleTooltip = function(isShow, tipType)
   -- function num : 0_111 , upvalues : btn_BuyWeight
-  if isGameTypeTR() then
-    return 
-  end
   if not isShow then
     return TooltipSimple_Hide()
   end

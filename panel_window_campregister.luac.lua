@@ -13,10 +13,8 @@ _ui = {_campNaming = (UI.getChildControl)(Panel_Window_CampRegister, "Edit_Namin
 PaGlobal_CampRegister.CampRegister_init = function(self)
   -- function num : 0_0 , upvalues : UI_TM
   ((self._ui)._campNaming):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_EDITBOX_COMMENT"), true)
-  if isGameTypeEnglish() or isGameTypeTaiwan() then
+  if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     ((self._ui)._staticCreateServantName):SetTextMode(UI_TM.eTextMode_AutoWrap)
-    ;
-    ((self._ui)._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
     ;
     ((self._ui)._staticCreateServantName):SetShow(true)
     ;
@@ -30,6 +28,21 @@ PaGlobal_CampRegister.CampRegister_init = function(self)
     ((self._ui)._staticCreateServantNameBG):SetShow(false)
     ;
     ((self._ui)._staticCreateServantNameTitle):SetShow(false)
+  end
+  if isGameTypeEnglish() or isGameTypeTaiwan() then
+    ((self._ui)._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
+  else
+    if isGameTypeTR() then
+      ((self._ui)._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
+    else
+      if isGameTypeTH() then
+        ((self._ui)._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
+      else
+        if isGameTypeID() then
+          ((self._ui)._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+        end
+      end
+    end
   end
   ;
   ((self._ui)._campRegisterDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)

@@ -216,8 +216,60 @@ local MiniGame_Manual_Cart_0 = function(actorKeyRaw, isSelf)
   end
 end
 
+local isCartRace = false
+local MiniGame_Manual_Cart_Race = function(actorKeyRaw, isSelf)
+  -- function num : 0_8 , upvalues : ui_Value, ui, uiPress, isCartRace
+  if ui_Value.isFirstTime_Manual_Cart_0 == true then
+    for _,v in pairs(ui) do
+      v:SetShow(false)
+      v:ComputePos()
+    end
+    for _,v in pairs(uiPress) do
+      v:SetShow(false)
+      v:ComputePos()
+    end
+    Panel_Global_Manual:SetShow(true)
+    Panel_Global_Manual:SetAlpha(0)
+    ;
+    (UIAni.AlphaAnimation)(1, Panel_Global_Manual, 0, 0.22)
+    ;
+    (ui._purposeText2):SetShow(true)
+    ;
+    (ui._purposeText2):SetSize(800, 95)
+    ;
+    (ui._purposeText2):AddEffect("UI_QustComplete01", false, 0, 0)
+    ;
+    (ui._purposeText2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_CART_TITLE"))
+    ;
+    (ui._cart_Icon_Title):SetShow(true)
+    ;
+    (uiPress._button_W):SetShow(true)
+    ;
+    (uiPress._button_A):SetShow(true)
+    ;
+    (ui._button_S):SetShow(true)
+    ;
+    (uiPress._button_D):SetShow(true)
+    ;
+    (uiPress._m0):SetShow(true)
+    ;
+    (uiPress._m1):SetShow(true)
+    ;
+    (ui._mBody):SetShow(true)
+    -- DECOMPILER ERROR at PC110: Confused about usage of register: R2 in 'UnsetPending'
+
+    ui_Value.isFirstTime_Manual_Cart_0 = false
+    isCartRace = true
+  end
+end
+
+FGlobal_isPlaying_CartRace = function()
+  -- function num : 0_9 , upvalues : isCartRace
+  return isCartRace
+end
+
 local MiniGame_Manual_Horse_Rope_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_8 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_10 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Horse_Rope_0 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -246,7 +298,7 @@ local MiniGame_Manual_Horse_Rope_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HorseDrop_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_9 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_11 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_HorseDrop_0 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -284,7 +336,7 @@ local MiniGame_Manual_HorseDrop_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Flute_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_10 , upvalues : ui_Value, IsHideMiniGameManual, ui, uiPress
+  -- function num : 0_12 , upvalues : ui_Value, IsHideMiniGameManual, ui, uiPress
   if ui_Value.isFirstTime_Manual_Flute_0 == true and not IsHideMiniGameManual() then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -319,7 +371,7 @@ local MiniGame_Manual_Flute_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Flute_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_11 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_13 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Flute_1 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -357,7 +409,7 @@ local MiniGame_Manual_Flute_1 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Drum_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_12 , upvalues : ui_Value, IsHideMiniGameManual, ui, uiPress
+  -- function num : 0_14 , upvalues : ui_Value, IsHideMiniGameManual, ui, uiPress
   if ui_Value.isFirstTime_Manual_Drum_0 == true and not IsHideMiniGameManual() then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -391,7 +443,7 @@ local MiniGame_Manual_Drum_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Drum_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_13 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_15 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Drum_1 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -429,7 +481,7 @@ local MiniGame_Manual_Drum_1 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Instrument_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_14 , upvalues : IsHideMiniGameManual, ui, uiPress
+  -- function num : 0_16 , upvalues : IsHideMiniGameManual, ui, uiPress
   if Panel_Global_Manual:GetShow() then
     return 
   end
@@ -458,7 +510,7 @@ local MiniGame_Manual_Instrument_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HerbMachine_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_15 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_17 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_HerbMachine_0 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -487,7 +539,7 @@ local MiniGame_Manual_HerbMachine_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HerbMachine_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_16 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_18 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_HerbMachine_1 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -516,7 +568,7 @@ local MiniGame_Manual_HerbMachine_1 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HerbMachine_2 = function(actorKeyRaw, isSelf)
-  -- function num : 0_17 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_19 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_HerbMachine_2 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -545,7 +597,7 @@ local MiniGame_Manual_HerbMachine_2 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HerbMachine_3 = function(actorKeyRaw, isSelf)
-  -- function num : 0_18 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_20 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_HerbMachine_3 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -574,7 +626,7 @@ local MiniGame_Manual_HerbMachine_3 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HerbMachine_4 = function(actorKeyRaw, isSelf)
-  -- function num : 0_19 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_21 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_HerbMachine_4 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -603,7 +655,7 @@ local MiniGame_Manual_HerbMachine_4 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HerbMachine_5 = function(actorKeyRaw, isSelf)
-  -- function num : 0_20 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_22 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_HerbMachine_5 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -634,12 +686,12 @@ local MiniGame_Manual_HerbMachine_5 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_HerbMachine = function()
-  -- function num : 0_21
+  -- function num : 0_23
   Panel_Minigame_HerbMachine_ResetCount()
 end
 
 local MiniGame_Manual_Buoy_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_22 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_24 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Buoy_0 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -668,7 +720,7 @@ local MiniGame_Manual_Buoy_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Buoy_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_23 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_25 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Buoy_1 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -698,7 +750,7 @@ local MiniGame_Manual_Buoy_1 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Buoy_2 = function(actorKeyRaw, isSelf)
-  -- function num : 0_24 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_26 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Buoy_2 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -728,7 +780,7 @@ local MiniGame_Manual_Buoy_2 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Buoy_3 = function(actorKeyRaw, isSelf)
-  -- function num : 0_25 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_27 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Buoy_3 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -758,12 +810,12 @@ local MiniGame_Manual_Buoy_3 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Reset_Buoy = function()
-  -- function num : 0_26
+  -- function num : 0_28
   Panel_Minigame_Buoy_ResetCount()
 end
 
 local MiniGame_Manual_Milky_0 = function(actorKeyRaw, isSelf)
-  -- function num : 0_27 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_29 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Milky_0 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -798,7 +850,7 @@ local MiniGame_Manual_Milky_0 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Milky_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_28 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_30 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Milky_1 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -836,7 +888,7 @@ local MiniGame_Manual_Milky_1 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Milky_2 = function(actorKeyRaw, isSelf)
-  -- function num : 0_29 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_31 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Milky_2 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -877,7 +929,7 @@ local MiniGame_Manual_Milky_2 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Milky_3 = function(actorKeyRaw, isSelf)
-  -- function num : 0_30 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_32 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Milky_3 == true then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -921,7 +973,7 @@ local MiniGame_Manual_Milky_3 = function(actorKeyRaw, isSelf)
 end
 
 Parking_PLZ_Update = function(variableName, value)
-  -- function num : 0_31
+  -- function num : 0_33
   if variableName == "IsParking" and value == 0 then
     if isNearMonsterCheck() == true then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_ISNEARMONSTERCHECK"), 4)
@@ -934,7 +986,7 @@ Parking_PLZ_Update = function(variableName, value)
 end
 
 isNearMonsterCheck = function()
-  -- function num : 0_32
+  -- function num : 0_34
   local distance = 3000
   local isNearMonsterCount = getNearMonsterCharacterKeyList(distance)
   if isNearMonsterCount > 0 then
@@ -946,7 +998,7 @@ end
 
 registerEvent("EventChangedSelfPlayerActionVariable", "Parking_PLZ_Update")
 playerUseBed = function(variableName, value)
-  -- function num : 0_33
+  -- function num : 0_35
   if variableName == "IsSleepingChk" and value == 1 then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_USE_BED"))
   else
@@ -958,14 +1010,14 @@ end
 
 registerEvent("EventChangedSelfPlayerActionVariable", "playerUseBed")
 FromAction_CheckedBasic = function()
-  -- function num : 0_34
+  -- function num : 0_36
   IsChecked_WeaponOut = true
   ShowUseTab_Func()
 end
 
 local isBulletShow = false
 local MiniGame_BulletCount_0 = function()
-  -- function num : 0_35 , upvalues : ui_Value, ui, uiPress
+  -- function num : 0_37 , upvalues : ui_Value, ui, uiPress
   if ui_Value.isFirstTime_Manual_Bullet_0 then
     for _,v in pairs(ui) do
       v:SetShow(false)
@@ -1004,7 +1056,7 @@ local MiniGame_BulletCount_0 = function()
 end
 
 local MiniGame_BulletCount_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_36 , upvalues : ui
+  -- function num : 0_38 , upvalues : ui
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -1020,7 +1072,7 @@ local MiniGame_BulletCount_1 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_BulletCount_2 = function(actorKeyRaw, isSelf)
-  -- function num : 0_37 , upvalues : isBulletShow, ui
+  -- function num : 0_39 , upvalues : isBulletShow, ui
   isBulletShow = false
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
   local bulletString = EquipMent_BulletCheck()
@@ -1031,23 +1083,23 @@ local MiniGame_BulletCount_2 = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_BulletCount_3 = function()
-  -- function num : 0_38
+  -- function num : 0_40
   local msg = PAGetString(Defines.StringSheet_GAME, "LUA_RELOADALERT")
   Proc_ShowMessage_Ack_WithOut_ChattingMessage(msg)
 end
 
 FGlobal_BulletShow = function()
-  -- function num : 0_39 , upvalues : MiniGame_BulletCount_0
+  -- function num : 0_41 , upvalues : MiniGame_BulletCount_0
   MiniGame_BulletCount_0()
 end
 
 FGlobal_BulletCount_UiShowCheck = function()
-  -- function num : 0_40 , upvalues : ui_Value
+  -- function num : 0_42 , upvalues : ui_Value
   return not ui_Value.isFirstTime_Manual_Bullet_0
 end
 
 local MiniGame_Diving_0 = function()
-  -- function num : 0_41 , upvalues : ui
+  -- function num : 0_43 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1062,7 +1114,7 @@ local MiniGame_Diving_0 = function()
 end
 
 local MiniGame_Diving_1 = function()
-  -- function num : 0_42 , upvalues : ui
+  -- function num : 0_44 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1075,7 +1127,7 @@ local MiniGame_Diving_1 = function()
 end
 
 local MiniGame_Diving_2 = function()
-  -- function num : 0_43 , upvalues : ui
+  -- function num : 0_45 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1088,7 +1140,7 @@ local MiniGame_Diving_2 = function()
 end
 
 local MiniGame_SummerEventCannon_1 = function()
-  -- function num : 0_44 , upvalues : ui
+  -- function num : 0_46 , upvalues : ui
   for _,v in pairs(ui) do
     v:SetShow(false)
     v:ComputePos()
@@ -1103,7 +1155,7 @@ local MiniGame_SummerEventCannon_1 = function()
 end
 
 local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
-  -- function num : 0_45 , upvalues : uiPress, ui_Value
+  -- function num : 0_47 , upvalues : uiPress, ui_Value, isCartRace
   if isSelf == false then
     return 
   end
@@ -1196,10 +1248,11 @@ local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
   if Panel_CannonGauge:GetShow() then
     FGlobal_CannonGauge_Close()
   end
+  isCartRace = false
 end
 
 local MiniGame_Manual_Instrument_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_46 , upvalues : Panel_Global_Manual_End
+  -- function num : 0_48 , upvalues : Panel_Global_Manual_End
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 
@@ -1208,6 +1261,7 @@ ActionChartEventBindFunction(202, MiniGame_Manual_Timing_1)
 ActionChartEventBindFunction(203, MiniGame_Manual_Timing_2)
 ActionChartEventBindFunction(204, MiniGame_Manual_Timing_3)
 ActionChartEventBindFunction(221, MiniGame_Manual_Cart_0)
+ActionChartEventBindFunction(222, MiniGame_Manual_Cart_Race)
 ActionChartEventBindFunction(231, MiniGame_Manual_HorseDrop_0)
 ActionChartEventBindFunction(232, MiniGame_Manual_Horse_Rope_0)
 ActionChartEventBindFunction(241, MiniGame_Manual_Flute_0)

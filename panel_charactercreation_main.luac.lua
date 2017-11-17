@@ -1436,7 +1436,7 @@ end
               -- DECOMPILER ERROR at PC322: Overwrote pending register: R5 in 'AssignReg'
 
               japanEventBanner:SetShow(false)
-              if (isGameTypeEnglish() or isGameTypeTaiwan()) and not isInGame then
+              if (isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID()) and not isInGame then
                 btn_CharacterNameCreateRule:SetShow(true)
               else
                 btn_CharacterNameCreateRule:SetShow(false)
@@ -1459,10 +1459,18 @@ end
   -- function num : 0_57
   local linkURL = ""
   if isType == 0 then
-    linkURL = "https://www.tr.playblackdesert.com/Intro/Event/cbt_signup"
+    if isGameTypeTH() then
+      linkURL = "https://www.th.playblackdesert.com/Intro/Event/CBT_Signup"
+    else
+      linkURL = "https://www.sea.playblackdesert.com/Intro/Event/CBT_Signup"
+    end
   else
     if isType == 1 then
-      linkURL = "https://payment.tr.playblackdesert.com/Pay/Package/"
+      if isGameTypeTH() then
+        linkURL = "https://payment.th.playblackdesert.com/Pay/PackageAcoin"
+      else
+        linkURL = "https://payment.sea.playblackdesert.com/Pay/PackageAcoin"
+      end
     end
   end
   ToClient_OpenChargeWebPage(linkURL, false)
@@ -1529,6 +1537,17 @@ end
         HandleClicked_RuleShow = function()
   -- function num : 0_66
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN")
+  if isGameTypeTR() then
+    messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR")
+  else
+    if isGameTypeTH() then
+      messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH")
+    else
+      if isGameTypeID() then
+        messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID")
+      end
+    end
+  end
   local messageBoxData = {title = PAGetString(Defines.StringSheet_RESOURCE, "COMMON_CHARACTERCREATEPOLICY_TITLE_EN"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageBoxData, "top")

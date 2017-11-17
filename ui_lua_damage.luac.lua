@@ -309,7 +309,7 @@ FromClient_WpChanged = function(prevWp, wp)
 end
 
 DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType, additionalDamageType, posFloat3, isTribeAttack, attackerActorKeyRaw, isNotRandom)
-  -- function num : 0_16 , upvalues : DamagePanel, DamagePanel_Index, DamagePanel_Count, WHITE_A0, WHITE_A1, RED_A0, RED_A1, ORANGE_A0, ORANGE_A1, GREEN_A0, GREEN_A1, SKY_BLUE_A0, SKY_BLUE_A1, LIGHT_ORANGE_A0, LIGHT_ORANGE_A1, isShowAttackEffect, SetAnimationPanel, SetAnimationControl, effectControlSetting, SetAnimation_CounterAttack
+  -- function num : 0_16 , upvalues : DamagePanel, DamagePanel_Index, DamagePanel_Count, WHITE_A0, WHITE_A1, RED_A0, RED_A1, ORANGE_A0, ORANGE_A1, GREEN_A0, GREEN_A1, SKY_BLUE_A0, SKY_BLUE_A1, LIGHT_ORANGE_A0, LIGHT_ORANGE_A1, isShowAttackEffect, SetAnimationPanel, effectControlSetting, SetAnimationControl, SetAnimation_CounterAttack
   local target = DamagePanel[DamagePanel_Index]
   DamagePanel_Index = DamagePanel_Index + 1
   if DamagePanel_Count < DamagePanel_Index then
@@ -419,23 +419,10 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
       targetPanel:SetWorldPosY(target._posY)
       targetPanel:SetWorldPosZ(target._posZ)
       SetAnimationPanel(targetPanel, startendColor, middleColor, timeRate)
-      if isRealServiceMode() == false and isDamageMeter() == true then
-        local nameStatic = target.damage
-        local numberWidth = 0
-        local numberHeight = 50
-        if effectType <= 6 then
-          setDamageNameStatic(nameStatic, effectNumber, showSymbol, startendColor)
-          numberWidth = nameStatic:getNumberWidth()
-          SetAnimationControl(nameStatic, -numberWidth / 2, baseY, timeRate)
-          baseY = baseY + numberHeight
-        else
-          nameStatic:SetShow(false)
-        end
-      end
       if effectType ~= 0 and effectType ~= 6 then
-        -- DECOMPILER ERROR at PC261: Unhandled construct in 'MakeBoolean' P3
+        -- DECOMPILER ERROR at PC227: Unhandled construct in 'MakeBoolean' P3
 
-        -- DECOMPILER ERROR at PC261: Unhandled construct in 'MakeBoolean' P3
+        -- DECOMPILER ERROR at PC227: Unhandled construct in 'MakeBoolean' P3
 
         if (effectType == 7 and effectType == 1) or effectType == 4 then
           baseX = baseX - (effectControlSetting[effectType])._sizeX / 2
@@ -625,7 +612,7 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
         end
       end
       do
-        -- DECOMPILER ERROR at PC1049: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC1015: Unhandled construct in 'MakeBoolean' P1
 
         if additionalDamageType ~= 99 or effectType == 96 or effectType == 97 or effectType == 93 then
           local arrowControl = (target.effectList)[94]
@@ -641,7 +628,7 @@ DamageOutputFunction_OnDamage = function(attakeeKeyRaw, effectNumber, effectType
           baseX = baseX + (effectControlSetting[effectType])._sizeX
           SetAnimationControl(arrowControl, baseX, baseY + 10, timeRate)
         end
-        -- DECOMPILER ERROR: 66 unprocessed JMP targets
+        -- DECOMPILER ERROR: 64 unprocessed JMP targets
       end
     end
   end

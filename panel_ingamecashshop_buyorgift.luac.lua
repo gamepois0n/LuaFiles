@@ -878,6 +878,17 @@ end
     if isNaver then
       moneyType = PAGetString(Defines.StringSheet_GAME, "LUA_PANEL_INGAMECASHSHOP_NAVERCASH")
     end
+    if isGameTypeTR() then
+      moneyType = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_DAUMCASH_TR")
+    else
+      if isGameTypeTH() then
+        moneyType = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_DAUMCASH_TH")
+      else
+        if isGameTypeID() then
+          moneyType = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_DAUMCASH_ID")
+        end
+      end
+    end
   else
     if (CppEnums.CashProductCategory).eCashProductCategory_Mileage == category then
       moneyType = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_MILEAGE")

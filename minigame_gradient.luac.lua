@@ -96,30 +96,30 @@ Panel_Minigame_Gradient_Start = function(isRace)
 
   data.currentPos = 0.5
   isGradientPlay = true
-  -- DECOMPILER ERROR at PC45: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC47: Confused about usage of register: R3 in 'UnsetPending'
 
-  if isRace == true then
-    define.sequenceClickTimeSpan = 1
-    -- DECOMPILER ERROR at PC47: Confused about usage of register: R3 in 'UnsetPending'
-
-    define.ClickTimeSpanMaxWeight = 0.35
+  if FGlobal_isPlaying_CartRace() == true then
+    define.sequenceClickTimeSpan = 0.5
     -- DECOMPILER ERROR at PC49: Confused about usage of register: R3 in 'UnsetPending'
 
-    define.ClickTimeSpanMinWeight = 0.15
+    define.ClickTimeSpanMaxWeight = 1.45
     -- DECOMPILER ERROR at PC51: Confused about usage of register: R3 in 'UnsetPending'
 
-    define.speedWeight = 1
-  else
-    -- DECOMPILER ERROR at PC54: Confused about usage of register: R3 in 'UnsetPending'
+    define.ClickTimeSpanMinWeight = 0.85
+    -- DECOMPILER ERROR at PC53: Confused about usage of register: R3 in 'UnsetPending'
 
-    define.sequenceClickTimeSpan = 1
+    define.speedWeight = 8
+  else
     -- DECOMPILER ERROR at PC56: Confused about usage of register: R3 in 'UnsetPending'
 
-    define.ClickTimeSpanMaxWeight = 0.35
+    define.sequenceClickTimeSpan = 1
     -- DECOMPILER ERROR at PC58: Confused about usage of register: R3 in 'UnsetPending'
 
-    define.ClickTimeSpanMinWeight = 0.15
+    define.ClickTimeSpanMaxWeight = 0.35
     -- DECOMPILER ERROR at PC60: Confused about usage of register: R3 in 'UnsetPending'
+
+    define.ClickTimeSpanMinWeight = 0.15
+    -- DECOMPILER ERROR at PC62: Confused about usage of register: R3 in 'UnsetPending'
 
     define.speedWeight = 1
   end

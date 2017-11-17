@@ -21,6 +21,7 @@ GlobalKeyBinder_MouseKeyMap = function(uiInputType)
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   mouseKeyTable[uiInputType] = true
+  GlobalKeyBinder_Update(0)
 end
 
 local GlobalKeyBinder_CheckKeyPressed = function(keyCode)
@@ -480,9 +481,6 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           return 
         end
         if (getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial or isGameTypeTaiwan()) and GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_CashShop) then
-          if isGameTypeTR() then
-            return 
-          end
           if PaGlobal_TutorialManager:isDoingTutorial() then
             Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALKEYBINDER_TUTORIALALERT"))
             return 
@@ -692,7 +690,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             return 
           end
         end
-        -- DECOMPILER ERROR at PC888: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC883: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Help) and Panel_KeyboardHelp ~= nil then
           if FGlobal_KeyboardHelpShow() then
@@ -702,7 +700,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
         end
         do return  end
-        -- DECOMPILER ERROR at PC923: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC918: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           if Panel_ProductNote_ShowToggle() then
@@ -772,7 +770,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC1108: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC1103: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -943,7 +941,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
               return 
             end
-            -- DECOMPILER ERROR at PC1585: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1580: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -960,7 +958,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            -- DECOMPILER ERROR at PC1632: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1627: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -1070,7 +1068,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               Panel_NaviButton:SetShow(false)
               audioPostEvent_SystemUi(0, 15)
             end
-            -- DECOMPILER ERROR: 158 unprocessed JMP targets
+            -- DECOMPILER ERROR: 157 unprocessed JMP targets
           end
         end
       end

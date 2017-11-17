@@ -46,13 +46,27 @@ local _btn_Close = ((UI.getChildControl)(Panel_IngameCashShop_ChargeDaumCash, "B
 do
   local _Web = nil
   Panel_IngameCashShop_ChargeDaumCash_Initialize = function()
-  -- function num : 0_2 , upvalues : _Web
+  -- function num : 0_2 , upvalues : termsofDaumCash, _Web
+  local self = termsofDaumCash
   _Web = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_IngameCashShop_ChargeDaumCash, "WebControl_ChargeDaumCash_WebLink")
   _Web:SetShow(true)
   _Web:SetPosX(43)
   _Web:SetPosY(63)
   _Web:SetSize(917, 586)
   _Web:ResetUrl()
+  ;
+  (self.panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_CHARGEDAUMCASH_PANELTITLE"))
+  if isGameTypeTR() then
+    (self.panelTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_TERMSOFDAUMCASH_TITLE_TR"))
+  else
+    if isGameTypeTH() then
+      (self.panelTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_TERMSOFDAUMCASH_TITLE_TH"))
+    else
+      if isGameTypeID() then
+        (self.panelTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_TERMSOFDAUMCASH_TITLE_ID"))
+      end
+    end
+  end
 end
 
   Panel_IngameCashShop_ChargeDaumCash_Initialize()
@@ -160,6 +174,17 @@ end
                       end
                       ToClient_OpenChargeWebPage(url, exeIE)
                       local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH")
+                      if isGameTypeTR() then
+                        messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_TR")
+                      else
+                        if isGameTypeTH() then
+                          messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_TH")
+                        else
+                          if isGameTypeID() then
+                            messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTIFY_CHARGEDAUMCASH_ID")
+                          end
+                        end
+                      end
                       local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = IngameCashShop_ChargeComplete, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                       ;
                       (MessageBox.showMessageBox)(messageBoxData)

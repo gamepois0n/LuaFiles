@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 Panel_PersonalIcon:SetShow(false)
-local personalIcon = {_btn_NpcNavi = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNavi"), _btn_NpcNaviTW = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNaviTW"), _btn_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "Button_MovieTooltip"), _btn_VoiceChat = (UI.getChildControl)(Panel_PersonalIcon, "Button_SetState"), _btn_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "Button_HuntingAlert"), _btn_SiegeArea = (UI.getChildControl)(Panel_PersonalIcon, "Button_VillageSiegeArea"), _btn_AutoTraining = (UI.getChildControl)(Panel_PersonalIcon, "Button_AutoTraining"), _btn_SummonElephant = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonElephant"), _btn_BusterCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_BusterCall"), _btn_WarCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_WarCall"), _btn_ReturnStone = (UI.getChildControl)(Panel_PersonalIcon, "Button_ReturnStone"), _btn_SummonParty = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonParty"), _btn_Militia = (UI.getChildControl)(Panel_PersonalIcon, "Button_Militia"), _plus_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_MoviePlus"), _plus_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_HuntingPlus"), _text_AutoTraining = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_Training")}
+local personalIcon = {_btn_NpcNavi = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNavi"), _btn_NpcNaviTW = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNaviTW"), _btn_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "Button_MovieTooltip"), _btn_VoiceChat = (UI.getChildControl)(Panel_PersonalIcon, "Button_SetState"), _btn_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "Button_HuntingAlert"), _btn_SiegeArea = (UI.getChildControl)(Panel_PersonalIcon, "Button_VillageSiegeArea"), _btn_SummonElephant = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonElephant"), _btn_BusterCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_BusterCall"), _btn_WarCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_WarCall"), _btn_ReturnStone = (UI.getChildControl)(Panel_PersonalIcon, "Button_ReturnStone"), _btn_SummonParty = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonParty"), _btn_Militia = (UI.getChildControl)(Panel_PersonalIcon, "Button_Militia"), _plus_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_MoviePlus"), _plus_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_HuntingPlus")}
 local radarPosX = 0
 local radarPosY = 0
 PersonalIcon_Initalize = function()
@@ -194,29 +194,25 @@ FGlobal_GetPersonalIconControl = function(index)
             if index == 4 then
               return self._btn_SiegeArea
             else
-              if index == 5 then
-                return self._btn_AutoTraining
+              if index == 6 then
+                return self._btn_BusterCall
               else
-                if index == 6 then
-                  return self._btn_BusterCall
+                if index == 7 then
+                  return self._btn_ReturnStone
                 else
-                  if index == 7 then
-                    return self._btn_ReturnStone
+                  if index == 8 then
+                    return self._btn_SummonElephant
                   else
-                    if index == 8 then
-                      return self._btn_SummonElephant
+                    if index == 9 then
+                      return self._btn_SummonParty
                     else
-                      if index == 9 then
-                        return self._btn_SummonParty
+                      if index == 10 then
+                        return self._btn_WarCall
                       else
-                        if index == 10 then
-                          return self._btn_WarCall
+                        if index == 11 then
+                          return self._btn_Militia
                         else
-                          if index == 11 then
-                            return self._btn_Militia
-                          else
-                            return nil
-                          end
+                          return nil
                         end
                       end
                     end
@@ -240,11 +236,7 @@ FGlobal_GetPersonalText = function(index)
     if index == 3 then
       return self._plus_Hunting
     else
-      if index == 5 then
-        return self._text_AutoTraining
-      else
-        return nil
-      end
+      return nil
     end
   end
 end
@@ -268,29 +260,25 @@ FGlobal_GetPersonalIconPosX = function(index)
           if index == 4 then
             return (self._btn_SiegeArea):GetPosX() + posX
           else
-            if index == 5 then
-              return (self._btn_AutoTraining):GetPosX() + posX
+            if index == 6 then
+              return (self._btn_BusterCall):GetPosX() + posX
             else
-              if index == 6 then
-                return (self._btn_BusterCall):GetPosX() + posX
+              if index == 7 then
+                return (self._btn_ReturnStone):GetPosX() + posX
               else
-                if index == 7 then
-                  return (self._btn_ReturnStone):GetPosX() + posX
+                if index == 8 then
+                  return (self._btn_SummonElephant):GetPosX() + posX
                 else
-                  if index == 8 then
-                    return (self._btn_SummonElephant):GetPosX() + posX
+                  if index == 9 then
+                    return (self._btn_SummonParty):GetPosX() + posX
                   else
-                    if index == 9 then
-                      return (self._btn_SummonParty):GetPosX() + posX
+                    if index == 10 then
+                      return (self._btn_WarCall):GetPosX() + posX
                     else
-                      if index == 10 then
-                        return (self._btn_WarCall):GetPosX() + posX
+                      if index == 11 then
+                        return (self._btn_Militia):GetPosX() + posX
                       else
-                        if index == 11 then
-                          return (self._btn_Militia):GetPosX() + posX
-                        else
-                          return nil
-                        end
+                        return nil
                       end
                     end
                   end
@@ -323,29 +311,25 @@ FGlobal_GetPersonalIconPosY = function(index)
           if index == 4 then
             return (self._btn_SiegeArea):GetPosY() + posY
           else
-            if index == 5 then
-              return (self._btn_AutoTraining):GetPosY() + posY
+            if index == 6 then
+              return (self._btn_BusterCall):GetPosY() + posY
             else
-              if index == 6 then
-                return (self._btn_BusterCall):GetPosY() + posY
+              if index == 7 then
+                return (self._btn_ReturnStone):GetPosY() + posY
               else
-                if index == 7 then
-                  return (self._btn_ReturnStone):GetPosY() + posY
+                if index == 8 then
+                  return (self._btn_SummonElephant):GetPosY() + posY
                 else
-                  if index == 8 then
-                    return (self._btn_SummonElephant):GetPosY() + posY
+                  if index == 9 then
+                    return (self._btn_SummonParty):GetPosY() + posY
                   else
-                    if index == 9 then
-                      return (self._btn_SummonParty):GetPosY() + posY
+                    if index == 10 then
+                      return (self._btn_WarCall):GetPosY() + posY
                     else
-                      if index == 10 then
-                        return (self._btn_WarCall):GetPosY() + posY
+                      if index == 11 then
+                        return (self._btn_Militia):GetPosY() + posY
                       else
-                        if index == 11 then
-                          return (self._btn_Militia):GetPosY() + posY
-                        else
-                          return nil
-                        end
+                        return nil
                       end
                     end
                   end
@@ -380,12 +364,8 @@ PersonalIcon_Tooltip = function()
   (self._btn_NpcNavi):addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
   ;
   (self._btn_NpcNaviTW):addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
-  if isGameTypeKorea() then
-    (self._btn_MovieGuide):addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Open()")
-  else
-    ;
-    (self._btn_MovieGuide):addInputEvent("Mouse_LUp", "Panel_MovieGuide_ShowToggle()")
-  end
+  ;
+  (self._btn_MovieGuide):addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Open()")
   ;
   (self._btn_VoiceChat):addInputEvent("Mouse_On", "HandleOnOut_SetVoiceChat_Tooltip(true)")
   ;
@@ -404,10 +384,6 @@ PersonalIcon_Tooltip = function()
   (self._btn_SiegeArea):addInputEvent("Mouse_Out", "VillageSiegeArea_Tooltip_ShowToggle(false)")
   ;
   (self._btn_SiegeArea):addInputEvent("Mouse_LUp", "ToggleVillageSiegeArea(false)")
-  ;
-  (self._btn_AutoTraining):addInputEvent("Mouse_On", "AutoTraining_ToolTip(true)")
-  ;
-  (self._btn_AutoTraining):addInputEvent("Mouse_Out", "AutoTraining_ToolTip(false)")
   ;
   (self._btn_SummonElephant):addInputEvent("Mouse_On", "SummonElephant_Tooltip_ShowToggle(true)")
   ;

@@ -2506,27 +2506,11 @@ end
   ;
   (radarTimeControl.serverName):SetText(getCurrentWolrdName())
   local curChannelData = getCurrentChannelServerData()
-  if isGameTypeKorea() then
-    (radarTimeControl.serverName):SetShow(false)
+  if isGameTypeRussia() then
+    (radarTimeControl.serverName):SetShow(true)
   else
-    if isGameTypeJapan() then
-      (radarTimeControl.serverName):SetShow(false)
-    else
-      if isGameTypeEnglish() then
-        (radarTimeControl.serverName):SetShow(false)
-      else
-        if isGameTypeTaiwan() then
-          (radarTimeControl.serverName):SetShow(false)
-        else
-          if isGameTypeSA() then
-            (radarTimeControl.serverName):SetShow(false)
-          else
-            ;
-            (radarTimeControl.serverName):SetShow(true)
-          end
-        end
-      end
-    end
+    ;
+    (radarTimeControl.serverName):SetShow(false)
   end
   local channelName = getChannelName(curChannelData._worldNo, curChannelData._serverNo)
   ;

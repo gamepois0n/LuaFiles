@@ -6,7 +6,7 @@
 local UI_TM = CppEnums.TextMode
 Panel_Login_Nickname:SetShow(false, false)
 Panel_Login_Nickname:setGlassBackground(true)
-local loginNickname = {edit_Nickname = (UI.getChildControl)(Panel_Login_Nickname, "Edit_Nickname"), button_OK = (UI.getChildControl)(Panel_Login_Nickname, "Button_Apply_Import"), desc1 = (UI.getChildControl)(Panel_Login_Nickname, "StaticText_1"), desc2 = (UI.getChildControl)(Panel_Login_Nickname, "StaticText_2"), desc3 = (UI.getChildControl)(Panel_Login_Nickname, "StaticText_3")}
+local loginNickname = {edit_Nickname = (UI.getChildControl)(Panel_Login_Nickname, "Edit_Nickname"), button_OK = (UI.getChildControl)(Panel_Login_Nickname, "Button_Apply_Import"), desc1 = (UI.getChildControl)(Panel_Login_Nickname, "StaticText_1"), desc2 = (UI.getChildControl)(Panel_Login_Nickname, "StaticText_2"), desc3 = (UI.getChildControl)(Panel_Login_Nickname, "StaticText_3"), exam_Character = (UI.getChildControl)(Panel_Login_Nickname, "Static_Illust")}
 loginNickname.init = function(self)
   -- function num : 0_0 , upvalues : loginNickname, UI_TM
   ;
@@ -68,7 +68,14 @@ LoginNickname_Open = function()
   ;
   (self.edit_Nickname):SetMaxInput(getGameServiceTypeUserNickNameLength())
   SetFocusEdit(self.edit_Nickname)
+  Panel_Login_Nickname:SetSize(Panel_Login_Nickname:GetSizeX(), 300 + (self.desc3):GetTextSizeY())
   Panel_Login_Nickname:SetShow(true)
+  ;
+  (self.edit_Nickname):ComputePos()
+  ;
+  (self.button_OK):ComputePos()
+  ;
+  (self.exam_Character):ComputePos()
 end
 
 LoginNickname_Close = function()

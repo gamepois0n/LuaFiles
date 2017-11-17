@@ -6,8 +6,8 @@
 Panel_GuidlBattle_Point:SetShow(false)
 PaGlobal_GuildBattlePoint = {_guildAName = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_Left"), _guildBName = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_Right"), _guildAPoint = nil, _guildBPoint = nil, 
 _round = {}
-, _isShow = false}
--- DECOMPILER ERROR at PC25: Confused about usage of register: R0 in 'UnsetPending'
+, _isShow = false, _perFrmaeTimer = 0, _nextStateTime = 0, _maxTime = 0, _timerPause = false}
+-- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.initilize = function(self)
   -- function num : 0_0
@@ -18,14 +18,15 @@ PaGlobal_GuildBattlePoint.initilize = function(self)
   self._isShow = false
   self._guildAPoint = (UI.getChildControl)(self._guildAName, "StaticText_LeftPoint")
   self._guildBPoint = (UI.getChildControl)(self._guildBName, "StaticText_RightPoint")
+  self:changeState()
 end
 
--- DECOMPILER ERROR at PC28: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC32: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.guildBattleTimer = function(self, time)
   -- function num : 0_1
   local min = (math.floor)(time / 60)
-  local sec = time % 60
+  local sec = (math.floor)(time % 60)
   local zero = "0"
   if time <= 0 then
     min = 0
@@ -46,7 +47,7 @@ PaGlobal_GuildBattlePoint.guildBattleTimer = function(self, time)
   end
 end
 
--- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.changeState = function(self)
   -- function num : 0_2
@@ -83,7 +84,7 @@ PaGlobal_GuildBattlePoint.changeState = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC34: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_GuildBattlePoint.Close = function(self)
   -- function num : 0_3
@@ -91,23 +92,66 @@ PaGlobal_GuildBattlePoint.Close = function(self)
   self._isShow = false
 end
 
-FromClient_guildBattlePointTimer = function(time)
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_GuildBattlePoint.SetTimer = function(self, next, max)
   -- function num : 0_4
-  PaGlobal_GuildBattlePoint:guildBattleTimer(time)
+  self._nextStateTime = max
+  self._maxTime = max
+  self._timerPause = false
+  self:guildBattleTimer(self._nextStateTime)
+end
+
+-- DECOMPILER ERROR at PC44: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_GuildBattlePoint.UpdatePerFrame = function(self, deltaTime)
+  -- function num : 0_5
+  if self._timerPause then
+    return 
+  end
+  self._perFrmaeTimer = self._perFrmaeTimer + deltaTime
+  self._nextStateTime = self._nextStateTime - deltaTime
+  if self._perFrmaeTimer > 1 then
+    if self._maxTime <= 0 then
+      return 
+    end
+    if self._nextStateTime <= 0 then
+      ToClient_guildBattleTimerEvent()
+      self._timerPause = true
+    end
+    self:guildBattleTimer(self._nextStateTime)
+    self._perFrmaeTimer = 0
+  end
+end
+
+FGlobal_GuildBattlePoint_UpdatePerFrame = function(deltaTime)
+  -- function num : 0_6
+  PaGlobal_GuildBattlePoint:UpdatePerFrame(deltaTime)
+end
+
+FromClient_guildBattlePointTimer = function(time, max)
+  -- function num : 0_7
+  PaGlobal_GuildBattlePoint:SetTimer(time, max)
 end
 
 FromClient_guildBattlePointChange = function()
-  -- function num : 0_5
+  -- function num : 0_8
   PaGlobal_GuildBattlePoint:changeState()
 end
 
 FromClient_unjoinGuildBattle = function()
-  -- function num : 0_6
+  -- function num : 0_9
   PaGlobal_GuildBattlePoint:Close()
+end
+
+GuildBattlePoint_LuaLoadComplete = function()
+  -- function num : 0_10
+  PaGlobal_GuildBattlePoint:initilize()
+  ToClient_GuildBattleInfoUpdate()
 end
 
 registerEvent("FromClient_guildBattleTimer", "FromClient_guildBattlePointTimer")
 registerEvent("FromClient_guildBattleStateChange", "FromClient_guildBattlePointChange")
 registerEvent("FromClient_unjoinGuildBattle", "FromClient_unjoinGuildBattle")
-PaGlobal_GuildBattlePoint:initilize()
+registerEvent("FromClient_luaLoadComplete", "GuildBattlePoint_LuaLoadComplete")
 

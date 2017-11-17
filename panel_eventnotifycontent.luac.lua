@@ -76,12 +76,42 @@ FGlobal_EventNotifyContent_Open = function(eventIndex)
           end
         end
       else
-        url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL", "index", eventIndex)
+        if isGameTypeTR() then
+          if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_TR_ALPHA", "index", eventIndex)
+          else
+            if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_TR", "index", eventIndex)
+            end
+          end
+        else
+          if isGameTypeTH() then
+            if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_TH_ALPHA", "index", eventIndex)
+            else
+              if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_TH", "index", eventIndex)
+              end
+            end
+          else
+            if isGameTypeID() then
+              if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_ID_ALPHA", "index", eventIndex)
+              else
+                if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL_ID", "index", eventIndex)
+                end
+              end
+            else
+              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_EVENTCONTENT_URL", "index", eventIndex)
+            end
+          end
+        end
       end
     end
   end
   local isType = false
-  if isGameTypeTaiwan() then
+  if isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     isType = true
   else
     isType = false

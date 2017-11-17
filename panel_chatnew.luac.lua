@@ -1442,7 +1442,7 @@ ChattingViewManager.UpdateSmoothScrollContent = function(self)
 end
 
 ChattingViewManager.UpdateSmoothResetScrollContent = function(self, chattingScrollingTime)
-  -- function num : 0_16 , upvalues : ChatUIPoolManager, isMouseOnChattingViewIndex, isMouseOn, UI_color, scrollIndex, scrollresetSpeed, preDownPosY, deltascrollPosy, isResetsmoothscroll, smoothResetScorllTime, ChattingViewManager
+  -- function num : 0_16 , upvalues : ChatUIPoolManager, isMouseOnChattingViewIndex, isMouseOn, UI_color, scrollIndex, scrollresetSpeed, preDownPosY, deltascrollPosy, isResetsmoothscroll, smoothResetScorllTime, ChattingViewManager, _tabButton_PosX
   local count = ToClient_getChattingPanelCount()
   FromClient_ChatUpdate(true)
   for panelIndex = 0, count - 1 do
@@ -1671,6 +1671,7 @@ ChattingViewManager.UpdateSmoothResetScrollContent = function(self, chattingScro
     end
   end
   if isResetsmoothscroll == false then
+    _tabButton_PosX = 0
     for panelIndex = 0, count - 1 do
       local chatPanel = ToClient_getChattingPanel(panelIndex)
       if chatPanel:isOpen() then
@@ -2420,6 +2421,7 @@ HandleClicked_Chatting_Close = function(panelIndex)
 
   ChattingViewManager._mainPanelSelectPanelIndex = 0
   FromClient_ChatUpdate()
+  Chatting_PanelTransparency(panelIndex, false, true)
   TooltipSimple_Hide()
   ToClient_SaveUiInfo(false)
 end
@@ -2592,7 +2594,7 @@ HandleOn_ChattingAddTabToolTip = function(isShow, poolIndex, tipType)
   local self = ChatUIPool
   local name, desc, control = nil, nil, nil
   local poolCurrentUI = ChatUIPoolManager:getPool(poolIndex)
-  local addTabControl = (poolCurrentUI._list_AddTab)[poolIndex]
+  local addTabControl = (poolCurrentUI._list_AddTab)[0]
   local divisionControl = (poolCurrentUI._list_PanelDivision)[poolIndex]
   local settingControl = (poolCurrentUI._list_TitleTabConfigButton)[poolIndex]
   local sizeControl = (poolCurrentUI._list_ResizeButton)[poolIndex]
@@ -2724,18 +2726,10 @@ HandleClicked_ChatSubMenu_AddFriend = function()
   if clickedName ~= nil and clickedUserNickName ~= nil then
     local nameType = ToClient_getChatNameType()
     if nameType == 0 then
-      if isNewFriendList_chk() == true then
-        ToClient_AddFriend(clickedName, true)
-      else
-        requestFriendList_addFriend(clickedName, true)
-      end
+      ToClient_AddFriend(clickedName, true)
     else
       if nameType == 1 then
-        if isNewFriendList_chk() == true then
-          ToClient_AddFriend(clickedUserNickName, false)
-        else
-          requestFriendList_addFriend(clickedUserNickName, false)
-        end
+        ToClient_AddFriend(clickedUserNickName, false)
       end
     end
     ChatSubMenu:SetShow(false)

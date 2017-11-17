@@ -353,29 +353,29 @@ ChatInput_UpdatePermission = function()
 
     ;
     (self.permissions)[UI_CT.Private] = true
-    -- DECOMPILER ERROR at PC30: Confused about usage of register: R2 in 'UnsetPending'
+    local myLevel = ((getSelfPlayer()):get()):getLevel()
+    -- DECOMPILER ERROR at PC36: Confused about usage of register: R3 in 'UnsetPending'
 
     if isGameServiceTypeDev() then
       (self.permissions)[UI_CT.WorldWithItem] = true
-      -- DECOMPILER ERROR at PC34: Confused about usage of register: R2 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC40: Confused about usage of register: R3 in 'UnsetPending'
 
       ;
       (self.permissions)[UI_CT.RolePlay] = true
     else
-      -- DECOMPILER ERROR at PC43: Confused about usage of register: R2 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC49: Confused about usage of register: R3 in 'UnsetPending'
 
       if isGameTypeKorea() then
         (self.permissions)[UI_CT.WorldWithItem] = true
       else
-        -- DECOMPILER ERROR at PC52: Confused about usage of register: R2 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC58: Confused about usage of register: R3 in 'UnsetPending'
 
         if isGameTypeJapan() then
           (self.permissions)[UI_CT.WorldWithItem] = true
         else
-          if isGameTypeEnglish() then
-            local myLevel = ((getSelfPlayer()):get()):getLevel()
-            -- DECOMPILER ERROR at PC69: Confused about usage of register: R3 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC69: Confused about usage of register: R3 in 'UnsetPending'
 
+          if isGameTypeEnglish() then
             if myLevel < 20 then
               (self.permissions)[UI_CT.WorldWithItem] = false
             else
@@ -389,56 +389,66 @@ ChatInput_UpdatePermission = function()
             ;
             (self.permissions)[UI_CT.RolePlay] = true
           else
-            do
-              if isGameTypeTaiwan() then
-                local myLevel = ((getSelfPlayer()):get()):getLevel()
-                -- DECOMPILER ERROR at PC95: Confused about usage of register: R3 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC89: Confused about usage of register: R3 in 'UnsetPending'
 
+            if isGameTypeTaiwan() then
+              if myLevel < 20 then
+                (self.permissions)[UI_CT.WorldWithItem] = false
+              else
+                -- DECOMPILER ERROR at PC94: Confused about usage of register: R3 in 'UnsetPending'
+
+                ;
+                (self.permissions)[UI_CT.WorldWithItem] = true
+              end
+            else
+              -- DECOMPILER ERROR at PC113: Confused about usage of register: R3 in 'UnsetPending'
+
+              if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
                 if myLevel < 20 then
                   (self.permissions)[UI_CT.WorldWithItem] = false
                 else
-                  -- DECOMPILER ERROR at PC100: Confused about usage of register: R3 in 'UnsetPending'
-
-                  ;
-                  (self.permissions)[UI_CT.WorldWithItem] = true
-                end
-              else
-                do
-                  -- DECOMPILER ERROR at PC106: Confused about usage of register: R2 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC119: Confused about usage of register: R3 in 'UnsetPending'
 
                   ;
                   (self.permissions)[UI_CT.WorldWithItem] = isWolrdChat
-                  -- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
-
-                  if (selfPlayerWrapper:get()):isGuildMember() then
-                    (self.permissions)[UI_CT.Guild] = true
-                  end
-                  -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
-
-                  if (selfPlayerWrapper:get()):hasParty() then
-                    (self.permissions)[UI_CT.Party] = true
-                  end
-                  -- DECOMPILER ERROR at PC133: Confused about usage of register: R2 in 'UnsetPending'
-
-                  if isArsha then
-                    (self.permissions)[UI_CT.Arsha] = true
-                  end
-                  -- DECOMPILER ERROR at PC146: Confused about usage of register: R2 in 'UnsetPending'
-
-                  if isLocalWar == true or isArsha == true or isSavageDefence == true then
-                    (self.permissions)[UI_CT.Team] = true
-                  end
-                  for chatType,btn in pairs((self.control).buttons) do
-                    local perm = (self.permissions)[chatType]
-                    local disAllowed = not (self.permissions)[chatType]
-                    btn:SetMonoTone(disAllowed)
-                  end
                 end
+              else
+                -- DECOMPILER ERROR at PC125: Confused about usage of register: R3 in 'UnsetPending'
+
+                ;
+                (self.permissions)[UI_CT.WorldWithItem] = isWolrdChat
               end
             end
           end
         end
       end
+    end
+    -- DECOMPILER ERROR at PC135: Confused about usage of register: R3 in 'UnsetPending'
+
+    if (selfPlayerWrapper:get()):isGuildMember() then
+      (self.permissions)[UI_CT.Guild] = true
+    end
+    -- DECOMPILER ERROR at PC145: Confused about usage of register: R3 in 'UnsetPending'
+
+    if (selfPlayerWrapper:get()):hasParty() then
+      (self.permissions)[UI_CT.Party] = true
+    end
+    -- DECOMPILER ERROR at PC152: Confused about usage of register: R3 in 'UnsetPending'
+
+    if isArsha then
+      (self.permissions)[UI_CT.Arsha] = true
+    end
+    -- DECOMPILER ERROR at PC165: Confused about usage of register: R3 in 'UnsetPending'
+
+    if isLocalWar == true or isArsha == true or isSavageDefence == true then
+      (self.permissions)[UI_CT.Team] = true
+    end
+  end
+  do
+    for chatType,btn in pairs((self.control).buttons) do
+      local perm = (self.permissions)[chatType]
+      local disAllowed = not (self.permissions)[chatType]
+      btn:SetMonoTone(disAllowed)
     end
   end
 end

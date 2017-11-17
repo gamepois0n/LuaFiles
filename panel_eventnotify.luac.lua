@@ -93,7 +93,37 @@ EventNotify_Open = function(isDo, isMenu)
           end
         end
       else
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL")
+        if isGameTypeTR() then
+          if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
+            url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_TR_ALPHA")
+          else
+            if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
+              url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_TR")
+            end
+          end
+        else
+          if isGameTypeTH() then
+            if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
+              url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_TH_ALPHA")
+            else
+              if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
+                url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_TH")
+              end
+            end
+          else
+            if isGameTypeID() then
+              if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
+                url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_ID_ALPHA")
+              else
+                if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
+                  url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL_ID")
+                end
+              end
+            else
+              url = PAGetString(Defines.StringSheet_GAME, "LUA_EVENTNOTIFY_URL")
+            end
+          end
+        end
       end
     end
   end

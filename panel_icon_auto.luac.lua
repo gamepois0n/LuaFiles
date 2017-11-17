@@ -118,7 +118,7 @@ PaGlobal_PossessByBlackSpirit_Open = function()
   -- function num : 0_6
   PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
   if PaGlobal_AutoManager._ActiveState == false then
-    PaGlobal_AutoManager:start()
+    PaGlobal_AutoManager:start(true)
   end
 end
 

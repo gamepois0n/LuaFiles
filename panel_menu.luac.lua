@@ -345,6 +345,11 @@ TargetWindow_ShowToggle = function(index)
                                                                                     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_FREEFIGHTALERT"))
                                                                                     return 
                                                                                   end
+                                                                                  local curChannelData = getCurrentChannelServerData()
+                                                                                  if curChannelData._isSiegeChannel == true then
+                                                                                    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BATTLEGROURND"))
+                                                                                    return 
+                                                                                  end
                                                                                   if ToClient_IsJoinPvpBattleGround() then
                                                                                     local FunctionYesUnJoinPvpBattle = function()
     -- function num : 0_1_0
@@ -711,8 +716,8 @@ GameMenu_CheckEnAble = function(buttonType)
       returnValue = false
     end
   end
-  if buttonType == MenuButtonId.btn_CashShop then
-    if isGameTypeTR() then
+  if buttonType == MenuButtonId.btn_CashShop or buttonType == MenuButtonId.btn_Beauty then
+    if getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
       returnValue = false
     else
       returnValue = true

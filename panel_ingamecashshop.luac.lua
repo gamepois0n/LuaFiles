@@ -231,7 +231,7 @@ inGameShop.sortTapData = function(self)
 end
 
 inGameShop.init = function(self)
-  -- function num : 0_7 , upvalues : subFilterCount, subFilterListReplace, tabIndexList, UI_TM, tabId, UI_color, _AllBG, gameServiceType, contry
+  -- function num : 0_7 , upvalues : subFilterCount, subFilterListReplace, tabIndexList, UI_TM, tabId, UI_color, _AllBG, contry
   local tabConfig = (self._config)._tab
   local slotConfig = (self._config)._slot
   local maxSlotCount = self._slotCount
@@ -475,16 +475,16 @@ inGameShop.init = function(self)
   (self._categoryWeb):addInputEvent("Mouse_Out", "ToClient_CategoryWebFocusOut()")
   ;
   (self._static_PromotionBanner):SetChildIndex(self._categoryWeb, 9900)
-  if gameServiceType == 0 or gameServiceType == 1 or gameServiceType == 2 or gameServiceType == 3 or gameServiceType == 4 then
+  if isGameTypeKorea() then
     cashIcon_changeTexture(self._nowCash, contry.kr)
   else
-    if gameServiceType == 5 or gameServiceType == 6 then
+    if isGameTypeJapan() then
       cashIcon_changeTexture(self._nowCash, contry.jp)
     else
-      if gameServiceType == 7 or gameServiceType == 8 then
+      if isGameTypeRussia() then
         cashIcon_changeTexture(self._nowCash, contry.ru)
       else
-        if gameServiceType == 9 or gameServiceType == 10 then
+        if isGameTypeKR2() then
           cashIcon_changeTexture(self._nowCash, contry.kr2)
           ;
           (self._btn_BuyPearl):SetShow(false)
@@ -1587,18 +1587,18 @@ InGameShop_ProductListContent_ChangeTexture = function(slot, isSelected)
 end
 
 InGameShop_ProductListContent_ChangeMoneyIconTexture = function(slot, categoryIdx, isEnableSilver, isDesc)
-  -- function num : 0_44 , upvalues : eCountryType, gameServiceType, contry, UI_CCC, cashIconType
+  -- function num : 0_44 , upvalues : contry, UI_CCC, cashIconType, eCountryType, gameServiceType
   local serviceContry, iconType = nil, nil
-  if eCountryType.NONE == gameServiceType or eCountryType.DEV == gameServiceType or eCountryType.KOR_ALPHA == gameServiceType or eCountryType.KOR_REAL == gameServiceType or eCountryType.KOR_TEST == gameServiceType then
+  if isGameTypeKorea() then
     serviceContry = contry.kr
   else
-    if eCountryType.JPN_ALPHA == gameServiceType or eCountryType.JPN_REAL == gameServiceType then
+    if isGameTypeJapan() then
       serviceContry = contry.jp
     else
-      if eCountryType.RUS_ALPHA == gameServiceType or eCountryType.RUS_REAL == gameServiceType then
+      if isGameTypeRussia() then
         serviceContry = contry.ru
       else
-        if eCountryType.KR2_ALPHA == gameServiceType or eCountryType.KR2_REAL == gameServiceType then
+        if isGameTypeKR2() then
           serviceContry = contry.kr2
         else
           serviceContry = contry.kr
@@ -3400,9 +3400,6 @@ end
 
   InGameShop_Open = function()
   -- function num : 0_92 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG
-  if isGameTypeTR() then
-    return 
-  end
   if Panel_IngameCashShop_EasyPayment:IsShow() then
     Panel_IngameCashShop_EasyPayment:SetShow(false, false)
   end
@@ -3735,6 +3732,20 @@ end
       if tipType == 2 then
         name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_NAME")
         desc = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_DESC")
+        if isGameTypeTR() then
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_NAME_TR")
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_DESC_TR")
+        else
+          if isGameTypeTH() then
+            name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_NAME_TH")
+            desc = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_DESC_TH")
+          else
+            if isGameTypeID() then
+              name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_NAME_ID")
+              desc = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMESHOP_MONEYICON_TOOLTIP_DAUMCASH_DESC_ID")
+            end
+          end
+        end
         control = self._nowCash
       end
     end

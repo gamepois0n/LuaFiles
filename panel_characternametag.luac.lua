@@ -191,7 +191,7 @@ end
   return monsterLevelNameColorText[levelDiff]
 end
 
-  local setMonsterNameColor = function(playerLevel, monsterLevel, nameStatic, isDarkSpiritMonster)
+  local setMonsterNameColor_Level = function(playerLevel, monsterLevel, nameStatic, isDarkSpiritMonster)
   -- function num : 0_6 , upvalues : monsterLevelNameColor
   if isDarkSpiritMonster then
     nameStatic:SetFontColor((Defines.Color).C_FF6A0000)
@@ -203,9 +203,22 @@ end
   nameStatic:SetFontColor(monsterLevelNameColor[levelDiff])
 end
 
+  setMonsterNameColor_Stat = function(playerOffence, monsterDeffence, nameStatic, isDarkSpiritMonster)
+  -- function num : 0_7 , upvalues : monsterLevelNameColor
+  if isDarkSpiritMonster then
+    nameStatic:SetFontColor((Defines.Color).C_FF6A0000)
+    return 
+  end
+  local rate = 5
+  local statDiff = (math.floor)((monsterDeffence - playerOffence) / rate + 6)
+  statDiff = (math.max)(statDiff, 1)
+  statDiff = (math.min)(statDiff, 11)
+  nameStatic:SetFontColor(monsterLevelNameColor[statDiff])
+end
+
   local hideTimeType = {overHeadUI = 0, preemptiveStrike = 1, bubbleBox = 2, murdererEnd = 3}
   local myMilitiaTeamNo = function()
-  -- function num : 0_7
+  -- function num : 0_8
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return -1
@@ -224,7 +237,7 @@ end
 end
 
   local settingName = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_8 , upvalues : myMilitiaTeamNo
+  -- function num : 0_9 , upvalues : myMilitiaTeamNo
   local nameTag = nil
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
@@ -433,7 +446,7 @@ end
 end
 
   local settingAlias = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_9
+  -- function num : 0_10
   local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
   if playerActorProxyWrapper == nil then
     return 
@@ -493,7 +506,7 @@ end
 end
 
   local settingTitle = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_10
+  -- function num : 0_11
   local actorProxy = actorProxyWrapper:get()
   if actorProxy:isPlayer() == false and actorProxy:isMonster() == false and actorProxy:isNpc() == false then
     return 
@@ -559,7 +572,7 @@ end
 end
 
   local settingFirstTalk = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_11
+  -- function num : 0_12
   local firstTalk = (UI.getChildControl)(targetPanel, "Static_FirstTalk")
   if firstTalk == nil then
     return 
@@ -573,7 +586,7 @@ end
 end
 
   local settingImportantTalk = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_12
+  -- function num : 0_13
   local importantTalk = (UI.getChildControl)(targetPanel, "Static_ImportantTalk")
   if importantTalk == nil then
     return 
@@ -590,7 +603,7 @@ end
 end
 
   local settingOtherHeadIcon = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_13 , upvalues : getControlProperty
+  -- function num : 0_14 , upvalues : getControlProperty
   local characterKeyRaw = actorProxyWrapper:getCharacterKeyRaw()
   local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
   if npcActorProxyWrapper == nil then
@@ -613,7 +626,7 @@ end
 end
 
   local guildTendencyColor = function(tendency)
-  -- function num : 0_14
+  -- function num : 0_15
   local r, g, b = 0, 0, 0
   local upValue = 300000
   local downValue = -1000000
@@ -637,7 +650,7 @@ end
 end
 
   local nameTendencyColor = function(tendency)
-  -- function num : 0_15
+  -- function num : 0_16
   local r, g, b = 0, 0, 0
   local upValue = 300000
   local downValue = -1000000
@@ -661,7 +674,7 @@ end
 end
 
   local settingGuildInfo = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_16 , upvalues : guildMarkInit
+  -- function num : 0_17 , upvalues : guildMarkInit
   if targetPanel == nil then
     return 
   end
@@ -799,7 +812,7 @@ end
 end
 
   local settingMonsterName = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_17 , upvalues : setMonsterNameColor
+  -- function num : 0_18 , upvalues : setMonsterNameColor_Level
   local nameTag = (UI.getChildControl)(targetPanel, "CharacterName")
   if nameTag == nil then
     return 
@@ -808,13 +821,29 @@ end
   if monsterActorProxyWrapper == nil then
     return 
   end
-  local monsterLevel = ((monsterActorProxyWrapper:get()):getCharacterStaticStatus()).level
-  local selfPlayerLevel = ((getSelfPlayer()):get()):getLevel()
-  setMonsterNameColor(selfPlayerLevel, monsterLevel, nameTag, (monsterActorProxyWrapper:get()):isDarkSpiritMonster())
+  local selfPlayerActorProxyWrapper = getSelfPlayer()
+  if ToClient_IsDevelopment() == true then
+    local selfPlayerAttackAwakenValue = ToClient_getAwakenOffence()
+    local selfPlayerAttackOffenceValue = (ToClient_getOffence())
+    local selfPlayerOffence = nil
+    if selfPlayerAttackOffenceValue < selfPlayerAttackAwakenValue then
+      selfPlayerOffence = selfPlayerAttackAwakenValue
+    else
+      selfPlayerOffence = selfPlayerAttackOffenceValue
+    end
+    local monsterDeffence = monsterActorProxyWrapper:getDeffence(selfPlayerActorProxyWrapper:getMainAttckType())
+    setMonsterNameColor_Stat(selfPlayerOffence, monsterDeffence, nameTag, (monsterActorProxyWrapper:get()):isDarkSpiritMonster())
+  else
+    do
+      local monsterLevel = ((monsterActorProxyWrapper:get()):getCharacterStaticStatus()).level
+      local selfPlayerLevel = (selfPlayerActorProxyWrapper:get()):getLevel()
+      setMonsterNameColor_Level(selfPlayerLevel, monsterLevel, nameTag, (monsterActorProxyWrapper:get()):isDarkSpiritMonster())
+    end
+  end
 end
 
   local settingLifeRankIcon = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_18 , upvalues : lifeContentCount, lifeContent, lifeRankSetTexture, sortCenterX
+  -- function num : 0_19 , upvalues : lifeContentCount, lifeContent, lifeRankSetTexture, sortCenterX
   if (actorProxyWrapper:get()):isPlayer() == false then
     return 
   end
@@ -1000,7 +1029,7 @@ end
 end
 
   local settingPlayerName = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_19 , upvalues : nameTendencyColor
+  -- function num : 0_20 , upvalues : nameTendencyColor
   local nameTag = (UI.getChildControl)(targetPanel, "CharacterName")
   if nameTag == nil then
     return 
@@ -1023,7 +1052,7 @@ end
 end
 
   isShowInstallationEnduranceType = function(installationType)
-  -- function num : 0_20
+  -- function num : 0_21
   if installationType == (CppEnums.InstallationType).eType_Mortar or installationType == (CppEnums.InstallationType).eType_Anvil or installationType == (CppEnums.InstallationType).eType_Stump or installationType == (CppEnums.InstallationType).eType_FireBowl or installationType == (CppEnums.InstallationType).eType_Buff or installationType == (CppEnums.InstallationType).eType_Alchemy or installationType == (CppEnums.InstallationType).eType_Havest or installationType == (CppEnums.InstallationType).eType_Bookcase or installationType == (CppEnums.InstallationType).eType_Cooking or installationType == (CppEnums.InstallationType).eType_Bed or installationType == (CppEnums.InstallationType).eType_LivestockHarvest then
     return true
   else
@@ -1035,7 +1064,7 @@ end
   local isTwenty = false
   local furnitureCheck = false
   ShowUseTab_Func = function()
-  -- function num : 0_21
+  -- function num : 0_22
   if getSelfPlayer() == nil then
     return 
   end
@@ -1056,7 +1085,7 @@ end
 end
 
   HideUseTab_Func = function()
-  -- function num : 0_22
+  -- function num : 0_23
   local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
   if targetPanel == nil then
     return 
@@ -1066,7 +1095,7 @@ end
 end
 
   FGlobal_ShowUseLantern = function(param)
-  -- function num : 0_23
+  -- function num : 0_24
   local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
   if targetPanel == nil then
     return 
@@ -1084,7 +1113,7 @@ end
 end
 
   local settingHpBarInitState = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_24
+  -- function num : 0_25
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1123,7 +1152,7 @@ end
 end
 
   local settingHpBar = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_25 , upvalues : furnitureCheck, hideTimeType
+  -- function num : 0_26 , upvalues : furnitureCheck, hideTimeType
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1764,7 +1793,7 @@ end
 end
 
   local settingMpBar = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_26 , upvalues : UI_classType
+  -- function num : 0_27 , upvalues : UI_classType
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1904,7 +1933,7 @@ end
 end
 
   local settingLocalWarCombatPoint = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_27 , upvalues : UI_color, settingLifeRankIcon
+  -- function num : 0_28 , upvalues : UI_color, settingLifeRankIcon
   if actorProxyWrapper == nil then
     return 
   end
@@ -2044,7 +2073,7 @@ end
 end
 
   FGlobal_SettingMpBarTemp = function()
-  -- function num : 0_28 , upvalues : settingMpBar
+  -- function num : 0_29 , upvalues : settingMpBar
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -2056,7 +2085,7 @@ end
 end
 
   local settingStun = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_29
+  -- function num : 0_30
   local stunBack = (UI.getChildControl)(targetPanel, "ProgressBack_Stun")
   local stunProgress = (UI.getChildControl)(targetPanel, "CharacterStunGageProgress")
   if stunBack == nil or stunProgress == nil then
@@ -2087,7 +2116,7 @@ end
 end
 
   local settingGuildMarkAndPreemptiveStrike = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_30
+  -- function num : 0_31
   if targetPanel == nil then
     return 
   end
@@ -2175,7 +2204,7 @@ end
 [3] = {x1 = 103, y1 = 391, x2 = 135, y2 = 423}
 }
   local settingPreemptiveStrike = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_31 , upvalues : hideTimeType, preemptiveIconTexture, pvpIconTexture, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_32 , upvalues : hideTimeType, preemptiveIconTexture, pvpIconTexture, settingGuildMarkAndPreemptiveStrike
   local preemptiveStrikeBeing = (UI.getChildControl)(targetPanel, "Static_PreemptiveStrikeBeing")
   if preemptiveStrikeBeing == nil then
     return 
@@ -2211,7 +2240,7 @@ end
 end
 
   PvpIconColorByTendency = function(actorKeyRaw)
-  -- function num : 0_32
+  -- function num : 0_33
   local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
   if playerActorProxyWrapper == nil then
     return 
@@ -2235,7 +2264,7 @@ end
 end
 
   local settingMurderer = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_33 , upvalues : hideTimeType, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_34 , upvalues : hideTimeType, settingGuildMarkAndPreemptiveStrike
   local murdererMark = (UI.getChildControl)(targetPanel, "Static_MurdererMark")
   if murdererMark == nil then
     return 
@@ -2253,7 +2282,7 @@ end
 end
 
   local settingGuildTextForAlias = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_34 , upvalues : lifeContentCount
+  -- function num : 0_35 , upvalues : lifeContentCount
   if targetPanel == nil then
     return 
   end
@@ -2305,7 +2334,7 @@ end
 end
 
   local settingQuestMark = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_35
+  -- function num : 0_36
   local questMark = (UI.getChildControl)(targetPanel, "Static_Quest_Mark")
   if questMark == nil then
     return 
@@ -2318,7 +2347,7 @@ end
 end
 
   local settingQuestMarkForce = function(isShow, targetPanel, actorProxyWrapper)
-  -- function num : 0_36
+  -- function num : 0_37
   local questMark = (UI.getChildControl)(targetPanel, "Static_Quest_Mark")
   if questMark == nil then
     return 
@@ -2327,7 +2356,7 @@ end
 end
 
   questIconOverTooltip = function(show, actorKeyRaw)
-  -- function num : 0_37
+  -- function num : 0_38
   local actorProxyWrapper = getActor(actorKeyRaw)
   local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
   local panel = (actorProxyWrapper:get()):getUIPanel()
@@ -2356,7 +2385,7 @@ end
 
   local currentTypeChangeCheck = {}
   local settingQuestUI = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_38 , upvalues : currentTypeChangeCheck
+  -- function num : 0_39 , upvalues : currentTypeChangeCheck
   local questIcon = (UI.getChildControl)(targetPanel, "Static_QuestIcon")
   local questBorder = (UI.getChildControl)(targetPanel, "Static_QuestIconBorder")
   local questClear = (UI.getChildControl)(targetPanel, "Static_QuestClear")
@@ -2443,11 +2472,11 @@ end
     end
     questBorder:SetAlpha(prevAlpha)
     local aControl = {questIcon = questIcon, questBorder = questBorder, questClear = questClear, lookAtMe = lookAtMe, lookAtMe2 = lookAtMe2, questType = questType, GetSizeX = function()
-    -- function num : 0_38_0 , upvalues : questBorder
+    -- function num : 0_39_0 , upvalues : questBorder
     return questBorder:GetSizeX()
   end
 , SetScale = function(self, x, y)
-    -- function num : 0_38_1 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
+    -- function num : 0_39_1 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
     questBorder:SetScale(x, y)
     questIcon:SetScale(x, y)
     questClear:SetScale(x, y)
@@ -2456,7 +2485,7 @@ end
     questType:SetScale(x, y)
   end
 , SetSpanSize = function(self, x, y)
-    -- function num : 0_38_2 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
+    -- function num : 0_39_2 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
     questBorder:SetSpanSize(x, y)
     questIcon:SetSpanSize(x, y + 8)
     questClear:SetSpanSize(x, y + 10)
@@ -2465,15 +2494,15 @@ end
     questType:SetSpanSize(x, y + 40)
   end
 , GetSpanSize = function()
-    -- function num : 0_38_3 , upvalues : questBorder
+    -- function num : 0_39_3 , upvalues : questBorder
     return questBorder:GetSpanSize()
   end
 , GetScale = function()
-    -- function num : 0_38_4 , upvalues : questBorder
+    -- function num : 0_39_4 , upvalues : questBorder
     return questBorder:GetScale()
   end
 , GetShow = function()
-    -- function num : 0_38_5 , upvalues : questBorder
+    -- function num : 0_39_5 , upvalues : questBorder
     return questBorder:GetShow()
   end
 }
@@ -2498,7 +2527,7 @@ end
 end
 
   local settingBillBoardMode = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_39
+  -- function num : 0_40
   houseHoldActorWrapper = getHouseHoldActor(actorKeyRaw)
   if houseHoldActorWrapper ~= nil and (houseHoldActorWrapper:get()):isTent() == false and ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() == false then
     targetPanel:Set3DRenderType(2)
@@ -2507,7 +2536,7 @@ end
 end
 
   local settingBubbleBox = function(actorKeyRaw, targetPanel, actorProxyWrapper, message)
-  -- function num : 0_40 , upvalues : hideTimeType
+  -- function num : 0_41 , upvalues : hideTimeType
   local targetStatic = (UI.getChildControl)(targetPanel, "StaticText_BubbleBox")
   local targetStaticBG = (UI.getChildControl)(targetPanel, "Static_BubbleBox")
   -- DECOMPILER ERROR at PC11: Confused about usage of register: R6 in 'UnsetPending'
@@ -2558,7 +2587,7 @@ end
 end
 
   local settingBubbleBoxShow = function(actorKeyRaw, targetPanel, actorProxyWrapper, isShow)
-  -- function num : 0_41
+  -- function num : 0_42
   local targetStatic = (UI.getChildControl)(targetPanel, "StaticText_BubbleBox")
   local targetStaticBG = (UI.getChildControl)(targetPanel, "Static_BubbleBox")
   targetStatic:SetShow(isShow)
@@ -2566,7 +2595,7 @@ end
 end
 
   local settingWaitCommentLaunch = function(isShow)
-  -- function num : 0_42
+  -- function num : 0_43
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local panel = selfPlayer:getWaitCommentPanel()
@@ -2624,7 +2653,7 @@ end
 end
 
   settingWaitCommentReady = function()
-  -- function num : 0_43
+  -- function num : 0_44
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local panel = selfPlayer:getWaitCommentPanel()
@@ -2670,7 +2699,7 @@ end
 end
 
   settingWaitCommentConfirmReload = function()
-  -- function num : 0_44
+  -- function num : 0_45
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   if selfPlayer:isShowWaitComment() == false then
@@ -2686,7 +2715,7 @@ end
 end
 
   settingWaitCommentConfirm = function()
-  -- function num : 0_45
+  -- function num : 0_46
   (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
   ClearFocusEdit()
   local selfPlayerWrapper = getSelfPlayer()
@@ -2753,7 +2782,7 @@ end
 end
 
   WaitComment_CheckCurrentUiEdit = function(targetUI)
-  -- function num : 0_46
+  -- function num : 0_47
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
     return false
@@ -2771,7 +2800,7 @@ end
 end
 
   local settingWaitComment = function(actorKeyRaw, panel, actorProxyWrapper, isShow, isforce)
-  -- function num : 0_47
+  -- function num : 0_48
   local selfPlayer = getSelfPlayer()
   local selfActorKeyRaw = selfPlayer:getActorKey()
   if actorKeyRaw == selfActorKeyRaw and isforce ~= true then
@@ -2843,12 +2872,12 @@ end
 end
 
   local settingSelfPlayerNameHelpText = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_48
+  -- function num : 0_49
 end
 
   local furnitureActorKeyRaw = nil
   Furniture_Check = function(actorKeyRaw)
-  -- function num : 0_49 , upvalues : furnitureActorKeyRaw, furnitureCheck, settingHpBar
+  -- function num : 0_50 , upvalues : furnitureActorKeyRaw, furnitureCheck, settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   local actorProxy = actorProxyWrapper:get()
   local characterStaticStatus = actorProxy:getCharacterStaticStatus()
@@ -2881,7 +2910,7 @@ end
 end
 
   Funiture_Endurance_Hide = function()
-  -- function num : 0_50 , upvalues : furnitureCheck, furnitureActorKeyRaw, settingHpBar
+  -- function num : 0_51 , upvalues : furnitureCheck, furnitureActorKeyRaw, settingHpBar
   if furnitureCheck == true and furnitureActorKeyRaw ~= nil then
     local actorProxyWrapper = getActor(furnitureActorKeyRaw)
     if actorProxyWrapper ~= nil then
@@ -2911,15 +2940,15 @@ end
 end
 
   local TypeByLoadData = {[ActorProxyType.isActorProxy] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_51 , upvalues : settingName
-  settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
-end
-, [ActorProxyType.isCharacter] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
   -- function num : 0_52 , upvalues : settingName
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
+, [ActorProxyType.isCharacter] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
+  -- function num : 0_53 , upvalues : settingName
+  settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
+end
 , [ActorProxyType.isPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_53 , upvalues : settingName, settingPlayerName, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_54 , upvalues : settingName, settingPlayerName, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2936,7 +2965,7 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isSelfPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_54 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingSelfPlayerNameHelpText, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_55 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingSelfPlayerNameHelpText, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2956,7 +2985,7 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isOtherPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_55 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingWaitComment, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_56 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingWaitComment, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2975,11 +3004,11 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isAlterego] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_56 , upvalues : settingName
+  -- function num : 0_57 , upvalues : settingName
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isMonster] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_57 , upvalues : settingName, settingMonsterName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingStun
+  -- function num : 0_58 , upvalues : settingName, settingMonsterName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingStun
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingMonsterName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingTitle(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2989,7 +3018,7 @@ end
   settingStun(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isNpc] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_58 , upvalues : settingName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_59 , upvalues : settingName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingTitle(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3003,10 +3032,10 @@ end
   sortCenterX(insertedArray)
 end
 , [ActorProxyType.isDeadBody] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_59
+  -- function num : 0_60
 end
 , [ActorProxyType.isVehicle] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_60 , upvalues : settingName, settingQuestMark, settingHpBarInitState, settingHpBar, settingMpBar
+  -- function num : 0_61 , upvalues : settingName, settingQuestMark, settingHpBarInitState, settingHpBar, settingMpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingQuestMark(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3014,26 +3043,26 @@ end
   settingMpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isGate] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_61
+  -- function num : 0_62
 end
 , [ActorProxyType.isHouseHold] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_62 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingBillBoardMode
+  -- function num : 0_63 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingBillBoardMode
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingBillBoardMode(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isInstallationActor] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_63 , upvalues : settingName, settingHpBarInitState, settingHpBar
+  -- function num : 0_64 , upvalues : settingName, settingHpBarInitState, settingHpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isCollect] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_64
+  -- function num : 0_65
 end
 , [ActorProxyType.isInstanceObject] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_65 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingMpBar
+  -- function num : 0_66 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingMpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3041,14 +3070,14 @@ end
 end
 }
   EventActorCreated_NameTag = function(actorKeyRaw, targetPanel, actorProxyType, actorProxyWrapper)
-  -- function num : 0_66 , upvalues : TypeByLoadData
+  -- function num : 0_67 , upvalues : TypeByLoadData
   if TypeByLoadData[actorProxyType] ~= nil then
     (TypeByLoadData[actorProxyType])(actorKeyRaw, targetPanel, actorProxyWrapper)
   end
 end
 
   FromClient_ChangeTopRankUser = function(actorKeyRaw)
-  -- function num : 0_67 , upvalues : settingLifeRankIcon, settingGuildTextForAlias
+  -- function num : 0_68 , upvalues : settingLifeRankIcon, settingGuildTextForAlias
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3063,7 +3092,7 @@ end
 end
 
   FromClient_NameTag_TendencyChanged = function(actorKeyRaw, tendencyValue)
-  -- function num : 0_68 , upvalues : settingPlayerName, settingGuildMarkAndPreemptiveStrike, settingPreemptiveStrike
+  -- function num : 0_69 , upvalues : settingPlayerName, settingGuildMarkAndPreemptiveStrike, settingPreemptiveStrike
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3078,24 +3107,6 @@ end
 end
 
   EventActorFirsttalk = function(actorKeyRaw, isFirsttalkOn)
-  -- function num : 0_69 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
-  local actorProxyWrapper = getActor(actorKeyRaw)
-  if actorProxyWrapper == nil then
-    return 
-  end
-  local panel = (actorProxyWrapper:get()):getUIPanel()
-  if panel == nil then
-    return 
-  end
-  local insertedArray = (Array.new)()
-  settingQuestUI(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  settingFirstTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  settingImportantTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  settingOtherHeadIcon(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
-  sortCenterX(insertedArray)
-end
-
-  EventActorImportantTalk = function(actorKeyRaw, isImportantTalk)
   -- function num : 0_70 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
@@ -3113,8 +3124,26 @@ end
   sortCenterX(insertedArray)
 end
 
+  EventActorImportantTalk = function(actorKeyRaw, isImportantTalk)
+  -- function num : 0_71 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  local actorProxyWrapper = getActor(actorKeyRaw)
+  if actorProxyWrapper == nil then
+    return 
+  end
+  local panel = (actorProxyWrapper:get()):getUIPanel()
+  if panel == nil then
+    return 
+  end
+  local insertedArray = (Array.new)()
+  settingQuestUI(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  settingFirstTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  settingImportantTalk(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  settingOtherHeadIcon(actorKeyRaw, panel, actorProxyWrapper, insertedArray)
+  sortCenterX(insertedArray)
+end
+
   EventActorChangeGuildInfo = function(actorKeyRaw, guildName)
-  -- function num : 0_71 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
+  -- function num : 0_72 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3132,7 +3161,7 @@ end
 end
 
   FromClient_EventActorUpdateTitleKey = function(actorKeyRaw)
-  -- function num : 0_72 , upvalues : settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
+  -- function num : 0_73 , upvalues : settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3150,7 +3179,7 @@ end
 end
 
   FromClient_EventActorChangeGuildInfo_HaveLand = function(actorProxyWrapper, Panel, isoccupyTerritory)
-  -- function num : 0_73 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_74 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
   local targetPanel = Panel
   if actorProxyWrapper == nil or isoccupyTerritory == nil then
     return 
@@ -3161,7 +3190,7 @@ end
 end
 
   EventActorPvpModeChange = function(actorKeyRaw)
-  -- function num : 0_74 , upvalues : settingPreemptiveStrike
+  -- function num : 0_75 , upvalues : settingPreemptiveStrike
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3176,7 +3205,7 @@ end
 end
 
   EventActorChangeLevel = function(actorKeyRaw)
-  -- function num : 0_75 , upvalues : settingMonsterName, settingPlayerName
+  -- function num : 0_76 , upvalues : settingMonsterName, settingPlayerName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3195,7 +3224,7 @@ end
 end
 
   EventActorHpChanged = function(actorKeyRaw, hp, maxHp)
-  -- function num : 0_76 , upvalues : settingHpBar
+  -- function num : 0_77 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3208,7 +3237,7 @@ end
 end
 
   EventChangeCharacterName = function(actorKeyRaw, characterName)
-  -- function num : 0_77 , upvalues : settingName, settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint
+  -- function num : 0_78 , upvalues : settingName, settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3229,7 +3258,7 @@ end
 end
 
   FGlobal_ReSet_SiegeBuildingName = function(actorKeyRaw)
-  -- function num : 0_78 , upvalues : settingName
+  -- function num : 0_79 , upvalues : settingName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3242,7 +3271,7 @@ end
 end
 
   insertPartyMemberGage = function(actorKeyRaw)
-  -- function num : 0_79 , upvalues : settingHpBar
+  -- function num : 0_80 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3263,7 +3292,7 @@ end
 end
 
   removePartyMemberGage = function(actorKeyRaw)
-  -- function num : 0_80 , upvalues : settingHpBar
+  -- function num : 0_81 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3276,14 +3305,14 @@ end
 end
 
   EventActorAddDamage = function(actorKeyRaw, variedPoint, attackResult_IntValue, additionalDamageType, position)
-  -- function num : 0_81 , upvalues : hideTimeType
+  -- function num : 0_82 , upvalues : hideTimeType
   if attackResult_IntValue == 0 or attackResult_IntValue == 1 or attackResult_IntValue == 2 or attackResult_IntValue == 3 or attackResult_IntValue == 4 or attackResult_IntValue == 5 then
     ActorInsertShowTime(actorKeyRaw, hideTimeType.overHeadUI, 0)
   end
 end
 
   EventShowProgressBar = function(actorKeyRaw, aHideTimeType)
-  -- function num : 0_82 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
+  -- function num : 0_83 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3328,7 +3357,7 @@ end
 end
 
   EventHideProgressBar = function(actorKeyRaw, aHideTimeType)
-  -- function num : 0_83 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
+  -- function num : 0_84 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3373,7 +3402,7 @@ end
 end
 
   update_Changed_StunGage = function(actorKeyRaw, curStun, maxStun)
-  -- function num : 0_84 , upvalues : settingStun
+  -- function num : 0_85 , upvalues : settingStun
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3390,7 +3419,7 @@ end
 end
 
   EventActor_QuestUpdateInserted = function(actorKeyRaw)
-  -- function num : 0_85 , upvalues : settingQuestMarkForce
+  -- function num : 0_86 , upvalues : settingQuestMarkForce
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3403,7 +3432,7 @@ end
 end
 
   EventActor_QuestUpdateDeleted = function(actorKeyRaw)
-  -- function num : 0_86 , upvalues : settingQuestMarkForce
+  -- function num : 0_87 , upvalues : settingQuestMarkForce
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3416,12 +3445,12 @@ end
 end
 
   FromClient_preemptiveStrikeTimeChanged = function(targetActorKeyRaw)
-  -- function num : 0_87 , upvalues : hideTimeType
+  -- function num : 0_88 , upvalues : hideTimeType
   ActorInsertShowTime(attackerActorKey, hideTimeType.preemptiveStrike, 0)
 end
 
   EventActor_QuestUI_UpdateData = function(actorKeyRaw, currentType, iconPath)
-  -- function num : 0_88 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_89 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3439,7 +3468,7 @@ end
 end
 
   EventActor_EnduranceUpdate = function(actorKeyRaw)
-  -- function num : 0_89 , upvalues : settingName, settingHpBar
+  -- function num : 0_90 , upvalues : settingName, settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3453,7 +3482,7 @@ end
 end
 
   EventActor_HouseHoldNearestDoorChanged = function(actorKeyRaw)
-  -- function num : 0_90 , upvalues : settingName
+  -- function num : 0_91 , upvalues : settingName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3466,7 +3495,7 @@ end
 end
 
   EventActor_OnChatMessageUpdate = function()
-  -- function num : 0_91 , upvalues : settingBubbleBox
+  -- function num : 0_92 , upvalues : settingBubbleBox
   local msg = nil
   local totalSize = getNewChatMessageCount()
   for index = 0, totalSize - 1 do
@@ -3484,7 +3513,7 @@ end
 end
 
   EventSelfPlayerWaitCommentLaunch = function()
-  -- function num : 0_92 , upvalues : settingWaitCommentLaunch
+  -- function num : 0_93 , upvalues : settingWaitCommentLaunch
   if ((getSelfPlayer()):get()):getWaitCommentPanel() == nil then
     return 
   end
@@ -3494,7 +3523,7 @@ end
 end
 
   EventSelfPlayerWaitCommentClose = function()
-  -- function num : 0_93 , upvalues : settingWaitCommentLaunch
+  -- function num : 0_94 , upvalues : settingWaitCommentLaunch
   if ((getSelfPlayer()):get()):getWaitCommentPanel() == nil then
     return 
   end
@@ -3507,7 +3536,7 @@ end
 end
 
   EventOtherPlayerWaitCommentUpdate = function(actorKeyRaw)
-  -- function num : 0_94 , upvalues : settingWaitComment
+  -- function num : 0_95 , upvalues : settingWaitComment
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3520,7 +3549,7 @@ end
 end
 
   EventOtherPlayerWaitCommentClose = function(actorKeyRaw)
-  -- function num : 0_95 , upvalues : settingWaitComment
+  -- function num : 0_96 , upvalues : settingWaitComment
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3533,17 +3562,17 @@ end
 end
 
   FromClient_OverHeadUIShowChanged = function(actorKeyRaw, panel, actorProxyWrapper, isShow)
-  -- function num : 0_96
+  -- function num : 0_97
 end
 
   FromClient_GuildMemberGradeChanged = function(actorKeyRaw, panel, actorProxyWrapper, guildGrade)
-  -- function num : 0_97 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_98 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
   settingGuildInfo(actorKeyRaw, panel, actorProxyWrapper)
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, panel, actorProxyWrapper)
 end
 
   EventPlayerNicknameUpdate = function(actorKeyRaw)
-  -- function num : 0_98 , upvalues : settingTitle
+  -- function num : 0_99 , upvalues : settingTitle
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3556,7 +3585,7 @@ end
 end
 
   FromClient_NameTag_SelfPlayerLevelUp = function()
-  -- function num : 0_99 , upvalues : settingName
+  -- function num : 0_100 , upvalues : settingName
   local actorProxyWrapper = getSelfPlayer()
   if actorProxyWrapper == nil then
     return 
@@ -3569,7 +3598,7 @@ end
 end
 
   FromClient_ActorInformationChanged = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_100 , upvalues : settingName
+  -- function num : 0_101 , upvalues : settingName
   if panel == nil then
     return 
   end
@@ -3580,7 +3609,7 @@ end
 end
 
   FromClient_NotifyChangeGuildTendency = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_101 , upvalues : settingGuildInfo
+  -- function num : 0_102 , upvalues : settingGuildInfo
   if panel == nil then
     return 
   end
@@ -3591,7 +3620,7 @@ end
 end
 
   FromClient_ChangeArenaAreaAndZoneState = function(actorProxyWrapper, panel, isStateOn)
-  -- function num : 0_102 , upvalues : settingHpBar
+  -- function num : 0_103 , upvalues : settingHpBar
   if actorProxyWrapper == nil or isStateOn == nil or panel == nil then
     return 
   end
@@ -3600,7 +3629,7 @@ end
 end
 
   FromClient_InstallationInfoWarningNameTag = function(warningType, tentPosition, characterSSW, progressingInfo, actorWrapper, addtionalValue1)
-  -- function num : 0_103 , upvalues : settingHpBar
+  -- function num : 0_104 , upvalues : settingHpBar
   if actorWrapper == nil then
     return 
   end
@@ -3613,22 +3642,6 @@ end
 end
 
   FromClient_LocalWarCombatPoint = function(actorkeyRaw)
-  -- function num : 0_104 , upvalues : settingLocalWarCombatPoint
-  if actorkeyRaw == nil then
-    return 
-  end
-  local playerActorWrapper = getPlayerActor(actorkeyRaw)
-  if playerActorWrapper == nil then
-    return 
-  end
-  local panel = (playerActorWrapper:get()):getUIPanel()
-  if panel == nil then
-    return 
-  end
-  settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
-end
-
-  FromClient_EntryTeamChanged = function(actorkeyRaw)
   -- function num : 0_105 , upvalues : settingLocalWarCombatPoint
   if actorkeyRaw == nil then
     return 
@@ -3644,8 +3657,24 @@ end
   settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
 end
 
+  FromClient_EntryTeamChanged = function(actorkeyRaw)
+  -- function num : 0_106 , upvalues : settingLocalWarCombatPoint
+  if actorkeyRaw == nil then
+    return 
+  end
+  local playerActorWrapper = getPlayerActor(actorkeyRaw)
+  if playerActorWrapper == nil then
+    return 
+  end
+  local panel = (playerActorWrapper:get()):getUIPanel()
+  if panel == nil then
+    return 
+  end
+  settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
+end
+
   FromClient_ObjectInstanceMpChanged = function(actorKeyRaw, panel)
-  -- function num : 0_106 , upvalues : settingMpBar
+  -- function num : 0_107 , upvalues : settingMpBar
   if actorKeyRaw == nil then
     return 
   end
@@ -3660,7 +3689,7 @@ end
 end
 
   FromClient_FlashBangStateChanged = function(actorKeyRaw, isFlashBangOn)
-  -- function num : 0_107 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
+  -- function num : 0_108 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
   if actorKeyRaw == nil then
     return 
   end
@@ -3686,7 +3715,7 @@ end
 end
 
   FromClient_ChangeMilitiaNameTag = function(actorKeyRaw)
-  -- function num : 0_108 , upvalues : settingName, settingAlias, settingTitle, settingLifeRankIcon, settingGuildInfo
+  -- function num : 0_109 , upvalues : settingName, settingAlias, settingTitle, settingLifeRankIcon, settingGuildInfo
   if actorKeyRaw == nil then
     return 
   end
@@ -3707,7 +3736,7 @@ end
 end
 
   FromClient_ShowOverheadRank = function(actorKeyRaw)
-  -- function num : 0_109 , upvalues : settingLifeRankIcon
+  -- function num : 0_110 , upvalues : settingLifeRankIcon
   if actorKeyRaw == nil then
     return 
   end

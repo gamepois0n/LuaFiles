@@ -302,6 +302,7 @@ PaGlobal_LargeParty.ButtonAction = function(self, isShow, index)
         ((self._ui)._btn_Exile):SetShow(false)
         ;
         ((self._ui)._btn_Exit):SetShow(false)
+        self._selectIndex = -1
         return 
       end
     end

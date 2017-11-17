@@ -43,6 +43,17 @@ PearlCharge.initialize = function(self)
     ;
     (self.goodsListPool)[goods_Idx] = tempSlot
   end
+  if isGameTypeTR() then
+    (self._staticText_HaveCashTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_BUYPEARLBOX_HAVECASHTITLE_TR"))
+  else
+    if isGameTypeTH() then
+      (self._staticText_HaveCashTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_BUYPEARLBOX_HAVECASHTITLE_TH"))
+    else
+      if isGameTypeID() then
+        (self._staticText_HaveCashTitle):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_INGAMECASHSHOP_BUYPEARLBOX_HAVECASHTITLE_ID"))
+      end
+    end
+  end
 end
 
 PearlCharge.update = function(self)

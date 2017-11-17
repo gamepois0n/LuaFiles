@@ -1145,11 +1145,16 @@ NpcShop_BuySome = function()
   end
   local s64_maxMoneyNumber = money_s64 / shopItem:getItemPriceWithOption()
   local s64_maxWeightNumber = (Defines.s64_const).s64_0
-  local itemWeight = itemEnchantStaticStatus._weight - Int64toInt32(shopItem:getItemPriceWithOption()) * 2
+  local itemWeight = nil
+  if (self.checkButton_Inventory):IsCheck() then
+    itemWeight = itemEnchantStaticStatus._weight - Int64toInt32(shopItem:getItemPriceWithOption()) * 2
+  else
+    itemWeight = itemEnchantStaticStatus._weight
+  end
   if s64_allWeight < s64_maxWeight then
     s64_maxWeightNumber = toInt64(0, (math.floor)((s64_maxWeight - s64_allWeight) / itemWeight))
   end
-  if s64_maxMoneyNumber < s64_maxWeightNumber then
+  if s64_maxMoneyNumber < s64_maxWeightNumber or s64_maxWeightNumber < (Defines.s64_const).s64_0 then
     s64_maxWeightNumber = s64_maxMoneyNumber
   end
   if shopItem:getNeedIntimacy() > 0 then

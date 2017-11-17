@@ -2016,7 +2016,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
   local selfPlayerWrapper = getSelfPlayer()
   local classType = selfPlayerWrapper:getClassType()
   local itemWrapper = getInventoryItemByType(whereType, slotNo)
-  local equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+  local equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
   local offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
   local defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
   local equipOffencePoint = 0
@@ -2034,7 +2034,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
     local matchEquip = true
     if equipType == 16 or equipType == 17 then
       local accSlotNo = FGlobal_AccSlotNo(itemWrapper, false)
-      local equipItemWrapper = getEquipmentItem(accSlotNo)
+      local equipItemWrapper = ToClient_getEquipmentItem(accSlotNo)
       if equipItemWrapper ~= nil then
         equipOffencePoint = ((equipItemWrapper:getStaticStatus()):getMinDamage(0) + (equipItemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
         equipDefencePoint = (equipItemWrapper:getStaticStatus()):getDefence()
@@ -2045,10 +2045,10 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
     else
       do
         if equipType == 15 or equipType == 18 then
-          equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+          equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
           if equipItemWrapper ~= nil then
-            equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
-            equipDefencePoint = ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getDefence()
+            equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+            equipDefencePoint = ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getDefence()
             matchEquip = true
           else
             equipOffencePoint = 0
@@ -2057,9 +2057,9 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
           end
           return offencePoint, defencePoint, equipOffencePoint, equipDefencePoint, matchEquip, true
         end
-        equipItemWrapper = getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+        equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
         if equipItemWrapper ~= nil then
-          equipDefencePoint = ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getDefence(0)
+          equipDefencePoint = ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getDefence(0)
           -- DECOMPILER ERROR at PC223: Unhandled construct in 'MakeBoolean' P3
 
           -- DECOMPILER ERROR at PC223: Unhandled construct in 'MakeBoolean' P3
@@ -2072,7 +2072,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
           if ((enum_class.ClassType_Warrior == classType or enum_class.ClassType_Valkyrie == classType) and equipType == 1) or not isAwakenWeaponContentsOpen or equipType == 12 then
             offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
-            equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+            equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
             defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
             matchEquip = true
           else
@@ -2088,7 +2088,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
             if (enum_class.ClassType_Giant == classType and equipType == 29) or not isAwakenWeaponContentsOpen or equipType == 12 then
               offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
-              equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+              equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
               matchEquip = true
             else
               -- DECOMPILER ERROR at PC343: Unhandled construct in 'MakeBoolean' P3
@@ -2103,7 +2103,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
               if (enum_class.ClassType_Ranger == classType and equipType == 31) or not isAwakenWeaponContentsOpen or equipType == 12 then
                 offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(1) + (itemWrapper:getStaticStatus()):getMaxDamage(1)) / 2
-                equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(1) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(1)) / 2
+                equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(1) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(1)) / 2
                 matchEquip = true
               else
                 -- DECOMPILER ERROR at PC400: Unhandled construct in 'MakeBoolean' P3
@@ -2118,7 +2118,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
                 if (enum_class.ClassType_Sorcerer == classType and equipType == 28) or not isAwakenWeaponContentsOpen or equipType == 12 then
                   offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
-                  equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
+                  equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
                   matchEquip = true
                 else
                   -- DECOMPILER ERROR at PC457: Unhandled construct in 'MakeBoolean' P3
@@ -2133,7 +2133,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
                   if (enum_class.ClassType_Tamer == classType and equipType == 2) or not isAwakenWeaponContentsOpen or equipType == 12 then
                     offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
-                    equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
+                    equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
                     matchEquip = true
                   else
                     -- DECOMPILER ERROR at PC519: Unhandled construct in 'MakeBoolean' P3
@@ -2150,7 +2150,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
                     if ((enum_class.ClassType_NinjaWomen == classType or enum_class.ClassType_NinjaMan == classType) and equipType == 2) or not isAwakenWeaponContentsOpen or equipType == 12 then
                       offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
-                      equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+                      equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
                       matchEquip = true
                     else
                       -- DECOMPILER ERROR at PC579: Unhandled construct in 'MakeBoolean' P3
@@ -2165,7 +2165,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
                       if ((enum_class.ClassType_BladeMaster == classType or enum_class.ClassType_BladeMasterWomen == classType) and equipType == 3) or not isAwakenWeaponContentsOpen or equipType == 12 then
                         offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
-                        equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+                        equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
                         matchEquip = true
                       else
                         -- DECOMPILER ERROR at PC639: Unhandled construct in 'MakeBoolean' P3
@@ -2180,7 +2180,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
                         if ((enum_class.ClassType_Wizard == classType or enum_class.ClassType_WizardWomen == classType) and equipType == 6) or not isAwakenWeaponContentsOpen or equipType == 12 then
                           offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
-                          equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
+                          equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
                           matchEquip = true
                         else
                           -- DECOMPILER ERROR at PC696: Unhandled construct in 'MakeBoolean' P3
@@ -2195,7 +2195,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
                           if (enum_class.ClassType_DarkElf == classType and equipType == 63) or not isAwakenWeaponContentsOpen or equipType == 12 then
                             offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
-                            equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
+                            equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(2) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(2)) / 2
                             matchEquip = true
                           else
                             -- DECOMPILER ERROR at PC756: Unhandled construct in 'MakeBoolean' P3
@@ -2210,7 +2210,7 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
 
                             if enum_class.ClassType_Combattant == classType or ((enum_class.ClassType_CombattantWomen == classType and equipType == 65) or not isAwakenWeaponContentsOpen or equipType == 12) then
                               offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
-                              equipOffencePoint = (((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+                              equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
                               matchEquip = true
                             end
                           end

@@ -12,7 +12,7 @@ PaGlobalPlayerWeightList.initialize = function(self)
   ;
   (self.weightText):SetShow(false)
   ;
-  (self.weightText):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_ENDURANCE_STCTXT_NOTICEWEIGHT"))
+  (self.weightText):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_ENDURANCE_STCTXT_NOTICEWEIGHT") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_WEIGHTHELP_4"))
   ;
   (self.weight):addInputEvent("Mouse_On", "PaGlobalPlayerWeightList_MouseOver(true)")
   ;
