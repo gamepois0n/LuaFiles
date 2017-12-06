@@ -222,7 +222,7 @@ FGlobal_Dialog_CheckConditionTutorialMenuButton = function()
   end
   do
     if playerLevel >= 25 and playerLevel <= 53 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Enchant) ~= -1 then
-      return true
+      return not isNewEnchant_chk()
     end
     if playerLevel >= 40 and playerLevel <= 56 and FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_Extract) ~= -1 then
       return true
@@ -449,14 +449,13 @@ Panel_Npc_Dialog.Initialize = function(self)
     ;
     (_uiFilterRadioButton[index]):SetShow(false)
     ;
-    (_uiFilterRadioButton[index]):SetPosX(getScrX / 2 - 340)
-    local btnTabSizeX = (_uiFilterRadioButton[index]):GetSizeX() + 23
-    local btnTabTextPosX = btnTabSizeX - btnTabSizeX / 2 - (_uiFilterRadioButton[index]):GetTextSizeX() / 2
-    ;
-    (_uiFilterRadioButton[index]):SetTextSpan(btnTabTextPosX, 5)
+    (_uiFilterRadioButton[index]):SetCheck(index == 0)
   end
   ;
-  (_uiFilterRadioButton[0]):SetCheck(true)
+  (_uiFilterRadioButton[0]):addInputEvent("Mouse_On", "HandleOverd_FilterAllButton(true)")
+  ;
+  (_uiFilterRadioButton[0]):addInputEvent("Mouse_Out", "HandleOverd_FilterAllButton(false)")
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 Panel_Npc_Dialog:Initialize()
@@ -473,7 +472,7 @@ _styleNormalTalkButton:SetShow(false)
 _styleExploreTalkButton:SetShow(false)
 _uiNextButton:addInputEvent("Mouse_LUp", "HandleClickedDialogNextButton()")
 _uiNextButton:SetPosX(getScrX / 2 - 175)
-_SpacebarIcon:SetPosX((_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() + 10)
+_SpacebarIcon:SetPosX((_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() - _SpacebarIcon:GetSizeX() - 5)
 _SpacebarIcon:SetSize(40, 28)
 local defaultDialogBtnSizeX = (_uiDialogButton[0]):GetSizeX()
 local _rBtnPosX = (_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() - _SpacebarIcon:GetSizeX() - 5
@@ -543,7 +542,7 @@ Dialog_updateMainDialog = function()
     _uiNextButton:SetShow(true)
     _SpacebarIcon:SetShow(true)
     Dialog_updateButtons(false)
-    _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() + 10)
+    _SpacebarIcon:SetPosX(_rBtnPosX)
     _SpacebarIcon:SetPosY(_rBtnPosY)
     _SpacebarIcon:SetSize(40, 28)
   else
@@ -601,28 +600,15 @@ local PreclosePanel_OpenDialog = function()
 end
 
 FromClient_ShowFilterButton = function(isShow)
-  -- function num : 0_22 , upvalues : _uiFilterRadioButton
+  -- function num : 0_22
   local isDev = ToClient_IsDevelopment()
   if isDev == false then
     isShow = false
   end
-  if isShow ~= (_uiFilterRadioButton[0]):GetShow() then
-    for index = 0, 3 do
-      (_uiFilterRadioButton[index]):SetShow(isShow)
-      if isShow == false then
-        (_uiFilterRadioButton[index]):SetCheck(false)
-      end
-    end
-  end
-  do
-    if isShow == false then
-      (_uiFilterRadioButton[0]):SetCheck(true)
-    end
-  end
 end
 
 FromClient_ShowDialog = function()
-  -- function num : 0_23 , upvalues : PreclosePanel_OpenDialog, _wpHelp, intimacyNotice, intimacyNoticeText, _ignoreShowDialog, _uiNpcDialog, _uiFuncBG, _equipRewardCount, _currentLine, _uiNpcTitle, _uiNpcName, _mainDialog, _maxLine, isFirstShowTooltip
+  -- function num : 0_23 , upvalues : PreclosePanel_OpenDialog, _wpHelp, intimacyNotice, intimacyNoticeText, _ignoreShowDialog, _uiNpcDialog, _uiFuncBG, _equipRewardCount, _currentLine, _uiNpcTitle, _uiNpcName, _mainDialog, _maxLine, isFirstShowTooltip, _uiFilterRadioButton
   PaGlobal_TutorialManager:handleBeforeShowDialog()
   FGlobal_RemoteControl_Hide()
   local charLevel = ((getSelfPlayer()):get()):getLevel()
@@ -683,7 +669,6 @@ FromClient_ShowDialog = function()
   if Panel_Window_Exchange:GetShow() then
     ExchangePC_MessageBox_ResponseCancel()
   end
-  local talker = dialog_getTalker()
   setShowNpcDialog(true)
   local npcTitle = dialogData:getContactNpcTitle()
   local npcName = dialogData:getContactNpcName()
@@ -708,7 +693,7 @@ FromClient_ShowDialog = function()
   while 1 do
     strFirst = stringList[i * 2 + 1]
     strSecond = stringList[i * 2 + 2]
-    -- DECOMPILER ERROR at PC266: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC264: Confused about usage of register: R12 in 'UnsetPending'
 
     if strFirst ~= nil and strSecond ~= nil then
       _mainDialog[i] = strFirst .. "\n" .. strSecond
@@ -716,7 +701,7 @@ FromClient_ShowDialog = function()
       if strFirst == nil then
         break
       else
-        -- DECOMPILER ERROR at PC275: Confused about usage of register: R13 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC273: Confused about usage of register: R12 in 'UnsetPending'
 
         if strSecond == nil then
           _mainDialog[i] = strFirst
@@ -733,44 +718,44 @@ FromClient_ShowDialog = function()
   for idx = 1, baseCount do
     local baseReward = dialogData:getBaseRewardAt(idx - 1)
     _baseReward[idx] = {}
-    -- DECOMPILER ERROR at PC300: Confused about usage of register: R21 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC298: Confused about usage of register: R20 in 'UnsetPending'
 
     ;
     (_baseReward[idx])._type = baseReward._type
-    -- DECOMPILER ERROR at PC309: Confused about usage of register: R21 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC307: Confused about usage of register: R20 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == baseReward._type then
       (_baseReward[idx])._exp = baseReward._experience
     else
-      -- DECOMPILER ERROR at PC319: Confused about usage of register: R21 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC317: Confused about usage of register: R20 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == baseReward._type then
         (_baseReward[idx])._exp = baseReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC329: Confused about usage of register: R21 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC327: Confused about usage of register: R20 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == baseReward._type then
           (_baseReward[idx])._exp = baseReward._productExperience
         else
-          -- DECOMPILER ERROR at PC340: Confused about usage of register: R21 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC338: Confused about usage of register: R20 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == baseReward._type then
             (_baseReward[idx])._item = baseReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC343: Confused about usage of register: R21 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC341: Confused about usage of register: R20 in 'UnsetPending'
 
             ;
             (_baseReward[idx])._count = baseReward._itemCount
           else
-            -- DECOMPILER ERROR at PC354: Confused about usage of register: R21 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC352: Confused about usage of register: R20 in 'UnsetPending'
 
             if (CppEnums.RewardType).RewardType_Intimacy == baseReward._type then
               (_baseReward[idx])._character = baseReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC357: Confused about usage of register: R21 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC355: Confused about usage of register: R20 in 'UnsetPending'
 
               ;
               (_baseReward[idx])._value = baseReward._intimacyValue
             else
-              -- DECOMPILER ERROR at PC368: Confused about usage of register: R21 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC366: Confused about usage of register: R20 in 'UnsetPending'
 
               if (CppEnums.RewardType).RewardType_Knowledge == baseReward._type then
                 (_baseReward[idx])._mentalCard = baseReward:getMentalCardKey()
@@ -786,37 +771,37 @@ FromClient_ShowDialog = function()
   for idx = 1, selectCount do
     local selectReward = dialogData:getSelectRewardAt(idx - 1)
     _selectReward[idx] = {}
-    -- DECOMPILER ERROR at PC384: Confused about usage of register: R23 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC382: Confused about usage of register: R22 in 'UnsetPending'
 
     ;
     (_selectReward[idx])._type = selectReward._type
-    -- DECOMPILER ERROR at PC393: Confused about usage of register: R23 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC391: Confused about usage of register: R22 in 'UnsetPending'
 
     if (CppEnums.RewardType).RewardType_Exp == selectReward._type then
       (_selectReward[idx])._exp = selectReward._experience
     else
-      -- DECOMPILER ERROR at PC403: Confused about usage of register: R23 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC401: Confused about usage of register: R22 in 'UnsetPending'
 
       if (CppEnums.RewardType).RewardType_SkillExp == selectReward._type then
         (_selectReward[idx])._exp = selectReward._skillExperience
       else
-        -- DECOMPILER ERROR at PC413: Confused about usage of register: R23 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC411: Confused about usage of register: R22 in 'UnsetPending'
 
         if (CppEnums.RewardType).RewardType_ProductExp == selectReward._type then
           (_selectReward[idx])._exp = selectReward._productExperience
         else
-          -- DECOMPILER ERROR at PC424: Confused about usage of register: R23 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC422: Confused about usage of register: R22 in 'UnsetPending'
 
           if (CppEnums.RewardType).RewardType_Item == selectReward._type then
             (_selectReward[idx])._item = selectReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC427: Confused about usage of register: R23 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC425: Confused about usage of register: R22 in 'UnsetPending'
 
             ;
             (_selectReward[idx])._count = selectReward._itemCount
             local selfPlayer = getSelfPlayer()
             if selfPlayer ~= nil then
               local classType = selfPlayer:getClassType()
-              -- DECOMPILER ERROR at PC438: Confused about usage of register: R25 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC436: Confused about usage of register: R24 in 'UnsetPending'
 
               ;
               (_selectReward[idx])._isEquipable = selectReward:isEquipable(classType)
@@ -824,38 +809,38 @@ FromClient_ShowDialog = function()
           else
             do
               do
-                -- DECOMPILER ERROR at PC449: Confused about usage of register: R23 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC447: Confused about usage of register: R22 in 'UnsetPending'
 
                 if (CppEnums.RewardType).RewardType_Intimacy == selectReward._type then
                   (_selectReward[idx])._character = selectReward:getIntimacyCharacter()
-                  -- DECOMPILER ERROR at PC452: Confused about usage of register: R23 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC450: Confused about usage of register: R22 in 'UnsetPending'
 
                   ;
                   (_selectReward[idx])._value = selectReward._intimacyValue
                 else
-                  -- DECOMPILER ERROR at PC463: Confused about usage of register: R23 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC461: Confused about usage of register: R22 in 'UnsetPending'
 
                   if (CppEnums.RewardType).RewardType_Knowledge == selectReward._type then
                     (_selectReward[idx])._mentalCard = selectReward:getMentalCardKey()
                   end
                 end
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC464: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC462: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -879,6 +864,7 @@ FromClient_ShowDialog = function()
     FGlobal_Dialog_HideTutorialMenuButton()
   end
   PaGlobal_TutorialManager:handleShowDialog(dialogData)
+  _uiNpcDialog:SetShow(not (_uiFilterRadioButton[0]):GetShow())
 end
 
 HandleClickedDialogNextButton = function()
@@ -1203,6 +1189,12 @@ Dialog_updateButtons = function(isVisible)
               _btnPositionType = 2
             end
           end
+          if UI_DS.eDialogState_RefuseQuest == tostring(linkType) then
+            (_uiDialogButton[_dialogCount]):addInputEvent("Mouse_LUp", "HandleClickedBackButton()")
+          else
+            ;
+            (_uiDialogButton[_dialogCount]):addInputEvent("Mouse_LUp", "HandleClickedDialogButton(" .. _dialogCount .. ")")
+          end
           if UI_DS.eDialogState_QuestComplete == tostring(linkType) then
             _isQuestComplete = true
           else
@@ -1227,7 +1219,7 @@ Dialog_updateButtons = function(isVisible)
               (_uiNeedWpAni[_dialogCount]):SetShow(false)
             else
               ;
-              (_uiNeedWpAni[_dialogCount]):SetShow(true)
+              (_uiNeedWpAni[_dialogCount]):SetShow(false)
             end
           else
             if dialogButton:getNeedItemCount() > 0 then
@@ -1235,10 +1227,10 @@ Dialog_updateButtons = function(isVisible)
               if itemStaticWrapper ~= nil then
                 needThings = needThings .. itemStaticWrapper:getName() .. " " .. tostring(dialogButton:getNeedItemCount()) .. PAGetString(Defines.StringSheet_GAME, "DIALOG_NEEDCOUNT")
                 isNeedThings = true
-                -- DECOMPILER ERROR at PC564: Confused about usage of register: R31 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC587: Confused about usage of register: R31 in 'UnsetPending'
 
                 isExchangeButtonIndex[_dialogCount + _dialogIndex] = true
-                -- DECOMPILER ERROR at PC573: Confused about usage of register: R31 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC596: Confused about usage of register: R31 in 'UnsetPending'
 
                 if dialogButton:getNeedItemKey() == promiseTokenKey then
                   isPromiseToken[_dialogCount + _dialogIndex] = true
@@ -1353,17 +1345,17 @@ Dialog_updateButtons = function(isVisible)
             do
               do
                 _dialogCount = _dialogCount + 1
-                -- DECOMPILER ERROR at PC878: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC901: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC878: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC901: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC878: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC901: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC878: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC901: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC878: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                -- DECOMPILER ERROR at PC901: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC878: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC901: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -1394,11 +1386,13 @@ Dialog_updateButtons = function(isVisible)
       end
       ;
       (_uiDialogButton[i]):SetPosX(getScreenSizeX() / 2 - (_dialogBtnSizeX) / 2)
+      ;
+      (_uiNoticeNeedInfo[i]):SetPosX((_uiDialogButton[i]):GetPosX() + (_uiDialogButton[i]):GetSizeX())
     end
     _rBtnPosY = (_uiDialogButton[0]):GetPosY()
     _uiNextButton:SetSize(_dialogBtnSizeX, 28)
     _uiNextButton:SetPosY(_rBtnPosY)
-    _SpacebarIcon:SetPosX((_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() + 10)
+    _SpacebarIcon:SetPosX((_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() - _SpacebarIcon:GetSizeX() - 5)
     _SpacebarIcon:SetPosY(_rBtnPosY + 1)
     _SpacebarIcon:SetSize(40, 21)
     _prevPageButton:SetPosX((_uiDialogButton[0]):GetPosX() - _prevPageButton:GetSizeX() * 2)
@@ -1448,7 +1442,7 @@ Dialog_updateButtons = function(isVisible)
       (_uiFuncBG[index]):ResetVertexAni()
       ;
       (_uiFuncBG[index]):SetShow(false)
-      -- DECOMPILER ERROR at PC1177: Confused about usage of register: R42 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1217: Confused about usage of register: R42 in 'UnsetPending'
 
       nextQuestFunctionBtnClick[index] = false
       if index < funcButtonCount then
@@ -1564,7 +1558,7 @@ Dialog_updateButtons = function(isVisible)
                 (_uiFuncButton[index]):SetMonoTone(false)
                 isDialogFunctionQuest = true
                 _btnPositionType = 3
-                -- DECOMPILER ERROR at PC1585: Confused about usage of register: R57 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC1625: Confused about usage of register: R57 in 'UnsetPending'
 
                 if handleClickedQuestComplete == true then
                   nextQuestFunctionBtnClick[index] = true
@@ -2332,205 +2326,205 @@ Dialog_updateButtons = function(isVisible)
                                                                                                                                             do
                                                                                                                                               ;
                                                                                                                                               (_uiFuncButton[index]):SetShow(false)
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                                                              -- DECOMPILER ERROR at PC4742: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                                              -- DECOMPILER ERROR at PC4784: LeaveBlock: unexpected jumping out IF_STMT
 
                                                                                                                                             end
                                                                                                                                           end
@@ -2710,30 +2704,35 @@ Dialog_updateButtons = function(isVisible)
               Panel_Npc_Quest_Reward:SetPosX(sizeX - Panel_Npc_Quest_Reward:GetSizeX())
               Panel_Npc_Quest_Reward:SetPosY(sizeY - Panel_Npc_Quest_Reward:GetSizeY() - Panel_Npc_Dialog:GetSizeY())
               FGlobal_ShowRewardList(isVisible)
-              _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() + 10)
+              _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() - 30)
               _SpacebarIcon:SetPosY(_rBtnPosY + 1)
               if isShowReContactDialog() or _uiNextButton:GetShow() or isShowDialogFunctionQuest() or -1 < questDialogIndex() or -1 < exchangalbeButtonIndex() then
                 _SpacebarIcon:SetSize(40, 21)
                 _SpacebarIcon:SetShow(true)
                 if 1 == _btnPositionType then
-                  _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() + 10)
+                  _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() - 30)
                   _SpacebarIcon:SetPosY(_rBtnPosY + 1)
                 else
                   if 2 == _btnPositionType then
-                    _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() + 10)
+                    _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() - 30)
                     _SpacebarIcon:SetPosY(_rBtnPosY + 1)
                   else
                     if 3 == _btnPositionType then
-                      _SpacebarIcon:SetPosX(startPosX + buttonSize - _SpacebarIcon:GetSizeX() - 5)
+                      _SpacebarIcon:SetPosX(startPosX + buttonSize - _SpacebarIcon:GetSizeX())
                       _SpacebarIcon:SetPosY((_uiFuncButton[0]):GetPosY() + 6)
                     else
                       if 4 == _btnPositionType then
-                        _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() + 10)
-                        _SpacebarIcon:SetPosY(_questDialogButtonPosY + 1)
+                        _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() - 30)
+                        _SpacebarIcon:SetPosY(_rBtnPosY + 1)
                       else
                         if 5 == _btnPositionType then
-                          _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() + 10 + _rBtnPlusPosX)
-                          _SpacebarIcon:SetPosY(_exchangalbeButtonPosY + 3)
+                          _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() - 30)
+                          _SpacebarIcon:SetPosY(_rBtnPosY + 1)
+                        else
+                          if 6 == _btnPositionType then
+                            _SpacebarIcon:SetPosX(_rBtnPosX + _SpacebarIcon:GetSizeX() - 30)
+                            _SpacebarIcon:SetPosY(_rBtnPosY + 1)
+                          end
                         end
                       end
                     end
@@ -2745,7 +2744,7 @@ Dialog_updateButtons = function(isVisible)
               for i = 0, 5 do
                 if true == handleClickedQuestComplete and true == nextQuestFunctionBtnClick[i] then
                   handleClickedQuestComplete = false
-                  -- DECOMPILER ERROR at PC5492: Confused about usage of register: R41 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC5553: Confused about usage of register: R41 in 'UnsetPending'
 
                   nextQuestFunctionBtnClick[i] = false
                   Dialog_clickFuncButtonReq(i)
@@ -2847,7 +2846,7 @@ RandomWorkerSelectUseMyWpConfirm = function(index)
 end
 
 ClickFunctionButtonByType = function(type)
-  -- function num : 0_33 , upvalues : _shopType, _indexWhenWorkerShopClicked
+  -- function num : 0_33 , upvalues : _uiNpcDialog, _uiFilterRadioButton, _shopType, _indexWhenWorkerShopClicked
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2897,91 +2896,103 @@ ClickFunctionButtonByType = function(type)
     local MyWp = (getSelfPlayer()):getWp()
     local inventory = ((getSelfPlayer()):get()):getInventory()
     local invenSize = inventory:getFreeCount()
-    if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
-      local shopType = dialogData:getShopType()
-      if _shopType.eShopType_Worker == shopType then
-        _indexWhenWorkerShopClicked = index
-        local pcPosition = ((getSelfPlayer()):get()):getPosition()
-        local regionInfo = getRegionInfoByPosition(pcPosition)
-        local region = regionInfo:get()
-        local regionPlantKey = regionInfo:getPlantKeyByWaypointKey()
-        local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(regionPlantKey, 0)
-        local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(regionPlantKey)
-        local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
-        local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
-        do
-          if s64_maxWeight <= s64_allWeight then
-            local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    do
+      if (CppEnums.ContentsType).Contents_Quest == funcButtonType or (CppEnums.ContentsType).Contents_NewQuest == funcButtonType then
+        local talker = dialog_getTalker()
+        if talker == nil then
+          _uiNpcDialog:SetShow(false)
+          for index = 0, 3 do
+            (_uiFilterRadioButton[index]):SetShow(true)
             ;
-            (MessageBox.showMessageBox)(messageboxData)
-            return 
+            (_uiFilterRadioButton[index]):SetCheck(index == 1)
           end
+          ToClient_SetFilterType(1, true)
+        end
+      end
+      if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
+        local shopType = dialogData:getShopType()
+        if _shopType.eShopType_Worker == shopType then
+          _indexWhenWorkerShopClicked = index
+          local pcPosition = ((getSelfPlayer()):get()):getPosition()
+          local regionInfo = getRegionInfoByPosition(pcPosition)
+          local region = regionInfo:get()
+          local regionPlantKey = regionInfo:getPlantKeyByWaypointKey()
+          local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(regionPlantKey, 0)
+          local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(regionPlantKey)
+          local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
+          local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
           do
-            if ((getSelfPlayer()):get()):checkWorkerWorkingServerNo() ~= 0 then
-              local messageboxData3 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+            if s64_maxWeight <= s64_allWeight then
+              local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
               ;
-              (MessageBox.showMessageBox)(messageboxData3)
+              (MessageBox.showMessageBox)(messageboxData)
               return 
             end
             do
-              if waitWorkerCount == maxWorkerCount then
-                local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              if ((getSelfPlayer()):get()):checkWorkerWorkingServerNo() ~= 0 then
+                local messageboxData3 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                 ;
-                (MessageBox.showMessageBox)(messageboxData)
+                (MessageBox.showMessageBox)(messageboxData3)
                 return 
               end
               do
-                if MyWp >= 5 then
-                  local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                if waitWorkerCount == maxWorkerCount then
+                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                   ;
-                  (MessageBox.showMessageBox)(messageboxData2)
+                  (MessageBox.showMessageBox)(messageboxData)
                   return 
                 end
-                if _shopType.eShopType_RandomShop == shopType then
-                  local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
-                  local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
-                  do
-                    if s64_maxWeight <= s64_allWeight then
-                      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                      ;
-                      (MessageBox.showMessageBox)(messageboxData)
-                      return 
-                    end
-                    local IsRamdomShopkeepItem = ToClient_IsRandomShopKeepItem()
-                    if IsRamdomShopkeepItem == false then
-                      local randomShopConsumeWp = FromClient_getRandomShopConsumWp()
-                      do
-                        if invenSize <= 0 then
-                          local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                          ;
-                          (MessageBox.showMessageBox)(messageboxData)
-                          return 
-                        end
-                        if MyWp < randomShopConsumeWp then
-                          local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                          ;
-                          (MessageBox.showMessageBox)(messageboxData2)
-                          return 
-                        else
-                          do
+                do
+                  if MyWp >= 5 then
+                    local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                    ;
+                    (MessageBox.showMessageBox)(messageboxData2)
+                    return 
+                  end
+                  if _shopType.eShopType_RandomShop == shopType then
+                    local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
+                    local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
+                    do
+                      if s64_maxWeight <= s64_allWeight then
+                        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                        ;
+                        (MessageBox.showMessageBox)(messageboxData)
+                        return 
+                      end
+                      local IsRamdomShopkeepItem = ToClient_IsRandomShopKeepItem()
+                      if IsRamdomShopkeepItem == false then
+                        local randomShopConsumeWp = ToClient_getRandomShopConsumWp()
+                        do
+                          if invenSize <= 0 then
+                            local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                            ;
+                            (MessageBox.showMessageBox)(messageboxData)
+                            return 
+                          end
+                          if MyWp < randomShopConsumeWp then
+                            local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                            ;
+                            (MessageBox.showMessageBox)(messageboxData2)
+                            return 
+                          elseif randomShopConsumeWp <= MyWp then
+                            local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                            ;
+                            (MessageBox.showMessageBox)(messageboxData2)
+                            return 
+                          end
+                          if _shopType.eShopType_DayRandomShop == shopType then
+                            local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
+                            local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
                             do
-                              if randomShopConsumeWp <= MyWp then
-                                local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                              if s64_maxWeight <= s64_allWeight then
+                                local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                                 ;
-                                (MessageBox.showMessageBox)(messageboxData2)
+                                (MessageBox.showMessageBox)(messageboxData)
                                 return 
                               end
-                              if _shopType.eShopType_DayRandomShop == shopType then
-                                local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
-                                local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
+                              local randomShopConsumeWp = 10
+                              do
                                 do
-                                  if s64_maxWeight <= s64_allWeight then
-                                    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                                    ;
-                                    (MessageBox.showMessageBox)(messageboxData)
-                                    return 
-                                  end
-                                  local randomShopConsumeWp = 10
                                   do
                                     if invenSize <= 0 then
                                       local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -2994,161 +3005,105 @@ ClickFunctionButtonByType = function(type)
                                       ;
                                       (MessageBox.showMessageBox)(messageboxData2)
                                       return 
-                                    else
-                                      do
-                                        do
-                                          do
-                                            if randomShopConsumeWp <= MyWp then
-                                              local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                                              ;
-                                              (MessageBox.showMessageBox)(messageboxData2)
-                                              return 
-                                            end
-                                            count = 2
-                                            targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
-                                            show_DialogPanel()
-                                            if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
-                                              count = 1
-                                              targetWindowList = {Panel_Window_Skill}
-                                            else
-                                            end
-                                            if (((CppEnums.ContentsType).Contents_Auction ~= funcButtonType or (CppEnums.ContentsType).Contents_Inn == funcButtonType) and (CppEnums.ContentsType).Contents_IntimacyGame ~= funcButtonType) or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
-                                              count = 1
-                                              targetWindowList = {Panel_Window_DeliveryForPerson}
-                                            else
-                                              if (CppEnums.ContentsType).Contents_Guild == funcButtonType then
-                                                FGlobal_GuildCreateManagerPopup()
-                                              else
-                                              end
-                                            end
-                                            if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_Enchant == funcButtonType then
-                                              PaGlobal_Enchant:enchant_Show()
-                                            else
-                                              if (CppEnums.ContentsType).Contents_Socket == funcButtonType then
-                                                Socket_Window_Show()
-                                              else
-                                                if (CppEnums.ContentsType).Contents_LordMenu == funcButtonType then
-                                                  LordMenu_Show()
-                                                else
-                                                  if (CppEnums.ContentsType).Contents_Extract == funcButtonType then
-                                                    extraction_Open()
-                                                  else
-                                                    if (CppEnums.ContentsType).Contents_TerritoryTrade == funcButtonType then
-                                                      npcShop_requestList(funcButtonType)
-                                                    else
-                                                      if (CppEnums.ContentsType).Contents_TerritorySupply == funcButtonType then
-                                                        npcShop_requestList(funcButtonType)
-                                                      else
-                                                        if (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
-                                                          count = 2
-                                                          targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
-                                                        else
-                                                          if (CppEnums.ContentsType).Contents_SupplyShop == funcButtonType then
-                                                            npcShop_requestList(funcButtonType)
-                                                          else
-                                                            if (CppEnums.ContentsType).Contents_FishSupplyShop == funcButtonType then
-                                                              npcShop_requestList(funcButtonType)
-                                                            else
-                                                              if (CppEnums.ContentsType).Contents_GuildSupplyShop == funcButtonType then
-                                                                npcShop_requestList(funcButtonType)
-                                                              else
-                                                                if (CppEnums.ContentsType).Contents_MinorLordMenu == funcButtonType then
-                                                                  FGlobal_NodeWarMenuOpen()
-                                                                end
-                                                              end
-                                                            end
-                                                          end
-                                                        end
-                                                      end
-                                                    end
-                                                  end
-                                                end
-                                              end
-                                            end
-                                            Dialog_innerPanelShow(count, targetWindowList)
-                                            if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
-                                              npcShop_requestList(funcButtonType)
-                                              FGlobal_NodeWarMenuClose()
-                                            else
-                                              if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
-                                                HandleMLUp_SkillWindow_OpenForLearn()
-                                              else
-                                                if (CppEnums.ContentsType).Contents_Repair == funcButtonType then
-                                                  PaGlobal_Repair:repair_OpenPanel(true)
-                                                else
-                                                  if (CppEnums.ContentsType).Contents_Warehouse == funcButtonType then
-                                                    Warehouse_OpenPanelFromDialog()
-                                                  else
-                                                    if (CppEnums.ContentsType).Contents_Stable == funcButtonType then
-                                                      if isGuildStable() then
-                                                        if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
-                                                          GuildStableFunction_Open()
-                                                        else
-                                                          if (CppEnums.ServantType).Type_Ship == stable_getServantType() then
-                                                            GuildWharfFunction_Open()
-                                                          end
-                                                        end
-                                                      else
-                                                        warehouse_requestInfoFromNpc()
-                                                        if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
-                                                          StableFunction_Open()
-                                                        else
-                                                          if (CppEnums.ServantType).Type_Ship == stable_getServantType() then
-                                                            WharfFunction_Open()
-                                                          else
-                                                            PetFunction_Open()
-                                                            PetList_Open()
-                                                          end
-                                                        end
-                                                      end
-                                                      show_DialogPanel()
-                                                    else
-                                                      if (CppEnums.ContentsType).Contents_Transfer == funcButtonType then
-                                                        DeliveryInformation_OpenPanelFromDialog()
-                                                      else
-                                                      end
-                                                    end
-                                                  end
-                                                end
-                                              end
-                                            end
-                                            if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
-                                              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_deliveryPerson_ReMake"))
-                                            else
-                                              if (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
-                                                npcShop_requestList(funcButtonType)
-                                              else
-                                                if (CppEnums.ContentsType).Contents_ItemMarket == funcButtonType then
-                                                  if Panel_Window_ItemMarket:IsUISubApp() then
-                                                    Panel_Window_ItemMarket:CloseUISubApp()
-                                                    Panel_Window_ItemMarket:SetShow(false)
-                                                  end
-                                                  if not Panel_Window_ItemMarket:GetShow() then
-                                                    FGolbal_ItemMarket_Function_Open()
-                                                  else
-                                                    FGolbal_ItemMarket_Function_Close()
-                                                  end
-                                                else
-                                                  if (CppEnums.ContentsType).Contents_Knowledge == funcButtonType then
-                                                    FGlobal_KnowledgeManagementShow()
-                                                  else
-                                                    if (CppEnums.ContentsType).Contents_Join == funcButtonType then
-                                                      Panel_Join_Show()
-                                                    else
-                                                      if (CppEnums.ContentsType).Contents_Improve == funcButtonType then
-                                                        Panel_Improvement_Show()
-                                                      end
-                                                    end
-                                                  end
-                                                end
-                                              end
-                                            end
-                                            Dialog_clickFuncButtonReq(index)
-                                            Panel_Interest_Knowledge_Hide()
-                                          end
+                                    elseif randomShopConsumeWp <= MyWp then
+                                      local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                      ;
+                                      (MessageBox.showMessageBox)(messageboxData2)
+                                      return 
+                                    end
+                                    count = 2
+                                    targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
+                                    show_DialogPanel()
+                                    if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
+                                      count = 1
+                                      targetWindowList = {Panel_Window_Skill}
+                                    end
+                                    if (((CppEnums.ContentsType).Contents_Auction ~= funcButtonType or (CppEnums.ContentsType).Contents_Inn == funcButtonType) and (CppEnums.ContentsType).Contents_IntimacyGame ~= funcButtonType) or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
+                                      count = 1
+                                      targetWindowList = {Panel_Window_DeliveryForPerson}
+                                    elseif (CppEnums.ContentsType).Contents_Guild == funcButtonType then
+                                      FGlobal_GuildCreateManagerPopup()
+                                    end
+                                    if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_Enchant == funcButtonType then
+                                      PaGlobal_Enchant:enchant_Show()
+                                    elseif (CppEnums.ContentsType).Contents_Socket == funcButtonType then
+                                      Socket_Window_Show()
+                                    elseif (CppEnums.ContentsType).Contents_LordMenu == funcButtonType then
+                                      LordMenu_Show()
+                                    elseif (CppEnums.ContentsType).Contents_Extract == funcButtonType then
+                                      extraction_Open()
+                                    elseif (CppEnums.ContentsType).Contents_TerritoryTrade == funcButtonType then
+                                      npcShop_requestList(funcButtonType)
+                                    elseif (CppEnums.ContentsType).Contents_TerritorySupply == funcButtonType then
+                                      npcShop_requestList(funcButtonType)
+                                    elseif (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
+                                      count = 2
+                                      targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
+                                    elseif (CppEnums.ContentsType).Contents_SupplyShop == funcButtonType then
+                                      npcShop_requestList(funcButtonType)
+                                    elseif (CppEnums.ContentsType).Contents_FishSupplyShop == funcButtonType then
+                                      npcShop_requestList(funcButtonType)
+                                    elseif (CppEnums.ContentsType).Contents_GuildSupplyShop == funcButtonType then
+                                      npcShop_requestList(funcButtonType)
+                                    elseif (CppEnums.ContentsType).Contents_MinorLordMenu == funcButtonType then
+                                      FGlobal_NodeWarMenuOpen()
+                                    end
+                                    Dialog_innerPanelShow(count, targetWindowList)
+                                    if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
+                                      npcShop_requestList(funcButtonType)
+                                      FGlobal_NodeWarMenuClose()
+                                    elseif (CppEnums.ContentsType).Contents_Skill == funcButtonType then
+                                      HandleMLUp_SkillWindow_OpenForLearn()
+                                    elseif (CppEnums.ContentsType).Contents_Repair == funcButtonType then
+                                      PaGlobal_Repair:repair_OpenPanel(true)
+                                    elseif (CppEnums.ContentsType).Contents_Warehouse == funcButtonType then
+                                      Warehouse_OpenPanelFromDialog()
+                                    elseif (CppEnums.ContentsType).Contents_Stable == funcButtonType then
+                                      if isGuildStable() then
+                                        if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
+                                          GuildStableFunction_Open()
+                                        elseif (CppEnums.ServantType).Type_Ship == stable_getServantType() then
+                                          GuildWharfFunction_Open()
+                                        end
+                                      else
+                                        warehouse_requestInfoFromNpc()
+                                        if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
+                                          StableFunction_Open()
+                                        elseif (CppEnums.ServantType).Type_Ship == stable_getServantType() then
+                                          WharfFunction_Open()
+                                        else
+                                          PetFunction_Open()
+                                          PetList_Open()
                                         end
                                       end
+                                      show_DialogPanel()
+                                    elseif (CppEnums.ContentsType).Contents_Transfer == funcButtonType then
+                                      DeliveryInformation_OpenPanelFromDialog()
                                     end
+                                    if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
+                                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_deliveryPerson_ReMake"))
+                                    elseif (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
+                                      npcShop_requestList(funcButtonType)
+                                    elseif (CppEnums.ContentsType).Contents_ItemMarket == funcButtonType then
+                                      if Panel_Window_ItemMarket:IsUISubApp() then
+                                        Panel_Window_ItemMarket:CloseUISubApp()
+                                        Panel_Window_ItemMarket:SetShow(false)
+                                      end
+                                      if not Panel_Window_ItemMarket:GetShow() then
+                                        FGolbal_ItemMarket_Function_Open()
+                                      else
+                                        FGolbal_ItemMarket_Function_Close()
+                                      end
+                                    elseif (CppEnums.ContentsType).Contents_Knowledge == funcButtonType then
+                                      FGlobal_KnowledgeManagementShow()
+                                    elseif (CppEnums.ContentsType).Contents_Join == funcButtonType then
+                                      Panel_Join_Show()
+                                    elseif (CppEnums.ContentsType).Contents_Improve == funcButtonType then
+                                      Panel_Improvement_Show()
+                                    end
+                                    Dialog_clickFuncButtonReq(index)
+                                    Panel_Interest_Knowledge_Hide()
+                                    -- DECOMPILER ERROR: 53 unprocessed JMP targets
                                   end
                                 end
                               end
@@ -3175,8 +3130,19 @@ HandleClickedFilterButton = function(index)
   Dialog_updateMainDialog()
 end
 
+HandleOverd_FilterAllButton = function(isShow)
+  -- function num : 0_35 , upvalues : _uiFilterRadioButton
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local uiControl = _uiFilterRadioButton[0]
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_QUESTFILTER_ALL")
+  TooltipSimple_Show(uiControl, name)
+end
+
 HandleClickedFuncButton = function(index)
-  -- function num : 0_35 , upvalues : _shopType, _indexWhenWorkerShopClicked
+  -- function num : 0_36 , upvalues : _uiNpcDialog, _uiFilterRadioButton, _shopType, _indexWhenWorkerShopClicked
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -3228,260 +3194,216 @@ HandleClickedFuncButton = function(index)
   local MyWp = (getSelfPlayer()):getWp()
   local inventory = ((getSelfPlayer()):get()):getInventory()
   local invenSize = inventory:getFreeCount()
-  if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
-    local shopType = dialogData:getShopType()
-    if _shopType.eShopType_Worker == shopType then
-      _indexWhenWorkerShopClicked = index
-      local pcPosition = ((getSelfPlayer()):get()):getPosition()
-      local regionInfo = getRegionInfoByPosition(pcPosition)
-      local region = regionInfo:get()
-      local regionPlantKey = regionInfo:getPlantKeyByWaypointKey()
-      local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(regionPlantKey, 0)
-      local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(regionPlantKey)
-      local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
-      local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
-      do
-        if s64_maxWeight <= s64_allWeight then
-          local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  do
+    if (CppEnums.ContentsType).Contents_Quest == funcButtonType or (CppEnums.ContentsType).Contents_NewQuest == funcButtonType then
+      local talker = dialog_getTalker()
+      if talker == nil then
+        _uiNpcDialog:SetShow(false)
+        for index = 0, 3 do
+          (_uiFilterRadioButton[index]):SetShow(true)
           ;
-          (MessageBox.showMessageBox)(messageboxData)
-          return 
+          (_uiFilterRadioButton[index]):SetCheck(index == 1)
         end
+        ToClient_SetFilterType(1, true)
+      end
+    end
+    if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
+      local shopType = dialogData:getShopType()
+      if _shopType.eShopType_Worker == shopType then
+        _indexWhenWorkerShopClicked = index
+        local pcPosition = ((getSelfPlayer()):get()):getPosition()
+        local regionInfo = getRegionInfoByPosition(pcPosition)
+        local region = regionInfo:get()
+        local regionPlantKey = regionInfo:getPlantKeyByWaypointKey()
+        local waitWorkerCount = ToClient_getPlantWaitWorkerListCount(regionPlantKey, 0)
+        local maxWorkerCount = ToClient_getTownWorkerMaxCapacity(regionPlantKey)
+        local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
+        local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
         do
-          if ((getSelfPlayer()):get()):checkWorkerWorkingServerNo() ~= 0 then
-            local messageboxData3 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+          if s64_maxWeight <= s64_allWeight then
+            local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTDESC"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
             ;
-            (MessageBox.showMessageBox)(messageboxData3)
+            (MessageBox.showMessageBox)(messageboxData)
             return 
           end
           do
-            if waitWorkerCount == maxWorkerCount then
-              local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+            if ((getSelfPlayer()):get()):checkWorkerWorkingServerNo() ~= 0 then
+              local messageboxData3 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ_NotSameServerNo"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
               ;
-              (MessageBox.showMessageBox)(messageboxData)
+              (MessageBox.showMessageBox)(messageboxData3)
               return 
             end
             do
-              if MyWp >= 5 then
-                local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              if waitWorkerCount == maxWorkerCount then
+                local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_ReSelect"), content = PAGetString(Defines.StringSheet_GAME, "Lua_WorkerShop_Cant_Employ"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                 ;
-                (MessageBox.showMessageBox)(messageboxData2)
+                (MessageBox.showMessageBox)(messageboxData)
                 return 
               end
-              if _shopType.eShopType_RandomShop == shopType then
-                do
-                  if invenSize <= 0 then
-                    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                    ;
-                    (MessageBox.showMessageBox)(messageboxData)
-                    return 
-                  end
-                  local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
-                  local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
+              do
+                if MyWp >= 5 then
+                  local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_WORKER", "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                  ;
+                  (MessageBox.showMessageBox)(messageboxData2)
+                  return 
+                end
+                if _shopType.eShopType_RandomShop == shopType then
                   do
-                    if s64_maxWeight <= s64_allWeight then
-                      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                    if invenSize <= 0 then
+                      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                       ;
                       (MessageBox.showMessageBox)(messageboxData)
                       return 
                     end
-                    local IsRamdomShopkeepItem = ToClient_IsRandomShopKeepItem()
-                    if IsRamdomShopkeepItem == false then
-                      local randomShopConsumeWp = FromClient_getRandomShopConsumWp()
-                      if MyWp < randomShopConsumeWp then
-                        local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                    local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
+                    local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
+                    do
+                      if s64_maxWeight <= s64_allWeight then
+                        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                         ;
-                        (MessageBox.showMessageBox)(messageboxData2)
+                        (MessageBox.showMessageBox)(messageboxData)
                         return 
-                      else
+                      end
+                      local IsRamdomShopkeepItem = ToClient_IsRandomShopKeepItem()
+                      if IsRamdomShopkeepItem == false then
+                        local randomShopConsumeWp = ToClient_getRandomShopConsumWp()
+                        if MyWp < randomShopConsumeWp then
+                          local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                          ;
+                          (MessageBox.showMessageBox)(messageboxData2)
+                          return 
+                        elseif randomShopConsumeWp <= MyWp then
+                          local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                          ;
+                          (MessageBox.showMessageBox)(messageboxData2)
+                          return 
+                        end
+                      end
+                      if _shopType.eShopType_DayRandomShop == shopType then
                         do
+                          if invenSize <= 0 then
+                            local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                            ;
+                            (MessageBox.showMessageBox)(messageboxData)
+                            return 
+                          end
+                          local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
+                          local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
                           do
-                            if randomShopConsumeWp <= MyWp then
-                              local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                              ;
-                              (MessageBox.showMessageBox)(messageboxData2)
-                              return 
-                            end
-                            if _shopType.eShopType_DayRandomShop == shopType then
+                            do
                               do
-                                if invenSize <= 0 then
-                                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_FREESLOT"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                if s64_maxWeight <= s64_allWeight then
+                                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
                                   ;
                                   (MessageBox.showMessageBox)(messageboxData)
                                   return 
                                 end
-                                local s64_allWeight = Int64toInt32(((getSelfPlayer()):get()):getCurrentWeight_s64())
-                                local s64_maxWeight = Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64())
-                                do
-                                  if s64_maxWeight <= s64_allWeight then
-                                    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHTOVER_ALERTTITLE"), content = PAGetString(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_SECRETSHOP_WEIGHTOVER"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                                    ;
-                                    (MessageBox.showMessageBox)(messageboxData)
-                                    return 
-                                  end
-                                  local randomShopConsumeWp = 10
-                                  if MyWp < randomShopConsumeWp then
-                                    local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                                    ;
-                                    (MessageBox.showMessageBox)(messageboxData2)
-                                    return 
+                                local randomShopConsumeWp = 10
+                                if MyWp < randomShopConsumeWp then
+                                  local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_LACK_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                  ;
+                                  (MessageBox.showMessageBox)(messageboxData2)
+                                  return 
+                                elseif randomShopConsumeWp <= MyWp then
+                                  local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                  ;
+                                  (MessageBox.showMessageBox)(messageboxData2)
+                                  return 
+                                end
+                                count = 2
+                                targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
+                                show_DialogPanel()
+                                if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
+                                  count = 1
+                                  targetWindowList = {Panel_Window_Skill}
+                                end
+                                if (((CppEnums.ContentsType).Contents_Auction ~= funcButtonType or (CppEnums.ContentsType).Contents_Inn == funcButtonType) and (CppEnums.ContentsType).Contents_IntimacyGame ~= funcButtonType) or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
+                                  count = 1
+                                  targetWindowList = {Panel_Window_DeliveryForPerson}
+                                elseif (CppEnums.ContentsType).Contents_Guild == funcButtonType then
+                                  FGlobal_GuildCreateManagerPopup()
+                                end
+                                if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_Enchant == funcButtonType then
+                                  PaGlobal_Enchant:enchant_Show()
+                                elseif (CppEnums.ContentsType).Contents_Socket == funcButtonType then
+                                  Socket_Window_Show()
+                                elseif (CppEnums.ContentsType).Contents_LordMenu == funcButtonType then
+                                  LordMenu_Show()
+                                elseif (CppEnums.ContentsType).Contents_Extract == funcButtonType then
+                                  extraction_Open()
+                                elseif (CppEnums.ContentsType).Contents_TerritoryTrade == funcButtonType then
+                                  npcShop_requestList(funcButtonType)
+                                elseif (CppEnums.ContentsType).Contents_TerritorySupply == funcButtonType then
+                                  npcShop_requestList(funcButtonType)
+                                elseif (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
+                                  count = 2
+                                  targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
+                                elseif (CppEnums.ContentsType).Contents_SupplyShop == funcButtonType then
+                                  npcShop_requestList(funcButtonType)
+                                elseif (CppEnums.ContentsType).Contents_FishSupplyShop == funcButtonType then
+                                  npcShop_requestList(funcButtonType)
+                                elseif (CppEnums.ContentsType).Contents_GuildSupplyShop == funcButtonType then
+                                  npcShop_requestList(funcButtonType)
+                                elseif (CppEnums.ContentsType).Contents_MinorLordMenu == funcButtonType then
+                                  FGlobal_NodeWarMenuOpen()
+                                elseif (CppEnums.ContentsType).Contents_Improve == funcButtonType then
+                                  Panel_Improvement_Show()
+                                end
+                                Dialog_innerPanelShow(count, targetWindowList)
+                                if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
+                                  npcShop_requestList(funcButtonType)
+                                  FGlobal_NodeWarMenuClose()
+                                elseif (CppEnums.ContentsType).Contents_Skill == funcButtonType then
+                                  HandleMLUp_SkillWindow_OpenForLearn()
+                                elseif (CppEnums.ContentsType).Contents_Repair == funcButtonType then
+                                  PaGlobal_Repair:repair_OpenPanel(true)
+                                elseif (CppEnums.ContentsType).Contents_Warehouse == funcButtonType then
+                                  Warehouse_OpenPanelFromDialog()
+                                elseif (CppEnums.ContentsType).Contents_Stable == funcButtonType then
+                                  if isGuildStable() then
+                                    if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
+                                      GuildStableFunction_Open()
+                                    elseif (CppEnums.ServantType).Type_Ship == stable_getServantType() then
+                                      GuildWharfFunction_Open()
+                                    end
                                   else
-                                    do
-                                      do
-                                        do
-                                          if randomShopConsumeWp <= MyWp then
-                                            local messageboxData2 = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_DIALOG_MAIN_CONFIRM_RANDOMITEM_WP", "randomShopConsumeWp", randomShopConsumeWp, "MyWp", MyWp), functionYes = RandomWorkerSelectUseMyWpConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                                            ;
-                                            (MessageBox.showMessageBox)(messageboxData2)
-                                            return 
-                                          end
-                                          count = 2
-                                          targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
-                                          show_DialogPanel()
-                                          if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
-                                            count = 1
-                                            targetWindowList = {Panel_Window_Skill}
-                                          else
-                                          end
-                                          if (((CppEnums.ContentsType).Contents_Auction ~= funcButtonType or (CppEnums.ContentsType).Contents_Inn == funcButtonType) and (CppEnums.ContentsType).Contents_IntimacyGame ~= funcButtonType) or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
-                                            count = 1
-                                            targetWindowList = {Panel_Window_DeliveryForPerson}
-                                          else
-                                            if (CppEnums.ContentsType).Contents_Guild == funcButtonType then
-                                              FGlobal_GuildCreateManagerPopup()
-                                            else
-                                            end
-                                          end
-                                          if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_Enchant == funcButtonType then
-                                            PaGlobal_Enchant:enchant_Show()
-                                          else
-                                            if (CppEnums.ContentsType).Contents_Socket == funcButtonType then
-                                              Socket_Window_Show()
-                                            else
-                                              if (CppEnums.ContentsType).Contents_LordMenu == funcButtonType then
-                                                LordMenu_Show()
-                                              else
-                                                if (CppEnums.ContentsType).Contents_Extract == funcButtonType then
-                                                  extraction_Open()
-                                                else
-                                                  if (CppEnums.ContentsType).Contents_TerritoryTrade == funcButtonType then
-                                                    npcShop_requestList(funcButtonType)
-                                                  else
-                                                    if (CppEnums.ContentsType).Contents_TerritorySupply == funcButtonType then
-                                                      npcShop_requestList(funcButtonType)
-                                                    else
-                                                      if (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
-                                                        count = 2
-                                                        targetWindowList = {Panel_Window_NpcShop, Panel_Window_Inventory}
-                                                      else
-                                                        if (CppEnums.ContentsType).Contents_SupplyShop == funcButtonType then
-                                                          npcShop_requestList(funcButtonType)
-                                                        else
-                                                          if (CppEnums.ContentsType).Contents_FishSupplyShop == funcButtonType then
-                                                            npcShop_requestList(funcButtonType)
-                                                          else
-                                                            if (CppEnums.ContentsType).Contents_GuildSupplyShop == funcButtonType then
-                                                              npcShop_requestList(funcButtonType)
-                                                            else
-                                                              if (CppEnums.ContentsType).Contents_MinorLordMenu == funcButtonType then
-                                                                FGlobal_NodeWarMenuOpen()
-                                                              else
-                                                                if (CppEnums.ContentsType).Contents_Improve == funcButtonType then
-                                                                  Panel_Improvement_Show()
-                                                                end
-                                                              end
-                                                            end
-                                                          end
-                                                        end
-                                                      end
-                                                    end
-                                                  end
-                                                end
-                                              end
-                                            end
-                                          end
-                                          Dialog_innerPanelShow(count, targetWindowList)
-                                          if (CppEnums.ContentsType).Contents_Shop == funcButtonType then
-                                            npcShop_requestList(funcButtonType)
-                                            FGlobal_NodeWarMenuClose()
-                                          else
-                                            if (CppEnums.ContentsType).Contents_Skill == funcButtonType then
-                                              HandleMLUp_SkillWindow_OpenForLearn()
-                                            else
-                                              if (CppEnums.ContentsType).Contents_Repair == funcButtonType then
-                                                PaGlobal_Repair:repair_OpenPanel(true)
-                                              else
-                                                if (CppEnums.ContentsType).Contents_Warehouse == funcButtonType then
-                                                  Warehouse_OpenPanelFromDialog()
-                                                else
-                                                  if (CppEnums.ContentsType).Contents_Stable == funcButtonType then
-                                                    if isGuildStable() then
-                                                      if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
-                                                        GuildStableFunction_Open()
-                                                      else
-                                                        if (CppEnums.ServantType).Type_Ship == stable_getServantType() then
-                                                          GuildWharfFunction_Open()
-                                                        end
-                                                      end
-                                                    else
-                                                      warehouse_requestInfoFromNpc()
-                                                      if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
-                                                        StableFunction_Open()
-                                                      else
-                                                        if (CppEnums.ServantType).Type_Ship == stable_getServantType() then
-                                                          WharfFunction_Open()
-                                                        else
-                                                          PetFunction_Open()
-                                                          PetList_Open()
-                                                        end
-                                                      end
-                                                    end
-                                                    show_DialogPanel()
-                                                  else
-                                                    if (CppEnums.ContentsType).Contents_Transfer == funcButtonType then
-                                                      DeliveryInformation_OpenPanelFromDialog()
-                                                    else
-                                                    end
-                                                  end
-                                                end
-                                              end
-                                            end
-                                          end
-                                          if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
-                                            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_deliveryPerson_ReMake"))
-                                          else
-                                            if (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
-                                              npcShop_requestList(funcButtonType)
-                                            else
-                                              if (CppEnums.ContentsType).Contents_ItemMarket == funcButtonType then
-                                                if Panel_Window_ItemMarket:IsUISubApp() then
-                                                  Panel_Window_ItemMarket:CloseUISubApp()
-                                                  Panel_Window_ItemMarket:SetShow(false)
-                                                end
-                                                if not Panel_Window_ItemMarket:GetShow() then
-                                                  FGolbal_ItemMarket_Function_Open()
-                                                else
-                                                  FGolbal_ItemMarket_Function_Close()
-                                                end
-                                              else
-                                                if (CppEnums.ContentsType).Contents_Knowledge == funcButtonType then
-                                                  FGlobal_KnowledgeManagementShow()
-                                                else
-                                                  if (CppEnums.ContentsType).Contents_Join == funcButtonType then
-                                                    Panel_Join_Show()
-                                                  end
-                                                end
-                                              end
-                                            end
-                                          end
-                                          PaGlobal_TutorialManager:handleClickedDialogFuncButton(funcButtonType)
-                                          Dialog_clickFuncButtonReq(index)
-                                          Panel_Interest_Knowledge_Hide()
-                                        end
-                                      end
+                                    warehouse_requestInfoFromNpc()
+                                    if (CppEnums.ServantType).Type_Vehicle == stable_getServantType() then
+                                      StableFunction_Open()
+                                    elseif (CppEnums.ServantType).Type_Ship == stable_getServantType() then
+                                      WharfFunction_Open()
+                                    else
+                                      PetFunction_Open()
+                                      PetList_Open()
                                     end
                                   end
+                                  show_DialogPanel()
+                                elseif (CppEnums.ContentsType).Contents_Transfer == funcButtonType then
+                                  DeliveryInformation_OpenPanelFromDialog()
                                 end
+                                if (CppEnums.ContentsType).Contents_Explore ~= funcButtonType or (CppEnums.ContentsType).Contents_DeliveryPerson == funcButtonType then
+                                  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "Lua_deliveryPerson_ReMake"))
+                                elseif (CppEnums.ContentsType).Contents_GuildShop == funcButtonType then
+                                  npcShop_requestList(funcButtonType)
+                                elseif (CppEnums.ContentsType).Contents_ItemMarket == funcButtonType then
+                                  if Panel_Window_ItemMarket:IsUISubApp() then
+                                    Panel_Window_ItemMarket:CloseUISubApp()
+                                    Panel_Window_ItemMarket:SetShow(false)
+                                  end
+                                  if not Panel_Window_ItemMarket:GetShow() then
+                                    FGolbal_ItemMarket_Function_Open()
+                                  else
+                                    FGolbal_ItemMarket_Function_Close()
+                                  end
+                                elseif (CppEnums.ContentsType).Contents_Knowledge == funcButtonType then
+                                  FGlobal_KnowledgeManagementShow()
+                                elseif (CppEnums.ContentsType).Contents_Join == funcButtonType then
+                                  Panel_Join_Show()
+                                end
+                                PaGlobal_TutorialManager:handleClickedDialogFuncButton(funcButtonType)
+                                Dialog_clickFuncButtonReq(index)
+                                Panel_Interest_Knowledge_Hide()
+                                -- DECOMPILER ERROR: 53 unprocessed JMP targets
                               end
                             end
                           end
@@ -3500,26 +3422,26 @@ HandleClickedFuncButton = function(index)
 end
 
 FGlobal_FirstLearnSkill_WindowShow = function()
-  -- function num : 0_36 , upvalues : _skillTutorial
+  -- function num : 0_37 , upvalues : _skillTutorial
   _skillTutorial = true
   HandleClickedFuncButton((CppEnums.ContentsType).Contents_Skill)
   _skillTutorial = false
 end
 
 isSkillLearnTutorial = function()
-  -- function num : 0_37 , upvalues : _skillTutorial
+  -- function num : 0_38 , upvalues : _skillTutorial
   return _skillTutorial
 end
 
 FGlobal_Dialog_TradeOpen = function()
-  -- function num : 0_38 , upvalues : tradeIndex
+  -- function num : 0_39 , upvalues : tradeIndex
   if tradeIndex >= 0 then
     HandleClickedFuncButton(tradeIndex)
   end
 end
 
 Dialog_innerPanelShow = function(count, targetWindowList)
-  -- function num : 0_39
+  -- function num : 0_40
   if count <= 0 then
     return 
   end
@@ -3547,7 +3469,7 @@ Dialog_innerPanelShow = function(count, targetWindowList)
 end
 
 HandleClickedDialogButton = function(index)
-  -- function num : 0_40 , upvalues : _doConfirmIndex, _isQuestComplete
+  -- function num : 0_41 , upvalues : _doConfirmIndex, _isQuestComplete, _uiFilterRadioButton, _uiNpcDialog
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -3563,22 +3485,26 @@ HandleClickedDialogButton = function(index)
   else
     do
       HandleClickedDialogButtonReal(_doConfirmIndex)
+      for fIndex = 0, 3 do
+        (_uiFilterRadioButton[fIndex]):SetShow(false)
+      end
+      _uiNpcDialog:SetShow(true)
     end
   end
 end
 
 _doConfirmYes = function()
-  -- function num : 0_41 , upvalues : _doConfirmIndex
+  -- function num : 0_42 , upvalues : _doConfirmIndex
   FGlobal_SelectRewardItemNameClear()
   HandleClickedDialogButtonReal(_doConfirmIndex)
 end
 
 _doConfirmNo = function()
-  -- function num : 0_42
+  -- function num : 0_43
 end
 
 HandleClickedDialogButtonReal = function(index)
-  -- function num : 0_43 , upvalues : _dialogIndex, handleClickedQuestComplete, UI_BTN_TYPE, UI_DS
+  -- function num : 0_44 , upvalues : _dialogIndex, handleClickedQuestComplete, UI_BTN_TYPE, UI_DS
   local dialogData = ToClient_GetCurrentDialogData()
   local dlgBtnCnt = dialogData:getDialogButtonCount()
   if dlgBtnCnt <= 0 then
@@ -3587,7 +3513,7 @@ HandleClickedDialogButtonReal = function(index)
   end
   index = index + _dialogIndex
   local clickDialogButtonReq = function()
-    -- function num : 0_43_0 , upvalues : index, handleClickedQuestComplete
+    -- function num : 0_44_0 , upvalues : index, handleClickedQuestComplete
     local displayData = Dialog_getButtonDisplayData(index)
     local questInfo = questList_isClearQuest(1038, 2)
     if displayData:empty() then
@@ -3613,13 +3539,13 @@ HandleClickedDialogButtonReal = function(index)
     do
       if ExpirationItemCheck(dialogButton:getNeedItemKey()) then
         local CancelExchange = function()
-    -- function num : 0_43_1
+    -- function num : 0_44_1
     return 
   end
 
         do
           local GoExchange = function()
-    -- function num : 0_43_2 , upvalues : index
+    -- function num : 0_44_2 , upvalues : index
     HandleClickedDialogButton_ShowData(index)
   end
 
@@ -3640,17 +3566,17 @@ HandleClickedDialogButtonReal = function(index)
                   local exchangeCount = (math.floor)(itemCount / needItemCount)
                   if exchangeCount > 1 and dialogButton._isValidMultipleExchange then
                     local dialogExchangeCountSet = function(inputNum)
-    -- function num : 0_43_3 , upvalues : dialogButton, dialogData, clickDialogButtonReq, needItemCount
+    -- function num : 0_44_3 , upvalues : dialogButton, dialogData, clickDialogButtonReq, needItemCount
     local itemStaticWrapper = getItemEnchantStaticStatus(ItemEnchantKey(dialogButton:getNeedItemKey()))
     local _exchangeCount = Int64toInt32(inputNum)
     local doExchange = function()
-      -- function num : 0_43_3_0 , upvalues : dialogData, _exchangeCount, clickDialogButtonReq
+      -- function num : 0_44_3_0 , upvalues : dialogData, _exchangeCount, clickDialogButtonReq
       dialogData:setExchangeCount(_exchangeCount)
       clickDialogButtonReq()
     end
 
     local exchangeOne = function()
-      -- function num : 0_43_3_1 , upvalues : dialogData, clickDialogButtonReq
+      -- function num : 0_44_3_1 , upvalues : dialogData, clickDialogButtonReq
       dialogData:setExchangeCount(1)
       clickDialogButtonReq()
     end
@@ -3685,7 +3611,7 @@ HandleClickedDialogButtonReal = function(index)
 end
 
 ExchangeItem_HaveCount = function(itemKey)
-  -- function num : 0_44
+  -- function num : 0_45
   local selfProxy = (getSelfPlayer()):get()
   if selfProxy == nil then
     return 
@@ -3708,7 +3634,7 @@ ExchangeItem_HaveCount = function(itemKey)
 end
 
 HandleClickedDialogButton_ShowData = function(index)
-  -- function num : 0_45 , upvalues : handleClickedQuestComplete
+  -- function num : 0_46 , upvalues : handleClickedQuestComplete
   local displayData = Dialog_getButtonDisplayData(index)
   local questInfo = questList_isClearQuest(1038, 2)
   if displayData:empty() then
@@ -3729,7 +3655,7 @@ HandleClickedDialogButton_ShowData = function(index)
 end
 
 ExpirationItemCheck = function(itemKey)
-  -- function num : 0_46
+  -- function num : 0_47
   local selfProxy = (getSelfPlayer()):get()
   if selfProxy == nil then
     return 
@@ -3754,7 +3680,7 @@ ExpirationItemCheck = function(itemKey)
 end
 
 FGlobal_HideDialog = function()
-  -- function num : 0_47 , upvalues : dialogShowCheck_Once, handleClickedQuestComplete
+  -- function num : 0_48 , upvalues : dialogShowCheck_Once, handleClickedQuestComplete, _uiFilterRadioButton
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -3783,16 +3709,21 @@ FGlobal_HideDialog = function()
   FGlobal_RemoteControl_Show(1)
   RemoteControl_Interaction_ShowToggloe(true)
   ToClient_SetFilterType(0, false)
-  FromClient_ShowFilterButton(false)
+  for index = 0, 3 do
+    (_uiFilterRadioButton[index]):SetShow(false)
+    ;
+    (_uiFilterRadioButton[index]):SetCheck(index == 0)
+  end
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 setIgnoreShowDialog = function(ignoreShowDialog)
-  -- function num : 0_48 , upvalues : _ignoreShowDialog
+  -- function num : 0_49 , upvalues : _ignoreShowDialog
   _ignoreShowDialog = ignoreShowDialog
 end
 
 dialog_CloseNpcTalk = function(isSetWait)
-  -- function num : 0_49 , upvalues : handleClickedQuestComplete
+  -- function num : 0_50 , upvalues : handleClickedQuestComplete
   if FGlobal_IsChecked_SkillCommand() == true then
     Panel_SkillCommand:SetShow(true)
     changePositionBySever(Panel_SkillCommand, (CppEnums.PAGameUIType).PAGameUIPanel_SkillCommand, true, true, false)
@@ -3809,7 +3740,7 @@ dialog_CloseNpcTalk = function(isSetWait)
 end
 
 Panel_Dialog_RestoreUI = function()
-  -- function num : 0_50 , upvalues : handleClickedQuestComplete
+  -- function num : 0_51 , upvalues : handleClickedQuestComplete
   SetUIMode((Defines.UIMode).eUIMode_Default)
   if Panel_Npc_Dialog:IsShow() then
     FGlobal_Dialog_renderMode:reset()
@@ -3851,7 +3782,7 @@ Panel_Dialog_RestoreUI = function()
 end
 
 HandleClickedExitButton = function(isSetWait)
-  -- function num : 0_51
+  -- function num : 0_52
   FGlobal_Dialog_HideTutorialStartButtonList()
   QuickSlot_UpdateData()
   FGlobal_QuestWidget_CalcScrollButtonSize()
@@ -3868,9 +3799,12 @@ HandleClickedExitButton = function(isSetWait)
 end
 
 HandleClickedBackButton = function()
-  -- function num : 0_52 , upvalues : _dialogIndex
+  -- function num : 0_53 , upvalues : _uiFilterRadioButton, _dialogIndex
   if Panel_Win_System:GetShow() then
     return 
+  end
+  if Panel_Window_Enchant:GetShow() then
+    PaGlobal_Enchant:enchantClose()
   end
   if check_ShowWindow() then
     close_WindowPanelList()
@@ -3903,17 +3837,22 @@ HandleClickedBackButton = function()
     PaGlobal_MasterpieceAuction:close()
   end
   ToClient_SetFilterType(0, false)
-  FromClient_ShowFilterButton(false)
+  for index = 0, 3 do
+    (_uiFilterRadioButton[index]):SetShow(false)
+    ;
+    (_uiFilterRadioButton[index]):SetCheck(index == 0)
+  end
   _dialogIndex = 0
   Dialog_PageButton_Init()
   ReqeustDialog_retryTalk()
+  -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 local DCCOT = CppEnums.DlgCommonConditionOperatorType
 local operatorString = {[(CppEnums.DlgCommonConditionOperatorType).Equal] = "", [(CppEnums.DlgCommonConditionOperatorType).Large] = "<PAColor0xFFFF0000>â–\178<PAOldColor>", [(CppEnums.DlgCommonConditionOperatorType).Small] = "<PAColor0xFF0000FF>â–\188<PAOldColor>"}
 local giftshowgap = 0.025
 FruitageItem_ShowTooltip = function(percent)
-  -- function num : 0_53 , upvalues : intimacyValueBuffer, giftshowgap, operatorString, giftNotice
+  -- function num : 0_54 , upvalues : intimacyValueBuffer, giftshowgap, operatorString, giftNotice
   local textSum = ""
   for key,value in pairs(intimacyValueBuffer) do
     if (math.abs)(value.giftPercent - percent) < giftshowgap or (math.abs)(value.giftPercent - (percent - 1)) < giftshowgap or (math.abs)(value.giftPercent - (percent + 1)) < giftshowgap then
@@ -3932,12 +3871,12 @@ FruitageItem_ShowTooltip = function(percent)
 end
 
 FruitageItem_HideTooltip = function()
-  -- function num : 0_54 , upvalues : giftNotice
+  -- function num : 0_55 , upvalues : giftNotice
   giftNotice:SetShow(false)
 end
 
 FruitageValue_ShowTooltip = function(isShow)
-  -- function num : 0_55 , upvalues : intimacyNoticeText, UI_TM, intimacyNotice, _intimacyCircularProgress
+  -- function num : 0_56 , upvalues : intimacyNoticeText, UI_TM, intimacyNotice, _intimacyCircularProgress
   intimacyNoticeText:SetAutoResize(true)
   intimacyNoticeText:SetTextMode(UI_TM.eTextMode_AutoWrap)
   intimacyNoticeText:SetSize(200, 250)
@@ -3956,7 +3895,7 @@ end
 
 local VehicleInfo_Window = nil
 ExitStable_VehicleInfo_Off = function(value)
-  -- function num : 0_56 , upvalues : VehicleInfo_Window
+  -- function num : 0_57 , upvalues : VehicleInfo_Window
   if value == true then
     VehicleInfo_Window = value
   else
@@ -3968,7 +3907,7 @@ ExitStable_VehicleInfo_Off = function(value)
 end
 
 FGlobal_Dialog_FindFuncButtonIndexByType = function(targetFuncButtonType)
-  -- function num : 0_57
+  -- function num : 0_58
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return -1
@@ -3985,7 +3924,7 @@ FGlobal_Dialog_FindFuncButtonIndexByType = function(targetFuncButtonType)
 end
 
 FGlobal_Dialog_GetPositionByIndex = function(ii)
-  -- function num : 0_58 , upvalues : _uiDialogButton
+  -- function num : 0_59 , upvalues : _uiDialogButton
   local Position = {_Return = false, _PosX = -1, _PosY = -1}
   if ii < 0 then
     return Position
@@ -3997,7 +3936,7 @@ FGlobal_Dialog_GetPositionByIndex = function(ii)
 end
 
 FGlobal_Dialog_GetFuncPositionNewQuestButton = function()
-  -- function num : 0_59 , upvalues : _uiFuncButton
+  -- function num : 0_60 , upvalues : _uiFuncButton
   local Position = {_Return = false, _PosX = -1, _PosY = -1}
   local Index = FGlobal_Dialog_FindFuncButtonIndexByType((CppEnums.ContentsType).Contents_NewQuest)
   if Index == -1 then
@@ -4010,7 +3949,7 @@ FGlobal_Dialog_GetFuncPositionNewQuestButton = function()
 end
 
 FGlobal_Dialog_FindDialogButtonIndexByType = function(targetFuncButtonType)
-  -- function num : 0_60
+  -- function num : 0_61
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return -1
@@ -4027,7 +3966,7 @@ FGlobal_Dialog_FindDialogButtonIndexByType = function(targetFuncButtonType)
 end
 
 FGlobal_Dialog_GetDialogButtonPositionByIndex = function(ii)
-  -- function num : 0_61 , upvalues : _uiFuncButton
+  -- function num : 0_62 , upvalues : _uiFuncButton
   if ii < 0 then
     return nil
   end
@@ -4038,17 +3977,17 @@ FGlobal_Dialog_GetDialogButtonPositionByIndex = function(ii)
 end
 
 FGlobal_AddEffect_ExitButton = function(effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
-  -- function num : 0_62 , upvalues : _uiButtonExit
+  -- function num : 0_63 , upvalues : _uiButtonExit
   _uiButtonExit:AddEffect(effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
 end
 
 FGlobal_EraseAllEffect_ExitButton = function()
-  -- function num : 0_63 , upvalues : _uiButtonExit
+  -- function num : 0_64 , upvalues : _uiButtonExit
   _uiButtonExit:EraseAllEffect()
 end
 
 FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEffectPosX, offsetEffectPosY)
-  -- function num : 0_64 , upvalues : _uiFuncButton
+  -- function num : 0_65 , upvalues : _uiFuncButton
   if buttonNo == -1 or buttonNo == nil then
     return 
   end
@@ -4057,7 +3996,7 @@ FGlobal_AddEffect_DialogButton = function(buttonNo, effectName, isLoop, offsetEf
 end
 
 FGlobal_EraseAllEffect_DialogButton = function(buttonNo)
-  -- function num : 0_65 , upvalues : _uiFuncButton
+  -- function num : 0_66 , upvalues : _uiFuncButton
   if buttonNo == -1 or buttonNo == nil then
     return 
   end
@@ -4066,7 +4005,7 @@ FGlobal_EraseAllEffect_DialogButton = function(buttonNo)
 end
 
 FromClient_Dialog_onScreenResize = function()
-  -- function num : 0_66 , upvalues : _uiNpcDialog, _scrollControl, _uiHalfLine, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _SpacebarIcon, _uiNextButton, _uiButtonExit, _uiButtonBack, _prevPageButton, _nextPageButton, _pageValue, _rBtnPosX, _rBtnPosY
+  -- function num : 0_67 , upvalues : _uiNpcDialog, _scrollControl, _uiHalfLine, _uiDialogButton, _uiNoticeNeedInfo, _uiNeedWpAni, _SpacebarIcon, _uiNextButton, _uiButtonExit, _uiButtonBack, _prevPageButton, _nextPageButton, _pageValue, _rBtnPosX, _rBtnPosY, _uiFilterRadioButton
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
   Panel_Npc_Dialog:SetSize(sizeX, Panel_Npc_Dialog:GetSizeY())
@@ -4091,7 +4030,7 @@ FromClient_Dialog_onScreenResize = function()
     ;
     (_uiNeedWpAni[index]):SetPosY((_uiDialogButton[index]):GetPosY())
   end
-  _SpacebarIcon:SetPosX((_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() + 10)
+  _SpacebarIcon:SetPosX((_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() - _SpacebarIcon:GetSizeX() - 5)
   _uiNextButton:SetPosX(sizeX / 2 - 175)
   _SpacebarIcon:SetSize(40, 28)
   _uiButtonExit:SetPosX(sizeX - (string.format)("%.0f", sizeX / 13 + 100))
@@ -4102,10 +4041,13 @@ FromClient_Dialog_onScreenResize = function()
   InterestKnowledge_onScreenResize()
   _rBtnPosX = (_uiDialogButton[0]):GetPosX() + (_uiDialogButton[0]):GetSizeX() - _SpacebarIcon:GetSizeX() - 5
   _rBtnPosY = (_uiDialogButton[0]):GetPosY()
+  for index = 0, 3 do
+    (_uiFilterRadioButton[index]):ComputePos()
+  end
 end
 
 Panel_Dialog_EnchantHelp_Func = function(isOn)
-  -- function num : 0_67 , upvalues : _txt_EnchantHelp, _txt_EnchantHelp_Desc, UI_TM
+  -- function num : 0_68 , upvalues : _txt_EnchantHelp, _txt_EnchantHelp_Desc, UI_TM
   local mouse_posX = getMousePosX()
   local mouse_posY = getMousePosY()
   local panel_posX = Panel_Npc_Dialog:GetPosX()
@@ -4130,7 +4072,7 @@ Panel_Dialog_EnchantHelp_Func = function(isOn)
 end
 
 Panel_Dialog_SocketHelp_Func = function(isOn)
-  -- function num : 0_68 , upvalues : _txt_SocketHelp, _txt_SocketHelp_Desc, UI_TM
+  -- function num : 0_69 , upvalues : _txt_SocketHelp, _txt_SocketHelp_Desc, UI_TM
   local mouse_posX = getMousePosX()
   local mouse_posY = getMousePosY()
   local panel_posX = Panel_Npc_Dialog:GetPosX()
@@ -4155,7 +4097,7 @@ Panel_Dialog_SocketHelp_Func = function(isOn)
 end
 
 wpHelp_Func = function(isOn)
-  -- function num : 0_69 , upvalues : _wpHelp, UI_TM, isFirstShowTooltip
+  -- function num : 0_70 , upvalues : _wpHelp, UI_TM, isFirstShowTooltip
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -4188,12 +4130,12 @@ wpHelp_Func = function(isOn)
 end
 
 getAuctionState = function()
-  -- function num : 0_70 , upvalues : isAuctionDialog
+  -- function num : 0_71 , upvalues : isAuctionDialog
   return isAuctionDialog
 end
 
 FromClient_CloseAllPanelWhenNpcGoHome = function()
-  -- function num : 0_71
+  -- function num : 0_72
   if GetUIMode() == (Defines.UIMode).eUIMode_Stable then
     StableFunction_Close()
   end
@@ -4215,7 +4157,7 @@ FromClient_CloseAllPanelWhenNpcGoHome = function()
 end
 
 Dialog_MouseToolTips = function(isShow, tipType, index)
-  -- function num : 0_72 , upvalues : _uiFuncButton
+  -- function num : 0_73 , upvalues : _uiFuncButton
   local name, desc, control = nil, nil, nil
   local Wp = 0
   local playerLevel = 0
@@ -4401,7 +4343,7 @@ Dialog_MouseToolTips = function(isShow, tipType, index)
 end
 
 Dialog_EtcButtonToolTips = function(isShow, tipType)
-  -- function num : 0_73 , upvalues : _uiButtonExit, _uiButtonBack
+  -- function num : 0_74 , upvalues : _uiButtonExit, _uiButtonBack
   local name, desc, control = nil
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_RESOURCE, "DIALOGUE_BTN_EXIT")
@@ -4421,7 +4363,7 @@ Dialog_EtcButtonToolTips = function(isShow, tipType)
 end
 
 extraction_Open = function()
-  -- function num : 0_74
+  -- function num : 0_75
   if Panel_Window_Extraction:GetShow() == false then
     PaGlobal_Extraction:openPanel(true)
   else
@@ -4430,33 +4372,33 @@ extraction_Open = function()
 end
 
 isShowReContactDialog = function()
-  -- function num : 0_75 , upvalues : isReContactDialog
+  -- function num : 0_76 , upvalues : isReContactDialog
   return isReContactDialog
 end
 
 isShowDialogFunctionQuest = function()
-  -- function num : 0_76 , upvalues : isDialogFunctionQuest
+  -- function num : 0_77 , upvalues : isDialogFunctionQuest
   return isDialogFunctionQuest
 end
 
 questDialogIndex = function()
-  -- function num : 0_77 , upvalues : _questDialogButtonIndex
+  -- function num : 0_78 , upvalues : _questDialogButtonIndex
   return _questDialogButtonIndex
 end
 
 isCheckExchangeItemButton = function(index)
-  -- function num : 0_78 , upvalues : isExchangeButtonIndex
+  -- function num : 0_79 , upvalues : isExchangeButtonIndex
   return isExchangeButtonIndex[index]
 end
 
 exchangalbeButtonIndex = function()
-  -- function num : 0_79 , upvalues : _exchangalbeButtonIndex
+  -- function num : 0_80 , upvalues : _exchangalbeButtonIndex
   return _exchangalbeButtonIndex
 end
 
 local _blackSpiritButtonPos = {eBlackSpiritButtonType_Quest = 0, eBlackSpiritButtonType_Enchant = 1, eBlackSpiritButtonType_Socket = 2, eBlackSpiritButtonType_Improve = 3, eBlackSpiritButtonType_Count = 4}
 ExecuteAfterDialogLoad = function()
-  -- function num : 0_80 , upvalues : _blackSpiritButtonPos
+  -- function num : 0_81 , upvalues : _blackSpiritButtonPos
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData == nil then
     return 
@@ -4499,7 +4441,7 @@ ExecuteAfterDialogLoad = function()
 end
 
 isNormalTradeMerchant = function()
-  -- function num : 0_81
+  -- function num : 0_82
   local talker = dialog_getTalker()
   if talker ~= nil then
     local characterKey = talker:getCharacterKey()
@@ -4514,12 +4456,12 @@ isNormalTradeMerchant = function()
 end
 
 isQuestComplete = function()
-  -- function num : 0_82 , upvalues : _isQuestComplete
+  -- function num : 0_83 , upvalues : _isQuestComplete
   return _isQuestComplete
 end
 
 FGlobal_CloseNpcDialogForDetail = function()
-  -- function num : 0_83
+  -- function num : 0_84
   if (getCustomizingManager()):isShow() then
     HandleClicked_CloseIngameCustomization()
     return true
@@ -4603,19 +4545,19 @@ registerEvent("FromClient_CloseAllPanelWhenNpcGoHome", "FromClient_CloseAllPanel
 registerEvent("FromClient_ShowFilterButton", "FromClient_ShowFilterButton")
 registerEvent("onScreenResize", "FromClient_Dialog_onScreenResize")
 RenderMode_DialogListClose = function()
-  -- function num : 0_84
+  -- function num : 0_85
   FGlobal_CloseNpcDialogForDetail()
   Panel_Npc_Dialog:SetShow(true)
   FGlobal_HideDialog(true)
 end
 
 proRenderModeSet = function()
-  -- function num : 0_85 , upvalues : dialogShowCheck_Once
+  -- function num : 0_86 , upvalues : dialogShowCheck_Once
   dialogShowCheck_Once = true
 end
 
 FromClient_CloseDialogByAttacked = function()
-  -- function num : 0_86
+  -- function num : 0_87
   FGlobal_Dialog_renderMode:reset()
 end
 
@@ -4623,7 +4565,7 @@ FGlobal_Dialog_renderMode:setPrefunctor(renderMode, proRenderModeSet)
 FGlobal_Dialog_renderMode:setClosefunctor(renderMode, RenderMode_DialogListClose)
 registerEvent("progressEventCancelByAttacked", "FromClient_CloseDialogByAttacked")
 isVisibleButton = function(buttonValue)
-  -- function num : 0_87 , upvalues : _dialogIndex
+  -- function num : 0_88 , upvalues : _dialogIndex
   local dialogData = ToClient_GetCurrentDialogData()
   if dialogData ~= nil then
     local dialogButtonCount = dialogData:getDialogButtonCount()
@@ -4640,32 +4582,32 @@ isVisibleButton = function(buttonValue)
 end
 
 isVisibleAcceptButton = function()
-  -- function num : 0_88 , upvalues : UI_DS
+  -- function num : 0_89 , upvalues : UI_DS
   return isVisibleButton(UI_DS.eDialogState_AcceptQuest)
 end
 
 isVisibleRecontactButton = function()
-  -- function num : 0_89 , upvalues : UI_DS
+  -- function num : 0_90 , upvalues : UI_DS
   return isVisibleButton(UI_DS.eDialogState_ReContact)
 end
 
 isVisibleTalkButton = function()
-  -- function num : 0_90 , upvalues : UI_DS
+  -- function num : 0_91 , upvalues : UI_DS
   return isVisibleButton(UI_DS.eDialogState_Talk)
 end
 
 isVisibleDisplayQuestButton = function()
-  -- function num : 0_91 , upvalues : UI_DS
+  -- function num : 0_92 , upvalues : UI_DS
   return isVisibleButton(UI_DS.eDialogState_DisplayQuest)
 end
 
 isVisibleProgressButton = function()
-  -- function num : 0_92 , upvalues : UI_DS
+  -- function num : 0_93 , upvalues : UI_DS
   return isVisibleButton(UI_DS.eDialogState_ProgressQuest)
 end
 
 isNextButtonShow = function()
-  -- function num : 0_93 , upvalues : _uiNextButton
+  -- function num : 0_94 , upvalues : _uiNextButton
   if _uiNextButton ~= nil then
     return _uiNextButton:GetShow()
   end

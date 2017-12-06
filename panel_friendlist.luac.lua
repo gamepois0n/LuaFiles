@@ -24,16 +24,17 @@ _info = {}
 
 PaGlobal_FriendList.Initialize = function(self)
   -- function num : 0_0
+  ToClient_GetFriendList()
   Panel_FriendList:addInputEvent("Mouse_Out", "PaGlobal_FriendList:ClosePopupMenu()")
-  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._treeFriendBackStatic = (UI.getChildControl)((self._ui)._treeFriend, "Tree_Friend_BackStatic")
-  -- DECOMPILER ERROR at PC20: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._treeFriendOverStatic = (UI.getChildControl)((self._ui)._treeFriend, "Tree_Friend_OverStatic")
-  -- DECOMPILER ERROR at PC28: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._treeFriendScroll = (UI.getChildControl)((self._ui)._treeFriend, "Tree_Friend_Scroll")
@@ -73,6 +74,8 @@ end
 
 PaGlobal_FriendList.UpdateList = function(self)
   -- function num : 0_1
+  local prePos = ((self._ui)._treeFriendScroll):GetControlPos()
+  ;
   ((self._ui)._treeFriend):ClearTree()
   ;
   ((self._ui)._treeFriend):SetShow(true)
@@ -80,7 +83,7 @@ PaGlobal_FriendList.UpdateList = function(self)
   ((self._ui)._treeFriendBackStatic):SetShow(true)
   ;
   ((self._ui)._treeFriendOverStatic):SetShow(true)
-  -- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC26: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._groupData)._count = ToClient_GetFriendGroupCount()
@@ -97,15 +100,15 @@ PaGlobal_FriendList.UpdateList = function(self)
     rootItem:SetCustomData(rootItem)
     ;
     ((self._ui)._treeFriend):AddRootItem(rootItem)
-    -- DECOMPILER ERROR at PC64: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC68: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     ((self._groupData)._info)[indexCnt] = friendGroup
-    -- DECOMPILER ERROR at PC67: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC71: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     ((self._groupData)._infoByIndex)[groupIndex] = friendGroup
-    -- DECOMPILER ERROR at PC71: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC75: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self._groupData)._count = (self._groupData)._count
@@ -148,18 +151,18 @@ PaGlobal_FriendList.UpdateList = function(self)
             end
             do
               do
-                -- DECOMPILER ERROR at PC202: Confused about usage of register: R19 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC206: Confused about usage of register: R20 in 'UnsetPending'
 
                 ;
                 ((self._friendData)._info)[indexCnt] = friendInfo
                 indexCnt = indexCnt + 1
-                -- DECOMPILER ERROR at PC204: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC204: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC204: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC204: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC208: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -173,6 +176,8 @@ PaGlobal_FriendList.UpdateList = function(self)
   end
   ;
   ((self._ui)._treeFriend):RefreshOpenList()
+  ;
+  ((self._ui)._treeFriendScroll):SetControlPos(prePos)
 end
 
 FGlobal_FriendList_UpdateList = function()

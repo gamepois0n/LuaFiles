@@ -566,6 +566,13 @@ end
       categoryData._x2 = 310
       categoryData._y2 = 372
     end
+    if menuIndex == (PaGlobal_Menu._main)._cashShop and (isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID()) then
+      icon:ChangeTextureInfoName("Renewal/Button/Console_Btn_ESCMenu.dds")
+      categoryData._x1 = 312
+      categoryData._y1 = 188
+      categoryData._x2 = 372
+      categoryData._y2 = 248
+    end
     local x1, y1, x2, y2 = setTextureUV_Func(icon, categoryData._x1, categoryData._y1, categoryData._x2, categoryData._y2)
     ;
     (icon:getBaseTexture()):setUV(x1, y1, x2, y2)
@@ -1490,6 +1497,11 @@ end
                     local playerHp = player:getHp()
                     if player:getLevel() < 50 then
                       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_FREEFIGHTALERT"))
+                      return 
+                    end
+                    local curChannelData = getCurrentChannelServerData()
+                    if curChannelData._isSiegeChannel == true then
+                      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BATTLEGROURND"))
                       return 
                     end
                     if ToClient_IsJoinPvpBattleGround() then

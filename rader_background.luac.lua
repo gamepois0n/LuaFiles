@@ -212,7 +212,7 @@ local updateMapImage = function(position, deltaTime)
               local zValue = constSize - (currentSector.z - floorIndexDivConstSize) % constSize - 1
               local desertMapImage = (Panel_RadarRealLine.desertMapImage)[index]
               local desertMapValue = (Panel_RadarRealLine.desertMapValue)[index]
-              if desertMapValue.x ~= xValue or desertMapValue.y ~= zValue then
+              if desertMapValue.x ~= xValue or desertMapValue.y ~= zValue or Panel_RadarRealLine.maxAlphaDesert > 0 and Panel_RadarRealLine.maxAlphaDesert < 1 then
                 desertMapValue.x = xValue
                 desertMapValue.y = zValue
                 if isDesert and not isResistDesert then

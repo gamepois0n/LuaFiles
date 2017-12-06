@@ -206,7 +206,7 @@ end
 
 PaGlobal_TutorialUiManager.restoreAllUiByUserSetting = function(self)
   -- function num : 0_10
-  if CheckTutorialEnd() then
+  if PaGlobal_TutorialManager:checkHaveOverLevelCharacter() then
     self:loadAllUiSavedInfo()
     if Panel_WorldMap:GetShow() == true and Panel_CheckedQuest:GetShow() then
       FGlobal_QuestWidget_Close()
@@ -282,8 +282,6 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
       local voiceChat = FGlobal_GetPersonalIconControl(2)
       local hunting = FGlobal_GetPersonalIconControl(3)
       local siegeArea = FGlobal_GetPersonalIconControl(4)
-      local autoTraining = FGlobal_GetPersonalIconControl(5)
-      autoTraining:SetShow(false)
       siegeArea:SetShow(false)
       hunting:SetShow(false)
       voiceChat:SetShow(false)

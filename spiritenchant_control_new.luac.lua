@@ -218,8 +218,30 @@ PaGlobal_Enchant.didEnchant = function(self, resultType, mainWhereType, mainSlot
   self:clearEnchantSlot()
   self:didShowEnchantTab()
   if self:setEnchantTarget(mainSlotNo, getInventoryItemByType(mainWhereType, mainSlotNo), mainWhereType) == false then
-    self:clearEnchantSlot()
-    self:showTab()
+    local itemWrapper = getInventoryItemByType(mainWhereType, mainSlotNo)
+    self._isLastEnchant = false
+    if itemWrapper ~= nil then
+      local itemSSW = itemWrapper:getStaticStatus()
+      local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+      -- DECOMPILER ERROR at PC49: Unhandled construct in 'MakeBoolean' P1
+
+      if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() and enchantLevel == 5 then
+        self._isLastEnchant = true
+      end
+    end
+    do
+      if enchantLevel == 20 then
+        self._isLastEnchant = true
+      end
+      if self._isLastEnchant then
+        self:setItemToSlot((self._ui)._slot_TargetItem, mainSlotNo, itemWrapper, mainWhereType)
+        ;
+        ((self._ui)._statictext_EnchantInfo):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FINALENCHANT"))
+      else
+        self:clearEnchantSlot()
+        self:showTab()
+      end
+    end
   end
 end
 
@@ -303,7 +325,23 @@ PaGlobal_Enchant.didSetCronEnchantTarget = function(self)
   local curLevel = (self._enchantInfo):ToClient_getCurLevel()
   self:setTextCronEnchantState(curLevel, curStack)
   self:setTextStackForNext((self._enchantInfo):ToClient_getNeedStack())
-  self:setTextBonusStats((self._enchantInfo):ToClient_getAddedDD(), (self._enchantInfo):ToClient_getAddedHIT(), (self._enchantInfo):ToClient_getAddedDV(), (self._enchantInfo):ToClient_getAddedPV(), (self._enchantInfo):ToClient_getAddedHP(), (self._enchantInfo):ToClient_getAddedMP())
+  local dd, hit, dv, pv, hp, mp = 0, 0, 0, 0, 0, 0
+  for index = 0, curLevel - 1 do
+    local itemWrapper = self._cronEnchantItemWrapper
+    if itemWrapper ~= nil then
+      local itemSSW = itemWrapper:getStaticStatus()
+      local itemClassifyType = itemSSW:getItemClassify()
+      local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+      local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, index)
+      dd = dd + cronEnchantSSW:getAddedDD()
+      hit = hit + cronEnchantSSW:getAddedHIT()
+      dv = dv + cronEnchantSSW:getAddedDV()
+      pv = pv + cronEnchantSSW:getAddedPV()
+      hp = hp + cronEnchantSSW:getAddedMaxHP()
+      mp = mp + cronEnchantSSW:getAddedMaxMP()
+    end
+  end
+  self:setTextBonusStats(dd, hit, dv, pv, hp, mp)
   self:setCronStackProgress(curStack, (self._enchantInfo):ToClient_getStackForLevel(maxLevel - 1))
   self:initCronLevelAndCountText(maxLevel)
   self:setCronEnchantMaterial()
@@ -423,18 +461,18 @@ PaGlobal_Enchant.getStr_EnchantInfo = function(self, curMaxEndura, decEndura, en
   -- function num : 0_29
   local str = nil
   if enchantType == (self._enum_EnchantType)._safe then
-    str = "잠재�\165 돌파 확률 100%"
+    str = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT")
   else
     if ((self._ui)._radiobutton_DifficultEnchant):GetShow() and ((self._ui)._radiobutton_DifficultEnchant):IsCheck() then
       decEndura = decEndura * 0.8
     end
-    str = "실패 �\156 최대 내구�\132 " .. tostring(decEndura) .. " 감소(현재 내구�\132 " .. tostring(curMaxEndura) .. ")"
+    str = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_0", "maxEndurance", tostring(decEndura), "currentEndurance", tostring(curMaxEndura))
     if isChecked == nil then
       if enchantType == (self._enum_EnchantType)._broken or enchantType == (self._enum_EnchantType)._downAndBroken then
-        str = str .. "\n잠재�\165 돌파 실패 �\156 아이�\156 파괴"
+        str = str .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_1")
       end
       if enchantType == (self._enum_EnchantType)._gradedown or enchantType == (self._enum_EnchantType)._downAndBroken then
-        str = str .. "\n잠재�\165 돌파 실패 �\156 단계 하락 �\128�\165"
+        str = str .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_2")
       end
     end
   end
@@ -446,9 +484,9 @@ end
 PaGlobal_Enchant.getStr_EnchantProtectInfo = function(self, enchantType)
   -- function num : 0_30
   if enchantType == (self._enum_EnchantType)._broken or enchantType == (self._enum_EnchantType)._downAndBroken then
-    return "\n잠재�\165 돌파 실패 �\156 단계 하락\n성공 여부�\144 상관 없이 크론�\157 소모"
+    return "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_3") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_4")
   else
-    return "\n잠재�\165 돌파 실패해도 단계 유지\n성공 여부�\144 상관 없이 크론�\157 소모"
+    return "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_5") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_4")
   end
 end
 
@@ -456,7 +494,7 @@ end
 
 PaGlobal_Enchant.getStr_PerfectEnchantInfo = function(self, needCount, decEndura)
   -- function num : 0_31
-  return "\n잠재�\165 돌파 확률 100%\n블랙스톤 " .. tostring(needCount) .. " �\156 소모 �\143 최대 내구�\132 " .. tostring(decEndura) .. " 감소"
+  return "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT") .. "\n" .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_6", "count", tostring(needCount), "endurance", tostring(decEndura))
 end
 
 -- DECOMPILER ERROR at PC98: Confused about usage of register: R0 in 'UnsetPending'
@@ -539,6 +577,7 @@ FGlobal_Enchant_RClickForTargetItem = function(slotNo, itemWrapper, count, inven
     Inventory_UseItemTargetSelf(inventoryType, slotNo, 0)
     return 
   end
+  self._isLastEnchant = false
   self:clearEnchantSlot()
   self:showTab()
   self:setEnchantTarget(slotNo, itemWrapper, inventoryType)
@@ -547,6 +586,7 @@ end
 FGlobal_Enchant_RClickForCronEnchantItem = function(slotNo, itemWrapper, Count, inventoryType)
   -- function num : 0_42
   local self = PaGlobal_Enchant
+  self._isLastEnchant = false
   self:clearEnchantSlot()
   self:showTab()
   self:setCronEnchanTarget(slotNo, itemWrapper, inventoryType)
@@ -580,6 +620,9 @@ FGlobal_Enchant_FilterForCronEnchantTarget = function(slotNo, notUse_itemWrapper
     if ToClient_Inventory_CheckItemLock(slotNo, whereType) then
       return true
     end
+    -- DECOMPILER ERROR at PC17: Confused about usage of register: R4 in 'UnsetPending'
+
+    PaGlobal_Enchant._cronEnchantItemWrapper = itemWrapper
     do return itemWrapper:checkToUpgradeItem() == false end
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
@@ -597,6 +640,7 @@ end
 
 PaGlobal_Enchant.handleLUpEnchantTab = function(self)
   -- function num : 0_46
+  self._cronEnchantItemWrapper = nil
   self:SetCheck_RadioButton((self._ui)._radiobutton_EnchantTab, true)
   self:SetCheck_RadioButton((self._ui)._radiobutton_CronEnchantTab, false)
   self:clearEnchantSlot()
@@ -654,150 +698,171 @@ PaGlobal_Enchant.handleLUpEnchantApplyButton = function(self)
       self:willStartCronEnchant()
     end
   end
+  self._resultShowTime = 0
 end
 
 -- DECOMPILER ERROR at PC153: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.handleMOnEnchantMaterialTooltip = function(self)
+PaGlobal_Enchant.handleMOnForceEnchantTooltip = function(self)
   -- function num : 0_52
-  if ((self._ui)._slot_EnchantMaterial).empty == true then
-    if self:isEnchantTab() == true then
-      self:showSlotToolTip((self._ui)._tooltip_TargetItem, PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_HELPMESSAGE1"))
-    else
-      self:showSlotToolTip((self._ui)._tooltip_TargetItem, "크론석을 올려놓도록해")
-    end
+  local control = (self._ui)._forceEnchantIcon
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FORCEDENCHANTTITLE")
+  local desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FORCEDENCHANTDESC")
+  if not ((self._ui)._forceEnchantIcon):IsCheck() then
+    name = name .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_ENABLE")
   else
-    if CppEnums.TInventorySlotNoUndefined == ((self._ui)._slot_EnchantMaterial).inventoryType then
-      local needSSW = nil
-      if self:isEnchantTab() == true then
-        needSSW = (self._enchantInfo):ToClient_getNeedItemStaticInformation()
-      else
-        needSSW = FromClient_getPreventDownGradeItem()
-      end
-      Panel_Tooltip_Item_Show(needSSW, ((self._ui)._slot_EnchantMaterial).icon, true, false)
-    else
-      do
-        Panel_Tooltip_Item_Show_GeneralNormal(1, "Enchant", true)
-      end
-    end
+    name = name .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_DISABLE")
   end
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC156: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.handleMOutEnchantMaterialTooltip = function(self)
+PaGlobal_Enchant.handleMOutForceEnchantTooltip = function(self)
   -- function num : 0_53
-  if ((self._ui)._slot_EnchantMaterial).empty == true then
-    ((self._ui)._tooltip_TargetItem):SetShow(false)
-    ;
-    ((self._ui)._tooltip_TargetItem):SetSize(220, 60)
-  else
-    if CppEnums.TInventorySlotNoUndefined == ((self._ui)._slot_EnchantMaterial).inventoryType then
-      Panel_Tooltip_Item_hideTooltip()
-    else
-      Panel_Tooltip_Item_Show_GeneralNormal(1, "Enchant", false)
-    end
-  end
+  TooltipSimple_Hide()
 end
 
 -- DECOMPILER ERROR at PC159: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.handleMOnEnchantTargetTooltip = function(self)
+PaGlobal_Enchant.handleMOnCronIconTooltip = function(self)
   -- function num : 0_54
-  if ((self._ui)._slot_TargetItem).empty == true then
-    if self:isEnchantTab() == true then
-      self:showSlotToolTip((self._ui)._tooltip_EnchantMaterial, PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_HELPMESSAGE2"))
-    else
-      self:showSlotToolTip((self._ui)._tooltip_EnchantMaterial, "크론�\157 �\128여를 �\160 장비�\188 올려놓도�\157 �\180.")
-    end
+  local control = (self._ui)._useCronIcon
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_SAFTYENCHANTTITLE")
+  local desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_SAFTYENCHANTDESC")
+  if ((self._ui)._useCronIcon):IsCheck() then
+    name = name .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_ENABLE")
   else
-    Panel_Tooltip_Item_Show_GeneralNormal(0, "Enchant", true)
+    name = name .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_DISABLE")
   end
+  TooltipSimple_Show(control, name, desc)
 end
 
 -- DECOMPILER ERROR at PC162: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.handleMOutEnchantTargetTooltip = function(self)
+PaGlobal_Enchant.handleMOutCronIconTooltip = function(self)
   -- function num : 0_55
-  if ((self._ui)._slot_TargetItem).empty == true then
-    ((self._ui)._tooltip_EnchantMaterial):SetShow(false)
-    ;
-    ((self._ui)._tooltip_EnchantMaterial):SetSize(220, 60)
-  else
-    Panel_Tooltip_Item_Show_GeneralNormal(0, "Enchant", false)
-  end
+  TooltipSimple_Hide()
 end
 
 -- DECOMPILER ERROR at PC165: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.handleMOnEasyEnchant = function(self)
+PaGlobal_Enchant.handleMOnEnchantMaterialTooltip = function(self)
   -- function num : 0_56
+  if ((self._ui)._slot_EnchantMaterial).empty ~= true or CppEnums.TInventorySlotNoUndefined == ((self._ui)._slot_EnchantMaterial).inventoryType then
+    local needSSW = nil
+    if self:isEnchantTab() == true then
+      needSSW = (self._enchantInfo):ToClient_getNeedItemStaticInformation()
+    else
+      needSSW = FromClient_getPreventDownGradeItem()
+    end
+    Panel_Tooltip_Item_Show(needSSW, ((self._ui)._slot_EnchantMaterial).icon, true, false)
+  else
+    do
+      Panel_Tooltip_Item_Show_GeneralNormal(1, "Enchant", true)
+    end
+  end
+end
+
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.handleMOutEnchantMaterialTooltip = function(self)
+  -- function num : 0_57
+  if ((self._ui)._slot_EnchantMaterial).empty ~= true or CppEnums.TInventorySlotNoUndefined == ((self._ui)._slot_EnchantMaterial).inventoryType then
+    Panel_Tooltip_Item_hideTooltip()
+  else
+    Panel_Tooltip_Item_Show_GeneralNormal(1, "Enchant", false)
+  end
+end
+
+-- DECOMPILER ERROR at PC171: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.handleMOnEnchantTargetTooltip = function(self)
+  -- function num : 0_58
+  if ((self._ui)._slot_TargetItem).empty == true then
+    Panel_Tooltip_Item_Show_GeneralNormal(0, "Enchant", true)
+  end
+end
+
+-- DECOMPILER ERROR at PC174: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.handleMOutEnchantTargetTooltip = function(self)
+  -- function num : 0_59
+  if ((self._ui)._slot_TargetItem).empty == true then
+    Panel_Tooltip_Item_Show_GeneralNormal(0, "Enchant", false)
+  end
+end
+
+-- DECOMPILER ERROR at PC177: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.handleMOnEasyEnchant = function(self)
+  -- function num : 0_60
   local name = PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DRASTICENCHANT_TITLE")
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_DRASTICENCHANT_DESC")
   TooltipSimple_Show((self._ui)._radiobutton_EasyEnchant, name, desc)
 end
 
--- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC180: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOutEasyEnchant = function(self)
-  -- function num : 0_57
+  -- function num : 0_61
   TooltipSimple_Hide()
 end
 
--- DECOMPILER ERROR at PC171: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC183: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handlemOnDifficultEnchant = function(self)
-  -- function num : 0_58
+  -- function num : 0_62
   local name = PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_METICULOUSENCHANT_TITLE")
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANT_METICULOUSENCHANT_DESC")
   TooltipSimple_Show((self._ui)._radiobutton_EasyEnchant, name, desc)
 end
 
--- DECOMPILER ERROR at PC174: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC186: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOutDifficultEnchant = function(self)
-  -- function num : 0_59
+  -- function num : 0_63
   TooltipSimple_Hide()
 end
 
--- DECOMPILER ERROR at PC177: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC189: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMUpSkipEffect = function(self)
-  -- function num : 0_60
+  -- function num : 0_64
   local name = PAGetString(Defines.StringSheet_GAME, "LUA_SPRITENCHANT_SKIPENCHANT_TOOLTIP_NAME")
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_SPRITENCHANT_SKIPENCHANT_TOOLTIP_DESC")
   TooltipSimple_Show((self._ui)._checkbox_skipEffect, name, desc)
 end
 
--- DECOMPILER ERROR at PC180: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC192: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Enchant.handleMOutSkipEffect = function(self)
-  -- function num : 0_61
+  -- function num : 0_65
   TooltipSimple_Hide()
 end
 
 FromClient_EnchantResultShow = function(resultType, mainWhereType, mainSlotNo, subWhereType, subSlotNo)
-  -- function num : 0_62
+  -- function num : 0_66
   local self = PaGlobal_Enchant
   self:didEnchant(resultType, mainWhereType, mainSlotNo, subWhereType, subSlotNo)
   PaGlobal_TutorialManager:handleEnchantResultShow(resultType, mainWhereType, mainSlotNo, subWhereType, subSlotNo)
 end
 
 FromClient_UpgradeItem = function(mainWhereType, mainSlotNo, variedCount)
-  -- function num : 0_63
+  -- function num : 0_67
   local self = PaGlobal_Enchant
   self:didCronEnchant(mainWhereType, mainSlotNo, variedCount)
 end
 
 FromClient_UpdateEnchantFailCount = function()
-  -- function num : 0_64
+  -- function num : 0_68
   if Panel_Window_Enchant:GetShow() then
     PaGlobal_Enchant:setEnchantFailCount()
   end
 end
 
 OnScreenEvent = function()
-  -- function num : 0_65
+  -- function num : 0_69
   local self = PaGlobal_Enchant
   local sizeX = getScreenSizeX()
   local sizeY = getScreenSizeY()
@@ -806,8 +871,28 @@ OnScreenEvent = function()
   Panel_Window_Enchant:ComputePos()
 end
 
+-- DECOMPILER ERROR at PC203: Confused about usage of register: R0 in 'UnsetPending'
+
+PaGlobal_Enchant.SetAnimation = function(self)
+  -- function num : 0_70
+  ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_SUCCESSFINALENCHANT"))
+  ;
+  ((self._ui)._statictext_EnchantResult):ResetVertexAni()
+  ;
+  ((self._ui)._statictext_EnchantResult):SetScale(1, 1)
+  ;
+  ((self._ui)._statictext_EnchantResult):SetSize(250, 20)
+  ;
+  ((self._ui)._statictext_EnchantResult):ComputePos()
+  ;
+  ((self._ui)._statictext_EnchantResult):SetVertexAniRun("Ani_Move_Pos_New", true)
+  ;
+  ((self._ui)._statictext_EnchantResult):SetVertexAniRun("Ani_Scale_New", true)
+  self._isResulTextAnimation = true
+end
+
 UpdateFunc_checkAnimation = function(deltaTime)
-  -- function num : 0_66
+  -- function num : 0_71
   local self = PaGlobal_Enchant
   if self._isAnimating == true then
     self._animationTimeStamp = self._animationTimeStamp + deltaTime
@@ -817,6 +902,23 @@ UpdateFunc_checkAnimation = function(deltaTime)
         self:startEnchant()
       else
         self:startCronEnchant()
+      end
+    end
+  end
+  if self._isLastEnchant and not self._isResulTextAnimation then
+    self:SetAnimation()
+  end
+  do return  end
+  self._isResulTextAnimation = false
+  if self._resultTimeCheck then
+    self._resultShowTime = self._resultShowTime + deltaTime
+    if self._resultShowTime > 5 then
+      self._resultShowTime = 0
+      self._resultTimeCheck = false
+      if ((self._ui)._radiobutton_EnchantTab):IsCheck() then
+        self:setEnchantFailCount()
+      else
+        self:setTextCronEnchantResultState()
       end
     end
   end

@@ -213,7 +213,7 @@ ChannelSelect_Init = function()
           (channelMainDesc._speedDesc):SetShow(false)
           sizeControl = channelMainDesc._serverDesc
         else
-          if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+          if isGameTypeKR2() then
             (channelMainDesc._speedTitle):SetShow(false)
             ;
             (channelMainDesc._speedDesc):SetShow(false)
@@ -293,7 +293,7 @@ ChannelSelect_Init = function()
         (channelMainDesc._scheduleSiege):SetPosY((channelMainDesc._scheduleTitle):GetPosY() + 20)
         ;
         (channelMainDesc._scheduleNodeWar):SetPosY((channelMainDesc._scheduleSiege):GetPosY() + 20)
-        if isGameTypeKR2() or isGameTypeTR() or isGameTypeTR() or isGameTypeID() then
+        if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
           (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._serverDesc):GetPosY() + (channelMainDesc._serverDesc):GetTextSizeY())
         else
           ;
@@ -815,30 +815,38 @@ HandleClicked_ChannelSelect = function(selectChannel)
         local messageMemo = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_DONTJOIN")
         Proc_ShowMessage_Ack(messageMemo)
         return 
-      end
-    end
-    do
-      if isSiegeBeing == true and isInSiegeBattle == false then
-        local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_MSG", "channelName", tostring(channelName))
-        local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = moveChannelMsg, functionNo = ChannelSelect_Update, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-        ;
-        (MessageBox.showMessageBox)(messageBoxData)
       else
         do
-          if toInt64(0, 0) < changeChannelTime then
-            local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANGECHANNEL_PENALTY", "changeRealChannelTime", changeRealChannelTime)
-            local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = ChannelSelect_Update, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-            ;
-            (MessageBox.showMessageBox)(messageBoxData)
-          else
-            do
+          do
+            if ((getSelfPlayer()):get()):isBattleGroundDefine() == true and tempChannel._isSiegeChannel == true then
+              local messageMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_BATTLEGROURND")
+              Proc_ShowMessage_Ack(messageMemo)
+              return 
+            end
+            if isSiegeBeing == true and isInSiegeBattle == false then
               local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_MSG", "channelName", tostring(channelName))
+              local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = moveChannelMsg, functionNo = ChannelSelect_Update, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              ;
+              (MessageBox.showMessageBox)(messageBoxData)
+            else
               do
-                local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = moveChannelMsg, functionNo = ChannelSelect_Update, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                ;
-                (MessageBox.showMessageBox)(messageBoxData)
-                ;
-                (((channelSelect.channelSelectUIPool)[selectChannel]).channelSelectedBg):SetShow(true)
+                if toInt64(0, 0) < changeChannelTime then
+                  local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANGECHANNEL_PENALTY", "changeRealChannelTime", changeRealChannelTime)
+                  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = ChannelSelect_Update, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                  ;
+                  (MessageBox.showMessageBox)(messageBoxData)
+                else
+                  do
+                    local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_MSG", "channelName", tostring(channelName))
+                    do
+                      local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_CHANNELMOVE_TITLE_MSG"), content = messageBoxMemo, functionYes = moveChannelMsg, functionNo = ChannelSelect_Update, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                      ;
+                      (MessageBox.showMessageBox)(messageBoxData)
+                      ;
+                      (((channelSelect.channelSelectUIPool)[selectChannel]).channelSelectedBg):SetShow(true)
+                    end
+                  end
+                end
               end
             end
           end

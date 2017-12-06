@@ -459,7 +459,7 @@ targetHpInfo_Update_Other = function(actorKey, nowHP)
 end
 
 panel_Update_Monster_Info = function(actorKey)
-  -- function num : 0_6 , upvalues : blackBg, lua_TargetInfo_NormalEnemyGauge, lua_TargetInfo_NormalHpRate, lua_TargetInfo_NormalHpRate_Later, lua_TargetInfo_BossEnemyGauge, lua_TargetInfo_BossHpRate, lua_TargetInfo_BossHpRate_Later, lua_TargetInfo_PlayerEnemyGauge, lua_TargetInfo_PlayerHpRate, lua_TargetInfo_PlayerHpRate_Later, lua_TargetInfo_Name, targetActorKey, monsterList, getMaxLevel, elapsedTime, updateStunGauge, EnemyBuffListBoarder, appliedBuff_UIPool_Last, appliedBuff_UIPool, appliedBuff_DATAPool, monsterBuffIcon_Base, lua_TargetInfo_StunRate_Back, lua_TargetInfo_StunRate, _darkSpirit, _helpBubble, _helpMsg, lua_EnemyTypeIcon, lua_EnemyTypeText
+  -- function num : 0_6 , upvalues : blackBg, lua_TargetInfo_NormalEnemyGauge, lua_TargetInfo_NormalHpRate, lua_TargetInfo_NormalHpRate_Later, lua_TargetInfo_BossEnemyGauge, lua_TargetInfo_BossHpRate, lua_TargetInfo_BossHpRate_Later, lua_TargetInfo_PlayerEnemyGauge, lua_TargetInfo_PlayerHpRate, lua_TargetInfo_PlayerHpRate_Later, lua_TargetInfo_Name, appliedBuff_UIPool_Last, appliedBuff_UIPool, targetActorKey, monsterList, getMaxLevel, elapsedTime, updateStunGauge, EnemyBuffListBoarder, appliedBuff_DATAPool, monsterBuffIcon_Base, lua_TargetInfo_StunRate_Back, lua_TargetInfo_StunRate, _darkSpirit, _helpBubble, _helpMsg, lua_EnemyTypeIcon, lua_EnemyTypeText
   blackBg:SetShow(false)
   lua_TargetInfo_NormalEnemyGauge:SetShow(false)
   lua_TargetInfo_NormalHpRate:SetShow(false)
@@ -473,12 +473,17 @@ panel_Update_Monster_Info = function(actorKey)
   lua_TargetInfo_Name:SetShow(false)
   local targetActor = getCharacterActor(actorKey)
   if targetActor == nil then
+    for buffIcon_idx = 0, appliedBuff_UIPool_Last do
+      if appliedBuff_UIPool[buffIcon_idx] then
+        (appliedBuff_UIPool[buffIcon_idx]):SetShow(false)
+      end
+    end
     return 
   end
   targetActorKey = actorKey
   local monsterLevel = ((targetActor:get()):getCharacterStaticStatus()).level
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
-  -- DECOMPILER ERROR at PC64: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC78: Confused about usage of register: R4 in 'UnsetPending'
 
   monsterList[targetActorKey] = monsterLevel
   local maxLevel = getMaxLevel()
@@ -512,7 +517,7 @@ panel_Update_Monster_Info = function(actorKey)
         if appliedBuff_UIPool[appliedBuff_Idx] == nil then
           local buffIcon = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, EnemyBuffListBoarder, "monsterBuffIcon_" .. appliedBuff_Idx)
           CopyBaseProperty(monsterBuffIcon_Base, buffIcon)
-          -- DECOMPILER ERROR at PC158: Confused about usage of register: R10 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC172: Confused about usage of register: R10 in 'UnsetPending'
 
           appliedBuff_UIPool[appliedBuff_Idx] = buffIcon
           if appliedBuff_UIPool_Last < appliedBuff_Idx then
@@ -533,16 +538,16 @@ panel_Update_Monster_Info = function(actorKey)
           (appliedBuff_UIPool[appliedBuff_Idx]):SetSpanSize((appliedBuff_UIPool[appliedBuff_Idx]):GetSizeX() * appliedBuff_Idx, ((appliedBuff_UIPool[appliedBuff_Idx]):GetSpanSize()).y)
           EnemyBuffListBoarder:SetSize(monsterBuffIcon_Base:GetSizeX() * appliedBuff_Idx, EnemyBuffListBoarder:GetSizeY())
           EnemyBuffListBoarder:ComputePos()
-          -- DECOMPILER ERROR at PC230: Confused about usage of register: R13 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC244: Confused about usage of register: R13 in 'UnsetPending'
 
           appliedBuff_DATAPool[appliedBuff_Idx] = appliedBuff
           appliedBuff_Idx = appliedBuff_Idx + 1
           appliedBuff = targetActor:getAppliedBuffNextNotSort()
-          -- DECOMPILER ERROR at PC235: LeaveBlock: unexpected jumping out DO_STMT
+          -- DECOMPILER ERROR at PC249: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC235: LeaveBlock: unexpected jumping out IF_THEN_STMT
+          -- DECOMPILER ERROR at PC249: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-          -- DECOMPILER ERROR at PC235: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC249: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end

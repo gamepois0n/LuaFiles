@@ -791,11 +791,6 @@ FromClient_Dyeing_AddDamage = function()
   FGlobal_Panel_DyeReNew_Hide()
 end
 
-FGlobal_Panel_DyeReNew_updateColorAmpuleList = function()
-  -- function num : 0_33 , upvalues : DyeReNew
-  DyeReNew:Update_AmpuleList()
-end
-
 renderMode:setClosefunctor(renderMode, FGlobal_Panel_DyeReNew_Hide)
 Panel_Dye_ReNew:SetShow(false)
 DyeReNew:Initialize()

@@ -23,6 +23,9 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   if NewQuickSlot_UpdatePerFrame ~= nil then
     NewQuickSlot_UpdatePerFrame(deltaTime)
   end
+  if isCoolTimeQuickSlot_chk() == true and FGlobal_SkillCoolTimeQuickSlot_UpdatePerFrame ~= nil then
+    FGlobal_SkillCoolTimeQuickSlot_UpdatePerFrame(deltaTime)
+  end
   if Competition_UpdatePerFrame ~= nil then
     Competition_UpdatePerFrame(deltaTime)
   end
@@ -71,11 +74,8 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     if (CppEnums.CountryType).DEV == getGameServiceType() and ConsoleUISimplifyPerFrameUpdate ~= nil then
       ConsoleUISimplifyPerFrameUpdate(deltaTime)
     end
-    if FGlobal_GuildBattle_IsOpen() and FGlobal_GuildBattle_UpdatePerFrame ~= nil then
+    if FGlobal_GuildBattle_UpdatePerFrame ~= nil then
       FGlobal_GuildBattle_UpdatePerFrame(deltaTime)
-    end
-    if Panel_GuidlBattle_Point:GetShow() and FGlobal_GuildBattlePoint_UpdatePerFrame ~= nil then
-      FGlobal_GuildBattlePoint_UpdatePerFrame(deltaTime)
     end
   end
 end

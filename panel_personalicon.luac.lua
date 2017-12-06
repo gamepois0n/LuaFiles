@@ -4,7 +4,7 @@
 -- params : ...
 -- function num : 0
 Panel_PersonalIcon:SetShow(false)
-local personalIcon = {_btn_NpcNavi = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNavi"), _btn_NpcNaviTW = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNaviTW"), _btn_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "Button_MovieTooltip"), _btn_VoiceChat = (UI.getChildControl)(Panel_PersonalIcon, "Button_SetState"), _btn_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "Button_HuntingAlert"), _btn_SiegeArea = (UI.getChildControl)(Panel_PersonalIcon, "Button_VillageSiegeArea"), _btn_SummonElephant = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonElephant"), _btn_BusterCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_BusterCall"), _btn_WarCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_WarCall"), _btn_ReturnStone = (UI.getChildControl)(Panel_PersonalIcon, "Button_ReturnStone"), _btn_SummonParty = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonParty"), _btn_Militia = (UI.getChildControl)(Panel_PersonalIcon, "Button_Militia"), _plus_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_MoviePlus"), _plus_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_HuntingPlus")}
+local personalIcon = {_btn_NpcNavi = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNavi"), _btn_NpcNaviTW = (UI.getChildControl)(Panel_PersonalIcon, "Button_FindNaviTW"), _btn_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "Button_MovieTooltip"), _btn_VoiceChat = (UI.getChildControl)(Panel_PersonalIcon, "Button_SetState"), _btn_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "Button_HuntingAlert"), _btn_SiegeArea = (UI.getChildControl)(Panel_PersonalIcon, "Button_VillageSiegeArea"), _btn_SummonElephant = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonElephant"), _btn_BusterCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_BusterCall"), _btn_WarCall = (UI.getChildControl)(Panel_PersonalIcon, "Button_WarCall"), _btn_ReturnStone = (UI.getChildControl)(Panel_PersonalIcon, "Button_ReturnStone"), _btn_SummonParty = (UI.getChildControl)(Panel_PersonalIcon, "Button_SummonParty"), _btn_Militia = (UI.getChildControl)(Panel_PersonalIcon, "Button_Militia"), _btn_DropItem = (UI.getChildControl)(Panel_PersonalIcon, "Button_DropItem"), _plus_MovieGuide = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_MoviePlus"), _plus_Hunting = (UI.getChildControl)(Panel_PersonalIcon, "StaticText_HuntingPlus"), _currentRegion = nil}
 local radarPosX = 0
 local radarPosY = 0
 PersonalIcon_Initalize = function()
@@ -38,135 +38,149 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     if isGameTypeKR2() then
       (self._btn_MovieGuide):SetShow(false)
     else
-      if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
-        (self._btn_MovieGuide):SetShow(false)
-      else
-        ;
-        (self._btn_MovieGuide):SetShow(true)
-      end
-    end
-  end
-  if playerLV > 51 then
-    (self._btn_NpcNavi):SetShow(true)
-    ;
-    (self._btn_NpcNaviTW):SetShow(false)
-  else
-    ;
-    (self._btn_NpcNavi):SetShow(false)
-    ;
-    (self._btn_NpcNaviTW):SetShow(true)
-  end
-  do
-    if ToClient_IsContentsGroupOpen("245") then
-      local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
-      if myGuildInfo ~= nil then
-        if playerLV >= 58 then
-          (self._btn_Militia):SetShow(true)
+      if isGameTypeKorea() then
+        local checkAgeType = ToClient_isAdultUser()
+        if checkAgeType then
+          (self._btn_MovieGuide):SetShow(true)
         else
           ;
-          (self._btn_Militia):SetShow(false)
+          (self._btn_MovieGuide):SetShow(false)
         end
       else
-        ;
-        (self._btn_Militia):SetShow(false)
+        do
+          ;
+          (self._btn_MovieGuide):SetShow(true)
+          if playerLV > 51 then
+            (self._btn_NpcNavi):SetShow(true)
+            ;
+            (self._btn_NpcNaviTW):SetShow(false)
+          else
+            ;
+            (self._btn_NpcNavi):SetShow(false)
+            ;
+            (self._btn_NpcNaviTW):SetShow(true)
+          end
+          do
+            if ToClient_IsContentsGroupOpen("245") then
+              local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
+              if myGuildInfo ~= nil then
+                if playerLV >= 58 then
+                  (self._btn_Militia):SetShow(true)
+                else
+                  ;
+                  (self._btn_Militia):SetShow(false)
+                end
+              else
+                ;
+                (self._btn_Militia):SetShow(false)
+              end
+            end
+            if (self._btn_Militia):GetShow() then
+              (self._btn_Militia):SetPosX((sizeX + controlGapX) * showIconCount)
+              ;
+              (self._btn_Militia):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            if (self._btn_DropItem):GetShow() then
+              (self._btn_DropItem):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_DropItem):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            if (self._btn_WarCall):GetShow() then
+              (self._btn_WarCall):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_WarCall):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            if (self._btn_SummonParty):GetShow() then
+              (self._btn_SummonParty):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_SummonParty):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            if (self._btn_ReturnStone):GetShow() then
+              (self._btn_ReturnStone):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_ReturnStone):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            if (self._btn_BusterCall):GetShow() then
+              (self._btn_BusterCall):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_BusterCall):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            if (self._btn_SummonElephant):GetShow() then
+              (self._btn_SummonElephant):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_SummonElephant):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            ;
+            (self._btn_SiegeArea):SetShow(ToClient_IsContentsGroupOpen("21"))
+            ;
+            (self._btn_SiegeArea):SetPosX((sizeX + controlGapX) * (showIconCount))
+            ;
+            (self._btn_SiegeArea):SetPosY(10)
+            showIconCount = showIconCount + 1
+            if ToClient_IsContentsGroupOpen("28") then
+              (self._btn_Hunting):SetShow(true)
+              ;
+              (self._btn_Hunting):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_Hunting):SetPosY(10)
+              showIconCount = showIconCount + 1
+            else
+              ;
+              (self._btn_Hunting):SetShow(false)
+            end
+            if ToClient_IsContentsGroupOpen("75") then
+              (self._btn_VoiceChat):SetShow(true)
+              ;
+              (self._btn_VoiceChat):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_VoiceChat):SetPosY(10)
+              showIconCount = showIconCount + 1
+            else
+              ;
+              (self._btn_VoiceChat):SetShow(false)
+            end
+            if (self._btn_MovieGuide):GetShow() then
+              (self._btn_MovieGuide):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_MovieGuide):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            if (self._btn_NpcNavi):GetShow() or (self._btn_NpcNaviTW):GetShow() then
+              (self._btn_NpcNavi):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_NpcNavi):SetPosY(10)
+              ;
+              (self._btn_NpcNaviTW):SetPosX((sizeX + controlGapX) * (showIconCount))
+              ;
+              (self._btn_NpcNaviTW):SetPosY(10)
+              showIconCount = showIconCount + 1
+            end
+            ;
+            (self._plus_MovieGuide):SetPosX((self._btn_MovieGuide):GetPosX() + 25)
+            ;
+            (self._plus_MovieGuide):SetPosY((self._btn_MovieGuide):GetPosY() + 25)
+            ;
+            (self._plus_Hunting):SetPosX((self._btn_Hunting):GetPosX() + 25)
+            ;
+            (self._plus_Hunting):SetPosY((self._btn_Hunting):GetPosY() + 25)
+            Panel_PersonalIcon:SetShow(true)
+            if CppDefine.ChangeUIAndResolution == true then
+              radarPosX = FGlobal_Panel_Radar_GetPosX()
+              radarPosY = FGlobal_Panel_Radar_GetPosY()
+            end
+            Panel_PersonalIcon:SetSize((sizeX + controlGapX) * (showIconCount) - 5, Panel_PersonalIcon:GetSizeY())
+            Panel_PersonalIcon:SetPosX(radarPosX - (sizeX + controlGapX) * (showIconCount))
+          end
+        end
       end
     end
-    if (self._btn_Militia):GetShow() then
-      (self._btn_Militia):SetPosX((sizeX + controlGapX) * showIconCount)
-      ;
-      (self._btn_Militia):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    if (self._btn_WarCall):GetShow() then
-      (self._btn_WarCall):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_WarCall):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    if (self._btn_SummonParty):GetShow() then
-      (self._btn_SummonParty):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_SummonParty):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    if (self._btn_ReturnStone):GetShow() then
-      (self._btn_ReturnStone):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_ReturnStone):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    if (self._btn_BusterCall):GetShow() then
-      (self._btn_BusterCall):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_BusterCall):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    if (self._btn_SummonElephant):GetShow() then
-      (self._btn_SummonElephant):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_SummonElephant):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    ;
-    (self._btn_SiegeArea):SetShow(ToClient_IsContentsGroupOpen("21"))
-    ;
-    (self._btn_SiegeArea):SetPosX((sizeX + controlGapX) * (showIconCount))
-    ;
-    (self._btn_SiegeArea):SetPosY(10)
-    showIconCount = showIconCount + 1
-    if ToClient_IsContentsGroupOpen("28") then
-      (self._btn_Hunting):SetShow(true)
-      ;
-      (self._btn_Hunting):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_Hunting):SetPosY(10)
-      showIconCount = showIconCount + 1
-    else
-      ;
-      (self._btn_Hunting):SetShow(false)
-    end
-    if ToClient_IsContentsGroupOpen("75") then
-      (self._btn_VoiceChat):SetShow(true)
-      ;
-      (self._btn_VoiceChat):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_VoiceChat):SetPosY(10)
-      showIconCount = showIconCount + 1
-    else
-      ;
-      (self._btn_VoiceChat):SetShow(false)
-    end
-    if (self._btn_MovieGuide):GetShow() then
-      (self._btn_MovieGuide):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_MovieGuide):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    if (self._btn_NpcNavi):GetShow() or (self._btn_NpcNaviTW):GetShow() then
-      (self._btn_NpcNavi):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_NpcNavi):SetPosY(10)
-      ;
-      (self._btn_NpcNaviTW):SetPosX((sizeX + controlGapX) * (showIconCount))
-      ;
-      (self._btn_NpcNaviTW):SetPosY(10)
-      showIconCount = showIconCount + 1
-    end
-    ;
-    (self._plus_MovieGuide):SetPosX((self._btn_MovieGuide):GetPosX() + 25)
-    ;
-    (self._plus_MovieGuide):SetPosY((self._btn_MovieGuide):GetPosY() + 25)
-    ;
-    (self._plus_Hunting):SetPosX((self._btn_Hunting):GetPosX() + 25)
-    ;
-    (self._plus_Hunting):SetPosY((self._btn_Hunting):GetPosY() + 25)
-    Panel_PersonalIcon:SetShow(true)
-    if CppDefine.ChangeUIAndResolution == true then
-      radarPosX = FGlobal_Panel_Radar_GetPosX()
-      radarPosY = FGlobal_Panel_Radar_GetPosY()
-    end
-    Panel_PersonalIcon:SetSize((sizeX + controlGapX) * (showIconCount) - 5, Panel_PersonalIcon:GetSizeY())
-    Panel_PersonalIcon:SetPosX(radarPosX - (sizeX + controlGapX) * (showIconCount))
   end
 end
 
@@ -212,7 +226,11 @@ FGlobal_GetPersonalIconControl = function(index)
                         if index == 11 then
                           return self._btn_Militia
                         else
-                          return nil
+                          if index == 12 then
+                            return self._btn_DropItem
+                          else
+                            return nil
+                          end
                         end
                       end
                     end
@@ -278,7 +296,11 @@ FGlobal_GetPersonalIconPosX = function(index)
                       if index == 11 then
                         return (self._btn_Militia):GetPosX() + posX
                       else
-                        return nil
+                        if index == 12 then
+                          return (self._btn_DropItem):GetPosX() + posX
+                        else
+                          return nil
+                        end
                       end
                     end
                   end
@@ -329,7 +351,11 @@ FGlobal_GetPersonalIconPosY = function(index)
                       if index == 11 then
                         return (self._btn_Militia):GetPosY() + posY
                       else
-                        return nil
+                        if index == 12 then
+                          return (self._btn_DropItem):GetPosY() + posY
+                        else
+                          return nil
+                        end
                       end
                     end
                   end
@@ -420,6 +446,12 @@ PersonalIcon_Tooltip = function()
   (self._btn_Militia):addInputEvent("Mouse_Out", "MilitiaButton_Tooltip(false)")
   ;
   (self._btn_Militia):addInputEvent("Mouse_LUp", "FGlobal_MercenaryOpen()")
+  ;
+  (self._btn_DropItem):addInputEvent("Mouse_On", "DropItemButton_Tooltip(true)")
+  ;
+  (self._btn_DropItem):addInputEvent("Mouse_Out", "DropItemButton_Tooltip(false)")
+  ;
+  (self._btn_DropItem):addInputEvent("Mouse_LUp", "FGlobal_DropItemOpen()")
 end
 
 MilitiaButton_Tooltip = function(isShow)
@@ -435,9 +467,70 @@ MilitiaButton_Tooltip = function(isShow)
   TooltipSimple_Show(control, name, desc)
 end
 
+DropItemButton_Tooltip = function(isShow)
+  -- function num : 0_10 , upvalues : personalIcon
+  if isShow == false then
+    TooltipSimple_Hide()
+    return 
+  end
+  local control = personalIcon._btn_DropItem
+  local name = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_DROPITEM_TOOLTIPNAME")
+  local desc = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_DROPITEM_TOOLTIPDESC")
+  registTooltipControl(control, Panel_Tooltip_SimpleText)
+  TooltipSimple_Show(control, name, desc)
+end
+
+DropItemButton_RegionCheck = function()
+  -- function num : 0_11 , upvalues : personalIcon
+  if not ToClient_IsContentsGroupOpen("337") then
+    return 
+  end
+  local self = personalIcon
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    (self._btn_DropItem):SetShow(false)
+    PaGlobal_DropItem:Close()
+  end
+  local currentRegionKeyRaw = selfPlayer:getRegionKeyRaw()
+  if currentRegionKeyRaw == 124 then
+    currentRegionKeyRaw = 286
+  end
+  if currentRegionKeyRaw == 515 then
+    currentRegionKeyRaw = 252
+  end
+  if currentRegionKeyRaw == 524 then
+    currentRegionKeyRaw = 314
+  end
+  if currentRegionKeyRaw == 525 then
+    currentRegionKeyRaw = 113
+  end
+  if currentRegionKeyRaw == 85 then
+    currentRegionKeyRaw = 332
+  end
+  if currentRegionKeyRaw == 537 then
+    currentRegionKeyRaw = 211
+  end
+  local itemCount = ToClient_GetRegionDropItemSize(currentRegionKeyRaw)
+  self._currentRegion = currentRegionKeyRaw
+  if itemCount > 0 then
+    (self._btn_DropItem):SetShow(true)
+    PaGlobal_DropItem:Update()
+  else
+    ;
+    (self._btn_DropItem):SetShow(false)
+  end
+  FGlobal_PersonalIcon_ButtonPosUpdate()
+end
+
+FGlobal_GetRegionKey_ByDropItem = function()
+  -- function num : 0_12 , upvalues : personalIcon
+  return personalIcon._currentRegion
+end
+
 PersonalIcon_Initalize()
 FGlobal_PersonalIcon_ButtonPosUpdate()
 if CppDefine.ChangeUIAndResolution == true then
   registerEvent("onScreenResize", "FGlobal_PersonalIcon_ButtonPosUpdate")
+  registerEvent("selfPlayer_regionChanged", "DropItemButton_RegionCheck")
 end
 

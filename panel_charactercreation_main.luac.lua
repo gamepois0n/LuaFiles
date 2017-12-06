@@ -557,47 +557,56 @@ end
   end
   screenShotReady = false
   screenShotButtonUse = true
-  if ToClient_getCaptureUpdateState() then
-    return 
+  local goShot = function()
+    -- function num : 0_14_0 , upvalues : isShow_CustomizationMessage, StaticText_CustomizationMessage, isShow_CustomizationCloth, isShow_CustomizationMotion, isShow_CustomizationFrame, isShow_CustomizationMain, isShow_CustomizationStatic, isShow_CustomizingAlbum, isShow_HistoryTable, CheckButton_CameraLook, CheckButton_ToggleUi, CheckButton_ImagePreset, Button_ScreenShot, Button_ScreenShotFolder, InGameMode, Button_ProfileScreenShot, Button_ProfileScreenShot_Title, CheckButton_CameraLook_Title, CheckButton_ToggleUi_Title, CheckButton_ImagePreset_Title, Button_ScreenShot_Title, Button_ScreenShotFolder_Title, isShow_CashCustom, doScreenShotInFrame, doScreenCapture, doScreenShotSub
+    if ToClient_getCaptureUpdateState() then
+      return 
+    end
+    isShow_CustomizationMessage = StaticText_CustomizationMessage:GetShow()
+    isShow_CustomizationCloth = Panel_CustomizationCloth:GetShow()
+    isShow_CustomizationMotion = Panel_CustomizationMotion:GetShow()
+    isShow_CustomizationFrame = Panel_CustomizationFrame:GetShow()
+    isShow_CustomizationMain = Panel_CustomizationMain:GetShow()
+    isShow_CustomizationStatic = Panel_CustomizationStatic:GetShow()
+    isShow_CustomizingAlbum = Panel_CustomizingAlbum:GetShow()
+    isShow_HistoryTable = historyTableGetShow()
+    StaticText_CustomizationMessage:SetShow(false)
+    Panel_CustomizationCloth:SetShow(false)
+    Panel_CustomizationMotion:SetShow(false)
+    Panel_CustomizationFrame:SetShow(false)
+    Panel_CustomizationMain:SetShow(false)
+    Panel_CustomizingAlbum:SetShow(false)
+    Panel_CustomizationMessage:SetShow(false)
+    CheckButton_CameraLook:SetShow(false)
+    CheckButton_ToggleUi:SetShow(false)
+    CheckButton_ImagePreset:SetShow(false)
+    Button_ScreenShot:SetShow(false)
+    Button_ScreenShotFolder:SetShow(false)
+    if InGameMode then
+      Button_ProfileScreenShot:SetShow(false)
+      Button_ProfileScreenShot_Title:SetShow(false)
+    end
+    CheckButton_CameraLook_Title:SetShow(false)
+    CheckButton_ToggleUi_Title:SetShow(false)
+    CheckButton_ImagePreset_Title:SetShow(false)
+    Button_ScreenShot_Title:SetShow(false)
+    Button_ScreenShotFolder_Title:SetShow(false)
+    historyTableSetShow(false)
+    if not ToClient_isLobbyProcessor() then
+      isShow_CashCustom = Panel_Cash_Customization:GetShow()
+      Panel_Cash_Customization:SetShow(false)
+    end
+    doScreenShotInFrame = true
+    doScreenCapture = true
+    doScreenShotSub = true
+    ToClient_setCaptureUpdateState(true)
   end
-  isShow_CustomizationMessage = StaticText_CustomizationMessage:GetShow()
-  isShow_CustomizationCloth = Panel_CustomizationCloth:GetShow()
-  isShow_CustomizationMotion = Panel_CustomizationMotion:GetShow()
-  isShow_CustomizationFrame = Panel_CustomizationFrame:GetShow()
-  isShow_CustomizationMain = Panel_CustomizationMain:GetShow()
-  isShow_CustomizationStatic = Panel_CustomizationStatic:GetShow()
-  isShow_CustomizingAlbum = Panel_CustomizingAlbum:GetShow()
-  isShow_HistoryTable = historyTableGetShow()
-  StaticText_CustomizationMessage:SetShow(false)
-  Panel_CustomizationCloth:SetShow(false)
-  Panel_CustomizationMotion:SetShow(false)
-  Panel_CustomizationFrame:SetShow(false)
-  Panel_CustomizationMain:SetShow(false)
-  Panel_CustomizingAlbum:SetShow(false)
-  Panel_CustomizationMessage:SetShow(false)
-  CheckButton_CameraLook:SetShow(false)
-  CheckButton_ToggleUi:SetShow(false)
-  CheckButton_ImagePreset:SetShow(false)
-  Button_ScreenShot:SetShow(false)
-  Button_ScreenShotFolder:SetShow(false)
-  if InGameMode then
-    Button_ProfileScreenShot:SetShow(false)
-    Button_ProfileScreenShot_Title:SetShow(false)
-  end
-  CheckButton_CameraLook_Title:SetShow(false)
-  CheckButton_ToggleUi_Title:SetShow(false)
-  CheckButton_ImagePreset_Title:SetShow(false)
-  Button_ScreenShot_Title:SetShow(false)
-  Button_ScreenShotFolder_Title:SetShow(false)
-  historyTableSetShow(false)
-  if not ToClient_isLobbyProcessor() then
-    isShow_CashCustom = Panel_Cash_Customization:GetShow()
-    Panel_Cash_Customization:SetShow(false)
-  end
-  doScreenShotInFrame = true
-  doScreenCapture = true
-  doScreenShotSub = true
-  ToClient_setCaptureUpdateState(true)
+
+  local _title = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_FACEPHOTO_MSGTITLE")
+  local _contenet = PAGetString(Defines.StringSheet_GAME, "LUA_CUSTOMIZATION_FACEPHOTO_MSGDESC")
+  local messageBoxData = {title = _title, content = _contenet, functionYes = goShot, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
 end
 
         FGlobal_TakeScreenShotByHotKey = function()
@@ -1571,98 +1580,7 @@ end
   _web_RandomBeauty:SetSize(1, 1)
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  local url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_DEV")
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_DEV")
-  else
-    if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_ALPHA")
-    else
-      if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_REAL")
-      else
-        if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-          if getServiceNationType() == 0 then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_ALPHA_NA", "port", worldNo)
-          else
-            if getServiceNationType() == 1 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_ALPHA_EU", "port", worldNo)
-            end
-          end
-        else
-          if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-            if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_REAL_NA", "port", worldNo)
-            else
-              if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_REAL_EU", "port", worldNo)
-              end
-            end
-          else
-            if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_JP_ALPHA")
-            else
-              if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_JP_REAL")
-              else
-                if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_ALPHA")
-                else
-                  if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                    if isServerFixedCharge() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_REAL_P2P")
-                    else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_REAL_F2P")
-                    end
-                  else
-                    if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_SA_ALPHA")
-                    else
-                      if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_SA_REAL")
-                      else
-                        if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_ALPHA")
-                        else
-                          if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_REAL")
-                          else
-                            if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TR_ALPHA")
-                            else
-                              if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TR_REAL")
-                              else
-                                if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TH_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TH_REAL")
-                                  else
-                                    if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_ID_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_ID_REAL")
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
+  local url = PaGlobal_URL_Check(worldNo)
   local userNo = 0
   local userNickName = ""
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
@@ -1675,7 +1593,7 @@ end
     userNickName = (getSelfPlayer()):getUserNickname()
     userNo = ((getSelfPlayer()):get()):getUserNo()
   end
-  url = url .. "?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true) .. "&isGm=" .. tostring(isGm) .. "&isRandom=" .. tostring(true)
+  url = url .. "/customizing?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(true) .. "&isGm=" .. tostring(isGm) .. "&isRandom=" .. tostring(true)
   _web_RandomBeauty:SetUrl(1, 1, url, false, true)
 end
 

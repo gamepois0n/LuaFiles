@@ -316,6 +316,7 @@ servantInventory.registMessageHandler = function(self)
   -- function num : 0_7
   registerEvent("FromClient_ServantInventoryOpenWithInventory", "ServantInventoryOpenWithInventory")
   registerEvent("FromClient_ServantInventoryUpdate", "ServantInventory_updateSlotData")
+  registerEvent("FromClient_UpdateCannonBallCount", "ServantInventory_updateSlotData")
   registerEvent("EventServantEquipmentUpdate", "ServantInventory_updateSlotData")
 end
 

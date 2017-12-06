@@ -1600,13 +1600,6 @@ FGlobal_UiSet_Open = function()
       -- DECOMPILER ERROR at PC155: Confused about usage of register: R6 in 'UnsetPending'
 
       ChatPanelIsOpenState[chattingPanelindex + 1] = false
-      local curIndex = panelID.Chat0 + chattingPanelindex
-      -- DECOMPILER ERROR at PC162: Confused about usage of register: R7 in 'UnsetPending'
-
-      ;
-      ((UiSet.panelPool)[curIndex]).isShow = false
-      ;
-      (((UiSet.panelPool)[curIndex]).control):SetShow(false)
     end
   end
 end
@@ -1674,8 +1667,6 @@ UiSet_registEventHandler = function()
   (UiSet.btn_reset):addInputEvent("Mouse_LUp", "HandleClicked_Reset_UiSetting_Msg()")
   ;
   (UiSet.btn_Win_Close):addInputEvent("Mouse_LUp", "FGlobal_UiSet_Close()")
-  ;
-  (UiSave.btn_SaveDefault):addInputEvent("Mouse_LUp", "HandleClicked_UiSet_ConfirmSetting()")
   ;
   (UiSet.chk_GridView):addInputEvent("Mouse_LUp", "UiSet_GridView()")
   if CppDefine.ChangeUIAndResolution == true then

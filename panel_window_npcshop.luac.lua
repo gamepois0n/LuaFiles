@@ -40,11 +40,53 @@ end
 -- DECOMPILER ERROR at PC273: Confused about usage of register: R10 in 'UnsetPending'
 
 npcShop.init = function(self)
-  -- function num : 0_1 , upvalues : _npcShopHelp, UI_TM
+  -- function num : 0_1 , upvalues : UI_TM, _npcShopHelp
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   (self.config).slotRows = (self.config).slotCount / (self.config).slotCols
   self.lastTabIndex = self.tabIndexBuy
+  ;
+  ((self.radioButtons)[0]):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  ((self.radioButtons)[1]):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  ((self.radioButtons)[2]):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  ((self.radioButtons)[0]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_TAPBUY"))
+  ;
+  ((self.radioButtons)[1]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_TAPSELL"))
+  ;
+  ((self.radioButtons)[2]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_TAPREBUY"))
+  local isBuyLimit = ((self.radioButtons)[0]):IsLimitText()
+  local isSellLimit = ((self.radioButtons)[1]):IsLimitText()
+  local isRepurchase = ((self.radioButtons)[2]):IsLimitText()
+  if isBuyLimit then
+    ((self.radioButtons)[0]):addInputEvent("Mouse_On", "PaGlobal_NpcShop:Simpletooltips(true, 0)")
+    ;
+    ((self.radioButtons)[0]):addInputEvent("Mouse_Out", "PaGlobal_NpcShop:Simpletooltips(false)")
+  end
+  if isSellLimit then
+    ((self.radioButtons)[1]):addInputEvent("Mouse_On", "PaGlobal_NpcShop:Simpletooltips(true, 1)")
+    ;
+    ((self.radioButtons)[1]):addInputEvent("Mouse_Out", "PaGlobal_NpcShop:Simpletooltips(false)")
+  end
+  if isRepurchase then
+    ((self.radioButtons)[2]):addInputEvent("Mouse_On", "PaGlobal_NpcShop:Simpletooltips(true, 2)")
+    ;
+    ((self.radioButtons)[2]):addInputEvent("Mouse_Out", "PaGlobal_NpcShop:Simpletooltips(false)")
+  end
+  local btnBuySizeX = ((self.radioButtons)[0]):GetSizeX() + 15
+  local btnBuyTextPosX = btnBuySizeX - btnBuySizeX / 2 - ((self.radioButtons)[0]):GetTextSizeX() / 2
+  ;
+  ((self.radioButtons)[0]):SetTextSpan(btnBuyTextPosX, 7)
+  local btnSellSizeX = ((self.radioButtons)[1]):GetSizeX() + 15
+  local btnSellTextPosX = btnSellSizeX - btnSellSizeX / 2 - ((self.radioButtons)[1]):GetTextSizeX() / 2
+  ;
+  ((self.radioButtons)[1]):SetTextSpan(btnSellTextPosX, 7)
+  local btnRepurchaseSizeX = ((self.radioButtons)[2]):GetSizeX() + 15
+  local btnRepurchaseTextPosX = btnRepurchaseSizeX - btnRepurchaseSizeX / 2 - ((self.radioButtons)[2]):GetTextSizeX() / 2
+  ;
+  ((self.radioButtons)[2]):SetTextSpan(btnRepurchaseTextPosX, 7)
   _npcShopHelp:SetTextMode(UI_TM.eTextMode_AutoWrap)
 end
 
@@ -96,6 +138,15 @@ npcShop.createSlot = function(self)
     (self.button):SetPosX(posX)
     ;
     (self.button):SetPosY(posY)
+    if isGameTypeTH() or isGameTypeID() then
+      param.pricePosX = 258
+      ;
+      (self.price):SetTextSpan(-90, -3)
+    else
+      param.pricePosX = 268
+      ;
+      (self.price):SetTextSpan(-75, -3)
+    end
     ;
     (self.price):SetPosX(posX + param.pricePosX)
     ;
@@ -317,6 +368,8 @@ SellAll_ShowToggle = function()
   local self = npcShop
   if self.tabIndexSell == self.lastTabIndex then
     (npcShop.buttonSellAll):SetShow(true)
+    ;
+    (npcShop.buttonSellAll):SetPosX((npcShop.buttonBuy):GetPosX() - (npcShop.buttonSellAll):GetSizeX() - 5)
   else
     ;
     (npcShop.buttonSellAll):SetShow(false)
@@ -332,6 +385,8 @@ BuySome_ShowToggle = function()
     (self.buttonBuySome):SetEnable(false)
     ;
     (self.buttonBuySome):SetMonoTone(true)
+    ;
+    (self.buttonBuySome):SetPosX((npcShop.buttonBuy):GetPosX() - (npcShop.buttonBuySome):GetSizeX() - 5)
   else
     ;
     (self.buttonBuySome):SetShow(false)
@@ -403,6 +458,8 @@ npcShop.controlInit = function(self)
       else
         Panel_Window_NpcShop:SetPosY(screenSizeY / 2 - Panel_Window_NpcShop:GetSizeY() / 2 - 100)
       end
+      ;
+      (self.buttonBuySome):SetPosX((npcShop.buttonBuy):GetPosX() - (npcShop.buttonBuySome):GetSizeX() - 5)
     end
   end
 end
@@ -421,6 +478,8 @@ npcShop.updateContent = function(self, updateForce)
   end
   if (npcShop.buttonSellAll):GetSizeX() < (npcShop.buttonSellAll):GetTextSizeX() then
     (npcShop.buttonSellAll):SetSize((npcShop.buttonSellAll):GetTextSizeX() + 10, (npcShop.buttonSellAll):GetSizeY())
+    ;
+    (npcShop.buttonSellAll):SetPosX((npcShop.buttonBuy):GetPosX() - (npcShop.buttonSellAll):GetSizeX() - 5)
   end
   Panel_Window_NpcShop:SetShow(true, false)
   if self.tabIndexBuy == self.lastTabIndex then
@@ -547,19 +606,19 @@ npcShop.updateContent = function(self, updateForce)
                       (slot.price):SetFontColor(UI_color.C_FFE7E7E7)
                     end
                     slot:clearItem()
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC423: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC437: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -675,6 +734,8 @@ NpcShop_OnSlotClicked = function(slotIdx)
       end
     end
   end
+  ;
+  (self.buttonBuySome):SetPosX((npcShop.buttonBuy):GetPosX() - (npcShop.buttonBuySome):GetSizeX() - 5)
   self.selectedSlotIndex = slotIdx
 end
 
@@ -937,7 +998,7 @@ NpcShop_BuyOrSellItem = function()
           local shopItem = shopItemWrapper:get()
           local shopItemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
           local shopItemEndurance = (shopItemSSW:get()):getEndurance()
-          local pricePiece = Int64toInt32(shopItem:getItemSellPriceWithOption())
+          local pricePiece = Int64toInt32(shopItemSSW:getSellPriceCalculate(shopItem:getItemPriceOption()))
           local toWhereType = 0
           if (self.checkButton_Warehouse):IsCheck() then
             toWhereType = 2
@@ -1019,9 +1080,9 @@ NpcShop_BuyOrSellItem = function()
                     (self.buttonBuy):SetEnable(false)
                     ;
                     (self.buttonBuy):SetMonoTone(false)
-                    -- DECOMPILER ERROR at PC277: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC277: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC279: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -1045,8 +1106,9 @@ NpcShop_SellItemAll = function()
       local shopItem = shopItemWrapper:get()
       local inventory = ((getSelfPlayer()):get()):getInventory()
       local s64_inventoryItemCount = inventory:getItemCount_s64(((shopItemWrapper:getStaticStatus()):get())._key)
+      local shopItemSSW = npcShop_getItemWrapperByShopSlotNo(slot.slotNo)
       local itemCount = Int64toInt32(s64_inventoryItemCount)
-      local pricePiece = Int64toInt32(shopItem:getItemSellPriceWithOption())
+      local pricePiece = Int64toInt32(shopItemSSW:getSellPriceCalculate(shopItem:getItemPriceOption()))
       local toWhereType = 0
       local sellPrice = pricePiece * itemCount
       local sellAllDoit = function()
@@ -1364,8 +1426,31 @@ Panel_NpcShop_InvenRClick = function(slotNo)
   end
 end
 
-donSell = function()
+-- DECOMPILER ERROR at PC353: Confused about usage of register: R12 in 'UnsetPending'
+
+PaGlobal_NpcShop.Simpletooltips = function(self, isShow, tipType)
   -- function num : 0_30
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  local self = npcShop
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_TAPBUY")
+    control = (self.radioButtons)[0]
+  else
+    if tipType == 1 then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_TAPSELL")
+      control = (self.radioButtons)[1]
+    else
+      if tipType == 2 then
+        name = PAGetString(Defines.StringSheet_RESOURCE, "SHOP_BTN_TAPREBUY")
+        control = (self.radioButtons)[2]
+      end
+    end
+  end
+  TooltipSimple_Show(control, name, desc)
 end
 
 Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
@@ -1375,10 +1460,11 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
   if playerWrapper == nil then
     return 
   end
+  local e100Percent = 1000000
   local itemWrapper = getInventoryItem(slotNo)
   local itemSSW = itemWrapper:getStaticStatus()
   local itemEndurance = (itemWrapper:get()):getEndurance()
-  local sellPrice_64 = (itemSSW:get())._sellPriceToNpc_s64
+  local sellPrice_64 = itemWrapper:getSellPriceCalculate(e100Percent)
   local sellPrice_32 = Int64toInt32(sellPrice_64)
   local itemCount_32 = Int64toInt32(itemCount)
   local sellPrice = sellPrice_32 * itemCount_32
@@ -1458,7 +1544,7 @@ Panel_NpcShop_InvenRClick_SellItem = function(itemCount, slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC357: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC358: Confused about usage of register: R12 in 'UnsetPending'
 
 npcShop.registMessageHandler = function(self)
   -- function num : 0_32
@@ -1538,7 +1624,7 @@ npcShop_GuildCheckByBuy = function()
   return true
 end
 
--- DECOMPILER ERROR at PC366: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC367: Confused about usage of register: R12 in 'UnsetPending'
 
 npcShop.setIsCamping = function(self, isCamping)
   -- function num : 0_36

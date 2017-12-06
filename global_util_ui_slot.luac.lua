@@ -1098,6 +1098,15 @@ SlotItem.clearItem = function(self)
   if self.soulComplete ~= nil then
     (self.soulComplete):SetShow(false)
   end
+  if self.bagIcon ~= nil then
+    (self.bagIcon):SetShow(false)
+  end
+  if self.quickslotBagIcon ~= nil then
+    (self.quickslotBagIcon):SetShow(false)
+  end
+  if self.soulComplete ~= nil then
+    (self.soulComplete):SetShow(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC140: Confused about usage of register: R2 in 'UnsetPending'

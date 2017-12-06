@@ -2451,7 +2451,7 @@ end
   ;
   (frame_Game._btn_Reset):addInputEvent("Mouse_LUp", "GameOption_ResetGameOption()")
   ;
-  (gamePanel_Main._btn_Reset):addInputEvent("Mouse_LUp", "GameOption_ResetAllOption()")
+  (gamePanel_Main._btn_Reset):addInputEvent("Mouse_LUp", "GameOption_ResetAllOptionConfirm()")
   value_GameOption_Check_ComboGuide:addInputEvent("Mouse_LUp", "GameOption_ShowComboGuide()")
   ;
   (frame_Display._btn_DOF):addInputEvent("Mouse_On", "Show_PictureTooltips( true , " .. 2 .. ")")
@@ -8234,7 +8234,16 @@ end
 
   GameOption_SaveSetting = function()
   -- function num : 0_320
-  PaGlobal_Panel_SaveSetting_Show()
+  if not isOptionVariableAction() then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    return 
+  end
+  do
+    PaGlobal_Panel_SaveSetting_Show()
+  end
 end
 
   GameOption_Apply = function()
@@ -9025,8 +9034,16 @@ end
   end
 end
 
-  GameOption_ResetAllOption = function()
+  GameOption_ResetAllOptionConfirm = function()
   -- function num : 0_329
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ALLRESETCONFIRMMESSAGE")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = GameOption_ResetAllOption, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
+end
+
+  GameOption_ResetAllOption = function()
+  -- function num : 0_330
   GameOption_ResetDisplayOption()
   GameOption_ResetSoundOption()
   GameOption_ResetGameOption()
@@ -9040,7 +9057,7 @@ end
 end
 
   GameOption_DefaultOption = function(gameOptionSetting, optionType)
-  -- function num : 0_330 , upvalues : chk_Option, randerPlayerColorStr, frame_Game
+  -- function num : 0_331 , upvalues : chk_Option, randerPlayerColorStr, frame_Game
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
   if optionType == 1 then
@@ -9469,7 +9486,7 @@ end
 end
 
   GameOption_ResetDisplayOption = function()
-  -- function num : 0_331 , upvalues : chk_Option, scaleRangeTable, frame_Display, GetStr_Option, gamePanel_Main
+  -- function num : 0_332 , upvalues : chk_Option, scaleRangeTable, frame_Display, GetStr_Option, gamePanel_Main
   resetDisplayOption()
   GameOption_SetScreenModeButtons(chk_Option.currentScreenModeIdx)
   if chk_Option.currentScreenResolutionIdx == 0 then
@@ -9558,7 +9575,7 @@ end
 end
 
   GameOption_ResetSoundOption = function()
-  -- function num : 0_332 , upvalues : frame_Sound, chk_Option, gamePanel_Main
+  -- function num : 0_333 , upvalues : frame_Sound, chk_Option, gamePanel_Main
   resetSoundOption()
   ;
   (frame_Sound._btn_MusicOnOff):SetCheck(chk_Option.currentCheckMusic)
@@ -9628,7 +9645,7 @@ end
 end
 
   GameOption_ResetGameOption = function()
-  -- function num : 0_333 , upvalues : chk_Option, frame_Game, GetStr_Option, gamePanel_Main
+  -- function num : 0_334 , upvalues : chk_Option, frame_Game, GetStr_Option, gamePanel_Main
   resetGameOption()
   local mouseSensitivityX_Percent = (chk_Option.currentCheckMouseSensitivityX - 0.1) / 1.9 * 100
   local mouseSensitivityY_Percent = (chk_Option.currentCheckMouseSensitivityY - 0.1) / 1.9 * 100
@@ -9774,7 +9791,7 @@ end
 end
 
   GameOption_DisplayOptimizationReset = function()
-  -- function num : 0_334 , upvalues : chk_Option, frame_Display, frame_Game
+  -- function num : 0_335 , upvalues : chk_Option, frame_Display, frame_Game
   resetDisplayOption()
   resetGameOption()
   GameOption_SetTextureQualityText(chk_Option.currentTextureQualityIdx)
@@ -9825,11 +9842,11 @@ end
 end
 
   GameOption_UIPositon_Reset = function()
-  -- function num : 0_335
+  -- function num : 0_336
 end
 
   GameOption_SimpleToolTips = function(isShow, optionType)
-  -- function num : 0_336 , upvalues : gamePanel_Main, frame_Sound
+  -- function num : 0_337 , upvalues : gamePanel_Main, frame_Sound
   if optionType == 1 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TOOLTIP_DISPLAY_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TOOLTIP_DISPLAY_DESC")
@@ -9963,7 +9980,7 @@ end
 end
 
   Button_Simpletooltips = function(isShow, targetNo)
-  -- function num : 0_337 , upvalues : toolTipIdxValue
+  -- function num : 0_338 , upvalues : toolTipIdxValue
   if isShow == true then
     registTooltipControl((toolTipIdxValue[targetNo]).control, Panel_Tooltip_SimpleText)
     TooltipSimple_Show((toolTipIdxValue[targetNo]).control, (toolTipIdxValue[targetNo]).name, (toolTipIdxValue[targetNo]).desc)
@@ -9973,7 +9990,7 @@ end
 end
 
   Show_PictureTooltips = function(isShow, tooltipType)
-  -- function num : 0_338 , upvalues : frame_Display
+  -- function num : 0_339 , upvalues : frame_Display
   for index = 0, #frame_Display._pictureTooltip do
     ((frame_Display._pictureTooltip)[index]):SetShow(false)
   end
@@ -10033,7 +10050,7 @@ end
 end
 
   FGlobal_getUIScale = function()
-  -- function num : 0_339 , upvalues : scaleRangeTable
+  -- function num : 0_340 , upvalues : scaleRangeTable
   local uiScale = {}
   uiScale.min = scaleRangeTable.minScaleValue
   uiScale.max = scaleRangeTable.maxScaleValue
@@ -10041,12 +10058,12 @@ end
 end
 
   FGlobal_returnUIScale = function()
-  -- function num : 0_340 , upvalues : chk_Option
+  -- function num : 0_341 , upvalues : chk_Option
   return chk_Option.currentCheckUIScale
 end
 
   FGlobal_saveUIScale = function(scale)
-  -- function num : 0_341 , upvalues : chk_Option
+  -- function num : 0_342 , upvalues : chk_Option
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentCheckUIScale = scale / 100
@@ -10059,7 +10076,7 @@ end
 end
 
   FGlobal_ApplyUIScale = function(scalePercent)
-  -- function num : 0_342 , upvalues : scaleRangeTable, chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_343 , upvalues : scaleRangeTable, chk_Option, frame_Display, GetStr_Option
   local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
   local uiScale_Percent = scalePercent
   -- DECOMPILER ERROR at PC13: Confused about usage of register: R3 in 'UnsetPending'
@@ -10091,7 +10108,7 @@ end
   ToClient_initGameOption()
   gameOption_SetEnableArea_Func()
   GameOption_FontResizeCheckFontType = function(fontRaiseSize)
-  -- function num : 0_343
+  -- function num : 0_344
   local addFontSize = convertUIFontTypeToUIFontSize(fontRaiseSize)
   ;
   (ToClient_getFontWrapper("BaseFont_10")):changeCurrentFontSizeBeMore(addFontSize)
@@ -10148,7 +10165,7 @@ end
 end
 
   getUiFontSize = function()
-  -- function num : 0_344 , upvalues : frame_Game
+  -- function num : 0_345 , upvalues : frame_Game
   if (frame_Game._btn_FontResizeDefault):IsCheck() then
     return 0
   else
@@ -10164,13 +10181,13 @@ end
 
   local simpleUI_Check = (frame_Game._btn_EnableSimpleUI):IsCheck()
   SimpleUI_Check = function()
-  -- function num : 0_345 , upvalues : simpleUI_Check
+  -- function num : 0_346 , upvalues : simpleUI_Check
   SimpleUI_EnableCheck(simpleUI_Check)
 end
 
   SimpleUI_EnableCheck(simpleUI_Check)
   FromClient_ChangeScreenMode = function()
-  -- function num : 0_346
+  -- function num : 0_347
   reloadGameUI()
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_CHANGESCREENMODE_FULL")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = messageBoxMemo, functionYes = ToClient_ChangePreScreenMode, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -10179,7 +10196,7 @@ end
 end
 
   GameOption_SimpleTipOnce = function(isShow)
-  -- function num : 0_347 , upvalues : frame_Display
+  -- function num : 0_348 , upvalues : frame_Display
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -10192,7 +10209,7 @@ end
 end
 
   GameOption_UIKeySetting_Simpletooltip = function(isShow, index, keyType)
-  -- function num : 0_348 , upvalues : getKeyConfigData, STATIC_INPUT_TITLE, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI
+  -- function num : 0_349 , upvalues : getKeyConfigData, STATIC_INPUT_TITLE, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -10217,7 +10234,7 @@ end
 end
 
   GameOption_UIKeySetting_PadKey_Simpletooltip = function(isShow, index, keyType)
-  -- function num : 0_349 , upvalues : getKeyConfigData, BUTTON_PAD, getKeyConfigData_UI, BUTTON_PAD_UI
+  -- function num : 0_350 , upvalues : getKeyConfigData, BUTTON_PAD, getKeyConfigData_UI, BUTTON_PAD_UI
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -10242,7 +10259,7 @@ end
 end
 
   GameOption_Repos = function()
-  -- function num : 0_350 , upvalues : chk_Option
+  -- function num : 0_351 , upvalues : chk_Option
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
   Panel_Window_Option:SetPosX((screenSizeX - Panel_Window_Option:GetSizeX()) / 2)
@@ -10255,12 +10272,12 @@ end
 end
 
   isNearMonsterAlert = function()
-  -- function num : 0_351 , upvalues : frame_Game
+  -- function num : 0_352 , upvalues : frame_Game
   return (frame_Game._btn_Alert_NearMonster):IsCheck()
 end
 
   FromClient_ChangePetOptionForSiege = function(visibleType)
-  -- function num : 0_352 , upvalues : chk_Option
+  -- function num : 0_353 , upvalues : chk_Option
   self = chk_Option
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -10274,7 +10291,7 @@ end
 end
 
   FromClient_OtherPlayeUpdate = function(isEnable, isOption)
-  -- function num : 0_353 , upvalues : chk_Option
+  -- function num : 0_354 , upvalues : chk_Option
   local self = chk_Option
   do
     local isShow = false

@@ -47,6 +47,8 @@ end
 PaGlobal_MovieSkillGuide_Weblist.ReturnValue = function(self, youtubeURL, strKey)
   -- function num : 0_3
   local url = nil
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   if (CppEnums.CountryType).DEV == getGameServiceType() then
     url = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MOVIESKILLGUIDEWEBLIST_URL_KOR_DEV", "movieUrl", youtubeURL, "strKey", strKey)
   else

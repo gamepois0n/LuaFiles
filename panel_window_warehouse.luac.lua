@@ -1099,6 +1099,9 @@ Warehouse_OpenPanelFromDialog = function()
   local self = warehouse
   self.sellCheck = false
   warehouse_clearSellToSystem()
+  if ToClient_IsDevelopment() == true then
+    FGlobal_SearchMenuWareHouse_Open()
+  end
   Warehouse_OpenPanel(getCurrentWaypointKey(), (CppEnums.WarehoouseFromType).eWarehoouseFromType_Npc)
   Warehouse_SetIgnoreMoneyButton(false)
   local screenSizeX = getScreenSizeX()
@@ -1151,6 +1154,9 @@ Warehouse_OpenPanelFromWorldmap = function(waypointKey, fromType)
     DeliveryRequestWindow_Close()
     DeliveryInformationWindow_Close()
   end
+  if (self.BtnMarketRegist):GetShow() == true then
+    (self.BtnMarketRegist):SetShow(false)
+  end
 end
 
 Warehouse_OpenPanelFromMaid = function()
@@ -1181,7 +1187,6 @@ end
 local btnMarketRegistSizeX = (warehouse.BtnMarketRegist):GetSizeX()
 Warehouse_OpenPanel = function(waypointKey, fromType)
   -- function num : 0_57 , upvalues : warehouse, btnMarketRegistSizeX, btnMarketRegSpanSizeY
-  _PA_LOG("cylee", "Warehouse_OpenPanel() waypointKey:" .. tostring(waypointKey))
   local self = warehouse
   self._currentWaypointKey = waypointKey
   self._fromType = fromType
@@ -1294,6 +1299,7 @@ Warehouse_Close = function()
     if Panel_Window_Inventory:GetShow() then
       InventoryWindow_Close()
     end
+    FGlobal_SearchMenuWareHouse_Close()
   end
   if self.itemMarketFilterFunc ~= nil then
     self.itemMarketFilterFunc = nil
@@ -1349,6 +1355,9 @@ end
 FGlobal_Warehouse_ResetFilter = function()
   -- function num : 0_63 , upvalues : warehouse
   local self = warehouse
+  if Panel_Window_SearchMenuWareHouse:GetShow() == false then
+    FGlobal_SearchMenuWareHouse_Show(true)
+  end
   if self.itemMarketFilterFunc ~= nil then
     self.itemMarketFilterFunc = nil
     self.itemMarketRclickFunc = nil

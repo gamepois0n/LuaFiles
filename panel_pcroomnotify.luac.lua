@@ -45,7 +45,7 @@ Panel_PcRoomNotify_Initialize = function()
   _Web = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_PcRoomNotify, "WebControl_PcRoomNotify_WebLink")
   _Web:SetShow(true)
   _Web:SetPosX(43)
-  _Web:SetPosY(63)
+  _Web:SetPosY(62)
   _Web:SetSize(870, 600)
   _Web:ResetUrl()
 end
@@ -57,12 +57,6 @@ PcRoomNotify_FirstUsePearl_Open = function()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
-    return 
-  end
-  if not isPremiumPcRoom then
-    return 
-  end
-  if temporaryPCRoomWrapper:isPcRoomBeforeShow() then
     return 
   end
   audioPostEvent_SystemUi(13, 6)

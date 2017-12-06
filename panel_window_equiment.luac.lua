@@ -302,21 +302,16 @@ EquipmentWindow_Close = function()
   end
   if Panel_Equipment:IsShow() then
     Panel_Equipment:SetShow(false, false)
-    if isNewCharacterInfo() == false then
-      CharacterInfoWindow_Hide()
-    else
-      PaGlobal_CharacterInfo:hideWindow()
-    end
     if ToClient_IsSavedUi() then
       ToClient_SaveUiInfo(false)
       ToClient_SetSavedUi(false)
     end
   end
   HelpMessageQuestion_Out()
-  -- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC29: Confused about usage of register: R0 in 'UnsetPending'
 
   equip.slotRingIndex = 0
-  -- DECOMPILER ERROR at PC41: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R0 in 'UnsetPending'
 
   equip.slotEaringIndex = 0
 end

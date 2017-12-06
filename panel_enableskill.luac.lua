@@ -25,7 +25,7 @@ local searchFailText = (UI.getChildControl)(Panel_EnableSkill, "StaticText_Searc
 local radio = {_radioButton_LearnSkill = (UI.getChildControl)(Panel_EnableSkill, "RadioButton_Tab_LearnSkill"), _radioButton_AllSkill = (UI.getChildControl)(Panel_EnableSkill, "RadioButton_Tab_AllSkill")}
 local CopyUI = {_base_SkillBG = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillBG"), _base_SkillBlueBG = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillBlueBG"), _base_SkillYellowBG = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillYellowBG"), _base_SkillIcon = (UI.getChildControl)(Panel_EnableSkill, "Static_C_SkillIcon"), _base_SkillName = (UI.getChildControl)(Panel_EnableSkill, "StaticText_C_SkillName"), _base_SkillNeedSP = (UI.getChildControl)(Panel_EnableSkill, "StaticText_C_NeedSP"), _base_LearnButton = (UI.getChildControl)(Panel_EnableSkill, "Button_LearnSkill")}
 local CopyString = {_base_StringName = (UI.getChildControl)(Panel_EnableSkill, "StaticText_C_SkillName")}
-local comboBoxUI = {_comboBox = (UI.getChildControl)(Panel_EnableSkill, "Combobox_Sort"), _comboBoxText = (UI.getChildControl)(Panel_EnableSkill, "StaticText_ComboBox")}
+local comboBox = (UI.getChildControl)(Panel_EnableSkill, "Combobox_Sort")
 local editSearch = {_editSearchText = (UI.getChildControl)(Panel_EnableSkill, "EditSearchText"), _editSearchButton = (UI.getChildControl)(Panel_EnableSkill, "BtnSearch")}
 local comboBoxString = {[-1] = PAGetString(Defines.StringSheet_GAME, "LUA_ENABLESKILL_RECOMMENDSKILL"), [0] = PAGetString(Defines.StringSheet_GAME, "LUA_ENABLESKILL_SKILLPOINT_HIGHORDER"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_ENABLESKILL_SKILLPOINT_LOWORDER")}
 local IM = CppEnums.EProcessorInputMode
@@ -92,7 +92,7 @@ EnableSkill_HideAni = function()
 end
 
 enableSkill_UpdateData = function(isEdit)
-  -- function num : 0_2 , upvalues : Panel_EnableSkill_Value_elementCount, radio, comboBoxUI, _slide, isEditCheck, skillEmptyText, searchFailText, enableSkillList_MaxCount, slideIndex, uiData, recommendSkillCount
+  -- function num : 0_2 , upvalues : Panel_EnableSkill_Value_elementCount, radio, comboBox, _slide, isEditCheck, skillEmptyText, searchFailText, enableSkillList_MaxCount, slideIndex, uiData, recommendSkillCount
   local skillInfo = {}
   local allSkillCount = 0
   if isEdit ~= true then
@@ -109,15 +109,15 @@ enableSkill_UpdateData = function(isEdit)
 
   R4_PC11 = R4_PC11(R4_PC11)
   local isAllCheck = nil
-  local selectIndex = (comboBoxUI._comboBox):GetSelectIndex()
+  local selectIndex = comboBox:GetSelectIndex()
   if Panel_EnableSkill_Value_elementCount < 8 then
     _slide:SetShow(false)
   else
     _slide:SetShow(true)
   end
-  -- DECOMPILER ERROR at PC50: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC49: Unhandled construct in 'MakeBoolean' P1
 
-  -- DECOMPILER ERROR at PC50: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC49: Unhandled construct in 'MakeBoolean' P1
 
   if Panel_EnableSkill_Value_elementCount == 0 and isEditCheck == true and skillEmptyText:GetShow() == false then
     searchFailText:SetText()
@@ -127,7 +127,7 @@ enableSkill_UpdateData = function(isEdit)
   skillEmptyText:SetShow(true)
   skillEmptyText:SetShow(false)
   searchFailText:SetShow(false)
-  -- DECOMPILER ERROR at PC83: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC82: Unhandled construct in 'MakeBoolean' P1
 
   if isAllCheck == true and (selectIndex == 0 or selectIndex == 1 or selectIndex == -1) then
     SkillPoint_Sort(Panel_EnableSkill_Value_elementCount, selectIndex + 1)
@@ -192,11 +192,11 @@ enableSkill_UpdateData = function(isEdit)
             ((uiData[index])._needSp):SetShow(false)
             ;
             ((uiData[index])._learnButton):SetShow(false)
-            -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC264: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC263: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -249,11 +249,11 @@ enableSkill_UpdateData = function(isEdit)
             ((uiData[index])._needSp):SetShow(false)
             ;
             ((uiData[index])._learnButton):SetShow(false)
-            -- DECOMPILER ERROR at PC404: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC403: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC404: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC403: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC404: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC403: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -270,30 +270,26 @@ FGlobal_EnableSkillReturn = function()
 end
 
 EnableSkillShowFunc = function()
-  -- function num : 0_4 , upvalues : _slide, slideIndex, comboBoxUI, comboBoxString, radio, isEditCheck, editSearch
+  -- function num : 0_4 , upvalues : _slide, slideIndex, comboBox, radio, isEditCheck, editSearch
   if Panel_Window_Skill:IsShow() == true then
     Panel_EnableSkill:SetShow(true, true)
     _slide:SetControlPos(0)
     slideIndex = 0
-    ;
-    (comboBoxUI._comboBox):SetShow(true)
+    comboBox:SetShow(true)
     ClearFocusEdit()
     EnableSkill_LearnBtn_Effect()
-    ;
-    (comboBoxUI._comboBox):SetSelectItemIndex(0)
-    ;
-    (comboBoxUI._comboBoxText):SetText(comboBoxString[-1])
+    comboBox:SetSelectItemIndex(0)
     Panel_EnableSkill_SetPosition()
     ;
     (radio._radioButton_LearnSkill):SetCheck(true)
     ;
     (radio._radioButton_AllSkill):SetCheck(false)
     enableSkill_UpdateData(isEditCheck)
+    RadioButton_Click(0)
   else
     Panel_EnableSkill:SetShow(false, true)
     ;
     (editSearch._editSearchText):SetEditText("", false)
-    ComboBox_Init()
     isEditCheck = false
   end
 end
@@ -323,7 +319,7 @@ Panel_EnableSkill_SetPosition = function()
 end
 
 enableSkill_MakeControl = function(index)
-  -- function num : 0_7 , upvalues : UI_PUCT, CopyUI, recommendSkill, mousePosBG, comboBoxUI
+  -- function num : 0_7 , upvalues : UI_PUCT, CopyUI, recommendSkill, mousePosBG, comboBox
   local ui = {}
   ui._IconBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_EnableSkill, "Static_SkillBG_" .. index)
   CopyBaseProperty(CopyUI._base_SkillBG, ui._IconBG)
@@ -426,10 +422,9 @@ enableSkill_MakeControl = function(index)
   (ui._skillIcon):addInputEvent("Mouse_UpScroll", "enableSkill_Scroll( true )")
   ;
   (ui._skillIcon):addInputEvent("Mouse_DownScroll", "enableSkill_Scroll( false )")
+  comboBox:addInputEvent("Mouse_LUp", "ComboBox_show()")
   ;
-  (comboBoxUI._comboBox):addInputEvent("Mouse_LUp", "ComboBox_show()")
-  ;
-  ((comboBoxUI._comboBox):GetListControl()):addInputEvent("Mouse_LUp", "ComboBox_Set()")
+  (comboBox:GetListControl()):addInputEvent("Mouse_LUp", "ComboBox_Set()")
   return ui
 end
 
@@ -507,7 +502,7 @@ isSkillLearnTutorialClick_check = function()
 end
 
 enableSkill_Init = function()
-  -- function num : 0_14 , upvalues : mousePosBG, UI_PUCT, CopyUI, enableSkillList_MaxCount, uiData, radio, editSearch, _slide, _frameBG, isEditCheck, comboBoxUI
+  -- function num : 0_14 , upvalues : mousePosBG, UI_PUCT, CopyUI, enableSkillList_MaxCount, uiData, radio, editSearch, _slide, _frameBG, isEditCheck, comboBox
   mousePosBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_EnableSkill, "Static_SkillYellowBG_")
   CopyBaseProperty(CopyUI._base_SkillYellowBG, mousePosBG)
   mousePosBG:SetShow(false)
@@ -565,14 +560,9 @@ enableSkill_Init = function()
   (editSearch._editSearchText):RegistReturnKeyEvent("SearchButton_Click()")
   isAllCheck = (radio._radioButton_LearnSkill):SetCheck(true)
   isLearnCheck = (radio._radioButton_AllSkill):SetCheck(false)
-  ComboBox_Init()
   enableSkill_UpdateData(isEditCheck)
-  ;
-  (comboBoxUI._comboBox):SetShow(true)
-  ;
-  (comboBoxUI._comboBoxText):SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
-  Panel_EnableSkill:SetChildIndex(comboBoxUI._comboBox, 9998)
-  Panel_EnableSkill:SetChildIndex(comboBoxUI._comboBoxText, 9999)
+  Panel_EnableSkill:SetChildIndex(comboBox, 9998)
+  RadioButton_Click(0)
 end
 
 FromClient_EventSkillWindowUpdate = function()
@@ -602,7 +592,7 @@ UseSkillFromOtherPlayer_No = function()
 end
 
 EnableSkill_Setting = function()
-  -- function num : 0_19 , upvalues : radio, comboBoxUI, Panel_EnableSkill_Value_elementCount, recommendSkillCount, skillNumber, editSkillName, editSkillNo, maxRecommendCount, recommendSkill
+  -- function num : 0_19 , upvalues : radio, comboBox, Panel_EnableSkill_Value_elementCount, recommendSkillCount, skillNumber, editSkillName, editSkillNo, maxRecommendCount, recommendSkill
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -617,7 +607,7 @@ EnableSkill_Setting = function()
   end
   local isLearnCheck = (radio._radioButton_LearnSkill):IsCheck()
   local isAllCheck = (radio._radioButton_AllSkill):IsCheck()
-  local selectIndex = (comboBoxUI._comboBox):GetSelectIndex()
+  local selectIndex = comboBox:GetSelectIndex()
   Panel_EnableSkill_Value_elementCount = 0
   recommendSkillCount = 0
   for iii = 0, 1 do
@@ -633,16 +623,16 @@ EnableSkill_Setting = function()
           local needSp = (skillStaticWrapper:get())._needSkillPointForLearning
           local recommendCheck = false
           local skillType = getSkillTypeStaticStatus(skillNo)
-          -- DECOMPILER ERROR at PC96: Confused about usage of register: R27 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC95: Confused about usage of register: R27 in 'UnsetPending'
 
-          -- DECOMPILER ERROR at PC96: Unhandled construct in 'MakeBoolean' P1
+          -- DECOMPILER ERROR at PC95: Unhandled construct in 'MakeBoolean' P1
 
           if skillType:isValidLocalizing() and isAllCheck == true and not recommendCheck then
             skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
-            -- DECOMPILER ERROR at PC101: Confused about usage of register: R27 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC100: Confused about usage of register: R27 in 'UnsetPending'
 
             editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-            -- DECOMPILER ERROR at PC104: Confused about usage of register: R27 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC103: Confused about usage of register: R27 in 'UnsetPending'
 
             editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
             Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
@@ -653,21 +643,21 @@ EnableSkill_Setting = function()
             for i = 0, maxRecommendCount - 1 do
               if skillNo == (recommendSkill[selfPlayer:getClassType()])[i] then
                 for ii = Panel_EnableSkill_Value_elementCount + 1, recommendSkillCount, -1 do
-                  -- DECOMPILER ERROR at PC145: Confused about usage of register: R35 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC144: Confused about usage of register: R35 in 'UnsetPending'
 
                   if recommendSkillCount == ii then
                     skillNumber[ii] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
                   else
-                    -- DECOMPILER ERROR at PC151: Confused about usage of register: R35 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC150: Confused about usage of register: R35 in 'UnsetPending'
 
                     skillNumber[ii] = skillNumber[ii - 1]
                   end
                 end
                 recommendSkillCount = recommendSkillCount + 1
-                -- DECOMPILER ERROR at PC160: Confused about usage of register: R31 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC159: Confused about usage of register: R31 in 'UnsetPending'
 
                 editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-                -- DECOMPILER ERROR at PC163: Confused about usage of register: R31 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC162: Confused about usage of register: R31 in 'UnsetPending'
 
                 editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
                 Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
@@ -677,23 +667,23 @@ EnableSkill_Setting = function()
           end
           do
             do
-              -- DECOMPILER ERROR at PC179: Confused about usage of register: R27 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC178: Confused about usage of register: R27 in 'UnsetPending'
 
               if not recommendCheck then
                 skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
-                -- DECOMPILER ERROR at PC184: Confused about usage of register: R27 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC183: Confused about usage of register: R27 in 'UnsetPending'
 
                 editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-                -- DECOMPILER ERROR at PC187: Confused about usage of register: R27 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC186: Confused about usage of register: R27 in 'UnsetPending'
 
                 editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
                 Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
               end
-              -- DECOMPILER ERROR at PC191: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC190: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC191: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC190: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC191: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC190: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -711,26 +701,33 @@ FGlobal_IsLearn = function()
 end
 
 RadioButton_Click = function(radioIndex)
-  -- function num : 0_21 , upvalues : learnSkillTabIndex, comboBoxUI, comboBoxString, radio, allSkillTabIndex, skillEmptyText, searchFailText, isEditCheck, editSearch
+  -- function num : 0_21 , upvalues : comboBox, learnSkillTabIndex, comboBoxString, radio, allSkillTabIndex, skillEmptyText, searchFailText, isEditCheck, editSearch
+  comboBox:DeleteAllItem(0)
+  local count = 0
   if radioIndex == learnSkillTabIndex then
-    (comboBoxUI._comboBox):SetSelectItemIndex(-1)
-    ;
-    (comboBoxUI._comboBoxText):SetText(comboBoxString[-1])
+    for index = -1, #comboBoxString do
+      comboBox:AddItem(comboBoxString[index])
+      count = count + 1
+    end
     ;
     (radio._radioButton_LearnSkill):SetCheck(true)
     ;
     (radio._radioButton_AllSkill):SetCheck(false)
   else
     if radioIndex == allSkillTabIndex then
-      (comboBoxUI._comboBox):SetSelectItemIndex(0)
-      ;
-      (comboBoxUI._comboBoxText):SetText(comboBoxString[0])
+      for index = 0, #comboBoxString do
+        comboBox:AddItem(comboBoxString[index])
+        count = count + 1
+      end
       ;
       (radio._radioButton_LearnSkill):SetCheck(false)
       ;
       (radio._radioButton_AllSkill):SetCheck(true)
     end
   end
+  comboBox:SetSelectItemIndex(0)
+  ;
+  (comboBox:GetListControl()):SetSize(comboBox:GetSizeX(), (count) * 20)
   skillEmptyText:SetShow(false)
   searchFailText:SetShow(false)
   RadioButton_Click_Init()
@@ -770,65 +767,20 @@ SkillPoint_Sort = function(skillCount, comboIndex)
   end
 end
 
-ComboBox_Init = function()
-  -- function num : 0_23 , upvalues : comboBoxUI, comboBoxString
-  (comboBoxUI._comboBox):SetShow(false)
-  ;
-  (comboBoxUI._comboBox):SetSelectItemIndex(0)
-  ;
-  (comboBoxUI._comboBoxText):SetText(comboBoxString[-1])
-end
-
-ComboBox_show = function(RadioClickInit)
-  -- function num : 0_24 , upvalues : comboBoxUI, radio, comboBoxString
-  (comboBoxUI._comboBox):DeleteAllItem(0)
-  ClearFocusEdit()
-  local isLearnCheck = (radio._radioButton_LearnSkill):IsCheck()
-  local isAllCheck = (radio._radioButton_AllSkill):IsCheck()
-  local count = 0
-  if isLearnCheck == true then
-    for index = -1, #comboBoxString do
-      (comboBoxUI._comboBox):AddItem(comboBoxString[index])
-      count = count + 1
-    end
-  else
-    do
-      if isAllCheck == true then
-        for index = 0, #comboBoxString do
-          (comboBoxUI._comboBox):AddItem(comboBoxString[index])
-          count = count + 1
-        end
-      end
-      do
-        if RadioClickInit ~= true then
-          ((comboBoxUI._comboBox):GetListControl()):SetPosX(0)
-          ;
-          ((comboBoxUI._comboBox):GetListControl()):SetSize((comboBoxUI._comboBox):GetSizeX(), (count) * 20)
-          ;
-          (comboBoxUI._comboBox):ToggleListbox()
-        end
-      end
-    end
-  end
+ComboBox_show = function()
+  -- function num : 0_23 , upvalues : comboBox
+  comboBox:ToggleListbox()
 end
 
 ComboBox_Set = function()
-  -- function num : 0_25 , upvalues : comboBoxUI, radio, comboBoxString, isEditCheck
-  local selectIndex = (comboBoxUI._comboBox):GetSelectIndex()
-  local isAllCheck = (radio._radioButton_AllSkill):IsCheck()
-  local index = 0
-  if isAllCheck == true then
-    index = 1
-  end
-  ;
-  (comboBoxUI._comboBoxText):SetText(comboBoxString[selectIndex - 1 + index])
-  ;
-  (comboBoxUI._comboBox):ToggleListbox()
+  -- function num : 0_24 , upvalues : comboBox, isEditCheck
+  comboBox:SetSelectItemIndex(comboBox:GetSelectIndex())
+  comboBox:ToggleListbox()
   enableSkill_UpdateData(isEditCheck)
 end
 
 RadioButton_Click_Init = function()
-  -- function num : 0_26 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount
+  -- function num : 0_25 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount
   _slide:SetControlPos(0)
   slideIndex = 0
   Panel_EnableSkill_Value_elementCount = 0
@@ -836,7 +788,7 @@ RadioButton_Click_Init = function()
 end
 
 SearchButton_Click = function()
-  -- function num : 0_27 , upvalues : IM, mousePosBG, slideIndex, filterText, editSearch, isEditCheck
+  -- function num : 0_26 , upvalues : IM, mousePosBG, slideIndex, filterText, editSearch, isEditCheck
   if AllowChangeInputMode() then
     (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     ClearFocusEdit()
@@ -855,7 +807,7 @@ SearchButton_Click = function()
 end
 
 SearchEditText_Reset = function()
-  -- function num : 0_28 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount, editSearch, isEditCheck
+  -- function num : 0_27 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount, editSearch, isEditCheck
   _slide:SetControlPos(0)
   slideIndex = 0
   Panel_EnableSkill_Value_elementCount = 0
@@ -867,7 +819,7 @@ SearchEditText_Reset = function()
 end
 
 SearchText_Click = function()
-  -- function num : 0_29 , upvalues : IM, editSearch
+  -- function num : 0_28 , upvalues : IM, editSearch
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(editSearch._editSearchText)
   ;
@@ -875,12 +827,12 @@ SearchText_Click = function()
 end
 
 local stringMatching = function(filterText, editSkillName)
-  -- function num : 0_30
+  -- function num : 0_29
   return stringSearch(filterText, editSkillName)
 end
 
 EnableSearchSkill_Setting = function()
-  -- function num : 0_31 , upvalues : Panel_EnableSkill_Value_elementCount, stringMatching, editSkillName, filterText, editSkillNo, skillNumber, isEditCheck
+  -- function num : 0_30 , upvalues : Panel_EnableSkill_Value_elementCount, stringMatching, editSkillName, filterText, editSkillNo, skillNumber, isEditCheck
   enableSkill_UpdateData(false)
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
@@ -915,10 +867,10 @@ EnableSearchSkill_Setting = function()
           allSkillCount = allSkillCount + 1
           if cell:isSkillType() then
             for i = 0, editSkillCount do
-              -- DECOMPILER ERROR at PC103: Confused about usage of register: R26 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC104: Confused about usage of register: R26 in 'UnsetPending'
 
               if skillNo == editSkillMatchNo[i] then
-                skillNumber[i] = {_skillNo = skillNo, _row = row, _col = col}
+                skillNumber[i] = {_skillNo = skillNo, _row = row, _col = col, _awaken = iii}
               end
             end
           end

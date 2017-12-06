@@ -104,8 +104,11 @@ end
 
 -- DECOMPILER ERROR at PC81: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_Memo.Save = function(self, saveMode)
+PaGlobal_Memo.Save = function(self, saveMode, inputId)
   -- function num : 0_5
+  if inputId ~= nil then
+    self._currentFocusId = inputId
+  end
   local id = self._currentFocusId
   local _saveMode = self:ReCheckSaveMode(saveMode)
   if _saveMode == nil then

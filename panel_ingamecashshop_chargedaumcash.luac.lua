@@ -43,9 +43,8 @@ Panel_IngameCashShop_ChargeDaumCash_HideAni = function()
 end
 
 local _btn_Close = ((UI.getChildControl)(Panel_IngameCashShop_ChargeDaumCash, "Button_Close"))
-do
-  local _Web = nil
-  Panel_IngameCashShop_ChargeDaumCash_Initialize = function()
+local _Web = nil
+Panel_IngameCashShop_ChargeDaumCash_Initialize = function()
   -- function num : 0_2 , upvalues : termsofDaumCash, _Web
   local self = termsofDaumCash
   _Web = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_IngameCashShop_ChargeDaumCash, "WebControl_ChargeDaumCash_WebLink")
@@ -69,9 +68,11 @@ do
   end
 end
 
-  Panel_IngameCashShop_ChargeDaumCash_Initialize()
+Panel_IngameCashShop_ChargeDaumCash_Initialize()
+do
+  local preScreenMode = 0
   chargeDaumCash_Open = function()
-  -- function num : 0_3 , upvalues : termsofDaumCash, UI_SERVICE_RESOURCE, isNaver
+  -- function num : 0_3 , upvalues : termsofDaumCash, UI_SERVICE_RESOURCE, preScreenMode, isNaver
   local self = termsofDaumCash
   local url = nil
   local langType = "EN"
@@ -94,6 +95,7 @@ end
       SALangType = "pt"
     end
   end
+  preScreenMode = (ToClient_getGameOptionControllerWrapper()):getScreenMode()
   if isGameServiceTypeKorReal() then
     if isNaver then
       url = "http://black.game.naver.com/black/billing/shop/index.daum"
@@ -201,9 +203,15 @@ end
 end
 
   IngameCashShop_ChargeComplete = function()
-  -- function num : 0_4
+  -- function num : 0_4 , upvalues : preScreenMode
   ToClient_ChargeComplete()
   InGameShop_RefreshCash()
+  if preScreenMode == 0 then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_CHANGESCREENMODE_FULL")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = messageBoxMemo, functionYes = ToClient_ChangePreScreenMode, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+  end
 end
 
   chargeDaumCash_Close = function()

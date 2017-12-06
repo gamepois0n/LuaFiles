@@ -45,6 +45,8 @@ end
 PaGlobal_MovieGuide_Web.ReturnValue = function(self)
   -- function num : 0_3
   local url = nil
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   if (CppEnums.CountryType).DEV == getGameServiceType() then
     url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_KOR_DEV")
   else

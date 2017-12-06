@@ -470,8 +470,15 @@ local CharacterView = function(index, classType, isSpecialCharacter, isChangeSpe
         setWeatherTime(7, 17)
         viewCharacterFov(0.75)
       else
-        viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
-        viewCharacterPitchRoll(3.14, 0)
+        if classType == UI_Class.ClassType_Angle then
+          viewCharacter(index, -20, -20, -94, -0.4, isSpecialCharacter, isChangeSpecialTab)
+          viewCharacterPitchRoll(0, 0)
+          setWeatherTime(8, 21)
+          viewCharacterFov(0.55)
+        else
+          viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
+          viewCharacterPitchRoll(3.14, 0)
+        end
       end
     end
   end
@@ -719,19 +726,37 @@ local ChangeTexture_Class = function(control, classType)
                                                             (control:getClickTexture()):setUV(x1, y1, x2, y2)
                                                           else
                                                             do
-                                                              control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                              local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
-                                                              ;
-                                                              (control:getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                              control:setRenderTexture(control:getBaseTexture())
-                                                              control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                              local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
-                                                              ;
-                                                              (control:getOnTexture()):setUV(x1, y1, x2, y2)
-                                                              control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
-                                                              local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
-                                                              ;
-                                                              (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                              if classType == UI_Class.ClassType_Angle then
+                                                                control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                                local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
+                                                                ;
+                                                                (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                control:setRenderTexture(control:getBaseTexture())
+                                                                control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                                local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
+                                                                ;
+                                                                (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                                control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
+                                                                local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                                ;
+                                                                (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                              else
+                                                                do
+                                                                  control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                                  local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
+                                                                  ;
+                                                                  (control:getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                  control:setRenderTexture(control:getBaseTexture())
+                                                                  control:ChangeOnTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                                  local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 306, 458, 366)
+                                                                  ;
+                                                                  (control:getOnTexture()):setUV(x1, y1, x2, y2)
+                                                                  control:ChangeClickTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_01.dds")
+                                                                  local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 367, 458, 427)
+                                                                  ;
+                                                                  (control:getClickTexture()):setUV(x1, y1, x2, y2)
+                                                                end
+                                                              end
                                                             end
                                                           end
                                                         end
@@ -1394,58 +1419,67 @@ CharacterSelect_PlayGame = function(index)
   local isSpecialCharacter = false
   if (SelectCharacter.radioBtn_SpecialCharacterList):IsCheck() == true then
     isSpecialCharacter = true
-  end
-  -- DECOMPILER ERROR at PC9: Confused about usage of register: R2 in 'UnsetPending'
-
-  configData.selectCaracterIdx = index
-  local characterData = getCharacterDataByIndex(index, isSpecialCharacter)
-  local classType = getCharacterClassType(characterData)
-  local characterCount = getCharacterDataCount()
-  local serverUtc64 = getServerUtc64()
-  do
-    if ToClient_IsCustomizeOnlyClass(classType) then
-      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    local curChannelData = getCurrentChannelServerData()
+    if curChannelData ~= nil and curChannelData._isSiegeChannel then
+      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_DONTJOIN"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageboxData)
       return 
     end
-    if characterData ~= nil then
-      if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_OBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
-        if characterData._level == 1 and characterCount == 1 then
-          FGlobal_FirstLogin_Open(index)
-        else
-          local pcDeliveryRegionKey = characterData._arrivalRegionKey
-          if (ePcWorkingType.ePcWorkType_Empty ~= characterData._pcWorkingType and ePcWorkingType.ePcWorkType_Play ~= characterData._pcWorkingType) or pcDeliveryRegionKey:get() ~= 0 and serverUtc64 < characterData._arrivalTime then
-            if pcDeliveryRegionKey:get() ~= 0 then
-              contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_CHANGE_Q") .. PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_MAIN_MOVECHARACTER_MSG")
-            else
-              if ePcWorkingType.ePcWorkType_ReadBook == characterData._pcWorkingType then
-                contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_READ_BOOK")
+  end
+  do
+    -- DECOMPILER ERROR at PC40: Confused about usage of register: R2 in 'UnsetPending'
+
+    configData.selectCaracterIdx = index
+    local characterData = getCharacterDataByIndex(index, isSpecialCharacter)
+    local classType = getCharacterClassType(characterData)
+    local characterCount = getCharacterDataCount()
+    local serverUtc64 = getServerUtc64()
+    do
+      if ToClient_IsCustomizeOnlyClass(classType) then
+        local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_NOTYET"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+        ;
+        (MessageBox.showMessageBox)(messageboxData)
+        return 
+      end
+      if characterData ~= nil then
+        if getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_CBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_OBT or getContentsServiceType() == (CppEnums.ContentsServiceType).eContentsServiceType_Commercial then
+          if characterData._level == 1 and characterCount == 1 then
+            FGlobal_FirstLogin_Open(index)
+          else
+            local pcDeliveryRegionKey = characterData._arrivalRegionKey
+            if (ePcWorkingType.ePcWorkType_Empty ~= characterData._pcWorkingType and ePcWorkingType.ePcWorkType_Play ~= characterData._pcWorkingType) or pcDeliveryRegionKey:get() ~= 0 and serverUtc64 < characterData._arrivalTime then
+              if pcDeliveryRegionKey:get() ~= 0 then
+                contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_CHANGE_Q") .. PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_MAIN_MOVECHARACTER_MSG")
               else
-                if ePcWorkingType.ePcWorkType_RepairItem == characterData._pcWorkingType then
-                  contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_REPAIR")
+                if ePcWorkingType.ePcWorkType_ReadBook == characterData._pcWorkingType then
+                  contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_READ_BOOK")
+                else
+                  if ePcWorkingType.ePcWorkType_RepairItem == characterData._pcWorkingType then
+                    contentString = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_WORKING_NOW_REPAIR")
+                  end
                 end
               end
-            end
-            local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"), content = contentString, functionYes = CharacterSelect_SelectEnterToGame, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-            ;
-            (MessageBox.showMessageBox)(messageboxData)
-          else
-            do
-              if ToClient_IsCustomizeOnlyClass(classType) then
-                local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_CUSTOMIZEONLYCLASS_MEMO"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                ;
-                (MessageBox.showMessageBox)(messageboxData)
-              else
-                do
+              local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE"), content = contentString, functionYes = CharacterSelect_SelectEnterToGame, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+              ;
+              (MessageBox.showMessageBox)(messageboxData)
+            else
+              do
+                if ToClient_IsCustomizeOnlyClass(classType) then
+                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_LOBBY_SELECTCHARACTER_CUSTOMIZEONLYCLASS_MEMO"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                  ;
+                  (MessageBox.showMessageBox)(messageboxData)
+                else
                   do
-                    if selectCharacter(configData.selectCaracterIdx, isSpecialCharacter) == true then
-                      Panel_Lobby_SelectCharacter_EnableSelectButton(false)
+                    do
+                      if selectCharacter(configData.selectCaracterIdx, isSpecialCharacter) == true then
+                        Panel_Lobby_SelectCharacter_EnableSelectButton(false)
+                      end
+                      local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
+                      local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
+                      ;
+                      (MessageBox.showMessageBox)(messageboxData)
                     end
-                    local titleText = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY")
-                    local messageboxData = {title = titleText, content = PAGetString(Defines.StringSheet_GAME, "PANEL_LOBBY_PREDOWNLOAD"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW, exitButton = false}
-                    ;
-                    (MessageBox.showMessageBox)(messageboxData)
                   end
                 end
               end
@@ -1846,9 +1880,17 @@ UpdateSpecialCharacterTab = function()
   if isSpecialCharacterOpen == false then
     return 
   end
-  local isPremiumPcRoom = temporaryWrapper:isPremiumPcRoom()
-  if isPremiumPcRoom == false then
-    return 
+  local isPremiumPcRoom = nil
+  if isGameTypeRussia() == true then
+    isPremiumPcRoom = temporaryWrapper:isRusPcRoom()
+    if isPremiumPcRoom == false then
+      return 
+    end
+  else
+    isPremiumPcRoom = temporaryWrapper:isPremiumPcRoom()
+    if isPremiumPcRoom == false then
+      return 
+    end
   end
   ;
   (SelectCharacter.radioBtn_CharacterList):SetShow(true)
@@ -1868,7 +1910,7 @@ UpdateSpecialCharacterTab = function()
     ;
     (SelectCharacter.radioBtnBG):SetShow(false)
   end
-  -- DECOMPILER ERROR at PC79: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC92: Confused about usage of register: R3 in 'UnsetPending'
 
   SelectCharacter.premiumPcRoomSizeY = (SelectCharacter.radioBtn_CharacterList):GetSizeY()
   ;
@@ -1879,10 +1921,10 @@ UpdateSpecialCharacterTab = function()
   local _btnCount = (math.floor)(scrSizeSumY / btnSizeY)
   ;
   (SelectCharacter._scroll):SetSize((SelectCharacter._scroll):GetSizeX(), btnSizeY * _btnCount - self.premiumPcRoomSizeY)
-  -- DECOMPILER ERROR at PC133: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC146: Confused about usage of register: R7 in 'UnsetPending'
 
   configData._listCount = _btnCount
-  -- DECOMPILER ERROR at PC136: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC149: Confused about usage of register: R7 in 'UnsetPending'
 
   configData.slotUiPool = {}
   for slotIdx = 0, configData._listCount - 1 do
@@ -1959,7 +2001,7 @@ UpdateSpecialCharacterTab = function()
     (slot._btnStart):addInputEvent("Mouse_UpScroll", "SelectCharacter_ScrollEvent( true )")
     ;
     (slot._btnStart):addInputEvent("Mouse_DownScroll", "SelectCharacter_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC390: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC403: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (configData.slotUiPool)[slotIdx] = slot

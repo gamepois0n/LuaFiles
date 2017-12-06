@@ -566,10 +566,8 @@ HandleClicked_ItemMarketItemSet_RegistCancle = function(itemEnchantKeyRaw, index
   (MessageBox.showMessageBox)(messageBoxData, "middle")
 end
 
-local withdrawalsItemKey = -1
-local withdrawalsIndex = -1
 HandleClicked_ItemMarketItemSet_ItemWithdrawals = function(itemEnchantKeyRaw, index)
-  -- function num : 0_14 , upvalues : ItemMarketItemSet, UI_BUFFTYPE, withdrawalsItemKey, withdrawalsIndex
+  -- function num : 0_14 , upvalues : UI_BUFFTYPE, ItemMarketItemSet
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -585,80 +583,33 @@ HandleClicked_ItemMarketItemSet_ItemWithdrawals = function(itemEnchantKeyRaw, in
   if iess == nil then
     return 
   end
-  local self = ItemMarketItemSet
-  local temporaryWrapper = getTemporaryInformationWrapper()
-  local isPcRoom = temporaryWrapper:isPcRoom()
-  local left_premiumTime = (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
-  local left_SecretDealsTime = (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_StarterPackage)
   local isPremiumUser = false
-  local isSecretDealsUser = false
-  local isCashitem = (iess:get()):isCash()
-  if left_premiumTime then
+  if (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage) == true then
     isPremiumUser = true
   end
-  if left_SecretDealsTime then
-    isSecretDealsUser = true
-  end
-  local myItemInfo = getItemMarketMyItemByIndex(index)
-  local itemTotalPrice = myItemInfo:getTradedTotalPrice()
   local isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_PCROOMMEMO", "forPremium", requestGetRefundPercentForPremiumPackage())
   if getGameServiceType() == 5 or getGameServiceType() == 6 then
     isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_PCROOMMEMO_JP", "pcRoom", requestGetRefundPercentForPcRoom())
-  else
-    isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_PCROOMMEMO", "forPremium", requestGetRefundPercentForPremiumPackage())
   end
+  local itemTotalPrice = myItemInfo:getTradedTotalPrice()
   local ItemWithdrawalsExecute = function()
-    -- function num : 0_14_0 , upvalues : ItemMarketItemSet, itemTotalPrice, withdrawalsItemKey, withdrawalsIndex
-    local self = ItemMarketItemSet
+    -- function num : 0_14_0 , upvalues : ItemMarketItemSet, itemTotalPrice, itemEnchantKeyRaw, index
     local toWhereType = (CppEnums.ItemWhereType).eInventory
-    if (self.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= itemTotalPrice then
+    if (ItemMarketItemSet.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= itemTotalPrice then
       toWhereType = (CppEnums.ItemWhereType).eWarehouse
     end
-    requestWithdrawSellingItemMoneyForItemMarket(withdrawalsItemKey, withdrawalsIndex, toWhereType)
-    withdrawalsItemKey = -1
-    withdrawalsIndex = -1
+    requestWithdrawSellingItemMoneyForItemMarket(itemEnchantKeyRaw, index, toWhereType)
   end
 
-  withdrawalsItemKey = itemEnchantKeyRaw
-  withdrawalsIndex = index
-  if isPremiumUser == false and not isCashitem then
+  if isPremiumUser == false and (iess:get()):isCash() == false then
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
     local messageBoxMemo = isCountryTypeSet
-    if isSecretDealsUser == false then
-      do
-        local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = ItemWithdrawalsExecute, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-        ;
-        (MessageBox.showMessageBox)(messageBoxData, "middle")
-        if isGameTypeRussia() and isServerFixedCharge() then
-          local doWithdrawals = function()
-    -- function num : 0_14_1 , upvalues : self, itemTotalPrice, itemEnchantKeyRaw, index, withdrawalsItemKey, withdrawalsIndex
-    local toWhereType = (CppEnums.ItemWhereType).eInventory
-    if (self.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= itemTotalPrice then
-      toWhereType = (CppEnums.ItemWhereType).eWarehouse
-    end
-    requestWithdrawSellingItemMoneyForItemMarket(itemEnchantKeyRaw, index, toWhereType)
-    withdrawalsItemKey = -1
-    withdrawalsIndex = -1
-  end
-
-          doWithdrawals()
-        else
-          do
-            local doWithdrawals = function()
-    -- function num : 0_14_2 , upvalues : self, itemTotalPrice, itemEnchantKeyRaw, index, withdrawalsItemKey, withdrawalsIndex
-    local toWhereType = (CppEnums.ItemWhereType).eInventory
-    if (self.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= itemTotalPrice then
-      toWhereType = (CppEnums.ItemWhereType).eWarehouse
-    end
-    requestWithdrawSellingItemMoneyForItemMarket(itemEnchantKeyRaw, index, toWhereType)
-    withdrawalsItemKey = -1
-    withdrawalsIndex = -1
-  end
-
-            doWithdrawals()
-          end
-        end
-      end
+    local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = ItemWithdrawalsExecute, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData, "middle")
+  else
+    do
+      ItemWithdrawalsExecute()
     end
   end
 end
@@ -672,68 +623,48 @@ ItemMarketSetItem_GetAllItemCheck = function()
   if getItemMarketMyItemsCount() == 0 then
     return 
   end
-  local left_premiumTime = (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
-  local left_SecretDealsTime = (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_StarterPackage)
   local isPremiumUser = false
-  local isSecretDealsUser = false
-  if left_premiumTime then
+  if (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage) == true then
     isPremiumUser = true
-  end
-  if left_SecretDealsTime then
-    isSecretDealsUser = true
   end
   local isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKETSET_GETALLITEMDESC_MEMOBOX", "forPremium", requestGetRefundPercentForPremiumPackage())
   if isGameTypeJapan() then
     isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_PCROOMMEMO_JP", "pcRoom", requestGetRefundPercentForPcRoom())
-  else
-    isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKETSET_GETALLITEMDESC_MEMOBOX", "forPremium", requestGetRefundPercentForPremiumPackage())
   end
   if isPremiumUser == false then
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
     local messageBoxMemo = isCountryTypeSet
-    if isSecretDealsUser == false then
-      do
-        local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = ItemMarketSetItem_GetAllItem, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-        ;
-        (MessageBox.showMessageBox)(messageBoxData)
-        if isGameTypeRussia() and isServerFixedCharge() then
-          ItemMarketSetItem_GetAllItem()
-        else
-          ItemMarketSetItem_GetAllItem()
-        end
-      end
+    local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = ItemMarketSetItem_GetAllItem, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+  else
+    do
+      ItemMarketSetItem_GetAllItem()
     end
   end
 end
 
 ItemMarketSetItem_GetAllItem = function()
-  -- function num : 0_16
-  local myItemCount = getItemMarketMyItemsCount()
+  -- function num : 0_16 , upvalues : ItemMarketItemSet
+  local myItemCount = (getItemMarketMyItemsCount())
+  local toWhereType = nil
   for i = 0, myItemCount - 1 do
     local myItemInfo = getItemMarketMyItemByIndex(i)
     if myItemInfo ~= nil then
       local iess = myItemInfo:getItemEnchantStaticStatusWrapper()
-      if iess ~= nil and myItemInfo:isTraded() and Int64toInt32(myItemInfo:getTotalPrice()) == 0 then
-        HandleClicked_ItemMarketItemSet_ItemWithdrawals(((iess:get())._key):get(), i)
+      if iess ~= nil and myItemInfo:isTraded() then
+        toWhereType = (CppEnums.ItemWhereType).eInventory
+        if (ItemMarketItemSet.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= myItemInfo:getTradedTotalPrice() then
+          toWhereType = (CppEnums.ItemWhereType).eWarehouse
+        end
+        requestWithdrawSellingItemMoneyForItemMarket(((iess:get())._key):get(), i, toWhereType)
       end
     end
   end
 end
 
-ItemMarketSetItem_ItemWithdrawalsExecute = function()
-  -- function num : 0_17 , upvalues : ItemMarketItemSet, withdrawalsItemKey, withdrawalsIndex
-  local self = ItemMarketItemSet
-  local toWhereType = (CppEnums.ItemWhereType).eInventory
-  if (self.btn_Warehouse):IsCheck() then
-    toWhereType = (CppEnums.ItemWhereType).eWarehouse
-  end
-  requestWithdrawSellingItemMoneyForItemMarket(withdrawalsItemKey, withdrawalsIndex, toWhereType)
-  withdrawalsItemKey = -1
-  withdrawalsIndex = -1
-end
-
 HandleClicked_ItemMarketItemSet_ItemSettlement = function(itemEnchantKeyRaw, index)
-  -- function num : 0_18 , upvalues : ItemMarketItemSet, UI_BUFFTYPE
+  -- function num : 0_17 , upvalues : UI_BUFFTYPE, ItemMarketItemSet
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -749,65 +680,50 @@ HandleClicked_ItemMarketItemSet_ItemSettlement = function(itemEnchantKeyRaw, ind
   if iess == nil then
     return 
   end
-  local self = ItemMarketItemSet
-  local left_SecretDealsTime = (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_StarterPackage)
-  local left_premiumTime = (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
   local isPremiumUser = false
-  local isSecretDealsUser = false
-  local isCashItem = (iess:get()):isCash()
-  if left_premiumTime then
+  if (selfPlayer:get()):isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage) == true then
     isPremiumUser = true
-  end
-  if left_SecretDealsTime then
-    isSecretDealsUser = true
   end
   local isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_PCROOMMEMO", "forPremium", requestGetRefundPercentForPremiumPackage())
   if isGameTypeJapan() then
     isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_PCROOMMEMO_JP", "pcRoom", requestGetRefundPercentForPcRoom())
-  else
-    isCountryTypeSet = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_PCROOMMEMO", "forPremium", requestGetRefundPercentForPremiumPackage())
   end
   local doSettlement = function()
-    -- function num : 0_18_0 , upvalues : index, self, itemEnchantKeyRaw
+    -- function num : 0_17_0 , upvalues : index, ItemMarketItemSet, itemEnchantKeyRaw
     local toWhereType = (CppEnums.ItemWhereType).eInventory
     local myItemInfo = getItemMarketMyItemByIndex(index)
     local itemTotalPrice = myItemInfo:getTradedTotalPrice()
-    if (self.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= itemTotalPrice then
+    if (ItemMarketItemSet.btn_Warehouse):IsCheck() or toInt64(0, 500000) <= itemTotalPrice then
       toWhereType = (CppEnums.ItemWhereType).eWarehouse
     end
     requestCancelRegistedItemAndWithdrawMoneyForItemMarket(itemEnchantKeyRaw, index, toWhereType)
   end
 
-  if isPremiumUser == false and not isCashItem then
+  if isPremiumUser == false and not (iess:get()):isCash() then
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
     local messageBoxMemo = isCountryTypeSet
-    if isSecretDealsUser == false then
-      do
-        local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = doSettlement, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-        ;
-        (MessageBox.showMessageBox)(messageBoxData, "middle")
-        if isGameTypeRussia() and isServerFixedCharge() then
-          doSettlement()
-        else
-          doSettlement()
-        end
-      end
+    local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = doSettlement, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData, "middle")
+  else
+    do
+      doSettlement()
     end
   end
 end
 
 HandleClicked_ItemMarketRegistItem_Open = function()
-  -- function num : 0_19
+  -- function num : 0_18
   FGlobal_ItemMarketRegistItem_Open()
 end
 
 HandleClicked_ItemMarketItemSet_Close = function()
-  -- function num : 0_20
+  -- function num : 0_19
   FGlobal_ItemMarketItemSet_Close()
 end
 
 ItemMarketItemSet_ToolTip = function(isShow, idx, iconType)
-  -- function num : 0_21 , upvalues : ItemMarketItemSet
+  -- function num : 0_20 , upvalues : ItemMarketItemSet
   local self = ItemMarketItemSet
   local name = ""
   local desc = ""
@@ -868,15 +784,13 @@ ItemMarketItemSet_ToolTip = function(isShow, idx, iconType)
 end
 
 FGlobal_ItemMarketMyItems_Update = function()
-  -- function num : 0_22 , upvalues : ItemMarketItemSet
-  local self = ItemMarketItemSet
-  self:SetPosition()
-  self:Update()
+  -- function num : 0_21 , upvalues : ItemMarketItemSet
+  ItemMarketItemSet:SetPosition()
+  ItemMarketItemSet:Update()
 end
 
 FGlobal_ItemMarketItemSet_Open = function()
-  -- function num : 0_23 , upvalues : ItemMarketItemSet
-  local self = ItemMarketItemSet
+  -- function num : 0_22 , upvalues : ItemMarketItemSet
   if Panel_Window_ItemMarket_ItemSet:GetShow() then
     return 
   end
@@ -899,6 +813,7 @@ FGlobal_ItemMarketItemSet_Open = function()
   if Panel_ItemMarket_PreBid_Manager:GetShow() then
     FGlobal_ItemMarketPreBid_Manager_Close()
   end
+  local self = ItemMarketItemSet
   ;
   (self.invenMoney):SetShow(true)
   ;
@@ -917,14 +832,18 @@ FGlobal_ItemMarketItemSet_Open = function()
   (self.btn_Warehouse):SetCheck(true)
   ;
   (self.btn_RegistItem):SetShow(true)
-  ;
-  (self.btn_GetAll):SetShow(false)
+  if ToClient_IsDevelopment() == true then
+    (self.btn_GetAll):SetShow(true)
+  else
+    ;
+    (self.btn_GetAll):SetShow(false)
+  end
   self:SetPosition()
   self:Open()
 end
 
 FGlobal_ItemMarketItemSet_Open_ForWorldMap = function(escMenu)
-  -- function num : 0_24 , upvalues : ItemMarketItemSet
+  -- function num : 0_23 , upvalues : ItemMarketItemSet
   local self = ItemMarketItemSet
   if Panel_Window_ItemMarket_ItemSet:GetShow() then
     return 
@@ -958,18 +877,17 @@ FGlobal_ItemMarketItemSet_Open_ForWorldMap = function(escMenu)
 end
 
 ItemMarketItemSet_SimpleToolTips = function(tipType, isShow)
-  -- function num : 0_25 , upvalues : ItemMarketItemSet
-  local name, desc, control = nil, nil, nil
-  local self = ItemMarketItemSet
+  -- function num : 0_24 , upvalues : ItemMarketItemSet
+  local name, desc, control = nil
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_INVEN_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_INVEN_DESC")
-    control = self.btn_Inven
+    control = ItemMarketItemSet.btn_Inven
   else
     if tipType == 1 then
       name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_WAREHOUSE_NAME")
       desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_TOOLTIP_WAREHOUSE_DESC")
-      control = self.btn_Warehouse
+      control = ItemMarketItemSet.btn_Warehouse
     end
   end
   if isShow == true then
@@ -981,40 +899,39 @@ ItemMarketItemSet_SimpleToolTips = function(tipType, isShow)
 end
 
 FGlobal_ItemMarketItemSet_Close = function()
-  -- function num : 0_26
+  -- function num : 0_25
   _ItemMarketItemSet_HideToolTip()
   Panel_Window_ItemMarket_ItemSet:SetShow(false, false)
   Panel_Window_ItemMarket_ItemSet:CloseUISubApp()
 end
 
 ItemMarketItemSet_UpdateMoney = function()
-  -- function num : 0_27
+  -- function num : 0_26
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKET_ITEMSET_UPDATEMONEY_ACK"), 5)
 end
 
 ItemMarketItemSet_UpdateMoneyByWarehouse = function()
-  -- function num : 0_28 , upvalues : ItemMarketItemSet
+  -- function num : 0_27 , upvalues : ItemMarketItemSet
   (ItemMarketItemSet.invenMoney):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
   ;
   (ItemMarketItemSet.warehouseMoney):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
 end
 
 ItemMarketSetItem_GetAllItem_Simpletooltip = function(isShow)
-  -- function num : 0_29 , upvalues : ItemMarketItemSet
+  -- function num : 0_28 , upvalues : ItemMarketItemSet
   if isShow == nil then
     TooltipSimple_Hide()
     return 
   end
   local name, desc, control = nil, nil, nil
-  local self = ItemMarketItemSet
   name = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETITEMSET_SIMPLETOOLTIP_GETALLITEM_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_ITEMMARKETITEMSET_SIMPLETOOLTIP_GETALLITEM_DESC")
-  control = self.btn_GetAll
+  control = ItemMarketItemSet.btn_GetAll
   TooltipSimple_Show(control, name, desc)
 end
 
 _ItemMarketItemSet_SimpleToolTip = function(isShow, idx)
-  -- function num : 0_30 , upvalues : ItemMarketItemSet
+  -- function num : 0_29 , upvalues : ItemMarketItemSet
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -1031,7 +948,7 @@ _ItemMarketItemSet_SimpleToolTip = function(isShow, idx)
 end
 
 ItemMarketItemSet.registEventHandler = function(self)
-  -- function num : 0_31
+  -- function num : 0_30
   (self.btn_Close):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketItemSet_Close()")
   ;
   (self.btn_RegistItem):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketRegistItem_Open()")
@@ -1056,7 +973,7 @@ ItemMarketItemSet.registEventHandler = function(self)
 end
 
 ItemMarketItemSet.registMessageHandler = function(self)
-  -- function num : 0_32
+  -- function num : 0_31
   registerEvent("FromClient_InventoryUpdate", "ItemMarketItemSet_UpdateMoneyByWarehouse")
   registerEvent("EventWarehouseUpdate", "ItemMarketItemSet_UpdateMoneyByWarehouse")
   registerEvent("FromClient_WarehousePushMoney", "ItemMarketItemSet_UpdateMoney")

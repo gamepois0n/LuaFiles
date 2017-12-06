@@ -12,7 +12,11 @@ PaGlobalPlayerWeightList.initialize = function(self)
   ;
   (self.weightText):SetShow(false)
   ;
-  (self.weightText):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_ENDURANCE_STCTXT_NOTICEWEIGHT") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_WEIGHTHELP_4"))
+  (self.weightText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHT_MAIN_DEFAULT_VISUAL"))
+  ;
+  (self.weightText):SetPosX((self.weight):GetPosX() - (self.weightText):GetTextSizeX() - 25)
+  ;
+  (self.weightText):SetPosY((self.weight):GetPosY() - 4)
   ;
   (self.weight):addInputEvent("Mouse_On", "PaGlobalPlayerWeightList_MouseOver(true)")
   ;
@@ -30,9 +34,13 @@ PaGlobalPlayerWeightList_MouseOver = function(isShow)
     (self.weightText):SetPosX((self.weight):GetPosX() - (self.weightText):GetTextSizeX() - 25)
     ;
     (self.weightText):SetPosY((self.weight):GetPosY() - 4)
+    ;
+    (self.weightText):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_ENDURANCE_STCTXT_NOTICEWEIGHT") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_WEIGHTHELP_4"))
   else
     ;
-    (self.weightText):SetShow(false)
+    (self.weightText):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WEIGHT_MAIN_DEFAULT_VISUAL"))
+    ;
+    (self.weightText):SetShow(true)
   end
 end
 

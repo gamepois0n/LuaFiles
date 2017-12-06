@@ -84,8 +84,10 @@ IngameCashShopCoupon_ListUpdate = function(contents, key)
           local couponState = couponWrapper:getCouponState()
           local couponExpirationDate = couponWrapper:getExpirationDateTime()
           local couponRate = couponWrapper:getCouponDisCountRate()
+          local couponPearl = couponWrapper:getCouponDisCountPearl()
           local couponMaxDiscount = couponWrapper:getCouponMaxDisCountPearl()
           local couponCategory = couponWrapper:getCouponCategoryExpression()
+          local isDiscountPearl = couponWrapper:isDisCountPearl()
           btn_Coupon:SetShow(true)
           txt_Title:SetShow(true)
           txt_Date:SetShow(true)
@@ -112,7 +114,11 @@ IngameCashShopCoupon_ListUpdate = function(contents, key)
           end
           txt_Title:SetPosX(25)
           txt_Title:SetPosY(10)
-          txt_Rate:SetText(couponRate / 10000 .. "%")
+          if isDiscountPearl == false then
+            txt_Rate:SetText(couponRate / 10000 .. "%")
+          else
+            txt_Rate:SetText(tostring(couponPearl) .. "P")
+          end
           txt_Rate:SetPosX(315)
           txt_Rate:SetPosY(65)
           if couponState == 2 or couponState == 1 then
@@ -173,8 +179,10 @@ IngameCashShopCoupon_ListUpdate_Unused = function(contents, key)
     local couponState = couponWrapper:getCouponState()
     local couponExpirationDate = couponWrapper:getExpirationDateTime()
     local couponRate = couponWrapper:getCouponDisCountRate()
+    local couponPearl = couponWrapper:getCouponDisCountPearl()
     local couponMaxDiscount = couponWrapper:getCouponMaxDisCountPearl()
     local couponNo = couponWrapper:getCouponNo()
+    local isDiscountPearl = couponWrapper:isDisCountPearl()
     btn_Coupon:setNotImpactScrollEvent(true)
     btn_Coupon:SetShow(true)
     txt_Title:SetShow(true)
@@ -187,7 +195,11 @@ IngameCashShopCoupon_ListUpdate_Unused = function(contents, key)
     txt_Title:SetText(couponName)
     txt_Title:SetPosX(25)
     txt_Title:SetPosY(10)
-    txt_Rate:SetText(couponRate / 10000 .. "%")
+    if isDiscountPearl == false then
+      txt_Rate:SetText(couponRate / 10000 .. "%")
+    else
+      txt_Rate:SetText(tostring(couponPearl) .. "P")
+    end
     txt_Rate:SetPosX(225)
     txt_Rate:SetPosY(7)
     if couponState == 2 or couponState == 1 then
@@ -224,6 +236,7 @@ IngameCashShopCoupon_Update = function(productNoRaw)
     middle = cashProduct:getMiddleCategory()
     small = cashProduct:getSmallCategory()
   end
+  local cashProductPrice = 0
   ;
   ((self._list2):getElementManager()):clearKey()
   for i = 0, count - 1 do
@@ -234,7 +247,20 @@ IngameCashShopCoupon_Update = function(productNoRaw)
         ;
         ((self._list2):getElementManager()):pushKey(toInt64(0, i))
       else
-        if couponWrapper:checkCategory(main, middle, small) == true then
+        cashProductPrice = cashProduct:getPrice()
+        local isDiscountPearl = couponWrapper:isDisCountPearl()
+        local minProductPearl = 0
+        if isDiscountPearl then
+          minProductPearl = couponWrapper:getCouponMinProductPearl()
+          if minProductPearl == 1 then
+            isDiscountPearl = false
+          else
+            if minProductPearl <= cashProductPrice then
+              isDiscountPearl = false
+            end
+          end
+        end
+        if couponWrapper:checkCategory(main, middle, small) == true and isDiscountPearl == false then
           tcount = tcount + 1
           ;
           ((self._list2):getElementManager()):pushKey(toInt64(0, i))

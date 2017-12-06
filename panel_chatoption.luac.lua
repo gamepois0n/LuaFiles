@@ -107,6 +107,7 @@ local _check_Division = (UI.getChildControl)(Panel_ChatOption, "Checkbox_Divisio
 _check_Division:addInputEvent("Mouse_LUp", "HandleClicked_ChattingDivision()")
 _check_Division:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 29)")
 _check_Division:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
+local _prevIsCheckDivision = nil
 local _checkButton_ChatTime = (UI.getChildControl)(Panel_ChatOption, "CheckButton_ChatTime")
 _checkButton_ChatTime:addInputEvent("Mouse_On", "HandleOn_ChattingOption_Tooltip(true, 30)")
 _checkButton_ChatTime:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
@@ -1434,7 +1435,7 @@ FGlobal_ChattingOption_SettingColor = function(index, chatType, panelIndex, isSy
 end
 
 ChattingOption_Open = function(penelIdex, drawPanelIndex, isCombinedMainPanel)
-  -- function num : 0_40 , upvalues : rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, preNameType, rdo_CharacterName, rdo_FamilyName, prevFontSizeType, _prevMainTransparency, _prevTransparency, _openOptionPanelIndex
+  -- function num : 0_40 , upvalues : rdo_FontSizeSmall, rdo_FontSizeSmall2, rdo_FontSizeNormal, rdo_FontSizeNormal2, rdo_FontSizeBig, preNameType, rdo_CharacterName, rdo_FamilyName, prevFontSizeType, _prevMainTransparency, _prevTransparency, _openOptionPanelIndex, _prevIsCheckDivision, _check_Division
   if Panel_ChatOption:GetShow() == false then
     Panel_ChatOption:SetShow(true, true)
     Panel_ChatOption:SetSpanSize(0, 0)
@@ -1499,13 +1500,14 @@ ChattingOption_Open = function(penelIdex, drawPanelIndex, isCombinedMainPanel)
   _openOptionPanelIndex = -1
   _openOptionPanelIndex = penelIdex
   _prevTransparency = _transparency
+  _prevIsCheckDivision = _check_Division:IsCheck()
   if penelIdex == 0 then
     _prevMainTransparency = _transparency
   end
 end
 
 ChattingOption_Close = function()
-  -- function num : 0_41 , upvalues : prevFontSizeType, _prevIsCheckChatTime, _checkButton_ChatTime, preNameType, preChattingAnimation, _openOptionPanelIndex, _prevTransparency, _prevMainTransparency
+  -- function num : 0_41 , upvalues : prevFontSizeType, _prevIsCheckChatTime, _checkButton_ChatTime, preNameType, preChattingAnimation, _openOptionPanelIndex, _prevTransparency, _prevMainTransparency, _check_Division, _prevIsCheckDivision
   local chatCount = ToClient_getChattingPanelCount()
   for panelIdex = 0, chatCount - 1 do
     local chatPanel = ToClient_getChattingPanel(panelIdex)
@@ -1531,6 +1533,9 @@ ChattingOption_Close = function()
     end
   end
   do
+    _check_Division:SetCheck(_prevIsCheckDivision)
+    ;
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).ChatDivision, _prevIsCheckDivision, (CppEnums.VariableStorageType).eVariableStorageType_User)
     Panel_ChatOption:SetShow(false, false)
     Panel_ChatOption:SetIgnore(true)
     ChattingColor_Hide()

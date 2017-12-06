@@ -336,7 +336,7 @@ FRAME_SERVERLIST:SetShow(true)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
-local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only"}
+local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only", "TROnly", "THOnly", "IDOnly"}
 local bgIndex = {}
 for k,v in pairs(bgItem) do
   bgIndex[v] = k
@@ -378,6 +378,12 @@ local bgManager = {
 [bgIndex.TaiwanOnly] = {isOpen = not isGameTypeTaiwan() or false, imageCount = 0, iconPath = "bgTaiwanOnly_"}
 , 
 [bgIndex.KR2Only] = {isOpen = not isGameTypeKR2() or false, imageCount = 0, iconPath = "bgKR2Only_"}
+, 
+[bgIndex.TROnly] = {isOpen = not isGameTypeTR() or false, imageCount = 0, iconPath = "bgTROnly_"}
+, 
+[bgIndex.THOnly] = {isOpen = not isGameTypeTH() or false, imageCount = 0, iconPath = "bgTHOnly_"}
+, 
+[bgIndex.IDOnly] = {isOpen = not isGameTypeID() or false, imageCount = 0, iconPath = "bgIDOnly_"}
 }
 local totalBG = 0
 local imageIndex = 1
@@ -397,7 +403,7 @@ for v,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_ServerSelect:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC686: Confused about usage of register: R59 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC722: Confused about usage of register: R59 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex

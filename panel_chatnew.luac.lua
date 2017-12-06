@@ -64,7 +64,7 @@ ChatSubMenu.initialize = function(self)
   ;
   (self._uiButtonBlockVote):addInputEvent("Mouse_LUp", "HandleClicked_ChatSubMenu_BlockVote()")
   ;
-  (self._uiButtonIntroduce):addInputEvent("Mouse_LUp", "HanldeClicked_ChatSubMenu_Introduce()")
+  (self._uiButtonIntroduce):addInputEvent("Mouse_LUp", "HandleClicked_ChatSubMenu_Introduce()")
   ;
   (self._uiButtonIntroduce):SetShow(false)
   ;
@@ -2726,10 +2726,10 @@ HandleClicked_ChatSubMenu_AddFriend = function()
   if clickedName ~= nil and clickedUserNickName ~= nil then
     local nameType = ToClient_getChatNameType()
     if nameType == 0 then
-      ToClient_AddFriend(clickedName, true)
+      requestFriendList_addFriend(clickedName, true)
     else
       if nameType == 1 then
-        ToClient_AddFriend(clickedUserNickName, false)
+        requestFriendList_addFriend(clickedUserNickName, false)
       end
     end
     ChatSubMenu:SetShow(false)
@@ -2902,7 +2902,7 @@ HandleClicked_ChatSubMenu_BlockVote = function()
   end
 end
 
-HanldeClicked_ChatSubMenu_Introduce = function()
+HandleClicked_ChatSubMenu_Introduce = function()
   -- function num : 0_53
 end
 

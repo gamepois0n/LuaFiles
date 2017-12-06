@@ -151,6 +151,10 @@ end
 
 PvpMode_ShowButton = function(isShow)
   -- function num : 0_10 , upvalues : UI_ANI_ADV, UI_color
+  if ToClient_isAdultUser() == false then
+    _pvpButton:SetShow(false)
+    return 
+  end
   if _pvpButton:GetShow() == isShow then
     return 
   end

@@ -167,9 +167,13 @@ dailyStamp.TapInit = function(self)
         ((self.tapControl)[index]):SetCheck(false)
         ;
         ((self.tapControl)[index]):SetText(dailyStampTapName)
+        local btnTapSizeX = ((self.tapControl)[index]):GetSizeX()
+        local btnTapTextPosX = btnTapSizeX - btnTapSizeX / 2 - ((self.tapControl)[index]):GetTextSizeX() / 2
+        ;
+        ((self.tapControl)[index]):SetTextSpan(btnTapTextPosX, 5)
         ;
         ((self.tapControl)[index]):addInputEvent("Mouse_LUp", "DailyStamp_TapClicked(" .. index .. ")")
-        -- DECOMPILER ERROR at PC58: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC76: Confused about usage of register: R8 in 'UnsetPending'
 
         ;
         (self.prevAttendanceCount)[index] = nil
@@ -185,11 +189,11 @@ dailyStamp.TapInit = function(self)
           do
             ;
             ((self.tapControl)[index]):SetShow(false)
-            -- DECOMPILER ERROR at PC95: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC113: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC95: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+            -- DECOMPILER ERROR at PC113: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-            -- DECOMPILER ERROR at PC95: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC113: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -199,7 +203,7 @@ dailyStamp.TapInit = function(self)
   else
     for index = 1, dailyStampCount do
       local dailyStampTapName = ((dailyStampKeys[index])[1]):getName()
-      -- DECOMPILER ERROR at PC119: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC137: Confused about usage of register: R6 in 'UnsetPending'
 
       ;
       (self.tapControl)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON, Panel_Window_DailyStamp, "DailyStamp_Tap_" .. index)
@@ -210,9 +214,13 @@ dailyStamp.TapInit = function(self)
       ((self.tapControl)[index]):SetCheck(false)
       ;
       ((self.tapControl)[index]):SetText(dailyStampTapName)
+      local btnTapSizeX = ((self.tapControl)[index]):GetSizeX()
+      local btnTapTextPosX = btnTapSizeX - btnTapSizeX / 2 - ((self.tapControl)[index]):GetTextSizeX() / 2
+      ;
+      ((self.tapControl)[index]):SetTextSpan(btnTapTextPosX, 5)
       ;
       ((self.tapControl)[index]):addInputEvent("Mouse_LUp", "DailyStamp_TapClicked(" .. index .. ")")
-      -- DECOMPILER ERROR at PC150: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC186: Confused about usage of register: R8 in 'UnsetPending'
 
       ;
       (self.prevAttendanceCount)[index] = nil
@@ -1324,7 +1332,6 @@ FromClient_AttendanceUpdateAll = function(isNextDay)
   ;
   (table.sort)(dailyStampKeys, TabSort)
   dailyStamp:TapInit()
-  dailyStamp:Init()
 end
 
 FromClient_DailyStampRegionCheck = function(regionData)

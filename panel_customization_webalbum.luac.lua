@@ -70,106 +70,7 @@ CustomizingAlbum_Open = function(isCTMode, isSceneState)
   Panel_CustomizingAlbum:setUiConvertableType(UiConvertable)
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  local url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_DEV")
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_DEV")
-  else
-    if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_ALPHA")
-    else
-      if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KOR_REAL")
-      else
-        if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-          if getServiceNationType() == 0 then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_ALPHA_NA", "port", worldNo)
-          else
-            if getServiceNationType() == 1 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_ALPHA_EU", "port", worldNo)
-            end
-          end
-        else
-          if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-            if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_REAL_NA", "port", worldNo)
-            else
-              if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_NA_REAL_EU", "port", worldNo)
-              end
-            end
-          else
-            if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_JP_ALPHA")
-            else
-              if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_JP_REAL")
-              else
-                if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_ALPHA")
-                else
-                  if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                    if isServerFixedCharge() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_REAL_P2P")
-                    else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_RUS_REAL_F2P")
-                    end
-                  else
-                    if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_ALPHA")
-                    else
-                      if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TW_REAL")
-                      else
-                        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_SA_ALPHA")
-                        else
-                          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_SA_REAL")
-                          else
-                            if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KR2_ALPHA")
-                            else
-                              if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_KR2_REAL")
-                              else
-                                if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TR_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TR_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TH_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_TH_REAL")
-                                      else
-                                        if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_ID_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_WEBALBUM_URL_ID_REAL")
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
+  local url = PaGlobal_URL_Check(worldNo)
   local userNo = 0
   local userNickName = ""
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
@@ -183,7 +84,7 @@ CustomizingAlbum_Open = function(isCTMode, isSceneState)
       userNickName = (getSelfPlayer()):getUserNickname()
       userNo = ((getSelfPlayer()):get()):getUserNo()
     end
-    url = url .. "?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(isCTMode == true) .. "&isGm=" .. tostring(isGm)
+    url = url .. "/customizing?userNo=" .. tostring(userNo) .. "&userNickname=" .. tostring(userNickName) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isCustomizationMode=" .. tostring(isCTMode == true) .. "&isGm=" .. tostring(isGm)
     _customizingAlbumWeb:SetUrl(870, 630, url, false, true)
     _customizingAlbumWeb:SetIME(true)
     isCustomizationMode = isCTMode

@@ -344,6 +344,7 @@ PaGlobal_Camp.setPos = function(self)
   Panel_Icon_Camp:SetPosX(posX)
   Panel_Icon_Camp:SetPosY(posY)
   PaGlobal_PossessByBlackSpiritIcon:setPosIcon()
+  PaGlobal_CharacterTag_SetPosIcon()
 end
 
 -- DECOMPILER ERROR at PC218: Confused about usage of register: R0 in 'UnsetPending'

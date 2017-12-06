@@ -544,6 +544,12 @@ FGlobal_MasterpieceAuction_OpenAuctionItemNotNpc = function()
   ((self._ui)._staticBtnReload):SetShow(false)
   ;
   ((self._ui)._radioBtnList):SetIgnore(true)
+  ;
+  ((self._ui)._staticMoneyBG):SetShow(false)
+  ;
+  ((self._ui)._staticTextWareHouse):SetShow(false)
+  ;
+  ((self._ui)._staticTextMoney):SetShow(false)
   isOpenEscMenu = true
   if isOpenEscMenu then
     ((self._ui)._txt_BottomDesc):SetShow(true)
@@ -571,6 +577,12 @@ FGlobal_MasterPieceAuction_Reset = function()
   ((self._ui)._staticBtnReload):SetShow(true)
   ;
   ((self._ui)._radioBtnList):SetIgnore(false)
+  ;
+  ((self._ui)._staticMoneyBG):SetShow(true)
+  ;
+  ((self._ui)._staticTextWareHouse):SetShow(true)
+  ;
+  ((self._ui)._staticTextMoney):SetShow(true)
   isOpenEscMenu = false
   ;
   ((self._ui)._txt_BottomDesc):SetShow(false)
@@ -634,12 +646,6 @@ end
 
 PaGlobal_MasterpieceAuction.showList_Left = function(self, isShow)
   -- function num : 0_22 , upvalues : isOpenEscMenu
-  ((self._ui)._staticTextMoney):SetShow(true)
-  ;
-  ((self._ui)._staticMoneyBG):SetShow(true)
-  ;
-  ((self._ui)._staticTextWareHouse):SetShow(true)
-  ;
   ((self._ui)._staticLeftBG):SetShow(true)
   ;
   ((self._ui)._staticCenterBG):SetShow(true)
@@ -676,12 +682,18 @@ PaGlobal_MasterpieceAuction.showList_Left = function(self, isShow)
   if isOpenEscMenu then
     ((self._ui)._txt_BottomDesc):SetShow(true)
     Panel_Window_MasterpieceAuction:SetSize(580, 590 + ((self._ui)._txt_BottomDesc):GetTextSizeY() + 20)
+  else
+    ((self._ui)._staticTextMoney):SetShow(true)
+    ;
+    ((self._ui)._staticMoneyBG):SetShow(true)
+    ;
+    ((self._ui)._staticTextWareHouse):SetShow(true)
   end
   ;
   ((self._ui)._txt_BottomDesc):ComputePos()
   ;
   ((self._ui)._staticTextDescBG):ComputePos()
-  -- DECOMPILER ERROR: 3 unprocessed JMP targets
+  -- DECOMPILER ERROR: 4 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC245: Confused about usage of register: R4 in 'UnsetPending'

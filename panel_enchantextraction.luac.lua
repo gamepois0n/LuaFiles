@@ -272,6 +272,11 @@ end
 FromClient_ConvertEnchantFailItemToCountAck = function()
   -- function num : 0_15
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANTCOUNTEXTRACTION_6"))
+  if isNewEnchant_chk() == true then
+    PaGlobal_Enchant:setEnchantFailCount()
+  else
+    PaGlobal_Enchant:enchantFailCount()
+  end
 end
 
 enchantExtraction.registerEvent = function(self)

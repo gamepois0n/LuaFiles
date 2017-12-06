@@ -16,7 +16,7 @@ slotBGPool = {}
 , 
 slotPool = {}
 , slot_PosYGap = 65, rouletteState = RouletteState.eClose, rollSpeedInit = 20, rollSpeedCur = 0, rollSpeedMin = 1, rollSpeedAccel = 0, rollPos = 0.5, pickItemKey = nil, pickSlotIndex = 0, elapsTime = 0, 
-slotConfing = {createIcon = true, createBorder = true, createCash = true}
+slotConfing = {createIcon = true, createBorder = true, createCash = true, createEnchant = true}
 }
 local itemDataPool = {}
 gacha_Roulette.Initialize = function(self)

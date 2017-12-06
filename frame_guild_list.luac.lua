@@ -675,7 +675,7 @@ HandleClickedGuildMemberMenuButton = function(index)
   ;
   (GuildListInfoPage._buttonListBG):SetShow(false)
   for idx = 0, _UI_Menu_Button.Type_Count - 1 do
-    if authorityCheck(savedMemberNum, grade, idx, false) then
+    if authorityCheck(savedMemberNum, grade, idx, isProtect) then
       (GuildListInfoPage._buttonListBG):SetShow(true)
       ;
       ((GuildListInfoPage._buttonList)[idx]):SetShow(true)

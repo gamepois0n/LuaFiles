@@ -239,8 +239,19 @@ PaGlobal_Panel_SaveSetting_PopUp_ShowIconToolTip = function(isShow)
   end
 end
 
+PaGlobal_Panel_SaveSetting_WebCall_CheckSafetyzone = function()
+  -- function num : 0_8
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  local regionInfo = getRegionInfoByPosition((selfPlayer:get()):getPosition())
+  local isSafeZone = (regionInfo:get()):isSafeZone()
+  return isSafeZone
+end
+
 FromClient_OpenExplorer_SaveGameOption = function(title, defaultName, paramList)
-  -- function num : 0_8 , upvalues : _Web
+  -- function num : 0_9 , upvalues : _Web
   local paramCount = 0
   local subNameStringBDC = ""
   for key,value in pairs(paramList) do
@@ -260,7 +271,7 @@ FromClient_OpenExplorer_SaveGameOption = function(title, defaultName, paramList)
 end
 
 FromClient_OnDownloadFromWeb_loadGameOption = function(path, filename)
-  -- function num : 0_9
+  -- function num : 0_10
   if (string.find)(filename, ".bdcp", -5) == nil then
     return 
   end
@@ -269,7 +280,7 @@ FromClient_OnDownloadFromWeb_loadGameOption = function(path, filename)
 end
 
 FromClient_applyGameOptionEnd = function()
-  -- function num : 0_10
+  -- function num : 0_11
   chatting_sendMessage("", PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_APPLYCOMPLETE"), (CppEnums.ChatType).System)
   UiSet_update()
 end

@@ -15,8 +15,14 @@ _uiQuestFavorType = {}
 , 
 _guildQuest = {}
 , _uiList = (Array.new)(), _giveupLimitLv = 10, _maxQuestListCnt = 30, _maxConditionCnt = 5, _defaultButtonSize = 18, _extendButtonSize = 25, _refUiQuestAutoNaviButton = nil, _refUiQuestNaviButton = nil, _refUiQuestTitle = nil}
+-- DECOMPILER ERROR at PC168: Confused about usage of register: R7 in 'UnsetPending'
+
+PaGlobal_CheckedQuest.nodeHelpMouseL = (UI.getChildControl)(PaGlobal_CheckedQuest._uiTooltipBG, "Static_Help_MouseL")
+-- DECOMPILER ERROR at PC176: Confused about usage of register: R7 in 'UnsetPending'
+
+PaGlobal_CheckedQuest.nodeHelpMouseR = (UI.getChildControl)(PaGlobal_CheckedQuest._uiTooltipBG, "Static_Help_MouseR")
 local MAX_QUEST_FAVOR_TYPE = 6
--- DECOMPILER ERROR at PC165: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC181: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.initialize = function(self)
   -- function num : 0_0 , upvalues : MAX_QUEST_FAVOR_TYPE
@@ -70,11 +76,13 @@ PaGlobal_CheckedQuest.initialize = function(self)
   end
   self._uiScrollBar = (UI.getChildControl)(self._uiNormalQuestGroup, "Scroll_CheckQuestList")
   self._uiOptionButton = (UI.getChildControl)(self._uiTransBG, "Button_Option")
+  ;
+  (self._uiGuideButton_Desc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHECKEDQUEST_GUIDEDESC"))
   self:initDefaults()
   self:subscribeEvents()
 end
 
--- DECOMPILER ERROR at PC169: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC185: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.initDefaults = function(self)
   -- function num : 0_1 , upvalues : UI_color
@@ -200,7 +208,7 @@ PaGlobal_CheckedQuest.initDefaults = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC172: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC188: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.subscribeEvents = function(self)
   -- function num : 0_2
@@ -267,7 +275,7 @@ PaGlobal_CheckedQuest.subscribeEvents = function(self)
   (self._uiOptionButton):addInputEvent("Mouse_Out", "HideTooltip_QuestWidget_OptionButton()")
 end
 
--- DECOMPILER ERROR at PC176: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC192: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.createGuildQuest = function(self)
   -- function num : 0_3 , upvalues : UI_TM
@@ -386,7 +394,7 @@ PaGlobal_CheckedQuest.createGuildQuest = function(self)
 end
 
 PaGlobal_CheckedQuest:initialize()
--- DECOMPILER ERROR at PC182: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC198: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.clear = function(self)
   -- function num : 0_4
@@ -430,7 +438,7 @@ PaGlobal_CheckedQuest.clear = function(self)
 end
 
 local UIRect = {left, top, right, bottom}
--- DECOMPILER ERROR at PC191: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC207: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.checkPosition = function(self)
   -- function num : 0_5
@@ -449,7 +457,7 @@ PaGlobal_CheckedQuest.checkPosition = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC194: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC210: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.findShownQuestUiInCheckedQuest = function(self, questGroupNo, questId)
   -- function num : 0_6
@@ -465,7 +473,7 @@ PaGlobal_CheckedQuest.findShownQuestUiInCheckedQuest = function(self, questGroup
   return nil
 end
 
--- DECOMPILER ERROR at PC197: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC213: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.findShownQuestUiInCheckedQuestIndex = function(self, questGroupNo, questId)
   -- function num : 0_7
@@ -481,7 +489,7 @@ PaGlobal_CheckedQuest.findShownQuestUiInCheckedQuestIndex = function(self, quest
   return nil
 end
 
--- DECOMPILER ERROR at PC200: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC216: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.findShownIndexInCheckedQuest = function(self, questGroupNo, questId)
   -- function num : 0_8
@@ -501,7 +509,7 @@ PaGlobal_CheckedQuest.findShownIndexInCheckedQuest = function(self, questGroupNo
   end
 end
 
--- DECOMPILER ERROR at PC203: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC219: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.isExistProgressingQuestInCheckedGroup = function(self, checkedQuestGroupInfo)
   -- function num : 0_9
@@ -518,7 +526,7 @@ PaGlobal_CheckedQuest.isExistProgressingQuestInCheckedGroup = function(self, che
   return false
 end
 
--- DECOMPILER ERROR at PC206: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC222: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.addEffectQuestFindNaviButtonForTutorial = function(self, questUiInfoInPanelCheckedQuest)
   -- function num : 0_10
@@ -555,7 +563,7 @@ PaGlobal_CheckedQuest.addEffectQuestFindNaviButtonForTutorial = function(self, q
   end
 end
 
--- DECOMPILER ERROR at PC209: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC225: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.eraseEffectQuestNaviButtonForTutorial = function(self)
   -- function num : 0_11
@@ -570,7 +578,7 @@ PaGlobal_CheckedQuest.eraseEffectQuestNaviButtonForTutorial = function(self)
   (PaGlobal_TutorialUiManager:getUiMasking()):hideQuestMasking()
 end
 
--- DECOMPILER ERROR at PC212: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC228: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.findQuestUiIndexInCheckedQuest = function(self, questGruopNo, questId)
   -- function num : 0_12
@@ -722,7 +730,7 @@ _update_QuestWidgetSetCheckAll = function()
   end
 end
 
--- DECOMPILER ERROR at PC239: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC255: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateFavorType = function(self)
   -- function num : 0_22
@@ -747,7 +755,7 @@ FGlobal_UpdateQuestFavorType = function()
   UIMain_QuestUpdate()
 end
 
--- DECOMPILER ERROR at PC245: Confused about usage of register: R9 in 'UnsetPending'
+-- DECOMPILER ERROR at PC261: Confused about usage of register: R9 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateQuestWidgetFavorType = function(self)
   -- function num : 0_24 , upvalues : MAX_QUEST_FAVOR_TYPE
@@ -931,7 +939,7 @@ QuestWidget_ScrollLPress = function()
   end
 end
 
--- DECOMPILER ERROR at PC333: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC349: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateScrollButtonSize = function(self)
   -- function num : 0_34 , upvalues : _startPosition, widgetMouseOn, _hasGuildQuest
@@ -971,7 +979,7 @@ PaGlobal_CheckedQuest.updateScrollButtonSize = function(self)
   ((self._uiScrollBar):GetControlButton()):SetSize(((self._uiScrollBar):GetControlButton()):GetSizeX(), button_sizeY)
 end
 
--- DECOMPILER ERROR at PC336: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC352: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.isAlreadyShown = function(self, questNo)
   -- function num : 0_35
@@ -980,7 +988,7 @@ PaGlobal_CheckedQuest.isAlreadyShown = function(self, questNo)
   end
 end
 
--- DECOMPILER ERROR at PC339: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC355: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getTotalListCount = function(self)
   -- function num : 0_36
@@ -1021,7 +1029,7 @@ PaGlobal_CheckedQuest.getTotalListCount = function(self)
   return totalCount
 end
 
--- DECOMPILER ERROR at PC343: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC359: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateScrollPosition = function(self)
   -- function num : 0_37 , upvalues : _startPosition
@@ -1036,7 +1044,7 @@ PaGlobal_CheckedQuest.updateScrollPosition = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC348: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC364: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.checkShowScrollbar = function(self)
   -- function num : 0_38 , upvalues : _startPosition, widgetMouseOn
@@ -1050,7 +1058,7 @@ PaGlobal_CheckedQuest.checkShowScrollbar = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC351: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC367: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getScollPageSize = function(self)
   -- function num : 0_39
@@ -1058,7 +1066,7 @@ PaGlobal_CheckedQuest.getScollPageSize = function(self)
   return pageSize
 end
 
--- DECOMPILER ERROR at PC354: Confused about usage of register: R29 in 'UnsetPending'
+-- DECOMPILER ERROR at PC370: Confused about usage of register: R29 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getLastShownGroupIndex = function(self)
   -- function num : 0_40
@@ -1130,7 +1138,7 @@ FGlobal_CheckedQuest_SetWelcomeToTheWorld = function(isFirst)
   welcomeToTheWorld = isFirst
 end
 
--- DECOMPILER ERROR at PC380: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC396: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.updateQuestList = function(self, startPosition)
   -- function num : 0_45 , upvalues : _maxscrollBarPos, _nextPosY, _shownListCount, _questGroupCount, _scrollBarStartPosition, CheckedQuest_SizeY, _isDontDownScroll, widgetMouseOn
@@ -1233,7 +1241,7 @@ PaGlobal_CheckedQuest.updateQuestList = function(self, startPosition)
   end
 end
 
--- DECOMPILER ERROR at PC383: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC399: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getGroupCount = function(self)
   -- function num : 0_46
@@ -1255,7 +1263,7 @@ isEmptyNormalQuestGroup = function()
   return false
 end
 
--- DECOMPILER ERROR at PC388: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC404: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.doGuideQuest = function(self)
   -- function num : 0_48
@@ -1309,7 +1317,7 @@ PaGlobal_CheckedQuest.doGuideQuest = function(self)
   (self._uiResizeButton):SetPosY((self._uiHistoryButton):GetPosY())
 end
 
--- DECOMPILER ERROR at PC393: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC409: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.doReleaseCheckForTutorial = function(self)
   -- function num : 0_49 , upvalues : welcomeToTheWorld, questNoSaveForTutorial
@@ -1383,7 +1391,7 @@ PaGlobal_CheckedQuest.doReleaseCheckForTutorial = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC399: Confused about usage of register: R31 in 'UnsetPending'
+-- DECOMPILER ERROR at PC415: Confused about usage of register: R31 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.QuestWidget_ProgressingGuildQuest = function(self, _nextPosY)
   -- function num : 0_50 , upvalues : _hasGuildQuest, UI_color, _shownListCount
@@ -1525,7 +1533,7 @@ QuestWidget_ProgressingGuildQuest_UpdateRemainTime = function(deltaTime)
 end
 
 Panel_CheckedQuest:RegisterUpdateFunc("QuestWidget_ProgressingGuildQuest_UpdateRemainTime")
--- DECOMPILER ERROR at PC410: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC426: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.groupQuestInfo = function(self, questGroupInfo, _nextPosY, questGroupIndex)
   -- function num : 0_52
@@ -1544,7 +1552,7 @@ PaGlobal_CheckedQuest.groupQuestInfo = function(self, questGroupInfo, _nextPosY,
   return tmp_next_GroupPosY
 end
 
--- DECOMPILER ERROR at PC413: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC429: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.questInfo = function(self, questGroupInfo, uiQuestInfo, _nextPosY, isSingle, questGroupIndex, questIndex, groupTitle, questGroupCount)
   -- function num : 0_53
@@ -1557,7 +1565,7 @@ PaGlobal_CheckedQuest.questInfo = function(self, questGroupInfo, uiQuestInfo, _n
   return tmp_nextPosY
 end
 
--- DECOMPILER ERROR at PC417: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC433: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.ProgressQuest = function(self, questGroupInfo, uiQuestInfo, tmp_nextPosY, isSingle, groupTitle, questGroupCount, questGroupIndex)
   -- function num : 0_54 , upvalues : _shownListCount
@@ -1599,7 +1607,7 @@ PaGlobal_CheckedQuest.ProgressQuest = function(self, questGroupInfo, uiQuestInfo
   return tmp_nextPosY
 end
 
--- DECOMPILER ERROR at PC420: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC436: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestGroupPos = function(self, idx, uiQuestInfo, questGroupId, questId, questGroupCount, groupTitle, posY)
   -- function num : 0_55
@@ -1652,7 +1660,7 @@ PaGlobal_CheckedQuest.setQuestGroupPos = function(self, idx, uiQuestInfo, questG
   end
 end
 
--- DECOMPILER ERROR at PC423: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC439: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestTypeIcon = function(self, idx, uiQuestInfo)
   -- function num : 0_56
@@ -1668,7 +1676,7 @@ PaGlobal_CheckedQuest.setQuestTypeIcon = function(self, idx, uiQuestInfo)
   FGlobal_ChangeOnTextureForDialogQuestIcon(uiQuestIcon, uiQuestInfo:getQuestType())
 end
 
--- DECOMPILER ERROR at PC427: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC443: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestTitle = function(self, idx, uiQuestInfo)
   -- function num : 0_57 , upvalues : UI_color
@@ -1692,7 +1700,7 @@ PaGlobal_CheckedQuest.setQuestTitle = function(self, idx, uiQuestInfo)
   uiQuestTitle:useGlowFont(true, "BaseFont_8_Glow", 4287655978)
 end
 
--- DECOMPILER ERROR at PC431: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC447: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestGroupTitle = function(self, idx, isSingle, groupTitle, questId, questGroupCount)
   -- function num : 0_58 , upvalues : UI_color
@@ -1723,7 +1731,7 @@ PaGlobal_CheckedQuest.setQuestGroupTitle = function(self, idx, isSingle, groupTi
   end
 end
 
--- DECOMPILER ERROR at PC435: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC451: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setQuestCondition = function(self, idx, uiQuestInfo, questNo, posY)
   -- function num : 0_59 , upvalues : UI_color
@@ -1802,7 +1810,7 @@ PaGlobal_CheckedQuest.setQuestCondition = function(self, idx, uiQuestInfo, quest
   end
 end
 
--- DECOMPILER ERROR at PC439: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC455: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setVisibleConvenienceButton = function(self, show)
   -- function num : 0_60 , upvalues : widgetMouseOn
@@ -1833,7 +1841,7 @@ PaGlobal_CheckedQuest.setVisibleConvenienceButton = function(self, show)
   end
 end
 
--- DECOMPILER ERROR at PC442: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC458: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.resizingConvenienceButtons = function(self, idx, isMouseOn)
   -- function num : 0_61
@@ -1885,7 +1893,7 @@ PaGlobal_CheckedQuest.resizingConvenienceButtons = function(self, idx, isMouseOn
   (uiElem._uiHideBtn):SetSize(sizeX, sizeY)
 end
 
--- DECOMPILER ERROR at PC449: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC465: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setNaviButtonInfo = function(self, idx, uiQuestInfo)
   -- function num : 0_62 , upvalues : _questGroupId, _questId, _naviInfoAgain, widgetMouseOn
@@ -1953,7 +1961,7 @@ PaGlobal_CheckedQuest.setNaviButtonInfo = function(self, idx, uiQuestInfo)
   end
 end
 
--- DECOMPILER ERROR at PC453: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC469: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setGiveupButtonInfo = function(self, idx, uiQuestInfo)
   -- function num : 0_63 , upvalues : widgetMouseOn
@@ -1984,7 +1992,7 @@ PaGlobal_CheckedQuest.setGiveupButtonInfo = function(self, idx, uiQuestInfo)
   end
 end
 
--- DECOMPILER ERROR at PC457: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC473: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setHideButtonInfo = function(self, idx, questNo, isSingle)
   -- function num : 0_64 , upvalues : widgetMouseOn
@@ -2014,7 +2022,7 @@ PaGlobal_CheckedQuest.setHideButtonInfo = function(self, idx, questNo, isSingle)
   uiHideBtn:addInputEvent("Mouse_Out", "HandleMouseOver_HelpPop( false," .. uiHideBtnPosY .. ", \"hide\", " .. idx .. "  )")
 end
 
--- DECOMPILER ERROR at PC460: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC476: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.isHitTestQuestGroup = function(self, groupControl)
   -- function num : 0_65
@@ -2033,7 +2041,7 @@ PaGlobal_CheckedQuest.isHitTestQuestGroup = function(self, groupControl)
   return false
 end
 
--- DECOMPILER ERROR at PC463: Confused about usage of register: R32 in 'UnsetPending'
+-- DECOMPILER ERROR at PC479: Confused about usage of register: R32 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.getQuestTitle = function(self, groupId, questId)
   -- function num : 0_66
@@ -2123,7 +2131,7 @@ _questWidgetBubblePos = function(posY)
 end
 
 local IM = CppEnums.EProcessorInputMode
--- DECOMPILER ERROR at PC493: Confused about usage of register: R34 in 'UnsetPending'
+-- DECOMPILER ERROR at PC509: Confused about usage of register: R34 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.Common_WidgetMouseOut = function(self)
   -- function num : 0_71 , upvalues : IM
@@ -2153,30 +2161,44 @@ FGlobal_QuestWidget_MouseOver = function(show)
     widgetMouseOn = true
     ;
     (PaGlobal_CheckedQuest._uiTooltipBG):SetShow(true)
+    ;
+    (PaGlobal_CheckedQuest.nodeHelpMouseL):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WIN_WORLDMAP_HELP_MOUSEL"))
+    ;
+    (PaGlobal_CheckedQuest.nodeHelpMouseR):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_WIN_WORLDMAP_HELP_MOUSER"))
+    local txtSizeMouseL = (PaGlobal_CheckedQuest.nodeHelpMouseL):GetTextSizeX()
+    local txtSizeMouseR = (PaGlobal_CheckedQuest.nodeHelpMouseR):GetTextSizeX()
+    if txtSizeMouseL < txtSizeMouseR then
+      (PaGlobal_CheckedQuest._uiTooltipBG):SetSize(txtSizeMouseR + 38, 75)
+    else
+      ;
+      (PaGlobal_CheckedQuest._uiTooltipBG):SetSize(txtSizeMouseL + 38, 75)
+    end
     PaGlobal_CheckedQuest:checkShowScrollbar()
     PaGlobal_CheckedQuest:tooltipReposition()
     PaGlobal_CheckedQuest:setShowFunctionButtons(true)
     PaGlobal_CheckedQuest:setVisibleConvenienceButton(true)
     FGlobal_LatestQuestWidget_MouseOver(true)
   else
-    if PaGlobal_CheckedQuest:Common_WidgetMouseOut() == false then
-      return 
+    do
+      if PaGlobal_CheckedQuest:Common_WidgetMouseOut() == false then
+        return 
+      end
+      do
+        local widgetType = FGlobal_GetSelectedWidgetType()
+        if (CppEnums.QuestWidgetType).eQuestWidgetType_Extend ~= widgetType then
+          (PaGlobal_CheckedQuest._uiNormalQuestGroup):SetShow(false)
+        end
+        widgetMouseOn = false
+        ;
+        (PaGlobal_CheckedQuest._uiTransBG):SetShow(false)
+        ;
+        (PaGlobal_CheckedQuest._uiTooltipBG):SetShow(false)
+        PaGlobal_CheckedQuest:setShowFunctionButtons(false)
+        PaGlobal_CheckedQuest:setVisibleConvenienceButton(false)
+        FGlobal_LatestQuestWidget_MouseOver(false)
+        PaGlobal_TutorialManager:handleQuestWidgetMouseOver(show)
+      end
     end
-    local widgetType = FGlobal_GetSelectedWidgetType()
-    if (CppEnums.QuestWidgetType).eQuestWidgetType_Extend ~= widgetType then
-      (PaGlobal_CheckedQuest._uiNormalQuestGroup):SetShow(false)
-    end
-    widgetMouseOn = false
-    ;
-    (PaGlobal_CheckedQuest._uiTransBG):SetShow(false)
-    ;
-    (PaGlobal_CheckedQuest._uiTooltipBG):SetShow(false)
-    PaGlobal_CheckedQuest:setShowFunctionButtons(false)
-    PaGlobal_CheckedQuest:setVisibleConvenienceButton(false)
-    FGlobal_LatestQuestWidget_MouseOver(false)
-  end
-  do
-    PaGlobal_TutorialManager:handleQuestWidgetMouseOver(show)
   end
 end
 
@@ -2191,30 +2213,36 @@ FGlobal_ChangeWidgetType = function()
   end
 end
 
--- DECOMPILER ERROR at PC501: Confused about usage of register: R34 in 'UnsetPending'
+-- DECOMPILER ERROR at PC517: Confused about usage of register: R34 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.tooltipReposition = function(self)
   -- function num : 0_74
   if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
-    (self._uiTooltipBG):SetSize(120, 68)
-  else
-    ;
-    (self._uiTooltipBG):SetSize(100, 68)
+    local txtSizeMouseL = (PaGlobal_CheckedQuest.nodeHelpMouseL):GetTextSizeX()
+    local txtSizeMouseR = (PaGlobal_CheckedQuest.nodeHelpMouseR):GetTextSizeX()
+    if txtSizeMouseL < txtSizeMouseR then
+      (PaGlobal_CheckedQuest._uiTooltipBG):SetSize(txtSizeMouseR + 38, 75)
+    else
+      ;
+      (PaGlobal_CheckedQuest._uiTooltipBG):SetSize(txtSizeMouseL + 38, 75)
+    end
   end
   do
-    local isLeft = getScreenSizeX() / 2 < Panel_CheckedQuest:GetPosX()
-    if not isLeft then
-      (self._uiTooltipBG):SetPosX(Panel_CheckedQuest:GetSizeX() + 10)
-    else
-      (self._uiTooltipBG):SetPosX(Panel_CheckedQuest:GetSizeX() - Panel_CheckedQuest:GetSizeX() - (self._uiTooltipBG):GetSizeX() - 10)
+    do
+      local isLeft = getScreenSizeX() / 2 < Panel_CheckedQuest:GetPosX()
+      if not isLeft then
+        (self._uiTooltipBG):SetPosX(Panel_CheckedQuest:GetSizeX() + 10)
+      else
+        (self._uiTooltipBG):SetPosX(Panel_CheckedQuest:GetSizeX() - Panel_CheckedQuest:GetSizeX() - (self._uiTooltipBG):GetSizeX() - 10)
+      end
+      ;
+      (self._uiTooltipBG):SetPosY((self._uiTransBG):GetPosY())
+      -- DECOMPILER ERROR: 3 unprocessed JMP targets
     end
-    ;
-    (self._uiTooltipBG):SetPosY((self._uiTransBG):GetPosY())
-    -- DECOMPILER ERROR: 3 unprocessed JMP targets
   end
 end
 
--- DECOMPILER ERROR at PC504: Confused about usage of register: R34 in 'UnsetPending'
+-- DECOMPILER ERROR at PC520: Confused about usage of register: R34 in 'UnsetPending'
 
 PaGlobal_CheckedQuest.setShowFunctionButtons = function(self, isMouseOver)
   -- function num : 0_75
@@ -2592,6 +2620,8 @@ end
 
 HandleClicked_QuestWidget_GuideQuest_MouseOver = function(isOn)
   -- function num : 0_98
+  (PaGlobal_CheckedQuest._uiGuideButton_Desc):SetSize((PaGlobal_CheckedQuest._uiGuideButton_Desc):GetTextSizeX() + 50, (PaGlobal_CheckedQuest._uiGuideButton_Desc):GetSizeY())
+  ;
   (PaGlobal_CheckedQuest._uiGuideButton_Desc):SetPosX((PaGlobal_CheckedQuest._uiGuideButton):GetPosX() - (PaGlobal_CheckedQuest._uiGuideButton_Desc):GetSizeX() + 35)
   ;
   (PaGlobal_CheckedQuest._uiGuideButton_Desc):SetPosY((PaGlobal_CheckedQuest._uiGuideButton):GetPosY() + 35)
@@ -2644,7 +2674,7 @@ end
 
 HandleClicked_QuestWidget_GuideQuest = function()
   -- function num : 0_100 , upvalues : _guideQuestChechk
-  if GlobalKeyBinder_CheckProgress_chk() then
+  if Panel_Collect_Bar:GetShow() or Panel_Product_Bar:GetShow() or Panel_Enchant_Bar:GetShow() then
     return 
   end
   if Panel_Global_Manual:GetShow() then
@@ -2666,11 +2696,11 @@ HandleClicked_QuestWidget_GuideQuest = function()
               guideQuestPos = float3(npcPosition.x, npcPosition.y, npcPosition.z)
             end
             ToClient_WorldMapNaviStart(guideQuestPos, NavigationGuideParam(), false, false)
-            -- DECOMPILER ERROR at PC63: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC74: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC63: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC74: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC63: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC74: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end

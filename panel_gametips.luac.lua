@@ -33,7 +33,7 @@ local gameTipsBG = (UI.getChildControl)(Panel_GameTips, "Static_GameTipsBG")
 local elapsedTime = 0
 local nowPlayingIndex = 1
 local textIndex = 1
-local const = {textChangeTime = 60, controlCount = #gameTips_Message, textOffset = 100, fixStartPosX = 100}
+local const = {textChangeTime = 30, controlCount = #gameTips_Message, textOffset = 100, fixStartPosX = 100}
 gameTip_init = function()
   -- function num : 0_1 , upvalues : gameTips_Message, txt_GameTip
   for i = 1, #gameTips_Message do

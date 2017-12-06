@@ -118,10 +118,6 @@ PaGlobal_Skill.initControl = function(self)
   else
     if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
       (self._btn_MovieToolTip):SetShow(false)
-      ;
-      (self._btn_MovieToolTipBG):SetShow(false)
-      ;
-      (self._btn_MovieToolTipDesc):SetShow(false)
     end
   end
 end

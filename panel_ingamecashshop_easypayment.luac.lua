@@ -155,8 +155,8 @@ end
 
 PaGlobal_EasyBuy.MyPearlUpdate = function(self)
   -- function num : 0_6
-  local pearlItemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, getPearlSlotNo())
-  local pearl = 0
+  local pearlItemWrapper = (getInventoryItemByType((CppEnums.ItemWhereType).eCashInventory, getPearlSlotNo()))
+  local pearl = nil
   if pearlItemWrapper ~= nil then
     pearl = (pearlItemWrapper:get()):getCount_s64()
   end

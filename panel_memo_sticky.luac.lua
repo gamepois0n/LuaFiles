@@ -202,11 +202,7 @@ end
 PaGlobal_Memo.StickyChangeColorEnd = function(self, id, color)
   -- function num : 0_12
   self._currentFocusId = id
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R3 in 'UnsetPending'
-
-  ;
-  ((self._stickyMemoList)[id])._stickyMemoColor = color
-  self:StickyApplyColor(id, ((self._stickyMemoList)[id])._stickyMemoColor)
+  self:StickyApplyColor(id, color)
   ;
   ((((self._stickyMemoList)[id])._colorChange)._uiframe):SetShow(false)
   self:Save((self._SaveMode_).SETTING)
@@ -357,7 +353,7 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     (self._uiMultiLineText):SetFontColor((Defines.Color).C_FFC4BEBE)
     self._uiSave = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_Memo_Sticky, self._mainPanel, "Button_SaveMemo", 0)
     ;
-    (self._uiSave):addInputEvent("Mouse_LUp", "PaGlobal_Memo:Save(" .. (PaGlobal_Memo._SaveMode_).ALL .. ")")
+    (self._uiSave):addInputEvent("Mouse_LUp", "PaGlobal_Memo:Save(" .. (PaGlobal_Memo._SaveMode_).ALL .. "," .. stickyMemoId .. ")")
     self._uiAddMemo = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_Memo_Sticky, self._mainPanel, "Button_AddMemo", 0)
     ;
     (self._uiAddMemo):addInputEvent("Mouse_LUp", "PaGlobal_Memo:Add()")
@@ -379,11 +375,11 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     (self._uiButtonColorChange):addInputEvent("Mouse_On", "PaGlobal_Memo:Tooltip_Show(" .. 4 .. ")")
     ;
     (self._uiButtonColorChange):addInputEvent("Mouse_Out", "PaGlobal_Memo:Tooltip_Hide()")
-    -- DECOMPILER ERROR at PC378: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC380: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._colorChange)._uiframe = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_FRAME, Panel_Memo_Sticky, self._mainPanel, "Frame_Sticky_ColorChange", 0)
-    -- DECOMPILER ERROR at PC384: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC386: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._colorChange)._uiframeContent = ((self._colorChange)._uiframe):GetFrameContent()
@@ -393,7 +389,7 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     colorTitle:SetShow(true)
     for color = 0, 5 do
       local colorStyle = (UI.getChildControl)(Panel_Memo_Sticky, "Button_Color_" .. tostring(color))
-      -- DECOMPILER ERROR at PC433: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC435: Confused about usage of register: R13 in 'UnsetPending'
 
       ;
       ((self._colorChange)._uiButton)[color] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, (self._colorChange)._uiframeContent, "Button_Color_" .. color)
@@ -413,7 +409,7 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     (self._uiMultiLineText):addInputEvent("Mouse_UpScroll", "PaGlobal_Memo:OnMouseWheel( " .. stickyMemoId .. ", true )")
     ;
     (self._uiMultiLineText):addInputEvent("Mouse_DownScroll", "PaGlobal_Memo:OnMouseWheel( " .. stickyMemoId .. ", false )")
-    -- DECOMPILER ERROR at PC499: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC501: Confused about usage of register: R8 in 'UnsetPending'
 
     PaGlobal_Memo.Tooltip_Show = function(self, uiType)
       -- function num : 0_15_3_0 , upvalues : stickyMemo
@@ -450,7 +446,7 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
       TooltipSimple_Show(uiControl, name, desc)
     end
 
-    -- DECOMPILER ERROR at PC502: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC504: Confused about usage of register: R8 in 'UnsetPending'
 
     PaGlobal_Memo.Tooltip_Hide = function(self)
       -- function num : 0_15_3_1
@@ -551,52 +547,55 @@ end
 
 PaGlobal_Memo.StickyApplyColor = function(self, id, color)
   -- function num : 0_19
+  -- DECOMPILER ERROR at PC2: Confused about usage of register: R3 in 'UnsetPending'
+
+  ((self._stickyMemoList)[id])._stickyMemoColor = color
   local control = ((self._stickyMemoList)[id])._uiEditTitleImg
   local _x1, _y1, _x2, _y2 = nil, nil, nil, nil
   if color == 0 then
     _x1 = 1
   else
-    -- DECOMPILER ERROR at PC19: Overwrote pending register: R7 in 'AssignReg'
+    -- DECOMPILER ERROR at PC22: Overwrote pending register: R7 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC20: Overwrote pending register: R6 in 'AssignReg'
+    -- DECOMPILER ERROR at PC23: Overwrote pending register: R6 in 'AssignReg'
 
-    -- DECOMPILER ERROR at PC21: Overwrote pending register: R5 in 'AssignReg'
+    -- DECOMPILER ERROR at PC24: Overwrote pending register: R5 in 'AssignReg'
 
     if color == 1 then
       _x1 = 30
     else
-      -- DECOMPILER ERROR at PC29: Overwrote pending register: R7 in 'AssignReg'
+      -- DECOMPILER ERROR at PC32: Overwrote pending register: R7 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC30: Overwrote pending register: R6 in 'AssignReg'
+      -- DECOMPILER ERROR at PC33: Overwrote pending register: R6 in 'AssignReg'
 
-      -- DECOMPILER ERROR at PC31: Overwrote pending register: R5 in 'AssignReg'
+      -- DECOMPILER ERROR at PC34: Overwrote pending register: R5 in 'AssignReg'
 
       if color == 2 then
         _x1 = 59
       else
-        -- DECOMPILER ERROR at PC39: Overwrote pending register: R7 in 'AssignReg'
+        -- DECOMPILER ERROR at PC42: Overwrote pending register: R7 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC40: Overwrote pending register: R6 in 'AssignReg'
+        -- DECOMPILER ERROR at PC43: Overwrote pending register: R6 in 'AssignReg'
 
-        -- DECOMPILER ERROR at PC41: Overwrote pending register: R5 in 'AssignReg'
+        -- DECOMPILER ERROR at PC44: Overwrote pending register: R5 in 'AssignReg'
 
         if color == 3 then
           _x1 = 88
         else
-          -- DECOMPILER ERROR at PC49: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC52: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC50: Overwrote pending register: R6 in 'AssignReg'
+          -- DECOMPILER ERROR at PC53: Overwrote pending register: R6 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC51: Overwrote pending register: R5 in 'AssignReg'
+          -- DECOMPILER ERROR at PC54: Overwrote pending register: R5 in 'AssignReg'
 
           if color == 4 then
             _x1 = 117
           else
-            -- DECOMPILER ERROR at PC59: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC62: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC60: Overwrote pending register: R6 in 'AssignReg'
+            -- DECOMPILER ERROR at PC63: Overwrote pending register: R6 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC61: Overwrote pending register: R5 in 'AssignReg'
+            -- DECOMPILER ERROR at PC64: Overwrote pending register: R5 in 'AssignReg'
 
             if color == 5 then
               _x1 = 146

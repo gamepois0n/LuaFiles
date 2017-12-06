@@ -180,6 +180,8 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
     FGlobal_QuestInfoDetail_Close()
     return 
   end
+  local questWindowX = Panel_Window_Quest_New:GetPosX()
+  local questWindowY = Panel_Window_Quest_New:GetPosY()
   if Panel_Window_Quest_New:GetShow() == false then
     Panel_Window_QuestNew_Show(true)
   end
@@ -326,8 +328,8 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
           Panel_CheckedQuestInfo:SetPosX(Panel_Window_Quest_New:GetScreenParentPosX() + Panel_Window_Quest_New:GetSizeX())
           Panel_CheckedQuestInfo:SetPosY(Panel_Window_Quest_New:GetScreenParentPosY() + 10)
         else
-          Panel_CheckedQuestInfo:SetPosX(Panel_Window_Quest_New:GetPosX() + Panel_Window_Quest_New:GetSizeX())
-          Panel_CheckedQuestInfo:SetPosY(Panel_Window_Quest_New:GetPosY() + 10)
+          Panel_CheckedQuestInfo:SetPosX(questWindowX + Panel_Window_Quest_New:GetSizeX())
+          Panel_CheckedQuestInfo:SetPosY(questWindowY + 10)
         end
       else
         Panel_CheckedQuestInfo:SetPosX(getScreenSizeX() - getScreenSizeX() / 2 - Panel_CheckedQuestInfo:GetSizeX() / 2)

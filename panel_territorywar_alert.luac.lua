@@ -44,6 +44,7 @@ FGlobal_TerritoryWar_Caution = function()
   -- function num : 0_2
   local isCaution = ToClient_IsDangerBySiegeSelf()
   Panel_TerritoryWar_Caution:SetShow(false)
+  PaGlobal_Radar_WarAlert(false)
   if isCaution then
     Panel_TerritoryWar_Caution:SetPosX(getScreenSizeX() / 2 - Panel_TerritoryWar_Caution:GetSizeX() / 2)
     Panel_TerritoryWar_Caution:SetPosY(230)
@@ -51,6 +52,7 @@ FGlobal_TerritoryWar_Caution = function()
     if isGameMaster then
       Panel_TerritoryWar_Caution:SetShow(false, false)
     else
+      PaGlobal_Radar_WarAlert(true)
       Panel_TerritoryWar_Caution:SetShow(true, true)
     end
   end

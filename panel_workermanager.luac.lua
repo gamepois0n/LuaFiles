@@ -122,7 +122,7 @@ local workerManager_Initiallize = function()
     ;
     (tempSlot.workerCheck):SetPosX(35)
     ;
-    (tempSlot.workerCheck):SetPosY(32)
+    (tempSlot.workerCheck):SetPosY(34)
     ;
     (tempSlot.picture):SetPosX(5)
     ;
@@ -140,53 +140,53 @@ local workerManager_Initiallize = function()
     ;
     (tempSlot.workerHpBG):SetPosX(58)
     ;
-    (tempSlot.workerHpBG):SetPosY((tempSlot.workerName):GetSizeY() + 1.5)
+    (tempSlot.workerHpBG):SetPosY((tempSlot.workerName):GetSizeY() + 5.5)
     ;
-    (tempSlot.workerRestorePT):SetPosX(58)
+    (tempSlot.workerRestorePT):SetPosX(60)
     ;
-    (tempSlot.workerRestorePT):SetPosY((tempSlot.workerName):GetSizeY() + 5)
+    (tempSlot.workerRestorePT):SetPosY((tempSlot.workerName):GetSizeY() + 7)
     ;
-    (tempSlot.workerCurrentPT):SetPosX(58)
+    (tempSlot.workerCurrentPT):SetPosX(60)
     ;
-    (tempSlot.workerCurrentPT):SetPosY((tempSlot.workerName):GetSizeY() + 5)
+    (tempSlot.workerCurrentPT):SetPosY((tempSlot.workerName):GetSizeY() + 7)
     ;
     (tempSlot.progressBg):SetPosX(58)
     ;
-    (tempSlot.progressBg):SetPosY((tempSlot.workerRestorePT):GetPosY() + (tempSlot.workerRestorePT):GetSizeY() + 7)
+    (tempSlot.progressBg):SetPosY((tempSlot.workerRestorePT):GetPosY() + (tempSlot.workerRestorePT):GetSizeY() + 9)
     ;
-    (tempSlot.progress):SetPosX(58)
+    (tempSlot.progress):SetPosX(59)
     ;
-    (tempSlot.progress):SetPosY((tempSlot.workerRestorePT):GetPosY() + (tempSlot.workerRestorePT):GetSizeY() + 8)
+    (tempSlot.progress):SetPosY((tempSlot.workerRestorePT):GetPosY() + (tempSlot.workerRestorePT):GetSizeY() + 10)
     ;
     (tempSlot.workingName):SetPosX(62)
     ;
     (tempSlot.workingName):SetPosY((tempSlot.progressBg):GetPosY())
     ;
-    (tempSlot.btn_Restore):SetPosX((tempSlot.progressBg):GetPosX() + (tempSlot.progressBg):GetSizeX())
+    (tempSlot.btn_Restore):SetPosX((tempSlot.progressBg):GetPosX() + (tempSlot.progressBg):GetSizeX() + 4)
     ;
-    (tempSlot.btn_Restore):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
+    (tempSlot.btn_Restore):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5 + 1)
     ;
     (tempSlot.btn_Stop):SetPosX((tempSlot.btn_Restore):GetPosX() + (tempSlot.btn_Restore):GetSizeX() + 2)
     ;
-    (tempSlot.btn_Stop):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
+    (tempSlot.btn_Stop):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5 + 1)
     ;
     (tempSlot.btn_Repeat):SetPosX((tempSlot.btn_Restore):GetPosX() + (tempSlot.btn_Restore):GetSizeX() + 2)
     ;
-    (tempSlot.btn_Repeat):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
+    (tempSlot.btn_Repeat):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5 + 1)
     ;
     (tempSlot.btn_UnRepeat):SetPosX((tempSlot.btn_Repeat):GetPosX() + (tempSlot.btn_Repeat):GetSizeX() + 2)
     ;
-    (tempSlot.btn_UnRepeat):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
+    (tempSlot.btn_UnRepeat):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5 + 1)
     ;
     (tempSlot.btn_Upgrade):SetPosX((tempSlot.btn_UnRepeat):GetPosX() + (tempSlot.btn_UnRepeat):GetSizeX() + 2)
     ;
-    (tempSlot.btn_Upgrade):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
+    (tempSlot.btn_Upgrade):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5 + 1)
     ;
     (tempSlot.btn_resetCount):ComputePos()
     ;
     (tempSlot.btn_ChangeSkill):SetPosX((tempSlot.btn_Upgrade):GetPosX() + (tempSlot.btn_Upgrade):GetSizeX() + 2)
     ;
-    (tempSlot.btn_ChangeSkill):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5)
+    (tempSlot.btn_ChangeSkill):SetPosY(((tempSlot.progressBg):GetPosY() + (tempSlot.workerHpBG):GetPosY()) / 2.5 + 1)
     ;
     (tempSlot.bg):addInputEvent("Mouse_UpScroll", "workerManager_ScrollEvent( true )")
     ;
@@ -211,7 +211,7 @@ local workerManager_Initiallize = function()
     (tempSlot.picture):addInputEvent("Mouse_UpScroll", "workerManager_ScrollEvent( true )")
     ;
     (tempSlot.picture):addInputEvent("Mouse_DownScroll", "workerManager_ScrollEvent( false )")
-    -- DECOMPILER ERROR at PC505: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC512: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self.slot)[slotIdx] = tempSlot
@@ -248,7 +248,7 @@ local workerManager_Initiallize = function()
     (tempItemSlot.slotIcon):addInputEvent("Mouse_UpScroll", "workerManager_SliderScroll( true )")
     ;
     (tempItemSlot.slotIcon):addInputEvent("Mouse_DownScroll", "workerManager_SliderScroll( false )")
-    -- DECOMPILER ERROR at PC622: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC629: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self.restoreItemSlot)[resIdx] = tempItemSlot
@@ -275,13 +275,23 @@ local workerManager_Initiallize = function()
   ;
   (self.desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORKERMANAGER_DESCRIPTION"))
   ;
+  (self.desc):SetSize((self.desc):GetSizeX(), (self.desc):GetTextSizeY() + 5)
+  ;
+  (self.desc):setPadding((CppEnums.Padding).ePadding_Left, 5)
+  ;
+  (self.desc):setPadding((CppEnums.Padding).ePadding_Top, 5)
+  ;
+  (self.desc):setPadding((CppEnums.Padding).ePadding_Right, 5)
+  ;
+  (self.desc):setPadding((CppEnums.Padding).ePadding_Bottom, 5)
+  ;
   (self.desc):ComputePos()
   ;
   (self.btn_restoreItemClose):SetShow(true)
   ;
-  (self.desc):setPadding(UI_PD.ePadding_Left, 10)
+  (self.desc):setPadding(UI_PD.ePadding_Left, 5)
   ;
-  (self.desc):setPadding(UI_PD.ePadding_Right, 10)
+  (self.desc):setPadding(UI_PD.ePadding_Right, 5)
   if isContentOpen then
     (self._restoreAll):SetSize(130, 30)
     ;
@@ -291,19 +301,19 @@ local workerManager_Initiallize = function()
     ;
     (self._btnUpgradeNow):SetSize(130, 30)
     ;
-    (self._btnFire):SetSize(130, 65)
+    (self._btnFire):SetSize(130, 68)
     ;
-    (self._restoreAll):SetSpanSize(30, 40)
+    (self._restoreAll):SetSpanSize(30, 45)
     ;
-    (self._reDoAll):SetSpanSize(0, 40)
+    (self._reDoAll):SetSpanSize(0, 45)
     ;
-    (self._resetUpgradeCount):SetSpanSize(30, 5)
+    (self._resetUpgradeCount):SetSpanSize(30, 8)
     ;
-    (self._btnUpgradeNow):SetSpanSize(0, 5)
+    (self._btnUpgradeNow):SetSpanSize(0, 8)
     ;
-    (self._btnFire):SetSpanSize(30, 5)
+    (self._btnFire):SetSpanSize(30, 8)
     ;
-    (self.desc):SetSpanSize(0, 75)
+    (self.desc):SetSpanSize(10, 82)
   else
     ;
     (self._restoreAll):SetSize(80, 30)
@@ -314,15 +324,15 @@ local workerManager_Initiallize = function()
     ;
     (self._btnFire):SetSize(120, 30)
     ;
-    (self._restoreAll):SetSpanSize(10, 5)
+    (self._restoreAll):SetSpanSize(11, 8)
     ;
-    (self._reDoAll):SetSpanSize(-100, 5)
+    (self._reDoAll):SetSpanSize(-94, 8)
     ;
-    (self._btnUpgradeNow):SetSpanSize(0, 5)
+    (self._btnUpgradeNow):SetSpanSize(0, 8)
     ;
-    (self._btnFire):SetSpanSize(10, 5)
+    (self._btnFire):SetSpanSize(13, 8)
     ;
-    (self.desc):SetSpanSize(0, 40)
+    (self.desc):SetSpanSize(10, 45)
   end
   ;
   (self._resetUpgradeCount):SetShow(isContentOpen)
@@ -903,10 +913,10 @@ local workerManager_Update = function()
   end
   workerManager_UpdateMain()
   ;
-  (self.workerListBg):SetSize((self.workerListBg):GetSizeX(), ((((self.slot)[0]).bg):GetSizeY() + 5) * self.slotMaxCount)
+  (self.workerListBg):SetSize((self.workerListBg):GetSizeX(), ((((self.slot)[0]).bg):GetSizeY() + 6) * self.slotMaxCount)
   ;
-  (self._scroll):SetSize((self._scroll):GetSizeX(), ((((self.slot)[0]).bg):GetSizeY() + 5) * self.slotMaxCount)
-  Panel_WorkerManager:SetSize(Panel_WorkerManager:GetSizeX(), ((((self.slot)[0]).bg):GetSizeY() + 5) * self.slotMaxCount + 80 + (self._btnFire):GetSizeY() + ((self.desc):GetSizeY() + 10))
+  (self._scroll):SetSize((self._scroll):GetSizeX(), ((((self.slot)[0]).bg):GetSizeY() + 6) * self.slotMaxCount)
+  Panel_WorkerManager:SetSize(Panel_WorkerManager:GetSizeX(), ((((self.slot)[0]).bg):GetSizeY() + 6) * self.slotMaxCount + 80 + (self._btnFire):GetSizeY() + ((self.desc):GetSizeY() + 20))
   ;
   (self._btnFire):ComputePos()
   ;

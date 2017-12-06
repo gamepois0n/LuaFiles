@@ -595,9 +595,9 @@ Chatnew_CreateChattingContent = function(chattingMessage, poolCurrentUI, PosY, m
                           ;
                           (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                           ;
-                          (chatting_contents[contentindex]):addInputEvent("Mouse_On", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",true )")
+                          (chatting_contents[contentindex]):addInputEvent("Mouse_On", "PaGlobal_HandleOnOut_MentalCard(" .. contentindex .. ",true )")
                           ;
-                          (chatting_contents[contentindex]):addInputEvent("Mouse_Out", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",false )")
+                          (chatting_contents[contentindex]):addInputEvent("Mouse_Out", "PaGlobal_HandleOnOut_MentalCard(" .. contentindex .. ",false )")
                           ;
                           (chatting_contents[contentindex]):addInputEvent("Mouse_LUp", "PaGlobal_HandleClicked_MentalCard(" .. chattingMessage:getMantalCardKey() .. ")")
                           ;
@@ -1377,9 +1377,9 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
                     ;
                     (chatting_contents[contentindex]):SetTextMode(UI_TM.eTextMode_ChattingText)
                     ;
-                    (chatting_contents[contentindex]):addInputEvent("Mouse_On", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",true )")
+                    (chatting_contents[contentindex]):addInputEvent("Mouse_On", "PaGlobal_HandleOnOut_MentalCard(" .. contentindex .. ",true )")
                     ;
-                    (chatting_contents[contentindex]):addInputEvent("Mouse_Out", "PaGlobal_HanldeOnOut_MentalCard(" .. contentindex .. ",false )")
+                    (chatting_contents[contentindex]):addInputEvent("Mouse_Out", "PaGlobal_HandleOnOut_MentalCard(" .. contentindex .. ",false )")
                     ;
                     (chatting_contents[contentindex]):addInputEvent("Mouse_LUp", "PaGlobal_HandleClicked_MentalCard(" .. chattingMessage:getMantalCardKey() .. ")")
                     ;
@@ -1456,10 +1456,13 @@ CreateContentWithMsgLength = function(reciver, poolCurrentUI, chatType, chatting
   end
 end
 
-PaGlobal_HanldeOnOut_MentalCard = function(index, isShow)
+PaGlobal_HandleOnOut_MentalCard = function(index, isShow)
   -- function num : 0_5
   if isShow == false then
     TooltipSimple_Hide()
+  end
+  if Panel_WorldMap:GetShow() == true then
+    return 
   end
   local control = PaGlobal_getChattingContentsByIndex(index)
   local name = (PAGetString(Defines.StringSheet_GAME, "LUA_CHATTING_MENTALCARD_TOOLTIP_NAME"))

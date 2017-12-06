@@ -719,7 +719,7 @@ FGlobal_CashShop_SetEquip_CouponEffectCheck = function()
     ;
     (self.btn_Coupon):SetSpanSize(10, 90)
     if count > 0 then
-      (self.btn_Coupon):AddEffect("UI_Cuponbox_Line", true, -10, 58)
+      (self.btn_Coupon):AddEffect("fui_coupon_01B", true, 0, 0)
     end
   else
     ;
@@ -1087,9 +1087,7 @@ HandleClicked_CashShopController_SetSpecialMove = function()
     ;
     (self.btn_StampCoupon):SetSpanSize(10, 130)
   end
-  -- DECOMPILER ERROR at PC60: Unhandled construct in 'MakeBoolean' P1
-
-  if not (self.btn_SpecialMove1):GetShow() or characterAnimationCount == 1 then
+  if characterAnimationCount == 1 then
     if specialMoveCheck then
       (self.btn_SpecialMove1):SetShow(true)
       ;
@@ -1654,6 +1652,8 @@ FGlobal_SpecialMoveSettingCheck = function()
   (self.btn_SpecialMove2):SetShow(false)
   ;
   (self.btn_SpecialMove):SetShow(false)
+  ;
+  (self.btn_SpecialMove):SetCheck(false)
   ;
   (self.btn_Coupon):SetSpanSize(10, 90)
   ;

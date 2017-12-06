@@ -734,30 +734,41 @@ Panel_Lobby_function_SelectClassType = function(index, isOn)
     ;
     (Panel_Lobby_UI.CCSC_RadioAwakenMovie):SetShow(isAwakenOpen[index])
     _index = index
-    ;
-    (Panel_Lobby_UI.CCSC_ClassMovie):SetShow(true)
-    ;
-    (Panel_Lobby_UI.CCSC_NoMovie):SetShow(false)
-    viewCharacterCreateSelectClassMode(index)
-    -- DECOMPILER ERROR at PC82: Confused about usage of register: R3 in 'UnsetPending'
+    do
+      if isGameTypeKorea() then
+        local checkAgeType = ToClient_isAdultUser()
+        if checkAgeType then
+          (Panel_Lobby_UI.CCSC_ClassMovie):SetShow(true)
+          ;
+          (Panel_Lobby_UI.CCSC_NoMovie):SetShow(false)
+        else
+          ;
+          (Panel_Lobby_UI.CCSC_ClassMovie):SetShow(false)
+          ;
+          (Panel_Lobby_UI.CCSC_NoMovie):SetShow(true)
+        end
+      end
+      viewCharacterCreateSelectClassMode(index)
+      -- DECOMPILER ERROR at PC101: Confused about usage of register: R3 in 'UnsetPending'
 
-    Panel_Lobby_Global_Variable.characterSelectType = index
-    ;
-    (Panel_Lobby_UI.CCSC_ClassName):SetText(getClassName(index, isSpecialCharacter))
-    ;
-    (Panel_Lobby_UI.CCSC_ClassDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
-    ;
-    (Panel_Lobby_UI.CCSC_ClassDesc):SetText(getClassDescription(index, isSpecialCharacter))
-    ;
-    (Panel_Lobby_UI.CCSC_ClassDesc):SetShow(false)
-    txt_BottomDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    txt_BottomDesc:SetText(getClassDescription(index, isSpecialCharacter))
-    _frameBottomDesc:SetSize(_frameBottomDesc:GetSizeX(), txt_BottomDesc:GetTextSizeY())
-    for _,value in pairs(Panel_Lobby_ClassUI.ClassStatus) do
-      value:SetShow(false)
+      Panel_Lobby_Global_Variable.characterSelectType = index
+      ;
+      (Panel_Lobby_UI.CCSC_ClassName):SetText(getClassName(index, isSpecialCharacter))
+      ;
+      (Panel_Lobby_UI.CCSC_ClassDesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
+      ;
+      (Panel_Lobby_UI.CCSC_ClassDesc):SetText(getClassDescription(index, isSpecialCharacter))
+      ;
+      (Panel_Lobby_UI.CCSC_ClassDesc):SetShow(false)
+      txt_BottomDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
+      txt_BottomDesc:SetText(getClassDescription(index, isSpecialCharacter))
+      _frameBottomDesc:SetSize(_frameBottomDesc:GetSizeX(), txt_BottomDesc:GetTextSizeY())
+      for _,value in pairs(Panel_Lobby_ClassUI.ClassStatus) do
+        value:SetShow(false)
+      end
+      ;
+      ((Panel_Lobby_ClassUI.ClassStatus)[index]):SetShow(true)
     end
-    ;
-    ((Panel_Lobby_ClassUI.ClassStatus)[index]):SetShow(true)
   end
 end
 

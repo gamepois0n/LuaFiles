@@ -16,6 +16,10 @@ FGlobal_Inventory_WeightCheck = function()
   if selfPlayerWrapper == nil then
     return 
   end
+  ;
+  (self.weightText):SetPosX((self.weight):GetPosX() - (self.weightText):GetTextSizeX() - 25)
+  ;
+  (self.weightText):SetPosY((self.weight):GetPosY() - 4)
   local selfPlayer = selfPlayerWrapper:get()
   local s64_allWeight = selfPlayer:getCurrentWeight_s64()
   local s64_maxWeight = selfPlayer:getPossessableWeight_s64()
@@ -50,6 +54,8 @@ FGlobal_Inventory_WeightCheck = function()
     (self.panel):SetShow(true)
     ;
     (self.weight):SetShow(true)
+    ;
+    (self.weightText):SetShow(true)
     ;
     (self.weight):SetAlpha(0.8)
     ;

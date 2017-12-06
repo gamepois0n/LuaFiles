@@ -18,9 +18,8 @@ local tempFromWhereType, tempFromSlotNo = nil, nil
 petRegister_init = function()
   -- function num : 0_0 , upvalues : petNaming, _staticCreateServantName, UI_TM, _staticCreateServantNameBG, _staticCreateServantNameTitle, _petRegisterDesc
   petNaming:SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEINFO_EDITBOX_COMMENT"), true)
-  if isGameTypeEnglish() or isGameTypeTaiwan() then
+  if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     _staticCreateServantName:SetTextMode(UI_TM.eTextMode_AutoWrap)
-    _staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
     _staticCreateServantName:SetShow(true)
     _staticCreateServantNameBG:SetShow(true)
     _staticCreateServantNameTitle:SetShow(true)
@@ -28,6 +27,21 @@ petRegister_init = function()
     _staticCreateServantName:SetShow(false)
     _staticCreateServantNameBG:SetShow(false)
     _staticCreateServantNameTitle:SetShow(false)
+  end
+  if isGameTypeEnglish() or isGameTypeTaiwan() then
+    _staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
+  else
+    if isGameTypeTR() then
+      _staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
+    else
+      if isGameTypeTH() then
+        _staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
+      else
+        if isGameTypeID() then
+          _staticCreateServantName:SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+        end
+      end
+    end
   end
   _petRegisterDesc:SetTextMode(UI_TM.eTextMode_AutoWrap)
 end

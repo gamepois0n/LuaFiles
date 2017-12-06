@@ -338,7 +338,7 @@ PaGlobal_CharacterInfoBasic.update = function(self)
   local FamiName = (self._player):getUserNickname()
   local ChaName = (self._player):getOriginalName()
   ;
-  ((self._ui)._staticTextPlayerName_Value):SetText(tostring(ChaName) .. "(" .. tostring(FamiName) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSDETAILINFO_FAMILY") .. ")")
+  ((self._ui)._staticTextPlayerName_Value):SetText(tostring(ChaName) .. "(" .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDLIST_FAMILYNAME", "name", tostring(FamiName)) .. ")")
   local ZodiacName = ((self._player):getZodiacSignOrderStaticStatusWrapper()):getZodiacName()
   ;
   ((self._ui)._staticTextZodiac_Value):SetText(tostring(ZodiacName))

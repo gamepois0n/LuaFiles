@@ -89,6 +89,10 @@ voiceSet.Init = function(self)
     ;
     (self.uiPool)[sliderIdx] = tempSlot
   end
+  ;
+  ((self.ui).pushToTalk):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+  ;
+  ((self.ui).pushToTalk):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SETVOICECHAT_PUSHTOTALK"))
 end
 
 voiceSet.close = function(self)

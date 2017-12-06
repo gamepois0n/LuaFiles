@@ -407,9 +407,12 @@ end
       end
       local couponName = couponWrapper:getCouponName()
       local couponDiscountRate = couponWrapper:getCouponDisCountRate()
+      local couponDiscountPearl = couponWrapper:getCouponDisCountPearl()
       local couponState = couponWrapper:getCouponState()
       local couponCategoryCheck = couponWrapper:checkCategory(cashProduct:getMainCategory(), cashProduct:getMiddleCategory(), cashProduct:getSmallCategory())
       local couponMaxDiscount = couponWrapper:getCouponMaxDisCountPearl()
+      local couponMinProductPearl = couponWrapper:getCouponMinProductPearl()
+      local isDiscountPearl = couponWrapper:isDisCountPearl()
       if not couponCategoryCheck and Panel_IngameCashShop_BuyOrGift:GetShow() then
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_UNABLECOUPON"))
         ;
@@ -440,19 +443,31 @@ end
         ;
         (self._txt_DiscountDirection):SetShow(true)
         do
-          local couponDiscountValue = cashProduct:getPrice() * toInt64(0, couponDiscountRate / 10000) / toInt64(0, 100)
-          if toInt64(0, 0) < couponMaxDiscount then
-            if couponMaxDiscount < couponDiscountValue then
-              (self._static_DiscountPrice):SetText(tostring(cashProduct:getPrice() - couponMaxDiscount))
-              ;
-              (self._txt_CouponApplyIcon):SetText(tostring(couponName) .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMITMAXSALE"))
+          local couponDiscountValue = nil
+          if isDiscountPearl == false then
+            couponDiscountValue = cashProduct:getPrice() * toInt64(0, couponDiscountRate / 10000) / toInt64(0, 100)
+            if toInt64(0, 0) < couponMaxDiscount then
+              if couponMaxDiscount < couponDiscountValue then
+                (self._static_DiscountPrice):SetText(tostring(cashProduct:getPrice() - couponMaxDiscount))
+                ;
+                (self._txt_CouponApplyIcon):SetText(tostring(couponName) .. PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMITMAXSALE"))
+              else
+                (self._static_DiscountPrice):SetText(tostring(cashProduct:getPrice() - cashProduct:getPrice() * toInt64(0, couponDiscountRate / 10000) / toInt64(0, 100)))
+                ;
+                (self._txt_CouponApplyIcon):SetText(tostring(couponName))
+              end
             else
               (self._static_DiscountPrice):SetText(tostring(cashProduct:getPrice() - cashProduct:getPrice() * toInt64(0, couponDiscountRate / 10000) / toInt64(0, 100)))
               ;
               (self._txt_CouponApplyIcon):SetText(tostring(couponName))
             end
           else
-            (self._static_DiscountPrice):SetText(tostring(cashProduct:getPrice() - cashProduct:getPrice() * toInt64(0, couponDiscountRate / 10000) / toInt64(0, 100)))
+            couponDiscountValue = cashProduct:getPrice() - couponDiscountPearl
+            if couponDiscountValue <= toInt64(0, 0) then
+              couponDiscountValue = ToClient_MinCashProductPriceCoupon()
+            end
+            ;
+            (self._static_DiscountPrice):SetText(tostring(couponDiscountValue))
             ;
             (self._txt_CouponApplyIcon):SetText(tostring(couponName))
           end
@@ -493,7 +508,7 @@ end
               (self._button_Confirm):ComputePos()
               ;
               (self._button_Cancle):ComputePos()
-              -- DECOMPILER ERROR: 7 unprocessed JMP targets
+              -- DECOMPILER ERROR: 9 unprocessed JMP targets
             end
           end
         end
@@ -665,18 +680,10 @@ end
   local isFriend = (self._buttonFriendList):IsCheck()
   if isFriend then
     local friendGroupCount = nil
-    if isNewFriendList_chk() == true then
-      friendGroupCount = ToClient_GetFriendGroupCount()
-    else
-      friendGroupCount = RequestFriends_getFriendGroupCount()
-    end
+    friendGroupCount = ToClient_GetFriendGroupCount()
     for groupIndex = 0, friendGroupCount - 1 do
       local friendGroup = nil
-      if isNewFriendList_chk() == true then
-        friendGroup = ToClient_GetFriendGroupAt(groupIndex)
-      else
-        friendGroup = RequestFriends_getFriendGroupAt(groupIndex)
-      end
+      friendGroup = ToClient_GetFriendGroupAt(groupIndex)
       local friendCount = friendGroup:getFriendCount()
       for friendIndex = 0, friendCount - 1 do
         local friendInfo = friendGroup:getFriendAt(friendIndex)
@@ -686,16 +693,16 @@ end
             do
               local s64_lastLogoutTime = friendInfo:getLastLogoutTime_s64()
               friendName = friendName .. "(" .. convertStringFromDatetimeOverHour(s64_lastLogoutTime) .. ")"
-              -- DECOMPILER ERROR at PC87: Confused about usage of register: R16 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC70: Confused about usage of register: R16 in 'UnsetPending'
 
               ;
               (self.giftUserList)[userCount] = {name = friendInfo:getName(), userNo = friendInfo:getUserNo(), sendType = giftSendType.userNo}
               userCount = userCount + 1
-              -- DECOMPILER ERROR at PC89: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC72: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC89: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC72: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC89: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC72: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -720,23 +727,23 @@ end
               end
               do
                 do
-                  -- DECOMPILER ERROR at PC141: Confused about usage of register: R11 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC124: Confused about usage of register: R11 in 'UnsetPending'
 
                   ;
                   (self.giftUserList)[userCount] = {name = myGuildMemberInfo:getName(), userNo = myGuildMemberInfo:getUserNo(), sendType = giftSendType.userNo}
                   userCount = userCount + 1
-                  -- DECOMPILER ERROR at PC143: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC126: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC143: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC126: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC143: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC126: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
             end
           end
         end
-        -- DECOMPILER ERROR at PC145: Confused about usage of register: R3 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC128: Confused about usage of register: R3 in 'UnsetPending'
 
         ;
         (self._config)._giftBotListCount = userCount
@@ -757,7 +764,7 @@ end
             do
               ;
               (UIScroll.SetButtonSize)(self._scroll_GiftBotList, (self._config)._giftBotListMaxCount, (self._config)._giftBotListCount)
-              -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC177: LeaveBlock: unexpected jumping out DO_STMT
 
             end
           end
@@ -1356,11 +1363,7 @@ end
   (self._scroll_GiftTopList):SetControlTop()
   ;
   (self._scroll_GiftBotList):SetControlTop()
-  if isNewFriendList_chk() == true then
-    ToClient_GetFriendList()
-  else
-    RequestFriendList_getFriendList()
-  end
+  ToClient_GetFriendList()
   ;
   (getIngameCashMall()):clearGift()
   self:update()

@@ -378,12 +378,20 @@ StableStallion.setProtectItem = function(self)
     end
     ;
     ((self.protect)._protectCount):SetText(tostring(haveCount) .. "/" .. tostring(needCount))
-    ;
-    ((self.protect)._protectIcon):addInputEvent("Mouse_On", "HandleMOnoutProtectItemToolTip( true )")
-    ;
-    ((self.protect)._protectIcon):addInputEvent("Mouse_Out", "HandleMOnoutProtectItemToolTip( false )")
-    ;
-    ((self.protect)._protectIcon):setTooltipEventRegistFunc("HandleMOnoutProtectItemToolTip( true )")
+    if isNewEnchant_chk() == false then
+      ((self.protect)._protectIcon):addInputEvent("Mouse_On", "HandleMOnoutProtectItemToolTip( true )")
+      ;
+      ((self.protect)._protectIcon):addInputEvent("Mouse_Out", "HandleMOnoutProtectItemToolTip( false )")
+      ;
+      ((self.protect)._protectIcon):setTooltipEventRegistFunc("HandleMOnoutProtectItemToolTip( true )")
+    else
+      ;
+      ((self.protect)._protectIcon):addInputEvent("Mouse_On", "PaGlobal_Enchant:handleMOnCronIconTooltip()")
+      ;
+      ((self.protect)._protectIcon):addInputEvent("Mouse_Out", "PaGlobal_Enchant:handleMOutCronIconTooltip()")
+      ;
+      ((self.protect)._protectIcon):setTooltipEventRegistFunc("PaGlobal_Enchant:handleMOnCronIconTooltip()")
+    end
     local textSizeX = ((self.protect)._protectCount):GetTextSizeX()
   end
 end
@@ -746,7 +754,7 @@ StableStallion.Refresh_UIData = function(self)
           ;
           (((self._slots)[i])._skillPercent):SetText((string.format)("%.1f", (self._skillExpCount)[i]) .. "%")
           ;
-          (((self._slots)[i])._skillExp):SetProgressRate((self._skillExpCount)[i])
+          (((self._slots)[i])._skillExp):SetProgressRate((self._skillExpCount)[i] / 1.8)
           awakenExp = awakenExp + servantInfo:getSkillExp(ii)
         end
       end
@@ -768,13 +776,13 @@ StableStallion.UpdateCount = function(self, isAwakenBtn)
       -- DECOMPILER ERROR at PC15: Confused about usage of register: R6 in 'UnsetPending'
 
       if (self._skillExpCount)[i] > 1 then
-        (self._skillExpCount)[i] = (self._skillExpCount)[i] - 1
+        (self._skillExpCount)[i] = (self._skillExpCount)[i] - 2
         ;
         (((self._slots)[i])._skillPercent):SetText((string.format)("%.1f", (self._skillExpCount)[i]) .. "%")
         ;
-        (((self._slots)[i])._skillExp):SetProgressRate((self._skillExpCount)[i])
+        (((self._slots)[i])._skillExp):SetProgressRate((self._skillExpCount)[i] / 1.8)
       else
-        -- DECOMPILER ERROR at PC38: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC39: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
         (self._skillExpCount)[i] = 0
@@ -792,22 +800,30 @@ StableStallion.UpdateCount = function(self, isAwakenBtn)
       ((self.awaken)._awakenExpCount):SetText((string.format)("%.1f", self._awakenExpCount * 2) .. "%")
     end
   else
-    -- DECOMPILER ERROR at PC86: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC87: Confused about usage of register: R2 in 'UnsetPending'
 
-    if (self._skillExpCount)[self._index] >= 100 then
-      (self._skillExpCount)[self._index] = 100
+    if (self._skillExpCount)[self._index] >= 180 then
+      (self._skillExpCount)[self._index] = 180
     else
-      -- DECOMPILER ERROR at PC99: Confused about usage of register: R2 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC105: Confused about usage of register: R2 in 'UnsetPending'
 
       if (self._itemCount)[self._index] > 0 then
-        (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 1
-        -- DECOMPILER ERROR at PC106: Confused about usage of register: R2 in 'UnsetPending'
+        if (self._skillExpCount)[self._index] >= 100 then
+          (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 0.5
+          self._awakenExpCount = self._awakenExpCount + 0.25
+        else
+          -- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
+
+          ;
+          (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 1
+          self._awakenExpCount = self._awakenExpCount + 0.5
+        end
+        -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
 
         ;
         (self._itemCount)[self._index] = (self._itemCount)[self._index] - 1
         ;
         (((self._slots)[self._index]).count):SetText(tostring((self._itemCount)[self._index]))
-        self._awakenExpCount = self._awakenExpCount + 0.5
         ;
         ((self.awaken)._awakenExp):SetProgressRate(self._awakenExpCount)
         ;
@@ -817,7 +833,7 @@ StableStallion.UpdateCount = function(self, isAwakenBtn)
     ;
     (((self._slots)[self._index])._skillPercent):SetText((string.format)("%.1f", (self._skillExpCount)[self._index]) .. "%")
     ;
-    (((self._slots)[self._index])._skillExp):SetProgressRate((self._skillExpCount)[self._index])
+    (((self._slots)[self._index])._skillExp):SetProgressRate((self._skillExpCount)[self._index] / 1.8)
   end
 end
 
@@ -860,8 +876,10 @@ StableStallion_UpdateTime = function(updateTime)
   self._elapsedTime = self._elapsedTime + updateTime
   if self._buttonClick == 0 then
     frame = frame + updateTime
-    self:UpdateCount(false)
-    -- DECOMPILER ERROR at PC31: Unhandled construct in 'MakeBoolean' P1
+    if self._elapsedTime < 4.2 then
+      self:UpdateCount(false)
+    end
+    -- DECOMPILER ERROR at PC34: Unhandled construct in 'MakeBoolean' P1
 
     if self._elapsedTime < 2.5 and self._effectType == 0 then
       StableStallion_Effect(((self._slots)[self._index]).icon, 0, 0, 0)
@@ -887,14 +905,14 @@ StableStallion_UpdateTime = function(updateTime)
       self._effectType = 1
     end
     do
-      -- DECOMPILER ERROR at PC92: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC95: Unhandled construct in 'MakeBoolean' P1
 
       if self._elapsedTime < 3 and self._effectType == 1 then
         StableStallion_Effect((self.awaken)._awakenExpCount, 4, -3, -30)
         StableStallion_Effect((self.awaken)._awakenExpCount, 3, -3, -30)
         self._effectType = 2
       end
-      -- DECOMPILER ERROR at PC117: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC120: Unhandled construct in 'MakeBoolean' P1
 
       if self._elapsedTime > 4.2 and self._elapsedTime < 4.5 and self._effectType == 2 then
         StableStallion_Effect((self.awaken)._awakenExpCount, 5, 0, -30)
@@ -911,7 +929,7 @@ StableStallion_UpdateTime = function(updateTime)
           ((self._slots)[index]):clearItem()
           ;
           (((self._slots)[index]).icon):addInputEvent("Mouse_On", "HandleMOnoutTrainingItemToolTip()")
-          -- DECOMPILER ERROR at PC162: Confused about usage of register: R6 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC165: Confused about usage of register: R6 in 'UnsetPending'
 
           ;
           (self._selectedItemSlotNo)[index] = nil
@@ -930,7 +948,7 @@ StableStallion_UpdateTime = function(updateTime)
           Panel_Window_StableStallion_Effect:SetShow(true)
         end
         self:UpdateCount(true)
-        -- DECOMPILER ERROR at PC202: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC205: Unhandled construct in 'MakeBoolean' P1
 
         if self._elapsedTime < 2 and self._effectType == 0 then
           audioPostEvent_SystemUi(13, 20)
@@ -946,7 +964,7 @@ StableStallion_UpdateTime = function(updateTime)
           ((self.protect)._protectButton):SetIgnore(true)
         end
       end
-      -- DECOMPILER ERROR at PC247: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC250: Unhandled construct in 'MakeBoolean' P1
 
       if self._elapsedTime < 2.5 and self._effectType == 1 then
         StableStallion_Effect((self.awaken)._awakenExpCount, 4, -3, -30)
@@ -966,7 +984,7 @@ StableStallion_UpdateTime = function(updateTime)
             ((self._slots)[index]):clearItem()
             ;
             (((self._slots)[index]).icon):addInputEvent("Mouse_On", "HandleMOnoutTrainingItemToolTip()")
-            -- DECOMPILER ERROR at PC301: Confused about usage of register: R6 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC304: Confused about usage of register: R6 in 'UnsetPending'
 
             ;
             (self._selectedItemSlotNo)[index] = nil
@@ -985,14 +1003,14 @@ StableStallion_UpdateTime = function(updateTime)
           end
         end
       else
-        -- DECOMPILER ERROR at PC338: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC341: Unhandled construct in 'MakeBoolean' P1
 
         if self._elapsedTime > 8 and self._elapsedTime < 10.5 and self._awakenDoing == true then
           Awaken_Training_isNineTier()
           self._awakenDoing = false
         end
       end
-      -- DECOMPILER ERROR at PC352: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC355: Unhandled construct in 'MakeBoolean' P1
 
       if self._elapsedTime > 11.5 and self._elapsedTime < 12 and self._effectType == 3 then
         StableStallion:Refresh_UIData()

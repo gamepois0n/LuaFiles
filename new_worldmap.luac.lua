@@ -274,7 +274,7 @@ UpdateWorldMapNode = function(node)
     affiliatedTownKey = ToClinet_getPlantAffiliatedWaypointKey(wayPlant)
   end
   FGlobal_FilterClear()
-  if WorldMapArrowEffectEraseClear() ~= nil then
+  if WorldMapArrowEffectEraseClear ~= nil then
     WorldMapArrowEffectEraseClear()
   end
   FGlobal_ShowInfoNodeMenuPanel(node)

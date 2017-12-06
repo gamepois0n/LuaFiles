@@ -67,7 +67,7 @@ PaGlobal_Enchant.setNeedPerfectEnchantItemCount = function(self, needCount, ench
         ;
         (self._uiHelpPerfectEnchant):SetSize(220, boxSizeY)
         ;
-        (self._uiHelpPerfectEnchant):SetPosY((self._uiButtonSureSuccess):GetPosY() - (self._uiHelpPerfectEnchant):GetSizeY())
+        (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY() + 50)
       end
     end
   end
@@ -658,6 +658,7 @@ PaGlobal_Enchant.successEnchant = function(self)
     ;
     (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
   end
+  audioPostEvent_SystemUi(5, 1)
   self._enchantLevel = enchantCount
   ToClient_BlackspiritEnchantSuccess()
   ;
@@ -882,6 +883,9 @@ EnchantInvenFilerMainItem = function(slotNo, notUse_itemWrappers, whereType)
   if itemWrapper == nil then
     return true
   end
+  if itemWrapper:checkToValksItem() then
+    return false
+  end
   if ToClient_Inventory_CheckItemLock(slotNo, whereType) then
     return true
   end
@@ -900,6 +904,9 @@ EnchantInvenFilerSubItem = function(slotNo, notUse_itemWrappers, whereType)
   local itemWrapper = getInventoryItemByType(whereType, slotNo)
   if itemWrapper == nil then
     return true
+  end
+  if itemWrapper:checkToValksItem() then
+    return false
   end
   if (CppEnums.ItemWhereType).eCashInventory == whereType then
     return true
@@ -1006,8 +1013,14 @@ EnchantInteractionFromInventory = function(slotNo, itemWrapper, count, inventory
   local enchantInfo = getEnchantInformation()
   local rv = enchantInfo:ToClient_setEnchantSlot(inventoryType, slotNo)
   if rv ~= 0 then
-    if itemWrapper ~= nil and itemWrapper:checkToUpgradeItem() and self._isCronEnchantOpen then
-      self:SetMainAndCronStone(slotNo, itemWrapper, count, inventoryType)
+    if itemWrapper ~= nil then
+      if itemWrapper:checkToValksItem() then
+        Inventory_UseItemTargetSelf(inventoryType, slotNo, 0)
+      else
+        if itemWrapper:checkToUpgradeItem() and self._isCronEnchantOpen then
+          self:SetMainAndCronStone(slotNo, itemWrapper, count, inventoryType)
+        end
+      end
     end
     return 
   end
@@ -1017,15 +1030,15 @@ EnchantInteractionFromInventory = function(slotNo, itemWrapper, count, inventory
       ;
       ((self._slotTargetItem).icon):AddEffect("UI_Button_Hide", false, 0, 0)
     end
-    -- DECOMPILER ERROR at PC46: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC56: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (self._slotTargetItem).empty = false
-    -- DECOMPILER ERROR at PC48: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC58: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (self._slotTargetItem).slotNo = slotNo
-    -- DECOMPILER ERROR at PC50: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC60: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (self._slotTargetItem).inventoryType = inventoryType
@@ -1090,15 +1103,15 @@ EnchantInteractionFromInventory = function(slotNo, itemWrapper, count, inventory
             (self._slotTargetItem):setItem(itemWrapper)
             Inventory_SetFunctor(EnchantInvenFilerSubItem, EnchantInteractionFromInventory, Enchant_Close, nil)
             self:CronEnchantCheck(itemWrapper, enchantCount)
-            -- DECOMPILER ERROR at PC243: Confused about usage of register: R7 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC253: Confused about usage of register: R7 in 'UnsetPending'
 
             if (self._slotEnchantItem).empty then
               (self._slotEnchantItem).empty = false
-              -- DECOMPILER ERROR at PC245: Confused about usage of register: R7 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC255: Confused about usage of register: R7 in 'UnsetPending'
 
               ;
               (self._slotEnchantItem).slotNo = slotNo
-              -- DECOMPILER ERROR at PC247: Confused about usage of register: R7 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC257: Confused about usage of register: R7 in 'UnsetPending'
 
               ;
               (self._slotEnchantItem).inventoryType = inventoryType
@@ -1298,6 +1311,13 @@ FromClient_UpgradeItem = function(itemWhereType, slotNo)
     (self._uiCheckBtn_CronEnchnt):SetMonoTone(true)
     ;
     (self._uiCheckBtn_CronEnchnt):SetIgnore(true)
+  end
+end
+
+FromClient_UpdateEnchantFailCount = function()
+  -- function num : 0_32
+  if Panel_Window_Enchant:GetShow() then
+    PaGlobal_Enchant:enchantFailCount()
   end
 end
 

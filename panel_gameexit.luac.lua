@@ -1033,6 +1033,12 @@ Panel_GameExit_CharChange_Confirm = function()
   _btn_cancel:SetShow(false)
   _btn_NoticeMsg:SetShow(true)
   _btn_NoticeMsg:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_COMMENT_TO_CHARACTER_CHANGE", "remainTime", logoutDelayTime))
+  if PaGlobal_IsTagChange() == true then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_TAGCHAR_NOW_CHANGING")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+  end
 end
 
 Panel_GameExit_ClickGameOff = function()

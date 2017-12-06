@@ -216,7 +216,9 @@ WatchingMode_UpdatePerFrame = function(deltaTime)
         local regenTime = "0"
         remainTime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "WATCHINGMODE_TEXT_RESPAWN_TIME", "regenTime", tostring(regenTime)))
         resurrectionTime = 0
-        observerCameraModeStop()
+        if ContentOption_OneLife == true and ToClient_IsAnySiegeBeingOfMyChannel() == true then
+          observerCameraModeStop()
+        end
       end
     end
   end

@@ -52,10 +52,8 @@ wharfRegister.init = function(self)
   (self._buttonOk):SetShow(true)
   ;
   (self._buttonClose):SetShow(true)
-  if isGameTypeEnglish() or isGameTypeTaiwan() then
+  if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     (self._staticCreateServantName):SetTextMode(UI_TM.eTextMode_AutoWrap)
-    ;
-    (self._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
     ;
     (self._staticCreateServantName):SetShow(true)
     ;
@@ -69,6 +67,21 @@ wharfRegister.init = function(self)
     (self._staticCreateServantNameBG):SetShow(false)
     ;
     (self._staticCreateServantNameTitle):SetShow(false)
+  end
+  if isGameTypeEnglish() or isGameTypeTaiwan() then
+    (self._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
+  else
+    if isGameTypeTR() then
+      (self._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
+    else
+      if isGameTypeTH() then
+        (self._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
+      else
+        if isGameTypeID() then
+          (self._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+        end
+      end
+    end
   end
 end
 

@@ -67,8 +67,11 @@ local uiInit = function()
   left.circle = (UI.getChildControl)(Panel_MentalGame_Left, "Static_Circle")
   left.circle2 = (UI.getChildControl)(Panel_MentalGame_Left, "Static_Circle2")
   left.failCount = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_FailCount")
+  left.failCount_1 = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_FailCountValue")
   left.cumulativePoint = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_CumulativePoint")
+  left.cumulativePoint_1 = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_CumulativePointValue")
   left.bestPoint = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_BestPoint")
+  left.bestPoint_1 = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_BestPointValue")
   left.statusBG_3 = (UI.getChildControl)(Panel_MentalGame_Left, "Static_StatusBG_3")
   left.fruitage = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_Fruitage")
   left.fruitage_Value = (UI.getChildControl)(Panel_MentalGame_Left, "StaticText_Fruitage_Value")
@@ -194,6 +197,49 @@ local uiInit = function()
   (right.cardLeftArrow):SetAutoDisableTime(0)
   ;
   (right.cardRightArrow):SetAutoDisableTime(0)
+  local temp1 = PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_INTERESTING_FAILED")
+  local temp2 = PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_ACC_INTERESTING")
+  local temp3 = PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_MOST_INTERESTING")
+  ;
+  (left.comboCount):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (left.failCount):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (left.cumulativePoint):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (left.bestPoint):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (left.comboCount):SetText(PAGetString(Defines.StringSheet_RESOURCE, "MENTAL_LEFT_TEXT_COMBOCOUNT") .. " : ")
+  ;
+  (left.failCount):SetText(temp1 .. " : ")
+  ;
+  (left.cumulativePoint):SetText(temp2 .. " : ")
+  ;
+  (left.bestPoint):SetText(temp3 .. " : ")
+  local isComboLimit = (left.comboCount):IsLimitText()
+  local isFailLimit = (left.failCount):IsLimitText()
+  local isCumulativeLimit = (left.cumulativePoint):IsLimitText()
+  local isBestLimit = (left.bestPoint):IsLimitText()
+  if isComboLimit then
+    (left.comboCount):addInputEvent("Mouse_On", "MentalGame_Simpletooltips(true, 0)")
+    ;
+    (left.comboCount):addInputEvent("Mouse_Out", "MentalGame_Simpletooltips(false)")
+  end
+  if isFailLimit then
+    (left.failCount):addInputEvent("Mouse_On", "MentalGame_Simpletooltips(true, 1)")
+    ;
+    (left.failCount):addInputEvent("Mouse_Out", "MentalGame_Simpletooltips(false)")
+  end
+  if isCumulativeLimit then
+    (left.cumulativePoint):addInputEvent("Mouse_On", "MentalGame_Simpletooltips(true, 2)")
+    ;
+    (left.cumulativePoint):addInputEvent("Mouse_Out", "MentalGame_Simpletooltips(false)")
+  end
+  if isBestLimit then
+    (left.bestPoint):addInputEvent("Mouse_On", "MentalGame_Simpletooltips(true, 3)")
+    ;
+    (left.bestPoint):addInputEvent("Mouse_Out", "MentalGame_Simpletooltips(false)")
+  end
 end
 
 local registEventInit = function()
@@ -432,7 +478,7 @@ local createMouseInputerAndSetting = function()
   mouseInputer:SetShow(false, false)
 end
 
-local init = function()
+local mentalGameinit = function()
   -- function num : 0_7 , upvalues : uiInit, registEventInit, mentalBaseInit, createCenterUI, createAnimationUI, createInformationUI, createMouseInputerAndSetting
   uiInit()
   registEventInit()
@@ -1143,15 +1189,18 @@ local updateState = function()
                           (left.circle2):SetPosY((left.comboCount_1):GetPosY())
                         end
                         maxPointUpdate()
-                        local temp1 = PAGetStringParam1(Defines.StringSheet_GAME, "MENTALGAME_TALK_INTERESTING_FAILED", "count", tostring(mentalObject:getFail()))
-                        local temp2 = PAGetStringParam1(Defines.StringSheet_GAME, "MENTALGAME_TALK_ACC_INTERESTING", "count", tostring(mentalObject:getTotalInterest()))
-                        local temp3 = PAGetStringParam1(Defines.StringSheet_GAME, "MENTALGAME_TALK_MOST_INTERESTING", "count", tostring(_bestPoint))
                         ;
-                        (left.failCount):SetText(temp1)
+                        (left.failCount_1):SetText(mentalObject:getFail())
                         ;
-                        (left.cumulativePoint):SetText(temp2)
+                        (left.cumulativePoint_1):SetText(mentalObject:getTotalInterest())
                         ;
-                        (left.bestPoint):SetText(temp3)
+                        (left.bestPoint_1):SetText(_bestPoint)
+                        ;
+                        (left.failCount_1):SetPosX((left.failCount):GetPosX() + (left.failCount):GetTextSizeX() + 3)
+                        ;
+                        (left.cumulativePoint_1):SetPosX((left.cumulativePoint):GetPosX() + (left.cumulativePoint):GetTextSizeX() + 3)
+                        ;
+                        (left.bestPoint_1):SetPosX((left.bestPoint):GetPosX() + (left.bestPoint):GetTextSizeX() + 3)
                         if gameStep == 3 then
                           (base.explain):SetShow(false)
                         else
@@ -1443,8 +1492,18 @@ MentalGame_HideByDamage = function()
 end
 
 MentalGame_HideByDead = function()
-  -- function num : 0_31 , upvalues : endUIProcessMentalOnly
+  -- function num : 0_31 , upvalues : endUIProcessMentalOnly, renderMode, mouseInputer
   local isClose = endUIProcessMentalOnly(true)
+  if isClose == false then
+    return 
+  end
+  renderMode:reset()
+  Panel_Npc_Dialog:SetShow(true)
+  dialog_CloseNpcTalk(true)
+  setShowNpcDialog(false)
+  setShowLine(true)
+  ToClient_PopDialogueFlush()
+  mouseInputer:SetAlpha(0)
 end
 
 local gameStartInit = function()
@@ -2183,8 +2242,38 @@ MentalGame_tryCard = function(slotIndex)
   maxPointUpdate()
 end
 
+MentalGame_Simpletooltips = function(isShow, tipType)
+  -- function num : 0_65 , upvalues : mgUI
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  local self = mgUI.left
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "MENTAL_LEFT_TEXT_COMBOCOUNT")
+    control = (mgUI.left).comboCount
+  else
+    if tipType == 1 then
+      name = PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_INTERESTING_FAILED")
+      control = (mgUI.left).failCount
+    else
+      if tipType == 2 then
+        name = PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_ACC_INTERESTING")
+        control = (mgUI.left).cumulativePoint
+      else
+        if tipType == 3 then
+          name = PAGetString(Defines.StringSheet_GAME, "MENTALGAME_TALK_MOST_INTERESTING")
+          control = (mgUI.left).bestPoint
+        end
+      end
+    end
+  end
+  TooltipSimple_Show(control, name, desc)
+end
+
 MentalGame_endStage = function(addedIntimacy)
-  -- function num : 0_65 , upvalues : gameStep, maxPointUpdate, addIntimacy, mgUI, updateState, updateStateUIShow
+  -- function num : 0_66 , upvalues : gameStep, maxPointUpdate, addIntimacy, mgUI, updateState, updateStateUIShow
   gameStep = 3
   local mentalStage = RequestMentalGame_getMentalStage()
   maxPointUpdate()
@@ -2214,7 +2303,7 @@ MentalGame_endStage = function(addedIntimacy)
 end
 
 MentalGame_UpdateEndTimer = function(deltaTime)
-  -- function num : 0_66 , upvalues : endTimechk, mentalGame_End
+  -- function num : 0_67 , upvalues : endTimechk, mentalGame_End
   endTimechk = endTimechk + deltaTime
   if endTimechk > 5 and mentalGame_End == true then
     MentalGame_Hide()
@@ -2226,13 +2315,13 @@ MentalGame_UpdateEndTimer = function(deltaTime)
 end
 
 MentalGame_UpdateHideTime = function(deltaTime)
-  -- function num : 0_67 , upvalues : hideDeltaTime, constValue, gameStep, endUIProcess
+  -- function num : 0_68 , upvalues : hideDeltaTime, constValue, gameStep, endUIProcess
   hideDeltaTime = hideDeltaTime + deltaTime
   if constValue.hideTime <= hideDeltaTime and gameStep == 4 then
     endUIProcess()
   end
 end
 
-init()
+mentalGameinit()
 renderMode:setClosefunctor(renderMode, MentalGame_HideByDamage)
 

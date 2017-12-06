@@ -42,10 +42,8 @@ GuildCreateManager.initialize = function(self)
   (GuildCreateManager._buttonCancel):addInputEvent("Mouse_LUp", "handleClicked_GuildCreateCancel()")
   ;
   (GuildCreateManager._editGuildNameInput):RegistReturnKeyEvent("handleClicked_GuildCreateApply()")
-  if isGameTypeEnglish() or isGameTypeTaiwan() then
+  if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     (GuildCreateManager._staticCreateServantName):SetTextMode(UI_TM.eTextMode_AutoWrap)
-    ;
-    (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
     ;
     (GuildCreateManager._staticCreateServantName):SetShow(true)
     ;
@@ -60,6 +58,21 @@ GuildCreateManager.initialize = function(self)
     ;
     (GuildCreateManager._staticCreateServantNameTitle):SetShow(false)
   end
+  if isGameTypeEnglish() or isGameTypeTaiwan() then
+    (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
+  else
+    if isGameTypeTR() then
+      (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
+    else
+      if isGameTypeTH() then
+        (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
+      else
+        if isGameTypeID() then
+          (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+        end
+      end
+    end
+  end
 end
 
 CreateClan.initialize = function(self)
@@ -69,10 +82,8 @@ CreateClan.initialize = function(self)
   (self.guideTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDETITLE_CLAN"))
   ;
   (self.guideDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CREATECLAN_GUIDEDESC_CLAN"))
-  if isGameTypeEnglish() or isGameTypeTaiwan() then
+  if isGameTypeEnglish() or isGameTypeTaiwan() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
     (GuildCreateManager._staticCreateServantName):SetTextMode(UI_TM.eTextMode_AutoWrap)
-    ;
-    (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
     ;
     (GuildCreateManager._staticCreateServantName):SetShow(true)
     ;
@@ -86,6 +97,21 @@ CreateClan.initialize = function(self)
     (GuildCreateManager._staticCreateServantNameBG):SetShow(false)
     ;
     (GuildCreateManager._staticCreateServantNameTitle):SetShow(false)
+  end
+  if isGameTypeEnglish() or isGameTypeTaiwan() then
+    (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_EN"))
+  else
+    if isGameTypeTR() then
+      (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TR"))
+    else
+      if isGameTypeTH() then
+        (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_TH"))
+      else
+        if isGameTypeID() then
+          (GuildCreateManager._staticCreateServantName):SetText(PAGetString(Defines.StringSheet_GAME, "COMMON_CHARACTERCREATEPOLICY_ID"))
+        end
+      end
+    end
   end
 end
 

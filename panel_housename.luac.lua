@@ -157,8 +157,12 @@ HandleClicked_SetShowUnderWearToggle = function()
     if (ui._btnSetUnderWear):IsCheck() then
       (ui._btnSetUnderWear):SetCheck(false)
     else
-      ;
-      (ui._btnSetUnderWear):SetCheck(true)
+      if ToClient_isAdultUser() == false then
+        (ui._btnSetUnderWear):SetCheck(false)
+      else
+        ;
+        (ui._btnSetUnderWear):SetCheck(true)
+      end
     end
     return 
   end
@@ -207,7 +211,12 @@ end
 
 FromClient_ChangeUnderwearModeInHouse = function(isUnderwearModeInHouse)
   -- function num : 0_8 , upvalues : ui
-  (ui._btnSetUnderWear):SetCheck(isUnderwearModeInHouse)
+  if ToClient_isAdultUser() == false then
+    (ui._btnSetUnderWear):SetCheck(false)
+  else
+    ;
+    (ui._btnSetUnderWear):SetCheck(isUnderwearModeInHouse)
+  end
 end
 
 Panel_HouseName_ShowAni = function()
@@ -231,8 +240,16 @@ EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, is
   _PA_LOG("�\128민혁", "EventHousingShowVisitHouse : " .. tostring(point))
   prevPoint = point
   local isShowUnderwear = ((getSelfPlayer()):get()):getUnderwearModeInhouse()
-  ;
-  (ui._btnSetUnderWear):SetCheck(isShowUnderwear)
+  if ToClient_isAdultUser() == false then
+    (ui._btnSetUnderWear):SetCheck(false)
+    ;
+    (ui._btnSetUnderWear):SetShow(false)
+    ;
+    (ui._btnSetUnderWear):SetIgnore(true)
+  else
+    ;
+    (ui._btnSetUnderWear):SetCheck(isShowUnderwear)
+  end
   local isPet = housing_getIsHidePetActors()
   local isMaid = housing_getIsHideMaidActors()
   ;

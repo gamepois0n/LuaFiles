@@ -324,6 +324,11 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
     (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetText(ExpRate .. "%")
     ;
     (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(((self._craftTable)[tableIdx])._level))
+    if isGameTypeTH() then
+      (((self._ui)._staticTextCraft_Level)[tableIdx]):SetSpanSize(80, -3)
+      ;
+      (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetShow(false)
+    end
   end
   local crafType = ((self._sortCraftTable)[1])._type
   ;
@@ -346,7 +351,7 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
   (((self._ui)._staticTextCraft_Percent)[0]):SetText(ExpRate .. "%")
   ;
   (((self._ui)._staticTextCraft_Percent)[0]):SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(((self._sortCraftTable)[1])._level))
-  -- DECOMPILER ERROR at PC424: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC443: Confused about usage of register: R7 in 'UnsetPending'
 
   self._requestRank = true
   FGlobal_LifeRanking_RequestRank(crafType)
@@ -365,7 +370,7 @@ FromClient_UI_CharacterInfo_Basic_RankChanged = function()
   end
   local bestRank = ToClient_GetLifeMyRank()
   if bestRank > 0 and bestRank < 31 then
-    local bestTitle = UI_LifeString[((self._sortCraftTable)[1])._type] .. "( " .. bestRank .. PAGetString(Defines.StringSheet_GAME, "LUA_FISHENCYCLOPEDIA_SIZERANK_RANKING") .. " )"
+    local bestTitle = UI_LifeString[((self._sortCraftTable)[1])._type] .. "( " .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LIFERANKING_RANK", "listIdx", bestRank) .. " )"
     ;
     (((self._ui)._staticTextCraft_Title)[0]):SetText(bestTitle)
   end
@@ -395,8 +400,11 @@ FromClient_UI_CharacterInfo_Basic_PotentialChanged = function()
         ((((self._ui)._staticPotencialPlusGrade)[index])[slotIndex]):SetShow(slotIndex < currentData[index])
       end
     end
+    if isGameTypeTH() then
+      (((self._ui)._staticTextPotential_Value)[index]):SetShow(false)
+    end
   end
-  -- DECOMPILER ERROR: 4 unprocessed JMP targets
+  -- DECOMPILER ERROR: 5 unprocessed JMP targets
 end
 
 FromClient_UI_CharacterInfo_Basic_FitnessChanged = function(addSp, addWeight, addHp, addMp)

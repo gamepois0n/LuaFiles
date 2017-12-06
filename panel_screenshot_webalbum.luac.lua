@@ -56,102 +56,7 @@ ScreenshotAlbum_Open = function()
   FGlobal_SetCandidate()
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  local url = "http://10.32.129.20/ScreenShot/"
-  if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-    url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA")
-  else
-    if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL")
-    else
-      if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-        if getServiceNationType() == 0 then
-          url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_NA")
-        else
-          if getServiceNationType() == 1 then
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_EU")
-          end
-        end
-      else
-        if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-          if getServiceNationType() == 0 then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_NA", "worldNo", worldNo)
-          else
-            if getServiceNationType() == 1 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_EU", "worldNo", worldNo)
-            end
-          end
-        else
-          if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_JP")
-          else
-            if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_JP")
-            else
-              if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_RUS")
-              else
-                if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                  if isServerFixedCharge() then
-                    url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_RUS_P2P")
-                  else
-                    url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_RUS_F2P")
-                  end
-                else
-                  if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                    url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_TW")
-                  else
-                    if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_TW")
-                    else
-                      if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_SA")
-                      else
-                        if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_SA")
-                        else
-                          if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_KR2")
-                          else
-                            if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_KR2")
-                            else
-                              if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_TR")
-                              else
-                                if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_TR")
-                                else
-                                  if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_TH")
-                                  else
-                                    if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_TH")
-                                    else
-                                      if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_ALPHA_ID")
-                                      else
-                                        if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SCREENSHOT_WEBALBUM_REAL_ID")
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
+  local url = PaGlobal_URL_Check(worldNo)
   if getSelfPlayer() == nil then
     return 
   end
@@ -159,7 +64,7 @@ ScreenshotAlbum_Open = function()
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
   local classType = (getSelfPlayer()):getClassType()
   local isGm = ToClient_SelfPlayerIsGM()
-  url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isGm=" .. tostring(isGm)
+  url = url .. "/ScreenShot?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&classType=" .. tostring(classType) .. "&isGm=" .. tostring(isGm)
   _screenshotAlbumWeb:SetUrl(875, 635, url, false, true)
   _screenshotAlbumWeb:SetIME(true)
   Panel_ScreenShotAlbum:SetPosX(getScreenSizeX() / 2 - Panel_ScreenShotAlbum:GetSizeX() / 2, getScreenSizeY() / 2 - Panel_ScreenShotAlbum:GetSizeY() / 2)

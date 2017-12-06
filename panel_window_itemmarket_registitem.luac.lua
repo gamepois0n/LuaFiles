@@ -431,6 +431,9 @@ FGlobal_ItemMarketRegistItem_Open = function(isOpenWarehouse, isByMaid)
   end
   if isOpenWarehouse then
     requestItemMarketMyItems(true, true)
+    if Panel_Window_SearchMenuWareHouse:GetShow() == true then
+      FGlobal_SearchMenuWareHouse_Show(false)
+    end
   end
   if Panel_Window_ItemMarket:GetShow() then
     FGolbal_ItemMarketNew_Close()

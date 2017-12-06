@@ -2572,6 +2572,9 @@ end
 
   FromClient_NameOff = function()
   -- function num : 0_85 , upvalues : radar_OverName
+  if radar_OverName == nil then
+    return 
+  end
   if radar_OverName:GetShow() then
     radar_OverName:SetShow(false)
   end
