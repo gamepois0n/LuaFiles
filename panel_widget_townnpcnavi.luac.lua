@@ -116,7 +116,7 @@ local iconStartPosY = 275
 local _spawnType, _isAuto = nil, nil
 local _isCheck = false
 HandleClicked_TownNpcIcon_NaviStart = function(spawnType, isAuto)
-  -- function num : 0_2 , upvalues : _spawnType, UI_ST
+  -- function num : 0_2 , upvalues : _spawnType, UI_ST, npcTypeText
   local player = getSelfPlayer()
   if player == nil then
     return 
@@ -147,6 +147,7 @@ HandleClicked_TownNpcIcon_NaviStart = function(spawnType, isAuto)
   if isSpawnNearNpc == false then
     NotifyDisplay(PAGetString(Defines.StringSheet_GAME, "NPCNAVIGATION_REST_AVAILABLE"))
   end
+  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOWNNPCNAVI_NAVIGATIONDESCRIPTION", "npcName", tostring(npcTypeText[spawnType])))
   TownfunctionNavi_Set()
   PaGlobal_TutorialManager:handleClickedTownNpcIconNaviStart(spawnType, isAuto)
 end

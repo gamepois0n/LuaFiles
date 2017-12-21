@@ -43,6 +43,7 @@ mainServerText:setPadding(UI_PD.ePadding_Bottom, 5)
 local isRadioBtnShow = false
 local isSpeedServer = {}
 local isNotSpeedServer = {}
+local isFirst = true
 local warInfo = {_uiWarInfo = (UI.getChildControl)(Panel_ServerSelect, "Static_WarInfo"), _warInfoTitle = (UI.getChildControl)(Panel_ServerSelect, "StaticText_WarInfo_Title"), _uiBG = (UI.getChildControl)(Panel_ServerSelect, "Static_WarInfo_BG"), _warGuide = (UI.getChildControl)(Panel_ServerSelect, "StaticText_WarGuide"), _siegeBG = (UI.getChildControl)(Panel_ServerSelect, "Static_SiegeBG"), _staticChannel = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Channel"), _siegeBalenos = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Balenos"), _siegeSerendia = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Serendia"), _siegeCalpheon = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Calpheon"), _siegeMedia = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Media"), _siegeValencia = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Siege_Valencia"), _nodeWarBG = (UI.getChildControl)(Panel_ServerSelect, "Static_NodeWarBG"), _staticSchedule = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Schedule"), _scheduleSiege = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Schedule_Siege"), _scheduleNodeWar = (UI.getChildControl)(Panel_ServerSelect, "StaticText_Schedule_Nodewar"), _slotMaxCount = 5, _startPosY = 5, _isSieging = false, _isNodeWar = false, 
 _slots = {}
 }
@@ -336,7 +337,7 @@ FRAME_SERVERLIST:SetShow(true)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
-local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only", "TROnly", "THOnly", "IDOnly"}
+local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "KR2Only", "SAOnly", "TROnly", "THOnly", "IDOnly"}
 local bgIndex = {}
 for k,v in pairs(bgItem) do
   bgIndex[v] = k
@@ -359,7 +360,7 @@ local bgManager = {
 , 
 [bgIndex.dragan] = {isOpen = ToClient_IsContentsGroupOpen("6"), imageCount = 0, iconPath = "bgDragan_"}
 , 
-[bgIndex.xmas] = {isOpen = ToClient_isEventOn("x-mas"), imageCount = 2, iconPath = "bgXmas_"}
+[bgIndex.xmas] = {isOpen = ToClient_isEventOn("x-mas"), imageCount = 1, iconPath = "bgXmas_"}
 , 
 [bgIndex.halloween] = {isOpen = ToClient_isEventOn("Halloween"), imageCount = 3, iconPath = "bgHalloween_"}
 , 
@@ -378,6 +379,8 @@ local bgManager = {
 [bgIndex.TaiwanOnly] = {isOpen = not isGameTypeTaiwan() or false, imageCount = 0, iconPath = "bgTaiwanOnly_"}
 , 
 [bgIndex.KR2Only] = {isOpen = not isGameTypeKR2() or false, imageCount = 0, iconPath = "bgKR2Only_"}
+, 
+[bgIndex.SAOnly] = {isOpen = not isGameTypeSA() or false, imageCount = 0, iconPath = "bgSAOnly_"}
 , 
 [bgIndex.TROnly] = {isOpen = not isGameTypeTR() or false, imageCount = 0, iconPath = "bgTROnly_"}
 , 
@@ -403,7 +406,7 @@ for v,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_ServerSelect:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC722: Confused about usage of register: R59 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC735: Confused about usage of register: R60 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex
@@ -581,13 +584,26 @@ StartUp_Panel_SelectServer = function()
       Panel_SelectServer_ReCreateChannelCtrl(idx)
     end
     _selectWorldIndex = -1
-    Panel_Lobby_function_SelectWorldServer(0)
+    Panel_Lobby_function_SelectWorldServer(PaGlobal_FindMyWorldServer())
     Panel_SelectServer_RePositioningCtrls()
   end
 end
 
+PaGlobal_FindMyWorldServer = function()
+  -- function num : 0_7 , upvalues : _worldServerCount
+  local isAdult = ToClient_IsAdultLogin()
+  local count = _worldServerCount
+  for ii = 0, count - 1 do
+    local serverData = getGameChannelServerDataByIndex(ii, 0)
+    if isAdult == serverData._isAdultWorld then
+      return ii
+    end
+  end
+  return 0
+end
+
 Panel_SelectServer_ReCreateChannelCtrl = function(worldIndex)
-  -- function num : 0_7 , upvalues : _worldServerCtrls, isSpeedServer, isNotSpeedServer, FRAME_SERVERLIST, CHANNEL_BG_STATIC, CHANNEL_MAINSERVER, CHANNEL_MAINSERVERSQ, CHANNEL_NAME_TEXT, channel_WarIcon, channel_Premium, channel_PvPIcon, CHANNEL_MAINICON_STATIC, CHANNEL_STATUS_TEXT, WORLD_SPEED_SERVER_IMG, CHANNEL_ENTER_BTN, CHANNEL_CHANGE_TEXT
+  -- function num : 0_8 , upvalues : _worldServerCtrls, isSpeedServer, isNotSpeedServer, FRAME_SERVERLIST, CHANNEL_BG_STATIC, CHANNEL_MAINSERVER, CHANNEL_MAINSERVERSQ, CHANNEL_NAME_TEXT, channel_WarIcon, channel_Premium, channel_PvPIcon, CHANNEL_MAINICON_STATIC, CHANNEL_STATUS_TEXT, WORLD_SPEED_SERVER_IMG, CHANNEL_ENTER_BTN, CHANNEL_CHANGE_TEXT
   local worldServerData = getGameWorldServerDataByIndex(worldIndex)
   local restrictedServerNo = worldServerData._restrictedServerNo
   local changeChannelTime = getChannelMoveableRemainTime(worldServerData._worldNo)
@@ -831,7 +847,7 @@ end
 local delayTime = 1
 local serverSelectDeltaTime = 0
 Panel_SelectServer_Delta = function(deltaTime)
-  -- function num : 0_8 , upvalues : serverSelectDeltaTime, delayTime, mainServerText, txt_EnterLastJoinServer, _worldServerCtrls, isRadioBtnShow
+  -- function num : 0_9 , upvalues : serverSelectDeltaTime, delayTime, mainServerText, txt_EnterLastJoinServer, _worldServerCtrls, isRadioBtnShow
   serverSelectDeltaTime = serverSelectDeltaTime + deltaTime
   if delayTime <= serverSelectDeltaTime then
     local serverCount = getGameWorldServerDataCount()
@@ -1128,21 +1144,52 @@ Panel_SelectServer_Delta = function(deltaTime)
 end
 
 Panel_SelectServer_ShowChannelCtrls = function(worldIndex)
-  -- function num : 0_9 , upvalues : _worldServerCount, _worldServerCtrls
+  -- function num : 0_10 , upvalues : _worldServerCount, _worldServerCtrls
+  local retBool = false
   local count = _worldServerCount
   for idx = 0, count - 1 do
     local isShow = false
     if idx == worldIndex then
+      retBool = true
       isShow = true
+      if isGameServiceTypeKor() and ToClient_IsDevelopment() == false then
+        if ToClient_CanEnterNonAdultWorld() == false then
+          isShow = false
+        end
+        local serverData = (getGameChannelServerDataByIndex(worldIndex, 0))
+        local isAdultWorld = nil
+        if serverData == nil then
+          isAdultWorld = true
+        else
+          isAdultWorld = serverData._isAdultWorld
+        end
+        local isAdultUser = ToClient_IsAdultLogin()
+        if isAdultUser ~= isAdultWorld then
+          local msg = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_ADULT_CANT_CONNECT")
+          if isAdultWorld == false then
+            msg = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERSELECT_NONADULT_CANT_CONNECT")
+          end
+          local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = msg, functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+          ;
+          (MessageBox.showMessageBox)(messageBoxData)
+          isShow = false
+          retBool = false
+        end
+      end
     end
-    for channelIdx = 0, (_worldServerCtrls[idx])._channelCount - 1 do
-      ((((_worldServerCtrls[idx])._channelCtrls)[channelIdx])._bgStatic):SetShow(isShow)
+    do
+      for channelIdx = 0, (_worldServerCtrls[idx])._channelCount - 1 do
+        ((((_worldServerCtrls[idx])._channelCtrls)[channelIdx])._bgStatic):SetShow(isShow)
+      end
+      -- DECOMPILER ERROR at PC87: LeaveBlock: unexpected jumping out DO_STMT
+
     end
   end
+  return retBool
 end
 
 Panel_SelectServer_RePositioningCtrls = function()
-  -- function num : 0_10 , upvalues : SELECT_SERVER_BG_TEXT, WORLD_BG_BTN, FRAME_SERVERLIST, _worldServerCount, _worldServerCtrls, FRAMEContents_SERVERLIST, FRAME_Scroll, mainServerBg
+  -- function num : 0_11 , upvalues : SELECT_SERVER_BG_TEXT, WORLD_BG_BTN, FRAME_SERVERLIST, _worldServerCount, _worldServerCtrls, FRAMEContents_SERVERLIST, FRAME_Scroll, mainServerBg
   local bgPosY = SELECT_SERVER_BG_TEXT:GetPosY() + 20
   local worldSizeY = WORLD_BG_BTN:GetSizeY()
   local posX = SELECT_SERVER_BG_TEXT:GetPosX() + 20
@@ -1175,7 +1222,7 @@ Panel_SelectServer_RePositioningCtrls = function()
 end
 
 Panel_SelectServer_GetVariableSizeY = function(posX, posY, worldIndex)
-  -- function num : 0_11 , upvalues : WORLD_BG_BTN, _selectWorldIndex, CHANNEL_BG_STATIC, _worldServerCtrls, isSpeedServer, FRAMEContents_SERVERLIST
+  -- function num : 0_12 , upvalues : WORLD_BG_BTN, _selectWorldIndex, CHANNEL_BG_STATIC, _worldServerCtrls, isSpeedServer, FRAMEContents_SERVERLIST
   local default = WORLD_BG_BTN:GetSizeY() + 10
   if _selectWorldIndex ~= worldIndex then
     return default
@@ -1195,21 +1242,31 @@ Panel_SelectServer_GetVariableSizeY = function(posX, posY, worldIndex)
 end
 
 Panel_Lobby_function_SelectWorldServer = function(index)
-  -- function num : 0_12 , upvalues : _selectWorldIndex
+  -- function num : 0_13 , upvalues : _selectWorldIndex
   _selectWorldIndex = index
-  Panel_SelectServer_ShowChannelCtrls(index)
-  Panel_SelectServer_RePositioningCtrls()
+  if Panel_SelectServer_ShowChannelCtrls(index) == true then
+    Panel_SelectServer_RePositioningCtrls()
+  end
 end
 
 Panel_Lobby_function_EnterChannel = function(index)
-  -- function num : 0_13 , upvalues : _selectWorldIndex
-  if selectServerGroup(_selectWorldIndex, index) == true then
-    Panel_Lobby_Function_EnableEnterChannelButton(false)
+  -- function num : 0_14 , upvalues : _selectWorldIndex
+  do
+    if isGameServiceTypeKor() and ToClient_IsDevelopment() == false and ToClient_CanEnterNonAdultWorld() == false then
+      local messageBoxData = {title = "주의", content = "0시부�\176 6시까�\128�\148 접속�\160 �\152 없습니다.", functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      ;
+      (MessageBox.showMessageBox)(messageBoxData)
+      Panel_Lobby_Function_EnableEnterChannelButton(false)
+      return 
+    end
+    if selectServerGroup(_selectWorldIndex, index) == true then
+      Panel_Lobby_Function_EnableEnterChannelButton(false)
+    end
   end
 end
 
 Panel_Lobby_Function_EnableEnterChannelButton = function(enableValue)
-  -- function num : 0_14 , upvalues : _worldServerCount, _worldServerCtrls, FRAME_SERVERLIST
+  -- function num : 0_15 , upvalues : _worldServerCount, _worldServerCtrls, FRAME_SERVERLIST
   for worldIndex = 0, _worldServerCount - 1 do
     for idx = 0, (_worldServerCtrls[worldIndex])._channelCount - 1 do
       local tmpBG = (UI.getChildControl)(FRAME_SERVERLIST:GetFrameContent(), "ChannelBG_" .. tostring(worldIndex) .. "_" .. tostring(idx))
@@ -1221,17 +1278,17 @@ Panel_Lobby_Function_EnableEnterChannelButton = function(enableValue)
 end
 
 Panel_Lobby_function_EnterMemorizedChannel = function(index)
-  -- function num : 0_15 , upvalues : _selectWorldIndex
+  -- function num : 0_16 , upvalues : _selectWorldIndex
   selectMemorizedServer(_selectWorldIndex, index)
 end
 
 ServerList_RandomServerJoin = function()
-  -- function num : 0_16 , upvalues : _selectWorldIndex
+  -- function num : 0_17 , upvalues : _selectWorldIndex
   selectRandomServer(_selectWorldIndex)
 end
 
 EventUpdateServerInformation_SelectServer = function()
-  -- function num : 0_17 , upvalues : _selectWorldIndex
+  -- function num : 0_18 , upvalues : _selectWorldIndex
   local isShow = Panel_ServerSelect:IsShow()
   if isShow == false then
     return 
@@ -1244,12 +1301,12 @@ EventUpdateServerInformation_SelectServer = function()
 end
 
 SelectServer_RequestInfo_ForTest = function()
-  -- function num : 0_18
+  -- function num : 0_19
   requestServerInformationForTest()
 end
 
 PanelServerSelect_Resize = function()
-  -- function num : 0_19 , upvalues : SELECT_SERVER_BG_TEXT, FRAME_SERVERLIST, FRAME_Scroll, totalBG
+  -- function num : 0_20 , upvalues : SELECT_SERVER_BG_TEXT, FRAME_SERVERLIST, FRAME_Scroll, totalBG
   local count = getGameWorldServerDataCount() + 1
   Panel_ServerSelect:SetSize(getScreenSizeX(), getScreenSizeY())
   SELECT_SERVER_BG_TEXT:SetSize(SELECT_SERVER_BG_TEXT:GetSizeX() + 21, count * 48 + 50)
@@ -1280,7 +1337,7 @@ local endUV = startUV + 0.04
 local startUV2 = 0.9
 local endUV2 = startUV2 + 0.04
 ChannelSelectInfo_onScreenResize = function()
-  -- function num : 0_20 , upvalues : channelSelectInfo, FRAME_SERVERLIST
+  -- function num : 0_21 , upvalues : channelSelectInfo, FRAME_SERVERLIST
   local self = channelSelectInfo
   local scrX = getScreenSizeX()
   ;
@@ -1290,7 +1347,7 @@ ChannelSelectInfo_onScreenResize = function()
 end
 
 SpeedChannelInfo_onScreenResize = function()
-  -- function num : 0_21 , upvalues : channelSpeedInfo, FRAME_SERVERLIST, channelSelectInfo
+  -- function num : 0_22 , upvalues : channelSpeedInfo, FRAME_SERVERLIST, channelSelectInfo
   local self = channelSpeedInfo
   local scrX = getScreenSizeX()
   ;
@@ -1304,7 +1361,7 @@ SpeedChannelInfo_onScreenResize = function()
 end
 
 PKChannelInfo_onScreenResize = function()
-  -- function num : 0_22 , upvalues : channelPKInfo, FRAME_SERVERLIST, channelSpeedInfo
+  -- function num : 0_23 , upvalues : channelPKInfo, FRAME_SERVERLIST, channelSpeedInfo
   local self = channelPKInfo
   local scrX = getScreenSizeX()
   ;
@@ -1314,7 +1371,7 @@ PKChannelInfo_onScreenResize = function()
 end
 
 warInfo_onScreenResize = function()
-  -- function num : 0_23 , upvalues : warInfo, FRAME_SERVERLIST, channelSelectInfo, channelPKInfo, channelSpeedInfo
+  -- function num : 0_24 , upvalues : warInfo, FRAME_SERVERLIST, channelSelectInfo, channelPKInfo, channelSpeedInfo
   local self = warInfo
   local scrX = getScreenSizeX()
   ;
@@ -1332,7 +1389,7 @@ warInfo_onScreenResize = function()
 end
 
 ChannelSelectInfo_Show = function()
-  -- function num : 0_24 , upvalues : channelSelectInfo
+  -- function num : 0_25 , upvalues : channelSelectInfo
   local self = channelSelectInfo
   ChannelSelectInfo_onScreenResize()
   ;
@@ -1340,7 +1397,7 @@ ChannelSelectInfo_Show = function()
 end
 
 ChannelSelectInfo_Hide = function()
-  -- function num : 0_25 , upvalues : channelSelectInfo
+  -- function num : 0_26 , upvalues : channelSelectInfo
   local self = channelSelectInfo
   if not (self._mainBG):GetShow() then
     return 
@@ -1350,7 +1407,7 @@ ChannelSelectInfo_Hide = function()
 end
 
 SpeedChannelInfo_Show = function()
-  -- function num : 0_26 , upvalues : channelSpeedInfo
+  -- function num : 0_27 , upvalues : channelSpeedInfo
   local self = channelSpeedInfo
   SpeedChannelInfo_onScreenResize()
   ;
@@ -1358,7 +1415,7 @@ SpeedChannelInfo_Show = function()
 end
 
 SpeedChannelInfo_Hide = function()
-  -- function num : 0_27 , upvalues : channelSpeedInfo
+  -- function num : 0_28 , upvalues : channelSpeedInfo
   local self = channelSpeedInfo
   if not (self._speedMainBG):GetShow() then
     return 
@@ -1368,7 +1425,7 @@ SpeedChannelInfo_Hide = function()
 end
 
 PKChannelInfo_Show = function()
-  -- function num : 0_28 , upvalues : channelPKInfo
+  -- function num : 0_29 , upvalues : channelPKInfo
   local self = channelPKInfo
   PKChannelInfo_onScreenResize()
   ;
@@ -1376,7 +1433,7 @@ PKChannelInfo_Show = function()
 end
 
 PKChannelInfo_Hide = function()
-  -- function num : 0_29 , upvalues : channelPKInfo
+  -- function num : 0_30 , upvalues : channelPKInfo
   local self = channelPKInfo
   if not (self._pkMainBG):GetShow() then
     return 
@@ -1386,7 +1443,7 @@ PKChannelInfo_Hide = function()
 end
 
 warInfo_Show = function()
-  -- function num : 0_30 , upvalues : warInfo
+  -- function num : 0_31 , upvalues : warInfo
   local self = warInfo
   warInfo_onScreenResize()
   ;
@@ -1394,7 +1451,7 @@ warInfo_Show = function()
 end
 
 warInfo_Hide = function()
-  -- function num : 0_31 , upvalues : warInfo
+  -- function num : 0_32 , upvalues : warInfo
   local self = warInfo
   if not (self._uiWarInfo):GetShow() then
     return 
@@ -1404,7 +1461,7 @@ warInfo_Hide = function()
 end
 
 Panel_ServerSelect_Update = function(deltaTime)
-  -- function num : 0_32 , upvalues : updateTime, isScope, currentBackIndex, startUV, endUV, startUV2, endUV2, totalBG
+  -- function num : 0_33 , upvalues : updateTime, isScope, currentBackIndex, startUV, endUV, startUV2, endUV2, totalBG
   Panel_SelectServer_Delta(deltaTime)
   updateTime = updateTime - deltaTime
   if updateTime <= 0 then
@@ -1453,13 +1510,13 @@ Panel_ServerSelect_Update = function(deltaTime)
 end
 
 ServerList_GetMainServerNo = function()
-  -- function num : 0_33
+  -- function num : 0_34
   local mainServerNo = ToClient_getUserSubCacheData((CppEnums.GlobalUIOptionType).MainServerNo)
   return mainServerNo
 end
 
 ServerList_ToggleRadioBtn = function()
-  -- function num : 0_34 , upvalues : isRadioBtnShow
+  -- function num : 0_35 , upvalues : isRadioBtnShow
   if isRadioBtnShow == true then
     isRadioBtnShow = false
   else
@@ -1470,7 +1527,7 @@ ServerList_ToggleRadioBtn = function()
 end
 
 ServerList_SetMainServer = function(worldIndex, serverIndex)
-  -- function num : 0_35 , upvalues : isRadioBtnShow
+  -- function num : 0_36 , upvalues : isRadioBtnShow
   local worldServerData = getGameWorldServerDataByIndex(worldIndex)
   local serverData = getGameChannelServerDataByIndex(worldIndex, serverIndex)
   if serverData == nil then
@@ -1478,7 +1535,7 @@ ServerList_SetMainServer = function(worldIndex, serverIndex)
     return 
   end
   local Set_MainServer = function()
-    -- function num : 0_35_0 , upvalues : worldIndex, serverIndex, isRadioBtnShow
+    -- function num : 0_36_0 , upvalues : worldIndex, serverIndex, isRadioBtnShow
     local serverData = getGameChannelServerDataByIndex(worldIndex, serverIndex)
     local serverNo = serverData._serverNo
     ToClient_setUserSubCacheData((CppEnums.GlobalUIOptionType).MainServerNo, serverNo)
@@ -1492,7 +1549,7 @@ ServerList_SetMainServer = function(worldIndex, serverIndex)
 end
 
 ServerSelect_Simpletooltip = function(isShow, tipType, index, idx)
-  -- function num : 0_36 , upvalues : _worldServerCtrls
+  -- function num : 0_37 , upvalues : _worldServerCtrls
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -1512,7 +1569,7 @@ ServerSelect_Simpletooltip = function(isShow, tipType, index, idx)
 end
 
 ServerList_EnterMainServer = function()
-  -- function num : 0_37 , upvalues : _selectWorldIndex, _worldServerCtrls
+  -- function num : 0_38 , upvalues : _selectWorldIndex, _worldServerCtrls
   local mainServerNo = ServerList_GetMainServerNo()
   do
     if mainServerNo == -1 then
@@ -1545,7 +1602,7 @@ ServerList_EnterMainServer = function()
 end
 
 ServerList_LastJoinServer = function()
-  -- function num : 0_38 , upvalues : _selectWorldIndex, _worldServerCtrls
+  -- function num : 0_39 , upvalues : _selectWorldIndex, _worldServerCtrls
   local tempWrapper = getTemporaryInformationWrapper()
   local lastJoinServerNo = tempWrapper:getLastServerNo()
   if lastJoinServerNo == 1 then

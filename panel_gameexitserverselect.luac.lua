@@ -213,7 +213,7 @@ ChannelSelect_Init = function()
           (channelMainDesc._speedDesc):SetShow(false)
           sizeControl = channelMainDesc._serverDesc
         else
-          if isGameTypeKR2() then
+          if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
             (channelMainDesc._speedTitle):SetShow(false)
             ;
             (channelMainDesc._speedDesc):SetShow(false)

@@ -1917,4 +1917,9 @@ registerEvent("FromClient_NotifyUseSkill", "FromClient_NotifyUseSkill")
 registerEvent("FromClient_NotifyUseSkillCoolTime", "FromClient_NotifyUseSkillCoolTime")
 registerEvent("FromClient_ChangeTeamName", "FromClient_ChangeTeamName")
 Panel_Window_Arsha:RegisterUpdateFunc("SkillCooltime_UpdatePerFrame")
+ArshaDebuff = function(isOn)
+  -- function num : 0_64
+  ToClient_ArshaDebuffOnOff(isOn)
+end
+
 

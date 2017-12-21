@@ -275,6 +275,10 @@ end
 GuildHistory_HelpWidget_Show = function(isShow, index, isLeft)
   -- function num : 0_3 , upvalues : currentValue, helpWidget, _dayHistoryValue
   if index ~= nil then
+    local journalCount = ToClient_GetJournalListCount(currentValue._year, currentValue._month, currentValue._myHistory)
+    if journalCount <= index or index < 0 then
+      return 
+    end
     local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._guildHistory, index)
     if journalInfo ~= nil then
       local helpDesc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_TIME", "hour", journalInfo:getJournalHour(), "minute", journalInfo:getJournalMinute(), "second", journalInfo:getJournalSecond())

@@ -10,7 +10,7 @@ isClearedQuest = false
 registerEvent("executeLuaFunc", "executeLuaFunc")
 local isFirstSummonBoss = false
 executeLuaFunc = function(funcText)
-  -- function num : 0_0 , upvalues : IM
+  -- function num : 0_0
   local classType = (getSelfPlayer()):getClassType()
   if isIntroMoviePlaying then
     return 
@@ -19,13 +19,9 @@ executeLuaFunc = function(funcText)
   if funcText ~= "move_tutorial1" then
     if funcText ~= "move_tutorial2" or funcText == "closeDialog" then
       close_WindowPanelList()
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     else
       if funcText == "PVP_Notice" then
         close_WindowPanelList()
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
         local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_NOWYOUCANKILLANYONE")
         local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = pvpMode_changedMode, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
         ;

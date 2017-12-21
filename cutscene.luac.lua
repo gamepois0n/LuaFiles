@@ -45,14 +45,12 @@ Update_Subtitle = function(deltaTime)
 end
 
 FromClient_PlayCutScene = function(cutSceneName, isFromServer)
-  -- function num : 0_3 , upvalues : prevUIMode, IM, renderMode, Static_FadeScreen, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxLeft, Static_LetterBoxRight, Static_SupportVoice, Multiline_Subtitle
+  -- function num : 0_3 , upvalues : prevUIMode, renderMode, Static_FadeScreen, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxLeft, Static_LetterBoxRight, Static_SupportVoice, Multiline_Subtitle
   ToClient_SaveUiInfo(false)
   crossHair_SetShow(false)
   prevUIMode = GetUIMode()
   FGlobal_SetIsCutScenePlay(true)
   SetUIMode((Defines.UIMode).eUIMode_Cutscene)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
   renderMode:set()
   Panel_SkillCommand:SetShow(false)
   Panel_Cutscene:SetSize(getScreenSizeX(), getScreenSizeY())
@@ -90,7 +88,7 @@ FromClient_PlayCutScene = function(cutSceneName, isFromServer)
 end
 
 FromClient_StopCutScene = function(cutSceneName)
-  -- function num : 0_4 , upvalues : Multiline_Subtitle, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxRight, Static_LetterBoxLeft, Static_FadeScreen, prevUIMode, renderMode, IM
+  -- function num : 0_4 , upvalues : Multiline_Subtitle, Static_LatterBoxTop, Static_LatterBoxBottom, Static_LetterBoxRight, Static_LetterBoxLeft, Static_FadeScreen, prevUIMode, renderMode
   Multiline_Subtitle:SetText("")
   Static_LatterBoxTop:SetShow(false)
   Static_LatterBoxBottom:SetShow(false)
@@ -104,8 +102,6 @@ FromClient_StopCutScene = function(cutSceneName)
   FGlobal_SetIsCutScenePlay(false)
   renderMode:reset()
   crossHair_SetShow(true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
   postProcessMessageData()
   PaGlobal_TutorialManager:handleStopCutScene(cutSceneName)
 end

@@ -407,7 +407,7 @@ farmInfo.SetPosition = function(self)
 end
 
 PAHousing_FarmInfo_Open = function()
-  -- function num : 0_12 , upvalues : farmInfo, IM
+  -- function num : 0_12 , upvalues : farmInfo
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
 
   farmInfo._currentActorKeyRaw = toClient_GetHousingSelectInstallationActorKey()
@@ -415,8 +415,6 @@ PAHousing_FarmInfo_Open = function()
 
   farmInfo._isShowOnlyGround = true
   farmInfo:SetPosition()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   farmInfo:update(true)
 end
 
@@ -439,15 +437,12 @@ PAHousing_FarmInfo_NowState = function()
 end
 
 PAHousing_FarmInfo_Close = function()
-  -- function num : 0_15 , upvalues : IM, farmInfo
+  -- function num : 0_15 , upvalues : farmInfo
   Panel_Housing_FarmInfo_New:SetShow(false, false)
-  if not housing_isBuildMode() and not housing_isInstallMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-  end
-  -- DECOMPILER ERROR at PC19: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
 
   farmInfo._currentActorKeyRaw = nil
-  -- DECOMPILER ERROR at PC21: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC8: Confused about usage of register: R0 in 'UnsetPending'
 
   farmInfo._isShowOnlyGround = false
 end
@@ -461,7 +456,7 @@ PAHousingFarmInfo_UpdatePerFrame = function()
 end
 
 FromClient_InterActionHarvestInformation = function(actorKeyRaw)
-  -- function num : 0_17 , upvalues : farmInfo, IM
+  -- function num : 0_17 , upvalues : farmInfo
   farmInfo:SetPosition()
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -469,18 +464,16 @@ FromClient_InterActionHarvestInformation = function(actorKeyRaw)
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   farmInfo._isShowOnlyGround = false
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   local installationActorProxyWrapper = getInstallationActor(farmInfo._currentActorKeyRaw)
   local installationType = ((installationActorProxyWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):getInstallationType()
   if (CppEnums.InstallationType).eType_LivestockHarvest == installationType then
     FarmInfo_Change_Texture(true)
-    -- DECOMPILER ERROR at PC31: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC26: Confused about usage of register: R3 in 'UnsetPending'
 
     farmInfo._isChange = true
   else
     FarmInfo_Change_Texture(false)
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R3 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC32: Confused about usage of register: R3 in 'UnsetPending'
 
     farmInfo._isChange = false
   end

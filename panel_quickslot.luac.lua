@@ -1425,7 +1425,7 @@ NoPotion_Alert = function()
     local itemWrapper = getInventoryItem(index)
     if itemWrapper ~= nil then
       local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-      if itemKey == 517 or itemKey == 518 or itemKey == 519 or itemKey == 524 or itemKey == 525 or itemKey == 513 or itemKey == 514 or itemKey == 528 or itemKey == 529 or itemKey == 530 or itemKey == 502 then
+      if itemKey == 502 or itemKey == 513 or itemKey == 514 or itemKey == 517 or itemKey == 518 or itemKey == 519 or itemKey == 524 or itemKey == 525 or itemKey == 528 or itemKey == 529 or itemKey == 530 or itemKey == 538 or itemKey == 551 or itemKey == 552 or itemKey == 553 or itemKey == 554 or itemKey == 555 or itemKey == 17568 or itemKey == 17569 or itemKey == 17679 or itemKey == 17681 or itemKey == 17682 or itemKey == 17683 or itemKey == 17684 or itemKey == 19932 or itemKey == 19933 or itemKey == 19934 or itemKey == 19935 then
         potionAlert = true
         if potionPosInit == false then
           potion_bubble2:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_QUICKSLOT_ADD_POTION"))

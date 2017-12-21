@@ -470,10 +470,10 @@ local CharacterView = function(index, classType, isSpecialCharacter, isChangeSpe
         setWeatherTime(7, 17)
         viewCharacterFov(0.75)
       else
-        if classType == UI_Class.ClassType_Angle then
+        if classType == UI_Class.ClassType_Lahn then
           viewCharacter(index, -20, -20, -94, -0.4, isSpecialCharacter, isChangeSpecialTab)
           viewCharacterPitchRoll(0, 0)
-          setWeatherTime(8, 21)
+          setWeatherTime(8, 2)
           viewCharacterFov(0.55)
         else
           viewCharacter(index, 0, 0, 0, 0, isSpecialCharacter, isChangeSpecialTab)
@@ -726,7 +726,7 @@ local ChangeTexture_Class = function(control, classType)
                                                             (control:getClickTexture()):setUV(x1, y1, x2, y2)
                                                           else
                                                             do
-                                                              if classType == UI_Class.ClassType_Angle then
+                                                              if classType == UI_Class.ClassType_Lahn then
                                                                 control:ChangeTextureInfoName("New_UI_Common_forLua/Window/Lobby/Lobby_ClassSelect_Btn_08.dds")
                                                                 local x1, y1, x2, y2 = setTextureUV_Func(control, 2, 245, 458, 305)
                                                                 ;

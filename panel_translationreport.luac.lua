@@ -22,25 +22,42 @@ end
 
 Panel_TranslationReport.Open = function(self, staticType, key1, key2, key3, textNo)
   -- function num : 0_1 , upvalues : _translationReportWebControl
+  local url = ""
+  local serviceType = getGameServiceType()
+  if (CppEnums.CountryType).DEV == serviceType then
+    url = "http://10.32.129.20/Translation"
+  else
+    if (CppEnums.CountryType).TR_ALPHA == serviceType then
+      url = "http://game-qa.tr.playblackdesert.com/Translation"
+    else
+      if (CppEnums.CountryType).TR_REAL == serviceType then
+        url = "https://game.tr.playblackdesert.com/Translation"
+      else
+        if (CppEnums.CountryType).TH_ALPHA == serviceType then
+          url = "http://game-qa.th.playblackdesert.com/Translation"
+        else
+          if (CppEnums.CountryType).TH_REAL == serviceType then
+            url = "https://game.th.playblackdesert.com/Translation"
+          else
+            if (CppEnums.CountryType).ID_ALPHA == serviceType then
+              url = "http://game-qa.sea.playblackdesert.com/Translation"
+            else
+              if (CppEnums.CountryType).ID_REAL == serviceType then
+                url = "https://game.sea.playblackdesert.com/Translation"
+              else
+                return 
+              end
+            end
+          end
+        end
+      end
+    end
+  end
   audioPostEvent_SystemUi(13, 6)
   Panel_TranslationReport:SetShow(true, true)
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
-  end
-  local url = ""
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    url = "http://10.32.129.20/Translation"
-  else
-    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-      url = "http://game-qa.tr.playblackdesert.com/Translation"
-    else
-      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-        url = "https://game.tr.playblackdesert.com/Translation"
-      else
-        return 
-      end
-    end
   end
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()

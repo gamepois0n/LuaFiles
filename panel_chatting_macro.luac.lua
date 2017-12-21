@@ -207,8 +207,6 @@ end
 HandleClicked_ChatMacroInputEdit = function(index)
   -- function num : 0_4 , upvalues : currentInputEditIndex
   currentInputEditIndex = index
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
 end
 
 ChatMacro.update = function(self)

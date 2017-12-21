@@ -917,118 +917,122 @@ Inventory_SlotRClickXXX = function(slotNo, equipSlotNo, index)
             if Panel_Housing_ConsignmentSale ~= nil and Panel_Housing_ConsignmentSale:GetShow() then
               FGlobal_ConsignmentRegisterItemFromInventory((itemWrapper:get()):getCount_s64(), slotNo)
             else
-              if getAuctionState() then
-                return 
+              if Panel_Window_FairyList ~= nil and PaGlobal_FairySettingList_GetShow() then
+                PaGlobal_FairySetting_SetPortion((itemWrapper:get()):getKey())
               else
-                if ((itemEnchantWrapper:get())._vestedType):getItemKey() == 2 and (itemWrapper:get()):isVested() == false then
-                  local bindingItemUse = function()
+                if getAuctionState() then
+                  return 
+                else
+                  if ((itemEnchantWrapper:get())._vestedType):getItemKey() == 2 and (itemWrapper:get()):isVested() == false then
+                    local bindingItemUse = function()
     -- function num : 0_25_0 , upvalues : inventoryType, slotNo, equipSlotNo
     Inventory_UseItemTargetSelf(inventoryType, slotNo, equipSlotNo)
   end
 
-                  local messageContent = nil
-                  if itemEnchantWrapper:isUserVested() then
-                    messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BINDING_ALERT_CONTENT_USERVESTED")
-                  else
-                    messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BINDING_ALERT_CONTENT")
-                  end
-                  local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BINDING_ALERT_TITLE"), content = messageContent, functionYes = bindingItemUse, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                  ;
-                  (MessageBox.showMessageBox)(messageboxData)
-                else
-                  do
-                    if eConnectUiType.eConnectUi_Undefined ~= (itemWrapper:getStaticStatus()):getConnectUi() then
-                      ConnectUI((itemWrapper:getStaticStatus()):getConnectUi())
+                    local messageContent = nil
+                    if itemEnchantWrapper:isUserVested() then
+                      messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BINDING_ALERT_CONTENT_USERVESTED")
                     else
-                      if (itemWrapper:getStaticStatus()):getItemType() == 8 then
-                        local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-                        audioPostEvent_SystemUi(0, 14)
-                        Panel_Invertory_Manufacture_BG:SetShow(true)
-                        Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "inventory", false, false)
-                        local row = (math.floor)((slotNo - 1) / (inven.config).slotCols)
-                        local col = (slotNo - 1) % (inven.config).slotCols
-                        Panel_Invertory_Manufacture_BG:SetPosX((((self.slots)[index]).icon):GetParentPosX() - 42)
-                        Panel_Invertory_Manufacture_BG:SetPosY((((self.slots)[index]).icon):GetParentPosY() + 42)
-                        local _btn_MenuSizeX = radioButtonManu:GetSizeX() + 23
-                        local _btn_MenuTextSizeX = _btn_MenuSizeX - _btn_MenuSizeX / 2 - radioButtonManu:GetTextSizeX() / 2
-                        local _btn_NoteSizeX = radioButtonNote:GetSizeX() + 23
-                        local _btn_NoteTextSizeX = _btn_NoteSizeX - _btn_NoteSizeX / 2 - radioButtonNote:GetTextSizeX() / 2
-                        radioButtonManu:SetTextSpan(_btn_MenuTextSizeX, 5)
-                        radioButtonNote:SetTextSpan(_btn_NoteTextSizeX, 5)
-                        radioButtonManu:SetPosX(4)
-                        radioButtonManu:SetPosY(4)
-                        radioButtonNote:SetPosX(4)
-                        radioButtonNote:SetPosY(38)
-                        if MiniGame_Manual_Value_FishingStart == true then
-                          radioButtonManu:SetEnable(false)
-                          radioButtonManu:SetMonoTone(true)
-                          radioButtonManu:SetAlpha(0.8)
-                        else
-                          radioButtonManu:SetEnable(true)
-                          radioButtonManu:SetMonoTone(false)
-                          radioButtonManu:SetAlpha(1)
-                        end
-                        radioButtonManu:addInputEvent("Mouse_LUp", "Manufacture_On(" .. slotNo .. ")")
-                        radioButtonNote:addInputEvent("Mouse_LUp", "Note_On(" .. ((itemWrapper:get()):getKey()):getItemKey() .. ")")
-                        radioButtonManu:addInputEvent("Mouse_RUp", "Manufacture_Off()")
-                        radioButtonNote:addInputEvent("Mouse_RUp", "Manufacture_Off()")
-                        radioButtonNote:addInputEvent("Mouse_Out", "Manufacture_Off()")
-                        radioButtonManu:addInputEvent("Mouse_Out", "Manufacture_Off()")
-                        Panel_Invertory_Manufacture_BG:addInputEvent("Mouse_Out", "Manufacture_Off()")
-                        return 
+                      messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BINDING_ALERT_CONTENT")
+                    end
+                    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_BINDING_ALERT_TITLE"), content = messageContent, functionYes = bindingItemUse, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                    ;
+                    (MessageBox.showMessageBox)(messageboxData)
+                  else
+                    do
+                      if eConnectUiType.eConnectUi_Undefined ~= (itemWrapper:getStaticStatus()):getConnectUi() then
+                        ConnectUI((itemWrapper:getStaticStatus()):getConnectUi())
                       else
-                        do
-                          if itemEnchantWrapper:isPopupItem() then
-                            Panel_UserItem_PopupItem(itemEnchantWrapper, inventoryType, slotNo, equipSlotNo)
+                        if (itemWrapper:getStaticStatus()):getItemType() == 8 then
+                          local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
+                          audioPostEvent_SystemUi(0, 14)
+                          Panel_Invertory_Manufacture_BG:SetShow(true)
+                          Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "inventory", false, false)
+                          local row = (math.floor)((slotNo - 1) / (inven.config).slotCols)
+                          local col = (slotNo - 1) % (inven.config).slotCols
+                          Panel_Invertory_Manufacture_BG:SetPosX((((self.slots)[index]).icon):GetParentPosX() - 42)
+                          Panel_Invertory_Manufacture_BG:SetPosY((((self.slots)[index]).icon):GetParentPosY() + 42)
+                          local _btn_MenuSizeX = radioButtonManu:GetSizeX() + 23
+                          local _btn_MenuTextSizeX = _btn_MenuSizeX - _btn_MenuSizeX / 2 - radioButtonManu:GetTextSizeX() / 2
+                          local _btn_NoteSizeX = radioButtonNote:GetSizeX() + 23
+                          local _btn_NoteTextSizeX = _btn_NoteSizeX - _btn_NoteSizeX / 2 - radioButtonNote:GetTextSizeX() / 2
+                          radioButtonManu:SetTextSpan(_btn_MenuTextSizeX, 5)
+                          radioButtonNote:SetTextSpan(_btn_NoteTextSizeX, 5)
+                          radioButtonManu:SetPosX(4)
+                          radioButtonManu:SetPosY(4)
+                          radioButtonNote:SetPosX(4)
+                          radioButtonNote:SetPosY(38)
+                          if MiniGame_Manual_Value_FishingStart == true then
+                            radioButtonManu:SetEnable(false)
+                            radioButtonManu:SetMonoTone(true)
+                            radioButtonManu:SetAlpha(0.8)
                           else
-                            if itemEnchantWrapper:isExchangeItemNPC() or itemWrapper:isSoulCollector() then
-                              Panel_Invertory_ExchangeButton:SetShow(true)
-                              Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "inventory", false, false)
-                              local row = (math.floor)((slotNo - 1) / (inven.config).slotCols)
-                              local col = (slotNo - 1) % (inven.config).slotCols
-                              Panel_Invertory_ExchangeButton:SetPosX((((self.slots)[index]).icon):GetParentPosX() - 42)
-                              Panel_Invertory_ExchangeButton:SetPosY((((self.slots)[index]).icon):GetParentPosY() + 42)
-                              local _btn_WayPointSizeX = _btn_WayPoint:GetSizeX() + 23
-                              local _btn_WayPointTextSizeX = _btn_WayPointSizeX - _btn_WayPointSizeX / 2 - _btn_WayPoint:GetTextSizeX() / 2
-                              local _btn_WidgetSizeX = _btn_Widget:GetSizeX() + 23
-                              local _btn_WidgetTextSizeX = _btn_WidgetSizeX - _btn_WidgetSizeX / 2 - _btn_Widget:GetTextSizeX() / 2
-                              _btn_WayPoint:SetTextSpan(_btn_WayPointTextSizeX, 5)
-                              _btn_Widget:SetTextSpan(_btn_WidgetTextSizeX, 5)
-                              _btn_WayPoint:SetPosX(4)
-                              _btn_WayPoint:SetPosY(4)
-                              _btn_Widget:SetPosX(4)
-                              _btn_Widget:SetPosY(38)
-                              _btn_WayPoint:addInputEvent("Mouse_LUp", "HandleClickedWayPoint( " .. slotNo .. " )")
-                              _btn_WayPoint:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
-                              _btn_Widget:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
-                              _btn_Widget:addInputEvent("Mouse_LUp", "HandleClickedWidget( " .. slotNo .. " )")
-                              Panel_Invertory_ExchangeButton:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
+                            radioButtonManu:SetEnable(true)
+                            radioButtonManu:SetMonoTone(false)
+                            radioButtonManu:SetAlpha(1)
+                          end
+                          radioButtonManu:addInputEvent("Mouse_LUp", "Manufacture_On(" .. slotNo .. ")")
+                          radioButtonNote:addInputEvent("Mouse_LUp", "Note_On(" .. ((itemWrapper:get()):getKey()):getItemKey() .. ")")
+                          radioButtonManu:addInputEvent("Mouse_RUp", "Manufacture_Off()")
+                          radioButtonNote:addInputEvent("Mouse_RUp", "Manufacture_Off()")
+                          radioButtonNote:addInputEvent("Mouse_Out", "Manufacture_Off()")
+                          radioButtonManu:addInputEvent("Mouse_Out", "Manufacture_Off()")
+                          Panel_Invertory_Manufacture_BG:addInputEvent("Mouse_Out", "Manufacture_Off()")
+                          return 
+                        else
+                          do
+                            if itemEnchantWrapper:isPopupItem() then
+                              Panel_UserItem_PopupItem(itemEnchantWrapper, inventoryType, slotNo, equipSlotNo)
                             else
-                              do
-                                if not itemStatic:isUseToVehicle() then
-                                  local useTradeItem = function()
+                              if itemEnchantWrapper:isExchangeItemNPC() or itemWrapper:isSoulCollector() then
+                                Panel_Invertory_ExchangeButton:SetShow(true)
+                                Panel_Tooltip_Item_Show_GeneralNormal(slotNo, "inventory", false, false)
+                                local row = (math.floor)((slotNo - 1) / (inven.config).slotCols)
+                                local col = (slotNo - 1) % (inven.config).slotCols
+                                Panel_Invertory_ExchangeButton:SetPosX((((self.slots)[index]).icon):GetParentPosX() - 42)
+                                Panel_Invertory_ExchangeButton:SetPosY((((self.slots)[index]).icon):GetParentPosY() + 42)
+                                local _btn_WayPointSizeX = _btn_WayPoint:GetSizeX() + 23
+                                local _btn_WayPointTextSizeX = _btn_WayPointSizeX - _btn_WayPointSizeX / 2 - _btn_WayPoint:GetTextSizeX() / 2
+                                local _btn_WidgetSizeX = _btn_Widget:GetSizeX() + 23
+                                local _btn_WidgetTextSizeX = _btn_WidgetSizeX - _btn_WidgetSizeX / 2 - _btn_Widget:GetTextSizeX() / 2
+                                _btn_WayPoint:SetTextSpan(_btn_WayPointTextSizeX, 5)
+                                _btn_Widget:SetTextSpan(_btn_WidgetTextSizeX, 5)
+                                _btn_WayPoint:SetPosX(4)
+                                _btn_WayPoint:SetPosY(4)
+                                _btn_Widget:SetPosX(4)
+                                _btn_Widget:SetPosY(38)
+                                _btn_WayPoint:addInputEvent("Mouse_LUp", "HandleClickedWayPoint( " .. slotNo .. " )")
+                                _btn_WayPoint:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
+                                _btn_Widget:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
+                                _btn_Widget:addInputEvent("Mouse_LUp", "HandleClickedWidget( " .. slotNo .. " )")
+                                Panel_Invertory_ExchangeButton:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
+                              else
+                                do
+                                  if not itemStatic:isUseToVehicle() then
+                                    local useTradeItem = function()
     -- function num : 0_25_1 , upvalues : inventoryType, slotNo, equipSlotNo
     Inventory_UseItemTargetSelf(inventoryType, slotNo, equipSlotNo)
   end
 
-                                  local itemSSW = itemWrapper:getStaticStatus()
-                                  local item_type = itemSSW:getItemType()
-                                  if item_type == 2 and (itemSSW:get()):isForJustTrade() == true then
-                                    local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TRADEITEMUSE_CONTENT")
-                                    local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TRADEITEMUSE_TITLE"), content = messageContent, functionYes = useTradeItem, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-                                    ;
-                                    (MessageBox.showMessageBox)(messageboxData)
-                                  else
-                                    do
-                                      local equipType = (itemWrapper:getStaticStatus()):getEquipType()
-                                      if equipType == 16 or equipType == 17 then
-                                        local accSlotNo = FGlobal_AccSlotNo(itemWrapper, true)
-                                        Inventory_UseItemTargetSelf(inventoryType, slotNo, accSlotNo)
-                                      else
-                                        do
+                                    local itemSSW = itemWrapper:getStaticStatus()
+                                    local item_type = itemSSW:getItemType()
+                                    if item_type == 2 and (itemSSW:get()):isForJustTrade() == true then
+                                      local messageContent = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TRADEITEMUSE_CONTENT")
+                                      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_TRADEITEMUSE_TITLE"), content = messageContent, functionYes = useTradeItem, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                                      ;
+                                      (MessageBox.showMessageBox)(messageboxData)
+                                    else
+                                      do
+                                        local equipType = (itemWrapper:getStaticStatus()):getEquipType()
+                                        if equipType == 16 or equipType == 17 then
+                                          local accSlotNo = FGlobal_AccSlotNo(itemWrapper, true)
+                                          Inventory_UseItemTargetSelf(inventoryType, slotNo, accSlotNo)
+                                        else
                                           do
-                                            Inventory_UseItemTargetSelf(inventoryType, slotNo, equipSlotNo)
-                                            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_CANT_USEITEM"))
+                                            do
+                                              Inventory_UseItemTargetSelf(inventoryType, slotNo, equipSlotNo)
+                                              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INVENTORY_CANT_USEITEM"))
+                                            end
                                           end
                                         end
                                       end

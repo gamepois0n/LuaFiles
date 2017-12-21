@@ -63,6 +63,8 @@ warehouse.init = function(self)
     local slot = {}
     slot.empty = (UI.createAndCopyBasePropertyControl)(Panel_Window_Warehouse, "Static_Slot", Panel_Window_Warehouse, "Warehouse_Slot_Base_" .. ii)
     slot.lock = (UI.createAndCopyBasePropertyControl)(Panel_Window_Warehouse, "Static_LockedSlot", Panel_Window_Warehouse, "Warehouse_Slot_Lock_" .. ii)
+    slot.plus = (UI.createAndCopyBasePropertyControl)(Panel_Window_Warehouse, "Static_PlusSlot", Panel_Window_Warehouse, "Warehouse_Slot_Plus_" .. ii)
+    slot.onlyPlus = (UI.createAndCopyBasePropertyControl)(Panel_Window_Warehouse, "Static_OnlyPlus", Panel_Window_Warehouse, "Warehouse_Slot_OnlyPlus_" .. ii)
     ;
     (UIScroll.InputEventByControl)(slot.empty, "Warehouse_Scroll")
     local row = (math.floor)(ii / (self.config).slotCols)
@@ -76,10 +78,22 @@ warehouse.init = function(self)
     ;
     (slot.lock):SetPosY((self.config).slotStartY + (self.config).slotGapY * row)
     ;
+    (slot.plus):SetPosX((self.config).slotStartX + (self.config).slotGapX * column)
+    ;
+    (slot.plus):SetPosY((self.config).slotStartY + (self.config).slotGapY * row)
+    ;
+    (slot.onlyPlus):SetPosX((self.config).slotStartX + (self.config).slotGapX * column)
+    ;
+    (slot.onlyPlus):SetPosY((self.config).slotStartY + (self.config).slotGapY * row)
+    ;
     (slot.empty):SetShow(false)
     ;
     (slot.lock):SetShow(true)
-    -- DECOMPILER ERROR at PC104: Confused about usage of register: R9 in 'UnsetPending'
+    ;
+    (slot.plus):SetShow(false)
+    ;
+    (slot.onlyPlus):SetShow(false)
+    -- DECOMPILER ERROR at PC168: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     (self.blankSlots)[ii] = slot
@@ -104,6 +118,8 @@ warehouse.init = function(self)
     ;
     (slot.icon):addInputEvent("Mouse_LUp", "Warehouse_DropHandler(" .. ii .. ")")
     ;
+    (slot.icon):addInputEvent("Mouse_LDown", "Warehouse_LDownClick(" .. ii .. ")")
+    ;
     (slot.icon):addInputEvent("Mouse_PressMove", "Warehouse_SlotDrag(" .. ii .. ")")
     ;
     (slot.icon):addInputEvent("Mouse_On", "Warehouse_IconOver(" .. ii .. ")")
@@ -112,7 +128,7 @@ warehouse.init = function(self)
     ;
     (UIScroll.InputEventByControl)(slot.icon, "Warehouse_Scroll")
     Panel_Tooltip_Item_SetPosition(ii, slot, "WareHouse")
-    -- DECOMPILER ERROR at PC211: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC283: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
     (self.slots)[ii] = slot
@@ -182,11 +198,31 @@ warehouse.update = function(self)
       (slot.empty):SetShow(false)
       ;
       (slot.lock):SetShow(false)
+      ;
+      (slot.plus):SetShow(false)
+      ;
+      (slot.onlyPlus):SetShow(false)
       if ii < useMaxCount - useStartSlot - self._startSlotIndex then
         (slot.empty):SetShow(true)
       else
-        ;
-        (slot.lock):SetShow(true)
+        if ii == useMaxCount - useStartSlot - self._startSlotIndex then
+          if isGameServiceTypeDev() then
+            if (((self.slots)[ii]).icon):GetShow() then
+              (slot.onlyPlus):SetShow(true)
+            else
+              ;
+              (slot.plus):SetShow(true)
+            end
+            Panel_Window_Warehouse:SetChildIndex(slot.plus, 15099)
+            Panel_Window_Warehouse:SetChildIndex(slot.onlyPlus, 15100)
+          else
+            ;
+            (slot.lock):SetShow(true)
+          end
+        else
+          ;
+          (slot.lock):SetShow(true)
+        end
       end
     end
     ;
@@ -261,12 +297,12 @@ warehouse.update = function(self)
               if (self.itemMarketFilterFunc)(slot.icon, itemWrapper) == false then
                 if (self.slotFilterEffect)[ii] then
                   (slot.icon):EraseEffect((self.slotFilterEffect)[ii])
-                  -- DECOMPILER ERROR at PC342: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC391: Confused about usage of register: R20 in 'UnsetPending'
 
                   ;
                   (self.slotFilterEffect)[ii] = nil
                 end
-                -- DECOMPILER ERROR at PC351: Confused about usage of register: R20 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC400: Confused about usage of register: R20 in 'UnsetPending'
 
                 ;
                 (self.slotFilterEffect)[ii] = (slot.icon):AddEffect("UI_Inventory_Filtering", true, 0, 0)
@@ -279,7 +315,7 @@ warehouse.update = function(self)
               else
                 if (self.slotFilterEffect)[ii] then
                   (slot.icon):EraseEffect((self.slotFilterEffect)[ii])
-                  -- DECOMPILER ERROR at PC375: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC424: Confused about usage of register: R20 in 'UnsetPending'
 
                   ;
                   (self.slotFilterEffect)[ii] = nil
@@ -296,12 +332,12 @@ warehouse.update = function(self)
                 if (self.manufactureFilterFunc)(slot.slotNo, itemWrapper) == false then
                   if (self.slotFilterEffect)[ii] then
                     (slot.icon):EraseEffect((self.slotFilterEffect)[ii])
-                    -- DECOMPILER ERROR at PC408: Confused about usage of register: R20 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC457: Confused about usage of register: R20 in 'UnsetPending'
 
                     ;
                     (self.slotFilterEffect)[ii] = nil
                   end
-                  -- DECOMPILER ERROR at PC417: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC466: Confused about usage of register: R20 in 'UnsetPending'
 
                   ;
                   (self.slotFilterEffect)[ii] = (slot.icon):AddEffect("UI_Inventory_Filtering", true, 0, 0)
@@ -314,7 +350,7 @@ warehouse.update = function(self)
                 else
                   if (self.slotFilterEffect)[ii] then
                     (slot.icon):EraseEffect((self.slotFilterEffect)[ii])
-                    -- DECOMPILER ERROR at PC441: Confused about usage of register: R20 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC490: Confused about usage of register: R20 in 'UnsetPending'
 
                     ;
                     (self.slotFilterEffect)[ii] = nil
@@ -329,7 +365,7 @@ warehouse.update = function(self)
               else
                 if (self.slotFilterEffect)[ii] then
                   (slot.icon):EraseEffect((self.slotFilterEffect)[ii])
-                  -- DECOMPILER ERROR at PC465: Confused about usage of register: R20 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC514: Confused about usage of register: R20 in 'UnsetPending'
 
                   ;
                   (self.slotFilterEffect)[ii] = nil
@@ -343,7 +379,7 @@ warehouse.update = function(self)
               end
             end
             do
-              -- DECOMPILER ERROR at PC487: Unhandled construct in 'MakeBoolean' P1
+              -- DECOMPILER ERROR at PC536: Unhandled construct in 'MakeBoolean' P1
 
               if self.itemMarketRclickFunc == nil or self.itemMarketFilterFunc == nil then
                 local packingCount_s64 = delivery_getPackItemCount(slotNo)
@@ -375,7 +411,7 @@ warehouse.update = function(self)
                       (slot.checkBox):SetShow(false)
                       if (self.slotFilterEffect)[ii] ~= nil then
                         (slot.icon):EraseEffect((self.slotFilterEffect)[ii])
-                        -- DECOMPILER ERROR at PC569: Confused about usage of register: R20 in 'UnsetPending'
+                        -- DECOMPILER ERROR at PC618: Confused about usage of register: R20 in 'UnsetPending'
 
                         ;
                         (self.slotFilterEffect)[ii] = nil
@@ -395,21 +431,21 @@ warehouse.update = function(self)
                         ;
                         (slot.icon):SetIgnore(false)
                       end
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out IF_STMT
 
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out DO_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out DO_STMT
 
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                      -- DECOMPILER ERROR at PC598: LeaveBlock: unexpected jumping out IF_STMT
+                      -- DECOMPILER ERROR at PC647: LeaveBlock: unexpected jumping out IF_STMT
 
                     end
                   end
@@ -970,8 +1006,22 @@ Warehouse_GroundClick = function(whereType, slotNo)
   end
 end
 
-Warehouse_GroundClick_Message = function(s64_count, slotNo)
+Warehouse_LDownClick = function(index)
   -- function num : 0_43 , upvalues : warehouse
+  local self = warehouse
+  local warehouseWrapper = self:getWarehouse()
+  if warehouseWrapper == nil then
+    return 
+  end
+  local useStartSlot = 1
+  local useMaxCount = warehouseWrapper:getUseMaxCount()
+  if index == useMaxCount - useStartSlot - self._startSlotIndex and isGameServiceTypeDev() then
+    PaGlobal_EasyBuy:Open(3, 7, 4, 1)
+  end
+end
+
+Warehouse_GroundClick_Message = function(s64_count, slotNo)
+  -- function num : 0_44 , upvalues : warehouse
   local self = warehouse
   self._deleteSlotNo = slotNo
   self._s64_deleteCount = s64_count
@@ -984,7 +1034,7 @@ Warehouse_GroundClick_Message = function(s64_count, slotNo)
 end
 
 Warehouse_Delete_Yes = function()
-  -- function num : 0_44 , upvalues : warehouse
+  -- function num : 0_45 , upvalues : warehouse
   local self = warehouse
   if self._deleteSlotNo == nil then
     return 
@@ -1002,7 +1052,7 @@ Warehouse_Delete_Yes = function()
 end
 
 Warehouse_Delete_YesXXX = function()
-  -- function num : 0_45 , upvalues : warehouse
+  -- function num : 0_46 , upvalues : warehouse
   local self = warehouse
   if self:isNpc() then
     warehouse_deleteItemByNpc(self._deleteSlotNo, self._s64_deleteCount)
@@ -1017,14 +1067,14 @@ Warehouse_Delete_YesXXX = function()
 end
 
 Warehouse_Delete_No = function()
-  -- function num : 0_46 , upvalues : warehouse
+  -- function num : 0_47 , upvalues : warehouse
   local self = warehouse
   self._deleteSlotNo = nil
   self._s64_deleteCount = (Defines.s64_const).s64_0
 end
 
 Warehouse_IconOver = function(index)
-  -- function num : 0_47 , upvalues : warehouse
+  -- function num : 0_48 , upvalues : warehouse
   local self = warehouse
   local slot = (self.slots)[index]
   if (self.slotNilEffect)[index] then
@@ -1044,7 +1094,7 @@ Warehouse_IconOver = function(index)
 end
 
 Warehouse_IconOut = function(index)
-  -- function num : 0_48 , upvalues : warehouse
+  -- function num : 0_49 , upvalues : warehouse
   local self = warehouse
   local slot = (self.slots)[index]
   self._tooltipSlotNo = nil
@@ -1052,7 +1102,7 @@ Warehouse_IconOut = function(index)
 end
 
 Warehouse_GetToopTipItem = function()
-  -- function num : 0_49 , upvalues : warehouse
+  -- function num : 0_50 , upvalues : warehouse
   local self = warehouse
   local warehouseWrapper = self:getWarehouse()
   if warehouseWrapper == nil then
@@ -1065,7 +1115,7 @@ Warehouse_GetToopTipItem = function()
 end
 
 Warehouse_GetItem = function(slotNo)
-  -- function num : 0_50 , upvalues : warehouse
+  -- function num : 0_51 , upvalues : warehouse
   local self = warehouse
   local warehouseWrapper = self:getWarehouse()
   if warehouseWrapper == nil then
@@ -1075,7 +1125,7 @@ Warehouse_GetItem = function(slotNo)
 end
 
 Warehouse_SetIgnoreMoneyButton = function(setIgnore)
-  -- function num : 0_51 , upvalues : warehouse
+  -- function num : 0_52 , upvalues : warehouse
   local self = warehouse
   if setIgnore == true then
     (self.buttonMoney):SetIgnore(true)
@@ -1086,7 +1136,7 @@ Warehouse_SetIgnoreMoneyButton = function(setIgnore)
 end
 
 FromClient_WarehouseOpenByInstallation = function(actorKeyRaw, waypointKey)
-  -- function num : 0_52 , upvalues : warehouse
+  -- function num : 0_53 , upvalues : warehouse
   local self = warehouse
   self._installationActorKeyRaw = actorKeyRaw
   Warehouse_OpenPanel(waypointKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Installation)
@@ -1095,7 +1145,7 @@ FromClient_WarehouseOpenByInstallation = function(actorKeyRaw, waypointKey)
 end
 
 Warehouse_OpenPanelFromDialog = function()
-  -- function num : 0_53 , upvalues : warehouse
+  -- function num : 0_54 , upvalues : warehouse
   local self = warehouse
   self.sellCheck = false
   warehouse_clearSellToSystem()
@@ -1122,7 +1172,7 @@ Warehouse_OpenPanelFromDialog = function()
 end
 
 Warehouse_OpenPanelFromDialogWithoutInventory = function(waypointKey, fromType)
-  -- function num : 0_54 , upvalues : warehouse
+  -- function num : 0_55 , upvalues : warehouse
   local self = warehouse
   Warehouse_OpenPanel(waypointKey, fromType)
   Warehouse_SetIgnoreMoneyButton(true)
@@ -1134,7 +1184,7 @@ Warehouse_OpenPanelFromDialogWithoutInventory = function(waypointKey, fromType)
 end
 
 Warehouse_OpenPanelFromWorldmap = function(waypointKey, fromType)
-  -- function num : 0_55 , upvalues : warehouse
+  -- function num : 0_56 , upvalues : warehouse
   local self = warehouse
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:increaseLayer(true)
@@ -1160,7 +1210,7 @@ Warehouse_OpenPanelFromWorldmap = function(waypointKey, fromType)
 end
 
 Warehouse_OpenPanelFromMaid = function()
-  -- function num : 0_56 , upvalues : warehouse
+  -- function num : 0_57 , upvalues : warehouse
   local self = warehouse
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
   if regionInfo == nil then
@@ -1186,7 +1236,7 @@ end
 
 local btnMarketRegistSizeX = (warehouse.BtnMarketRegist):GetSizeX()
 Warehouse_OpenPanel = function(waypointKey, fromType)
-  -- function num : 0_57 , upvalues : warehouse, btnMarketRegistSizeX, btnMarketRegSpanSizeY
+  -- function num : 0_58 , upvalues : warehouse, btnMarketRegistSizeX, btnMarketRegSpanSizeY
   local self = warehouse
   self._currentWaypointKey = waypointKey
   self._fromType = fromType
@@ -1275,7 +1325,7 @@ Warehouse_OpenPanel = function(waypointKey, fromType)
 end
 
 Warehouse_OpenWithInventory = function()
-  -- function num : 0_58 , upvalues : warehouse
+  -- function num : 0_59 , upvalues : warehouse
   local self = warehouse
   Inventory_SetFunctor(nil, FGlobal_PopupMoveItem_InitByInventory, Warehouse_Close, nil)
   InventoryWindow_Show()
@@ -1286,7 +1336,7 @@ Warehouse_OpenWithInventory = function()
 end
 
 Warehouse_Close = function()
-  -- function num : 0_59 , upvalues : warehouse
+  -- function num : 0_60 , upvalues : warehouse
   local self = warehouse
   self._fromType = (CppEnums.WarehoouseFromType).eWarehoouseFromType_Worldmap
   if Panel_Window_Warehouse:GetShow() then
@@ -1321,18 +1371,18 @@ Warehouse_Close = function()
 end
 
 Warehouse_GetWarehouseWarpper = function()
-  -- function num : 0_60 , upvalues : warehouse
+  -- function num : 0_61 , upvalues : warehouse
   local self = warehouse
   return self:getWarehouse()
 end
 
 Warehouse_updateSlotData = function()
-  -- function num : 0_61
+  -- function num : 0_62
   FromClient_WarehouseUpdate()
 end
 
 Warehouse_SetFunctor = function(filterFunc, rClickFunc)
-  -- function num : 0_62 , upvalues : warehouse
+  -- function num : 0_63 , upvalues : warehouse
   local self = warehouse
   if filterFunc ~= nil and type(filterFunc) ~= "function" then
     filterFunc = nil
@@ -1353,9 +1403,9 @@ Warehouse_SetFunctor = function(filterFunc, rClickFunc)
 end
 
 FGlobal_Warehouse_ResetFilter = function()
-  -- function num : 0_63 , upvalues : warehouse
+  -- function num : 0_64 , upvalues : warehouse
   local self = warehouse
-  if Panel_Window_SearchMenuWareHouse:GetShow() == false then
+  if ToClient_IsDevelopment() == true and Panel_Window_SearchMenuWareHouse:GetShow() == false then
     FGlobal_SearchMenuWareHouse_Show(true)
   end
   if self.itemMarketFilterFunc ~= nil then
@@ -1366,7 +1416,7 @@ FGlobal_Warehouse_ResetFilter = function()
 end
 
 Warehouse_OpenPanelFromManufacture = function()
-  -- function num : 0_64
+  -- function num : 0_65
   Warehouse_OpenPanel(getCurrentWaypointKey(), (CppEnums.WarehoouseFromType).eWarehoouseFromType_Manufacture)
 end
 

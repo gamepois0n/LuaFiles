@@ -142,23 +142,15 @@ Panel_Chat_SocialMenu:SetChildIndex(SocialAction._icon, 9999)
 ;
 (SocialAction._desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_SOCIALACTION_DESC"))
 HandleClicked_Button = function(number, index)
-  -- function num : 0_2 , upvalues : IM, SocialAction
+  -- function num : 0_2 , upvalues : SocialAction
   if number == 0 then
     ToClient_resetSocialActionInfo()
   else
     if number == 1 then
       ToClient_cancelSocialActionInfo()
       FGlobal_SocialAction_ShowToggle()
-      if not AllowChangeInputMode() then
-        SetFocusChatting()
-      else
+      if CheckChattingInput() == false then
         ClearFocusEdit()
-        if check_ShowWindow() then
-          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-        else
-          ;
-          (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-        end
       end
     end
   end
@@ -324,8 +316,7 @@ SocialAction.Description_Setting = function(self, index)
 end
 
 HandleClicked_EditBox = function(editControlNo)
-  -- function num : 0_5 , upvalues : IM, SocialAction
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_5 , upvalues : SocialAction
   if editControlNo == 0 then
     SetFocusEdit(SocialAction._command)
   else

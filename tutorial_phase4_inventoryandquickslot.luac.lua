@@ -82,8 +82,6 @@ PaGlobal_TutorialPhase_InventoryAndQuickSlot.startPhaseXXX = function(self, step
   self._nextStep = stepNo
   self._currentProgress = 1
   classType = (getSelfPlayer()):getClassType()
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
   ToClient_DeleteNaviGuideByGroup()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
   PaGlobal_TutorialManager:setAllowShowQuickSlot(true)

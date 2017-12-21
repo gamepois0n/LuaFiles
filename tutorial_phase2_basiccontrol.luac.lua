@@ -90,8 +90,6 @@ PaGlobal_TutorialPhase_BasicControl.startPhaseXXX = function(self, stepNo)
   self._currentStep = 0
   self._nextStep = stepNo
   self._currentProgress = 1
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
   FGlobal_NewQuickSlot_Update()
   ToClient_DeleteNaviGuideByGroup()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
@@ -200,8 +198,6 @@ PaGlobal_TutorialPhase_BasicControl.changeStepClickButton = function(self)
   -- function num : 0_10 , upvalues : uiRotateArrow, uiCtrlGuide, uiClickButton, setPosClickButton
   if self._currentProgress == 1 then
     uiRotateArrow:SetShow(false)
-    ;
-    (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
     PaGlobal_TutorialUiBlackSpirit:setSpiritUiForTutorialFunctor(function()
     -- function num : 0_10_0
     (PaGlobal_TutorialUiManager:getUiBlackSpirit()):setSpiritUiForTutorial(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_62"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_OBSIDIAN_TEXT_63"), false, getScreenSizeX() * 0.5 - 20, getScreenSizeY() * 0.5 - 300)

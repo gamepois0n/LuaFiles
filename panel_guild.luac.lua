@@ -60,7 +60,7 @@ local keyUseCheck = true
 local guildCommentsWebUrl = nil
 local GuildInfoPage = {}
 GuildInfoPage.initialize = function(self)
-  -- function num : 0_2 , upvalues : UI_TM, isContentsGuildInfo, isProtectGuildMember, isContentsArsha, isCanDoReservation, isContentsGuildHouse, btn_GuildMasterMandate, btn_GuildMasterMandateBG, checkPopUp
+  -- function num : 0_2 , upvalues : UI_TM, isContentsGuildInfo, isProtectGuildMember, isContentsArsha, isCanDoReservation, isContentsGuildHouse, promote_btn, btn_GuildMasterMandate, btn_GuildMasterMandateBG, checkPopUp, notice_title, notice_btn
   self._guildMainBG = (UI.getChildControl)(Panel_Window_Guild, "Static_Menu_BG_0")
   self._windowTitle = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Title")
   self._textGuildInfoTitle = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Title_Info")
@@ -142,6 +142,13 @@ GuildInfoPage.initialize = function(self)
     ;
     (self._txtMaster):SetShow(false)
   end
+  if isGameTypeTH() or isGameTypeID() then
+    promote_btn:SetSize(115, 30)
+    promote_btn:SetSpanSize(410, 365)
+  else
+    promote_btn:SetSize(100, 30)
+    promote_btn:SetSpanSize(425, 365)
+  end
   self:SetShow(false)
   ;
   (self._btnGuildDel):addInputEvent("Mouse_LUp", "HandleClickedGuildDel()")
@@ -204,10 +211,6 @@ GuildInfoPage.initialize = function(self)
     ;
     (self._txtRMaster):addInputEvent("Mouse_Out", "GuildSimplTooltips( false, 5 )")
     ;
-    (self._txtRGuildName):setTooltipEventRegistFunc("GuildSimplTooltips( true, 4 )")
-    ;
-    (self._txtRMaster):setTooltipEventRegistFunc("GuildSimplTooltips( true, 5 )")
-    ;
     (self._txtRGuildName):SetIgnore(false)
     ;
     (self._txtRMaster):SetIgnore(false)
@@ -217,16 +220,10 @@ GuildInfoPage.initialize = function(self)
     ;
     (self._txtRMaster):SetIgnore(true)
   end
-  btn_GuildMasterMandate:setTooltipEventRegistFunc("GuildSimplTooltips( true, 0 )")
-  btn_GuildMasterMandateBG:setTooltipEventRegistFunc("GuildSimplTooltips( true, 1 )")
-  ;
-  (self._btnChangeMark):setTooltipEventRegistFunc("GuildSimplTooltips( true, 2 )")
-  ;
-  (self._btnGuildDel):setTooltipEventRegistFunc("GuildSimplTooltips( true, 3 )")
-  ;
-  (self._btnIncreaseMember):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 6, true )")
-  ;
-  (self._btnProtectAdd):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 8, true )")
+  notice_title:addInputEvent("Mouse_On", "GuildSimplTooltips(true, 9)")
+  notice_title:addInputEvent("Mouse_Out", "GuildSimplTooltips(false)")
+  notice_btn:addInputEvent("Mouse_On", "GuildSimplTooltips(true, 10)")
+  notice_btn:addInputEvent("Mouse_Out", "GuildSimplTooltips(false)")
 end
 
 local _Web = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_WEBCONTROL, Panel_Window_Guild, "WebControl_EventNotify_WebLink")
@@ -844,7 +841,7 @@ GuildWarInfoPage.initialize = function(self)
   (self._static_WarInfoBG):SetSpanSize(0, (self._txtWarInfoTitle):GetSizeY() + 25)
   ;
   (self._static_WarInfoBG):ComputePos()
-  if isGameTypeEnglish() then
+  if isGameTypeEnglish() or isGameTypeTH() or isGameTypeID() then
     (self._btnWarList1):SetSize(100, 23)
     ;
     (self._btnWarList2):SetSize(100, 23)
@@ -1047,8 +1044,6 @@ GuildWarInfoPage.initialize = function(self)
                 ;
                 (rtGuildWarInfo._guildShowbuScore):addInputEvent("Mouse_Out", "")
                 ;
-                (rtGuildWarInfo._guildShowbuScore):setTooltipEventRegistFunc("")
-                ;
                 (rtGuildWarInfo._guildShowbuScore):SetShow(false)
                 local penaltyCount = pWarringGuild:getPenaltyCount()
                 if penaltyCount == 0 then
@@ -1074,7 +1069,7 @@ GuildWarInfoPage.initialize = function(self)
                   ;
                   (rtGuildWarInfo._txtShowbu):addInputEvent("Mouse_LUp", "")
                 end
-                -- DECOMPILER ERROR at PC281: Confused about usage of register: R8 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC276: Confused about usage of register: R8 in 'UnsetPending'
 
                 rtGuildWarInfo._PenaltyType = 7
               end
@@ -1088,7 +1083,7 @@ GuildWarInfoPage.initialize = function(self)
   end
 
   for index = 0, constCreateWarInfoCount - 1 do
-    -- DECOMPILER ERROR at PC308: Confused about usage of register: R15 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC316: Confused about usage of register: R15 in 'UnsetPending'
 
     (self._list)[index] = createWarinfo(index)
   end
@@ -1193,10 +1188,12 @@ GuildWarInfoPage.initialize = function(self)
   end
 
   for index = 0, constCreateWarInfoCount - 1 do
-    -- DECOMPILER ERROR at PC322: Confused about usage of register: R15 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC330: Confused about usage of register: R15 in 'UnsetPending'
 
     (self._list2)[index] = createWarinfo2(index)
   end
+  ;
+  (self._txtNoWar):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   (self._txtNoWar):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_NOWAR"))
   ;
@@ -1282,25 +1279,17 @@ GuildWarInfoPage.UpdateData = function(self)
           ;
           (((self._list)[uiIdx])._WarIcon):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. ((self._list)[uiIdx])._PenaltyType .. ", false, " .. uiIdx .. " )")
           ;
-          (((self._list)[uiIdx])._WarIcon):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( " .. ((self._list)[uiIdx])._PenaltyType .. ", true, " .. uiIdx .. " )")
-          ;
           (((self._list)[uiIdx])._txtStopWar):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", true, " .. uiIdx .. " )")
           ;
           (((self._list)[uiIdx])._txtStopWar):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", false, " .. uiIdx .. " )")
           ;
-          (((self._list)[uiIdx])._txtStopWar):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( " .. 9 .. ", true, " .. uiIdx .. " )")
-          ;
           (((self._list)[uiIdx])._txtShowbu):addInputEvent("Mouse_On", "Panel_Guild_Tab_ToolTip_Func( " .. 10 .. ", true, " .. uiIdx .. " )")
           ;
           (((self._list)[uiIdx])._txtShowbu):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( " .. 10 .. ", false, " .. uiIdx .. " )")
-          ;
-          (((self._list)[uiIdx])._txtShowbu):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( " .. 10 .. ", true, " .. uiIdx .. " )")
           if isContentsGuildDuel then
             (((self._list)[uiIdx])._guildShowbuScore):addInputEvent("Mouse_On", "HandleOnOut_GuildDuelInfo_Tooltip( true,\t" .. index .. ", " .. uiIdx .. " )")
             ;
             (((self._list)[uiIdx])._guildShowbuScore):addInputEvent("Mouse_Out", "HandleOnOut_GuildDuelInfo_Tooltip( false,\t" .. index .. ", " .. uiIdx .. " )")
-            ;
-            (((self._list)[uiIdx])._guildShowbuScore):setTooltipEventRegistFunc("HandleOnOut_GuildDuelInfo_Tooltip( true,\t" .. index .. ", " .. uiIdx .. " )")
           end
           local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
           local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
@@ -1320,11 +1309,11 @@ GuildWarInfoPage.UpdateData = function(self)
               ;
               ((self._list)[uiIdx]):SetShow(false)
               uiIdx = uiIdx + 1
-              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC240: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC240: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC286: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC240: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -1395,7 +1384,7 @@ local _txt_Help_GuildMember = (UI.getChildControl)(Panel_Window_Guild, "StaticTe
 local _txt_Help_GuildQuest = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildQuest")
 local _txt_Help_GuildSkill = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildSkill")
 local _txt_Help_WarInfo = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_WarInfo")
--- DECOMPILER ERROR at PC377: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC380: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.initialize = function(self)
   -- function num : 0_33 , upvalues : GuildInfoPage, GuildLetsWarPage, GuildWarInfoPage
@@ -1472,24 +1461,6 @@ GuildManager.initialize = function(self)
   (self.mainBtn_CraftInfo):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 11, false )")
   ;
   (self.mainBtn_GuildBattle):addInputEvent("Mouse_Out", "Panel_Guild_Tab_ToolTip_Func( 12, false )")
-  ;
-  (self.mainBtn_Main):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 99, true )")
-  ;
-  (self.mainBtn_History):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 5, true )")
-  ;
-  (self.mainBtn_Info):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 0, true )")
-  ;
-  (self.mainBtn_Quest):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 1, true )")
-  ;
-  (self.mainBtn_Tree):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 2, true )")
-  ;
-  (self.mainBtn_Warfare):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 3, true )")
-  ;
-  (self.mainBtn_Recruitment):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 4, true )")
-  ;
-  (self.mainBtn_CraftInfo):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 11, true )")
-  ;
-  (self.mainBtn_GuildBattle):setTooltipEventRegistFunc("Panel_Guild_Tab_ToolTip_Func( 12, true )")
   GuildInfoPage:initialize()
   GuildLetsWarPage:initialize()
   GuildWarInfoPage:initialize()
@@ -1606,7 +1577,6 @@ Panel_Guild_Tab_ToolTip_Func = function(tabNo, isOn, inPut_index)
         end
       end
     end
-    registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
     TooltipSimple_Show(uiControl, name, desc)
   else
     do
@@ -1616,7 +1586,7 @@ Panel_Guild_Tab_ToolTip_Func = function(tabNo, isOn, inPut_index)
 end
 
 GuildSimplTooltips = function(isShow, tipType)
-  -- function num : 0_36 , upvalues : btn_GuildMasterMandate, btn_GuildMasterMandateBG, GuildInfoPage, isContentsArsha, isCanDoReservation
+  -- function num : 0_36 , upvalues : btn_GuildMasterMandate, btn_GuildMasterMandateBG, GuildInfoPage, isContentsArsha, isCanDoReservation, notice_title, notice_btn
   local name, desc, control = nil
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMASTER_MANDATE_TOOLTIP_NAME")
@@ -1662,6 +1632,17 @@ GuildSimplTooltips = function(isShow, tipType)
                   if tipType == 8 and isContentsArsha == true and isCanDoReservation == true then
                     name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_SIMPLETOOLTIP_GETARSHAHOST")
                     control = GuildInfoPage._btnGetArshaHost
+                  else
+                    if tipType == 9 then
+                      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_LIST_NOTICE_TITLE")
+                      control = notice_title
+                    else
+                      if tipType == 10 then
+                        name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GUILD_LIST_NOTICE_TITLE") .. " " .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ITEMMARKET_REGISTITEM_BTN_CONFIRM")
+                        desc = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_ONLINE_NOTICE_DESC")
+                        control = notice_btn
+                      end
+                    end
                   end
                 end
               end
@@ -1671,7 +1652,6 @@ GuildSimplTooltips = function(isShow, tipType)
       end
     end
   end
-  registTooltipControl(control, Panel_Tooltip_SimpleText)
   if isShow == true then
     TooltipSimple_Show(control, name, desc)
   else
@@ -1680,7 +1660,7 @@ GuildSimplTooltips = function(isShow, tipType)
 end
 
 local _index = nil
--- DECOMPILER ERROR at PC400: Confused about usage of register: R47 in 'UnsetPending'
+-- DECOMPILER ERROR at PC405: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.TabToggle = function(self, index)
   -- function num : 0_37 , upvalues : tabNumber, _Web, btn_GuildMasterMandateBG, btn_GuildMasterMandate, _index
@@ -1865,7 +1845,7 @@ GuildManager.TabToggle = function(self, index)
   -- DECOMPILER ERROR: 34 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC405: Confused about usage of register: R47 in 'UnsetPending'
+-- DECOMPILER ERROR at PC410: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.Hide = function(self)
   -- function num : 0_38 , upvalues : IM, _Web
@@ -1901,7 +1881,7 @@ GuildManager.Hide = function(self)
   _Web:ResetUrl()
 end
 
--- DECOMPILER ERROR at PC411: Confused about usage of register: R47 in 'UnsetPending'
+-- DECOMPILER ERROR at PC416: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.Show = function(self)
   -- function num : 0_39 , upvalues : GuildWarInfoPage, GuildInfoPage, GuildLetsWarPage
@@ -2064,7 +2044,9 @@ GuildComment_Load = function()
   local guildNo_s64 = guildWrapper:getGuildNo_s64()
   local myUserNo = ((getSelfPlayer()):get()):getUserNo()
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
-  guildCommentsWebUrl = guildCommentsUrlByServiceType()
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  guildCommentsWebUrl = PaGlobal_URL_Check(worldNo)
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   local isAdmin = 0
@@ -2073,7 +2055,7 @@ GuildComment_Load = function()
   end
   if guildCommentsWebUrl ~= nil then
     FGlobal_SetCandidate()
-    local url = guildCommentsWebUrl .. "?guildNo=" .. tostring(guildNo_s64) .. "&userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&isMaster=" .. tostring(isAdmin)
+    local url = guildCommentsWebUrl .. "/guild?guildNo=" .. tostring(guildNo_s64) .. "&userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&isMaster=" .. tostring(isAdmin)
     _urlCache = url
     _Web:SetUrl(323, 272, url, false, true)
     _Web:SetIME(true)
@@ -2306,8 +2288,6 @@ end
 guildCommentsUrlByServiceType = function()
   -- function num : 0_43
   local url = nil
-  local temporaryWrapper = getTemporaryInformationWrapper()
-  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   if (CppEnums.CountryType).DEV == getGameServiceType() then
     url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_URL_KOR_DEV")
   else
@@ -3496,7 +3476,6 @@ HandleOnOut_GuildDuelInfo_Tooltip = function(isShow, gIdx, uiIdx)
     local control = ((GuildWarInfoPage._list)[uiIdx])._guildShowbuScore
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUEL_INFOTOOLTIP_TITLE")
     local desc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_GUILD_GUILDDUEL_INFOTOOLTIP_DESC", "targetKillCount", targetKillCount, "fightMoney", makeDotMoney(fightMoney_s64), "time", lefttimeText)
-    registTooltipControl(control, Panel_Tooltip_SimpleText)
     TooltipSimple_Show(control, name, desc)
   else
     do
@@ -3562,22 +3541,12 @@ FGlobal_Notice_Update = function()
 end
 
 FGlobal_Notice_AuthorizationUpdate = function()
-  -- function num : 0_76 , upvalues : notice_edit, notice_btn
+  -- function num : 0_76 , upvalues : notice_edit
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if isGuildMaster == true or isGuildSubMaster == true then
-    if isGameTypeEnglish() then
-      notice_edit:SetSize(500, 28)
-      notice_btn:SetSize(100, 30)
-      notice_btn:SetSpanSize(45, 140)
-    else
-      notice_edit:SetSize(550, 28)
-      notice_btn:SetSize(50, 30)
-      notice_btn:SetSpanSize(45, 140)
-    end
     notice_edit:SetIgnore(false)
   else
-    notice_edit:SetSize(605, 28)
     notice_edit:SetIgnore(true)
   end
 end
@@ -3759,11 +3728,13 @@ FromWeb_WebPageError = function(url, statusCode)
   if _urlCache ~= url then
     return 
   end
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   local startIndex = (string.find)(url, "?")
   do
     if startIndex ~= nil then
       local _url = (string.sub)(url, 1, startIndex - 1)
-      if guildCommentsUrlByServiceType() == _url then
+      if PaGlobal_URL_Check(worldNo) == _url then
         _Web:SetShow(true)
         return 
       end

@@ -933,12 +933,16 @@ Manufacture_UpdateSlotWarehouse = function()
     end
   end
   _uiButtonManufacture:SetShow(isEnable)
+  Warehouse_updateSlotData()
 end
 
 Manufacture_UpdateSlot = function()
   -- function num : 0_22 , upvalues : _whiteCircle, _slotCount, _slotList, _materialSlotNoList, materialItemWhereType, _materialSlotNoListItemIn, noneStackItem_ChkBtn, _defaultSlotNo, MAX_ACTION_BTN, _listAction, _uiButtonManufacture
   _whiteCircle:EraseAllEffect()
   local inventory = Inventory_GetCurrentInventory()
+  if inventory == nil then
+    return 
+  end
   local invenSize = inventory:size()
   for ii = 0, _slotCount - 1 do
     ((_slotList[ii]).icon):SetShow(false)
@@ -966,7 +970,7 @@ Manufacture_UpdateSlot = function()
           ;
           ((_slotList[ii]).icon):addInputEvent("Mouse_Out", "Material_Mouse_Out( " .. ii .. " )")
           _whiteCircle:AddEffect("UI_ItemInstall_ProduceRing", false, 0, 0)
-          -- DECOMPILER ERROR at PC118: Confused about usage of register: R7 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC121: Confused about usage of register: R7 in 'UnsetPending'
 
           _materialSlotNoListItemIn[ii] = true
           local isStack = (itemWrapper:getStaticStatus()):isStackable()
@@ -977,23 +981,23 @@ Manufacture_UpdateSlot = function()
         else
           do
             do
-              -- DECOMPILER ERROR at PC136: Confused about usage of register: R7 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC139: Confused about usage of register: R7 in 'UnsetPending'
 
               _materialSlotNoList[ii] = _defaultSlotNo
-              -- DECOMPILER ERROR at PC138: Confused about usage of register: R7 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC141: Confused about usage of register: R7 in 'UnsetPending'
 
               _materialSlotNoListItemIn[ii] = false
-              -- DECOMPILER ERROR at PC139: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC142: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC139: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC142: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-              -- DECOMPILER ERROR at PC139: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC142: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC139: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC142: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC139: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC142: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC139: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC142: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -1008,6 +1012,7 @@ Manufacture_UpdateSlot = function()
     end
   end
   _uiButtonManufacture:SetShow(isEnable)
+  Inventory_updateSlotData()
 end
 
 Manufacture_Response = function()
@@ -1471,7 +1476,7 @@ Manufacture_UpdateRepairTime = function()
 end
 
 Material_Mouse_RUp = function(index)
-  -- function num : 0_32 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem, selectedWarehouseItemKey, selectedWarehouseItemSlotNo, targetWarehouseSlotNo, noneStackItem_ChkBtn, _usingItemSlotCount, _materialSlotNoList, _defaultSlotNo, _materialSlotNoListItemIn
+  -- function num : 0_32 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem, selectedWarehouseItemKey, selectedWarehouseItemSlotNo, targetWarehouseSlotNo, noneStackItem_ChkBtn, _usingItemSlotCount, _materialSlotNoList, _defaultSlotNo, _materialSlotNoListItemIn, materialItemWhereType
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1492,12 +1497,12 @@ Material_Mouse_RUp = function(index)
     -- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
 
     _materialSlotNoListItemIn[index] = false
-    for ii = index, _usingItemSlotCount - 1 do
-      -- DECOMPILER ERROR at PC60: Confused about usage of register: R5 in 'UnsetPending'
+    for ii = index, _usingItemSlotCount - 1 - 1 do
+      -- DECOMPILER ERROR at PC63: Confused about usage of register: R5 in 'UnsetPending'
 
-      if _materialSlotNoList[ii] == 255 and _materialSlotNoList[ii + 1] ~= 255 then
+      if _defaultSlotNo == _materialSlotNoList[ii] and _defaultSlotNo ~= _materialSlotNoList[ii + 1] then
         _materialSlotNoList[ii] = _materialSlotNoList[ii + 1]
-        -- DECOMPILER ERROR at PC64: Confused about usage of register: R5 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC67: Confused about usage of register: R5 in 'UnsetPending'
 
         _materialSlotNoList[ii + 1] = _defaultSlotNo
       else
@@ -1507,7 +1512,11 @@ Material_Mouse_RUp = function(index)
   end
   do
     Panel_Tooltip_Item_hideTooltip()
-    Manufacture_UpdateSlot()
+    if materialItemWhereType == (CppEnums.ItemWhereType).eInventory or (CppEnums.ItemWhereType).eCashInventory == materialItemWhereType then
+      Manufacture_UpdateSlot()
+    else
+      Manufacture_UpdateSlotWarehouse()
+    end
   end
 end
 
@@ -2145,7 +2154,7 @@ Manufacture_Button_LUp_Craft = function(isClear)
   if not enableCraft then
     return 
   end
-  audioPostEvent_SystemUi(13, 13)
+  audioPostEvent_SystemUi(13, 23)
   if isClear ~= nil and isClear == true then
     Manufacture_ClearMaterial()
   end
@@ -2543,13 +2552,30 @@ Manufacture_Notify_Check = function()
   end
 end
 
+Manufacture_Full_Check = function()
+  -- function num : 0_66 , upvalues : _usingItemSlotCount, _defaultSlotNo, _materialSlotNoList
+  local useSlotCount = 0
+  for ii = 0, _usingItemSlotCount - 1 do
+    if _defaultSlotNo ~= _materialSlotNoList[ii] then
+      useSlotCount = useSlotCount + 1
+    end
+  end
+  if useSlotCount == _usingItemSlotCount then
+    return true
+  end
+  return false
+end
+
 ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
-  -- function num : 0_66 , upvalues : _actionIndex, _listAction
+  -- function num : 0_67 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
   local isVested = (itemWrapper:get()):isVested()
   local isPersonalTrade = (itemWrapper:getStaticStatus()):isPersonalTrade()
+  if Manufacture_Full_Check() == true then
+    return true
+  end
   do
     if isVested then
       local isFilter = not isUsePcExchangeInLocalizingValue() or isPersonalTrade
@@ -2569,7 +2595,7 @@ ManufactureAction_InvenFiler = function(slotNo, itemWrapper, inventoryType)
 end
 
 ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
-  -- function num : 0_67 , upvalues : _actionIndex, _listAction
+  -- function num : 0_68 , upvalues : _actionIndex, _listAction
   if _actionIndex == -1 then
     return false
   end
@@ -2579,6 +2605,9 @@ ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
   end
   local isVested = (itemWrapper:get()):isVested()
   local isPersonalTrade = (itemWrapper:getStaticStatus()):isPersonalTrade()
+  if Manufacture_Full_Check() == true then
+    return true
+  end
   do
     if isVested then
       local isFilter = not isUsePcExchangeInLocalizingValue() or isPersonalTrade
@@ -2599,7 +2628,7 @@ ManufactureAction_WarehouseFilter = function(slotNo, itemWrapper, stackCount)
 end
 
 manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2, isType)
-  -- function num : 0_68
+  -- function num : 0_69
   if isType > 11 then
     uiBase:ChangeTextureInfoName("new_ui_common_forlua/window/manufacture/manufacture_01.dds")
   else
@@ -2613,7 +2642,7 @@ manufactureClickSetTextureUV = function(uiBase, x1, y1, x2, y2, isType)
 end
 
 manufacture_ShowIconToolTip = function(isShow, idx)
-  -- function num : 0_69 , upvalues : isEnableMsg, _listAction
+  -- function num : 0_70 , upvalues : isEnableMsg, _listAction
   local name, desc = nil
   if isShow == true then
     audioPostEvent_SystemUi(1, 13)
@@ -2697,14 +2726,14 @@ manufacture_ShowIconToolTip = function(isShow, idx)
 end
 
 noneStackItemCheckBT = function()
-  -- function num : 0_70 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
+  -- function num : 0_71 , upvalues : noneStackItemCheck, noneStackItem_ChkBtn
   if Panel_Manufacture:GetShow() then
     noneStackItemCheck = noneStackItem_ChkBtn:IsCheck()
   end
 end
 
 Manufacture_RepeatAction = function()
-  -- function num : 0_71 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem
+  -- function num : 0_72 , upvalues : noneStackItemList, noneStackItemCheck, hasNoneStackItem
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2720,7 +2749,7 @@ Manufacture_RepeatAction = function()
 end
 
 registEventHandler = function()
-  -- function num : 0_72 , upvalues : MAX_ACTION_BTN, _listAction
+  -- function num : 0_73 , upvalues : MAX_ACTION_BTN, _listAction
   for i = 0, MAX_ACTION_BTN - 1 do
     ((_listAction[i])._radioBtn):addInputEvent("Mouse_On", "manufacture_ShowIconToolTip( true, " .. i .. " )")
     ;
@@ -2729,7 +2758,7 @@ registEventHandler = function()
 end
 
 FontSize_SetPos = function()
-  -- function num : 0_73 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
+  -- function num : 0_74 , upvalues : _currentActionIcon, iconPosY, _textDesc, textDescPosY, _textTemp, textTempPosY, _manufactureName, manufactureNamePosY
   if getUiFontSize() ~= 0 then
     _currentActionIcon:SetPosY(iconPosY - 5)
     _textDesc:SetPosY(textDescPosY - 8)
@@ -2744,7 +2773,7 @@ FontSize_SetPos = function()
 end
 
 Manufacture_ListControlCreate = function(content, key)
-  -- function num : 0_74 , upvalues : selectIndex, UI_color, limitTextTooltip, IsLimitText
+  -- function num : 0_75 , upvalues : selectIndex, UI_color, limitTextTooltip, IsLimitText
   local index = Int64toInt32(key)
   local recipe = (UI.getChildControl)(content, "StaticText_List2_AlchemyRecipe")
   local selectList = (UI.getChildControl)(content, "Static_List2_SelectList")
@@ -2793,7 +2822,7 @@ Manufacture_ListControlCreate = function(content, key)
 end
 
 ManufactureLimitTextTooptip = function(isShow, index)
-  -- function num : 0_75 , upvalues : IsLimitText, limitTextTooltip
+  -- function num : 0_76 , upvalues : IsLimitText, limitTextTooltip
   if isShow == false or IsLimitText[index] == false then
     TooltipSimple_Hide()
     return 

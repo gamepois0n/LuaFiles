@@ -1240,8 +1240,8 @@ _Panel_Menu_OpenLimit = function()
     local buttonGapX = 7
     local bgSizeX = buttonSizeX * columnCountByRaw
     if isActionUiOpen or isGameTypeKorea() then
-      menu_Bg:SetSize(bgSizeX + buttonGapX * 2, (countrySizeNum + 2) * totalRaw + buttonGapX - 12)
-      Panel_Menu:SetSize(menu_Bg:GetSizeX() + buttonGapX * 6 - 10, menu_Bg:GetSizeY() + 110)
+      menu_Bg:SetSize(bgSizeX + buttonGapX * 1.6, (countrySizeNum + 2) * totalRaw + buttonGapX - 12)
+      Panel_Menu:SetSize(menu_Bg:GetSizeX() + buttonGapX * 6 - 5, menu_Bg:GetSizeY() + 110)
       menuTitleBar:SetSize(Panel_Menu:GetSizeX() - 16, menuTitleBar:GetSizeY())
       menu_Bg:ComputePos()
       changeMenu:ComputePos()
@@ -1342,7 +1342,7 @@ _Panel_Menu_OpenLimit = function()
 end
 
 Panel_Menu_Close = function()
-  -- function num : 0_20 , upvalues : isActionUiOpen, IM
+  -- function num : 0_20 , upvalues : isActionUiOpen
   do
     if isActionUiOpen or isGameTypeKorea() then
       local currentMenuType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuType)
@@ -1354,9 +1354,6 @@ Panel_Menu_Close = function()
     Panel_Menu:SetShow(false, true)
     Panel_Menu:SetDragAll(false)
     Panel_Menu:SetIgnore(true)
-    if check_ShowWindow() == false then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
   end
 end
 

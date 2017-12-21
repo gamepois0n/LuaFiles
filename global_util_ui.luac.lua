@@ -169,9 +169,6 @@ end
 
 UI.Set_ProcessorInputMode = function(UIModeType)
   -- function num : 0_15
-  if getInputMode() ~= UIModeType then
-    setInputMode(UIModeType)
-  end
 end
 
 -- DECOMPILER ERROR at PC63: Confused about usage of register: R1 in 'UnsetPending'
@@ -179,16 +176,7 @@ end
 UI.ClearFocusEdit = function()
   -- function num : 0_16
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if check_ShowWindow then
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 -- DECOMPILER ERROR at PC66: Confused about usage of register: R1 in 'UnsetPending'

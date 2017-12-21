@@ -1185,7 +1185,7 @@ HandleClicked_WorkerManager_RestoreWorker = function(workerIdx, uiIdx)
   ;
   (self.restoreItemBG):SetPosX((slot.btn_Restore):GetPosX() - (self.restoreItemBG):GetSizeX() * 0.95)
   ;
-  (self.restoreItemBG):SetPosY((slot.bg):GetPosY() + (slot.bg):GetSizeY() * 1.75)
+  (self.restoreItemBG):SetPosY((slot.bg):GetPosY() + (slot.bg):GetSizeY() * 1.75 + 10)
   restoreItem_update()
 end
 

@@ -612,18 +612,23 @@ Interaction_ButtonPushed = function(interactionType)
                 local targetCharacterName = actor:getOriginalName()
                 PaGlobal_PvPBattle:notifyRequest(targetCharacterName)
               end
-            end
-          end
-          do
-            if isTakedownCannon then
-              local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
-              local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INTERACTION_TEXT_TAKEDOWN_CANNON")
-              local messageBoxData = {title = messageTitle, content = messageBoxMemo, functionYes = isTakedownCannonFuncPass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-              ;
-              (MessageBox.showMessageBox)(messageBoxData)
             else
               do
-                interaction_processInteraction(interactionType)
+                if (CppEnums.InteractionType).InteractionType_InstallationMode == interactionType and getInputMode() == (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode then
+                  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NOT_ENTER_HOUSINGMODE_CHATMODE"))
+                  return 
+                end
+                if isTakedownCannon then
+                  local messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS")
+                  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INTERACTION_TEXT_TAKEDOWN_CANNON")
+                  local messageBoxData = {title = messageTitle, content = messageBoxMemo, functionYes = isTakedownCannonFuncPass, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+                  ;
+                  (MessageBox.showMessageBox)(messageBoxData)
+                else
+                  do
+                    interaction_processInteraction(interactionType)
+                  end
+                end
               end
             end
           end

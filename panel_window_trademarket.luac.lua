@@ -16,9 +16,9 @@ local UI_TM = CppEnums.TextMode
 local const_64 = Defines.s64_const
 local currentTradeSlot = 0
 local tradeBuyMaxCount = 9
-local npcTradeShop = {buyListFrame, buyListFrameContent, _buttonExit, _staticCategoryTotal, _staticPossessMoneyText, _staticPossessMoneyValue, _staticPossessMoney, _staticTotalMoneyText, _staticTotalMoneyValue, _staticTotalMoney, _staticTotalWeightText, _staticTotalWeight, _StaticTextCartWeightLT, _button_Confirm, _button_ClearList, _button_Confirm_EnterVihicle, _currentWeightText, _buttonTradeGameStart, _currentWeightLT, _vehicleWeightLT, _vehicleWeightText, _alertpanel, _alerttext, _btnInvestNode; 
+local npcTradeShop = {buyListFrame, buyListFrameContent, _buttonExit, _buttonToggleServant, _staticCategoryTotal, _staticPossessMoneyText, _staticPossessMoneyValue, _staticPossessMoney, _staticTotalMoneyText, _staticTotalMoneyValue, _staticTotalMoney, _staticTotalWeightText, _staticTotalWeight, _StaticTextCartWeightLT, _button_Confirm, _button_ClearList, _button_Confirm_EnterVihicle, _currentWeightText, _buttonTradeGameStart, _currentWeightLT, _vehicleWeightLT, _vehicleWeightText, _alertpanel, _alerttext, _btnInvestNode; 
 slotConfig = {createIcon = true, createBorder = true, createCount = false, createCash = true}
-, _TradeBuyListRow = 3, _TradeBuyListCol = 3, _buySlotMaxCount = 14, _buyRequest = false, _selectClickIndex = 1, _selectClickItemKey = 0, _numpadNumber = toInt64(0, 1), _totalWeight = const_64.s64_0, _myRemainWeight = const_64.s64_0, _totalCost = const_64.s64_0, 
+, _TradeBuyListRow = 3, _TradeBuyListCol = 3, _buySlotMaxCount = 14, _buyRequest = false, _isShip = true, _selectClickIndex = 1, _selectClickItemKey = 0, _numpadNumber = toInt64(0, 1), _totalWeight = const_64.s64_0, _myRemainWeight = const_64.s64_0, _totalCost = const_64.s64_0, 
 preLoadUI = {_static_Icon = nil, _static_TextItemName = nil, _static_Multiply = nil, _button_Quantity = nil, _static_Equal = nil, _static_Cost = nil, _static_CostIcon = nil}
 , 
 _slotBuyAmount = {}
@@ -198,93 +198,98 @@ npcTradeShop.registUiControl = function(self)
   npcTradeShop._buttonExit = (UI.getChildControl)(Panel_Npc_Trade_Market, "Button_Win_Close")
   -- DECOMPILER ERROR at PC34: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._staticEarnProfitText = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Earn_Profit_Title")
+  npcTradeShop._buttonToggleServant = (UI.getChildControl)(Panel_Npc_Trade_Market, "Button_ToggleServant")
   -- DECOMPILER ERROR at PC41: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._staticEarnProfitValue = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Earn_Profit_Value")
+  npcTradeShop._staticEarnProfitText = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Earn_Profit_Title")
   -- DECOMPILER ERROR at PC48: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._staticEarnProfitCoin = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Earn_Profit_Coin")
+  npcTradeShop._staticEarnProfitValue = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Earn_Profit_Value")
   -- DECOMPILER ERROR at PC55: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._petInventoryTitle = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Pet_Inventory")
+  npcTradeShop._staticEarnProfitCoin = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Earn_Profit_Coin")
   -- DECOMPILER ERROR at PC62: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._petInventoryValue = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Pet_Inventory_Value")
+  npcTradeShop._petInventoryTitle = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Pet_Inventory")
   -- DECOMPILER ERROR at PC69: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._alertpanel = (UI.getChildControl)(Panel_Npc_Trade_Market, "Static_AlertPanel")
+  npcTradeShop._petInventoryValue = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Pet_Inventory_Value")
   -- DECOMPILER ERROR at PC76: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._alerttext = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Alert_NoticeText")
+  npcTradeShop._alertpanel = (UI.getChildControl)(Panel_Npc_Trade_Market, "Static_AlertPanel")
   -- DECOMPILER ERROR at PC83: Confused about usage of register: R2 in 'UnsetPending'
 
-  npcTradeShop._btnInvestNode = (UI.getChildControl)(Panel_Npc_Trade_Market, "Button_Node_Invest")
+  npcTradeShop._alerttext = (UI.getChildControl)(Panel_Npc_Trade_Market, "StaticText_Alert_NoticeText")
   -- DECOMPILER ERROR at PC90: Confused about usage of register: R2 in 'UnsetPending'
+
+  npcTradeShop._btnInvestNode = (UI.getChildControl)(Panel_Npc_Trade_Market, "Button_Node_Invest")
+  -- DECOMPILER ERROR at PC97: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._buttonTradeGameStart = (UI.getChildControl)(Panel_Npc_Trade_Market, "Button_TradeGameStart")
   ;
   (npcTradeShop._buttonTradeGameStart):SetShow(false)
-  -- DECOMPILER ERROR at PC147: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC154: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop.preLoadUI = {_static_Icon = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "list_icon"), _static_TextItemName = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "list_name"), _static_Multiply = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "list_multiply"), _button_Quantity = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "Button_listCount"), _static_Equal = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "list_equal"), _static_Cost = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "StaticText_Cost"), _static_CostIcon = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "list_totalCost_moneyIcon")}
-  -- DECOMPILER ERROR at PC155: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC162: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticCategoryTotal = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "category_total")
-  -- DECOMPILER ERROR at PC163: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC170: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticPossessMoneyText = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "possessed_money")
-  -- DECOMPILER ERROR at PC171: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC178: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticPossessMoneyValue = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "possessed_money_value")
-  -- DECOMPILER ERROR at PC179: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC186: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticPossessMoney = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "possessed_money_moneyIcon")
-  -- DECOMPILER ERROR at PC187: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC194: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticTotalMoneyText = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "totalCost")
-  -- DECOMPILER ERROR at PC195: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC202: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticTotalMoneyValue = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "totalCost_value")
-  -- DECOMPILER ERROR at PC203: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC210: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticTotalMoney = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "totalCost_moneyIcon")
-  -- DECOMPILER ERROR at PC211: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC218: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticTotalWeightText = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "totalWeight")
-  -- DECOMPILER ERROR at PC219: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC226: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._staticTotalWeight = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "totalWeight_value")
-  -- DECOMPILER ERROR at PC227: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC234: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._StaticTextCartWeightLT = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "totalWeight_LT")
-  -- DECOMPILER ERROR at PC235: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC242: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._button_Confirm = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "Button_confirm")
-  -- DECOMPILER ERROR at PC243: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC250: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._currentWeightLT = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "currentWeight_LT")
-  -- DECOMPILER ERROR at PC251: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC258: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._vehicleWeightText = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "StaticText_Vehicle_Weight")
-  -- DECOMPILER ERROR at PC259: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC266: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._vehicleWeightLT = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "currentVehicleWeight_LT")
   ;
   (npcTradeShop._button_Confirm):addInputEvent("Mouse_LUp", "click_Confirm_BasketList()")
-  -- DECOMPILER ERROR at PC273: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC280: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._button_ClearList = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "Button_clearList")
   ;
   (npcTradeShop._button_ClearList):addInputEvent("Mouse_LUp", "click_clear_BasketList()")
   ;
   (npcTradeShop._buttonExit):addInputEvent("Mouse_LUp", "closeNpcTrade_Basket()")
-  -- DECOMPILER ERROR at PC293: Confused about usage of register: R2 in 'UnsetPending'
+  ;
+  (npcTradeShop._buttonToggleServant):addInputEvent("Mouse_LUp", "trademarket_toggleServant()")
+  -- DECOMPILER ERROR at PC306: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._button_Confirm_EnterVihicle = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "Button_confirm_EnterViehicle")
   ;
   (npcTradeShop._button_Confirm_EnterVihicle):addInputEvent("Mouse_LUp", "click_Confirm_Enter_Vehicle()")
-  -- DECOMPILER ERROR at PC307: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC320: Confused about usage of register: R2 in 'UnsetPending'
 
   npcTradeShop._currentWeightText = (UI.getChildControl)(npcTradeShop.buyListFrameContent, "currentWeight")
   local preloadUIList = npcTradeShop.preLoadUI
@@ -359,7 +364,7 @@ npcTradeShop.registUiControl = function(self)
     ((self.icon).icon):SetShow(bShow)
   end
 
-      -- DECOMPILER ERROR at PC468: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC481: Confused about usage of register: R12 in 'UnsetPending'
 
       ;
       (npcTradeShop._buyList)[index] = buyList
@@ -373,9 +378,12 @@ npcTradeShop.registUiControl = function(self)
 end
 
 check_Servant = function()
-  -- function num : 0_10
+  -- function num : 0_10 , upvalues : npcTradeShop
   local myLandVehicle = getTemporaryInformationWrapper()
   local servantInfoWrapper = myLandVehicle:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+  if ToClient_IsDevelopment() == true and npcTradeShop._isShip == true then
+    servantInfoWrapper = myLandVehicle:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+  end
   if servantInfoWrapper ~= nil then
     local myLandVehicleActorKey = servantInfoWrapper:getActorKeyRaw()
     if myLandVehicleActorKey ~= nil then
@@ -383,25 +391,49 @@ check_Servant = function()
       local selfProxy = getSelfPlayer()
       if landVehicleActorProxy ~= nil then
         local isAbleDistance = getDistanceFromVehicle()
+        if ToClient_IsDevelopment() == true and npcTradeShop._isShip == true then
+          isAbleDistance = getDistanceFromShip()
+        end
         if isAbleDistance then
-          local vehicleInventory = servantInfoWrapper:getInventory()
-          local maxInventorySlot = vehicleInventory:size() - 2
-          local freeInventorySlot = maxInventorySlot - vehicleInventory:getFreeCount()
-          local myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle(false)):getActorKeyRaw()
-          local servantWrapper = myLandVehicle:getUnsealVehicleByActorKeyRaw(myLandVehicleActorKey)
-          local max_weight = Int64toInt32(servantWrapper:getMaxWeight_s64() / (Defines.s64_const).s64_10000)
-          local total_weight = Int64toInt32((servantWrapper:getInventoryWeight_s64() + servantWrapper:getEquipWeight_s64() + servantWrapper:getMoneyWeight_s64()) / (Defines.s64_const).s64_10000)
-          local vehicleRemainWeightValue = (string.format)("%.1f", max_weight - total_weight)
-          return true, maxInventorySlot, freeInventorySlot, vehicleRemainWeightValue
-        else
-          do
+          if ToClient_IsDevelopment() == false then
+            local vehicleInventory = servantInfoWrapper:getInventory()
+            local maxInventorySlot = vehicleInventory:size() - 2
+            local freeInventorySlot = maxInventorySlot - vehicleInventory:getFreeCount()
+            local myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle(false)):getActorKeyRaw()
+            local servantWrapper = myLandVehicle:getUnsealVehicleByActorKeyRaw(myLandVehicleActorKey)
+            local max_weight = Int64toInt32(servantWrapper:getMaxWeight_s64() / (Defines.s64_const).s64_10000)
+            local total_weight = Int64toInt32((servantWrapper:getInventoryWeight_s64() + servantWrapper:getEquipWeight_s64() + servantWrapper:getMoneyWeight_s64()) / (Defines.s64_const).s64_10000)
+            local vehicleRemainWeightValue = (string.format)("%.1f", max_weight - total_weight)
+            return true, maxInventorySlot, freeInventorySlot, vehicleRemainWeightValue
+          else
             do
+              local myLandVehicleActorKey = servantInfoWrapper:getActorKeyRaw()
+              local servantWrapper = getVehicleActor(myLandVehicleActorKey)
+              local servantActor = servantWrapper:get()
+              if servantActor == nil then
+                return nil, 0, 0
+              end
+              local inventory = servantActor:getInventory()
+              if inventory == nil then
+                return nil, 0, 0
+              end
+              local useStartSlot = inventorySlotNoUserStart()
+              local maxInventorySlot = inventory:size() - useStartSlot
+              local freeInventorySlot = maxInventorySlot - inventory:getFreeCount()
+              local max_weight = Int64toInt32(servantActor:getPossessableWeight_s64() / (Defines.s64_const).s64_10000)
+              local total_weight = Int64toInt32(servantActor:getCurrentWeight_s64() / (Defines.s64_const).s64_10000)
               do
                 do
-                  do return false, 0, 0 end
-                  do return nil, 0, 0 end
-                  do return nil, 0, 0 end
-                  do return nil, 0, 0 end
+                  do
+                    do
+                      local vehicleRemainWeightValue = (string.format)("%.1f", max_weight - total_weight)
+                      do return true, maxInventorySlot, freeInventorySlot, vehicleRemainWeightValue end
+                      do return false, 0, 0 end
+                      do return nil, 0, 0 end
+                      do return nil, 0, 0 end
+                      do return nil, 0, 0 end
+                    end
+                  end
                 end
               end
             end
@@ -522,9 +554,17 @@ confirm_VehicleInventory = function()
   -- function num : 0_17 , upvalues : npcTradeShop
   local myLandVehicle = getTemporaryInformationWrapper()
   local myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle(false)):getActorKeyRaw()
-  local servantWrapper = myLandVehicle:getUnsealVehicleByActorKeyRaw(myLandVehicleActorKey)
-  local max_weight = Int64toInt32(servantWrapper:getMaxWeight_s64() / (Defines.s64_const).s64_10000)
-  local total_weight = Int64toInt32((servantWrapper:getInventoryWeight_s64() + servantWrapper:getEquipWeight_s64() + servantWrapper:getMoneyWeight_s64()) / (Defines.s64_const).s64_10000)
+  if ToClient_IsDevelopment() == true then
+    if npcTradeShop._isShip == true then
+      myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle((CppEnums.ServantType).Type_Ship)):getActorKeyRaw()
+    else
+      myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)):getActorKeyRaw()
+    end
+  end
+  local servantWrapper = getVehicleActor(myLandVehicleActorKey)
+  local servantActor = servantWrapper:get()
+  local max_weight = Int64toInt32(servantActor:getPossessableWeight_s64() / (Defines.s64_const).s64_10000)
+  local total_weight = Int64toInt32(servantActor:getCurrentWeight_s64() / (Defines.s64_const).s64_10000)
   if max_weight - total_weight < Int64toInt32(npcTradeShop._totalWeight) / 10000 then
     local titleString = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_VEHICLE_MSG_TITLE")
     local contentString = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_VEHICLE_MSG_CONTENT")
@@ -541,18 +581,26 @@ end
 send_doBuy = function(fromWhere, toWhere)
   -- function num : 0_18 , upvalues : npcTradeShop
   local rv = 0
+  local servantType = 0
   rv = check_BuyableTradeItem()
   if rv ~= 0 then
     return 
+  end
+  if npcTradeShop._isShip == true then
+    servantType = 1
   end
   for slotIndex,itemCount in pairs(npcTradeShop._slotBuyAmount) do
     if toInt64(0, 0) ~= ((npcTradeShop._slotBuyAmount)[slotIndex])._itemCount then
       local itemCount = ((npcTradeShop._slotBuyAmount)[slotIndex])._itemCount
       local itemCount32 = Int64toInt32(itemCount)
       for count = 0, itemCount32 - 1 do
-        npcShop_doBuy(((npcTradeShop._slotBuyAmount)[slotIndex])._slotIndex, 1, fromWhere, toWhere, false)
+        if ToClient_IsDevelopment() == false then
+          npcShop_doBuy(((npcTradeShop._slotBuyAmount)[slotIndex])._slotIndex, 1, fromWhere, toWhere, false)
+        else
+          npcShop_doBuy(((npcTradeShop._slotBuyAmount)[slotIndex])._slotIndex, 1, fromWhere, toWhere, false, servantType)
+        end
       end
-      -- DECOMPILER ERROR at PC45: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC67: Confused about usage of register: R11 in 'UnsetPending'
 
       npcTradeShop._buyRequest = true
     end
@@ -570,9 +618,16 @@ check_BuyableTradeItem = function()
 end
 
 click_Confirm_Enter_Vehicle = function()
-  -- function num : 0_20
+  -- function num : 0_20 , upvalues : npcTradeShop
   local myLandVehicle = getTemporaryInformationWrapper()
   local myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle(false)):getActorKeyRaw()
+  if ToClient_IsDevelopment() == true then
+    if npcTradeShop._isShip == true then
+      myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle((CppEnums.ServantType).Type_Ship)):getActorKeyRaw()
+    else
+      myLandVehicleActorKey = (myLandVehicle:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)):getActorKeyRaw()
+    end
+  end
   if myLandVehicleActorKey ~= nil then
     local landVehicleActorProxy = getActor(myLandVehicleActorKey)
     local selfProxy = getSelfPlayer()
@@ -581,6 +636,9 @@ click_Confirm_Enter_Vehicle = function()
       return 
     end
     local isAbleDistance = getDistanceFromVehicle()
+    if ToClient_IsDevelopment() == true and npcTradeShop._isShip == true then
+      isAbleDistance = getDistanceFromShip()
+    end
     if isAbleDistance == true then
       send_doBuy(0, 4)
     end
@@ -627,6 +685,8 @@ npcTradeShop.setSizeBuyListControl = function(self, index, posX, posY)
   (npcTradeShop.title):ComputePos()
   ;
   (npcTradeShop._buttonExit):ComputePos()
+  ;
+  (npcTradeShop._buttonToggleServant):ComputePos()
   ;
   (npcTradeShop._staticEarnProfitText):ComputePos()
   ;
@@ -730,8 +790,31 @@ eventResetTradeUI = function()
   end
 end
 
+trademarket_toggleServant = function()
+  -- function num : 0_26 , upvalues : npcTradeShop
+  -- DECOMPILER ERROR at PC5: Confused about usage of register: R0 in 'UnsetPending'
+
+  if npcTradeShop._isShip == true then
+    npcTradeShop._isShip = false
+  else
+    -- DECOMPILER ERROR at PC8: Confused about usage of register: R0 in 'UnsetPending'
+
+    npcTradeShop._isShip = true
+  end
+  global_setTradeUI(true)
+  global_tradeSellListOpen()
+  check_Servant_Inventory()
+  local tempInfo = (getTemporaryInformationWrapper())
+  local vehicleWrapper = nil
+end
+
+trademarket_isShip = function()
+  -- function num : 0_27 , upvalues : npcTradeShop
+  return npcTradeShop._isShip
+end
+
 closeNpcTrade_Basket = function()
-  -- function num : 0_26
+  -- function num : 0_28
   if Panel_Win_System:GetShow() then
     Proc_ShowMessage_Ack("알림창을 먼저 닫아주세�\148.")
     return 
@@ -765,7 +848,7 @@ closeNpcTrade_Basket = function()
 end
 
 InitNpcTradeShopOpen = function()
-  -- function num : 0_27 , upvalues : npcTradeShop
+  -- function num : 0_29 , upvalues : npcTradeShop
   if global_IsTrading == false then
     if Panel_Npc_Dialog:IsShow() == false then
       return 
@@ -780,6 +863,29 @@ InitNpcTradeShopOpen = function()
     Panel_Npc_Dialog:SetShow(false, false)
     Panel_Npc_Trade_Market:SetShow(true)
     Panel_Trade_Market_Graph_Window:SetShow(true, false)
+    if ToClient_IsDevelopment() == true then
+      tempInfo = getTemporaryInformationWrapper()
+      shipWrapper = tempInfo:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+      vehicleWrapper = tempInfo:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+      -- DECOMPILER ERROR at PC69: Confused about usage of register: R1 in 'UnsetPending'
+
+      if shipWrapper ~= nil and vehicleWrapper ~= nil then
+        npcTradeShop._isShip = false
+      else
+        -- DECOMPILER ERROR at PC75: Confused about usage of register: R1 in 'UnsetPending'
+
+        if shipWrapper ~= nil then
+          npcTradeShop._isShip = true
+        else
+          -- DECOMPILER ERROR at PC78: Confused about usage of register: R1 in 'UnsetPending'
+
+          npcTradeShop._isShip = false
+        end
+      end
+    else
+      ;
+      (npcTradeShop._buttonToggleServant):SetShow(false)
+    end
     global_setTradeUI(true)
     global_tradeSellListOpen()
     cutSceneCameraWaveMode(false)
@@ -814,11 +920,13 @@ InitNpcTradeShopOpen = function()
       (npcTradeShop._alerttext):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NeedInvest") .. " <PAColor0xAAFFFFFF>[ " .. npcTradeNodeName .. " ]<PAOldColor> " .. PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NeedInvest2"))
       local isNpcNodeCotrol = getDialogButtonIndexByType((CppEnums.ContentsType).Contents_Explore)
       if isNpcNodeCotrol ~= -1 then
+        (npcTradeShop._btnInvestNode):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NodeButton"))
+        ;
+        (npcTradeShop._btnInvestNode):SetSize((npcTradeShop._btnInvestNode):GetTextSizeX() + 40, (npcTradeShop._btnInvestNode):GetSizeY())
+        ;
         (npcTradeShop._btnInvestNode):SetSpanSize((getScreenSizeX() - (npcTradeShop._btnInvestNode):GetSizeX()) / 2, (npcTradeShop._alertpanel):GetPosY() + (npcTradeShop._alertpanel):GetSizeY() + 10)
         ;
         (npcTradeShop._btnInvestNode):addInputEvent("Mouse_LUp", "click_OpenWorldMap_InvestNode()")
-        ;
-        (npcTradeShop._btnInvestNode):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NodeButton"))
         ;
         (npcTradeShop._btnInvestNode):SetShow(true)
       else
@@ -840,14 +948,14 @@ InitNpcTradeShopOpen = function()
 end
 
 click_OpenWorldMap_InvestNode = function()
-  -- function num : 0_28
+  -- function num : 0_30
   closeNpcTrade_Basket()
   local buttonIndex = getDialogButtonIndexByType((CppEnums.ContentsType).Contents_Explore)
   HandleClickedFuncButton(buttonIndex)
 end
 
 TradeShopGraphRefresh = function()
-  -- function num : 0_29
+  -- function num : 0_31
   if global_IsTrading == true then
     local rv = global_updateCurrentCommerce()
     if rv == true then
@@ -858,7 +966,7 @@ TradeShopGraphRefresh = function()
 end
 
 TradeShopMoneyRefresh = function()
-  -- function num : 0_30 , upvalues : npcTradeShop, currentTradeSlot, const_64
+  -- function num : 0_32 , upvalues : npcTradeShop, currentTradeSlot, const_64
   if global_IsTrading == true then
     if npcTradeShop._buyRequest == true then
       currentTradeSlot = 1
@@ -890,7 +998,7 @@ TradeShopMoneyRefresh = function()
 end
 
 TradeItem_BuySuccess = function()
-  -- function num : 0_31 , upvalues : npcTradeShop
+  -- function num : 0_33 , upvalues : npcTradeShop
   local tradeItemMessage = PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_BUYING_SUCCESS")
   ;
   (npcTradeShop._alertpanel):SetSpanSize((getScreenSizeX() - (npcTradeShop._alertpanel):GetSizeX()) / 2, ((npcTradeShop._alertpanel):GetSizeY() + Panel_Npc_Trade_Market:GetSizeY() - getScreenSizeY()) / 3)
@@ -905,7 +1013,7 @@ TradeItem_BuySuccess = function()
 end
 
 npcTradeShop.registTradeShopEvent = function(self)
-  -- function num : 0_32
+  -- function num : 0_34
   registerEvent("onScreenResize", "eventResetTradeUI")
   registerEvent("EventNpcTradeShopUpdate", "InitNpcTradeShopOpen")
   registerEvent("EventNpcTradeShopGraphRefresh", "TradeShopGraphRefresh")
@@ -914,7 +1022,7 @@ npcTradeShop.registTradeShopEvent = function(self)
 end
 
 refreshEarnProfit = function(profit)
-  -- function num : 0_33 , upvalues : npcTradeShop
+  -- function num : 0_35 , upvalues : npcTradeShop
   (npcTradeShop._staticEarnProfitValue):SetText(tostring(profit))
   ;
   (npcTradeShop._staticEarnProfitValue):SetShow(true)

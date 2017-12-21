@@ -111,7 +111,7 @@ handleClickedMyVendorListClose = function()
 end
 
 MyVendorList.Open = function(self)
-  -- function num : 0_4 , upvalues : IM
+  -- function num : 0_4
   Panel_MyVendor_List:SetShow(true, true)
   local myVendorListCount = ToClient_RequestGetMyVendorListCount()
   for index = 0, 2 do
@@ -136,14 +136,11 @@ MyVendorList.Open = function(self)
       end
     end
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 MyVendorList.Close = function(self)
-  -- function num : 0_5 , upvalues : IM
+  -- function num : 0_5
   if Panel_MyVendor_List:IsShow() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     Panel_MyVendor_List:SetShow(false, true)
   end
   HelpMessageQuestion_Out()

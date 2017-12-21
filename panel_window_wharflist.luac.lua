@@ -577,8 +577,9 @@ end
 local sortByExploreKey = {}
 wharfList_ServantCountInit = function(nums)
   -- function num : 0_24 , upvalues : sortByExploreKey
+  sortByExploreKey = {}
   for i = 1, nums do
-    -- DECOMPILER ERROR at PC10: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC12: Confused about usage of register: R5 in 'UnsetPending'
 
     sortByExploreKey[i] = {_index = nil, _servantNo = nil, _exploreKey = nil, _areaName = nil}
   end

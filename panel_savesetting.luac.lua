@@ -61,35 +61,14 @@ PaGlobal_Panel_SaveSetting_Show = function()
   end
   local myUserNo = ((getSelfPlayer()):get()):getUserNo()
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
-  local isSaveSettingUrlByServeceType = PaGlobal_SaveSettingUrlByServiceType()
-  local isNationType = "KR"
-  if isGameTypeKorea() then
-    isNationType = "KR"
-  else
-    if isGameTypeJapan() then
-      isNationType = "JP"
-    else
-      if isGameTypeRussia() then
-        isNationType = "RU"
-      else
-        if isGameTypeEnglish() then
-          isNationType = "EN"
-        else
-          if isGameTypeTaiwan() then
-            isNationType = "TW"
-          else
-            _PA_LOG("정태�\164", "새로�\180 국가 �\128입이 추가되었으니 �\180 로그�\188 발견하면 해당 담당자에�\140 알려주세�\148 �\173!!!")
-            isNationType = "KR"
-          end
-        end
-      end
-    end
-  end
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  local url = PaGlobal_URL_Check(worldNo)
   local fileName = "UserCachePack" .. getFamilyName() .. ".bdcp"
-  if isSaveSettingUrlByServeceType ~= nil then
-    local url = isSaveSettingUrlByServeceType .. "?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&fileName=" .. tostring(fileName)
+  if url ~= nil then
+    local realUrl = url .. "/SaveSettings?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&fileName=" .. tostring(fileName)
     _Web:SetIME(false)
-    _Web:SetUrl(322, 407, url, false, true)
+    _Web:SetUrl(322, 407, realUrl, false, true)
   end
 end
 
@@ -114,115 +93,8 @@ PaGlobal_Panel_SaveSetting_Open = function()
   PaGlobal_Panel_SaveSetting_Show()
 end
 
-PaGlobal_SaveSettingUrlByServiceType = function()
-  -- function num : 0_6
-  local url = nil
-  local temporaryWrapper = getTemporaryInformationWrapper()
-  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KOR_DEV")
-  else
-    if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KOR_ALPHA")
-    else
-      if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KOR_REAL")
-      else
-        if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-          if getServiceNationType() == 0 then
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_ALPHA_NA")
-          else
-            if getServiceNationType() == 1 then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_ALPHA_EU")
-            end
-          end
-        else
-          if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-            if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_REAL_NA", "port", worldNo)
-            else
-              if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_NA_REAL_EU", "port", worldNo)
-              end
-            end
-          else
-            if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_JP_ALPHA")
-            else
-              if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_JP_REAL")
-              else
-                if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_RUS_ALPHA")
-                else
-                  if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                    if isServerFixedCharge() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_RUS_REAL_F2P")
-                    else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_RUS_REAL_P2P")
-                    end
-                  else
-                    if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TW_ALPHA")
-                    else
-                      if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TW_REAL")
-                      else
-                        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_SA_ALPHA")
-                        else
-                          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_SA_REAL")
-                          else
-                            if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KR2_ALPHA")
-                            else
-                              if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_KR2_REAL")
-                              else
-                                if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TR_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TR_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TH_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_TH_REAL")
-                                      else
-                                        if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_ID_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_URL_ID_REAL")
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-  return url
-end
-
 PaGlobal_Panel_SaveSetting_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_7 , upvalues : checkPopUp
+  -- function num : 0_6 , upvalues : checkPopUp
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""
@@ -240,7 +112,7 @@ PaGlobal_Panel_SaveSetting_PopUp_ShowIconToolTip = function(isShow)
 end
 
 PaGlobal_Panel_SaveSetting_WebCall_CheckSafetyzone = function()
-  -- function num : 0_8
+  -- function num : 0_7
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -251,7 +123,7 @@ PaGlobal_Panel_SaveSetting_WebCall_CheckSafetyzone = function()
 end
 
 FromClient_OpenExplorer_SaveGameOption = function(title, defaultName, paramList)
-  -- function num : 0_9 , upvalues : _Web
+  -- function num : 0_8 , upvalues : _Web
   local paramCount = 0
   local subNameStringBDC = ""
   for key,value in pairs(paramList) do
@@ -271,7 +143,7 @@ FromClient_OpenExplorer_SaveGameOption = function(title, defaultName, paramList)
 end
 
 FromClient_OnDownloadFromWeb_loadGameOption = function(path, filename)
-  -- function num : 0_10
+  -- function num : 0_9
   if (string.find)(filename, ".bdcp", -5) == nil then
     return 
   end
@@ -280,12 +152,21 @@ FromClient_OnDownloadFromWeb_loadGameOption = function(path, filename)
 end
 
 FromClient_applyGameOptionEnd = function()
-  -- function num : 0_11
+  -- function num : 0_10
   chatting_sendMessage("", PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_APPLYCOMPLETE"), (CppEnums.ChatType).System)
   UiSet_update()
+end
+
+FromClient_NotifyMessageAboutSaveSetting = function()
+  -- function num : 0_11
+  local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
+  local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
 end
 
 registerEvent("FromClient_OpenExplorer", "FromClient_OpenExplorer_SaveGameOption")
 registerEvent("FromClient_OnDownloadFromWeb", "FromClient_OnDownloadFromWeb_loadGameOption")
 registerEvent("FromClient_applyGameOptionEnd", "FromClient_applyGameOptionEnd")
+registerEvent("FromClient_NotifyMessageAboutSaveSetting", "FromClient_NotifyMessageAboutSaveSetting")
 

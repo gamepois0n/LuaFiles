@@ -86,8 +86,6 @@ PaGlobal_TutorialPhase_BasicMove.startPhaseXXX = function(self, stepNo)
   classType = (getSelfPlayer()):getClassType()
   Panel_Tutorial:SetShow(true, true)
   FGlobal_NewQuickSlot_Update()
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
   ToClient_DeleteNaviGuideByGroup()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
   PaGlobal_TutorialManager:setAllowShowQuickSlot(false)
@@ -363,6 +361,6 @@ PaGlobal_TutorialPhase_BasicMove._classStringData = {
 , 
 [(CppEnums.ClassType).ClassType_CombattantWomen] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
 , 
-[(CppEnums.ClassType).ClassType_Angle] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
+[(CppEnums.ClassType).ClassType_Lahn] = {"TUTORIAL_MOVE_DARKELF_TALK1", "TUTORIAL_MOVE_DARKELF_TALK2", "TUTORIAL_MOVE_DARKELF_TALK3"}
 }
 

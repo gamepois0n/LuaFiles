@@ -331,12 +331,10 @@ UpdateDecorationContents = function(contentsIndex, currentclassType, currentuiId
       (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
       ;
       (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
-      _PA_LOG("이재�\141", " checkType : " .. checkType)
-      if checkType ~= 3 then
-        (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-        ;
-        (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      end
+      ;
+      (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+      ;
+      (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
       local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
       ;
       (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
@@ -453,9 +451,7 @@ UpdateDecorationListMessage = function(paramType, paramIndex, itemIndex)
         EnableDecorationSlide(slideEnable)
       end
       UpdateDecorationList()
-      if checkType ~= 3 then
-        add_CurrentHistory()
-      end
+      add_CurrentHistory()
     end
   end
 end
@@ -472,9 +468,7 @@ UpdateDecorationPose = function()
   -- function num : 0_9 , upvalues : selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex, UpdateMarkPosition
   setParam(selectedClassType, selectedListParamType, selectedListParamIndex, selectedItemIndex)
   UpdateMarkPosition(selectedItemIndex)
-  if checkType ~= 3 then
-    add_CurrentHistory()
-  end
+  add_CurrentHistory()
 end
 
 UpdateDecorationList = function()
@@ -490,9 +484,7 @@ UpdateDecorationSlider = function(sliderIndex)
   setParam(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex], value)
   ;
   (SliderValueArr[luaSliderIndex]):SetText(value)
-  if checkType ~= 3 then
-    setGlobalCheck(true)
-  end
+  setGlobalCheck(true)
 end
 
 UpdateHairDecorationSlider = function(sliderIndex)

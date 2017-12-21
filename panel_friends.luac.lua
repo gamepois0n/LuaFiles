@@ -366,7 +366,7 @@ end
 FriendMessanger_Close = function(messangerId)
   -- function num : 0_8 , upvalues : FriendMessangerManager, IM
   local messanger = (FriendMessangerManager._messangerList)[messangerId]
-  ToClient_CloseMessanger(messangerId)
+  ToClient_FriendListCloseMessanger(messangerId)
   messanger:clear()
   -- DECOMPILER ERROR at PC10: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -426,9 +426,9 @@ end
 friend_sendMessage = function(messangerId)
   -- function num : 0_13 , upvalues : FriendMessangerManager
   local messanger = (FriendMessangerManager._messangerList)[messangerId]
-  local rv = chatting_sendMessageByUserNo((ToClient_GetMessageListById(messangerId)):getUserNo(), (messanger._uiEditInputChat):GetEditText(), (CppEnums.ChatType).Friend)
+  local rv = chatting_sendMessageByUserNo((RequestFriendList_GetMessageListById(messangerId)):getUserNo(), (messanger._uiEditInputChat):GetEditText(), (CppEnums.ChatType).Friend)
   if rv == 0 then
-    (ToClient_GetMessageListById(messangerId)):pushFromMessage((messanger._uiEditInputChat):GetEditText())
+    (RequestFriendList_GetMessageListById(messangerId)):pushFromMessage((messanger._uiEditInputChat):GetEditText())
   end
   ;
   (messanger._uiEditInputChat):SetEditText("", true)
@@ -436,7 +436,7 @@ end
 
 FromClient_FriendListUpdateMessanger = function(messangerId)
   -- function num : 0_14 , upvalues : FriendMessangerManager
-  local friendMesaageList = ToClient_GetMessageListById(messangerId)
+  local friendMesaageList = RequestFriendList_GetMessageListById(messangerId)
   local message = friendMesaageList:beginMessage()
   local messanger = (FriendMessangerManager._messangerList)[messangerId]
   if messanger == nil then
@@ -505,8 +505,8 @@ FromClient_FriendListUpdateLogOnOffForMessanger = function(messangerId, isOnline
   end
 end
 
-registerEvent("FromClient_UpdateFriendMessanger", "FromClient_FriendListUpdateMessanger")
-registerEvent("FromClient_OpenMessanger", "FromClient_FriendListOpenMessanger")
+registerEvent("FromClient_FriendListUpdateMessanger", "FromClient_FriendListUpdateMessanger")
+registerEvent("FromClient_FriendListOpenMessanger", "FromClient_FriendListOpenMessanger")
 local styleFriendGroup = (UI.getChildControl)(Panel_FriendList, "Style_FriendGroup")
 local styleFriendGroupName = (UI.getChildControl)(Panel_FriendList, "StyleGroupName")
 local styleName = (UI.getChildControl)(Panel_FriendList, "Style_Name")
@@ -519,7 +519,6 @@ styleName:SetIgnore(false)
 local FriendList = {_mainPanel = Panel_FriendList, _maxGroupCount = 5, _maxFriendCount = 50, _uiClose = (UI.getChildControl)(Panel_FriendList, "Button_Close"), _buttonRefresh = (UI.getChildControl)(Panel_FriendList, "Button_Refresh"), _buttonQuestion = (UI.getChildControl)(Panel_FriendList, "Button_Question"), _checkButtonSound = (UI.getChildControl)(Panel_FriendList, "CheckButton_Sound"), _checkButtonEffect = (UI.getChildControl)(Panel_FriendList, "CheckButton_Effect"), _uiTreeFriend = (UI.getChildControl)(Panel_FriendList, "Tree_Friend"), _uiTreeFriendBackStatic = nil, _uiTreeFriendOverStatic = nil, _uiTreeFriendScroll = nil, _isFriendMenuShow = false, _isGroupMenuShow = false}
 FriendList.initialize = function(self)
   -- function num : 0_17
-  ToClient_GetFriendList()
   self._uiTreeFriendBackStatic = (UI.getChildControl)(self._uiTreeFriend, "Tree_Friend_BackStatic")
   self._uiTreeFriendOverStatic = (UI.getChildControl)(self._uiTreeFriend, "Tree_Friend_OverStatic")
   self._uiTreeFriendScroll = (UI.getChildControl)(self._uiTreeFriend, "Tree_Friend_Scroll")
@@ -534,9 +533,9 @@ FriendList.initialize = function(self)
   ;
   (self._buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"PanelFriends\", \"false\")")
   ;
-  (self._checkButtonSound):addInputEvent("Mouse_LUp", "ToClient_ToggleSoundNotice()")
+  (self._checkButtonSound):addInputEvent("Mouse_LUp", "ToClient_RequestToggleSoundNotice()")
   ;
-  (self._checkButtonEffect):addInputEvent("Mouse_LUp", "ToClient_ToggleEffectNotice()")
+  (self._checkButtonEffect):addInputEvent("Mouse_LUp", "ToClient_RequestToggleEffectNotice()")
   ;
   (self._uiTreeFriend):addInputEvent("Mouse_RUp", "clickFriendList(true)")
   ;
@@ -554,8 +553,6 @@ end
 
 FriendList.updateList = function(self)
   -- function num : 0_18 , upvalues : _groupListData, _friendListData
-  local prePos = (self._uiTreeFriendScroll):GetControlPos()
-  ;
   (self._uiTreeFriend):ClearTree()
   ;
   (self._uiTreeFriend):SetAlpha(1)
@@ -571,21 +568,21 @@ FriendList.updateList = function(self)
   (self._uiTreeFriendOverStatic):SetShow(true)
   local friendGroupNoDefault = -1
   local friendGroupNoPartyFriend = -2
-  local friendGroupCount = ToClient_GetFriendGroupCount()
+  local friendGroupCount = RequestFriends_getFriendGroupCount()
   local indexCnt = 0
   local groupIndexCnt = 0
   for groupIndex = 0, friendGroupCount - 1 do
-    local friendGroup = ToClient_GetFriendGroupAt(groupIndex)
+    local friendGroup = RequestFriends_getFriendGroupAt(groupIndex)
     local rootItem = (self._uiTreeFriend):createRootItem()
     if friendGroup:getGroupNo() == friendGroupNoDefault then
       rootItem:SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_GROUP_ETC"))
-      -- DECOMPILER ERROR at PC58: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC55: Confused about usage of register: R12 in 'UnsetPending'
 
       _groupListData._defaultGroupIndex = indexCnt
     else
       if friendGroup:getGroupNo() == friendGroupNoPartyFriend then
         rootItem:SetText(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_GROUP_PARTY"))
-        -- DECOMPILER ERROR at PC72: Confused about usage of register: R13 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC69: Confused about usage of register: R12 in 'UnsetPending'
 
         _groupListData._partyplayGroupIndex = indexCnt
       else
@@ -595,15 +592,15 @@ FriendList.updateList = function(self)
     rootItem:SetCustomData(rootItem)
     ;
     (self._uiTreeFriend):AddRootItem(rootItem)
-    -- DECOMPILER ERROR at PC87: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC84: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (_groupListData._groupInfo)[indexCnt] = friendGroup
-    -- DECOMPILER ERROR at PC90: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC87: Confused about usage of register: R12 in 'UnsetPending'
 
     ;
     (_groupListData._groupInfoByGroupIndex)[groupIndex] = friendGroup
-    -- DECOMPILER ERROR at PC92: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC89: Confused about usage of register: R12 in 'UnsetPending'
 
     _groupListData._groupCount = friendGroupCount
     indexCnt = indexCnt + 1
@@ -641,18 +638,18 @@ FriendList.updateList = function(self)
             end
             do
               do
-                -- DECOMPILER ERROR at PC211: Confused about usage of register: R22 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC208: Confused about usage of register: R21 in 'UnsetPending'
 
                 ;
                 (_friendListData._friendInfo)[indexCnt] = friendInfo
                 indexCnt = indexCnt + 1
-                -- DECOMPILER ERROR at PC213: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC213: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC213: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC213: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC210: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -666,12 +663,10 @@ FriendList.updateList = function(self)
   end
   ;
   (self._uiTreeFriend):RefreshOpenList()
-  ;
-  (self._uiTreeFriendScroll):SetControlPos(prePos)
 end
 
 FriendList:initialize()
-registerEvent("FromClient_UpdateFriendList", "ResponseFriendList_updateFriends")
+registerEvent("ResponseFriendList_updateFriends", "ResponseFriendList_updateFriends")
 registerEvent("FromClient_NoticeNewMessage", "FromClient_NoticeNewMessage")
 ResponseFriendList_updateFriends = function()
   -- function num : 0_19 , upvalues : FriendList
@@ -739,14 +734,14 @@ end
 friend_clickAcceptFriend = function()
   -- function num : 0_25 , upvalues : RequestFriendList
   if RequestFriendList._selectFriendIndex ~= -1 then
-    ToClient_AcceptFriend(RequestFriendList._selectFriendIndex)
+    requestFriendList_acceptFriend(RequestFriendList._selectFriendIndex)
   end
 end
 
 friend_clickRefuseFriend = function()
   -- function num : 0_26 , upvalues : RequestFriendList
   if RequestFriendList._selectFriendIndex ~= -1 then
-    ToClient_RefuseFriend(RequestFriendList._selectFriendIndex)
+    requestFriendList_refuseFriend(RequestFriendList._selectFriendIndex)
   end
 end
 
@@ -761,9 +756,9 @@ RequestFriendList.updateList = function(self)
   -- function num : 0_28 , upvalues : UI_color
   local listControl = self._uiRequestFriendList
   listControl:DeleteAll()
-  local friendCount = ToClient_GetAddFriendCount()
+  local friendCount = RequestFriends_getAddFriendCount()
   for friendIndex = 0, friendCount - 1 do
-    local addFriendInfo = ToClient_GetAddFriendAt(friendIndex)
+    local addFriendInfo = RequestFriends_getAddFriendAt(friendIndex)
     listControl:AddItemWithLineFeed(addFriendInfo:getName(), UI_color.C_FFC4BEBE)
   end
   ;
@@ -775,14 +770,14 @@ RequestFriendList.updateList = function(self)
 end
 
 RequestFriendList:initialize()
-registerEvent("FromClient_UpdateFriendRequestList", "ResponseFriendList_updateAddFriends")
+registerEvent("ResponseFriendList_updateAddFriends", "ResponseFriendList_updateAddFriends")
 AddFriendList_show = function()
   -- function num : 0_29 , upvalues : RequestFriendList
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   self._selectFriendIndex = -1
   RequestFriendList:SetShow(true)
-  local isNew = ToClient_GetAddFriendList()
+  local isNew = RequestFriendList_getAddFriendList()
   RequestFriendList:updateList()
 end
 
@@ -856,7 +851,7 @@ end
 friend_clickAddFriend = function()
   -- function num : 0_34 , upvalues : PopupAddFriend
   local isNickName = (PopupAddFriend._uiCheckUserNickName):IsCheck()
-  ToClient_AddFriend((PopupAddFriend._uiEditName):GetEditText(), isNickName)
+  requestFriendList_addFriend((PopupAddFriend._uiEditName):GetEditText(), isNickName)
   PopupAddFriend:SetShow(false)
   ClearFocusEdit()
 end
@@ -944,7 +939,7 @@ friend_clickRenameGroup = function()
       if (PopupRenameGroup._uiEditName):GetEditText() == "" then
         return 
       end
-      ToClient_RenameGroup(((_groupListData._groupInfo)[_groupListData._selectedGroupIndex]):getGroupNo(), (PopupRenameGroup._uiEditName):GetEditText())
+      requestFriendList_renameGroup(((_groupListData._groupInfo)[_groupListData._selectedGroupIndex]):getGroupNo(), (PopupRenameGroup._uiEditName):GetEditText())
     end
     PopupRenameGroup:SetShow(false)
   end
@@ -1118,7 +1113,7 @@ PopupFriendMenu.SetShow = function(self, isShow)
   -- function num : 0_47 , upvalues : _friendListData, FriendList
   if isShow then
     local isOnline = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):isOnline()
-    local isMessage = ToClient_IsMessageList(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
+    local isMessage = RequestFriendList_isMessageList(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
     if isOnline == false and isMessage == false then
       (self._uiMessanger):SetEnable(false)
       ;
@@ -1274,7 +1269,7 @@ end
 PopupGroupList:initialize()
 clickFriendGroupIcon = function(groupIndex)
   -- function num : 0_56 , upvalues : _groupListData
-  ToClient_CheckGroup(((_groupListData._groupInfoByGroupIndex)[groupIndex]):getGroupNo())
+  requestFriendList_checkGroup(((_groupListData._groupInfoByGroupIndex)[groupIndex]):getGroupNo())
 end
 
 clickFriendGroup = function(groupIndex)
@@ -1296,7 +1291,7 @@ end
 
 friend_addFriendGroup = function()
   -- function num : 0_59 , upvalues : PopupGroupMenu
-  ToClient_AddFriendGroup(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_NEW_GROUPNAME"))
+  requestFriendList_addFriendGroup(PAGetString(Defines.StringSheet_GAME, "FRIEND_TEXT_NEW_GROUPNAME"))
   PopupGroupMenu:SetShow(false)
 end
 
@@ -1374,7 +1369,7 @@ friend_Messanger = function()
   local userNo = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo()
   local userName = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getName()
   local isOnline = ((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):isOnline()
-  ToClient_OpenMessanger(userNo, userName, isOnline)
+  RequestFriendList_OpenMessanger(userNo, userName, isOnline)
   PopupFriendMenu:SetShow(false)
 end
 
@@ -1386,20 +1381,20 @@ end
 
 friend_requestAddFriend = function()
   -- function num : 0_65 , upvalues : _friendListData, PopupPartyFriendMenu
-  ToClient_AddFriend(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getName())
+  requestFriendList_addFriend(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getName())
   PopupPartyFriendMenu:SetShow(false)
 end
 
 friend_deleteFriend = function()
   -- function num : 0_66 , upvalues : _friendListData, PopupFriendMenu, PopupPartyFriendMenu
-  ToClient_DeleteFriend(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
+  requestFriendList_deleteFriend(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo())
   PopupFriendMenu:SetShow(false)
   PopupPartyFriendMenu:SetShow(false)
 end
 
 clickedFriend_moveGroup = function(groupIndex)
   -- function num : 0_67 , upvalues : _friendListData, _groupListData, PopupFriendMenu, PopupGroupList
-  ToClient_MoveGroup(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo(), ((_groupListData._groupInfoByGroupIndex)[groupIndex]):getGroupNo())
+  requestFriendList_moveGroup(((_friendListData._friendInfo)[_friendListData._selectedFriendIndex]):getUserNo(), ((_groupListData._groupInfoByGroupIndex)[groupIndex]):getGroupNo())
   PopupFriendMenu:SetShow(false)
   PopupGroupList:SetShow(false)
 end
@@ -1472,9 +1467,9 @@ end
 
 FriendList_showAni = function()
   -- function num : 0_75 , upvalues : FriendList, RequestFriendList, UI_ANI_ADV
-  local isNew = ToClient_GetFriendList()
+  local isNew = RequestFriendList_getFriendList()
   FriendList:updateList()
-  ToClient_GetAddFriendList()
+  RequestFriendList_getAddFriendList()
   RequestFriendList:updateList()
   ;
   (UIAni.AlphaAnimation)(1, Panel_FriendList, 0, 0.15)

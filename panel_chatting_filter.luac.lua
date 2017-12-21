@@ -199,7 +199,7 @@ ChattingFilter.Open = function(self)
 end
 
 ChattingFilter.Close = function(self)
-  -- function num : 0_5 , upvalues : IM
+  -- function num : 0_5
   Panel_Chatting_Filter:SetShow(false, false)
   ;
   ((self.ui).scroll):SetControlPos(0)
@@ -211,8 +211,6 @@ ChattingFilter.Close = function(self)
 
   ;
   (self.config).totalFilterCount = 0
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
 end
 
 ChattingFilter_InsertFilterString = function()
@@ -253,26 +251,16 @@ Scroll_ChattingFilterList = function(isScrollUp)
 end
 
 HandleClicked_ChattingFilter_EditName = function()
-  -- function num : 0_9 , upvalues : IM, ChattingFilter
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_9 , upvalues : ChattingFilter
   SetFocusEdit((ChattingFilter.ui).edit_Filter)
   ;
   ((ChattingFilter.ui).edit_Filter):SetEditText("", true)
 end
 
 FGlobal_ChattingFilter_ClearFocusEdit = function()
-  -- function num : 0_10 , upvalues : IM
+  -- function num : 0_10
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FGlobal_ChattingFilter_UiEdit = function(targetUI)

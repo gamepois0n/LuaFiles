@@ -187,10 +187,16 @@ WeaponChange_ApplyChangeItem = function()
   btn_Apply:SetMonoTone(true)
   btn_Apply:SetEnable(false)
   btn_Apply:SetIgnore(true)
+  Inventory_SetFunctor(WeaponChange_SetFilterIgnore, nil, nil, nil)
+end
+
+WeaponChange_SetFilterIgnore = function()
+  -- function num : 0_7
+  return true
 end
 
 FromClient_WeaponChange = function(itemSSW)
-  -- function num : 0_7 , upvalues : equipSlot, avatarSlot, selectedItemSlotNo, selectedItemWhere, elapsTime, doChange, resultItemKey
+  -- function num : 0_8 , upvalues : equipSlot, avatarSlot, selectedItemSlotNo, selectedItemWhere, elapsTime, doChange, resultItemKey
   equipSlot:clearItem()
   avatarSlot:clearItem()
   selectedItemSlotNo = nil
@@ -204,7 +210,7 @@ FromClient_WeaponChange = function(itemSSW)
 end
 
 WeaponChange_IconOver = function(isShow, controlId)
-  -- function num : 0_8 , upvalues : selectedItemWhere, selectedItemSlotNo, equipSlot, avatarSlot, materialWhereType, materialSlotno
+  -- function num : 0_9 , upvalues : selectedItemWhere, selectedItemSlotNo, equipSlot, avatarSlot, materialWhereType, materialSlotno
   if isShow then
     local control = nil
     if controlId == 0 then
@@ -237,7 +243,7 @@ WeaponChange_IconOver = function(isShow, controlId)
 end
 
 WeaponChange_Close = function()
-  -- function num : 0_9 , upvalues : isChangeDoing, equipSlot, avatarSlot, selectedItemSlotNo, selectedItemWhere, elapsTime, doChange, resultItemKey, btn_Apply, btn_Close, runEffect
+  -- function num : 0_10 , upvalues : isChangeDoing, equipSlot, avatarSlot, selectedItemSlotNo, selectedItemWhere, elapsTime, doChange, resultItemKey, btn_Apply, btn_Close, runEffect
   if isChangeDoing == true then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHANGEITEM_DONOT_CLOSE"))
     return 
@@ -258,7 +264,7 @@ WeaponChange_Close = function()
 end
 
 WeaponChange_updateTime = function(deltaTime)
-  -- function num : 0_10 , upvalues : elapsTime, selectedItemSlotNo, selectedItemWhere, doChange, runEffect, avatarSlot, materialWhereType, materialSlotno, isChangeDoing, btn_Apply, btn_Close
+  -- function num : 0_11 , upvalues : elapsTime, selectedItemSlotNo, selectedItemWhere, doChange, runEffect, avatarSlot, materialWhereType, materialSlotno, isChangeDoing, btn_Apply, btn_Close
   elapsTime = elapsTime + deltaTime
   if elapsTime > 3 then
     if selectedItemSlotNo == nil or selectedItemWhere == nil or doChange == false then
@@ -279,12 +285,12 @@ WeaponChange_updateTime = function(deltaTime)
 end
 
 FGlobal_WeaponChange_IsDoing = function()
-  -- function num : 0_11 , upvalues : isChangeDoing
+  -- function num : 0_12 , upvalues : isChangeDoing
   return isChangeDoing
 end
 
 FromClient_UseItemExchangeToClassNotify = function()
-  -- function num : 0_12
+  -- function num : 0_13
   WeaponChange_Close()
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CHANGEWEAPON_SUCCESS_CHANGEITEM"))
 end

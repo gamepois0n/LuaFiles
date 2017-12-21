@@ -177,13 +177,11 @@ HandleClicked_SelectCard = function()
 end
 
 HandleClicked_SearchCard = function()
-  -- function num : 0_7 , upvalues : _listKnowledgeList, _treeKnowledgeList, _editSearch, IM
+  -- function num : 0_7 , upvalues : _listKnowledgeList, _treeKnowledgeList, _editSearch
   local index = _listKnowledgeList:GetSelectIndex()
   _treeKnowledgeList:SetFilterString(_editSearch:GetText())
   _treeKnowledgeList:RefreshOpenList()
   _treeKnowledgeList:SetSelectItem(index + 2)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit()
 end
 
@@ -233,7 +231,7 @@ HandleClicked_TabCreateThemeBook = function()
 end
 
 FGlobal_KnowledgeManagementShow = function()
-  -- function num : 0_11 , upvalues : changeTab, _textNeed, _textNeedValue, IM, _tabCreateThemeBook, _buttonRemoveKnowLedge, _buttonClose, eventInputType
+  -- function num : 0_11 , upvalues : changeTab, _textNeed, _textNeedValue, _tabCreateThemeBook, _buttonRemoveKnowLedge, _buttonClose, eventInputType
   if Panel_KnowledgeManagement:IsShow() then
     Panel_KnowledgeManagement:SetShow(false)
   else
@@ -241,8 +239,6 @@ FGlobal_KnowledgeManagementShow = function()
     Panel_KnowledgeManagement:SetShow(true)
     _textNeed:SetShow(true)
     _textNeedValue:SetShow(true)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
     _tabCreateThemeBook:SetShow(true)
     _buttonRemoveKnowLedge:SetSpanSize(0, (_buttonRemoveKnowLedge:GetSpanSize()).y)
     _buttonClose:SetShow(false)
@@ -271,10 +267,8 @@ FromClient_UpdateKnowledgeManage = function(isByItem)
 end
 
 HandleClicked_KnowledgeManagement_Edit = function()
-  -- function num : 0_14 , upvalues : _editSearch, IM
+  -- function num : 0_14 , upvalues : _editSearch
   SetFocusEdit(_editSearch)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 KnowledgeManagementPosition = function()
@@ -284,15 +278,11 @@ KnowledgeManagementPosition = function()
 end
 
 KnowledgeClose = function()
-  -- function num : 0_16 , upvalues : _editSearch, IM
+  -- function num : 0_16 , upvalues : _editSearch
   Panel_KnowledgeManagement:SetShow(false, false)
   ClearFocusEdit()
   _editSearch:SetEditText("", true)
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FGlobal_KnowledgeClose = function()

@@ -25,7 +25,7 @@ local awakenWeaponContentsOpen = awakenWeapon[classType]
 local equip = {
 slotConfig = {createIcon = false, createBorder = true, createCount = true, createCash = true, createEnduranceIcon = true, createItemLock = true}
 , 
-slotNoId = {[0] = "Static_Slot_RightHand", [1] = "Static_Slot_LeftHand", [2] = "Static_Slot_Gather", [3] = "Static_Slot_Chest", [4] = "Static_Slot_Glove", [5] = "Static_Slot_Boots", [6] = "Static_Slot_Helm", [7] = "Static_Slot_Necklace", [8] = "Static_Slot_Ring1", [9] = "Static_Slot_Ring2", [10] = "Static_Slot_Earing1", [11] = "Static_Slot_Earing2", [12] = "Static_Slot_Belt", [13] = "Static_Slot_Lantern", [14] = "Static_Slot_Avatar_Chest", [15] = "Static_Slot_Avatar_Gloves", [16] = "Static_Slot_Avatar_Boots", [17] = "Static_Slot_Avatar_Helm", [18] = "Static_Slot_Avatar_RightHand", [19] = "Static_Slot_Avatar_LeftHand", [20] = "Static_Slot_Avatar_UnderWear", [22] = "Static_Slot_FaceDecoration1", [23] = "Static_Slot_FaceDecoration2", [21] = "Static_Slot_FaceDecoration3", [27] = "Static_Slot_AlchemyStone", [29] = "Static_Slot_AwakenWeapon", [30] = "Static_Slot_Avatar_AwakenWeapon"}
+slotNoId = {[0] = "Static_Slot_RightHand", [1] = "Static_Slot_LeftHand", [2] = "Static_Slot_Gather", [3] = "Static_Slot_Chest", [4] = "Static_Slot_Glove", [5] = "Static_Slot_Boots", [6] = "Static_Slot_Helm", [7] = "Static_Slot_Necklace", [8] = "Static_Slot_Ring1", [9] = "Static_Slot_Ring2", [10] = "Static_Slot_Earing1", [11] = "Static_Slot_Earing2", [12] = "Static_Slot_Belt", [13] = "Static_Slot_Lantern", [14] = "Static_Slot_Avatar_Chest", [15] = "Static_Slot_Avatar_Gloves", [16] = "Static_Slot_Avatar_Boots", [17] = "Static_Slot_Avatar_Helm", [18] = "Static_Slot_Avatar_RightHand", [19] = "Static_Slot_Avatar_LeftHand", [20] = "Static_Slot_Avatar_UnderWear", [22] = "Static_Slot_FaceDecoration1", [23] = "Static_Slot_FaceDecoration2", [21] = "Static_Slot_FaceDecoration3", [27] = "Static_Slot_AlchemyStone", [29] = "Static_Slot_AwakenWeapon", [30] = "Static_Slot_Avatar_AwakenWeapon", [31] = "Static_Slot_QuestBook"}
 , 
 avataEquipSlotId = {[14] = "Check_Slot_Avatar_Chest", [15] = "Check_Slot_Avatar_Gloves", [16] = "Check_Slot_Avatar_Boots", [17] = "Check_Slot_Avatar_Helm", [18] = "Check_Slot_Avatar_RightHand", [19] = "Check_Slot_Avatar_LeftHand", [20] = "Check_Slot_Avatar_UnderWear", [22] = "Check_Slot_FaceDecoration1", [23] = "Check_Slot_FaceDecoration2", [21] = "Check_Slot_FaceDecoration3", [30] = "Check_Slot_Avatar_AwakenWeapon"}
 , 
@@ -33,7 +33,7 @@ equipSlotId = {[6] = "Check_Slot_Helm"}
 , 
 _checkFlag = {[14] = 1, [15] = 2, [16] = 4, [17] = 8, [18] = 32, [19] = 64, [20] = 16, [22] = 256, [23] = 512, [21] = 128, [3] = 65536, [4] = 131072, [5] = 262144, [6] = 524288, [0] = 2097152, [1] = 4194304, [30] = 1024}
 , 
-slotNoIdToString = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_MAINHAND"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_SUBHAND"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_GATHERTOOLS"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_UPPERBODY"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_GLOVES"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_BOOTS"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_HELM"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_NECKLACE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [9] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [10] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [11] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [12] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_WAISTBAND"), [13] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_LANTERN"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_BODY"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HANDS"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_BOOTS"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HELM"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_MAIN"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_SUB"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_UNDERWEAR"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_EYES"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_MOUSE"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HEAD"), [27] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_alchemyStone"), [29] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_awakenWeapon"), [30] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_avatarAwakenWeapon")}
+slotNoIdToString = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_MAINHAND"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_SUBHAND"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_GATHERTOOLS"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_UPPERBODY"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_GLOVES"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_BOOTS"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_HELM"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_NECKLACE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [9] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [10] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [11] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [12] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_WAISTBAND"), [13] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_LANTERN"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_BODY"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HANDS"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_BOOTS"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HELM"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_MAIN"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_SUB"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_UNDERWEAR"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_EYES"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_MOUSE"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AVATAR_HEAD"), [27] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_alchemyStone"), [29] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_awakenWeapon"), [30] = PAGetString(Defines.StringSheet_GAME, "Lua_EquipSlotNo_String_avatarAwakenWeapon"), [31] = "í€˜ìŠ¤íŠ\184 ë¶\129"}
 , slots = (Array.new)(), slotBGs = (Array.new)(), avataSlots = (Array.new)(), defaultSlots = (Array.new)(), staticTitle = (UI.getChildControl)(Panel_Equipment, "Static_Text_Title"), buttonClose = (UI.getChildControl)(Panel_Equipment, "Button_Close"), enchantText = (UI.getChildControl)(Panel_Equipment, "Static_Text_Slot_Enchant_value"), attackText = (UI.getChildControl)(Panel_Equipment, "StaticText_Attack"), attackValue = (UI.getChildControl)(Panel_Equipment, "StaticText_Attack_Value"), defenceText = (UI.getChildControl)(Panel_Equipment, "StaticText_Defence"), defenceValue = (UI.getChildControl)(Panel_Equipment, "StaticText_Defence_Value"), awakenText = (UI.getChildControl)(Panel_Equipment, "StaticText_AwakenAttack"), awakenValue = (UI.getChildControl)(Panel_Equipment, "StaticText_AwakenAttack_Value"), effectBG = (UI.getChildControl)(Panel_Equipment, "Static_Effect"), checkCloak = (UI.getChildControl)(Panel_Equipment, "CheckButton_Cloak_Invisual"), checkHelm = (UI.getChildControl)(Panel_Equipment, "CheckButton_Helm_Invisual"), checkHelmOpen = (UI.getChildControl)(Panel_Equipment, "CheckButton_HelmOpen"), btn_PetList = (UI.getChildControl)(Panel_Equipment, "Button_PetInfo"), checkUnderwear = (UI.getChildControl)(Panel_Equipment, "CheckButton_Underwear_Invisual"), checkCamouflage = (UI.getChildControl)(Panel_Equipment, "CheckButton_ShowNameWhenCamouflage"), checkPopUp = (UI.getChildControl)(Panel_Equipment, "CheckButton_PopUp"), btn_ServantInventory = (UI.getChildControl)(Panel_Equipment, "Button_ServantInventory"), 
 extendedSlotInfoArray = {}
 , checkExtendedSlot = 0, checkBox_AlchemyStone = (UI.getChildControl)(Panel_Equipment, "CheckBox_AlchemyStone"), slotRingIndex = 0, slotEaringIndex = 0}
@@ -218,8 +218,12 @@ equip.initControl = function(self)
   (self.checkHelmOpen):SetShow(true)
   ;
   (self.enchantText):SetShow(false)
-  ;
-  (self.checkUnderwear):SetShow(not isKR2ContentsEnable)
+  if ToClient_isAdultUser() == false then
+    (self.checkUnderwear):SetShow(false)
+  else
+    ;
+    (self.checkUnderwear):SetShow(not isKR2ContentsEnable)
+  end
   ;
   (self.checkCamouflage):SetShow(true)
   local isPopUpContentsEnable = ToClient_IsContentsGroupOpen("240")
@@ -490,7 +494,7 @@ end
 FGlobal_Equipment_SetFunctionButtonHide = function(isShow)
   -- function num : 0_16 , upvalues : equip, isKR2ContentsEnable
   (equip.btn_PetList):SetShow(isShow)
-  if isKR2ContentsEnable then
+  if isKR2ContentsEnable or ToClient_isAdultUser() == false then
     (equip.checkUnderwear):SetShow(false)
   else
     ;
@@ -790,6 +794,16 @@ Equipment_updateSlotData = function()
         (equip.checkBox_AlchemyStone):SetShow(true)
       end
     end
+    if ToClient_IsContentsGroupOpen("335") == true then
+      ((self.slotBGs)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]):SetShow(true)
+      ;
+      (((self.slots)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]).icon):SetShow(true)
+    else
+      ;
+      ((self.slotBGs)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]):SetShow(false)
+      ;
+      (((self.slots)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]).icon):SetShow(false)
+    end
     local alchemyStoneQuickKeyString = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_AlchemySton)
     alchemyStoneQuickKey:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_QUICKCOMMAND", "keyString", alchemyStoneQuickKeyString))
   end
@@ -993,17 +1007,17 @@ Equipment_StatValueTooltips = function(isShow, tipType)
   local self = equip
   if tipType == 0 then
     name = PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_ATTACK")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_ATTACK_TEXT_TOOLTIP_DESC")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_ATTACK_TEXT_TOOLTIP_DESC") .. "\n<PAColor0xffe7d583>- " .. PAGetString(Defines.StringSheet_RESOURCE, "EQUIPMENT_TEXT_HIT") .. " : " .. tostring(ToClient_getHit()) .. "<PAOldColor>"
     control = self.attackText
   else
     if tipType == 1 then
       name = PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_DEFENCE")
-      desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_DEFENCE_TEXT_TOOLTIP_DESC")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_DEFENCE_TEXT_TOOLTIP_DESC") .. "\n<PAColor0xffe7d583>" .. PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_ITEM_TXT_DV") .. " " .. tostring(ToClient_getDv()) .. "<PAOldColor>\n<PAColor0xffe7d583>" .. PAGetString(Defines.StringSheet_RESOURCE, "TOOLTIP_ITEM_TXT_PV") .. " " .. tostring(ToClient_getPv()) .. "<PAOldColor>"
       control = self.defenceText
     else
       if tipType == 2 then
         name = PAGetString(Defines.StringSheet_RESOURCE, "EQUIPMENT_TOOLTIP_AWAKEN_TITLE")
-        desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AWAKEN_TEXT_TOOLTIP_DESC")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_EQUIPMENT_AWAKEN_TEXT_TOOLTIP_DESC") .. "\n<PAColor0xffe7d583>- " .. PAGetString(Defines.StringSheet_RESOURCE, "EQUIPMENT_TEXT_HIT") .. " : " .. tostring(ToClient_getHit()) .. "<PAOldColor>"
         control = self.awakenText
       end
     end

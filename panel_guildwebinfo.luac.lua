@@ -59,7 +59,7 @@ end
 
 Panel_GuildWebInfo_Initialize()
 FGlobal_GuildWebInfo_Open = function(listIdx)
-  -- function num : 0_3 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
+  -- function num : 0_3 , upvalues : isContentsGuildInfo, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
   end
@@ -72,7 +72,6 @@ FGlobal_GuildWebInfo_Open = function(listIdx)
   audioPostEvent_SystemUi(13, 6)
   local curChannelData = getCurrentChannelServerData()
   local serverNo = curChannelData._worldNo
-  local url = ""
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
   local playerLevel = (selfPlayer:get()):getLevel()
@@ -141,108 +140,8 @@ FGlobal_GuildWebInfo_Open = function(listIdx)
       local guildCount = guildRanker._guildMemberCount
       local temporaryWrapper = getTemporaryInformationWrapper()
       local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-      if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_DEV")
-      else
-        if GST.eGameServiceType_KOR_ALPHA == gameServiceType or GST.eGameServiceType_KOR_TEST == gameServiceType then
-          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_ALPHA")
-        else
-          if GST.eGameServiceType_KOR_REAL == gameServiceType then
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_REAL")
-          else
-            if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-              if getServiceNationType() == 0 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_NA", "port", worldNo)
-              else
-                if getServiceNationType() == 1 then
-                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_EU", "port", worldNo)
-                end
-              end
-            else
-              if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-                if getServiceNationType() == 0 then
-                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_NA", "port", worldNo)
-                else
-                  if getServiceNationType() == 1 then
-                    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_EU", "port", worldNo)
-                  end
-                end
-              else
-                if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_ALPHA")
-                else
-                  if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_REAL")
-                  else
-                    if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_ALPHA")
-                    else
-                      if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                        if isServerFixedCharge() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_P2P")
-                        else
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_F2P")
-                        end
-                      else
-                        if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_ALPHA")
-                        else
-                          if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_REAL")
-                          else
-                            if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_ALPHA")
-                            else
-                              if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_REAL")
-                              else
-                                if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
-                                      else
-                                        if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
-                                          else
-                                            if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
-                                            else
-                                              if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
-                                              else
-                                                return 
-                                              end
-                                            end
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-      url = url .. "?guildNo=" .. GuildNo_str
+      local url = PaGlobal_URL_Check(worldNo)
+      url = url .. "/Guildinfo?guildNo=" .. GuildNo_str
       url = url .. "&certKey=" .. tostring(cryptKey)
       url = url .. "&userNo=" .. tostring(userNo)
       url = url .. "&level=" .. tostring(playerLevel)
@@ -273,7 +172,7 @@ FGlobal_GuildWebInfo_Open = function(listIdx)
 end
 
 FGlobal_GuildWebInfoForGuildRank_Open = function(guildNo_string)
-  -- function num : 0_4 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
+  -- function num : 0_4 , upvalues : isContentsGuildInfo, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
   end
@@ -282,7 +181,6 @@ FGlobal_GuildWebInfoForGuildRank_Open = function(guildNo_string)
     return 
   end
   audioPostEvent_SystemUi(13, 6)
-  local url = ""
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
   local playerLevel = (selfPlayer:get()):getLevel()
@@ -295,108 +193,8 @@ FGlobal_GuildWebInfoForGuildRank_Open = function(guildNo_string)
   local isGameMaster = ToClient_SelfPlayerIsGM()
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
-    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_DEV")
-  else
-    if GST.eGameServiceType_KOR_ALPHA == gameServiceType or GST.eGameServiceType_KOR_TEST == gameServiceType then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_ALPHA")
-    else
-      if GST.eGameServiceType_KOR_REAL == gameServiceType then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_REAL")
-      else
-        if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-          if getServiceNationType() == 0 then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_NA", "port", worldNo)
-          else
-            if getServiceNationType() == 1 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_EU", "port", worldNo)
-            end
-          end
-        else
-          if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-            if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_NA", "port", worldNo)
-            else
-              if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_EU", "port", worldNo)
-              end
-            end
-          else
-            if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_ALPHA")
-            else
-              if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_REAL")
-              else
-                if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_ALPHA")
-                else
-                  if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                    if isServerFixedCharge() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_P2P")
-                    else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_F2P")
-                    end
-                  else
-                    if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_ALPHA")
-                    else
-                      if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_REAL")
-                      else
-                        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_ALPHA")
-                        else
-                          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_REAL")
-                          else
-                            if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_ALPHA")
-                            else
-                              if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
-                              else
-                                if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
-                                      else
-                                        if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
-                                          else
-                                            return 
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-  url = url .. "?guildNo=" .. guildNo_string
+  local url = PaGlobal_URL_Check(worldNo)
+  url = url .. "/Guildinfo?guildNo=" .. guildNo_string
   url = url .. "&certKey=" .. tostring(cryptKey)
   url = url .. "&level=" .. tostring(playerLevel)
   url = url .. "&classType=" .. tostring(classType)
@@ -413,7 +211,7 @@ FGlobal_GuildWebInfoForGuildRank_Open = function(guildNo_string)
 end
 
 FGlobal_GuildWebInfoByName_Open = function()
-  -- function num : 0_5 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
+  -- function num : 0_5 , upvalues : isContentsGuildInfo, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
   end
@@ -426,7 +224,6 @@ FGlobal_GuildWebInfoByName_Open = function()
   audioPostEvent_SystemUi(13, 6)
   local curChannelData = getCurrentChannelServerData()
   local serverNo = curChannelData._worldNo
-  local url = ""
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
   local playerLevel = (selfPlayer:get()):getLevel()
@@ -497,108 +294,8 @@ FGlobal_GuildWebInfoByName_Open = function()
       local guildCount = guildWebInfo:getGuildMemberCount()
       local temporaryWrapper = getTemporaryInformationWrapper()
       local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-      if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_DEV")
-      else
-        if GST.eGameServiceType_KOR_ALPHA == gameServiceType or GST.eGameServiceType_KOR_TEST == gameServiceType then
-          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_ALPHA")
-        else
-          if GST.eGameServiceType_KOR_REAL == gameServiceType then
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_REAL")
-          else
-            if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-              if getServiceNationType() == 0 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_NA", "port", worldNo)
-              else
-                if getServiceNationType() == 1 then
-                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_EU", "port", worldNo)
-                end
-              end
-            else
-              if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-                if getServiceNationType() == 0 then
-                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_NA", "port", worldNo)
-                else
-                  if getServiceNationType() == 1 then
-                    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_EU", "port", worldNo)
-                  end
-                end
-              else
-                if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_ALPHA")
-                else
-                  if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_REAL")
-                  else
-                    if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_ALPHA")
-                    else
-                      if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                        if isServerFixedCharge() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_P2P")
-                        else
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_F2P")
-                        end
-                      else
-                        if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_ALPHA")
-                        else
-                          if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_REAL")
-                          else
-                            if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_ALPHA")
-                            else
-                              if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_REAL")
-                              else
-                                if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
-                                      else
-                                        if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
-                                          else
-                                            if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
-                                            else
-                                              if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
-                                              else
-                                                return 
-                                              end
-                                            end
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-      url = url .. "?guildNo=" .. GuildNo_str
+      local url = PaGlobal_URL_Check(worldNo)
+      url = url .. "/Guildinfo?guildNo=" .. GuildNo_str
       url = url .. "&certKey=" .. tostring(cryptKey)
       url = url .. "&userNo=" .. tostring(userNo)
       url = url .. "&level=" .. tostring(playerLevel)
@@ -629,7 +326,7 @@ FGlobal_GuildWebInfoByName_Open = function()
 end
 
 FGlobal_GuildWebInfoFromGuildMain_Open = function()
-  -- function num : 0_6 , upvalues : isContentsGuildInfo, GST, gameServiceType, _Web, webSizeY
+  -- function num : 0_6 , upvalues : isContentsGuildInfo, _Web, webSizeY
   if not isContentsGuildInfo then
     return 
   end
@@ -645,7 +342,6 @@ FGlobal_GuildWebInfoFromGuildMain_Open = function()
   audioPostEvent_SystemUi(13, 6)
   local curChannelData = getCurrentChannelServerData()
   local serverNo = curChannelData._worldNo
-  local url = ""
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
   local playerLevel = (selfPlayer:get()):getLevel()
@@ -714,108 +410,8 @@ FGlobal_GuildWebInfoFromGuildMain_Open = function()
       local guildCount = myGuildInfo:getMemberCount()
       local temporaryWrapper = getTemporaryInformationWrapper()
       local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-      if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_DEV")
-      else
-        if GST.eGameServiceType_KOR_ALPHA == gameServiceType or GST.eGameServiceType_KOR_TEST == gameServiceType then
-          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_ALPHA")
-        else
-          if GST.eGameServiceType_KOR_REAL == gameServiceType then
-            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KOR_REAL")
-          else
-            if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-              if getServiceNationType() == 0 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_NA", "port", worldNo)
-              else
-                if getServiceNationType() == 1 then
-                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_ALPHA_EU", "port", worldNo)
-                end
-              end
-            else
-              if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-                if getServiceNationType() == 0 then
-                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_NA", "port", worldNo)
-                else
-                  if getServiceNationType() == 1 then
-                    url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_NA_REAL_EU", "port", worldNo)
-                  end
-                end
-              else
-                if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_ALPHA")
-                else
-                  if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_JP_REAL")
-                  else
-                    if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_ALPHA")
-                    else
-                      if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                        if isServerFixedCharge() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_P2P")
-                        else
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_RUS_REAL_F2P")
-                        end
-                      else
-                        if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_ALPHA")
-                        else
-                          if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TW_REAL")
-                          else
-                            if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_ALPHA")
-                            else
-                              if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_SA_REAL")
-                              else
-                                if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_KR2_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TR_REAL")
-                                      else
-                                        if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_TH_REAL")
-                                          else
-                                            if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_ALPHA")
-                                            else
-                                              if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDWEBINFO_URL_ID_REAL")
-                                              else
-                                                return 
-                                              end
-                                            end
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-      url = url .. "?guildNo=" .. GuildNo_str
+      local url = PaGlobal_URL_Check(worldNo)
+      url = url .. "/Guildinfo?guildNo=" .. GuildNo_str
       url = url .. "&certKey=" .. tostring(cryptKey)
       url = url .. "&userNo=" .. tostring(userNo)
       url = url .. "&level=" .. tostring(playerLevel)

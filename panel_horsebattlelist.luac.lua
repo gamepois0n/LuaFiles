@@ -31,16 +31,16 @@ end
 
 PaGlobal_HorseBattleList.HorseBattleList_ControlCreate = function(self, content, key)
   -- function num : 0_2 , upvalues : sortByMemberLevel, checkList
-  _PA_LOG("GG", "들어옵니�\140??")
   local checkBox = (UI.getChildControl)(content, "CheckButton_MebmerCheck")
   local index = Int64toInt32(key)
   local name = (sortByMemberLevel[index])._name
   local level = (sortByMemberLevel[index])._level
-  _PA_LOG("GG", "이름" .. tostring(name))
   if level == 0 then
     checkBox:SetText("<PAColor0xffc4bebe>" .. "Lv." .. level .. "    " .. name .. "<PAOldColor>")
+    checkBox:SetIgnore(true)
   else
     checkBox:SetText("<PAColor0xffffffff>" .. "Lv." .. level .. "    " .. name .. "<PAOldColor>")
+    checkBox:SetIgnore(false)
   end
   checkBox:SetShow(true)
   checkBox:SetCheck(checkList[index])
@@ -119,42 +119,55 @@ FGlobal_Panel_HorseBattleList_Confirm = function()
     if checkList[listCount] == true then
       checkCount = checkCount + 1
       local guildMember = (ToClient_GetMyGuildInfoWrapper()):getMember((sortByMemberLevel[listCount])._index)
-      if playerUserNo == 0 then
-        playerUserNo = guildMember:getUserNo()
-      else
-        otherPlayerNo = guildMember:getUserNo()
+      if guildMember ~= nil then
+        if playerUserNo == 0 then
+          playerUserNo = guildMember:getUserNo()
+        else
+          otherPlayerNo = guildMember:getUserNo()
+        end
       end
     end
   end
   if checkCount == 2 then
-    if playerUserNo ~= 0 and otherPlayerNo ~= 0 then
-      FromClient_GuildTeamBattleRequest(playerUserNo, otherPlayerNo)
-    else
-      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_NOTMATCH_1"))
-    end
+    FromClient_GuildTeamBattleRequest(playerUserNo, otherPlayerNo)
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_NOTMATCH_2"))
   end
 end
 
-FGlobal_Panel_HorseBattleList_Start = function(guildName, enemyGuildName)
+FGlobal_Panel_NotifyGuildTeamBattle = function(msgType, guildName, targetGuildName)
   -- function num : 0_8
-  Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_START", "guildName", guildName, "enemyGuildName", enemyGuildName))
+  if msgType == 0 then
+    Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_START", "guildName", guildName, "targetGuildName", targetGuildName))
+  else
+    if msgType == 1 then
+      Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_WIN", "guildName", guildName, "targetGuildName", targetGuildName))
+    else
+      if msgType == 2 then
+        Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_DRAW", "guildName", guildName, "targetGuildName", targetGuildName))
+      else
+        if msgType == 3 then
+          Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_NOTMATCH_3", "guildName", guildName, "targetGuildName", targetGuildName))
+        end
+      end
+    end
+  end
 end
 
-FGlobal_Panel_HorseBattleList_Win = function(guildName)
+FGlobal_Panel_NotifyGuildTeamBattleJoin = function()
   -- function num : 0_9
-  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_WIN", "guildName", guildName))
+  Panel_HorseBattleList:SetShow(false)
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_JOIN"))
 end
 
-FGlobal_Panel_HorseBattleList_Lose = function(guildName)
+FGlobal_Panel_NotifyGuildTeamBattleNotMatch = function()
   -- function num : 0_10
-  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_LOSE", "guildName", guildName))
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_NOTMATCH_1"))
 end
 
-FGlobal_Panel_HorseBattleList_Draw = function(guildName)
+FGlobal_Panel_NotifyGuildTeamBattleNotMatch = function()
   -- function num : 0_11
-  Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_DRAW", "guildName", guildName))
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILETEAMBATTLE_NOTMATCH_1"))
 end
 
 -- DECOMPILER ERROR at PC65: Confused about usage of register: R2 in 'UnsetPending'
@@ -169,9 +182,10 @@ PaGlobal_HorseBattleList.registEventHandler = function(self)
   ;
   ((self._ui)._btn_Confirm):addInputEvent("Mouse_LUp", "FGlobal_Panel_HorseBattleList_Confirm()")
   registerEvent("FromClient_OpenGuildTeamBattleMemberList", "FGlobal_Panel_HorseBattleList_Open")
-  registerEvent("FromClient_GuildTeamBattleStart", "FGlobal_Panel_HorseBattleList_Start")
-  registerEvent("FromClient_GuildTeamBattleWin", "FGlobal_Panel_HorseBattleList_Win")
-  registerEvent("FromClient_GuildTeamBattleLose", "FGlobal_Panel_HorseBattleList_Lose")
+  registerEvent("FromClient_NotifyGuildTeamBattle", "FGlobal_Panel_NotifyGuildTeamBattle")
+  registerEvent("FromClient_NotifyGuildTeamBattleJoin", "FGlobal_Panel_NotifyGuildTeamBattleJoin")
+  registerEvent("FromClient_NotifyGuildTeamBattleNotMatch", "FGlobal_Panel_NotifyGuildTeamBattleNotMatch")
+  registerEvent("FromClient_NotifyGuildTeamBattleUnqualified", "FGlobal_Panel_NotifyGuildTeamBattleUnqualified")
 end
 
 PaGlobal_HorseBattleList:registEventHandler()

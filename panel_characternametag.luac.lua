@@ -1151,8 +1151,176 @@ end
   end
 end
 
+  local beforeMaxHp = {}
+  local rulerControl = {}
+  checkAndCreateRular = function(rularCount, targetPanel, actorKeyRaw)
+  -- function num : 0_26 , upvalues : rulerControl
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R3 in 'UnsetPending'
+
+  if rulerControl[actorKeyRaw] == nil then
+    rulerControl[actorKeyRaw] = {}
+    -- DECOMPILER ERROR at PC9: Confused about usage of register: R3 in 'UnsetPending'
+
+    ;
+    (rulerControl[actorKeyRaw]).panel = targetPanel
+    -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
+
+    ;
+    (rulerControl[actorKeyRaw]).createRulerCount = 0
+  end
+  if rularCount <= (rulerControl[actorKeyRaw]).createRulerCount then
+    return false
+  end
+  -- DECOMPILER ERROR at PC27: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (rulerControl[actorKeyRaw]).rularParent = (UI.getChildControl)(targetPanel, "Static_Rular")
+  for index = 0, rularCount - 1 do
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R7 in 'UnsetPending'
+
+    if (rulerControl[actorKeyRaw]).createRulerCount <= index then
+      if index % 10 == 9 then
+        (rulerControl[actorKeyRaw])[index] = (UI.createAndCopyBasePropertyControl)((rulerControl[actorKeyRaw]).panel, "Static_1000Stick", (rulerControl[actorKeyRaw]).rularParent, "RulerControl_" .. index)
+      else
+        -- DECOMPILER ERROR at PC72: Confused about usage of register: R7 in 'UnsetPending'
+
+        ;
+        (rulerControl[actorKeyRaw])[index] = (UI.createAndCopyBasePropertyControl)((rulerControl[actorKeyRaw]).panel, "Static_100Stick", (rulerControl[actorKeyRaw]).rularParent, "RulerControl_" .. index)
+      end
+    end
+  end
+  -- DECOMPILER ERROR at PC76: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (rulerControl[actorKeyRaw]).createRulerCount = rularCount
+  for index = 0, (rulerControl[actorKeyRaw]).createRulerCount - 1 do
+    ((rulerControl[actorKeyRaw])[index]):SetShow(false)
+  end
+  return true
+end
+
+  checkAvailableRular = function(index, rularCount)
+  -- function num : 0_27
+  if rularCount > 1000 then
+    return false
+  else
+    -- DECOMPILER ERROR at PC11: Unhandled construct in 'MakeBoolean' P1
+
+    if rularCount >= 100 and index % 10 == 9 then
+      return true
+    end
+  end
+  -- DECOMPILER ERROR at PC19: Unhandled construct in 'MakeBoolean' P1
+
+  if rularCount >= 40 and index % 2 == 1 then
+    return true
+  end
+  do return true end
+  return false
+end
+
+  checkChagnedNameTagPanel = function(actorKeyRaw, targetPanel, hpMain, rularParent)
+  -- function num : 0_28 , upvalues : beforeMaxHp, rulerControl
+  if beforeMaxHp[actorKeyRaw] == nil then
+    return false
+  end
+  if rulerControl[actorKeyRaw] == nil then
+    return false
+  end
+  if (rulerControl[actorKeyRaw]).panel == nil or targetPanel == nil then
+    return false
+  end
+  if ((rulerControl[actorKeyRaw]).panel):GetID() ~= targetPanel:GetID() then
+    rularParent:MoveChilds(rularParent:GetID(), (rulerControl[actorKeyRaw]).rularParent)
+    rularParent:SetPosX(hpMain:GetPosX())
+    rularParent:SetPosY(hpMain:GetPosY())
+    rularParent:SetShow(hpMain:GetShow())
+    -- DECOMPILER ERROR at PC51: Confused about usage of register: R4 in 'UnsetPending'
+
+    ;
+    (rulerControl[actorKeyRaw]).panel = targetPanel
+    -- DECOMPILER ERROR at PC54: Confused about usage of register: R4 in 'UnsetPending'
+
+    ;
+    (rulerControl[actorKeyRaw]).rularParent = rularParent
+    return false
+  end
+  return false
+end
+
+  GameOptionApply_CharacterNameTag_Ruler = function(isShow)
+  -- function num : 0_29 , upvalues : rulerControl
+  if rulerControl == nil then
+    return 
+  end
+  for _,control in pairs(rulerControl) do
+    -- DECOMPILER ERROR at PC16: Unhandled construct in 'MakeBoolean' P1
+
+    if isShow == false and control.rularParent ~= nil then
+      (control.rularParent):SetShow(isShow)
+    end
+    if control.hpMain ~= nil and control.rularParent ~= nil then
+      (control.rularParent):SetShow((control.hpMain):GetShow())
+    end
+  end
+end
+
+  local CharacterNameTag_SetRuler = function(maxHp, targetPanel, actorKeyRaw)
+  -- function num : 0_30 , upvalues : beforeMaxHp, rulerControl
+  local hpMain = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress_Ruler")
+  local rularParent = (UI.getChildControl)(targetPanel, "Static_Rular")
+  if GameOption_GetShowHpRular() == false then
+    rularParent:SetShow(false)
+    return 
+  else
+    rularParent:SetShow(hpMain:GetShow())
+    rularParent:SetPosX(hpMain:GetPosX())
+  end
+  -- DECOMPILER ERROR at PC32: Confused about usage of register: R5 in 'UnsetPending'
+
+  if beforeMaxHp[actorKeyRaw] == nil then
+    beforeMaxHp[actorKeyRaw] = 0
+  end
+  checkChagnedNameTagPanel(actorKeyRaw, targetPanel, hpMain, rularParent)
+  if beforeMaxHp[actorKeyRaw] == maxHp then
+    return 
+  end
+  local rularCount = (math.floor)(maxHp * 0.01)
+  if checkAndCreateRular(rularCount, targetPanel, actorKeyRaw) == false then
+    return false
+  end
+  -- DECOMPILER ERROR at PC59: Confused about usage of register: R6 in 'UnsetPending'
+
+  ;
+  (rulerControl[actorKeyRaw]).hpMain = hpMain
+  local hpPosX = hpMain:GetPosX()
+  local hpPosY = hpMain:GetPosY()
+  rularParent:SetShow(hpMain:GetShow())
+  rularParent:SetPosX(hpPosX)
+  rularParent:SetPosY(hpPosY)
+  local hpSizeX = hpMain:GetSizeX()
+  local rularDivideSizeValue = hpSizeX / (maxHp * 0.01)
+  for index = 0, rularCount - 1 do
+    if checkAvailableRular(index, rularCount) == true then
+      ((rulerControl[actorKeyRaw])[index]):SetShow(true)
+      local posX = rularDivideSizeValue * (index + 1)
+      if hpSizeX <= posX then
+        ((rulerControl[actorKeyRaw])[index]):SetShow(false)
+      else
+        ;
+        ((rulerControl[actorKeyRaw])[index]):SetPosX(posX)
+        ;
+        ((rulerControl[actorKeyRaw])[index]):SetPosY(0)
+      end
+    end
+  end
+  -- DECOMPILER ERROR at PC119: Confused about usage of register: R10 in 'UnsetPending'
+
+  beforeMaxHp[actorKeyRaw] = maxHp
+end
+
   local settingHpBar = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_26 , upvalues : furnitureCheck, hideTimeType
+  -- function num : 0_31 , upvalues : furnitureCheck, CharacterNameTag_SetRuler, hideTimeType
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
@@ -1172,9 +1340,15 @@ end
       hpLater = (UI.getChildControl)(targetPanel, "KingOrLordTentProgress2_HpLater")
       hpMain = (UI.getChildControl)(targetPanel, "KingOrLordTentHPGageProgress")
     else
-      hpBack = (UI.getChildControl)(targetPanel, "ProgressBack")
-      hpLater = (UI.getChildControl)(targetPanel, "Progress2_HpLater")
-      hpMain = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress")
+      if GameOption_GetShowHpRular() and (actorProxy:isSelfPlayer() or actorProxy:isPlayer()) then
+        hpBack = (UI.getChildControl)(targetPanel, "ProgressBack_Ruler")
+        hpLater = (UI.getChildControl)(targetPanel, "Progress2_HpLater_Ruler")
+        hpMain = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress_Ruler")
+      else
+        hpBack = (UI.getChildControl)(targetPanel, "ProgressBack")
+        hpLater = (UI.getChildControl)(targetPanel, "Progress2_HpLater")
+        hpMain = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress")
+      end
     end
   end
   local characterStaticStatus = actorProxy:getCharacterStaticStatus()
@@ -1221,11 +1395,11 @@ end
         if isWarning then
           x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
         else
-          -- DECOMPILER ERROR at PC235: Overwrote pending register: R18 in 'AssignReg'
+          -- DECOMPILER ERROR at PC266: Overwrote pending register: R18 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC236: Overwrote pending register: R17 in 'AssignReg'
+          -- DECOMPILER ERROR at PC267: Overwrote pending register: R17 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC237: Overwrote pending register: R16 in 'AssignReg'
+          -- DECOMPILER ERROR at PC268: Overwrote pending register: R16 in 'AssignReg'
 
           x1 = setTextureUV_Func(hpMain, 206, 96, 255, 99)
         end
@@ -1246,9 +1420,9 @@ end
           local prevRate = hpMain:GetProgressRate()
           do
             local rate = curEndurance / maxEndurance * 100
-            -- DECOMPILER ERROR at PC283: Overwrote pending register: R16 in 'AssignReg'
+            -- DECOMPILER ERROR at PC314: Overwrote pending register: R16 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC284: Overwrote pending register: R17 in 'AssignReg'
+            -- DECOMPILER ERROR at PC315: Overwrote pending register: R17 in 'AssignReg'
 
             if rate < prevRate then
               hpMain:SetVertexAniRun(x2, true)
@@ -1340,47 +1514,47 @@ end
                         if hpRate > 75 then
                           x1 = setTextureUV_Func(hpMain, 206, 96, 255, 99)
                         else
-                          -- DECOMPILER ERROR at PC555: Overwrote pending register: R15 in 'AssignReg'
+                          -- DECOMPILER ERROR at PC586: Overwrote pending register: R15 in 'AssignReg'
 
-                          -- DECOMPILER ERROR at PC556: Overwrote pending register: R14 in 'AssignReg'
+                          -- DECOMPILER ERROR at PC587: Overwrote pending register: R14 in 'AssignReg'
 
-                          -- DECOMPILER ERROR at PC557: Overwrote pending register: R13 in 'AssignReg'
+                          -- DECOMPILER ERROR at PC588: Overwrote pending register: R13 in 'AssignReg'
 
                           if hpRate > 50 then
                             x1 = setTextureUV_Func(hpMain, 206, 100, 255, 103)
                           else
-                            -- DECOMPILER ERROR at PC569: Overwrote pending register: R15 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC600: Overwrote pending register: R15 in 'AssignReg'
 
-                            -- DECOMPILER ERROR at PC570: Overwrote pending register: R14 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC601: Overwrote pending register: R14 in 'AssignReg'
 
-                            -- DECOMPILER ERROR at PC571: Overwrote pending register: R13 in 'AssignReg'
+                            -- DECOMPILER ERROR at PC602: Overwrote pending register: R13 in 'AssignReg'
 
                             if hpRate > 25 then
                               x1 = setTextureUV_Func(hpMain, 206, 104, 255, 107)
                             else
-                              -- DECOMPILER ERROR at PC583: Overwrote pending register: R15 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC614: Overwrote pending register: R15 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC584: Overwrote pending register: R14 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC615: Overwrote pending register: R14 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC585: Overwrote pending register: R13 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC616: Overwrote pending register: R13 in 'AssignReg'
 
                               if hpRate > 10 then
                                 x1 = setTextureUV_Func(hpMain, 206, 108, 255, 111)
                               else
-                                -- DECOMPILER ERROR at PC597: Overwrote pending register: R15 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC628: Overwrote pending register: R15 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC598: Overwrote pending register: R14 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC629: Overwrote pending register: R14 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC599: Overwrote pending register: R13 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC630: Overwrote pending register: R13 in 'AssignReg'
 
                                 if hpRate > 5 then
                                   x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                                 else
-                                  -- DECOMPILER ERROR at PC609: Overwrote pending register: R15 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC640: Overwrote pending register: R15 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC610: Overwrote pending register: R14 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC641: Overwrote pending register: R14 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC611: Overwrote pending register: R13 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC642: Overwrote pending register: R13 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                                 end
@@ -1401,10 +1575,10 @@ end
                           hpBack:SetShow(true)
                           hpLater:SetShow(true)
                           hpMain:SetShow(true)
-                          -- DECOMPILER ERROR at PC661: Overwrote pending register: R14 in 'AssignReg'
+                          -- DECOMPILER ERROR at PC692: Overwrote pending register: R14 in 'AssignReg'
 
                           local x1, y1, x2, y2 = nil, nil, nil, x2
-                          -- DECOMPILER ERROR at PC662: Overwrote pending register: R15 in 'AssignReg'
+                          -- DECOMPILER ERROR at PC693: Overwrote pending register: R15 in 'AssignReg'
 
                           if y2() > 0 then
                             hpMain:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Gauges.dds")
@@ -1412,31 +1586,31 @@ end
                           else
                             if isColorBlindMode == 0 then
                               hpMain:ChangeTextureInfoName("New_UI_Common_forLua/Default/Default_Gauges.dds")
-                              -- DECOMPILER ERROR at PC693: Overwrote pending register: R14 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC724: Overwrote pending register: R14 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC694: Overwrote pending register: R13 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC725: Overwrote pending register: R13 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC695: Overwrote pending register: R12 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC726: Overwrote pending register: R12 in 'AssignReg'
 
                               x1 = setTextureUV_Func(hpMain, 206, 96, 255, 99)
                             else
                               if isColorBlindMode == 1 then
                                 hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                -- DECOMPILER ERROR at PC710: Overwrote pending register: R14 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC741: Overwrote pending register: R14 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC711: Overwrote pending register: R13 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC742: Overwrote pending register: R13 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC712: Overwrote pending register: R12 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC743: Overwrote pending register: R12 in 'AssignReg'
 
                                 x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                               else
                                 if isColorBlindMode == 2 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC727: Overwrote pending register: R14 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC758: Overwrote pending register: R14 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC728: Overwrote pending register: R13 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC759: Overwrote pending register: R13 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC729: Overwrote pending register: R12 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC760: Overwrote pending register: R12 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 end
@@ -1470,21 +1644,21 @@ end
                             else
                               if isColorBlindMode == 1 then
                                 hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                -- DECOMPILER ERROR at PC819: Overwrote pending register: R21 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC850: Overwrote pending register: R21 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC820: Overwrote pending register: R20 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC851: Overwrote pending register: R20 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC821: Overwrote pending register: R19 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC852: Overwrote pending register: R19 in 'AssignReg'
 
                                 x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                               else
                                 if isColorBlindMode == 2 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC836: Overwrote pending register: R21 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC867: Overwrote pending register: R21 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC837: Overwrote pending register: R20 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC868: Overwrote pending register: R20 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC838: Overwrote pending register: R19 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC869: Overwrote pending register: R19 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 end
@@ -1500,31 +1674,31 @@ end
                             if hpRate >= 20 then
                               if isColorBlindMode == 0 then
                                 hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/default_gauges.dds")
-                                -- DECOMPILER ERROR at PC875: Overwrote pending register: R21 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC906: Overwrote pending register: R21 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC876: Overwrote pending register: R20 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC907: Overwrote pending register: R20 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC877: Overwrote pending register: R19 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC908: Overwrote pending register: R19 in 'AssignReg'
 
                                 x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                               else
                                 if isColorBlindMode == 1 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC892: Overwrote pending register: R21 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC923: Overwrote pending register: R21 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC893: Overwrote pending register: R20 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC924: Overwrote pending register: R20 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC894: Overwrote pending register: R19 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC925: Overwrote pending register: R19 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 else
                                   if isColorBlindMode == 2 then
                                     hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                    -- DECOMPILER ERROR at PC909: Overwrote pending register: R21 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC940: Overwrote pending register: R21 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC910: Overwrote pending register: R20 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC941: Overwrote pending register: R20 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC911: Overwrote pending register: R19 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC942: Overwrote pending register: R19 in 'AssignReg'
 
                                     x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                   end
@@ -1541,31 +1715,31 @@ end
                             else
                               if isColorBlindMode == 0 then
                                 hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/default_gauges.dds")
-                                -- DECOMPILER ERROR at PC950: Overwrote pending register: R21 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC981: Overwrote pending register: R21 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC951: Overwrote pending register: R20 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC982: Overwrote pending register: R20 in 'AssignReg'
 
-                                -- DECOMPILER ERROR at PC952: Overwrote pending register: R19 in 'AssignReg'
+                                -- DECOMPILER ERROR at PC983: Overwrote pending register: R19 in 'AssignReg'
 
                                 x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                               else
                                 if isColorBlindMode == 1 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC967: Overwrote pending register: R21 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC998: Overwrote pending register: R21 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC968: Overwrote pending register: R20 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC999: Overwrote pending register: R20 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC969: Overwrote pending register: R19 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1000: Overwrote pending register: R19 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 else
                                   if isColorBlindMode == 2 then
                                     hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                    -- DECOMPILER ERROR at PC984: Overwrote pending register: R21 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC1015: Overwrote pending register: R21 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC985: Overwrote pending register: R20 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC1016: Overwrote pending register: R20 in 'AssignReg'
 
-                                    -- DECOMPILER ERROR at PC986: Overwrote pending register: R19 in 'AssignReg'
+                                    -- DECOMPILER ERROR at PC1017: Overwrote pending register: R19 in 'AssignReg'
 
                                     x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                   end
@@ -1582,20 +1756,21 @@ end
                             end
                           end
                           hpMain:setRenderTexture(hpMain:getBaseTexture())
+                          CharacterNameTag_SetRuler(actorProxy:getMaxHp(), targetPanel, actorKeyRaw)
                         else
                           do
                             if actorProxy:isPlayer() then
                               local prevRate = hpMain:GetProgressRate()
                               local isParty = Requestparty_isPartyPlayer(actorKeyRaw)
-                              -- DECOMPILER ERROR at PC1027: Overwrote pending register: R12 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1064: Overwrote pending register: R12 in 'AssignReg'
 
                               local playerActorProxyWrapper = getPlayerActor(y1)
-                              -- DECOMPILER ERROR at PC1029: Overwrote pending register: R13 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1066: Overwrote pending register: R13 in 'AssignReg'
 
                               if not (playerActorProxyWrapper:get()):isArenaAreaRegion() and not (playerActorProxyWrapper:get()):isArenaZoneRegion() then
                                 local isArenaAreaOrZone = (playerActorProxyWrapper:get()):isCompetitionDefined()
                               end
-                              -- DECOMPILER ERROR at PC1045: Overwrote pending register: R14 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1082: Overwrote pending register: R14 in 'AssignReg'
 
                               local hpRate = actorProxy:getHp() * 100 / actorProxy:getMaxHp()
                               if hpRate < prevRate then
@@ -1617,11 +1792,11 @@ end
                               hpLater:SetShow(isShow)
                               hpMain:SetShow(isShow)
                               local x1, y1, x2, y2 = nil, nil, nil, nil
-                              -- DECOMPILER ERROR at PC1109: Overwrote pending register: R20 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1146: Overwrote pending register: R20 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC1109: Overwrote pending register: R19 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1146: Overwrote pending register: R19 in 'AssignReg'
 
-                              -- DECOMPILER ERROR at PC1110: Overwrote pending register: R21 in 'AssignReg'
+                              -- DECOMPILER ERROR at PC1147: Overwrote pending register: R21 in 'AssignReg'
 
                               if isParty then
                                 y1(x2, y2)
@@ -1629,29 +1804,29 @@ end
                               else
                                 if isColorBlindMode == 0 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/default_gauges.dds")
-                                  -- DECOMPILER ERROR at PC1136: Overwrote pending register: R18 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1173: Overwrote pending register: R18 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1137: Overwrote pending register: R17 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1174: Overwrote pending register: R17 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1138: Overwrote pending register: R16 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1175: Overwrote pending register: R16 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 206, 112, 255, 115)
                                 elseif isColorBlindMode == 1 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC1153: Overwrote pending register: R18 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1190: Overwrote pending register: R18 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1154: Overwrote pending register: R17 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1191: Overwrote pending register: R17 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1155: Overwrote pending register: R16 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1192: Overwrote pending register: R16 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 elseif isColorBlindMode == 2 then
                                   hpMain:ChangeTextureInfoName("new_ui_common_forlua/default/Default_Gauges_01.dds")
-                                  -- DECOMPILER ERROR at PC1170: Overwrote pending register: R18 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1207: Overwrote pending register: R18 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1171: Overwrote pending register: R17 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1208: Overwrote pending register: R17 in 'AssignReg'
 
-                                  -- DECOMPILER ERROR at PC1172: Overwrote pending register: R16 in 'AssignReg'
+                                  -- DECOMPILER ERROR at PC1209: Overwrote pending register: R16 in 'AssignReg'
 
                                   x1 = setTextureUV_Func(hpMain, 1, 247, 255, 250)
                                 end
@@ -1661,6 +1836,7 @@ end
                               ;
                               (hpMain:getBaseTexture()):setUV(x1, y1, x2, y2)
                               hpMain:setRenderTexture(hpMain:getBaseTexture())
+                              CharacterNameTag_SetRuler(actorProxy:getMaxHp(), targetPanel, actorKeyRaw)
                             elseif actorProxy:isNpc() then
                               local isShow = false
                               local isFusionCore = (actorProxy:getCharacterStaticStatus()):isFusionCore()
@@ -1793,14 +1969,20 @@ end
 end
 
   local settingMpBar = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_27 , upvalues : UI_classType
+  -- function num : 0_32 , upvalues : UI_classType
   local actorProxy = actorProxyWrapper:get()
   if actorProxy == nil then
     return 
   end
-  local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
-  local mpBack = (UI.getChildControl)(targetPanel, "ProgressBack_ManaResource")
-  local mpMain = (UI.getChildControl)(targetPanel, "Character_ManaResource")
+  local isColorBlindMode = ((ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode))
+  local mpBack, mpMain = nil, nil
+  if GameOption_GetShowHpRular() and actorProxy:isSelfPlayer() then
+    mpBack = (UI.getChildControl)(targetPanel, "ProgressBack_ManaResource_Ruler")
+    mpMain = (UI.getChildControl)(targetPanel, "Character_ManaResource_Ruler")
+  else
+    mpBack = (UI.getChildControl)(targetPanel, "ProgressBack_ManaResource")
+    mpMain = (UI.getChildControl)(targetPanel, "Character_ManaResource")
+  end
   if mpBack == nil or mpMain == nil then
     return 
   end
@@ -1813,7 +1995,7 @@ end
     mpMain:SetProgressRate(mpRate)
     mpMain:SetCurrentProgressRate(mpRate)
     local isEP_Character = UI_classType.ClassType_Ranger == playerWrapper:getClassType()
-    local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType()
+    local isFP_Character = UI_classType.ClassType_Warrior == playerWrapper:getClassType() or UI_classType.ClassType_Giant == playerWrapper:getClassType() or UI_classType.ClassType_BladeMaster == playerWrapper:getClassType() or UI_classType.ClassType_BladeMasterWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaWomen == playerWrapper:getClassType() or UI_classType.ClassType_NinjaMan == playerWrapper:getClassType() or UI_classType.ClassType_Combattant == playerWrapper:getClassType() or UI_classType.ClassType_CombattantWomen == playerWrapper:getClassType() or UI_classType.ClassType_Lahn == playerWrapper:getClassType()
     local isBP_Character = UI_classType.ClassType_Valkyrie == playerWrapper:getClassType()
     local isOnlyDarkelf = UI_classType.ClassType_DarkElf == playerWrapper:getClassType()
     local isMP_Character = (not isEP_Character and not isFP_Character and not isBP_Character and not isOnlyDarkelf)
@@ -1933,7 +2115,7 @@ end
 end
 
   local settingLocalWarCombatPoint = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_28 , upvalues : UI_color, settingLifeRankIcon
+  -- function num : 0_33 , upvalues : UI_color, settingLifeRankIcon
   if actorProxyWrapper == nil then
     return 
   end
@@ -2073,7 +2255,7 @@ end
 end
 
   FGlobal_SettingMpBarTemp = function()
-  -- function num : 0_29 , upvalues : settingMpBar
+  -- function num : 0_34 , upvalues : settingMpBar
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -2085,7 +2267,7 @@ end
 end
 
   local settingStun = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_30
+  -- function num : 0_35
   local stunBack = (UI.getChildControl)(targetPanel, "ProgressBack_Stun")
   local stunProgress = (UI.getChildControl)(targetPanel, "CharacterStunGageProgress")
   if stunBack == nil or stunProgress == nil then
@@ -2096,6 +2278,10 @@ end
     return 
   end
   local characterActorProxy = characterActorProxyWrapper:get()
+  if GameOption_GetShowHpRular() and (characterActorProxy:isSelfPlayer() or characterActorProxy:isPlayer()) then
+    stunBack = (UI.getChildControl)(targetPanel, "ProgressBack_Stun_Ruler")
+    stunProgress = (UI.getChildControl)(targetPanel, "CharacterStunGageProgress_Ruler")
+  end
   if characterActorProxy:hasStun() then
     local stun = characterActorProxy:getStun()
     local maxStun = characterActorProxy:getMaxStun()
@@ -2116,7 +2302,7 @@ end
 end
 
   local settingGuildMarkAndPreemptiveStrike = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_31
+  -- function num : 0_36
   if targetPanel == nil then
     return 
   end
@@ -2204,7 +2390,7 @@ end
 [3] = {x1 = 103, y1 = 391, x2 = 135, y2 = 423}
 }
   local settingPreemptiveStrike = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_32 , upvalues : hideTimeType, preemptiveIconTexture, pvpIconTexture, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_37 , upvalues : hideTimeType, preemptiveIconTexture, pvpIconTexture, settingGuildMarkAndPreemptiveStrike
   local preemptiveStrikeBeing = (UI.getChildControl)(targetPanel, "Static_PreemptiveStrikeBeing")
   if preemptiveStrikeBeing == nil then
     return 
@@ -2240,7 +2426,7 @@ end
 end
 
   PvpIconColorByTendency = function(actorKeyRaw)
-  -- function num : 0_33
+  -- function num : 0_38
   local playerActorProxyWrapper = getPlayerActor(actorKeyRaw)
   if playerActorProxyWrapper == nil then
     return 
@@ -2264,7 +2450,7 @@ end
 end
 
   local settingMurderer = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_34 , upvalues : hideTimeType, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_39 , upvalues : hideTimeType, settingGuildMarkAndPreemptiveStrike
   local murdererMark = (UI.getChildControl)(targetPanel, "Static_MurdererMark")
   if murdererMark == nil then
     return 
@@ -2282,7 +2468,7 @@ end
 end
 
   local settingGuildTextForAlias = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_35 , upvalues : lifeContentCount
+  -- function num : 0_40 , upvalues : lifeContentCount
   if targetPanel == nil then
     return 
   end
@@ -2334,7 +2520,7 @@ end
 end
 
   local settingQuestMark = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_36
+  -- function num : 0_41
   local questMark = (UI.getChildControl)(targetPanel, "Static_Quest_Mark")
   if questMark == nil then
     return 
@@ -2347,7 +2533,7 @@ end
 end
 
   local settingQuestMarkForce = function(isShow, targetPanel, actorProxyWrapper)
-  -- function num : 0_37
+  -- function num : 0_42
   local questMark = (UI.getChildControl)(targetPanel, "Static_Quest_Mark")
   if questMark == nil then
     return 
@@ -2356,7 +2542,7 @@ end
 end
 
   questIconOverTooltip = function(show, actorKeyRaw)
-  -- function num : 0_38
+  -- function num : 0_43
   local actorProxyWrapper = getActor(actorKeyRaw)
   local npcActorProxyWrapper = getNpcActor(actorKeyRaw)
   local panel = (actorProxyWrapper:get()):getUIPanel()
@@ -2385,7 +2571,7 @@ end
 
   local currentTypeChangeCheck = {}
   local settingQuestUI = function(actorKeyRaw, targetPanel, actorProxyWrapper, insertedArray)
-  -- function num : 0_39 , upvalues : currentTypeChangeCheck
+  -- function num : 0_44 , upvalues : currentTypeChangeCheck
   local questIcon = (UI.getChildControl)(targetPanel, "Static_QuestIcon")
   local questBorder = (UI.getChildControl)(targetPanel, "Static_QuestIconBorder")
   local questClear = (UI.getChildControl)(targetPanel, "Static_QuestClear")
@@ -2472,11 +2658,11 @@ end
     end
     questBorder:SetAlpha(prevAlpha)
     local aControl = {questIcon = questIcon, questBorder = questBorder, questClear = questClear, lookAtMe = lookAtMe, lookAtMe2 = lookAtMe2, questType = questType, GetSizeX = function()
-    -- function num : 0_39_0 , upvalues : questBorder
+    -- function num : 0_44_0 , upvalues : questBorder
     return questBorder:GetSizeX()
   end
 , SetScale = function(self, x, y)
-    -- function num : 0_39_1 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
+    -- function num : 0_44_1 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
     questBorder:SetScale(x, y)
     questIcon:SetScale(x, y)
     questClear:SetScale(x, y)
@@ -2485,7 +2671,7 @@ end
     questType:SetScale(x, y)
   end
 , SetSpanSize = function(self, x, y)
-    -- function num : 0_39_2 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
+    -- function num : 0_44_2 , upvalues : questBorder, questIcon, questClear, lookAtMe, lookAtMe2, questType
     questBorder:SetSpanSize(x, y)
     questIcon:SetSpanSize(x, y + 8)
     questClear:SetSpanSize(x, y + 10)
@@ -2494,15 +2680,15 @@ end
     questType:SetSpanSize(x, y + 40)
   end
 , GetSpanSize = function()
-    -- function num : 0_39_3 , upvalues : questBorder
+    -- function num : 0_44_3 , upvalues : questBorder
     return questBorder:GetSpanSize()
   end
 , GetScale = function()
-    -- function num : 0_39_4 , upvalues : questBorder
+    -- function num : 0_44_4 , upvalues : questBorder
     return questBorder:GetScale()
   end
 , GetShow = function()
-    -- function num : 0_39_5 , upvalues : questBorder
+    -- function num : 0_44_5 , upvalues : questBorder
     return questBorder:GetShow()
   end
 }
@@ -2527,7 +2713,7 @@ end
 end
 
   local settingBillBoardMode = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_40
+  -- function num : 0_45
   houseHoldActorWrapper = getHouseHoldActor(actorKeyRaw)
   if houseHoldActorWrapper ~= nil and (houseHoldActorWrapper:get()):isTent() == false and ((houseHoldActorWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isBarricade() == false then
     targetPanel:Set3DRenderType(2)
@@ -2536,7 +2722,7 @@ end
 end
 
   local settingBubbleBox = function(actorKeyRaw, targetPanel, actorProxyWrapper, message)
-  -- function num : 0_41 , upvalues : hideTimeType
+  -- function num : 0_46 , upvalues : hideTimeType
   local targetStatic = (UI.getChildControl)(targetPanel, "StaticText_BubbleBox")
   local targetStaticBG = (UI.getChildControl)(targetPanel, "Static_BubbleBox")
   -- DECOMPILER ERROR at PC11: Confused about usage of register: R6 in 'UnsetPending'
@@ -2587,7 +2773,7 @@ end
 end
 
   local settingBubbleBoxShow = function(actorKeyRaw, targetPanel, actorProxyWrapper, isShow)
-  -- function num : 0_42
+  -- function num : 0_47
   local targetStatic = (UI.getChildControl)(targetPanel, "StaticText_BubbleBox")
   local targetStaticBG = (UI.getChildControl)(targetPanel, "Static_BubbleBox")
   targetStatic:SetShow(isShow)
@@ -2595,7 +2781,7 @@ end
 end
 
   local settingWaitCommentLaunch = function(isShow)
-  -- function num : 0_43
+  -- function num : 0_48
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local panel = selfPlayer:getWaitCommentPanel()
@@ -2653,7 +2839,7 @@ end
 end
 
   settingWaitCommentReady = function()
-  -- function num : 0_44
+  -- function num : 0_49
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local panel = selfPlayer:getWaitCommentPanel()
@@ -2683,8 +2869,6 @@ end
   local paperPosX = targetPaper:GetPosX()
   targetRoll_L:SetSpanSize(-paperSizeX / 2, (targetRoll_L:GetSpanSize()).y)
   targetRoll_R:SetSpanSize(paperSizeX / 2, (targetRoll_R:GetSpanSize()).y)
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(targetEditComment)
   targetBoard:SetShow(false)
   targetPaper:SetShow(true)
@@ -2699,7 +2883,7 @@ end
 end
 
   settingWaitCommentConfirmReload = function()
-  -- function num : 0_45
+  -- function num : 0_50
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   if selfPlayer:isShowWaitComment() == false then
@@ -2715,8 +2899,7 @@ end
 end
 
   settingWaitCommentConfirm = function()
-  -- function num : 0_46
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
+  -- function num : 0_51
   ClearFocusEdit()
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
@@ -2782,7 +2965,7 @@ end
 end
 
   WaitComment_CheckCurrentUiEdit = function(targetUI)
-  -- function num : 0_47
+  -- function num : 0_52
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
     return false
@@ -2800,7 +2983,7 @@ end
 end
 
   local settingWaitComment = function(actorKeyRaw, panel, actorProxyWrapper, isShow, isforce)
-  -- function num : 0_48
+  -- function num : 0_53
   local selfPlayer = getSelfPlayer()
   local selfActorKeyRaw = selfPlayer:getActorKey()
   if actorKeyRaw == selfActorKeyRaw and isforce ~= true then
@@ -2872,12 +3055,12 @@ end
 end
 
   local settingSelfPlayerNameHelpText = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_49
+  -- function num : 0_54
 end
 
   local furnitureActorKeyRaw = nil
   Furniture_Check = function(actorKeyRaw)
-  -- function num : 0_50 , upvalues : furnitureActorKeyRaw, furnitureCheck, settingHpBar
+  -- function num : 0_55 , upvalues : furnitureActorKeyRaw, furnitureCheck, settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   local actorProxy = actorProxyWrapper:get()
   local characterStaticStatus = actorProxy:getCharacterStaticStatus()
@@ -2910,7 +3093,7 @@ end
 end
 
   Funiture_Endurance_Hide = function()
-  -- function num : 0_51 , upvalues : furnitureCheck, furnitureActorKeyRaw, settingHpBar
+  -- function num : 0_56 , upvalues : furnitureCheck, furnitureActorKeyRaw, settingHpBar
   if furnitureCheck == true and furnitureActorKeyRaw ~= nil then
     local actorProxyWrapper = getActor(furnitureActorKeyRaw)
     if actorProxyWrapper ~= nil then
@@ -2940,15 +3123,15 @@ end
 end
 
   local TypeByLoadData = {[ActorProxyType.isActorProxy] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_52 , upvalues : settingName
+  -- function num : 0_57 , upvalues : settingName
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isCharacter] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_53 , upvalues : settingName
+  -- function num : 0_58 , upvalues : settingName
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_54 , upvalues : settingName, settingPlayerName, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_59 , upvalues : settingName, settingPlayerName, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2965,7 +3148,7 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isSelfPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_55 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingSelfPlayerNameHelpText, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_60 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingSelfPlayerNameHelpText, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -2985,7 +3168,7 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isOtherPlayer] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_56 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingWaitComment, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_61 , upvalues : settingName, settingPlayerName, settingAlias, settingTitle, settingGuildInfo, settingLifeRankIcon, settingHpBarInitState, settingHpBar, settingPreemptiveStrike, settingStun, settingWaitComment, settingGuildTextForAlias, settingLocalWarCombatPoint, settingMurderer, settingGuildMarkAndPreemptiveStrike
   local insertedArray = (Array.new)()
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingPlayerName(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3004,11 +3187,11 @@ end
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isAlterego] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_57 , upvalues : settingName
+  -- function num : 0_62 , upvalues : settingName
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isMonster] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_58 , upvalues : settingName, settingMonsterName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingStun
+  -- function num : 0_63 , upvalues : settingName, settingMonsterName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingStun
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingMonsterName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingTitle(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3018,7 +3201,7 @@ end
   settingStun(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isNpc] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_59 , upvalues : settingName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_64 , upvalues : settingName, settingTitle, settingHpBarInitState, settingHpBar, settingQuestMark, settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingTitle(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3032,10 +3215,10 @@ end
   sortCenterX(insertedArray)
 end
 , [ActorProxyType.isDeadBody] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_60
+  -- function num : 0_65
 end
 , [ActorProxyType.isVehicle] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_61 , upvalues : settingName, settingQuestMark, settingHpBarInitState, settingHpBar, settingMpBar
+  -- function num : 0_66 , upvalues : settingName, settingQuestMark, settingHpBarInitState, settingHpBar, settingMpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingQuestMark(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3043,26 +3226,26 @@ end
   settingMpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isGate] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_62
+  -- function num : 0_67
 end
 , [ActorProxyType.isHouseHold] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_63 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingBillBoardMode
+  -- function num : 0_68 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingBillBoardMode
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingBillBoardMode(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isInstallationActor] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_64 , upvalues : settingName, settingHpBarInitState, settingHpBar
+  -- function num : 0_69 , upvalues : settingName, settingHpBarInitState, settingHpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
 end
 , [ActorProxyType.isCollect] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_65
+  -- function num : 0_70
 end
 , [ActorProxyType.isInstanceObject] = function(actorKeyRaw, targetPanel, actorProxyWrapper)
-  -- function num : 0_66 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingMpBar
+  -- function num : 0_71 , upvalues : settingName, settingHpBarInitState, settingHpBar, settingMpBar
   settingName(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBarInitState(actorKeyRaw, targetPanel, actorProxyWrapper)
   settingHpBar(actorKeyRaw, targetPanel, actorProxyWrapper)
@@ -3070,14 +3253,14 @@ end
 end
 }
   EventActorCreated_NameTag = function(actorKeyRaw, targetPanel, actorProxyType, actorProxyWrapper)
-  -- function num : 0_67 , upvalues : TypeByLoadData
+  -- function num : 0_72 , upvalues : TypeByLoadData
   if TypeByLoadData[actorProxyType] ~= nil then
     (TypeByLoadData[actorProxyType])(actorKeyRaw, targetPanel, actorProxyWrapper)
   end
 end
 
   FromClient_ChangeTopRankUser = function(actorKeyRaw)
-  -- function num : 0_68 , upvalues : settingLifeRankIcon, settingGuildTextForAlias
+  -- function num : 0_73 , upvalues : settingLifeRankIcon, settingGuildTextForAlias
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3092,7 +3275,7 @@ end
 end
 
   FromClient_NameTag_TendencyChanged = function(actorKeyRaw, tendencyValue)
-  -- function num : 0_69 , upvalues : settingPlayerName, settingGuildMarkAndPreemptiveStrike, settingPreemptiveStrike
+  -- function num : 0_74 , upvalues : settingPlayerName, settingGuildMarkAndPreemptiveStrike, settingPreemptiveStrike
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3107,7 +3290,7 @@ end
 end
 
   EventActorFirsttalk = function(actorKeyRaw, isFirsttalkOn)
-  -- function num : 0_70 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_75 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3125,7 +3308,7 @@ end
 end
 
   EventActorImportantTalk = function(actorKeyRaw, isImportantTalk)
-  -- function num : 0_71 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_76 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3143,7 +3326,7 @@ end
 end
 
   EventActorChangeGuildInfo = function(actorKeyRaw, guildName)
-  -- function num : 0_72 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
+  -- function num : 0_77 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3161,7 +3344,7 @@ end
 end
 
   FromClient_EventActorUpdateTitleKey = function(actorKeyRaw)
-  -- function num : 0_73 , upvalues : settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
+  -- function num : 0_78 , upvalues : settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingGuildTextForAlias, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3179,7 +3362,7 @@ end
 end
 
   FromClient_EventActorChangeGuildInfo_HaveLand = function(actorProxyWrapper, Panel, isoccupyTerritory)
-  -- function num : 0_74 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_79 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
   local targetPanel = Panel
   if actorProxyWrapper == nil or isoccupyTerritory == nil then
     return 
@@ -3190,7 +3373,7 @@ end
 end
 
   EventActorPvpModeChange = function(actorKeyRaw)
-  -- function num : 0_75 , upvalues : settingPreemptiveStrike
+  -- function num : 0_80 , upvalues : settingPreemptiveStrike
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3205,7 +3388,7 @@ end
 end
 
   EventActorChangeLevel = function(actorKeyRaw)
-  -- function num : 0_76 , upvalues : settingMonsterName, settingPlayerName
+  -- function num : 0_81 , upvalues : settingMonsterName, settingPlayerName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3224,7 +3407,7 @@ end
 end
 
   EventActorHpChanged = function(actorKeyRaw, hp, maxHp)
-  -- function num : 0_77 , upvalues : settingHpBar
+  -- function num : 0_82 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3237,7 +3420,7 @@ end
 end
 
   EventChangeCharacterName = function(actorKeyRaw, characterName)
-  -- function num : 0_78 , upvalues : settingName, settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint
+  -- function num : 0_83 , upvalues : settingName, settingAlias, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3258,7 +3441,7 @@ end
 end
 
   FGlobal_ReSet_SiegeBuildingName = function(actorKeyRaw)
-  -- function num : 0_79 , upvalues : settingName
+  -- function num : 0_84 , upvalues : settingName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3271,7 +3454,7 @@ end
 end
 
   insertPartyMemberGage = function(actorKeyRaw)
-  -- function num : 0_80 , upvalues : settingHpBar
+  -- function num : 0_85 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3292,7 +3475,7 @@ end
 end
 
   removePartyMemberGage = function(actorKeyRaw)
-  -- function num : 0_81 , upvalues : settingHpBar
+  -- function num : 0_86 , upvalues : settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3305,14 +3488,14 @@ end
 end
 
   EventActorAddDamage = function(actorKeyRaw, variedPoint, attackResult_IntValue, additionalDamageType, position)
-  -- function num : 0_82 , upvalues : hideTimeType
+  -- function num : 0_87 , upvalues : hideTimeType
   if attackResult_IntValue == 0 or attackResult_IntValue == 1 or attackResult_IntValue == 2 or attackResult_IntValue == 3 or attackResult_IntValue == 4 or attackResult_IntValue == 5 then
     ActorInsertShowTime(actorKeyRaw, hideTimeType.overHeadUI, 0)
   end
 end
 
   EventShowProgressBar = function(actorKeyRaw, aHideTimeType)
-  -- function num : 0_83 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
+  -- function num : 0_88 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3357,7 +3540,7 @@ end
 end
 
   EventHideProgressBar = function(actorKeyRaw, aHideTimeType)
-  -- function num : 0_84 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
+  -- function num : 0_89 , upvalues : hideTimeType, settingPreemptiveStrike, settingHpBar, settingBubbleBoxShow, settingMurderer
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3402,7 +3585,7 @@ end
 end
 
   update_Changed_StunGage = function(actorKeyRaw, curStun, maxStun)
-  -- function num : 0_85 , upvalues : settingStun
+  -- function num : 0_90 , upvalues : settingStun
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3419,7 +3602,7 @@ end
 end
 
   EventActor_QuestUpdateInserted = function(actorKeyRaw)
-  -- function num : 0_86 , upvalues : settingQuestMarkForce
+  -- function num : 0_91 , upvalues : settingQuestMarkForce
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3432,7 +3615,7 @@ end
 end
 
   EventActor_QuestUpdateDeleted = function(actorKeyRaw)
-  -- function num : 0_87 , upvalues : settingQuestMarkForce
+  -- function num : 0_92 , upvalues : settingQuestMarkForce
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3445,12 +3628,12 @@ end
 end
 
   FromClient_preemptiveStrikeTimeChanged = function(targetActorKeyRaw)
-  -- function num : 0_88 , upvalues : hideTimeType
+  -- function num : 0_93 , upvalues : hideTimeType
   ActorInsertShowTime(attackerActorKey, hideTimeType.preemptiveStrike, 0)
 end
 
   EventActor_QuestUI_UpdateData = function(actorKeyRaw, currentType, iconPath)
-  -- function num : 0_89 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
+  -- function num : 0_94 , upvalues : settingQuestUI, settingFirstTalk, settingImportantTalk, settingOtherHeadIcon, sortCenterX
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3468,7 +3651,7 @@ end
 end
 
   EventActor_EnduranceUpdate = function(actorKeyRaw)
-  -- function num : 0_90 , upvalues : settingName, settingHpBar
+  -- function num : 0_95 , upvalues : settingName, settingHpBar
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3482,7 +3665,7 @@ end
 end
 
   EventActor_HouseHoldNearestDoorChanged = function(actorKeyRaw)
-  -- function num : 0_91 , upvalues : settingName
+  -- function num : 0_96 , upvalues : settingName
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3495,7 +3678,7 @@ end
 end
 
   EventActor_OnChatMessageUpdate = function()
-  -- function num : 0_92 , upvalues : settingBubbleBox
+  -- function num : 0_97 , upvalues : settingBubbleBox
   local msg = nil
   local totalSize = getNewChatMessageCount()
   for index = 0, totalSize - 1 do
@@ -3513,7 +3696,7 @@ end
 end
 
   EventSelfPlayerWaitCommentLaunch = function()
-  -- function num : 0_93 , upvalues : settingWaitCommentLaunch
+  -- function num : 0_98 , upvalues : settingWaitCommentLaunch
   if ((getSelfPlayer()):get()):getWaitCommentPanel() == nil then
     return 
   end
@@ -3523,12 +3706,10 @@ end
 end
 
   EventSelfPlayerWaitCommentClose = function()
-  -- function num : 0_94 , upvalues : settingWaitCommentLaunch
+  -- function num : 0_99 , upvalues : settingWaitCommentLaunch
   if ((getSelfPlayer()):get()):getWaitCommentPanel() == nil then
     return 
   end
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
   ClearFocusEdit()
   settingWaitCommentLaunch(false)
   ;
@@ -3536,7 +3717,7 @@ end
 end
 
   EventOtherPlayerWaitCommentUpdate = function(actorKeyRaw)
-  -- function num : 0_95 , upvalues : settingWaitComment
+  -- function num : 0_100 , upvalues : settingWaitComment
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3549,7 +3730,7 @@ end
 end
 
   EventOtherPlayerWaitCommentClose = function(actorKeyRaw)
-  -- function num : 0_96 , upvalues : settingWaitComment
+  -- function num : 0_101 , upvalues : settingWaitComment
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3562,17 +3743,17 @@ end
 end
 
   FromClient_OverHeadUIShowChanged = function(actorKeyRaw, panel, actorProxyWrapper, isShow)
-  -- function num : 0_97
+  -- function num : 0_102
 end
 
   FromClient_GuildMemberGradeChanged = function(actorKeyRaw, panel, actorProxyWrapper, guildGrade)
-  -- function num : 0_98 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
+  -- function num : 0_103 , upvalues : settingGuildInfo, settingGuildMarkAndPreemptiveStrike
   settingGuildInfo(actorKeyRaw, panel, actorProxyWrapper)
   settingGuildMarkAndPreemptiveStrike(actorKeyRaw, panel, actorProxyWrapper)
 end
 
   EventPlayerNicknameUpdate = function(actorKeyRaw)
-  -- function num : 0_99 , upvalues : settingTitle
+  -- function num : 0_104 , upvalues : settingTitle
   local actorProxyWrapper = getActor(actorKeyRaw)
   if actorProxyWrapper == nil then
     return 
@@ -3585,7 +3766,7 @@ end
 end
 
   FromClient_NameTag_SelfPlayerLevelUp = function()
-  -- function num : 0_100 , upvalues : settingName
+  -- function num : 0_105 , upvalues : settingName
   local actorProxyWrapper = getSelfPlayer()
   if actorProxyWrapper == nil then
     return 
@@ -3598,7 +3779,7 @@ end
 end
 
   FromClient_ActorInformationChanged = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_101 , upvalues : settingName
+  -- function num : 0_106 , upvalues : settingName
   if panel == nil then
     return 
   end
@@ -3609,7 +3790,7 @@ end
 end
 
   FromClient_NotifyChangeGuildTendency = function(actorKeyRaw, panel, actorProxyWrapper)
-  -- function num : 0_102 , upvalues : settingGuildInfo
+  -- function num : 0_107 , upvalues : settingGuildInfo
   if panel == nil then
     return 
   end
@@ -3620,7 +3801,7 @@ end
 end
 
   FromClient_ChangeArenaAreaAndZoneState = function(actorProxyWrapper, panel, isStateOn)
-  -- function num : 0_103 , upvalues : settingHpBar
+  -- function num : 0_108 , upvalues : settingHpBar
   if actorProxyWrapper == nil or isStateOn == nil or panel == nil then
     return 
   end
@@ -3629,7 +3810,7 @@ end
 end
 
   FromClient_InstallationInfoWarningNameTag = function(warningType, tentPosition, characterSSW, progressingInfo, actorWrapper, addtionalValue1)
-  -- function num : 0_104 , upvalues : settingHpBar
+  -- function num : 0_109 , upvalues : settingHpBar
   if actorWrapper == nil then
     return 
   end
@@ -3642,7 +3823,7 @@ end
 end
 
   FromClient_LocalWarCombatPoint = function(actorkeyRaw)
-  -- function num : 0_105 , upvalues : settingLocalWarCombatPoint
+  -- function num : 0_110 , upvalues : settingLocalWarCombatPoint
   if actorkeyRaw == nil then
     return 
   end
@@ -3658,7 +3839,7 @@ end
 end
 
   FromClient_EntryTeamChanged = function(actorkeyRaw)
-  -- function num : 0_106 , upvalues : settingLocalWarCombatPoint
+  -- function num : 0_111 , upvalues : settingLocalWarCombatPoint
   if actorkeyRaw == nil then
     return 
   end
@@ -3674,7 +3855,7 @@ end
 end
 
   FromClient_ObjectInstanceMpChanged = function(actorKeyRaw, panel)
-  -- function num : 0_107 , upvalues : settingMpBar
+  -- function num : 0_112 , upvalues : settingMpBar
   if actorKeyRaw == nil then
     return 
   end
@@ -3689,7 +3870,7 @@ end
 end
 
   FromClient_FlashBangStateChanged = function(actorKeyRaw, isFlashBangOn)
-  -- function num : 0_108 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
+  -- function num : 0_113 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
   if actorKeyRaw == nil then
     return 
   end
@@ -3715,7 +3896,7 @@ end
 end
 
   FromClient_ChangeMilitiaNameTag = function(actorKeyRaw)
-  -- function num : 0_109 , upvalues : settingName, settingAlias, settingTitle, settingLifeRankIcon, settingGuildInfo
+  -- function num : 0_114 , upvalues : settingName, settingAlias, settingTitle, settingLifeRankIcon, settingGuildInfo
   if actorKeyRaw == nil then
     return 
   end
@@ -3736,7 +3917,7 @@ end
 end
 
   FromClient_ShowOverheadRank = function(actorKeyRaw)
-  -- function num : 0_110 , upvalues : settingLifeRankIcon
+  -- function num : 0_115 , upvalues : settingLifeRankIcon
   if actorKeyRaw == nil then
     return 
   end

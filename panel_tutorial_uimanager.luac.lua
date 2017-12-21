@@ -206,17 +206,21 @@ end
 
 PaGlobal_TutorialUiManager.restoreAllUiByUserSetting = function(self)
   -- function num : 0_10
-  if PaGlobal_TutorialManager:checkHaveOverLevelCharacter() then
-    self:loadAllUiSavedInfo()
-    if Panel_WorldMap:GetShow() == true and Panel_CheckedQuest:GetShow() then
-      FGlobal_QuestWidget_Close()
+  do
+    local isTutorialSkip = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).TutorialSkip) == 1
+    if CheckTutorialEnd() or isTutorialSkip then
+      self:loadAllUiSavedInfo()
+      if Panel_WorldMap:GetShow() == true and Panel_CheckedQuest:GetShow() then
+        FGlobal_QuestWidget_Close()
+      end
     end
+    if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR) or isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP) then
+      FGlobal_PersonalIcon_ButtonPosUpdate()
+    end
+    self:showConditionalUi()
+    Panel_ClassResource:SetShow(true)
+    -- DECOMPILER ERROR: 5 unprocessed JMP targets
   end
-  if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_KOR) or isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_JAP) then
-    FGlobal_PersonalIcon_ButtonPosUpdate()
-  end
-  self:showConditionalUi()
-  Panel_ClassResource:SetShow(true)
 end
 
 -- DECOMPILER ERROR at PC251: Confused about usage of register: R0 in 'UnsetPending'
@@ -229,6 +233,7 @@ PaGlobal_TutorialUiManager.showConditionalUi = function(self)
   FGlobal_PetControl_CheckUnSealPet()
   FGlobal_Party_ConditionalShow()
   PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
+  PaGlobal_CharacterTag_SetPosIcon()
   if ToClient_GetUiInfo((CppEnums.PAGameUIType).PAGameUIPanel_GameTips, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow) == 1 then
     GameTips_Show()
     GameTips_Reposition()
@@ -275,6 +280,7 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
     Panel_NewEventProduct_Alarm:SetShow(isShow)
     FGlobal_PetControl_CheckUnSealPet()
     PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
+    PaGlobal_CharacterTag_SetPosIcon()
   else
     if isShow == false then
       local navi = FGlobal_GetPersonalIconControl(0)

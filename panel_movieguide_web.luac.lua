@@ -22,11 +22,13 @@ end
 
 PaGlobal_MovieGuide_Web.Open = function(self)
   -- function num : 0_1 , upvalues : _Web
-  local movieGuideWeb = PaGlobal_MovieGuide_Web:ReturnValue()
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  local movieGuideWeb = PaGlobal_URL_Check(worldNo)
   Panel_MovieGuide_Web:SetPosX(getScreenSizeX() / 2 - Panel_MovieGuide_Web:GetSizeX() / 2)
   Panel_MovieGuide_Web:SetPosY(getScreenSizeY() / 2 - Panel_MovieGuide_Web:GetSizeY() / 2)
   if movieGuideWeb ~= nil then
-    local url = movieGuideWeb
+    local url = movieGuideWeb .. "/MovieGuide/Index"
     _Web:SetUrl(320, 430, url, false, true)
     Panel_MovieGuide_Web:SetShow(true)
   end
@@ -42,117 +44,8 @@ end
 
 -- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
 
-PaGlobal_MovieGuide_Web.ReturnValue = function(self)
-  -- function num : 0_3
-  local url = nil
-  local temporaryWrapper = getTemporaryInformationWrapper()
-  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_KOR_DEV")
-  else
-    if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_KOR_ALPHA")
-    else
-      if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_KOR_REAL")
-      else
-        if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-          if getServiceNationType() == 0 then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_NA_ALPHA_NA", "port", worldNo)
-          else
-            if getServiceNationType() == 1 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_NA_ALPHA_EU", "port", worldNo)
-            end
-          end
-        else
-          if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-            if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_NA_REAL_NA", "port", worldNo)
-            else
-              if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_NA_REAL_EU", "port", worldNo)
-              end
-            end
-          else
-            if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_JP_ALPHA")
-            else
-              if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_JP_REAL")
-              else
-                if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_RUS_ALPHA")
-                else
-                  if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                    if isServerFixedCharge() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_RUS_REAL_P2P")
-                    else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_RUS_REAL_F2P")
-                    end
-                  else
-                    if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_TW_ALPHA")
-                    else
-                      if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_TW_REAL")
-                      else
-                        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_SA_ALPHA")
-                        else
-                          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_SA_REAL")
-                          else
-                            if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_KR2_ALPHA")
-                            else
-                              if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_KR2_REAL")
-                              else
-                                if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_TR_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_TR_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_TH_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_TH_REAL")
-                                      else
-                                        if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_ID_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_MOVIEGUIDEWEB_URL_ID_REAL")
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-  return url
-end
-
--- DECOMPILER ERROR at PC49: Confused about usage of register: R2 in 'UnsetPending'
-
 PaGlobal_MovieGuide_Web.GuideWebCodeExecute = function(self, titleName, youtubeUrl)
-  -- function num : 0_4
+  -- function num : 0_3
 end
 
 PaGlobal_MovieGuide_Web:init()

@@ -39,13 +39,11 @@ DetectPlayer.show = function(self)
 end
 
 DetectPlayer_Close = function()
-  -- function num : 0_2 , upvalues : DetectPlayer, editBoxClear, IM
+  -- function num : 0_2 , upvalues : DetectPlayer, editBoxClear
   Panel_DetectPlayer:SetShow(false, false)
   ;
   (DetectPlayer._editPlayerName):SetEditText("", true)
   editBoxClear = true
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit()
 end
 
@@ -56,13 +54,11 @@ DetectPlayer_reload = function()
 end
 
 DetectPlayer_EditClear = function()
-  -- function num : 0_4 , upvalues : editBoxClear, DetectPlayer, IM
+  -- function num : 0_4 , upvalues : editBoxClear, DetectPlayer
   if editBoxClear == true then
     (DetectPlayer._editPlayerName):SetEditText("", true)
     editBoxClear = false
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(DetectPlayer._editPlayerName)
 end
 

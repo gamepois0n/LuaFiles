@@ -129,6 +129,7 @@ NewKnowledgePopup.initialize = function(self)
   self._frameContent = (UI.getChildControl)(self._frameKnowledge, "Frame_1_Content")
   self._frameScrollV = (UI.getChildControl)(self._frameKnowledge, "Frame_1_VerticalScroll")
   self._staticDesc = (UI.getChildControl)(self._frameContent, "StaticText_Knowledge_Desc")
+  self._frameScrollVBTN = (UI.getChildControl)(self._frameScrollV, "Frame_1_VerticalScroll_CtrlButton")
   ;
   (self._buttonNext):addInputEvent("Mouse_LUp", "HandleClicked_nextNewKnowledge()")
   ;
@@ -168,11 +169,9 @@ NewKnowledgePopup.show = function(self, usingType)
     ;
     (self._staticTitle):SetText(cardData.name)
     ;
-    (self._staticDesc):SetAutoResize(true)
-    ;
     (self._staticDesc):SetText(cardData.desc)
     ;
-    (self._staticDesc):SetSize((self._staticDesc):GetSizeX(), (self._staticDesc):GetSizeY())
+    (self._staticDesc):SetSize((self._staticDesc):GetSizeX(), (self._staticDesc):GetTextSizeY())
     ;
     (self._staticImage):ChangeTextureInfoName(cardData.imagePath)
     ;
@@ -183,6 +182,14 @@ NewKnowledgePopup.show = function(self, usingType)
     (self._frameScrollV):SetInterval(2)
     ;
     (self._frameKnowledge):UpdateContentPos()
+    ;
+    (self._frameScrollV):SetShow(true)
+    if (self._frameKnowledge):GetSizeY() < (self._frameContent):GetSizeY() then
+      (self._frameScrollVBTN):SetShow(true)
+    else
+      ;
+      (self._frameScrollVBTN):SetShow(false)
+    end
     ;
     (target._cardList):pop_front()
     if newCount > 2 then

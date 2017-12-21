@@ -122,7 +122,7 @@ PaGlobal_LargeParty.Initialize = function(self)
       CopyBaseProperty((self._ui)._staticDeadRightBG, partyMember._deadConditionBG)
       CopyBaseProperty((self._ui)._staticTextRightDead, partyMember._deadCondition)
       ;
-      (partyMember._base):SetPosX(((self._ui)._staticPartyLeftBG):GetPosX() + ((self._ui)._staticPartyLeftBG):GetSizeX() + 10)
+      (partyMember._base):SetPosX(((self._ui)._staticPartyLeftBG):GetPosX() + ((self._ui)._staticPartyLeftBG):GetSizeX() + 15)
       ;
       (partyMember._base):SetPosY((index - 10) * 42)
     end
@@ -296,15 +296,6 @@ PaGlobal_LargeParty.ButtonAction = function(self, isShow, index)
     do
       ;
       (((self._uiPartyMemberList)[index])._actionBtn):SetShow(false)
-      if self._selectIndex == ((self._partyMemberData)[index])._index then
-        ((self._ui)._btn_Mandate):SetShow(false)
-        ;
-        ((self._ui)._btn_Exile):SetShow(false)
-        ;
-        ((self._ui)._btn_Exit):SetShow(false)
-        self._selectIndex = -1
-        return 
-      end
     end
   end
 end

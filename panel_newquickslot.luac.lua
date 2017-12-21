@@ -27,12 +27,12 @@ local NewQuickSlot_PanelList = {[0] = Panel_NewQuickSlot_0, [1] = Panel_NewQuick
 local NewQuickSlot_PanelID = {[0] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_0, [1] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_1, [2] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_2, [3] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_3, [4] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_4, [5] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_5, [6] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_6, [7] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_7, [8] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_8, [9] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_9, [10] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_10, [11] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_11, [12] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_12, [13] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_13, [14] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_14, [15] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_15, [16] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_16, [17] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_17, [18] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_18, [19] = (CppEnums.PAGameUIType).PAGameUIPanel_NewQuickSlot_19}
 local NewQuickSlot_Lock = {[NewQuickSlot_PanelList[0]] = false, [NewQuickSlot_PanelList[1]] = false, [NewQuickSlot_PanelList[2]] = false, [NewQuickSlot_PanelList[3]] = false, [NewQuickSlot_PanelList[4]] = false, [NewQuickSlot_PanelList[5]] = false, [NewQuickSlot_PanelList[6]] = false, [NewQuickSlot_PanelList[7]] = false, [NewQuickSlot_PanelList[8]] = false, [NewQuickSlot_PanelList[9]] = false, [NewQuickSlot_PanelList[10]] = false, [NewQuickSlot_PanelList[11]] = false, [NewQuickSlot_PanelList[12]] = false, [NewQuickSlot_PanelList[13]] = false, [NewQuickSlot_PanelList[14]] = false, [NewQuickSlot_PanelList[15]] = false, [NewQuickSlot_PanelList[16]] = false, [NewQuickSlot_PanelList[17]] = false, [NewQuickSlot_PanelList[18]] = false, [NewQuickSlot_PanelList[19]] = false}
 potionData = {
-hp = {[0] = 502, [1] = 513, [2] = 514, [3] = 517, [4] = 518, [5] = 519, [6] = 524, [7] = 525, [8] = 528, [9] = 529, [10] = 530, [11] = 538, [12] = 551, [13] = 552, [14] = 553, [15] = 554, [16] = 555, [17] = 17568, [18] = 17569, [19] = 19932, [20] = 19933, [21] = 19934, [22] = 19935}
+hp = {[0] = 502, [1] = 513, [2] = 514, [3] = 517, [4] = 518, [5] = 519, [6] = 524, [7] = 525, [8] = 528, [9] = 529, [10] = 530, [11] = 538, [12] = 551, [13] = 552, [14] = 553, [15] = 554, [16] = 555, [17] = 17568, [18] = 17569, [19] = 17679, [20] = 17681, [21] = 17682, [22] = 17683, [23] = 17684, [24] = 19932, [25] = 19933, [26] = 19934, [27] = 19935}
 , 
 mp = {[0] = 503, [1] = 520, [2] = 521, [3] = 522, [4] = 526, [5] = 527, [6] = 515, [7] = 516, [8] = 531, [9] = 532, [10] = 533}
 }
 PaGlobal_NewQuickSlot = {}
--- DECOMPILER ERROR at PC341: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC346: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_NewQuickSlot.addSlotEffectForTutorial = function(self, panelIdx, slot, effectString, isLoop, posX, posY)
   -- function num : 0_0 , upvalues : NewQuickSlot_PanelList
@@ -42,7 +42,7 @@ PaGlobal_NewQuickSlot.addSlotEffectForTutorial = function(self, panelIdx, slot, 
   (PaGlobal_TutorialUiManager:getUiMasking()):showNewQuickSlotMasking(newQuickSlotPanel:GetPosX() + newQuickSlotPanel:GetSizeX() * 0.5, newQuickSlotPanel:GetPosY() + newQuickSlotPanel:GetSizeY() * 0.5)
 end
 
--- DECOMPILER ERROR at PC344: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC349: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_NewQuickSlot.eraseSlotEffectForTutorial = function(self, slot)
   -- function num : 0_1

@@ -228,6 +228,7 @@ DyeReNew.Initialize = function(self)
   local numbering = 0
   local ampuleSlotConfig = {createIcon = true, createBorder = true, createCount = true, createCash = true, createEnchant = true}
   local UIStaticBG = (UI.getChildControl)(Panel_Dye_ReNew, "Static_BG")
+  self._partDyeInfo = {}
   FGlobal_Panel_Dye_ReNew_AddEvent()
   for ii = 0, enControlValue.MaxEquipSlotCount - 1 do
     local UIEquipBG = (UI.getChildControl)(UIStaticBG, "Static_EquipSlotBG_" .. ii)
@@ -235,7 +236,7 @@ DyeReNew.Initialize = function(self)
     ;
     (SlotItem.new)(equipSlot, "Dye_ReNew_equipSlotItem_" .. ii, 0, UIEquipBG, ampuleSlotConfig)
     equipSlot:createChild()
-    -- DECOMPILER ERROR at PC62: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC64: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self._arrEquipSlotItem)[ii] = equipSlot
@@ -247,11 +248,11 @@ DyeReNew.Initialize = function(self)
     for kk = 0, enControlValue.MaxPartSlotCount - 1 do
       local UIEquipSlotPart = (UI.getChildControl)(UIEquipPartArea, "Static_Radiobutton_PartColor_" .. jj .. "_" .. kk)
       local UIEquipSlotReset = (UI.getChildControl)(UIEquipSlotPart, "Static_Button_PartColorReset_" .. jj .. "_" .. kk)
-      -- DECOMPILER ERROR at PC108: Confused about usage of register: R16 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC110: Confused about usage of register: R16 in 'UnsetPending'
 
       ;
       (self._arrEquipPartSlot)[numbering] = UIEquipSlotPart
-      -- DECOMPILER ERROR at PC110: Confused about usage of register: R16 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC112: Confused about usage of register: R16 in 'UnsetPending'
 
       ;
       (self._arrEquipPartReset)[numbering] = UIEquipSlotReset
@@ -266,15 +267,15 @@ DyeReNew.Initialize = function(self)
       local UIAmpuleSlotBG = (UI.getChildControl)(UIAmpuleBG, "Static_AmpuleSlotBG_" .. kk .. "_" .. ll)
       local UIAmpuleSlotColor = (UI.getChildControl)(UIAmpuleSlotBG, "Static_AmplueSlotColor_" .. kk .. "_" .. ll)
       local UIAmpuleSlotButton = (UI.getChildControl)(UIAmpuleSlotBG, "RadioButton_AmplueSlotButton_" .. kk .. "_" .. ll)
-      -- DECOMPILER ERROR at PC163: Confused about usage of register: R17 in 'UnsetPending'
-
-      ;
-      (self._arrAmpuleSlotBG)[numbering] = UIAmpuleSlotBG
       -- DECOMPILER ERROR at PC165: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
-      (self._arrAmpuleSlotColor)[numbering] = UIAmpuleSlotColor
+      (self._arrAmpuleSlotBG)[numbering] = UIAmpuleSlotBG
       -- DECOMPILER ERROR at PC167: Confused about usage of register: R17 in 'UnsetPending'
+
+      ;
+      (self._arrAmpuleSlotColor)[numbering] = UIAmpuleSlotColor
+      -- DECOMPILER ERROR at PC169: Confused about usage of register: R17 in 'UnsetPending'
 
       ;
       (self._arrAmpuleSlotButton)[numbering] = UIAmpuleSlotButton
@@ -353,6 +354,9 @@ DyeReNew.Reset_Position = function(self)
   UIPartBG:SetPosY(311)
   UIAmpuleTitle:SetPosY(380)
   UIAmpuleBG:SetPosY(413)
+  self._checkButtonDyeAll = (UI.getChildControl)(UIPartTitle, "CheckBox_DyeAll")
+  ;
+  (self._checkButtonDyeAll):SetCheck(false)
 end
 
 DyeReNew.Update_Position = function(self)
@@ -504,6 +508,7 @@ DyeReNew.Update_Part = function(self)
   ToClient_SetDyeingTargetInformationByEquipNo(equipSlotNo)
   local infoCount = ToClient_getDyeingTargetInformationCount()
   local oldPartIdx = 0
+  self._partDyeInfo = {}
   for infoIdx = 0, infoCount - 1 do
     local partIdx = ToClient_getDyeingTargetPartIdxByIndex(infoIdx)
     local slotIdx = ToClient_getDyeingTartSlotIndexByIndex(infoIdx)
@@ -523,6 +528,10 @@ DyeReNew.Update_Part = function(self)
     PartSlot:SetAlphaIgnore(true)
     PartSlot:SetColor(getColorInfo)
     PartSlot:SetShow(true)
+    -- DECOMPILER ERROR at PC93: Confused about usage of register: R15 in 'UnsetPending'
+
+    ;
+    (self._partDyeInfo)[infoIdx] = {partIdx, slotIdx, DyeSlotIdx}
   end
 end
 
@@ -789,6 +798,11 @@ end
 FromClient_Dyeing_AddDamage = function()
   -- function num : 0_32
   FGlobal_Panel_DyeReNew_Hide()
+end
+
+FGlobal_Panel_DyeReNew_updateColorAmpuleList = function()
+  -- function num : 0_33 , upvalues : DyeReNew
+  DyeReNew:Update_AmpuleList()
 end
 
 renderMode:setClosefunctor(renderMode, FGlobal_Panel_DyeReNew_Hide)

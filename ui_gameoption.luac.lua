@@ -1434,10 +1434,6 @@ end
 , 
 [(CppEnums.GameServiceType).eGameServiceType_SA_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_PT, (CppEnums.ServiceResourceType).eServiceResourceType_ES}
 , 
-[(CppEnums.GameServiceType).eGameServiceType_TH_ALPHA] = {(CppEnums.ServiceResourceType).eServiceResourceType_TH, (CppEnums.ServiceResourceType).eServiceResourceType_EN}
-, 
-[(CppEnums.GameServiceType).eGameServiceType_TH_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_TH, (CppEnums.ServiceResourceType).eServiceResourceType_EN}
-, 
 [(CppEnums.GameServiceType).eGameServiceType_ID_ALPHA] = {(CppEnums.ServiceResourceType).eServiceResourceType_ID, (CppEnums.ServiceResourceType).eServiceResourceType_EN}
 , 
 [(CppEnums.GameServiceType).eGameServiceType_ID_REAL] = {(CppEnums.ServiceResourceType).eServiceResourceType_ID, (CppEnums.ServiceResourceType).eServiceResourceType_EN}
@@ -1457,10 +1453,6 @@ end
 , 
 [(CppEnums.GameServiceType).eGameServiceType_SA_REAL] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_Pt, (CppEnums.LangType).LangType_Es}
 , 
-[(CppEnums.GameServiceType).eGameServiceType_TH_ALPHA] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_TH}
-, 
-[(CppEnums.GameServiceType).eGameServiceType_TH_REAL] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_TH}
-, 
 [(CppEnums.GameServiceType).eGameServiceType_ID_ALPHA] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_ID}
 , 
 [(CppEnums.GameServiceType).eGameServiceType_ID_REAL] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_English, (CppEnums.LangType).LangType_ID}
@@ -1470,7 +1462,7 @@ end
 [(CppEnums.GameServiceType).eGameServiceType_TR_REAL] = {(CppEnums.LangType).LangType_International, (CppEnums.LangType).LangType_TR, (CppEnums.LangType).LangType_English}
 }
   local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.ServiceResourceType).eServiceResourceType_PT] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.ServiceResourceType).eServiceResourceType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.ServiceResourceType).eServiceResourceType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.ServiceResourceType).eServiceResourceType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
-  local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = "International", [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
+  local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_INTERNATIONAL"), [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
   local _btn_ServiceResourceType = {}
   local serviceResEnumsNumber = {}
   local serviceResCount = 0
@@ -1581,7 +1573,7 @@ end
     _cpy_frameContent = _frameContent_Game
   end
   _txt_LanguageOption = (UI.getChildControl)(_cpy_frameContent, "StaticText_Language")
-  if serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_DEV or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_TH_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_TH_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_REAL then
+  if serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_DEV or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_REAL then
     createServiceResOption(_cpy_frame, _cpy_frameContent)
     createChatChannelOption(_cpy_frame, _cpy_frameContent)
   else
@@ -8234,16 +8226,7 @@ end
 
   GameOption_SaveSetting = function()
   -- function num : 0_320
-  if not isOptionVariableAction() then
-    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
-    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
-    ;
-    (MessageBox.showMessageBox)(messageBoxData)
-    return 
-  end
-  do
-    PaGlobal_Panel_SaveSetting_Show()
-  end
+  PaGlobal_Panel_SaveSetting_Show()
 end
 
   GameOption_Apply = function()

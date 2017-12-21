@@ -4,61 +4,28 @@
 -- params : ...
 -- function num : 0
 PaGlobal_MiniGame_Find = {
-_ui = {_baseOpenSlot = (UI.getChildControl)(Panel_MiniGame_Find, "Static_OpenSlot"), _baseCloseSlot = (UI.getChildControl)(Panel_MiniGame_Find, "Static_CloseSlot"), _closeButton = (UI.getChildControl)(Panel_MiniGame_Find, "Button_Win_Close"), _feverGauge = (UI.getChildControl)(Panel_MiniGame_Find, "Static_Text_Fever_Gauge")}
+_ui = {_baseOpenSlot = (UI.getChildControl)(Panel_MiniGame_Find, "Static_OpenSlot"), _baseCloseSlot = (UI.getChildControl)(Panel_MiniGame_Find, "Static_CloseSlot"), _closeButton = (UI.getChildControl)(Panel_MiniGame_Find, "Button_Win_Close")}
 , 
 _config = {_slotCols = 16, _slotRows = 16, _slotMax = 0, _slotStartPosX = 30, _slotStartPosY = 70, _slotGapX = 47, _slotGapY = 47}
 , 
-_dir = {eCentor = 0, eLeft = 1, eTop = 2, eRight = 4, eBottom = 8}
-, 
-_objType = {eObjectTypeEmpty = 0, eObjectTypeMain = 1, eObjectTypeSub = 2}
-, _slots = (Array.new)()}
--- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
+_slotType = {default = 0, empty = 1, obj = 2}
+, _slots = (Array.new)(), _imagePath = nil}
+-- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_MiniGame_Find.initialize = function(self)
   -- function num : 0_0
-  self._dirTexture = {
-[(self._dir).eLeft] = {123, 123, 183, 183}
-, 
-[(self._dir).eTop] = {62, 123, 122, 183}
-, 
-[(self._dir).eRight] = {184, 123, 244, 183}
-, 
-[(self._dir).eBottom] = {1, 123, 61, 183}
-, 
-[(self._dir).eLeft + (self._dir).eRight] = {62, 1, 122, 61}
-, 
-[(self._dir).eTop + (self._dir).eBottom] = {1, 1, 61, 61}
-, 
-[(self._dir).eLeft + (self._dir).eTop] = {306, 1, 366, 61}
-, 
-[(self._dir).eRight + (self._dir).eTop] = {245, 1, 305, 61}
-, 
-[(self._dir).eLeft + (self._dir).eBottom] = {184, 1, 244, 61}
-, 
-[(self._dir).eRight + (self._dir).eBottom] = {123, 1, 183, 61}
-, 
-[(self._dir).eLeft + (self._dir).eRight + (self._dir).eTop] = {123, 62, 183, 122}
-, 
-[(self._dir).eLeft + (self._dir).eRight + (self._dir).eBottom] = {184, 62, 244, 122}
-, 
-[(self._dir).eLeft + (self._dir).eTop + (self._dir).eBottom] = {62, 62, 122, 122}
-, 
-[(self._dir).eRight + (self._dir).eTop + (self._dir).eBottom] = {1, 62, 61, 122}
-, 
-[(self._dir).eLeft + (self._dir).eRight + (self._dir).eTop + (self._dir).eBottom] = {245, 62, 305, 122}
-}
   self:createSlot()
   self:registEventHandler()
 end
 
--- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_MiniGame_Find.close = function(self)
   -- function num : 0_1
   ToClient_MiniGameFindSetShow(false)
 end
 
--- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_MiniGame_Find.createSlot = function(self)
   -- function num : 0_2
@@ -94,7 +61,7 @@ PaGlobal_MiniGame_Find.createSlot = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_MiniGame_Find.registEventHandler = function(self)
   -- function num : 0_3
@@ -103,7 +70,7 @@ PaGlobal_MiniGame_Find.registEventHandler = function(self)
   registerEvent("FromClient_MiniGameFindSetShow", "FromClient_MiniGameFindSetShow")
 end
 
--- DECOMPILER ERROR at PC67: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_MiniGame_Find.clickCloseSlot = function(self, ii)
   -- function num : 0_4
@@ -111,7 +78,7 @@ PaGlobal_MiniGame_Find.clickCloseSlot = function(self, ii)
   ToClient_MiniGameFindClick(ii)
 end
 
--- DECOMPILER ERROR at PC70: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC58: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_MiniGame_Find.endGame = function(self)
   -- function num : 0_5
@@ -124,7 +91,7 @@ PaGlobal_MiniGame_Find.endGame = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC73: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC61: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_MiniGame_Find.refresh = function(self, slotMaxCol, slotMaxRow)
   -- function num : 0_6
@@ -159,59 +126,38 @@ PaGlobal_MiniGame_Find.refresh = function(self, slotMaxCol, slotMaxRow)
   end
 end
 
-FromClient_MiniGameFindSlotShow = function(idx, objType, value, feverGauge)
+FromClient_MiniGameFindSlotShow = function(idx, uv0, uv1, uv2, uv3, slotType, patternKey)
   -- function num : 0_7
-  _PA_LOG("박규나_MiniGame_Find", "FromClient_MiniGameFindSlotShow " .. tostring(idx) .. " , " .. tostring(objType) .. " , " .. tostring(value))
-  local self = PaGlobal_MiniGame_Find
-  local slot = ((self._slots)[idx]).open
-  if (self._objType).eObjectTypeEmpty == objType then
-    slot:ChangeTextureInfoName("new_ui_common_forlua/window/minigame/minigame_00.dds")
-    local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, 123, 184, 183, 244)
+  if slotType == 2 and patternKey >= 0 then
+    local col = idx % 16
+    local row = (math.floor)(idx / 16)
+    _PA_LOG("박규나_MiniGame_Find", tostring(col) .. "," .. tostring(row) .. " , patternKey : " .. tostring(patternKey))
+  end
+  do
+    local self = PaGlobal_MiniGame_Find
+    local slot = ((self._slots)[idx]).open
+    slot:ChangeTextureInfoName(self._imagePath)
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, uv0, uv1, uv2, uv3)
     ;
     (slot:getBaseTexture()):setUV(xx1, yy1, xx2, yy2)
     slot:setRenderTexture(slot:getBaseTexture())
-  else
-    do
-      if (self._objType).eObjectTypeMain == objType then
-        slot:ChangeTextureInfoName("new_ui_common_forlua/window/minigame/minigame_00.dds")
-        local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, 1, 184, 61, 244)
-        ;
-        (slot:getBaseTexture()):setUV(xx1, yy1, xx2, yy2)
-        slot:setRenderTexture(slot:getBaseTexture())
-      else
-        do
-          if (self._objType).eObjectTypeSub == objType then
-            local dst = (self._dirTexture)[value]
-            slot:ChangeTextureInfoName("new_ui_common_forlua/window/minigame/minigame_00.dds")
-            local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, dst[1], dst[2], dst[3], dst[4])
-            ;
-            (slot:getBaseTexture()):setUV(xx1, yy1, xx2, yy2)
-            slot:setRenderTexture(slot:getBaseTexture())
-          else
-            do
-              _PA_LOG("박규나_MiniGame_Find", "[ERROR] 에러�\188...")
-              ;
-              (((self._slots)[idx]).close):SetShow(false)
-              ;
-              (((self._slots)[idx]).open):SetShow(true)
-              if feverGauge <= 0 then
-                ((self._ui)._feverGauge):SetText(tostring(0))
-                self:endGame()
-              else
-                ;
-                ((self._ui)._feverGauge):SetText(tostring(feverGauge))
-              end
-            end
-          end
-        end
-      end
-    end
+    ;
+    (((self._slots)[idx]).close):SetShow(false)
+    ;
+    (((self._slots)[idx]).open):SetShow(true)
   end
 end
 
-FromClient_MiniGameFindSetShow = function(isShow, col, row)
+FromClient_MiniGameFindSetShow = function(isShow, col, row, imagePath)
   -- function num : 0_8
-  PaGlobal_MiniGame_Find:refresh(col, row)
+  local self = PaGlobal_MiniGame_Find
+  _PA_LOG("박규나_MiniGame_Find", "FromClient_MiniGameFindSetShow " .. tostring(col) .. "," .. tostring(row) .. "," .. tostring(imagePath))
+  if isShow == true then
+    self:refresh(col, row)
+    self._imagePath = imagePath
+  else
+    self._imagePath = nil
+  end
   Panel_MiniGame_Find:SetShow(isShow)
 end
 

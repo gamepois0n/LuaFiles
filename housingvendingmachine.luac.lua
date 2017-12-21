@@ -310,9 +310,7 @@ VendingMachineManager.initialize = function(self)
 end
 
 handleClickedVendingMachineEditGold = function()
-  -- function num : 0_1 , upvalues : IM, VendingMachineManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_1 , upvalues : VendingMachineManager
   (VendingMachineManager._editGold):SetEditText("", true)
 end
 
@@ -404,7 +402,7 @@ handleClickedVendingMachineCheckWithdraw = function()
 end
 
 handleClickedVendingMachinePerform = function()
-  -- function num : 0_6 , upvalues : VendingMachineManager, UI_PP, IM
+  -- function num : 0_6 , upvalues : VendingMachineManager, UI_PP
   local gold = (VendingMachineManager._editGold):GetEditNumber()
   if gold <= toInt64(0, 0) then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_VENDINGMACHINE_PERFORM_MESSAGE_0"))
@@ -427,8 +425,6 @@ handleClickedVendingMachinePerform = function()
           ;
           (MessageBox.showMessageBox)(messageboxData)
         end
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
         ClearFocusEdit()
       end
     end
@@ -436,20 +432,16 @@ handleClickedVendingMachinePerform = function()
 end
 
 handleClickedVendingMachineDepositGoldContinue = function()
-  -- function num : 0_7 , upvalues : VendingMachineManager, IM
+  -- function num : 0_7 , upvalues : VendingMachineManager
   local gold = (VendingMachineManager._editGold):GetEditNumber()
   ToClient_RequestBusinessDepositMoney(gold)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit()
 end
 
 handleClickedVendingMachineWithdrawGoldContinue = function()
-  -- function num : 0_8 , upvalues : VendingMachineManager, IM
+  -- function num : 0_8 , upvalues : VendingMachineManager
   local gold = (VendingMachineManager._editGold):GetEditNumber()
   ToClient_RequestBusinessWithdrawMoney(gold)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit()
 end
 
@@ -654,23 +646,17 @@ NumberPadSellContinue = function()
 end
 
 handleClickedVendingMachineEditBuy = function(index)
-  -- function num : 0_20 , upvalues : IM, VendingMachineManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_20 , upvalues : VendingMachineManager
   (((VendingMachineManager._list)[index])._editBuyPrice):SetEditText("", true)
 end
 
 handleClickedVendingMachineEditSell = function(index)
-  -- function num : 0_21 , upvalues : IM, VendingMachineManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_21 , upvalues : VendingMachineManager
   (((VendingMachineManager._list)[index])._editSellPrice):SetEditText("", true)
 end
 
 handleClickedVendingMachineEditCount = function(index)
-  -- function num : 0_22 , upvalues : IM, VendingMachineManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_22 , upvalues : VendingMachineManager
   (((VendingMachineManager._list)[index])._editMaxCount):SetEditText("", true)
 end
 
@@ -730,7 +716,7 @@ FGlobal_CheckCurrentVendingMachineUiEdit = function(targetUI)
 end
 
 FGlobal_VendingMachineClearFocusEdit = function(targetUI)
-  -- function num : 0_25 , upvalues : VendingMachineManager, IM
+  -- function num : 0_25 , upvalues : VendingMachineManager
   for index = 0, 3 do
     local vendingData = ToClient_RequestVendingMachineListAt(index)
     if targetUI:GetKey() == (((VendingMachineManager._list)[index])._editBuyPrice):GetKey() then
@@ -765,8 +751,6 @@ FGlobal_VendingMachineClearFocusEdit = function(targetUI)
   end
   do
     ClearFocusEdit()
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   end
 end
 
@@ -805,9 +789,8 @@ VendingMachineManager.Show = function(self)
 end
 
 VendingMachineManager.Close = function(self)
-  -- function num : 0_28 , upvalues : IM
+  -- function num : 0_28
   if Panel_Housing_VendingMachineList:IsShow() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     Panel_Housing_VendingMachineList:SetShow(false, false)
     ClearFocusEdit()
   end
@@ -828,20 +811,19 @@ FromClient_EventShowVendingMachineHoldingMoneyManager = function(holdingMoney)
 end
 
 FromClient_EventShowVendingMachineList = function(isOwner)
-  -- function num : 0_30 , upvalues : IM, VendingMachineManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_30 , upvalues : VendingMachineManager
   if VendingMachineManager._clickIconNoReset == false then
     for index = 0, 3 do
-      -- DECOMPILER ERROR at PC16: Confused about usage of register: R5 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC11: Confused about usage of register: R5 in 'UnsetPending'
 
       ((VendingMachineManager._list)[index])._checkSlotIn = 0
     end
   end
   do
-    -- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
 
     VendingMachineManager._clickIconNoReset = false
-    -- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
 
     VendingMachineManager._checkFlag = 1
     VendingMachineManager:UpdateData(isOwner)

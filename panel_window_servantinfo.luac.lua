@@ -52,7 +52,7 @@ _checkFlag = {[3] = 1, [4] = 2, [5] = 4, [6] = 8, [12] = 0, [14] = 16, [15] = 32
 , 
 _slotText = {[3] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_3"), [4] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_4"), [5] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_5"), [6] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_6"), [12] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_12"), [14] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_14"), [15] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_15"), [16] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_16"), [17] = PAGetString(Defines.StringSheet_GAME, "Lua_ServantInfo_Horse_Armor_17")}
 , 
-_skill = {startX = 0, startY = 0, startIconX = 10, startIconY = 5, startNameX = 64, startNameY = 5, startDecX = 64, startDecY = 27, startExpBGX = 4, startExpBGY = -1, startExpX = 6, startExpY = 1, startExpStrX = 18, startExpStrY = 35, gapY = 52, count = 4}
+_skill = {startX = 0, startY = 0, startIconX = 10, startIconY = 5, startNameX = 64, startNameY = 5, startDecX = 64, startDecY = 27, startPreDecX = 64, startPreDecY = 42, startExpBGX = 4, startExpBGY = -1, startExpX = 6, startExpY = 1, startExpStrX = 18, startExpStrY = 35, gapY = 52, count = 4}
 }
 , _buttonClose = (UI.getChildControl)(Panel_Window_ServantInfo, "close_button"), _buttonQuestion = (UI.getChildControl)(Panel_Window_ServantInfo, "Button_Question"), _staticIconMale = (UI.getChildControl)(Panel_Window_ServantInfo, "Static_MaleIcon"), _staticIconFemale = (UI.getChildControl)(Panel_Window_ServantInfo, "Static_FemaleIcon"), _staticName = (UI.getChildControl)(Panel_Window_ServantInfo, "horse_name_value"), _staticGrade = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_Grade"), _lv = (UI.getChildControl)(Panel_Window_ServantInfo, "Lv"), _staticLevel = (UI.getChildControl)(Panel_Window_ServantInfo, "Level_value"), _staticGaugeBar_Hp = (UI.getChildControl)(Panel_Window_ServantInfo, "HP_GaugeBar"), _staticTextValue_Hp = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_HP_Value"), _mp = (UI.getChildControl)(Panel_Window_ServantInfo, "MP"), _staticGaugeBar_Mp = (UI.getChildControl)(Panel_Window_ServantInfo, "MP_GaugeBar"), _staticTextValue_Mp = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_MP_Value"), _exp = (UI.getChildControl)(Panel_Window_ServantInfo, "EXP"), _staticGaugeBar_ExpBG = (UI.getChildControl)(Panel_Window_ServantInfo, "EXP_Gauge_Back"), _staticGaugeBar_Exp = (UI.getChildControl)(Panel_Window_ServantInfo, "EXP_GaugeBar"), _staticTextValue_Exp = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_EXP_Value"), _weight = (UI.getChildControl)(Panel_Window_ServantInfo, "Weight"), _staticGaugeBar_WeightBG = (UI.getChildControl)(Panel_Window_ServantInfo, "Static_Texture_Weight_Background"), _staticGaugeBar_Weight = (UI.getChildControl)(Panel_Window_ServantInfo, "Weight_Gauge"), _staticTextValue_Weight = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_Weight_Value"), _staticText_MaxMoveSpeedValue = (UI.getChildControl)(Panel_Window_ServantInfo, "MaxMoveSpeedValue"), _staticText_AccelerationValue = (UI.getChildControl)(Panel_Window_ServantInfo, "AccelerationValue"), _staticText_CorneringSpeedValue = (UI.getChildControl)(Panel_Window_ServantInfo, "CorneringSpeedValue"), _staticText_BrakeSpeedValue = (UI.getChildControl)(Panel_Window_ServantInfo, "BrakeSpeedValue"), _staticText_Life = (UI.getChildControl)(Panel_Window_ServantInfo, "category_Life"), _staticText_LifeValue = (UI.getChildControl)(Panel_Window_ServantInfo, "category_LifeValue"), _staticText_Value_Def = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_DefenceValue"), _staticSkilltitle = (UI.getChildControl)(Panel_Window_ServantInfo, "category_skillList"), _staticSkillBG = (UI.getChildControl)(Panel_Window_ServantInfo, "panel_skillInfo"), _skillScroll = (UI.getChildControl)(Panel_Window_ServantInfo, "skill_scroll"), deadCountTitle = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_DeadCount"), deadCountValue = (UI.getChildControl)(Panel_Window_ServantInfo, "StaticText_DeadCountValue"), _staticMatingCount = (UI.getChildControl)(Panel_Window_ServantInfo, "Static_MatingCount"), _staticMatingCountValue = (UI.getChildControl)(Panel_Window_ServantInfo, "Static_MatingCountValue"), _iconStallion = (UI.getChildControl)(Panel_Window_ServantInfo, "Static_iconStallion"), _skillStart = 0, _skillCount = 0, _actorKeyRaw = nil, _armorName = (Array.new)(), _itemSlots = (Array.new)(), _skillSlots = (Array.new)(), _checkButton = (Array.new)(), _prevCheckButton = (Array.new)(), _functionGet = nil, babyElephant_Warning = (UI.getChildControl)(Panel_Window_ServantInfo, "Static_BabyElephantTooltip")}
 ;
@@ -109,6 +109,9 @@ servantInfo.init = function(self)
     slot.expText = (UI.createAndCopyBasePropertyControl)(Panel_Window_ServantInfo, "SkillLearn_PercentString", slot.button, "ServantInfo_Skill_ExpStr_" .. ii)
     slot.name = (UI.createAndCopyBasePropertyControl)(Panel_Window_ServantInfo, "skill_name", slot.button, "ServantInfo_Skill_Name_" .. ii)
     slot.dec = (UI.createAndCopyBasePropertyControl)(Panel_Window_ServantInfo, "skill_condition", slot.button, "ServantInfo_Skill_Dec_" .. ii)
+    slot.predec = (UI.createAndCopyBasePropertyControl)(Panel_Window_ServantInfo, "skill_precondition", slot.button, "ServantInfo_Skill_PreDec_" .. ii)
+    ;
+    (slot.dec):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
     local skillConfig = (self._config)._skill
     ;
     (slot.button):SetPosX(skillConfig.startX)
@@ -139,8 +142,12 @@ servantInfo.init = function(self)
     ;
     (slot.dec):SetPosY(skillConfig.startDecY)
     ;
+    (slot.predec):SetPosX(skillConfig.startPreDecX)
+    ;
+    (slot.predec):SetPosY(skillConfig.startPreDecY)
+    ;
     (UIScroll.InputEventByControl)(slot.button, "ServantInfo_ScrollEvent")
-    -- DECOMPILER ERROR at PC253: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC277: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (self._skillSlots)[ii] = slot
@@ -446,6 +453,19 @@ servantInfo.update = function(self)
                 ;
                 (slot.dec):SetText(skillWrapper:getDescription())
                 ;
+                (slot.predec):SetShow(false)
+                if skillWrapper:getConditionDescription() ~= "" then
+                  (slot.predec):SetShow(true)
+                  ;
+                  (slot.predec):SetPosX((slot.name):GetPosX() + (slot.name):GetTextSizeX() + 5)
+                  ;
+                  (slot.predec):SetPosY((slot.name):GetPosY() + 2)
+                  ;
+                  (slot.predec):addInputEvent("Mouse_On", "ServantInfo_Simpletooltips(true, " .. ii .. ", " .. slotNo .. ")")
+                  ;
+                  (slot.predec):addInputEvent("Mouse_Out", "ServantInfo_Simpletooltips(false)")
+                end
+                ;
                 (slot.exp):SetProgressRate(servantWrapper:getSkillExp(ii) / ((skillWrapper:get())._maxExp / 100))
                 ;
                 (slot.exp):SetAniSpeed(0)
@@ -458,11 +478,11 @@ servantInfo.update = function(self)
               do
                 do
                   self._skillCount = self._skillCount + 1
-                  -- DECOMPILER ERROR at PC794: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC839: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC794: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC839: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC794: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC839: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -819,6 +839,28 @@ ServantInfo_StallionToolTip = function(isOn)
       ;
       (self._iconStallion):SetShow(false)
     end
+  end
+end
+
+ServantInfo_Simpletooltips = function(isShow, idx, slotNo)
+  -- function num : 0_32 , upvalues : servantInfo
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = servantInfo
+  local servantWrapper = getServantInfoFromActorKey(self._actorKeyRaw)
+  if servantWrapper == nil then
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  local skillWrapper = servantWrapper:getSkill(idx)
+  local slot = (self._skillSlots)[slotNo]
+  if skillWrapper ~= nil then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_SERVANTINFO_NEEDSKILLTITLE")
+    desc = skillWrapper:getConditionDescription()
+    control = slot.predec
+    TooltipSimple_Show(control, name, desc)
   end
 end
 

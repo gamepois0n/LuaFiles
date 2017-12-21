@@ -85,7 +85,7 @@ ActionMiniGame_Main = function(gameIndex)
 end
 
 ActionMiniGame_Stop = function()
-  -- function num : 0_1 , upvalues : currentMiniGame, MGT, IM, lastUIMode
+  -- function num : 0_1 , upvalues : currentMiniGame, MGT, lastUIMode
   if currentMiniGame < MGT.MiniGameType_0 or MGT.MiniGameType_18 < currentMiniGame then
     return 
   end
@@ -157,16 +157,7 @@ ActionMiniGame_Stop = function()
     end
   end
   SetUIMode((Defines.UIMode).eUIMode_Default)
-  if AllowChangeInputMode() then
-    if check_ShowWindow() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
   lastUIMode = nil
   currentMiniGame = -1
 end

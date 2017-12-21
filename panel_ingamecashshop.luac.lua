@@ -165,10 +165,14 @@ InGameShop_GameTypeCheck = function()
   if isGameTypeTaiwan() then
     isTaiwanNation = true
   else
-    if isGameTypeKorea() then
+    if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
       isTaiwanNation = true
     else
-      isTaiwanNation = false
+      if isGameTypeKorea() then
+        isTaiwanNation = true
+      else
+        isTaiwanNation = false
+      end
     end
   end
 end
@@ -320,16 +324,27 @@ inGameShop.init = function(self)
       subtab.static = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "Static_SubCategory", Panel_IngameCashShop, "InGameShop_SubTab_" .. ii .. "_" .. jj)
       subtab.text = (UI.createAndCopyBasePropertyControl)(Panel_IngameCashShop, "StaticText_SubCategoryName", subtab.static, "InGameShop_SubTabText_" .. ii .. "_" .. jj)
       ;
-      (subtab.text):SetText("")
+      (subtab.text):SetTextMode(UI_TM.eTextMode_LimitText)
       ;
       (subtab.text):SetText(getCashCategoryName((tabIndexList[ii])[2], jj))
+      local isSubTabLimit = (subtab.text):IsLimitText()
+      if isSubTabLimit then
+        (subtab.text):addInputEvent("Mouse_On", "InGameShop_SubTab_Tooltip(true, " .. ii .. ", " .. jj .. ")")
+        ;
+        (subtab.text):addInputEvent("Mouse_Out", "InGameShop_SubTab_Tooltip(false)")
+      else
+        ;
+        (subtab.text):addInputEvent("Mouse_On", "")
+        ;
+        (subtab.text):addInputEvent("Mouse_Out", "")
+      end
       ;
       (subtab.text):addInputEvent("Mouse_LUp", "InGameShop_SubTabEvent(" .. ii .. ", " .. jj .. ")")
       ;
       (subtab.static):SetShow(false)
       ;
       (subtab.text):SetShow(false)
-      -- DECOMPILER ERROR at PC358: Confused about usage of register: R20 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC390: Confused about usage of register: R21 in 'UnsetPending'
 
       ;
       (((self._tabs)[ii])._subTab)[jj] = subtab
@@ -415,7 +430,7 @@ inGameShop.init = function(self)
     (slot.soldout):SetShow(false)
     ;
     (slot.static):SetShow(false)
-    -- DECOMPILER ERROR at PC701: Confused about usage of register: R16 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC733: Confused about usage of register: R16 in 'UnsetPending'
 
     ;
     (self._slots)[ii] = slot
@@ -2667,6 +2682,7 @@ IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
           IngameCashShop_DescUpdate()
           FGlobal_CashShop_SetEquip_Update(productNoRaw)
           FGlobal_CashShop_SetEquip_SelectedItem(productNoRaw)
+          PaGlobal_RecommendEngine_CashVeiw(productNoRaw)
           self:update()
         end
       end
@@ -2715,7 +2731,7 @@ FGlobal_Update_IngameCashShop_CartEffect = function()
   ;
   ((self._myCartTab).static):EraseAllEffect()
   ;
-  ((self._myCartTab).static):AddEffect("UI_CashShop_BasketButton", false, 0, 0)
+  ((self._myCartTab).static):AddEffect("fUI_CashShop_BasketButton", false, 0, 0)
 end
 
 IngameCashShop_CartItem = function(index)
@@ -2825,9 +2841,15 @@ IngameCashShop_GiftItem = function(index)
   if selfplayer == nil then
     return 
   end
-  local limitLevel = 56
+  local limitLevel = 50
   local myLevel = (selfplayer:get()):getLevel()
-  if myLevel < limitLevel and (isGameTypeEnglish() or isGameTypeSA()) then
+  if myLevel < 50 and isGameTypeEnglish() then
+    limitLevel = 50
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
+    return 
+  end
+  if myLevel < 56 and isGameTypeSA() then
+    limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 
   end
@@ -2860,9 +2882,15 @@ IngameCashShop_DescSelectedGiftItem = function(productNoRaw)
   if selfplayer == nil then
     return 
   end
-  local limitLevel = 56
+  local limitLevel = 50
   local myLevel = (selfplayer:get()):getLevel()
-  if myLevel < limitLevel and (isGameTypeEnglish() or isGameTypeSA()) then
+  if myLevel < 50 and isGameTypeEnglish() then
+    limitLevel = 50
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
+    return 
+  end
+  if myLevel < 56 and isGameTypeSA() then
+    limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 
   end
@@ -3694,6 +3722,19 @@ end
   else
     TooltipSimple_Hide()
   end
+end
+
+  InGameShop_SubTab_Tooltip = function(isShow, ii, jj)
+  -- function num : 0_99 , upvalues : inGameShop, tabIndexList
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = inGameShop
+  local name, desc, control = nil, nil, nil
+  name = getCashCategoryName((tabIndexList[ii])[2], jj)
+  control = ((((self._tabs)[ii])._subTab)[jj]).text
+  TooltipSimple_Show(control, name, desc)
 end
 
   inGameShop:init()

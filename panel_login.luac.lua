@@ -25,10 +25,11 @@ Button_GameOption:ActiveMouseEventEffect(true)
 Button_Login:SetEnable(true)
 Button_Exit:SetEnable(true)
 Button_GameOption:SetEnable(true)
+StaticEventBG:SetShow(false)
 local screenX = getScreenSizeX()
 local screenY = getScreenSizeY()
 Static_Back = (Array.new)()
-local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "TROnly", "THOnly", "KR2Only", "TROnly", "THOnly", "IDOnly"}
+local bgItem = {"base", "calpeon", "media", "valencia", "sea", "kamasilvia", "kamasilvia2", "dragan", "xmas", "halloween", "thanksGivingDay", "aurora", "KoreaOnly", "JapanOnly", "RussiaOnly", "NaOnly", "TaiwanOnly", "TROnly", "THOnly", "KR2Only", "SAOnly", "TROnly", "THOnly", "IDOnly"}
 local bgIndex = {}
 for k,v in pairs(bgItem) do
   bgIndex[v] = k
@@ -51,7 +52,7 @@ local bgManager = {
 , 
 [bgIndex.dragan] = {isOpen = ToClient_IsContentsGroupOpen("6"), imageCount = 0, iconPath = "bgDragan_"}
 , 
-[bgIndex.xmas] = {isOpen = ToClient_isEventOn("x-mas"), imageCount = 2, iconPath = "bgXmas_"}
+[bgIndex.xmas] = {isOpen = ToClient_isEventOn("x-mas"), imageCount = 1, iconPath = "bgXmas_"}
 , 
 [bgIndex.halloween] = {isOpen = ToClient_isEventOn("Halloween"), imageCount = 3, iconPath = "bgHalloween_"}
 , 
@@ -74,6 +75,8 @@ local bgManager = {
 [bgIndex.THOnly] = {isOpen = not isGameTypeTH() or false, imageCount = 0, iconPath = "bgTHOnly_"}
 , 
 [bgIndex.KR2Only] = {isOpen = not isGameTypeKR2() or false, imageCount = 0, iconPath = "bgKR2Only_"}
+, 
+[bgIndex.SAOnly] = {isOpen = not isGameTypeSA() or false, imageCount = 0, iconPath = "bgSAOnly_"}
 , 
 [bgIndex.TROnly] = {isOpen = not isGameTypeTR() or false, imageCount = 0, iconPath = "bgTROnly_"}
 , 
@@ -99,7 +102,7 @@ for _,value in ipairs(bgManager) do
         targetControl:SetPosY(0)
         targetControl:SetAlpha(0)
         Panel_Login:SetChildIndex(targetControl, 0)
-        -- DECOMPILER ERROR at PC434: Confused about usage of register: R35 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC449: Confused about usage of register: R35 in 'UnsetPending'
 
         Static_Back[imageIndex] = targetControl
         endIndex = imageIndex
@@ -207,10 +210,6 @@ LogInPanel_Resize = function()
                           Static_CI:SetSpanSize(Static_DaumCI:GetSizeX() + 30, (Static_Blackline_down:GetSizeY() - Static_CI:GetSizeY()) / 2)
                           Static_DaumCI:SetSpanSize(20, (Static_Blackline_down:GetSizeY() - Static_DaumCI:GetSizeY()) / 2)
                           StaticEventBG:SetShow(false)
-                          local isXmas = ToClient_isEventOn("x-mas")
-                          if isXmas then
-                            StaticEventBG:SetShow(true)
-                          end
                           StaticEventBG:ComputePos()
                           Static_BI:ComputePos()
                           Static_Blackline_up:ComputePos()

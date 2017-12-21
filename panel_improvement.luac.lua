@@ -34,7 +34,7 @@ Improvement_HideAni = function()
   ImageMoveAni:SetDisableWhileAni(true)
 end
 
-local improvement = {title = (UI.getChildControl)(Panel_Improvement, "Static_Text_Title"), effectControl = (UI.getChildControl)(Panel_Improvement, "Static_AddEffect"), slot_0 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_0"), slot_1 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_1"), descBg = (UI.getChildControl)(Panel_Improvement, "Static_CommentBG"), desc = (UI.getChildControl)(Panel_Improvement, "StaticText_Comment"), btnApply = (UI.getChildControl)(Panel_Improvement, "Button_Apply"), _chk_Skip = (UI.getChildControl)(Panel_Improvement, "CheckButton_SkipImprovement"), equipItem = nil, materialItem = nil, 
+local improvement = {title = (UI.getChildControl)(Panel_Improvement, "Static_Text_Title"), effectControl = (UI.getChildControl)(Panel_Improvement, "Static_AddEffect"), slot_0 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_0"), slot_1 = (UI.getChildControl)(Panel_Improvement, "Static_Slot_1"), descBg = (UI.getChildControl)(Panel_Improvement, "StaticText_CommentBG"), desc = (UI.getChildControl)(Panel_Improvement, "StaticText_Comment"), btnApply = (UI.getChildControl)(Panel_Improvement, "Button_Apply"), _chk_Skip = (UI.getChildControl)(Panel_Improvement, "CheckButton_SkipImprovement"), equipItem = nil, materialItem = nil, 
 equipSlot = {}
 , 
 materialSlot = {}
@@ -42,27 +42,26 @@ materialSlot = {}
 ;
 (improvement.btnApply):addInputEvent("Mouse_LUp", "DoImprove()")
 ;
-(improvement.desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
+(improvement.descBg):SetTextMode(UI_TM.eTextMode_AutoWrap)
 ;
-(improvement.desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_DESC"))
+(improvement.descBg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_DESC"))
 ;
 (improvement.title):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_TITLE"))
-local textSizeY = (improvement.desc):GetTextSizeY()
-do
-  if (improvement.descBg):GetSizeY() < textSizeY + 15 then
-    local addSizeY = textSizeY + 15 - (improvement.descBg):GetSizeY()
-    ;
-    (improvement.descBg):SetSize((improvement.descBg):GetSizeX(), textSizeY + 15)
-    Panel_Improvement:SetSize(Panel_Improvement:GetSizeX(), Panel_Improvement:GetSizeY() + addSizeY)
-    ;
-    (improvement.descBg):ComputePos()
-    ;
-    (improvement.desc):ComputePos()
-    ;
-    (improvement.btnApply):ComputePos()
-  end
-  local slotConfig = {createIcon = true, createBorder = true, createCount = true, createCash = false}
-  improvement.Init = function(self)
+;
+(improvement.desc):SetShow(false)
+local textSizeY = (improvement.descBg):GetTextSizeY()
+local addSizeY = textSizeY + 15 - (improvement.descBg):GetSizeY()
+;
+(improvement.descBg):SetSize((improvement.descBg):GetSizeX(), textSizeY + 15)
+Panel_Improvement:SetSize(Panel_Improvement:GetSizeX(), Panel_Improvement:GetSizeY() + addSizeY)
+;
+(improvement.descBg):ComputePos()
+;
+(improvement.desc):ComputePos()
+;
+(improvement.btnApply):ComputePos()
+local slotConfig = {createIcon = true, createBorder = true, createCount = true, createCash = false}
+improvement.Init = function(self)
   -- function num : 0_2 , upvalues : slotConfig
   (SlotItem.new)(self.equipSlot, "Improvement_EquipSlot", 0, self.slot_0, slotConfig)
   ;
@@ -99,8 +98,8 @@ do
   (self._chk_Skip):addInputEvent("Mouse_Out", "Improvement_SimpleTooltip(false)")
 end
 
-  improvement:Init()
-  Panel_Improvement_Show = function()
+improvement:Init()
+Panel_Improvement_Show = function()
   -- function num : 0_3 , upvalues : improvement
   Panel_Improvement:SetShow(true, true)
   ;
@@ -135,7 +134,7 @@ end
   (improvement._chk_Skip):SetCheck(false)
 end
 
-  Panel_Improvement_Hide = function()
+Panel_Improvement_Hide = function()
   -- function num : 0_4 , upvalues : improvement
   local self = improvement
   self.animationTime = 0
@@ -158,7 +157,7 @@ end
   Equipment_PosLoadMemory()
 end
 
-  ImproveInvenFilerMainItem = function(slotNo, notUse_itemWrappers, whereType)
+ImproveInvenFilerMainItem = function(slotNo, notUse_itemWrappers, whereType)
   -- function num : 0_5
   local itemWrapper = getInventoryItemByType(whereType, slotNo)
   if itemWrapper == nil then
@@ -168,7 +167,7 @@ end
   return not ssW:isImprovable()
 end
 
-  ImproveSetMainItemFromInventory = function(slotNo, itemWrapper, count, inventoryType)
+ImproveSetMainItemFromInventory = function(slotNo, itemWrapper, count, inventoryType)
   -- function num : 0_6 , upvalues : improvement
   local self = improvement
   local improveInfo = getImproveInformation()
@@ -185,7 +184,7 @@ end
   Inventory_SetFunctor(ImproveInvenFilerSubItem, ImproveSetMaterialItemFromInventory, Panel_Improvement_Hide, nil)
 end
 
-  ImproveInvenFilerSubItem = function(slotNo, notUse_itemWrappers, whereType)
+ImproveInvenFilerSubItem = function(slotNo, notUse_itemWrappers, whereType)
   -- function num : 0_7
   local itemWrapper = getInventoryItemByType(whereType, slotNo)
   if itemWrapper == nil then
@@ -206,7 +205,7 @@ end
   return returnValue
 end
 
-  ImproveSetMaterialItemFromInventory = function(slotNo, itemWrapper, count, inventoryType)
+ImproveSetMaterialItemFromInventory = function(slotNo, itemWrapper, count, inventoryType)
   -- function num : 0_8 , upvalues : improvement
   local self = improvement
   local improveInfo = getImproveInformation()
@@ -225,12 +224,12 @@ end
   audioPostEvent_SystemUi(0, 16)
 end
 
-  ImproveInvenFilerAll = function()
+ImproveInvenFilerAll = function()
   -- function num : 0_9
   return true
 end
 
-  Improvement_SlotInit = function()
+Improvement_SlotInit = function()
   -- function num : 0_10 , upvalues : improvement
   local self = improvement
   if self._doImprove then
@@ -260,7 +259,7 @@ end
   Inventory_SetFunctor(ImproveInvenFilerMainItem, ImproveSetMainItemFromInventory, Panel_Improvement_Hide, nil)
 end
 
-  Improvement_Tooltip = function(isShow, slotType)
+Improvement_Tooltip = function(isShow, slotType)
   -- function num : 0_11 , upvalues : improvement
   if isShow == false then
     Panel_Tooltip_Item_hideTooltip()
@@ -291,7 +290,7 @@ end
   end
 end
 
-  Improvement_SimpleTooltip = function(isShow, tipType)
+Improvement_SimpleTooltip = function(isShow, tipType)
   -- function num : 0_12 , upvalues : improvement
   if not isShow then
     TooltipSimple_Hide()
@@ -305,7 +304,7 @@ end
   TooltipSimple_Show(control, name, desc)
 end
 
-  DoImprove = function()
+DoImprove = function()
   -- function num : 0_13 , upvalues : improvement
   local self = improvement
   if self._doImprove then
@@ -371,7 +370,7 @@ end
   ToClient_BlackspiritEnchantStart()
 end
 
-  UpdateFunc_DoingImprove = function(deltaTime)
+UpdateFunc_DoingImprove = function(deltaTime)
   -- function num : 0_14 , upvalues : improvement
   local self = improvement
   self.animationTime = self.animationTime + deltaTime
@@ -419,13 +418,12 @@ end
   end
 end
 
-  FromClient_ResponseImporve = function(itemEnchantKey)
+FromClient_ResponseImporve = function(itemEnchantKey)
   -- function num : 0_15
   local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(itemEnchantKey))
   Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_IMPROVEMENT_SUCCESSMSG", "itemName", tostring(itemSSW:getName())))
 end
 
-  Panel_Improvement:RegisterUpdateFunc("UpdateFunc_DoingImprove")
-  registerEvent("FromClient_ResponseImporve", "FromClient_ResponseImporve")
-end
+Panel_Improvement:RegisterUpdateFunc("UpdateFunc_DoingImprove")
+registerEvent("FromClient_ResponseImporve", "FromClient_ResponseImporve")
 

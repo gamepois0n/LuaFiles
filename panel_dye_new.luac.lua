@@ -695,10 +695,20 @@ DyeNew.Initialize = function(self)
   (self.Slider_Endurance):SetPosX((self.txt_Endurance):GetPosX() + (self.txt_Endurance):GetSizeX() + 50)
   ;
   (self.Slider_Endurance):SetPosY(15)
-  ;
-  (self.btn_ShowUnderwear):SetPosX(70)
-  ;
-  (self.btn_ShowUnderwear):SetPosY(30)
+  if ToClient_isAdultUser() == false then
+    (self.btn_ShowUnderwear):SetShow(false)
+    ;
+    (self.btn_ShowUnderwear):SetIgnore(false)
+  else
+    ;
+    (self.btn_ShowUnderwear):SetPosX(70)
+    ;
+    (self.btn_ShowUnderwear):SetPosY(30)
+    ;
+    (self.btn_HideAvatar):SetPosX((self.btn_ShowUnderwear):GetPosX() + (self.btn_ShowUnderwear):GetSizeX())
+    ;
+    (self.btn_HideAvatar):SetPosY(30)
+  end
   ;
   (self.btn_HideAvatar):SetPosX((self.btn_ShowUnderwear):GetPosX() + (self.btn_ShowUnderwear):GetSizeX())
   ;

@@ -67,7 +67,7 @@ TooltipCommon_Show = function(index, uiWedget, iconPath, name, title, desc)
   local height = getMaxBottomPos() + 30
   if width ~= 0 and height ~= 0 then
     local posX = uiWedget:GetParentPosX() + uiWedget:GetSizeX() * 0.8
-    local posY = uiWedget:GetParentPosY() - uiWedget:GetSizeY() * 1.8
+    local posY = uiWedget:GetParentPosY() - uiWedget:GetSizeY() - _uiName:GetTextSizeY()
     Panel_Tooltip_Common:SetPosX(posX)
     Panel_Tooltip_Common:SetPosY(posY)
     Panel_Tooltip_Common:SetSize(Panel_Tooltip_Common:GetSizeX(), height)

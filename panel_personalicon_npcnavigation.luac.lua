@@ -182,17 +182,13 @@ local checkIsNewAdd = function(index, key)
 end
 
 local clearFocusEdit = function()
-  -- function num : 0_8 , upvalues : searchGroupShow, UILink, IM
+  -- function num : 0_8 , upvalues : searchGroupShow, UILink
   if NpcNavi_CheckCurrentUiEdit(GetFocusEdit()) then
     ClearFocusEdit()
+    CheckChattingInput()
     searchGroupShow(false)
     ;
     (UILink.editSearchText):SetEditText("")
-    if AllowChangeInputMode() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
-    end
   end
 end
 
@@ -767,8 +763,7 @@ NpcNavi_ShowRequestOuter = function(isShow)
 end
 
 NpcNavi_OnInputMode = function()
-  -- function num : 0_32 , upvalues : IM, UILink, searchGroupShow
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_32 , upvalues : UILink, searchGroupShow
   SetFocusEdit(UILink.editSearchText)
   ;
   (UILink.editSearchText):SetEditText("")
@@ -956,12 +951,9 @@ NpcListUpdate = function()
 end
 
 NpcNavi_SearchBtn = function()
-  -- function num : 0_41 , upvalues : IM, filterText, UILink, treeClear
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_41 , upvalues : filterText, UILink, treeClear
+  if CheckChattingInput() == false then
     ClearFocusEdit()
-  else
-    SetFocusChatting()
   end
   filterText = (UILink.editSearchText):GetEditText()
   treeClear()

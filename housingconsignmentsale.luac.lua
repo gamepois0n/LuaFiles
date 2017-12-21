@@ -489,30 +489,22 @@ HandleClickedSelectComboBoxConsignmentSellDate = function()
 end
 
 HandleClickedConsignmentEditRegisterPrice = function(index)
-  -- function num : 0_20 , upvalues : IM, ConsignmentSaleManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_20 , upvalues : ConsignmentSaleManager
   (((ConsignmentSaleManager._saleList)[index])._editRegisterPrice):SetEditText("", true)
 end
 
 HandleClickedConsignmentEditSalePrice = function()
-  -- function num : 0_21 , upvalues : IM, ConsignmentSaleManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_21 , upvalues : ConsignmentSaleManager
   (((ConsignmentSaleManager._saleList)[0])._editSalePrice):SetEditText("", true)
 end
 
 HandleClickedConsignmentEditRegistMinimum = function()
-  -- function num : 0_22 , upvalues : IM, ConsignmentSaleManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_22 , upvalues : ConsignmentSaleManager
   (ConsignmentSaleManager._editRegistMinimum):SetEditText("", true)
 end
 
 HandleClickedConsignmentEditBalance = function()
-  -- function num : 0_23 , upvalues : IM, ConsignmentSaleManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_23 , upvalues : ConsignmentSaleManager
   (ConsignmentSaleManager._editBalance):SetEditText("", true)
 end
 
@@ -541,11 +533,9 @@ FGlobal_CheckCurrentConsignmentSaleUiEdit = function(targetUI)
 end
 
 FGlobal_ConsignmentSaleClearFocusEdit = function()
-  -- function num : 0_25 , upvalues : ConsignmentSaleManager, IM
+  -- function num : 0_25 , upvalues : ConsignmentSaleManager
   (ConsignmentSaleManager._editRegistMinimum):SetEditText(ConsignmentSaleManager._registGoldMinimum, true)
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 HandleClickedConsignmentListLeft = function()
@@ -788,11 +778,9 @@ handleClickedConsignmentWithdrawGold = function()
 end
 
 handleClickedConsignmentWithdrawGoldContinue = function()
-  -- function num : 0_37 , upvalues : ConsignmentSaleManager, IM
+  -- function num : 0_37 , upvalues : ConsignmentSaleManager
   local gold = (ConsignmentSaleManager._editBalance):GetEditNumber()
   ToClient_RequestBusinessWithdrawMoney(gold)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit()
 end
 
@@ -1181,16 +1169,15 @@ ConsignmentSaleManager.Show = function(self)
 end
 
 ConsignmentSaleManager.Close = function(self)
-  -- function num : 0_44 , upvalues : IM, ConsignmentSaleManager
+  -- function num : 0_44 , upvalues : ConsignmentSaleManager
   if Panel_Housing_ConsignmentSale:IsShow() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     Panel_Housing_ConsignmentSale:SetShow(false, false)
     ClearFocusEdit()
     FGlobal_UpdateInventorySlotData()
-    -- DECOMPILER ERROR at PC20: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
 
     ConsignmentSaleManager._slotNo = 0
-    -- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC17: Confused about usage of register: R1 in 'UnsetPending'
 
     ConsignmentSaleManager._itemCount = 0
   end
@@ -1203,7 +1190,7 @@ registerEvent("FromClient_EventShowConsignmentSale", "FromClient_EventShowConsig
 registerEvent("FromClient_EventShowMyConsignmentSale", "FromClient_EventShowMyConsignmentSale")
 registerEvent("FromClient_EventShowHoldingMoneyManager", "FromClient_EventShowConsignmentHoldingMoneyManager")
 FromClient_EventShowSetConsignmentSale = function(isOwner)
-  -- function num : 0_45 , upvalues : ConsignmentSaleManager, UI_color, IM
+  -- function num : 0_45 , upvalues : ConsignmentSaleManager, UI_color
   (ConsignmentSaleManager._buttonMyList):SetShow(false)
   ;
   (ConsignmentSaleManager._buttonRegisterItem):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CONSIGNMENTSALE_BUTTON_NOTREGISTER"))
@@ -1260,10 +1247,8 @@ FromClient_EventShowSetConsignmentSale = function(isOwner)
     ;
     (((ConsignmentSaleManager._saleList)[index])._staticBack):SetShow(false)
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ConsignmentSaleManager:Show()
-  -- DECOMPILER ERROR at PC177: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC172: Confused about usage of register: R5 in 'UnsetPending'
 
   ConsignmentSaleManager._isOwner = isOwner
 end
@@ -1289,7 +1274,7 @@ FromClient_EventShowRegisterConsignmentSale = function(commission, minRegisterMo
 end
 
 FromClient_EventShowConsignmentSale = function(isOwner)
-  -- function num : 0_47 , upvalues : ConsignmentSaleManager, IM
+  -- function num : 0_47 , upvalues : ConsignmentSaleManager
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R1 in 'UnsetPending'
 
   if ConsignmentSaleManager._isUpdate == false then
@@ -1301,15 +1286,12 @@ FromClient_EventShowConsignmentSale = function(isOwner)
   if Panel_Housing_ConsignmentSale:GetShow() == false then
     ConsignmentSaleManager._static_currentPage = 0
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ConsignmentSaleManager:Show()
   ConsignmentSaleManager:UpdateData(isOwner)
 end
 
 FromClient_EventShowMyConsignmentSale = function(isOwner)
-  -- function num : 0_48 , upvalues : IM, ConsignmentSaleManager
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_48 , upvalues : ConsignmentSaleManager
   ConsignmentSaleManager:UpdateMyData(isOwner)
 end
 

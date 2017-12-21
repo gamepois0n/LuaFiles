@@ -38,6 +38,8 @@ local classPicture = {
 [UI_classType.ClassType_Combattant] = {289, 291, 384, 435}
 , 
 [UI_classType.ClassType_CombattantWomen] = {385, 291, 480, 435}
+, 
+[UI_classType.ClassType_Lahn] = {97, 1, 192, 145}
 }
 local tooltip = {_bg = (UI.getChildControl)(Panel_Introduction, "Static_TooltipBG"), _pic = (UI.getChildControl)(Panel_Introduction, "Static_CharacterPic"), _name = (UI.getChildControl)(Panel_Introduction, "StaticText_FamilyName"), _level = (UI.getChildControl)(Panel_Introduction, "StaticText_CharacterLv"), _desc = (UI.getChildControl)(Panel_Introduction, "StaticText_SelfIntro"), _close = (UI.getChildControl)(Panel_Introduction, "Button_Close")}
 ;
@@ -50,77 +52,17 @@ FGlobal_Introcution_TooltipHide = function()
 end
 
 local replaceClassType = function(classNo)
-  -- function num : 0_1 , upvalues : UI_classType
+  -- function num : 0_1
   local returnValue = ""
-  if UI_classType.ClassType_Warrior == classNo then
-    returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WARRIOR")
-  else
-    if UI_classType.ClassType_Ranger == classNo then
-      returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RANGER")
-    else
-      if UI_classType.ClassType_Sorcerer == classNo then
-        returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_SORCERER")
-      else
-        if UI_classType.ClassType_Giant == classNo then
-          returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_GIANT")
-        else
-          if UI_classType.ClassType_Tamer == classNo then
-            returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_TAMER")
-          else
-            if UI_classType.ClassType_BladeMaster == classNo then
-              returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER")
-            else
-              if UI_classType.ClassType_BladeMasterWomen == classNo then
-                returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN")
-              else
-                if UI_classType.ClassType_Valkyrie == classNo then
-                  returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE")
-                else
-                  if UI_classType.ClassType_Wizard == classNo then
-                    returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD")
-                  else
-                    if UI_classType.ClassType_WizardWomen == classNo then
-                      returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN")
-                    else
-                      if UI_classType.ClassType_Kunoichi == classNo then
-                        returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI")
-                      else
-                        if UI_classType.ClassType_NinjaWomen == classNo then
-                          returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN")
-                        else
-                          if UI_classType.ClassType_NinjaMan == classNo then
-                            returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN")
-                          else
-                            if UI_classType.ClassType_DarkElf == classNo then
-                              returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF")
-                            else
-                              if UI_classType.ClassType_Combattant == classNo then
-                                returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
-                              else
-                                if UI_classType.ClassType_CombattantWomen == classNo then
-                                  returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN")
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
+  if classNo == nil then
+    return 
   end
-  return returnValue
+  return (CppEnums.ClassType2String)[classNo]
 end
 
 local panelSizeY = Panel_Introduction:GetSizeY()
 FGlobal_Introduction_TooltipShow = function(uiControl, name, desc, isClose, actorKey)
-  -- function num : 0_2 , upvalues : tooltip, panelSizeY, replaceClassType, classPicture
+  -- function num : 0_2 , upvalues : tooltip, panelSizeY, replaceClassType, UI_classType, classPicture
   FGlobal_Introcution_TooltipHide()
   Panel_Introduction:SetShow(true)
   local self = tooltip
@@ -155,8 +97,12 @@ FGlobal_Introduction_TooltipShow = function(uiControl, name, desc, isClose, acto
       local playerClass = playerActorProxyWrapper:getClassType()
       ;
       (tooltip._level):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_INTRODUCTIONMYSELF_SUBINFO", "class", replaceClassType(playerClass), "level", charLevel))
-      ;
-      (tooltip._pic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_00.dds")
+      if UI_classType.ClassType_Lahn == playerClass then
+        (tooltip._pic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_01.dds")
+      else
+        ;
+        (tooltip._pic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_00.dds")
+      end
       local x1, y1, x2, y2 = setTextureUV_Func(tooltip._pic, (classPicture[playerClass])[1], (classPicture[playerClass])[2], (classPicture[playerClass])[3], (classPicture[playerClass])[4])
       ;
       ((tooltip._pic):getBaseTexture()):setUV(x1, y1, x2, y2)

@@ -5,7 +5,6 @@
 -- function num : 0
 Panel_CoolTime_Effect:SetShow(false, false)
 Panel_SkillCooltime:SetShow(true)
-Panel_SkillCooltime:SetFakeUIRenderList()
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_PSFT = CppEnums.PAUI_SHOW_FADE_TYPE

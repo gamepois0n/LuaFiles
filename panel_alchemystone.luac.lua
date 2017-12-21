@@ -916,7 +916,7 @@ AlchemyStone_StoneFilter = function(slotNo, itemWrapper, count, inventoryType)
   end
   if ((itemWrapper:getStaticStatus()):get()):getContentsEventType() == 32 then
     local alchemyStoneType = ((itemWrapper:getStaticStatus()):get())._contentsEventParam1
-    if alchemyStoneType > 2 then
+    if alchemyStoneType > 2 and alchemyStoneType ~= 6 then
       return true
     end
     if ((AlchemyStone.control).tab_Upgrade):IsCheck() then

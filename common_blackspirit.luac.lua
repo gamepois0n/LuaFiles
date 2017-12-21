@@ -6,7 +6,7 @@
 local UIMode = Defines.UIMode
 local IM = CppEnums.EProcessorInputMode
 appear_blackSpirit = function(questNo, blackSpiritUIType)
-  -- function num : 0_0 , upvalues : UIMode, IM
+  -- function num : 0_0 , upvalues : UIMode
   ToClient_SaveUiInfo(false)
   close_WindowPanelList()
   local preUIMode = GetUIMode()
@@ -15,8 +15,6 @@ appear_blackSpirit = function(questNo, blackSpiritUIType)
   if callSummon then
     Panel_Npc_Dialog:SetShow(false)
     FGlobal_Dialog_renderMode:set()
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
   else
     SetUIMode(preUIMode)
     ToClient_PopBlackSpiritFlush()

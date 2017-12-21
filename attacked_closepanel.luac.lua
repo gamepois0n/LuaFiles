@@ -51,11 +51,7 @@ FromClient_CancelByAttacked = function()
   end
   HandleClicked_HouseInstallation_Exit_ByAttacked()
   FGlobal_AgreementGuild_Close()
-  if isNewFriendList_chk() == true then
-    FGlobal_FriendMessanger_KillFocusEdit()
-  else
-    FriendMessanger_KillFocusEdit()
-  end
+  FriendMessanger_KillFocusEdit()
   close_WindowMinigamePanelList()
   FGlobal_Gacha_Roulette_Close()
   if dialog_getTalkNpcKey() ~= 0 then

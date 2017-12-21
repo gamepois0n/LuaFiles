@@ -1233,6 +1233,7 @@ NpcShop_BuySome = function()
   end
   do
     Panel_NumberPad_Show(true, s64_maxMoneyNumber, param, NpcShop_BuySome_ConfirmFunction, nil, nil, nil, nil, s64_maxWeightNumber)
+    Panel_NumberPad_SetType("NpcShop_BuySome")
   end
 end
 
@@ -1603,6 +1604,9 @@ NpcShop_CheckFromMoney = function(check)
       ;
       (self.checkButton_Inventory):SetCheck(true)
     end
+  end
+  if Panel_NumberPad_IsPopUp() and Panel_NumberPad_IsType("NpcShop_BuySome") then
+    NpcShop_BuySome()
   end
 end
 

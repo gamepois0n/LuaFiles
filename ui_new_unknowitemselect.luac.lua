@@ -73,7 +73,7 @@ randomShopShow = function(slotNo, priceRate)
     end
   end
   if shopTypeNum == 12 then
-    useWp = 50
+    useWp = 25
     _reserveButton:SetShow(isReserveContentOpen)
   else
     if shopTypeNum == 13 then
@@ -155,7 +155,7 @@ Item_RequestShopList = function()
   -- function num : 0_6 , upvalues : shopTypeNum, _itemButtonReSelect
   local myWp = (getSelfPlayer()):getWp()
   if shopTypeNum == 12 then
-    useWp = 50
+    useWp = 25
   else
     if shopTypeNum == 13 then
       useWp = 10

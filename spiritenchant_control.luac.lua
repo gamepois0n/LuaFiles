@@ -67,7 +67,7 @@ PaGlobal_Enchant.setNeedPerfectEnchantItemCount = function(self, needCount, ench
         ;
         (self._uiHelpPerfectEnchant):SetSize(220, boxSizeY)
         ;
-        (self._uiHelpPerfectEnchant):SetPosY(self._bubbleBasePosY - (self._uiHelpPerfectEnchant):GetSizeY() + 50)
+        (self._uiHelpPerfectEnchant):SetPosY((self._uiButtonSureSuccess):GetPosY() - (self._uiHelpPerfectEnchant):GetSizeY())
       end
     end
   end

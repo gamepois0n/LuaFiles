@@ -532,7 +532,7 @@ waterRateStatic = {}
 tempRateStatic = {}
 }
 housing.ShowInstallationMenu = function(self, isShow, posX, posY, isHarvest, isShowMove, isShowFix, isShowDelete, isShowCancel)
-  -- function num : 0_3 , upvalues : housing, IM
+  -- function num : 0_3 , upvalues : housing
   (housing.FixingBG):SetShow(false)
   ;
   (housing._btnObjectMove):SetShow(false)
@@ -544,9 +544,6 @@ housing.ShowInstallationMenu = function(self, isShow, posX, posY, isHarvest, isS
   (housing._btnObjectCancel):SetShow(false)
   if isShow == false then
     return 
-  else
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   end
   audioPostEvent_SystemUi(12, 16)
   if isHarvest then
@@ -1051,10 +1048,8 @@ Event_HousingBuildTentMessageBox = function()
 end
 
 Event_HousingCancelInstallModeMessageBox = function()
-  -- function num : 0_31 , upvalues : IM, housing
+  -- function num : 0_31 , upvalues : housing
   audioPostEvent_SystemUi(1, 33)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   housing:ShowInstallationMenu(false, 0, 0, false, false, false, false, false)
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_MEMO")
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_TITLE"), content = messageBoxMemo, functionYes = Panel_Housing_CancelInstallMode_InteractionFromMessageBox, functionCancel = MessageBox_Housing_Default_Cancel_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}

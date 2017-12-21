@@ -17,7 +17,7 @@ local autoTraining_Init = function()
 end
 
 AutoTraining_Set = function()
-  -- function num : 0_1 , upvalues : IM, autoTrain
+  -- function num : 0_1 , upvalues : autoTrain
   if Panel_Global_Manual:GetShow() then
     Proc_ShowMessage_Ack("미니게임 중에�\148 흑정령의 수련�\132 이용�\160 �\152 없습니다.")
     return 
@@ -39,14 +39,10 @@ AutoTraining_Set = function()
   end
   if check_ShowWindow() then
     close_WindowPanelList()
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     FGlobal_NpcNavi_Hide()
   end
   if check_ShowWindow() and FGlobal_NpcNavi_IsShowCheck() then
     close_WindowPanelList()
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
     FGlobal_NpcNavi_Hide()
   else
     if not check_ShowWindow() and FGlobal_NpcNavi_IsShowCheck() then
@@ -54,8 +50,6 @@ AutoTraining_Set = function()
     else
       if check_ShowWindow() and not FGlobal_NpcNavi_IsShowCheck() then
         close_WindowPanelList()
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
       end
     end
   end

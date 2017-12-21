@@ -86,6 +86,90 @@ PaGlobal_Repair.initialize = function(self)
   if repair_SetRepairMode ~= nil then
     repair_SetRepairMode(false)
   end
+  ;
+  (self._uiRepairStableEquippedItemButton):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  ;
+  (self._uiRepairWharfEquippedItemButton):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  ;
+  (self._uiRepairElephantButton):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  ;
+  (self._uiRepairAllEquippedItemButton):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  ;
+  (self._uiRepairAllInvenItemButton):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  ;
+  (self._uiFixEquipItemButton):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
+  ;
+  (self._uiRepairStableEquippedItemButton):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_VEHICLE"))
+  ;
+  (self._uiRepairWharfEquippedItemButton):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_SHIP"))
+  ;
+  (self._uiRepairElephantButton):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_ELEPHANT"))
+  ;
+  (self._uiRepairAllEquippedItemButton):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_EQUIPITEM"))
+  ;
+  (self._uiRepairAllInvenItemButton):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_IVNENITEM"))
+  ;
+  (self._uiFixEquipItemButton):SetText(PAGetString(Defines.StringSheet_RESOURCE, "REPAIR_MAXENDURANCE_TITLE"))
+  local isLimitTextStable = (self._uiRepairStableEquippedItemButton):IsLimitText()
+  local isLimitTextWharf = (self._uiRepairWharfEquippedItemButton):IsLimitText()
+  local isLimitTextElephant = (self._uiRepairElephantButton):IsLimitText()
+  local isLimitTextAllEquiped = (self._uiRepairAllEquippedItemButton):IsLimitText()
+  local isLimitTextAllInven = (self._uiRepairAllInvenItemButton):IsLimitText()
+  local isLimitTextFixEquip = (self._uiFixEquipItemButton):IsLimitText()
+  ;
+  (self._uiRepairStableEquippedItemButton):addInputEvent("Mouse_On", "")
+  ;
+  (self._uiRepairStableEquippedItemButton):addInputEvent("Mouse_Out", "")
+  ;
+  (self._uiRepairWharfEquippedItemButton):addInputEvent("Mouse_On", "")
+  ;
+  (self._uiRepairWharfEquippedItemButton):addInputEvent("Mouse_Out", "")
+  ;
+  (self._uiRepairElephantButton):addInputEvent("Mouse_On", "")
+  ;
+  (self._uiRepairElephantButton):addInputEvent("Mouse_Out", "")
+  ;
+  (self._uiRepairAllEquippedItemButton):addInputEvent("Mouse_On", "")
+  ;
+  (self._uiRepairAllEquippedItemButton):addInputEvent("Mouse_Out", "")
+  ;
+  (self._uiRepairAllInvenItemButton):addInputEvent("Mouse_On", "")
+  ;
+  (self._uiRepairAllInvenItemButton):addInputEvent("Mouse_Out", "")
+  ;
+  (self._uiFixEquipItemButton):addInputEvent("Mouse_On", "")
+  ;
+  (self._uiFixEquipItemButton):addInputEvent("Mouse_Out", "")
+  if isLimitTextStable then
+    (self._uiRepairStableEquippedItemButton):addInputEvent("Mouse_On", "PaGlobal_Repair_MouseTooltip(true, 0)")
+    ;
+    (self._uiRepairStableEquippedItemButton):addInputEvent("Mouse_Out", "PaGlobal_Repair_MouseTooltip(false)")
+  end
+  if isLimitTextWharf then
+    (self._uiRepairWharfEquippedItemButton):addInputEvent("Mouse_On", "PaGlobal_Repair_MouseTooltip(true, 1)")
+    ;
+    (self._uiRepairWharfEquippedItemButton):addInputEvent("Mouse_Out", "PaGlobal_Repair_MouseTooltip(false)")
+  end
+  if isLimitTextElephant then
+    (self._uiRepairElephantButton):addInputEvent("Mouse_On", "PaGlobal_Repair_MouseTooltip(true, 2)")
+    ;
+    (self._uiRepairElephantButton):addInputEvent("Mouse_Out", "PaGlobal_Repair_MouseTooltip(false)")
+  end
+  if isLimitTextAllEquiped then
+    (self._uiRepairAllEquippedItemButton):addInputEvent("Mouse_On", "PaGlobal_Repair_MouseTooltip(true, 3)")
+    ;
+    (self._uiRepairAllEquippedItemButton):addInputEvent("Mouse_Out", "PaGlobal_Repair_MouseTooltip(false)")
+  end
+  if isLimitTextAllInven then
+    (self._uiRepairAllInvenItemButton):addInputEvent("Mouse_On", "PaGlobal_Repair_MouseTooltip(true, 4)")
+    ;
+    (self._uiRepairAllInvenItemButton):addInputEvent("Mouse_Out", "PaGlobal_Repair_MouseTooltip(false)")
+  end
+  if isLimitTextFixEquip then
+    (self._uiFixEquipItemButton):addInputEvent("Mouse_On", "PaGlobal_Repair_MouseTooltip(true, 5)")
+    ;
+    (self._uiFixEquipItemButton):addInputEvent("Mouse_Out", "PaGlobal_Repair_MouseTooltip(false)")
+  end
   self._uiRepairInvenMoneyTextSizeX = (self._uiRepairInvenMoney):GetTextSizeX()
   self._uiRepairWareHouseMoneyTextSizeX = (self._uiRepairWareHouseMoney):GetTextSizeX()
   if self._uiRepairWareHouseMoneyTextSizeX < self._uiRepairInvenMoneyTextSizeX then
@@ -376,15 +460,55 @@ PaGlobal_Repair.repair_OpenPanel = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC157: Confused about usage of register: R4 in 'UnsetPending'
+PaGlobal_Repair_MouseTooltip = function(isShow, tipType)
+  -- function num : 0_8
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  local self = PaGlobal_Repair
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_VEHICLE")
+    control = self._uiRepairStableEquippedItemButton
+  else
+    if tipType == 1 then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_REPAIR_SHIP")
+      control = self._uiRepairWharfEquippedItemButton
+    else
+      if tipType == 2 then
+        name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_ELEPHANT")
+        control = self._uiRepairElephantButton
+      else
+        if tipType == 3 then
+          name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_EQUIPITEM")
+          control = self._uiRepairAllEquippedItemButton
+        else
+          if tipType == 4 then
+            name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_REPAIR_BTN_IVNENITEM")
+            control = self._uiRepairAllInvenItemButton
+          else
+            if tipType == 5 then
+              name = PAGetString(Defines.StringSheet_RESOURCE, "REPAIR_MAXENDURANCE_TITLE")
+              control = self._uiFixEquipItemButton
+            end
+          end
+        end
+      end
+    end
+  end
+  TooltipSimple_Show(control, name, desc)
+end
+
+-- DECOMPILER ERROR at PC159: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repairMoneyUpdate = function(self)
-  -- function num : 0_8
+  -- function num : 0_9
   Repair_Money_Update()
 end
 
 Repair_Money_Update = function()
-  -- function num : 0_9
+  -- function num : 0_10
   local self = PaGlobal_Repair
   ;
   (self._uiRepairInven):SetText(makeDotMoney((((getSelfPlayer()):get()):getInventory()):getMoney_s64()))
@@ -392,19 +516,19 @@ Repair_Money_Update = function()
   (self._uiRepairWareHouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
 end
 
--- DECOMPILER ERROR at PC162: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC164: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.cursor_PosUpdate = function(self)
-  -- function num : 0_10
+  -- function num : 0_11
   (self._uiRepairCursor):SetPosX(getMousePosX() - Panel_Window_Repair:GetPosX())
   ;
   (self._uiRepairCursor):SetPosY(getMousePosY() - Panel_Window_Repair:GetPosY())
 end
 
--- DECOMPILER ERROR at PC165: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC167: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.Repair_Money_SetPos = function(self)
-  -- function num : 0_11
+  -- function num : 0_12
   if (self._uiRepairInven):GetPosX() - (self._uiRepairInvenMoney):GetPosX() - 24 < self._uiRepairTextSizeX then
     local sizeX = self._uiRepairTextSizeX - (self._uiRepairInven):GetPosX() - (self._uiRepairInvenMoney):GetPosX() + 36
     ;
@@ -414,20 +538,20 @@ PaGlobal_Repair.Repair_Money_SetPos = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC168: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC170: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.repair_registMessageHandler = function(self)
-  -- function num : 0_12
+  -- function num : 0_13
   registerEvent("onScreenResize", "Repair_Resize")
   registerEvent("FromClient_MaxEnduranceLuckyRepairEvent", "FromClient_LuckyRepair_resultShow")
   registerEvent("EventWarehouseUpdate", "Repair_Money_Update")
   Panel_LuckyRepair_Result:RegisterUpdateFunc("Chk_LuckyRepair_ResultMsg_ShowTime")
 end
 
--- DECOMPILER ERROR at PC171: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC173: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_Repair.setIsCamping = function(self, isCamping)
-  -- function num : 0_13
+  -- function num : 0_14
   self._isCamping = isCamping
 end
 

@@ -323,7 +323,7 @@ end
 local dontGoMaid = -1
 local maidType = -1
 FGlobal_WarehouseOpenByMaid = function(index)
-  -- function num : 0_8 , upvalues : dontGoMaid, maidType, IM
+  -- function num : 0_8 , upvalues : dontGoMaid, maidType
   local selfProxy = getSelfPlayer()
   if selfProxy == nil then
     return 
@@ -404,8 +404,6 @@ FGlobal_WarehouseOpenByMaid = function(index)
             end
           end
           do
-            ;
-            (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
             SetUIMode((Defines.UIMode).eUIMode_Default)
             if index == 1 then
               if warehouseOutMaid or warehouseInMaid then
@@ -447,8 +445,6 @@ FGlobal_WarehouseOpenByMaid = function(index)
                       end
                       do
                         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ALERT"))
-                        ;
-                        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
                         SetUIMode((Defines.UIMode).eUIMode_Default)
                       end
                     end

@@ -25,7 +25,7 @@ giftTopList = {}
 giftBotList = {}
 , 
 giftUserList = {}
-, savedCouponApply = nil, savedCouponDiscountRate = 0, savedCouponDiscountTextSizeX = 0, _panelTitle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_Title"), _static_LeftBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_LeftBG"), _static_PearlBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_PearlBG"), _static_ItemIconBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlotBG"), _static_ItemIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlot"), _static_ItemName = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GoodsName"), _static_PearlIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlIcon"), _static_StampIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlStampIcon"), _txt_PearlIconPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_CouponPearlIcon"), _txt_DiscountDirection = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountDirection"), _static_DiscountPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountGoodsPrice"), _static_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GiftTo"), _edit_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Edit_GiftTo"), _static_GiftListBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBG"), _static_GiftListTopBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListTopBG"), _static_GiftListBotBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBotBG"), _static_GiftList_NonUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_NonUser"), _scroll_GiftTopList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftTopList"), _scroll_GiftBotList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftBotList"), _buttonFriendList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Friend"), _buttonGuildList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Guild"), _button_AddUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_AddUser"), _button_Close = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Win_Close"), _button_Confirm = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Confirm"), _button_Cancle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Cancle"), _static_selectStampBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_StampCouponSelectBG"), _slotCount = 20, _slots = (Array.new)(), _needMoneyType = -1, _productNoRaw = nil, _isGift = false, _byCart = false, _easyBuy = false, _usePearlStampCount = 0, _isUsePearl = false}
+, savedProductCount = 1, savedCouponApply = nil, savedCouponDiscountRate = 0, savedCouponDiscountTextSizeX = 0, _panelTitle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_Title"), _static_LeftBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_LeftBG"), _static_PearlBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_PearlBG"), _static_ItemIconBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlotBG"), _static_ItemIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GoodsSlot"), _static_ItemName = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GoodsName"), _static_PearlIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlIcon"), _static_StampIcon = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlStampIcon"), _txt_PearlIconPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_CouponPearlIcon"), _txt_DiscountDirection = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountDirection"), _static_DiscountPrice = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_DiscountGoodsPrice"), _static_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_GiftTo"), _edit_Gift = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Edit_GiftTo"), _static_GiftListBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBG"), _static_GiftListTopBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListTopBG"), _static_GiftListBotBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_GiftListBotBG"), _static_GiftList_NonUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_NonUser"), _scroll_GiftTopList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftTopList"), _scroll_GiftBotList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Scroll_GiftBotList"), _buttonFriendList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Friend"), _buttonGuildList = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Guild"), _button_AddUser = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_AddUser"), _button_Close = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Win_Close"), _button_Confirm = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Confirm"), _button_Cancle = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Button_Cancle"), _static_selectStampBG = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "Static_StampCouponSelectBG"), _slotCount = 20, _slots = (Array.new)(), _needMoneyType = -1, _productNoRaw = nil, _isGift = false, _byCart = false, _easyBuy = false, _usePearlStampCount = 0, _isUsePearl = false}
 local contry = {kr = 0, jp = 1, ru = 2, kr2 = 3}
 local cashIconType = {cash = 0, pearl = 1, mileage = 2, silver = 3}
 local cashIconTexture = {
@@ -225,6 +225,7 @@ do
   self._pearlStampCount = (UI.getChildControl)(Panel_IngameCashShop_BuyOrGift, "StaticText_PearlStamp")
   ;
   (self._pearlStampCount):SetShow(false)
+  self.savedProductCount = 1
 end
 
   inGameShopBuy.registMessageHandler = function(self)
@@ -275,12 +276,13 @@ end
   (self._static_ItemIcon):ChangeTextureInfoName("Icon/" .. cashProduct:getIconPath())
   ;
   (self._static_ItemName):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  local sumPrice = cashProduct:getPrice() * toInt64(0, self.savedProductCount)
   ;
   (self._static_ItemName):SetText(cashProduct:getName())
   ;
-  (self._static_Price):SetText(makeDotMoney(cashProduct:getPrice()))
+  (self._static_Price):SetText(makeDotMoney(sumPrice))
   ;
-  (self._txt_PearlIconPrice):SetText(makeDotMoney(cashProduct:getPrice()))
+  (self._txt_PearlIconPrice):SetText(makeDotMoney(sumPrice))
   InGameShopBuy_ChangeMoneyIconTexture(cashProduct:getMainCategory(), cashProduct:isMoneyPrice())
   for ii = 0, self._slotCount - 1 do
     local slot = (self._slots)[ii]
@@ -445,6 +447,7 @@ end
         do
           local couponDiscountValue = nil
           if isDiscountPearl == false then
+            self.savedProductCount = 1
             couponDiscountValue = cashProduct:getPrice() * toInt64(0, couponDiscountRate / 10000) / toInt64(0, 100)
             if toInt64(0, 0) < couponMaxDiscount then
               if couponMaxDiscount < couponDiscountValue then
@@ -461,8 +464,15 @@ end
               ;
               (self._txt_CouponApplyIcon):SetText(tostring(couponName))
             end
+            ;
+            (self._static_Price):SetText(makeDotMoney(cashProduct:getPrice()))
+            ;
+            (self._txt_PearlIconPrice):SetText(makeDotMoney(cashProduct:getPrice()))
+            ;
+            (self._edit_count):SetEditText(1, false)
           else
-            couponDiscountValue = cashProduct:getPrice() - couponDiscountPearl
+            local productPrice = cashProduct:getPrice() * toInt64(0, self.savedProductCount)
+            couponDiscountValue = productPrice - couponDiscountPearl
             if couponDiscountValue <= toInt64(0, 0) then
               couponDiscountValue = ToClient_MinCashProductPriceCoupon()
             end
@@ -475,8 +485,6 @@ end
           (self._txt_CouponApplyIcon):SetShow(true)
           ;
           (self._static_CouponApplyBG):SetShow(true)
-          ;
-          (self._edit_count):SetEditText(1, false)
           self.savedCouponDiscountTextSizeX = (self._static_DiscountPrice):GetTextSizeX() + 30
           pearlIconPriceByCoupon = (self._static_CouponApplyBG):GetPosY() + (self._static_CouponApplyBG):GetSizeY() / 2 + (self._txt_PearlIconPrice):GetSizeY()
           local couponIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - (self._txt_CouponApplyIcon):GetTextSizeX() / 2 - 25
@@ -508,7 +516,7 @@ end
               (self._button_Confirm):ComputePos()
               ;
               (self._button_Cancle):ComputePos()
-              -- DECOMPILER ERROR: 9 unprocessed JMP targets
+              -- DECOMPILER ERROR: 10 unprocessed JMP targets
             end
           end
         end
@@ -612,8 +620,8 @@ end
 end
 
   FGlobal_IngameShopBuy_Update = function(isCouponApply)
-  -- function num : 0_6 , upvalues : inGameShopBuy
-  inGameShopBuy:update(isCouponApply)
+  -- function num : 0_6
+  InGameShopBuy_ResetCount(isCouponApply)
 end
 
   inGameShopBuy.AddedListUpdate = function(self)
@@ -680,10 +688,10 @@ end
   local isFriend = (self._buttonFriendList):IsCheck()
   if isFriend then
     local friendGroupCount = nil
-    friendGroupCount = ToClient_GetFriendGroupCount()
+    friendGroupCount = RequestFriends_getFriendGroupCount()
     for groupIndex = 0, friendGroupCount - 1 do
       local friendGroup = nil
-      friendGroup = ToClient_GetFriendGroupAt(groupIndex)
+      friendGroup = RequestFriends_getFriendGroupAt(groupIndex)
       local friendCount = friendGroup:getFriendCount()
       for friendIndex = 0, friendCount - 1 do
         local friendInfo = friendGroup:getFriendAt(friendIndex)
@@ -1071,8 +1079,8 @@ end
     end
     count = count + 1
   end
+  self.savedProductCount = count
   local sumPrice = Int64toInt32(price) * (count)
-  self.savedCouponApply = false
   ;
   (self._static_PearlBG):SetSize((self._static_GiftListBG):GetSizeX(), 30)
   Panel_IngameCashShop_BuyOrGift:SetSize(Panel_IngameCashShop_BuyOrGift:GetSizeX(), ((self._config)._buy)._startY + ((self._config)._buy)._gapX + (self._config)._sizePanel + (self._static_PearlBG):GetSizeY() + 20)
@@ -1090,8 +1098,6 @@ end
   (self._static_CouponApplyBG):SetShow(false)
   ;
   (self._txt_CouponApplyIcon):SetShow(false)
-  ;
-  (self._static_Price):SetText(makeDotMoney(sumPrice))
   local couponBGSizeX = (self._static_CouponApplyBG):GetSizeX()
   local pearIconTextPosX = couponBGSizeX - couponBGSizeX / 2 - (self._txt_PearlIconPrice):GetTextSizeX() / 2
   ;
@@ -1100,19 +1106,53 @@ end
   (self._txt_PearlIconPrice):SetPosY((self._static_PearlBG):GetPosY() + (self._static_PearlBG):GetSizeY() / 2 - (self._txt_PearlIconPrice):GetSizeY() / 2)
   ;
   (self._txt_PearlIconPrice):SetText(makeDotMoney(sumPrice))
-  FGlobal_IngameCashShopCoupon_RefreshList(self._productNoRaw)
-  FGlobal_IngameCashShopCoupon_ReturnValueCancel()
+  if Panel_IngameCashShop_Coupon:GetShow() == false then
+    IngameCashShopCoupon_Open(0, self._productNoRaw, count)
+  else
+    FGlobal_IngameCashShopCoupon_RefreshList(self._productNoRaw, count)
+    FGlobal_IngameCashShopCoupon_ReturnValueCancel()
+  end
   FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(sumPrice, cashProduct:getMainCategory())
+  ;
+  (self._static_Price):SetText(makeDotMoney(sumPrice))
   ;
   (self._edit_count):SetEditText(tostring(count), false)
   ;
   (self._button_Confirm):ComputePos()
   ;
   (self._button_Cancle):ComputePos()
+  self:update()
+end
+
+  InGameShopBuy_ResetCount = function(isCouponApply)
+  -- function num : 0_22 , upvalues : inGameShopBuy
+  local self = inGameShopBuy
+  local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
+  if cashProduct == nil then
+    return 
+  end
+  local couponIndex = FGlobal_IngameCashShopCoupon_ReturnValue()
+  if couponIndex ~= nil and couponIndex > 0 then
+    local count = 1
+    local isDiscountPearl = false
+    local couponWrapper = ToClient_GetCouponInfoWrapper(couponIndex)
+    if couponWrapper ~= nil then
+      isDiscountPearl = couponWrapper:isDisCountPearl()
+      if isDiscountPearl == false then
+        self.savedProductCount = count
+        local sumPrice = Int64toInt32(price) * count
+        FGlobal_IngameCashShopCoupon_RefreshList_KeepSelect(self._productNoRaw, count)
+        FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(sumPrice, cashProduct:getMainCategory())
+      end
+    end
+  end
+  do
+    self:update(isCouponApply)
+  end
 end
 
   InGameShopBuy_ChangeMoneyIconTexture = function(categoryIdx, isEnableSilver)
-  -- function num : 0_22 , upvalues : inGameShopBuy, contry, UI_CCC, cashIconType
+  -- function num : 0_23 , upvalues : inGameShopBuy, contry, UI_CCC, cashIconType
   local self = inGameShopBuy
   local icon = self._static_PearlIcon
   icon = self._txt_PearlIconPrice
@@ -1162,7 +1202,7 @@ end
 end
 
   FromClient_NotifyCompleteBuyProduct = function(productNoRaw, isGift, toCharacterName)
-  -- function num : 0_23
+  -- function num : 0_24
   local isPearlBox = false
   if isGift then
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_NOTIFYCOMPLETEBUYPRODUCT_GIFT", "toCharacterName", toCharacterName))
@@ -1194,14 +1234,14 @@ end
 end
 
   _InGameShopBuy_DontChangeCount = function()
-  -- function num : 0_24
+  -- function num : 0_25
   ClearFocusEdit()
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_DONTCHANGECOUNT"))
   return 
 end
 
   Scroll_GiftTopList = function(isUp)
-  -- function num : 0_25 , upvalues : inGameShopBuy
+  -- function num : 0_26 , upvalues : inGameShopBuy
   -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
 
   (inGameShopBuy._config)._giftTopListStart = (UIScroll.ScrollEvent)(inGameShopBuy._scroll_GiftTopList, isUp, (inGameShopBuy._config)._giftTopListMaxCount, (inGameShopBuy._config)._giftTopListCount, (inGameShopBuy._config)._giftTopListStart, 1)
@@ -1209,7 +1249,7 @@ end
 end
 
   Scroll_GiftBotList = function(isUp)
-  -- function num : 0_26 , upvalues : inGameShopBuy
+  -- function num : 0_27 , upvalues : inGameShopBuy
   -- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
 
   (inGameShopBuy._config)._giftBotListStart = (UIScroll.ScrollEvent)(inGameShopBuy._scroll_GiftBotList, isUp, (inGameShopBuy._config)._giftBotListMaxCount, (inGameShopBuy._config)._giftBotListCount, (inGameShopBuy._config)._giftBotListStart, 1)
@@ -1217,7 +1257,7 @@ end
 end
 
   HandleClicked_AddGiftTopList = function(botIdx)
-  -- function num : 0_27 , upvalues : inGameShopBuy
+  -- function num : 0_28 , upvalues : inGameShopBuy
   local botName = ((inGameShopBuy.giftUserList)[botIdx]).name
   local botUserNo = ((inGameShopBuy.giftUserList)[botIdx]).userNo
   local botSendType = ((inGameShopBuy.giftUserList)[botIdx]).sendType
@@ -1230,7 +1270,7 @@ end
 end
 
   HandleClicked_InGameShop_ChangeGiftCount = function(isPlus, dataIdx)
-  -- function num : 0_28 , upvalues : inGameShopBuy
+  -- function num : 0_29 , upvalues : inGameShopBuy
   local beforCount = ((getIngameCashMall()):getGiftList(dataIdx)):getCount()
   if isPlus then
     if beforCount >= 20 then
@@ -1251,7 +1291,7 @@ end
 end
 
   HandleClicked_InGameShop_DeleteGiftList = function(dataIdx)
-  -- function num : 0_29 , upvalues : inGameShopBuy
+  -- function num : 0_30 , upvalues : inGameShopBuy
   (getIngameCashMall()):popGift(dataIdx)
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -1263,17 +1303,17 @@ end
 end
 
   HandelClicked_InGameShopBuy_FriendGuild = function()
-  -- function num : 0_30 , upvalues : inGameShopBuy
+  -- function num : 0_31 , upvalues : inGameShopBuy
   inGameShopBuy:update()
 end
 
   HandelClicked_InGameShopBuy_SetAddUser = function()
-  -- function num : 0_31 , upvalues : inGameShopBuy
+  -- function num : 0_32 , upvalues : inGameShopBuy
   (inGameShopBuy._edit_Gift):SetEditText("", true)
 end
 
   HandelClicked_InGameShopBuy_AddUser = function()
-  -- function num : 0_32 , upvalues : inGameShopBuy
+  -- function num : 0_33 , upvalues : inGameShopBuy
   local userName = (inGameShopBuy._edit_Gift):GetEditText()
   ;
   (getIngameCashMall()):pushGiftToCharacter(userName)
@@ -1286,7 +1326,7 @@ end
 end
 
   InGameShopBuy_ShowItemToolTip = function(isShow, index)
-  -- function num : 0_33 , upvalues : inGameShopBuy
+  -- function num : 0_34 , upvalues : inGameShopBuy
   local self = inGameShopBuy
   if isShow == true then
     local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
@@ -1301,7 +1341,7 @@ end
 end
 
   InGameShopBuy_ShowSubItemToolTip = function(isShow, index)
-  -- function num : 0_34 , upvalues : inGameShopBuy
+  -- function num : 0_35 , upvalues : inGameShopBuy
   local self = inGameShopBuy
   if isShow == true then
     local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
@@ -1316,7 +1356,7 @@ end
 end
 
   FGlobal_InGameShopBuy_Open = function(productNoRaw, isGift, byCart, isEasy)
-  -- function num : 0_35 , upvalues : inGameShopBuy
+  -- function num : 0_36 , upvalues : inGameShopBuy
   local self = inGameShopBuy
   self._productNoRaw = productNoRaw
   self._isGift = isGift
@@ -1324,6 +1364,7 @@ end
   self._easyBuy = isEasy
   ;
   (self._edit_count):SetEditText(1, false)
+  self.savedProductCount = 1
   if isGift == true then
     (self._panelTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_DOGIFT"))
     ;
@@ -1343,19 +1384,19 @@ end
     (self._button_Confirm):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_BUYORGIFT_BUY"))
   end
   self.giftUserList = {}
-  -- DECOMPILER ERROR at PC65: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC66: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (self._config)._giftTopListCount = 0
-  -- DECOMPILER ERROR at PC67: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC68: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (self._config)._giftBotListCount = 0
-  -- DECOMPILER ERROR at PC69: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC70: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (self._config)._giftTopListStart = 0
-  -- DECOMPILER ERROR at PC71: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC72: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (self._config)._giftBotListStart = 0
@@ -1363,7 +1404,7 @@ end
   (self._scroll_GiftTopList):SetControlTop()
   ;
   (self._scroll_GiftBotList):SetControlTop()
-  ToClient_GetFriendList()
+  RequestFriendList_getFriendList()
   ;
   (getIngameCashMall()):clearGift()
   self:update()
@@ -1382,7 +1423,7 @@ end
 end
 
   InGameShopBuy_Open = function()
-  -- function num : 0_36 , upvalues : inGameShopBuy
+  -- function num : 0_37 , upvalues : inGameShopBuy
   if Panel_IngameCashShop_BuyOrGift:GetShow() then
     return 
   end
@@ -1393,7 +1434,7 @@ end
 end
 
   InGameShopBuy_Close = function(isCouponCheck)
-  -- function num : 0_37 , upvalues : inGameShopBuy
+  -- function num : 0_38 , upvalues : inGameShopBuy
   if not Panel_IngameCashShop_BuyOrGift:GetShow() then
     return 
   end
@@ -1408,7 +1449,7 @@ end
 end
 
   InGameShopBuy_CheckAddUser = function()
-  -- function num : 0_38 , upvalues : inGameShopBuy
+  -- function num : 0_39 , upvalues : inGameShopBuy
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1418,7 +1459,7 @@ end
 end
 
   FromClient_IncashshopGetUserNickName = function(outUserNickName, isSearched)
-  -- function num : 0_39 , upvalues : inGameShopBuy
+  -- function num : 0_40 , upvalues : inGameShopBuy
   local checkCharacterName = (inGameShopBuy._edit_Gift):GetEditText()
   if isSearched == true then
     local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING")

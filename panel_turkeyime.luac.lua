@@ -97,28 +97,13 @@ PaGlobal_TurkeyIME.UpdateShiftKey = function(self)
   end
 end
 
-FromClient_OpenTurkeyInput = function()
-  -- function num : 0_5
-  Panel_TurkeyIME:SetShow(true)
-  ;
-  ((PaGlobal_TurkeyIME._ui)._staticInputTurkeyLan):SetShow(false)
-  local uiEdit = GetFocusEdit()
-  if uiEdit == nil then
-    return 
-  end
-  local uiEdit = GetFocusEdit()
-  local uiEditPanel = uiEdit:GetParentPanel()
-  Panel_TurkeyIME:SetPosX(uiEditPanel:GetPosX() + 20)
-  Panel_TurkeyIME:SetPosY(uiEditPanel:GetPosY())
-end
-
 FromClient_TurkeyInputUpdate = function()
-  -- function num : 0_6
+  -- function num : 0_5
   PaGlobal_TurkeyIME:UpdateShiftKey()
 end
 
 FromClient_OpenTurkeyInput = function()
-  -- function num : 0_7
+  -- function num : 0_6
   Panel_TurkeyIME:SetShow(true)
   ;
   ((PaGlobal_TurkeyIME._ui)._staticInputTurkeyLan):SetShow(false)
@@ -134,7 +119,7 @@ FromClient_OpenTurkeyInput = function()
 end
 
 FromClient_CloseTurkeyInput = function()
-  -- function num : 0_8
+  -- function num : 0_7
   Panel_TurkeyIME:SetShow(false)
   Panel_TurkeyIME:RegisterUpdateFunc("")
 end

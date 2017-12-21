@@ -769,8 +769,9 @@ end
 local sortByExploreKey = {}
 GuildStableList_ServantCountInit = function(nums)
   -- function num : 0_27 , upvalues : sortByExploreKey
+  sortByExploreKey = {}
   for i = 1, nums do
-    -- DECOMPILER ERROR at PC9: Confused about usage of register: R5 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC11: Confused about usage of register: R5 in 'UnsetPending'
 
     sortByExploreKey[i] = {_index = nil, _servantNo = nil, _exploreKey = nil}
   end

@@ -6,6 +6,7 @@
 Panel_Window_WharfFunction:SetShow(false, false)
 Panel_Window_WharfFunction:setMaskingChild(true)
 Panel_Window_WharfFunction:ActiveMouseEventEffect(true)
+local UI_TM = CppEnums.TextMode
 local _wharfBG = (UI.getChildControl)(Panel_Window_WharfFunction, "Static_WharfTitle")
 _wharfBG:setGlassBackground(true)
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
@@ -13,9 +14,23 @@ local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
 local wharfFunction = {
 _config = {}
-, _buttonRegister = (UI.getChildControl)(Panel_Window_WharfFunction, "Button_Register"), _buttonExit = (UI.getChildControl)(Panel_Window_WharfFunction, "Button_Exit")}
+, _buttonRegister = (UI.getChildControl)(Panel_Window_WharfFunction, "Button_Register"), _buttonExit = (UI.getChildControl)(Panel_Window_WharfFunction, "Button_Exit"), _descBG = (UI.getChildControl)(Panel_Window_WharfFunction, "StaticText_DescBg")}
 wharfFunction.init = function(self)
-  -- function num : 0_0
+  -- function num : 0_0 , upvalues : UI_TM
+  (self._descBG):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  ;
+  (self._descBG):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_DESC_GUILDWARF_SHIPSTOCKITEM"))
+  local descTxtSizeX = (self._descBG):GetTextSizeX()
+  ;
+  (self._descBG):setPadding((CppEnums.Padding).ePadding_Left, 10)
+  ;
+  (self._descBG):setPadding((CppEnums.Padding).ePadding_Top, 10)
+  ;
+  (self._descBG):setPadding((CppEnums.Padding).ePadding_Right, 10)
+  ;
+  (self._descBG):setPadding((CppEnums.Padding).ePadding_Bottom, 10)
+  ;
+  (self._descBG):SetSize(descTxtSizeX + 20, (self._descBG):GetTextSizeY() + 20)
 end
 
 wharfFunction.registEventHandler = function(self)
@@ -44,6 +59,8 @@ WharfFunction_Resize = function()
   (self._buttonRegister):ComputePos()
   ;
   (self._buttonExit):ComputePos()
+  ;
+  (self._descBG):ComputePos()
 end
 
 WharfFunction_Button_RegisterReady = function()

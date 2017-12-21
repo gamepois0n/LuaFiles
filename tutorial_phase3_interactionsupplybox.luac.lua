@@ -84,8 +84,6 @@ PaGlobal_TutorialPhase_InteractionSupplyBox.startPhaseXXX = function(self, stepN
   self._currentProgress = 1
   self._updateTime = 0
   classType = (getSelfPlayer()):getClassType()
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
   ToClient_DeleteNaviGuideByGroup()
   PaGlobal_TutorialManager:setAllowCallBlackSpirit(false)
   PaGlobal_TutorialManager:setAllowShowQuickSlot(false)

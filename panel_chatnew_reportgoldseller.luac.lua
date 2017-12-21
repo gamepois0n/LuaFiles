@@ -14,7 +14,7 @@ local reportSeller = {panel_Title = (UI.getChildControl)(Panel_Chatting_Block_Go
 data = {reportUserName = nil, reportUserMsg = nil}
 }
 reportSeller.init = function(self)
-  -- function num : 0_0 , upvalues : UI_TM, IM
+  -- function num : 0_0 , upvalues : UI_TM
   (self.report_Notify):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
   (self.report_Notify):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHAT_REPORT_GOLD_SELLER_NOTIFY"))
@@ -22,8 +22,6 @@ reportSeller.init = function(self)
   (self.str_ChatLog):SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
   ;
   (self.str_ChatLog):setLineCountByLimitAutoWrap(7)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 reportSeller.update = function(self)
@@ -48,15 +46,13 @@ reportSeller.update = function(self)
 end
 
 reportSeller.Open = function(self)
-  -- function num : 0_2 , upvalues : IM
+  -- function num : 0_2
   Panel_Chatting_Block_GoldSeller:SetShow(true)
   self:update()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 reportSeller.Close = function(self)
-  -- function num : 0_3 , upvalues : IM
+  -- function num : 0_3
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   (self.data).reportUserName = nil
@@ -66,15 +62,11 @@ reportSeller.Close = function(self)
   (self.data).reportUserMsg = nil
   ClearFocusEdit()
   Panel_Chatting_Block_GoldSeller:SetShow(false)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
 end
 
 HandleClicked_reportSeller_Close = function()
-  -- function num : 0_4 , upvalues : reportSeller, IM
+  -- function num : 0_4 , upvalues : reportSeller
   reportSeller:Close()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
 end
 
 HandleClicked_reportSeller_Confirm = function()
@@ -100,11 +92,9 @@ HandleClicked_reportSeller_Confirm = function()
 end
 
 _reportSeller_ConfirmDo = function()
-  -- function num : 0_6 , upvalues : reportSeller, IM
+  -- function num : 0_6 , upvalues : reportSeller
   ToClient_BlockChatWithItem((reportSeller.data).reportUserName, (reportSeller.data).reportUserMsg)
   reportSeller:Close()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
 end
 
 FGlobal_reportSeller_Open = function(userName, userMsg)
@@ -120,10 +110,8 @@ FGlobal_reportSeller_Open = function(userName, userMsg)
 end
 
 FGlobal_reportSeller_Close = function()
-  -- function num : 0_8 , upvalues : reportSeller, IM
+  -- function num : 0_8 , upvalues : reportSeller
   reportSeller:Close()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
 end
 
 reportSeller_OnscreenResize = function()
@@ -132,8 +120,7 @@ reportSeller_OnscreenResize = function()
 end
 
 HandleClicked_reportSeller_EditBox = function()
-  -- function num : 0_10 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_10
 end
 
 reportSeller.registEventHandler = function(self)

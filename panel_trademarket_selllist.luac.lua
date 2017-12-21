@@ -36,6 +36,7 @@ local _expiration = (UI.getChildControl)(Panel_Trade_Market_Sell_ItemList, "Stat
 local _tradePrice = (UI.getChildControl)(Panel_Trade_Market_Sell_ItemList, "StaticText_TradePrice")
 local _btnSellAllItem = (UI.getChildControl)(Panel_Trade_Market_Sell_ItemList, "Button_AllTradeItemSell")
 local _btnTradeGame = (UI.getChildControl)(Panel_Trade_Market_Sell_ItemList, "Button_TradeGameStart")
+local _isShip = true
 _btnSellAllItem:addInputEvent("Mouse_LUp", "HandleClicked_TradeItem_AllSellQuestion()")
 _btnTradeGame:addInputEvent("Mouse_LUp", "click_TradeGameStart()")
 local e1Percent = 10000
@@ -109,7 +110,12 @@ global_tradeSellListExit = function()
 end
 
 global_tradeSellListOpen = function()
-  -- function num : 0_1 , upvalues : tradeSellMarket, _sellScroll
+  -- function num : 0_1 , upvalues : _isShip, tradeSellMarket, _sellScroll
+  if ToClient_IsDevelopment() == true then
+    _isShip = trademarket_isShip()
+  else
+    _isShip = false
+  end
   FGlobal_isTradeGameSuccess()
   local talker = dialog_getTalker()
   if talker ~= nil then
@@ -123,17 +129,17 @@ global_tradeSellListOpen = function()
   end
   do
     Panel_Trade_Market_Sell_ItemList:SetShow(true)
-    -- DECOMPILER ERROR at PC29: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
 
     tradeSellMarket.totalProfit = toInt64(0, 0)
     for count = 1, 10 do
       tradeSellMarket:setShowTradeIcon(count, false)
     end
-    -- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
     tradeSellMarket._isNoLinkedNodeOne = false
     _sellScroll:SetControlPos(0)
-    -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC57: Confused about usage of register: R1 in 'UnsetPending'
 
     tradeSellMarket.scrollIndex = 0
     global_sellItemFromPlayer()
@@ -175,7 +181,7 @@ local _sellCount = 0
 local showTradeItemList = {}
 local _commerceIndex = 1
 global_sellItemFromPlayer = function()
-  -- function num : 0_3 , upvalues : _sellCount, realPriceCache, tradeSellMarket, showTradeItemList, _sellScroll, _commerceIndex
+  -- function num : 0_3 , upvalues : _sellCount, realPriceCache, _isShip, tradeSellMarket, showTradeItemList, _sellScroll, _commerceIndex
   _sellCount = 0
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
 
@@ -186,6 +192,10 @@ global_sellItemFromPlayer = function()
   local mySellCount = npcShop_getSellCount()
   local vhicleSellCount = npcShop_getVehicleSellCount()
   local isValidDistance = getDistanceFromVehicle()
+  if ToClient_IsDevelopment() == true and _isShip == true then
+    vhicleSellCount = npcShop_getShipSellCount()
+    isValidDistance = getDistanceFromShip()
+  end
   if isValidDistance == false then
     vhicleSellCount = 0
   end
@@ -227,7 +237,7 @@ global_sellItemFromPlayer = function()
       local shopItemWrapper = npcShop_getItemSell(indexNum)
       if shopItemWrapper ~= nil then
         local tradeItemInfo = {_isMyInventory = true, _indexNumber = indexNum, _itemKey = (((shopItemWrapper:getStaticStatus()):get())._key):get()}
-        -- DECOMPILER ERROR at PC102: Confused about usage of register: R15 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC115: Confused about usage of register: R15 in 'UnsetPending'
 
         showTradeItemList[commerceIndex] = tradeItemInfo
         commerceIndex = commerceIndex + 1
@@ -240,6 +250,9 @@ global_sellItemFromPlayer = function()
       local servertInventorySize = 0
       local temporaryWrapper = getTemporaryInformationWrapper()
       local servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+      if ToClient_IsDevelopment() == true and _isShip == true then
+        servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+      end
       if servantInfo ~= nil then
         local servertinventory = servantInfo:getInventory()
         if servertinventory ~= nil then
@@ -255,7 +268,14 @@ global_sellItemFromPlayer = function()
             for slotCount = slotCountIndex, servertInventorySize - 1 do
               if not servertinventory:empty(slotCount) then
                 local servertitemWrapper = npcShop_getVehicleSellItem(vehicleTradeItemCount - 1)
-                -- DECOMPILER ERROR at PC161: Unhandled construct in 'MakeBoolean' P1
+                if ToClient_IsDevelopment() == true then
+                  if _isShip == true then
+                    servertitemWrapper = npcShop_getShipSellItem(vehicleTradeItemCount - 1)
+                  else
+                    servertitemWrapper = npcShop_getVehicleSellItem(vehicleTradeItemCount - 1)
+                  end
+                end
+                -- DECOMPILER ERROR at PC203: Unhandled construct in 'MakeBoolean' P1
 
                 if servertitemWrapper ~= nil or vhicleSellCount < vehicleTradeItemCount then
                   break
@@ -265,7 +285,7 @@ global_sellItemFromPlayer = function()
                   addScrollIndex = addScrollIndex + 1
                   local indexNum = tradeSellMarket.scrollIndex + (addScrollIndex) - 1
                   local tradeItemInfo = {_isMyInventory = false, _indexNumber = vehicleTradeItemCount - 1, _itemKey = ((itemStaticStaus:get())._key):get()}
-                  -- DECOMPILER ERROR at PC184: Confused about usage of register: R24 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC226: Confused about usage of register: R24 in 'UnsetPending'
 
                   showTradeItemList[commerceIndex] = tradeItemInfo
                   commerceIndex = commerceIndex + 1
@@ -301,15 +321,15 @@ global_sellItemFromPlayer = function()
         for count = 1, commerceIndex - 1 do
           local tradeItemInfoList = showTradeItemList[count]
           local indexNum = tradeItemInfoList._indexNumber
-          -- DECOMPILER ERROR at PC241: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC283: Confused about usage of register: R31 in 'UnsetPending'
 
           ;
           (tradeSellMarket._isLinkedNode)[count] = false
-          -- DECOMPILER ERROR at PC245: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC287: Confused about usage of register: R31 in 'UnsetPending'
 
           ;
           (tradeSellMarket.itemEnchantKey)[count] = tradeItemInfoList._itemKey
-          -- DECOMPILER ERROR at PC248: Confused about usage of register: R31 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC290: Confused about usage of register: R31 in 'UnsetPending'
 
           ;
           (tradeSellMarket.itemIndex)[count] = indexNum
@@ -331,11 +351,11 @@ global_sellItemFromPlayer = function()
             s64_inventoryItemCount = inventory:getItemCountByItemNo_s64(s64_TradeItemNo)
             itemValueType = inventory:getItemByItemNo(s64_TradeItemNo)
             realPrice = fillSellTradeItemInfo(count, indexNum, itemValueType, tradeItemWrapper, characterStaticStatus, selfPlayerPosition, 0)
-            -- DECOMPILER ERROR at PC309: Confused about usage of register: R39 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC351: Confused about usage of register: R39 in 'UnsetPending'
 
             ;
             (tradeSellMarket.vehicleItem)[count] = 0
-            -- DECOMPILER ERROR at PC312: Confused about usage of register: R39 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC354: Confused about usage of register: R39 in 'UnsetPending'
 
             ;
             (tradeSellMarket.vehicleActorKey)[count] = 0
@@ -352,16 +372,19 @@ global_sellItemFromPlayer = function()
             Panel_Tooltip_Item_SetPosition(indexNum, (tradeSellMarket.icons)[count], "tradeMarket_Sell")
             ;
             ((tradeSellMarket.expiration)[count]):SetShow(true)
-            -- DECOMPILER ERROR at PC385: Confused about usage of register: R40 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC427: Confused about usage of register: R40 in 'UnsetPending'
 
             ;
             (realPriceCache._cacheData)[realPriceCache._maxIndex] = Int64toInt32(realPrice)
-            -- DECOMPILER ERROR at PC390: Confused about usage of register: R40 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC432: Confused about usage of register: R40 in 'UnsetPending'
 
             realPriceCache._maxIndex = realPriceCache._maxIndex + 1
           else
             do
               s64_TradeItemNo = npcShop_getVehicleInvenItemNoByShopSlotNo(indexNum)
+              if ToClient_IsDevelopment() == true and _isShip == true then
+                s64_TradeItemNo = npcShop_getShipInvenItemNoByShopSlotNo(indexNum)
+              end
               if landVehicleActorProxy == nil then
                 break
               end
@@ -369,17 +392,26 @@ global_sellItemFromPlayer = function()
               s64_inventoryItemCount = vehicleInven:getItemCountByItemNo_s64(s64_TradeItemNo)
               itemValueType = vehicleInven:getItemByItemNo(s64_TradeItemNo)
               realPrice = fillSellTradeItemInfo(count, indexNum, itemValueType, tradeItemWrapper, characterStaticStatus, selfPlayerPosition, 4)
-              -- DECOMPILER ERROR at PC423: Confused about usage of register: R40 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC476: Confused about usage of register: R40 in 'UnsetPending'
 
               ;
               (tradeSellMarket.vehicleItem)[count] = 4
-              -- DECOMPILER ERROR at PC426: Confused about usage of register: R40 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC479: Confused about usage of register: R40 in 'UnsetPending'
 
               ;
               (tradeSellMarket.vehicleActorKey)[count] = myLandVehicleActorKey
               tradeSellMarket:setBuyItemDataInfo(count, PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRADEMARKET_RIDE", "getName", (tradeItemWrapper:getStaticStatus()):getName()), s64_inventoryItemCount, realPrice, tradeItemWrapper:getLeftCount())
               do
-                local vehilcleItemWrapper = npcShop_getVehicleItemWrapper(indexNum)
+                local vehilcleItemWrapper = nil
+                if ToClient_IsDevelopment() == false then
+                  vehilcleItemWrapper = npcShop_getVehicleItemWrapper(indexNum)
+                else
+                  if _isShip == true then
+                    vehilcleItemWrapper = npcShop_getShipItemWrapper(indexNum)
+                  else
+                    vehilcleItemWrapper = npcShop_getVehicleItemWrapper(indexNum)
+                  end
+                end
                 ;
                 ((tradeSellMarket.noLink)[count]):SetText(vehilcleItemWrapper:getProductionRegion())
                 ;
@@ -391,24 +423,24 @@ global_sellItemFromPlayer = function()
                 Panel_Tooltip_Item_SetPosition(indexNum, (tradeSellMarket.icons)[count], "tradeMarket_VehicleSell")
                 ;
                 ((tradeSellMarket.expiration)[count]):SetShow(true)
-                -- DECOMPILER ERROR at PC505: Confused about usage of register: R41 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC577: Confused about usage of register: R41 in 'UnsetPending'
 
                 ;
                 (realPriceCache._cacheData)[realPriceCache._maxIndex] = Int64toInt32(realPrice)
-                -- DECOMPILER ERROR at PC510: Confused about usage of register: R41 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC582: Confused about usage of register: R41 in 'UnsetPending'
 
                 realPriceCache._maxIndex = realPriceCache._maxIndex + 1
-                -- DECOMPILER ERROR at PC511: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC583: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC511: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC583: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC511: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC583: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
           end
         end
-        -- DECOMPILER ERROR at PC513: Confused about usage of register: R25 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC585: Confused about usage of register: R25 in 'UnsetPending'
 
         tradeSellMarket.currentItemCount = sellCount
         _sellScroll:SetInterval(commerceIndex)
@@ -424,7 +456,7 @@ global_sellItemFromPlayer = function()
 end
 
 fillSellTradeItemInfo = function(count, indexNum, itemValueType, tradeItemWrapper, characterStaticStatus, selfPlayerPosition, inventoryType)
-  -- function num : 0_4 , upvalues : e1Percent, tradeSellMarket, UI_color
+  -- function num : 0_4 , upvalues : e1Percent, tradeSellMarket, _isShip, UI_color
   local isSupplyMerchant = characterStaticStatus:isSupplyMerchant()
   local isFishSupplyMerchant = characterStaticStatus:isFishSupplyMerchant()
   local itemExpiration = (itemValueType:getExpirationDate())
@@ -489,8 +521,14 @@ fillSellTradeItemInfo = function(count, indexNum, itemValueType, tradeItemWrappe
       ;
       ((tradeSellMarket.DistanceNoBonus)[count]):SetShow(false)
       local isLinkedNode = false
-      isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType)
-      -- DECOMPILER ERROR at PC195: Confused about usage of register: R26 in 'UnsetPending'
+      if ToClient_IsDevelopment() == false then
+        isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType)
+      elseif _isShip == true then
+        isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType, 1)
+      else
+        isLinkedNode = npcShop_CheckLinkedItemExplorationNode(indexNum, inventoryType, 0)
+      end
+      -- DECOMPILER ERROR at PC216: Confused about usage of register: R26 in 'UnsetPending'
 
       if not isLinkedNode then
         tradeSellMarket._isNoLinkedNodeOne = true
@@ -507,13 +545,13 @@ fillSellTradeItemInfo = function(count, indexNum, itemValueType, tradeItemWrappe
         ((tradeSellMarket.DistanceBonusValue)[count]):SetShow(false)
         ;
         ((tradeSellMarket.DistanceBonus)[count]):SetShow(false)
-        -- DECOMPILER ERROR at PC251: Confused about usage of register: R26 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC272: Confused about usage of register: R26 in 'UnsetPending'
 
         ;
         (tradeSellMarket._isLinkedNode)[count] = false
       else
         profitItemGold = realPrice - itemValueType:getBuyingPrice()
-        -- DECOMPILER ERROR at PC258: Confused about usage of register: R26 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC279: Confused about usage of register: R26 in 'UnsetPending'
 
         ;
         (tradeSellMarket._isLinkedNode)[count] = true
@@ -543,7 +581,7 @@ fillSellTradeItemInfo = function(count, indexNum, itemValueType, tradeItemWrappe
         ((tradeSellMarket.noLink)[count]):SetShow(true)
         ;
         ((tradeSellMarket.AddCart)[count]):SetPosY(((tradeSellMarket.noLink)[count]):GetPosY() + ((tradeSellMarket.noLink)[count]):GetTextSizeY() + 10)
-        -- DECOMPILER ERROR at PC366: Confused about usage of register: R28 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC387: Confused about usage of register: R28 in 'UnsetPending'
 
         ;
         (tradeSellMarket.itemProfit)[count] = profitItemGold
@@ -566,7 +604,7 @@ fillSellTradeItemInfo = function(count, indexNum, itemValueType, tradeItemWrappe
           ((tradeSellMarket.sellPrice)[count]):SetText(makeDotMoney(sellPrice * profitRate / 100 * (_displayleftPeriod) / 100))
         end
         do return realPrice end
-        -- DECOMPILER ERROR: 16 unprocessed JMP targets
+        -- DECOMPILER ERROR: 19 unprocessed JMP targets
       end
     end
   end
@@ -591,7 +629,7 @@ HandleClicked_TradeItem_AllSellQuestion = function()
 end
 
 HandleClicked_TradeItem_AllSell = function()
-  -- function num : 0_7 , upvalues : realPriceCache, LIMITEDSELLMONEY, tradeSellMarket
+  -- function num : 0_7 , upvalues : _isShip, realPriceCache, LIMITEDSELLMONEY, tradeSellMarket
   if Panel_TradeGame:GetShow() then
     Fglobal_TradeGame_Close()
   end
@@ -600,6 +638,12 @@ HandleClicked_TradeItem_AllSell = function()
   local s64_TradeItemNo = toInt64(0, 0)
   local temporaryWrapper = getTemporaryInformationWrapper()
   local servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+  if ToClient_IsDevelopment() == true then
+    _isShip = trademarket_isShip()
+    if _isShip == true then
+      servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+    end
+  end
   local talker = dialog_getTalker()
   if talker ~= nil then
     local actorKeyRaw = talker:getActorKey()
@@ -650,9 +694,21 @@ HandleClicked_TradeItem_AllSell = function()
         for slotCount = 2, servertInventorySize - 1 do
           if not servertinventory:empty(slotCount) then
             local s64_VehicleItemNo = npcShop_getVehicleInvenItemNoByShopSlotNo(slotCount - 2 - emptyCount)
+            if ToClient_IsDevelopment() == true and _isShip == true then
+              s64_VehicleItemNo = npcShop_getShipInvenItemNoByShopSlotNo(slotCount - 2 - emptyCount)
+            end
             if s64_VehicleItemNo ~= nil then
-              local vehicleItemCount = Int64toInt32(servertinventory:getItemCountByItemNo_s64(s64_VehicleItemNo))
-              local servertitemWrapper = npcShop_getVehicleSellItem(slotCount - 2 - emptyCount)
+              local vehicleItemCount = (Int64toInt32(servertinventory:getItemCountByItemNo_s64(s64_VehicleItemNo)))
+              local servertitemWrapper = nil
+              if ToClient_IsDevelopment() == false then
+                servertitemWrapper = npcShop_getVehicleSellItem(slotCount - 2 - emptyCount)
+              else
+                if _isShip == true then
+                  servertitemWrapper = npcShop_getShipSellItem(slotCount - 2 - emptyCount)
+                else
+                  servertitemWrapper = npcShop_getVehicleSellItem(slotCount - 2 - emptyCount)
+                end
+              end
               if servertitemWrapper ~= nil then
                 local realPrice = (realPriceCache._cacheData)[priceIndex]
                 if realPrice == nil then
@@ -663,23 +719,39 @@ HandleClicked_TradeItem_AllSell = function()
                 priceIndex = priceIndex + 1
                 if limitCount < vehicleItemCount then
                   if limitCount > 0 then
-                    npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, limitCount, 4, 0)
+                    if ToClient_IsDevelopment() == false then
+                      npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, limitCount, 4, 0)
+                    else
+                      if _isShip == true then
+                        npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, limitCount, 4, 0, 1)
+                      else
+                        npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, limitCount, 4, 0, 0)
+                      end
+                    end
                   end
                   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TOOMANYMONEYFORSELLTRADEITEM"))
                   return 
                 end
-                npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, vehicleItemCount, 4, 0)
+                if ToClient_IsDevelopment() == false then
+                  npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, vehicleItemCount, 4, 0)
+                else
+                  if _isShip == true then
+                    npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, vehicleItemCount, 4, 0, 1)
+                  else
+                    npcShop_doSellInTradeShop(slotCount - 2 - emptyCount, vehicleItemCount, 4, 0, 0)
+                  end
+                end
               end
             end
           else
             do
               do
                 emptyCount = emptyCount + 1
-                -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC350: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC350: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC251: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC350: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -689,7 +761,7 @@ HandleClicked_TradeItem_AllSell = function()
     end
     do
       PaGlobal_TutorialManager:handleClickedTradeItemAllSell(talker)
-      -- DECOMPILER ERROR at PC257: Confused about usage of register: R8 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC356: Confused about usage of register: R8 in 'UnsetPending'
 
       tradeSellMarket._isNoLinkedNodeOne = false
     end
@@ -706,6 +778,10 @@ click_TradeGameStart = function()
   if selfPlayer == nil then
     return 
   end
+  if ToClient_GetMyDuelCharacterIndex() ~= -1 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_SymbolNo, "eErrNoCantCharacterTagSellTradeItem"))
+    return 
+  end
   local useStartSlot = inventorySlotNoUserStart()
   local invenUseSize = (selfPlayer:get()):getInventorySlotCount(true)
   local inventory = (selfPlayer:get()):getInventoryByType((CppEnums.ItemWhereType).eInventory)
@@ -715,7 +791,7 @@ click_TradeGameStart = function()
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TRADEMARKET_SELLLIST_DONTPLAYGAME"))
     return 
   end
-  -- DECOMPILER ERROR at PC51: Unhandled construct in 'MakeBoolean' P1
+  -- DECOMPILER ERROR at PC63: Unhandled construct in 'MakeBoolean' P1
 
   if Panel_TradeGame:GetShow() and isTradeGameFinish() == true then
     Fglobal_TradeGame_Close()
@@ -1090,7 +1166,7 @@ click_tradeSellMarket_SellItem = function(index)
 end
 
 TradeMarket_SellSome_ConfirmFunction = function(inputNumber, param)
-  -- function num : 0_17 , upvalues : tempTradeType, sellStackCount, e1Percent, realPriceCache, selectIndex, LIMITEDSELLMONEY, tradeSellMarket
+  -- function num : 0_17 , upvalues : _isShip, tempTradeType, sellStackCount, e1Percent, realPriceCache, selectIndex, LIMITEDSELLMONEY, tradeSellMarket
   local inventory = ((getSelfPlayer()):get()):getInventory()
   local s64_TradeItemNo = toInt64(0, 0)
   local s64_inventoryItemCount = (toInt64(0, 0))
@@ -1118,9 +1194,24 @@ TradeMarket_SellSome_ConfirmFunction = function(inputNumber, param)
         local myLandVehicleActorKey, landVehicleActorProxy = nil, nil
         local temporaryWrapper = getTemporaryInformationWrapper()
         local servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+        if ToClient_IsDevelopment() == true then
+          if _isShip == true then
+            servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Ship)
+          else
+            servantInfo = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
+          end
+        end
         if servantInfo ~= nil then
           local servertinventory = servantInfo:getInventory()
-          s64_TradeItemNo = npcShop_getVehicleInvenItemNoByShopSlotNo(param[0])
+          if ToClient_IsDevelopment() == false then
+            s64_TradeItemNo = npcShop_getVehicleInvenItemNoByShopSlotNo(param[0])
+          else
+            if _isShip == true then
+              s64_TradeItemNo = npcShop_getShipInvenItemNoByShopSlotNo(param[0])
+            else
+              s64_TradeItemNo = npcShop_getVehicleInvenItemNoByShopSlotNo(param[0])
+            end
+          end
           myLandVehicleActorKey = servantInfo:getActorKeyRaw()
           if myLandVehicleActorKey ~= nil then
             landVehicleActorProxy = getVehicleActor(myLandVehicleActorKey)
@@ -1132,7 +1223,15 @@ TradeMarket_SellSome_ConfirmFunction = function(inputNumber, param)
         end
         do
           do
-            itemWrapper = npcShop_getVehicleSellItem(param[0])
+            if ToClient_IsDevelopment() == false then
+              itemWrapper = npcShop_getVehicleSellItem(param[0])
+            else
+              if _isShip == true then
+                itemWrapper = npcShop_getShipSellItem(param[0])
+              else
+                itemWrapper = npcShop_getVehicleSellItem(param[0])
+              end
+            end
             if itemWrapper == nil then
               return 
             end
@@ -1146,7 +1245,15 @@ TradeMarket_SellSome_ConfirmFunction = function(inputNumber, param)
                 itemData = npcShop_getItemWrapperByShopSlotNo(param[0])
               else
                 if param[2] == 4 then
-                  itemData = npcShop_getVehicleItemWrapper(param[0])
+                  if ToClient_IsDevelopment() == false then
+                    itemData = npcShop_getVehicleItemWrapper(param[0])
+                  else
+                    if _isShip == true then
+                      itemData = npcShop_getShipItemWrapper(param[0])
+                    else
+                      itemData = npcShop_getVehicleItemWrapper(param[0])
+                    end
+                  end
                 end
               end
               if itemData ~= nil then
@@ -1181,10 +1288,18 @@ TradeMarket_SellSome_ConfirmFunction = function(inputNumber, param)
                     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TOOMANYMONEYFORSELLTRADEITEM"))
                     return 
                   end
-                  rv = npcShop_doSellInTradeShop(param[0], Int64toInt32(sellStackCount), param[2], 0)
+                  if ToClient_IsDevelopment() == false then
+                    rv = npcShop_doSellInTradeShop(param[0], Int64toInt32(sellStackCount), param[2], 0)
+                  else
+                    if _isShip == true then
+                      rv = npcShop_doSellInTradeShop(param[0], Int64toInt32(sellStackCount), param[2], 0, 1)
+                    else
+                      rv = npcShop_doSellInTradeShop(param[0], Int64toInt32(sellStackCount), param[2], 0, 0)
+                    end
+                  end
                 end
                 do
-                  -- DECOMPILER ERROR at PC304: Confused about usage of register: R10 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC404: Confused about usage of register: R10 in 'UnsetPending'
 
                   if rv == 0 then
                     tradeSellMarket.totalProfit = tradeSellMarket.totalProfit + param[1] * inputNumber
@@ -1200,14 +1315,22 @@ TradeMarket_SellSome_ConfirmFunction = function(inputNumber, param)
 end
 
 TradeMarket_CheckNodeLink_SellSome = function()
-  -- function num : 0_18 , upvalues : tempTradeType, tradeSellMarket, selectIndex, sellStackCount
+  -- function num : 0_18 , upvalues : tempTradeType, tradeSellMarket, selectIndex, sellStackCount, _isShip
   if tempTradeType == nil then
     tempTradeType = 0
   end
   if tempTradeType == 5 then
     npcShop_doSellInTradeShop((tradeSellMarket.itemIndex)[selectIndex], Int64toInt32(sellStackCount), (tradeSellMarket.vehicleItem)[selectIndex], 14)
   else
-    npcShop_doSellInTradeShop((tradeSellMarket.itemIndex)[selectIndex], Int64toInt32(sellStackCount), (tradeSellMarket.vehicleItem)[selectIndex], 0)
+    if ToClient_IsDevelopment() == false then
+      npcShop_doSellInTradeShop((tradeSellMarket.itemIndex)[selectIndex], Int64toInt32(sellStackCount), (tradeSellMarket.vehicleItem)[selectIndex], 0)
+    else
+      if _isShip == true then
+        npcShop_doSellInTradeShop((tradeSellMarket.itemIndex)[selectIndex], Int64toInt32(sellStackCount), (tradeSellMarket.vehicleItem)[selectIndex], 0, 1)
+      else
+        npcShop_doSellInTradeShop((tradeSellMarket.itemIndex)[selectIndex], Int64toInt32(sellStackCount), (tradeSellMarket.vehicleItem)[selectIndex], 0, 0)
+      end
+    end
   end
 end
 

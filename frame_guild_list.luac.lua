@@ -207,10 +207,10 @@ GuildLogoutTimeConvert = function(s64_datetime)
   return strDate
 end
 
--- DECOMPILER ERROR at PC454: Confused about usage of register: R56 in 'UnsetPending'
+-- DECOMPILER ERROR at PC455: Confused about usage of register: R56 in 'UnsetPending'
 
 GuildListInfoPage.initialize = function(self)
-  -- function num : 0_3 , upvalues : UCT, _constStartY, isVoiceOpen, _constStartButtonX, _constGuildListMaxCount, _UI_Menu_Button, staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, frameSizeY
+  -- function num : 0_3 , upvalues : UI_TM, UCT, _constStartY, isVoiceOpen, _constStartButtonX, _constGuildListMaxCount, _UI_Menu_Button, staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, frameSizeY
   self._frameGuildList = (UI.getChildControl)(Panel_Guild_List, "Frame_GuildList")
   self._contentGuildList = (UI.getChildControl)(self._frameGuildList, "Frame_1_Content")
   local _copyGrade = (UI.getChildControl)(self._contentGuildList, "StaticText_C_Grade")
@@ -257,6 +257,54 @@ GuildListInfoPage.initialize = function(self)
   self._scrollBar = (UI.getChildControl)(self._frameGuildList, "VerticalScroll")
   ;
   (UIScroll.InputEvent)(self._scrollBar, "GuildListMouseScrollEvent")
+  ;
+  (GuildListInfoPage._btnGiveIncentive):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (GuildListInfoPage._btnDeposit):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (GuildListInfoPage._btnPaypal):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (GuildListInfoPage._btnWelfare):SetTextMode(UI_TM.eTextMode_LimitText)
+  local btnIncentiveSizeX = (GuildListInfoPage._btnGiveIncentive):GetSizeX() + 20
+  local btnIncentiveTextPosX = btnIncentiveSizeX - btnIncentiveSizeX / 2 - (GuildListInfoPage._btnGiveIncentive):GetTextSizeX() / 2
+  ;
+  (GuildListInfoPage._btnGiveIncentive):SetTextSpan(btnIncentiveTextPosX, 5)
+  local btnDepositSizeX = (GuildListInfoPage._btnDeposit):GetSizeX() + 20
+  local btnDepositTextPosX = btnDepositSizeX - btnDepositSizeX / 2 - (GuildListInfoPage._btnDeposit):GetTextSizeX() / 2
+  ;
+  (GuildListInfoPage._btnDeposit):SetTextSpan(btnDepositTextPosX, 5)
+  local btnPaypalSizeX = (GuildListInfoPage._btnPaypal):GetSizeX() + 20
+  local btnPaypalTextPosX = btnPaypalSizeX - btnPaypalSizeX / 2 - (GuildListInfoPage._btnPaypal):GetTextSizeX() / 2
+  ;
+  (GuildListInfoPage._btnPaypal):SetTextSpan(btnPaypalTextPosX, 5)
+  local btnWelfareSizeX = (GuildListInfoPage._btnWelfare):GetSizeX() + 20
+  local btnWelfareTextPosX = btnWelfareSizeX - btnWelfareSizeX / 2 - (GuildListInfoPage._btnWelfare):GetTextSizeX() / 2
+  ;
+  (GuildListInfoPage._btnWelfare):SetTextSpan(btnWelfareTextPosX, 5)
+  local isIncentiveLimit = (GuildListInfoPage._btnGiveIncentive):IsLimitText()
+  local isDepositLimit = (GuildListInfoPage._btnDeposit):IsLimitText()
+  local isPayPalLimit = (GuildListInfoPage._btnPaypal):IsLimitText()
+  local isWelfareLimit = (GuildListInfoPage._btnWelfare):IsLimitText()
+  if isIncentiveLimit then
+    (GuildListInfoPage._btnGiveIncentive):addInputEvent("Mouse_On", "GuildList_Simpletooltips(true, 0)")
+    ;
+    (GuildListInfoPage._btnGiveIncentive):addInputEvent("Mouse_On", "GuildList_Simpletooltips(false)")
+  end
+  if isDepositLimit then
+    (GuildListInfoPage._btnDeposit):addInputEvent("Mouse_On", "GuildList_Simpletooltips(true, 1)")
+    ;
+    (GuildListInfoPage._btnDeposit):addInputEvent("Mouse_On", "GuildList_Simpletooltips(false)")
+  end
+  if isPayPalLimit then
+    (GuildListInfoPage._btnPaypal):addInputEvent("Mouse_On", "GuildList_Simpletooltips(true, 2)")
+    ;
+    (GuildListInfoPage._btnPaypal):addInputEvent("Mouse_On", "GuildList_Simpletooltips(false)")
+  end
+  if isWelfareLimit then
+    (GuildListInfoPage._btnWelfare):addInputEvent("Mouse_On", "GuildList_Simpletooltips(true, 3)")
+    ;
+    (GuildListInfoPage._btnWelfare):addInputEvent("Mouse_On", "GuildList_Simpletooltips(false)")
+  end
   ;
   (self._contentGuildList):addInputEvent("Mouse_UpScroll", "GuildListMouseScrollEvent(true)")
   ;
@@ -470,6 +518,11 @@ GuildListInfoPage.initialize = function(self)
     CopyBaseProperty(_copyButton, rtGuildListInfoButton)
     rtGuildListInfoButton:SetPosX(_constStartButtonX)
     rtGuildListInfoButton:SetShow(true)
+    if isGameTypeTH() or isGameTypeID() then
+      rtGuildListInfoButton:SetSize(150, 30)
+    else
+      rtGuildListInfoButton:SetSize(125, 30)
+    end
     rtGuildListInfoButton:addInputEvent("Mouse_LUp", "HandleClickedGuildMenuButton(" .. pIndex .. ")")
     return rtGuildListInfoButton
   end
@@ -477,12 +530,12 @@ GuildListInfoPage.initialize = function(self)
   ;
   (self._buttonListBG):addInputEvent("Mouse_Out", "MouseOutGuildMenuButton()")
   for index = 0, _constGuildListMaxCount - 1 do
-    -- DECOMPILER ERROR at PC203: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC375: Confused about usage of register: R29 in 'UnsetPending'
 
     (self._list)[index] = createListInfo(index)
   end
   for index = 0, _UI_Menu_Button.Type_Count - 1 do
-    -- DECOMPILER ERROR at PC215: Confused about usage of register: R17 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC387: Confused about usage of register: R29 in 'UnsetPending'
 
     (self._buttonList)[index] = createListInfoButton(index)
     ;
@@ -684,9 +737,15 @@ HandleClickedGuildMemberMenuButton = function(index)
       buttonPosY = buttonPosY + ((GuildListInfoPage._buttonList)[idx]):GetSizeY() + 5
     end
   end
-  ;
-  (GuildListInfoPage._buttonListBG):SetSize(140, buttonPosY)
-  _selectIndex = dataIdx
+  do
+    if isGameTypeTH() or isGameTypeID() then
+      (GuildListInfoPage._buttonListBG):SetSize(165, buttonPosY)
+    else
+      ;
+      (GuildListInfoPage._buttonListBG):SetSize(140, buttonPosY)
+    end
+    _selectIndex = dataIdx
+  end
 end
 
 HandleClickedGuildMemberContractButton = function(index)
@@ -1242,7 +1301,7 @@ GuildListMouseScrollEvent = function(isUpScroll)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC571: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC572: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.TitleLineReset = function(self)
   -- function num : 0_32 , upvalues : staticText_Grade, staticText_Level, staticText_Class, staticText_charName, staticText_activity, staticText_contract, staticText_contributedTendency, text_contributedTendency
@@ -1255,7 +1314,7 @@ GuildListInfoPage.TitleLineReset = function(self)
   staticText_contributedTendency:SetText(text_contributedTendency)
 end
 
--- DECOMPILER ERROR at PC575: Confused about usage of register: R57 in 'UnsetPending'
+-- DECOMPILER ERROR at PC576: Confused about usage of register: R57 in 'UnsetPending'
 
 GuildListInfoPage.SetGuildList = function(self)
   -- function num : 0_33 , upvalues : tempGuildList
@@ -1505,7 +1564,7 @@ HandleClicked_GuildListSort = function(sortType)
   GuildListInfoPage:UpdateData()
 end
 
--- DECOMPILER ERROR at PC616: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC617: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.GuildListSortSet = function(self)
   -- function num : 0_42 , upvalues : staticText_Grade, _listSort, tempGuildList, guildListCompareGrade
@@ -1518,7 +1577,7 @@ GuildListInfoPage.GuildListSortSet = function(self)
   (table.sort)(tempGuildList, guildListCompareGrade)
 end
 
--- DECOMPILER ERROR at PC628: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC629: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.updateSort = function(self)
   -- function num : 0_43 , upvalues : _selectSortType, tempGuildList, guildListCompareGrade, guildListCompareLev, guildListCompareClass, guildListCompareName, guildListCompareAp, guildListCompareExpiration, guildListCompareWp
@@ -1551,7 +1610,7 @@ GuildListInfoPage.updateSort = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC642: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC643: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateData = function(self)
   -- function num : 0_44 , upvalues : _initMoney, contentSizeY, _constGuildListMaxCount, tempGuildUserNolist, tempGuildList, UI_Class, isVoiceOpen, UI_color, btn_GuildMasterMandate, frameSizeY, notice_title
@@ -1955,7 +2014,7 @@ GuildListInfoTooltip_Grade = function(isShow, index, gradeType)
   end
 end
 
--- DECOMPILER ERROR at PC648: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC649: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.UpdateVoiceDataByUserNo = function(self, userNo)
   -- function num : 0_46 , upvalues : tempGuildUserNolist
@@ -2074,7 +2133,7 @@ GuildListControl_ChangeTexture_Expiration = function(control, state)
   end
 end
 
--- DECOMPILER ERROR at PC660: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC661: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Show = function(self)
   -- function num : 0_50 , upvalues : _selectSortType, listening_Volume
@@ -2093,7 +2152,7 @@ GuildListInfoPage.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC664: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC665: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Hide = function(self)
   -- function num : 0_51 , upvalues : IM
@@ -2295,13 +2354,43 @@ GuildList_PanelResize_ByFontSize = function()
   end
 end
 
+GuildList_Simpletooltips = function(isShow, tipType)
+  -- function num : 0_64
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local self = rtGuildListInfo
+  local name, desc, control = nil, nil, nil
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_BTN_INCENTIVE")
+    control = self._btnGiveIncentive
+  else
+    if tipType == 1 then
+      name = PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_BTN_DEPOSIT")
+      control = self._btnDeposit
+    else
+      if tipType == 2 then
+        name = PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_BTN_PAYPAL")
+        control = self._btnPaypal
+      else
+        if tipType == 3 then
+          name = PAGetString(Defines.StringSheet_RESOURCE, "FRAME_GUILD_LIST_BTN_WELFARE")
+          control = self._btnWelfare
+        end
+      end
+    end
+  end
+  TooltipSimple_Show(control, name, desc)
+end
+
 registerEvent("FromClient_ResponseGuildMasterChange", "FromClient_ResponseGuildMasterChange")
 registerEvent("FromClient_ResponseChangeGuildMemberGrade", "FromClient_ResponseChangeGuildMemberGrade")
 registerEvent("FromClient_RequestExpelMemberFromGuild", "FromClient_RequestExpelMemberFromGuild")
 registerEvent("FromClient_RequestChangeGuildMemberGrade", "FromClient_RequestChangeGuildMemberGrade")
 registerEvent("FromClient_ResponseChangeProtectGuildMember", "FromClient_ResponseChangeProtectGuildMember")
 FromClient_ResponseGuildMasterChange = function(userNo, targetNo)
-  -- function num : 0_64
+  -- function num : 0_65
   local userNum = Int64toInt32(((getSelfPlayer()):get()):getUserNo())
   if userNum == Int64toInt32(userNo) then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_MASTERCHANGE_MESSAGE_0"))
@@ -2314,7 +2403,7 @@ FromClient_ResponseGuildMasterChange = function(userNo, targetNo)
 end
 
 FromClient_ResponseChangeGuildMemberGrade = function(targetNo, grade)
-  -- function num : 0_65
+  -- function num : 0_66
   local userNum = Int64toInt32(((getSelfPlayer()):get()):getUserNo())
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   do
@@ -2352,7 +2441,7 @@ FromClient_ResponseChangeGuildMemberGrade = function(targetNo, grade)
 end
 
 FromClient_ResponseChangeProtectGuildMember = function(targetNo, isProtectable)
-  -- function num : 0_66
+  -- function num : 0_67
   local userNum = Int64toInt32(((getSelfPlayer()):get()):getUserNo())
   if userNum == Int64toInt32(targetNo) then
     if isProtectable == true then
@@ -2367,7 +2456,7 @@ FromClient_ResponseChangeProtectGuildMember = function(targetNo, isProtectable)
 end
 
 FromClient_RequestExpelMemberFromGuild = function()
-  -- function num : 0_67
+  -- function num : 0_68
   if Panel_Window_Guild:GetShow() == true then
     GuildListInfoPage:UpdateData()
   else
@@ -2380,7 +2469,7 @@ FromClient_RequestExpelMemberFromGuild = function()
 end
 
 FromClient_RequestChangeGuildMemberGrade = function(grade)
-  -- function num : 0_68
+  -- function num : 0_69
   local guildWrapper = ToClient_GetMyGuildInfoWrapper()
   do
     if guildWrapper ~= nil then
@@ -2414,7 +2503,7 @@ FromClient_RequestChangeGuildMemberGrade = function(grade)
 end
 
 HandleClicked_GuildListWelfare_Request = function()
-  -- function num : 0_69
+  -- function num : 0_70
   ToClient_RequestGuildWelfare()
 end
 

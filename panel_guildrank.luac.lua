@@ -654,7 +654,7 @@ _Web:SetSize(890, 645)
 _Web:ResetUrl()
 webClose:addInputEvent("Mouse_LUp", "GuildRank_Web_Close()")
 GuildRank_Web_Show = function()
-  -- function num : 0_20 , upvalues : _Web, GST
+  -- function num : 0_20 , upvalues : _Web
   if not Panel_GuildRank_Web:GetShow() then
     Panel_GuildRank_Web:SetShow(true, true)
     FGlobal_ClearCandidate()
@@ -668,111 +668,9 @@ GuildRank_Web_Show = function()
     local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
     local temporaryWrapper = getTemporaryInformationWrapper()
     local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-    local gameServiceType = (getGameServiceType())
-    local url = nil
-    if GST.eGameServiceType_NONE == gameServiceType or GST.eGameServiceType_DEV == gameServiceType then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_KOR_DEV")
-    else
-      if GST.eGameServiceType_KOR_ALPHA == gameServiceType or GST.eGameServiceType_KOR_TEST == gameServiceType then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_KOR_ALPHA")
-      else
-        if GST.eGameServiceType_KOR_REAL == gameServiceType then
-          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_KOR_REAL")
-        else
-          if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-            if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_NA_ALPHA_NA", "port", worldNo)
-            else
-              if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_NA_ALPHA_EU", "port", worldNo)
-              end
-            end
-          else
-            if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-              if getServiceNationType() == 0 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_NA_REAL_NA", "port", worldNo)
-              else
-                if getServiceNationType() == 1 then
-                  url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_NA_REAL_EU", "port", worldNo)
-                end
-              end
-            else
-              if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_JP_ALPHA")
-              else
-                if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_JP_REAL")
-                else
-                  if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_RUS_ALPHA")
-                  else
-                    if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                      if isServerFixedCharge() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_RUS_REAL_P2P")
-                      else
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_RUS_REAL_F2P")
-                      end
-                    else
-                      if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TW_ALPHA")
-                      else
-                        if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TW_REAL")
-                        else
-                          if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_SA_ALPHA")
-                          else
-                            if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_SA_REAL")
-                            else
-                              if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_KR2_ALPHA")
-                              else
-                                if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_KR2_REAL")
-                                else
-                                  if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TR_ALPHA")
-                                  else
-                                    if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TR_REAL")
-                                    else
-                                      if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TH_ALPHA")
-                                      else
-                                        if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_TH_REAL")
-                                        else
-                                          if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_ID_ALPHA")
-                                          else
-                                            if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                              url = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDRANKING_URL_ID_REAL")
-                                            else
-                                              _PA_LOG("정태�\164", "한국, 일본, 러시�\132, 북미&유럽, �\128�\140 �\184 다른 국가�\152 �\128입이 존재한다!!!! 수정해야�\168!!")
-                                              return 
-                                            end
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey)
+    local gameServiceType = getGameServiceType()
+    local url = PaGlobal_URL_Check(worldNo)
+    url = url .. "/GuildRank?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey)
     _Web:SetUrl(890, 645, url, false, true)
     _Web:SetIME(true)
   end

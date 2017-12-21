@@ -56,6 +56,7 @@ SkillEvent_SkillWindow_LearnQuest = function(skillNo)
     (((self.skillNoSlot)[skillNo]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
     ;
     (((self.skillNoSlot)[skillNo]).icon):AddEffect("fUI_NewSkill01", false, 0, 0)
+    PaGlobal_Window_Skill_CoolTimeSlot:skillUpdate()
   end
   UI_MAIN_checkSkillLearnable()
 end
@@ -75,13 +76,27 @@ SkillEvent_SkillWindow_ClearSkill = function(skillPointType)
   (MessageBox.showMessageBox)(messageboxData)
 end
 
-SkillEvent_SkillWindow_ClearSkillsByPoint = function()
+Handle_SkillEnable_CoolTime_Change = function()
   -- function num : 0_4
+  if isCoolTimeQuickSlot_chk() == true then
+    if Panel_EnableSkill:GetShow() == true then
+      Panel_EnableSkill:SetShow(false)
+      PaGlobal_Window_Skill_CoolTimeSlot:showFunc()
+    else
+      Panel_EnableSkill:SetShow(true)
+      PaGlobal_Window_Skill_CoolTimeSlot:closeFunc()
+    end
+    Panel_SkillCombination:SetShow(false)
+  end
+end
+
+SkillEvent_SkillWindow_ClearSkillsByPoint = function()
+  -- function num : 0_5
   HandleMLUp_SkillWindow_UpdateData()
 end
 
 HandleMLUp_SkillWindow_UpdateData = function(tabIndex, isLearnMode, doForce)
-  -- function num : 0_5
+  -- function num : 0_6
   local self = PaGlobal_Skill
   if not tabIndex then
     tabIndex = self.lastTabIndex
@@ -150,7 +165,7 @@ HandleMLUp_SkillWindow_UpdateData = function(tabIndex, isLearnMode, doForce)
       local skillStaticWrapper = getSkillStaticStatus(skillNo, 1)
       if skillStaticWrapper ~= nil then
         local changeTextureLockIcon = function(isBlockSkill)
-    -- function num : 0_5_0 , upvalues : slot
+    -- function num : 0_6_0 , upvalues : slot
     if isBlockSkill then
       (slot.lockIcon):ChangeTextureInfoName("New_UI_Common_forLua/Window/Skill/Skill_ui_03.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(slot.lockIcon, 235, 247, 258, 275)
@@ -266,11 +281,12 @@ HandleMLUp_SkillWindow_UpdateData = function(tabIndex, isLearnMode, doForce)
     end
     ;
     (self.awakenDesc):SetShow(false)
+    PaGlobal_Window_Skill_CoolTimeSlot:skillUpdate()
   end
 end
 
 Request_SkillCommandLock = function(skillNo)
-  -- function num : 0_6
+  -- function num : 0_7
   local skillLevelInfo = getSkillLevelInfo(skillNo)
   if skillLevelInfo ~= nil then
     local isBlockSkill = ToClient_isBlockSkillCommand(skillLevelInfo._skillKey)
@@ -280,7 +296,7 @@ Request_SkillCommandLock = function(skillNo)
       ToClient_blockSkillCommand(skillLevelInfo._skillKey)
     end
     local changeTextureLockIcon = function(isBlockSkill)
-    -- function num : 0_6_0 , upvalues : skillNo
+    -- function num : 0_7_0 , upvalues : skillNo
     local slot = (PaGlobal_Skill.skillNoSlot)[skillNo]
     if isBlockSkill then
       (slot.lockIcon):ChangeTextureInfoName("New_UI_Common_forLua/Window/Skill/Skill_ui_03.dds")
@@ -328,7 +344,7 @@ Request_SkillCommandLock = function(skillNo)
 end
 
 SkillCommandTooltip = function(skillNo, tabIndex, isShow)
-  -- function num : 0_7
+  -- function num : 0_8
   if not isShow then
     local skillStaticWrapper = getSkillStaticStatus(skillNo, 1)
     local skillTypeStaticStatusWrapper = skillStaticWrapper:getSkillTypeStaticStatusWrapper()
@@ -363,7 +379,7 @@ SkillCommandTooltip = function(skillNo, tabIndex, isShow)
 end
 
 HandleMLUp_SkillWindow_OpenForLearn = function()
-  -- function num : 0_8
+  -- function num : 0_9
   local self = PaGlobal_Skill
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
@@ -400,7 +416,7 @@ HandleMLUp_SkillWindow_OpenForLearn = function()
 end
 
 HandleMLUp_SkillWindow_Close = function(isManualClick)
-  -- function num : 0_9
+  -- function num : 0_10
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
   if Panel_Window_Skill:IsShow() then
@@ -411,11 +427,24 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     Panel_SkillTooltip_Hide()
     UIMain_SkillPointUpdateRemove()
     Panel_Window_Skill:SetShow(false, true)
-    EnableSkillShowFunc()
-    PaGlobal_SkillCombination:close()
-    Panel_Scroll:SetShow(false, false)
-    if Panel_EnableSkill:IsShow() then
+    if isCoolTimeQuickSlot_chk() == true then
+      Panel_SkillCombination:SetShow(false)
+      -- DECOMPILER ERROR at PC28: Confused about usage of register: R2 in 'UnsetPending'
+
+      Panel_SkillCombination._isFirstOpen = false
+      -- DECOMPILER ERROR at PC30: Confused about usage of register: R2 in 'UnsetPending'
+
+      Panel_SkillCombination._currentSlotIndex = -1
+      Panel_Scroll:SetShow(false, false)
+      FGlobal_EnableSkillCloseFunc()
+      PaGlobal_Window_Skill_CoolTimeSlot:closeFunc()
+    else
       EnableSkillShowFunc()
+      PaGlobal_SkillCombination:close()
+      Panel_Scroll:SetShow(false, false)
+      if Panel_EnableSkill:IsShow() then
+        EnableSkillShowFunc()
+      end
     end
   end
   do
@@ -424,7 +453,7 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     end
     HelpMessageQuestion_Out()
     local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
-    -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC77: Confused about usage of register: R2 in 'UnsetPending'
 
     PaGlobal_Skill.scrollPos = 0
     FGlobal_ResetUrl_Tooltip_SkillForLearning()
@@ -433,7 +462,7 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
 end
 
 HandleMOver_SkillWindow_ToolTipHide = function(skillNo, SlotType, isFusion)
-  -- function num : 0_10
+  -- function num : 0_11
   -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
 
   if PaGlobal_Skill.skillNoCache == skillNo and PaGlobal_Skill.slotTypeCache == SlotType then
@@ -463,7 +492,7 @@ HandleMOver_SkillWindow_ToolTipHide = function(skillNo, SlotType, isFusion)
 end
 
 HandleMOver_SkillWindow_ToolTipShow = function(skillNo, isShowNextLevel, SlotType, isFusion)
-  -- function num : 0_11
+  -- function num : 0_12
   -- DECOMPILER ERROR at PC12: Confused about usage of register: R4 in 'UnsetPending'
 
   if PaGlobal_Skill.skillNoCache == skillNo and PaGlobal_Skill.slotTypeCache == SlotType then
@@ -525,7 +554,7 @@ HandleMOver_SkillWindow_ToolTipShow = function(skillNo, isShowNextLevel, SlotTyp
 end
 
 HandleMLUp_SkillWindow_LearnButtonClick = function(skillNo)
-  -- function num : 0_12
+  -- function num : 0_13
   local skillTypeStaticWrapper = getSkillTypeStaticStatus(skillNo)
   if skillTypeStaticWrapper == nil then
     return 
@@ -538,7 +567,7 @@ HandleMLUp_SkillWindow_LearnButtonClick = function(skillNo)
     return 
   end
   local DolearnSkill = function()
-    -- function num : 0_12_0 , upvalues : skillNo
+    -- function num : 0_13_0 , upvalues : skillNo
     PaGlobal_Skill:SkillWindow_LearnButtonClick(skillNo)
     EnableSkillWindow_EffectOff()
   end
@@ -566,24 +595,27 @@ HandleMLUp_SkillWindow_LearnButtonClick = function(skillNo)
 end
 
 HandleMLUp_SkillWindow_ClearButtonClick = function(skillNo)
-  -- function num : 0_13
+  -- function num : 0_14
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
   end
   local partlySkillReset = function()
-    -- function num : 0_13_0 , upvalues : skillNo
-    ToClient_RequestClearSkillPartly(skillNo)
-    -- DECOMPILER ERROR at PC4: Confused about usage of register: R0 in 'UnsetPending'
+    -- function num : 0_14_0 , upvalues : skillNo
+    local returnValue = ToClient_RequestClearSkillPartly(skillNo)
+    -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
 
     PaGlobal_Skill.isPartsSkillReset = false
+    if returnValue == 0 then
+      ToClient_clearSkillCoolTimeSlot(skillNo)
+    end
   end
 
   partlySkillReset()
 end
 
 HandleMLUp_SkillWindow_StartDrag = function(skillNo)
-  -- function num : 0_14
+  -- function num : 0_15
   if (Defines.UIMode).eUIMode_NpcDialog == GetUIMode() then
     return 
   end
@@ -595,7 +627,7 @@ HandleMLUp_SkillWindow_StartDrag = function(skillNo)
 end
 
 HandleMScroll_SkillWindow_ScrollEvent = function(isShow)
-  -- function num : 0_15
+  -- function num : 0_16
   local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
   if isShow then
     (UIScrollButton.ScrollButtonEvent)(false, Panel_Window_Skill, (PaGlobal_Skill.frames)[0], vScroll)
@@ -603,14 +635,14 @@ HandleMScroll_SkillWindow_ScrollEvent = function(isShow)
 end
 
 Skill_GroundClick = function(whereType, skillKey)
-  -- function num : 0_16
+  -- function num : 0_17
   if isUseNewQuickSlot() then
     FGlobal_SetNewQuickSlot_BySkillGroundClick(skillKey)
   end
 end
 
 Skill_ClearSkill_ConfirmFromMessageBox = function()
-  -- function num : 0_17
+  -- function num : 0_18
   skillWindow_ClearSkill()
   if ((PaGlobal_Skill.radioButtons)[PaGlobal_Skill.combatTabIndex]):IsCheck() then
     HandleMLUp_SkillWindow_UpdateData(PaGlobal_Skill.combatTabIndex)
@@ -620,7 +652,7 @@ Skill_ClearSkill_ConfirmFromMessageBox = function()
 end
 
 Skill_RegistEventHandler = function()
-  -- function num : 0_18
+  -- function num : 0_19
   local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
   vScroll:addInputEvent("Mouse_LDown", "HandleMScroll_SkillWindow_ScrollEvent(true)")
   ;
@@ -655,28 +687,50 @@ Skill_RegistEventHandler = function()
   (PaGlobal_Skill._btn_ResetAllSkill):addInputEvent("Mouse_On", "SkillEvent_ResetTooltip( true )")
   ;
   (PaGlobal_Skill._btn_ResetAllSkill):addInputEvent("Mouse_Out", "SkillEvent_ResetTooltip()")
+  if isCoolTimeQuickSlot_chk() == true then
+    (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_LUp", "Handle_SkillEnable_CoolTime_Change()")
+    ;
+    (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_On", "Handle_SkillCollTimeTooltip( true )")
+    ;
+    (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_Out", "Handle_SkillCollTimeTooltip()")
+  end
 end
 
 SkillEvent_ResetTooltip = function(isShow)
-  -- function num : 0_19
+  -- function num : 0_20
   if isShow == nil then
     TooltipSimple_Hide()
     return 
   end
   local uiControl = PaGlobal_Skill._btn_ResetAllSkill
-  local name = ""
+  local name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_RESETALL")
   local desc = PAGetString(Defines.StringSheet_GAME, "LUA_SKILL_RESETBUTTON_TOOLTIPDESC")
   TooltipSimple_Show(uiControl, name, desc)
 end
 
+Handle_SkillCollTimeTooltip = function(isShow)
+  -- function num : 0_21
+  if isCoolTimeQuickSlot_chk() == true then
+    if isShow == nil then
+      TooltipSimple_Hide()
+      return 
+    end
+    local uiControl = PaGlobal_Skill._btn_Enable_CoolTime_Change
+    local name = ""
+    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_SKILL_COOLTIMESLOT_TOOLTIPDESC")
+    TooltipSimple_Show(uiControl, name, desc)
+  end
+end
+
 SkillEvent_SkillWindow_ClearSkillMessage = function()
-  -- function num : 0_20
+  -- function num : 0_22
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SKILL_RESETSUCCESS"))
   HandleMLUp_SkillWindow_UpdateData()
+  PaGlobal_Window_Skill_CoolTimeSlot:skillUpdate()
 end
 
 Skill_RegistMessageHandler = function()
-  -- function num : 0_21
+  -- function num : 0_23
   registerEvent("FromClient_luaLoadComplete", "LoadComplete_SkillWindow_Initialize")
   registerEvent("EventSkillWindowInit", "SkillEvent_SkillWindow_ControlInitialize")
   registerEvent("EventlearnedSkill", "SkillEvent_SkillWindow_LearnQuest")

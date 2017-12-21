@@ -10,7 +10,7 @@ _id = {}
 _stickyMemoList = {}
 , 
 _ui = {_buttonAddMemo = (UI.getChildControl)(Panel_Memo_List, "Button_AddMemo"), _buttonAllRemove = (UI.getChildControl)(Panel_Memo_List, "Button_AllDelete"), _buttonClose = (UI.getChildControl)(Panel_Memo_List, "Button_Win_Close"), _list2 = (UI.getChildControl)(Panel_Memo_List, "List2_MemoList"), _noMemoAlert = (UI.getChildControl)(Panel_Memo_List, "StaticText_NoMemoAlert")}
-, _currentFocusId = nil, _currentFocusTitle = nil, _currentFocusContent = nil, 
+, _currentFocusId = nil, _currentFocusContent = nil, 
 _SaveMode_ = {TEXT = 0, SETTING = 1, ALL = 2}
 }
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Memo")
@@ -19,7 +19,7 @@ FromClient_luaLoadComplete_Memo = function()
   PaGlobal_Memo:Initialize()
 end
 
--- DECOMPILER ERROR at PC69: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.Initialize = function(self)
   -- function num : 0_1
@@ -33,7 +33,7 @@ PaGlobal_Memo.Initialize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC72: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC71: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.DataInitialize = function(self)
   -- function num : 0_2
@@ -63,12 +63,12 @@ PaGlobal_Memo.DataInitialize = function(self)
   for index = 0, memoCount - 1 do
     local info = elements[index]
     if info:isOn() == true then
-      self:createStickyMemoWrapper(info:getId(), info:getTitle(), info:getContent())
+      self:createStickyMemoWrapper(info:getId())
     end
   end
 end
 
--- DECOMPILER ERROR at PC75: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC74: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.RegistEventHandler = function(self)
   -- function num : 0_3
@@ -83,7 +83,7 @@ PaGlobal_Memo.RegistEventHandler = function(self)
   ((self._ui)._list2):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
 end
 
--- DECOMPILER ERROR at PC78: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC77: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.Add = function(self)
   -- function num : 0_4
@@ -95,14 +95,14 @@ PaGlobal_Memo.Add = function(self)
   self._currentFocusId = newId
   ;
   (((self._ui)._list2):getElementManager()):pushKey(toInt64(0, newId))
-  self:createStickyMemoWrapper(newId, info:getTitle(), info:getTitle())
+  self:createStickyMemoWrapper(newId)
   if Panel_Memo_List:GetShow() == true then
     self:StickySetDefaultPos(newId)
   end
   self:ListUpdate()
 end
 
--- DECOMPILER ERROR at PC81: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC80: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.Save = function(self, saveMode, inputId)
   -- function num : 0_5
@@ -124,7 +124,7 @@ PaGlobal_Memo.Save = function(self, saveMode, inputId)
   self:ComputeFrameContentSizeY(id)
 end
 
--- DECOMPILER ERROR at PC84: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC83: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.Remove = function(self, id)
   -- function num : 0_6
@@ -146,7 +146,7 @@ PaGlobal_Memo.Remove = function(self, id)
   self:StickyClearFocus()
 end
 
--- DECOMPILER ERROR at PC87: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC86: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.AllRemove = function(self)
   -- function num : 0_7
@@ -181,10 +181,26 @@ PaGlobal_Memo.AllRemove = function(self)
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
--- DECOMPILER ERROR at PC90: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC89: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_Memo.RemoveConfirmPopUp = function(self, id)
+  -- function num : 0_8
+  local applyFunc = function()
+    -- function num : 0_8_0 , upvalues : self, id
+    self:Remove(id)
+  end
+
+  local _title = PAGetString(Defines.StringSheet_GAME, "LUA_MEMOLIST_CURRENTDELETEDTITLE")
+  local _content = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MEMOLIST_CURRENTDELETEDESC", "count", memoCount)
+  local messageBoxData = {title = _title, content = _content, functionYes = applyFunc, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  ;
+  (MessageBox.showMessageBox)(messageBoxData)
+end
+
+-- DECOMPILER ERROR at PC92: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.ReCheckSaveMode = function(self, saveMode)
-  -- function num : 0_8
+  -- function num : 0_9
   if saveMode ~= (self._SaveMode_).SETTING then
     if self._currentFocusId == nil then
       return nil
@@ -202,10 +218,10 @@ PaGlobal_Memo.ReCheckSaveMode = function(self, saveMode)
   end
 end
 
--- DECOMPILER ERROR at PC93: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.ListUpdate = function(self)
-  -- function num : 0_9
+  -- function num : 0_10
   if Panel_Memo_List:IsShow() == false then
     return 
   end
@@ -238,19 +254,16 @@ PaGlobal_Memo.ListUpdate = function(self)
 end
 
 FGlobal_Memo_List2EventControlCreate = function(list_content, key)
-  -- function num : 0_10 , upvalues : UI_TM
+  -- function num : 0_11 , upvalues : UI_TM
   local id = Int64toInt32(key)
   local info = ToClient_getMemo(id)
   local _content = info:getContent()
   local bg = (UI.getChildControl)(list_content, "List2_Static_MemoList_TitleBG")
-  local name = (UI.getChildControl)(list_content, "List2_StaticText_MemoList_Title")
   local content = (UI.getChildControl)(list_content, "List2_StaticText_MemoList_Content")
   local toggleButton = (UI.getChildControl)(list_content, "List2_CheckButton_MemoList_ToggleShow")
   local removeButton = (UI.getChildControl)(list_content, "List2_Button_MemoList_RemoveMemo")
   do
     local updatetime = (UI.getChildControl)(list_content, "List2_StaticText_MemoList_UpdateTime")
-    name:SetShow(false)
-    name:SetText(info:getTitle())
     content:SetShow(true)
     if _content == "" or _content == "Content" then
       _content = PAGetString(Defines.StringSheet_GAME, "LUA_MEMO_INSERTCONTENT")
@@ -261,7 +274,7 @@ FGlobal_Memo_List2EventControlCreate = function(list_content, key)
     updatetime:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MEMO_LASTUPDATE", "time", info:getUpdateTime()))
     toggleButton:SetCheck(info:isOn() == true)
     MemoList_SimpleTooltipShow = function(uiType)
-    -- function num : 0_10_0 , upvalues : toggleButton, removeButton
+    -- function num : 0_11_0 , upvalues : toggleButton, removeButton
     local uiControl, name = nil
     if uiType == 0 then
       uiControl = toggleButton
@@ -276,7 +289,7 @@ FGlobal_Memo_List2EventControlCreate = function(list_content, key)
   end
 
     MemoList_SimpleTooltipHide = function()
-    -- function num : 0_10_1
+    -- function num : 0_11_1
     TooltipSimple_Hide()
   end
 
@@ -284,39 +297,38 @@ FGlobal_Memo_List2EventControlCreate = function(list_content, key)
     toggleButton:addInputEvent("Mouse_LUp", "PaGlobal_Memo:StickyToggleShow( " .. id .. ")")
     toggleButton:addInputEvent("Mouse_On", "MemoList_SimpleTooltipShow(" .. 0 .. ")")
     toggleButton:addInputEvent("Mouse_Out", "MemoList_SimpleTooltipHide()")
-    removeButton:addInputEvent("Mouse_LUp", "PaGlobal_Memo:Remove( " .. id .. " ) ")
+    removeButton:addInputEvent("Mouse_LUp", "PaGlobal_Memo:RemoveConfirmPopUp( " .. id .. " ) ")
     removeButton:addInputEvent("Mouse_On", "MemoList_SimpleTooltipShow(" .. 1 .. ")")
     removeButton:addInputEvent("Mouse_Out", "MemoList_SimpleTooltipHide()")
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
 
--- DECOMPILER ERROR at PC99: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC101: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.StickyClearFocus = function(self)
-  -- function num : 0_11
+  -- function num : 0_12
   ClearFocusEdit()
   self._currentFocusId = nil
-  self._currentFocusTitle = nil
   self._currentFocusContent = nil
 end
 
--- DECOMPILER ERROR at PC102: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC104: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.IsChanged = function(self)
-  -- function num : 0_12
+  -- function num : 0_13
   if self._currentFocusId == nil then
     return false
   end
   local stickyMemo = (self._stickyMemoList)[self._currentFocusId]
-  if self._currentFocusContent == (stickyMemo._uiMultiLineText):GetEditText() and self._currentFocusTitle == (stickyMemo._uiEditTitle):GetText() then
+  if self._currentFocusContent == (stickyMemo._uiMultiLineText):GetEditText() then
     return false
   end
   return true
 end
 
 Panel_Memo_List_ShowAni = function()
-  -- function num : 0_13
+  -- function num : 0_14
   local aniInfo1 = Panel_Memo_List:addScaleAnimation(0, 0.08, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
   aniInfo1:SetEndScale(1.12)
@@ -334,7 +346,7 @@ Panel_Memo_List_ShowAni = function()
 end
 
 Panel_Memo_List_HideAni = function()
-  -- function num : 0_14
+  -- function num : 0_15
   local aniInfo1 = Panel_Memo_List:addColorAnimation(0, 0.1, (CppEnums.PAUI_ANIM_ADVANCE_TYPE).PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor((Defines.Color).C_FFFFFFFF)
   aniInfo1:SetEndColor((Defines.Color).C_00FFFFFF)
@@ -345,10 +357,10 @@ Panel_Memo_List_HideAni = function()
   aniInfo1:SetDisableWhileAni(true)
 end
 
--- DECOMPILER ERROR at PC109: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC111: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.ListOpen = function(self)
-  -- function num : 0_15
+  -- function num : 0_16
   if not Panel_Memo_List:IsShow() then
     Panel_Memo_List:SetShow(true, true)
     ToClient_refreshMemoUpdateTime()
@@ -356,20 +368,20 @@ PaGlobal_Memo.ListOpen = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC112: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.ListClose = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
   if Panel_Memo_List:IsShow() then
     Panel_Memo_List:SetShow(false, true)
   end
   TooltipSimple_Hide()
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC117: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.getInfoByCurData = function(self, id)
-  -- function num : 0_17
+  -- function num : 0_18
   local stickyMemo = (self._stickyMemoList)[id]
   local posX = (stickyMemo._mainPanel):GetPosX()
   local posY = (stickyMemo._mainPanel):GetPosY()
@@ -380,15 +392,15 @@ PaGlobal_Memo.getInfoByCurData = function(self, id)
       posY = info:getPositionY()
     end
     local info = MemoInfo(id)
-    info:setInfo((stickyMemo._uiEditTitle):GetText(), (stickyMemo._uiMultiLineText):GetEditText(), stickyMemo._isOn, int2(posX, posY), int2((stickyMemo._mainPanel):GetSizeX(), (stickyMemo._mainPanel):GetSizeY()), stickyMemo._stickyMemoAlpha, stickyMemo._stickyMemoColor)
+    info:setInfo((stickyMemo._uiMultiLineText):GetEditText(), stickyMemo._isOn, int2(posX, posY), int2((stickyMemo._mainPanel):GetSizeX(), (stickyMemo._mainPanel):GetSizeY()), stickyMemo._stickyMemoAlpha, stickyMemo._stickyMemoColor)
     return info
   end
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC120: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Memo.Tablelength = function(self, T)
-  -- function num : 0_18
+  -- function num : 0_19
   local count = 0
   for _ in pairs(T) do
     count = count + 1

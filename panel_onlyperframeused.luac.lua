@@ -23,7 +23,7 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   if NewQuickSlot_UpdatePerFrame ~= nil then
     NewQuickSlot_UpdatePerFrame(deltaTime)
   end
-  if isCoolTimeQuickSlot_chk() == true and FGlobal_SkillCoolTimeQuickSlot_UpdatePerFrame ~= nil then
+  if FGlobal_SkillCoolTimeQuickSlot_UpdatePerFrame ~= nil then
     FGlobal_SkillCoolTimeQuickSlot_UpdatePerFrame(deltaTime)
   end
   if Competition_UpdatePerFrame ~= nil then

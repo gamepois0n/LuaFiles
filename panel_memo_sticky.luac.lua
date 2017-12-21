@@ -17,11 +17,7 @@ FGlobal_Memo_CheckUiEdit = function(targetUI)
   if currentMemo == nil then
     return false
   end
-  local currentEdit = currentMemo._uiEditTitle
-  if targetUI ~= nil and targetUI:GetKey() == currentEdit:GetKey() then
-    return true
-  end
-  currentEdit = ((PaGlobal_Memo._stickyMemoList)[PaGlobal_Memo._currentFocusId])._uiMultiLineText
+  local currentEdit = ((PaGlobal_Memo._stickyMemoList)[PaGlobal_Memo._currentFocusId])._uiMultiLineText
   if targetUI ~= nil and targetUI:GetKey() == currentEdit:GetKey() then
     return true
   end
@@ -32,7 +28,6 @@ end
 
 PaGlobal_Memo.StickyToggleShow = function(self, id)
   -- function num : 0_2
-  self._currentFocusId = id
   local info = ToClient_getMemo(id)
   local stickyMemo = (self._stickyMemoList)[id]
   if info:isOn() == true then
@@ -45,14 +40,14 @@ PaGlobal_Memo.StickyToggleShow = function(self, id)
     (stickyMemo._uiCheckbuttonPopup):SetCheck(false)
   else
     if stickyMemo == nil then
-      self:createStickyMemoWrapper(id, info:getTitle(), info:getContent())
+      self:createStickyMemoWrapper(id)
     else
       stickyMemo._isOn = true
       ;
       (stickyMemo._mainPanel):SetShow(true)
     end
   end
-  self:Save((self._SaveMode_).SETTING)
+  self:Save((self._SaveMode_).SETTING, id)
   self:StickyClearFocus()
   if Panel_Memo_List:IsShow() == true then
     ((self._ui)._list2):requestUpdateByKey(toInt64(0, id))
@@ -69,23 +64,18 @@ end
 
 -- DECOMPILER ERROR at PC12: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Memo.StickyClicked = function(self, id)
+PaGlobal_Memo.StickyClickedContent = function(self, id)
   -- function num : 0_4
   local stickyMemo = (self._stickyMemoList)[id]
-  if self._currentFocusId ~= -1 and self._currentFocusId ~= id then
+  if self._currentFocusId ~= nil and self._currentFocusId ~= id then
     self:Save()
   end
   self._currentFocusId = id
-  self._currentFocusTitle = (stickyMemo._uiEditTitle):GetText()
   self._currentFocusContent = (stickyMemo._uiMultiLineText):GetEditText()
-end
-
--- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_Memo.StickyClickedContent = function(self, id)
-  -- function num : 0_5
-  self:StickyClicked(id)
-  local stickyMemo = (self._stickyMemoList)[id]
+  local default_text = PAGetString(Defines.StringSheet_GAME, "LUA_MEMO_INSERTCONTENT")
+  if self._currentFocusContent == default_text then
+    (stickyMemo._uiMultiLineText):SetEditText("")
+  end
   SetFocusEdit(stickyMemo._uiMultiLineText)
   ;
   (stickyMemo._uiframe):UpdateContentScroll()
@@ -95,19 +85,18 @@ PaGlobal_Memo.StickyClickedContent = function(self, id)
   (stickyMemo._uiframe):UpdateContentPos()
 end
 
--- DECOMPILER ERROR at PC18: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickyAlphaSlider = function(self, id)
-  -- function num : 0_6
+  -- function num : 0_5
   self:ComputeControlAlpha(id)
-  self._currentFocusId = id
-  self:Save((self._SaveMode_).SETTING)
+  self:Save((self._SaveMode_).SETTING, id)
 end
 
--- DECOMPILER ERROR at PC21: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC18: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickyResizeStartPos = function(self, id)
-  -- function num : 0_7
+  -- function num : 0_6
   local panel = ((self._stickyMemoList)[id])._mainPanel
   orgMouseX = getMousePosX()
   orgMouseY = getMousePosY()
@@ -116,10 +105,10 @@ PaGlobal_Memo.StickyResizeStartPos = function(self, id)
   orgPanelSizeY = panel:GetSizeY()
 end
 
--- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC21: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickyResize = function(self, id)
-  -- function num : 0_8
+  -- function num : 0_7
   local stickyMemo = (self._stickyMemoList)[id]
   if (stickyMemo._uiCheckbuttonPopup):IsCheck() then
     return 
@@ -153,18 +142,17 @@ PaGlobal_Memo.StickyResize = function(self, id)
   self:ComputeControlShape(id, currentPosX, currentPosY, sizeX, sizeY)
 end
 
--- DECOMPILER ERROR at PC27: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickyResizeEnd = function(self, id)
-  -- function num : 0_9
+  -- function num : 0_8
   local stickyMemo = (self._stickyMemoList)[id]
   if (stickyMemo._uiCheckbuttonPopup):IsCheck() then
     return 
   end
   do
     local isFocused = self._currentFocusId ~= nil
-    self._currentFocusId = id
-    self:Save((self._SaveMode_).SETTING)
+    self:Save((self._SaveMode_).SETTING, id)
     if isFocused == true then
       SetFocusEdit(stickyMemo._uiMultiLineText)
     end
@@ -172,20 +160,20 @@ PaGlobal_Memo.StickyResizeEnd = function(self, id)
   end
 end
 
--- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC27: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.ComputeFrameContentSizeY = function(self, id)
-  -- function num : 0_10
+  -- function num : 0_9
   local stickyMemo = (self._stickyMemoList)[id]
   local info = ToClient_getMemo(id)
   ;
   (stickyMemo._uiframeContent):SetSize((stickyMemo._uiframeContent):GetSizeX(), info:getFrameContentY())
 end
 
--- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC30: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickyToggleChangeColor = function(self, id)
-  -- function num : 0_11
+  -- function num : 0_10
   local stickyMemo = (self._stickyMemoList)[id]
   local isShow = ((stickyMemo._colorChange)._uiframe):GetShow()
   if isShow == true then
@@ -197,25 +185,23 @@ PaGlobal_Memo.StickyToggleChangeColor = function(self, id)
   ((stickyMemo._colorChange)._uiframe):SetShow(isShow)
 end
 
--- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickyChangeColorEnd = function(self, id, color)
-  -- function num : 0_12
-  self._currentFocusId = id
+  -- function num : 0_11
   self:StickyApplyColor(id, color)
   ;
   ((((self._stickyMemoList)[id])._colorChange)._uiframe):SetShow(false)
-  self:Save((self._SaveMode_).SETTING)
+  self:Save((self._SaveMode_).SETTING, id)
 end
 
--- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.Check_PopUI = function(self, id)
-  -- function num : 0_13
+  -- function num : 0_12
   local stickyMemo = (self._stickyMemoList)[id]
   if (stickyMemo._uiCheckbuttonPopup):IsCheck() == true then
-    self._currentFocusId = id
-    self:Save((self._SaveMode_).SETTING)
+    self:Save((self._SaveMode_).SETTING, id)
     stickyMemo._isSubAppMode = true
     ;
     (stickyMemo._mainPanel):OpenUISubApp()
@@ -226,19 +212,19 @@ PaGlobal_Memo.Check_PopUI = function(self, id)
   end
 end
 
--- DECOMPILER ERROR at PC42: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Memo.createStickyMemoWrapper = function(self, id, title, content)
-  -- function num : 0_14
+PaGlobal_Memo.createStickyMemoWrapper = function(self, id)
+  -- function num : 0_13
   local info = ToClient_getMemo(id)
   local content = info:getContent()
   if content == "" or content == "Content" then
     content = PAGetString(Defines.StringSheet_GAME, "LUA_MEMO_INSERTCONTENT")
   end
-  -- DECOMPILER ERROR at PC23: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC21: Confused about usage of register: R4 in 'UnsetPending'
 
   ;
-  (self._stickyMemoList)[id] = PaGlobal_Memo:createStickyMemo(id, info:getTitle(), content)
+  (self._stickyMemoList)[id] = PaGlobal_Memo:createStickyMemo(id, content)
   local stickyMemo = (self._stickyMemoList)[id]
   local panel = stickyMemo._mainPanel
   ;
@@ -250,23 +236,23 @@ PaGlobal_Memo.createStickyMemoWrapper = function(self, id, title, content)
   self:StickyApplyColor(id, info:getColor())
 end
 
--- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC42: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Memo.createStickyMemo = function(self, stickyMemoId, title, content)
-  -- function num : 0_15
-  local stickyMemo = {_id = stickyMemoId, _title = title, _content = content, _isOn = true, _mainPanel = nil, _uiClose = nil, _uiAddMemo = nil, _uiEditTitle = nil, _uiEditTitleImg = nil, _uiSizeControl = nil, _uiSave = nil, _uiButtonColorChange = nil, 
+PaGlobal_Memo.createStickyMemo = function(self, stickyMemoId, content)
+  -- function num : 0_14
+  local stickyMemo = {_id = stickyMemoId, _content = content, _isOn = true, _mainPanel = nil, _uiClose = nil, _uiAddMemo = nil, _uiEditTitleImg = nil, _uiSizeControl = nil, _uiSave = nil, _uiButtonColorChange = nil, 
 _colorChange = {_uiframe = nil, _uiframeContent = nil, _title = nil, _bg = nil, 
 _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
 }
 , _uiSlider = nil, _uiSliderButton = nil, _uiEmpty = nil, _uiframe = nil, _uiframeContent = nil, _uiframeScroll = nil, _uiMultiLineText = nil, _uiMultiLineTextContent = nil, _uiMultiLineTextScroll = nil, _curline = 0, _uiCheckbuttonPopup = nil, _stickyMemoAlpha = 1, _stickyMemoColor = 0, _isSubAppMode = false}
   stickyMemo.initialize = function(self, stickyMemoId)
-    -- function num : 0_15_0 , upvalues : stickyMemo
+    -- function num : 0_14_0 , upvalues : stickyMemo
     stickyMemo:createPanel(stickyMemoId)
     stickyMemo:prepareControl(stickyMemoId)
   end
 
   stickyMemo.clear = function(self)
-    -- function num : 0_15_1 , upvalues : stickyMemo
+    -- function num : 0_14_1 , upvalues : stickyMemo
     if (stickyMemo._uiCheckbuttonPopup):IsCheck() == true then
       (stickyMemo._mainPanel):CloseUISubApp()
     end
@@ -276,7 +262,7 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
   end
 
   stickyMemo.createPanel = function(self, stickyMemoId)
-    -- function num : 0_15_2 , upvalues : stickyMemo
+    -- function num : 0_14_2 , upvalues : stickyMemo
     local newName = "Panel_Memo_Sticky" .. stickyMemoId
     -- DECOMPILER ERROR at PC11: Confused about usage of register: R3 in 'UnsetPending'
 
@@ -289,7 +275,7 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
   end
 
   stickyMemo.prepareControl = function(self, stickyMemoId)
-    -- function num : 0_15_3 , upvalues : stickyMemo
+    -- function num : 0_14_3 , upvalues : stickyMemo
     self._uiEditTitleImg = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Memo_Sticky, self._mainPanel, "Static_TitleImage", 0)
     self._uiClose = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_Memo_Sticky, self._mainPanel, "Button_Close", 0)
     ;
@@ -314,15 +300,6 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     (self._uiSlider):addInputEvent("Mouse_LUp", "PaGlobal_Memo:StickyAlphaSlider( " .. stickyMemoId .. ")")
     ;
     (self._uiSlider):SetControlPos(100)
-    self._uiEditTitle = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_EDIT, Panel_Memo_Sticky, self._mainPanel, "Edit_TitleName", 0)
-    ;
-    (self._uiEditTitle):SetText(stickyMemo._title)
-    ;
-    (self._uiEditTitle):SetMaxInput(10)
-    ;
-    (self._uiEditTitle):SetShow(false)
-    ;
-    (self._uiEditTitle):addInputEvent("Mouse_LUp", "PaGlobal_Memo:StickyClicked(" .. stickyMemoId .. ")")
     self._uiSizeControl = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, Panel_Memo_Sticky, self._mainPanel, "Button_SizeControl", 0)
     ;
     (self._uiSizeControl):addInputEvent("Mouse_LDown", "PaGlobal_Memo:StickyResizeStartPos( " .. stickyMemoId .. " )")
@@ -375,11 +352,11 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     (self._uiButtonColorChange):addInputEvent("Mouse_On", "PaGlobal_Memo:Tooltip_Show(" .. 4 .. ")")
     ;
     (self._uiButtonColorChange):addInputEvent("Mouse_Out", "PaGlobal_Memo:Tooltip_Hide()")
-    -- DECOMPILER ERROR at PC380: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC348: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._colorChange)._uiframe = stickyMemo:createControl((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_FRAME, Panel_Memo_Sticky, self._mainPanel, "Frame_Sticky_ColorChange", 0)
-    -- DECOMPILER ERROR at PC386: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC354: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._colorChange)._uiframeContent = ((self._colorChange)._uiframe):GetFrameContent()
@@ -389,7 +366,7 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     colorTitle:SetShow(true)
     for color = 0, 5 do
       local colorStyle = (UI.getChildControl)(Panel_Memo_Sticky, "Button_Color_" .. tostring(color))
-      -- DECOMPILER ERROR at PC435: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC403: Confused about usage of register: R13 in 'UnsetPending'
 
       ;
       ((self._colorChange)._uiButton)[color] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_BUTTON, (self._colorChange)._uiframeContent, "Button_Color_" .. color)
@@ -409,10 +386,10 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
     (self._uiMultiLineText):addInputEvent("Mouse_UpScroll", "PaGlobal_Memo:OnMouseWheel( " .. stickyMemoId .. ", true )")
     ;
     (self._uiMultiLineText):addInputEvent("Mouse_DownScroll", "PaGlobal_Memo:OnMouseWheel( " .. stickyMemoId .. ", false )")
-    -- DECOMPILER ERROR at PC501: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC469: Confused about usage of register: R8 in 'UnsetPending'
 
     PaGlobal_Memo.Tooltip_Show = function(self, uiType)
-      -- function num : 0_15_3_0 , upvalues : stickyMemo
+      -- function num : 0_14_3_0 , upvalues : stickyMemo
       local uiControl, name, desc = nil
       if uiType == 0 then
         uiControl = stickyMemo._uiClose
@@ -446,17 +423,17 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
       TooltipSimple_Show(uiControl, name, desc)
     end
 
-    -- DECOMPILER ERROR at PC504: Confused about usage of register: R8 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC472: Confused about usage of register: R8 in 'UnsetPending'
 
     PaGlobal_Memo.Tooltip_Hide = function(self)
-      -- function num : 0_15_3_1
+      -- function num : 0_14_3_1
       TooltipSimple_Hide()
     end
 
   end
 
   stickyMemo.createControl = function(self, controlType, parentStyleControl, parentControl, controlName, index)
-    -- function num : 0_15_4
+    -- function num : 0_14_4
     local styleControl = (UI.getChildControl)(parentStyleControl, controlName)
     local control = (UI.createControl)(controlType, parentControl, controlName .. index)
     CopyBaseProperty(styleControl, control)
@@ -467,10 +444,10 @@ _uiButton = {[0] = nil, [1] = nil, [2] = nil, [3] = nil}
   return stickyMemo
 end
 
--- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.OnMouseWheel = function(self, stickyMemoId, isUp)
-  -- function num : 0_16
+  -- function num : 0_15
   local stickyMemo = (self._stickyMemoList)[stickyMemoId]
   local targetScroll = stickyMemo._uiFrameScroll
   if targetScroll == nil then
@@ -485,10 +462,10 @@ PaGlobal_Memo.OnMouseWheel = function(self, stickyMemoId, isUp)
   (stickyMemo._uiFrame):UpdateContentPos()
 end
 
--- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC48: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.ComputeControlShape = function(self, id, posX, posY, sizeX, sizeY)
-  -- function num : 0_17
+  -- function num : 0_16
   local stickyMemo = (self._stickyMemoList)[id]
   local info = ToClient_getMemo(id)
   local panel = stickyMemo._mainPanel
@@ -529,10 +506,10 @@ PaGlobal_Memo.ComputeControlShape = function(self, id, posX, posY, sizeX, sizeY)
   (stickyMemo._uiframe):UpdateContentPos()
 end
 
--- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.ComputeControlAlpha = function(self, id)
-  -- function num : 0_18
+  -- function num : 0_17
   local stickyMemo = (self._stickyMemoList)[id]
   local panel = stickyMemo._mainPanel
   stickyMemo._stickyMemoAlpha = (stickyMemo._uiSlider):GetControlPos() * 0.9 + 0.1
@@ -543,10 +520,10 @@ PaGlobal_Memo.ComputeControlAlpha = function(self, id)
   (stickyMemo._uiSave):SetFontAlpha(stickyMemo._stickyMemoAlpha)
 end
 
--- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickyApplyColor = function(self, id, color)
-  -- function num : 0_19
+  -- function num : 0_18
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R3 in 'UnsetPending'
 
   ((self._stickyMemoList)[id])._stickyMemoColor = color
@@ -612,10 +589,10 @@ PaGlobal_Memo.StickyApplyColor = function(self, id, color)
   control:setRenderTexture(control:getBaseTexture())
 end
 
--- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Memo.StickySetDefaultPos = function(self, id)
-  -- function num : 0_20
+  -- function num : 0_19
   local lsitPosX = Panel_Memo_List:GetPosX()
   local lsitPosY = Panel_Memo_List:GetPosY()
   local lsitSizeX = Panel_Memo_List:GetSizeX()
@@ -627,8 +604,7 @@ PaGlobal_Memo.StickySetDefaultPos = function(self, id)
     panel:SetPosX(lsitPosX + lsitSizeX + 10)
   end
   panel:SetPosY(lsitPosY + 15)
-  self._currentFocusId = id
-  self:Save((self._SaveMode_).SETTING)
+  self:Save((self._SaveMode_).SETTING, id)
 end
 
 

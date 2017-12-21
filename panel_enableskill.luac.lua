@@ -294,8 +294,18 @@ EnableSkillShowFunc = function()
   end
 end
 
+FGlobal_EnableSkillCloseFunc = function()
+  -- function num : 0_5 , upvalues : editSearch, isEditCheck
+  if isCoolTimeQuickSlot_chk() == true then
+    Panel_EnableSkill:SetShow(false, true)
+    ;
+    (editSearch._editSearchText):SetEditText("", false)
+    isEditCheck = false
+  end
+end
+
 EnableSkill_LearnBtn_Effect = function()
-  -- function num : 0_5 , upvalues : uiData, isSkillLearnTutorialClick
+  -- function num : 0_6 , upvalues : uiData, isSkillLearnTutorialClick
   ((uiData[0])._learnButton):EraseAllEffect()
   if ((uiData[0])._learnButton):GetShow() == true then
     if isSkillLearnTutorial() ~= nil and isSkillLearnTutorial() == true then
@@ -313,13 +323,13 @@ EnableSkill_LearnBtn_Effect = function()
 end
 
 Panel_EnableSkill_SetPosition = function()
-  -- function num : 0_6
+  -- function num : 0_7
   Panel_EnableSkill:SetPosX(Panel_Window_Skill:GetPosX() + Panel_Window_Skill:GetSizeX() - 25)
   Panel_EnableSkill:SetPosY(Panel_Window_Skill:GetPosY() + 40)
 end
 
 enableSkill_MakeControl = function(index)
-  -- function num : 0_7 , upvalues : UI_PUCT, CopyUI, recommendSkill, mousePosBG, comboBox
+  -- function num : 0_8 , upvalues : UI_PUCT, CopyUI, UI_TM, recommendSkill, mousePosBG, comboBox
   local ui = {}
   ui._IconBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_EnableSkill, "Static_SkillBG_" .. index)
   CopyBaseProperty(CopyUI._base_SkillBG, ui._IconBG)
@@ -366,11 +376,20 @@ enableSkill_MakeControl = function(index)
   ;
   (ui._learnButton):SetIgnore(false)
   ;
+  (ui._learnButton):SetTextMode(UI_TM.eTextMode_LimitText)
+  ;
+  (ui._learnButton):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENABLESKILL_LEARNSKILL_BTN"))
+  if (ui._learnButton):IsLimitText() then
+    (ui._learnButton):addInputEvent("Mouse_On", "enableSkill_Simpletooltips(true, " .. index .. ")")
+    ;
+    (ui._learnButton):addInputEvent("Mouse_Out", "enableSkill_Simpletooltips(false)")
+  end
+  ;
   (ui._learnButton):ComputePos()
   ;
   (ui._learnButton):SetPosY(134 + index * ((ui._IconBG):GetSizeY() + 9))
   ui.SetData = function(self, skillTypeSSW, skillNo)
-    -- function num : 0_7_0 , upvalues : recommendSkill
+    -- function num : 0_8_0 , upvalues : recommendSkill
     local skillStaticWrapper = getSkillStaticStatus(skillNo, 1)
     local needSp = (skillStaticWrapper:get())._needSkillPointForLearning
     ;
@@ -432,7 +451,7 @@ local skillNoCache = 0
 local slotTypeCache = 0
 local tooltipcacheCount = 0
 enableSkill_BackgroundOverEvent = function(index, isOn)
-  -- function num : 0_8 , upvalues : mousePosBG, skillNumber, slideIndex, onIndex
+  -- function num : 0_9 , upvalues : mousePosBG, skillNumber, slideIndex, onIndex
   if Panel_EnableSkill:isPlayAnimation() == true then
     return 
   end
@@ -461,8 +480,20 @@ enableSkill_BackgroundOverEvent = function(index, isOn)
   end
 end
 
+enableSkill_Simpletooltips = function(isShow, index)
+  -- function num : 0_10 , upvalues : uiData
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_ENABLESKILL_LEARNSKILL_BTN")
+  control = (uiData[index])._learnButton
+  TooltipSimple_Show(control, name, desc)
+end
+
 enableSkill_OverEventHide = function(skillNo, SlotType)
-  -- function num : 0_9 , upvalues : skillNoCache, slotTypeCache, tooltipcacheCount
+  -- function num : 0_11 , upvalues : skillNoCache, slotTypeCache, tooltipcacheCount
   if skillNoCache == skillNo and slotTypeCache == SlotType then
     tooltipcacheCount = tooltipcacheCount - 1
   else
@@ -474,7 +505,7 @@ enableSkill_OverEventHide = function(skillNo, SlotType)
 end
 
 enableSkill_OverEvent = function(skillNo, isShowNextLevel, SlotType)
-  -- function num : 0_10 , upvalues : skillNoCache, slotTypeCache, tooltipcacheCount
+  -- function num : 0_12 , upvalues : skillNoCache, slotTypeCache, tooltipcacheCount
   if skillNoCache == skillNo and slotTypeCache == SlotType then
     tooltipcacheCount = tooltipcacheCount + 1
   else
@@ -486,23 +517,23 @@ enableSkill_OverEvent = function(skillNo, isShowNextLevel, SlotType)
 end
 
 enableSkill_Scroll = function(isUp)
-  -- function num : 0_11 , upvalues : slideIndex, _slide, enableSkillList_MaxCount, Panel_EnableSkill_Value_elementCount, isEditCheck
+  -- function num : 0_13 , upvalues : slideIndex, _slide, enableSkillList_MaxCount, Panel_EnableSkill_Value_elementCount, isEditCheck
   slideIndex = (UIScroll.ScrollEvent)(_slide, isUp, enableSkillList_MaxCount, Panel_EnableSkill_Value_elementCount, slideIndex, 1)
   enableSkill_UpdateData(isEditCheck)
 end
 
 EnableSkillWindow_EffectOff = function()
-  -- function num : 0_12 , upvalues : isSkillLearnTutorialClick
+  -- function num : 0_14 , upvalues : isSkillLearnTutorialClick
   isSkillLearnTutorialClick = false
 end
 
 isSkillLearnTutorialClick_check = function()
-  -- function num : 0_13 , upvalues : isSkillLearnTutorialClick
+  -- function num : 0_15 , upvalues : isSkillLearnTutorialClick
   return isSkillLearnTutorialClick
 end
 
 enableSkill_Init = function()
-  -- function num : 0_14 , upvalues : mousePosBG, UI_PUCT, CopyUI, enableSkillList_MaxCount, uiData, radio, editSearch, _slide, _frameBG, isEditCheck, comboBox
+  -- function num : 0_16 , upvalues : mousePosBG, UI_PUCT, CopyUI, enableSkillList_MaxCount, uiData, radio, editSearch, _slide, _frameBG, isEditCheck, comboBox
   mousePosBG = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATIC, Panel_EnableSkill, "Static_SkillYellowBG_")
   CopyBaseProperty(CopyUI._base_SkillYellowBG, mousePosBG)
   mousePosBG:SetShow(false)
@@ -566,7 +597,7 @@ enableSkill_Init = function()
 end
 
 FromClient_EventSkillWindowUpdate = function()
-  -- function num : 0_15 , upvalues : slideIndex, _slide, isEditCheck
+  -- function num : 0_17 , upvalues : slideIndex, _slide, isEditCheck
   slideIndex = 0
   _slide:SetControlPos(0)
   enableSkill_UpdateData(isEditCheck)
@@ -574,7 +605,7 @@ FromClient_EventSkillWindowUpdate = function()
 end
 
 FromClient_UseSkillAskFromOtherPlayer = function(fromName)
-  -- function num : 0_16
+  -- function num : 0_18
   local messageboxMemo = "[<PAColor0xFFE49800>" .. fromName .. "<PAOldColor>" .. PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_QUESTTION")
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = UseSkillFromOtherPlayer_Yes, functionCancel = UseSkillFromOtherPlayer_No, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -582,17 +613,17 @@ FromClient_UseSkillAskFromOtherPlayer = function(fromName)
 end
 
 UseSkillFromOtherPlayer_Yes = function()
-  -- function num : 0_17
+  -- function num : 0_19
   ToClient_AnswerUseSkill(true)
 end
 
 UseSkillFromOtherPlayer_No = function()
-  -- function num : 0_18
+  -- function num : 0_20
   ToClient_AnswerUseSkill(false)
 end
 
 EnableSkill_Setting = function()
-  -- function num : 0_19 , upvalues : radio, comboBox, Panel_EnableSkill_Value_elementCount, recommendSkillCount, skillNumber, editSkillName, editSkillNo, maxRecommendCount, recommendSkill
+  -- function num : 0_21 , upvalues : radio, comboBox, Panel_EnableSkill_Value_elementCount, recommendSkillCount, skillNumber, editSkillName, editSkillNo, maxRecommendCount, recommendSkill
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -695,13 +726,13 @@ EnableSkill_Setting = function()
 end
 
 FGlobal_IsLearn = function()
-  -- function num : 0_20 , upvalues : radio
+  -- function num : 0_22 , upvalues : radio
   local isLearn = (radio._radioButton_LearnSkill):IsCheck()
   return isLearn
 end
 
 RadioButton_Click = function(radioIndex)
-  -- function num : 0_21 , upvalues : comboBox, learnSkillTabIndex, comboBoxString, radio, allSkillTabIndex, skillEmptyText, searchFailText, isEditCheck, editSearch
+  -- function num : 0_23 , upvalues : comboBox, learnSkillTabIndex, comboBoxString, radio, allSkillTabIndex, skillEmptyText, searchFailText, isEditCheck, editSearch
   comboBox:DeleteAllItem(0)
   local count = 0
   if radioIndex == learnSkillTabIndex then
@@ -740,7 +771,7 @@ RadioButton_Click = function(radioIndex)
 end
 
 SkillPoint_Sort = function(skillCount, comboIndex)
-  -- function num : 0_22 , upvalues : skillNumber
+  -- function num : 0_24 , upvalues : skillNumber
   for i = 1, skillCount do
     for j = 1, skillCount - i do
       local skillStaticWrapper = getSkillStaticStatus((skillNumber[j - 1])._skillNo, 1)
@@ -768,19 +799,19 @@ SkillPoint_Sort = function(skillCount, comboIndex)
 end
 
 ComboBox_show = function()
-  -- function num : 0_23 , upvalues : comboBox
+  -- function num : 0_25 , upvalues : comboBox
   comboBox:ToggleListbox()
 end
 
 ComboBox_Set = function()
-  -- function num : 0_24 , upvalues : comboBox, isEditCheck
+  -- function num : 0_26 , upvalues : comboBox, isEditCheck
   comboBox:SetSelectItemIndex(comboBox:GetSelectIndex())
   comboBox:ToggleListbox()
   enableSkill_UpdateData(isEditCheck)
 end
 
 RadioButton_Click_Init = function()
-  -- function num : 0_25 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount
+  -- function num : 0_27 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount
   _slide:SetControlPos(0)
   slideIndex = 0
   Panel_EnableSkill_Value_elementCount = 0
@@ -788,7 +819,7 @@ RadioButton_Click_Init = function()
 end
 
 SearchButton_Click = function()
-  -- function num : 0_26 , upvalues : IM, mousePosBG, slideIndex, filterText, editSearch, isEditCheck
+  -- function num : 0_28 , upvalues : IM, mousePosBG, slideIndex, filterText, editSearch, isEditCheck
   if AllowChangeInputMode() then
     (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     ClearFocusEdit()
@@ -807,7 +838,7 @@ SearchButton_Click = function()
 end
 
 SearchEditText_Reset = function()
-  -- function num : 0_27 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount, editSearch, isEditCheck
+  -- function num : 0_29 , upvalues : _slide, slideIndex, Panel_EnableSkill_Value_elementCount, editSearch, isEditCheck
   _slide:SetControlPos(0)
   slideIndex = 0
   Panel_EnableSkill_Value_elementCount = 0
@@ -819,7 +850,7 @@ SearchEditText_Reset = function()
 end
 
 SearchText_Click = function()
-  -- function num : 0_28 , upvalues : IM, editSearch
+  -- function num : 0_30 , upvalues : IM, editSearch
   (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(editSearch._editSearchText)
   ;
@@ -827,12 +858,12 @@ SearchText_Click = function()
 end
 
 local stringMatching = function(filterText, editSkillName)
-  -- function num : 0_29
+  -- function num : 0_31
   return stringSearch(filterText, editSkillName)
 end
 
 EnableSearchSkill_Setting = function()
-  -- function num : 0_30 , upvalues : Panel_EnableSkill_Value_elementCount, stringMatching, editSkillName, filterText, editSkillNo, skillNumber, isEditCheck
+  -- function num : 0_32 , upvalues : Panel_EnableSkill_Value_elementCount, stringMatching, editSkillName, filterText, editSkillNo, skillNumber, isEditCheck
   enableSkill_UpdateData(false)
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then

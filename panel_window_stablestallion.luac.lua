@@ -278,6 +278,7 @@ StableStallion_Close = function()
   self._buttonClick = -1
   self._effectType = 0
   self._elapsedTime = 0
+  StableStallion_HandleMOnoutProtectItemToolTip(false)
 end
 
 StablStallion_Resize = function()
@@ -378,26 +379,30 @@ StableStallion.setProtectItem = function(self)
     end
     ;
     ((self.protect)._protectCount):SetText(tostring(haveCount) .. "/" .. tostring(needCount))
-    if isNewEnchant_chk() == false then
-      ((self.protect)._protectIcon):addInputEvent("Mouse_On", "HandleMOnoutProtectItemToolTip( true )")
-      ;
-      ((self.protect)._protectIcon):addInputEvent("Mouse_Out", "HandleMOnoutProtectItemToolTip( false )")
-      ;
-      ((self.protect)._protectIcon):setTooltipEventRegistFunc("HandleMOnoutProtectItemToolTip( true )")
-    else
-      ;
-      ((self.protect)._protectIcon):addInputEvent("Mouse_On", "PaGlobal_Enchant:handleMOnCronIconTooltip()")
-      ;
-      ((self.protect)._protectIcon):addInputEvent("Mouse_Out", "PaGlobal_Enchant:handleMOutCronIconTooltip()")
-      ;
-      ((self.protect)._protectIcon):setTooltipEventRegistFunc("PaGlobal_Enchant:handleMOnCronIconTooltip()")
-    end
+    ;
+    ((self.protect)._protectIcon):addInputEvent("Mouse_On", "StableStallion_HandleMOnoutProtectItemToolTip( true )")
+    ;
+    ((self.protect)._protectIcon):addInputEvent("Mouse_Out", "StableStallion_HandleMOnoutProtectItemToolTip( false )")
+    ;
+    ((self.protect)._protectIcon):setTooltipEventRegistFunc("StableStallion_HandleMOnoutProtectItemToolTip( true )")
     local textSizeX = ((self.protect)._protectCount):GetTextSizeX()
   end
 end
 
-StableStallion.AwakenItemCount = function(self)
+StableStallion_HandleMOnoutProtectItemToolTip = function(isShow)
   -- function num : 0_9 , upvalues : StableStallion
+  local self = StableStallion
+  local itemSSW = FromClient_getPreventDownGradeItem()
+  if isShow then
+    registTooltipControl((self.protect)._protectIcon, Panel_Tooltip_Item)
+    Panel_Tooltip_Item_Show(itemSSW, (self.protect)._protectIcon, true, false, nil, nil, nil)
+  else
+    Panel_Tooltip_Item_hideTooltip()
+  end
+end
+
+StableStallion.AwakenItemCount = function(self)
+  -- function num : 0_10 , upvalues : StableStallion
   local selfPlayerWrapper = getSelfPlayer()
   local selfPlayer = selfPlayerWrapper:get()
   local useStartSlot = inventorySlotNoUserStart()
@@ -434,7 +439,7 @@ StableStallion.AwakenItemCount = function(self)
 end
 
 StableStallion.setAwakenitem = function(self)
-  -- function num : 0_10
+  -- function num : 0_11
   local itemSSW = stable_getStallionTrainingCompleteRequiredItem()
   if itemSSW ~= nil then
     ((self.awaken)._awakenIcon):ChangeTextureInfoName("Icon/" .. itemSSW:getIconPath())
@@ -468,7 +473,7 @@ StableStallion.setAwakenitem = function(self)
 end
 
 Set_StallionItemSlotClick = function(index)
-  -- function num : 0_11 , upvalues : StableStallion
+  -- function num : 0_12 , upvalues : StableStallion
   self = StableStallion
   if Panel_Window_Exchange_Number:GetShow() or self._buttonClick ~= -1 then
     return 
@@ -495,7 +500,7 @@ Set_StallionItemSlotClick = function(index)
 end
 
 InvenFilter_Stallion = function(slotNo, itemWrapper)
-  -- function num : 0_12 , upvalues : StableStallion
+  -- function num : 0_13 , upvalues : StableStallion
   if itemWrapper == nil then
     return true
   end
@@ -525,7 +530,7 @@ InvenFilter_Stallion = function(slotNo, itemWrapper)
 end
 
 Set_StallionItemSlot = function(count, slotNo, itemWrapper)
-  -- function num : 0_13 , upvalues : StableStallion, selectedItemWhereType
+  -- function num : 0_14 , upvalues : StableStallion, selectedItemWhereType
   local self = StableStallion
   local index = StableStallion._index
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R5 in 'UnsetPending'
@@ -558,7 +563,7 @@ Set_StallionItemSlot = function(count, slotNo, itemWrapper)
 end
 
 HandleMOnoutAwakenItemToolTip = function(isShow)
-  -- function num : 0_14 , upvalues : StableStallion
+  -- function num : 0_15 , upvalues : StableStallion
   local self = StableStallion
   local itemSSW = stable_getStallionTrainingCompleteRequiredItem()
   if isShow then
@@ -570,7 +575,7 @@ HandleMOnoutAwakenItemToolTip = function(isShow)
 end
 
 HandleMOnoutTrainingItemToolTip = function(index, slotNo)
-  -- function num : 0_15 , upvalues : StableStallion
+  -- function num : 0_16 , upvalues : StableStallion
   if index == nil then
     Panel_Tooltip_Item_hideTooltip()
     return 
@@ -587,7 +592,7 @@ HandleMOnoutTrainingItemToolTip = function(index, slotNo)
 end
 
 StableStallion_Training = function(index)
-  -- function num : 0_16 , upvalues : StableStallion, selectedItemWhereType
+  -- function num : 0_17 , upvalues : StableStallion, selectedItemWhereType
   if Panel_Window_Exchange_Number:GetShow() then
     return 
   end
@@ -616,7 +621,7 @@ StableStallion_Training = function(index)
 end
 
 Awaken_Training = function()
-  -- function num : 0_17 , upvalues : StableStallion
+  -- function num : 0_18 , upvalues : StableStallion
   if Panel_Window_Exchange_Number:GetShow() then
     return 
   end
@@ -646,14 +651,14 @@ Awaken_Training = function()
 end
 
 Awaken_Training_Yes = function()
-  -- function num : 0_18 , upvalues : StableStallion
+  -- function num : 0_19 , upvalues : StableStallion
   local self = StableStallion
   self._buttonClick = 1
   self._awakenDoing = true
 end
 
 Awaken_Training_isNineTier = function()
-  -- function num : 0_19 , upvalues : StableStallion
+  -- function num : 0_20 , upvalues : StableStallion
   local self = StableStallion
   local awakenItemWrapper = stable_getStallionTrainingCompleteRequiredItem()
   if awakenItemWrapper == nil then
@@ -700,7 +705,7 @@ Awaken_Training_isNineTier = function()
 end
 
 FromClient_IncreaseStallionSkillExpAck = function(servantNo, skillKey, skillExp)
-  -- function num : 0_20 , upvalues : StableStallion
+  -- function num : 0_21 , upvalues : StableStallion
   StableStallion:TrainSkillUpdate()
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R3 in 'UnsetPending'
 
@@ -708,13 +713,13 @@ FromClient_IncreaseStallionSkillExpAck = function(servantNo, skillKey, skillExp)
 end
 
 StableStallion_RefreshUpdate = function()
-  -- function num : 0_21 , upvalues : StableStallion
+  -- function num : 0_22 , upvalues : StableStallion
   self = StableStallion
   self:Refresh_UIData()
 end
 
 StableStallion.TrainSkillUpdate = function(self)
-  -- function num : 0_22 , upvalues : selectedItemWhereType
+  -- function num : 0_23 , upvalues : selectedItemWhereType
   for index = 0, self._slotCount - 1 do
     if (self._selectedItemSlotNo)[index] ~= nil then
       local itemWrapper = getInventoryItemByType(selectedItemWhereType, (self._selectedItemSlotNo)[index])
@@ -729,8 +734,13 @@ StableStallion.TrainSkillUpdate = function(self)
   end
 end
 
+StableStallion.getfloorValueString = function(self, value)
+  -- function num : 0_24
+  return (string.format)((math.floor)(value * 10) / 10)
+end
+
 StableStallion.Refresh_UIData = function(self)
-  -- function num : 0_23
+  -- function num : 0_25
   local servantInfo = stable_getServantByServantNo(self._servantNo)
   if servantInfo == nil then
     return 
@@ -752,7 +762,7 @@ StableStallion.Refresh_UIData = function(self)
         if stallionSkillWrapperKey == skillKey then
           (self._skillExpCount)[i] = servantInfo:getSkillExp(ii) / (skillWrapper:getMaxExp() / 100)
           ;
-          (((self._slots)[i])._skillPercent):SetText((string.format)("%.1f", (self._skillExpCount)[i]) .. "%")
+          (((self._slots)[i])._skillPercent):SetText(self:getfloorValueString((self._skillExpCount)[i]) .. "%")
           ;
           (((self._slots)[i])._skillExp):SetProgressRate((self._skillExpCount)[i] / 1.8)
           awakenExp = awakenExp + servantInfo:getSkillExp(ii)
@@ -761,16 +771,19 @@ StableStallion.Refresh_UIData = function(self)
     end
   end
   self._awakenExpCount = (awakenExp) / (awakenMaxExp / 100)
+  if self._awakenExpCount > 100 then
+    self._awakenExpCount = 100
+  end
   ;
   ((self.awaken)._awakenExp):SetProgressRate(self._awakenExpCount)
   ;
-  ((self.awaken)._awakenExpCount):SetText((string.format)("%.1f", self._awakenExpCount * 2) .. "%")
+  ((self.awaken)._awakenExpCount):SetText(self:getfloorValueString(self._awakenExpCount * 2) .. "%")
   self:setProtectItem()
   self:setAwakenitem()
 end
 
 StableStallion.UpdateCount = function(self, isAwakenBtn)
-  -- function num : 0_24
+  -- function num : 0_26
   if isAwakenBtn == true then
     for i = 0, self._slotCount - 1 do
       -- DECOMPILER ERROR at PC15: Confused about usage of register: R6 in 'UnsetPending'
@@ -778,11 +791,11 @@ StableStallion.UpdateCount = function(self, isAwakenBtn)
       if (self._skillExpCount)[i] > 1 then
         (self._skillExpCount)[i] = (self._skillExpCount)[i] - 2
         ;
-        (((self._slots)[i])._skillPercent):SetText((string.format)("%.1f", (self._skillExpCount)[i]) .. "%")
+        (((self._slots)[i])._skillPercent):SetText(self:getfloorValueString((self._skillExpCount)[i]) .. "%")
         ;
         (((self._slots)[i])._skillExp):SetProgressRate((self._skillExpCount)[i] / 1.8)
       else
-        -- DECOMPILER ERROR at PC39: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC37: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
         (self._skillExpCount)[i] = 0
@@ -797,26 +810,29 @@ StableStallion.UpdateCount = function(self, isAwakenBtn)
       ;
       ((self.awaken)._awakenExp):SetProgressRate(self._awakenExpCount)
       ;
-      ((self.awaken)._awakenExpCount):SetText((string.format)("%.1f", self._awakenExpCount * 2) .. "%")
+      ((self.awaken)._awakenExpCount):SetText(self:getfloorValueString(self._awakenExpCount * 2) .. "%")
     end
   else
-    -- DECOMPILER ERROR at PC87: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC83: Confused about usage of register: R2 in 'UnsetPending'
 
     if (self._skillExpCount)[self._index] >= 180 then
       (self._skillExpCount)[self._index] = 180
     else
-      -- DECOMPILER ERROR at PC105: Confused about usage of register: R2 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC101: Confused about usage of register: R2 in 'UnsetPending'
 
       if (self._itemCount)[self._index] > 0 then
         if (self._skillExpCount)[self._index] >= 100 then
           (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 0.5
           self._awakenExpCount = self._awakenExpCount + 0.25
         else
-          -- DECOMPILER ERROR at PC116: Confused about usage of register: R2 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
 
           ;
           (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 1
           self._awakenExpCount = self._awakenExpCount + 0.5
+        end
+        if self._awakenExpCount > 100 then
+          self._awakenExpCount = 100
         end
         -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -827,18 +843,18 @@ StableStallion.UpdateCount = function(self, isAwakenBtn)
         ;
         ((self.awaken)._awakenExp):SetProgressRate(self._awakenExpCount)
         ;
-        ((self.awaken)._awakenExpCount):SetText((string.format)("%.1f", self._awakenExpCount * 2) .. "%")
+        ((self.awaken)._awakenExpCount):SetText(self:getfloorValueString(self._awakenExpCount * 2) .. "%")
       end
     end
     ;
-    (((self._slots)[self._index])._skillPercent):SetText((string.format)("%.1f", (self._skillExpCount)[self._index]) .. "%")
+    (((self._slots)[self._index])._skillPercent):SetText(self:getfloorValueString((self._skillExpCount)[self._index]) .. "%")
     ;
     (((self._slots)[self._index])._skillExp):SetProgressRate((self._skillExpCount)[self._index] / 1.8)
   end
 end
 
 FromClient_CompleteStallionTrainingAck = function(servantNo, servantCharacterKey)
-  -- function num : 0_25 , upvalues : StableStallion
+  -- function num : 0_27 , upvalues : StableStallion
   local self = StableStallion
   local servantKey = servantCharacterKey
   if servantKey == 0 then
@@ -852,7 +868,7 @@ FromClient_CompleteStallionTrainingAck = function(servantNo, servantCharacterKey
 end
 
 FGlobal_MaxItemCount = function(itemSlotNo)
-  -- function num : 0_26 , upvalues : StableStallion
+  -- function num : 0_28 , upvalues : StableStallion
   local self = StableStallion
   if self._buttonClick ~= -1 then
     return nil
@@ -868,7 +884,7 @@ end
 
 local frame = 0
 StableStallion_UpdateTime = function(updateTime)
-  -- function num : 0_27 , upvalues : StableStallion, frame
+  -- function num : 0_29 , upvalues : StableStallion, frame
   local self = StableStallion
   if self._buttonClick == -1 then
     return 
@@ -1035,13 +1051,13 @@ StableStallion_UpdateTime = function(updateTime)
 end
 
 FGlobal_IsButtonClick = function()
-  -- function num : 0_28 , upvalues : StableStallion
+  -- function num : 0_30 , upvalues : StableStallion
   local self = StableStallion
   return self._buttonClick
 end
 
 StableStallion_SetPos = function()
-  -- function num : 0_29 , upvalues : StableStallion
+  -- function num : 0_31 , upvalues : StableStallion
   local self = StableStallion
   local stallionTextSizeY = (self._stallionNotify):GetTextSizeY()
   local stallionTextBGSizeY = (self._stallionNotifyBG):GetSizeY()
@@ -1061,7 +1077,7 @@ StableStallion_SetPos = function()
     ;
     (self._stallionNotifyBG):SetSize((self._stallionNotifyBG):GetSizeX(), (self._stallionNotifyBG):GetSizeY() + stallionSizeY + 10)
     local SetPos = function(control)
-    -- function num : 0_29_0 , upvalues : self, stallionSizeY, protectSizeY
+    -- function num : 0_31_0 , upvalues : self, stallionSizeY, protectSizeY
     if (self.awaken)._awakenButton == control then
       control:SetPosY(control:GetPosY() + stallionSizeY + protectSizeY + 10)
     else

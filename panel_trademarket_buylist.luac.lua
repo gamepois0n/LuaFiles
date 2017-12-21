@@ -154,60 +154,49 @@ global_setBuyList = function()
         ((tradeBuyMarket.expiration)[commerceIndex]):addInputEvent("Mouse_On", "TradeBuyMarket_SimpleTooltip( true, " .. commerceIndex .. ", 0 )")
         ;
         ((tradeBuyMarket.expiration)[commerceIndex]):addInputEvent("Mouse_Out", "TradeBuyMarket_SimpleTooltip( false, " .. commerceIndex .. ", 0 )")
+        local territorySupplyKey = nil
         if isUsedNewTradeEventNotice_chk() then
-          local territorySupplyKey = FGlobal_TradeEventNotice_Renewal_GetTerritorySupplyIndex((tradeBuyMarket.itemEnchantKey)[commerceIndex])
+          territorySupplyKey = FGlobal_TradeEventNotice_Renewal_GetTerritorySupplyIndex((tradeBuyMarket.itemEnchantKey)[commerceIndex])
+        else
+          territorySupplyKey = FGlobal_TradeSupplyItemInfo_Compare((tradeBuyMarket.itemEnchantKey)[commerceIndex])
+        end
+        if territorySupplyKey ~= nil then
+          ((tradeBuyMarket.supply)[commerceIndex]):SetShow(true)
+          local supplyText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_SUPPLY", "territoryName", territoryName[territorySupplyKey])
+          ;
+          ((tradeBuyMarket.supply)[commerceIndex]):SetText("")
+          ;
+          ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_On", "TradeBuyMarket_SimpleTooltip( true, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
+          ;
+          ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_Out", "TradeBuyMarket_SimpleTooltip( false, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
         else
           do
+            ;
+            ((tradeBuyMarket.supply)[commerceIndex]):SetShow(false)
+            ;
+            (((tradeBuyMarket.icons)[commerceIndex]).icon):SetShow(true)
+            local iconPosX = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosX()
             do
-              local territorySupplyKey = FGlobal_TradeSupplyItemInfo_Compare((tradeBuyMarket.itemEnchantKey)[commerceIndex])
-              if territorySupplyKey ~= nil then
-                ((tradeBuyMarket.supply)[commerceIndex]):SetShow(true)
-                local supplyText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TRADEMARKET_BUYLIST_SUPPLY", "territoryName", territoryName[territorySupplyKey])
-                ;
-                ((tradeBuyMarket.supply)[commerceIndex]):SetText("")
-                ;
-                ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_On", "TradeBuyMarket_SimpleTooltip( true, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
-                ;
-                ((tradeBuyMarket.supply)[commerceIndex]):addInputEvent("Mouse_Out", "TradeBuyMarket_SimpleTooltip( false, " .. commerceIndex .. ", 1, " .. territorySupplyKey .. " )")
-              else
-                do
-                  ;
-                  ((tradeBuyMarket.supply)[commerceIndex]):SetShow(false)
-                  ;
-                  (((tradeBuyMarket.icons)[commerceIndex]).icon):SetShow(true)
-                  local iconPosX = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosX()
-                  do
-                    local iconPosY = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosY()
-                    ;
-                    (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosX(14)
-                    ;
-                    (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosY(11)
-                    commerceIndex = commerceIndex + 1
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out DO_STMT
+              local iconPosY = ((tradeBuyMarket.ListBody)[commerceIndex]):GetPosY()
+              ;
+              (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosX(14)
+              ;
+              (((tradeBuyMarket.icons)[commerceIndex]).icon):SetPosY(11)
+              commerceIndex = commerceIndex + 1
+              -- DECOMPILER ERROR at PC274: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC274: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC274: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC274: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC274: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+              -- DECOMPILER ERROR at PC274: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC274: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
-
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                    -- DECOMPILER ERROR at PC273: LeaveBlock: unexpected jumping out IF_STMT
-
-                  end
-                end
-              end
             end
           end
         end

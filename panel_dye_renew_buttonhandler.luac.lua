@@ -90,6 +90,10 @@ FGlobal_Panel_Dye_ReNew_AddEvent = function()
   if FGlobal_DyeReNew_GetEnableKR2() == true then
     checkButton_ToggleShowUnderwear:SetShow(false)
   end
+  if ToClient_isAdultUser() == false then
+    checkButton_ToggleShowUnderwear:SetShow(false)
+    checkButton_ToggleShowUnderwear:SetIgnore(false)
+  end
   local checkButton_ToggleHideAvatar = (UI.getChildControl)(Panel_Dye_ReNew, "CheckButton_HideAvatar")
   checkButton_ToggleHideAvatar:addInputEvent("Mouse_LUp", "HandleClicked_DyeReNew_SetHideAvartar()")
   checkButton_ToggleHideAvatar:addInputEvent("Mouse_On", "HandleOver_DyeReNew_SimpleTooltipCheckbutton(true," .. enToggleIndex.Avater .. ")")
@@ -379,30 +383,65 @@ end
 HandleClicked_DeyReNew_Palette_SelectColor = function(dataIdx)
   -- function num : 0_15
   local self = FGlobal_DyeReNew_GetInstance()
-  self._nowPaletteDataIndex = dataIdx
-  if self._selected_EquipSlotNo == -1 or self._nowClickPartId == -1 then
-    return 
-  end
-  local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex, self._paletteShowAll)
-  local isDyeUI = true
-  local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteDataIndex, isDyeUI)
-  local convertCount = tostring(ampuleCount)
-  convertCount = tonumber(convertCount)
-  if convertCount >= 1 then
-    self._ampuleCountCheck = false
+  if (self._checkButtonDyeAll):IsCheck() == true then
+    if #self._partDyeInfo == 0 then
+      return 
+    end
+    for ii = 0, #self._partDyeInfo do
+      self._nowPaletteDataIndex = dataIdx
+      self._nowClickPartId = ((self._partDyeInfo)[ii])[1]
+      self._nowClickPartSlotId = ((self._partDyeInfo)[ii])[2]
+      if self._selected_EquipSlotNo == -1 or self._nowClickPartId == -1 then
+        return 
+      end
+      local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex, self._paletteShowAll)
+      local isDyeUI = true
+      local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteDataIndex, isDyeUI)
+      local convertCount = tostring(ampuleCount)
+      convertCount = tonumber(convertCount)
+      if convertCount >= 1 then
+        self._ampuleCountCheck = false
+      else
+        self._ampuleCountCheck = true
+        if self._isPearlPalette == true then
+          self._ampuleCountCheck = false
+        end
+      end
+      ToClient_RequestSelectedDyeingPalette(self._selected_EquipSlotNo, self._nowClickPartId, self._nowClickPartSlotId, self._nowPaletteCategoryIndex, self._nowPaletteDataIndex, self._paletteShowAll)
+      if ToClient_RequestGetPartDyeingSlotCount(self._selected_EquipSlotNo, 0) > 0 then
+        (table.insert)(self._selectedDyePart, self._selected_EquipSlotNo)
+      end
+    end
   else
-    self._ampuleCountCheck = true
-    if self._isPearlPalette == true then
-      self._ampuleCountCheck = false
+    do
+      self._nowPaletteDataIndex = dataIdx
+      if self._selected_EquipSlotNo == -1 or self._nowClickPartId == -1 then
+        return 
+      end
+      local DyeingPaletteCategoryInfo = ToClient_requestGetPaletteCategoryInfo(self._nowPaletteCategoryIndex, self._paletteShowAll)
+      local isDyeUI = true
+      local ampuleCount = DyeingPaletteCategoryInfo:getCount(self._nowPaletteDataIndex, isDyeUI)
+      do
+        local convertCount = tostring(ampuleCount)
+        convertCount = tonumber(convertCount)
+        if convertCount >= 1 then
+          self._ampuleCountCheck = false
+        else
+          self._ampuleCountCheck = true
+          if self._isPearlPalette == true then
+            self._ampuleCountCheck = false
+          end
+        end
+        ToClient_RequestSelectedDyeingPalette(self._selected_EquipSlotNo, self._nowClickPartId, self._nowClickPartSlotId, self._nowPaletteCategoryIndex, self._nowPaletteDataIndex, self._paletteShowAll)
+        if ToClient_RequestGetPartDyeingSlotCount(self._selected_EquipSlotNo, 0) > 0 then
+          (table.insert)(self._selectedDyePart, self._selected_EquipSlotNo)
+        end
+        Panel_Tooltip_Item_hideTooltip()
+        self:Update_Part()
+        self:Update_AmpuleList()
+      end
     end
   end
-  ToClient_RequestSelectedDyeingPalette(self._selected_EquipSlotNo, self._nowClickPartId, self._nowClickPartSlotId, self._nowPaletteCategoryIndex, self._nowPaletteDataIndex, self._paletteShowAll)
-  if ToClient_RequestGetPartDyeingSlotCount(self._selected_EquipSlotNo, 0) > 0 then
-    (table.insert)(self._selectedDyePart, self._selected_EquipSlotNo)
-  end
-  Panel_Tooltip_Item_hideTooltip()
-  self:Update_Part()
-  self:Update_AmpuleList()
 end
 
 HandleOpen_RadioButton_AmpuleReset = function()

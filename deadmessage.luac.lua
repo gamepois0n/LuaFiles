@@ -61,6 +61,8 @@ local deadMessage_ClearDropItems = function()
   -- function num : 0_0 , upvalues : STATIC_DROP_ITEM, DROP_ITEM_COUNT
   for ii = 0, #STATIC_DROP_ITEM do
     (STATIC_DROP_ITEM[ii]):SetShow(false)
+    ;
+    (STATIC_DROP_ITEM[ii]):SetText(" ")
   end
   DROP_ITEM_COUNT = 1
 end
@@ -642,10 +644,10 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
       _button_GuildSpawn:SetShow(false)
       _useCashItemBG:SetShow(false)
       _checkBoxUseCache:SetShow(false)
-      _button_Immediate:SetShow(true)
+      _button_Immediate:SetShow(false)
       _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
       _text_ImmediateCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_IMMEDIATECOUNT_TEXT"))
-      _text_ImmediateCount:SetShow(true)
+      _text_ImmediateCount:SetShow(false)
       _button_LocalWar:SetShow(false)
       _button_ObserverMode:SetShow(true)
       _button_SavageOut:SetShow(false)
@@ -1103,8 +1105,10 @@ deadMessage_DestroyJewel = function(destoryJewel01, destoryJewel02, destoryJewel
     end
     do
       do
-        jewelName = (getItemEnchantStaticStatus(ItemEnchantKey(jewelKey[idx]))):getName()
-        -- DECOMPILER ERROR at PC45: LeaveBlock: unexpected jumping out DO_STMT
+        if jewelKey[idx] ~= nil and jewelKey[idx] ~= 0 then
+          jewelName = (getItemEnchantStaticStatus(ItemEnchantKey(jewelKey[idx]))):getName()
+        end
+        -- DECOMPILER ERROR at PC51: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end

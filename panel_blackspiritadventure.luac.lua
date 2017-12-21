@@ -64,7 +64,9 @@ BlackSpiritAd_Show = function()
   end
   local myUserNo = ((getSelfPlayer()):get()):getUserNo()
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
-  local bAdventureWebUrl = blackSpiritUrlByServiceType()
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  local bAdventureWebUrl = PaGlobal_URL_Check(worldNo)
   local isNationType = "KR"
   if isGameTypeKorea() then
     isNationType = "KR"
@@ -84,8 +86,20 @@ BlackSpiritAd_Show = function()
             if isGameTypeSA() then
               isNationType = "SA"
             else
-              _PA_LOG("정태�\164", "새로�\180 국가 �\128입이 추가되었으니 �\180 로그�\188 발견하면 해당 담당자에�\140 알려주세�\148 �\173!!!")
-              isNationType = "KR"
+              if isGameTypeTR() then
+                isNationType = "TR"
+              else
+                if isGameTypeTH() then
+                  isNationType = "TH"
+                else
+                  if isGameTypeID() then
+                    isNationType = "ID"
+                  else
+                    _PA_LOG("정태�\164", "새로�\180 국가 �\128입이 추가되었으니 �\180 로그�\188 발견하면 해당 담당자에�\140 알려주세�\148 �\173!!!")
+                    isNationType = "KR"
+                  end
+                end
+              end
             end
           end
         end
@@ -93,7 +107,7 @@ BlackSpiritAd_Show = function()
     end
   end
   if bAdventureWebUrl ~= nil then
-    local url = bAdventureWebUrl .. "?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&nationCode=" .. tostring(isNationType)
+    local url = bAdventureWebUrl .. "/BoardGame?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&nationCode=" .. tostring(isNationType)
     _Web:SetUrl(918, 655, url)
   end
 end
@@ -121,115 +135,8 @@ FGlobal_BlackSpiritAdventure_Open = function()
   BlackSpiritAd_Show()
 end
 
-blackSpiritUrlByServiceType = function()
-  -- function num : 0_6
-  local url = nil
-  local temporaryWrapper = getTemporaryInformationWrapper()
-  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
-  if (CppEnums.CountryType).DEV == getGameServiceType() then
-    url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_KOR_DEV")
-  else
-    if (CppEnums.CountryType).KOR_ALPHA == getGameServiceType() then
-      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_KOR_ALPHA")
-    else
-      if (CppEnums.CountryType).KOR_REAL == getGameServiceType() then
-        url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_KOR_REAL")
-      else
-        if (CppEnums.CountryType).NA_ALPHA == getGameServiceType() then
-          if getServiceNationType() == 0 then
-            url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_ALPHA_NA", "port", worldNo)
-          else
-            if getServiceNationType() == 1 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_ALPHA_EU", "port", worldNo)
-            end
-          end
-        else
-          if (CppEnums.CountryType).NA_REAL == getGameServiceType() then
-            if getServiceNationType() == 0 then
-              url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_REAL_NA", "port", worldNo)
-            else
-              if getServiceNationType() == 1 then
-                url = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_NA_REAL_EU", "port", worldNo)
-              end
-            end
-          else
-            if (CppEnums.CountryType).JPN_ALPHA == getGameServiceType() then
-              url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_JP_ALPHA")
-            else
-              if (CppEnums.CountryType).JPN_REAL == getGameServiceType() then
-                url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_JP_REAL")
-              else
-                if (CppEnums.CountryType).RUS_ALPHA == getGameServiceType() then
-                  url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_ALPHA")
-                else
-                  if (CppEnums.CountryType).RUS_REAL == getGameServiceType() then
-                    if isServerFixedCharge() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_REAL_P2P")
-                    else
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_RUS_REAL_F2P")
-                    end
-                  else
-                    if (CppEnums.CountryType).TW_ALPHA == getGameServiceType() then
-                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TW_ALPHA")
-                    else
-                      if (CppEnums.CountryType).TW_REAL == getGameServiceType() then
-                        url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TW_REAL")
-                      else
-                        if (CppEnums.CountryType).SA_ALPHA == getGameServiceType() then
-                          url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_SA_ALPHA")
-                        else
-                          if (CppEnums.CountryType).SA_REAL == getGameServiceType() then
-                            url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_SA_REAL")
-                          else
-                            if (CppEnums.CountryType).KR2_ALPHA == getGameServiceType() then
-                              url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_KR2_ALPHA")
-                            else
-                              if (CppEnums.CountryType).KR2_REAL == getGameServiceType() then
-                                url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_KR2_REAL")
-                              else
-                                if (CppEnums.CountryType).TR_ALPHA == getGameServiceType() then
-                                  url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TR_ALPHA")
-                                else
-                                  if (CppEnums.CountryType).TR_REAL == getGameServiceType() then
-                                    url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TR_REAL")
-                                  else
-                                    if (CppEnums.CountryType).TH_ALPHA == getGameServiceType() then
-                                      url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TH_ALPHA")
-                                    else
-                                      if (CppEnums.CountryType).TH_REAL == getGameServiceType() then
-                                        url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_TH_REAL")
-                                      else
-                                        if (CppEnums.CountryType).ID_ALPHA == getGameServiceType() then
-                                          url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_ID_ALPHA")
-                                        else
-                                          if (CppEnums.CountryType).ID_REAL == getGameServiceType() then
-                                            url = PAGetString(Defines.StringSheet_GAME, "LUA_BLACKSPIRITADVENTURE_URL_ID_REAL")
-                                          end
-                                        end
-                                      end
-                                    end
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-  end
-  return url
-end
-
 BlackSpirit_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_7 , upvalues : checkPopUp
+  -- function num : 0_6 , upvalues : checkPopUp
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""
@@ -247,7 +154,7 @@ BlackSpirit_PopUp_ShowIconToolTip = function(isShow)
 end
 
 Web_BlackSpirit_DiceSound = function()
-  -- function num : 0_8
+  -- function num : 0_7
   audioPostEvent_SystemUi(11, 16)
 end
 

@@ -274,8 +274,13 @@ FGlobal_WorldMapOpenForMenu = function()
   if isGameTypeKR2() then
     HelpMenu_Btn:SetShow(false)
   else
-    if isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
-      HelpMenu_Btn:SetShow(false)
+    if isGameTypeKorea() then
+      local checkAgeType = ToClient_isAdultUser()
+      if checkAgeType then
+        HelpMenu_Btn:SetShow(true)
+      else
+        HelpMenu_Btn:SetShow(false)
+      end
     end
   end
 end

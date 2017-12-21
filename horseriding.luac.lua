@@ -10,8 +10,13 @@ FromClient_StartReconnectFishing = function()
   ToClient_StartFishingReconnect()
 end
 
+FromClient_StartReconnectAutoLevelUp = function()
+  -- function num : 0_1
+  ToClient_AutoLevelUpReconnect()
+end
+
 FromClient_StartReconnectAtion = function()
-  -- function num : 0_1 , upvalues : HorseRiding, enStatus
+  -- function num : 0_2 , upvalues : HorseRiding, enStatus
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   HorseRiding._isStartHorseRiding = true
@@ -21,17 +26,17 @@ FromClient_StartReconnectAtion = function()
 end
 
 ReconnectAction_HorseCall = function()
-  -- function num : 0_2
+  -- function num : 0_3
   Servant_Call(0)
 end
 
 ReconnectAction_HorseRide = function()
-  -- function num : 0_3
+  -- function num : 0_4
   interaction_processInteraction((CppEnums.InteractionType).InteractionType_Ride)
 end
 
 ReconnectAction_HorseGoToStart = function()
-  -- function num : 0_4 , upvalues : HorseRiding
+  -- function num : 0_5 , upvalues : HorseRiding
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   HorseRiding._isWaitingForStart = true
@@ -39,7 +44,7 @@ ReconnectAction_HorseGoToStart = function()
 end
 
 FromClient_ReconnectHorseRun = function()
-  -- function num : 0_5 , upvalues : HorseRiding
+  -- function num : 0_6 , upvalues : HorseRiding
   if HorseRiding._isWaitingForStart == false then
     return 
   end
@@ -54,8 +59,9 @@ end
 registerEvent("FromClient_StartReconnectAtion", "FromClient_StartReconnectAtion")
 registerEvent("FromClient_ReconnectHorseRun", "FromClient_ReconnectHorseRun")
 registerEvent("FromClient_StartReconnectFishing", "FromClient_StartReconnectFishing")
+registerEvent("FromClient_StartReconnectAutoLevelUp", "FromClient_StartReconnectAutoLevelUp")
 Update_ReconnectHorse = function()
-  -- function num : 0_6 , upvalues : HorseRiding, enStatus
+  -- function num : 0_7 , upvalues : HorseRiding, enStatus
   if HorseRiding._isStartHorseRiding == false then
     return 
   end
@@ -85,7 +91,7 @@ Update_ReconnectHorse = function()
 end
 
 FrameControl_FiveSecond = function()
-  -- function num : 0_7 , upvalues : HorseRiding
+  -- function num : 0_8 , upvalues : HorseRiding
   local self = HorseRiding
   local nowTick = (os.time)()
   if self._preTick == 0 then
@@ -102,7 +108,7 @@ end
 registerEvent("FromClient_ReconnectAlert_Show", "FromClient_ReconnectAlert_Show")
 registerEvent("FromClient_ReconnectAlert_Hide", "FromClient_ReconnectAlert_Hide")
 FromClient_ReconnectAlert_Show = function()
-  -- function num : 0_8
+  -- function num : 0_9
   local messageBoxtitle = PAGetString(Defines.StringSheet_GAME, "GUILD_MESSAGEBOX_TITLE")
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_AUTO_RECONNECT")
   local messageBoxData = {title = messageBoxtitle, content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_HIGH}
@@ -110,7 +116,7 @@ FromClient_ReconnectAlert_Show = function()
 end
 
 FromClient_ReconnectAlert_Hide = function()
-  -- function num : 0_9
+  -- function num : 0_10
   postProcessMessageData()
 end
 

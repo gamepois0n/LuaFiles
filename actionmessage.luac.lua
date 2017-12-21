@@ -11,10 +11,8 @@ Panel_ActionMessage:setFlushAble(false)
 Panel_ActionMessage:RegisterShowEventFunc(true, "ActionMessageShowAni()")
 Panel_ActionMessage:RegisterShowEventFunc(false, "ActionMessageHideAni()")
 ActionMessageShowAni = function()
-  -- function num : 0_0 , upvalues : IM, UI_ANI_ADV
+  -- function num : 0_0 , upvalues : UI_ANI_ADV
   (UIAni.fadeInSCR_Down)(Panel_ActionMessage)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
   local aniInfo1 = Panel_ActionMessage:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
   aniInfo1:SetEndScale(1.1)

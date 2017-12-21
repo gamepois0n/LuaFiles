@@ -20,9 +20,6 @@ local panel_ExceptionWindowList = {Panel_Npc_Quest_Reward}
 local _panelCloseAni = UIAni.closeAni
 check_ShowWindow = function()
   -- function num : 0_0 , upvalues : panel_WindowList, panel_HideListAnimationTrue, panel_SoundedWindowList, panel_ExceptionWindowList
-  if Panel_CustomizingAlbum:GetShow() == true then
-    CustomizingAlbum_Close()
-  end
   local panel = nil
   for idx = 1, #panel_WindowList do
     panel = panel_WindowList[idx]
@@ -72,7 +69,7 @@ end
 local Panel_LowLevelGuide_Value_IsCheckMoviePlay = Panel_LowLevelGuide_Value_IsCheckMoviePlay
 isComboMovieClosedCount = 0
 close_WindowPanelList = function()
-  -- function num : 0_1 , upvalues : IM, panel_WindowList, panel_HideListAnimationTrue, panel_SoundedWindowList, panel_ExceptionWindowList, Panel_LowLevelGuide_Value_IsCheckMoviePlay
+  -- function num : 0_1 , upvalues : panel_WindowList, panel_HideListAnimationTrue, panel_SoundedWindowList, panel_ExceptionWindowList, Panel_LowLevelGuide_Value_IsCheckMoviePlay
   if Panel_MovieTheater_320:IsShow() == false then
     value_Panel_MovieTheater_320_IsCheckedShow = false
   end
@@ -92,6 +89,9 @@ close_WindowPanelList = function()
   FGlobal_BuffTooltipOff()
   if Panel_IngameCashShop_GoodsTooltip:IsShow() then
     Panel_IngameCashShop_GoodsTooltip:SetShow(false)
+  end
+  if Panel_CustomizingAlbum:GetShow() == true then
+    CustomizingAlbum_Close()
   end
   Panel_Knowledge_Hide()
   if Panel_WebControl:IsShow() then
@@ -221,11 +221,7 @@ close_WindowPanelList = function()
     GuildManager:Hide()
   end
   if Panel_AgreementGuild:GetShow() then
-    if AllowChangeInputMode() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
     audioPostEvent_SystemUi(1, 31)
     FGlobal_AgreementGuild_Close()
     return 
@@ -334,7 +330,7 @@ close_WindowPanelList = function()
 end
 
 close_force_WindowPanelList = function()
-  -- function num : 0_2 , upvalues : IM, panel_WindowList, panel_HideListAnimationTrue, panel_SoundedWindowList, panel_ExceptionWindowList, Panel_LowLevelGuide_Value_IsCheckMoviePlay
+  -- function num : 0_2 , upvalues : panel_WindowList, panel_HideListAnimationTrue, panel_SoundedWindowList, panel_ExceptionWindowList, Panel_LowLevelGuide_Value_IsCheckMoviePlay
   if Panel_MovieTheater_320:IsShow() == false then
     value_Panel_MovieTheater_320_IsCheckedShow = false
   end
@@ -466,11 +462,7 @@ close_force_WindowPanelList = function()
     GuildManager:Hide()
   end
   if Panel_AgreementGuild:GetShow() then
-    if AllowChangeInputMode() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
     audioPostEvent_SystemUi(1, 31)
     FGlobal_AgreementGuild_Close()
   end

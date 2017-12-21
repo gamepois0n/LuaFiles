@@ -138,6 +138,10 @@ for index = 0, _maxBaseSlotCount - 1 do
   (slot.border):SetSize(41, 41)
   ;
   (slot.icon):SetIgnore(false)
+  ;
+  (slot.icon):addInputEvent("Mouse_On", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Base\",true)")
+  ;
+  (slot.icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_Show_GeneralStatic(" .. index .. ",\"QuestReward_Base\",false)")
   _listBaseRewardSlots[index] = slot
   Panel_Tooltip_Item_SetPosition(index, slot, "QuestReward_Base")
 end
@@ -178,6 +182,7 @@ FGlobal_QuestInfoDetail = function(groupId, questId, uiCondition, groupTitle, qu
   end
   if _questInfoDetailGroupId == groupId and _questInfoDetailQuestId == questId then
     FGlobal_QuestInfoDetail_Close()
+    Panel_Tooltip_Item_hideTooltip()
     return 
   end
   local questWindowX = Panel_Window_Quest_New:GetPosX()
@@ -374,6 +379,7 @@ FGlobal_QuestInfoDetail_Close = function()
   if Panel_CheckedQuestInfo:IsUISubApp() then
     Panel_CheckedQuestInfo:CloseUISubApp()
   end
+  Panel_Tooltip_Item_hideTooltip()
   Panel_CheckedQuestInfo:SetShow(false, false)
   checkedQuestInfo_PosX = Panel_CheckedQuestInfo:GetPosX()
   checkedQuestInfo_PosY = Panel_CheckedQuestInfo:GetPosY()

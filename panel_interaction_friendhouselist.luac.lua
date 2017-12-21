@@ -163,7 +163,7 @@ FriendHouseRank_ScrollEvent = function(isScrollUp)
 end
 
 FGlobal_FriendHouseRank_Open = function()
-  -- function num : 0_7 , upvalues : FriendHouseRank, IM
+  -- function num : 0_7 , upvalues : FriendHouseRank
   local self = FriendHouseRank
   local scrSizeX = getScreenSizeX()
   local scrSizeY = getScreenSizeY()
@@ -173,21 +173,17 @@ FGlobal_FriendHouseRank_Open = function()
   Panel_Interaction_FriendHouseList:SetPosY((string.format)("%.0f", posY))
   if not Panel_Interaction_FriendHouseList:GetShow() then
     Panel_Interaction_FriendHouseList:SetShow(true)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   end
   self:Update()
 end
 
 FriendHouseRank_Close = function()
-  -- function num : 0_8 , upvalues : IM
+  -- function num : 0_8
   if not Panel_Interaction_FriendHouseList:GetShow() then
     return 
   end
   if Panel_Interaction_FriendHouseList:GetShow() then
     Panel_Interaction_FriendHouseList:SetShow(false)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
   end
 end
 

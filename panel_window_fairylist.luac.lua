@@ -399,21 +399,25 @@ end
 PaGlobal_FairyList_Setting = function(petNoStr)
   -- function num : 0_12 , upvalues : FairyList
   audioPostEvent_SystemUi(1, 40)
-  self = FairyList
+  local self = FairyList
   if (self.Static_FairySetting):GetShow() == true then
     PaGlobal_FairyList_SetNo()
     return 
   end
-  -- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
-
   self._currentPetNoStr = petNoStr
   ;
   (self.Static_FairySetting):SetShow(true, true)
   self:Update_Setting(petNoStr, true)
 end
 
-PaGlobal_FairyList_SetYes = function()
+PaGlobal_FairySettingList_GetShow = function()
   -- function num : 0_13 , upvalues : FairyList
+  local self = FairyList
+  return (self.Static_FairySetting):GetShow()
+end
+
+PaGlobal_FairyList_SetYes = function()
+  -- function num : 0_14 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -432,7 +436,7 @@ PaGlobal_FairyList_SetYes = function()
 end
 
 PaGlobal_FairyList_SetNo = function()
-  -- function num : 0_14 , upvalues : FairyList
+  -- function num : 0_15 , upvalues : FairyList
   local self = FairyList
   self._currentPetNoStr = nil
   self:ClearCache()
@@ -441,7 +445,7 @@ PaGlobal_FairyList_SetNo = function()
 end
 
 FairyList.Update_Setting = function(self, petNoStr, notDataUpdate)
-  -- function num : 0_15
+  -- function num : 0_16
   local petNo_s64 = tonumber64(petNoStr)
   local settingData = ToClient_getFairySettingData(petNo_s64)
   if notDataUpdate then
@@ -506,7 +510,7 @@ FairyList.Update_Setting = function(self, petNoStr, notDataUpdate)
 end
 
 PaGlobal_FairyList_HpRateCheck = function(rate)
-  -- function num : 0_16 , upvalues : FairyList
+  -- function num : 0_17 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -515,7 +519,7 @@ PaGlobal_FairyList_HpRateCheck = function(rate)
 end
 
 PaGlobal_FairyList_MpRateCheck = function(mpCheck)
-  -- function num : 0_17 , upvalues : FairyList
+  -- function num : 0_18 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
@@ -524,7 +528,7 @@ PaGlobal_FairyList_MpRateCheck = function(mpCheck)
 end
 
 PaGlobal_FairyList_IsHp = function(hpKeyStr)
-  -- function num : 0_18 , upvalues : fairyPotionData
+  -- function num : 0_19 , upvalues : fairyPotionData
   local key = tonumber(hpKeyStr)
   for idx,value in pairs(fairyPotionData.hp) do
     if key == value then
@@ -535,45 +539,54 @@ PaGlobal_FairyList_IsHp = function(hpKeyStr)
 end
 
 PaGlobal_FairyList_IsMp = function(mpKeyStr)
-  -- function num : 0_19 , upvalues : fairyPotionData
+  -- function num : 0_20 , upvalues : fairyPotionData, spiritClass
   local classType = (getSelfPlayer()):getClassType()
-  local key = tonumber(mpKeyStr)
-  for idx,value in pairs(fairyPotionData.mp) do
-    if key == value then
-      return true
+  local PotionData = fairyPotionData.mp
+  local ii = 1
+  -- DECOMPILER ERROR at PC10: Overwrote pending register: R4 in 'AssignReg'
+
+  -- DECOMPILER ERROR at PC17: Overwrote pending register: R5 in 'AssignReg'
+
+  if (#spiritClass)[ii] == classType then
+    local key = tonumber(1)
+    for idx,value in pairs(PotionData) do
+      if key == value then
+        return true
+      end
     end
+    return false
   end
-  return false
 end
 
 PaGlobal_FairySetting_SetPortion = function(itemKey)
-  -- function num : 0_20 , upvalues : FairyList
+  -- function num : 0_21 , upvalues : FairyList
+  local self = FairyList
   local isSetting = false
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R3 in 'UnsetPending'
 
   if PaGlobal_FairyList_IsHp(tostring(itemKey:get())) == true then
     (self._cacheSetting)._hpKey = itemKey
     isSetting = true
   end
-  -- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC22: Confused about usage of register: R3 in 'UnsetPending'
 
   if PaGlobal_FairyList_IsMp(tostring(itemKey:get())) == true then
     (self._cacheSetting)._mpKey = itemKey
     isSetting = true
   end
   if isSetting == false then
-    Proc_ShowMessage_Ack_WithOut_ChattingMessage("회복제만 등록�\160 �\152 있습니다.")
+    Proc_ShowMessage_Ack_WithOut_ChattingMessage("등록�\160 �\152 없는 아이템입니다.")
   end
   FairyList:Update_Setting(self._currentPetNoStr, false)
 end
 
 FromClient_FairyUpdate = function()
-  -- function num : 0_21 , upvalues : FairyList
+  -- function num : 0_22 , upvalues : FairyList
   FairyList:SetFairyList()
 end
 
 PaGlobal_FairySetting_HpReset = function()
-  -- function num : 0_22 , upvalues : FairyList
+  -- function num : 0_23 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -584,7 +597,7 @@ PaGlobal_FairySetting_HpReset = function()
 end
 
 PaGlobal_FairySetting_MpReset = function()
-  -- function num : 0_23 , upvalues : FairyList
+  -- function num : 0_24 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -595,7 +608,7 @@ PaGlobal_FairySetting_MpReset = function()
 end
 
 FairyList.Initialize = function(self)
-  -- function num : 0_24
+  -- function num : 0_25
   (self.List2_FairyList):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "FairyListCreate")
   ;
   (self.List2_FairyList):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
@@ -645,7 +658,7 @@ FairyList.Initialize = function(self)
 end
 
 HandleClicked_OnOut_ShowHpEquipItemToolTip = function(isShow)
-  -- function num : 0_25 , upvalues : FairyList
+  -- function num : 0_26 , upvalues : FairyList
   local self = FairyList
   local selfPlayer = (getSelfPlayer()):get()
   local inventory = selfPlayer:getInventoryByType((CppEnums.ItemWhereType).eInventory)
@@ -665,7 +678,7 @@ HandleClicked_OnOut_ShowHpEquipItemToolTip = function(isShow)
 end
 
 HandleClicked_OnOut_ShowMpEquipItemToolTip = function(isShow)
-  -- function num : 0_26 , upvalues : FairyList
+  -- function num : 0_27 , upvalues : FairyList
   local self = FairyList
   local selfPlayer = (getSelfPlayer()):get()
   local inventory = selfPlayer:getInventoryByType((CppEnums.ItemWhereType).eInventory)
@@ -686,7 +699,7 @@ end
 
 FairyList:Initialize()
 OpenFairyList = function()
-  -- function num : 0_27 , upvalues : isFairyOpen, FairyList
+  -- function num : 0_28 , upvalues : isFairyOpen, FairyList
   if isFairyOpen == false then
     return 
   end

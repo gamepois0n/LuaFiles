@@ -226,7 +226,7 @@ gacha_Roulette_Ani = function(deltaTime)
 end
 
 gacha_Roulette.Open = function(self)
-  -- function num : 0_5 , upvalues : gacha_Roulette, RouletteState, IM
+  -- function num : 0_5 , upvalues : gacha_Roulette, RouletteState
   local selfPlayerWrapper = getSelfPlayer()
   if selfPlayerWrapper == nil then
     return nil
@@ -262,29 +262,19 @@ gacha_Roulette.Open = function(self)
   ;
   (self.effectControl):AddEffect("fUI_Gacha_Spark01", true, 0, 50)
   if self.rouletteState == RouletteState.eRoll then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
     SetUIMode((Defines.UIMode).eUIMode_Gacha_Roulette)
   end
 end
 
 gacha_Roulette.Close = function(self)
-  -- function num : 0_6 , upvalues : RouletteState, IM
+  -- function num : 0_6 , upvalues : RouletteState
   if Panel_Gacha_Roulette:GetShow() or Panel_RandomBoxSelect:GetShow() then
     Panel_Gacha_Roulette:SetShow(false)
     Panel_RandomBoxSelect:SetShow(false)
     Panel_Tooltip_Item_hideTooltip()
     SetUIMode((Defines.UIMode).eUIMode_Default)
     self.rouletteState = RouletteState.eClose
-    if AllowChangeInputMode() then
-      if check_ShowWindow() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
   end
   if ToClient_CloseRandomBox ~= nil then
     ToClient_CloseRandomBox()
@@ -485,7 +475,7 @@ FromClient_SelectRandomItem = function(itemKey)
 end
 
 FGlobal_Gacha_Roulette_ShowResult = function()
-  -- function num : 0_19 , upvalues : gacha_Roulette, RouletteState, resultShowTime, IM
+  -- function num : 0_19 , upvalues : gacha_Roulette, RouletteState, resultShowTime
   local self = gacha_Roulette
   if self.rouletteState ~= RouletteState.eClose then
     self.rouletteState = RouletteState.eResult
@@ -498,7 +488,6 @@ FGlobal_Gacha_Roulette_ShowResult = function()
   (changeSlot.icon):addInputEvent("Mouse_On", "gacha_Roulette_Tooltip( true )")
   local itemWrapper = getItemEnchantStaticStatus(self.pickItemKey)
   if self.rouletteState ~= RouletteState.eClose then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
     SetUIMode((Defines.UIMode).eUIMode_Gacha_Roulette)
   end
   local sendMsg = {main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GACHA_ROULETTE_GETITEM", "getName", itemWrapper:getName()), sub = "", addMsg = ""}
@@ -508,7 +497,6 @@ FGlobal_Gacha_Roulette_ShowResult = function()
     InventoryWindow_Show()
   end
   if self.rouletteState ~= RouletteState.eClose then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
     SetUIMode((Defines.UIMode).eUIMode_Gacha_Roulette)
   end
 end

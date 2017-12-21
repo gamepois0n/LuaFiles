@@ -1541,6 +1541,11 @@ PetListControlCreate = function(control, key)
         orderFind:addInputEvent("Mouse_LUp", "petListNew_SetOrder(" .. 1 .. "," .. index .. ")")
         orderGetItem:addInputEvent("Mouse_LUp", "petListNew_SetOrder(" .. 2 .. "," .. index .. ")")
         orderPlay:addInputEvent("Mouse_LUp", "petListNew_SetPlay(" .. index .. ")")
+        orderFollow:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 0 .. "," .. index .. ")")
+        orderWait:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 0 .. "," .. index .. ")")
+        orderFind:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 1 .. "," .. index .. ")")
+        orderGetItem:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 2 .. "," .. index .. ")")
+        orderPlay:addInputEvent("Mouse_RUp", "petListNew_SetPlayAll(" .. index .. ")")
         orderFollow:addInputEvent("Mouse_On", "petListNew_OrderTooltip(" .. 0 .. ", " .. index .. ")")
         orderWait:addInputEvent("Mouse_On", "petListNew_OrderTooltip(" .. 1 .. ", " .. index .. ")")
         orderFind:addInputEvent("Mouse_On", "petListNew_OrderTooltip(" .. 2 .. ", " .. index .. ")")
@@ -1551,10 +1556,10 @@ PetListControlCreate = function(control, key)
         orderFind:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderGetItem:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderPlay:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
-        -- DECOMPILER ERROR at PC489: Confused about usage of register: R56 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC532: Confused about usage of register: R56 in 'UnsetPending'
 
         PetList.orderList = PetControl_UnsealPetOrderInfo(tostring(petNo_s64))
-        -- DECOMPILER ERROR at PC498: Confused about usage of register: R56 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC541: Confused about usage of register: R56 in 'UnsetPending'
 
         if isPassive then
           ((PetList.orderList)._find)[tostring(petNo_s64)] = true
@@ -1583,20 +1588,20 @@ PetListControlCreate = function(control, key)
         if petLootingType == 0 then
           x1 = setTextureUV_Func(orderPlay, 140, 280, 172, 312)
         else
-          -- DECOMPILER ERROR at PC586: Overwrote pending register: R60 in 'AssignReg'
+          -- DECOMPILER ERROR at PC629: Overwrote pending register: R60 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC587: Overwrote pending register: R59 in 'AssignReg'
+          -- DECOMPILER ERROR at PC630: Overwrote pending register: R59 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC588: Overwrote pending register: R58 in 'AssignReg'
+          -- DECOMPILER ERROR at PC631: Overwrote pending register: R58 in 'AssignReg'
 
           if petLootingType == 1 then
             x1 = setTextureUV_Func(orderPlay, 104, 280, 136, 312)
           else
-            -- DECOMPILER ERROR at PC600: Overwrote pending register: R60 in 'AssignReg'
+            -- DECOMPILER ERROR at PC643: Overwrote pending register: R60 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC601: Overwrote pending register: R59 in 'AssignReg'
+            -- DECOMPILER ERROR at PC644: Overwrote pending register: R59 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC602: Overwrote pending register: R58 in 'AssignReg'
+            -- DECOMPILER ERROR at PC645: Overwrote pending register: R58 in 'AssignReg'
 
             if petLootingType == 2 then
               x1 = setTextureUV_Func(orderPlay, 176, 280, 208, 312)
@@ -1669,11 +1674,11 @@ PetListControlCreate = function(control, key)
             end
           end
           do
-            -- DECOMPILER ERROR at PC833: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC876: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC833: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC876: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC833: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC876: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1686,7 +1691,7 @@ PetListControlCreate = function(control, key)
     btnUnsealAll:SetShow(false)
     btnInfo:addInputEvent("Mouse_LUp", "petListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
     local uiIndex = 0
-    -- DECOMPILER ERROR at PC867: Overwrote pending register: R58 in 'AssignReg'
+    -- DECOMPILER ERROR at PC910: Overwrote pending register: R58 in 'AssignReg'
 
     btnSeal:addInputEvent("Mouse_LUp", "petListNew_Seal( \"" .. tostring(petNo_s64) .. "\" ," .. uiIndex .. y1)
   else
@@ -1712,10 +1717,10 @@ PetListControlCreate = function(control, key)
             isPassive = (pcPetData:getSkillParam(1)):isPassiveSkill()
           end
           local hungryPercent = pethungry / petMaxHungry * 100
-          -- DECOMPILER ERROR at PC924: Overwrote pending register: R59 in 'AssignReg'
+          -- DECOMPILER ERROR at PC967: Overwrote pending register: R59 in 'AssignReg'
 
           hungryProgress:SetProgressRate(x2)
-          -- DECOMPILER ERROR at PC929: Overwrote pending register: R60 in 'AssignReg'
+          -- DECOMPILER ERROR at PC972: Overwrote pending register: R60 in 'AssignReg'
 
           hungryPercentText:SetText((string.format)(y2, hungryPercent) .. "%")
           groupIndexBtn1:SetShow(true)
@@ -1727,15 +1732,15 @@ PetListControlCreate = function(control, key)
           groupIndexBtn1:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 1))
           groupIndexBtn2:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 2))
           groupIndexBtn3:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 3))
-          -- DECOMPILER ERROR at PC995: Confused about usage of register: R57 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1038: Confused about usage of register: R57 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._follow)[petNo_s64] = true
-          -- DECOMPILER ERROR at PC999: Confused about usage of register: R57 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1042: Confused about usage of register: R57 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._find)[petNo_s64] = isPassive
-          -- DECOMPILER ERROR at PC1003: Confused about usage of register: R57 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1046: Confused about usage of register: R57 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._getItem)[petNo_s64] = true
@@ -1842,13 +1847,51 @@ petListNew_SetOrder = function(orderType, index)
   -- function num : 0_58
   local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
   if pcPetData ~= nil then
-    local petNo = pcPetData:getPcPetNo()
     FGlobal_PetControl_OrderList(orderType, index)
   end
 end
 
+petListNew_SetOrderAll = function(orderType, index)
+  -- function num : 0_59 , upvalues : PetList
+  local selectedPetData = ToClient_getPetUnsealedDataByIndex(index)
+  if selectedPetData == nil then
+    return 
+  end
+  local selectedPetNo_s64 = (selectedPetData:getPcPetNo())
+  local currentState = nil
+  if orderType == 0 then
+    currentState = ((PetList.orderList)._follow)[tostring(selectedPetNo_s64)]
+  else
+    if orderType == 1 then
+      currentState = ((PetList.orderList)._find)[tostring(selectedPetNo_s64)]
+    else
+      currentState = ((PetList.orderList)._getItem)[tostring(selectedPetNo_s64)]
+    end
+  end
+  local unsealPetCount = ToClient_getPetUnsealedList()
+  for pIndex = 0, unsealPetCount - 1 do
+    local pcPetData = ToClient_getPetUnsealedDataByIndex(pIndex)
+    if pcPetData ~= nil then
+      local petNo_s64 = pcPetData:getPcPetNo()
+      -- DECOMPILER ERROR at PC63: Unhandled construct in 'MakeBoolean' P1
+
+      if orderType == 0 and currentState == ((PetList.orderList)._follow)[tostring(petNo_s64)] then
+        petListNew_SetOrder(orderType, pIndex)
+      end
+    end
+    -- DECOMPILER ERROR at PC79: Unhandled construct in 'MakeBoolean' P1
+
+    if orderType == 1 and currentState == ((PetList.orderList)._find)[tostring(petNo_s64)] then
+      petListNew_SetOrder(orderType, pIndex)
+    end
+    if orderType == 2 and currentState == ((PetList.orderList)._getItem)[tostring(petNo_s64)] then
+      petListNew_SetOrder(orderType, pIndex)
+    end
+  end
+end
+
 petListNew_SetPlay = function(index)
-  -- function num : 0_59 , upvalues : isPetFlyPet
+  -- function num : 0_60 , upvalues : isPetFlyPet
   local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
   if pcPetData ~= nil then
     local petNo = pcPetData:getPcPetNo()
@@ -1864,8 +1907,25 @@ petListNew_SetPlay = function(index)
   end
 end
 
+petListNew_SetPlayAll = function(index)
+  -- function num : 0_61
+  local selectedPetData = ToClient_getPetUnsealedDataByIndex(index)
+  if selectedPetData == nil then
+    return 
+  end
+  local petLootingType = (selectedPetData:getPetLootingType() + 1) % 3
+  local unsealPetCount = ToClient_getPetUnsealedList()
+  for pIndex = 0, unsealPetCount - 1 do
+    local pcPetData = ToClient_getPetUnsealedDataByIndex(pIndex)
+    if pcPetData ~= nil then
+      local petNo = pcPetData:getPcPetNo()
+      ToClient_requestChangePetLootingType(petNo, petLootingType)
+    end
+  end
+end
+
 FGlobal_PetList_PetOrder = function(index)
-  -- function num : 0_60 , upvalues : PetList
+  -- function num : 0_62 , upvalues : PetList
   local pcPetData = ToClient_getPetUnsealedDataByIndex(index)
   if pcPetData ~= nil then
     local petNo = pcPetData:getPcPetNo()
@@ -1875,7 +1935,7 @@ FGlobal_PetList_PetOrder = function(index)
 end
 
 petListNew_OrderTooltip = function(orderType, index)
-  -- function num : 0_61 , upvalues : PetList
+  -- function num : 0_63 , upvalues : PetList
   if orderType == nil then
     TooltipSimple_Hide()
     return 
@@ -1983,7 +2043,7 @@ petListNew_OrderTooltip = function(orderType, index)
 end
 
 PetListNew_SimpleTooltipBTN = function(isShow, index, tipType)
-  -- function num : 0_62 , upvalues : PetList, maxUnsealCount
+  -- function num : 0_64 , upvalues : PetList, maxUnsealCount
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -2068,7 +2128,7 @@ PetListNew_SimpleTooltipBTN = function(isShow, index, tipType)
 end
 
 PetList_SkillTypeString = function(skillType)
-  -- function num : 0_63
+  -- function num : 0_65
   local paramText = ""
   if skillType == 1 then
     paramText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETINFO_PETSKILLTYPE_ITEMGETTIME", "itemGetTime", (string.format)("%.1f", skillParam:getParam(0) / 1000))
@@ -2121,7 +2181,7 @@ PetList_SkillTypeString = function(skillType)
 end
 
 PetList.registEventHandler = function(self)
-  -- function num : 0_64
+  -- function num : 0_66
   (self.BTN_Close):addInputEvent("Mouse_LUp", "FGlobal_PetListNew_Close()")
   ;
   (self.BTN_Compose):addInputEvent("Mouse_LUp", "PetListNew_Compose()")
@@ -2148,11 +2208,11 @@ PetList.registEventHandler = function(self)
 end
 
 FromClient_PetPromotion = function(fromWhereType, fromSlotNo)
-  -- function num : 0_65
+  -- function num : 0_67
 end
 
 PetList.registMessageHandler = function(self)
-  -- function num : 0_66
+  -- function num : 0_68
   registerEvent("FromClient_PetAddSealedList", "FromClient_PetUpdate")
   registerEvent("FromClient_PetDelSealedList", "FromClient_PetUpdate_ButtonShow")
   registerEvent("FromClient_PetDelList", "FromClient_PetUpdate")
@@ -2167,7 +2227,7 @@ end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetList")
 FromClient_luaLoadComplete_PetList = function()
-  -- function num : 0_67 , upvalues : PetList
+  -- function num : 0_69 , upvalues : PetList
   PetList:Initialize()
   petSkillList_Close()
   FGlobal_PetListNew_NoPet()
@@ -2177,12 +2237,12 @@ FromClient_luaLoadComplete_PetList = function()
 end
 
 PetList_VScroll_MoveTop = function()
-  -- function num : 0_68 , upvalues : PetList
+  -- function num : 0_70 , upvalues : PetList
   (PetList.list2_PetList):moveTopIndex()
 end
 
 PetCompose_Simpletooltips = function(isShow, tipType)
-  -- function num : 0_69 , upvalues : petCompose
+  -- function num : 0_71 , upvalues : petCompose
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -2226,13 +2286,13 @@ PetCompose_Simpletooltips = function(isShow, tipType)
 end
 
 PetList_ChangePosition = function(isUp, index)
-  -- function num : 0_70 , upvalues : PetList
+  -- function num : 0_72 , upvalues : PetList
   ToClient_changePetListOrder(isUp, index)
   PetList:SetPetList(true)
 end
 
 PetList.IsCheckGroupBtnByPetNo = function(self, petNo_s64, groupIndex)
-  -- function num : 0_71
+  -- function num : 0_73
   local isCheck = (checkUnSealGroupList[groupIndex])[Int64toInt32(petNo_s64)]
   if isCheck == nil then
     isCheck = false
@@ -2241,14 +2301,14 @@ PetList.IsCheckGroupBtnByPetNo = function(self, petNo_s64, groupIndex)
 end
 
 HandleClicked_PetGroupClear = function()
-  -- function num : 0_72
+  -- function num : 0_74
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_GROUPCLEAR_ALERT"), functionYes = PaGlobal_PetList_GroupClear, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
 PaGlobal_PetList_GroupClear = function()
-  -- function num : 0_73 , upvalues : PetList
+  -- function num : 0_75 , upvalues : PetList
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R0 in 'UnsetPending'
 
   checkUnSealGroupList[1] = {}
@@ -2263,7 +2323,7 @@ PaGlobal_PetList_GroupClear = function()
 end
 
 PaGlobal_PetList_CheckGroup = function()
-  -- function num : 0_74
+  -- function num : 0_76
   for ii = 1, 3 do
     for key,value in pairs(checkUnSealGroupList[ii]) do
       local isRemain = false

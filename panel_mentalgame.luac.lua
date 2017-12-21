@@ -1481,8 +1481,6 @@ MentalGame_HideByDamage = function()
   end
   SetUIMode((Defines.UIMode).eUIMode_Default)
   renderMode:reset()
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
   Panel_Npc_Dialog:SetShow(true)
   dialog_CloseNpcTalk(true)
   setShowNpcDialog(false)

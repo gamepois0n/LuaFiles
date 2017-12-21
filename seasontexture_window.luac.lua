@@ -11,7 +11,7 @@ local currentMonth = ToClient_GetThisMonth()
 local currentDay = (ToClient_GetToday())
 local isSpring, isSummer, isAutumn = nil, nil, nil
 local isWinter = currentMonth == 1 or currentMonth == 12 or currentMonth == 11
-local contentOpen = ToClient_isEventOn("Winter_Looting")
+local contentOpen = ToClient_isEventOn("Aurora")
 local textureSize = {[0] = 300, [1] = 450, [2] = 900}
 local panelList = {
 [0] = {[0] = Panel_EnableSkill, [1] = nil, [2] = Panel_ItemMarket_Alarm}

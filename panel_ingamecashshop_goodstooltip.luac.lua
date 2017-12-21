@@ -79,7 +79,7 @@ GoodsTooltipInfo.Initialize = function(self)
 end
 
 GoodsTooltipInfo.Update = function(self)
-  -- function num : 0_1 , upvalues : UI_color
+  -- function num : 0_1 , upvalues : UI_color, UI_TM
   for itemIdx = 0, self.itemSlotMaxCount do
     local itemUI = (self.PackingItemUIPool)[itemIdx]
     ;
@@ -284,6 +284,8 @@ GoodsTooltipInfo.Update = function(self)
         (self.Desc):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_GOODSTOOLTIP_PRODUCTDESC", "getDescription", cashProduct:getDescription()))
         local tradeDesc = IngameShopDetailInfo_ConvertFromCategoryToTradeDesc(cashProduct)
         if tradeDesc ~= nil then
+          (self.Warning):SetTextMode(UI_TM.eTextMode_AutoWrap)
+          ;
           (self.Warning):SetText(tradeDesc)
           ;
           (self.Warning):SetShow(true)
@@ -325,7 +327,7 @@ GoodsTooltipInfo.Update = function(self)
         end
         if (self.Warning):GetShow() then
           (self.Warning):SetPosY(controlPosY)
-          controlPosY = controlPosY + (self.Warning):GetSizeY()
+          controlPosY = controlPosY + (self.Warning):GetTextSizeY()
         end
         if (self.ItemListTitle):GetShow() then
           (self.ItemListTitle):SetPosY(controlPosY)

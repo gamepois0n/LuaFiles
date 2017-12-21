@@ -557,14 +557,24 @@ CashShopController.Initialize = function(self)
   (self.btn_AllDoff):SetPosX((self.Slider_Endurance):GetPosX() - 50)
   ;
   (self.btn_AllDoff):SetPosY(45)
-  ;
-  (self.btn_ShowUnderwear):SetPosX((self.btn_AllDoff):GetPosX() + (self.btn_AllDoff):GetSizeX() - 1)
-  ;
-  (self.btn_ShowUnderwear):SetPosY(45)
-  ;
-  (self.btn_HideAvatar):SetPosX((self.btn_ShowUnderwear):GetPosX() + (self.btn_ShowUnderwear):GetSizeX() - 1)
-  ;
-  (self.btn_HideAvatar):SetPosY(45)
+  if ToClient_isAdultUser() == false then
+    (self.btn_ShowUnderwear):SetShow(false)
+    ;
+    (self.btn_ShowUnderwear):SetIgnore(false)
+    ;
+    (self.btn_HideAvatar):SetPosX((self.btn_AllDoff):GetPosX() + (self.btn_AllDoff):GetSizeX() - 1)
+    ;
+    (self.btn_HideAvatar):SetPosY(45)
+  else
+    ;
+    (self.btn_ShowUnderwear):SetPosX((self.btn_AllDoff):GetPosX() + (self.btn_AllDoff):GetSizeX() - 1)
+    ;
+    (self.btn_ShowUnderwear):SetPosY(45)
+    ;
+    (self.btn_HideAvatar):SetPosX((self.btn_ShowUnderwear):GetPosX() + (self.btn_ShowUnderwear):GetSizeX() - 1)
+    ;
+    (self.btn_HideAvatar):SetPosY(45)
+  end
   ;
   (self.btn_HideHair):SetPosX((self.btn_HideAvatar):GetPosX() + (self.btn_HideAvatar):GetSizeX() - 1)
   ;

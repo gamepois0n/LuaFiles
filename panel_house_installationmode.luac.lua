@@ -626,6 +626,12 @@ HouseInstallation.Open = function(self)
   do
     audioPostEvent_SystemUi(1, 32)
     SetUIMode((Defines.UIMode).eUIMode_Housing)
+    if Panel_Chatting_Input:IsShow() then
+      ChatInput_CancelAction()
+      ChatInput_CancelMessage()
+      ChatInput_Close()
+    end
+    ClearFocusEdit()
     renderMode:set()
     crossHair_SetShow(false)
     setShowLine(false)

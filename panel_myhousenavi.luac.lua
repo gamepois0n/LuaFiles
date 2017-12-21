@@ -287,6 +287,7 @@ Panel_MyHouseNavi_Update = function(init, listCount)
     if PaGlobal_PossessByBlackSpiritIcon:showAble() then
       PaGlobal_PossessByBlackSpiritIcon_UpdateVisibleState()
     end
+    PaGlobal_CharacterTag_SetPosIcon()
     -- DECOMPILER ERROR: 18 unprocessed JMP targets
   end
 end
