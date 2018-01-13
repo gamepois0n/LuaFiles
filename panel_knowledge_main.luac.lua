@@ -1038,7 +1038,10 @@ end
 
 local _cardKeyRaw = nil
 Panel_Knowledge_Show = function()
-  -- function num : 0_28 , upvalues : IM, onShowLoadControls, _cardKeyRaw
+  -- function num : 0_28 , upvalues : onShowLoadControls, _cardKeyRaw
+  if ToClient_getJoinGuildBattle() == true then
+    return 
+  end
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_KNOWLEDGEOPENALERT_INDEAD"))
     return 
@@ -1061,8 +1064,6 @@ Panel_Knowledge_Show = function()
   UIMain_KnowledgeUpdateRemove()
   ;
   (uiConst.list_GetKnowledgeCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_GETKNOWLEDGECOUNT", "count", ToClient_GetTotalMentalCardCount()))
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   onShowLoadControls()
   if _cardKeyRaw ~= FGlobal_CardKeyReturn() then
     _cardKeyRaw = FGlobal_CardKeyReturn()
@@ -1071,7 +1072,7 @@ Panel_Knowledge_Show = function()
 end
 
 Panel_Knowledge_Hide = function()
-  -- function num : 0_29 , upvalues : IM, onHideCloseControls
+  -- function num : 0_29 , upvalues : onHideCloseControls
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -1080,13 +1081,8 @@ Panel_Knowledge_Hide = function()
   if knowledge:isShow() == false then
     return 
   end
-  if (UI.isGameOptionMouseMode)() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-  end
   audioPostEvent_SystemUi(1, 33)
   knowledge:hide()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
   onHideCloseControls()
   PackageIconPosition()
 end
@@ -1328,8 +1324,7 @@ Panel_Knowledge_SelectAnotherCard = function(cardKeyRaw)
 end
 
 Panel_Knowledge_OnInputMode = function()
-  -- function num : 0_45 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_45
   SetFocusEdit(uiConst.list_Edit)
   ;
   (uiConst.list_Edit):SetEditText("")
@@ -1337,12 +1332,10 @@ end
 
 local filterText = ""
 Panel_Knowledge_OutInputMode = function(isApply)
-  -- function num : 0_46 , upvalues : IM
+  -- function num : 0_46
   if isApply ~= true then
     (uiConst.list_Edit):SetEditText("")
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit()
   ;
   (uiConst.list_Tree):SetFilterString((uiConst.list_Edit):GetEditText())

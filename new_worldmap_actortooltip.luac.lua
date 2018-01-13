@@ -84,7 +84,6 @@ FGlobal_ActorTooltip_SetShowPartyMemberIcon = function(isShowValue)
 end
 
 InitPartyMemberTooltipTable()
-nodeIconName:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 local villageWar = {title = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildWarTitle"), guildMarkBg = (UI.getChildControl)(Panel_NodeSiegeTooltip, "Static_GuildMarkBG"), guildMark = (UI.getChildControl)(Panel_NodeSiegeTooltip, "Static_GuildMark"), guildName = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildName"), guildMasterName = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildMaster"), guildOption = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_Benefits"), nodeState = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_NodeState"), nodeStateDesc = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_StateDesc"), nodeWarJoinCount = (UI.getChildControl)(Panel_NodeSiegeTooltip, "MultilineText_JoinNodeWarCount"), nodeTaxGrade = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_TaxGrade"), nodeGuildWarDay = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_GuildWarDay"), nodeLastWeek = (UI.getChildControl)(Panel_NodeSiegeTooltip, "StaticText_LastWeek")}
 local tooltipHide = function()
   -- function num : 0_2 , upvalues : nodeIconName, nodeResultDropGroupMaxCount, nodeResultIconName, nodeResultIconBG, nodeResultIcon, nodeHelpBG, nodeHelpMouseL, nodeHelpMouseR

@@ -1162,40 +1162,41 @@ end
     -- DECOMPILER ERROR at PC9: Confused about usage of register: R3 in 'UnsetPending'
 
     ;
-    (rulerControl[actorKeyRaw]).panel = targetPanel
-    -- DECOMPILER ERROR at PC12: Confused about usage of register: R3 in 'UnsetPending'
-
-    ;
     (rulerControl[actorKeyRaw]).createRulerCount = 0
+    -- DECOMPILER ERROR at PC16: Confused about usage of register: R3 in 'UnsetPending'
+
+    if targetPanel ~= nil then
+      (rulerControl[actorKeyRaw]).panel = targetPanel:GetID()
+    end
   end
-  if rularCount <= (rulerControl[actorKeyRaw]).createRulerCount then
+  if rularCount == (rulerControl[actorKeyRaw]).createRulerCount then
     return false
   end
-  -- DECOMPILER ERROR at PC27: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R3 in 'UnsetPending'
 
   ;
   (rulerControl[actorKeyRaw]).rularParent = (UI.getChildControl)(targetPanel, "Static_Rular")
   for index = 0, rularCount - 1 do
-    -- DECOMPILER ERROR at PC55: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC57: Confused about usage of register: R7 in 'UnsetPending'
 
     if (rulerControl[actorKeyRaw]).createRulerCount <= index then
       if index % 10 == 9 then
-        (rulerControl[actorKeyRaw])[index] = (UI.createAndCopyBasePropertyControl)((rulerControl[actorKeyRaw]).panel, "Static_1000Stick", (rulerControl[actorKeyRaw]).rularParent, "RulerControl_" .. index)
+        (rulerControl[actorKeyRaw])[index] = (UI.createAndCopyBasePropertyControl)(targetPanel, "Static_1000Stick", (rulerControl[actorKeyRaw]).rularParent, "RulerControl_" .. index)
       else
         -- DECOMPILER ERROR at PC72: Confused about usage of register: R7 in 'UnsetPending'
 
         ;
-        (rulerControl[actorKeyRaw])[index] = (UI.createAndCopyBasePropertyControl)((rulerControl[actorKeyRaw]).panel, "Static_100Stick", (rulerControl[actorKeyRaw]).rularParent, "RulerControl_" .. index)
+        (rulerControl[actorKeyRaw])[index] = (UI.createAndCopyBasePropertyControl)(targetPanel, "Static_100Stick", (rulerControl[actorKeyRaw]).rularParent, "RulerControl_" .. index)
       end
     end
   end
-  -- DECOMPILER ERROR at PC76: Confused about usage of register: R3 in 'UnsetPending'
-
-  ;
-  (rulerControl[actorKeyRaw]).createRulerCount = rularCount
   for index = 0, (rulerControl[actorKeyRaw]).createRulerCount - 1 do
     ((rulerControl[actorKeyRaw])[index]):SetShow(false)
   end
+  -- DECOMPILER ERROR at PC90: Confused about usage of register: R3 in 'UnsetPending'
+
+  ;
+  (rulerControl[actorKeyRaw]).createRulerCount = rularCount
   return true
 end
 
@@ -1230,7 +1231,7 @@ end
   if (rulerControl[actorKeyRaw]).panel == nil or targetPanel == nil then
     return false
   end
-  if ((rulerControl[actorKeyRaw]).panel):GetID() ~= targetPanel:GetID() then
+  if (rulerControl[actorKeyRaw]).panel ~= targetPanel:GetID() then
     rularParent:MoveChilds(rularParent:GetID(), (rulerControl[actorKeyRaw]).rularParent)
     rularParent:SetPosX(hpMain:GetPosX())
     rularParent:SetPosY(hpMain:GetPosY())
@@ -1238,11 +1239,15 @@ end
     -- DECOMPILER ERROR at PC51: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
-    (rulerControl[actorKeyRaw]).panel = targetPanel
+    (rulerControl[actorKeyRaw]).panel = targetPanel:GetID()
     -- DECOMPILER ERROR at PC54: Confused about usage of register: R4 in 'UnsetPending'
 
     ;
     (rulerControl[actorKeyRaw]).rularParent = rularParent
+    -- DECOMPILER ERROR at PC57: Confused about usage of register: R4 in 'UnsetPending'
+
+    ;
+    (rulerControl[actorKeyRaw]).hpMain = hpMain
     return false
   end
   return false
@@ -1267,6 +1272,9 @@ end
 
   local CharacterNameTag_SetRuler = function(maxHp, targetPanel, actorKeyRaw)
   -- function num : 0_30 , upvalues : beforeMaxHp, rulerControl
+  if maxHp > 100000 then
+    return 
+  end
   local hpMain = (UI.getChildControl)(targetPanel, "CharacterHPGageProgress_Ruler")
   local rularParent = (UI.getChildControl)(targetPanel, "Static_Rular")
   if GameOption_GetShowHpRular() == false then
@@ -1276,7 +1284,7 @@ end
     rularParent:SetShow(hpMain:GetShow())
     rularParent:SetPosX(hpMain:GetPosX())
   end
-  -- DECOMPILER ERROR at PC32: Confused about usage of register: R5 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC35: Confused about usage of register: R5 in 'UnsetPending'
 
   if beforeMaxHp[actorKeyRaw] == nil then
     beforeMaxHp[actorKeyRaw] = 0
@@ -1287,9 +1295,9 @@ end
   end
   local rularCount = (math.floor)(maxHp * 0.01)
   if checkAndCreateRular(rularCount, targetPanel, actorKeyRaw) == false then
-    return false
+    return 
   end
-  -- DECOMPILER ERROR at PC59: Confused about usage of register: R6 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC61: Confused about usage of register: R6 in 'UnsetPending'
 
   ;
   (rulerControl[actorKeyRaw]).hpMain = hpMain
@@ -1300,7 +1308,7 @@ end
   rularParent:SetPosY(hpPosY)
   local hpSizeX = hpMain:GetSizeX()
   local rularDivideSizeValue = hpSizeX / (maxHp * 0.01)
-  for index = 0, rularCount - 1 do
+  for index = 0, (rulerControl[actorKeyRaw]).createRulerCount - 1 do
     if checkAvailableRular(index, rularCount) == true then
       ((rulerControl[actorKeyRaw])[index]):SetShow(true)
       local posX = rularDivideSizeValue * (index + 1)
@@ -1314,7 +1322,7 @@ end
       end
     end
   end
-  -- DECOMPILER ERROR at PC119: Confused about usage of register: R10 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC124: Confused about usage of register: R10 in 'UnsetPending'
 
   beforeMaxHp[actorKeyRaw] = maxHp
 end
@@ -3822,23 +3830,20 @@ end
   settingHpBar(actorKeyRaw, panel, actorWrapper)
 end
 
-  FromClient_LocalWarCombatPoint = function(actorkeyRaw)
-  -- function num : 0_110 , upvalues : settingLocalWarCombatPoint
-  if actorkeyRaw == nil then
+  FromClient_InstallationInfo = function(actorWrapper)
+  -- function num : 0_110 , upvalues : settingHpBar
+  if actorWrapper == nil then
     return 
   end
-  local playerActorWrapper = getPlayerActor(actorkeyRaw)
-  if playerActorWrapper == nil then
-    return 
-  end
-  local panel = (playerActorWrapper:get()):getUIPanel()
+  local actorKeyRaw = (actorWrapper:get()):getActorKeyRaw()
+  local panel = (actorWrapper:get()):getUIPanel()
   if panel == nil then
     return 
   end
-  settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
+  settingHpBar(actorKeyRaw, panel, actorWrapper)
 end
 
-  FromClient_EntryTeamChanged = function(actorkeyRaw)
+  FromClient_LocalWarCombatPoint = function(actorkeyRaw)
   -- function num : 0_111 , upvalues : settingLocalWarCombatPoint
   if actorkeyRaw == nil then
     return 
@@ -3854,8 +3859,24 @@ end
   settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
 end
 
+  FromClient_EntryTeamChanged = function(actorkeyRaw)
+  -- function num : 0_112 , upvalues : settingLocalWarCombatPoint
+  if actorkeyRaw == nil then
+    return 
+  end
+  local playerActorWrapper = getPlayerActor(actorkeyRaw)
+  if playerActorWrapper == nil then
+    return 
+  end
+  local panel = (playerActorWrapper:get()):getUIPanel()
+  if panel == nil then
+    return 
+  end
+  settingLocalWarCombatPoint(actorkeyRaw, panel, playerActorWrapper)
+end
+
   FromClient_ObjectInstanceMpChanged = function(actorKeyRaw, panel)
-  -- function num : 0_112 , upvalues : settingMpBar
+  -- function num : 0_113 , upvalues : settingMpBar
   if actorKeyRaw == nil then
     return 
   end
@@ -3870,7 +3891,7 @@ end
 end
 
   FromClient_FlashBangStateChanged = function(actorKeyRaw, isFlashBangOn)
-  -- function num : 0_113 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
+  -- function num : 0_114 , upvalues : settingName, settingAlias, settingGuildInfo, settingGuildMarkAndPreemptiveStrike, settingLifeRankIcon, settingPlayerName, settingLocalWarCombatPoint, settingTitle
   if actorKeyRaw == nil then
     return 
   end
@@ -3896,7 +3917,7 @@ end
 end
 
   FromClient_ChangeMilitiaNameTag = function(actorKeyRaw)
-  -- function num : 0_114 , upvalues : settingName, settingAlias, settingTitle, settingLifeRankIcon, settingGuildInfo
+  -- function num : 0_115 , upvalues : settingName, settingAlias, settingTitle, settingLifeRankIcon, settingGuildInfo
   if actorKeyRaw == nil then
     return 
   end
@@ -3917,7 +3938,7 @@ end
 end
 
   FromClient_ShowOverheadRank = function(actorKeyRaw)
-  -- function num : 0_115 , upvalues : settingLifeRankIcon
+  -- function num : 0_116 , upvalues : settingLifeRankIcon
   if actorKeyRaw == nil then
     return 
   end
@@ -3969,6 +3990,7 @@ end
   registerEvent("FromClient_ChangeArenaAreaRegion", "FromClient_ChangeArenaAreaAndZoneState")
   registerEvent("FromClient_ChangeArenaZoneRegion", "FromClient_ChangeArenaAreaAndZoneState")
   registerEvent("FromClient_InstallationInfoWarning", "FromClient_InstallationInfoWarningNameTag")
+  registerEvent("FromClient_InstallationInfo", "FromClient_InstallationInfo")
   registerEvent("FromClient_ChangeTopRankUser", "FromClient_ChangeTopRankUser")
   registerEvent("FromClient_EventActorUpdateTitleKey", "FromClient_EventActorUpdateTitleKey")
   registerEvent("FromClient_LocalWarCombatPoint", "FromClient_LocalWarCombatPoint")

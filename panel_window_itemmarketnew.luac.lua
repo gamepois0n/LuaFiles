@@ -3603,10 +3603,10 @@ HandleClicked_ItemMarket_EditText = function()
   (self.edit_ItemName):SetEditText("", true)
   SetFocusEdit(self.edit_ItemName)
   if ToClient_WorldMapIsShow() then
-    SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
+    SetUIMode((Defines.UIMode).eUIMode_WorldMap)
   else
     if ItemMarket.escMenuSaveValue then
-      SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
+      SetUIMode((Defines.UIMode).eUIMode_Default)
     end
   end
   self.isSelectItem = false
@@ -3619,48 +3619,42 @@ HandleClicked_ItemMarket_SpecialEditText = function()
   (self.edit_SpecialItemName):SetEditText("", true)
   SetFocusEdit(self.edit_SpecialItemName)
   if ToClient_WorldMapIsShow() then
-    SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
+    SetUIMode((Defines.UIMode).eUIMode_WorldMap)
   else
     if ItemMarket.escMenuSaveValue then
-      SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
+      SetUIMode((Defines.UIMode).eUIMode_Default)
     end
   end
 end
 
 FGolbal_ItemMarketNew_Search = function()
-  -- function num : 0_63 , upvalues : IM, ItemMarket
+  -- function num : 0_63 , upvalues : ItemMarket
   _itemMarket_Search()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     SetUIMode((Defines.UIMode).eUIMode_WorldMap)
   else
     if ItemMarket.escMenuSaveValue then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
       SetUIMode((Defines.UIMode).eUIMode_Default)
     end
   end
 end
 
 FGolbal_ItemMarketNew_SpecialSearch = function()
-  -- function num : 0_64 , upvalues : IM, ItemMarket
+  -- function num : 0_64 , upvalues : ItemMarket
   _itemMarket_SpecialSearch()
   ClearFocusEdit()
   if ToClient_WorldMapIsShow() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     SetUIMode((Defines.UIMode).eUIMode_WorldMap)
   else
     if ItemMarket.escMenuSaveValue then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
       SetUIMode((Defines.UIMode).eUIMode_Default)
     end
   end
 end
 
 HandleClicked_ItemMarket_ClearEdit = function()
-  -- function num : 0_65 , upvalues : IM, ItemMarket
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_65 , upvalues : ItemMarket
   (ItemMarket.edit_ItemName):SetEditText("", true)
   SetFocusEdit(ItemMarket.edit_ItemName)
 end
@@ -3679,7 +3673,7 @@ HandleClicked_ItemMarket_RegistItem = function()
 end
 
 FGlobal_ItemMarketNew_Open = function()
-  -- function num : 0_67 , upvalues : ItemMarket, IM, selectedKey, tree2IndexMap
+  -- function num : 0_67 , upvalues : ItemMarket, selectedKey, tree2IndexMap
   local self = ItemMarket
   -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -3725,8 +3719,6 @@ FGlobal_ItemMarketNew_Open = function()
   (self.invenMoneyTit):SetCheck(false)
   ;
   (self.warehouseMoneyTit):SetCheck(true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   ;
   (self.btn_MyList):SetShow(false)
   ;
@@ -4142,15 +4134,13 @@ FGlobal_ItemMarket_OpenByMaid = function()
 end
 
 FGolbal_ItemMarketNew_Close = function()
-  -- function num : 0_70 , upvalues : selectedKey, IM, isOpenByMaid, ItemMarket
+  -- function num : 0_70 , upvalues : selectedKey, isOpenByMaid, ItemMarket
   if Panel_Window_ItemMarket:IsShow() == false or Panel_Window_ItemMarket:IsUISubApp() == true then
     return 
   end
   selectedKey = -1
   _itemMarket_ShowIconToolTip(false)
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   _itemMarket_HideToolTip()
   Panel_Window_ItemMarket:SetShow(false)
   if not Panel_Window_ItemMarket_Function:GetShow() and isOpenByMaid == true then
@@ -4161,7 +4151,7 @@ FGolbal_ItemMarketNew_Close = function()
     (ItemMarket.btn_RegistItem):SetShow(false)
     FGlobal_ReturnIsByMaid()
   end
-  -- DECOMPILER ERROR at PC64: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
 
   if not Panel_Window_ItemMarket_Function:GetShow() and ItemMarket.escMenuSaveValue == true then
     ItemMarket.escMenuSaveValue = false

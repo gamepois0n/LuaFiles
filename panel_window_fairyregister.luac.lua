@@ -50,10 +50,8 @@ FairyRegister.SetPosition = function(self)
 end
 
 HandleClicked_FairyRegister_ClearEdit = function()
-  -- function num : 0_2 , upvalues : FairyRegister, IM
+  -- function num : 0_2 , upvalues : FairyRegister
   local self = FairyRegister
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   ;
   (self.uiEdit_FairyName):SetEditText("", false)
   SetFocusEdit(self.uiEdit_FairyName)

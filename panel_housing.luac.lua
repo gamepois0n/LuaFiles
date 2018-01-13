@@ -1782,7 +1782,7 @@ Panel_Housing_CheckIsDeleteAllObject_MouseLUp = function()
           if freeInventorySlot < installedCount then
             msgContent = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_4", "InstalledCount", installedCount, "FreeInventorySlot", freeInventorySlot)
           else
-            msgContent = installedCount .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_5")
+            msgContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_5", "count", installedCount)
           end
           local messageboxData = {title = titleString, content = msgContent, functionYes = installed_Delete_All, functionCancel = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
           ;

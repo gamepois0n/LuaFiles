@@ -320,15 +320,15 @@ local workerManager_Initiallize = function()
     ;
     (self._reDoAll):SetSize(80, 30)
     ;
-    (self._btnUpgradeNow):SetSize(120, 30)
+    (self._btnUpgradeNow):SetSize(150, 30)
     ;
     (self._btnFire):SetSize(120, 30)
     ;
     (self._restoreAll):SetSpanSize(11, 8)
     ;
-    (self._reDoAll):SetSpanSize(-94, 8)
+    (self._reDoAll):SetSpanSize(-97, 8)
     ;
-    (self._btnUpgradeNow):SetSpanSize(0, 8)
+    (self._btnUpgradeNow):SetSpanSize(20, 8)
     ;
     (self._btnFire):SetSpanSize(13, 8)
     ;

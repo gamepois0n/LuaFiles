@@ -79,20 +79,11 @@ looting.init = function(self)
 end
 
 local closePanelLooting = function()
-  -- function num : 0_3 , upvalues : _buttonLootAll, IM
+  -- function num : 0_3 , upvalues : _buttonLootAll
   if Panel_Looting:IsShow() then
     Panel_Looting:SetShow(false, false)
     _buttonLootAll:ClearDisableTime()
-    if AllowChangeInputMode() then
-      if check_ShowWindow() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
     if Panel_Looting:IsShow() == false then
       Panel_Looting_Value_isCloseLooting = true
     end
@@ -109,16 +100,13 @@ Panel_Looting_Update = function(empty)
     Panel_Looting:SetShow(true, true)
     Panel_Looting_Value_isCloseLooting = false
   end
-  if Panel_Chatting_Input:GetShow() then
-    (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
-  end
   if looting_isPickItemToServant() then
     _buttonLootAllToServant:SetShow(true)
   else
     _buttonLootAllToServant:SetShow(false)
   end
   local lootingCount = looting_getItemCount()
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC36: Confused about usage of register: R2 in 'UnsetPending'
 
   looting.remainItemCnt = 0
   for ii = 1, looting.MAX_LOOTING_SLOT_COUNT do
@@ -126,7 +114,7 @@ Panel_Looting_Update = function(empty)
     local itemWrapper = looting_getItem(ii - 1)
     if itemWrapper ~= nil then
       slot:setItem(itemWrapper)
-      -- DECOMPILER ERROR at PC68: Confused about usage of register: R8 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC57: Confused about usage of register: R8 in 'UnsetPending'
 
       looting.remainItemCnt = looting.remainItemCnt + 1
     else

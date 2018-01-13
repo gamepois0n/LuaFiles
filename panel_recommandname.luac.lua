@@ -28,7 +28,7 @@ SendMailForHelpInit = function()
 end
 
 HandleClicked_SendMailForHelp = function()
-  -- function num : 0_1 , upvalues : uiStaticContentHelper, _helpMailType, HelpMailType, uiEditName, IM
+  -- function num : 0_1 , upvalues : uiStaticContentHelper, _helpMailType, HelpMailType, uiEditName
   local content = uiStaticContentHelper:GetText()
   local title = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_RECOMMANDGIFT")
   if _helpMailType == HelpMailType.eHelpMailType_Thanks then
@@ -45,22 +45,13 @@ HandleClicked_SendMailForHelp = function()
   end
   ToClient_SendMailForHelp(uiEditName:GetEditText(), title, content)
   Panel_RecommandName:SetShow(false, false)
-  if AllowChangeInputMode() then
-    if check_ShowWindow() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
   uiEditName:SetEditText("", true)
   ClearFocusEdit()
+  CheckChattingInput()
 end
 
 FromClient_SendMailForHelp = function(helpMailType)
-  -- function num : 0_2 , upvalues : _helpMailType, uiStaticContentHelper, uiButtonApply, HelpMailType, uiStaticTitle, uiStaticWarnning, uiEditName, IM
+  -- function num : 0_2 , upvalues : _helpMailType, uiStaticContentHelper, uiButtonApply, HelpMailType, uiStaticTitle, uiStaticWarnning, uiEditName
   Panel_RecommandName:SetShow(true, false)
   _helpMailType = helpMailType
   uiStaticContentHelper:SetShow(true)
@@ -83,8 +74,6 @@ FromClient_SendMailForHelp = function(helpMailType)
     end
   end
   SetFocusEdit(uiEditName)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 FromClient_SendMailForHelpComplete = function(isSender, helpMailType)
@@ -105,20 +94,11 @@ FromClient_SendMailForHelpComplete = function(isSender, helpMailType)
 end
 
 FGlobal_SendMailForHelpClose = function()
-  -- function num : 0_4 , upvalues : IM, uiEditName
+  -- function num : 0_4 , upvalues : uiEditName
   Panel_RecommandName:SetShow(false, false)
-  if AllowChangeInputMode() then
-    if check_ShowWindow() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
   uiEditName:SetEditText("", true)
   ClearFocusEdit()
+  CheckChattingInput()
 end
 
 registerEvent("FromClient_SendMailForHelp", "FromClient_SendMailForHelp")

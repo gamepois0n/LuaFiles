@@ -360,10 +360,10 @@ FGlobal_FriendMessanger_CheckUiEdit = function(targetUI)
   end
 end
 
--- DECOMPILER ERROR at PC43: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC42: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_FriendMessanger.Close = function(self, messangerId)
-  -- function num : 0_6 , upvalues : IM
+  -- function num : 0_6
   local messanger = (PaGlobal_FriendMessanger._messangerList)[messangerId]
   ToClient_CloseMessanger(messangerId)
   messanger:Clear()
@@ -377,28 +377,22 @@ PaGlobal_FriendMessanger.Close = function(self, messangerId)
     PaGlobal_FriendMessanger._currentFocusId = -1
     ClearFocusEdit()
   end
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
--- DECOMPILER ERROR at PC47: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_FriendMessanger.SetFocusEdit = function(self, messangerId)
-  -- function num : 0_7 , upvalues : IM
+  -- function num : 0_7
   local messanger = (PaGlobal_FriendMessanger._messangerList)[messangerId]
   SetFocusEdit((messanger._ui)._editInputChat)
   -- DECOMPILER ERROR at PC8: Confused about usage of register: R3 in 'UnsetPending'
 
   PaGlobal_FriendMessanger._currentFocusId = messangerId
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 FGlobal_FriendMessanger_KillFocusEdit = function()
-  -- function num : 0_8 , upvalues : IM
+  -- function num : 0_8
   if PaGlobal_FriendMessanger._currentFocusId == -1 then
     return false
   end
@@ -406,22 +400,18 @@ FGlobal_FriendMessanger_KillFocusEdit = function()
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_FriendMessanger._currentFocusId = -1
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
   return false
 end
 
--- DECOMPILER ERROR at PC53: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC50: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_FriendMessanger.SendMessageByKeyboard = function(self)
   -- function num : 0_9
   PaGlobal_FriendMessanger:SendMessage(PaGlobal_FriendMessanger._currentFocusId)
 end
 
--- DECOMPILER ERROR at PC56: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC53: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_FriendMessanger.SendMessage = function(self, messangerId)
   -- function num : 0_10
@@ -434,24 +424,15 @@ PaGlobal_FriendMessanger.SendMessage = function(self, messangerId)
   ((messanger._ui)._editInputChat):SetEditText("", true)
 end
 
--- DECOMPILER ERROR at PC60: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC56: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_FriendMessanger.UpdateLogOnOff = function(self, messangerId, isOnline)
-  -- function num : 0_11 , upvalues : IM
+  -- function num : 0_11
   local messanger = (self._messangerList)[messangerId]
   if messangerId == self._currentFocusId and messangerId ~= -1 then
     self._currentFocusId = -1
     ClearFocusEdit()
-    if AllowChangeInputMode() then
-      if (UI.checkShowWindow)() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
   end
   if messanger ~= nil then
     if isOnline == 1 then

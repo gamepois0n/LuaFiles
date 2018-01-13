@@ -16,6 +16,7 @@ PaGlobal_GuildBattlePoint.initilize = function(self)
   round._bg = (UI.getChildControl)(Panel_GuidlBattle_Point, "StaticText_Center")
   round._timer = (UI.getChildControl)(round._bg, "StaticText_Time")
   round._staticText_BattleMode = (UI.getChildControl)(round._bg, "StaticText_BattleMode")
+  round._staticText_BattleStateDetail = (UI.getChildControl)(round._bg, "StaticText_BattleStateDetail")
   self._round = round
   self._guildAPoint = (UI.getChildControl)(self._guildAName, "StaticText_LeftPoint")
   self._guildBPoint = (UI.getChildControl)(self._guildBName, "StaticText_RightPoint")
@@ -78,6 +79,8 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
   local round = ToClient_GuildBattle_GetBattleCurrentRound()
   local guildA = ToClient_GuildBattle_GetCurrentServerGuildBattleInfo(0)
   local guildB = ToClient_GuildBattle_GetCurrentServerGuildBattleInfo(1)
+  ;
+  ((self._round)._staticText_BattleStateDetail):SetShow(false)
   if battleState == BattleStates.Idle then
     ((self._round)._bg):SetText("")
   else
@@ -86,12 +89,24 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
     else
       if battleState == BattleStates.Ready then
         ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
+        ;
+        ((self._round)._staticText_BattleStateDetail):SetShow(true)
+        ;
+        ((self._round)._staticText_BattleStateDetail):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_READYSTATE_SHORT"))
       else
         if battleState == BattleStates.SelectEntry then
           ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
+          ;
+          ((self._round)._staticText_BattleStateDetail):SetShow(true)
+          ;
+          ((self._round)._staticText_BattleStateDetail):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SELECTENTRY_SHORT"))
         else
           if battleState == BattleStates.SelectAttend then
             ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
+            ;
+            ((self._round)._staticText_BattleStateDetail):SetShow(true)
+            ;
+            ((self._round)._staticText_BattleStateDetail):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SELECTATTEND_SHORT"))
           else
             if battleState == BattleStates.Fight then
               ((self._round)._bg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_COMPETITION_ROUND", "round", round))
@@ -115,7 +130,21 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
   ;
   ((self._round)._staticText_BattleMode):SetShow(false)
   if battleState == BattleStates.Fight or battleState == BattleStates.SelectEntry or battleState == BattleStates.SelectAttend or battleState == BattleStates.Ready then
-    ((self._round)._staticText_BattleMode):SetShow(false)
+    ((self._round)._staticText_BattleMode):SetShow(true)
+    if battleMode == BattleModes.Normal then
+      ((self._round)._staticText_BattleMode):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_NORMAL"))
+    else
+      if battleMode == BattleModes.OneOne then
+        ((self._round)._staticText_BattleMode):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ONEONE"))
+      else
+        if battleMode == BattleModes.All then
+          ((self._round)._staticText_BattleMode):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ALL"))
+        else
+          ;
+          ((self._round)._staticText_BattleMode):SetText("")
+        end
+      end
+    end
   end
   ;
   (self._guildASurvivorCount):SetShow(false)
@@ -131,7 +160,7 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
     (self._guildAPoint):SetText(guildA:winPoint())
     ;
     (self._guildBPoint):SetText(guildB:winPoint())
-    -- DECOMPILER ERROR at PC210: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC304: Unhandled construct in 'MakeBoolean' P1
 
     if battleMode == BattleModes.Normal and battleState == BattleStates.Fight then
       (self._guildASurvivorCount):SetShow(true)
@@ -146,9 +175,9 @@ PaGlobal_GuildBattlePoint.UpdateRoundAndScore = function(self)
     end
   end
   do
-    -- DECOMPILER ERROR at PC259: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC361: Unhandled construct in 'MakeBoolean' P1
 
-    if battleMode == BattleModes.OneOne and (battleState == BattleStates.Fight or battleState == BattleStates.Ready) then
+    if battleMode == BattleModes.OneOne and (battleState == BattleStates.Fight or battleState == BattleStates.Ready or battleState == BattleStates.Teleport or battleState == BattleStates.SelectAttend) then
       (self._oneonePointBg):SetShow(true)
       ;
       (self._guildAOneOnePoint):SetText(guildA:getModeWinScore())

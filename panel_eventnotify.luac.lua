@@ -132,16 +132,13 @@ EventNotify_Open = function(isDo, isMenu)
 end
 
 EventNotify_Close = function()
-  -- function num : 0_4 , upvalues : IM
+  -- function num : 0_4
   audioPostEvent_SystemUi(13, 5)
   Panel_EventNotify:SetShow(false, false)
   _Web:ResetUrl()
   FGlobal_LevelupGuide_Open()
   if not tempWrapper:isEventBeforeShow() then
     tempWrapper:setEventBeforeShow(true)
-  else
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
   end
 end
 

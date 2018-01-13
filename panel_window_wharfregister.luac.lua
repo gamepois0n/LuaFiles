@@ -193,12 +193,10 @@ WharfRegister_Register = function()
 end
 
 WharfRegister_ClearEdit = function()
-  -- function num : 0_6 , upvalues : wharfRegister, IM
+  -- function num : 0_6 , upvalues : wharfRegister
   local self = wharfRegister
   ;
   (self._editEditName):SetEditText("", true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 WharfRegister_OpenByInventory = function(inventoryType, inventorySlotNo)
@@ -240,15 +238,13 @@ WharfRegister_Open = function()
 end
 
 WharfRegister_Close = function()
-  -- function num : 0_10 , upvalues : IM
+  -- function num : 0_10
   audioPostEvent_SystemUi(0, 0)
   if not Panel_Window_WharfRegister:GetShow() then
     return 
   end
   audioPostEvent_SystemUi(1, 1)
   Panel_Window_WharfRegister:SetShow(false)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 wharfRegister:init()

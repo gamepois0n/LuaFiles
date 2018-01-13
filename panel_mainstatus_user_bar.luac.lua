@@ -534,8 +534,73 @@ Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate = function()
   end
 end
 
+local beforeMaxHp = 0
+local createRulerCount = 0
+local rulerControl = {}
+Panel_MainStatus_UserBar_SetRuler = function(maxHp)
+  -- function num : 0_17 , upvalues : beforeMaxHp, createRulerCount, rulerControl, selfPlayerStatusBar
+  if beforeMaxHp ~= maxHp then
+    if (math.floor)(maxHp / 100) > 1000 then
+      if createRulerCount > 0 then
+        for index = 0, createRulerCount - 1 do
+          (rulerControl[index]):SetShow(false)
+        end
+      end
+      do
+        beforeMaxHp = maxHp
+        do return  end
+        if createRulerCount < (math.floor)(maxHp / 100) then
+          for index = 0, (math.floor)(maxHp / 100) - 1 do
+            -- DECOMPILER ERROR at PC56: Confused about usage of register: R5 in 'UnsetPending'
+
+            if createRulerCount <= index then
+              if index % 10 == 9 then
+                rulerControl[index] = (UI.createAndCopyBasePropertyControl)(Panel_MainStatus_User_Bar, "Static_HP_1000Stick", Panel_MainStatus_User_Bar, "RulerControl_" .. index)
+              else
+                -- DECOMPILER ERROR at PC68: Confused about usage of register: R5 in 'UnsetPending'
+
+                rulerControl[index] = (UI.createAndCopyBasePropertyControl)(Panel_MainStatus_User_Bar, "Static_HP_100Stick", Panel_MainStatus_User_Bar, "RulerControl_" .. index)
+              end
+            end
+          end
+          createRulerCount = (math.floor)(maxHp / 100)
+        end
+        for index = 0, createRulerCount - 1 do
+          (rulerControl[index]):SetShow(false)
+        end
+        for index = 0, createRulerCount - 1 do
+          if createRulerCount > 1000 then
+            break
+          else
+            -- DECOMPILER ERROR at PC106: Unhandled construct in 'MakeBoolean' P1
+
+            if createRulerCount > 100 and index % 10 == 9 then
+              (rulerControl[index]):SetShow(true)
+            end
+          end
+          -- DECOMPILER ERROR at PC118: Unhandled construct in 'MakeBoolean' P1
+
+          if createRulerCount > 40 and index % 2 == 1 then
+            (rulerControl[index]):SetShow(true)
+          end
+          ;
+          (rulerControl[index]):SetShow(true)
+        end
+        do
+          for index = 0, createRulerCount - 1 do
+            (rulerControl[index]):SetPosX(5 + (selfPlayerStatusBar._staticHP_BG):GetPosX() + ((selfPlayerStatusBar._staticHP_BG):GetSizeX() - 12) / (createRulerCount + 1) * (index + 1))
+            ;
+            (rulerControl[index]):SetPosY(1)
+          end
+          beforeMaxHp = maxHp
+        end
+      end
+    end
+  end
+end
+
 Panel_MainStatus_User_Bar_Onresize = function()
-  -- function num : 0_17 , upvalues : _alertDanger
+  -- function num : 0_18 , upvalues : _alertDanger
   Panel_Danger:SetPosX(0)
   _alertDanger:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_MainStatus_User_Bar:ComputePos()
@@ -574,7 +639,7 @@ Panel_MainStatus_User_Bar_Onresize = function()
 end
 
 refreshHpAlertForLevelup = function()
-  -- function num : 0_18 , upvalues : checkHpAlert
+  -- function num : 0_19 , upvalues : checkHpAlert
   local playerWrapper = getSelfPlayer()
   local player = playerWrapper:get()
   local hp = (math.floor)(player:getHp())
@@ -583,7 +648,7 @@ refreshHpAlertForLevelup = function()
 end
 
 selfPlayerStatusBar.registMessageHandler = function(self)
-  -- function num : 0_19 , upvalues : selfPlayerStatusBar
+  -- function num : 0_20 , upvalues : selfPlayerStatusBar
   registerEvent("EventCharacterInfoUpdate", "Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate")
   registerEvent("FromClient_SelfPlayerHpChanged", "Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate")
   registerEvent("FromClient_SelfPlayerMpChanged", "Panel_MainStatus_User_Bar_CharacterInfoWindowUpdate")
@@ -604,7 +669,7 @@ selfPlayerStatusBar:checkLoad()
 selfPlayerStatusBar:init()
 selfPlayerStatusBar:registMessageHandler()
 SelfPlayerStatusBar_RefleshPosition = function()
-  -- function num : 0_20 , upvalues : selfPlayerStatusBar
+  -- function num : 0_21 , upvalues : selfPlayerStatusBar
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R0 in 'UnsetPending'
 
   selfPlayerStatusBar.posX = Panel_MainStatus_User_Bar:GetPosX()
@@ -614,7 +679,7 @@ SelfPlayerStatusBar_RefleshPosition = function()
 end
 
 SelfPlayerStatusBar_Vibrate_ByDamage = function(damagePercent, isbackAttack, isCritical)
-  -- function num : 0_21 , upvalues : UI_ANI_ADV, UI_AH, selfPlayerStatusBar
+  -- function num : 0_22 , upvalues : UI_ANI_ADV, UI_AH, selfPlayerStatusBar
   local periodTime = 0.015
   local moveCount = 6
   local randomizeValue = 7
@@ -648,13 +713,13 @@ Panel_MainStatus_User_Bar:addInputEvent("Mouse_On", "MainStatus_ChangeTexture_On
 Panel_MainStatus_User_Bar:addInputEvent("Mouse_Out", "MainStatus_ChangeTexture_Off()")
 Panel_MainStatus_User_Bar:addInputEvent("Mouse_LUp", "ResetPos_WidgetButton()")
 MainStatus_ChangeTexture_On = function()
-  -- function num : 0_22 , upvalues : mainBarText
+  -- function num : 0_23 , upvalues : mainBarText
   Panel_MainStatus_User_Bar:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_drag.dds")
   mainBarText:SetText(PAGetString(Defines.StringSheet_GAME, "MAINSTATUS_DRAG_BATTLERESOURCE"))
 end
 
 MainStatus_ChangeTexture_Off = function()
-  -- function num : 0_23 , upvalues : mainBarText
+  -- function num : 0_24 , upvalues : mainBarText
   if Panel_UIControl:IsShow() then
     Panel_MainStatus_User_Bar:ChangeTextureInfoName("new_ui_common_forlua/default/window_sample_isWidget.dds")
     mainBarText:SetText(PAGetString(Defines.StringSheet_GAME, "MAINSTATUS_BATTLERESOURCE"))
@@ -663,10 +728,10 @@ MainStatus_ChangeTexture_Off = function()
   end
 end
 
--- DECOMPILER ERROR at PC435: Confused about usage of register: R38 in 'UnsetPending'
+-- DECOMPILER ERROR at PC444: Confused about usage of register: R41 in 'UnsetPending'
 
 Panel_MainStatus_User_Bar.MainStatusShowToggle = function()
-  -- function num : 0_24
+  -- function num : 0_25
   local isShow = Panel_MainStatus_User_Bar:GetShow()
   if isShow == true then
     Panel_MainStatus_User_Bar:SetShow(false, true)
@@ -676,7 +741,7 @@ Panel_MainStatus_User_Bar.MainStatusShowToggle = function()
 end
 
 FGlobal_Panel_MainStatus_User_Bar_Show = function()
-  -- function num : 0_25 , upvalues : selfPlayerStatusBar
+  -- function num : 0_26 , upvalues : selfPlayerStatusBar
   Panel_MainStatus_User_Bar:SetShow(true, true)
   Panel_MainStatus_User_Bar:AddEffect("UI_Tuto_Hp_1", false, 0, -4)
   Panel_MainStatus_User_Bar:AddEffect("fUI_Tuto_Hp_01A", false, 0, -4)
@@ -692,7 +757,7 @@ FGlobal_Panel_MainStatus_User_Bar_Show = function()
 end
 
 mainStatus_AniOpen = function()
-  -- function num : 0_26 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
+  -- function num : 0_27 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
   Panel_MainStatus_User_Bar:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_IN)
   local MainStatusOpen_Alpha = Panel_MainStatus_User_Bar:addColorAnimation(0, 0.35, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   MainStatusOpen_Alpha:SetStartColor(UI_color.C_00FFFFFF)
@@ -701,7 +766,7 @@ mainStatus_AniOpen = function()
 end
 
 mainStatus_AniClose = function()
-  -- function num : 0_27 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
+  -- function num : 0_28 , upvalues : UI_PSFT, UI_ANI_ADV, UI_color
   Panel_MainStatus_User_Bar:SetShowWithFade(UI_PSFT.PAUI_ANI_TYPE_FADE_OUT)
   local MainStatusClose_Alpha = Panel_MainStatus_User_Bar:addColorAnimation(0, 0.25, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   MainStatusClose_Alpha:SetStartColor(UI_color.C_FFFFFFFF)
@@ -712,7 +777,7 @@ mainStatus_AniClose = function()
 end
 
 HP_TextOn = function()
-  -- function num : 0_28 , upvalues : selfPlayerStatusBar
+  -- function num : 0_29 , upvalues : selfPlayerStatusBar
   local playerWrapper = getSelfPlayer()
   local player = playerWrapper:get()
   local hp = (math.floor)(player:getHp())
@@ -723,7 +788,7 @@ HP_TextOn = function()
 end
 
 MP_TextOn = function()
-  -- function num : 0_29 , upvalues : selfPlayerStatusBar
+  -- function num : 0_30 , upvalues : selfPlayerStatusBar
   local playerWrapper = getSelfPlayer()
   local player = playerWrapper:get()
   local mp = player:getMp()
@@ -734,11 +799,11 @@ MP_TextOn = function()
 end
 
 HP_TextOff = function()
-  -- function num : 0_30
+  -- function num : 0_31
 end
 
 MP_TextOff = function()
-  -- function num : 0_31
+  -- function num : 0_32
 end
 
 changePositionBySever(Panel_MainStatus_User_Bar, (CppEnums.PAGameUIType).PAGameUIPanel_MainStatusBar, true, true, false)

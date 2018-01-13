@@ -442,14 +442,12 @@ FGlobal_GuildWebInfoFromGuildMain_Open = function()
 end
 
 GuildWebInfo_Close = function()
-  -- function num : 0_7 , upvalues : _Web, IM
+  -- function num : 0_7 , upvalues : _Web
   FGlobal_ClearCandidate()
   _Web:ResetUrl()
   ClearFocusEdit()
   audioPostEvent_SystemUi(13, 5)
   Panel_GuildWebInfo:SetShow(false, false)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 FGlobal_GuildWebInfoClose = function()

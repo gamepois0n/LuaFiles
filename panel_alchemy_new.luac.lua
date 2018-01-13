@@ -236,10 +236,10 @@ PaGlobal_Alchemy.showPanel = function(self, isCook, installationType)
   end
 end
 
--- DECOMPILER ERROR at PC110: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC109: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.closePanel = function(self)
-  -- function num : 0_4 , upvalues : IM
+  -- function num : 0_4
   FGlobal_Alchemy_ClearEditFocus()
   if Panel_Alchemy:IsShow() == false then
     return 
@@ -254,11 +254,9 @@ PaGlobal_Alchemy.closePanel = function(self)
   Panel_Alchemy:SetShow(false)
   PaGlobal_RecentCook:closePanel()
   InventoryWindow_Close()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.playPushItemAnimation = function(self, invenSlotIndex, itemCount)
   -- function num : 0_5 , upvalues : UI_ANI_ADV, UI_AH
@@ -285,7 +283,7 @@ PaGlobal_Alchemy.playPushItemAnimation = function(self, invenSlotIndex, itemCoun
   aniInfo2:SetRotateCount(1)
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC117: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.updateMaterialSlot = function(self)
   -- function num : 0_6
@@ -315,7 +313,7 @@ PaGlobal_Alchemy.updateMaterialSlot = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC121: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC120: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.updateKnowledgeList = function(self)
   -- function num : 0_7
@@ -344,7 +342,7 @@ PaGlobal_Alchemy.updateKnowledgeList = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC124: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC123: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.clearKnowledgeList = function(self)
   -- function num : 0_8
@@ -358,7 +356,7 @@ PaGlobal_Alchemy.clearKnowledgeList = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC128: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC127: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.setAlchemyDescriptionText = function(self, text)
   -- function num : 0_9 , upvalues : UI_TM
@@ -377,7 +375,7 @@ PaGlobal_Alchemy.setAlchemyDescriptionText = function(self, text)
   (ui._frameAlchemyDesc):UpdateContentPos()
 end
 
--- DECOMPILER ERROR at PC131: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC130: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.pushItemFromInventory = function(self, invenSlotIndex, itemCount)
   -- function num : 0_10
@@ -395,7 +393,7 @@ PaGlobal_Alchemy.pushItemFromInventory = function(self, invenSlotIndex, itemCoun
   end
 end
 
--- DECOMPILER ERROR at PC134: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC133: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.clearMaterialSlot = function(self)
   -- function num : 0_11
@@ -403,7 +401,7 @@ PaGlobal_Alchemy.clearMaterialSlot = function(self)
   self:updateMaterialSlot()
 end
 
--- DECOMPILER ERROR at PC137: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC136: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.showInventoryNumpad = function(self, slotIndex, itemCount)
   -- function num : 0_12
@@ -418,7 +416,7 @@ PaGlobal_Alchemy.showInventoryNumpad = function(self, slotIndex, itemCount)
 )
 end
 
--- DECOMPILER ERROR at PC140: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC139: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.selectKnowledge = function(self, knowledgeIndex)
   -- function num : 0_13
@@ -448,10 +446,10 @@ PaGlobal_Alchemy.selectKnowledge = function(self, knowledgeIndex)
   end
 end
 
--- DECOMPILER ERROR at PC144: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC142: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.startAlchemy = function(self, countProduction)
-  -- function num : 0_14 , upvalues : IM
+  -- function num : 0_14
   if ToClient_AlchemyGetCountSlotWithMaterial() <= 0 then
     return 
   end
@@ -466,20 +464,16 @@ PaGlobal_Alchemy.startAlchemy = function(self, countProduction)
   EventProgressBarShow(true, progressBarTimeSec, self._isCook == true and 7 or 9)
   audioPostEvent_SystemUi(1, 0)
   self:closePanel()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
+end
+
+-- DECOMPILER ERROR at PC145: Confused about usage of register: R7 in 'UnsetPending'
+
+PaGlobal_Alchemy.cancelAlchemy = function(self)
+  -- function num : 0_15
+  ToClient_AlchemyCancel()
 end
 
 -- DECOMPILER ERROR at PC148: Confused about usage of register: R7 in 'UnsetPending'
-
-PaGlobal_Alchemy.cancelAlchemy = function(self)
-  -- function num : 0_15 , upvalues : IM
-  ToClient_AlchemyCancel()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-end
-
--- DECOMPILER ERROR at PC151: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.popMaterial = function(self, slotIndex)
   -- function num : 0_16
@@ -488,7 +482,7 @@ PaGlobal_Alchemy.popMaterial = function(self, slotIndex)
   Panel_Tooltip_Item_hideTooltip()
 end
 
--- DECOMPILER ERROR at PC154: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC151: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.showMassProductionMessageBox = function(self)
   -- function num : 0_17
@@ -503,7 +497,7 @@ PaGlobal_Alchemy.showMassProductionMessageBox = function(self)
   (MessageBox.showMessageBox)(msgBoxData, "middle")
 end
 
--- DECOMPILER ERROR at PC157: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC154: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.askMassProductionQuantity = function(self)
   -- function num : 0_18
@@ -521,7 +515,7 @@ PaGlobal_Alchemy.askMassProductionQuantity = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC160: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC157: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.resumeMassProduction = function(self)
   -- function num : 0_19
@@ -529,26 +523,24 @@ PaGlobal_Alchemy.resumeMassProduction = function(self)
   self:startAlchemy(countDoingAlchemy)
 end
 
--- DECOMPILER ERROR at PC163: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC160: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.clearEditBoxSearchText = function(self)
   -- function num : 0_20
   ((PaGlobal_Alchemy._ui)._editBoxSearch):SetEditText("", false)
 end
 
--- DECOMPILER ERROR at PC167: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC163: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.clearFocusEdit = function(self)
-  -- function num : 0_21 , upvalues : IM
+  -- function num : 0_21
   if GetFocusEdit() == nil or (GetFocusEdit()):GetKey() ~= ((PaGlobal_Alchemy._ui)._editBoxSearch):GetKey() then
     return 
   end
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
--- DECOMPILER ERROR at PC170: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC166: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.handleMouseOn_ShowMaterialTooltip = function(self, slotIndex)
   -- function num : 0_22
@@ -557,14 +549,14 @@ PaGlobal_Alchemy.handleMouseOn_ShowMaterialTooltip = function(self, slotIndex)
   Panel_Tooltip_Item_Show(itemStatic, uiBase, true, false)
 end
 
--- DECOMPILER ERROR at PC173: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC169: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.handleMouseOut_HideMaterialTooltip = function(self)
   -- function num : 0_23
   Panel_Tooltip_Item_hideTooltip()
 end
 
--- DECOMPILER ERROR at PC176: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC172: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.handleMouseLUp_SearchButton = function(self)
   -- function num : 0_24
@@ -581,14 +573,14 @@ PaGlobal_Alchemy.handleMouseLUp_SearchButton = function(self)
   self:updateKnowledgeList()
 end
 
--- DECOMPILER ERROR at PC179: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC175: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.handleMouseLUp_CheckButtonLearntOnly = function(self)
   -- function num : 0_25
   self:updateKnowledgeList()
 end
 
--- DECOMPILER ERROR at PC182: Confused about usage of register: R7 in 'UnsetPending'
+-- DECOMPILER ERROR at PC178: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_Alchemy.handleMouseRUp_MaterialSlotIcon = function(self, slotIndex)
   -- function num : 0_26
@@ -631,7 +623,7 @@ FromClient_luaLoadComplete_PaGlobal_Alchemy = function()
 end
 
 FromClient_AlchemyFail_PaGlobal_Alchemy = function(isSuccess, hint, alchemyType, strErr, bDoingMassProduction)
-  -- function num : 0_33 , upvalues : IM
+  -- function num : 0_33
   do
     local isCook = alchemyType == 1
     if isSuccess == true then
@@ -659,8 +651,6 @@ FromClient_AlchemyFail_PaGlobal_Alchemy = function(isSuccess, hint, alchemyType,
 , priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
         ;
         (MessageBox.showMessageBox)(messageBoxData)
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
       end
     else
       Proc_ShowMessage_Ack(strErr)

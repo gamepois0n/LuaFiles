@@ -17,39 +17,39 @@ PaGlobal_TranslationText.Initialize = function(self)
   ;
   (self.desc1):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.desc1):SetText("BaseFont_8 : Haydutlar Kara Ejderi mühürlemiş.\nZayıf ve güçsüz görünüyor.\nÖn sırada olmak eğitimine konsantre olmasına yardımcı olmuş gibi görünüyor.\nDinleyin, dinleyin! En sevdiğiniz eğlence döndü! Çok kolay!\nKAtılmak ister misin?")
+  (self.desc1):SetText("BaseFont_8 : พี�\136 �\128ลี้ย�\135 �\128ครื่อง ชั้น ชี�\137")
   ;
   (self.desc2):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.desc2):SetText("BaseFont_10 : Haydutlar Kara Ejderi mühürlemiş.\nZayıf ve güçsüz görünüyor.\nÖn sırada olmak eğitimine konsantre olmasına yardımcı olmuş gibi görünüyor.\nDinleyin, dinleyin! En sevdiğiniz eğlence döndü! Çok kolay!\nKAtılmak ister misin?")
+  (self.desc2):SetText("BaseFont_10 : พี�\136 �\128ลี้ย�\135 �\128ครื่อง ชั้น ชี�\137")
   ;
   (self.desc3):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.desc3):SetText("BaseFont_12 : Haydutlar Kara Ejderi mühürlemiş.\nZayıf ve güçsüz görünüyor.\nÖn sırada olmak eğitimine konsantre olmasına yardımcı olmuş gibi görünüyor.\nDinleyin, dinleyin! En sevdiğiniz eğlence döndü! Çok kolay!\nKAtılmak ister misin?")
+  (self.desc3):SetText("BaseFont_12 : พี�\136 �\128ลี้ย�\135 �\128ครื่อง ชั้น ชี�\137")
   ;
   (self.nonBG1):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.nonBG1):SetText("BaseFont_8 : Haydutlar Kara Ejderi mühürlemiş.\nZayıf ve güçsüz görünüyor.\nÖn sırada olmak eğitimine konsantre olmasına yardımcı olmuş gibi görünüyor.\nDinleyin, dinleyin! En sevdiğiniz eğlence döndü! Çok kolay!\nKAtılmak ister misin?")
+  (self.nonBG1):SetText("BaseFont_8 : พี�\136 �\128ลี้ย�\135 �\128ครื่อง ชั้น ชี�\137")
   ;
   (self.nonBG2):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.nonBG2):SetText("BaseFont_10 : Haydutlar Kara Ejderi mühürlemiş.\nZayıf ve güçsüz görünüyor.\nÖn sırada olmak eğitimine konsantre olmasına yardımcı olmuş gibi görünüyor.\nDinleyin, dinleyin! En sevdiğiniz eğlence döndü! Çok kolay!\nKAtılmak ister misin?")
+  (self.nonBG2):SetText("BaseFont_10 : พี�\136 �\128ลี้ย�\135 �\128ครื่อง ชั้น ชี�\137")
   ;
   (self.nonBG3):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.nonBG3):SetText("BaseFont_12 : Haydutlar Kara Ejderi mühürlemiş.\nZayıf ve güçsüz görünüyor.\nÖn sırada olmak eğitimine konsantre olmasına yardımcı olmuş gibi görünüyor.\nDinleyin, dinleyin! En sevdiğiniz eğlence döndü! Çok kolay!\nKAtılmak ister misin?")
+  (self.nonBG3):SetText("BaseFont_12 : พี�\136 �\128ลี้ย�\135 �\128ครื่อง ชั้น ชี�\137")
   ;
   (self.num1):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.num1):SetText("BaseFont_8 : 1,234,567,890")
+  (self.num1):SetText("BaseFont_8 : 10,234,567,890")
   ;
   (self.num2):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.num2):SetText("BaseFont_10 : 1,234,567,890")
+  (self.num2):SetText("BaseFont_10 : 10,234,567,890")
   ;
   (self.num3):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;
-  (self.num3):SetText("BaseFont_12 : 1,234,567,890")
+  (self.num3):SetText("BaseFont_12 : 10,234,567,890")
   ;
   (self.itemdesc):SetTextMode(UI_TM.eTextMode_AutoWrap)
   ;

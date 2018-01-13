@@ -470,8 +470,7 @@ CashShopCart.countErase = function(self, index)
 end
 
 CashShopCart.OnEditInputMode = function(self, index)
-  -- function num : 0_18 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_18
   self._activeEditBoxUI = ((self._uiData)[index])[7]
   SetFocusEdit(self._activeEditBoxUI)
   ;
@@ -480,8 +479,7 @@ CashShopCart.OnEditInputMode = function(self, index)
 end
 
 CashShopCart.OutEditInputMode = function(self, isOkay)
-  -- function num : 0_19 , upvalues : IM, updateUI
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_19 , upvalues : updateUI
   local selectItem = (getIngameCashMall()):getCartItemByIndex(self._currentSlotIndex + self._activeEditBoxRow)
   do
     if isOkay then

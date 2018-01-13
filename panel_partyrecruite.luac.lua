@@ -78,8 +78,6 @@ PartyListRecruite_TextSet = function()
   if baseText == msg then
     ((self.control)._editText):SetEditText("")
   end
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
   SetFocusEdit((self.control)._editText)
   ;
   ((self.control)._editText):SetEditText(((self.control)._editText):GetEditText(), true)

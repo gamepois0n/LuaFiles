@@ -73,16 +73,15 @@ FromClient_ShowInventoryBag = function(bagType, bagSize, fromWhereType, fromSlot
   ;
   (self.textTitle):SetText(_title)
   self.bagWhereType = bagType
-  _PA_LOG("cylee", "FromClient_ShowInventoryBag() bagType:" .. tostring(bagType))
   for index = 0, bagSize - 1 do
-    -- DECOMPILER ERROR at PC113: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC105: Confused about usage of register: R10 in 'UnsetPending'
 
     (self.bg)[index] = {}
-    -- DECOMPILER ERROR at PC116: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC108: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.slot)[index] = {}
-    -- DECOMPILER ERROR at PC128: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC120: Confused about usage of register: R10 in 'UnsetPending'
 
     ;
     (self.bg)[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_Window_ClothInventory, "ColothInventory_SlotBg_" .. index)
@@ -222,11 +221,9 @@ ClothInven_HandleInventorySlotRClick = function(slotNo, itemWrapper, count, inve
   local itemCount = (itemWrapper:get()):getCount_s64()
   do
     local useNumberPad = not itemStatic:isStackable() or Int64toInt32(itemCount) > 1
-    _PA_LOG("cylee", "ClothInven_HandleInventorySlotRClick() useNumberPad:" .. tostring(useNumberPad))
     if useNumberPad then
       Panel_NumberPad_Show(true, itemCount, nil, function(inputNumber)
     -- function num : 0_5_0 , upvalues : inventoryType, slotNo, clothInven
-    _PA_LOG("cylee", "ClothInven_HandleInventorySlotRClick() inputNumber:" .. tostring(inputNumber))
     ToClient_ReqPushInventoryItemToInventoryBag(inventoryType, slotNo, clothInven.fromWhereType, clothInven.fromSlotNo, inputNumber)
   end
 )
@@ -241,17 +238,14 @@ ClothInven_HandleInventoryBagSlotRClick = function(fromWhereType, fromSlotNo, ba
   -- function num : 0_6
   local itemWrapper = getInventoryBagItemByType(fromWhereType, fromSlotNo, bagIndex)
   if not itemWrapper then
-    _PA_LOG("cylee", "ClothInven_HandleInventoryBagSlotRClick() no itemWrapper, fromWhereType:" .. tostring(fromWhereType) .. ", fromSlotNo:" .. tostring(fromSlotNo) .. ", bagIndex:" .. tostring(bagIndex) .. ", bagWhereType:" .. tostring(bagWhereType))
     return 
   end
   local itemCount = (itemWrapper:get()):getCount_s64()
   do
     local useNumberPad = not (itemWrapper:getStaticStatus()):isStackable() or Int64toInt32(itemCount) > 1
-    _PA_LOG("cylee", "ClothInven_HandleInventoryBagSlotRClick() itemCount:" .. tostring(itemCount) .. ", useNumberPad:" .. tostring(useNumberPad))
     if useNumberPad then
       Panel_NumberPad_Show(true, itemCount, nil, function(inputNumber)
     -- function num : 0_6_0 , upvalues : fromWhereType, fromSlotNo, bagIndex, bagWhereType
-    _PA_LOG("cylee", "ClothInven_HandleInventoryBagSlotRClick() inputNumber:" .. tostring(inputNumber))
     ToClient_ReqPopInventoryBagItemToInventory(fromWhereType, fromSlotNo, bagIndex, bagWhereType, inputNumber)
   end
 )

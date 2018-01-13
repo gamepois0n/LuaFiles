@@ -1086,18 +1086,15 @@ HandleClicked_HouseInstallation_ItemFilter = function(itemType)
 end
 
 HandleClicked_HouseInstallation_EditItemNameClear = function()
-  -- function num : 0_26 , upvalues : HouseInstallation, IM
+  -- function num : 0_26 , upvalues : HouseInstallation
   local self = HouseInstallation
   ;
   (self.edit_ItemName):SetEditText("", true)
   SetFocusEdit(self.edit_ItemName)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 HandleClicked_HouseInstallation_FindItemName = function()
-  -- function num : 0_27 , upvalues : IM, HouseInstallation
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_27 , upvalues : HouseInstallation
   local self = HouseInstallation
   local inputKeyword = (self.edit_ItemName):GetEditText()
   ClearFocusEdit()
@@ -1367,15 +1364,13 @@ FromClient_ShowHousingModeUI = function(isShow)
 end
 
 FromClient_CancelInstallModeMessageBox = function()
-  -- function num : 0_46 , upvalues : IM
+  -- function num : 0_46
   audioPostEvent_SystemUi(1, 33)
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_MEMO")
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "INSTALLATION_MODE_EXIT_MESSAGEBOX_TITLE"), content = messageBoxMemo, functionYes = HandleClicked_HouseInstallation_Exit_DO, functionCancel = _houseInstallation_Default_Cancel_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   local isExist = (MessageBox.doHaveMessageBoxData)(messageboxData.title)
   if isExist == false then
     (MessageBox.showMessageBox)(messageboxData)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   end
 end
 
@@ -1387,7 +1382,7 @@ FGlobal_House_InstallationMode_Update = function()
 end
 
 FGlobal_House_InstallationMode_Open = function()
-  -- function num : 0_48 , upvalues : HouseInstallation, IM
+  -- function num : 0_48 , upvalues : HouseInstallation
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   HouseInstallation.filter_ItemType = -1
@@ -1414,8 +1409,6 @@ FGlobal_House_InstallationMode_Open = function()
     HouseInstallation._isMyHouse = false
   end
   HouseInstallation:Open()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 EventHousingPointUpdate = function()

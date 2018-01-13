@@ -99,7 +99,10 @@ CreateListContent_GuildBattle_AttendMember = function(content, index)
     EnableText(staticText_Level, isEnableText)
     staticText_Name:SetText(memberInfo:getCharacterName())
     EnableText(staticText_Name, isEnableText)
-    -- DECOMPILER ERROR: 9 unprocessed JMP targets
+    if ToClient_GuildBattle_IsWaitingAttendSelectResult() == true or ToClient_GuildBattle_IsAttendMemberConfirmed() == true then
+      EnableControl(checkBtn_AsAttend, false)
+    end
+    -- DECOMPILER ERROR: 11 unprocessed JMP targets
   end
 end
 
@@ -219,10 +222,18 @@ end
 
 PaGlobal_GuildBattle_SelectAttend.UpdateConfirmButton = function(self)
   -- function num : 0_10 , upvalues : EnableControl
-  if ToClient_GuildBattle_IsAttendMemberComplete() == true and self._canSelectAttend == true then
-    EnableControl((self._ui)._btn_ConfirmAttend, true)
-  else
+  if ToClient_GuildBattle_IsAttendMemberConfirmed() == true then
     EnableControl((self._ui)._btn_ConfirmAttend, false)
+  else
+    if ToClient_GuildBattle_IsAttendMemberComplete() == true and self._canSelectAttend == true then
+      if ToClient_GuildBattle_IsWaitingAttendSelectResult() == true then
+        EnableControl((self._ui)._btn_ConfirmAttend, false)
+      else
+        EnableControl((self._ui)._btn_ConfirmAttend, true)
+      end
+    else
+      EnableControl((self._ui)._btn_ConfirmAttend, false)
+    end
   end
 end
 
@@ -231,6 +242,7 @@ end
 PaGlobal_GuildBattle_SelectAttend.ConfirmAttendMember = function(self)
   -- function num : 0_11
   ToClient_GuildBattle_ConfirmAttendMember()
+  self:UpdateMemberInfo()
 end
 
 FromClient_luaLoadComplete_GuildBattle_SelectAttend = function()
@@ -238,10 +250,15 @@ FromClient_luaLoadComplete_GuildBattle_SelectAttend = function()
   PaGlobal_GuildBattle_SelectAttend:Initialize()
 end
 
-FromClient_GuildBattle_SelectAttendFailed = function()
+FromClient_GuildBattle_SelectAttendResult = function(isSuccess)
   -- function num : 0_13
+  if isSuccess == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SETATTENDFINISHED"))
+  else
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SETATTENDFAILED"))
+  end
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_GuildBattle_SelectAttend")
-registerEvent("FromClient_selectAttendFailed", "FromClient_GuildBattle_SelectAttendFailed")
+registerEvent("FromClient_selectAttendResult", "FromClient_GuildBattle_SelectAttendResult")
 

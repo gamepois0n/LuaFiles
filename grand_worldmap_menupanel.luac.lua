@@ -273,15 +273,6 @@ FGlobal_WorldMapOpenForMenu = function()
   Panel_Worldmap_MovieGuide_Init()
   if isGameTypeKR2() then
     HelpMenu_Btn:SetShow(false)
-  else
-    if isGameTypeKorea() then
-      local checkAgeType = ToClient_isAdultUser()
-      if checkAgeType then
-        HelpMenu_Btn:SetShow(true)
-      else
-        HelpMenu_Btn:SetShow(false)
-      end
-    end
   end
 end
 

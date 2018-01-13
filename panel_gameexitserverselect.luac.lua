@@ -811,6 +811,7 @@ HandleClicked_ChannelSelect = function(selectChannel)
     local isInSiegeBattle = deadMessage_isInSiegeBattle()
     if tempChannel ~= nil then
       local busyState = tempChannel._busyState
+      local isSpecialCharacter = (getTemporaryInformationWrapper()):isSpecialCharacter()
       if busyState == 0 then
         local messageMemo = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_DONTJOIN")
         Proc_ShowMessage_Ack(messageMemo)
@@ -818,7 +819,7 @@ HandleClicked_ChannelSelect = function(selectChannel)
       else
         do
           do
-            if ((getSelfPlayer()):get()):isBattleGroundDefine() == true and tempChannel._isSiegeChannel == true then
+            if (((getSelfPlayer()):get()):isBattleGroundDefine() == true and tempChannel._isSiegeChannel == true) or tempChannel._isSiegeChannel == true and isSpecialCharacter then
               local messageMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_BATTLEGROURND")
               Proc_ShowMessage_Ack(messageMemo)
               return 

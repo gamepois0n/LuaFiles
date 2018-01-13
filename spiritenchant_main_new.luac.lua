@@ -443,7 +443,7 @@ PaGlobal_Enchant.initialize = function(self)
   ;
   ((self._ui)._statictext_noticeApplyButton):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   ;
-  ((self._ui)._statictext_noticeApplyButton):SetAutoResize(false)
+  ((self._ui)._statictext_noticeApplyButton):SetAutoResize(true)
   ;
   ((self._ui)._radiobutton_EnchantTab):addInputEvent("Mouse_LUp", "PaGlobal_Enchant:handleLUpEnchantTab()")
   ;
@@ -1025,7 +1025,7 @@ end
 
 -- DECOMPILER ERROR at PC1473: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Enchant.setTextBonusStats = function(self, DD, HIT, DV, PV, HP, MP, isReturn)
+PaGlobal_Enchant.setTextBonusStats = function(self, DD, HIT, DV, HDV, PV, HPV, HP, MP, isReturn)
   -- function num : 0_42
   local str = ""
   if DD > 0 then
@@ -1043,11 +1043,17 @@ PaGlobal_Enchant.setTextBonusStats = function(self, DD, HIT, DV, PV, HP, MP, isR
     end
     str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_DV") .. tostring(DV)
   end
+  if HDV > 0 then
+    str = str .. "(+" .. tostring(HDV) .. ")"
+  end
   if PV > 0 then
     if str ~= "" then
       str = str .. " / "
     end
     str = str .. PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_CRONSTONE_ADD_PV") .. tostring(PV)
+  end
+  if HPV > 0 then
+    str = str .. "(+" .. tostring(HPV) .. ")"
   end
   if HP > 0 then
     if str ~= "" then
@@ -1118,7 +1124,7 @@ PaGlobal_Enchant.initCronLevelAndCountText = function(self, maxLevel)
             local itemClassifyType = itemSSW:getItemClassify()
             local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
             local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, idx)
-            local addText = self:setTextBonusStats(cronEnchantSSW:getAddedDD(), cronEnchantSSW:getAddedHIT(), cronEnchantSSW:getAddedDV(), cronEnchantSSW:getAddedPV(), cronEnchantSSW:getAddedMaxHP(), cronEnchantSSW:getAddedMaxMP(), true)
+            local addText = self:setTextBonusStats(cronEnchantSSW:getAddedDD(), cronEnchantSSW:getAddedHIT(), cronEnchantSSW:getAddedDV(), cronEnchantSSW:getAddedHDV(), cronEnchantSSW:getAddedPV(), cronEnchantSSW:getAddedHPV(), cronEnchantSSW:getAddedMaxHP(), cronEnchantSSW:getAddedMaxMP(), true)
             ;
             (((self._ui)._statictext_AddStat)[idx]):SetText(addText)
           end
@@ -1127,17 +1133,17 @@ PaGlobal_Enchant.initCronLevelAndCountText = function(self, maxLevel)
               countControl:SetShow(false)
               ;
               ((self._ui)._stackTitle):SetShow(false)
-              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_STMT
 
-              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC179: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC183: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end
@@ -1191,6 +1197,11 @@ end
 
 PaGlobal_Enchant.setEnchantFailCount = function(self)
   -- function num : 0_45
+  if self._enchantInfo == nil then
+    self._enchantInfo = getEnchantInformation()
+    ;
+    (self._enchantInfo):ToClient_clearData()
+  end
   local failCount = (self._enchantInfo):ToClient_getFailCount()
   local valksCount = (self._enchantInfo):ToClient_getValksCount()
   ;
@@ -1346,6 +1357,8 @@ PaGlobal_Enchant.showNoticeEnchantApply = function(self, enchantType)
         end
         ;
         ((self._ui)._statictext_noticeApplyButton):SetShow(true)
+        ;
+        ((self._ui)._statictext_noticeApplyButton):SetPosY((((self._ui)._statictext_noticeApplyButton):GetSizeY() + 5) * -1)
       end
     end
   end
@@ -1432,7 +1445,7 @@ PaGlobal_Enchant.handleMOnAddStat = function(self, index)
     local itemClassifyType = itemSSW:getItemClassify()
     local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
     local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, index)
-    local addText = self:setTextBonusStats(cronEnchantSSW:getAddedDD(), cronEnchantSSW:getAddedHIT(), cronEnchantSSW:getAddedDV(), cronEnchantSSW:getAddedPV(), cronEnchantSSW:getAddedMaxHP(), cronEnchantSSW:getAddedMaxMP(), true)
+    local addText = self:setTextBonusStats(cronEnchantSSW:getAddedDD(), cronEnchantSSW:getAddedHIT(), cronEnchantSSW:getAddedDV(), cronEnchantSSW:getAddedHDV(), cronEnchantSSW:getAddedPV(), cronEnchantSSW:getAddedHPV(), cronEnchantSSW:getAddedMaxHP(), cronEnchantSSW:getAddedMaxMP(), true)
     TooltipSimple_Show(((self._ui)._addStatBg)[index], addText)
   end
 end

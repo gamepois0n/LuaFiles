@@ -354,7 +354,7 @@ DeliveryRequestWindow_Open = function()
   ;
   (deliveryRequest.staticGoldIcon):SetPosY((deliveryRequest.staticText_Total_Title):GetPosY() + (deliveryRequest.staticText_Total_Title):GetSizeY() + 3)
   ;
-  (deliveryRequest.button_Send):SetPosY((deliveryRequest.deliveryHelpBG):GetPosY() + (deliveryRequest.deliveryHelpBG):GetSizeY() + 10)
+  (deliveryRequest.button_Send):SetPosY((deliveryRequest.deliveryHelpBG):GetPosY() + (deliveryRequest.deliveryHelpBG):GetSizeY() + 5)
   Panel_Window_Delivery_Request:SetSize(Panel_Window_Delivery_Request:GetSizeX(), (deliveryRequest.button_Send):GetPosY() + (deliveryRequest.button_Send):GetSizeY() + 7)
   DeliveryInformationWindow_Close()
   if not Panel_Window_Delivery_Request:IsShow() then

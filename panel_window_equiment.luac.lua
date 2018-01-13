@@ -794,12 +794,7 @@ Equipment_updateSlotData = function()
         (equip.checkBox_AlchemyStone):SetShow(true)
       end
     end
-    if ToClient_IsContentsGroupOpen("335") == true then
-      ((self.slotBGs)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]):SetShow(true)
-      ;
-      (((self.slots)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]).icon):SetShow(true)
-    else
-      ;
+    if ToClient_IsContentsGroupOpen("335") == false then
       ((self.slotBGs)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]):SetShow(false)
       ;
       (((self.slots)[(CppEnums.EquipSlotNoClient).eEquipSlotNoQuestBook]).icon):SetShow(false)

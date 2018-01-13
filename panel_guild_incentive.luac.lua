@@ -532,18 +532,9 @@ FGlobal_CheckGuildIncentiveUiEdit = function(targetUI)
 end
 
 FGlobal_GuildIncentiveClearFocusEdit = function()
-  -- function num : 0_15 , upvalues : IM
+  -- function num : 0_15
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 Panel_Guild_Incentive_Foundation_Open = function()

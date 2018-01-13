@@ -104,8 +104,8 @@ PaGlobal_Enchant.setEnchantTarget = function(self, slotNo, itemWrapper, inventor
     end
   end
   do
-    local equipType = (itemWrapper:getStaticStatus()):getEquipType()
-    if equipType == 15 or equipType == 16 or equipType == 17 or equipType == 18 then
+    local equipType = (itemWrapper:getStaticStatus()):getItemClassify()
+    if (CppEnums.ItemClassifyType).eItemClassify_Accessory == equipType then
       isMonotone = true
     end
     self._grantItemSlotNo = slotNo
@@ -131,7 +131,7 @@ PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone)
   end
   local enchantItemClassify = (itemWrapper:getStaticStatus()):getItemClassify()
   local enchantLevel = ((itemWrapper:get()):getKey()):getEnchantLevel()
-  if enchantLevel > 15 or enchantItemClassify == 4 then
+  if enchantLevel > 16 or enchantItemClassify == 4 then
     self:setEnable_CheckboxUseCron(true)
     self:setText_NumOfCron((self._enchantInfo):ToClient_getCountProtecMaterial_s64(), (self._enchantInfo):ToClient_getNeedCountForProtect_s64())
     local enduranceDesc = self:getStr_EnchantInfo((self._enchantInfo):ToClient_getCurMaxEndura(), (self._enchantInfo):ToClient_getDecMaxEndura(), enchantType, true)
@@ -355,26 +355,13 @@ PaGlobal_Enchant.didSetCronEnchantTarget = function(self, isMonotone)
   local curLevel = (self._enchantInfo):ToClient_getCurLevel()
   self:setTextCronEnchantState(curLevel, curStack)
   self:setTextStackForNext((self._enchantInfo):ToClient_getNeedStack())
-  local dd, hit, dv, pv, hp, mp = 0, 0, 0, 0, 0, 0
-  for index = 0, curLevel - 1 do
-    local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
-    if itemWrapper ~= nil then
-      local itemSSW = itemWrapper:getStaticStatus()
-      local itemClassifyType = itemSSW:getItemClassify()
-      local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
-      local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, index)
-      dd = dd + cronEnchantSSW:getAddedDD()
-      hit = hit + cronEnchantSSW:getAddedHIT()
-      dv = dv + cronEnchantSSW:getAddedDV()
-      pv = pv + cronEnchantSSW:getAddedPV()
-      hp = hp + cronEnchantSSW:getAddedMaxHP()
-      mp = mp + cronEnchantSSW:getAddedMaxMP()
-    end
-  end
-  self:setTextBonusStats(dd, hit, dv, pv, hp, mp)
+  self:setTextBonusStats((self._enchantInfo):ToClient_getAddedDD(), (self._enchantInfo):ToClient_getAddedHIT(), (self._enchantInfo):ToClient_getAddedDV(), (self._enchantInfo):ToClient_getAddedHDV(), (self._enchantInfo):ToClient_getAddedPV(), (self._enchantInfo):ToClient_getAddedHPV(), (self._enchantInfo):ToClient_getAddedHP(), (self._enchantInfo):ToClient_getAddedMP())
   self:setCronStackProgress(curStack, (self._enchantInfo):ToClient_getStackForLevel(maxLevel - 1))
   self:initCronLevelAndCountText(maxLevel)
   self:setCronEnchantMaterial(isMonotone)
+  if maxLevel == curLevel then
+    self:setEnable_button_Apply(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC62: Confused about usage of register: R0 in 'UnsetPending'
@@ -654,7 +641,6 @@ FGlobal_Enchant_RClickCronItem = function(slotNo, itemWrapper, Count, inventoryT
   end
   self._isLastEnchant = false
   self:clearItemSlot((self._ui)._slot_EnchantMaterial)
-  self:showTab()
   self:setCronEnchantMaterial(false)
 end
 

@@ -1040,7 +1040,7 @@ StableList_ButtonOpen = function(eType, slotNo)
               ((self._taming)._effect):SetShow(true)
               buttonList[buttonSlotNo] = self._buttonRegister
               buttonSlotNo = buttonSlotNo + 1
-              positionX = ((self._taming)._bg):GetPosX() + buttonConfig.startX
+              positionX = ((self._taming)._bg):GetPosX() + buttonConfig.startX + 30
               positionY = ((self._taming)._bg):GetPosY() + buttonConfig.startY
               local sizeX = (self._staticButtonListBG):GetSizeX()
               do

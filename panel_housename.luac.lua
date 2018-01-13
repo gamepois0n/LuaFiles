@@ -300,7 +300,7 @@ EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, is
       (ui._btnInstallGift):SetShow(false)
     end
   end
-  local desc = "<PAColor0xFFFFD649>" .. userNickname .. "<PAOldColor> " .. PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_HOUSENAME_LIVING") .. "( " .. houseName .. " ) " .. tostring(point)
+  local desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSING_HOUSENAME_LIVING", "user_nickname", userNickname) .. "( " .. houseName .. " ) " .. tostring(point)
   ;
   (ui._houseName):SetText(desc)
   if Panel_Housing:IsShow() then

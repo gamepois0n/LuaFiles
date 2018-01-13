@@ -252,7 +252,7 @@ end
 end
 
   FGlobal_ItemMarket_BuyConfirm_Open = function(itemName, itemBuyCount, isSingle, singleItemPrice)
-  -- function num : 0_11 , upvalues : ItemMarketBuyConfirm, isBuySingle, marketItemName, marketItemBuyCount, marketItemMaxCount, buyItemPrice, IM, failCount
+  -- function num : 0_11 , upvalues : ItemMarketBuyConfirm, isBuySingle, marketItemName, marketItemBuyCount, marketItemMaxCount, buyItemPrice, failCount
   local self = ItemMarketBuyConfirm
   isBuySingle = isSingle
   marketItemName = itemName
@@ -262,7 +262,6 @@ end
   Panel_Window_ItemMarket_BuyConfirm:SetShow(true)
   ItemMarketBuyConfirm:Update()
   if isItemMarketSecureCode() == true then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
     SetFocusEdit(self.buySecureCode)
     ;
     (self.buyItemSecureCodeBG):EraseAllEffect()
@@ -331,7 +330,7 @@ end
 end
 
   FGlobal_ItemMarket_BuyConfirm_Close = function()
-  -- function num : 0_13 , upvalues : ItemMarketBuyConfirm, IM, marketItemMaxCount
+  -- function num : 0_13 , upvalues : ItemMarketBuyConfirm, marketItemMaxCount
   if Panel_Window_ItemMarket_BuyConfirm:GetShow() == false then
     return 
   end
@@ -339,8 +338,6 @@ end
   ;
   (self.buyItemCount):SetEditText("")
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   Panel_Window_ItemMarket_BuyConfirm:SetShow(false)
   marketItemMaxCount = nil
 end

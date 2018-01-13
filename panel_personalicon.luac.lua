@@ -38,8 +38,12 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     if isGameTypeKR2() then
       (self._btn_MovieGuide):SetShow(false)
     else
-      ;
-      (self._btn_MovieGuide):SetShow(true)
+      if isGameTypeTH() then
+        (self._btn_MovieGuide):SetShow(false)
+      else
+        ;
+        (self._btn_MovieGuide):SetShow(true)
+      end
     end
   end
   if playerLV > 51 then

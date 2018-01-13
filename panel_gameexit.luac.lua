@@ -1019,19 +1019,21 @@ end
 Panel_GameExit_CharChange_Confirm = function()
   -- function num : 0_16 , upvalues : changeIndex, exitMode, _btn_selectCharacter, _btn_gameExit, _btn_cancel, _btn_NoticeMsg, logoutDelayTime
   FGlobal_gameExit_saveCurrentData()
-  do
-    local rv = swapCharacter_Select(changeIndex, true)
-    if rv == false then
-      return 
-    end
-    exitMode = enum_ExitMode.eExitMode_SwapCharacter
-    _btn_selectCharacter:SetShow(false)
-    _btn_gameExit:SetShow(false)
-    _btn_cancel:SetShow(false)
-    _btn_NoticeMsg:SetShow(true)
-    _btn_NoticeMsg:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_COMMENT_TO_CHARACTER_CHANGE", "remainTime", logoutDelayTime))
-    if PaGlobal_IsTagChange() == true then
-    end
+  local rv = swapCharacter_Select(changeIndex, true)
+  if rv == false then
+    return 
+  end
+  exitMode = enum_ExitMode.eExitMode_SwapCharacter
+  _btn_selectCharacter:SetShow(false)
+  _btn_gameExit:SetShow(false)
+  _btn_cancel:SetShow(false)
+  _btn_NoticeMsg:SetShow(true)
+  _btn_NoticeMsg:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_COMMENT_TO_CHARACTER_CHANGE", "remainTime", logoutDelayTime))
+  if PaGlobal_IsTagChange() == true then
+    local messageBoxMemo = PAGetString(Defines.StringSheet_RESOURCE, "LUA_TAG_CHANGING")
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
   end
 end
 
@@ -1191,8 +1193,6 @@ GameExitShowToggle = function(isAttacked)
       end
       Panel_GameExit:SetShow(false, true)
       SetUIMode(prevUIMode)
-      ;
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
       if exitMode ~= -1 then
         Panel_GameExit_sendGameDelayExitCancel()
       end
@@ -1373,8 +1373,6 @@ GameExit_Close = function()
   end
   Panel_GameExit:SetShow(false, true)
   SetUIMode(prevUIMode)
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
   if exitMode ~= -1 then
     Panel_GameExit_sendGameDelayExitCancel()
   end

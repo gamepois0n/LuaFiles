@@ -144,14 +144,12 @@ handleClickedGuildCreateCancel = function()
 end
 
 Guild_PopupCreate = function(guildGrade)
-  -- function num : 0_9 , upvalues : IM, GuildCreateManager, UI_TM
+  -- function num : 0_9 , upvalues : GuildCreateManager, UI_TM
   local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
   local playerLevel = ((getSelfPlayer()):get()):getLevel()
   local showInputGuildName = function()
-    -- function num : 0_9_0 , upvalues : IM, GuildCreateManager, UI_TM
+    -- function num : 0_9_0 , upvalues : GuildCreateManager, UI_TM
     Panel_CreateGuild:SetShow(true)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
     ;
     (GuildCreateManager._editGuildNameInput):SetEditText("", true)
     ;
@@ -417,12 +415,10 @@ CreateClan_Open = function()
 end
 
 CreateClan_Close = function()
-  -- function num : 0_16 , upvalues : IM
+  -- function num : 0_16
   Panel_CreateGuild:SetShow(false)
   Panel_CreateClan:SetShow(false)
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 CreateClan.registEventHandler = function(self)

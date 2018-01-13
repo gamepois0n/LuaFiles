@@ -28,10 +28,10 @@ desc_Rule = {(UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Rule_2"),
 , 
 desc_RuleText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_2"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_3"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_4"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_5"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_6"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_7"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_8"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_9"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_10"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_12"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_RULETEXT_1")}
 , _desc_Reward_Title = (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_LocalWar_Reward"), _desc_Reward = (UI.getChildControl)(Panel_LocalWarInfo, "Static_BG_2"), 
-desc_Reward = {(UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Reward_2"); [0] = (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Reward_1")}
+desc_Reward = {(UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Reward_2"), (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Reward_3"); [0] = (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Reward_1")}
 , 
-desc_RewardText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_REWARD_2"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_REWARD_1")}
-, _desc_Explanation_Title = (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_LocalWar_Explanation"), _desc_Explanation = (UI.getChildControl)(Panel_LocalWarInfo, "Static_BG_3"), 
+desc_RewardText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_REWARD_2"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_REWARD_3"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_REWARD_1")}
+, _rewardCount = 2, _desc_Explanation_Title = (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_LocalWar_Explanation"), _desc_Explanation = (UI.getChildControl)(Panel_LocalWarInfo, "Static_BG_3"), 
 desc_Explanation = {(UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Explanation_2"), (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Explanation_3"), (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Explanation_4"), (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Explanation_5"); [0] = (UI.getChildControl)(Panel_LocalWarInfo, "StaticText_Desc_Explanation_1")}
 , 
 desc_ExplanationText = {PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_2"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_3"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_4"), PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_5"); [0] = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_DESC_EXPLANATION_1")}
@@ -41,8 +41,16 @@ _listPool = {}
 _posConfig = {_listStartPosY = 25, _iconStartPosY = 88, _listPosYGap = 31}
 }
 local localWarServerCountLimit = 0
+local isGrouthLocalwar = ToClient_IsContentsGroupOpen("338")
+if isGrouthLocalwar then
+  localWarInfo._rewardCount = 3
+else
+  ;
+  ((localWarInfo.desc_Reward)[2]):SetShow(false)
+  localWarInfo._rewardCount = 2
+end
 LocalWarInfo_Initionalize = function()
-  -- function num : 0_2 , upvalues : localWarInfo, UI_TM
+  -- function num : 0_2 , upvalues : localWarInfo, UI_TM, isGrouthLocalwar
   local self = localWarInfo
   for listIdx = 0, self._createListCount - 1 do
     local localWar = {}
@@ -183,7 +191,7 @@ LocalWarInfo_Initionalize = function()
     control:SetTextMode(UI_TM.eTextMode_AutoWrap)
     control:SetAutoResize(true)
   end
-  for index = 0, #self.desc_RewardText do
+  for index = 0, self._rewardCount - 1 do
     ((self.desc_Reward)[index]):SetText((self.desc_RewardText)[index])
     self._maxDescRewardSize = self._maxDescRewardSize + ((self.desc_Reward)[index]):GetTextSizeY()
   end
@@ -238,13 +246,16 @@ LocalWarInfo_Initionalize = function()
   ((self.desc_Rule)[10]):SetPosY(((self.desc_Rule)[9]):GetPosY() + ((self.desc_Rule)[9]):GetTextSizeY() + 2)
   ;
   ((self.desc_Rule)[11]):SetPosY(((self.desc_Rule)[10]):GetPosY() + ((self.desc_Rule)[10]):GetTextSizeY() + 2)
-  for index = 0, #self.desc_RewardText do
+  for index = 0, self._rewardCount - 1 do
     ((self.desc_Reward)[index]):SetPosX(5)
   end
   ;
   ((self.desc_Reward)[0]):SetPosY(5)
   ;
   ((self.desc_Reward)[1]):SetPosY(((self.desc_Reward)[0]):GetPosY() + ((self.desc_Reward)[0]):GetTextSizeY() + 2)
+  if isGrouthLocalwar then
+    ((self.desc_Reward)[2]):SetPosY(((self.desc_Reward)[1]):GetPosY() + ((self.desc_Reward)[1]):GetTextSizeY() + 2)
+  end
   for index = 0, #self.desc_ExplanationText do
     ((self.desc_Explanation)[index]):SetPosX(5)
   end

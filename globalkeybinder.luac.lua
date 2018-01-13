@@ -1165,13 +1165,8 @@ local _keyBinder_UIMode_WorldMap = function(deltaTime)
       return 
     end
     if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
-      if isNewItemmarket_chk() then
-        FGolbal_ItemMarketNew_Close()
-        return 
-      else
-        FGolbal_ItemMarket_Close()
-        return 
-      end
+      FGolbal_ItemMarketNew_Close()
+      return 
     end
     if Panel_Window_ItemMarket_ItemSet:GetShow() then
       FGlobal_ItemMarketItemSet_Close()
@@ -1206,7 +1201,7 @@ local _keyBinder_UIMode_WorldMap = function(deltaTime)
     FGlobal_HandleClicked_ItemMarketBackPage()
   end
   if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia()) and getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
-    -- DECOMPILER ERROR at PC163: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC155: Unhandled construct in 'MakeBoolean' P1
 
     if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil then
       Panel_ProductNote_ShowToggle()
@@ -1449,13 +1444,9 @@ local _keyBinder_UIMode_ItemMarket = function(delataTime)
                   if Panel_Window_ItemMarket_BuyConfirm:GetShow() then
                     FGlobal_ItemMarket_BuyConfirm_Close()
                   else
-                    if isNewItemmarket_chk() then
-                      FGolbal_ItemMarketNew_Close()
-                      InventoryWindow_Close()
-                      Equipment_SetShow(false)
-                    else
-                      FGolbal_ItemMarket_Close()
-                    end
+                    FGolbal_ItemMarketNew_Close()
+                    InventoryWindow_Close()
+                    Equipment_SetShow(false)
                   end
                 else
                   FGolbal_ItemMarket_Function_Close()
@@ -1477,11 +1468,7 @@ local _keyBinder_UIMode_ItemMarket = function(delataTime)
     HandleClicked_ItemMarket_BuyItem()
   end
   if Panel_Window_ItemMarket:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-    if isNewItemmarket_chk() then
-      FGolbal_ItemMarketNew_Search()
-    else
-      FGolbal_ItemMarket_Search()
-    end
+    FGolbal_ItemMarketNew_Search()
   end
   if Panel_ItemMarket_PreBid:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
     if FGlobal_ItemMarketPreBid_Check_OpenType() == 0 then

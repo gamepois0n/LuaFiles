@@ -5,8 +5,42 @@
 -- function num : 0
 local Button_CharacterTag = nil
 local isOpenCharacterTag = ToClient_IsContentsGroupOpen("330")
+local isAlreadyTaging = false
+local hasAwakenCharacter = false
+PaGlobal_CharacterTag_CheckShow = function()
+  -- function num : 0_0
+  local size = getCharacterDataCount()
+  local isAlreadyTaging = 0
+  local hasAwakenCharacter = false
+  local returnBool = false
+  local player = getSelfPlayer()
+  if player == nil then
+    return 
+  end
+  local curLevel = (player:get()):getLevel()
+  for ii = 0, size - 1 do
+    local characterData = getCharacterDataByIndex(ii)
+    if characterData ~= nil then
+      local duelChar_No_s32 = Int64toInt32(characterData._duelCharacterNo)
+      local char_Level = characterData._level
+      if char_Level > 55 then
+        hasAwakenCharacter = true
+      end
+      if char_Level > 1 and duelChar_No_s32 ~= -1 then
+        isAlreadyTaging = isAlreadyTaging + 1
+      end
+    end
+  end
+  do
+    if isAlreadyTaging > 1 or hasAwakenCharacter == true or curLevel > 55 then
+      returnBool = true
+    end
+    return returnBool
+  end
+end
+
 PaGlobal_CharacterTag_SetPosIcon = function()
-  -- function num : 0_0 , upvalues : Button_CharacterTag, isOpenCharacterTag
+  -- function num : 0_1 , upvalues : Button_CharacterTag, isOpenCharacterTag
   if isFlushedUI() then
     return 
   end
@@ -14,6 +48,10 @@ PaGlobal_CharacterTag_SetPosIcon = function()
     return 
   end
   if PaGlobal_TutorialManager:isDoingTutorial() == true then
+    return 
+  end
+  if PaGlobal_CharacterTag_CheckShow() == false then
+    Panel_Icon_CharacterTag:SetShow(false)
     return 
   end
   if isOpenCharacterTag == true then
@@ -66,22 +104,28 @@ PaGlobal_CharacterTag_SetPosIcon = function()
   else
     do
       Panel_Icon_CharacterTag:SetShow(false)
+      PaGlobal_Fairy_SetPosIcon()
     end
   end
 end
 
 PaGlobal_CharacterTag_IconMouseToolTip = function(isShow)
-  -- function num : 0_1
+  -- function num : 0_2 , upvalues : Button_CharacterTag
   if not isShow then
     TooltipSimple_Hide()
     return 
   end
   local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_TAG")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_TAGCHAR_ICON_TOOLTIP_DESC")
+  control = Button_CharacterTag
+  TooltipSimple_Show(control, name, desc)
 end
 
 InitializeTagIcon = function()
-  -- function num : 0_2 , upvalues : Button_CharacterTag
+  -- function num : 0_3 , upvalues : Button_CharacterTag
   Panel_Icon_CharacterTag:SetIgnore(false)
+  Panel_Icon_CharacterTag:SetShow(true)
   Button_CharacterTag = (UI.getChildControl)(Panel_Icon_CharacterTag, "Button_TagIcon")
   Button_CharacterTag:ActiveMouseEventEffect(true)
   Button_CharacterTag:addInputEvent("Mouse_LUp", "PaGlobal_CharacterTag_Open()")
@@ -91,5 +135,18 @@ InitializeTagIcon = function()
   PaGlobal_CharacterTag_SetPosIcon()
 end
 
+FromClient_Tag_SelfPlayerLevelUp = function()
+  -- function num : 0_4
+  local player = getSelfPlayer()
+  if player == nil then
+    return 
+  end
+  local curLevel = (player:get()):getLevel()
+  if curLevel > 55 and Panel_Icon_CharacterTag:GetShow() == false then
+    PaGlobal_CharacterTag_SetPosIcon()
+  end
+end
+
 registerEvent("FromClient_luaLoadComplete", "InitializeTagIcon")
+registerEvent("EventSelfPlayerLevelUp", "FromClient_Tag_SelfPlayerLevelUp")
 

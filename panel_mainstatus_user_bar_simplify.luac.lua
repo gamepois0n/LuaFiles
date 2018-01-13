@@ -16,7 +16,7 @@ PaGlobal_MainStatus_User_Bar_simplify.Initialize = function(self)
   if self._isLoad == true then
     return 
   end
-  self._combatResourceTypeList = {[UI_classType.ClassType_Ranger] = self._combatResource_EP_RG, [UI_classType.ClassType_DarkElf] = self._combatResource_EP_DE, [UI_classType.ClassType_Warrior] = self._combatResource_FP, [UI_classType.ClassType_Giant] = self._combatResource_FP, [UI_classType.ClassType_BladeMaster] = self._combatResource_FP, [UI_classType.ClassType_BladeMasterWomen] = self._combatResource_FP, [UI_classType.ClassType_NinjaWomen] = self._combatResource_FP, [UI_classType.ClassType_Combattant] = self._combatResource_FP, [UI_classType.ClassType_CombattantWomen] = self._combatResource_FP, [UI_classType.ClassType_Valkyrie] = self._combatResource_BP}
+  self._combatResourceTypeList = {[UI_classType.ClassType_Ranger] = self._combatResource_EP_RG, [UI_classType.ClassType_DarkElf] = self._combatResource_EP_DE, [UI_classType.ClassType_Warrior] = self._combatResource_FP, [UI_classType.ClassType_Giant] = self._combatResource_FP, [UI_classType.ClassType_BladeMaster] = self._combatResource_FP, [UI_classType.ClassType_BladeMasterWomen] = self._combatResource_FP, [UI_classType.ClassType_NinjaWomen] = self._combatResource_FP, [UI_classType.ClassType_Combattant] = self._combatResource_FP, [UI_classType.ClassType_CombattantWomen] = self._combatResource_FP, [UI_classType.ClassType_Lahn] = self._combatResource_FP, [UI_classType.ClassType_Valkyrie] = self._combatResource_BP}
   self._uvDataList = {
 [self._combatResource_EP_RG] = {setTextureUV_Func((self._ui)._staticGauge_CombatResource, 2, 144, 306, 164)}
 , 

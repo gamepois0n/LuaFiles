@@ -88,7 +88,7 @@ MailSend_PressedDown = function()
 end
 
 MailSend_Open = function(inventoryType, inventorySlotNo)
-  -- function num : 0_10 , upvalues : mailSend, IM, editContentWebcontrol
+  -- function num : 0_10 , upvalues : mailSend, editContentWebcontrol
   if not Panel_Mail_Send:GetShow() then
     Panel_Mail_Send:ChangeSpecialTextureInfoName("")
     Panel_Mail_Send:SetAlphaExtraChild(1)
@@ -97,14 +97,11 @@ MailSend_Open = function(inventoryType, inventorySlotNo)
   local self = mailSend
   self._inventoryType = inventoryType
   self._inventorySlotNo = inventorySlotNo
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   editContentWebcontrol:TriggerEvent("InventorySlotNo", inventorySlotNo)
 end
 
 MailSend_Close = function()
-  -- function num : 0_11 , upvalues : IM, UI_ANI_ADV, UI_color
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_11 , upvalues : UI_ANI_ADV, UI_color
   Panel_Mail_Send:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
   local aniInfo1 = Panel_Mail_Send:addColorAnimation(0, 0.22, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)

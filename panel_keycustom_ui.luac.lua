@@ -168,8 +168,6 @@ KeyCustom_Ui_Close = function()
   -- function num : 0_9
   Panel_KeyCustom_Ui:SetShow(false)
   SetUIMode((Defines.UIMode).eUIMode_Default)
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
 end
 
 KeyCustom_Ui_UpdateButtonText_Key = function()

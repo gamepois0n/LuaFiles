@@ -180,11 +180,9 @@ HandleClicked_FGlobal_competitionGameClearFocusEditEditText = function()
 end
 
 HandleClicked_competitionGameEditSetFocus = function()
-  -- function num : 0_12 , upvalues : competitionGameForHost, IM
+  -- function num : 0_12 , upvalues : competitionGameForHost
   _PA_LOG("LUA_COMPETITION", "HandleClicked_competitionGameEditSetFocus : START")
   local self = competitionGameForHost
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(self.edit_Name)
   ;
   (self.edit_Name):SetEditText((self.edit_Name):GetEditText(), true)
@@ -213,20 +211,9 @@ HandleClicked_FGlobal_competitionGameClearFocusEditAllPlayerResurrection = funct
 end
 
 FGlobal_competitionGameClearFocusEdit = function()
-  -- function num : 0_17 , upvalues : IM
-  _PA_LOG("LUA_COMPETITION", "FGlobal_competitionGameClearFocusEdit : START")
+  -- function num : 0_17
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
-  _PA_LOG("LUA_COMPETITION", "FGlobal_competitionGameClearFocusEdit : END")
+  CheckChattingInput()
 end
 
 FGlobal_CompetitionGameForHost_NormalUser_Out = function()

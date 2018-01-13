@@ -64,14 +64,12 @@ expTooltip:SetTextHorizonCenter()
 expTooltip:SetShow(false)
 Panel_ChallengeReward_Alert:SetShow(false)
 HandleClicked_challengeRewardAlert_Open = function()
-  -- function num : 0_0 , upvalues : IM
+  -- function num : 0_0
   if isNewCharacterInfo() == false then
     CharacterInfoWindow_Show()
   else
     PaGlobal_CharacterInfo:showWindow(0)
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 local group_2 = nil

@@ -372,14 +372,15 @@ StableRegister_MarketRegister = function()
 end
 
 StableRegister_ClearEdit = function(clearIdx)
-  -- function num : 0_7 , upvalues : stableRegister, IM
-  local self = stableRegister
-  if clearIdx == 1 then
-    (self._editEditName):SetEditText("", true)
-  else
-  end
-  if clearIdx == 2 then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_7 , upvalues : stableRegister
+  do
+    local self = stableRegister
+    if clearIdx == 1 then
+      (self._editEditName):SetEditText("", true)
+    else
+    end
+    if clearIdx == 2 then
+    end
   end
 end
 
@@ -517,15 +518,13 @@ StableRegister_Open = function()
 end
 
 StableRegister_Close = function()
-  -- function num : 0_15 , upvalues : IM
+  -- function num : 0_15
   audioPostEvent_SystemUi(0, 0)
   if not Panel_Window_StableRegister:GetShow() then
     return 
   end
   audioPostEvent_SystemUi(1, 1)
   Panel_Window_StableRegister:SetShow(false)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 StableMarketInput_Open = function(marketType)
@@ -557,15 +556,13 @@ StableMarketInput_Open = function(marketType)
 end
 
 StableMarketInput_Close = function()
-  -- function num : 0_17 , upvalues : IM
+  -- function num : 0_17
   audioPostEvent_SystemUi(0, 0)
   if not Panel_Servant_Market_Input:GetShow() then
     return 
   end
   audioPostEvent_SystemUi(1, 1)
   Panel_Servant_Market_Input:SetShow(false)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 stableRegister:init()

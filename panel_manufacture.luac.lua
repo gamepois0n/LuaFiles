@@ -1970,7 +1970,11 @@ Manufacture_Button_LUp_Cook = function(isClear)
     if ToClient_IsContentsGroupOpen("228") then
       _usingItemSlotCount = 3
     else
-      _usingItemSlotCount = 2
+      if isGameTypeTaiwan() then
+        _usingItemSlotCount = 3
+      else
+        _usingItemSlotCount = 2
+      end
     end
   end
   Manufacture_UpdateSlotPos()
@@ -2517,7 +2521,7 @@ Manufacture_Tooltip_Item_Show = function(index, isResult)
 end
 
 IsManufacture_Chk = function(variableName, value)
-  -- function num : 0_64 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType, IM
+  -- function num : 0_64 , upvalues : Manufacture_Notify, manufactureListName, _actionIndex, materialItemWhereType
   if variableName == "IsManufactureChk" then
     if value == 0 then
       Panel_Manufacture_Notify:SetShow(false)
@@ -2529,16 +2533,7 @@ IsManufacture_Chk = function(variableName, value)
       Manufacture_Notify:SetPos()
       Manufacture_Progress_Update(materialItemWhereType)
     end
-    if AllowChangeInputMode() then
-      if check_ShowWindow() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
   else
     Panel_Manufacture_Notify:SetShow(false)
     Manufacture_Notify:clear()

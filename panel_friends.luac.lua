@@ -364,7 +364,7 @@ FriendMessanger_CheckCurrentUiEdit = function(targetUI)
 end
 
 FriendMessanger_Close = function(messangerId)
-  -- function num : 0_8 , upvalues : FriendMessangerManager, IM
+  -- function num : 0_8 , upvalues : FriendMessangerManager
   local messanger = (FriendMessangerManager._messangerList)[messangerId]
   ToClient_FriendListCloseMessanger(messangerId)
   messanger:clear()
@@ -378,38 +378,28 @@ FriendMessanger_Close = function(messangerId)
     FriendMessangerManager._currentFocusId = -1
     ClearFocusEdit()
   end
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FriendMessanger_SetFocusEdit = function(messangerId)
-  -- function num : 0_9 , upvalues : FriendMessangerManager, IM
+  -- function num : 0_9 , upvalues : FriendMessangerManager
   local messanger = (FriendMessangerManager._messangerList)[messangerId]
   SetFocusEdit(messanger._uiEditInputChat)
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R2 in 'UnsetPending'
 
   FriendMessangerManager._currentFocusId = messangerId
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 FriendMessanger_KillFocusEdit = function()
-  -- function num : 0_10 , upvalues : FriendMessangerManager, IM
+  -- function num : 0_10 , upvalues : FriendMessangerManager
   if FriendMessangerManager._currentFocusId == -1 then
     return false
   end
   ClearFocusEdit()
-  -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
+  CheckChattingInput()
+  -- DECOMPILER ERROR at PC11: Confused about usage of register: R0 in 'UnsetPending'
 
   FriendMessangerManager._currentFocusId = -1
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-  else
-    SetFocusChatting()
-  end
   return false
 end
 
@@ -473,23 +463,14 @@ FromClient_FriendListOpenMessanger = function(messangerId, userName, isOnline)
 end
 
 FromClient_FriendListUpdateLogOnOffForMessanger = function(messangerId, isOnline)
-  -- function num : 0_16 , upvalues : FriendMessangerManager, IM
+  -- function num : 0_16 , upvalues : FriendMessangerManager
   local messanger = (FriendMessangerManager._messangerList)[messangerId]
   -- DECOMPILER ERROR at PC10: Confused about usage of register: R3 in 'UnsetPending'
 
   if messangerId == FriendMessangerManager._currentFocusId and messangerId ~= -1 then
     FriendMessangerManager._currentFocusId = -1
     ClearFocusEdit()
-    if AllowChangeInputMode() then
-      if (UI.checkShowWindow)() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
   end
   if messanger ~= nil then
     if isOnline == 1 then
@@ -793,7 +774,7 @@ end
 
 local PopupAddFriend = {_uiBackGround = (UI.getChildControl)(Panel_FriendList, "Static_FriendName_BG"), _uiEditName = (UI.getChildControl)(Panel_FriendList, "Edit_FriendName"), _uiYesButton = (UI.getChildControl)(Panel_FriendList, "Button_AddFriend_Yes"), _uiNoButton = (UI.getChildControl)(Panel_FriendList, "Button_AddFriend_No"), _uiCloseButton = (UI.getChildControl)(Panel_FriendList, "Button_AddFriend_Close"), _uiStaticTitle = (UI.getChildControl)(Panel_FriendList, "StaticText_AddFriend"), _uiCheckUserNickName = (UI.getChildControl)(Panel_FriendList, "CheckButton_IsUserNickName")}
 PopupAddFriend.SetShow = function(self, isShow)
-  -- function num : 0_32 , upvalues : IM
+  -- function num : 0_32
   (self._uiBackGround):SetShow(isShow)
   ;
   (self._uiEditName):SetShow(isShow)
@@ -808,16 +789,11 @@ PopupAddFriend.SetShow = function(self, isShow)
   ;
   (self._uiCheckUserNickName):SetShow(isShow)
   if isShow then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
     SetFocusEdit(self._uiEditName)
     ;
     (self._uiEditName):SetMaxInput(getGameServiceTypeUserNickNameLength())
   else
-    if AllowChangeInputMode() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
   end
   ;
   (self._uiEditName):SetEditText("", true)
@@ -830,8 +806,6 @@ PopupAddFriend.initialize = function(self)
   (self._uiNoButton):addInputEvent("Mouse_LUp", "friend_clickAddFriendClose()")
   ;
   (self._uiCloseButton):addInputEvent("Mouse_LUp", "friend_clickAddFriendClose()")
-  ;
-  (self._uiEditName):addInputEvent("Mouse_LUp", "friend_ChangeInputMode()")
   ;
   (self._uiCheckUserNickName):addInputEvent("Mouse_LUp", "friend_ChangeNickNameMode()")
   ;
@@ -863,8 +837,7 @@ friend_clickAddFriendClose = function()
 end
 
 friend_ChangeInputMode = function()
-  -- function num : 0_36 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_36
 end
 
 friend_ChangeNickNameMode = function()
@@ -887,7 +860,7 @@ end
 PopupAddFriend:initialize()
 local PopupRenameGroup = {_uiBackGround = (UI.getChildControl)(Panel_FriendList, "Static_GroupName_BG"), _uiEditName = (UI.getChildControl)(Panel_FriendList, "Edit_GroupName"), _uiYesButton = (UI.getChildControl)(Panel_FriendList, "Button_GroupName_Yes"), _uiNoButton = (UI.getChildControl)(Panel_FriendList, "Button_GroupName_No"), _uiCloseButton = (UI.getChildControl)(Panel_FriendList, "Button_GroupName_Close"), _uiStaticTitle = (UI.getChildControl)(Panel_FriendList, "StaticText_ChangeGroupName")}
 PopupRenameGroup.SetShow = function(self, isShow)
-  -- function num : 0_39 , upvalues : IM
+  -- function num : 0_39
   self._isShow = isShow
   ;
   (self._uiBackGround):SetShow(isShow)
@@ -901,14 +874,8 @@ PopupRenameGroup.SetShow = function(self, isShow)
   (self._uiCloseButton):SetShow(isShow)
   ;
   (self._uiStaticTitle):SetShow(isShow)
-  if isShow then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  else
-    if AllowChangeInputMode() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
-    end
+  if isShow == false then
+    CheckChattingInput()
   end
   ;
   (self._uiEditName):SetEditText("", true)
@@ -921,8 +888,6 @@ PopupRenameGroup.initialize = function(self)
   (self._uiNoButton):addInputEvent("Mouse_LUp", "friend_clickRenameGroupClose()")
   ;
   (self._uiCloseButton):addInputEvent("Mouse_LUp", "friend_clickRenameGroupClose()")
-  ;
-  (self._uiEditName):addInputEvent("Mouse_LUp", "friend_ChangeInputMode()")
   self:SetShow(false)
   ;
   (self._uiEditName):SetMaxInput(getGameServiceTypeUserNickNameLength())

@@ -570,317 +570,326 @@ ResponseParty_PartyMemberTextureSet = function(partyData, partyMemberCount, inde
       do
         ;
         ((_uiPartyMemberList[index])._stylePartyOptionBtn):SetShow(false)
-        classTypeTexture = "new_ui_common_forlua/widget/party/portrait_" .. CT2S[(_partyData[index])._class] .. ".dds"
-        if (_partyData[index])._class == 4 then
-          classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
-          ;
-          ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 70, 233, 76)
-          ;
-          (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
-          ;
-          ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
-        else
-          do
-            if (_partyData[index])._class == 8 or (_partyData[index])._class == 16 or (_partyData[index])._class == 28 or (_partyData[index])._class == 31 then
-              classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
-              ;
-              ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 63, 233, 69)
-              ;
-              (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
-              ;
-              ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
-            else
-              do
-                if (_partyData[index])._class == 24 then
-                  classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
-                  ;
-                  ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 2, 250, 232, 255)
-                  ;
-                  (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
-                  ;
-                  ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
-                else
-                  do
-                    if (_partyData[index])._class == 0 or (_partyData[index])._class == 12 or (_partyData[index])._class == 20 or (_partyData[index])._class == 21 or (_partyData[index])._class == 25 or (_partyData[index])._class == 26 or (_partyData[index])._class == 19 or (_partyData[index])._class == 23 then
-                      classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
-                      ;
-                      ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 56, 233, 62)
-                      ;
-                      (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
-                      ;
-                      ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
-                    else
-                      do
-                        if (_partyData[index])._class == 27 then
-                          classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
-                          ;
-                          ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
-                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 206, 214, 255, 217)
-                          ;
-                          (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
-                          ;
-                          ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
-                        end
+        do
+          if ToClient_IsDevelopment() == true and (_partyData[index])._isSelf == false then
+            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._hp, 206, 214, 255, 217)
+            ;
+            (((_uiPartyMemberList[index])._hp):getBaseTexture()):setUV(x1, y1, x2, y2)
+            ;
+            ((_uiPartyMemberList[index])._hp):setRenderTexture(((_uiPartyMemberList[index])._hp):getBaseTexture())
+          end
+          classTypeTexture = "new_ui_common_forlua/widget/party/portrait_" .. CT2S[(_partyData[index])._class] .. ".dds"
+          if (_partyData[index])._class == 4 then
+            classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
+            ;
+            ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
+            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 70, 233, 76)
+            ;
+            (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
+            ;
+            ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
+          else
+            do
+              if (_partyData[index])._class == 8 or (_partyData[index])._class == 16 or (_partyData[index])._class == 28 or (_partyData[index])._class == 31 then
+                classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
+                ;
+                ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
+                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 63, 233, 69)
+                ;
+                (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
+                ;
+                ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
+              else
+                do
+                  if (_partyData[index])._class == 24 then
+                    classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
+                    ;
+                    ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
+                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 2, 250, 232, 255)
+                    ;
+                    (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
+                    ;
+                    ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
+                  else
+                    do
+                      if (_partyData[index])._class == 0 or (_partyData[index])._class == 12 or (_partyData[index])._class == 20 or (_partyData[index])._class == 21 or (_partyData[index])._class == 25 or (_partyData[index])._class == 26 or (_partyData[index])._class == 19 or (_partyData[index])._class == 23 then
+                        classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
+                        ;
+                        ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
+                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 1, 56, 233, 62)
+                        ;
+                        (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
+                        ;
+                        ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
+                      else
                         do
-                          if (_partyData[index])._class == UI_Class.ClassType_Warrior then
-                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                          if (_partyData[index])._class == 27 then
+                            classMP = "new_ui_common_forlua/default/Default_Gauges.dds"
                             ;
-                            ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 77, 25, 107, 55)
+                            ((_uiPartyMemberList[index])._mp):ChangeTextureInfoName(classMP)
+                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._mp, 206, 214, 255, 217)
                             ;
-                            (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                            (((_uiPartyMemberList[index])._mp):getBaseTexture()):setUV(x1, y1, x2, y2)
                             ;
-                            ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                          else
-                            do
-                              if (_partyData[index])._class == UI_Class.ClassType_Ranger then
-                                classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                ;
-                                ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 108, 25, 138, 55)
-                                ;
-                                (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                ;
-                                ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                              else
-                                do
-                                  if (_partyData[index])._class == UI_Class.ClassType_Sorcerer then
-                                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                    ;
-                                    ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 139, 25, 169, 55)
-                                    ;
-                                    (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                    ;
-                                    ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                  else
-                                    do
-                                      if (_partyData[index])._class == UI_Class.ClassType_Giant then
-                                        classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                        ;
-                                        ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 170, 25, 200, 55)
-                                        ;
-                                        (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                        ;
-                                        ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                      else
-                                        do
-                                          if (_partyData[index])._class == UI_Class.ClassType_Tamer then
-                                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                            ;
-                                            ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 56, 197, 86)
-                                            ;
-                                            (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                            ;
-                                            ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                          else
-                                            do
-                                              if (_partyData[index])._class == UI_Class.ClassType_BladeMaster then
-                                                classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                                ;
-                                                ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 56, 228, 86)
-                                                ;
-                                                (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                ;
-                                                ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                              else
-                                                do
-                                                  if (_partyData[index])._class == UI_Class.ClassType_BladeMasterWomen then
-                                                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                                    ;
-                                                    ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 87, 228, 117)
-                                                    ;
-                                                    (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                    ;
-                                                    ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                  else
-                                                    do
-                                                      if (_partyData[index])._class == UI_Class.ClassType_Valkyrie then
-                                                        classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                                        ;
-                                                        ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 87, 197, 117)
-                                                        ;
-                                                        (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                        ;
-                                                        ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                      else
-                                                        do
-                                                          if (_partyData[index])._class == UI_Class.ClassType_Wizard then
-                                                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                                            ;
-                                                            ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 118, 228, 148)
-                                                            ;
-                                                            (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                            ;
-                                                            ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                          else
-                                                            do
-                                                              if (_partyData[index])._class == UI_Class.ClassType_WizardWomen then
-                                                                classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                                                ;
-                                                                ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 149, 228, 179)
-                                                                ;
-                                                                (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                ;
-                                                                ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                              else
-                                                                do
-                                                                  if (_partyData[index])._class == UI_Class.ClassType_NinjaWomen then
-                                                                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                                                    ;
-                                                                    ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 201, 25, 231, 55)
-                                                                    ;
-                                                                    (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                    ;
-                                                                    ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                  else
-                                                                    do
-                                                                      if (_partyData[index])._class == UI_Class.ClassType_NinjaMan then
-                                                                        classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
-                                                                        ;
-                                                                        ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 180, 228, 210)
-                                                                        ;
-                                                                        (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                        ;
-                                                                        ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                      else
-                                                                        do
-                                                                          if (_partyData[index])._class == UI_Class.ClassType_DarkElf then
-                                                                            classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
-                                                                            ;
-                                                                            ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 1, 31, 31)
-                                                                            ;
-                                                                            (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                            ;
-                                                                            ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                          else
-                                                                            do
-                                                                              if (_partyData[index])._class == UI_Class.ClassType_Combattant then
-                                                                                classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
-                                                                                ;
-                                                                                ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 222, 31, 252)
-                                                                                ;
-                                                                                (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                ;
-                                                                                ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                              else
-                                                                                do
-                                                                                  if (_partyData[index])._class == UI_Class.ClassType_CombattantWomen then
-                                                                                    classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
-                                                                                    ;
-                                                                                    ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 21, 191, 51, 221)
-                                                                                    ;
-                                                                                    (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                    ;
-                                                                                    ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                                  else
-                                                                                    do
-                                                                                      if (_partyData[index])._class == UI_Class.ClassType_Lahn then
-                                                                                        classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
-                                                                                        ;
-                                                                                        ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
-                                                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 57, 216, 87, 246)
-                                                                                        ;
-                                                                                        (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                        ;
-                                                                                        ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
-                                                                                      end
+                            ((_uiPartyMemberList[index])._mp):setRenderTexture(((_uiPartyMemberList[index])._mp):getBaseTexture())
+                          end
+                          do
+                            if (_partyData[index])._class == UI_Class.ClassType_Warrior then
+                              classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                              ;
+                              ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 77, 25, 107, 55)
+                              ;
+                              (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                              ;
+                              ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                            else
+                              do
+                                if (_partyData[index])._class == UI_Class.ClassType_Ranger then
+                                  classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                  ;
+                                  ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 108, 25, 138, 55)
+                                  ;
+                                  (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                  ;
+                                  ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                else
+                                  do
+                                    if (_partyData[index])._class == UI_Class.ClassType_Sorcerer then
+                                      classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                      ;
+                                      ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 139, 25, 169, 55)
+                                      ;
+                                      (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                      ;
+                                      ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                    else
+                                      do
+                                        if (_partyData[index])._class == UI_Class.ClassType_Giant then
+                                          classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                          ;
+                                          ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 170, 25, 200, 55)
+                                          ;
+                                          (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                          ;
+                                          ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                        else
+                                          do
+                                            if (_partyData[index])._class == UI_Class.ClassType_Tamer then
+                                              classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                              ;
+                                              ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 56, 197, 86)
+                                              ;
+                                              (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                              ;
+                                              ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                            else
+                                              do
+                                                if (_partyData[index])._class == UI_Class.ClassType_BladeMaster then
+                                                  classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                  ;
+                                                  ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 56, 228, 86)
+                                                  ;
+                                                  (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                  ;
+                                                  ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                else
+                                                  do
+                                                    if (_partyData[index])._class == UI_Class.ClassType_BladeMasterWomen then
+                                                      classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                      ;
+                                                      ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 87, 228, 117)
+                                                      ;
+                                                      (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                      ;
+                                                      ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                    else
+                                                      do
+                                                        if (_partyData[index])._class == UI_Class.ClassType_Valkyrie then
+                                                          classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                          ;
+                                                          ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 167, 87, 197, 117)
+                                                          ;
+                                                          (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                          ;
+                                                          ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                        else
+                                                          do
+                                                            if (_partyData[index])._class == UI_Class.ClassType_Wizard then
+                                                              classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                              ;
+                                                              ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 118, 228, 148)
+                                                              ;
+                                                              (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                              ;
+                                                              ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                            else
+                                                              do
+                                                                if (_partyData[index])._class == UI_Class.ClassType_WizardWomen then
+                                                                  classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                                  ;
+                                                                  ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 149, 228, 179)
+                                                                  ;
+                                                                  (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                  ;
+                                                                  ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                else
+                                                                  do
+                                                                    if (_partyData[index])._class == UI_Class.ClassType_NinjaWomen then
+                                                                      classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                                      ;
+                                                                      ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 201, 25, 231, 55)
+                                                                      ;
+                                                                      (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                      ;
+                                                                      ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                    else
+                                                                      do
+                                                                        if (_partyData[index])._class == UI_Class.ClassType_NinjaMan then
+                                                                          classTypeTexture = "new_ui_common_forlua/widget/party/Party_00.dds"
+                                                                          ;
+                                                                          ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 198, 180, 228, 210)
+                                                                          ;
+                                                                          (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                          ;
+                                                                          ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                        else
+                                                                          do
+                                                                            if (_partyData[index])._class == UI_Class.ClassType_DarkElf then
+                                                                              classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
+                                                                              ;
+                                                                              ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 1, 31, 31)
+                                                                              ;
+                                                                              (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                              ;
+                                                                              ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                            else
+                                                                              do
+                                                                                if (_partyData[index])._class == UI_Class.ClassType_Combattant then
+                                                                                  classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
+                                                                                  ;
+                                                                                  ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 1, 222, 31, 252)
+                                                                                  ;
+                                                                                  (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                  ;
+                                                                                  ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                                else
+                                                                                  do
+                                                                                    if (_partyData[index])._class == UI_Class.ClassType_CombattantWomen then
+                                                                                      classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
+                                                                                      ;
+                                                                                      ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 21, 191, 51, 221)
+                                                                                      ;
+                                                                                      (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                      ;
+                                                                                      ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                                    else
                                                                                       do
-                                                                                        ;
-                                                                                        ((_uiPartyMemberList[index])._distance):SetShow(true)
-                                                                                        ;
-                                                                                        ((_uiPartyMemberList[index])._distance):ChangeTextureInfoName("new_ui_common_forlua/widget/party/party_00.dds")
-                                                                                        if (_partyData[index])._distance == 0 then
-                                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 152, 1, 174, 23)
+                                                                                        if (_partyData[index])._class == UI_Class.ClassType_Lahn then
+                                                                                          classTypeTexture = "new_ui_common_forlua/widget/party/Party_01.dds"
                                                                                           ;
-                                                                                          (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                        else
-                                                                                          do
-                                                                                            if (_partyData[index])._distance == 1 then
-                                                                                              local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 176, 1, 198, 23)
-                                                                                              ;
-                                                                                              (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                            else
-                                                                                              do
-                                                                                                if (_partyData[index])._distance == 2 then
-                                                                                                  local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 200, 1, 222, 23)
-                                                                                                  ;
-                                                                                                  (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                else
-                                                                                                  do
+                                                                                          ((_uiPartyMemberList[index])._class):ChangeTextureInfoName(classTypeTexture)
+                                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._class, 57, 216, 87, 246)
+                                                                                          ;
+                                                                                          (((_uiPartyMemberList[index])._class):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                          ;
+                                                                                          ((_uiPartyMemberList[index])._class):setRenderTexture(((_uiPartyMemberList[index])._class):getBaseTexture())
+                                                                                        end
+                                                                                        do
+                                                                                          ;
+                                                                                          ((_uiPartyMemberList[index])._distance):SetShow(true)
+                                                                                          ;
+                                                                                          ((_uiPartyMemberList[index])._distance):ChangeTextureInfoName("new_ui_common_forlua/widget/party/party_00.dds")
+                                                                                          if (_partyData[index])._distance == 0 then
+                                                                                            local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 152, 1, 174, 23)
+                                                                                            ;
+                                                                                            (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                          else
+                                                                                            do
+                                                                                              if (_partyData[index])._distance == 1 then
+                                                                                                local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 176, 1, 198, 23)
+                                                                                                ;
+                                                                                                (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                              else
+                                                                                                do
+                                                                                                  if (_partyData[index])._distance == 2 then
+                                                                                                    local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 200, 1, 222, 23)
+                                                                                                    ;
+                                                                                                    (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                  else
                                                                                                     do
-                                                                                                      if (_partyData[index])._distance == 3 then
-                                                                                                        local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 224, 1, 246, 23)
-                                                                                                        ;
-                                                                                                        (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                      end
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._distance):setRenderTexture(((_uiPartyMemberList[index])._distance):getBaseTexture())
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_On", "PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_Out", "PartyPop_SimpleTooltip_Show( false, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._distance):setTooltipEventRegistFunc("PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
-                                                                                                      if (_partyData[index])._nowHp <= 0 then
-                                                                                                        ((_uiPartyMemberList[index])._conditionBG):SetShow(true)
-                                                                                                        ;
-                                                                                                        ((_uiPartyMemberList[index])._conditionTxt):SetShow(true)
-                                                                                                        ;
-                                                                                                        ((_uiPartyMemberList[index])._conditionTxt):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DEATH"))
-                                                                                                      else
-                                                                                                        if (_partyData[index])._nowHp >= 1 then
-                                                                                                          ((_uiPartyMemberList[index])._conditionBG):SetShow(false)
+                                                                                                      do
+                                                                                                        if (_partyData[index])._distance == 3 then
+                                                                                                          local x1, y1, x2, y2 = setTextureUV_Func((_uiPartyMemberList[index])._distance, 224, 1, 246, 23)
                                                                                                           ;
-                                                                                                          ((_uiPartyMemberList[index])._conditionTxt):SetShow(false)
-                                                                                                          ;
-                                                                                                          ((_uiPartyMemberList[index])._conditionTxt):SetText("")
+                                                                                                          (((_uiPartyMemberList[index])._distance):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                                                         end
-                                                                                                      end
-                                                                                                      if (_partyData[index])._isMaster == true then
-                                                                                                        ((_uiPartyMemberList[index])._leader):SetShow(true)
-                                                                                                      else
                                                                                                         ;
-                                                                                                        ((_uiPartyMemberList[index])._leader):SetShow(false)
-                                                                                                      end
-                                                                                                      if (_partyData[index])._isSelf then
-                                                                                                        ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(false)
+                                                                                                        ((_uiPartyMemberList[index])._distance):setRenderTexture(((_uiPartyMemberList[index])._distance):getBaseTexture())
                                                                                                         ;
-                                                                                                        ((_uiPartyMemberList[index])._distance):SetShow(false)
+                                                                                                        ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_On", "PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
                                                                                                         ;
-                                                                                                        ((_uiPartyMemberList[index])._distance):SetSpanSize(-125, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
-                                                                                                      else
+                                                                                                        ((_uiPartyMemberList[index])._distance):addInputEvent("Mouse_Out", "PartyPop_SimpleTooltip_Show( false, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
                                                                                                         ;
-                                                                                                        ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(true)
-                                                                                                        if ((_uiPartyMemberList[index])._stylePartyOptionBtn):GetShow() then
-                                                                                                          ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-165, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                        ((_uiPartyMemberList[index])._distance):setTooltipEventRegistFunc("PartyPop_SimpleTooltip_Show( true, 1," .. index .. "," .. (_partyData[index])._distance .. " )")
+                                                                                                        if (_partyData[index])._nowHp <= 0 then
+                                                                                                          ((_uiPartyMemberList[index])._conditionBG):SetShow(true)
+                                                                                                          ;
+                                                                                                          ((_uiPartyMemberList[index])._conditionTxt):SetShow(true)
+                                                                                                          ;
+                                                                                                          ((_uiPartyMemberList[index])._conditionTxt):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_DEATH"))
+                                                                                                        else
+                                                                                                          if (_partyData[index])._nowHp >= 1 then
+                                                                                                            ((_uiPartyMemberList[index])._conditionBG):SetShow(false)
+                                                                                                            ;
+                                                                                                            ((_uiPartyMemberList[index])._conditionTxt):SetShow(false)
+                                                                                                            ;
+                                                                                                            ((_uiPartyMemberList[index])._conditionTxt):SetText("")
+                                                                                                          end
+                                                                                                        end
+                                                                                                        if (_partyData[index])._isMaster == true then
+                                                                                                          ((_uiPartyMemberList[index])._leader):SetShow(true)
                                                                                                         else
                                                                                                           ;
-                                                                                                          ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                          ((_uiPartyMemberList[index])._leader):SetShow(false)
+                                                                                                        end
+                                                                                                        if (_partyData[index])._isSelf then
+                                                                                                          ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(false)
+                                                                                                          ;
+                                                                                                          ((_uiPartyMemberList[index])._distance):SetShow(false)
+                                                                                                          ;
+                                                                                                          ((_uiPartyMemberList[index])._distance):SetSpanSize(-125, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
+                                                                                                        else
+                                                                                                          ;
+                                                                                                          ((_uiPartyMemberList[index])._styleFollowBtn):SetShow(true)
+                                                                                                          if ((_uiPartyMemberList[index])._stylePartyOptionBtn):GetShow() then
+                                                                                                            ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-165, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                          else
+                                                                                                            ;
+                                                                                                            ((_uiPartyMemberList[index])._styleFollowBtn):SetSpanSize(-185, (((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).y)
+                                                                                                          end
+                                                                                                          ;
+                                                                                                          ((_uiPartyMemberList[index])._distance):SetSpanSize((((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).x + 23, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
                                                                                                         end
                                                                                                         ;
-                                                                                                        ((_uiPartyMemberList[index])._distance):SetSpanSize((((_uiPartyMemberList[index])._styleFollowBtn):GetSpanSize()).x + 23, (((_uiPartyMemberList[index])._distance):GetSpanSize()).y)
+                                                                                                        ((_uiPartyMemberList[index])._base):SetShow(true)
+                                                                                                        ;
+                                                                                                        ((_uiPartyMemberList[index])._base):SetShow(false)
                                                                                                       end
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._base):SetShow(true)
-                                                                                                      ;
-                                                                                                      ((_uiPartyMemberList[index])._base):SetShow(false)
                                                                                                     end
                                                                                                   end
                                                                                                 end
@@ -944,7 +953,7 @@ ResponseParty_updatePartyList = function()
       ResponseParty_PartyMemberTextureSet(_partyData, partyMemberCount, index)
     end
     if _preLootType ~= nil and _preLootType ~= PLT2S[lootType] then
-      local rottingMsg = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_LOOTING_RULE1") .. " " .. PLT2S[lootType] .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_LOOTING_RULE2")
+      local rottingMsg = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_LOOTING_RULE1", "plt2s_lootType", PLT2S[lootType])
       _uiComboLootingOption:SetText(PLT2S[lootType])
       Proc_ShowMessage_Ack(rottingMsg)
     else
@@ -1061,9 +1070,9 @@ ResponseParty_withdraw = function(withdrawType, actorKey, isMe)
       if actorProxyWrapper ~= nil then
         local textName = actorProxyWrapper:getOriginalName()
         if partyType == 0 then
-          message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_LEAVE_PARTY_MEMBER")
+          message = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_LEAVE_PARTY_MEMBER", "text_name", tostring(textName))
         else
-          message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_LEAVE_PARTY_MEMBER")
+          message = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_LEAVE_PARTY_MEMBER", "text_name", tostring(textName))
         end
       end
     end
@@ -1081,9 +1090,9 @@ ResponseParty_withdraw = function(withdrawType, actorKey, isMe)
           if actorProxyWrapper ~= nil then
             local textName = actorProxyWrapper:getOriginalName()
             if partyType == 0 then
-              message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_MEMBER")
+              message = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_MEMBER", "text_name", tostring(textName))
             else
-              message = tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_MEMBER")
+              message = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_MEMBER", "text_name", tostring(textName))
             end
           end
         end
@@ -1116,9 +1125,9 @@ ResponseParty_changeLeader = function(actorKey)
   end
   local textName = actorProxyWrapper:getName()
   if partyType == 0 then
-    Proc_ShowMessage_Ack(tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_PARTY_LEADER"))
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_CHANGE_PARTY_LEADER", "text_name", tostring(textName)))
   else
-    Proc_ShowMessage_Ack(tostring(textName) .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_CHANGE_PARTY_LEADER"))
+    Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_CHANGE_PARTY_LEADER", "text_name", tostring(textName)))
   end
   ResponseParty_updatePartyList()
   Party_RegistItem_Show(false)
@@ -1148,10 +1157,10 @@ ResponseParty_invite = function(hostName, invitePartyType)
   local messageboxMemo = ""
   local messageboxData = ""
   if partyType == 0 then
-    messageboxMemo = hostName .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_INVITE_ACCEPT")
+    messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_INVITE_ACCEPT", "host_name", hostName)
     messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "PARTY_INVITE_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = messageBox_party_accept, functionNo = messageBox_party_refuse, priority = PP.PAUIMB_PRIORITY_LOW}
   else
-    messageboxMemo = hostName .. PAGetString(Defines.StringSheet_GAME, "LUA_LARGEPARTY_INVITE_ACCEPT")
+    messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_LARGEPARTY_INVITE_ACCEPT", "host_name", hostName)
     messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_LARGEPARTY_INVITE_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = messageBox_party_accept, functionNo = messageBox_party_refuse, priority = PP.PAUIMB_PRIORITY_LOW}
   end
   ;
@@ -1203,10 +1212,10 @@ PartyPop_clickBanishMember = function(index)
   local contentString = ""
   local titleForceOut = ""
   if partyType == 0 then
-    contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_QUESTION")
+    contentString = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT_QUESTION", "member_name", withdrawMemberData:name())
     titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_PARTY_FORCEOUT")
   else
-    contentString = withdrawMemberData:name() .. PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_QUESTION")
+    contentString = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT_QUESTION", "member_name", withdrawMemberData:name())
     titleForceOut = PAGetString(Defines.StringSheet_GAME, "PANEL_LARGEPARTY_FORCEOUT")
   end
   local messageboxData = {title = titleForceOut, content = contentString, functionYes = messageBox_party_withdrawMember, functionNo = MessageBox_Empty_function, priority = PP.PAUIMB_PRIORITY_LOW}

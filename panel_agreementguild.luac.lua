@@ -143,22 +143,13 @@ FGlobal_AgreementGuild_Open = function(isJoin, hostUsername, hostname, guildName
 end
 
 FGlobal_AgreementGuild_Close = function()
-  -- function num : 0_6 , upvalues : IM
+  -- function num : 0_6
   if not Panel_AgreementGuild:GetShow() then
     return 
   end
   Panel_AgreementGuild:SetShow(false, false)
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 HandleClicked_AgreementGuild_Close = function()

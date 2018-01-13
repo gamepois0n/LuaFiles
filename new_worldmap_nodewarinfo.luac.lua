@@ -69,7 +69,8 @@ local NodeWarInfo_Init = function()
   if territoryCount == nil then
     return 
   end
-  for territory_idx = 0, territoryCount - 3 do
+  territoryCount = (math.min)(territoryCount, 5)
+  for territory_idx = 0, territoryCount - 1 do
     local territoryKey = getTerritoryByIndex(territory_idx)
     local territoryName = getTerritoryNameByKey(territoryKey)
     if territoryKey ~= nil then
@@ -97,7 +98,7 @@ local NodeWarInfo_Init = function()
       (territoryDATA.EndCount):SetPosY(nodeWar_CountPosY)
       nodeWar_NamePosY = nodeWar_NamePosY + (territoryDATA.Name):GetSizeY() + 5 + line_gap
       nodeWar_CountPosY = nodeWar_CountPosY + (territoryDATA.IngCount):GetSizeY() + line_gap
-      -- DECOMPILER ERROR at PC112: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC118: Confused about usage of register: R9 in 'UnsetPending'
 
       nodeWarInfoUIPool[territory_idx] = territoryDATA
     end
@@ -116,7 +117,8 @@ NodeWar_Info_Update = function()
   if territoryCount == nil then
     return 
   end
-  for territory_idx = 0, territoryCount - 3 do
+  territoryCount = (math.min)(territoryCount, 5)
+  for territory_idx = 0, territoryCount - 1 do
     local territoryDATA = nodeWarInfoUIPool[territory_idx]
     local territoryKey = (getTerritoryByIndex(territory_idx)):get()
     local nowBeingMinor = ToClient_GetVillageSiegeCountByTerritory(territoryKey, true)
@@ -163,8 +165,9 @@ FGlobal_NodeWarInfo_Open = function()
   if territoryCount == nil then
     return 
   end
+  territoryCount = (math.min)(territoryCount, 5)
   local isSiegeBeing_chk = false
-  for territory_idx = 0, territoryCount - 3 do
+  for territory_idx = 0, territoryCount - 1 do
     local territoryKey = (getTerritoryByIndex(territory_idx)):get()
     local nowBeingMinor = ToClient_GetVillageSiegeCountByTerritory(territoryKey, true)
     if nowBeingMinor > 0 then

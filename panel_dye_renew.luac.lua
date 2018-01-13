@@ -626,6 +626,9 @@ FGlobal_Panel_Dye_ReNew_Open = function()
   if FGlobal_Panel_DyeReNew_Show() ~= true then
     return 
   end
+  if ToClient_getJoinGuildBattle() == true then
+    return 
+  end
   Panel_Dye_ReNew:SetShow(true)
 end
 
@@ -638,6 +641,9 @@ FGlobal_Panel_DyeReNew_Show = function()
   -- function num : 0_24 , upvalues : renderMode, DyeReNew
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DYEOPENALERT_INDEAD"))
+    return 
+  end
+  if ToClient_getJoinGuildBattle() == true then
     return 
   end
   ToClient_SaveUiInfo(false)

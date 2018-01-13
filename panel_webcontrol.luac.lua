@@ -12,7 +12,7 @@ Panel_WebControl:RegisterShowEventFunc(false, "Panel_WebHelper_HideAni()")
 Panel_WebControl:setGlassBackground(true)
 Panel_WebControl:ActiveMouseEventEffect(true)
 local html_WebHelper_Control = (UI.createControl)(PA_UI.PA_UI_CONTROL_WEBCONTROL, Panel_WebControl, "WebControl_Help_CharInfo")
-local ui = {_btn_Close = (UI.getChildControl)(Panel_WebControl, "Button_Close"), _btn_CloseWin = (UI.getChildControl)(Panel_WebControl, "Button_CloseWindow"), _edit_Question = (UI.getChildControl)(Panel_WebControl, "Edit_InputQuestion"), _btn_Search = (UI.getChildControl)(Panel_WebControl, "Button_Search")}
+local ui = {_btn_Close = (UI.getChildControl)(Panel_WebControl, "Button_Close"), _btn_CloseWin = (UI.getChildControl)(Panel_WebControl, "Button_CloseWindow"), _edit_Question = (UI.getChildControl)(Panel_WebControl, "Edit_InputQuestion"), _btn_Search = (UI.getChildControl)(Panel_WebControl, "Button_Search"), _btn_KeyHelp = (UI.getChildControl)(Panel_WebControl, "Button_KeyboardHelp"), _btn_ProductNote = (UI.getChildControl)(Panel_WebControl, "Button_ProductNote")}
 ;
 (ui._btn_Close):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle()")
 ;
@@ -68,13 +68,22 @@ Panel_WebHelper_ShowToggle = function(helpType)
   end
 end
 
+FGlobal_WebHelper_ForceClose = function()
+  -- function num : 0_1 , upvalues : html_WebHelper_Control
+  if Panel_WebControl:IsShow() then
+    Panel_WebControl:SetShow(false, true)
+    html_WebHelper_Control:ResetUrl()
+    return 
+  end
+end
+
 FGlobal_Panel_WebHelper_ShowToggle = function()
-  -- function num : 0_1
+  -- function num : 0_2
   Panel_WebHelper_ShowToggle("GUIDE")
 end
 
 Panel_WebHelper_ShowAni = function()
-  -- function num : 0_2 , upvalues : UI_ANI_ADV
+  -- function num : 0_3 , upvalues : UI_ANI_ADV
   (UIAni.fadeInSCR_Down)(Panel_WebControl)
   local aniInfo1 = Panel_WebControl:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -93,7 +102,7 @@ Panel_WebHelper_ShowAni = function()
 end
 
 Panel_WebHelper_HideAni = function()
-  -- function num : 0_3
+  -- function num : 0_4
   audioPostEvent_SystemUi(1, 1)
   Panel_WebControl:SetAlpha(1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_WebControl, 0, 0.1)
@@ -101,13 +110,26 @@ Panel_WebHelper_HideAni = function()
 end
 
 Panel_WebControl_Initialize = function()
-  -- function num : 0_4 , upvalues : html_WebHelper_Control
+  -- function num : 0_5 , upvalues : ui, html_WebHelper_Control
+  local self = ui
   Panel_WebControl:SetShow(false, false)
   html_WebHelper_Control:SetHorizonCenter()
   html_WebHelper_Control:ResetUrl()
   html_WebHelper_Control:SetSize(960, 600)
   html_WebHelper_Control:SetSpanSize(0, 5)
   html_WebHelper_Control:SetShow(false)
+  local btnHelpSizeX = (self._btn_KeyHelp):GetSizeX() + 23
+  local btnHelpTextPosX = btnHelpSizeX - btnHelpSizeX / 2 - (self._btn_KeyHelp):GetTextSizeX() / 2
+  ;
+  (self._btn_KeyHelp):SetTextSpan(btnHelpTextPosX, 5)
+  ;
+  (self._btn_KeyHelp):addInputEvent("Mouse_LUp", "FGlobal_KeyboardHelpShow()")
+  local btnProductSizeX = (self._btn_ProductNote):GetSizeX() + 23
+  local btnProductTextPosX = btnProductSizeX - btnProductSizeX / 2 - (self._btn_ProductNote):GetTextSizeX() / 2
+  ;
+  (self._btn_ProductNote):SetTextSpan(btnProductTextPosX, 5)
+  ;
+  (self._btn_ProductNote):addInputEvent("Mouse_LUp", "Panel_ProductNote_ShowToggle()")
 end
 
 local countryType = ""
@@ -132,7 +154,7 @@ else
   end
 end
 Panel_WebControl_TakeAndShow = function(helpType)
-  -- function num : 0_5 , upvalues : html_WebHelper_Control, countryType
+  -- function num : 0_6 , upvalues : html_WebHelper_Control, countryType
   Panel_WebControl:SetShow(true, true)
   html_WebHelper_Control:SetHorizonCenter()
   if helpType == "GUIDE" then
@@ -450,7 +472,7 @@ Panel_WebControl_TakeAndShow = function(helpType)
 end
 
 Panel_WebControl_LevelUpGuide = function(isString)
-  -- function num : 0_6 , upvalues : html_WebHelper_Control
+  -- function num : 0_7 , upvalues : html_WebHelper_Control
   if isString == nil then
     return 
   end

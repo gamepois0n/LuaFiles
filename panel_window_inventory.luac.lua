@@ -671,7 +671,7 @@ InventoryWindow_Close = function()
 end
 
 InventoryWindow_Show = function(uiType, isCashInven, isMarket)
-  -- function num : 0_22 , upvalues : inven, openUiType, openWhereIs, icon_TrashOn, icon_TrashSequence, IM, btn_DyePalette, btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead
+  -- function num : 0_22 , upvalues : inven, openUiType, openWhereIs, icon_TrashOn, icon_TrashSequence, btn_DyePalette, btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead
   local self = inven
   self.effect = nil
   self.startSlotIndex = 0
@@ -729,8 +729,6 @@ InventoryWindow_Show = function(uiType, isCashInven, isMarket)
   ;
   (self._scroll):SetControlTop()
   Panel_Window_Inventory:SetShow(true, true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   PaGlobal_TutorialManager:handleOpenedInventory()
   if not Panel_Window_Warehouse:GetShow() and not Panel_Window_ServantInventory:GetShow() then
     (inven.buttonMoney):SetEnable(false)
@@ -1296,12 +1294,13 @@ Inventory_IconOver = function(index)
   if selfPlayer == nil then
     return 
   end
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC15: Confused about usage of register: R4 in 'UnsetPending'
 
-  ;
-  ((self.slotEtcData)[index]).isFirstItem = false
-  if (effectScene.newItem)[index] ~= nil then
-    (((self.slots)[index]).icon):EraseEffect((effectScene.newItem)[index])
+  if slotNo < (self.config).slotCount then
+    ((self.slotEtcData)[slotNo]).isFirstItem = false
+    if (effectScene.newItem)[slotNo] ~= nil then
+      (((self.slots)[index]).icon):EraseEffect((effectScene.newItem)[slotNo])
+    end
   end
   local useStartSlot = inventorySlotNoUserStart()
   local invenUseSize = (selfPlayer:get()):getInventorySlotCount(not (self.radioButtonNormaiInven):IsChecked())
@@ -1870,124 +1869,131 @@ Inventory_updateSlotData = function()
           (slot.icon):EraseAllEffect()
         else
           if self.filterFunc ~= nil then
-            (slot.icon):AddEffect("UI_Inventory_Filtering", true, 0, 0)
-          end
-          _Inventory_updateSlotData_AddEffectMapea(ii, slotNo)
-        end
-        itemExist = true
-        Panel_Inventory_isBlackStone_16002 = _Inventory_updateSlotData_AddEffectBlackStone(ii, isFiltered, slotNo)
-        local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-        _Inventory_updateSlotData_AutoSetPotion(playerLevel, itemKey, currentWhereType, slotNo)
-        PaGlobal_TutorialManager:handleUpdateInventorySlotData(slot, itemKey)
-        if (itemKey == 42000 or itemKey == 42001 or itemKey == 41607 or itemKey == 42002 or itemKey == 42010 or itemKey == 42003 or itemKey == 42004 or itemKey == 42034 or itemKey == 42035 or itemKey == 42037 or itemKey == 42036 or itemKey == 42006 or itemKey == 42008 or itemKey == 42039 or itemKey == 42038 or itemKey == 42007 or itemKey == 42053 or itemKey == 41610 or itemKey == 42009 or itemKey == 42054 or itemKey == 42057 or itemKey == 42061 or itemKey == 42066 or itemKey == 42055 or itemKey == 42056) and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true and not FGlobal_FirstSummonItemUse() then
-          (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
-        end
-        if itemKey == 42405 and questList_hasProgressQuest(4015, 6) then
-          (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
-        end
-        local itemSSW = itemWrapper:getStaticStatus()
-        local item_type = itemSSW:getItemType()
-        if item_type == 5 then
-          Panel_Inventory_isSocketItem = true
-        end
-        local offencePoint = 0
-        local defencePoint = 0
-        local equipOffencePoint = 0
-        local equipDefencePoint = 0
-        local isEquip = ((itemWrapper:getStaticStatus()):get()):isEquipable()
-        local matchEquip = false
-        local isAccessory = false
-        offencePoint = _inventory_updateSlot_compareSpec(currentWhereType, slotNo, isAccessory)
-        local currentEndurance = (itemWrapper:get()):getEndurance()
-        local isUsableServant = (itemWrapper:getStaticStatus()):isUsableServant()
-        if not isUsableServant and not Panel_Window_Exchange:GetShow() then
-          if isEquip and defencePoint ~= nil and offencePoint ~= nil and currentEndurance > 0 and matchEquip == true and isAccessory == false and equipDefencePoint + equipOffencePoint < defencePoint + offencePoint then
-            (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
-            local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
-            Panel_NewEquip_Update(equipPos)
-            PaGlobal_TutorialManager:handleNewEquipInInventory(slot)
-          end
-          do
-            if currentEndurance > 0 and matchEquip == true and isAccessory == true and equipOffencePoint + equipDefencePoint < offencePoint + defencePoint then
-              (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
-              local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
-              Panel_NewEquip_Update(equipPos)
+            _Inventory_updateSlotData_AddEffectMapea(ii, slotNo)
+            itemExist = true
+            Panel_Inventory_isBlackStone_16002 = _Inventory_updateSlotData_AddEffectBlackStone(ii, isFiltered, slotNo)
+            local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
+            _Inventory_updateSlotData_AutoSetPotion(playerLevel, itemKey, currentWhereType, slotNo)
+            PaGlobal_TutorialManager:handleUpdateInventorySlotData(slot, itemKey)
+            if (itemKey == 42000 or itemKey == 42001 or itemKey == 41607 or itemKey == 42002 or itemKey == 42010 or itemKey == 42003 or itemKey == 42004 or itemKey == 42034 or itemKey == 42035 or itemKey == 42037 or itemKey == 42036 or itemKey == 42006 or itemKey == 42008 or itemKey == 42039 or itemKey == 42038 or itemKey == 42007 or itemKey == 42053 or itemKey == 41610 or itemKey == 42009 or itemKey == 42054 or itemKey == 42057 or itemKey == 42061 or itemKey == 42066 or itemKey == 42055 or itemKey == 42056) and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true and not FGlobal_FirstSummonItemUse() then
+              (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
             end
-            do
+            if itemKey == 42405 and questList_hasProgressQuest(4015, 6) then
+              (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
+            end
+            local itemSSW = itemWrapper:getStaticStatus()
+            local item_type = itemSSW:getItemType()
+            if item_type == 5 then
+              Panel_Inventory_isSocketItem = true
+            end
+            local offencePoint = 0
+            local defencePoint = 0
+            local equipOffencePoint = 0
+            local equipDefencePoint = 0
+            local isEquip = ((itemWrapper:getStaticStatus()):get()):isEquipable()
+            local matchEquip = false
+            local isAccessory = false
+            offencePoint = _inventory_updateSlot_compareSpec(currentWhereType, slotNo, isAccessory)
+            local currentEndurance = (itemWrapper:get()):getEndurance()
+            local isUsableServant = (itemWrapper:getStaticStatus()):isUsableServant()
+            if not isUsableServant and not Panel_Window_Exchange:GetShow() then
+              if isEquip and defencePoint ~= nil and offencePoint ~= nil and currentEndurance > 0 and matchEquip == true and isAccessory == false and equipDefencePoint + equipOffencePoint < defencePoint + offencePoint then
+                (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
+                local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
+                Panel_NewEquip_Update(equipPos)
+                PaGlobal_TutorialManager:handleNewEquipInInventory(slot)
+              end
               do
-                if ((inven.slotEtcData)[ii]).isFirstItem == true and ((inven.slotEtcData)[ii]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
-                  local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem02", true, 0, 0)
-                  -- DECOMPILER ERROR at PC636: Confused about usage of register: R47 in 'UnsetPending'
-
-                  ;
-                  (effectScene.newItem)[slotNo] = newItemEffectSceneId
-                  UIMain_ItemUpdate()
-                end
-                local isUsableClass = nil
-                if itemSSW ~= nil then
-                  if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
-                    isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
-                  else
-                    isUsableClass = true
-                  end
-                else
-                  isUsableClass = false
-                end
-                if isEquip == false then
-                  (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                else
-                  if isUsableClass == true then
-                    (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                  else
-                    ;
-                    (slot.icon):SetColor(UI_color.C_FFD20000)
-                  end
-                end
-                for iii = 0, _exchangeIndex do
-                  if Panel_Window_Exchange:GetShow() and slotNo == _exchangeSlotNo[iii] then
-                    (slot.icon):SetColor(UI_color.C_FFD20000)
-                  else
-                    if slotNo == _exchangeSlotNo[iii] and _exchangeSlotNo[iii] == nil then
-                      (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                    end
-                  end
+                if currentEndurance > 0 and matchEquip == true and isAccessory == true and equipOffencePoint + equipDefencePoint < offencePoint + defencePoint then
+                  (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
+                  local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
+                  Panel_NewEquip_Update(equipPos)
                 end
                 do
                   do
-                    local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
-                    if Panel_Window_Exchange:GetShow() and itemBindType > 0 then
-                      (slot.icon):SetColor(UI_color.C_FFD20000)
+                    if slotNo < (self.config).slotCount and ((inven.slotEtcData)[slotNo]).isFirstItem == true and ((inven.slotEtcData)[slotNo]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
+                      local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem02", true, 0, 0)
+                      -- DECOMPILER ERROR at PC633: Confused about usage of register: R47 in 'UnsetPending'
+
+                      ;
+                      (effectScene.newItem)[slotNo] = newItemEffectSceneId
+                      UIMain_ItemUpdate()
                     end
-                    equipDefencePoint = 0
-                    equipOffencePoint = 0
-                    defencePoint = 0
-                    offencePoint = 0
-                    if not itemExist then
-                      slot:clearItem()
-                      ;
-                      (slot.icon):SetEnable(true)
-                      ;
-                      (slot.icon):SetMonoTone(true)
-                      ;
-                      (slot.icon):SetIgnore(false)
-                      slot.isEmpty = true
+                    local isUsableClass = nil
+                    if itemSSW ~= nil then
+                      if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
+                        isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
+                      else
+                        isUsableClass = true
+                      end
+                    else
+                      isUsableClass = false
                     end
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
+                    if isEquip == false then
+                      (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+                    else
+                      if isUsableClass == true then
+                        (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+                      else
+                        ;
+                        (slot.icon):SetColor(UI_color.C_FFD20000)
+                      end
+                    end
+                    for iii = 0, _exchangeIndex do
+                      if Panel_Window_Exchange:GetShow() and slotNo == _exchangeSlotNo[iii] then
+                        (slot.icon):SetColor(UI_color.C_FFD20000)
+                      else
+                        if slotNo == _exchangeSlotNo[iii] and _exchangeSlotNo[iii] == nil then
+                          (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+                        end
+                      end
+                    end
+                    do
+                      do
+                        local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
+                        if Panel_Window_Exchange:GetShow() and itemBindType > 0 then
+                          (slot.icon):SetColor(UI_color.C_FFD20000)
+                        end
+                        equipDefencePoint = 0
+                        equipOffencePoint = 0
+                        defencePoint = 0
+                        offencePoint = 0
+                        if not itemExist then
+                          slot:clearItem()
+                          ;
+                          (slot.icon):SetEnable(true)
+                          ;
+                          (slot.icon):SetMonoTone(true)
+                          ;
+                          (slot.icon):SetIgnore(false)
+                          slot.isEmpty = true
+                        end
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out DO_STMT
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC767: LeaveBlock: unexpected jumping out IF_STMT
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
 
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
+
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
+
+                      end
+                    end
                   end
                 end
               end
@@ -2003,7 +2009,7 @@ Inventory_updateSlotData = function()
         local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
         if Panel_FixEquip:GetShow() then
           PaGlobal_FixEquip:useCashBtnEffectDelete()
-          if PaGlobal_FixEquip:isRepeatRepair() and not FixEquip_InvenFiler_SubItem(slotNo, itemWrapper, currentWhereType) and PaGlobal_FixEquip:isFixEquip_SubSlotItemKey() == itemKey and not fixEquipCheck then
+          if PaGlobal_FixEquip:isRepeatRepair() and itemWrapper:hasItemJewel() == false and not FixEquip_InvenFiler_SubItem(slotNo, itemWrapper, currentWhereType) and PaGlobal_FixEquip:isFixEquip_SubSlotItemKey() == itemKey and not fixEquipCheck then
             fixEquipCheck = true
             PaGlobal_FixEquip:fixEquipContinue(slotNo)
           end
@@ -2593,12 +2599,11 @@ Inventory_AddItem = function(itemKey, slotNo, itemCount)
   -- function num : 0_81 , upvalues : inven
   local self = inven
   for ii = 0, (self.config).slotCount - 1 do
-    local slot = (self.slots)[ii]
-    -- DECOMPILER ERROR at PC15: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC12: Confused about usage of register: R8 in 'UnsetPending'
 
-    if slotNo == slot._slotNo then
+    if ii == slotNo then
       ((inven.slotEtcData)[ii]).isFirstItem = true
-      -- DECOMPILER ERROR at PC19: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC16: Confused about usage of register: R8 in 'UnsetPending'
 
       ;
       ((inven.slotEtcData)[ii]).itemKey = itemKey

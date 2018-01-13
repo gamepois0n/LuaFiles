@@ -376,11 +376,9 @@ FGlobal_PushOpenWorldMap = function()
 end
 
 FGlobal_CloseWorldmapForLuaKeyHandling = function()
-  -- function num : 0_18 , upvalues : IM
+  -- function num : 0_18
   if (Defines.UIMode).eUIMode_WoldMapSearch == GetUIMode() then
     ClearFocusEdit()
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     SetUIMode((Defines.UIMode).eUIMode_WorldMap)
   end
   FGlobal_PopCloseWorldMap()
@@ -402,7 +400,7 @@ FGlobal_PopCloseWorldMap = function()
 end
 
 FromClient_WorldMapOpen = function()
-  -- function num : 0_20 , upvalues : isFadeOutWindow, IM, isPrevShowPanel, isPrevShowMainQuestPanel, isCullingNaviBtn, renderMode
+  -- function num : 0_20 , upvalues : isFadeOutWindow, isPrevShowPanel, isPrevShowMainQuestPanel, isCullingNaviBtn, renderMode
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPOPENALERT_INDEAD"))
     return 
@@ -421,8 +419,6 @@ FromClient_WorldMapOpen = function()
   end
   PaGlobal_TutorialManager:handleBeforeWorldmapOpen()
   Panel_MovieTheater640_Initialize()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   SetUIMode((Defines.UIMode).eUIMode_WorldMap)
   ToClient_openWorldMap()
   setFullSizeMode(true, (FullSizeMode.fullSizeModeEnum).Worldmap)
@@ -543,7 +539,7 @@ end
 
 local IM = CppEnums.EProcessorInputMode
 FGlobal_WorldMapClose = function()
-  -- function num : 0_30 , upvalues : isFadeOutWindow, renderMode, isCloseWorldMap, isPrevShowPanel, isPrevShowMainQuestPanel, IM
+  -- function num : 0_30 , upvalues : isFadeOutWindow, renderMode, isCloseWorldMap, isPrevShowPanel, isPrevShowMainQuestPanel
   FGlobal_TentTooltipHide()
   isFadeOutWindow = false
   DragManager:clearInfo()
@@ -568,12 +564,7 @@ FGlobal_WorldMapClose = function()
   FGlobal_TownfunctionNavi_UnSetWorldMap()
   FGlobal_HouseInstallation_MinorWar_Close()
   SetUIMode((Defines.UIMode).eUIMode_Default)
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-  else
-    SetUIMode((Defines.UIMode).eUIMode_Default)
-    SetFocusChatting()
-  end
+  CheckChattingInput()
   if ToClient_IsSavedUi() then
     ToClient_SaveUiInfo(false)
     ToClient_SetSavedUi(false)

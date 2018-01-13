@@ -462,32 +462,28 @@ PaGlobal_Window_Skill_CoolTimeSlot.bottomDesc_Setting = function(self)
   (self._desc):SetText((self._desc):GetText())
 end
 
--- DECOMPILER ERROR at PC232: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC231: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_Window_Skill_CoolTimeSlot.searchbuttonClick = function(self)
-  -- function num : 0_17 , upvalues : IM
+  -- function num : 0_17
   local self = PaGlobal_Window_Skill_CoolTimeSlot
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  if CheckChattingInput() == false then
     ClearFocusEdit()
-  else
-    SetFocusChatting()
   end
   self._slideIndex = 0
   self:update()
 end
 
--- DECOMPILER ERROR at PC236: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC234: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_Window_Skill_CoolTimeSlot.searchText_Click = function(self)
-  -- function num : 0_18 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_18
   SetFocusEdit((self._editSearch)._editSearchText)
   ;
   ((self._editSearch)._editSearchText):SetEditText("", false)
 end
 
--- DECOMPILER ERROR at PC239: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC237: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_Window_Skill_CoolTimeSlot.allSkillClear = function(self)
   -- function num : 0_19
@@ -498,7 +494,7 @@ PaGlobal_Window_Skill_CoolTimeSlot.allSkillClear = function(self)
   PaGlobal_SkillCoolTimeQuickSlot:updateQuickSlot()
 end
 
--- DECOMPILER ERROR at PC242: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC240: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_Window_Skill_CoolTimeSlot.skillUpdate = function(self)
   -- function num : 0_20
@@ -513,7 +509,7 @@ FromClient_SkillCoolTimeSlotUpdate = function()
   PaGlobal_Window_Skill_CoolTimeSlot:skillUpdate()
 end
 
--- DECOMPILER ERROR at PC247: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC245: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_Window_Skill_CoolTimeSlot.registMessageHandler = function(self)
   -- function num : 0_22

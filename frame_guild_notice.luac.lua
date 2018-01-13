@@ -15,37 +15,18 @@ deletePanel(Panel_Guild_Notice:GetID())
 ;
 (ui_Notice._btn_NoticeConfirm):SetShow(false)
 saved_Guild_Frame_Notice = _frame_Notice
-guildNotice_NoticeInputMode = function()
-  -- function num : 0_0 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-end
-
-guildNotice_CommentInputMode = function()
-  -- function num : 0_1 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-end
-
 guildNotice_Output = function()
-  -- function num : 0_2 , upvalues : IM
+  -- function num : 0_0
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWIndow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 guildNotice_GetComment_Update = function()
-  -- function num : 0_3
+  -- function num : 0_1
 end
 
 guild_GuildNotice_Show = function(isShow)
-  -- function num : 0_4 , upvalues : defaultFrameBG_Notice
+  -- function num : 0_2 , upvalues : defaultFrameBG_Notice
   if isShow == true then
     defaultFrameBG_Notice:SetShow(true)
   else
@@ -53,8 +34,4 @@ guild_GuildNotice_Show = function(isShow)
   end
 end
 
-;
-(ui_Notice._edit_Notice):addInputEvent("Mouse_LUp", "guildNotice_NoticeInputMode()")
-;
-(ui_Notice._edit_Comment):addInputEvent("Mouse_LUp", "guildNotice_CommentInputMode()")
 

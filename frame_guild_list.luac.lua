@@ -2152,23 +2152,14 @@ GuildListInfoPage.Show = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC665: Confused about usage of register: R64 in 'UnsetPending'
+-- DECOMPILER ERROR at PC664: Confused about usage of register: R64 in 'UnsetPending'
 
 GuildListInfoPage.Hide = function(self)
-  -- function num : 0_51 , upvalues : IM
+  -- function num : 0_51
   if (self._frameDefaultBG):GetShow() == true then
     (self._frameDefaultBG):SetShow(false)
-    if AllowChangeInputMode() then
-      if (UI.checkShowWindow)() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
     ClearFocusEdit()
+    CheckChattingInput()
   end
 end
 
@@ -2180,8 +2171,7 @@ FGlobal_GuildListScrollTop = function()
 end
 
 HandleClicked_SetIncentive = function()
-  -- function num : 0_53 , upvalues : IM, incentive_InputMoney, inputGuildDepositNum_s64
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_53 , upvalues : incentive_InputMoney, inputGuildDepositNum_s64
   SetFocusEdit(incentive_InputMoney)
   inputGuildDepositNum_s64 = toInt64(0, 0)
   incentive_InputMoney:SetEditText("", true)
@@ -2189,40 +2179,22 @@ HandleClicked_SetIncentive = function()
 end
 
 FGlobal_GuildIncentive_Close = function()
-  -- function num : 0_54 , upvalues : IM
+  -- function num : 0_54
   if not Panel_GuildIncentive:GetShow() then
     return 
   end
   ClearFocusEdit()
   Panel_GuildIncentive:SetShow(false)
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 HandleClicked_GuildIncentive_Close = function()
-  -- function num : 0_55 , upvalues : IM
+  -- function num : 0_55
   if not Panel_GuildIncentive:GetShow() then
     return 
   end
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
   Panel_GuildIncentive:SetShow(false)
 end
 

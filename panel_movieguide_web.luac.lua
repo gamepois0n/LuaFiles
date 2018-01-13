@@ -11,14 +11,20 @@ _Web:SetPosX(12)
 _Web:SetPosY(50)
 _Web:SetSize(320, 430)
 _Web:ResetUrl()
--- DECOMPILER ERROR at PC35: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC36: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_MovieGuide_Web.init = function(self)
-  -- function num : 0_0
+  -- function num : 0_0 , upvalues : _Web
   (self.btn_Close):addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Close()")
+  local checkAgeType = ToClient_isAdultUser()
+  if checkAgeType then
+    _Web:SetMonoTone(false)
+  else
+    _Web:SetMonoTone(true)
+  end
 end
 
--- DECOMPILER ERROR at PC39: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC40: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_MovieGuide_Web.Open = function(self)
   -- function num : 0_1 , upvalues : _Web
@@ -34,7 +40,7 @@ PaGlobal_MovieGuide_Web.Open = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC43: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC44: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_MovieGuide_Web.Close = function(self)
   -- function num : 0_2 , upvalues : _Web
@@ -42,7 +48,7 @@ PaGlobal_MovieGuide_Web.Close = function(self)
   _Web:ResetUrl()
 end
 
--- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_MovieGuide_Web.GuideWebCodeExecute = function(self, titleName, youtubeUrl)
   -- function num : 0_3

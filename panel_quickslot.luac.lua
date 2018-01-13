@@ -799,6 +799,7 @@ end
 
 QuickSlot_Click = function(slotIndex)
   -- function num : 0_12 , upvalues : quickSlot
+  _PA_LOG("정태�\164", "slotIndex : " .. tostring(slotIndex))
   if slotIndex == nil then
     return 
   end
@@ -867,7 +868,11 @@ QuickSlot_Click = function(slotIndex)
               if itemEnchantWrapper:isPopupItem() then
                 Panel_UserItem_PopupItem(itemEnchantWrapper, whereType, invenSlotNo)
               else
-                quickSlot_UseSlot(slotIndex)
+                if eConnectUiType.eConnectUi_Undefined ~= (itemWrapper:getStaticStatus()):getConnectUi() then
+                  ConnectUI((itemWrapper:getStaticStatus()):getConnectUi())
+                else
+                  quickSlot_UseSlot(slotIndex)
+                end
               end
               quickSlot_UseSlot(slotIndex)
             end
@@ -1077,7 +1082,7 @@ FGlobal_Potion_InvenToQuickSlot = function(inventoryType, slotNo, itemType)
             local quickType = quickSlotInfo._type
             if (CppEnums.QuickSlotType).eItem == quickType or (CppEnums.QuickSlotType).eCashItem == quickType then
               local itemKey = (quickSlotInfo._itemKey):get()
-              if itemKey == 517 or itemKey == 518 or itemKey == 519 or itemKey == 524 or itemKey == 525 or itemKey == 513 or itemKey == 514 or itemKey == 528 or itemKey == 529 or itemKey == 530 or itemKey == 502 then
+              if itemKey == 502 or itemKey == 513 or itemKey == 514 or itemKey == 517 or itemKey == 518 or itemKey == 519 or itemKey == 524 or itemKey == 525 or itemKey == 528 or itemKey == 529 or itemKey == 530 or itemKey == 538 or itemKey == 551 or itemKey == 552 or itemKey == 553 or itemKey == 554 or itemKey == 555 or itemKey == 17568 or itemKey == 17569 or itemKey == 17679 or itemKey == 17681 or itemKey == 17682 or itemKey == 17683 or itemKey == 17684 or itemKey == 19932 or itemKey == 19933 or itemKey == 19934 or itemKey == 19935 then
                 return 
               end
             end
@@ -1460,7 +1465,7 @@ Potion_Pos_Init = function()
       local invenSlotNo = (((getSelfPlayer()):get()):getInventory()):getSlot(quickSlotInfo._itemKey)
       local itemStaticWrapper = getItemEnchantStaticStatus(quickSlotInfo._itemKey)
       local itemKey = (quickSlotInfo._itemKey):getItemKey()
-      if itemKey == 502 or itemKey == 513 or itemKey == 514 or itemKey == 517 or itemKey == 518 or itemKey == 519 or itemKey == 524 or itemKey == 525 or itemKey == 528 or itemKey == 529 or itemKey == 530 or itemKey == 538 or itemKey == 551 or itemKey == 552 or itemKey == 553 or itemKey == 554 or itemKey == 555 or itemKey == 17568 or itemKey == 17569 or itemKey == 19932 or itemKey == 19933 or itemKey == 19934 or itemKey == 19935 then
+      if itemKey == 502 or itemKey == 513 or itemKey == 514 or itemKey == 517 or itemKey == 518 or itemKey == 519 or itemKey == 524 or itemKey == 525 or itemKey == 528 or itemKey == 529 or itemKey == 530 or itemKey == 538 or itemKey == 551 or itemKey == 552 or itemKey == 553 or itemKey == 554 or itemKey == 555 or itemKey == 17568 or itemKey == 17569 or itemKey == 17679 or itemKey == 17681 or itemKey == 17682 or itemKey == 17683 or itemKey == 17684 or itemKey == 19932 or itemKey == 19933 or itemKey == 19934 or itemKey == 19935 then
         potionPosInit = true
         if invenSlotNo == 255 then
           Potion_Alert(index)

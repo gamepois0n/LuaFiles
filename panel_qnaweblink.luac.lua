@@ -119,11 +119,7 @@ end
   _qnaWeb:ResetUrl()
   audioPostEvent_SystemUi(13, 5)
   Panel_QnAWebLink:SetShow(false, false)
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
   _btn_Close:addInputEvent("Mouse_LUp", "Panel_QnAWebLink_ShowToggle()")

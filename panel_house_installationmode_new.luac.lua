@@ -715,7 +715,7 @@ FromClient_ShowHousingModeUI = function(isShow)
 end
 
 FromClient_CancelInstallModeMessageBox = function()
-  -- function num : 0_19 , upvalues : IM
+  -- function num : 0_19
   audioPostEvent_SystemUi(1, 33)
   local messageBox_HouseInstallation_Exit_DO = function()
     -- function num : 0_19_0
@@ -735,8 +735,6 @@ FromClient_CancelInstallModeMessageBox = function()
   local isExist = (MessageBox.doHaveMessageBoxData)(messageboxData.title)
   if isExist == false then
     (MessageBox.showMessageBox)(messageboxData)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   end
 end
 
@@ -779,7 +777,7 @@ FGlobal_House_InstallationMode_Update = function()
 end
 
 FGlobal_House_InstallationMode_Open = function()
-  -- function num : 0_22 , upvalues : IM
+  -- function num : 0_22
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_HouseInstallation._filter_ItemType = 0
@@ -806,8 +804,6 @@ FGlobal_House_InstallationMode_Open = function()
     PaGlobal_HouseInstallation._isMyHouse = false
   end
   PaGlobal_HouseInstallation:open()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 FGlobal_House_InstallationMode_Close = function()
@@ -848,7 +844,7 @@ House_InstallationMode_UpdatePerFrame = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC231: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC229: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.updateScroll = function(self, isDown)
   -- function num : 0_25
@@ -876,7 +872,7 @@ PaGlobal_HouseInstallation.updateScroll = function(self, isDown)
   self._nowInterval = now
 end
 
--- DECOMPILER ERROR at PC234: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC232: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.itemFilter = function(self, itemType)
   -- function num : 0_26
@@ -936,7 +932,7 @@ PaGlobal_HouseInstallation.itemFilter = function(self, itemType)
   self:update(self._nowInterval)
 end
 
--- DECOMPILER ERROR at PC237: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC235: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.controllBottomMenu = function(self, valuetype)
   -- function num : 0_27
@@ -968,7 +964,7 @@ PaGlobal_HouseInstallation.controllBottomMenu = function(self, valuetype)
   end
 end
 
--- DECOMPILER ERROR at PC240: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC238: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.menuTopIconTooltip = function(self, iconType)
   -- function num : 0_28
@@ -1015,7 +1011,7 @@ PaGlobal_HouseInstallation.menuTopIconTooltip = function(self, iconType)
   end
 end
 
--- DECOMPILER ERROR at PC243: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC241: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.menuBottomIconTooltip = function(self, iconType)
   -- function num : 0_29
@@ -1047,7 +1043,7 @@ PaGlobal_HouseInstallation.menuBottomIconTooltip = function(self, iconType)
   end
 end
 
--- DECOMPILER ERROR at PC246: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC244: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.floor_MouseLUp = function(self, floor)
   -- function num : 0_30
@@ -1055,7 +1051,7 @@ PaGlobal_HouseInstallation.floor_MouseLUp = function(self, floor)
   PaGlobal_HouseInstallation:floorCheck(floor)
 end
 
--- DECOMPILER ERROR at PC249: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC247: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.scrollBtn = function(self)
   -- function num : 0_31
@@ -1067,21 +1063,18 @@ PaGlobal_HouseInstallation.scrollBtn = function(self)
   self:update(self._nowInterval)
 end
 
--- DECOMPILER ERROR at PC253: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC250: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.editItemNameClear = function(self)
-  -- function num : 0_32 , upvalues : IM
+  -- function num : 0_32
   (((self._ui)._menu_Top)._edit_ItemName):SetEditText("", true)
   SetFocusEdit(((self._ui)._menu_Top)._edit_ItemName)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
--- DECOMPILER ERROR at PC257: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC253: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.findItemName = function(self)
-  -- function num : 0_33 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_33
   local inputKeyword = (((self._ui)._menu_Top)._edit_ItemName):GetEditText()
   self._filter_ItemType = 0
   ClearFocusEdit()
@@ -1097,7 +1090,7 @@ PaGlobal_HouseInstallation.findItemName = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC260: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC256: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.exit = function(self)
   -- function num : 0_34
@@ -1105,7 +1098,7 @@ PaGlobal_HouseInstallation.exit = function(self)
   FromClient_CancelInstallModeMessageBox()
 end
 
--- DECOMPILER ERROR at PC264: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC260: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.delete_InstalledObject = function(self, idx)
   -- function num : 0_35 , upvalues : UI_CIT
@@ -1144,7 +1137,7 @@ PaGlobal_HouseInstallation.delete_InstalledObject = function(self, idx)
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
--- DECOMPILER ERROR at PC267: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC263: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.cashItemShowToolTip = function(self, productNoRaw, uiIdx)
   -- function num : 0_36
@@ -1157,7 +1150,7 @@ PaGlobal_HouseInstallation.cashItemShowToolTip = function(self, productNoRaw, ui
   Panel_Tooltip_Item_Show(itemSSW, (Uislot.slotItem).icon, true, false)
 end
 
--- DECOMPILER ERROR at PC270: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC266: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.showInstalledItemToolTip = function(self, invenSlotNo, slot_Idx)
   -- function num : 0_37
@@ -1170,7 +1163,7 @@ PaGlobal_HouseInstallation.showInstalledItemToolTip = function(self, invenSlotNo
   Panel_Tooltip_Item_Show(itemSSW, (Uislot.slotItem).icon, true, false, nil)
 end
 
--- DECOMPILER ERROR at PC273: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC269: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.showToolTip = function(self, invenType, invenSlotNo, slot_Idx)
   -- function num : 0_38
@@ -1179,7 +1172,7 @@ PaGlobal_HouseInstallation.showToolTip = function(self, invenType, invenSlotNo, 
   Panel_Tooltip_Item_Show(itemWrapper, (Uislot.slotItem).icon, false, false, nil)
 end
 
--- DECOMPILER ERROR at PC276: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC272: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.installFurniture = function(self, invenType, invenSlotNo, iscash, productNo)
   -- function num : 0_39
@@ -1195,7 +1188,7 @@ PaGlobal_HouseInstallation.installFurniture = function(self, invenType, invenSlo
   end
 end
 
--- DECOMPILER ERROR at PC279: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC275: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.registEventHandler = function(self)
   -- function num : 0_40
@@ -1235,7 +1228,7 @@ PaGlobal_HouseInstallation.registEventHandler = function(self)
   ((self._ui)._btn_ExitInstallMode):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:exit()")
 end
 
--- DECOMPILER ERROR at PC282: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC278: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.registMessageHandler = function(self)
   -- function num : 0_41

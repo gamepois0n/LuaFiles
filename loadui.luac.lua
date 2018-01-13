@@ -10,16 +10,16 @@ isQuest160524_chk = function()
   return isQuest160524
 end
 
-local isUsedNewItemmarket = true
-isNewItemmarket_chk = function()
-  -- function num : 0_1 , upvalues : isUsedNewItemmarket
-  return isUsedNewItemmarket
+local isNewHousing = true
+isNewHousing_chk = function()
+  -- function num : 0_1 , upvalues : isNewHousing
+  return isNewHousing
 end
 
-local isNewHousing = false
-isNewHousing_chk = function()
-  -- function num : 0_2 , upvalues : isUsedNewItemmarket
-  return isUsedNewItemmarket
+local isFurnitureWarehouse = ToClient_IsContentsGroupOpen("342")
+isFurnitureWarehouse_chk = function()
+  -- function num : 0_2 , upvalues : isFurnitureWarehouse
+  return isFurnitureWarehouse
 end
 
 if not ToClient_IsContentsGroupOpen("315") then
@@ -30,8 +30,8 @@ isNewEnchant_chk = function()
   return isUsedNewEnchant
 end
 
-if not ToClient_IsContentsGroupOpen("315") then
-  local isUsedNewTradeEventNotice = isGameTypeKorea()
+if not ToClient_IsContentsGroupOpen("315") and not isGameTypeKorea() and not isGameTypeTH() then
+  local isUsedNewTradeEventNotice = isGameTypeID()
 end
 isUsedNewTradeEventNotice_chk = function()
   -- function num : 0_4 , upvalues : isUsedNewTradeEventNotice
@@ -46,8 +46,8 @@ isNewCharacterInfo = function()
   return isUsedNewCharacterInfo
 end
 
-if not isGameTypeKorea() then
-  local isMemoOpen = ToClient_IsContentsGroupOpen("315")
+if not isGameTypeKorea() and not ToClient_IsContentsGroupOpen("315") and not isGameTypeTH() then
+  local isMemoOpen = isGameTypeID()
 end
 isUsedMemoOpen = function()
   -- function num : 0_6 , upvalues : isMemoOpen
@@ -56,23 +56,30 @@ end
 
 local renewalUiOpen = false
 local isActionModeActive = false
+isActionUiOpen = function()
+  -- function num : 0_7 , upvalues : isActionModeActive
+  return isActionModeActive
+end
+
 local isNewLifeRanking = false
 isNewLifeRanking_chk = function()
-  -- function num : 0_7 , upvalues : isNewLifeRanking
-  return isNewLifeRanking
+  -- function num : 0_8
+  if not isGameTypeKorea() then
+    return ToClient_IsContentsGroupOpen("315")
+  end
 end
 
 local isUseNewGlobalKeyBinder = true
 isUseNewGlobalKeyBinder_chk = function()
-  -- function num : 0_8 , upvalues : isUseNewGlobalKeyBinder
+  -- function num : 0_9 , upvalues : isUseNewGlobalKeyBinder
   return isUseNewGlobalKeyBinder
 end
 
 local isNewOption = false
 isUsedNewOption = function()
-  -- function num : 0_9 , upvalues : isNewOption
-  if isNewOption then
-    return ToClient_IsDevelopment()
+  -- function num : 0_10
+  if not isGameTypeKorea() and not ToClient_IsContentsGroupOpen("315") and not isGameTypeTH() then
+    return isGameTypeID()
   end
 end
 
@@ -87,7 +94,7 @@ local RenderModeBitSetInGameCashShop = PAUIRenderModeBitSet({RenderMode.eRenderM
 local RenderModeAllModeOpen = PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Knowledge, RenderMode.eRenderMode_Dialog, RenderMode.eRenderMode_Dye, RenderMode.eRenderMode_InGameCashShop, RenderMode.eRenderMode_HouseInstallation, RenderMode.eRenderMode_BlackSpirit, RenderMode.eRenderMode_MentalGame, RenderMode.eRenderMode_customScreenShot, RenderMode.eRenderMode_UISetting, RenderMode.eRenderMode_CutScene, RenderMode.eRenderMode_IngameCustomize})
 runLua("UI_Data/Script/RenderMode/renderMode.lua")
 CheckTutorialEnd = function()
-  -- function num : 0_10
+  -- function num : 0_11
   if getSelfPlayer() == nil then
     return false
   end
@@ -98,12 +105,12 @@ end
 local UIFontType = (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType()
 preloadUI_cahngeUIFontSize(UIFontType)
 basicLoadUI = function(panelNodeName, panelID, panelGroup)
-  -- function num : 0_11 , upvalues : defaultRenderModeBitSet
+  -- function num : 0_12 , upvalues : defaultRenderModeBitSet
   loadUI(panelNodeName, panelID, panelGroup, defaultRenderModeBitSet)
 end
 
 loadLogoUI = function()
-  -- function num : 0_12 , upvalues : UIGroup
+  -- function num : 0_13 , upvalues : UIGroup
   basicLoadUI("UI_Data/UI_Lobby/UI_Logo.xml", "Panel_Logo", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Widget/UIcontrol/UI_SpecialCharacter.XML", "Panel_SpecialCharacter", UIGroup.PAGameUIGroup_ModalDialog)
   runLua("UI_Data/Script/Panel_Logo.lua")
@@ -111,7 +118,7 @@ loadLogoUI = function()
 end
 
 loadLoginUI = function()
-  -- function num : 0_13 , upvalues : UIGroup
+  -- function num : 0_14 , upvalues : UIGroup
   basicLoadUI("UI_Data/UI_Lobby/UI_TermsofGameUse.XML", "Panel_TermsofGameUse", UIGroup.PAGameUIGroup_Movie)
   basicLoadUI("UI_Data/UI_Lobby/UI_Login.xml", "Panel_Login", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/UI_Lobby/UI_Login_Password.XML", "Panel_Login_Password", UIGroup.PAGameUIGroup_GameSystemMenu)
@@ -136,11 +143,11 @@ loadLoginUI = function()
 end
 
 loadSceneEditUI = function()
-  -- function num : 0_14
+  -- function num : 0_15
 end
 
 loadServerSelectUI = function()
-  -- function num : 0_15 , upvalues : UIGroup
+  -- function num : 0_16 , upvalues : UIGroup
   basicLoadUI("UI_Data/UI_Lobby/UI_ServerSelect_New.xml", "Panel_ServerSelect", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/MessageBox/UI_Win_System.XML", "Panel_Win_System", UIGroup.PAGameUIGroup_ModalDialog)
   basicLoadUI("UI_Data/Window/MessageBox/Panel_ScreenShot_For_Desktop.XML", "Panel_ScreenShot_For_Desktop", UIGroup.PAGameUIGroup_ModalDialog)
@@ -157,7 +164,7 @@ loadServerSelectUI = function()
 end
 
 loadLoadingUI = function()
-  -- function num : 0_16 , upvalues : UIGroup, RenderMode
+  -- function num : 0_17 , upvalues : UIGroup, RenderMode
   loadUI("UI_Data/UI_Loading/UI_Loading_Progress.xml", "Panel_Loading", UIGroup.PAGameUIGroup_GameSystemMenu, PAUIRenderModeBitSet({RenderMode.eRenderMode_Loading}))
   runLua("UI_Data/Script/Panel_Loading.lua")
   basicLoadUI("UI_Data/Window/Worldmap/UI_New_Worldmap_NodeName.XML", "Panel_NodeName", UIGroup.PAGameUIGroup_Interaction)
@@ -185,7 +192,7 @@ loadLoadingUI = function()
 end
 
 preloadCustomizationUI = function()
-  -- function num : 0_17 , upvalues : UIGroup, RenderMode, RenderModeAllModeOpen
+  -- function num : 0_18 , upvalues : UIGroup, RenderMode, RenderModeAllModeOpen
   loadUI("UI_Data/Customization/UI_Customization_Common_Decoration.xml", "Panel_Customization_Common_Decoration", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_IngameCustomize}))
   loadUI("UI_Data/Customization/UI_Customization_Main.XML", "Panel_CustomizationMain", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_IngameCustomize}))
   loadUI("UI_Data/Customization/UI_Customization_Transform.xml", "Panel_CustomizationTransform", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_IngameCustomize}))
@@ -212,7 +219,7 @@ preloadCustomizationUI = function()
 end
 
 loadCustomizationUI = function()
-  -- function num : 0_18
+  -- function num : 0_19
   runLua("UI_Data/Script/Customization/Customization_Common.lua")
   runLua("UI_Data/Script/Customization/Panel_Customization_HairShape.lua")
   runLua("UI_Data/Script/Customization/Panel_Customization_Common_Decoration.lua")
@@ -240,7 +247,7 @@ loadCustomizationUI = function()
 end
 
 loadLobbyUI = function()
-  -- function num : 0_19 , upvalues : UIGroup, renewalUiOpen
+  -- function num : 0_20 , upvalues : UIGroup, renewalUiOpen
   _PA_LOG("광운", "***********  UI_DATA1 function loadLobbyUI()")
   basicLoadUI("UI_Data/UI_Lobby/UI_Startl.xml", "Panel_Start", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/UI_Lobby/UI_CharacterSelect.xml", "Panel_CharacterSelect", UIGroup.PAGameUIGroup_Windows)
@@ -282,7 +289,7 @@ loadLobbyUI = function()
 end
 
 preLoadGameUI = function()
-  -- function num : 0_20 , upvalues : UIGroup, RenderModeAllModeOpen, RenderMode, skillOldandNew, isQuest160524, RenderModeWorldMapBitSet, isActionModeActive, isNewHousing, RenderModeBitSetInGameCashShop, isUsedNewItemmarket
+  -- function num : 0_21 , upvalues : UIGroup, RenderModeAllModeOpen, RenderMode, skillOldandNew, isQuest160524, RenderModeWorldMapBitSet, isActionModeActive, isNewHousing, RenderModeBitSetInGameCashShop
   loadUI("UI_Data/Widget/UIcontrol/Panel_OnlyPerframeUsed.XML", "Panel_OnlyPerframeUsed", UIGroup.PAGameUIGroup_Widget, RenderModeAllModeOpen)
   basicLoadUI("UI_Data/Window/Movie/Panel_MovieTheater_MessageBox.XML", "Panel_MovieTheater_MessageBox", UIGroup.PAGameUIGroup_Movie)
   basicLoadUI("UI_Data/Window/Movie/UI_IntroMovie.xml", "Panel_IntroMovie", UIGroup.PAGameUIGroup_Movie)
@@ -403,7 +410,7 @@ preLoadGameUI = function()
   basicLoadUI("UI_Data/Window/Copyright/Panel_Window_Copyright.XML", "Panel_Copyright", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Widget/dance/DanceFrame.XML", "Panel_DanceFrame", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Twitch/Panel_Twitch.XML", "Panel_Twitch", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/SaveSetting/Panel_SaveSetting.XML", "Panel_SaveSetting", UIGroup.PAGameUIGroup_Windows)
+  loadUI("UI_Data/Window/SaveSetting/Panel_SaveSetting.XML", "Panel_SaveSetting", UIGroup.PAGameUIGroup_Windows, RenderModeAllModeOpen)
   if isQuest160524 == true then
     basicLoadUI("UI_Data/Window/Quest/UI_Window_Quest_160525.xml", "Panel_Window_Quest_New", UIGroup.PAGameUIGroup_Windows)
   else
@@ -481,6 +488,7 @@ preLoadGameUI = function()
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetRegister.XML", "Panel_Window_PetRegister", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetInfo.XML", "Panel_Window_PetInfoNew", UIGroup.PAGameUIGroup_Window_Progress)
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetListNew.XML", "Panel_Window_PetListNew", UIGroup.PAGameUIGroup_Windows)
+  basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetRestoreAll.XML", "Panel_PetRestoreAll", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetLookChange.XML", "Panel_Window_PetLookChange", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetControl.XML", "Panel_Window_PetControl", UIGroup.PAGameUIGroup_Widget)
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_NoPetIcon.XML", "Panel_Window_PetIcon", UIGroup.PAGameUIGroup_Widget)
@@ -566,6 +574,7 @@ preLoadGameUI = function()
   basicLoadUI("UI_Data/Window/Guild/Panel_Guild_Rank.XML", "Panel_Guild_Rank", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Panel_GuildRank_Web.XML", "Panel_GuildRank_Web", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Guild/Panel_GuildWebInfo.XML", "Panel_GuildWebInfo", UIGroup.PAGameUIGroup_Windows)
+  basicLoadUI("UI_Data/Window/Guild/Panel_Window_GuildWatchingMode.XML", "Panel_GuildBattleWatchingMode", UIGroup.PAGameUIGroup_windows)
   if true == isUsedNewOption() then
     basicLoadUI("UI_Data/Window/c_Option/Panel_Option_Main.XML", "Panel_Window_cOption", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/c_Option/Option_Performance_Camera.XML", "Panel_Performance_Camera", UIGroup.PAGameUIGroup_Windows)
@@ -594,15 +603,16 @@ preLoadGameUI = function()
     basicLoadUI("UI_Data/Window/c_Option/Option_Sound_OnOff.XML", "Panel_Sound_OnOff", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/c_Option/Option_Sound_Volume.XML", "Panel_Sound_Volume", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/c_Option/Option_Alert_Alarm.XML", "Panel_Alert_Alarm", UIGroup.PAGameUIGroup_Windows)
+  else
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption.XML", "Panel_Window_Option", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Display.XML", "Panel_GameOption_Display", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Sound.XML", "Panel_GameOption_Sound", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Game.XML", "Panel_GameOption_Game", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig.XML", "Panel_GameOption_Key", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig_UI.XML", "Panel_GameOption_Key_UI", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Language.XML", "Panel_GameOption_Language", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Optimization.XML", "Panel_GameOption_Optimization", UIGroup.PAGameUIGroup_Windows)
   end
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption.XML", "Panel_Window_Option", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Display.XML", "Panel_GameOption_Display", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Sound.XML", "Panel_GameOption_Sound", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Game.XML", "Panel_GameOption_Game", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig.XML", "Panel_GameOption_Key", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig_UI.XML", "Panel_GameOption_Key_UI", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Language.XML", "Panel_GameOption_Language", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Optimization.XML", "Panel_GameOption_Optimization", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/Option/Panel_SetShortCut.XML", "Panel_SetShortCut", UIGroup.PAGameUIGroup_Windows)
   loadUI("UI_Data/Window/MessageBox/UI_Win_System.XML", "Panel_Win_System", UIGroup.PAGameUIGroup_FadeScreen, RenderModeAllModeOpen)
   loadUI("UI_Data/Window/MessageBox/Panel_ScreenShot_For_Desktop.XML", "Panel_ScreenShot_For_Desktop", UIGroup.PAGameUIGroup_FadeScreen, RenderModeAllModeOpen)
@@ -839,8 +849,8 @@ preLoadGameUI = function()
   basicLoadUI("UI_Data/Window/GameExit/Panel_ChannelSelect.XML", "Panel_ChannelSelect", UIGroup.PAGameUIGroup_GameMenu)
   loadUI("UI_Data/Widget/RecentMemory/Panel_RecentMemory.XML", "Panel_RecentMemory", UIGroup.PAGameUIGroup_WorldMap_Contents, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default}))
   basicLoadUI("UI_Data/Window/DeadMessage/UI_NoAccessibleArea_Alert.xml", "Panel_NoAceessArea_Alert", UIGroup.PAGameUIGroup_ScreenEffect)
-  loadUI("UI_Data/Window/ProductNote/Panel_ProductNote.XML", "Panel_ProductNote", UIGroup.PAGameUIGroup_WorldMap_Contents, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_Dialog}))
-  basicLoadUI("UI_Data/Window/KeyboardHelp/Panel_KeyboardHelp.XML", "Panel_KeyboardHelp", UIGroup.PAGameUIGroup_WorldMap_Contents)
+  loadUI("UI_Data/Window/ProductNote/Panel_ProductNote.XML", "Panel_ProductNote", UIGroup.PAGameUIGroup_DeadMessage, RenderModeAllModeOpen)
+  basicLoadUI("UI_Data/Window/KeyboardHelp/Panel_KeyboardHelp.XML", "Panel_KeyboardHelp", UIGroup.PAGameUIGroup_DeadMessage, RenderModeAllModeOpen)
   basicLoadUI("UI_Data/Window/LevelupGuide/Panel_LevelupGuide.XML", "Panel_LevelupGuide", UIGroup.PAGameUIGroup_WorldMap_Contents)
   basicLoadUI("UI_Data/Window/QnAWebLink/Panel_QnAWebLink.XML", "Panel_QnAWebLink", UIGroup.PAGameUIGroup_WorldMap_Contents)
   basicLoadUI("UI_Data/Widget/MiniGame/MiniGame_Gradient.xml", "Panel_Minigame_Gradient", UIGroup.PAGameUIGroup_MainUI)
@@ -917,11 +927,7 @@ preLoadGameUI = function()
   loadUI("UI_Data/Window/Cash_Customization/Panel_Cash_Customization.XML", "Panel_Cash_Customization", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_IngameCustomize}))
   loadUI("UI_Data/Window/Cash_Customization/Panel_Cash_Customization_BuyItem.XML", "Panel_Cash_Customization_BuyItem", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_IngameCustomize}))
   loadUI("UI_Data/Window/ItemMarket/Panel_Window_ItemMarket_Function.XML", "Panel_Window_ItemMarket_Function", UIGroup.PAGameUIGroup_WorldMap_Contents, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
-  if isUsedNewItemmarket then
-    loadUI("UI_Data/Window/ItemMarket/Panel_Window_ItemMarketNew.XML", "Panel_Window_ItemMarket", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
-  else
-    loadUI("UI_Data/Window/ItemMarket/Panel_Window_ItemMarket.XML", "Panel_Window_ItemMarket", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
-  end
+  loadUI("UI_Data/Window/ItemMarket/Panel_Window_ItemMarketNew.XML", "Panel_Window_ItemMarket", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
   loadUI("UI_Data/Window/ItemMarket/Panel_Window_ItemMarket_Favorite.XML", "Panel_Window_ItemMarket_Favorite", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
   loadUI("UI_Data/Window/ItemMarket/Panel_ItemMarket_BidDesc.XML", "Panel_ItemMarket_BidDesc", UIGroup.PAGameUIGroup_Window_Progress, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
   loadUI("UI_Data/Window/ItemMarket/Panel_Window_ItemMarket_ItemSet.XML", "Panel_Window_ItemMarket_ItemSet", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
@@ -932,6 +938,7 @@ preLoadGameUI = function()
   loadUI("UI_Data/Window/ItemMarket/Panel_ItemMarket_Alarm.XML", "Panel_ItemMarket_Alarm", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
   loadUI("UI_Data/Window/ItemMarket/Panel_ItemMarket_PreBid.XML", "Panel_ItemMarket_PreBid", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
   loadUI("UI_Data/Window/ItemMarket/Panel_ItemMarket_PreBid_Manager.XML", "Panel_ItemMarket_PreBid_Manager", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
+  loadUI("UI_Data/Window/ItemMarket/Panel_ItemMarket_Password.XML", "Panel_ItemMarket_Password", UIGroup.PAGameUIGroup_GameMenu, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_WorldMap, RenderMode.eRenderMode_Dialog}))
   basicLoadUI("UI_Data/Window/RandomBoxSelect/Panel_RandomBoxSelect.XML", "Panel_RandomBoxSelect", UIGroup.PAGameUIGroup_WorldMap_Contents)
   basicLoadUI("UI_Data/Widget/Gacha_Roulette/Panel_Gacha_Roulette.XML", "Panel_Gacha_Roulette", UIGroup.PAGameUIGroup_Chatting)
   basicLoadUI("UI_Data/Widget/PowerGauge/Panel_PowerGauge.XML", "Panel_PowerGauge", UIGroup.PAGameUIGroup_Window_Progress)
@@ -1001,9 +1008,10 @@ preLoadGameUI = function()
     basicLoadUI("UI_Data/Window/Memo/Panel_Memo_Sticky.xml", "Panel_Memo_Sticky", UIGroup.PAGameUIGroup_Windows)
     basicLoadUI("UI_Data/Window/Memo/Panel_Memo_Main.xml", "Panel_Memo_List", UIGroup.PAGameUIGroup_Windows)
   end
+  basicLoadUI("UI_Data/Window/ButtonShortcuts/Panel_ButtonShortcuts.xml", "Panel_ButtonShortcuts", UIGroup.PAGameUIGroup_Windows)
   loadUI("UI_Data/Window/TranslationReport/Panel_Window_TranslationReport.XML", "Panel_TranslationReport", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Knowledge, RenderMode.eRenderMode_Dialog}))
   basicLoadUI("UI_Data/Window/TranslationReport/Panel_Window_TranslationText.XML", "Panel_Window_TranslationText", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Under18/Panel_Message_Under18.xml", "Panel_Message_Under18", UIGroup.PAGameUIGroup_Windows)
+  basicLoadUI("UI_Data/Window/Under18/Panel_Message_Under18.xml", "Panel_Message_Under18", UIGroup.PAGameUIGroup_FadeScreen)
   if isActionModeActive then
     basicLoadUI("UI_Data/Widget/Z_AlertArea/UI_Widget_AlertArea.xml", "Panel_AlertArea", UIGroup.PAGameUIGroup_Widget)
     basicLoadUI("UI_Data/Widget/Z_RightTopIcons/UI_Widget_Function.xml", "Panel_FunctionButton_Area", UIGroup.PAGameUIGroup_Widget)
@@ -1011,7 +1019,7 @@ preLoadGameUI = function()
 end
 
 loadOceanUI = function()
-  -- function num : 0_21 , upvalues : UIGroup
+  -- function num : 0_22 , upvalues : UIGroup
   basicLoadUI("UI_Data/Window/Cutscene/Panel_CutsceneMovie.XML", "Panel_Cutscene", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/Acquire/Acquire.XML", "Panel_Acquire", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/Acquire/Acquire_QuestDirect.XML", "Panel_QuestDirect", UIGroup.PAGameUIGroup_ModalDialog)
@@ -1021,16 +1029,34 @@ loadOceanUI = function()
 end
 
 preLoadGameOptionUI = function()
-  -- function num : 0_22 , upvalues : UIGroup, RenderMode
+  -- function num : 0_23 , upvalues : UIGroup, RenderMode
   basicLoadUI("UI_Data/Window/WebHelper/Panel_WebControl.XML", "Panel_WebControl", UIGroup.PAGameUIGroup_DeadMessage)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption.XML", "Panel_Window_Option", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Display.XML", "Panel_GameOption_Display", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Sound.XML", "Panel_GameOption_Sound", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Game.XML", "Panel_GameOption_Game", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig.XML", "Panel_GameOption_Key", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig_UI.XML", "Panel_GameOption_Key_UI", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Language.XML", "Panel_GameOption_Language", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Optimization.XML", "Panel_GameOption_Optimization", UIGroup.PAGameUIGroup_Windows)
+  if isUsedNewOption() == true then
+    basicLoadUI("UI_Data/Window/c_Option/Panel_Option_Main.XML", "Panel_Window_cOption", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Performance_Camera.XML", "Panel_Performance_Camera", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Performance_GraphicQuality.XML", "Panel_Performance_GraphicQuality", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Performance_Npc.XML", "Panel_Performance_Npc", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Performance_Optimize.XML", "Panel_Performance_Optimize", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Performance_OptimizeBeta.XML", "Panel_Performance_OptimizeBeta", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Function_Alert.XML", "Panel_Function_Alert", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Function_Nation.XML", "Panel_Function_Nation", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Graphic_Camera.XML", "Panel_Graphic_Camera", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Graphic_Effect.XML", "Panel_Graphic_Effect", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Graphic_Quality.XML", "Panel_Graphic_Quality", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Graphic_ScreenShot.XML", "Panel_Graphic_ScreenShot", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Graphic_Window.XML", "Panel_Graphic_Window", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Sound_OnOff.XML", "Panel_Sound_OnOff", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/c_Option/Option_Sound_Volume.XML", "Panel_Sound_Volume", UIGroup.PAGameUIGroup_Windows)
+  else
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption.XML", "Panel_Window_Option", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Display.XML", "Panel_GameOption_Display", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Sound.XML", "Panel_GameOption_Sound", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Game.XML", "Panel_GameOption_Game", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig.XML", "Panel_GameOption_Key", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_KeyConfig_UI.XML", "Panel_GameOption_Key_UI", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Language.XML", "Panel_GameOption_Language", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/Option/UI_GameOption_Frame_Optimization.XML", "Panel_GameOption_Optimization", UIGroup.PAGameUIGroup_Windows)
+  end
   basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_Skill.XML", "Panel_Tooltip_Skill", UIGroup.PAGameUIGroup_GameMenu)
   basicLoadUI("UI_Data/Widget/Tooltip/UI_Tooltip_Skill_forLearning.XML", "Panel_Tooltip_Skill_forLearning", UIGroup.PAGameUIGroup_GameMenu)
   loadUI("UI_Data/Widget/Tooltip/UI_Tooltip_Item.XML", "Panel_Tooltip_Item", UIGroup.PAGameUIGroup_ModalDialog, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_InGameCashShop, RenderMode.eRenderMode_WorldMap}))
@@ -1045,9 +1071,18 @@ preLoadGameOptionUI = function()
 end
 
 loadGameOptionUI = function()
-  -- function num : 0_23
-  runLua("UI_Data/Script/Window/Option/Panel_GameOption_Optimization.lua")
-  runLua("UI_Data/Script/Window/Option/UI_GameOption.lua")
+  -- function num : 0_24
+  if isUsedNewOption() == true then
+    runLua("UI_Data/Script/Window/Option/GameOptionHeader.lua")
+    runLua("UI_Data/Script/Window/Option/GameOptionMain.lua")
+    runLua("UI_Data/Script/Window/Option/GameOptionUtil.lua")
+    runLua("UI_Data/Script/Window/Option/Panel_Option_Main.lua")
+    PaGlobal_Option:Init()
+    ToClient_initGameOption()
+  else
+    runLua("UI_Data/Script/Window/Option/Panel_GameOption_Optimization.lua")
+    runLua("UI_Data/Script/Window/Option/UI_GameOption.lua")
+  end
   if isUseNewGlobalKeyBinder_chk() == true then
     runLua("UI_Data/Script/GlobalKeyBinder/new_globalkeybinder.lua")
     runLua("UI_Data/Script/GlobalKeyBinder/new_globalkeybinderFunctions.lua")
@@ -1065,7 +1100,7 @@ loadGameOptionUI = function()
 end
 
 loadGameUI = function()
-  -- function num : 0_24 , upvalues : isActionModeActive, isNewHousing, isQuest160524, isUsedNewItemmarket
+  -- function num : 0_25 , upvalues : isActionModeActive, isNewHousing, isQuest160524
   runLua("UI_Data/Script/Panel_Ime.lua")
   runLua("UI_Data/Script/Tutorial/Panel_WebControl.lua")
   runLua("UI_Data/Script/DragManager.lua")
@@ -1492,16 +1527,17 @@ loadGameUI = function()
   runLua("UI_Data/Script/Window/Mail/Panel_Mail.lua")
   runLua("UI_Data/Script/Window/Mail/Panel_Mail_Detail.lua")
   runLua("UI_Data/Script/Window/Mail/Panel_Mail_Send.lua")
-  runLua("UI_Data/Script/Window/Option/Panel_GameOption_Optimization.lua")
-  runLua("UI_Data/Script/Window/Option/UI_GameOption.lua")
-  runLua("UI_Data/Script/Window/Option/Attacked_ClosePanel.lua")
-  runLua("UI_Data/Script/Window/Option/Panel_SetShortCut.lua")
   if true == isUsedNewOption() then
     runLua("UI_Data/Script/Window/Option/GameOptionHeader.lua")
     runLua("UI_Data/Script/Window/Option/GameOptionMain.lua")
     runLua("UI_Data/Script/Window/Option/GameOptionUtil.lua")
     runLua("UI_Data/Script/Window/Option/Panel_Option_Main.lua")
+  else
+    runLua("UI_Data/Script/Window/Option/Panel_GameOption_Optimization.lua")
+    runLua("UI_Data/Script/Window/Option/UI_GameOption.lua")
   end
+  runLua("UI_Data/Script/Window/Option/Panel_SetShortCut.lua")
+  runLua("UI_Data/Script/Window/Option/Attacked_ClosePanel.lua")
   runLua("UI_Data/Script/Widget/SkillCommand/UI_Widget_SkillCommand.lua")
   runLua("UI_Data/Script/Window/ProductNote/Panel_ProductNote.lua")
   runLua("UI_Data/Script/Window/KeyboardHelp/Panel_Window_KeyboardHelp.lua")
@@ -1602,9 +1638,6 @@ loadGameUI = function()
   runLua("UI_Data/Script/Window/Worldmap_Grand/New_WorldMap_PinGuide.lua")
   runLua("UI_Data/Script/Window/Worldmap_Grand/New_WorldMap_NodeStable.lua")
   runLua("UI_Data/Script/Window/Worldmap_Grand/New_Worldmap_NodeStableInfo.lua")
-  if ToClient_IsDevelopment() then
-    runLua("UI_Data/Script/Window/WorldMap/WorldMiniMap.lua")
-  end
   runLua("UI_Data/Script/Window/Worldmap_Grand/WordMap_Craft/Worldmap_Grand_GuildCraft.lua")
   runLua("UI_Data/Script/Window/Worldmap_Grand/WordMap_Craft/Worldmap_Grand_GuildHouseControl.lua")
   runLua("UI_Data/Script/Window/Worldmap_Grand/WordMap_Craft/Worldmap_Grand_GuildCraft_ChangeWorker.lua")
@@ -1627,11 +1660,7 @@ loadGameUI = function()
   runLua("UI_Data/Script/Window/Cash_Customization/Panel_Cash_Customization.lua")
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_Function.lua")
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_ItemSet.lua")
-  if isUsedNewItemmarket then
-    runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarketNew.lua")
-  else
-    runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket.lua")
-  end
+  runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarketNew.lua")
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_Favorite.lua")
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_RegistItem.lua")
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_BuyConfirm.lua")
@@ -1639,6 +1668,7 @@ loadGameUI = function()
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_Alarm.lua")
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_PreBid.lua")
   runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_PreBid_Manager.lua")
+  runLua("UI_Data/Script/Window/ItemMarket/Panel_Window_ItemMarket_Password.lua")
   runLua("UI_Data/Script/Window/ChallengePresent/Panel_ChallengePresent.lua")
   runLua("UI_Data/Script/Window/ChallengePresent/Panel_Special_Reward.lua")
   runLua("UI_Data/Script/Widget/Gacha_Roulette/Panel_Gacha_Roulette.lua")
@@ -1661,6 +1691,9 @@ loadGameUI = function()
   runLua("UI_Data/Script/Window/ChangeItem/Panel_ChangeWeapon.lua")
   runLua("UI_Data/Script/Window/Alchemy/Panel_AlchemyStone.lua")
   runLua("UI_Data/Script/Window/Alchemy/Panel_AlchemyFigureHead.lua")
+  if ToClient_IsDevelopment() then
+    runLua("UI_Data/Script/Window/WorldMap/WorldMiniMap.lua")
+  end
   runLua("UI_Data/Script/Window/RallyRanking/Panel_RallyRanking.lua")
   runLua("UI_Data/Script/Panel_SpecialCharacter.lua")
   runLua("UI_Data/Script/Widget/LocalWar/Panel_LocalWar.lua")
@@ -1728,6 +1761,7 @@ loadGameUI = function()
     runLua("UI_Data/Script/Widget/Z_AlertArea/Panel_AlertArea.lua")
     runLua("UI_Data/Script/Widget/Z_RightTopIcons/Panel_FunctionButtonArea.lua")
   end
+  runLua("UI_Data/Script/Window/ButtonShortcuts/Panel_ButtonShortcuts.lua")
   runLua("UI_Data/Script/globalUIManager.lua")
   if true == isUseNewGlobalKeyBinder_chk() then
     runLua("UI_Data/Script/GlobalKeyBinder/new_globalkeybinder.lua")
@@ -1739,7 +1773,7 @@ loadGameUI = function()
 end
 
 WorldMapWindow_Update_ExplorePoint = function()
-  -- function num : 0_25
+  -- function num : 0_26
 end
 
 

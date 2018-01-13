@@ -1321,8 +1321,6 @@ end
   ;
   (inGameShopBuy._edit_Gift):SetEditText("", true)
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
 end
 
   InGameShopBuy_ShowItemToolTip = function(isShow, index)
@@ -1444,8 +1442,6 @@ end
   -- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
 
   inGameShopBuy.savedCouponDiscountTextSizeX = 0
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
 end
 
   InGameShopBuy_CheckAddUser = function()

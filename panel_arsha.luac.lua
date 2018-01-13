@@ -619,28 +619,17 @@ FGlobal_CheckArshaPvpUiEdit = function(targetUI)
 end
 
 HandleClicked_ArshaPvP_EditSetFocus = function()
-  -- function num : 0_10 , upvalues : arshaPvP, IM
+  -- function num : 0_10 , upvalues : arshaPvP
   local self = arshaPvP
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(self.edit_InviteMemberEdit)
   ;
   (self.edit_InviteMemberEdit):SetEditText((self.edit_InviteMemberEdit):GetEditText(), true)
 end
 
 FGlobal_ArshaPvPClearFocusEdit = function()
-  -- function num : 0_11 , upvalues : IM
+  -- function num : 0_11
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 HandleClicked_ArshaPvP_TeamChange = function(teamNo)

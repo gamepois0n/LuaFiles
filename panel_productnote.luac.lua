@@ -62,7 +62,7 @@ end
 
 Panel_ProductNote_Initialize()
 Panel_ProductNote_ShowToggle = function()
-  -- function num : 0_3 , upvalues : _productWeb, IM, _btn_PopUp
+  -- function num : 0_3 , upvalues : _productWeb, _btn_PopUp
   local isShow = Panel_ProductNote:IsShow()
   if ToClient_IsConferenceMode() then
     return 
@@ -73,8 +73,6 @@ Panel_ProductNote_ShowToggle = function()
     audioPostEvent_SystemUi(13, 5)
     Panel_ProductNote:SetShow(false, false)
     ClearFocusEdit()
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     _btn_PopUp:SetCheck(false)
     if Panel_ProductNote:IsUISubApp() then
       Panel_ProductNote:CloseUISubApp()
@@ -105,12 +103,8 @@ ProductNote_Item_ShowToggle = function(itemKey)
     _productWeb:ResetUrl()
     audioPostEvent_SystemUi(13, 5)
     Panel_ProductNote:SetShow(false, false)
-    if AllowChangeInputMode() then
+    if CheckChattingInput() == false then
       ClearFocusEdit()
-      ;
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
     end
     _btn_PopUp:SetCheck(false)
     if Panel_ProductNote:IsUISubApp() then

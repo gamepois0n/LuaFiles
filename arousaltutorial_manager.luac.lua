@@ -178,7 +178,7 @@ local SkillComboCheck = {
 [0] = {
 {1986}
 ; 
-[0] = {1445, 1446, 1447}
+[0] = {1445, 1446, 1447, 3169}
 }
 , 
 [1] = {
@@ -186,7 +186,7 @@ local SkillComboCheck = {
 , 
 {2000, 2001, 2002, 2003}
 ; 
-[0] = {1263, 1264, 1265, 418}
+[0] = {1263, 1264, 1265, 418, 3154}
 }
 }
 , 
@@ -194,7 +194,7 @@ local SkillComboCheck = {
 [0] = {
 {2029}
 ; 
-[0] = {1549, 1550, 1551, 1552, 1553}
+[0] = {1549, 1550, 1551, 1552, 1553, 3184}
 }
 , 
 [1] = {
@@ -202,7 +202,7 @@ local SkillComboCheck = {
 , 
 {2040, 2041, 2042, 2043}
 ; 
-[0] = {1515, 1516, 1517, 1518, 1520}
+[0] = {1515, 1516, 1517, 1518, 1520, 3176}
 }
 }
 , 
@@ -210,7 +210,7 @@ local SkillComboCheck = {
 [0] = {
 {1943}
 ; 
-[0] = {732, 733, 734, 735, 770}
+[0] = {732, 733, 734, 735, 770, 3202}
 }
 , 
 [1] = {
@@ -218,7 +218,7 @@ local SkillComboCheck = {
 , 
 {1963, 1964, 1965, 1966}
 ; 
-[0] = {1497, 1498, 1499}
+[0] = {1497, 1498, 1499, 3203}
 }
 }
 , 
@@ -226,7 +226,7 @@ local SkillComboCheck = {
 [0] = {
 {2209}
 ; 
-[0] = {822, 823, 824, 825, 826}
+[0] = {822, 823, 824, 825, 826, 3133}
 }
 , 
 [1] = {
@@ -234,7 +234,7 @@ local SkillComboCheck = {
 , 
 {2225, 2226, 2227, 2228}
 ; 
-[0] = {834, 835, 836, 837, 838}
+[0] = {834, 835, 836, 837, 838, 3137}
 }
 }
 , 
@@ -242,7 +242,7 @@ local SkillComboCheck = {
 [0] = {
 {2163}
 ; 
-[0] = {822, 823, 824, 825, 826}
+[0] = {822, 823, 824, 825, 826, 3133}
 }
 , 
 [1] = {
@@ -250,7 +250,7 @@ local SkillComboCheck = {
 , 
 {2186, 2187, 2188, 2189}
 ; 
-[0] = {834, 835, 836, 837, 838}
+[0] = {834, 835, 836, 837, 838, 3137}
 }
 }
 , 
@@ -290,7 +290,7 @@ local SkillComboCheck = {
 [0] = {
 {2380}
 ; 
-[0] = {2268, 2340, 2363}
+[0] = {2268, 2340, 2363, 2341, 3075}
 }
 , 
 [1] = {
@@ -298,7 +298,7 @@ local SkillComboCheck = {
 , 
 {2391, 2392, 2393, 2394}
 ; 
-[0] = {2269, 2270, 2271, 2272, 2273}
+[0] = {2269, 2270, 2271, 2272, 2273, 3089}
 }
 }
 , 
@@ -306,7 +306,7 @@ local SkillComboCheck = {
 [0] = {
 {2558}
 ; 
-[0] = {2486, 2487, 2488, 2489}
+[0] = {2486, 2487, 2488, 2489, 3038}
 }
 , 
 [1] = {
@@ -314,7 +314,7 @@ local SkillComboCheck = {
 , 
 {2562, 2563, 2564, 2565}
 ; 
-[0] = {2486, 2487, 2488, 2489}
+[0] = {2486, 2487, 2488, 2489, 3038}
 }
 }
 , 
@@ -322,7 +322,7 @@ local SkillComboCheck = {
 [0] = {
 {2762}
 ; 
-[0] = {2674, 2675, 2676, 2677}
+[0] = {2674, 2675, 2676, 2677, 3062}
 }
 , 
 [1] = {
@@ -330,7 +330,7 @@ local SkillComboCheck = {
 , 
 {2776, 2777, 2778, 2779}
 ; 
-[0] = {2691, 2692, 2693}
+[0] = {2691, 2692, 2693, 3064}
 }
 }
 }
@@ -789,7 +789,7 @@ local updateDeltaTime_ComboTutorial = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC2081: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2110: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
   -- function num : 0_13 , upvalues : questCheck, classType, comboQuestClear, UI_TM, UI_color, baseComboCount, usedSkillKey, usedSkillMatch, _stepNo
@@ -993,7 +993,7 @@ PaGlobal_ArousalTutorial_Manager.startTutorial = function(self)
   _stepNo = 101
 end
 
--- DECOMPILER ERROR at PC2087: Confused about usage of register: R21 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2116: Confused about usage of register: R21 in 'UnsetPending'
 
 PaGlobal_ArousalTutorial_Manager.updatePerFrame = function(self, deltaTime)
   -- function num : 0_14 , upvalues : _stepNo, updateDeltaTime_ComboTutorial

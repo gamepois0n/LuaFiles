@@ -326,16 +326,7 @@ end
 FGlobal_PartyListClearFocusEdit = function()
   -- function num : 0_13
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FGlobal_PartyList_ShowToggle = function()
@@ -382,8 +373,6 @@ end
 HandleClicked_PartyList_SearchEdit = function()
   -- function num : 0_18 , upvalues : partyList
   local self = partyList
-  ;
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
   SetFocusEdit((self.control)._editSearch)
   ;
   ((self.control)._editSearch):SetEditText(((self.control)._editSearch):GetEditText(), true)

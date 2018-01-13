@@ -22,10 +22,15 @@ local panelList = {
 }
 -- DECOMPILER ERROR at PC133: Confused about usage of register: R12 in 'UnsetPending'
 
+if isUsedNewOption() then
+  (panelList[1])[2] = Panel_Window_cOption
+end
+-- DECOMPILER ERROR at PC140: Confused about usage of register: R12 in 'UnsetPending'
+
 if isUsedNewTradeEventNotice_chk() then
   (panelList[0])[1] = Panel_TradeEventNotice_Renewal
 else
-  -- DECOMPILER ERROR at PC137: Confused about usage of register: R12 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC144: Confused about usage of register: R12 in 'UnsetPending'
 
   (panelList[0])[1] = Panel_TradeMarket_EventInfo
 end
@@ -118,12 +123,25 @@ local panelInfo = {
 [17] = {posX = 8, posY = -14, sizeX = 15}
 }
 }
--- DECOMPILER ERROR at PC356: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC363: Confused about usage of register: R13 in 'UnsetPending'
+
+if isUsedNewOption() then
+  ((panelInfo[1])[2]).posX = 0
+  -- DECOMPILER ERROR at PC366: Confused about usage of register: R13 in 'UnsetPending'
+
+  ;
+  ((panelInfo[1])[2]).posY = -20
+  -- DECOMPILER ERROR at PC369: Confused about usage of register: R13 in 'UnsetPending'
+
+  ;
+  ((panelInfo[1])[2]).sizeX = 0
+end
+-- DECOMPILER ERROR at PC376: Confused about usage of register: R13 in 'UnsetPending'
 
 if isGameTypeEnglish() then
   ((panelInfo[1])[5]).sizeX = -157
 end
--- DECOMPILER ERROR at PC365: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC385: Confused about usage of register: R13 in 'UnsetPending'
 
 if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
   ((panelInfo[1])[5]).sizeX = -207
@@ -438,6 +456,6 @@ end
   end
 end
 
-  -- DECOMPILER ERROR: 9 unprocessed JMP targets
+  -- DECOMPILER ERROR: 11 unprocessed JMP targets
 end
 

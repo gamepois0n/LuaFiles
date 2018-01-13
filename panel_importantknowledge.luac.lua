@@ -184,7 +184,7 @@ NewKnowledgePopup.show = function(self, usingType)
     (self._frameKnowledge):UpdateContentPos()
     ;
     (self._frameScrollV):SetShow(true)
-    if (self._frameKnowledge):GetSizeY() < (self._frameContent):GetSizeY() then
+    if (self._frameKnowledge):GetSizeY() < (self._staticDesc):GetSizeY() then
       (self._frameScrollVBTN):SetShow(true)
     else
       ;

@@ -359,11 +359,9 @@ FGlobal_RallyRanking_Close = function()
 end
 
 RallyRanking_RankerWhisper = function(rankIdx)
-  -- function num : 0_7 , upvalues : RallyRanking, IM
+  -- function num : 0_7 , upvalues : RallyRanking
   local rallyRanker = ToClient_GetMatchRankerAt(RallyRanking._selectedTabIdx, rankIdx)
   local rallyRankerCharName = rallyRanker:getCharacterName()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   FGlobal_ChattingInput_ShowWhisper(rallyRankerCharName)
 end
 

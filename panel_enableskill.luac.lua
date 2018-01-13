@@ -63,7 +63,7 @@ recommendSkill[UI_classType.ClassType_NinjaMan] = {[0] = 949, [1] = 950, [2] = 9
 recommendSkill[UI_classType.ClassType_DarkElf] = {[0] = 2269, [1] = 2270, [2] = 2271, [3] = 2272, [4] = 2273, [5] = 2267, [6] = 2338, [7] = 2362, [8] = 2268, [9] = 2340, [10] = 2363, [11] = 2263, [12] = 2264, [13] = 2265, [14] = 2361, [15] = 2266, [16] = 2296, [17] = 2297, [18] = 2379, [19] = 2352, [20] = 2353, [21] = 2354, [22] = 2355, [23] = 2356, [24] = 2359, [25] = 2367, [26] = 2368, [27] = 2369, [28] = 2370}
 recommendSkill[UI_classType.ClassType_Combattant] = {[0] = 2449, [1] = 2450, [2] = 2451, [3] = 2501, [4] = 2502, [5] = 2503, [6] = 2504, [7] = 2508, [8] = 2509, [9] = 2510, [10] = 2511, [11] = 2519, [12] = 2520, [13] = 2521, [14] = 2532, [15] = 2533, [16] = 2534, [17] = 2535, [18] = 2536, [19] = 2443, [20] = 2444, [21] = 2445, [22] = 2446, [23] = 2447, [24] = 2448}
 recommendSkill[UI_classType.ClassType_CombattantWomen] = {[0] = 2723, [1] = 2724, [2] = 2725, [3] = 2726, [4] = 2727, [5] = 2718, [6] = 2719, [7] = 2720, [8] = 2721, [9] = 2722, [10] = 2706, [11] = 2707, [12] = 2708, [13] = 2709, [14] = 2710, [15] = 2711, [16] = 2712, [17] = 2713, [18] = 2714, [19] = 2715, [20] = 2716, [21] = 2691, [22] = 2692, [23] = 2693, [24] = 2694, [25] = 2695, [26] = 2696, [27] = 2697, [28] = 2698, [29] = 2699, [30] = 2674, [31] = 2675, [32] = 2676, [33] = 2677, [34] = 2631, [35] = 2632, [36] = 2633, [37] = 2637, [38] = 2638, [39] = 2639}
-recommendSkill[UI_classType.ClassType_Angle] = {}
+recommendSkill[UI_classType.ClassType_Lahn] = {}
 recommendSkill[UI_classType.ClassType_ShyWomen] = {}
 recommendSkill[22] = {}
 EnableSkill_ShowAni = function()
@@ -296,12 +296,10 @@ end
 
 FGlobal_EnableSkillCloseFunc = function()
   -- function num : 0_5 , upvalues : editSearch, isEditCheck
-  if isCoolTimeQuickSlot_chk() == true then
-    Panel_EnableSkill:SetShow(false, true)
-    ;
-    (editSearch._editSearchText):SetEditText("", false)
-    isEditCheck = false
-  end
+  Panel_EnableSkill:SetShow(false, true)
+  ;
+  (editSearch._editSearchText):SetEditText("", false)
+  isEditCheck = false
 end
 
 EnableSkill_LearnBtn_Effect = function()
@@ -819,12 +817,9 @@ RadioButton_Click_Init = function()
 end
 
 SearchButton_Click = function()
-  -- function num : 0_28 , upvalues : IM, mousePosBG, slideIndex, filterText, editSearch, isEditCheck
-  if AllowChangeInputMode() then
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_28 , upvalues : mousePosBG, slideIndex, filterText, editSearch, isEditCheck
+  if CheckChattingInput() == false then
     ClearFocusEdit()
-  else
-    SetFocusChatting()
   end
   mousePosBG:SetShow(false)
   slideIndex = 0
@@ -850,8 +845,7 @@ SearchEditText_Reset = function()
 end
 
 SearchText_Click = function()
-  -- function num : 0_30 , upvalues : IM, editSearch
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_30 , upvalues : editSearch
   SetFocusEdit(editSearch._editSearchText)
   ;
   (editSearch._editSearchText):SetEditText("", false)

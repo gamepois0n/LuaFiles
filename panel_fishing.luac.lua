@@ -76,6 +76,12 @@ fishingGame_Initialize = function()
     value:SetShow(false)
     value:ComputePos()
   end
+  do
+    local targetItemGrade = (getSelfPlayer()):getFishingAutoItemGrade()
+    ;
+    (fishing_UI._fishCheckBtn):SetCheck(targetItemGrade == 1)
+    -- DECOMPILER ERROR: 1 unprocessed JMP targets
+  end
 end
 
 setFishingResourcePool_text = function()

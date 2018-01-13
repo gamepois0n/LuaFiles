@@ -691,7 +691,7 @@ GuildLetsWarPage.initialize = function(self)
 end
 
 HandleClickedLetsWar = function()
-  -- function num : 0_20 , upvalues : GuildLetsWarPage, IM
+  -- function num : 0_20 , upvalues : GuildLetsWarPage
   local guildName = (GuildLetsWarPage._editLetsWarInputName):GetEditText()
   local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
   if myGuildInfo == nil then
@@ -701,17 +701,8 @@ HandleClickedLetsWar = function()
   local accumulateTax_s32 = Int64toInt32(myGuildInfo:getAccumulateTax())
   local accumulateCost_s32 = Int64toInt32(myGuildInfo:getAccumulateGuildHouseCost())
   local close_function = function()
-    -- function num : 0_20_0 , upvalues : IM
-    if AllowChangeInputMode() then
-      if (UI.checkShowWindow)() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    -- function num : 0_20_0
+    CheckChattingInput()
   end
 
   if accumulateTax_s32 > 0 or accumulateCost_s32 > 0 then
@@ -750,8 +741,7 @@ ConfirmDeclareGuildWar = function()
 end
 
 HandleClickedLetsWarEditName = function()
-  -- function num : 0_22 , upvalues : IM, GuildLetsWarPage
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_22 , upvalues : GuildLetsWarPage
   SetFocusEdit(GuildLetsWarPage._editLetsWarInputName)
   ;
   (GuildLetsWarPage._editLetsWarInputName):SetEditText("", true)
@@ -764,19 +754,10 @@ FGlobal_CheckGuildLetsWarUiEdit = function(targetUI)
 end
 
 FGlobal_GuildLetsWarClearFocusEdit = function()
-  -- function num : 0_24 , upvalues : GuildLetsWarPage, IM
+  -- function num : 0_24 , upvalues : GuildLetsWarPage
   (GuildLetsWarPage._editLetsWarInputName):SetText("", true)
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 GuildLetsWarPage.UpdateData = function(self)
@@ -1384,7 +1365,7 @@ local _txt_Help_GuildMember = (UI.getChildControl)(Panel_Window_Guild, "StaticTe
 local _txt_Help_GuildQuest = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildQuest")
 local _txt_Help_GuildSkill = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_GuildSkill")
 local _txt_Help_WarInfo = (UI.getChildControl)(Panel_Window_Guild, "StaticText_Help_WarInfo")
--- DECOMPILER ERROR at PC380: Confused about usage of register: R46 in 'UnsetPending'
+-- DECOMPILER ERROR at PC377: Confused about usage of register: R46 in 'UnsetPending'
 
 GuildManager.initialize = function(self)
   -- function num : 0_33 , upvalues : GuildInfoPage, GuildLetsWarPage, GuildWarInfoPage
@@ -1660,7 +1641,7 @@ GuildSimplTooltips = function(isShow, tipType)
 end
 
 local _index = nil
--- DECOMPILER ERROR at PC405: Confused about usage of register: R47 in 'UnsetPending'
+-- DECOMPILER ERROR at PC402: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.TabToggle = function(self, index)
   -- function num : 0_37 , upvalues : tabNumber, _Web, btn_GuildMasterMandateBG, btn_GuildMasterMandate, _index
@@ -1803,7 +1784,7 @@ GuildManager.TabToggle = function(self, index)
   elseif index == 99 then
     GuildMainInfo_Show()
     FGlobal_GuildHistory_Show(false)
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE"), 446, 2, 458, 14)
+    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDINFO_TITLE"), 107, 1, 119, 15)
     GuildListInfoPage:Hide()
     GuildQuestInfoPage:Hide()
     GuildWarfareInfoPage:Hide()
@@ -1813,7 +1794,7 @@ GuildManager.TabToggle = function(self, index)
     PaGlobal_GuildBattle:Close()
     tabNumber = 99
   elseif index == 6 then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDCRAFTINFO_TITLE"), 461, 2, 473, 14)
+    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDCRAFTINFO_TITLE"), 107, 1, 119, 15)
     FGlobal_GuildHistory_Show(false)
     GuildMainInfo_Hide()
     GuildListInfoPage:Hide()
@@ -1826,7 +1807,7 @@ GuildManager.TabToggle = function(self, index)
     PaGlobal_GuildBattle:Close()
     tabNumber = 6
   elseif index == 7 then
-    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_GUILDBATTLE"), 461, 2, 473, 14)
+    self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_GUILDBATTLE"), 107, 1, 119, 15)
     FGlobal_GuildBattle_Open()
     FGlobal_GuildHistory_Show(false)
     GuildMainInfo_Hide()
@@ -1845,10 +1826,10 @@ GuildManager.TabToggle = function(self, index)
   -- DECOMPILER ERROR: 34 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC410: Confused about usage of register: R47 in 'UnsetPending'
+-- DECOMPILER ERROR at PC406: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.Hide = function(self)
-  -- function num : 0_38 , upvalues : IM, _Web
+  -- function num : 0_38 , upvalues : _Web
   if Panel_Window_Guild:IsShow() == false then
     return 
   end
@@ -1866,22 +1847,14 @@ GuildManager.Hide = function(self)
   TooltipSimple_Hide()
   TooltipGuild_Hide()
   FGlobal_GetDailyPay_Hide()
-  if AllowChangeInputMode() then
+  if CheckChattingInput() == false then
     ClearFocusEdit()
-    if check_ShowWindow() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
   end
   FGlobal_ClearCandidate()
   _Web:ResetUrl()
 end
 
--- DECOMPILER ERROR at PC416: Confused about usage of register: R47 in 'UnsetPending'
+-- DECOMPILER ERROR at PC412: Confused about usage of register: R47 in 'UnsetPending'
 
 GuildManager.Show = function(self)
   -- function num : 0_39 , upvalues : GuildWarInfoPage, GuildInfoPage, GuildLetsWarPage
@@ -3493,24 +3466,15 @@ Notice_Init = function()
 end
 
 Notice_Regist = function()
-  -- function num : 0_72 , upvalues : IM, notice_edit
+  -- function num : 0_72 , upvalues : notice_edit
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if isGuildMaster == false and isGuildSubMaster == false then
     return 
   end
   local close_function = function()
-    -- function num : 0_72_0 , upvalues : IM
-    if AllowChangeInputMode() then
-      if (UI.checkShowWindow)() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    -- function num : 0_72_0
+    CheckChattingInput()
   end
 
   ToClient_RequestSetGuildNotice(tostring(notice_edit:GetEditText()))
@@ -3519,8 +3483,7 @@ Notice_Regist = function()
 end
 
 HandleClicked_NoticeEditSetFocus = function()
-  -- function num : 0_73 , upvalues : IM, notice_edit
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_73 , upvalues : notice_edit
   SetFocusEdit(notice_edit)
   notice_edit:SetEditText(notice_edit:GetEditText(), true)
 end
@@ -3552,18 +3515,9 @@ FGlobal_Notice_AuthorizationUpdate = function()
 end
 
 FGlobal_GuildNoticeClearFocusEdit = function()
-  -- function num : 0_77 , upvalues : IM
+  -- function num : 0_77
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FGlobal_CheckGuildNoticeUiEdit = function(targetUI)
@@ -3591,8 +3545,7 @@ Introduce_Init = function()
 end
 
 HandleClicked_IntroduceEditSetFocus = function()
-  -- function num : 0_80 , upvalues : IM, introduce_edit_TW, introduce_edit
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_80 , upvalues : introduce_edit_TW, introduce_edit
   if isGameTypeTaiwan() then
     SetFocusEdit(introduce_edit_TW)
     introduce_edit_TW:SetEditText(introduce_edit_TW:GetEditText(), true)
@@ -3603,18 +3556,9 @@ HandleClicked_IntroduceEditSetFocus = function()
 end
 
 FGlobal_GuildIntroduceClearFocusEdit = function()
-  -- function num : 0_81 , upvalues : IM
+  -- function num : 0_81
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 Guild_Promote_Confirm = function()
@@ -3653,24 +3597,15 @@ Promote_Tooltip = function(isShow)
 end
 
 Introduce_Regist = function()
-  -- function num : 0_85 , upvalues : IM, introduce_edit_TW, introduce_edit
+  -- function num : 0_85 , upvalues : introduce_edit_TW, introduce_edit
   local isGuildMaster = ((getSelfPlayer()):get()):isGuildMaster()
   local isGuildSubMaster = ((getSelfPlayer()):get()):isGuildSubMaster()
   if isGuildMaster == false and isGuildSubMaster == false then
     return 
   end
   local close_function = function()
-    -- function num : 0_85_0 , upvalues : IM
-    if AllowChangeInputMode() then
-      if (UI.checkShowWindow)() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    -- function num : 0_85_0
+    CheckChattingInput()
   end
 
   if isGameTypeTaiwan() then

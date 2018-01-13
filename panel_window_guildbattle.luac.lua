@@ -286,13 +286,15 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
           ((self._ui)._backgroundMainBG):SetSize(710, 580)
           -- DECOMPILER ERROR at PC164: Unhandled construct in 'MakeBoolean' P1
 
-          if isCurrentGuildServer == true and amIMaster == true then
+          if isCurrentGuildServer == true and amIGuildMasterOrSubMaster == true then
             ((self._ui)._btn_Cancle):SetShow(true)
             ;
             ((self._ui)._btn_Cancle):SetSpanSize(0, 85)
           end
           if amIGuildMasterOrSubMaster == true then
             ((self._ui)._btn_Reservation):SetShow(true)
+            ;
+            ((self._ui)._btn_Reservation):SetSpanSize(0, 85)
           end
         else
           self:SetGuildInfoBothReserved(0, guildA)
@@ -318,8 +320,17 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
               if BattleStates.End == battleState then
                 ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLESTATE_END"))
               else
-                ;
-                ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
+                if battleMode == 0 then
+                  ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_NORMAL") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
+                else
+                  if battleMode == 1 then
+                    ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ONEONE") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
+                  else
+                    if battleMode == 2 then
+                      ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_BATTLEMODE_ALL") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
+                    end
+                  end
+                end
               end
             end
           end
@@ -327,24 +338,41 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
             (((self._ui)._joinBothGuild)._CompleteBG):SetShow(false)
             ;
             (((self._ui)._joinProgressTimer)._bg):SetShow(true)
-            if amIMaster == true then
-              if didIJoinGuildBattle == true then
-                ((self._ui)._btn_Start):SetShow(true)
-                ;
-                ((self._ui)._btn_UnJoin):SetShow(true)
-                ;
-                ((self._ui)._btn_Start):SetSpanSize(-100, 85)
-                ;
-                ((self._ui)._btn_UnJoin):SetSpanSize(100, 85)
+            if amIGuildMasterOrSubMaster == true then
+              if amIMaster == true then
+                if didIJoinGuildBattle == true then
+                  ((self._ui)._btn_Start):SetShow(true)
+                  ;
+                  ((self._ui)._btn_UnJoin):SetShow(true)
+                  ;
+                  ((self._ui)._btn_Start):SetSpanSize(-100, 85)
+                  ;
+                  ((self._ui)._btn_UnJoin):SetSpanSize(100, 85)
+                else
+                  ;
+                  ((self._ui)._btn_Join):SetShow(true)
+                  ;
+                  ((self._ui)._btn_Cancle):SetShow(true)
+                  ;
+                  ((self._ui)._btn_Join):SetSpanSize(-100, 85)
+                  ;
+                  ((self._ui)._btn_Cancle):SetSpanSize(100, 85)
+                end
               else
-                ;
-                ((self._ui)._btn_Join):SetShow(true)
-                ;
-                ((self._ui)._btn_Cancle):SetShow(true)
-                ;
-                ((self._ui)._btn_Join):SetSpanSize(-100, 85)
-                ;
-                ((self._ui)._btn_Cancle):SetSpanSize(100, 85)
+                if didIJoinGuildBattle == true then
+                  ((self._ui)._btn_UnJoin):SetShow(true)
+                  ;
+                  ((self._ui)._btn_UnJoin):SetSpanSize(0, 85)
+                else
+                  ;
+                  ((self._ui)._btn_Join):SetShow(true)
+                  ;
+                  ((self._ui)._btn_Cancle):SetShow(true)
+                  ;
+                  ((self._ui)._btn_Join):SetSpanSize(-100, 85)
+                  ;
+                  ((self._ui)._btn_Cancle):SetSpanSize(100, 85)
+                end
               end
             else
               if didIJoinGuildBattle == true then
@@ -474,6 +502,7 @@ end
 PaGlobal_GuildBattle.Start = function(self)
   -- function num : 0_20
   ToClient_GuildBattle_StartGuildBattle()
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WE_ARE_READY_SHORT"))
 end
 
 -- DECOMPILER ERROR at PC163: Confused about usage of register: R1 in 'UnsetPending'

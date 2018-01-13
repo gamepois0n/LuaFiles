@@ -96,11 +96,8 @@ local _startKnowledgeIndex = 0
 local prevSelectIndex = -1
 local selectIndex = -1
 AlchemyShowAni = function()
-  -- function num : 0_0 , upvalues : IM, _aniSlotParent, UI_ANI_ADV
+  -- function num : 0_0 , upvalues : _aniSlotParent, UI_ANI_ADV
   (UIAni.fadeInSCR_Down)(Panel_Alchemy)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiModeNotInput)
-  FGlobal_SetNumberPadUiModeNotInput(true)
   _aniSlotParent:AddEffect("fUI_AlchemyCook01", true, 0, 0)
   local aniInfo1 = Panel_Alchemy:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartScale(0.5)
@@ -119,7 +116,7 @@ AlchemyShowAni = function()
 end
 
 AlchemyHideAni = function()
-  -- function num : 0_1 , upvalues : UI_ANI_ADV, UI_color, IM, _aniSlotParent
+  -- function num : 0_1 , upvalues : UI_ANI_ADV, UI_color, _aniSlotParent
   Panel_Alchemy:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_OUT)
   local aniInfo1 = Panel_Alchemy:addColorAnimation(0, 0.22, UI_ANI_ADV.PAUI_ANIM_ADVANCE_SIN_HALF_PI)
   aniInfo1:SetStartColor(UI_color.C_FFFFFFFF)
@@ -129,9 +126,6 @@ AlchemyHideAni = function()
   aniInfo1.IsChangeChild = true
   aniInfo1:SetHideAtEnd(true)
   aniInfo1:SetDisableWhileAni(true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-  FGlobal_SetNumberPadUiModeNotInput(false)
   _aniSlotParent:EraseAllEffect()
 end
 
@@ -401,7 +395,7 @@ ResponseAlchemyResultList = function(itemDynamicListWrapper)
 end
 
 FromClient_AlchemyFail = function(hint, alchemyType, strErr, bShowMessageBox)
-  -- function num : 0_16 , upvalues : IM
+  -- function num : 0_16
   if hint == 1 then
     local msg = {main = PAGetString(Defines.StringSheet_GAME, "ALCHEMYFAIL_REASON_1"), sub = ""}
     if alchemyType == 0 then
@@ -451,10 +445,6 @@ FromClient_AlchemyFail = function(hint, alchemyType, strErr, bShowMessageBox)
                 ;
                 (MessageBox.showMessageBox)(messageBoxData)
               end
-              do
-                ;
-                (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-              end
             end
           end
         end
@@ -464,7 +454,7 @@ FromClient_AlchemyFail = function(hint, alchemyType, strErr, bShowMessageBox)
 end
 
 MassProduction_Continue = function()
-  -- function num : 0_17 , upvalues : _isCook, IM
+  -- function num : 0_17 , upvalues : _isCook
   local s64_doAlchemyCount = ToClient_GetDoingAlchemyCount()
   RequestAlchemy_AlchemyStart(_isCook, s64_doAlchemyCount)
   if getSelfPlayer() == nil then
@@ -482,15 +472,11 @@ MassProduction_Continue = function()
     EventProgressBarShow(true, tempTime, 9)
     audioPostEvent_SystemUi(1, 0)
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
 end
 
 MassProduction_Cancel = function()
-  -- function num : 0_18 , upvalues : IM
+  -- function num : 0_18
   ToClient_CancelAlchemy()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 Alchemy_Start = function()

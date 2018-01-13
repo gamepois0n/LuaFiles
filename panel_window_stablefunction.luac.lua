@@ -15,7 +15,7 @@ local UI_color = Defines.Color
 local IM = CppEnums.EProcessorInputMode
 local stableFunction = {
 config = {}
-, _buttonRegister = (UI.getChildControl)(Panel_Window_StableFunction, "Button_RegisterByItem"), _textRegist = (UI.getChildControl)(Panel_Window_StableFunction, "StaticText_Purpose"), _buttonMix = (UI.getChildControl)(Panel_Window_StableFunction, "Button_HorseMix"), _buttonMating = (UI.getChildControl)(Panel_Window_StableFunction, "Button_ListMating"), _buttonMarket = (UI.getChildControl)(Panel_Window_StableFunction, "Button_ListMarket"), _buttonExit = (UI.getChildControl)(Panel_Window_StableFunction, "Button_Exit"), _buttonLink = (UI.getChildControl)(Panel_Window_StableFunction, "Button_HorseLink")}
+, _buttonRegister = (UI.getChildControl)(Panel_Window_StableFunction, "Button_RegisterByItem"), _textRegist = (UI.getChildControl)(Panel_Window_StableFunction, "StaticText_Purpose"), _buttonMix = (UI.getChildControl)(Panel_Window_StableFunction, "Button_HorseMix"), _buttonMating = (UI.getChildControl)(Panel_Window_StableFunction, "Button_ListMating"), _buttonMarket = (UI.getChildControl)(Panel_Window_StableFunction, "Button_ListMarket"), _buttonExit = (UI.getChildControl)(Panel_Window_StableFunction, "Button_Exit"), _buttonLink = (UI.getChildControl)(Panel_Window_StableFunction, "Button_HorseLink"), textCaution = (UI.getChildControl)(Panel_Window_StableFunction, "StaticText_Caution")}
 stableFunction.init = function(self)
   -- function num : 0_0 , upvalues : stableFunction
   (stableFunction._textRegist):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_STABLEFUNCTION_TEXTREGIST"))
@@ -97,6 +97,8 @@ StableFunction_Resize = function()
   (self._buttonMix):ComputePos()
   ;
   (self._textRegist):SetSpanSize(0, -screenY * 3 / 4)
+  ;
+  (self.textCaution):SetSize((self.textCaution):GetTextSizeX() + 20, (self.textCaution):GetTextSizeY() + 15)
 end
 
 StableFunction_Button_RegisterReady = function(slotNo)

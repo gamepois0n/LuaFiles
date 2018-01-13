@@ -134,8 +134,9 @@ end
 click_ItemReSelect = function()
   -- function num : 0_4 , upvalues : shopTypeNum
   messageTitle = PAGetString(Defines.StringSheet_GAME, "LUA_UNKNOWITEMSELECT_RESELECT_TITLE")
+  local isConsumWP = ToClient_getRandomShopConsumWp()
   if shopTypeNum == 12 then
-    contentString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UNKNOWITEMSELECT_RESELECT_STRING", "getWp", (getSelfPlayer()):getWp())
+    contentString = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_UNKNOWITEMSELECT_RESELECT_STRING", "getWp", (getSelfPlayer()):getWp(), "itemWP", isConsumWP)
   else
     if shopTypeNum == 13 then
       contentString = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UNKNOWITEMSELECT_RESELECT_STRING2", "getWp", (getSelfPlayer()):getWp())

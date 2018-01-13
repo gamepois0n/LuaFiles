@@ -266,6 +266,8 @@ local FillExploreUpgradeAble = function(nodeStaticStatus, nodeKey)
     if ToClient_isAbleInvestnWithdraw(nodeKey) then
       Btn_NodeLink:SetShow(true)
       Btn_NodeLink:addInputEvent("Mouse_LUp", "OnNodeUpgradeClick(" .. tostring(nodeKey) .. ")")
+      Btn_NodeLink:addInputEvent("Mouse_On", "HandleOnOut_Contribution_ButtonTooltip ( true )")
+      Btn_NodeLink:addInputEvent("Mouse_Out", "HandleOnOut_Contribution_ButtonTooltip ( false )")
     else
       Txt_Node_Desc:SetAutoResize(true)
       Txt_Node_Desc:SetTextMode(UI_TM.eTextMode_AutoWrap)
@@ -276,8 +278,20 @@ local FillExploreUpgradeAble = function(nodeStaticStatus, nodeKey)
   end
 end
 
+HandleOnOut_Contribution_ButtonTooltip = function(isShow)
+  -- function num : 0_9 , upvalues : Btn_NodeLink
+  if isShow then
+    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_CONTRIBUTIONTOOLTIP")
+    TooltipSimple_Show(Btn_NodeLink, desc)
+  else
+    do
+      TooltipSimple_Hide()
+    end
+  end
+end
+
 HandledMouseEvent_FillNodeInfo = function(isShow, nodeType, nodeKey)
-  -- function num : 0_9 , upvalues : nodeButtonTextSwitchCaseList, MakeNodeWeatherStatus
+  -- function num : 0_10 , upvalues : nodeButtonTextSwitchCaseList, MakeNodeWeatherStatus
   local name, desc, control = nil
   if nodeType ~= nil and nodeKey ~= nil then
     name = nodeButtonTextSwitchCaseList[nodeType] .. " - " .. MakeNodeWeatherStatus(nodeKey)
@@ -291,7 +305,7 @@ HandledMouseEvent_FillNodeInfo = function(isShow, nodeType, nodeKey)
 end
 
 local SetNodeType = function(nodeType)
-  -- function num : 0_10 , upvalues : NodeIconArray, IconType
+  -- function num : 0_11 , upvalues : NodeIconArray, IconType
   local uiControl = NodeIconArray[IconType.NodeType]
   uiControl:SetShow(true)
   if tonumber(nodeType) == 0 then
@@ -358,11 +372,11 @@ local SetNodeType = function(nodeType)
 end
 
 local SetNodeCountryAndTerritory = function(nodeStaticStatus)
-  -- function num : 0_11
+  -- function num : 0_12
 end
 
 local SetWeatherAndNodeTypeIcon = function(nodeKey)
-  -- function num : 0_12 , upvalues : NodeIconArray, IconType
+  -- function num : 0_13 , upvalues : NodeIconArray, IconType
   local fWeatherCloudRate = getWeatherInfoByWaypoint((CppEnums.WEATHER_SYSTEM_FACTOR_TYPE).eWSFT_CLOUD_RATE, nodeKey)
   local fWeatherRainAmount = getWeatherInfoByWaypoint((CppEnums.WEATHER_SYSTEM_FACTOR_TYPE).eWSFT_RAIN_AMOUNT, nodeKey)
   local fWeatherCelsius = getWeatherInfoByWaypoint((CppEnums.WEATHER_SYSTEM_FACTOR_TYPE).eWSFT_CELSIUS, nodeKey)
@@ -410,7 +424,7 @@ local SetWeatherAndNodeTypeIcon = function(nodeKey)
 end
 
 local GenerateNodeInfo = function(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)
-  -- function num : 0_13 , upvalues : FillContryInfo, FillTerritoryInfo, SetWeatherAndNodeTypeIcon, SetNodeType, Txt_Node_Title, Txt_NodeManager, Txt_NodeManager_Name, SetFontColorAndText, NodeTextString, NodeTextType, NodeTextColor
+  -- function num : 0_14 , upvalues : FillContryInfo, FillTerritoryInfo, SetWeatherAndNodeTypeIcon, SetNodeType, Txt_Node_Title, Txt_NodeManager, Txt_NodeManager_Name, SetFontColorAndText, NodeTextString, NodeTextType, NodeTextColor
   FillContryInfo(nodeStaticStatus)
   FillTerritoryInfo(nodeStaticStatus)
   SetWeatherAndNodeTypeIcon(nodeKey)
@@ -430,7 +444,7 @@ local GenerateNodeInfo = function(nodeStaticStatus, nodeKey, isAffiliated, isMax
 end
 
 local Align_NodeControls = function()
-  -- function num : 0_14 , upvalues : Txt_NodeManager, Txt_NodeManager_Name, Txt_Node_Desc, Tex_NeedExplorePoint, Txt_NeedExplorePoint, Btn_NodeLink, Btn_NodeUnlink, Btn_NearNode, NodeLevelGroup, SelfExplorePointGroup, static_NodeManagerBG
+  -- function num : 0_15 , upvalues : Txt_NodeManager, Txt_NodeManager_Name, Txt_Node_Desc, Tex_NeedExplorePoint, Txt_NeedExplorePoint, Btn_NodeLink, Btn_NodeUnlink, Btn_NearNode, NodeLevelGroup, SelfExplorePointGroup, static_NodeManagerBG
   local nextSpanY = 115
   if Txt_NodeManager:GetShow() then
     Txt_NodeManager:SetSpanSize((Txt_NodeManager:GetSpanSize()).x, nextSpanY)
@@ -501,7 +515,7 @@ local Align_NodeControls = function()
 end
 
 local update_ExplorePoint = function()
-  -- function num : 0_15 , upvalues : SelfExplorePointGroup
+  -- function num : 0_16 , upvalues : SelfExplorePointGroup
   local territoryKeyRaw = ToClient_getDefaultTerritoryKey()
   local explorePoint = ToClient_getExplorePointByTerritoryRaw(territoryKeyRaw)
   local cont_expRate = Int64toInt32(explorePoint:getExperience_s64()) / Int64toInt32(getRequireExplorationExperience_s64())
@@ -512,7 +526,7 @@ local update_ExplorePoint = function()
 end
 
 local FillNodeInfo = function(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)
-  -- function num : 0_16 , upvalues : GenerateNodeInfo, NodeLevelGroup, savedisMaxLevel, Txt_Node_Desc, UI_TM, FillExploreUpgradeAble, Tex_NeedExplorePoint, Txt_NeedExplorePoint, Btn_NodeUnlink, SetFontColorAndText, NodeTextColor, NodeTextType, Btn_NearNode, update_ExplorePoint, Align_NodeControls
+  -- function num : 0_17 , upvalues : GenerateNodeInfo, NodeLevelGroup, savedisMaxLevel, Txt_Node_Desc, UI_TM, FillExploreUpgradeAble, Tex_NeedExplorePoint, Txt_NeedExplorePoint, Btn_NodeUnlink, SetFontColorAndText, NodeTextColor, NodeTextType, Btn_NearNode, update_ExplorePoint, Align_NodeControls
   GenerateNodeInfo(nodeStaticStatus, nodeKey, isAffiliated, isMaxLevel)
   NodeLevelGroup:SetShow(false)
   savedisMaxLevel = isMaxLevel
@@ -538,6 +552,7 @@ local FillNodeInfo = function(nodeStaticStatus, nodeKey, isAffiliated, isMaxLeve
         Btn_NodeUnlink:SetShow(true)
         Btn_NodeUnlink:SetText(PAGetString(Defines.StringSheet_RESOURCE, "WORLDMAP_NODE_BTN_WITHDRAW") .. "( " .. needPoint .. " )")
         Btn_NodeUnlink:addInputEvent("Mouse_LUp", "OnNodeWithdrawClick( " .. tostring(nodeKey) .. ")")
+        TooltipSimple_Hide()
       else
         if needPoint > 0 or supportPoint > 0 or needMoney > 0 or recipeItems > 0 then
           if workerManager_CheckWorkingOtherChannel() then
@@ -568,12 +583,12 @@ local FillNodeInfo = function(nodeStaticStatus, nodeKey, isAffiliated, isMaxLeve
 end
 
 WorldMap_ItemMarket_Open = function(territoryKeyRaw)
-  -- function num : 0_17
+  -- function num : 0_18
   FGlobal_ItemMarket_Open_ForWorldMap(territoryKeyRaw)
 end
 
 local ClearNodeInfo = function()
-  -- function num : 0_18 , upvalues : Btn_NodeLink, Btn_NodeUnlink, Btn_NearNode, NodeLevelGroup
+  -- function num : 0_19 , upvalues : Btn_NodeLink, Btn_NodeUnlink, Btn_NearNode, NodeLevelGroup
   Btn_NodeLink:SetShow(false)
   Btn_NodeUnlink:SetShow(false)
   Btn_NearNode:SetShow(false)
@@ -582,19 +597,19 @@ local ClearNodeInfo = function()
 end
 
 FGlobal_NodeMenu_SetEnableNodeLinkButton = function(bEnable)
-  -- function num : 0_19 , upvalues : Btn_NodeLink
+  -- function num : 0_20 , upvalues : Btn_NodeLink
   Btn_NodeLink:SetEnable(bEnable)
   Btn_NodeLink:SetDisableColor(not bEnable)
 end
 
 FGlobal_NodeMenu_SetEnableNodeUnlinkButton = function(bEnable)
-  -- function num : 0_20 , upvalues : Btn_NodeUnlink
+  -- function num : 0_21 , upvalues : Btn_NodeUnlink
   Btn_NodeUnlink:SetEnable(bEnable)
   Btn_NodeUnlink:SetDisableColor(not bEnable)
 end
 
 NodeLevelGroup.SetNodeLevel = function(self, nodeKey)
-  -- function num : 0_21 , upvalues : isProgressReset
+  -- function num : 0_22 , upvalues : isProgressReset
   local nodeLv = ToClient_GetNodeLevel(nodeKey)
   local nodeExp = Int64toInt32(ToClient_GetNodeExperience_s64(nodeKey))
   local nodeExpMax = Int64toInt32(ToClient_GetNeedExperienceToNextNodeLevel_s64(nodeKey))
@@ -611,7 +626,7 @@ NodeLevelGroup.SetNodeLevel = function(self, nodeKey)
 end
 
 NodeLevelGroup.SetShow = function(self, isShow)
-  -- function num : 0_22
+  -- function num : 0_23
   (self.Tex_NodeLevBG):SetShow(isShow)
   ;
   (self.Btn_NodeLev):SetShow(isShow)
@@ -626,7 +641,7 @@ NodeLevelGroup.SetShow = function(self, isShow)
 end
 
 FGlobal_ShowInfoNodeMenuPanel = function(node)
-  -- function num : 0_23 , upvalues : _wayPointKey, nodeStaticStatus, ClearNodeInfo, FillNodeInfo, NodeLevelGroup
+  -- function num : 0_24 , upvalues : _wayPointKey, nodeStaticStatus, ClearNodeInfo, FillNodeInfo, NodeLevelGroup
   if ToClient_WorldMapIsShow() == false then
     return 
   end
@@ -666,7 +681,7 @@ FGlobal_ShowInfoNodeMenuPanel = function(node)
 end
 
 InvestNodeLevelNumpad = function(wayPointKey)
-  -- function num : 0_24
+  -- function num : 0_25
   if ToClient_WorldMapIsShow() == false then
     return 
   end
@@ -685,19 +700,19 @@ InvestNodeLevelNumpad = function(wayPointKey)
 end
 
 InvestNodeLevelExecute = function(inputNumber, param)
-  -- function num : 0_25
+  -- function num : 0_26
   local wpCount = Int64toInt32(inputNumber) * 10
   ToClient_RequestIncreaseExperienceNode(param, wpCount)
 end
 
 FGlobal_CloseNodeMenu = function()
-  -- function num : 0_26 , upvalues : ClearNodeInfo
+  -- function num : 0_27 , upvalues : ClearNodeInfo
   ClearNodeInfo()
   Panel_NodeMenu:SetShow(false)
 end
 
 FromClient_RClickedWorldMapNode = function(nodeBtn)
-  -- function num : 0_27
+  -- function num : 0_28
   local node = nodeBtn:FromClient_getExplorationNodeInClient()
   if node == nil then
     return 
@@ -712,7 +727,7 @@ end
 
 local buildingActorKey = nil
 FGlobal_ShowBuildingInfo = function(nodeBtn)
-  -- function num : 0_28 , upvalues : buildingActorKey
+  -- function num : 0_29 , upvalues : buildingActorKey
   buildingActorKey = nodeBtn:ToClient_getActorKey()
   local buildingSS = ToClient_getBuildingInfo(buildingActorKey)
   if buildingSS == nil then
@@ -725,7 +740,7 @@ FGlobal_ShowBuildingInfo = function(nodeBtn)
 end
 
 FGlobal_OnClickBuildingManage = function()
-  -- function num : 0_29 , upvalues : buildingActorKey
+  -- function num : 0_30 , upvalues : buildingActorKey
   local buildingSS = ToClient_getBuildingInfo(buildingActorKey)
   if buildingSS == nil then
     return 
@@ -744,7 +759,7 @@ FGlobal_OnClickBuildingManage = function()
 end
 
 FromClient_BuildingNodeRClick = function(nodeBtn)
-  -- function num : 0_30
+  -- function num : 0_31
   local buildInfoSS = nodeBtn:ToClient_getBuildingStaticStatus()
   if buildInfoSS ~= nil then
     FromClient_RClickWorldmapPanel(ToClient_getBuildingPosition(buildInfoSS), true, false)
@@ -752,13 +767,13 @@ FromClient_BuildingNodeRClick = function(nodeBtn)
 end
 
 FGlobal_OnClickTradeIcon = function(territoryKeyRaw)
-  -- function num : 0_31
+  -- function num : 0_32
   WorldMap_ItemMarket_Open(territoryKeyRaw)
 end
 
 local nodeBtnArray = {}
 CreateNodeIconForTradeIcon_ShowTooltip = function(wayPointKey, isShow)
-  -- function num : 0_32 , upvalues : nodeBtnArray
+  -- function num : 0_33 , upvalues : nodeBtnArray
   if isLuaLoadingComplete then
     if isShow == true then
       local name = PAGetString(Defines.StringSheet_GAME, "GAME_ITEM_MARKET_NAME")
@@ -775,12 +790,12 @@ CreateNodeIconForTradeIcon_ShowTooltip = function(wayPointKey, isShow)
 end
 
 FGlobal_ExplorationNode = function(WaypointKey, ExplorationLevel, TExperience)
-  -- function num : 0_33 , upvalues : NodeLevelGroup
+  -- function num : 0_34 , upvalues : NodeLevelGroup
   NodeLevelGroup:SetNodeLevel(WaypointKey)
 end
 
 worldmapNodeIcon_GuildWarSet = function(nodeBtn)
-  -- function num : 0_34
+  -- function num : 0_35
   local explorationInfo = nodeBtn:FromClient_getExplorationNodeInClient()
   local nodeStaticStatus = explorationInfo:getStaticStatus()
   local regionInfo = nodeStaticStatus:getMinorSiegeRegion()
@@ -834,7 +849,7 @@ worldmapNodeIcon_GuildWarSet = function(nodeBtn)
 end
 
 FromClient_CreateNodeIcon = function(nodeBtn)
-  -- function num : 0_35 , upvalues : nodeBtnArray
+  -- function num : 0_36 , upvalues : nodeBtnArray
   worldmapNodeIcon_GuildWarSet(nodeBtn)
   local tradeIcon = nodeBtn:FromClient_getTradeIcon()
   local explorationInfo = nodeBtn:FromClient_getExplorationNodeInClient()
@@ -876,12 +891,12 @@ FromClient_CreateNodeIcon = function(nodeBtn)
 end
 
 FGlobal_handleOpenItemMarket = function(territoryKey)
-  -- function num : 0_36
+  -- function num : 0_37
   FGlobal_ItemMarket_Open_ForWorldMap(1)
 end
 
 FromClient_StartMinorSiege = function(nodeBtn)
-  -- function num : 0_37
+  -- function num : 0_38
   local warStateIcon = nodeBtn:FromClient_getWarStateIcon()
   warStateIcon:setUpdateTextureAni(true)
   warStateIcon:SetShow(true)
@@ -892,24 +907,24 @@ FromClient_StartMinorSiege = function(nodeBtn)
 end
 
 FromClient_EndMinorSiege = function(nodeBtn)
-  -- function num : 0_38
+  -- function num : 0_39
   worldmapNodeIcon_GuildWarSet(nodeBtn)
 end
 
 FromClient_OnVillageSiegeBuildingNodeGroup = function(nodeBtn)
-  -- function num : 0_39
+  -- function num : 0_40
   nodeBtn:EraseAllEffect()
   nodeBtn:AddEffect("UI_WorldMap_Ping01", true, 0, 0)
 end
 
 FromClient_OutVillageSiegeBuildingNodeGroup = function(nodeBtn)
-  -- function num : 0_40
+  -- function num : 0_41
   nodeBtn:EraseAllEffect()
 end
 
 local dayType = {"1Monday", "2Tuesday", "3wednesday", "4Thursday", "5Friday", "6Saturday"; [0] = "0Sunday"}
 FromClient_SetGuildModeeWorldMapNodeIcon = function(nodeBtn)
-  -- function num : 0_41 , upvalues : dayType
+  -- function num : 0_42 , upvalues : dayType
   if FGlobal_isGuildWarMode() then
     local warStateIcon = nodeBtn:FromClient_getWarStateIcon()
     local guildMark = nodeBtn:FromClient_getGuildMark()
@@ -960,12 +975,12 @@ FromClient_SetGuildModeeWorldMapNodeIcon = function(nodeBtn)
 end
 
 FGlobal_WayPointKey_Return = function()
-  -- function num : 0_42 , upvalues : _wayPointKey
+  -- function num : 0_43 , upvalues : _wayPointKey
   return _wayPointKey
 end
 
 FGlobal_LoadWorldMap_WarehouseOpen = function()
-  -- function num : 0_43 , upvalues : _wayPointKey
+  -- function num : 0_44 , upvalues : _wayPointKey
   if _wayPointKey ~= nil then
     local regionInfoWrapper = ToClient_getRegionInfoWrapperByWaypoint(_wayPointKey)
     if regionInfoWrapper ~= nil and (regionInfoWrapper:get()):isMainOrMinorTown() and (regionInfoWrapper:get()):hasWareHouseNpc() then
@@ -975,12 +990,12 @@ FGlobal_LoadWorldMap_WarehouseOpen = function()
 end
 
 FGlobal_WorldMapGrand_NodeExplorePoint_Update = function()
-  -- function num : 0_44 , upvalues : update_ExplorePoint
+  -- function num : 0_45 , upvalues : update_ExplorePoint
   update_ExplorePoint()
 end
 
 HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp = function(isShow, buttonType)
-  -- function num : 0_45 , upvalues : NodeLevelGroup, SelfExplorePointGroup
+  -- function num : 0_46 , upvalues : NodeLevelGroup, SelfExplorePointGroup
   if isShow then
     local control = nil
     local name = ""
@@ -1004,16 +1019,16 @@ HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp = function(isShow, buttonTyp
 end
 
 nodeMenu_OnScreenResize = function()
-  -- function num : 0_46
+  -- function num : 0_47
   Panel_NodeMenu:SetSize(getScreenSizeX(), getScreenSizeY())
 end
 
 local guildVehicleActorKeyRawForDestroy = nil
 FomClient_Worldmap_GuildVehicleIcon_Clicked = function(actorKeyRaw)
-  -- function num : 0_47 , upvalues : guildVehicleActorKeyRawForDestroy
+  -- function num : 0_48 , upvalues : guildVehicleActorKeyRawForDestroy
   guildVehicleActorKeyRawForDestroy = actorKeyRaw
   local ApplyDistroy = function()
-    -- function num : 0_47_0 , upvalues : guildVehicleActorKeyRawForDestroy
+    -- function num : 0_48_0 , upvalues : guildVehicleActorKeyRawForDestroy
     ToClient_Worldmap_GuildVehicleDestroy(guildVehicleActorKeyRawForDestroy)
   end
 

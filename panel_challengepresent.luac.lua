@@ -497,17 +497,8 @@ FGlobal_ChallengePresent_Open = function()
 end
 
 FGlobal_ChallengePresent_Close = function()
-  -- function num : 0_12 , upvalues : IM
-  if not AllowChangeInputMode() then
-    SetFocusChatting()
-  else
-    if check_ShowWindow() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  end
+  -- function num : 0_12
+  CheckChattingInput()
   Panel_ChallengePresent:SetShow(false, true)
 end
 

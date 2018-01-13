@@ -868,7 +868,7 @@ local AlignButtonPosition = function()
     value:SetPosY(offsetY + 40)
   end
   for checkIndex,value in pairs(worldMapCheckState) do
-    (worldMapCheckState[checkIndex]):SetPosX(offsetX + ((worldMapCheckState[checkIndex]):GetSizeX() + 2) * checkIndex)
+    (worldMapCheckState[checkIndex]):SetPosX(offsetX + ((worldMapCheckState[checkIndex]):GetSizeX() + 5) * checkIndex)
     ;
     (worldMapCheckState[checkIndex]):SetPosY(110)
   end
@@ -1621,7 +1621,7 @@ worldmapGrand_nodeTypeTooltip = function(isShow, typeIdx)
 end
 
 HandleClicked_GrandWorldMap_SearchNode = function()
-  -- function num : 0_66 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_66 , upvalues : worldmapGrand, worldmapGrand_SearchType
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1631,16 +1631,14 @@ HandleClicked_GrandWorldMap_SearchNode = function()
   ;
   (worldmapGrand.config).searchType = worldmapGrand_SearchType.nodeName
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   SetUIMode((Defines.UIMode).eUIMode_WorldMap)
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).searchingResultCount = ToClient_FindNodeByName(tostring(searchString))
   ;
   ((worldmapGrand.ui).list_scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC56: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).scrollStartIdx = 0
@@ -1648,7 +1646,7 @@ HandleClicked_GrandWorldMap_SearchNode = function()
 end
 
 HandleClicked_GrandWorldMap_SearchGuild = function()
-  -- function num : 0_67 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_67 , upvalues : worldmapGrand, worldmapGrand_SearchType
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1658,16 +1656,14 @@ HandleClicked_GrandWorldMap_SearchGuild = function()
   ;
   (worldmapGrand.config).searchType = worldmapGrand_SearchType.GuildName
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   SetUIMode((Defines.UIMode).eUIMode_WorldMap)
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).searchingResultCount = ToClient_findNodebyGuildName(tostring(searchString))
   ;
   ((worldmapGrand.ui).list_scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC56: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).scrollStartIdx = 0
@@ -1675,7 +1671,7 @@ HandleClicked_GrandWorldMap_SearchGuild = function()
 end
 
 HandleClicked_GrandWorldMap_SearchItem = function()
-  -- function num : 0_68 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_68 , upvalues : worldmapGrand, worldmapGrand_SearchType
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1685,16 +1681,14 @@ HandleClicked_GrandWorldMap_SearchItem = function()
   ;
   (worldmapGrand.config).searchType = worldmapGrand_SearchType.itemName
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   SetUIMode((Defines.UIMode).eUIMode_WorldMap)
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).searchingResultCount = ToCleint_findHouseByItemName(tostring(searchString))
   ;
   ((worldmapGrand.ui).list_scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC56: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).scrollStartIdx = 0
@@ -1702,7 +1696,7 @@ HandleClicked_GrandWorldMap_SearchItem = function()
 end
 
 HandleClicked_GrandWorldMap_SearchUseType = function()
-  -- function num : 0_69 , upvalues : worldmapGrand, worldmapGrand_SearchType, IM
+  -- function num : 0_69 , upvalues : worldmapGrand, worldmapGrand_SearchType
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
@@ -1712,16 +1706,14 @@ HandleClicked_GrandWorldMap_SearchUseType = function()
   ;
   (worldmapGrand.config).searchType = worldmapGrand_SearchType.UseType
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   SetUIMode((Defines.UIMode).eUIMode_WorldMap)
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC42: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).searchingResultCount = ToClient_findHouseByHouseUseTypeName(tostring(searchString))
   ;
   ((worldmapGrand.ui).list_scroll):SetControlPos(0)
-  -- DECOMPILER ERROR at PC56: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC51: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (worldmapGrand.config).scrollStartIdx = 0
@@ -1729,19 +1721,17 @@ HandleClicked_GrandWorldMap_SearchUseType = function()
 end
 
 HandleClicked_GrandWorldMap_SearchNode_ResetString = function()
-  -- function num : 0_70 , upvalues : worldmapGrand, IM
+  -- function num : 0_70 , upvalues : worldmapGrand
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
   ;
   ((worldmapGrand.ui).edit_NodeName):SetEditText("", true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
 end
 
 HandleClicked_GrandWorldMap_SearchGuild_ResetString = function()
-  -- function num : 0_71 , upvalues : worldmapGrand, IM
+  -- function num : 0_71 , upvalues : worldmapGrand
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1749,13 +1739,11 @@ HandleClicked_GrandWorldMap_SearchGuild_ResetString = function()
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
   ;
   ((worldmapGrand.ui).edit_GuildName):SetEditText("", true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
 end
 
 HandleClicked_GrandWorldMap_SearchItem_ResetString = function()
-  -- function num : 0_72 , upvalues : worldmapGrand, IM
+  -- function num : 0_72 , upvalues : worldmapGrand
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText((worldmapGrand.config).searchDefaultUseType, true)
@@ -1763,13 +1751,11 @@ HandleClicked_GrandWorldMap_SearchItem_ResetString = function()
   ((worldmapGrand.ui).edit_GuildName):SetEditText((worldmapGrand.config).searchDefaultGuildName, true)
   ;
   ((worldmapGrand.ui).edit_ItemName):SetEditText("", true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
 end
 
 HandleClicked_GrandWorldMap_SearchUseType_ResetString = function()
-  -- function num : 0_73 , upvalues : worldmapGrand, IM
+  -- function num : 0_73 , upvalues : worldmapGrand
   ((worldmapGrand.ui).edit_NodeName):SetEditText((worldmapGrand.config).searchDefaultNodeName, true)
   ;
   ((worldmapGrand.ui).edit_ItemName):SetEditText((worldmapGrand.config).searchDefaultItemName, true)
@@ -1777,8 +1763,6 @@ HandleClicked_GrandWorldMap_SearchUseType_ResetString = function()
   ((worldmapGrand.ui).edit_GuildName):SetEditText((worldmapGrand.config).searchDefaultGuildName, true)
   ;
   ((worldmapGrand.ui).edit_UseType):SetEditText("", true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
 end
 
@@ -1880,10 +1864,8 @@ HandleOnout_GrandWorldMap_explorePointHelp = function(isShow)
 end
 
 FGlobal_GrandWorldMap_SearchToWorldMapMode = function()
-  -- function num : 0_80 , upvalues : IM
+  -- function num : 0_80
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   SetUIMode((Defines.UIMode).eUIMode_WorldMap)
 end
 

@@ -476,17 +476,16 @@ PaGlobal_CharacterInfoBasic.handleClicked_FacePhotoButton = function(self)
   IngameCustomize_Show()
 end
 
--- DECOMPILER ERROR at PC82: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC81: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleClicked_Introduce = function(self)
-  -- function num : 0_19 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_19
   SetFocusEdit((self._ui)._multilineEdit)
   ;
   ((self._ui)._multilineEdit):SetEditText(((self._ui)._multilineEdit):GetEditText(), true)
 end
 
--- DECOMPILER ERROR at PC85: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC84: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleClicked_SetIntroduce = function(self)
   -- function num : 0_20
@@ -500,7 +499,7 @@ PaGlobal_CharacterInfoBasic.handleClicked_SetIntroduce = function(self)
   self:showIntroduce(false)
 end
 
--- DECOMPILER ERROR at PC88: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC87: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleClicked_ResetIntroduce = function(self)
   -- function num : 0_21
@@ -514,7 +513,7 @@ PaGlobal_CharacterInfoBasic.handleClicked_ResetIntroduce = function(self)
   ClearFocusEdit()
 end
 
--- DECOMPILER ERROR at PC91: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC90: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_FacePhotoButton = function(self, isShow)
   -- function num : 0_22
@@ -528,7 +527,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_FacePhotoButton = function(self, isS
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC94: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_FamilyPoints = function(self, isShow, tipType)
   -- function num : 0_23
@@ -551,7 +550,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_FamilyPoints = function(self, isShow
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC97: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC96: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_NormalStack = function(self, defaultCount, valksCount, isShow)
   -- function num : 0_24
@@ -572,7 +571,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_NormalStack = function(self, default
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC100: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC99: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_Regist = function(self, isShow, tipType)
   -- function num : 0_25
@@ -596,7 +595,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Regist = function(self, isShow, tipT
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC103: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC102: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_Fitness = function(self, isShow, _tipType)
   -- function num : 0_26
@@ -624,7 +623,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Fitness = function(self, isShow, _ti
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC107: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC106: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_Potential = function(self, isShow, _tipType)
   -- function num : 0_27 , upvalues : Class_BattleSpeed
@@ -640,7 +639,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Potential = function(self, isShow, _
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC111: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC110: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_CharInfomation = function(self, isShow, _tipType)
   -- function num : 0_28 , upvalues : CombatType
@@ -681,7 +680,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_CharInfomation = function(self, isSh
   end
 end
 
--- DECOMPILER ERROR at PC115: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC114: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.handleMouseOver_Craft = function(self, isShow, _slotNo)
   -- function num : 0_29 , upvalues : UI_LifeToolTip
@@ -699,7 +698,7 @@ PaGlobal_CharacterInfoBasic.handleMouseOver_Craft = function(self, isShow, _slot
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC118: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC117: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.showWindow = function(self)
   -- function num : 0_30
@@ -707,7 +706,7 @@ PaGlobal_CharacterInfoBasic.showWindow = function(self)
   self:update()
 end
 
--- DECOMPILER ERROR at PC121: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC120: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.hideWindow = function(self)
   -- function num : 0_31
@@ -715,7 +714,7 @@ PaGlobal_CharacterInfoBasic.hideWindow = function(self)
   self._toolTipCount = 0
 end
 
--- DECOMPILER ERROR at PC124: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC123: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.showIntroduce = function(self, isShow)
   -- function num : 0_32
@@ -729,7 +728,7 @@ PaGlobal_CharacterInfoBasic.showIntroduce = function(self, isShow)
   ((self._ui)._multilineEdit):SetEditText(msg)
 end
 
--- DECOMPILER ERROR at PC127: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC126: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.checkToolTip = function(self, isShow)
   -- function num : 0_33
@@ -746,7 +745,7 @@ PaGlobal_CharacterInfoBasic.checkToolTip = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC131: Confused about usage of register: R10 in 'UnsetPending'
+-- DECOMPILER ERROR at PC130: Confused about usage of register: R10 in 'UnsetPending'
 
 PaGlobal_CharacterInfoBasic.updateFacePhoto = function(self)
   -- function num : 0_34 , upvalues : UI_DefaultFaceTexture

@@ -9,8 +9,6 @@ local guardGauge = (UI.getChildControl)(Panel_GuardGauge, "Progress2_1")
 local bar_FullGauge = (UI.getChildControl)(Panel_GuardGauge, "GuardGauge_ProgresssBG")
 local txt_GuardGaugeMax = (UI.getChildControl)(Panel_GuardGauge, "StaticText_GuardGaugeCount")
 Panel_GuardGauge:RegisterShowEventFunc(false, "Panel_GuardGauge_HideAni()")
-Panel_GuardGauge:SetPosX(100)
-Panel_GuardGauge:SetPosY(200)
 Panel_GuardGauge_HideAni = function()
   -- function num : 0_0
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_GuardGauge, 0, 0.3)
@@ -44,7 +42,7 @@ GuardGauge_Update = function()
     guardGauge:SetProgressRate(fullGauge)
     txt_GuardGaugeMax:SetFontAlpha(alpha)
     txt_GuardGaugeMax:SetText(tostring((math.floor)(spRate * 100)))
-    Panel_GuardGauge:SetShow(true, false)
+    Panel_GuardGauge:SetShow(true)
   end
 end
 

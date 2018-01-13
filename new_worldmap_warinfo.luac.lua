@@ -70,7 +70,8 @@ local territoryInfo_Init = function()
   if territoryCount == nil then
     return 
   end
-  for territory_idx = 0, territoryCount - 3 do
+  territoryCount = (math.min)(territoryCount, 5)
+  for territory_idx = 0, territoryCount - 1 do
     local territoryKey = getTerritoryByIndex(territory_idx)
     if toInt64(0, 5) ~= territoryKey then
       local territoryName = getTerritoryNameByKey(territoryKey)
@@ -99,7 +100,7 @@ local territoryInfo_Init = function()
         (territoryDATA.AllCount):SetPosY(territory_CountPosY)
         territory_NamePosY = territory_NamePosY + (territoryDATA.Name):GetSizeY() + 5 + line_gap
         territory_CountPosY = territory_CountPosY + (territoryDATA.FindCount):GetSizeY() + line_gap
-        -- DECOMPILER ERROR at PC118: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC124: Confused about usage of register: R9 in 'UnsetPending'
 
         WarInfoUIPool[territory_idx] = territoryDATA
       end
@@ -113,8 +114,9 @@ territory_Info_Update = function()
   if territoryCount == nil then
     return 
   end
+  territoryCount = (math.min)(territoryCount, 5)
   local isSiegeBeing_World = false
-  for territory_idx = 0, territoryCount - 3 do
+  for territory_idx = 0, territoryCount - 1 do
     local territoryKey = getTerritoryByIndex(territory_idx)
     if toInt64(0, 5) ~= territoryKey then
       local territoryDATA = WarInfoUIPool[territory_idx]
@@ -184,8 +186,9 @@ FGlobal_WarInfo_Open = function()
   if territoryCount == nil then
     return 
   end
+  territoryCount = (math.min)(territoryCount, 5)
   local isSiegeBeing_chk = false
-  for territory_idx = 0, territoryCount - 3 do
+  for territory_idx = 0, territoryCount - 1 do
     local territoryKey = getTerritoryByIndex(territory_idx)
     if toInt64(0, 5) ~= territoryKey then
       local isSiegeBeing_Value = isSiegeBeing(territory_idx)

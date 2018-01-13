@@ -17,7 +17,7 @@ Pos = {gapX = 122, skillTextPosX = 0, skillTextPosY = 6, expGaugePosX = 29, expG
 , 
 skill = {count = 3}
 }
-, _closeBtn = (UI.getChildControl)(Panel_Window_StableStallion, "Button_Close"), _stallionNotifyBG = (UI.getChildControl)(Panel_Window_StableStallion, "Static_DescBg"), _stallionNotify = (UI.getChildControl)(Panel_Window_StableStallion, "StaticText_StallionDesc"), _upgradeBG = (UI.getChildControl)(Panel_Window_StableStallion, "Static_UpgradeBG"), 
+, _closeBtn = (UI.getChildControl)(Panel_Window_StableStallion, "Button_Close"), _stallionNotifyBG = (UI.getChildControl)(Panel_Window_StableStallion, "Static_DescBg"), _stallionNotify = (UI.getChildControl)(Panel_Window_StableStallion, "StaticText_StallionDesc"), _upgradeBG = (UI.getChildControl)(Panel_Window_StableStallion, "Static_UpgradeBG"), _stackBG = (UI.getChildControl)(Panel_Window_StableStallion, "Static_PotenBG"), 
 awaken = {_awakenIconBG = (UI.getChildControl)(Panel_Window_StableStallion, "Static_AwakenIconBG"), _awakenIcon = (UI.getChildControl)(Panel_Window_StableStallion, "Static_AwakenIcon"), _awakenCount = (UI.getChildControl)(Panel_Window_StableStallion, "StaticText_AwakenItemCount"), _awakenExpBG = (UI.getChildControl)(Panel_Window_StableStallion, "Static_AwakenExpBG"), _awakenExp = (UI.getChildControl)(Panel_Window_StableStallion, "Static_AwakenExp"), _awakenExpCount = (UI.getChildControl)(Panel_Window_StableStallion, "Static_AwakenPercentString"), _awakenButton = (UI.getChildControl)(Panel_Window_StableStallion, "Button_AwakenTraining"), _awakenArea = (UI.getChildControl)(Panel_Window_StableStallion, "Static_SelectedAwakenArea"), _isEnableAwaken = false, _awakenSlotNo = 0, _awakenItemCount = 0, 
 _awaken = {}
 }
@@ -36,6 +36,7 @@ _skillExpCount = {}
 , _awakenExpCount = 0, _buttonClick = -1, _elapsedTime = 0, _effectType = 0, _awakenDoing = false, _selectedServantIndex = 0, 
 _isExpUp = {}
 , _servantNo = nil}
+StableStallion._stackValue = (UI.getChildControl)(StableStallion._stackBG, "StaticText_PotenText")
 local inventoryItemSSW = nil
 local selectedItemWhereType = (CppEnums.ItemWhereType).eInventory
 StableStallion.init = function(self)
@@ -749,6 +750,7 @@ StableStallion.Refresh_UIData = function(self)
   local skillCount = servantInfo:getSkillCount()
   local awakenExp = 0
   local awakenMaxExp = stable_getStallionTrainingCompleteRequiredExperience()
+  local statckCount = servantInfo:getServantAwakenStack()
   for i = 0, self._slotCount - 1 do
     local satllionSkillWrapper = stable_getStallionTrainingSkillListAt(i)
     local stallionSkillWrapperKey = satllionSkillWrapper:getKey()
@@ -757,7 +759,7 @@ StableStallion.Refresh_UIData = function(self)
       if skillWrapper ~= nil then
         local skillname = skillWrapper:getName()
         local skillKey = skillWrapper:getKey()
-        -- DECOMPILER ERROR at PC46: Confused about usage of register: R19 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC48: Confused about usage of register: R20 in 'UnsetPending'
 
         if stallionSkillWrapperKey == skillKey then
           (self._skillExpCount)[i] = servantInfo:getSkillExp(ii) / (skillWrapper:getMaxExp() / 100)
@@ -774,6 +776,8 @@ StableStallion.Refresh_UIData = function(self)
   if self._awakenExpCount > 100 then
     self._awakenExpCount = 100
   end
+  ;
+  (self._stackValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_STABLESTALLION_STACKCOUNT", "count", tostring(statckCount)))
   ;
   ((self.awaken)._awakenExp):SetProgressRate(self._awakenExpCount)
   ;

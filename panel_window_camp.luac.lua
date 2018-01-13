@@ -234,7 +234,16 @@ PaGlobal_Camp.update = function(self)
     end
   end
   if isUnseal then
-    ((self._ui)._btn_Seal):SetShow(true)
+    if ToClient_IsContentsGroupOpen("347") then
+      ((self._ui)._btn_Seal):SetShow(true)
+      ;
+      ((self._ui)._btn_Seal):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_BUILDINGBUFFLIST_BUTTON_TEXT"))
+    else
+      ;
+      ((self._ui)._btn_Seal):SetShow(false)
+      ;
+      ((self._ui)._btn_RemoteSeal):SetPosX(Panel_Window_Camp:GetSizeX() / 2 - ((self._ui)._btn_RemoteSeal):GetSizeX() / 2)
+    end
     ;
     ((self._ui)._btn_RemoteSeal):SetShow(true)
     ;
@@ -245,8 +254,6 @@ PaGlobal_Camp.update = function(self)
     ((self._ui)._btn_Seal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:sealTent()")
     ;
     ((self._ui)._btn_RemoteSeal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:remoteSeal()")
-    ;
-    ((self._ui)._btn_Seal):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_BUILDINGBUFFLIST_BUTTON_TEXT"))
   else
     ;
     ((self._ui)._btn_UnSealTent):SetShow(true)

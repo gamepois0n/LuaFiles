@@ -340,16 +340,11 @@ PopupAddFriend.SetShow = function(self, isShow)
   -- function num : 0_16
   ((self._ui)._backGround):SetShow(isShow)
   if isShow then
-    (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
     SetFocusEdit((self._ui)._editName)
     ;
     ((self._ui)._editName):SetMaxInput(getGameServiceTypeUserNickNameLength())
   else
-    if AllowChangeInputMode() then
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
   end
   ;
   ((self._ui)._editName):SetEditText("", true)
@@ -386,8 +381,6 @@ PopupAddFriend.Initialize = function(self)
   ((self._ui)._btnCancel):addInputEvent("Mouse_LUp", "PaGlobal_FriendList:CloseAddFriendPopup()")
   ;
   ((self._ui)._btnClose):addInputEvent("Mouse_LUp", "PaGlobal_FriendList:CloseAddFriendPopup()")
-  ;
-  ((self._ui)._editName):addInputEvent("Mouse_LUp", "PaGlobal_FriendList:ChangeInputMode()")
   ;
   ((self._ui)._checkUserNickName):addInputEvent("Mouse_LUp", "PaGlobal_FriendList:ChangeNickNameMode()")
   ;
@@ -433,7 +426,6 @@ end
 
 PaGlobal_FriendList.ChangeInputMode = function(self)
   -- function num : 0_21
-  (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
 end
 
 -- DECOMPILER ERROR at PC196: Confused about usage of register: R3 in 'UnsetPending'
@@ -470,14 +462,8 @@ PopupRenameGroup.SetShow = function(self, isShow)
   self._isShow = isShow
   ;
   ((self._ui)._backGround):SetShow(isShow)
-  if isShow then
-    (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode)
-  else
-    if AllowChangeInputMode() then
-      (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode)
-    else
-      SetFocusChatting()
-    end
+  if isShow == false then
+    CheckChattingInput()
   end
   ;
   ((self._ui)._editName):SetEditText("", true)
@@ -510,8 +496,6 @@ PopupRenameGroup.Initialize = function(self)
   ((self._ui)._btnCancel):addInputEvent("Mouse_LUp", "PaGlobal_FriendList:ClosePopupRenameGroup()")
   ;
   ((self._ui)._btnClose):addInputEvent("Mouse_LUp", "PaGlobal_FriendList:ClosePopupRenameGroup()")
-  ;
-  ((self._ui)._editName):addInputEvent("Mouse_LUp", "PaGlobal_FriendList:ChangeInputMode()")
   ;
   ((self._ui)._editName):SetMaxInput(getGameServiceTypeUserNickNameLength())
   self:SetShow(false)

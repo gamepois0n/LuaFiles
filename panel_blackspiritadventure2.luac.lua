@@ -71,8 +71,47 @@ BlackSpirit2_Show = function()
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
   local bAdventureWebUrl = PaGlobal_URL_Check(worldNo)
+  local isNationType = "KR"
+  if isGameTypeKorea() then
+    isNationType = "KR"
+  else
+    if isGameTypeJapan() then
+      isNationType = "JP"
+    else
+      if isGameTypeRussia() then
+        isNationType = "RU"
+      else
+        if isGameTypeEnglish() then
+          isNationType = "EN"
+        else
+          if isGameTypeTaiwan() then
+            isNationType = "TW"
+          else
+            if isGameTypeSA() then
+              isNationType = "SA"
+            else
+              if isGameTypeTR() then
+                isNationType = "TR"
+              else
+                if isGameTypeTH() then
+                  isNationType = "TH"
+                else
+                  if isGameTypeID() then
+                    isNationType = "ID"
+                  else
+                    _PA_LOG("정태�\164", "새로�\180 국가 �\128입이 추가되었으니 �\180 로그�\188 발견하면 해당 담당자에�\140 알려주세�\148 �\173!!!")
+                    isNationType = "KR"
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
   if bAdventureWebUrl ~= nil then
-    local url = bAdventureWebUrl .. "/BlackSpiritAdventure?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&serverNo=" .. tostring(serverNo) .. "?userId=" .. tostring(userNickName) .. "&characterName=" .. tostring(characterName) .. "&characterNo=" .. tostring(characterNo_64)
+    local url = bAdventureWebUrl .. "/BlackSpiritAdventure?userNo=" .. tostring(myUserNo) .. "&certKey=" .. tostring(cryptKey) .. "&serverNo=" .. tostring(serverNo) .. "?userId=" .. tostring(userNickName) .. "&characterName=" .. tostring(characterName) .. "&characterNo=" .. tostring(characterNo_64) .. "&nationCode=" .. tostring(isNationType)
     _Web:SetUrl(1220, 628, url, false, true)
   end
 end

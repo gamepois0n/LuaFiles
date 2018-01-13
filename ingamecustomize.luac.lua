@@ -45,6 +45,7 @@ IngameCustomize_Show = function()
   if Panel_CustomizingAlbum:GetShow() then
     CustomizingAlbum_Close()
   end
+  FGlobal_WebHelper_ForceClose()
   audioPostEvent_SystemUi(1, 2)
   SetUIMode((Defines.UIMode).eUIMode_InGameCustomize)
   renderMode:set()

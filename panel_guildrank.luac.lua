@@ -54,8 +54,7 @@ local btn_Search = (UI.getChildControl)(Panel_Guild_Rank, "Button_Search")
 editBox_Search:addInputEvent("Mouse_LUp", "HandleClicked_GuildSearch_EditBox()")
 btn_Search:addInputEvent("Mouse_LUp", "GuildSearch_Confirm()")
 HandleClicked_GuildSearch_EditBox = function()
-  -- function num : 0_2 , upvalues : IM, editBox_Search
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_2 , upvalues : editBox_Search
   editBox_Search:SetMaxInput(10)
   SetFocusEdit(editBox_Search)
   editBox_Search:SetEditText("", true)
@@ -79,8 +78,7 @@ FGlobal_CheckEditBox_GuildRank = function(uiEditBox)
 end
 
 FGlobal_EscapeEditBox_GuildRank = function(bool)
-  -- function num : 0_5 , upvalues : IM, editBox_Search
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_5 , upvalues : editBox_Search
   ClearFocusEdit(editBox_Search)
 end
 

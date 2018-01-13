@@ -30,10 +30,6 @@ _slot = {
 }
 , 
 _slotConfig = {createIcon = true, createBorder = true}
-, 
-_regionKeyData = {[1] = 289, [2] = 284, [3] = 286, [4] = 253, [5] = 256, [6] = 252, [7] = 290, [8] = 314, [9] = 249, [10] = 113, [11] = 297, [12] = 216, [13] = 417, [14] = 332, [15] = 337, [16] = 210, [17] = 327, [18] = 415, [19] = 213, [20] = 214, [21] = 211, [22] = 555, [23] = 556, [24] = 557, [25] = 243}
-, 
-_regionString = {[1] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_7"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_9"), [10] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_10"), [11] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_11"), [12] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_12"), [13] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_13"), [14] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_14"), [15] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_15"), [16] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_16"), [17] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_17"), [18] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_18"), [19] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_19"), [20] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_20"), [21] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_21"), [22] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_22"), [23] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_23"), [24] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_24"), [25] = PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_NEEDAP_25")}
 , _selectedRegionKey = nil, 
 _itemKeyByType = {
 [0] = {}
@@ -45,7 +41,7 @@ _itemKeyByType = {
 [3] = {}
 }
 , _maxSlot = 30}
--- DECOMPILER ERROR at PC272: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC93: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.Init = function(self)
   -- function num : 0_0
@@ -94,13 +90,13 @@ PaGlobal_WorldDropItem.Init = function(self)
   (control._list2Region):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "DropItemRegion_ControlCreate")
   ;
   (control._list2Region):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
-  for index = 1, #self._regionKeyData do
-    local regionKey_s64 = toInt64(0, (self._regionKeyData)[index])
+  for index = 0, ToClient_RegionDropItem_GetRegionKeySize() - 1 do
+    local regionKey_s64 = ToClient_RegionDropItem_GetRegionKeyByIndex(index)
     ;
     ((control._list2Region):getElementManager()):pushKey(regionKey_s64)
   end
   for index = 0, self._maxSlot - 1 do
-    -- DECOMPILER ERROR at PC161: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC160: Confused about usage of register: R6 in 'UnsetPending'
 
     ((control._slotBg)[0])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[0], "DropItem_WeaponSlotBg_" .. index)
     CopyBaseProperty(control._weaponSlotTempleteBg, ((control._slotBg)[0])[index])
@@ -110,7 +106,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[0])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[0])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC196: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC195: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[0])[index] = {}
@@ -122,7 +118,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     ((((control._slot)[0])[index]).icon):addInputEvent("Mouse_On", "PaGlobal_WorldDropItem:ItemTooltip_Show(" .. 0 .. "," .. index .. ")")
     ;
     ((((control._slot)[0])[index]).icon):addInputEvent("Mouse_Out", "PaGlobal_WorldDropItem:ItemTooltip_Hide()")
-    -- DECOMPILER ERROR at PC250: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC249: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slotBg)[1])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[1], "DropItem_ArmorSlotBg_" .. index)
@@ -133,7 +129,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[1])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[1])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC285: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC284: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[1])[index] = {}
@@ -145,7 +141,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     ((((control._slot)[1])[index]).icon):addInputEvent("Mouse_On", "PaGlobal_WorldDropItem:ItemTooltip_Show(" .. 1 .. "," .. index .. ")")
     ;
     ((((control._slot)[1])[index]).icon):addInputEvent("Mouse_Out", "PaGlobal_WorldDropItem:ItemTooltip_Hide()")
-    -- DECOMPILER ERROR at PC339: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC338: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slotBg)[2])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[2], "DropItem_AccessorySlotBg_" .. index)
@@ -156,7 +152,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[2])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[2])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC374: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC373: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[2])[index] = {}
@@ -168,7 +164,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     ((((control._slot)[2])[index]).icon):addInputEvent("Mouse_On", "PaGlobal_WorldDropItem:ItemTooltip_Show(" .. 2 .. "," .. index .. ")")
     ;
     ((((control._slot)[2])[index]).icon):addInputEvent("Mouse_Out", "PaGlobal_WorldDropItem:ItemTooltip_Hide()")
-    -- DECOMPILER ERROR at PC428: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC427: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slotBg)[3])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[3], "DropItem_EtcSlotBg_" .. index)
@@ -179,7 +175,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[3])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[3])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC463: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC462: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[3])[index] = {}
@@ -223,7 +219,7 @@ DropItemRegion_ControlCreate = function(content, key)
   end
 end
 
--- DECOMPILER ERROR at PC277: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC98: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.HandleClicked_Region = function(self, regionKey)
   -- function num : 0_2
@@ -237,102 +233,98 @@ PaGlobal_WorldDropItem.HandleClicked_Region = function(self, regionKey)
   PaGlobal_WorldDropItem:SetDropItem(regionKey)
 end
 
--- DECOMPILER ERROR at PC280: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC101: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.SetDropItem = function(self, regionKey)
   -- function num : 0_3
   local regionInfo = getRegionInfoWrapper(regionKey)
   ;
   ((self._ui)._selectedRegionName):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DROPITEM_SELECTEDAREA", "areaName", regionInfo:getAreaName()))
-  for index = 1, #self._regionKeyData do
-    if regionKey == (self._regionKeyData)[index] then
-      ((self._ui)._needAp):SetText((self._regionString)[index])
-      break
+  local needAttackPoint = ToClient_RegionDropItem_GetNeedAttackPoint(regionKey)
+  if needAttackPoint ~= nil then
+    ((self._ui)._needAp):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DROPITEM_ATTACKPOINT_TEXT", "apCount", tostring(needAttackPoint)))
+  end
+  local itemCount = ToClient_GetRegionDropItemSize(regionKey)
+  if itemCount > 0 then
+    for iIndex = 0, 3 do
+      -- DECOMPILER ERROR at PC44: Confused about usage of register: R9 in 'UnsetPending'
+
+      (self._itemKeyByType)[iIndex] = {}
+    end
+    for index = 0, itemCount - 1 do
+      local itemSSW = ToClient_GetRegionDropItemWrapper(regionKey, index)
+      local itemKey = ((itemSSW:get())._key):get()
+      if itemSSW:isEquipable() then
+        if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
+          (table.insert)((self._itemKeyByType)[0], itemKey)
+        else
+          if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
+            (table.insert)((self._itemKeyByType)[2], itemKey)
+          else
+            ;
+            (table.insert)((self._itemKeyByType)[1], itemKey)
+          end
+        end
+      else
+        ;
+        (table.insert)((self._itemKeyByType)[3], itemKey)
+      end
     end
   end
   do
-    local itemCount = ToClient_GetRegionDropItemSize(regionKey)
-    if itemCount > 0 then
-      for iIndex = 0, 3 do
-        -- DECOMPILER ERROR at PC43: Confused about usage of register: R8 in 'UnsetPending'
-
-        (self._itemKeyByType)[iIndex] = {}
-      end
-      for index = 0, itemCount - 1 do
-        local itemSSW = ToClient_GetRegionDropItemWrapper(regionKey, index)
-        local itemKey = ((itemSSW:get())._key):get()
-        if itemSSW:isEquipable() then
-          if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
-            (table.insert)((self._itemKeyByType)[0], itemKey)
-          else
-            if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
-              (table.insert)((self._itemKeyByType)[2], itemKey)
-            else
-              ;
-              (table.insert)((self._itemKeyByType)[1], itemKey)
-            end
-          end
-        else
+    self:Slot_Init()
+    local control = self._ui
+    local nextPosY = 0
+    for index = 0, 3 do
+      if #(self._itemKeyByType)[index] > 0 then
+        ((control._itemGroupUi)[index]):SetShow(true)
+        ;
+        ((control._itemGroupUi)[index]):SetPosY(nextPosY)
+        local posY = 0
+        for sIndex = 1, #(self._itemKeyByType)[index] do
+          (((control._slotBg)[index])[sIndex - 1]):SetShow(true)
+          local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(((self._itemKeyByType)[index])[sIndex]))
           ;
-          (table.insert)((self._itemKeyByType)[3], itemKey)
+          (((control._slot)[index])[sIndex - 1]):setItemByStaticStatus(itemSSW)
+        end
+        nextPosY = nextPosY + (((control._slotBg)[index])[#(self._itemKeyByType)[index] - 1]):GetPosY() + 50
+      else
+        do
+          do
+            ;
+            ((control._itemGroupUi)[index]):SetShow(false)
+            -- DECOMPILER ERROR at PC185: LeaveBlock: unexpected jumping out DO_STMT
+
+            -- DECOMPILER ERROR at PC185: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+            -- DECOMPILER ERROR at PC185: LeaveBlock: unexpected jumping out IF_STMT
+
+          end
         end
       end
     end
     do
-      self:Slot_Init()
-      local control = self._ui
-      local nextPosY = 0
-      for index = 0, 3 do
-        if #(self._itemKeyByType)[index] > 0 then
-          ((control._itemGroupUi)[index]):SetShow(true)
-          ;
-          ((control._itemGroupUi)[index]):SetPosY(nextPosY)
-          local posY = 0
-          for sIndex = 1, #(self._itemKeyByType)[index] do
-            (((control._slotBg)[index])[sIndex - 1]):SetShow(true)
-            local itemSSW = getItemEnchantStaticStatus(ItemEnchantKey(((self._itemKeyByType)[index])[sIndex]))
-            ;
-            (((control._slot)[index])[sIndex - 1]):setItemByStaticStatus(itemSSW)
-          end
-          nextPosY = nextPosY + (((control._slotBg)[index])[#(self._itemKeyByType)[index] - 1]):GetPosY() + 50
-        else
-          do
-            do
-              ;
-              ((control._itemGroupUi)[index]):SetShow(false)
-              -- DECOMPILER ERROR at PC184: LeaveBlock: unexpected jumping out DO_STMT
-
-              -- DECOMPILER ERROR at PC184: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-              -- DECOMPILER ERROR at PC184: LeaveBlock: unexpected jumping out IF_STMT
-
-            end
-          end
-        end
-      end
-      do
-        local contentSize = (math.max)(330, nextPosY)
-        ;
-        (control._frameContent):SetSize((control._frameContent):GetSizeX(), contentSize)
-        ;
-        (control._scroll):SetShow(contentSize > 330)
-        ;
-        (control._scroll):SetInterval(contentSize / 100 * 1.2)
-        ;
-        ((control._scroll):GetControlButton()):SetSize(((control._scroll):GetControlButton()):GetSizeX(), (math.min)(325, 325 / contentSize * 250))
-        ;
-        (control._frameDropItem):UpdateContentScroll()
-        ;
-        (control._scroll):SetControlTop()
-        ;
-        (control._frameDropItem):UpdateContentPos()
-        -- DECOMPILER ERROR: 1 unprocessed JMP targets
-      end
+      local contentSize = (math.max)(330, nextPosY)
+      ;
+      (control._frameContent):SetSize((control._frameContent):GetSizeX(), contentSize)
+      ;
+      (control._scroll):SetShow(contentSize > 330)
+      ;
+      (control._scroll):SetInterval(contentSize / 100 * 1.2)
+      ;
+      ((control._scroll):GetControlButton()):SetSize(((control._scroll):GetControlButton()):GetSizeX(), (math.min)(325, 325 / contentSize * 250))
+      ;
+      (control._frameDropItem):UpdateContentScroll()
+      ;
+      (control._scroll):SetControlTop()
+      ;
+      (control._frameDropItem):UpdateContentPos()
+      -- DECOMPILER ERROR: 1 unprocessed JMP targets
     end
   end
 end
 
--- DECOMPILER ERROR at PC283: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC104: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.Slot_Init = function(self)
   -- function num : 0_4
@@ -344,7 +336,7 @@ PaGlobal_WorldDropItem.Slot_Init = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC286: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC107: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.SetNavi = function(self)
   -- function num : 0_5
@@ -356,10 +348,25 @@ PaGlobal_WorldDropItem.SetNavi = function(self)
     local pos3D = regionInfo:getPosition()
     ToClient_DeleteNaviGuideByGroup(0)
     ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, false)
+  else
+    do
+      if self._selectedRegionKey == 249 then
+        local pos3D = float3(-337181.94, 10127, -248922)
+        ToClient_DeleteNaviGuideByGroup(0)
+        ToClient_WorldMapNaviStart(pos3D, NavigationGuideParam(), false, false)
+      else
+        do
+          if self._selectedRegionKey == 688 or self._selectedRegionKey == 689 then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_DROPITEM_DESERTALERT"))
+          end
+          _PA_LOG("cylee", "PaGlobal_WorldDropItem:SetNavi() region not has base way point! region:" .. tostring(self._selectedRegionKey))
+        end
+      end
+    end
   end
 end
 
--- DECOMPILER ERROR at PC289: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC110: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.ItemTooltip_Show = function(self, itemType, index)
   -- function num : 0_6
@@ -370,21 +377,21 @@ PaGlobal_WorldDropItem.ItemTooltip_Show = function(self, itemType, index)
   end
 end
 
--- DECOMPILER ERROR at PC292: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC113: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.ItemTooltip_Hide = function(self)
   -- function num : 0_7
   Panel_Tooltip_Item_hideTooltip()
 end
 
--- DECOMPILER ERROR at PC295: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC116: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.Open = function(self)
   -- function num : 0_8
   Panel_Window_DropItem:SetShow(true)
 end
 
--- DECOMPILER ERROR at PC298: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC119: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_WorldDropItem.Close = function(self)
   -- function num : 0_9
@@ -396,7 +403,7 @@ FGlobal_DropItemWindow_Open = function(regionKey)
   local self = PaGlobal_WorldDropItem
   self:Open()
   if regionKey == nil then
-    regionKey = (self._regionKeyData)[1]
+    regionKey = Int64toInt32(ToClient_RegionDropItem_GetRegionKeyByIndex(0))
   end
   self:HandleClicked_Region(regionKey)
 end

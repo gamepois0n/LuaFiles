@@ -44,6 +44,11 @@ local radar_DangerIcon = (UI.getChildControl)(Panel_Radar, "Static_DangerArea")
 local redar_DangerAletText = (UI.getChildControl)(Panel_Radar, "StaticText_MonsterAlert")
 local radar_DangetAlertBg = (UI.getChildControl)(Panel_Radar, "Static_Alert")
 local radar_WarAlert = (UI.getChildControl)(Panel_Radar, "StaticText_WarAlert")
+local radar_ChangeBtn = (UI.getChildControl)(Panel_Radar, "Button_Swap")
+local radar_SequenceAni = (UI.getChildControl)(Panel_Radar, "Static_SequenceAni")
+local isWorldMinimapOpen = ToClient_IsContentsGroupOpen("345")
+radar_ChangeBtn:SetShow(isWorldMinimapOpen)
+radar_SequenceAni:SetShow(isWorldMinimapOpen)
 radar_regionName:SetAutoResize(true)
 radar_regionName:SetNotAbleMasking(true)
 radar_regionNodeName:SetAutoResize(true)
@@ -51,6 +56,14 @@ radar_regionNodeName:SetNotAbleMasking(true)
 radar_regionWarName:SetAutoResize(true)
 radar_regionWarName:SetNotAbleMasking(true)
 radar_Background:addInputEvent("Mouse_On", "FGlobal_Radar_HandleMouseOn()")
+local radar_Swap = nil
+if ToClient_IsDevelopment() then
+  radar_Swap = (UI.getChildControl)(Panel_Radar, "Button_Swap")
+  radar_Swap:SetShow(isWorldMinimapOpen)
+  radar_Swap:SetNotAbleMasking(true)
+  radar_Swap:addInputEvent("Mouse_LUp", "PaGlobal_changeRadarUI()")
+  radar_Swap:SetDepth(-9999)
+end
 redar_DangerAletText:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 redar_DangerAletText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTERALERT"))
 redar_DangerAletText:SetShow(false)
@@ -371,8 +384,12 @@ FGlobal_Radar_HandleMouseOn = function()
   PaGlobal_TutorialManager:handleRadarMouseOn()
 end
 
+GLOBAL_CHECK_WORLDMINIMAP = false
 RadarMap_Background_MouseRUp = function()
   -- function num : 0_21 , upvalues : radar_MiniMapScl, PI
+  if GLOBAL_CHECK_WORLDMINIMAP == true then
+    return 
+  end
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local posX = mousePosX - Panel_Radar:GetPosX()
@@ -417,7 +434,7 @@ RadarMap_Background_MouseRUp = function()
 end
 
 local controlInit = function()
-  -- function num : 0_22 , upvalues : radarTime, radar_DangerIcon, radar_SizeBtn, radar_SizeSlider, radar_AlphaBtn, radar_AlphaScrl, alphaValue, radar_MiniMapScl, controlAlign, PI, updateWorldMapDistance, scaleMinValue
+  -- function num : 0_22 , upvalues : radarTime, radar_DangerIcon, radar_SizeBtn, radar_SizeSlider, radar_AlphaBtn, radar_AlphaScrl, alphaValue, radar_MiniMapScl, controlAlign, radar_ChangeBtn, radar_SequenceAni, PI, updateWorldMapDistance, scaleMinValue
   local radarControl = radarMap.controls
   ;
   (radarControl.timeNum):SetShow(false)
@@ -514,6 +531,8 @@ local controlInit = function()
   ;
   (radarControl.rader_Close):SetNotAbleMasking(true)
   radar_MiniMapScl:SetNotAbleMasking(true)
+  radar_ChangeBtn:SetNotAbleMasking(true)
+  radar_SequenceAni:SetNotAbleMasking(true)
   ;
   (radarControl.rader_Plus):SetAlpha(0)
   ;
@@ -531,6 +550,8 @@ local controlInit = function()
   ;
   (radarControl.rader_Close):SetAlpha(0)
   radar_MiniMapScl:SetAlpha(0)
+  radar_ChangeBtn:SetAlpha(1)
+  radar_SequenceAni:SetAlpha(0)
   ;
   (radarControl.icon_SelfPlayer):SetRotate(PI)
   radar_AlphaScrl:SetControlPos(ToClient_GetRaderAlpha() * 100)
@@ -755,7 +776,7 @@ SortRador_IconIndex = function()
   Panel_Radar:SetChildIndex(radar_MiniMapScl, 9999)
 end
 
--- DECOMPILER ERROR at PC1259: Confused about usage of register: R78 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1309: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.getIdleIcon = function(self)
   -- function num : 0_29
@@ -769,14 +790,14 @@ radarMap.getIdleIcon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1263: Confused about usage of register: R78 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1313: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.returnIconToPool = function(self, icon)
   -- function num : 0_30
   (self.iconPool):push_back(icon)
 end
 
--- DECOMPILER ERROR at PC1268: Confused about usage of register: R78 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1318: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.getIdleQuest = function(self)
   -- function num : 0_31 , upvalues : QuestArrowHalfSize
@@ -801,7 +822,7 @@ radarMap.getIdleQuest = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1272: Confused about usage of register: R78 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1322: Confused about usage of register: R82 in 'UnsetPending'
 
 radarMap.returnQuestToPool = function(self, questIcon)
   -- function num : 0_32
@@ -1805,7 +1826,7 @@ end
 
 RadarMap_UpdatePosition()
 local RadarMap_MouseOnOffAnimation = function(deltaTime)
-  -- function num : 0_58 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl
+  -- function num : 0_58 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl, isWorldMinimapOpen, radar_SequenceAni
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == getInputMode() or (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == getInputMode()
@@ -1838,7 +1859,10 @@ local RadarMap_MouseOnOffAnimation = function(deltaTime)
     (UIAni.perFrameAlphaAnimation)(simpleUIAlpha, radar_AlphaBtn, 5 * deltaTime)
     ;
     (UIAni.perFrameAlphaAnimation)(simpleUIAlpha, radar_MiniMapScl, 5 * deltaTime)
-    -- DECOMPILER ERROR: 5 unprocessed JMP targets
+    if isWorldMinimapOpen then
+      (UIAni.perFrameAlphaAnimation)(simpleUIAlpha, radar_SequenceAni, 5 * deltaTime)
+    end
+    -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
 end
 
@@ -1998,27 +2022,29 @@ RadarMap_UpdatePerFrame = function(deltaTime)
   whaleTimeCheck = whaleTimeCheck + deltaTime
   if whaleTimeCheck > 30 then
     whaleTimeCheck = 0
+  end
+  if isActionUiOpen() then
     FGlobal_WhaleConditionCheck()
     FGlobal_TerritoryWar_Caution()
     FGlobal_SummonPartyCheck()
     FGlobal_ReturnStoneCheck()
-  end
-  _OnSiegeRide = false
-  if ToClient_GetState_EnemyOnMyBoatAlert() then
-    FGlobal_EnemyAlert_OnShip_Show()
-  end
-  if not ToClient_GetMessageFilter(10) then
-    StrongMonsterByNear(deltaTime)
-    if FromClient_DetectsOfStrongMonster(strongMonsterCheckDistance) then
-      chattingAlertTimeCheck = chattingAlertTimeCheck + deltaTime
-      if chattingAlertTimeCheck > 60 then
-        chattingAlertTimeCheck = 0
-        chatting_sendMessage("", PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTER_CHATALERT"), (CppEnums.ChatType).System)
-      end
+    _OnSiegeRide = false
+    if ToClient_GetState_EnemyOnMyBoatAlert() then
+      FGlobal_EnemyAlert_OnShip_Show()
     end
-  else
-    redar_DangerAletText:SetShow(false)
-    radar_DangetAlertBg:SetShow(false)
+    if not ToClient_GetMessageFilter(10) then
+      StrongMonsterByNear(deltaTime)
+      if FromClient_DetectsOfStrongMonster(strongMonsterCheckDistance) then
+        chattingAlertTimeCheck = chattingAlertTimeCheck + deltaTime
+        if chattingAlertTimeCheck > 60 then
+          chattingAlertTimeCheck = 0
+          chatting_sendMessage("", PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTER_CHATALERT"), (CppEnums.ChatType).System)
+        end
+      end
+    else
+      redar_DangerAletText:SetShow(false)
+      radar_DangetAlertBg:SetShow(false)
+    end
   end
 end
 

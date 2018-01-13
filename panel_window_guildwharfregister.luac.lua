@@ -188,12 +188,10 @@ GuildWharfRegister_Register = function()
 end
 
 GuildWharfRegister_ClearEdit = function()
-  -- function num : 0_6 , upvalues : guildWharfRegister, IM
+  -- function num : 0_6 , upvalues : guildWharfRegister
   local self = guildWharfRegister
   ;
   (self._editEditName):SetEditText("", true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
 end
 
 GuildWharfRegister_OpenByInventory = function(inventoryType, inventorySlotNo)
@@ -235,15 +233,13 @@ GuildWharfRegister_Open = function()
 end
 
 GuildWharfRegister_Close = function()
-  -- function num : 0_10 , upvalues : IM
+  -- function num : 0_10
   audioPostEvent_SystemUi(0, 0)
   if not Panel_Window_GuildShipNaming_Input:GetShow() then
     return 
   end
   audioPostEvent_SystemUi(1, 1)
   Panel_Window_GuildShipNaming_Input:SetShow(false)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 guildWharfRegister:init()

@@ -705,7 +705,7 @@ InventoryWindow_Close = function()
 end
 
 InventoryWindow_Show = function(uiType, isCashInven, isMarket)
-  -- function num : 0_23 , upvalues : inven, openUiType, openWhereIs, icon_TrashOn, icon_TrashSequence, IM, btn_DyePalette, btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead
+  -- function num : 0_23 , upvalues : inven, openUiType, openWhereIs, icon_TrashOn, icon_TrashSequence, btn_DyePalette, btn_Manufacture, btn_AlchemyStone, btn_AlchemyFigureHead
   local self = inven
   self.effect = nil
   self.startSlotIndex = 0
@@ -763,8 +763,6 @@ InventoryWindow_Show = function(uiType, isCashInven, isMarket)
   ;
   (self._scroll):SetControlTop()
   Panel_Window_Inventory:SetShow(true, true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   PaGlobal_TutorialManager:handleOpenedInventory()
   if not Panel_Window_Warehouse:GetShow() and not Panel_Window_ServantInventory:GetShow() then
     (inven.buttonMoney):SetEnable(false)
@@ -1309,12 +1307,13 @@ Inventory_IconOver = function(index)
   -- function num : 0_43 , upvalues : inven, effectScene, over_SlotEffect
   local self = inven
   local slotNo = ((self.slots)[index])._slotNo
-  -- DECOMPILER ERROR at PC6: Confused about usage of register: R3 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC10: Confused about usage of register: R3 in 'UnsetPending'
 
-  ;
-  ((self.slotEtcData)[index]).isFirstItem = false
-  if (effectScene.newItem)[index] ~= nil then
-    (((self.slots)[index]).icon):EraseEffect((effectScene.newItem)[index])
+  if slotNo < (self.config).slotCount then
+    ((self.slotEtcData)[slotNo]).isFirstItem = false
+    if (effectScene.newItem)[slotNo] ~= nil then
+      (((self.slots)[index]).icon):EraseEffect((effectScene.newItem)[slotNo])
+    end
   end
   if over_SlotEffect ~= nil then
     (((self.slots)[index]).icon):EraseEffect(over_SlotEffect)
@@ -1896,9 +1895,9 @@ Inventory_updateSlotData = function()
             end
             do
               do
-                if ((self.slotEtcData)[ii]).isFirstItem == true and ((inven.slotEtcData)[ii]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
+                if slotNo < (self.config).slotCount and ((self.slotEtcData)[slotNo]).isFirstItem == true and ((inven.slotEtcData)[slotNo]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
                   local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem01", true, 0, 0)
-                  -- DECOMPILER ERROR at PC535: Confused about usage of register: R47 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC539: Confused about usage of register: R47 in 'UnsetPending'
 
                   ;
                   (effectScene.newItem)[slotNo] = newItemEffectSceneId
@@ -1953,21 +1952,21 @@ Inventory_updateSlotData = function()
                       (slot.icon):SetIgnore(false)
                       slot.isEmpty = true
                     end
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                    -- DECOMPILER ERROR at PC666: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC670: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end
@@ -2570,12 +2569,11 @@ Inventory_AddItem = function(itemKey, slotNo, itemCount)
   -- function num : 0_82 , upvalues : inven
   local self = inven
   for ii = 0, (self.config).slotCount - 1 do
-    local slot = (self.slots)[ii]
-    -- DECOMPILER ERROR at PC15: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC12: Confused about usage of register: R8 in 'UnsetPending'
 
-    if slotNo == slot._slotNo then
+    if ii == slotNo then
       ((inven.slotEtcData)[ii]).isFirstItem = true
-      -- DECOMPILER ERROR at PC19: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC16: Confused about usage of register: R8 in 'UnsetPending'
 
       ;
       ((inven.slotEtcData)[ii]).itemKey = itemKey

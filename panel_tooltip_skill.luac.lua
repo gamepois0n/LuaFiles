@@ -469,19 +469,17 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
           (target.skill_Movie):TriggerEvent("PlayMovie", "coui://" .. movieName)
           currMovieName = movieName
         end
-        if isGameTypeKorea() then
-          local checkAgeType = ToClient_isAdultUser()
-          if checkAgeType then
-            (target.skill_Movie):SetShow(true)
-          else
-            (target.skill_Movie):SetShow(false)
-          end
-        end
       else
         currMovieName = nil
         ;
         (target.skill_Movie):SetShow(false)
         movieShow = false
+      end
+      local checkAgeType = ToClient_isAdultUser()
+      if checkAgeType then
+        (target.skill_Movie):SetMonoTone(false)
+      else
+        (target.skill_Movie):SetMonoTone(true)
       end
       ;
       (target.skillIcon):SetPosY((target.skillName):GetPosY() + (target.skillName):GetTextSizeY() + 5)
@@ -499,73 +497,63 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
       end
       local skillIconPosY = (target.skillIcon):GetPosY()
       local skillIconSizeY = (target.skillIcon):GetSizeY()
-      -- DECOMPILER ERROR at PC739: Overwrote pending register: R41 in 'AssignReg'
+      -- DECOMPILER ERROR at PC734: Overwrote pending register: R41 in 'AssignReg'
 
       ;
-      (target.skillDescription):SetPosY(R41_PC607)
-      -- DECOMPILER ERROR at PC743: Overwrote pending register: R41 in 'AssignReg'
+      (target.skillDescription):SetPosY(skillIconPosY)
+      -- DECOMPILER ERROR at PC738: Overwrote pending register: R41 in 'AssignReg'
 
       do
-        local skillDescriptionBottom = Tooltip_SkillData:GetBottomPos(R41_PC607) + elementgap
-        -- DECOMPILER ERROR at PC749: Overwrote pending register: R41 in 'AssignReg'
+        local skillDescriptionBottom = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
+        -- DECOMPILER ERROR at PC744: Overwrote pending register: R41 in 'AssignReg'
+
+        -- DECOMPILER ERROR at PC745: Overwrote pending register: R41 in 'AssignReg'
 
         if iconBottom < skillDescriptionBottom then
-          TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillDescription) + elementgap
+          R41_PC607 = R41_PC607(R41_PC607, target.skillDescription)
+          TooltipYPos = R41_PC607 + elementgap
         else
-          -- DECOMPILER ERROR at PC755: Overwrote pending register: R41 in 'AssignReg'
-
-          TooltipYPos = Tooltip_SkillData:GetBottomPos(target.skillIcon) + elementgap
+          R41_PC607 = Tooltip_SkillData
+          R41_PC607 = R41_PC607(R41_PC607, target.skillIcon)
+          TooltipYPos = R41_PC607 + elementgap
         end
+        R41_PC607 = target.useMethod
+        R41_PC607(R41_PC607, TooltipYPos + 9)
+        -- DECOMPILER ERROR at PC759: Overwrote pending register: R41 in 'AssignReg'
+
         -- DECOMPILER ERROR at PC760: Overwrote pending register: R41 in 'AssignReg'
 
-        ;
-        (target.useMethod):SetPosY(TooltipYPos + 9)
-        -- DECOMPILER ERROR at PC764: Overwrote pending register: R41 in 'AssignReg'
-
-        TooltipYPos = Tooltip_SkillData:GetBottomPos(target.useMethod) + elementgap
-        -- DECOMPILER ERROR at PC771: Overwrote pending register: R41 in 'AssignReg'
-
+        R41_PC607 = R41_PC607(R41_PC607, target.useMethod)
+        TooltipYPos = R41_PC607 + elementgap
         if isNextLvWidget then
-          (target.learnRequirement_category):SetPosY(TooltipYPos - 5)
-          -- DECOMPILER ERROR at PC775: Overwrote pending register: R41 in 'AssignReg'
+          R41_PC607 = target.learnRequirement_category
+          R41_PC607(R41_PC607, TooltipYPos - 5)
+          -- DECOMPILER ERROR at PC770: Overwrote pending register: R41 in 'AssignReg'
 
-          TooltipYPos = Tooltip_SkillData:GetBottomPos(target.learnRequirement_category) + elementgap - elementBiggap
-          -- DECOMPILER ERROR at PC781: Overwrote pending register: R41 in 'AssignReg'
+          -- DECOMPILER ERROR at PC771: Overwrote pending register: R41 in 'AssignReg'
 
+          R41_PC607 = R41_PC607(R41_PC607, target.learnRequirement_category)
+          R41_PC607 = R41_PC607 + elementgap
+          TooltipYPos = R41_PC607 - elementBiggap
+          R41_PC607 = target.learnRequirement_panel
+          R41_PC607(R41_PC607, TooltipYPos)
+          -- DECOMPILER ERROR at PC780: Overwrote pending register: R41 in 'AssignReg'
+
+          TooltipYPos = TooltipYPos + R41_PC607
+          -- DECOMPILER ERROR at PC782: Overwrote pending register: R41 in 'AssignReg'
+
+          local isLevelShow = R41_PC607
           ;
-          (target.learnRequirement_panel):SetPosY(TooltipYPos)
-          TooltipYPos = TooltipYPos + elementBiggap / 2
-          local isLevelShow = isNeedLvLearning
-          -- DECOMPILER ERROR at PC787: Overwrote pending register: R41 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC788: Overwrote pending register: R41 in 'AssignReg'
-
-          R41_PC607(R41_PC607, isLevelShow)
-          -- DECOMPILER ERROR at PC791: Overwrote pending register: R41 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC792: Overwrote pending register: R41 in 'AssignReg'
-
-          R41_PC607(R41_PC607, isLevelShow)
-          -- DECOMPILER ERROR at PC797: Overwrote pending register: R41 in 'AssignReg'
-
-          -- DECOMPILER ERROR at PC798: Overwrote pending register: R41 in 'AssignReg'
-
+          (target.requireLevel):SetShow(isLevelShow)
+          ;
+          (target.requireLevel_value):SetShow(isLevelShow)
           if isLevelShow then
-            R41_PC607(R41_PC607, TooltipYPos)
-            -- DECOMPILER ERROR at PC801: Overwrote pending register: R41 in 'AssignReg'
-
-            -- DECOMPILER ERROR at PC802: Overwrote pending register: R41 in 'AssignReg'
-
-            R41_PC607(R41_PC607, TooltipYPos)
-            -- DECOMPILER ERROR at PC805: Overwrote pending register: R41 in 'AssignReg'
-
-            -- DECOMPILER ERROR at PC806: Overwrote pending register: R41 in 'AssignReg'
-
-            R41_PC607 = R41_PC607(R41_PC607, target.requireLevel_value)
-            TooltipYPos = R41_PC607 + elementgap
+            (target.requireLevel):SetPosY(TooltipYPos)
+            ;
+            (target.requireLevel_value):SetPosY(TooltipYPos)
+            TooltipYPos = Tooltip_SkillData:GetBottomPos(target.requireLevel_value) + elementgap
           end
-          R41_PC607 = needSkillLearning ~= 0
-          local isSpShow = nil
+          local isSpShow = needSkillLearning ~= 0
           ;
           (target.requireSP):SetShow(isSpShow)
           ;
@@ -591,8 +579,10 @@ Tooltip_SkillData.showTooltip_Skill_Real = function(self, target, skillNo, skill
           (target.learnRequirement_panel):SetSize((target.learnRequirement_panel):GetSizeX(), TooltipYPos - (target.learnRequirement_panel):GetPosY() + elementBiggap)
           TooltipYPos = Tooltip_SkillData:GetBottomPos(target.learnRequirement_panel)
         end
+        -- DECOMPILER ERROR at PC886: Overwrote pending register: R41 in 'AssignReg'
+
         if isShowNeedHp or isShowNeedMp or isShowNeedSp or isShowNeedItem or isShowReuseCycle then
-          (target.useCondition_category):SetPosY(TooltipYPos - 5)
+          isLevelShow:SetPosY(TooltipYPos - 5)
           TooltipYPos = Tooltip_SkillData:GetBottomPos(target.useCondition_category) + elementgap - elementBiggap
           ;
           (target.useCondition_category_panel):SetPosY(TooltipYPos)

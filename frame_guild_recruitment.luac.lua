@@ -50,6 +50,8 @@ local classPicture = {
 [UI_classType.ClassType_Combattant] = {289, 291, 384, 435}
 , 
 [UI_classType.ClassType_CombattantWomen] = {385, 291, 480, 435}
+, 
+[UI_classType.ClassType_Lahn] = {97, 1, 192, 145}
 }
 Guild_Recruitment_Initialize = function()
   -- function num : 0_0 , upvalues : GuildRecruitment, UI_TM, defaultFrameBG_Recruitment
@@ -115,79 +117,16 @@ Guild_Recruitment_Initialize = function()
 end
 
 GuildRecruitment.Update = function(self)
-  -- function num : 0_1 , upvalues : UI_classType, classPicture, UI_color
+  -- function num : 0_1 , upvalues : classPicture, UI_color
   for slotIdx = 0, self.maxSlotCount - 1 do
     local slot = (self.slotPool)[slotIdx]
     ;
     (slot.bg):SetShow(false)
   end
   local replaceClassType = function(classNo)
-    -- function num : 0_1_0 , upvalues : UI_classType
+    -- function num : 0_1_0
     local returnValue = ""
-    if UI_classType.ClassType_Warrior == classNo then
-      returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WARRIOR")
-    else
-      if UI_classType.ClassType_Ranger == classNo then
-        returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RANGER")
-      else
-        if UI_classType.ClassType_Sorcerer == classNo then
-          returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_SORCERER")
-        else
-          if UI_classType.ClassType_Giant == classNo then
-            returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_GIANT")
-          else
-            if UI_classType.ClassType_Tamer == classNo then
-              returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_TAMER")
-            else
-              if UI_classType.ClassType_BladeMaster == classNo then
-                returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER")
-              else
-                if UI_classType.ClassType_BladeMasterWomen == classNo then
-                  returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN")
-                else
-                  if UI_classType.ClassType_Valkyrie == classNo then
-                    returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE")
-                  else
-                    if UI_classType.ClassType_Wizard == classNo then
-                      returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD")
-                    else
-                      if UI_classType.ClassType_WizardWomen == classNo then
-                        returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN")
-                      else
-                        if UI_classType.ClassType_Kunoichi == classNo then
-                          returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI")
-                        else
-                          if UI_classType.ClassType_NinjaWomen == classNo then
-                            returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN")
-                          else
-                            if UI_classType.ClassType_NinjaMan == classNo then
-                              returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN")
-                            else
-                              if UI_classType.ClassType_DarkElf == classNo then
-                                returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF")
-                              else
-                                if UI_classType.ClassType_Combattant == classNo then
-                                  returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER")
-                                else
-                                  if UI_classType.ClassType_CombattantWomen == classNo then
-                                    returnValue = PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN")
-                                  end
-                                end
-                              end
-                            end
-                          end
-                        end
-                      end
-                    end
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
-    end
-    return returnValue
+    return (CppEnums.ClassType2String)[classNo]
   end
 
   local guildUnjoinedCount = ToClient_GetGuildUnjoinedPlayerCount()
@@ -216,8 +155,12 @@ GuildRecruitment.Update = function(self)
       local slot = (self.slotPool)[realIndex]
       ;
       (slot.bg):SetShow(true)
-      ;
-      (slot.charPic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_00.dds")
+      if (CppEnums.ClassType).ClassType_Lahn == playerClass then
+        (slot.charPic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_01.dds")
+      else
+        ;
+        (slot.charPic):ChangeTextureInfoName("New_UI_Common_ForLua/Window/Lobby/Lobby_ClassSelect_00.dds")
+      end
       local x1, y1, x2, y2 = setTextureUV_Func(slot.charPic, (classPicture[playerClass])[1], (classPicture[playerClass])[2], (classPicture[playerClass])[3], (classPicture[playerClass])[4])
       ;
       ((slot.charPic):getBaseTexture()):setUV(x1, y1, x2, y2)
@@ -252,15 +195,13 @@ GuildRecruitment.Update = function(self)
 end
 
 GuildRecruitment_SelectPlayer = function(idx, uiIdx)
-  -- function num : 0_2 , upvalues : GuildRecruitment, IM
+  -- function num : 0_2 , upvalues : GuildRecruitment
   local self = GuildRecruitment
   local parentSlot = ((self.slotPool)[uiIdx]).bg
   self.selectedPlayer = idx
   local unjoinPlayerWrapper = ToClient_GetGuildUnjoinedPlayerAt(idx)
   local playerNickName = unjoinPlayerWrapper:getUserNickName()
   local playerName = unjoinPlayerWrapper:getCharacterName()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   FGlobal_ChattingInput_ShowWhisper(playerName)
 end
 

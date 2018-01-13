@@ -49,17 +49,15 @@ PaGlobal_CharacterInfoTitle.handleClicked_SearchButton = function(self)
   self:updateList()
 end
 
--- DECOMPILER ERROR at PC15: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC14: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.handleClicked_SearchText = function(self)
-  -- function num : 0_3 , upvalues : IM
+  -- function num : 0_3
   self:clearSearchText()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit((self._ui)._editSearch)
 end
 
--- DECOMPILER ERROR at PC18: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC17: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.handleClicked_Category = function(self, categoryIdx)
   -- function num : 0_4
@@ -84,14 +82,14 @@ PaGlobal_CharacterInfoTitle.handleClicked_Category = function(self, categoryIdx)
   self:updateList()
 end
 
--- DECOMPILER ERROR at PC21: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC20: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.handleClicked_ComboBox = function(self)
   -- function num : 0_5
   ((self._ui)._comboBoxSort):ToggleListbox()
 end
 
--- DECOMPILER ERROR at PC24: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC23: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.handleClicked_ComboBoxText = function(self)
   -- function num : 0_6
@@ -102,7 +100,7 @@ PaGlobal_CharacterInfoTitle.handleClicked_ComboBoxText = function(self)
   self:updateList()
 end
 
--- DECOMPILER ERROR at PC27: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC26: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.handleClicked_Description = function(self, categoryIdx, titleIdx)
   -- function num : 0_7
@@ -112,7 +110,7 @@ PaGlobal_CharacterInfoTitle.handleClicked_Description = function(self, categoryI
   ((self._ui)._staticText_PartDesc):SetText(titleWrapper:getDescription())
 end
 
--- DECOMPILER ERROR at PC30: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC29: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.handleClicked_Title = function(self, categoryIdx, titleIdx)
   -- function num : 0_8
@@ -120,7 +118,7 @@ PaGlobal_CharacterInfoTitle.handleClicked_Title = function(self, categoryIdx, ti
   ToClient_TitleSetRequest(categoryIdx, titleIdx)
 end
 
--- DECOMPILER ERROR at PC33: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC32: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.handleMouseOver_Category = function(self, isShow, tipType)
   -- function num : 0_9
@@ -136,7 +134,7 @@ PaGlobal_CharacterInfoTitle.handleMouseOver_Category = function(self, isShow, ti
   TooltipSimple_Show(uiControl, name, desc)
 end
 
--- DECOMPILER ERROR at PC36: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.showWindow = function(self)
   -- function num : 0_10
@@ -147,7 +145,7 @@ PaGlobal_CharacterInfoTitle.showWindow = function(self)
   self:update()
 end
 
--- DECOMPILER ERROR at PC39: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.updateList = function(self)
   -- function num : 0_11
@@ -168,7 +166,7 @@ PaGlobal_CharacterInfoTitle.updateList = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC42: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_CharacterInfoTitle.clearSearchText = function(self)
   -- function num : 0_12

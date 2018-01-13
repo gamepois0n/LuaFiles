@@ -34,7 +34,7 @@ local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
 if isPremiumPcRoom then
   maxUnsealCount = maxUnsealCount + ToClient_getPetUseMaxCountPcRoom()
 end
-local petRaceCount = {[1] = "고양�\180", [2] = "�\156", [3] = "�\164", [4] = "펭귄", [5] = "사막여우", [6] = "고슴도치", [7] = "눈사�\140", [8] = "고슴도치", [9] = "오목눈이", [10] = "렛서팬더", [11] = "앵무�\136", [12] = "북극�\176", [13] = "돌맨�\140", [14] = "이벤트할로윈1", [15] = "이벤트할로윈2", [16] = "이벤트할로윈3", [17] = "이벤트할로윈4", [18] = "이벤트할로윈5", [19] = "이벤트할로윈6", [20] = "어린 �\145", [22] = "까마�\128", [23] = "아무거나1", [24] = "아무거나2", [25] = "아무거나3", [26] = "아무거나4", [27] = "아무거나5", [28] = "아무거나6", [29] = "아무거나7", [30] = "아무거나8", [99] = "합성�\169 �\171"}
+local petRaceCount = {[1] = "고양�\180", [2] = "�\156", [3] = "�\164", [4] = "펭귄", [5] = "사막여우", [6] = "고슴도치", [7] = "눈사�\140", [8] = "고슴도치", [9] = "오목눈이", [10] = "렛서팬더", [11] = "앵무�\136", [12] = "북극�\176", [13] = "돌맨�\140", [14] = "이벤트할로윈1", [15] = "이벤트할로윈2", [16] = "이벤트할로윈3", [17] = "이벤트할로윈4", [18] = "이벤트할로윈5", [19] = "이벤트할로윈6", [20] = "어린 �\145", [22] = "까마�\128", [23] = "아무거나1", [24] = "아무거나2", [25] = "아무거나3", [26] = "아무거나4", [27] = "아무거나5", [28] = "아무거나6", [29] = "아무거나7", [30] = "아무거나8", [31] = "아무거나9", [32] = "아무거나10", [33] = "아무거나11", [34] = "아무거나12", [35] = "아무거나13", [36] = "아무거나14", [37] = "아무거나15", [38] = "아무거나16", [39] = "아무거나17", [40] = "아무거나18", [41] = "아무거나19", [42] = "아무거나20", [43] = "아무거나21", [44] = "아무거나22", [45] = "아무거나23", [46] = "아무거나24", [47] = "아무거나25", [48] = "아무거나26", [49] = "아무거나27", [50] = "아무거나28", [51] = "아무거나29", [52] = "아무거나30", [53] = "아무거나31", [54] = "아무거나32", [55] = "아무거나33", [56] = "아무거나34", [57] = "아무거나35", [58] = "아무거나36", [59] = "아무거나37", [60] = "아무거나38", [61] = "아무거나39", [62] = "아무거나40", [63] = "아무거나41", [64] = "아무거나42", [65] = "아무거나43", [66] = "아무거나44", [67] = "아무거나45", [68] = "아무거나46", [69] = "아무거나47", [70] = "아무거나48", [71] = "아무거나49", [72] = "아무거나50", [73] = "아무거나51", [74] = "아무거나52", [75] = "아무거나53", [76] = "아무거나54", [77] = "아무거나55", [78] = "아무거나56", [79] = "아무거나57", [80] = "아무거나58", [81] = "아무거나59", [82] = "아무거나60", [83] = "아무거나61", [84] = "아무거나62", [85] = "아무거나63", [86] = "아무거나64", [87] = "아무거나65", [88] = "아무거나66", [89] = "아무거나67", [90] = "아무거나68", [91] = "아무거나69", [92] = "아무거나70", [93] = "아무거나71", [94] = "아무거나72", [95] = "아무거나73", [96] = "아무거나74", [97] = "아무거나75", [98] = "아무거나76", [99] = "합성�\169 �\171"}
 local isPetFlyPet = {[1] = 3, [2] = 9, [3] = 11, [4] = 15}
 checkUnSealGroupList = {
 [1] = {}
@@ -912,9 +912,7 @@ petImgChange = function(petNo, index)
 end
 
 HandleClicked_PetCompose_ClearEdit = function()
-  -- function num : 0_29 , upvalues : IM, petCompose
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-  ;
+  -- function num : 0_29 , upvalues : petCompose
   (petCompose.editName):SetMaxInput(getGameServiceTypePetNameLength())
   SetFocusEdit(petCompose.editName)
   ;
@@ -922,10 +920,8 @@ HandleClicked_PetCompose_ClearEdit = function()
 end
 
 Confirm_PetCompose = function()
-  -- function num : 0_30 , upvalues : petCompose, IM, petComposeString, petComposeNo, PetList
+  -- function num : 0_30 , upvalues : petCompose, petComposeString, petComposeNo, PetList
   ClearFocusEdit(petCompose.editName)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   local petName = (petCompose.editName):GetEditText()
   if petName == "" or petComposeString == petName then
     Proc_ShowMessage_Ack(petComposeString)
@@ -977,10 +973,8 @@ Confirm_PetCompose = function()
 end
 
 Panel_Window_PetCompose_Close = function()
-  -- function num : 0_31 , upvalues : IM, PetList
+  -- function num : 0_31 , upvalues : PetList
   PetCompose_Init()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   Panel_Window_PetCompose:SetShow(false)
   PetListNew_IgnoreAllSealButton(false)
   PetList:SetPetList()
@@ -1240,8 +1234,7 @@ FGlobal_CheckEditBox_PetCompose = function(uiEditBox)
 end
 
 FGlobal_EscapeEditBox_PetCompose = function(bool)
-  -- function num : 0_41 , upvalues : IM, petCompose
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_41 , upvalues : petCompose
   ClearFocusEdit(petCompose.editName)
 end
 
@@ -1274,6 +1267,14 @@ PetListNew_IgnoreAllSealButton = function(isShow)
   (PetList.BTN_GroupSeal1):SetIgnore(isShow)
   ;
   (PetList.BTN_GroupSeal1):SetMonoTone(isShow)
+  ;
+  (PetList.BTN_GroupSeal2):SetIgnore(isShow)
+  ;
+  (PetList.BTN_GroupSeal2):SetMonoTone(isShow)
+  ;
+  (PetList.BTN_GroupSeal3):SetIgnore(isShow)
+  ;
+  (PetList.BTN_GroupSeal3):SetMonoTone(isShow)
 end
 
 FGlobal_PetListNew_Toggle = function()
@@ -2359,6 +2360,11 @@ PaGlobal_PetList_CheckGroup = function()
       end
     end
   end
+end
+
+test_pet = function()
+  -- function num : 0_77
+  _PA_LOG("cylee", "test_pet()")
 end
 
 

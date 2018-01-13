@@ -125,6 +125,7 @@ end
 
 local setReward = function(uiSlot, reward, index, questType)
   -- function num : 0_5 , upvalues : UI_RewardType, _uiButtonSelectRewardSlots
+  rewardTooltip(nil, false)
   uiSlot._type = reward._type
   if UI_RewardType.RewardType_Exp == reward._type then
     (uiSlot.count):SetText("")

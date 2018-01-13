@@ -78,16 +78,14 @@ end
 
 Handle_SkillEnable_CoolTime_Change = function()
   -- function num : 0_4
-  if isCoolTimeQuickSlot_chk() == true then
-    if Panel_EnableSkill:GetShow() == true then
-      Panel_EnableSkill:SetShow(false)
-      PaGlobal_Window_Skill_CoolTimeSlot:showFunc()
-    else
-      Panel_EnableSkill:SetShow(true)
-      PaGlobal_Window_Skill_CoolTimeSlot:closeFunc()
-    end
-    Panel_SkillCombination:SetShow(false)
+  if Panel_EnableSkill:GetShow() == true then
+    Panel_EnableSkill:SetShow(false)
+    PaGlobal_Window_Skill_CoolTimeSlot:showFunc()
+  else
+    Panel_EnableSkill:SetShow(true)
+    PaGlobal_Window_Skill_CoolTimeSlot:closeFunc()
   end
+  Panel_SkillCombination:SetShow(false)
 end
 
 SkillEvent_SkillWindow_ClearSkillsByPoint = function()
@@ -427,25 +425,16 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     Panel_SkillTooltip_Hide()
     UIMain_SkillPointUpdateRemove()
     Panel_Window_Skill:SetShow(false, true)
-    if isCoolTimeQuickSlot_chk() == true then
-      Panel_SkillCombination:SetShow(false)
-      -- DECOMPILER ERROR at PC28: Confused about usage of register: R2 in 'UnsetPending'
+    Panel_SkillCombination:SetShow(false)
+    -- DECOMPILER ERROR at PC24: Confused about usage of register: R2 in 'UnsetPending'
 
-      Panel_SkillCombination._isFirstOpen = false
-      -- DECOMPILER ERROR at PC30: Confused about usage of register: R2 in 'UnsetPending'
+    Panel_SkillCombination._isFirstOpen = false
+    -- DECOMPILER ERROR at PC26: Confused about usage of register: R2 in 'UnsetPending'
 
-      Panel_SkillCombination._currentSlotIndex = -1
-      Panel_Scroll:SetShow(false, false)
-      FGlobal_EnableSkillCloseFunc()
-      PaGlobal_Window_Skill_CoolTimeSlot:closeFunc()
-    else
-      EnableSkillShowFunc()
-      PaGlobal_SkillCombination:close()
-      Panel_Scroll:SetShow(false, false)
-      if Panel_EnableSkill:IsShow() then
-        EnableSkillShowFunc()
-      end
-    end
+    Panel_SkillCombination._currentSlotIndex = -1
+    Panel_Scroll:SetShow(false, false)
+    FGlobal_EnableSkillCloseFunc()
+    PaGlobal_Window_Skill_CoolTimeSlot:closeFunc()
   end
   do
     for _,value in pairs(PaGlobal_Skill.skillNoSlot) do
@@ -453,7 +442,7 @@ HandleMLUp_SkillWindow_Close = function(isManualClick)
     end
     HelpMessageQuestion_Out()
     local vScroll = ((PaGlobal_Skill.frames)[0]):GetVScroll()
-    -- DECOMPILER ERROR at PC77: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC55: Confused about usage of register: R2 in 'UnsetPending'
 
     PaGlobal_Skill.scrollPos = 0
     FGlobal_ResetUrl_Tooltip_SkillForLearning()
@@ -687,13 +676,12 @@ Skill_RegistEventHandler = function()
   (PaGlobal_Skill._btn_ResetAllSkill):addInputEvent("Mouse_On", "SkillEvent_ResetTooltip( true )")
   ;
   (PaGlobal_Skill._btn_ResetAllSkill):addInputEvent("Mouse_Out", "SkillEvent_ResetTooltip()")
-  if isCoolTimeQuickSlot_chk() == true then
-    (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_LUp", "Handle_SkillEnable_CoolTime_Change()")
-    ;
-    (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_On", "Handle_SkillCollTimeTooltip( true )")
-    ;
-    (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_Out", "Handle_SkillCollTimeTooltip()")
-  end
+  ;
+  (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_LUp", "Handle_SkillEnable_CoolTime_Change()")
+  ;
+  (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_On", "Handle_SkillCollTimeTooltip( true )")
+  ;
+  (PaGlobal_Skill._btn_Enable_CoolTime_Change):addInputEvent("Mouse_Out", "Handle_SkillCollTimeTooltip()")
 end
 
 SkillEvent_ResetTooltip = function(isShow)
@@ -710,16 +698,14 @@ end
 
 Handle_SkillCollTimeTooltip = function(isShow)
   -- function num : 0_21
-  if isCoolTimeQuickSlot_chk() == true then
-    if isShow == nil then
-      TooltipSimple_Hide()
-      return 
-    end
-    local uiControl = PaGlobal_Skill._btn_Enable_CoolTime_Change
-    local name = ""
-    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_SKILL_COOLTIMESLOT_TOOLTIPDESC")
-    TooltipSimple_Show(uiControl, name, desc)
+  if isShow == nil then
+    TooltipSimple_Hide()
+    return 
   end
+  local uiControl = PaGlobal_Skill._btn_Enable_CoolTime_Change
+  local name = ""
+  local desc = PAGetString(Defines.StringSheet_GAME, "LUA_SKILL_COOLTIMESLOT_TOOLTIPDESC")
+  TooltipSimple_Show(uiControl, name, desc)
 end
 
 SkillEvent_SkillWindow_ClearSkillMessage = function()

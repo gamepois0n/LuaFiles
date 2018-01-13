@@ -1952,7 +1952,7 @@ CharacterInfoWindow_Show = function()
 end
 
 CharacterInfoWindow_Hide = function()
-  -- function num : 0_33 , upvalues : CharacterInfo, initProgress, IM
+  -- function num : 0_33 , upvalues : CharacterInfo, initProgress
   if (CharacterInfo._frameDefaultBG_Challenge):GetShow() then
     CharacterInfoWindowUpdate()
     HandleClicked_CharacterInfo_Tab(0)
@@ -1975,16 +1975,8 @@ CharacterInfoWindow_Hide = function()
     initProgress()
     HelpMessageQuestion_Out()
   end
-  if AllowChangeInputMode() then
+  if CheckChattingInput() == false then
     ClearFocusEdit()
-    if check_ShowWindow() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
   end
   Panel_Window_CharInfo_Status:CloseUISubApp()
   ;
@@ -2020,7 +2012,7 @@ FGlobal_Challenge_Show = function()
 end
 
 FGlobal_Challenge_Hide = function()
-  -- function num : 0_36 , upvalues : CharacterInfo, IM
+  -- function num : 0_36 , upvalues : CharacterInfo
   if (CharacterInfo._frameDefaultBG_Basic):GetShow() then
     HandleClicked_CharacterInfo_Tab(3)
     ;
@@ -2037,16 +2029,8 @@ FGlobal_Challenge_Hide = function()
     Panel_Window_CharInfo_Status:SetShow(false, false)
     Panel_Tooltip_Item_hideTooltip()
   end
-  if AllowChangeInputMode() then
+  if CheckChattingInput() == false then
     ClearFocusEdit()
-    if check_ShowWindow() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
   end
 end
 
@@ -2101,10 +2085,8 @@ IntroduceMyself_ShowToggle = function(isShow)
 end
 
 HandleClicked_IntroduceMyself = function()
-  -- function num : 0_40 , upvalues : CharacterInfo, IM
+  -- function num : 0_40 , upvalues : CharacterInfo
   local self = CharacterInfo._introduce
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(self._editText)
   ;
   (self._editText):SetEditText((self._editText):GetEditText(), true)
@@ -2140,18 +2122,9 @@ HandleClicked_ResetIntroduce = function()
 end
 
 FGlobal_MyIntroduceClearFocusEdit = function()
-  -- function num : 0_43 , upvalues : IM
+  -- function num : 0_43
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FGlobal_CheckMyIntroduceUiEdit = function(targetUI)

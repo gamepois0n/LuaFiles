@@ -274,10 +274,8 @@ HandleClicked_CompetitionGame_EditText = function()
 end
 
 HandleClicked_competitionGameEditSetFocus = function()
-  -- function num : 0_16 , upvalues : competitionGame, IM
+  -- function num : 0_16 , upvalues : competitionGame
   local self = competitionGame
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetFocusEdit(self.edit_Name)
   ;
   (self.edit_Name):SetEditText((self.edit_Name):GetEditText(), true)

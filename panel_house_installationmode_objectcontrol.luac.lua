@@ -308,7 +308,7 @@ HandleClicked_HouseInstallationControl_Cancel = function()
 end
 
 FGlobal_HouseInstallationControl_Open = function(installMode, posX, posY, isShow, isShowMove, isShowFix, isShowDelete, isShowCancel)
-  -- function num : 0_12 , upvalues : HouseInstallationControl, _txt_btnDesc, isConfirmStep, UI_CIT, typeIsHavest, IM, HouseInstallationControl_Is_Open
+  -- function num : 0_12 , upvalues : HouseInstallationControl, _txt_btnDesc, isConfirmStep, UI_CIT, typeIsHavest, HouseInstallationControl_Is_Open
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -427,8 +427,6 @@ FGlobal_HouseInstallationControl_Open = function(installMode, posX, posY, isShow
     Panel_House_InstallationMode_ObjectControl:SetPosX(posX)
     Panel_House_InstallationMode_ObjectControl:SetPosY(posY)
     Panel_House_InstallationMode_ObjectControl:SetShow(isShow)
-    ;
-    (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
     HouseInstallationControl_Is_Open = true
   end
 end

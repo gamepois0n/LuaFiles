@@ -9,7 +9,7 @@ local loginPassword = {
 config = {indexMax = 10, startX = 30, startY = 95, gapX = 70, gapY = 40, row = 2, column = 5}
 , 
 const = {type_CreatePassword = 0, type_Reconfirm = 1, type_Authentic = 2}
-, Edit_Password = (UI.getChildControl)(Panel_Login_Password, "Edit_DisplayNumber"), StaticText_Title = (UI.getChildControl)(Panel_Login_Password, "Static_Text_Title_Import"), Button_Keypad_Back = (UI.getChildControl)(Panel_Login_Password, "Button_Back_Import"), Button_Keypad_Clear = (UI.getChildControl)(Panel_Login_Password, "Button_Clear_Import"), Button_Apply = (UI.getChildControl)(Panel_Login_Password, "Button_Apply_Import"), Button_Cancel = (UI.getChildControl)(Panel_Login_Password, "Button_Cancel_Import"), Check_PasswordView = (UI.getChildControl)(Panel_Login_Password, "CheckButton_NumberView"), indexs = (Array.new)(), state = 0, isChangeTexture = false}
+, Edit_Password = (UI.getChildControl)(Panel_Login_Password, "Edit_DisplayNumber"), StaticText_Title = (UI.getChildControl)(Panel_Login_Password, "Static_Text_Title_Import"), Button_Keypad_Back = (UI.getChildControl)(Panel_Login_Password, "Button_Back_Import"), Button_Keypad_Clear = (UI.getChildControl)(Panel_Login_Password, "Button_Clear_Import"), Button_Apply = (UI.getChildControl)(Panel_Login_Password, "Button_Apply_Import"), Button_Cancel = (UI.getChildControl)(Panel_Login_Password, "Button_Cancel_Import"), Check_PasswordView = (UI.getChildControl)(Panel_Login_Password, "CheckButton_NumberView"), BlockBG = (UI.getChildControl)(Panel_Login_Password, "Static_BlockBG"), indexs = (Array.new)(), state = 0, isChangeTexture = false}
 local UI_color = Defines.Color
 loginPassword.init = function(self)
   -- function num : 0_0
@@ -67,6 +67,14 @@ loginPassword.init = function(self)
   (self.Button_Cancel):ActiveMouseEventEffect(true)
   ;
   (self.Check_PasswordView):addInputEvent("Mouse_LUp", "CheckButton_Sound()")
+  ;
+  (self.BlockBG):SetSize(getScreenSizeX() + 500, getScreenSizeY() + 500)
+  ;
+  (self.BlockBG):SetHorizonCenter()
+  ;
+  (self.BlockBG):SetVerticalMiddle()
+  ;
+  (self.BlockBG):ComputePos()
   registerEvent("EventOpenPassword", "LoginPassword_Open")
   -- DECOMPILER ERROR: 15 unprocessed JMP targets
 end
@@ -119,6 +127,12 @@ LoginPassword_Open = function(isCreatePassword)
   LoginPassword_Update()
   if not Panel_Login_Password:GetShow() then
     Panel_Login_Password:SetShow(true)
+    ;
+    (self.BlockBG):SetSize(getScreenSizeX() + 500, getScreenSizeY() + 500)
+    ;
+    (self.BlockBG):SetHorizonCenter()
+    ;
+    (self.BlockBG):SetVerticalMiddle()
   end
 end
 

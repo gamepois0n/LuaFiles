@@ -300,6 +300,7 @@ PaGlobal_TutorialUiManager.setShowAllDefaultUi = function(self, isShow)
       Panel_Movie_KeyViewer:SetShow(false)
       ;
       (PaGlobal_Camp._btn_Camp):SetShow(false)
+      Panel_Icon_CharacterTag:SetShow(false)
     end
   end
   do

@@ -71,7 +71,10 @@ CreateListContent_GuildBattle_EntryMember = function(content, index)
     else
       staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_CANFIGHT"))
     end
-    -- DECOMPILER ERROR: 8 unprocessed JMP targets
+    if ToClient_GuildBattle_IsWaitingEntrySelectResult() == true or ToClient_GuildBattle_IsEntryMemberConfirmed() == true then
+      EnableControl(checkBtn_AsEntry, false)
+    end
+    -- DECOMPILER ERROR: 10 unprocessed JMP targets
   end
 end
 
@@ -107,6 +110,7 @@ end
 PaGlobal_GuildBattle_SelectEntry.ConfirmEntryMember = function(self)
   -- function num : 0_3
   ToClient_GuildBattle_ConfirmEntryMember()
+  self:UpdateMemberInfo()
 end
 
 -- DECOMPILER ERROR at PC46: Confused about usage of register: R1 in 'UnsetPending'
@@ -172,13 +176,21 @@ end
 
 PaGlobal_GuildBattle_SelectEntry.UpdateControlButton = function(self)
   -- function num : 0_8 , upvalues : EnableControl
-  if ToClient_GuildBattle_IsEntryMemberComplete() == true then
-    EnableControl((self._ui)._btn_ConfirmEntry, true)
+  if ToClient_GuildBattle_IsEntryMemberConfirmed() == true then
+    EnableControl((self._ui)._btn_ConfirmEntry, false)
   else
-    if ToClient_GuildBattle_GetMyGuildMemberJoinedCount() <= ToClient_GuildBattle_GetMaxEntryCount() and ToClient_GuildBattle_GetMyGuildMemberJoinedCount() == ToClient_GuildBattle_GetEntryCount() then
+    if ToClient_GuildBattle_IsEntryMemberComplete() == true then
       EnableControl((self._ui)._btn_ConfirmEntry, true)
     else
-      EnableControl((self._ui)._btn_ConfirmEntry, false)
+      if ToClient_GuildBattle_IsWaitingEntrySelectResult() == true then
+        EnableControl((self._ui)._btn_ConfirmEntry, false)
+      else
+        if ToClient_GuildBattle_GetMyGuildMemberJoinedCount() <= ToClient_GuildBattle_GetMaxEntryCount() and ToClient_GuildBattle_GetMyGuildMemberJoinedCount() == ToClient_GuildBattle_GetEntryCount() then
+          EnableControl((self._ui)._btn_ConfirmEntry, true)
+        else
+          EnableControl((self._ui)._btn_ConfirmEntry, false)
+        end
+      end
     end
   end
 end
@@ -188,6 +200,7 @@ end
 PaGlobal_GuildBattle_SelectEntry.ToggleEntryMember = function(self, index)
   -- function num : 0_9
   if ToClient_GuildBattle_GetMaxEntryCount() == 1 then
+    ToClient_GuildBattle_ToggleEntryMember(index)
     self:UpdateMemberInfo()
   else
     local wasEntryComplete = ToClient_GuildBattle_IsEntryMemberComplete()
@@ -219,10 +232,15 @@ FromClient_luaLoadComplete_GuildBattle_SelectEntry = function()
   PaGlobal_GuildBattle_SelectEntry:Initialize()
 end
 
-FromClient_GuildBattle_SelectEntryFailed = function()
+FromClient_GuildBattle_SelectEntryResult = function(isSuccess)
   -- function num : 0_12
+  if isSuccess == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SETENTRYFINISHED"))
+  else
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SETENTRYFAILED"))
+  end
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_GuildBattle_SelectEntry")
-registerEvent("FromClient_selectEntryFailed", "FromClient_GuildBattle_SelectEntryFailed")
+registerEvent("FromClient_selectEntryResult", "FromClient_GuildBattle_SelectEntryResult")
 

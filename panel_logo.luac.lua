@@ -99,19 +99,26 @@ Panel_Logo_Init = function()
                                 (static_Grade:getBaseTexture()):setUV(x1, y1, x2, y2)
                                 static_Grade:setRenderTexture(static_Grade:getBaseTexture())
                                 if isGameTypeKorea() then
-                                  staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE"))
-                                else
-                                  if isGameTypeTaiwan() then
-                                    staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_TW"))
+                                  local isAdult = ToClient_IsAdultLogin()
+                                  if isAdult then
+                                    staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE"))
                                   else
-                                    if isGameTypeKR2() then
-                                      staticText_Warning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_A"))
+                                    staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_15"))
+                                  end
+                                else
+                                  do
+                                    if isGameTypeTaiwan() then
+                                      staticText_Warning:SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_LOGO_AGE_TW"))
                                     else
-                                      staticText_Warning:SetText("")
+                                      if isGameTypeKR2() then
+                                        staticText_Warning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_BDOKR2_A"))
+                                      else
+                                        staticText_Warning:SetText("")
+                                      end
                                     end
+                                    static_PearlAbyss:SetShow(false)
                                   end
                                 end
-                                static_PearlAbyss:SetShow(false)
                               end
                             end
                           end

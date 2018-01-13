@@ -722,7 +722,7 @@ FGlobal_LifeRanking_Close = function()
 end
 
 LifeRanking_RankerWhisper = function(rankIdx)
-  -- function num : 0_10 , upvalues : LifeRanking, IM
+  -- function num : 0_10 , upvalues : LifeRanking
   local lifeRanker = nil
   if LifeRanking._selectedTabIdx <= 9 then
     lifeRanker = ToClient_GetLifeRankerAt(rankIdx)
@@ -744,8 +744,6 @@ LifeRanking_RankerWhisper = function(rankIdx)
     end
   end
   local lifeRankerCharName = lifeRanker:getCharacterName()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   FGlobal_ChattingInput_ShowWhisper(lifeRankerCharName)
 end
 

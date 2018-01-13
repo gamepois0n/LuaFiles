@@ -2089,9 +2089,6 @@ end
     Panel_Menu_Close_New = function()
   -- function num : 0_47
   Panel_Menu_New:SetShow(false, true)
-  if check_ShowWindow() == false then
-    (UI.Set_ProcessorInputMode)((CppEnums.EProcessorInputMode).eProcessorInputMode_GameMode)
-  end
 end
 
     HandleClicked_RescueConfirm = function()

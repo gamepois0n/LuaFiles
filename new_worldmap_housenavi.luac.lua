@@ -145,22 +145,18 @@ FGlobal_FilterLevelOn = function()
 end
 
 FGlobal_HouseNavi_Close = function()
-  -- function num : 0_9 , upvalues : IM
+  -- function num : 0_9
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
 end
 
 HandleClicked_HouseNaviEditSearch = function()
-  -- function num : 0_10 , upvalues : _edit_Search, IM
+  -- function num : 0_10 , upvalues : _edit_Search
   _edit_Search:SetEditText("", true)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   SetUIMode((Defines.UIMode).eUIMode_WoldMapSearch)
 end
 
 HandleClicked_HouseNaviSearch = function()
-  -- function num : 0_11 , upvalues : _myHosueCombo, _typeCombo, _levelCombo, _edit_Search, IM
+  -- function num : 0_11 , upvalues : _myHosueCombo, _typeCombo, _levelCombo, _edit_Search
   FGlobal_FilterEffectClear()
   _myHosueCombo:SetSelectItemIndex(0)
   _typeCombo:SetSelectItemIndex(0)
@@ -168,8 +164,6 @@ HandleClicked_HouseNaviSearch = function()
   local searchKeyword = _edit_Search:GetEditText()
   ToClient_findHouseByItemNameInTown(searchKeyword)
   ClearFocusEdit()
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   SetUIMode((Defines.UIMode).eUIMode_WorldMap)
 end
 

@@ -35,13 +35,11 @@ changeNickname.init = function(self)
 end
 
 handleClicked_ClickEdit = function()
-  -- function num : 0_1 , upvalues : changeNickname, IM
+  -- function num : 0_1 , upvalues : changeNickname
   if not Panel_ChangeNickname:IsShow() then
     return 
   end
   local self = changeNickname
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   ;
   (self.edit_Nickname):SetMaxInput(getGameServiceTypeUserNickNameLength())
   SetFocusEdit(self.edit_Nickname)
@@ -95,7 +93,7 @@ FromClient_ChangeName = function()
 end
 
 FromClient_ShowChangeNickname = function(param)
-  -- function num : 0_4 , upvalues : _nameType, changeName, IM, changeNickname
+  -- function num : 0_4 , upvalues : _nameType, changeName, changeNickname
   if Panel_ChangeNickname:GetShow() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NAMECHANGE_2"))
     return 
@@ -133,8 +131,6 @@ FromClient_ShowChangeNickname = function(param)
         self:PanelResize_ByFontSize(_nameType)
         Panel_ChangeNickname:SetShow(true)
         ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
-        ;
         (changeNickname.edit_Nickname):SetEditText("")
         ;
         (changeNickname.edit_Nickname):SetMaxInput(getGameServiceTypeUserNickNameLength())
@@ -145,23 +141,14 @@ FromClient_ShowChangeNickname = function(param)
 end
 
 ChangeNickname_Close = function()
-  -- function num : 0_5 , upvalues : changeNickname, IM
+  -- function num : 0_5 , upvalues : changeNickname
   local self = changeNickname
   ;
   (self.edit_Nickname):SetEditText("")
   if Panel_ChangeNickname:GetShow() then
     Panel_ChangeNickname:SetShow(false)
     ClearFocusEdit()
-    if AllowChangeInputMode() then
-      if check_ShowWindow() then
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-      else
-        ;
-        (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-      end
-    else
-      SetFocusChatting()
-    end
+    CheckChattingInput()
   end
 end
 

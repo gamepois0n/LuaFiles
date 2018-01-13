@@ -47,12 +47,10 @@ petRegister_init = function()
 end
 
 petRegister_Close = function()
-  -- function num : 0_1 , upvalues : IM, petNaming
+  -- function num : 0_1 , upvalues : petNaming
   if not Panel_Window_PetRegister:GetShow() then
     return 
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit(petNaming)
   Panel_Window_PetRegister:SetShow(false)
 end
@@ -83,24 +81,30 @@ FromClient_InputPetName = function(fromWhereType, fromSlotNo)
 end
 
 HandleClicked_PetRegister_Register = function()
-  -- function num : 0_3 , upvalues : tempFromWhereType, tempFromSlotNo, petNaming, IM
+  -- function num : 0_3 , upvalues : tempFromWhereType, tempFromSlotNo, petNaming
   local fromWhereType = tempFromWhereType
   local fromSlotNo = tempFromSlotNo
   local petName = petNaming:GetEditText()
   ToClient_requestPetRegister(petName, fromWhereType, fromSlotNo)
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   petRegister_Close()
 end
 
-FromClient_PetAddSealedList = function(petNo, reason)
+FromClient_PetAddSealedList = function(petNo, reason, petType)
   -- function num : 0_4
   if reason == nil then
     return 
   end
   if reason == 1 then
-    FGlobal_PetListNew_Open()
-    FGlobal_PetInfoInit()
+    if petType == (CppEnums.PetType).Normal then
+      FGlobal_PetListNew_Open()
+      FGlobal_PetInfoInit()
+    else
+      if petType == (CppEnums.PetType).Fairy then
+        PaGlobal_FairyList_Open()
+      else
+        return 
+      end
+    end
   end
 end
 
@@ -110,15 +114,13 @@ HandleClicked_PetRegister_Close = function()
 end
 
 HandleClicked_PetRegister_ClearEdit = function()
-  -- function num : 0_6 , upvalues : IM, petNaming
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
+  -- function num : 0_6 , upvalues : petNaming
   petNaming:SetEditText("", false)
   SetFocusEdit(petNaming)
 end
 
 FGlobal_PetRegister_Close = function()
-  -- function num : 0_7 , upvalues : IM
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
+  -- function num : 0_7
   Panel_Window_PetRegister:SetShow(false)
 end
 

@@ -3373,6 +3373,13 @@ end
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOPOPENALERT_INDEAD"))
     return 
   end
+  if ToClient_getJoinGuildBattle() == true then
+    return 
+  end
+  if ToClient_getJoinGuildBattle() == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOPOPENALERT_INDEAD"))
+    return 
+  end
   ToClient_SaveUiInfo(false)
   if isFlushedUI() then
     return 
@@ -3675,10 +3682,8 @@ end
 end
 
   FGlobal_EscapeEditBox_IngameCashShop = function()
-  -- function num : 0_97 , upvalues : inGameShop, IM
+  -- function num : 0_97 , upvalues : inGameShop
   local self = inGameShop
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
   ClearFocusEdit(self._edit_Search)
 end
 

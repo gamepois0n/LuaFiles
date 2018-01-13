@@ -17,7 +17,7 @@ local isDev = ToClient_IsDevelopment()
 local isOpenCharacterTag = ToClient_IsContentsGroupOpen("330")
 local localDefine = {CHARSLOTCOLMAX = 6, CHARSLOTROWMAX = 2, CHARSLOTLISTMAX = 12, SCROLLVERTICAL = 270, NODUEL = -1}
 local CharacterTag = {_doTag = false, 
-_UI = {_StaticText_TagAreaValue, _Static_MainImage_1, _Static_MainImage_2, _CheckButton_TagState, _Button_Question, _Button_Close, _CheckButton_PopUp, _StaticText_Name_1, _StaticText_Name_2, _Scroll_Tag, _Scroll_CtrlButton, _StaticText_Desc; 
+_UI = {_StaticText_TagAreaValue, _Static_MainImage_1, _Static_MainImage_2, _CheckButton_TagState, _Button_Question, _Button_Close, _CheckButton_PopUp, _StaticText_Name_1, _StaticText_Name_2, _Scroll_Tag, _Scroll_CtrlButton, _StaticText_Desc, _StaticText_TagState; 
 _Static_CharacterList = {}
 }
 , _requestCharacterKey = -1, _currentTagState = false, _selfCharTag = false, _maxCharacterCount = 0, _pageIndex = 0}
@@ -45,7 +45,7 @@ CharacterTag.Initialize = function(self)
   local descBg = (UI.getChildControl)(Panel_CharacterTag, "Static_DescBg")
   selfUI._StaticText_Desc = (UI.getChildControl)(descBg, "StaticText_Desc")
   ;
-  (selfUI._StaticText_Desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTERTAG_DESC"))
+  (selfUI._StaticText_Desc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_DESC"))
   ;
   (selfUI._StaticText_Desc):SetShow(true)
   local templateCharacterList = (UI.getChildControl)(Panel_CharacterTag, "Static_TemPleate_CharacterImageBorder")
@@ -82,6 +82,9 @@ CharacterTag.Initialize = function(self)
   (selfUI._CheckButton_TagState):SetIgnore(false)
   selfUI._Scroll_Tag = (UI.getChildControl)(Panel_CharacterTag, "Scroll_Tag")
   selfUI._Scroll_CtrlButton = (UI.getChildControl)(selfUI._Scroll_Tag, "Scroll_CtrlButton")
+  selfUI._StaticText_TagState = (UI.getChildControl)(Panel_CharacterTag, "StaticText_TagState")
+  ;
+  (UIScroll.SetButtonSize)(selfUI._Scroll_Tag, 2, (math.ceil)(self._maxCharacterCount / 6))
   ;
   (UIScroll.InputEvent)(selfUI._Scroll_Tag, "PaGlobal_CharacterTag_ScrollEvent")
 end
@@ -102,15 +105,16 @@ HandleEvent_ClickRequestTag = function()
   ;
   ((self._UI)._CheckButton_TagState):SetCheck(self._currentTagState)
   if self._selfCharTag == false then
-    _PA_LOG("�\128민혁", "내가 �\128프캐릭터�\128 아닌데요")
+    return 
   end
   if localDefine.NODUEL == self._requestCharacterKey then
-    _PA_LOG("�\128민혁", "태그요청! : " .. tostring(self._currentTagState) .. " / 태그캐릭�\176 Key = " .. tostring(self._requestCharacterKey))
-    if self._currentTagState then
-      PaGlobal_Delete_TagCharacter(self._requestCharacterKey)
-    else
-      PaGlobal_Request_TagCharacter(self._requestCharacterKey)
-    end
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_NEEDSELECTCHARACTER"))
+    return 
+  end
+  if self._currentTagState then
+    PaGlobal_Delete_TagCharacter(self._requestCharacterKey)
+  else
+    PaGlobal_Request_TagCharacter(self._requestCharacterKey)
   end
 end
 
@@ -129,9 +133,14 @@ PaGlobal_TagCharacter_Change = function()
   -- function num : 0_5 , upvalues : localDefine, CharacterTag
   local index = ToClient_GetMyDuelCharacterIndex()
   if localDefine.NODUEL == index then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CURRENT_NOT_TAGGING"))
     return 
   end
-  -- DECOMPILER ERROR at PC8: Confused about usage of register: R1 in 'UnsetPending'
+  if ToClient_getJoinGuildBattle() == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CANTDO_GUILDBATTLE"))
+    return 
+  end
+  -- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
 
   CharacterTag._doTag = true
   Panel_GameExit_ChangeCharacter(index)
@@ -158,7 +167,8 @@ CharacterTag.SetLeftFace = function(self, idx, isRegionKey)
   ((self._UI)._Static_MainImage_1):SetShow(true)
   ;
   ((self._UI)._StaticText_Name_1):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. char_Level .. " " .. char_Name)
-  if isRegionKey == true then
+  local RegionInfo = getRegionInfoByRegionKey(duelRegion_Key)
+  if RegionInfo ~= nil then
     ((self._UI)._StaticText_TagAreaValue):SetText((getRegionInfoByRegionKey(duelRegion_Key)):getAreaName())
   end
 end
@@ -193,47 +203,57 @@ CharacterTag.LoadMainFace = function(self)
   local duelCharIndex = ToClient_GetMyDuelCharacterIndex()
   local selfCharIndex = ToClient_GetMyCharacterIndex()
   local isSetLeft = false
+  local isSetRight = false
+  local selfPlayerChar_No_s64 = selfPlayer:getCharacterNo_64()
+  local selfPos = float3((selfPlayer:get()):getPositionX(), (selfPlayer:get()):getPositionY(), (selfPlayer:get()):getPositionZ())
+  ;
+  ((self._UI)._StaticText_TagAreaValue):SetText((getRegionInfoByPosition(selfPos)):getAreaName())
+  local characterCount = getCharacterDataCount() - 1
+  ;
+  ((self._UI)._StaticText_TagState):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_ALREADY_TAG"))
   if localDefine.NODUEL == duelCharIndex then
-    for idx = 0, self._maxCharacterCount - 1 do
-      local characterData = getCharacterDataByIndex(idx)
-      local duelChar_No_s64 = characterData._duelCharacterNo
-      if localDefine.NODUEL ~= duelChar_No_s64 then
-        if isSetLeft then
-          self:SetLeftFace(idx)
+    self._selfCharTag = false
+    for idx = 0, characterCount do
+      local characterData = getCharacterDataByIndex(R14_PC56)
+      R14_PC56 = characterData._duelCharacterNo
+      local duelChar_No_s64 = nil
+      local duelChar_No_s32 = Int64toInt32(duelChar_No_s64)
+      if localDefine.NODUEL ~= duelChar_No_s32 then
+        if isSetLeft == false then
+          self:SetLeftFace(R18_PC69)
           isSetLeft = true
           ;
-          ((self._UI)._CheckButton_TagState):SetCheck(true)
+          ((self._UI)._CheckButton_TagState):SetCheck(R18_PC69)
         else
-          self:SetRightFace(idx)
+          -- DECOMPILER ERROR at PC78: Overwrote pending register: R18 in 'AssignReg'
+
+          self:SetRightFace(R18_PC69)
+          isSetRight = true
           self._currentTagState = true
+          -- DECOMPILER ERROR at PC85: Overwrote pending register: R18 in 'AssignReg'
+
           ;
-          ((self._UI)._Static_QuestionIcon_2):SetShow(false)
+          ((self._UI)._Static_QuestionIcon_2):SetShow(R18_PC69)
         end
       end
     end
-    self._selfCharTag = false
-    if isSetLeft == false then
-      isSetLeft = true
-      self:SetLeftFace(selfCharIndex, false)
-      local selfPlayerChar_No_s64 = selfPlayer:getCharacterNo_64()
-      local selfPos = float3((selfPlayer:get()):getPositionX(), (selfPlayer:get()):getPositionY(), (selfPlayer:get()):getPositionZ())
-      ;
-      ((self._UI)._StaticText_TagAreaValue):SetText((getRegionInfoByPosition(selfPos)):getAreaName())
-      ;
-      ((self._UI)._CheckButton_TagState):SetCheck(false)
-      ;
-      ((self._UI)._Static_MainImage_2):SetShow(false)
-      ;
-      ((self._UI)._StaticText_Name_2):SetText()
-      ;
-      ((self._UI)._StaticText_Name_2):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TAGCHAR_DESCSETTING"))
-      self._selfCharTag = true
-      self._currentTagState = false
-      ;
-      ((self._UI)._Static_QuestionIcon_2):SetShow(true)
-    end
-  else
     do
+      if isSetLeft == false or isSetRight == false then
+        isSetLeft = true
+        self:SetLeftFace(selfCharIndex, false)
+        ;
+        ((self._UI)._CheckButton_TagState):SetCheck(false)
+        ;
+        ((self._UI)._Static_MainImage_2):ChangeTextureInfoName("")
+        ;
+        ((self._UI)._StaticText_Name_2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_SETTING_TARGET"))
+        self._selfCharTag = true
+        self._currentTagState = false
+        ;
+        ((self._UI)._Static_QuestionIcon_2):SetShow(true)
+        ;
+        ((self._UI)._StaticText_TagState):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CANDO"))
+      end
       isSetLeft = true
       self:SetLeftFace(selfCharIndex)
       self:SetRightFace(duelCharIndex)
@@ -243,6 +263,11 @@ CharacterTag.LoadMainFace = function(self)
       self._selfCharTag = true
       ;
       ((self._UI)._Static_QuestionIcon_2):SetShow(false)
+      if self._selfCharTag == false then
+        ((self._UI)._CheckButton_TagState):SetMonoTone(true)
+        ;
+        ((self._UI)._CheckButton_TagState):SetIgnore(true)
+      end
     end
   end
 end
@@ -433,12 +458,13 @@ CharacterTag.LoadList = function(self)
   local selfPos = float3((selfPlayer:get()):getPositionX(), (selfPlayer:get()):getPositionY(), (selfPlayer:get()):getPositionZ())
   local selfPlayerRegionInfoKey = (getRegionInfoByPosition(selfPos)):getRegionKey()
   local duelCharIndex = ToClient_GetMyDuelCharacterIndex()
+  local characterListMax = getCharacterDataCount()
   for jj = 0, 11 do
     (((self._UI)._Static_CharacterList)[jj]):SetShow(false)
   end
   for idx = 0, 11 do
     local ii = idx + self._pageIndex * 6
-    if self._maxCharacterCount - 1 < ii then
+    if characterListMax - 1 < ii then
       return 
     end
     local targetUI = ((self._UI)._Static_CharacterList)[idx]
@@ -458,10 +484,10 @@ CharacterTag.LoadList = function(self)
     local currentChar_Tag = false
     targetUI:SetShow(true)
     self:SetMonotoneIgnore(targetUI, targetImage, false)
-    targetUI:SetPosX(32 + 105 * (idx % localDefine.CHARSLOTCOLMAX))
-    targetUI:SetPosY(363 + (math.floor)(idx / localDefine.CHARSLOTCOLMAX) * 132)
-    targetState:SetText("태그 �\128�\165")
-    targetUI:ChangeTextureInfoName("")
+    targetUI:SetPosX(32 + 108 * (idx % localDefine.CHARSLOTCOLMAX))
+    targetUI:SetPosY(363 + (math.floor)(idx / localDefine.CHARSLOTCOLMAX) * 138)
+    targetState:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+    targetState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CANDO"))
     local isCaptureExist = targetImage:ChangeTextureInfoNameNotDDS(char_TextureName, char_Type, PaGlobal_getIsExitPhoto())
     if isCaptureExist == true then
       (targetImage:getBaseTexture()):setUV(0, 0, 1, 1)
@@ -470,7 +496,9 @@ CharacterTag.LoadList = function(self)
     end
     targetImage:setRenderTexture(targetImage:getBaseTexture())
     targetLevel:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. char_Level)
-    targetImage:addInputEvent("Mouse_LUp", "HandleEvent_ClickCharacterList(" .. tostring(idx) .. ")")
+    targetImage:addInputEvent("Mouse_LUp", "HandleEvent_ClickCharacterList(" .. tostring(ii) .. ")")
+    targetImage:addInputEvent("Mouse_UpScroll", "PaGlobal_CharacterTag_ScrollEvent(true)")
+    targetImage:addInputEvent("Mouse_DownScroll", "PaGlobal_CharacterTag_ScrollEvent(false)")
     local regionInfo = getRegionInfoByPosition(char_float3_position)
     local serverUtc64 = getServerUtc64()
     local workingText = global_workTypeToStringSwap(characterData._pcWorkingType)
@@ -484,9 +512,9 @@ CharacterTag.LoadList = function(self)
       else
         if localDefine.NODUEL ~= Int64toInt32(duelChar_No_s64) then
           self:SetMonotoneIgnore(targetUI, targetImage, true)
-          targetState:SetText("태그 �\145")
+          targetState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_ALREADY_TAG"))
         else
-          if selfPlayerRegionInfoKey ~= regionInfo:getRegionKey() then
+          if selfPlayerRegionInfoKey ~= regionInfo:getRegionKey() or (regionInfo:get()):isMainOrMinorTown() == false then
             self:SetMonotoneIgnore(targetUI, targetImage, true)
             targetState:SetText(tostring(regionInfo:getAreaName()))
           end
@@ -499,7 +527,7 @@ CharacterTag.LoadList = function(self)
       targetState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CHARACTER_DELETE"))
     end
     if ii == selfPlayerIndex then
-      targetState:SetText("접속 �\145")
+      targetState:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_TEXT_LASTONLINETIME"))
       self:SetMonotoneIgnore(targetUI, targetImage, true)
     end
     if self._currentTagState == true then
@@ -510,7 +538,6 @@ end
 
 CharacterTag.SetMonotoneIgnore = function(self, UIControl, ImageControl, value)
   -- function num : 0_12
-  UIControl:SetMonoTone(value)
   UIControl:SetIgnore(value)
   ImageControl:SetMonoTone(value)
   ImageControl:SetIgnore(value)
@@ -529,6 +556,7 @@ CharacterTag.Clear = function(self)
   ((self._UI)._Static_MainImage_2):ChangeTextureInfoName("")
   ;
   ((self._UI)._Static_MainImage_2):setRenderTexture(((self._UI)._Static_MainImage_2):getBaseTexture())
+  self._requestCharacterKey = -1
   for ii = 0, 11 do
     (((self._UI)._Static_CharacterList)[ii]):SetShow(false)
   end
@@ -547,6 +575,10 @@ end
 CharacterTag.Open = function(self)
   -- function num : 0_15 , upvalues : isOpenCharacterTag
   if isOpenCharacterTag == false then
+    return 
+  end
+  if ToClient_GetMyCharacterIndex() == -1 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_PREMIUMCHARACTER"))
     return 
   end
   self:WindowPosition()
@@ -595,7 +627,7 @@ end
 PaGlobal_CharacterTag_ScrollEvent = function(isUp)
   -- function num : 0_22 , upvalues : CharacterTag
   local self = CharacterTag
-  self._pageIndex = (UIScroll.ScrollEvent)((self._UI)._Scroll_Tag, isUp, 2, 4, self._pageIndex, 1)
+  self._pageIndex = (UIScroll.ScrollEvent)((self._UI)._Scroll_Tag, isUp, 2, (math.ceil)(self._maxCharacterCount / 6), self._pageIndex, 1)
   self:LoadList()
 end
 

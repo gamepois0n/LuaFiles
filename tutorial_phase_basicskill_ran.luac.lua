@@ -233,7 +233,7 @@ PaGlobal_TutorialPhase_BasicSkill_Ran.changeStepTryBasicSkill = function(self)
           end
         end
         ;
-        (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMBO_0_1") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMMAND_0_1") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
+        (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMBO_0_1") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMMAND_0_1") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
         ;
         (PaGlobal_TutorialUiManager:getUiKeyButton()):setPrevUsingKeyAll(true)
         ;
@@ -252,7 +252,7 @@ PaGlobal_TutorialPhase_BasicSkill_Ran.changeStepTryBasicSkill = function(self)
             end
           end
           ;
-          (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMBO_0_2") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMMAND_0_2") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
+          (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMBO_0_2") .. PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMMAND_0_2") .. PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP7") .. " ( " .. self._usedSkillCount .. " / " .. self._totalSkillCount .. " )")
           ;
           (PaGlobal_TutorialUiManager:getUiKeyButton()):setPrevUsingKeyAll(true)
           ;
@@ -401,9 +401,9 @@ PaGlobal_TutorialPhase_BasicSkill_Ran.changeStepTrySkillCombo = function(self)
   ;
   (PaGlobal_TutorialUiManager:getUiHeadlineMessage()):setTextPurposeText(PAGetString(Defines.StringSheet_GAME, "TUTORIAL_PURPOSE_BATTLE_STEP6") .. " ( " .. self._usedComboCount .. " / " .. self._totalComboCount .. " )")
   ;
-  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_1):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMBO_0_3"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMMAND_0_3"), 1))
+  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_1):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMBO_0_3"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMMAND_0_3"), 1))
   ;
-  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_2):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMBO_0_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RANGER2_COMMAND_0_2"), 2))
+  (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_2):SetText(PaGlobal_TutorialManager:getStringResize(PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMBO_0_2"), PAGetString(Defines.StringSheet_GAME, "LUA_TUTORIAL_BASECOMBO_RAN_COMMAND_0_2"), 2))
   ;
   (((PaGlobal_TutorialUiManager:getUiHeadlineMessage())._ui)._nextStep_3):SetShow(false)
   ;

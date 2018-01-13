@@ -18,10 +18,8 @@ template = {effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill
 _skillCoolTimeQuickSlot_PanelID = {[0] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_0, [1] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_1, [2] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_2, [3] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_3, [4] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_4, [5] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_5, [6] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_6, [7] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_7, [8] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_8, [9] = UI_UIType.PAGameUIPanel_SkillCoolTimeQuickSlot_9}
 , 
 _skillCoolTimeQuickSlot_PanelList = {[0] = Panel_SkillCoolTimeQuickSlot_0, [1] = Panel_SkillCoolTimeQuickSlot_1, [2] = Panel_SkillCoolTimeQuickSlot_2, [3] = Panel_SkillCoolTimeQuickSlot_3, [4] = Panel_SkillCoolTimeQuickSlot_4, [5] = Panel_SkillCoolTimeQuickSlot_5, [6] = Panel_SkillCoolTimeQuickSlot_6, [7] = Panel_SkillCoolTimeQuickSlot_7, [8] = Panel_SkillCoolTimeQuickSlot_8, [9] = Panel_SkillCoolTimeQuickSlot_9}
-, 
-_panelToPanelIndex = {[Panel_SkillCoolTimeQuickSlot_1] = 128, [Panel_SkillCoolTimeQuickSlot_2] = 129, [Panel_SkillCoolTimeQuickSlot_3] = 130, [Panel_SkillCoolTimeQuickSlot_4] = 131, [Panel_SkillCoolTimeQuickSlot_5] = 132, [Panel_SkillCoolTimeQuickSlot_6] = 133, [Panel_SkillCoolTimeQuickSlot_7] = 134, [Panel_SkillCoolTimeQuickSlot_8] = 135, [Panel_SkillCoolTimeQuickSlot_9] = 136}
 }
--- DECOMPILER ERROR at PC99: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC79: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.init = function(self)
   -- function num : 0_0
@@ -53,7 +51,7 @@ PaGlobal_SkillCoolTimeQuickSlot.init = function(self)
   PaGlobal_SkillCoolTimeQuickSlot:settingPos(true)
 end
 
--- DECOMPILER ERROR at PC102: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC82: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.updateQuickSlot = function(self)
   -- function num : 0_1
@@ -83,7 +81,7 @@ PaGlobal_SkillCoolTimeQuickSlot.updateQuickSlot = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC105: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC85: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.updateSkill = function(self, panelIdx, skillNo)
   -- function num : 0_2
@@ -95,22 +93,59 @@ PaGlobal_SkillCoolTimeQuickSlot.updateSkill = function(self, panelIdx, skillNo)
   ((slot.skill).icon):SetIgnore(false)
 end
 
--- DECOMPILER ERROR at PC108: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC88: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_SkillCoolTimeQuickSlot.settingPos = function(self, updateByServer)
   -- function num : 0_3
   local self = PaGlobal_SkillCoolTimeQuickSlot
-  for panelIdx = 0, (self._config).maxPanelCount - 1 do
-    local slot = (self._panelPool)[panelIdx]
-    ;
-    (slot.Panel):SetPosX(getScreenSizeX() * 0.25 + ((slot.Panel):GetSizeX() + 5) * (panelIdx % 2))
-    ;
-    (slot.Panel):SetPosY(getScreenSizeY() * 0.29 + ((slot.Panel):GetSizeY() + 5) * (math.floor)(panelIdx / 2))
-    if updateByServer then
-      changePositionBySever(slot.Panel, (self._skillCoolTimeQuickSlot_PanelID)[panelIdx], true, true, false)
+  if CppDefine.ChangeUIAndResolution == true then
+    for panelIdx = 0, (self._config).maxPanelCount - 1 do
+      local slot = (self._panelPool)[panelIdx]
+      if (slot.Panel):GetRelativePosX() == -1 and (slot.Panel):GetRelativePosY() == -1 then
+        local initPosX = getScreenSizeX() * 0.25 + (slot.Panel):GetSizeX() * (panelIdx % 2)
+        local initPosY = getScreenSizeY() * 0.29 + (slot.Panel):GetSizeY() * (math.floor)(panelIdx / 2)
+        ;
+        (slot.Panel):SetPosX(initPosX)
+        ;
+        (slot.Panel):SetPosY(initPosY)
+      else
+        do
+          do
+            if (slot.Panel):GetRelativePosX() == 0 and (slot.Panel):GetRelativePosY() == 0 then
+              (slot.Panel):SetPosX(getScreenSizeX() * 0.25 + (slot.Panel):GetSizeX() * (panelIdx % 2))
+              ;
+              (slot.Panel):SetPosY(getScreenSizeY() * 0.29 + (slot.Panel):GetSizeY() * (math.floor)(panelIdx / 2))
+            else
+              ;
+              (slot.Panel):SetPosX(getScreenSizeX() * (slot.Panel):GetRelativePosX() - (slot.Panel):GetSizeX() / 2)
+              ;
+              (slot.Panel):SetPosY(getScreenSizeY() * (slot.Panel):GetRelativePosY() - (slot.Panel):GetSizeY() / 2)
+            end
+            if updateByServer then
+              changePositionBySever(slot.Panel, (self._skillCoolTimeQuickSlot_PanelID)[panelIdx], true, false, false)
+            end
+            FGlobal_InitPanelRelativePos(slot.Panel, initPosX, initPosY)
+            FGlobal_PanelRepostionbyScreenOut(slot.Panel)
+            -- DECOMPILER ERROR at PC137: LeaveBlock: unexpected jumping out DO_STMT
+
+            -- DECOMPILER ERROR at PC137: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+            -- DECOMPILER ERROR at PC137: LeaveBlock: unexpected jumping out IF_STMT
+
+          end
+        end
+      end
     end
-    if CppDefine.ChangeUIAndResolution == true then
-      FGlobal_PanelRepostionbyScreenOut(slot.Panel)
+  else
+    for panelIdx = 0, (self._config).maxPanelCount - 1 do
+      local slot = (self._panelPool)[panelIdx]
+      ;
+      (slot.Panel):SetPosX(getScreenSizeX() * 0.25 + (slot.Panel):GetSizeX() * (panelIdx % 2))
+      ;
+      (slot.Panel):SetPosY(getScreenSizeY() * 0.29 + (slot.Panel):GetSizeY() * (math.floor)(panelIdx / 2))
+      if updateByServer then
+        changePositionBySever(slot.Panel, (self._skillCoolTimeQuickSlot_PanelID)[panelIdx], true, false, false)
+      end
     end
   end
 end

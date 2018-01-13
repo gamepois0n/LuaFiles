@@ -583,8 +583,12 @@ HandleClicked_NewQuickSlot_Use = function(panelIdx)
             if itemEnchantWrapper:isPopupItem() then
               Panel_UserItem_PopupItem(itemEnchantWrapper, whereType, invenSlotNo)
             else
-              audioPostEvent_SystemUi(8, 2)
-              quickSlot_UseSlot(panelIdx)
+              if eConnectUiType.eConnectUi_Undefined ~= (itemWrapper:getStaticStatus()):getConnectUi() then
+                ConnectUI((itemWrapper:getStaticStatus()):getConnectUi())
+              else
+                audioPostEvent_SystemUi(8, 2)
+                quickSlot_UseSlot(panelIdx)
+              end
             end
             if (CppEnums.QuickSlotType).eSkill == quickSlotInfo._type and not ((slot.skill).cooltime):GetShow() then
               local skillStaticWrapper = getSkillTypeStaticStatus((quickSlotInfo._skillKey):getSkillNo())

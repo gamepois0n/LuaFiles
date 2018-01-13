@@ -99,7 +99,7 @@ IngameCashShopCoupon_ListUpdate = function(contents, key)
             btn_CouponApply:SetShow(false)
           end
           btn_Coupon:SetPosX(10)
-          btn_Coupon:SetPosY(0)
+          btn_Coupon:SetPosY(10)
           btn_Coupon:addInputEvent("Mouse_LUp", "IngameCashShopCoupon_SavedCouponIndex(" .. idx .. ")")
           btn_Coupon:addInputEvent("Mouse_On", "IngameCashShopCoupon_MouseOver( true, " .. idx .. " )")
           btn_Coupon:addInputEvent("Mouse_Out", "IngameCashShopCoupon_MouseOver( false, " .. idx .. " )")
@@ -113,14 +113,14 @@ IngameCashShopCoupon_ListUpdate = function(contents, key)
             txt_Title:addInputEvent("Mouse_Out", "")
           end
           txt_Title:SetPosX(25)
-          txt_Title:SetPosY(10)
+          txt_Title:SetPosY(20)
           if isDiscountPearl == false then
             txt_Rate:SetText(couponRate / 10000 .. "%")
           else
             txt_Rate:SetText(tostring(couponPearl) .. "P")
           end
           txt_Rate:SetPosX(315)
-          txt_Rate:SetPosY(65)
+          txt_Rate:SetPosY(75)
           if couponState == 2 or couponState == 1 then
             txt_Date:SetFontColor((Defines.Color).C_FFF26A6A)
           else
@@ -132,7 +132,7 @@ IngameCashShopCoupon_ListUpdate = function(contents, key)
             txt_Date:SetText(couponExpirationDate .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COUPON_PERIOD"))
           end
           txt_Date:SetPosX(25)
-          txt_Date:SetPosY(37)
+          txt_Date:SetPosY(47)
           if toInt64(0, 0) < couponMaxDiscount then
             txt_Desc:SetShow(true)
             txt_PearlIcon:SetShow(true)
@@ -146,15 +146,16 @@ IngameCashShopCoupon_ListUpdate = function(contents, key)
           txt_Desc:SetTextMode(UI_TM.eTextMode_Limit_AutoWrap)
           txt_Desc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COUPON_DISCOUNT") .. " : ")
           txt_Desc:SetPosX(25)
-          txt_Desc:SetPosY(53)
+          txt_Desc:SetPosY(63)
           txt_PearlIcon:SetText(tostring(couponMaxDiscount))
           txt_PearlIcon:SetPosX(txt_Desc:GetPosX() + txt_Desc:GetTextSizeX())
-          txt_PearlIcon:SetPosY(52)
+          txt_PearlIcon:SetPosY(62)
           txt_CategoryDesc:SetShow(true)
           txt_CategoryDesc:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COUPON_USECATEGORY") .. " : " .. tostring(couponCategory))
           txt_CategoryDesc:SetPosX(25)
+          txt_CategoryDesc:SetPosY(65)
           btn_CouponApply:SetPosX(288)
-          btn_CouponApply:SetPosY(30)
+          btn_CouponApply:SetPosY(40)
           btn_CouponApply:addInputEvent("Mouse_LUp", "IngameCashShopCoupon_SavedCouponIndex(" .. idx .. ")")
         end
       end

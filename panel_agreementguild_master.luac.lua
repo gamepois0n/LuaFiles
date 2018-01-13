@@ -316,22 +316,13 @@ FGlobal_AgreementGuild_Master_Open = function(memberIndex, requesterMemberGrade,
 end
 
 agreementGuild_Master_Close = function()
-  -- function num : 0_8 , upvalues : IM
+  -- function num : 0_8
   if not Panel_AgreementGuild_Master:GetShow() then
     return 
   end
   Panel_AgreementGuild_Master:SetShow(false)
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 agreementGuild_Master_Send = function()
@@ -412,7 +403,7 @@ FromClient_Agreement_Result = function()
 end
 
 HandleClicked_AgreementGuild_Master_SetEditBox = function(type)
-  -- function num : 0_11 , upvalues : AgreementGuild_Master, IM
+  -- function num : 0_11 , upvalues : AgreementGuild_Master
   local self = AgreementGuild_Master
   local control = nil
   if type == 0 then
@@ -426,8 +417,6 @@ HandleClicked_AgreementGuild_Master_SetEditBox = function(type)
       end
     end
   end
-  ;
-  (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_ChattingInputMode)
   control:SetEditText("", true)
 end
 

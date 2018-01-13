@@ -24,7 +24,7 @@ local itemGradeBorderData = {
 , 
 [4] = {texture = "new_ui_common_forlua/window/skill/skill_ui_00.dds", x1 = 129, y1 = 44, x2 = 171, y2 = 86}
 }
-local Acquire_Enum = {LevelUp = 0, GainProductSkillPoint = 1, GainCombatSkillPoint = 2, GainGuildSkillPoint = 3, LearnSkill = 4, SkillLearnable = 5, SkillAwakened = 6, QuestAccept = 7, QuestFailed = 8, QuestComplete = 9, GetRareItem = 10, DiscoveryExplorationNode = 11, UpgradeExplorationNode = 12, LearnMentalCard = 13, ServantLevelUp = 14, GainExplorePoint = 15, Detected = 16, AddNpcWorker = 17, GetAlchemy = 18, GetManufacture = 19, LearnGuildSkill = 20, MentalThemeComplete = 21, ProductLevelUp = 22, GetFishEncyclopedia = 23, UpdateFishLength = 24, GetFish = 25, AcquiredTitle = 26, ServantLearnSkill = 27, ServantSkillMaster = 28, PetLearnSkill = 29, Normal = 0, Viliage = 1, City = 2, Gate = 3, Farm = 4, Filtration = 5, Collect = 6, Quarry = 7, Logging = 8, Deco_Tree = 9}
+local Acquire_Enum = {LevelUp = 0, GainProductSkillPoint = 1, GainCombatSkillPoint = 2, GainGuildSkillPoint = 3, LearnSkill = 4, SkillLearnable = 5, SkillAwakened = 6, QuestAccept = 7, QuestFailed = 8, QuestComplete = 9, GetRareItem = 10, DiscoveryExplorationNode = 11, UpgradeExplorationNode = 12, LearnMentalCard = 13, ServantLevelUp = 14, GainExplorePoint = 15, Detected = 16, AddNpcWorker = 17, GetAlchemy = 18, GetManufacture = 19, LearnGuildSkill = 20, MentalThemeComplete = 21, ProductLevelUp = 22, GetFishEncyclopedia = 23, UpdateFishLength = 24, GetFish = 25, AcquiredTitle = 26, ServantLearnSkill = 27, ServantSkillMaster = 28, PetLearnSkill = 29, ClearGuildSkill = 30, AlertInvidualShutDown = 31, AlertWorldShutDown = 32, Normal = 0, Viliage = 1, City = 2, Gate = 3, Farm = 4, Filtration = 5, Collect = 6, Quarry = 7, Logging = 8, Deco_Tree = 9}
 local Acquire_Value = {elapsedTime = Acquire_ConstValue.animationEndTime}
 local isView = false
 local preDefaultMsg, preArcObjectMsg, saveEventItem = nil, nil, nil
@@ -254,8 +254,16 @@ local Acquire_SetData = function(notifyMsg)
                                 local mentalCardSSW = notifyMsg:getMentalCardStaticStatusWrapper()
                                 if mentalCardSSW ~= nil then
                                   arcObjectMsg = mentalCardSSW:getName()
-                                  if mentalCardSSW:getMainThemeKeyRaw() >= 10000 and mentalCardSSW:getMainThemeKeyRaw() <= 10399 then
-                                    defaultMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_GET_MONSTER_KNOWLEDGE")
+                                  local isMonsterKnowledge = mentalCardSSW:getMainThemeKeyRaw() >= 10000 and mentalCardSSW:getMainThemeKeyRaw() <= 10399
+                                  local isLevelUp = notifyMsg:checkMentalCardLevelUp()
+                                  if isMonsterKnowledge then
+                                    if isLevelUp then
+                                      defaultMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_GET_MONSTER_KNOWLEDGE_LEVELUP")
+                                    else
+                                      defaultMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_GET_MONSTER_KNOWLEDGE")
+                                    end
+                                  elseif isLevelUp then
+                                    defaultMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_13_LEVELUP")
                                   end
                                   arcIconPath = mentalCardSSW:getImagePath()
                                   local mentalLevel = notifyMsg:getMentalCardLevel()
@@ -264,323 +272,271 @@ local Acquire_SetData = function(notifyMsg)
                                   end
                                   UIMain_KnowledgeUpdate()
                                 end
-                              else
+                              elseif Acquire_Enum.ServantLevelUp == arcType then
+                                local servantNo = notifyMsg._Param2
+                                local servantWrapper = stable_getServantByServantNo(servantNo)
+                                if servantWrapper == nil then
+                                  return 
+                                end
+                                local vehicleType = servantWrapper:getVehicleType()
+                                if UI_VT.Type_Horse == vehicleType then
+                                  (Acquire_UI.servantSkillgetHigh):SetShow(true)
+                                  ;
+                                  (Acquire_UI.servantSkillgetHigh):SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_SERVANTSKILLGETHIGH"))
+                                else
+                                  (Acquire_UI.servantSkillgetHigh):SetShow(false)
+                                end
+                                arcObjectMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_SERVANT_LVUP", "name", servantWrapper:getName(), "lv", servantWrapper:getLevel())
+                              elseif Acquire_Enum.GainExplorePoint == arcType then
+                                arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_CONTRIBUTIVENESS")
+                              elseif Acquire_Enum.Detected == arcType then
+                                arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_GETLETTER")
+                                local npcCharacterKey = notifyMsg:getCharacterKey()
+                              elseif Acquire_Enum.AddNpcWorker == arcType then
+                                local characterSSW = notifyMsg:getCharacterStaticStatus()
+                                if characterSSW ~= nil then
+                                  arcObjectMsg = characterSSW:getName()
+                                end
+                                local regionInfo = notifyMsg:getRegionInfo()
+                                if regionInfo ~= nil then
+                                  arcObjectMsg = arcObjectMsg .. "(" .. regionInfo:getAreaName() .. ")"
+                                end
+                              elseif Acquire_Enum.GetAlchemy == arcType then
+                                local itemEnchantSSW = notifyMsg:getItemEnchantStaticStatusWrapper()
+                                local alchemyItemKey = ((itemEnchantSSW:get())._key):get()
+                                if itemEnchantSSW ~= nil then
+                                  arcIconPath = itemEnchantSSW:getIconPath()
+                                  arcObjectMsg = itemEnchantSSW:getName()
+                                  arcItemGrade = itemEnchantSSW:getGradeType()
+                                end
+                              elseif Acquire_Enum.GetManufacture == arcType then
+                                local itemEnchantSSW = notifyMsg:getItemEnchantStaticStatusWrapper()
+                                if itemEnchantSSW ~= nil then
+                                  arcIconPath = itemEnchantSSW:getIconPath()
+                                  arcObjectMsg = itemEnchantSSW:getName()
+                                  arcItemGrade = itemEnchantSSW:getGradeType()
+                                end
+                              elseif Acquire_Enum.MentalThemeComplete == arcType then
+                                local mentalThemeSSW = notifyMsg:getMentalThemeStaticStatus()
+                                local currentMaxWp = (getSelfPlayer()):getMaxWp()
+                                if mentalThemeSSW ~= nil then
+                                  arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_MENTALTHEMECOMPLETE_BODY", "wp", notifyMsg:getVariedWp())
+                                  defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_MENTALTHEMECOMPLETE_HEAD", "theme", mentalThemeSSW:getName())
+                                end
+                              elseif Acquire_Enum.ProductLevelUp == arcType then
+                                local arcParam = Int64toInt32(notifyMsg._Param) + 1
+                                arcObjectMsg = productLevelUpObejctMessage[arcParam]
+                              elseif Acquire_Enum.GetFishEncyclopedia == arcType then
+                                local fishEncyclopedia = notifyMsg:getEncyclopedia()
+                                if fishEncyclopedia ~= nil then
+                                  local fishName = fishEncyclopedia:getName()
+                                  local fishLength = fishEncyclopedia:getValue()
+                                  arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_1") .. " : " .. fishName .. "(" .. fishLength .. ")"
+                                  defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_2", "fishName", fishName)
+                                  arcIconPath = ""
+                                end
+                              elseif Acquire_Enum.UpdateFishLength == arcType then
+                                local fishEncyclopedia = notifyMsg:getEncyclopedia()
+                                if fishEncyclopedia ~= nil then
+                                  local fishName = fishEncyclopedia:getName()
+                                  local fishLength = fishEncyclopedia:getValue()
+                                  arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_3") .. " : " .. fishName .. "(" .. fishLength .. ")"
+                                  defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_4", "fishName", fishName)
+                                  arcIconPath = ""
+                                end
+                              elseif Acquire_Enum.GetFish == arcType then
+                                local fishEncyclopedia = notifyMsg:getEncyclopedia()
+                                if fishEncyclopedia ~= nil then
+                                  local fishName = fishEncyclopedia:getName()
+                                  local fishLength = fishEncyclopedia:getValue()
+                                  arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_5")
+                                  defaultMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_6", "fishName", fishName, "fishLen", fishLength)
+                                  arcIconPath = ""
+                                end
+                              elseif Acquire_Enum.AcquiredTitle == arcType then
+                                arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_GET_TITLE_1", "titleName", (notifyMsg:getAcquiredTitle()):getName())
+                                defaultMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_GET_TITLE_2")
+                                arcIconPath = ""
+                              elseif Acquire_Enum.ServantLearnSkill == arcType then
+                                local skillKey = Int64toInt32(notifyMsg._Param)
+                                local skillName = vehicleSkillStaticStatus_getName(skillKey)
+                                if skillKey ~= nil then
+                                  (Acquire_UI.servantSkillIcon):SetShow(true)
+                                  ;
+                                  (Acquire_UI.servantSkillName):SetShow(true)
+                                  ;
+                                  (Acquire_UI.servantSkillIcon):ChangeTextureInfoName("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
+                                  ;
+                                  (Acquire_UI.servantSkillName):SetText(skillName)
+                                  ;
+                                  (Acquire_UI.servantSkillIcon):SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
+                                end
+                                arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_26", "skillName", skillName)
+                                defaultMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4")
+                              elseif Acquire_Enum.ServantSkillMaster == arcType then
+                                local skillKey = Int64toInt32(notifyMsg._Param)
+                                local skillName = vehicleSkillStaticStatus_getName(skillKey)
+                                if skillWrapper ~= nil then
+                                  (Acquire_UI.servantSkillIcon):SetShow(true)
+                                  ;
+                                  (Acquire_UI.servantSkillName):SetShow(true)
+                                  ;
+                                  (Acquire_UI.servantSkillIcon):ChangeTextureInfoName("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
+                                  ;
+                                  (Acquire_UI.servantSkillName):SetText(skillName)
+                                  ;
+                                  (Acquire_UI.servantSkillIcon):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_24", "skillName", skillName))
+                                end
+                                arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_24", "skillName", skillName)
+                                defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_24", "skillName", skillName)
+                              elseif Acquire_Enum.PetLearnSkill == arcType then
+                                local skillSSW = notifyMsg:getSkillStaticstatusWrapper()
+                                local petNo = (Uint64toInt64(notifyMsg._Param2))
+                                local skillName, petName = nil, nil
                                 do
-                                  if Acquire_Enum.ServantLevelUp == arcType then
-                                    local servantNo = notifyMsg._Param2
-                                    local servantWrapper = stable_getServantByServantNo(servantNo)
-                                    if servantWrapper == nil then
+                                  if skillSSW ~= nil then
+                                    local skillTypeSSW = skillSSW:getSkillTypeStaticStatusWrapper()
+                                    if skillTypeSSW ~= nil then
+                                      arcIconPath = skillTypeSSW:getIconPath()
+                                      skillName = skillTypeSSW:getName()
+                                    end
+                                  end
+                                  local petCountUnseal = ToClient_getPetUnsealedList()
+                                  for index = 0, petCountUnseal - 1 do
+                                    local PcPetData = ToClient_getPetUnsealedDataByIndex(index)
+                                    if PcPetData == nil then
                                       return 
                                     end
-                                    local vehicleType = servantWrapper:getVehicleType()
-                                    if UI_VT.Type_Horse == vehicleType then
-                                      (Acquire_UI.servantSkillgetHigh):SetShow(true)
-                                      ;
-                                      (Acquire_UI.servantSkillgetHigh):SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_SERVANTSKILLGETHIGH"))
-                                    else
-                                      ;
-                                      (Acquire_UI.servantSkillgetHigh):SetShow(false)
+                                    if petNo == PcPetData:getPcPetNo() then
+                                      petName = PcPetData:getName()
                                     end
-                                    arcObjectMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_SERVANT_LVUP", "name", servantWrapper:getName(), "lv", servantWrapper:getLevel())
-                                  else
-                                    do
-                                      if Acquire_Enum.GainExplorePoint == arcType then
-                                        arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_CONTRIBUTIVENESS")
-                                      else
-                                        if Acquire_Enum.Detected == arcType then
-                                          arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_GETLETTER")
-                                          local npcCharacterKey = notifyMsg:getCharacterKey()
-                                        else
-                                          do
-                                            if Acquire_Enum.AddNpcWorker == arcType then
-                                              local characterSSW = notifyMsg:getCharacterStaticStatus()
-                                              if characterSSW ~= nil then
-                                                arcObjectMsg = characterSSW:getName()
-                                              end
-                                              local regionInfo = notifyMsg:getRegionInfo()
-                                              if regionInfo ~= nil then
-                                                arcObjectMsg = arcObjectMsg .. "(" .. regionInfo:getAreaName() .. ")"
-                                              end
-                                            else
-                                              do
-                                                if Acquire_Enum.GetAlchemy == arcType then
-                                                  local itemEnchantSSW = notifyMsg:getItemEnchantStaticStatusWrapper()
-                                                  local alchemyItemKey = ((itemEnchantSSW:get())._key):get()
-                                                  if itemEnchantSSW ~= nil then
-                                                    arcIconPath = itemEnchantSSW:getIconPath()
-                                                    arcObjectMsg = itemEnchantSSW:getName()
-                                                    arcItemGrade = itemEnchantSSW:getGradeType()
-                                                  end
-                                                else
-                                                  do
-                                                    if Acquire_Enum.GetManufacture == arcType then
-                                                      local itemEnchantSSW = notifyMsg:getItemEnchantStaticStatusWrapper()
-                                                      if itemEnchantSSW ~= nil then
-                                                        arcIconPath = itemEnchantSSW:getIconPath()
-                                                        arcObjectMsg = itemEnchantSSW:getName()
-                                                        arcItemGrade = itemEnchantSSW:getGradeType()
-                                                      end
-                                                    else
-                                                      do
-                                                        if Acquire_Enum.MentalThemeComplete == arcType then
-                                                          local mentalThemeSSW = notifyMsg:getMentalThemeStaticStatus()
-                                                          local currentMaxWp = (getSelfPlayer()):getMaxWp()
-                                                          if mentalThemeSSW ~= nil then
-                                                            arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_MENTALTHEMECOMPLETE_BODY", "wp", notifyMsg:getVariedWp())
-                                                            defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_MENTALTHEMECOMPLETE_HEAD", "theme", mentalThemeSSW:getName())
-                                                          end
-                                                        else
-                                                          do
-                                                            if Acquire_Enum.ProductLevelUp == arcType then
-                                                              local arcParam = Int64toInt32(notifyMsg._Param) + 1
-                                                              arcObjectMsg = productLevelUpObejctMessage[arcParam]
-                                                            else
-                                                              do
-                                                                if Acquire_Enum.GetFishEncyclopedia == arcType then
-                                                                  local fishEncyclopedia = notifyMsg:getEncyclopedia()
-                                                                  if fishEncyclopedia ~= nil then
-                                                                    local fishName = fishEncyclopedia:getName()
-                                                                    local fishLength = fishEncyclopedia:getValue()
-                                                                    arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_1") .. " : " .. fishName .. "(" .. fishLength .. ")"
-                                                                    defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_2", "fishName", fishName)
-                                                                    arcIconPath = ""
-                                                                  end
-                                                                else
-                                                                  do
-                                                                    if Acquire_Enum.UpdateFishLength == arcType then
-                                                                      local fishEncyclopedia = notifyMsg:getEncyclopedia()
-                                                                      if fishEncyclopedia ~= nil then
-                                                                        local fishName = fishEncyclopedia:getName()
-                                                                        local fishLength = fishEncyclopedia:getValue()
-                                                                        arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_3") .. " : " .. fishName .. "(" .. fishLength .. ")"
-                                                                        defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_4", "fishName", fishName)
-                                                                        arcIconPath = ""
-                                                                      end
-                                                                    else
-                                                                      do
-                                                                        if Acquire_Enum.GetFish == arcType then
-                                                                          local fishEncyclopedia = notifyMsg:getEncyclopedia()
-                                                                          if fishEncyclopedia ~= nil then
-                                                                            local fishName = fishEncyclopedia:getName()
-                                                                            local fishLength = fishEncyclopedia:getValue()
-                                                                            arcObjectMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_5")
-                                                                            defaultMsg = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_FISHENCYCLOPEDIA_6", "fishName", fishName, "fishLen", fishLength)
-                                                                            arcIconPath = ""
-                                                                          end
-                                                                        else
-                                                                          do
-                                                                            if Acquire_Enum.AcquiredTitle == arcType then
-                                                                              arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_GET_TITLE_1", "titleName", (notifyMsg:getAcquiredTitle()):getName())
-                                                                              defaultMsg = PAGetString(Defines.StringSheet_GAME, "LUA_ACQUIRE_MESSAGE_GET_TITLE_2")
-                                                                              arcIconPath = ""
-                                                                            else
-                                                                              if Acquire_Enum.ServantLearnSkill == arcType then
-                                                                                local skillKey = Int64toInt32(notifyMsg._Param)
-                                                                                local skillName = vehicleSkillStaticStatus_getName(skillKey)
-                                                                                if skillKey ~= nil then
-                                                                                  (Acquire_UI.servantSkillIcon):SetShow(true)
-                                                                                  ;
-                                                                                  (Acquire_UI.servantSkillName):SetShow(true)
-                                                                                  ;
-                                                                                  (Acquire_UI.servantSkillIcon):ChangeTextureInfoName("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
-                                                                                  ;
-                                                                                  (Acquire_UI.servantSkillName):SetText(skillName)
-                                                                                  ;
-                                                                                  (Acquire_UI.servantSkillIcon):SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
-                                                                                end
-                                                                                arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_26", "skillName", skillName)
-                                                                                defaultMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4")
-                                                                              else
-                                                                                do
-                                                                                  if Acquire_Enum.ServantSkillMaster == arcType then
-                                                                                    local skillKey = Int64toInt32(notifyMsg._Param)
-                                                                                    local skillName = vehicleSkillStaticStatus_getName(skillKey)
-                                                                                    if skillWrapper ~= nil then
-                                                                                      (Acquire_UI.servantSkillIcon):SetShow(true)
-                                                                                      ;
-                                                                                      (Acquire_UI.servantSkillName):SetShow(true)
-                                                                                      ;
-                                                                                      (Acquire_UI.servantSkillIcon):ChangeTextureInfoName("Icon/" .. vehicleSkillStaticStatus_getIconPath(skillKey))
-                                                                                      ;
-                                                                                      (Acquire_UI.servantSkillName):SetText(skillName)
-                                                                                      ;
-                                                                                      (Acquire_UI.servantSkillIcon):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_24", "skillName", skillName))
-                                                                                    end
-                                                                                    arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_24", "skillName", skillName)
-                                                                                    defaultMsg = PAGetStringParam1(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_24", "skillName", skillName)
-                                                                                  else
-                                                                                    do
-                                                                                      if Acquire_Enum.PetLearnSkill == arcType then
-                                                                                        local skillSSW = notifyMsg:getSkillStaticstatusWrapper()
-                                                                                        local petNo = (Uint64toInt64(notifyMsg._Param2))
-                                                                                        local skillName, petName = nil, nil
-                                                                                        do
-                                                                                          if skillSSW ~= nil then
-                                                                                            local skillTypeSSW = skillSSW:getSkillTypeStaticStatusWrapper()
-                                                                                            if skillTypeSSW ~= nil then
-                                                                                              arcIconPath = skillTypeSSW:getIconPath()
-                                                                                              skillName = skillTypeSSW:getName()
-                                                                                            end
-                                                                                          end
-                                                                                          local petCountUnseal = ToClient_getPetUnsealedList()
-                                                                                          for index = 0, petCountUnseal - 1 do
-                                                                                            local PcPetData = ToClient_getPetUnsealedDataByIndex(index)
-                                                                                            if PcPetData == nil then
-                                                                                              return 
-                                                                                            end
-                                                                                            if petNo == PcPetData:getPcPetNo() then
-                                                                                              petName = PcPetData:getName()
-                                                                                            end
-                                                                                          end
-                                                                                          do
-                                                                                            local petCountSeal = ToClient_getPetSealedList()
-                                                                                            for index = 0, petCountSeal - 1 do
-                                                                                              local PcPetData = ToClient_getPetSealedDataByIndex(index)
-                                                                                              if PcPetData == nil then
-                                                                                                return 
-                                                                                              end
-                                                                                              if petNo == PcPetData._petNo then
-                                                                                                petName = PcPetData:getName()
-                                                                                              end
-                                                                                            end
-                                                                                            if skillTypeSSW ~= nil then
-                                                                                              (Acquire_UI.servantSkillIcon):SetShow(true)
-                                                                                              ;
-                                                                                              (Acquire_UI.servantSkillName):SetShow(true)
-                                                                                              ;
-                                                                                              (Acquire_UI.servantSkillIcon):ChangeTextureInfoName("Icon/" .. arcIconPath)
-                                                                                              ;
-                                                                                              (Acquire_UI.servantSkillName):SetText(skillName)
-                                                                                              ;
-                                                                                              (Acquire_UI.servantSkillIcon):SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
-                                                                                            end
-                                                                                            arcObjectMsg = PAGetStringParam2(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_27", "name", petName, "skillname", skillName)
-                                                                                            defaultMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4")
-                                                                                            ;
-                                                                                            (Acquire_UI.titleText):SetText(defaultMsg)
-                                                                                            ;
-                                                                                            (Acquire_UI.ArcText):SetText(tostring(arcObjectMsg))
-                                                                                            if Acquire_Enum.LearnMentalCard == arcType then
-                                                                                              local mentalCardSSW = notifyMsg:getMentalCardStaticStatusWrapper()
-                                                                                              if mentalCardSSW ~= nil then
-                                                                                                local mentalLevel = notifyMsg:getMentalCardLevel()
-                                                                                                if mentalLevel > 0 then
-                                                                                                  local spanSizeX = (Acquire_UI.ArcText):GetTextSizeX() / 2 + (knowledge_Level[mentalLevel]):GetSizeX()
-                                                                                                  local spanSizeY = ((Acquire_UI.ArcText):GetSpanSize()).y
-                                                                                                  ;
-                                                                                                  (knowledge_Level[mentalLevel]):SetSpanSize(spanSizeX, spanSizeY)
-                                                                                                end
-                                                                                              end
-                                                                                            end
-                                                                                            do
-                                                                                              if arcIconPath ~= "" and Acquire_Enum.LearnMentalCard == arcType then
-                                                                                                (Acquire_UI.iconEtc):SetShow(false)
-                                                                                                ;
-                                                                                                (Acquire_UI.iconBack):SetShow(false)
-                                                                                                ;
-                                                                                                (Acquire_UI.iconImage):SetShow(true)
-                                                                                                ;
-                                                                                                (Acquire_UI.iconImage):SetSize(100, 100)
-                                                                                                ;
-                                                                                                (Acquire_UI.iconImage):SetVerticalTop()
-                                                                                                ;
-                                                                                                (Acquire_UI.iconImage):SetHorizonCenter()
-                                                                                                ;
-                                                                                                (Acquire_UI.iconImage):SetSpanSize(0, -65)
-                                                                                                ;
-                                                                                                (Acquire_UI.iconGrade):SetShow(false)
-                                                                                                ;
-                                                                                                (Acquire_UI.iconImage):ChangeTextureInfoName(arcIconPath)
-                                                                                              else
-                                                                                                if arcIconPath ~= "" then
-                                                                                                  (Acquire_UI.iconEtc):SetShow(false)
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconBack):SetShow(true)
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconImage):SetShow(true)
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconGrade):SetShow(true)
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconImage):SetSize(42, 42)
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconImage):SetVerticalTop()
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconImage):SetHorizonCenter()
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconImage):SetSpanSize(0, -17)
-                                                                                                  ;
-                                                                                                  (Acquire_UI.iconImage):ChangeTextureInfoName("icon/" .. arcIconPath)
-                                                                                                  if arcItemGrade >= 0 and arcItemGrade <= 4 then
-                                                                                                    (Acquire_UI.iconGrade):ChangeTextureInfoName((itemGradeBorderData[arcItemGrade]).texture)
-                                                                                                    local x1, y1, x2, y2 = setTextureUV_Func(Acquire_UI.iconGrade, (itemGradeBorderData[arcItemGrade]).x1, (itemGradeBorderData[arcItemGrade]).y1, (itemGradeBorderData[arcItemGrade]).x2, (itemGradeBorderData[arcItemGrade]).y2)
-                                                                                                    ;
-                                                                                                    ((Acquire_UI.iconGrade):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                    ;
-                                                                                                    (Acquire_UI.iconGrade):setRenderTexture((Acquire_UI.iconGrade):getBaseTexture())
-                                                                                                  else
-                                                                                                    do
-                                                                                                      ;
-                                                                                                      (Acquire_UI.iconGrade):ReleaseTexture()
-                                                                                                      ;
-                                                                                                      (Acquire_UI.iconGrade):ChangeTextureInfoName("")
-                                                                                                      ;
-                                                                                                      (Acquire_UI.mainPanel):SetShow(false, false)
-                                                                                                      ;
-                                                                                                      (Acquire_UI.iconEtc):SetShow(true)
-                                                                                                      ;
-                                                                                                      (Acquire_UI.iconBack):SetShow(false)
-                                                                                                      ;
-                                                                                                      (Acquire_UI.iconImage):SetShow(false)
-                                                                                                      ;
-                                                                                                      (Acquire_UI.iconGrade):SetShow(false)
-                                                                                                      local aniIsPlaying = Acquire_Animation()
-                                                                                                      if not aniIsPlaying then
-                                                                                                        (Acquire_UI.mainPanel):SetShow(true, true)
-                                                                                                        -- DECOMPILER ERROR at PC1068: Confused about usage of register: R8 in 'UnsetPending'
-
-                                                                                                        Acquire_Value.elapsedTime = 0
-                                                                                                      end
-                                                                                                      if isShowChatMsg and (preDefaultMsg ~= defaultMsg or preArcObjectMsg ~= arcObjectMsg) then
-                                                                                                        chatting_sendMessage("", defaultMsg, (CppEnums.ChatType).System)
-                                                                                                        if arcObjectMsg ~= nil and arcObjectMsg ~= "" and Acquire_Enum.LearnMentalCard ~= arcType then
-                                                                                                          chatting_sendMessage("", "[ " .. tostring(arcObjectMsg) .. " ]", (CppEnums.ChatType).System)
-                                                                                                        end
-                                                                                                      end
-                                                                                                      preDefaultMsg = defaultMsg
-                                                                                                      preArcObjectMsg = arcObjectMsg
-                                                                                                      return true
-                                                                                                    end
-                                                                                                  end
-                                                                                                end
-                                                                                              end
-                                                                                            end
-                                                                                          end
-                                                                                        end
-                                                                                      end
-                                                                                    end
-                                                                                  end
-                                                                                end
-                                                                              end
-                                                                            end
-                                                                          end
-                                                                        end
-                                                                      end
-                                                                    end
-                                                                  end
-                                                                end
-                                                              end
-                                                            end
-                                                          end
-                                                        end
-                                                      end
-                                                    end
-                                                  end
-                                                end
-                                              end
-                                            end
-                                          end
+                                  end
+                                  do
+                                    local petCountSeal = ToClient_getPetSealedList()
+                                    for index = 0, petCountSeal - 1 do
+                                      local PcPetData = ToClient_getPetSealedDataByIndex(index)
+                                      if PcPetData == nil then
+                                        return 
+                                      end
+                                      if petNo == PcPetData._petNo then
+                                        petName = PcPetData:getName()
+                                      end
+                                    end
+                                    if skillTypeSSW ~= nil then
+                                      (Acquire_UI.servantSkillIcon):SetShow(true)
+                                      ;
+                                      (Acquire_UI.servantSkillName):SetShow(true)
+                                      ;
+                                      (Acquire_UI.servantSkillIcon):ChangeTextureInfoName("Icon/" .. arcIconPath)
+                                      ;
+                                      (Acquire_UI.servantSkillName):SetText(skillName)
+                                      ;
+                                      (Acquire_UI.servantSkillIcon):SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
+                                    end
+                                    arcObjectMsg = PAGetStringParam2(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_27", "name", petName, "skillname", skillName)
+                                    defaultMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4")
+                                    if Acquire_Enum.AlertInvidualShutDown == arcType then
+                                      arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INVIDUAL_SHUTDOWN_COUNTDOWN_MSG", "time", Int64toInt32(notifyMsg._Param))
+                                      defaultMsg = ""
+                                      arcIconPath = ""
+                                    elseif Acquire_Enum.AlertWorldShutDown == arcType then
+                                      arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_SHUTDOWN_COUNTDOWN_MSG", "time", Int64toInt32(notifyMsg._Param))
+                                      defaultMsg = ""
+                                      arcIconPath = ""
+                                    end
+                                    ;
+                                    (Acquire_UI.titleText):SetText(defaultMsg)
+                                    ;
+                                    (Acquire_UI.ArcText):SetText(tostring(arcObjectMsg))
+                                    if Acquire_Enum.LearnMentalCard == arcType then
+                                      local mentalCardSSW = notifyMsg:getMentalCardStaticStatusWrapper()
+                                      if mentalCardSSW ~= nil then
+                                        local mentalLevel = notifyMsg:getMentalCardLevel()
+                                        if mentalLevel > 0 then
+                                          local spanSizeX = (Acquire_UI.ArcText):GetTextSizeX() / 2 + (knowledge_Level[mentalLevel]):GetSizeX()
+                                          local spanSizeY = ((Acquire_UI.ArcText):GetSpanSize()).y
+                                          ;
+                                          (knowledge_Level[mentalLevel]):SetSpanSize(spanSizeX, spanSizeY)
                                         end
                                       end
+                                    end
+                                    if arcIconPath ~= "" and Acquire_Enum.LearnMentalCard == arcType then
+                                      (Acquire_UI.iconEtc):SetShow(false)
+                                      ;
+                                      (Acquire_UI.iconBack):SetShow(false)
+                                      ;
+                                      (Acquire_UI.iconImage):SetShow(true)
+                                      ;
+                                      (Acquire_UI.iconImage):SetSize(100, 100)
+                                      ;
+                                      (Acquire_UI.iconImage):SetVerticalTop()
+                                      ;
+                                      (Acquire_UI.iconImage):SetHorizonCenter()
+                                      ;
+                                      (Acquire_UI.iconImage):SetSpanSize(0, -65)
+                                      ;
+                                      (Acquire_UI.iconGrade):SetShow(false)
+                                      ;
+                                      (Acquire_UI.iconImage):ChangeTextureInfoName(arcIconPath)
+                                    elseif arcIconPath ~= "" then
+                                      (Acquire_UI.iconEtc):SetShow(false)
+                                      ;
+                                      (Acquire_UI.iconBack):SetShow(true)
+                                      ;
+                                      (Acquire_UI.iconImage):SetShow(true)
+                                      ;
+                                      (Acquire_UI.iconGrade):SetShow(true)
+                                      ;
+                                      (Acquire_UI.iconImage):SetSize(42, 42)
+                                      ;
+                                      (Acquire_UI.iconImage):SetVerticalTop()
+                                      ;
+                                      (Acquire_UI.iconImage):SetHorizonCenter()
+                                      ;
+                                      (Acquire_UI.iconImage):SetSpanSize(0, -17)
+                                      ;
+                                      (Acquire_UI.iconImage):ChangeTextureInfoName("icon/" .. arcIconPath)
+                                      if arcItemGrade >= 0 and arcItemGrade <= 4 then
+                                        (Acquire_UI.iconGrade):ChangeTextureInfoName((itemGradeBorderData[arcItemGrade]).texture)
+                                        local x1, y1, x2, y2 = setTextureUV_Func(Acquire_UI.iconGrade, (itemGradeBorderData[arcItemGrade]).x1, (itemGradeBorderData[arcItemGrade]).y1, (itemGradeBorderData[arcItemGrade]).x2, (itemGradeBorderData[arcItemGrade]).y2)
+                                        ;
+                                        ((Acquire_UI.iconGrade):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                        ;
+                                        (Acquire_UI.iconGrade):setRenderTexture((Acquire_UI.iconGrade):getBaseTexture())
+                                      else
+                                        (Acquire_UI.iconGrade):ReleaseTexture()
+                                        ;
+                                        (Acquire_UI.iconGrade):ChangeTextureInfoName("")
+                                      end
+                                    else
+                                      (Acquire_UI.mainPanel):SetShow(false, false)
+                                      ;
+                                      (Acquire_UI.iconEtc):SetShow(true)
+                                      ;
+                                      (Acquire_UI.iconBack):SetShow(false)
+                                      ;
+                                      (Acquire_UI.iconImage):SetShow(false)
+                                      ;
+                                      (Acquire_UI.iconGrade):SetShow(false)
+                                    end
+                                    do
+                                      local aniIsPlaying = Acquire_Animation()
+                                      if not aniIsPlaying then
+                                        (Acquire_UI.mainPanel):SetShow(true, true)
+                                        -- DECOMPILER ERROR at PC1127: Confused about usage of register: R8 in 'UnsetPending'
+
+                                        Acquire_Value.elapsedTime = 0
+                                      end
+                                      if isShowChatMsg and (preDefaultMsg ~= defaultMsg or preArcObjectMsg ~= arcObjectMsg) then
+                                        chatting_sendMessage("", defaultMsg, (CppEnums.ChatType).System)
+                                        if arcObjectMsg ~= nil and arcObjectMsg ~= "" and Acquire_Enum.LearnMentalCard ~= arcType then
+                                          chatting_sendMessage("", "[ " .. tostring(arcObjectMsg) .. " ]", (CppEnums.ChatType).System)
+                                        end
+                                      end
+                                      preDefaultMsg = defaultMsg
+                                      preArcObjectMsg = arcObjectMsg
+                                      do return true end
+                                      -- DECOMPILER ERROR: 43 unprocessed JMP targets
                                     end
                                   end
                                 end
@@ -628,11 +584,14 @@ Acquire_ProcessMessage = function()
           do
             do
               do
-                notifyMsg:playingAudio()
-                if notifyMsg == nil and FGlobal_NakMessagePanel_CheckLeftMessageCount() ~= 0 then
-                  Panel_RewardSelect_NakMessage:SetShow(true, false)
+                do
+                  notifyMsg:playingAudio()
+                  getAcquirePopFront()
+                  if notifyMsg == nil and FGlobal_NakMessagePanel_CheckLeftMessageCount() ~= 0 then
+                    Panel_RewardSelect_NakMessage:SetShow(true, false)
+                  end
+                  enableSkill_UpdateData()
                 end
-                enableSkill_UpdateData()
               end
             end
           end
@@ -752,8 +711,8 @@ AcquireUpdate = function(updateTime)
   Acquire_Value.elapsedTime = Acquire_Value.elapsedTime + updateTime
   local aniIsPlaying = Acquire_Animation()
   if not aniIsPlaying then
-    getAcquirePopFront()
     local notifyMsg = Acquire_getNextData()
+    getAcquirePopFront()
     if notifyMsg ~= nil then
       Acquire_SetData(notifyMsg)
       local itemEnchantSSW = notifyMsg:getItemEnchantStaticStatusWrapper()

@@ -38,18 +38,9 @@ ArshaPvP_TeamNameChangeControl_Confirm = function()
 end
 
 FGlobal_ArshaNameClearFocusEdit_A = function()
-  -- function num : 0_2 , upvalues : IM
+  -- function num : 0_2
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FGlobal_CheckArshaNameUiEdit_A = function(targetUI)
@@ -62,18 +53,9 @@ FGlobal_CheckArshaNameUiEdit_A = function(targetUI)
 end
 
 FGlobal_ArshaNameClearFocusEdit_B = function()
-  -- function num : 0_4 , upvalues : IM
+  -- function num : 0_4
   ClearFocusEdit()
-  if AllowChangeInputMode() then
-    if (UI.checkShowWindow)() then
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
-    else
-      ;
-      (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_GameMode)
-    end
-  else
-    SetFocusChatting()
-  end
+  CheckChattingInput()
 end
 
 FGlobal_CheckArshaNameUiEdit_B = function(targetUI)

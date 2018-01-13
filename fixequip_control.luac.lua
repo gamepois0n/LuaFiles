@@ -10,6 +10,13 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
   if itemWrapper == nil then
     return 
   end
+  -- DECOMPILER ERROR at PC33: Confused about usage of register: R6 in 'UnsetPending'
+
+  if Panel_FixEquip:GetShow() and self._checkHasItemJewel == false and (self._slotMain).empty == false and (self._slotSub).empty == true and Panel_FixEquip_checkHasItemJewel(slotNo, itemWrapper, count, inventoryType) == true then
+    PaGlobal_FixEquip._checkHasItemJewel = false
+    return 
+  end
+  self._checkHasItemJewel = false
   ;
   (self._enduranceGauge):SetShow(true)
   ;
@@ -20,19 +27,19 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
   (self._enduranceValue):SetShow(true)
   if (self._slotMain).empty then
     (self._slotMain):setItem(itemWrapper)
-    -- DECOMPILER ERROR at PC33: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC61: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).empty = false
-    -- DECOMPILER ERROR at PC35: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC63: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).whereType = inventoryType
-    -- DECOMPILER ERROR at PC37: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC65: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).slotNo = slotNo
-    -- DECOMPILER ERROR at PC43: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC71: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (self._slotMain).itemKey = (itemWrapper:get()):getKey()
@@ -61,19 +68,19 @@ Panel_FixEquip_InteractortionFromInventory = function(slotNo, itemWrapper, count
         (self._enduranceText):SetShow(true)
         ;
         (self._enduranceIcon):SetShow(true)
-        -- DECOMPILER ERROR at PC120: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC148: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
         (self._slotSub).empty = false
-        -- DECOMPILER ERROR at PC122: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC150: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
         (self._slotSub).whereType = inventoryType
-        -- DECOMPILER ERROR at PC124: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC152: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
         (self._slotSub).slotNo = slotNo
-        -- DECOMPILER ERROR at PC132: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC160: Confused about usage of register: R6 in 'UnsetPending'
 
         ;
         (self._slotSub).itemKey = ((itemWrapper:get()):getKey()):getItemKey()
@@ -454,6 +461,7 @@ PaGlobal_FixEquip.fixEquip_Show = function(self)
   (self._uiTxtInven):SetText(makeDotMoney(invenMoney))
   ;
   (self._uiTxtWarehouse):SetText(makeDotMoney(warehouse_moneyFromNpcShop_s64()))
+  self._checkHasItemJewel = false
   PaGlobal_FixEquip:fixEquipData_Clear()
 end
 
@@ -486,18 +494,40 @@ FixEquip_HideAni = function()
   audioPostEvent_SystemUi(1, 1)
 end
 
--- DECOMPILER ERROR at PC33: Confused about usage of register: R0 in 'UnsetPending'
+Panel_FixEquip_checkHasItemJewel = function(slotNo, itemWrapper, count, inventoryType)
+  -- function num : 0_12
+  local repairConfirm = function()
+    -- function num : 0_12_0 , upvalues : slotNo, itemWrapper, count, inventoryType
+    -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
+
+    PaGlobal_FixEquip._checkHasItemJewel = true
+    Panel_FixEquip_InteractortionFromInventory(slotNo, itemWrapper, count, inventoryType)
+  end
+
+  if itemWrapper:hasItemJewel() == true then
+    local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_FIXEQUIP_CONTROL_CHECKHASITEMJEWEL_DESC"), functionYes = repairConfirm, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+    ;
+    (MessageBox.showMessageBox)(messageBoxData)
+    return true
+  else
+    do
+      do return false end
+    end
+  end
+end
+
+-- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_FixEquip.fixEquip_CancelButton = function(self)
-  -- function num : 0_12
+  -- function num : 0_13
   PaGlobal_FixEquip:fixEquip_clearData()
   Inventory_SetFunctor(FixEquip_InvenFiler_MainItem, Panel_FixEquip_InteractortionFromInventory, FixEquip_CloseButton, nil)
 end
 
--- DECOMPILER ERROR at PC36: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_FixEquip.handleMClickedFixEquipItemButton = function(self)
-  -- function num : 0_13
+  -- function num : 0_14
   if Panel_FixEquip:GetShow() == true then
     self._onlyItemCheck = true
     self._moneyItemCheck = false
