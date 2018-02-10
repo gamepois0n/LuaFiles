@@ -37,13 +37,8 @@ Panel_NewEquip_ScreenResize = function()
   -- function num : 0_2
   Panel_NewEquip:ComputePos()
   local posX, posY = nil, nil
-  if isActionUiOpen() then
-    posX = FGlobal_Panel_Radar_GetPosX() - FGlobal_Panel_Radar_GetSizeX()
-    posY = 0
-  else
-    posY = FGlobal_GetPersonalIconPosY(4) + FGlobal_GetPersonalIconSizeY()
-    posX = FGlobal_GetPersonalIconPosX(4)
-  end
+  posY = FGlobal_GetPersonalIconPosY(4) + FGlobal_GetPersonalIconSizeY()
+  posX = FGlobal_GetPersonalIconPosX(4)
   if CppDefine.ChangeUIAndResolution == true then
     if Panel_NewEquip:GetRelativePosX() == -1 and Panel_NewEquip:GetRelativePosY() == -1 then
       Panel_NewEquip:SetPosX(posX)

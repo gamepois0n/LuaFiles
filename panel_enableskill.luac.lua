@@ -63,7 +63,7 @@ recommendSkill[UI_classType.ClassType_NinjaMan] = {[0] = 949, [1] = 950, [2] = 9
 recommendSkill[UI_classType.ClassType_DarkElf] = {[0] = 2269, [1] = 2270, [2] = 2271, [3] = 2272, [4] = 2273, [5] = 2267, [6] = 2338, [7] = 2362, [8] = 2268, [9] = 2340, [10] = 2363, [11] = 2263, [12] = 2264, [13] = 2265, [14] = 2361, [15] = 2266, [16] = 2296, [17] = 2297, [18] = 2379, [19] = 2352, [20] = 2353, [21] = 2354, [22] = 2355, [23] = 2356, [24] = 2359, [25] = 2367, [26] = 2368, [27] = 2369, [28] = 2370}
 recommendSkill[UI_classType.ClassType_Combattant] = {[0] = 2449, [1] = 2450, [2] = 2451, [3] = 2501, [4] = 2502, [5] = 2503, [6] = 2504, [7] = 2508, [8] = 2509, [9] = 2510, [10] = 2511, [11] = 2519, [12] = 2520, [13] = 2521, [14] = 2532, [15] = 2533, [16] = 2534, [17] = 2535, [18] = 2536, [19] = 2443, [20] = 2444, [21] = 2445, [22] = 2446, [23] = 2447, [24] = 2448}
 recommendSkill[UI_classType.ClassType_CombattantWomen] = {[0] = 2723, [1] = 2724, [2] = 2725, [3] = 2726, [4] = 2727, [5] = 2718, [6] = 2719, [7] = 2720, [8] = 2721, [9] = 2722, [10] = 2706, [11] = 2707, [12] = 2708, [13] = 2709, [14] = 2710, [15] = 2711, [16] = 2712, [17] = 2713, [18] = 2714, [19] = 2715, [20] = 2716, [21] = 2691, [22] = 2692, [23] = 2693, [24] = 2694, [25] = 2695, [26] = 2696, [27] = 2697, [28] = 2698, [29] = 2699, [30] = 2674, [31] = 2675, [32] = 2676, [33] = 2677, [34] = 2631, [35] = 2632, [36] = 2633, [37] = 2637, [38] = 2638, [39] = 2639}
-recommendSkill[UI_classType.ClassType_Lahn] = {}
+recommendSkill[UI_classType.ClassType_Lahn] = {[0] = 3221, [1] = 3222, [2] = 3223, [3] = 3224, [4] = 2948, [5] = 2975, [6] = 2976, [7] = 2949, [8] = 2977, [9] = 2950, [10] = 2978, [11] = 2979, [12] = 2980, [13] = 2981, [14] = 2951, [15] = 2992, [16] = 2993, [17] = 2994, [18] = 2952, [19] = 2982, [20] = 2983, [21] = 2984, [22] = 2985, [23] = 2986, [24] = 2953, [25] = 2987, [26] = 2988, [27] = 2989, [28] = 2954, [29] = 2990, [30] = 2991, [31] = 2955, [31] = 2995, [32] = 2956, [33] = 2957, [34] = 2996, [35] = 2997, [36] = 2958, [37] = 2959, [38] = 2960, [39] = 2998, [40] = 2999, [41] = 2961, [42] = 2962, [43] = 3000, [44] = 3001, [45] = 3002, [46] = 2964, [47] = 3003, [48] = 3004, [49] = 2966, [50] = 3005, [51] = 3006, [52] = 2967, [53] = 3007, [54] = 3008, [55] = 3009, [56] = 3010, [57] = 2969, [58] = 3011, [59] = 3012, [60] = 2970, [61] = 3013, [62] = 3014, [63] = 3015, [64] = 3016, [65] = 2971, [66] = 3017, [67] = 3018, [68] = 3019, [69] = 2972, [70] = 3020, [71] = 3021, [72] = 2973, [73] = 3022, [74] = 3023, [75] = 3024, [76] = 2974, [77] = 3025, [78] = 3026, [79] = 3027, [80] = 3028, [81] = 3029, [81] = 3147, [82] = 3148, [83] = 3149, [84] = 3150}
 recommendSkill[UI_classType.ClassType_ShyWomen] = {}
 recommendSkill[22] = {}
 EnableSkill_ShowAni = function()
@@ -604,7 +604,7 @@ end
 
 FromClient_UseSkillAskFromOtherPlayer = function(fromName)
   -- function num : 0_18
-  local messageboxMemo = "[<PAColor0xFFE49800>" .. fromName .. "<PAOldColor>" .. PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_QUESTTION")
+  local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_QUESTTION", "from_name", fromName)
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_ANSWERSKILL_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = UseSkillFromOtherPlayer_Yes, functionCancel = UseSkillFromOtherPlayer_No, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)

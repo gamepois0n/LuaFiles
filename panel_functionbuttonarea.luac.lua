@@ -784,7 +784,7 @@ PaGlobal_FunctionButtonArea.OpenCheck = function(self)
   -- DECOMPILER ERROR at PC135: Confused about usage of register: R11 in 'UnsetPending'
 
   ;
-  ((self._data)[buttonId._maid])._isOpen = maidCount > 0
+  ((self._data)[buttonId._maid])._isOpen = maidCount >= 0
   local isRegisted = ToClient_isCampingReigsted()
   -- DECOMPILER ERROR at PC142: Confused about usage of register: R12 in 'UnsetPending'
 

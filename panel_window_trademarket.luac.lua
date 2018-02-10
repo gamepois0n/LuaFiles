@@ -917,7 +917,7 @@ InitNpcTradeShopOpen = function()
       ;
       (npcTradeShop._alerttext):SetSpanSize((getScreenSizeX() - (npcTradeShop._alerttext):GetSizeX()) / 2, ((npcTradeShop._alerttext):GetSizeY() + Panel_Npc_Trade_Market:GetSizeY() - getScreenSizeY()) / 2)
       ;
-      (npcTradeShop._alerttext):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NeedInvest") .. " <PAColor0xAAFFFFFF>[ " .. npcTradeNodeName .. " ]<PAOldColor> " .. PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NeedInvest2"))
+      (npcTradeShop._alerttext):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NeedInvest", "npc_tradenodename", npcTradeNodeName))
       local isNpcNodeCotrol = getDialogButtonIndexByType((CppEnums.ContentsType).Contents_Explore)
       if isNpcNodeCotrol ~= -1 then
         (npcTradeShop._btnInvestNode):SetText(PAGetString(Defines.StringSheet_GAME, "Lua_WindowTradeMarket_NodeButton"))

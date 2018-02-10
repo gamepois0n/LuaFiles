@@ -51,7 +51,15 @@ PaGlobal_AlertArea.Init = function(self)
     ;
     (((self._ui)._button)[index]):SetShow((self._isShowButton)[index])
   end
-  -- DECOMPILER ERROR: 1 unprocessed JMP targets
+  do
+    local isShow = true
+    self:ButtonShow((self._buttonType)._blackSpirit, isShow)
+    self:ButtonShow((self._buttonType)._mail, isShow)
+    self:ButtonShow((self._buttonType)._challengeReward, isShow)
+    self:ButtonShow((self._buttonType)._pcRoomReward, isShow)
+    self:ButtonShow((self._buttonType)._weightOver, isShow)
+    -- DECOMPILER ERROR: 1 unprocessed JMP targets
+  end
 end
 
 -- DECOMPILER ERROR at PC373: Confused about usage of register: R0 in 'UnsetPending'
@@ -122,7 +130,7 @@ PaGlobal_AlertArea.Update = function(self)
       end
     end
     self._showCount = showCount
-    Panel_AlertArea:SetShow(showCount > 0)
+    Panel_AlertArea:SetShow(showCount >= 0)
     -- DECOMPILER ERROR: 1 unprocessed JMP targets
   end
 end
@@ -691,16 +699,25 @@ FGlobal_AlertArea_NewEquipShow = function(isShow)
   self:ButtonShow((self._buttonType)._batterEquipment, isShow)
 end
 
-AlertArea_Init = function()
+FGlobal_AlertArea_Update = function()
   -- function num : 0_25
+end
+
+AlertArea_Init = function()
+  -- function num : 0_26
   PaGlobal_AlertArea:Init()
 end
 
--- DECOMPILER ERROR at PC438: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC440: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_AlertArea.RegisterEvent = function(self)
-  -- function num : 0_26
+  -- function num : 0_27
   registerEvent("FromClient_luaLoadComplete", "AlertArea_Init")
+end
+
+FGlobal_NpcNavi_IsShowCheck = function()
+  -- function num : 0_28
+  return false
 end
 
 PaGlobal_AlertArea:RegisterEvent()

@@ -336,8 +336,16 @@ GameOption_OptimizationReset = function()
   GameOption_EffectOption_slider()
   ;
   ((self._ui)._btn_PlayerEffectOption):SetCheck(chk_Option.currentPlayerEffectOption)
+  local sliderPos = (chk_Option.currentPlayerEffectOptionFrame - 10) / 10 * 25
+  if sliderPos < 0 then
+    sliderPos = 0
+  else
+    if sliderPos > 100 then
+      sliderPos = 100
+    end
+  end
   ;
-  ((self._ui)._slide_PlayerEffectOption):SetControlPos((chk_Option.currentPlayerEffectOptionFrame - 10) / 10 * 25)
+  ((self._ui)._slide_PlayerEffectOption):SetControlPos(sliderPos)
   GameOption_PlayerEffectOption()
   GameOption_PlayerEffectOption_slider()
   ;

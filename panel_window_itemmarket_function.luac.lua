@@ -79,22 +79,14 @@ FGolbal_ItemMarket_Function_Open = function()
   self:SetBtnPosition()
   self:SetPosition()
   Panel_Window_ItemMarket_Function:SetShow(true)
-  if isNewItemmarket_chk() then
-    FGlobal_ItemMarketNew_Open()
-  else
-    FGlobal_ItemMarket_Open()
-  end
+  FGlobal_ItemMarketNew_Open()
 end
 
 FGolbal_ItemMarket_Function_Close = function()
   -- function num : 0_3
   SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
   Panel_Npc_Dialog:SetShow(true)
-  if isNewItemmarket_chk() then
-    FGolbal_ItemMarketNew_Close()
-  else
-    FGolbal_ItemMarket_Close()
-  end
+  FGolbal_ItemMarketNew_Close()
   FGlobal_ItemMarketItemSet_Close()
   FGlobal_ItemMarket_BuyConfirm_Close()
   FGlobal_ItemMarketRegistItem_Close()
@@ -138,12 +130,7 @@ end
 
 ItemMarketFunction.registEventHandler = function(self)
   -- function num : 0_7
-  if isNewItemmarket_chk() then
-    (self.btn_Market):addInputEvent("Mouse_LUp", "FGlobal_ItemMarketNew_Open()")
-  else
-    ;
-    (self.btn_Market):addInputEvent("Mouse_LUp", "FGlobal_ItemMarket_Open()")
-  end
+  (self.btn_Market):addInputEvent("Mouse_LUp", "FGlobal_ItemMarketNew_Open()")
   ;
   (self.btn_ItemSet):addInputEvent("Mouse_LUp", "FGlobal_ItemMarketItemSet_Open()")
   ;

@@ -6,7 +6,6 @@
 local FairyIcon = {_icon = (UI.getChildControl)(Panel_Window_FairyIcon, "Button_FairyIcon")}
 PaGlobal_Fairy_SetPosIcon = function()
   -- function num : 0_0 , upvalues : FairyIcon
-  do return  end
   if ToClient_IsDevelopment() == false then
     return 
   end

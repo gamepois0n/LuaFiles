@@ -1061,6 +1061,7 @@ Panel_Knowledge_Show = function()
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end
+  FGlobal_WebHelper_ForceClose()
   UIMain_KnowledgeUpdateRemove()
   ;
   (uiConst.list_GetKnowledgeCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_GETKNOWLEDGECOUNT", "count", ToClient_GetTotalMentalCardCount()))

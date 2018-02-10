@@ -119,7 +119,7 @@ CraftLevInfo.Update = function(self)
   local gatherCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.gather)
   local gatherMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.gather)
   local gatherExpRate = Int64toInt32(gatherCurrentExp * toInt64(0, 100) / gatherMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.gathering_LevText):SetText(FGlobal_CraftLevel_Replace(gatherLevel, craftType.gather))
   else
     ;
@@ -141,7 +141,7 @@ CraftLevInfo.Update = function(self)
   local manufatureCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.manufacture)
   local manufatureMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.manufacture)
   local manufatureExpRate = Int64toInt32(manufatureCurrentExp * toInt64(0, 100) / manufatureMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.manufacture_LevText):SetText(FGlobal_CraftLevel_Replace(manufatureLevel, craftType.manufacture))
   else
     ;
@@ -163,7 +163,7 @@ CraftLevInfo.Update = function(self)
   local cookingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.cooking)
   local cookingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.cooking)
   local cookingExpRate = Int64toInt32(cookingCurrentExp * toInt64(0, 100) / cookingMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.cook_LevText):SetText(FGlobal_CraftLevel_Replace(cookingLevel, craftType.cooking))
   else
     ;
@@ -185,7 +185,7 @@ CraftLevInfo.Update = function(self)
   local alchemyCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.alchemy)
   local alchemyMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.alchemy)
   local alchemyExpRate = Int64toInt32(alchemyCurrentExp * toInt64(0, 100) / alchemyMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.alchemy_LevText):SetText(FGlobal_CraftLevel_Replace(alchemyLevel, craftType.alchemy))
   else
     ;
@@ -207,7 +207,7 @@ CraftLevInfo.Update = function(self)
   local fishingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.fishing)
   local fishingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.fishing)
   local fishingExpRate = Int64toInt32(fishingCurrentExp * toInt64(0, 100) / fishingMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.fishing_LevText):SetText(FGlobal_CraftLevel_Replace(fishingLevel, craftType.fishing))
   else
     ;
@@ -229,7 +229,7 @@ CraftLevInfo.Update = function(self)
   local huntingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.hunting)
   local huntingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.hunting)
   local huntingExpRate = Int64toInt32(huntingCurrentExp * toInt64(0, 100) / huntingMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.hunting_LevText):SetText(FGlobal_CraftLevel_Replace(huntingLevel, craftType.hunting))
   else
     ;
@@ -251,7 +251,7 @@ CraftLevInfo.Update = function(self)
   local trainingCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.training)
   local trainingMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.training)
   local trainingExpRate = Int64toInt32(trainingCurrentExp * toInt64(0, 100) / trainingMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.training_LevText):SetText(FGlobal_CraftLevel_Replace(trainingLevel, craftType.training))
   else
     ;
@@ -273,7 +273,7 @@ CraftLevInfo.Update = function(self)
   local tradeCurrentExp = playerGet:getCurrLifeExperiencePoint(craftType.trade)
   local tradeMaxExp = playerGet:getDemandLifeExperiencePoint(craftType.trade)
   local tradeExpRate = Int64toInt32(tradeCurrentExp * toInt64(0, 100) / tradeMaxExp)
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     (self.trade_LevText):SetText(FGlobal_CraftLevel_Replace(tradeLevel, craftType.trade))
   else
     ;

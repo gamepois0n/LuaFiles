@@ -115,8 +115,10 @@ FromClient_CompleteChallengeReward = function()
     FromClient_ChallengeReward_UpdateText()
     FGlobal_RightBottomIconReposition()
     PcRoomGift_TimeCheck()
-    PackageIconPosition()
-    FromClient_PackageIconUpdate()
+    if not isActionUiOpen() then
+      PackageIconPosition()
+      FromClient_PackageIconUpdate()
+    end
   end
   messagePosition()
 end

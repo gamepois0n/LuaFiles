@@ -374,6 +374,14 @@ PaGlobal_TutorialManager.initializeClassBasicSkillPhaseTable = function(self)
 
   ;
   (self._classBasicSkillPhaseList)[(CppEnums.ClassType).ClassType_Lahn] = PaGlobal_TutorialPhase_BasicSkill_Ran
+  -- DECOMPILER ERROR at PC101: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._classBasicSkillPhaseList)[18] = PaGlobal_TutorialPhase_BasicSkill_LocalHost
+  -- DECOMPILER ERROR at PC104: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._classBasicSkillPhaseList)[29] = PaGlobal_TutorialPhase_BasicSkill_7Layer
 end
 
 -- DECOMPILER ERROR at PC168: Confused about usage of register: R0 in 'UnsetPending'

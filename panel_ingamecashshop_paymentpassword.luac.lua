@@ -10,7 +10,7 @@ local paymentPassword = {
 _config = {indexMax = 10, startX = 30, startY = 95, gapX = 70, gapY = 40, row = 2, column = 5}
 , 
 _const = {type_CreatePassword = 0, type_Reconfirm = 1, type_Authentic = 2}
-, _staticTextTitle = (UI.getChildControl)(Panel_IngameCashShop_Password, "Static_Text_Title_Import"), _editPassword = (UI.getChildControl)(Panel_IngameCashShop_Password, "Edit_DisplayNumber"), _checkPasswordView = (UI.getChildControl)(Panel_IngameCashShop_Password, "CheckButton_NumberView"), _buttonKeypadBack = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Back_Import"), _buttonKeypadClear = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Clear_Import"), _buttonApply = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Apply_Import"), _buttonCancel = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Cancel_Import"), _staticText_Guide = (UI.getChildControl)(Panel_IngameCashShop_Password, "StaticText_Guide"), _indexs = (Array.new)(), _state = 0, _isChangeTexture = false, _function = nil}
+, _staticTextTitle = (UI.getChildControl)(Panel_IngameCashShop_Password, "Static_Text_Title_Import"), _editPassword = (UI.getChildControl)(Panel_IngameCashShop_Password, "Edit_DisplayNumber"), _checkPasswordView = (UI.getChildControl)(Panel_IngameCashShop_Password, "CheckButton_NumberView"), _buttonKeypadBack = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Back_Import"), _buttonKeypadClear = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Clear_Import"), _buttonApply = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Apply_Import"), _buttonCancel = (UI.getChildControl)(Panel_IngameCashShop_Password, "Button_Cancel_Import"), BlockBG = (UI.getChildControl)(Panel_IngameCashShop_Password, "Static_BlockBG"), _staticText_Guide = (UI.getChildControl)(Panel_IngameCashShop_Password, "StaticText_Guide"), _indexs = (Array.new)(), _state = 0, _isChangeTexture = false, _function = nil}
 paymentPassword.init = function(self)
   -- function num : 0_0
   local config = self._config
@@ -42,6 +42,14 @@ paymentPassword.init = function(self)
   (self._buttonApply):ActiveMouseEventEffect(true)
   ;
   (self._buttonCancel):ActiveMouseEventEffect(true)
+  ;
+  (self.BlockBG):SetSize(getScreenSizeX() + 500, getScreenSizeY() + 500)
+  ;
+  (self.BlockBG):SetHorizonCenter()
+  ;
+  (self.BlockBG):SetVerticalMiddle()
+  ;
+  (self.BlockBG):ComputePos()
 end
 
 paymentPassword.update = function(self)
@@ -248,6 +256,14 @@ PaymentPassword_Open = function()
     ;
     (self._buttonCancel):SetPosY((self._buttonCancel):GetPosY() + 10)
   end
+  ;
+  (self.BlockBG):SetSize(getScreenSizeX() + 500, getScreenSizeY() + 500)
+  ;
+  (self.BlockBG):SetHorizonCenter()
+  ;
+  (self.BlockBG):SetVerticalMiddle()
+  ;
+  (self.BlockBG):ComputePos()
 end
 
 PaymentPassword_Close = function()

@@ -312,19 +312,21 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
     -- DECOMPILER ERROR at PC473: Confused about usage of register: R9 in 'UnsetPending'
 
     ((self._ui)._staticCraftIcon)[index] = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_Craft_" .. index)
-    -- DECOMPILER ERROR at PC483: Confused about usage of register: R9 in 'UnsetPending'
+    ;
+    (((self._ui)._staticCraftIcon)[index]):SetShow(false)
+    -- DECOMPILER ERROR at PC489: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextCraft_Title)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "StaticText_Title")
-    -- DECOMPILER ERROR at PC493: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC499: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextCraft_Level)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "StaticText_Level")
-    -- DECOMPILER ERROR at PC503: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC509: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextCraft_Percent)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "StaticText_Percent")
-    -- DECOMPILER ERROR at PC513: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC519: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._progress2Craft)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "Progress2_Gauge")

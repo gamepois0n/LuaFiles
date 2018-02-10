@@ -31,78 +31,85 @@ end
 CreateListContent_GuildBattle_AttendMember = function(content, index)
   -- function num : 0_2 , upvalues : EnableControl, EnableText
   local memberIndex = Int64toInt32(index)
-  local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
-  if myGuildListInfo == nil then
-    return 
+  local userNo = (ToClient_GuildBattle_GetUserNoFromEntryList(memberIndex))
+  local memberInfo = nil
+  if ToClient_isPersonalBattle() then
+    memberInfo = Toclient_getPersonalBattleMemberInfo(userNo)
+  else
+    local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
+    if myGuildListInfo == nil then
+      return 
+    end
+    memberInfo = myGuildListInfo:getMemberByUserNo(userNo)
   end
-  local userNo = ToClient_GuildBattle_GetUserNoFromEntryList(memberIndex)
-  local memberInfo = myGuildListInfo:getMemberByUserNo(userNo)
-  if memberInfo == nil then
-    return 
-  end
-  local checkBtn_AsAttend = (UI.getChildControl)(content, "CheckButton_ItemSort")
-  local static_ClassIcon = (UI.getChildControl)(content, "Static_ClassIcon")
-  local staticText_Level = (UI.getChildControl)(content, "StaticText_Level")
-  local staticText_Name = (UI.getChildControl)(content, "StaticText_CharacterName")
-  local staticText_State = (UI.getChildControl)(content, "StaticText_State")
-  local hideCheckBox = ToClient_GuildBattle_GetMaxAttendCount() > 1
-  local isEnableText = true
-  if PaGlobal_GuildBattle_SelectAttend._canSelectAttend == true then
-    if ToClient_GuildBattle_IsMemberInDeadList(userNo) == true then
+  do
+    if memberInfo == nil then
+      return 
+    end
+    local checkBtn_AsAttend = (UI.getChildControl)(content, "CheckButton_ItemSort")
+    local static_ClassIcon = (UI.getChildControl)(content, "Static_ClassIcon")
+    local staticText_Level = (UI.getChildControl)(content, "StaticText_Level")
+    local staticText_Name = (UI.getChildControl)(content, "StaticText_CharacterName")
+    local staticText_State = (UI.getChildControl)(content, "StaticText_State")
+    local hideCheckBox = ToClient_GuildBattle_GetMaxAttendCount() > 1
+    local isEnableText = true
+    if PaGlobal_GuildBattle_SelectAttend._canSelectAttend == true then
+      if ToClient_GuildBattle_IsMemberInDeadList(userNo) == true then
+        staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_DEAD"))
+        checkBtn_AsAttend:SetShow(false)
+        EnableControl(staticText_Name, false)
+        EnableControl(staticText_Level, false)
+        isEnableText = false
+      else
+        if ToClient_GuildBattle_IsMemberInAttendList(userNo) == true then
+          EnableControl(checkBtn_AsAttend, true)
+          checkBtn_AsAttend:SetShow(true)
+          checkBtn_AsAttend:SetCheck(true)
+          checkBtn_AsAttend:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectAttend:ToggleAttendMember(" .. memberIndex .. ")")
+        elseif hideCheckBox == true and ToClient_GuildBattle_IsAttendMemberComplete() == true then
+          checkBtn_AsAttend:SetShow(false)
+        else
+          EnableControl(checkBtn_AsAttend, true)
+          checkBtn_AsAttend:SetShow(true)
+          checkBtn_AsAttend:SetCheck(false)
+          checkBtn_AsAttend:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectAttend:ToggleAttendMember(" .. memberIndex .. ")")
+        end
+        staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_CANFIGHT"))
+      end
+    elseif ToClient_GuildBattle_IsMemberInAttendList(userNo) == true then
+      EnableControl(checkBtn_AsAttend, false)
+      checkBtn_AsAttend:SetShow(true)
+      checkBtn_AsAttend:SetCheck(true)
+      staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_FIGHTING"))
+    elseif ToClient_GuildBattle_IsMemberInDeadList(userNo) == true then
       staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_DEAD"))
       checkBtn_AsAttend:SetShow(false)
       EnableControl(staticText_Name, false)
       EnableControl(staticText_Level, false)
       isEnableText = false
     else
-      if ToClient_GuildBattle_IsMemberInAttendList(userNo) == true then
-        checkBtn_AsAttend:SetEnable(true)
-        checkBtn_AsAttend:SetShow(true)
-        checkBtn_AsAttend:SetCheck(ToClient_GuildBattle_IsMemberInAttendList(userNo))
-        checkBtn_AsAttend:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectAttend:ToggleAttendMember(" .. memberIndex .. ")")
-      elseif hideCheckBox == true and ToClient_GuildBattle_IsAttendMemberComplete() == true then
-        checkBtn_AsAttend:SetShow(false)
-      else
-        checkBtn_AsAttend:SetEnable(true)
-        checkBtn_AsAttend:SetShow(true)
-        checkBtn_AsAttend:SetCheck(ToClient_GuildBattle_IsMemberInAttendList(userNo))
-        checkBtn_AsAttend:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectAttend:ToggleAttendMember(" .. memberIndex .. ")")
+      staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_WAITING"))
+      checkBtn_AsAttend:SetShow(false)
+      EnableControl(staticText_Name, false)
+      EnableControl(staticText_Level, false)
+      isEnableText = false
+    end
+    local classSymbomInfo = (CppEnums.ClassType_Symbol)[memberInfo:getClassType()]
+    static_ClassIcon:ChangeTextureInfoName(classSymbomInfo[1])
+    do
+      local x1, y1, x2, y2 = setTextureUV_Func(static_ClassIcon, classSymbomInfo[2], classSymbomInfo[3], classSymbomInfo[4], classSymbomInfo[5])
+      ;
+      (static_ClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+      static_ClassIcon:setRenderTexture(static_ClassIcon:getBaseTexture())
+      staticText_Level:SetText(tostring(memberInfo:getLevel()))
+      EnableText(staticText_Level, isEnableText)
+      staticText_Name:SetText(memberInfo:getCharacterName())
+      EnableText(staticText_Name, isEnableText)
+      if ToClient_GuildBattle_IsWaitingAttendSelectResult() == true or ToClient_GuildBattle_IsAttendMemberConfirmed() == true then
+        EnableControl(checkBtn_AsAttend, false)
       end
-      staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_CANFIGHT"))
+      -- DECOMPILER ERROR: 11 unprocessed JMP targets
     end
-  elseif ToClient_GuildBattle_IsMemberInAttendList(userNo) == true then
-    EnableControl(checkBtn_AsAttend, false)
-    checkBtn_AsAttend:SetShow(true)
-    checkBtn_AsAttend:SetCheck(true)
-    staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_FIGHTING"))
-  elseif ToClient_GuildBattle_IsMemberInDeadList(userNo) == true then
-    staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_DEAD"))
-    checkBtn_AsAttend:SetShow(false)
-    EnableControl(staticText_Name, false)
-    EnableControl(staticText_Level, false)
-    isEnableText = false
-  else
-    staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_WAITING"))
-    checkBtn_AsAttend:SetShow(false)
-    EnableControl(staticText_Name, false)
-    EnableControl(staticText_Level, false)
-    isEnableText = false
-  end
-  local classSymbomInfo = (CppEnums.ClassType_Symbol)[memberInfo:getClassType()]
-  static_ClassIcon:ChangeTextureInfoName(classSymbomInfo[1])
-  do
-    local x1, y1, x2, y2 = setTextureUV_Func(static_ClassIcon, classSymbomInfo[2], classSymbomInfo[3], classSymbomInfo[4], classSymbomInfo[5])
-    ;
-    (static_ClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-    static_ClassIcon:setRenderTexture(static_ClassIcon:getBaseTexture())
-    staticText_Level:SetText(tostring(memberInfo:getLevel()))
-    EnableText(staticText_Level, isEnableText)
-    staticText_Name:SetText(memberInfo:getCharacterName())
-    EnableText(staticText_Name, isEnableText)
-    if ToClient_GuildBattle_IsWaitingAttendSelectResult() == true or ToClient_GuildBattle_IsAttendMemberConfirmed() == true then
-      EnableControl(checkBtn_AsAttend, false)
-    end
-    -- DECOMPILER ERROR: 11 unprocessed JMP targets
   end
 end
 

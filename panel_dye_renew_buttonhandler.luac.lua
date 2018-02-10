@@ -384,10 +384,11 @@ HandleClicked_DeyReNew_Palette_SelectColor = function(dataIdx)
   -- function num : 0_15
   local self = FGlobal_DyeReNew_GetInstance()
   if (self._checkButtonDyeAll):IsCheck() == true then
-    if #self._partDyeInfo == 0 then
+    local infoCount = ToClient_getDyeingTargetInformationCount()
+    if infoCount == 0 then
       return 
     end
-    for ii = 0, #self._partDyeInfo do
+    for ii = 0, infoCount - 1 do
       self._nowPaletteDataIndex = dataIdx
       self._nowClickPartId = ((self._partDyeInfo)[ii])[1]
       self._nowClickPartSlotId = ((self._partDyeInfo)[ii])[2]

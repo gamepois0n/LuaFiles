@@ -201,7 +201,7 @@ local updateMapImage = function(position, deltaTime)
               if mapValue.x ~= xSector or mapValue.y ~= zSector then
                 mapValue.x = xSector
                 mapValue.y = zSector
-                mapImage:ChangeTextureInfoName(radarPath .. xSector .. "_" .. zSector .. ".dds")
+                mapImage:ChangeTextureInfoNameForRadarBackground(radarPath .. xSector .. "_" .. zSector .. ".dds")
               end
               mapImage:SetPosX(startX + indexModConstSize * constImageSize)
               mapImage:SetPosY(startY + floorIndexDivConstSize * constImageSize)
@@ -216,10 +216,10 @@ local updateMapImage = function(position, deltaTime)
                 desertMapValue.x = xValue
                 desertMapValue.y = zValue
                 if isDesert and not isResistDesert then
-                  desertMapImage:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Rader/Rader_Desert_" .. xValue .. "_" .. zValue .. ".dds")
+                  desertMapImage:ChangeTextureInfoNameForRadarBackground("New_UI_Common_forLua/Widget/Rader/Rader_Desert_" .. xValue .. "_" .. zValue .. ".dds")
                 else
                   if isOcean then
-                    desertMapImage:ChangeTextureInfoName("New_UI_Common_forLua/Widget/Rader/Rader_Ocean_" .. xValue .. "_" .. zValue .. ".dds")
+                    desertMapImage:ChangeTextureInfoNameForRadarBackground("New_UI_Common_forLua/Widget/Rader/Rader_Ocean_" .. xValue .. "_" .. zValue .. ".dds")
                   end
                 end
               end

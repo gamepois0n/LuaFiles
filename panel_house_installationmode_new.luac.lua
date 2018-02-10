@@ -9,8 +9,10 @@ local UI_CIT = CppEnums.InstallationType
 local IM = CppEnums.EProcessorInputMode
 local renderMode = (RenderModeWrapper.new)(99, {(Defines.RenderMode).eRenderMode_HouseInstallation}, false)
 PaGlobal_HouseInstallation = {
-_ui = {_panelTitle = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Title"), _installedObjectCount = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InstalledObject"), _menu_TopBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Menu_TopBG"), _menu_BottomBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Menu_BottomBG"), _itemListBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_ItemListBG"), _interiorPointBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_InteriorPointBG"), _staticBackFloorBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_BackFloorBG"), 
+_ui = {_panelTitle = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Title"), _installedObjectCount = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InstalledObject"), _menu_TopBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Menu_TopBG"), _menu_CategoryBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Menu_CategoryBG"), _menu_BottomBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_Menu_BottomBG"), _itemListBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_ItemListBG"), _interiorPointBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_InteriorPointBG"), _staticBackFloorBg = (UI.getChildControl)(Panel_House_InstallationMode, "Static_BackFloorBG"), 
 _menu_Top = {}
+, 
+_menu_Category = {}
 , 
 _menu_Bottom = {}
 , 
@@ -19,122 +21,62 @@ _itemList = {}
 _interiorPoint = {}
 , 
 _staticBackFloor = {}
-, _staticInteriorSensePoint = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorSensePoint"), _btn_ExitInstallMode = (UI.getChildControl)(Panel_House_InstallationMode, "Button_ExitInstallMode")}
+, _staticInteriorSensePoint = (UI.getChildControl)(Panel_House_InstallationMode, "StaticText_InteriorSensePoint"), _btn_ExitInstallMode = (UI.getChildControl)(Panel_House_InstallationMode, "Button_ExitInstallMode"), _edit_ItemName = (UI.getChildControl)(Panel_House_InstallationMode, "Edit_ItemName"), _searchBtn = (UI.getChildControl)(Panel_House_InstallationMode, "Button_Search")}
 , 
 _template = {_normalIconBG = (UI.getChildControl)(Panel_House_InstallationMode, "Template_Static_HaveFurnitureIconBG"), _cashIconBG = (UI.getChildControl)(Panel_House_InstallationMode, "Template_Static_CashIconBG"), _installedIcon = (UI.getChildControl)(Panel_House_InstallationMode, "Template_Static_IsInstalled"), _slot = (UI.getChildControl)(Panel_House_InstallationMode, "Template_Static_Slot")}
 , 
-_menu_Top_Enum = {All = 0, Floor = 1, Wall = 2, Table = 3, AllHarvest = 4, Harvest = 5, Others = 6, Category_All = 7, Category_Sofa = 8, Category_Chair = 9, Category_Curtain = 10, Category_Bed = 11, Count = 12}
+_menu_Top_Enum = {AllHarvest = 0, Harvest = 1, Others = 2, All = 3, Goods = 4, Furniture = 5, BaseMaterial = 6, Tools = 7, Count = 8}
+, 
+_menu_Category_Enum = {All = 0, AllFurniture = 1, Dresser = 2, Wardrobe = 3, Table = 4, Chair = 5, Bookcase = 6, Bed = 7, AllGoods = 8, OntheTable = 9, Floor = 10, Wall = 11, Ceiling = 12, AllBaseMaterial = 13, WallPaper = 14, FloorMaterial = 15, AllTools = 16, Cooking = 17, Alchemy = 18, Count = 19}
 , 
 _menu_Bottom_Enum = {Rotate_Left = 0, Rotate_Right = 1, RotateAngle_45 = 2, Reset = 3, Count = 4}
 , 
 _static_BackFloor_Enum = {First = 0, Second = 1, Third = 2, Four = 3, Count = 4}
 , 
 _slotConfig = {createIcon = true, createBorder = true, createCount = true, createCash = true, createCash = true}
+, 
+_categoryIndex = {}
 , _maxSlotCount = 36, 
 _slotUIPool = {}
-, _maxInterval = 0, _nowInterval = 0, _filter_ItemType = 0, _filter_SearchKeyword = "", _dataCount = 0, _isModeShow = false, _isInstallMode = false, _houseInstallationMode = false, _deleteItemIdx = nil, _isMyHouse = false}
--- DECOMPILER ERROR at PC164: Confused about usage of register: R5 in 'UnsetPending'
+, _maxInterval = 0, _nowInterval = 0, _dataCount = 0, _isModeShow = false, _isInstallMode = false, _houseInstallationMode = false, _deleteItemIdx = nil, _isMyHouse = false}
+-- DECOMPILER ERROR at PC202: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.initialize = function(self)
   -- function num : 0_0 , upvalues : UI_PUCT
   local do_Initialize = function()
     -- function num : 0_0_0 , upvalues : self
-    -- DECOMPILER ERROR at PC151: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC91: Confused about usage of register: R0 in 'UnsetPending'
 
-    (self._ui)._menu_Top = {[(self._menu_Top_Enum).All] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeAll"), [(self._menu_Top_Enum).Floor] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeFloor"), [(self._menu_Top_Enum).Wall] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeWall"), [(self._menu_Top_Enum).Table] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeTable"), [(self._menu_Top_Enum).AllHarvest] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeAllHarvest"), [(self._menu_Top_Enum).Harvest] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeHarvest"), [(self._menu_Top_Enum).Others] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeOthers"), [(self._menu_Top_Enum).Category_All] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Category_All"), [(self._menu_Top_Enum).Category_Sofa] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Category_Sofa"), [(self._menu_Top_Enum).Category_Chair] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Category_Chair"), [(self._menu_Top_Enum).Category_Curtain] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Category_Curtain"), [(self._menu_Top_Enum).Category_Bed] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Category_Bed"), _edit_ItemName = (UI.getChildControl)((self._ui)._menu_TopBg, "Edit_ItemName"), _searchBtn = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Search")}
-    -- DECOMPILER ERROR at PC207: Confused about usage of register: R0 in 'UnsetPending'
+    (self._ui)._menu_Top = {[(self._menu_Top_Enum).AllHarvest] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeAllHarvest"), [(self._menu_Top_Enum).Harvest] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeHarvest"), [(self._menu_Top_Enum).Others] = (UI.getChildControl)((self._ui)._menu_TopBg, "RadioButton_AttributeOthers"), [(self._menu_Top_Enum).All] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_All"), [(self._menu_Top_Enum).Goods] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Goods"), [(self._menu_Top_Enum).Furniture] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Furniture"), [(self._menu_Top_Enum).BaseMaterial] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_BaseMaterial"), [(self._menu_Top_Enum).Tools] = (UI.getChildControl)((self._ui)._menu_TopBg, "Button_Tools")}
+    -- DECOMPILER ERROR at PC304: Confused about usage of register: R0 in 'UnsetPending'
+
+    ;
+    (self._ui)._menu_Category = {[(self._menu_Category_Enum).All] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_All"), [(self._menu_Category_Enum).AllFurniture] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_AllFurniture"), [(self._menu_Category_Enum).Dresser] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Dresser"), [(self._menu_Category_Enum).Wardrobe] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Wardrobe"), [(self._menu_Category_Enum).Table] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Table"), [(self._menu_Category_Enum).Chair] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Chair"), [(self._menu_Category_Enum).Bookcase] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Bookcase"), [(self._menu_Category_Enum).Bed] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Bed"), [(self._menu_Category_Enum).AllGoods] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_AllGoods"), [(self._menu_Category_Enum).OntheTable] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_OntheTable"), [(self._menu_Category_Enum).Floor] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Floor"), [(self._menu_Category_Enum).Wall] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Wall"), [(self._menu_Category_Enum).Ceiling] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Ceiling"), [(self._menu_Category_Enum).AllBaseMaterial] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_AllBaseMaterial"), [(self._menu_Category_Enum).WallPaper] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_WallPaper"), [(self._menu_Category_Enum).FloorMaterial] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_FloorMaterial"), [(self._menu_Category_Enum).AllTools] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_AllTools"), [(self._menu_Category_Enum).Cooking] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Cooking"), [(self._menu_Category_Enum).Alchemy] = (UI.getChildControl)((self._ui)._menu_CategoryBg, "Button_Category_Alchemy")}
+    -- DECOMPILER ERROR at PC360: Confused about usage of register: R0 in 'UnsetPending'
 
     ;
     (self._ui)._menu_Bottom = {[(self._menu_Bottom_Enum).Rotate_Left] = (UI.getChildControl)((self._ui)._menu_BottomBg, "Button_CameraRotation_Left"), [(self._menu_Bottom_Enum).Rotate_Right] = (UI.getChildControl)((self._ui)._menu_BottomBg, "Button_CameraRotation_Right"), [(self._menu_Bottom_Enum).RotateAngle_45] = (UI.getChildControl)((self._ui)._menu_BottomBg, "CheckButton_ObjectRotateAngle45"), [(self._menu_Bottom_Enum).Reset] = (UI.getChildControl)((self._ui)._menu_BottomBg, "Button_ResetFurniture"), _btn_Exit = (UI.getChildControl)((self._ui)._menu_BottomBg, "Button_Exit")}
-    -- DECOMPILER ERROR at PC220: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC373: Confused about usage of register: R0 in 'UnsetPending'
 
     ;
     (self._ui)._itemList = {_scroll = (UI.getChildControl)((self._ui)._itemListBg, "Scroll_List"), _scrollCTRLBTN = nil}
-    -- DECOMPILER ERROR at PC232: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC385: Confused about usage of register: R0 in 'UnsetPending'
 
     ;
     ((self._ui)._itemList)._scrollCTRLBTN = (UI.getChildControl)(((self._ui)._itemList)._scroll, "Scroll_CtrlButton")
-    -- DECOMPILER ERROR at PC300: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC453: Confused about usage of register: R0 in 'UnsetPending'
 
     ;
     (self._ui)._interiorPoint = {_baseText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointBase"), _optionText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointOption"), _bonusText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointBonus"), _totalText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointTotal"), _baseValueText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointBaseValue"), _optionValueText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointOptionValue"), _bonusValueText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointBonusValue"), _totalValueText = (UI.getChildControl)((self._ui)._interiorPointBg, "StaticText_InteriorPointTotalValue")}
-    -- DECOMPILER ERROR at PC356: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC509: Confused about usage of register: R0 in 'UnsetPending'
 
     ;
     (self._ui)._staticBackFloor = {[(self._static_BackFloor_Enum).First] = (UI.getChildControl)((self._ui)._staticBackFloorBg, "RadioButton_FirstFloor"), [(self._static_BackFloor_Enum).Second] = (UI.getChildControl)((self._ui)._staticBackFloorBg, "RadioButton_SecondFloor"), [(self._static_BackFloor_Enum).Third] = (UI.getChildControl)((self._ui)._staticBackFloorBg, "RadioButton_ThirdFloor"), [(self._static_BackFloor_Enum).Four] = (UI.getChildControl)((self._ui)._staticBackFloorBg, "RadioButton_FourFloor"), _staticTextFloor = (UI.getChildControl)((self._ui)._staticBackFloorBg, "StaticText_Floor")}
-    local _menuTopPosX = 12
-    local _menuTopPosY = 7
-    local _menuTopRadioGap = 3
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).All]):SetPosX(_menuTopPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).All]):SetPosY(_menuTopPosY)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).AllHarvest]):SetPosX(_menuTopPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).AllHarvest]):SetPosY(_menuTopPosY)
-    _menuTopPosX = _menuTopPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).All]):GetSizeX() + _menuTopRadioGap
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Floor]):SetPosX(_menuTopPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Floor]):SetPosY(_menuTopPosY)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Harvest]):SetPosX(_menuTopPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Harvest]):SetPosY(_menuTopPosY)
-    _menuTopPosX = _menuTopPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).Floor]):GetSizeX() + _menuTopRadioGap
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Wall]):SetPosX(_menuTopPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Wall]):SetPosY(_menuTopPosY)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Others]):SetPosX(_menuTopPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Others]):SetPosY(_menuTopPosY)
-    _menuTopPosX = _menuTopPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).Others]):GetSizeX() + _menuTopRadioGap
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Table]):SetPosX(_menuTopPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Table]):SetPosY(_menuTopPosY)
-    local _menuCategoryPosX = 12
-    local _menuCategoryPosY = _menuTopPosY + (((self._ui)._menu_Top)[(self._menu_Top_Enum).All]):GetSizeY() + _menuTopRadioGap
-    local _menuCategoryGap = 3
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_All]):SetPosX(_menuCategoryPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_All]):SetPosY(_menuCategoryPosY)
-    _menuCategoryPosX = _menuCategoryPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_All]):GetSizeX() + _menuCategoryGap
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Sofa]):SetPosX(_menuCategoryPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Sofa]):SetPosY(_menuCategoryPosY)
-    _menuCategoryPosX = _menuCategoryPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Sofa]):GetSizeX() + _menuCategoryGap
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Chair]):SetPosX(_menuCategoryPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Chair]):SetPosY(_menuCategoryPosY)
-    _menuCategoryPosX = _menuCategoryPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Chair]):GetSizeX() + _menuCategoryGap
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Curtain]):SetPosX(_menuCategoryPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Curtain]):SetPosY(_menuCategoryPosY)
-    _menuCategoryPosX = _menuCategoryPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Curtain]):GetSizeX() + _menuCategoryGap
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Bed]):SetPosX(_menuCategoryPosX)
-    ;
-    (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Bed]):SetPosY(_menuCategoryPosY)
-    _menuCategoryPosX = _menuCategoryPosX + (((self._ui)._menu_Top)[(self._menu_Top_Enum).Category_Bed]):GetSizeX() + _menuCategoryGap
-    ;
-    (((self._ui)._menu_Top)._edit_ItemName):SetPosX(_menuCategoryPosX)
-    ;
-    (((self._ui)._menu_Top)._edit_ItemName):SetPosY(_menuCategoryPosY)
-    _menuCategoryPosX = _menuCategoryPosX + (((self._ui)._menu_Top)._edit_ItemName):GetSizeX() + _menuCategoryGap
-    ;
-    (((self._ui)._menu_Top)._searchBtn):SetPosX(_menuCategoryPosX)
-    ;
-    (((self._ui)._menu_Top)._searchBtn):SetPosY(_menuCategoryPosY)
     ;
     ((PaGlobal_HouseInstallation._ui)._itemListBg):setGlassBackground(true)
+    -- DECOMPILER ERROR at PC595: Confused about usage of register: R0 in 'UnsetPending'
+
+    self._categoryIndex = {[(self._menu_Category_Enum).Dresser] = (CppEnums.InstallationType).eType_Carpenter, [(self._menu_Category_Enum).Wardrobe] = (CppEnums.InstallationType).eType_Founding, [(self._menu_Category_Enum).Table] = (CppEnums.InstallationType).eType_Treasure, [(self._menu_Category_Enum).Chair] = (CppEnums.InstallationType).eType_Smithing, [(self._menu_Category_Enum).Bookcase] = (CppEnums.InstallationType).eType_Bookcase, [(self._menu_Category_Enum).Bed] = (CppEnums.InstallationType).eType_Bed, [(self._menu_Category_Enum).Ceiling] = (CppEnums.InstallationType).eType_Chandelier, [(self._menu_Category_Enum).WallPaper] = (CppEnums.InstallationType).eType_WallPaper, [(self._menu_Category_Enum).FloorMaterial] = (CppEnums.InstallationType).eType_FloorMaterial, [(self._menu_Category_Enum).Cooking] = (CppEnums.InstallationType).eType_Cooking, [(self._menu_Category_Enum).Alchemy] = (CppEnums.InstallationType).eType_Alchemy}
     ;
     ((PaGlobal_HouseInstallation._ui)._menu_TopBg):setGlassBackground(true)
     ;
@@ -179,9 +121,9 @@ PaGlobal_HouseInstallation.initialize = function(self)
       (SlotItem.new)(slot, "Panel_House_Installation_SlotItem_" .. slot_Idx, slot_Idx, (self._ui)._itemListBg, self._slotConfig)
       slot:createChild()
       ;
-      (slot.icon):SetPosX(posX + 3)
+      (slot.icon):SetPosX(posX + 2)
       ;
-      (slot.icon):SetPosY(posY + 3)
+      (slot.icon):SetPosY(posY + 2)
       ;
       (slot.icon):SetShow(false)
       tempArray.slotItem = slot
@@ -203,10 +145,10 @@ PaGlobal_HouseInstallation.initialize = function(self)
   ;
   (((self._ui)._itemList)._scroll):SetControlTop()
   ;
-  (((self._ui)._menu_Top)._edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+  ((self._ui)._edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
 end
 
--- DECOMPILER ERROR at PC167: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC205: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.setPosition = function(self)
   -- function num : 0_1
@@ -223,20 +165,32 @@ PaGlobal_HouseInstallation.setPosition = function(self)
   ;
   ((self._ui)._btn_ExitInstallMode):ComputePos()
   ;
-  ((self._ui)._staticBackFloorBg):SetPosX(((self._ui)._installedObjectCount):GetPosX() + 10)
+  ((self._ui)._staticBackFloorBg):SetPosX(((self._ui)._installedObjectCount):GetPosX() + 35)
   ;
   ((self._ui)._staticBackFloorBg):SetPosY(((self._ui)._installedObjectCount):GetPosY() + ((self._ui)._installedObjectCount):GetSizeY())
   ;
   ((self._ui)._menu_TopBg):SetPosX(((self._ui)._itemListBg):GetPosX())
   ;
-  ((self._ui)._menu_TopBg):SetPosY(((self._ui)._itemListBg):GetPosY() - 75)
+  ((self._ui)._menu_TopBg):SetPosY(((self._ui)._itemListBg):GetPosY() - 80)
+  ;
+  ((self._ui)._menu_CategoryBg):SetPosX(((self._ui)._itemListBg):GetPosX())
+  ;
+  ((self._ui)._menu_CategoryBg):SetPosY(((self._ui)._itemListBg):GetPosY() - 40)
   ;
   ((self._ui)._menu_BottomBg):SetPosX(((self._ui)._itemListBg):GetPosX() + ((self._ui)._itemListBg):GetSizeX() + 10)
   ;
   ((self._ui)._menu_BottomBg):SetVerticalBottom()
+  ;
+  ((self._ui)._edit_ItemName):SetPosX(((self._ui)._itemListBg):GetPosX() + 800)
+  ;
+  ((self._ui)._edit_ItemName):SetPosY(((self._ui)._itemListBg):GetPosY() - 35)
+  ;
+  ((self._ui)._searchBtn):SetPosX(((self._ui)._itemListBg):GetPosX() + 950)
+  ;
+  ((self._ui)._searchBtn):SetPosY(((self._ui)._itemListBg):GetPosY() - 35)
 end
 
--- DECOMPILER ERROR at PC170: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC208: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.floorCheck = function(self, floor)
   -- function num : 0_2
@@ -250,7 +204,7 @@ PaGlobal_HouseInstallation.floorCheck = function(self, floor)
   end
 end
 
--- DECOMPILER ERROR at PC173: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC211: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.setData = function(self, initflag)
   -- function num : 0_3
@@ -259,7 +213,7 @@ PaGlobal_HouseInstallation.setData = function(self, initflag)
   FGlobal_House_InstallationModeCart_InteriorPointUpdate()
 end
 
--- DECOMPILER ERROR at PC176: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC214: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.setScroll = function(self)
   -- function num : 0_4
@@ -289,7 +243,7 @@ PaGlobal_HouseInstallation.setScroll = function(self)
   (((self._ui)._itemList)._scrollCTRLBTN):SetSize((((self._ui)._itemList)._scrollCTRLBTN):GetSizeX(), btn_scrollSizeY)
 end
 
--- DECOMPILER ERROR at PC179: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC217: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.update = function(self, nowInterval)
   -- function num : 0_5
@@ -387,7 +341,7 @@ PaGlobal_HouseInstallation.update = function(self, nowInterval)
   end
 end
 
--- DECOMPILER ERROR at PC183: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC221: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.open = function(self)
   -- function num : 0_6 , upvalues : renderMode
@@ -399,7 +353,7 @@ PaGlobal_HouseInstallation.open = function(self)
   end
   Panel_Tooltip_Item_hideTooltip()
   self:eventHousingPointUpdateClear()
-  ToClient_Housing_List_NonFilter()
+  ToClient_Housing_List_ClearFilter()
   if housing_isBuildMode() then
     self._isInstallMode = false
   else
@@ -426,7 +380,7 @@ PaGlobal_HouseInstallation.open = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC186: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC224: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.open_ObjectInstallMode = function(self, isShow)
   -- function num : 0_7
@@ -450,27 +404,36 @@ PaGlobal_HouseInstallation.open_ObjectInstallMode = function(self, isShow)
       ((self._ui)._itemListBg):SetShow(true)
       ;
       ((self._ui)._btn_ExitInstallMode):SetShow(false)
-      self._filter_ItemType = 0
       if self._houseInstallationMode == true then
+        (((self._ui)._menu_Top)[(self._menu_Top_Enum).AllHarvest]):SetCheck(false)
+        ;
         (((self._ui)._menu_Top)[(self._menu_Top_Enum).All]):SetCheck(true)
         ;
-        (((self._ui)._menu_Top)[(self._menu_Top_Enum).AllHarvest]):SetCheck(false)
+        ((self._ui)._menu_CategoryBg):SetShow(true)
+        ;
+        ((self._ui)._menu_TopBg):SetPosY(((self._ui)._itemListBg):GetPosY() - 80)
       else
         ;
         (((self._ui)._menu_Top)[(self._menu_Top_Enum).AllHarvest]):SetCheck(true)
         ;
         (((self._ui)._menu_Top)[(self._menu_Top_Enum).All]):SetCheck(false)
+        ;
+        ((self._ui)._menu_CategoryBg):SetShow(false)
+        ;
+        ((self._ui)._menu_TopBg):SetPosY(((self._ui)._itemListBg):GetPosY() - 40)
       end
-      ;
-      (((self._ui)._menu_Top)[(self._menu_Top_Enum).Floor]):SetCheck(false)
-      ;
-      (((self._ui)._menu_Top)[(self._menu_Top_Enum).Wall]):SetCheck(false)
-      ;
-      (((self._ui)._menu_Top)[(self._menu_Top_Enum).Table]):SetCheck(false)
       ;
       (((self._ui)._menu_Top)[(self._menu_Top_Enum).Harvest]):SetCheck(false)
       ;
       (((self._ui)._menu_Top)[(self._menu_Top_Enum).Others]):SetCheck(false)
+      ;
+      (((self._ui)._menu_Top)[(self._menu_Top_Enum).Furniture]):SetCheck(false)
+      ;
+      (((self._ui)._menu_Top)[(self._menu_Top_Enum).Goods]):SetCheck(false)
+      ;
+      (((self._ui)._menu_Top)[(self._menu_Top_Enum).BaseMaterial]):SetCheck(false)
+      ;
+      (((self._ui)._menu_Top)[(self._menu_Top_Enum).Tools]):SetCheck(false)
       PaGlobal_HouseInstallation:setData(true)
       PaGlobal_HouseInstallation:setScroll()
       PaGlobal_HouseInstallation:update(PaGlobal_HouseInstallation._nowInterval)
@@ -499,19 +462,102 @@ PaGlobal_HouseInstallation.open_ObjectInstallMode = function(self, isShow)
             (((self._ui)._menu_Top)[index]):SetShow(index ~= (self._menu_Top_Enum).AllHarvest and index ~= (self._menu_Top_Enum).Harvest and index ~= (self._menu_Top_Enum).Others)
             ;
             (((self._ui)._menu_Top)[index]):SetShow(self._houseInstallationMode == true)
-            -- DECOMPILER ERROR at PC253: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC288: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC253: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC288: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
       end
-      -- DECOMPILER ERROR: 4 unprocessed JMP targets
+      for index = 0, (self._menu_Category_Enum).Count - 1 do
+        (((self._ui)._menu_Category)[index]):SetShow(false)
+      end
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).All]):SetCheck(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).All]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Dresser]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Dresser]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wardrobe]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wardrobe]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Table]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Table]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Chair]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Chair]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bookcase]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bookcase]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):GetPosX() + 34)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):GetPosX() + 34)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):GetPosX() + 34)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):GetPosX() + 34)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):GetPosX() + 34)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):GetPosX() + 34)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):GetPosX() + 34)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetShow(self._houseInstallationMode == true)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetCheck(self._houseInstallationMode == false)
+      ;
+      (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):GetPosX() + 34)
+      ;
+      ((self._ui)._edit_ItemName):SetShow(true)
+      ;
+      ((self._ui)._searchBtn):SetShow(true)
+      -- DECOMPILER ERROR: 34 unprocessed JMP targets
     end
   end
 end
 
--- DECOMPILER ERROR at PC189: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC227: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.open_ItemInstallMode = function(self, isShow)
   -- function num : 0_8
@@ -523,9 +569,15 @@ PaGlobal_HouseInstallation.open_ItemInstallMode = function(self, isShow)
   ;
   ((self._ui)._menu_TopBg):SetShow(false)
   ;
+  ((self._ui)._menu_CategoryBg):SetShow(false)
+  ;
   ((self._ui)._menu_BottomBg):SetShow(false)
   ;
   ((self._ui)._itemListBg):SetShow(false)
+  ;
+  ((self._ui)._edit_ItemName):SetShow(false)
+  ;
+  ((self._ui)._searchBtn):SetShow(false)
   self:showFloorStatic(false)
   local characterStaticWrapper = housing_getCreatedCharacterStaticWrapper()
   if characterStaticWrapper ~= nil then
@@ -539,7 +591,7 @@ PaGlobal_HouseInstallation.open_ItemInstallMode = function(self, isShow)
   end
 end
 
--- DECOMPILER ERROR at PC192: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC230: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.showFloorStatic = function(self, isShow)
   -- function num : 0_9
@@ -579,7 +631,7 @@ PaGlobal_HouseInstallation.showFloorStatic = function(self, isShow)
   self:floorCheck(curFloor)
 end
 
--- DECOMPILER ERROR at PC196: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC234: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.close = function(self)
   -- function num : 0_10 , upvalues : renderMode
@@ -596,7 +648,7 @@ PaGlobal_HouseInstallation.close = function(self)
   InitializeModeClose_PetMaidInit()
 end
 
--- DECOMPILER ERROR at PC199: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC237: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.eventHousingPointUpdateClear = function(self)
   -- function num : 0_11
@@ -606,7 +658,7 @@ PaGlobal_HouseInstallation.eventHousingPointUpdateClear = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC202: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC240: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.houseInstall_Reset = function(self)
   -- function num : 0_12
@@ -659,13 +711,13 @@ PaGlobal_HouseInstallation.houseInstall_Reset = function(self)
         localfunctionYes = installed_Delete_All
         localfunctionCancle = MessageBox_Empty_function
       else
-        localcontent = installedCount .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_5") .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_6")
+        localcontent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_5", "count", installedCount) .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_6")
         localfunctionYes = installed_Delete_All
-        localfunctionCancel = MessageBox_Empty_function
+        localfunctionCancle = MessageBox_Empty_function
       end
     end
   end
-  local messageboxData = {title = localtitle, content = localcontent, functionYes = localfunctionYes, functionApply = localfunctionApply, functionCancle = localfunctionCancle, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  local messageboxData = {title = localtitle, content = localcontent, functionYes = localfunctionYes, functionApply = localfunctionApply, functionNo = localfunctionCancle, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)
 end
@@ -778,14 +830,7 @@ end
 
 FGlobal_House_InstallationMode_Open = function()
   -- function num : 0_22
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R0 in 'UnsetPending'
-
-  PaGlobal_HouseInstallation._filter_ItemType = 0
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R0 in 'UnsetPending'
-
-  PaGlobal_HouseInstallation._filter_SearchKeyword = ""
-  ;
-  (((PaGlobal_HouseInstallation._ui)._menu_Top)._edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+  ((PaGlobal_HouseInstallation._ui)._edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   if houseWrapper == nil then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_GOTO_NEAR_HOUSEHOLD"))
@@ -794,12 +839,12 @@ FGlobal_House_InstallationMode_Open = function()
   if not ((houseWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isFixedHouse() then
     local isHouse = ((houseWrapper:getStaticStatusWrapper()):getObjectStaticStatus()):isInnRoom()
   end
-  -- DECOMPILER ERROR at PC51: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
 
   if isHouse then
     PaGlobal_HouseInstallation._isMyHouse = ((getSelfPlayer()):get()):isMyHouseVisiting()
   else
-    -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC49: Confused about usage of register: R2 in 'UnsetPending'
 
     PaGlobal_HouseInstallation._isMyHouse = false
   end
@@ -844,7 +889,7 @@ House_InstallationMode_UpdatePerFrame = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC229: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC267: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.updateScroll = function(self, isDown)
   -- function num : 0_25
@@ -872,50 +917,262 @@ PaGlobal_HouseInstallation.updateScroll = function(self, isDown)
   self._nowInterval = now
 end
 
--- DECOMPILER ERROR at PC232: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC270: Confused about usage of register: R5 in 'UnsetPending'
 
-PaGlobal_HouseInstallation.itemFilter = function(self, itemType)
+PaGlobal_HouseInstallation.itemTopFilter = function(self, itemType)
   -- function num : 0_26
-  self._filter_ItemType = itemType
-  self._filter_SearchKeyword = ""
-  if (self._menu_Top_Enum).All == self._filter_ItemType then
-    ToClient_Housing_List_NonFilter()
+  for index = 0, (self._menu_Category_Enum).Count - 1 do
+    (((self._ui)._menu_Category)[index]):SetShow(false)
+  end
+  ToClient_Housing_List_ClearFilter()
+  if (self._menu_Top_Enum).AllHarvest ~= itemType or (self._menu_Top_Enum).Harvest == itemType then
+    ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Havest)
+    ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_LivestockHarvest)
   else
-    if (self._menu_Top_Enum).Floor == self._filter_ItemType then
-      ToClient_Housing_List_Filter_Floor()
+    if (self._menu_Top_Enum).Others == itemType then
+      ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Scarecrow)
+      ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Waterway)
     else
-      if (self._menu_Top_Enum).Wall == self._filter_ItemType then
-        ToClient_Housing_List_Filter_Wall()
+      if (self._menu_Top_Enum).All == itemType then
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).All]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).All]):SetCheck(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Dresser]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Dresser]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wardrobe]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wardrobe]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Table]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Table]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Chair]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Chair]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bookcase]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bookcase]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):GetPosX() + 34)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):GetPosX() + 34)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):GetPosX() + 34)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):GetPosX() + 34)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):GetPosX() + 34)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):GetPosX() + 34)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):GetPosX() + 34)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetShow(true)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetCheck(false)
+        ;
+        (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):GetPosX() + 34)
       else
-        if (self._menu_Top_Enum).Table == self._filter_ItemType then
-          ToClient_Housing_List_Filter_Table()
+        if (self._menu_Top_Enum).Furniture == itemType then
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllFurniture]):SetCheck(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllFurniture]):SetShow(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Dresser]):SetShow(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Dresser]):SetCheck(false)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wardrobe]):SetShow(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wardrobe]):SetCheck(false)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Table]):SetShow(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Table]):SetCheck(false)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Chair]):SetShow(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Chair]):SetCheck(false)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bookcase]):SetShow(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bookcase]):SetCheck(false)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):SetShow(true)
+          ;
+          (((self._ui)._menu_Category)[(self._menu_Category_Enum).Bed]):SetCheck(false)
+          ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Dresser])
+          ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Wardrobe])
+          ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Table])
+          ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Forging)
+          ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Chair])
+          ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Bookcase])
+          ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Bed])
         else
-          if (self._menu_Top_Enum).AllHarvest == self._filter_ItemType then
-            ToClient_Housing_List_NonFilter()
+          if (self._menu_Top_Enum).Goods == itemType then
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllGoods]):SetCheck(true)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllGoods]):SetShow(true)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetShow(true)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetCheck(false)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetShow(true)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetCheck(false)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetShow(true)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetCheck(false)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetShow(true)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetCheck(false)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).AllGoods]):GetPosX() + 34)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).OntheTable]):GetPosX() + 34)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Floor]):GetPosX() + 34)
+            ;
+            (((self._ui)._menu_Category)[(self._menu_Category_Enum).Ceiling]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Wall]):GetPosX() + 34)
+            ToClient_Housing_List_Filter_Table()
+            ToClient_Housing_List_Filter_Floor()
+            ToClient_Housing_List_Filter_Wall()
+            ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Ceiling])
           else
-            if (self._menu_Top_Enum).Harvest == self._filter_ItemType then
-              ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Havest)
+            if (self._menu_Top_Enum).BaseMaterial == itemType then
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllBaseMaterial]):SetCheck(true)
+              ;
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllBaseMaterial]):SetShow(true)
+              ;
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetShow(true)
+              ;
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetCheck(false)
+              ;
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetShow(true)
+              ;
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetCheck(false)
+              ;
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).AllBaseMaterial]):GetPosX() + 34)
+              ;
+              (((self._ui)._menu_Category)[(self._menu_Category_Enum).FloorMaterial]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).WallPaper]):GetPosX() + 34)
+              ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).WallPaper])
+              ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).FloorMaterial])
             else
-              if (self._menu_Top_Enum).Others == self._filter_ItemType then
-                ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Scarecrow)
+              if (self._menu_Top_Enum).Tools == itemType then
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllTools]):SetCheck(true)
+                ;
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).AllTools]):SetShow(true)
+                ;
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetShow(true)
+                ;
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetCheck(false)
+                ;
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetShow(true)
+                ;
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetCheck(false)
+                ;
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).AllTools]):GetPosX() + 34)
+                ;
+                (((self._ui)._menu_Category)[(self._menu_Category_Enum).Alchemy]):SetPosX((((self._ui)._menu_Category)[(self._menu_Category_Enum).Cooking]):GetPosX() + 34)
+                ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Cooking])
+                ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[(self._menu_Category_Enum).Alchemy])
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  ;
+  ((self._ui)._edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+  self:setData(false)
+  ;
+  (((self._ui)._itemList)._scrollCTRLBTN):SetPosY(0)
+  self:setScroll()
+  self:update(self._nowInterval)
+end
+
+-- DECOMPILER ERROR at PC273: Confused about usage of register: R5 in 'UnsetPending'
+
+PaGlobal_HouseInstallation.itemCategoryFilter = function(self, itemType)
+  -- function num : 0_27
+  ToClient_Housing_List_ClearFilter()
+  if (self._menu_Category_Enum).All == itemType then
+    PaGlobal_HouseInstallation:itemTopFilter((self._menu_Top_Enum).All)
+    return 
+  else
+    if (self._menu_Category_Enum).AllFurniture == itemType then
+      PaGlobal_HouseInstallation:itemTopFilter((self._menu_Top_Enum).Furniture)
+      return 
+    else
+      if (self._menu_Category_Enum).AllGoods == itemType then
+        PaGlobal_HouseInstallation:itemTopFilter((self._menu_Top_Enum).Goods)
+        return 
+      else
+        if (self._menu_Category_Enum).AllBaseMaterial == itemType then
+          PaGlobal_HouseInstallation:itemTopFilter((self._menu_Top_Enum).BaseMaterial)
+          return 
+        else
+          if (self._menu_Category_Enum).AllTools == itemType then
+            PaGlobal_HouseInstallation:itemTopFilter((self._menu_Top_Enum).Tools)
+            return 
+          else
+            if (self._menu_Category_Enum).OntheTable == itemType then
+              ToClient_Housing_List_Filter_Table()
+            else
+              if (self._menu_Category_Enum).Floor == itemType then
+                ToClient_Housing_List_Filter_Floor()
               else
-                if (self._menu_Top_Enum).Category_All == self._filter_ItemType then
-                  ToClient_Housing_List_NonFilter()
+                if (self._menu_Category_Enum).Wall == itemType then
+                  ToClient_Housing_List_Filter_Wall()
                 else
-                  if (self._menu_Top_Enum).Category_Sofa == self._filter_ItemType then
-                    ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Weaving)
-                  else
-                    if (self._menu_Top_Enum).Category_Chair == self._filter_ItemType then
-                      ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Smithing)
-                    else
-                      if (self._menu_Top_Enum).Category_Curtain == self._filter_ItemType then
-                        ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Curtain)
-                      else
-                        if (self._menu_Top_Enum).Category_Bed == self._filter_ItemType then
-                          ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Bed)
-                        end
-                      end
+                  if itemType < (self._menu_Category_Enum).Count then
+                    ToClient_Housing_List_Filter_InstallType((self._categoryIndex)[itemType])
+                    if itemType == (self._menu_Category_Enum).Table then
+                      ToClient_Housing_List_Filter_InstallType((CppEnums.InstallationType).eType_Forging)
                     end
+                  else
+                    _PA_LOG("무정", "여기 들어오면 안됩니다.")
                   end
                 end
               end
@@ -926,24 +1183,26 @@ PaGlobal_HouseInstallation.itemFilter = function(self, itemType)
     end
   end
   ;
-  (((self._ui)._menu_Top)._edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
+  ((self._ui)._edit_ItemName):SetEditText(PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME"), false)
   self:setData(false)
+  ;
+  (((self._ui)._itemList)._scrollCTRLBTN):SetPosY(0)
   self:setScroll()
   self:update(self._nowInterval)
 end
 
--- DECOMPILER ERROR at PC235: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC276: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.controllBottomMenu = function(self, valuetype)
-  -- function num : 0_27
+  -- function num : 0_28
   if (PaGlobal_HouseInstallation._menu_Bottom_Enum).Rotate_Left == valuetype then
-    local xDegree = -0.5
+    local xDegree = 0.5
     local yDegree = 0
     housing_rotateCamera(xDegree, yDegree)
   else
     do
       if (PaGlobal_HouseInstallation._menu_Bottom_Enum).Rotate_Right == valuetype then
-        local xDegree = 0.5
+        local xDegree = -0.5
         local yDegree = 0
         housing_rotateCamera(xDegree, yDegree)
       else
@@ -964,44 +1223,24 @@ PaGlobal_HouseInstallation.controllBottomMenu = function(self, valuetype)
   end
 end
 
--- DECOMPILER ERROR at PC238: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC279: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.menuTopIconTooltip = function(self, iconType)
-  -- function num : 0_28
+  -- function num : 0_29
   local control = nil
   local name = ""
   local desc = ""
-  if (self._menu_Top_Enum).All == iconType then
-    name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ALL_NAME")
-    desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ALL_DESC")
+  if (self._menu_Top_Enum).AllHarvest == iconType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTALLHARVEST_NAME")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTALLHARVEST_DESC")
   else
-    if (self._menu_Top_Enum).Floor == iconType then
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTFLOOR_NAME")
-      desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTFLOOR_DESC")
+    if (self._menu_Top_Enum).Harvest == iconType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTHARVEST_NAME")
+      desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTHARVEST_DESC")
     else
-      if (self._menu_Top_Enum).Wall == iconType then
-        name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTWALL_NAME")
-        desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTWALL_DESC")
-      else
-        if (self._menu_Top_Enum).Table == iconType then
-          name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTTABLE_NAME")
-          desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTTABLE_DESC")
-        else
-          if (self._menu_Top_Enum).AllHarvest == iconType then
-            name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTALLHARVEST_NAME")
-            desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTALLHARVEST_DESC")
-          else
-            if (self._menu_Top_Enum).Harvest == iconType then
-              name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTHARVEST_NAME")
-              desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTHARVEST_DESC")
-            else
-              if (self._menu_Top_Enum).Others == iconType then
-                name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTOTHERS_NAME")
-                desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTOTHERS_DESC")
-              end
-            end
-          end
-        end
+      if (self._menu_Top_Enum).Others == iconType then
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTOTHERS_NAME")
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_ATTOTHERS_DESC")
       end
     end
   end
@@ -1011,10 +1250,82 @@ PaGlobal_HouseInstallation.menuTopIconTooltip = function(self, iconType)
   end
 end
 
--- DECOMPILER ERROR at PC241: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC282: Confused about usage of register: R5 in 'UnsetPending'
+
+PaGlobal_HouseInstallation.menuCategoryIconTooltip = function(self, iconType)
+  -- function num : 0_30
+  local control = nil
+  local name = ""
+  local desc = ""
+  if (self._menu_Category_Enum).All == iconType then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_ALL")
+  else
+    if (self._menu_Category_Enum).Dresser == iconType then
+      name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_DRESSER")
+    else
+      if (self._menu_Category_Enum).Wardrobe == iconType then
+        name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_WARDRODE")
+      else
+        if (self._menu_Category_Enum).Table == iconType then
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_TABLE")
+        else
+          if (self._menu_Category_Enum).Chair == iconType then
+            name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_CHAIR")
+          else
+            if (self._menu_Category_Enum).Bookcase == iconType then
+              name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_BOOKCASE")
+            else
+              if (self._menu_Category_Enum).Bed == iconType then
+                name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_BED")
+              else
+                if (self._menu_Category_Enum).OntheTable == iconType then
+                  name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_ONTHETABLE")
+                else
+                  if (self._menu_Category_Enum).Floor == iconType then
+                    name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_FLOOR")
+                  else
+                    if (self._menu_Category_Enum).Wall == iconType then
+                      name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_WALL")
+                    else
+                      if (self._menu_Category_Enum).Ceiling == iconType then
+                        name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_CEILING")
+                      else
+                        if (self._menu_Category_Enum).WallPaper == iconType then
+                          name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_WALLPAPER")
+                        else
+                          if (self._menu_Category_Enum).FloorMaterial == iconType then
+                            name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_FLOORMATERIAL")
+                          else
+                            if (self._menu_Category_Enum).Cooking == iconType then
+                              name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_COOKING")
+                            else
+                              if (self._menu_Category_Enum).Alchemy == iconType then
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_CATEGORYICON_ALCHEMY")
+                              end
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  if name ~= "" then
+    control = ((self._ui)._menu_Category)[iconType]
+    TooltipSimple_Show(control, name, desc)
+  end
+end
+
+-- DECOMPILER ERROR at PC285: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.menuBottomIconTooltip = function(self, iconType)
-  -- function num : 0_29
+  -- function num : 0_31
   local control = nil
   local name = ""
   local desc = ""
@@ -1043,18 +1354,18 @@ PaGlobal_HouseInstallation.menuBottomIconTooltip = function(self, iconType)
   end
 end
 
--- DECOMPILER ERROR at PC244: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC288: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.floor_MouseLUp = function(self, floor)
-  -- function num : 0_30
+  -- function num : 0_32
   housing_selectHouseFloor(floor)
   PaGlobal_HouseInstallation:floorCheck(floor)
 end
 
--- DECOMPILER ERROR at PC247: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC291: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.scrollBtn = function(self)
-  -- function num : 0_31
+  -- function num : 0_33
   local posPer = (((self._ui)._itemList)._scroll):GetControlPos()
   local viewRow = 2
   local totalRow = (math.ceil)(self._dataCount / (self._maxSlotCount / 2))
@@ -1063,24 +1374,23 @@ PaGlobal_HouseInstallation.scrollBtn = function(self)
   self:update(self._nowInterval)
 end
 
--- DECOMPILER ERROR at PC250: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC294: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.editItemNameClear = function(self)
-  -- function num : 0_32
-  (((self._ui)._menu_Top)._edit_ItemName):SetEditText("", true)
-  SetFocusEdit(((self._ui)._menu_Top)._edit_ItemName)
+  -- function num : 0_34
+  ((self._ui)._edit_ItemName):SetEditText("", true)
+  SetFocusEdit((self._ui)._edit_ItemName)
 end
 
--- DECOMPILER ERROR at PC253: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC297: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.findItemName = function(self)
-  -- function num : 0_33
-  local inputKeyword = (((self._ui)._menu_Top)._edit_ItemName):GetEditText()
-  self._filter_ItemType = 0
+  -- function num : 0_35
+  local inputKeyword = ((self._ui)._edit_ItemName):GetEditText()
   ClearFocusEdit()
+  ToClient_Housing_List_ClearFilter()
   ToClient_Housing_List_Filter_Search(inputKeyword)
   if inputKeyword ~= nil and inputKeyword ~= "" and PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_EDIT_ITEMNAME") ~= inputKeyword then
-    self._filter_SearchKeyword = (((self._ui)._menu_Top)._edit_ItemName):GetEditText()
     self:setData(false)
     self:setScroll()
     self:update(self._nowInterval)
@@ -1090,18 +1400,18 @@ PaGlobal_HouseInstallation.findItemName = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC256: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC300: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.exit = function(self)
-  -- function num : 0_34
+  -- function num : 0_36
   FGlobal_AlertHouseLightingReset()
   FromClient_CancelInstallModeMessageBox()
 end
 
--- DECOMPILER ERROR at PC260: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC304: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.delete_InstalledObject = function(self, idx)
-  -- function num : 0_35 , upvalues : UI_CIT
+  -- function num : 0_37 , upvalues : UI_CIT
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -1126,7 +1436,7 @@ PaGlobal_HouseInstallation.delete_InstalledObject = function(self, idx)
     messageContent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_MSGBOX_CONTENT", "itemName", itemName)
   end
   local messageBox_HouseInstallation_Delete_InstalledObjectDo = function()
-    -- function num : 0_35_0
+    -- function num : 0_37_0
     PAHousing_FarmInfo_Close()
     FGlobal_HouseInstallationControl_CloseOuter()
     housing_deleteObject_InstalledObjectList(PaGlobal_HouseInstallation._deleteItemIdx)
@@ -1137,10 +1447,10 @@ PaGlobal_HouseInstallation.delete_InstalledObject = function(self, idx)
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
--- DECOMPILER ERROR at PC263: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC307: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.cashItemShowToolTip = function(self, productNoRaw, uiIdx)
-  -- function num : 0_36
+  -- function num : 0_38
   local cPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(productNoRaw)
   local itemSSW = cPSSW:getItemByIndex(0)
   local Uislot = (PaGlobal_HouseInstallation._slotUIPool)[uiIdx]
@@ -1150,10 +1460,10 @@ PaGlobal_HouseInstallation.cashItemShowToolTip = function(self, productNoRaw, ui
   Panel_Tooltip_Item_Show(itemSSW, (Uislot.slotItem).icon, true, false)
 end
 
--- DECOMPILER ERROR at PC266: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC310: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.showInstalledItemToolTip = function(self, invenSlotNo, slot_Idx)
-  -- function num : 0_37
+  -- function num : 0_39
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   local itemSSW = houseWrapper:getCurrentItemEnchantStatStaticWrapper(invenSlotNo)
   if itemSSW == nil then
@@ -1163,19 +1473,19 @@ PaGlobal_HouseInstallation.showInstalledItemToolTip = function(self, invenSlotNo
   Panel_Tooltip_Item_Show(itemSSW, (Uislot.slotItem).icon, true, false, nil)
 end
 
--- DECOMPILER ERROR at PC269: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC313: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.showToolTip = function(self, invenType, invenSlotNo, slot_Idx)
-  -- function num : 0_38
+  -- function num : 0_40
   local itemWrapper = getInventoryItemByType(invenType, invenSlotNo)
   local Uislot = (PaGlobal_HouseInstallation._slotUIPool)[slot_Idx]
   Panel_Tooltip_Item_Show(itemWrapper, (Uislot.slotItem).icon, false, false, nil)
 end
 
--- DECOMPILER ERROR at PC272: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC316: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.installFurniture = function(self, invenType, invenSlotNo, iscash, productNo)
-  -- function num : 0_39
+  -- function num : 0_41
   PAHousing_FarmInfo_Close()
   FGlobal_HouseInstallationControl_CloseOuter()
   if Panel_Win_System:GetShow() then
@@ -1188,19 +1498,38 @@ PaGlobal_HouseInstallation.installFurniture = function(self, invenType, invenSlo
   end
 end
 
--- DECOMPILER ERROR at PC275: Confused about usage of register: R5 in 'UnsetPending'
+HandleClicked_HouseInstallation_Exit_ByAttacked = function()
+  -- function num : 0_42
+  if housing_isBuildMode() or housing_isInstallMode() then
+    HouseInstallation:close()
+  end
+end
+
+HouseInstallation_Hide = function()
+  -- function num : 0_43
+  HouseInstallation:close()
+end
+
+-- DECOMPILER ERROR at PC323: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.registEventHandler = function(self)
-  -- function num : 0_40
+  -- function num : 0_44
   ((self._ui)._itemListBg):addInputEvent("Mouse_DownScroll", "PaGlobal_HouseInstallation:updateScroll( true )")
   ;
   ((self._ui)._itemListBg):addInputEvent("Mouse_UpScroll", "PaGlobal_HouseInstallation:updateScroll( false )")
   for index = 0, (self._menu_Top_Enum).Count - 1 do
-    (((self._ui)._menu_Top)[index]):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:itemFilter( " .. index .. " )")
+    (((self._ui)._menu_Top)[index]):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:itemTopFilter( " .. index .. " )")
     ;
     (((self._ui)._menu_Top)[index]):addInputEvent("Mouse_On", "PaGlobal_HouseInstallation:menuTopIconTooltip( " .. index .. " )")
     ;
     (((self._ui)._menu_Top)[index]):addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
+  end
+  for index = 0, (self._menu_Category_Enum).Count - 1 do
+    (((self._ui)._menu_Category)[index]):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:itemCategoryFilter( " .. index .. " )")
+    ;
+    (((self._ui)._menu_Category)[index]):addInputEvent("Mouse_On", "PaGlobal_HouseInstallation:menuCategoryIconTooltip( " .. index .. " )")
+    ;
+    (((self._ui)._menu_Category)[index]):addInputEvent("Mouse_Out", "TooltipSimple_Hide()")
   end
   for index = 0, (self._menu_Bottom_Enum).Count - 1 do
     (((self._ui)._menu_Bottom)[index]):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:controllBottomMenu( " .. index .. " )")
@@ -1217,21 +1546,21 @@ PaGlobal_HouseInstallation.registEventHandler = function(self)
   ;
   (((self._ui)._itemList)._scroll):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:scrollBtn()")
   ;
-  (((self._ui)._menu_Top)._edit_ItemName):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:editItemNameClear()")
+  ((self._ui)._edit_ItemName):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:editItemNameClear()")
   ;
-  (((self._ui)._menu_Top)._edit_ItemName):RegistReturnKeyEvent("PaGlobal_HouseInstallation:findItemName()")
+  ((self._ui)._edit_ItemName):RegistReturnKeyEvent("PaGlobal_HouseInstallation:findItemName()")
   ;
-  (((self._ui)._menu_Top)._searchBtn):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:findItemName()")
+  ((self._ui)._searchBtn):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:findItemName()")
   ;
   (((self._ui)._menu_Bottom)._btn_Exit):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:exit()")
   ;
   ((self._ui)._btn_ExitInstallMode):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallation:exit()")
 end
 
--- DECOMPILER ERROR at PC278: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC326: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_HouseInstallation.registMessageHandler = function(self)
-  -- function num : 0_41
+  -- function num : 0_45
   registerEvent("EventHousingShowInstallationMenu", "FromClient_ShowInstallationMenu")
   registerEvent("EventHousingCancelInstallObjectMessageBox", "FromClient_CancelInstallObject")
   registerEvent("EventHousingCancelInstallModeMessageBox", "FromClient_CancelInstallMode")
@@ -1245,5 +1574,5 @@ end
 PaGlobal_HouseInstallation:initialize()
 PaGlobal_HouseInstallation:registEventHandler()
 PaGlobal_HouseInstallation:registMessageHandler()
-renderMode:setClosefunctor(renderMode, houseInstallation_Hide)
+renderMode:setClosefunctor(renderMode, HouseInstallation_Hide)
 

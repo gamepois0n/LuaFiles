@@ -1253,20 +1253,16 @@ end
 CashShopController_HideHairBtnCheck = function(isUpHairMode)
   -- function num : 0_41 , upvalues : CashShopController
   local self = CashShopController
-  if isUpHairMode then
-    if not (self.btn_HideHair):IsCheck() then
-      (self.btn_HideHair):EraseAllEffect()
-      ;
-      (self.btn_HideHair):AddEffect("UI_CashShop_HairChange", true, 0, 0)
-    else
-      if (self.btn_HideHair):IsCheck() then
-        (self.btn_HideHair):EraseAllEffect()
-      end
-    end
-  else
+  if isUpHairMode and not (self.btn_HideHair):IsCheck() and isGameServiceTypeDev() then
+    (self.btn_HideHair):EraseAllEffect()
     ;
+    (self.btn_HideHair):AddEffect("UI_CashShop_HairChange", true, 0, 0)
+  end
+  if (self.btn_HideHair):IsCheck() then
     (self.btn_HideHair):EraseAllEffect()
   end
+  ;
+  (self.btn_HideHair):EraseAllEffect()
 end
 
 HandleClicked_CashShopController_ToggleHideHelm = function()
@@ -1664,8 +1660,14 @@ FGlobal_SpecialMoveSettingCheck = function()
   (self.btn_SpecialMove):SetShow(false)
   ;
   (self.btn_SpecialMove):SetCheck(false)
-  ;
-  (self.btn_Coupon):SetSpanSize(10, 90)
+  local specialMoveCheck = (self.btn_SpecialMove):IsCheck()
+  local sunShineCheck = (self.SunIcon):IsCheck()
+  if sunShineCheck or specialMoveCheck then
+    (self.btn_Coupon):SetSpanSize(10, 140)
+  else
+    ;
+    (self.btn_Coupon):SetSpanSize(10, 90)
+  end
   ;
   (self.btn_StampCoupon):SetSpanSize(10, 130)
 end

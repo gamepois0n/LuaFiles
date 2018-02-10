@@ -84,16 +84,11 @@ end
 Panel_HorseEndurance_Position = function()
   -- function num : 0_1
   local self = PaGlobalHorseEnduranceList
-  if FGlobal_Panel_Radar_GetShow() then
-    (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 1.7)
-    ;
-    (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY() - FGlobal_Panel_Radar_GetSizeY() / 1.5)
-  else
-    ;
-    (self.panel):SetPosX(getScreenSizeX() - (self.panel):GetSizeX())
-    ;
-    (self.panel):SetPosY(30)
-  end
+  self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
+  ;
+  (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 1.7)
+  ;
+  (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY() - FGlobal_Panel_Radar_GetSizeY() / 1.5)
   if Panel_Widget_TownNpcNavi:GetShow() then
     (self.panel):SetPosY(Panel_Widget_TownNpcNavi:GetSizeY() + Panel_Widget_TownNpcNavi:GetPosY() + 10)
   end
@@ -107,7 +102,12 @@ renderModeChange_Panel_HorseEndurance_Position = function(prevRenderModeList, ne
   Panel_HorseEndurance_Position()
 end
 
-PaGlobalHorseEnduranceList:initialize()
+PaGlobalHorseEnduranceList_Init = function()
+  -- function num : 0_3
+  PaGlobalHorseEnduranceList:initialize()
+end
+
+registerEvent("FromClient_luaLoadComplete", "PaGlobalHorseEnduranceList_Init")
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Panel_HorseEndurance_Position")
 registerEvent("onScreenResize", "Panel_HorseEndurance_Position")
 

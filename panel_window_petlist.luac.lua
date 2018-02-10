@@ -34,7 +34,7 @@ local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
 if isPremiumPcRoom then
   maxUnsealCount = maxUnsealCount + ToClient_getPetUseMaxCountPcRoom()
 end
-local petRaceCount = {[1] = "고양�\180", [2] = "�\156", [3] = "�\164", [4] = "펭귄", [5] = "사막여우", [6] = "고슴도치", [7] = "눈사�\140", [8] = "고슴도치", [9] = "오목눈이", [10] = "렛서팬더", [11] = "앵무�\136", [12] = "북극�\176", [13] = "돌맨�\140", [14] = "이벤트할로윈1", [15] = "이벤트할로윈2", [16] = "이벤트할로윈3", [17] = "이벤트할로윈4", [18] = "이벤트할로윈5", [19] = "이벤트할로윈6", [20] = "어린 �\145", [22] = "까마�\128", [23] = "아무거나1", [24] = "아무거나2", [25] = "아무거나3", [26] = "아무거나4", [27] = "아무거나5", [28] = "아무거나6", [29] = "아무거나7", [30] = "아무거나8", [31] = "아무거나9", [32] = "아무거나10", [33] = "아무거나11", [34] = "아무거나12", [35] = "아무거나13", [36] = "아무거나14", [37] = "아무거나15", [38] = "아무거나16", [39] = "아무거나17", [40] = "아무거나18", [41] = "아무거나19", [42] = "아무거나20", [43] = "아무거나21", [44] = "아무거나22", [45] = "아무거나23", [46] = "아무거나24", [47] = "아무거나25", [48] = "아무거나26", [49] = "아무거나27", [50] = "아무거나28", [51] = "아무거나29", [52] = "아무거나30", [53] = "아무거나31", [54] = "아무거나32", [55] = "아무거나33", [56] = "아무거나34", [57] = "아무거나35", [58] = "아무거나36", [59] = "아무거나37", [60] = "아무거나38", [61] = "아무거나39", [62] = "아무거나40", [63] = "아무거나41", [64] = "아무거나42", [65] = "아무거나43", [66] = "아무거나44", [67] = "아무거나45", [68] = "아무거나46", [69] = "아무거나47", [70] = "아무거나48", [71] = "아무거나49", [72] = "아무거나50", [73] = "아무거나51", [74] = "아무거나52", [75] = "아무거나53", [76] = "아무거나54", [77] = "아무거나55", [78] = "아무거나56", [79] = "아무거나57", [80] = "아무거나58", [81] = "아무거나59", [82] = "아무거나60", [83] = "아무거나61", [84] = "아무거나62", [85] = "아무거나63", [86] = "아무거나64", [87] = "아무거나65", [88] = "아무거나66", [89] = "아무거나67", [90] = "아무거나68", [91] = "아무거나69", [92] = "아무거나70", [93] = "아무거나71", [94] = "아무거나72", [95] = "아무거나73", [96] = "아무거나74", [97] = "아무거나75", [98] = "아무거나76", [99] = "합성�\169 �\171"}
+local petRaceCount = {[1] = "고양�\180", [2] = "�\156", [3] = "�\164", [4] = "펭귄", [5] = "사막여우", [6] = "고슴도치", [7] = "눈사�\140", [8] = "고슴도치", [9] = "오목눈이", [10] = "렛서팬더", [11] = "앵무�\136", [12] = "북극�\176", [13] = "돌맨�\140", [14] = "이벤트할로윈1", [15] = "이벤트할로윈2", [16] = "이벤트할로윈3", [17] = "이벤트할로윈4", [18] = "이벤트할로윈5", [19] = "이벤트할로윈6", [20] = "어린 �\145", [22] = "까마�\128", [23] = "몬스터펫 임시", [24] = "마멋", [25] = "에어리스", [26] = "루돌�\132", [27] = "붉은오크", [28] = "골렘", [29] = "나무 정령", [30] = "키메�\188", [31] = "켄타우로�\164", [32] = "카마실비�\132 불곰", [33] = "아무거나11", [34] = "아무거나12", [35] = "아무거나13", [36] = "아무거나14", [37] = "아무거나15", [38] = "아무거나16", [39] = "아무거나17", [40] = "아무거나18", [41] = "아무거나19", [42] = "아무거나20", [43] = "아무거나21", [44] = "아무거나22", [45] = "아무거나23", [46] = "아무거나24", [47] = "아무거나25", [48] = "아무거나26", [49] = "아무거나27", [50] = "아무거나28", [51] = "아무거나29", [52] = "아무거나30", [53] = "아무거나31", [54] = "아무거나32", [55] = "아무거나33", [56] = "아무거나34", [57] = "아무거나35", [58] = "아무거나36", [59] = "아무거나37", [60] = "아무거나38", [61] = "아무거나39", [62] = "아무거나40", [63] = "아무거나41", [64] = "아무거나42", [65] = "아무거나43", [66] = "아무거나44", [67] = "아무거나45", [68] = "아무거나46", [69] = "아무거나47", [70] = "아무거나48", [71] = "아무거나49", [72] = "아무거나50", [73] = "아무거나51", [74] = "아무거나52", [75] = "아무거나53", [76] = "아무거나54", [77] = "아무거나55", [78] = "아무거나56", [79] = "아무거나57", [80] = "아무거나58", [81] = "아무거나59", [82] = "아무거나60", [83] = "아무거나61", [84] = "아무거나62", [85] = "아무거나63", [86] = "아무거나64", [87] = "아무거나65", [88] = "아무거나66", [89] = "아무거나67", [90] = "아무거나68", [91] = "아무거나69", [92] = "아무거나70", [93] = "아무거나71", [94] = "아무거나72", [95] = "아무거나73", [96] = "아무거나74", [97] = "아무거나75", [98] = "아무거나76", [99] = "합성�\169 �\171"}
 local isPetFlyPet = {[1] = 3, [2] = 9, [3] = 11, [4] = 15}
 checkUnSealGroupList = {
 [1] = {}
@@ -44,7 +44,7 @@ checkUnSealGroupList = {
 [3] = {}
 }
 local checkUnSealList = {}
-local PetList = {BTN_Close = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Win_Close"), BTN_Compose = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Compose"), BTN_AllUnSeal = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllUnSeal"), BTN_GroupSeal1 = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllSeal_Group1"), BTN_GroupSeal2 = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllSeal_Group2"), BTN_GroupSeal3 = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllSeal_Group3"), BTN_ClearGroup = (UI.getChildControl)(Panel_Window_PetListNew, "Button_ClearGroup"), BTN_Market = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Market"), list2_PetList = (UI.getChildControl)(Panel_Window_PetListNew, "List2_PetList"), listMaxCount = 5, 
+local PetList = {BTN_Close = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Win_Close"), BTN_Compose = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Compose"), BTN_FeedAll = (UI.getChildControl)(Panel_Window_PetListNew, "Button_FeedingAll"), BTN_AllUnSeal = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllUnSeal"), BTN_GroupSeal1 = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllSeal_Group1"), BTN_GroupSeal2 = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllSeal_Group2"), BTN_GroupSeal3 = (UI.getChildControl)(Panel_Window_PetListNew, "Button_AllSeal_Group3"), BTN_ClearGroup = (UI.getChildControl)(Panel_Window_PetListNew, "Button_ClearGroup"), BTN_Market = (UI.getChildControl)(Panel_Window_PetListNew, "Button_Market"), list2_PetList = (UI.getChildControl)(Panel_Window_PetListNew, "List2_PetList"), feedUi = (UI.getChildControl)(Panel_Window_PetListNew, "Static_FeedingBg"), feedAllUi = Panel_PetRestoreAll, listMaxCount = 5, 
 listUIPool = {}
 , SealDATACount = 0, UnSealDataCount = 0, 
 orderList = {
@@ -54,7 +54,13 @@ _find = {}
 , 
 _getItem = {}
 }
-, _nowSelectGroup = 0}
+, _nowSelectGroup = 0, feedingPetIndex = 0, feedStaticItemCount = ToClient_Pet_GetFeedStaticItemCount(), cachedUserFeedItemCount = 0, 
+feedSlot = {}
+, 
+feedAllSlot = {}
+, 
+config = {createBorder = true, createCount = true}
+, selectItemIndex = -1, selectSlotBg = nil, selectAllSlotBg = nil}
 ;
 (PetList.BTN_GroupSeal1):addInputEvent("Mouse_On", "PetListNew_SimpleTooltip( true, 0 )")
 ;
@@ -475,6 +481,7 @@ PetList.Initialize = function(self)
   -- function num : 0_7 , upvalues : PetList
   local btnComposeSizeX = (PetList.BTN_Compose):GetSizeX() + 23
   local btnComposeTextPosX = btnComposeSizeX - btnComposeSizeX / 2 - (PetList.BTN_Compose):GetTextSizeX() / 2
+  local btnFeedAllTextPosX = btnComposeSizeX - btnComposeSizeX / 2 - (PetList.BTN_FeedAll):GetTextSizeX() / 2
   local btnAllUnSealSizeX = (PetList.BTN_AllUnSeal):GetSizeX() + 23
   local btnAllUnSealTextPosX = btnAllUnSealSizeX - btnAllUnSealSizeX / 2 - (PetList.BTN_AllUnSeal):GetTextSizeX() / 2
   local btnAllSealSizeX = (PetList.BTN_GroupSeal1):GetSizeX() + 23
@@ -483,6 +490,8 @@ PetList.Initialize = function(self)
   local btnClearGroupTextPosX = btnClearGroupSizeX - btnClearGroupSizeX / 2 - (PetList.BTN_ClearGroup):GetTextSizeX() / 2
   ;
   (PetList.BTN_Compose):SetTextSpan(btnComposeTextPosX, 5)
+  ;
+  (PetList.BTN_FeedAll):SetTextSpan(btnFeedAllTextPosX, 5)
   ;
   (PetList.BTN_AllUnSeal):SetTextSpan(btnAllUnSealTextPosX, 5)
   ;
@@ -495,8 +504,6 @@ PetList.Initialize = function(self)
   (PetList.BTN_ClearGroup):SetTextSpan(btnClearGroupTextPosX, 5)
   ;
   (PetList.BTN_Compose):SetShow(true)
-  ;
-  (PetList.BTN_GroupSeal1):SetSpanSize(120, 7)
 end
 
 PetList.SetPosition = function(self)
@@ -510,7 +517,7 @@ PetList.SetPosition = function(self)
 end
 
 PetList.Open = function(self)
-  -- function num : 0_9 , upvalues : petComposeNo
+  -- function num : 0_9 , upvalues : petComposeNo, PetList
   self:SetPosition()
   PetCompose_Init()
   petGroupList_Load()
@@ -521,6 +528,8 @@ PetList.Open = function(self)
   -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
 
   petComposeNo[1] = nil
+  PetList:showFeedUi(-1)
+  PetList:showFeedAllUi(false)
   if Panel_Window_PetCompose:GetShow() then
     Panel_Window_PetCompose_Close()
   end
@@ -618,8 +627,10 @@ PetList.SetPetList = function(self, noclearscroll)
 end
 
 PetList.Close = function(self)
-  -- function num : 0_11
+  -- function num : 0_11 , upvalues : PetList
   Panel_Window_PetListNew:SetShow(false, false)
+  PetList:showFeedUi(-1)
+  PetList:showFeedAllUi(false)
 end
 
 petListNew_ShowInfo = function(petNoStr)
@@ -642,6 +653,7 @@ petListNew_Seal = function(petNoStr, index)
   FGlobal_PetControl_SealPet(index)
   ToClient_requestPetSeal(petNo_s64)
   FGlobal_AllSealButtonPosition(self.UnSealDATACount, false)
+  FGlobal_PetList_FeedClose()
 end
 
 FGlobal_petListNew_Seal = function(petNo, index)
@@ -662,6 +674,7 @@ petListNew_UnSeal = function(petNoStr, isGroup)
   ToClient_requestPetUnseal(petNo_s64)
   FGlobal_PetContorl_HungryGaugeUpdate(petNo_s64)
   FGlobal_AllSealButtonPosition(self.UnSealDATACount, true)
+  FGlobal_PetList_FeedClose()
 end
 
 petListNew_UnRegister = function(petNoStr)
@@ -1258,6 +1271,8 @@ end
 FGlobal_PetListNew_Close = function()
   -- function num : 0_44 , upvalues : PetList
   PetList:Close()
+  PetList:showFeedUi(-1)
+  PetList:showFeedAllUi(false)
   Panel_Window_PetCompose_Close()
   PetListNew_IgnoreAllSealButton(false)
 end
@@ -1439,6 +1454,7 @@ PetListControlCreate = function(control, key)
   local groupIndexBtn2 = (UI.getChildControl)(control, "Template_Button_GroupIndex2")
   local groupIndexBtn3 = (UI.getChildControl)(control, "Template_Button_GroupIndex3")
   local property = (UI.getChildControl)(control, "StaticText_Property")
+  local btnFeed = (UI.getChildControl)(control, "Button_Feeding")
   local orderFollow = (UI.getChildControl)(control, "CheckButton_Follow")
   local orderWait = (UI.getChildControl)(control, "CheckButton_Wait")
   local orderFind = (UI.getChildControl)(control, "CheckButton_Find")
@@ -1489,6 +1505,7 @@ PetListControlCreate = function(control, key)
   btnUnseal:SetShow(isShow)
   btnSeal:SetShow(isShow)
   btnFusion:SetShow(isShow)
+  btnFeed:SetShow(isShow)
   groupIndexBtn1:SetShow(isShow)
   groupIndexBtn2:SetShow(isShow)
   groupIndexBtn3:SetShow(isShow)
@@ -1542,11 +1559,13 @@ PetListControlCreate = function(control, key)
         orderFind:addInputEvent("Mouse_LUp", "petListNew_SetOrder(" .. 1 .. "," .. index .. ")")
         orderGetItem:addInputEvent("Mouse_LUp", "petListNew_SetOrder(" .. 2 .. "," .. index .. ")")
         orderPlay:addInputEvent("Mouse_LUp", "petListNew_SetPlay(" .. index .. ")")
+        btnFeed:addInputEvent("Mouse_LUp", "HandleClicked_PetList_Feed(" .. index .. ")")
         orderFollow:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 0 .. "," .. index .. ")")
         orderWait:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 0 .. "," .. index .. ")")
         orderFind:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 1 .. "," .. index .. ")")
         orderGetItem:addInputEvent("Mouse_RUp", "petListNew_SetOrderAll(" .. 2 .. "," .. index .. ")")
         orderPlay:addInputEvent("Mouse_RUp", "petListNew_SetPlayAll(" .. index .. ")")
+        btnFeed:addInputEvent("Mouse_RUp", "")
         orderFollow:addInputEvent("Mouse_On", "petListNew_OrderTooltip(" .. 0 .. ", " .. index .. ")")
         orderWait:addInputEvent("Mouse_On", "petListNew_OrderTooltip(" .. 1 .. ", " .. index .. ")")
         orderFind:addInputEvent("Mouse_On", "petListNew_OrderTooltip(" .. 2 .. ", " .. index .. ")")
@@ -1557,10 +1576,10 @@ PetListControlCreate = function(control, key)
         orderFind:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderGetItem:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
         orderPlay:addInputEvent("Mouse_Out", "petListNew_OrderTooltip()")
-        -- DECOMPILER ERROR at PC532: Confused about usage of register: R56 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC551: Confused about usage of register: R57 in 'UnsetPending'
 
         PetList.orderList = PetControl_UnsealPetOrderInfo(tostring(petNo_s64))
-        -- DECOMPILER ERROR at PC541: Confused about usage of register: R56 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC560: Confused about usage of register: R57 in 'UnsetPending'
 
         if isPassive then
           ((PetList.orderList)._find)[tostring(petNo_s64)] = true
@@ -1583,26 +1602,27 @@ PetListControlCreate = function(control, key)
         else
           orderGetItem:SetMonoTone(true)
         end
+        btnFeed:SetShow(true)
         local petLootingType = pcPetData:getPetLootingType()
         orderPlay:ChangeTextureInfoName("new_ui_common_forlua/window/servant/pet_00.dds")
         local x1, y1, x2, y2 = nil, nil, nil, nil
         if petLootingType == 0 then
           x1 = setTextureUV_Func(orderPlay, 140, 280, 172, 312)
         else
-          -- DECOMPILER ERROR at PC629: Overwrote pending register: R60 in 'AssignReg'
+          -- DECOMPILER ERROR at PC651: Overwrote pending register: R61 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC630: Overwrote pending register: R59 in 'AssignReg'
+          -- DECOMPILER ERROR at PC652: Overwrote pending register: R60 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC631: Overwrote pending register: R58 in 'AssignReg'
+          -- DECOMPILER ERROR at PC653: Overwrote pending register: R59 in 'AssignReg'
 
           if petLootingType == 1 then
             x1 = setTextureUV_Func(orderPlay, 104, 280, 136, 312)
           else
-            -- DECOMPILER ERROR at PC643: Overwrote pending register: R60 in 'AssignReg'
+            -- DECOMPILER ERROR at PC665: Overwrote pending register: R61 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC644: Overwrote pending register: R59 in 'AssignReg'
+            -- DECOMPILER ERROR at PC666: Overwrote pending register: R60 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC645: Overwrote pending register: R58 in 'AssignReg'
+            -- DECOMPILER ERROR at PC667: Overwrote pending register: R59 in 'AssignReg'
 
             if petLootingType == 2 then
               x1 = setTextureUV_Func(orderPlay, 176, 280, 208, 312)
@@ -1675,11 +1695,11 @@ PetListControlCreate = function(control, key)
             end
           end
           do
-            -- DECOMPILER ERROR at PC876: LeaveBlock: unexpected jumping out DO_STMT
+            -- DECOMPILER ERROR at PC898: LeaveBlock: unexpected jumping out DO_STMT
 
-            -- DECOMPILER ERROR at PC876: LeaveBlock: unexpected jumping out IF_THEN_STMT
+            -- DECOMPILER ERROR at PC898: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-            -- DECOMPILER ERROR at PC876: LeaveBlock: unexpected jumping out IF_STMT
+            -- DECOMPILER ERROR at PC898: LeaveBlock: unexpected jumping out IF_STMT
 
           end
         end
@@ -1692,7 +1712,7 @@ PetListControlCreate = function(control, key)
     btnUnsealAll:SetShow(false)
     btnInfo:addInputEvent("Mouse_LUp", "petListNew_ShowInfo( \"" .. tostring(petNo_s64) .. "\" )")
     local uiIndex = 0
-    -- DECOMPILER ERROR at PC910: Overwrote pending register: R58 in 'AssignReg'
+    -- DECOMPILER ERROR at PC932: Overwrote pending register: R59 in 'AssignReg'
 
     btnSeal:addInputEvent("Mouse_LUp", "petListNew_Seal( \"" .. tostring(petNo_s64) .. "\" ," .. uiIndex .. y1)
   else
@@ -1718,10 +1738,10 @@ PetListControlCreate = function(control, key)
             isPassive = (pcPetData:getSkillParam(1)):isPassiveSkill()
           end
           local hungryPercent = pethungry / petMaxHungry * 100
-          -- DECOMPILER ERROR at PC967: Overwrote pending register: R59 in 'AssignReg'
+          -- DECOMPILER ERROR at PC989: Overwrote pending register: R60 in 'AssignReg'
 
           hungryProgress:SetProgressRate(x2)
-          -- DECOMPILER ERROR at PC972: Overwrote pending register: R60 in 'AssignReg'
+          -- DECOMPILER ERROR at PC994: Overwrote pending register: R61 in 'AssignReg'
 
           hungryPercentText:SetText((string.format)(y2, hungryPercent) .. "%")
           groupIndexBtn1:SetShow(true)
@@ -1733,15 +1753,15 @@ PetListControlCreate = function(control, key)
           groupIndexBtn1:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 1))
           groupIndexBtn2:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 2))
           groupIndexBtn3:SetCheck(PetList:IsCheckGroupBtnByPetNo(petNo_s64, 3))
-          -- DECOMPILER ERROR at PC1038: Confused about usage of register: R57 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1060: Confused about usage of register: R58 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._follow)[petNo_s64] = true
-          -- DECOMPILER ERROR at PC1042: Confused about usage of register: R57 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1064: Confused about usage of register: R58 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._find)[petNo_s64] = isPassive
-          -- DECOMPILER ERROR at PC1046: Confused about usage of register: R57 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC1068: Confused about usage of register: R58 in 'UnsetPending'
 
           ;
           ((PetList.orderList)._getItem)[petNo_s64] = true
@@ -1786,6 +1806,7 @@ PetListControlCreate = function(control, key)
       btnSeal:SetShow(false)
       btnUnsealAll:SetShow(false)
       btnFusion:SetShow(false)
+      btnFeed:SetShow(false)
       orderFollow:SetShow(false)
       orderWait:SetShow(false)
       orderFind:SetShow(false)
@@ -2181,8 +2202,267 @@ PetList_SkillTypeString = function(skillType)
   return paramText
 end
 
-PetList.registEventHandler = function(self)
+PetList.initializeFeedAllUi = function(self)
   -- function num : 0_66
+  local closeButton = (UI.getChildControl)(self.feedAllUi, "Button_Close")
+  closeButton:addInputEvent("Mouse_LUp", "HandleClicked_PetList_FeedAllClose()")
+  local cancelButton = (UI.getChildControl)(self.feedAllUi, "Button_Cancel")
+  cancelButton:addInputEvent("Mouse_LUp", "HandleClicked_PetList_FeedAllClose()")
+  local adminButton = (UI.getChildControl)(self.feedAllUi, "Button_Restore")
+  adminButton:addInputEvent("Mouse_LUp", "PetList_useFeedItemToAll()")
+  self.selectAllSlotBg = (UI.getChildControl)(self.feedAllUi, "Static_Selected_Item_Icon")
+  local originalSlot = (UI.getChildControl)(self.feedAllUi, "Static_Restore_Item_Icon")
+  local slotGap = originalSlot:GetSizeX() + 5
+  for i = 0, self.feedStaticItemCount - 1 do
+    local slotBg = (UI.createAndCopyBasePropertyControl)(self.feedAllUi, "Static_Restore_Item_Icon", self.feedAllUi, "Static_Restore_Item_Icon" .. tostring(i))
+    slotBg:SetPosX(originalSlot:GetPosX() + slotGap * i)
+    slotBg:SetShow(false)
+    -- DECOMPILER ERROR at PC68: Confused about usage of register: R11 in 'UnsetPending'
+
+    ;
+    (self.feedAllSlot)[i] = {}
+    ;
+    (SlotItem.new)((self.feedAllSlot)[i], "FeedAllItem_", i, slotBg, self.config)
+    ;
+    ((self.feedAllSlot)[i]):createChild()
+    ;
+    (((self.feedAllSlot)[i]).border):SetSize(33, 33)
+    ;
+    (((self.feedAllSlot)[i]).icon):SetSize(33, 33)
+    ;
+    (((self.feedAllSlot)[i]).count):ComputePos()
+  end
+end
+
+PetList.initializeFeedUi = function(self)
+  -- function num : 0_67
+  local closeButton = (UI.getChildControl)(self.feedUi, "Button_Close")
+  closeButton:addInputEvent("Mouse_LUp", "HandleClicked_PetList_FeedClose()")
+  self.selectSlotBg = (UI.getChildControl)(self.feedUi, "Static_Selected_Item_Icon")
+  local feedOneButton = (UI.getChildControl)(self.feedUi, "Button_FeedOne")
+  feedOneButton:addInputEvent("Mouse_LUp", "PetList_useFeedOneItem()")
+  local feedFullButton = (UI.getChildControl)(self.feedUi, "Button_FeedFull")
+  feedFullButton:addInputEvent("Mouse_LUp", "PetList_useFeedFullItem()")
+  local originalSlot = (UI.getChildControl)(self.feedUi, "Static_IconBg")
+  originalSlot:SetShow(false)
+  local slotGap = originalSlot:GetSizeX() + 5
+  for i = 0, self.feedStaticItemCount - 1 do
+    local additionalSlot = (UI.createAndCopyBasePropertyControl)(self.feedUi, "Static_IconBg", self.feedUi, "Static_IconBg" .. tostring(i))
+    additionalSlot:SetPosX(originalSlot:GetPosX() + slotGap * i)
+    additionalSlot:SetShow(false)
+    -- DECOMPILER ERROR at PC71: Confused about usage of register: R11 in 'UnsetPending'
+
+    ;
+    (self.feedSlot)[i] = {}
+    ;
+    (SlotItem.new)((self.feedSlot)[i], "FeedItem_", i, additionalSlot, self.config)
+    ;
+    ((self.feedSlot)[i]):createChild()
+    ;
+    (((self.feedSlot)[i]).border):SetSize(32, 32)
+    ;
+    (((self.feedSlot)[i]).icon):SetSize(32, 32)
+    ;
+    (((self.feedSlot)[i]).count):ComputePos()
+  end
+end
+
+FromClient_PetList_UpdateFeedUi = function()
+  -- function num : 0_68 , upvalues : PetList
+  PetList:updateFeedUi()
+  PetList:updateFeedAllUi()
+end
+
+PetList.updateUserFeedItemCount = function(self, count)
+  -- function num : 0_69
+  if self.cachedUserFeedItemCount ~= count then
+    self:initSelection()
+  end
+  self.cachedUserFeedItemCount = count
+end
+
+PetList.initSelection = function(self)
+  -- function num : 0_70
+  self.selectItemIndex = -1
+  ;
+  (self.selectSlotBg):SetShow(false)
+  ;
+  (self.selectAllSlotBg):SetShow(false)
+end
+
+PetList.updateFeedAllUi = function(self)
+  -- function num : 0_71
+  if not (self.feedAllUi):GetShow() then
+    return 
+  end
+  local userFeedItemCount = ToClient_Pet_GetFeedItemCount()
+  self:updateUserFeedItemCount(userFeedItemCount)
+  for i = 0, self.feedStaticItemCount - 1 do
+    local targetSlot = (UI.getChildControl)(self.feedAllUi, "Static_Restore_Item_Icon" .. tostring(i))
+    if i < userFeedItemCount then
+      targetSlot:SetShow(true)
+      local feedItem = ToClient_Pet_GetFeedItemByIndex(i)
+      if not feedItem then
+        return 
+      end
+      local feedItemKey = ((feedItem:get()):getKey()):getItemKey()
+      local feedItemCount = (feedItem:get()):getCount_s64()
+      ;
+      ((self.feedAllSlot)[i]):setItem(feedItem)
+      ;
+      (((self.feedAllSlot)[i]).icon):addInputEvent("Mouse_LUp", "HandleClicked_PetList_FeedItemToAll(" .. i .. ")")
+      ;
+      (((self.feedAllSlot)[i]).icon):addInputEvent("Mouse_On", "HandleOver_PetRestore_FeedItem_ShowTooltip(" .. i .. ")")
+      ;
+      (((self.feedAllSlot)[i]).icon):addInputEvent("Mouse_Out", "HandleOver_PetRestore_FeedItem_HideTooltip()")
+    else
+      do
+        do
+          targetSlot:SetShow(false)
+          targetSlot:removeInputEvent("Mouse_LUp")
+          -- DECOMPILER ERROR at PC85: LeaveBlock: unexpected jumping out DO_STMT
+
+          -- DECOMPILER ERROR at PC85: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+          -- DECOMPILER ERROR at PC85: LeaveBlock: unexpected jumping out IF_STMT
+
+        end
+      end
+    end
+  end
+end
+
+PetList.updateFeedUi = function(self)
+  -- function num : 0_72
+  if not (self.feedUi):GetShow() then
+    return 
+  end
+  local userFeedItemCount = ToClient_Pet_GetFeedItemCount()
+  self:updateUserFeedItemCount(userFeedItemCount)
+  for i = 0, self.feedStaticItemCount - 1 do
+    local targetSlot = (UI.getChildControl)(self.feedUi, "Static_IconBg" .. tostring(i))
+    if i < userFeedItemCount then
+      targetSlot:SetShow(true)
+      local feedItem = ToClient_Pet_GetFeedItemByIndex(i)
+      if not feedItem then
+        return 
+      end
+      ;
+      ((self.feedSlot)[i]):setItem(feedItem)
+      ;
+      (((self.feedSlot)[i]).icon):addInputEvent("Mouse_On", "HandleOver_PetList_FeedItem_ShowTooltip(" .. i .. ")")
+      ;
+      (((self.feedSlot)[i]).icon):addInputEvent("Mouse_Out", "HandleOver_PetList_FeedItem_HideTooltip()")
+      ;
+      (((self.feedSlot)[i]).icon):addInputEvent("Mouse_LUp", "HandleClicked_PetList_FeedItem(" .. i .. ")")
+    else
+      do
+        do
+          targetSlot:SetShow(false)
+          targetSlot:removeInputEvent("Mouse_LUp")
+          -- DECOMPILER ERROR at PC75: LeaveBlock: unexpected jumping out DO_STMT
+
+          -- DECOMPILER ERROR at PC75: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+          -- DECOMPILER ERROR at PC75: LeaveBlock: unexpected jumping out IF_STMT
+
+        end
+      end
+    end
+  end
+end
+
+PetList.showFeedUi = function(self, targetPetIndex)
+  -- function num : 0_73 , upvalues : PetList
+  if self.feedingPetIndex == targetPetIndex then
+    targetPetIndex = -1
+  end
+  self:initSelection()
+  local showFlag = targetPetIndex >= 0
+  ;
+  (self.feedUi):SetShow(showFlag)
+  self.feedingPetIndex = targetPetIndex
+  if showFlag then
+    PetList:showFeedAllUi(false)
+    local petData = ToClient_getPetUnsealedDataByIndex(targetPetIndex)
+    if not petData then
+      return 
+    end
+    local petNo = petData:getPcPetNo()
+    local contents = (self.list2_PetList):GetContentByKey(petNo)
+    local btnFeed = (UI.getChildControl)(contents, "Button_Feeding")
+    local nameUi = (UI.getChildControl)(contents, "Template_StaticText_PetName")
+    ;
+    (self.feedUi):SetPosX(contents:GetPosX() + btnFeed:GetPosX() + 50)
+    ;
+    (self.feedUi):SetPosY(contents:GetPosY() + btnFeed:GetPosY())
+    self:updateFeedUi()
+  end
+  -- DECOMPILER ERROR: 3 unprocessed JMP targets
+end
+
+FGlobal_PetList_FeedClose = function()
+  -- function num : 0_74 , upvalues : PetList
+  PetList:showFeedUi(-1)
+  PetList:showFeedAllUi(false)
+end
+
+PetList_useFeedOneItem = function()
+  -- function num : 0_75 , upvalues : PetList
+  local self = PetList
+  if self.selectItemIndex < 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_SELECTFOODALERT"))
+    return 
+  end
+  local petData = ToClient_getPetUnsealedDataByIndex(self.feedingPetIndex)
+  local petNo = petData:getPcPetNo()
+  local fullChargeFlag = isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT)
+  ToClient_Pet_UseFeedItemByIndex(self.selectItemIndex, petNo)
+end
+
+PetList_useFeedFullItem = function()
+  -- function num : 0_76 , upvalues : PetList
+  local self = PetList
+  if self.selectItemIndex < 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_SELECTFOODALERT"))
+    return 
+  end
+  local petData = ToClient_getPetUnsealedDataByIndex(self.feedingPetIndex)
+  local petNo = petData:getPcPetNo()
+  ToClient_Pet_UseFeedItemFullByIndex(self.selectItemIndex, petNo)
+end
+
+PetList_useFeedItemToAll = function()
+  -- function num : 0_77 , upvalues : PetList
+  if PetList.selectItemIndex < 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_SELECTFOODALERT"))
+    return 
+  end
+  ToClient_Pet_UseFeedItemFullAll(PetList.selectItemIndex)
+end
+
+PetList.showFeedAllUi = function(self, showFlag)
+  -- function num : 0_78
+  if showFlag == (self.feedAllUi):GetShow() then
+    showFlag = false
+  end
+  local unsealPetCount = ToClient_getPetUnsealedList()
+  if showFlag and unsealPetCount == 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETLISTNEW_UNSEALALERT"))
+    return 
+  end
+  ;
+  (self.feedAllUi):SetShow(showFlag)
+  self:initSelection()
+  if showFlag then
+    self:updateFeedAllUi()
+    Panel_PetRestoreAll:SetPosX(Panel_Window_PetListNew:GetPosX() + Panel_Window_PetListNew:GetSizeX() + 10)
+    Panel_PetRestoreAll:SetPosY(Panel_Window_PetListNew:GetPosY() + Panel_Window_PetListNew:GetSizeY() - Panel_PetRestoreAll:GetSizeY())
+  end
+end
+
+PetList.registEventHandler = function(self)
+  -- function num : 0_79
   (self.BTN_Close):addInputEvent("Mouse_LUp", "FGlobal_PetListNew_Close()")
   ;
   (self.BTN_Compose):addInputEvent("Mouse_LUp", "PetListNew_Compose()")
@@ -2190,6 +2470,8 @@ PetList.registEventHandler = function(self)
   (self.BTN_Compose):addInputEvent("Mouse_On", "PetListNew_SimpleTooltip(true, 4)")
   ;
   (self.BTN_Compose):addInputEvent("Mouse_Out", "PetListNew_SimpleTooltip(false)")
+  ;
+  (self.BTN_FeedAll):addInputEvent("Mouse_LUp", "HandleClicked_PetList_FeedAll()")
   ;
   (self.BTN_AllUnSeal):addInputEvent("Mouse_LUp", "FGlobal_HandleClicked_petControl_AllUnSeal()")
   ;
@@ -2209,11 +2491,11 @@ PetList.registEventHandler = function(self)
 end
 
 FromClient_PetPromotion = function(fromWhereType, fromSlotNo)
-  -- function num : 0_67
+  -- function num : 0_80
 end
 
 PetList.registMessageHandler = function(self)
-  -- function num : 0_68
+  -- function num : 0_81
   registerEvent("FromClient_PetAddSealedList", "FromClient_PetUpdate")
   registerEvent("FromClient_PetDelSealedList", "FromClient_PetUpdate_ButtonShow")
   registerEvent("FromClient_PetDelList", "FromClient_PetUpdate")
@@ -2223,13 +2505,18 @@ PetList.registMessageHandler = function(self)
   registerEvent("FromClient_PetInfoChanged", "FromClient_PetUpdate")
   registerEvent("FromClient_PetAddList", "FGlobal_PetListNew_NoPet")
   registerEvent("FromClient_PetPromotion", "FromClient_PetPromotion")
+  registerEvent("FromClient_InventoryUpdate", "FromClient_PetList_UpdateFeedUi")
   ToClient_getPetInitLuaInfo()
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_PetList")
 FromClient_luaLoadComplete_PetList = function()
-  -- function num : 0_69 , upvalues : PetList
+  -- function num : 0_82 , upvalues : PetList
   PetList:Initialize()
+  PetList:initializeFeedUi()
+  PetList:initializeFeedAllUi()
+  PetList:showFeedUi(-1)
+  PetList:showFeedAllUi(false)
   petSkillList_Close()
   FGlobal_PetListNew_NoPet()
   Panel_MyHouseNavi_Update(true)
@@ -2238,12 +2525,12 @@ FromClient_luaLoadComplete_PetList = function()
 end
 
 PetList_VScroll_MoveTop = function()
-  -- function num : 0_70 , upvalues : PetList
+  -- function num : 0_83 , upvalues : PetList
   (PetList.list2_PetList):moveTopIndex()
 end
 
 PetCompose_Simpletooltips = function(isShow, tipType)
-  -- function num : 0_71 , upvalues : petCompose
+  -- function num : 0_84 , upvalues : petCompose
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -2287,13 +2574,13 @@ PetCompose_Simpletooltips = function(isShow, tipType)
 end
 
 PetList_ChangePosition = function(isUp, index)
-  -- function num : 0_72 , upvalues : PetList
+  -- function num : 0_85 , upvalues : PetList
   ToClient_changePetListOrder(isUp, index)
   PetList:SetPetList(true)
 end
 
 PetList.IsCheckGroupBtnByPetNo = function(self, petNo_s64, groupIndex)
-  -- function num : 0_73
+  -- function num : 0_86
   local isCheck = (checkUnSealGroupList[groupIndex])[Int64toInt32(petNo_s64)]
   if isCheck == nil then
     isCheck = false
@@ -2302,14 +2589,93 @@ PetList.IsCheckGroupBtnByPetNo = function(self, petNo_s64, groupIndex)
 end
 
 HandleClicked_PetGroupClear = function()
-  -- function num : 0_74
+  -- function num : 0_87
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = PAGetString(Defines.StringSheet_GAME, "LUA_PETLIST_GROUPCLEAR_ALERT"), functionYes = PaGlobal_PetList_GroupClear, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
+HandleClicked_PetList_Feed = function(index)
+  -- function num : 0_88 , upvalues : PetList
+  PetList:showFeedUi(index)
+end
+
+HandleClicked_PetList_FeedClose = function()
+  -- function num : 0_89 , upvalues : PetList
+  PetList:showFeedUi(-1)
+end
+
+HandleClicked_PetList_FeedAll = function()
+  -- function num : 0_90 , upvalues : PetList
+  PetList:showFeedUi(-1)
+  PetList:showFeedAllUi(true)
+end
+
+HandleClicked_PetList_FeedAllClose = function()
+  -- function num : 0_91 , upvalues : PetList
+  PetList:showFeedAllUi(false)
+end
+
+HandleOver_PetList_FeedItem_ShowTooltip = function(index)
+  -- function num : 0_92 , upvalues : PetList
+  local itemWrapper = ToClient_Pet_GetFeedItemByIndex(index)
+  if itemWrapper == nil then
+    return 
+  end
+  local itemSSW = itemWrapper:getStaticStatus()
+  if itemSSW ~= nil then
+    Panel_Tooltip_Item_SetPosition(index, ((PetList.feedSlot)[index]).icon, "petList")
+    Panel_Tooltip_Item_Show(itemSSW, Panel_Window_PetListNew, true)
+  end
+end
+
+HandleOver_PetList_FeedItem_HideTooltip = function()
+  -- function num : 0_93
+  Panel_Tooltip_Item_hideTooltip()
+end
+
+HandleOver_PetRestore_FeedItem_ShowTooltip = function(index)
+  -- function num : 0_94 , upvalues : PetList
+  local itemWrapper = ToClient_Pet_GetFeedItemByIndex(index)
+  if itemWrapper == nil then
+    return 
+  end
+  local itemSSW = itemWrapper:getStaticStatus()
+  if itemSSW ~= nil then
+    Panel_Tooltip_Item_SetPosition(index, ((PetList.feedAllSlot)[index]).icon, "petList")
+    Panel_Tooltip_Item_Show(itemSSW, Panel_PetRestoreAll, true)
+  end
+end
+
+HandleOver_PetRestore_FeedItem_HideTooltip = function()
+  -- function num : 0_95
+  Panel_Tooltip_Item_hideTooltip()
+end
+
+HandleClicked_PetList_FeedItem = function(index)
+  -- function num : 0_96 , upvalues : PetList
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
+
+  PetList.selectItemIndex = index
+  ;
+  (PetList.selectSlotBg):SetShow(true)
+  ;
+  (PetList.selectSlotBg):SetPosX(8 + 35 * index)
+end
+
+HandleClicked_PetList_FeedItemToAll = function(index)
+  -- function num : 0_97 , upvalues : PetList
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
+
+  PetList.selectItemIndex = index
+  ;
+  (PetList.selectAllSlotBg):SetShow(true)
+  ;
+  (PetList.selectAllSlotBg):SetPosX(18 + 38 * index)
+end
+
 PaGlobal_PetList_GroupClear = function()
-  -- function num : 0_75 , upvalues : PetList
+  -- function num : 0_98 , upvalues : PetList
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R0 in 'UnsetPending'
 
   checkUnSealGroupList[1] = {}
@@ -2324,7 +2690,7 @@ PaGlobal_PetList_GroupClear = function()
 end
 
 PaGlobal_PetList_CheckGroup = function()
-  -- function num : 0_76
+  -- function num : 0_99
   for ii = 1, 3 do
     for key,value in pairs(checkUnSealGroupList[ii]) do
       local isRemain = false
@@ -2363,8 +2729,7 @@ PaGlobal_PetList_CheckGroup = function()
 end
 
 test_pet = function()
-  -- function num : 0_77
-  _PA_LOG("cylee", "test_pet()")
+  -- function num : 0_100
 end
 
 

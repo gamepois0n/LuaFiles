@@ -1680,6 +1680,7 @@ GuildManager.TabToggle = function(self, index)
     GuildMainInfo_Hide()
     btn_GuildMasterMandateBG:SetShow(false)
     btn_GuildMasterMandate:SetShow(false)
+    PaGlobal_GuildBattle:Close()
     tabNumber = 0
   elseif index == 1 then
     local myGuildInfo = (ToClient_GetMyGuildInfoWrapper())
@@ -3099,7 +3100,7 @@ FromClient_NotifyGuildMessage = function(msgType, strParam1, strParam2, s64_para
                                                   end
                                                 end
                                                 local message = {}
-                                                message.main = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMEMBERENCHANTSUCCESS_MAIN1", "strParam1", strParam1) .. " " .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMEMBERENCHANTSUCCESS_MAIN2", "param1", enchantLevelHigh, "strParam2", itemName)
+                                                message.main = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMEMBERENCHANTSUCCESS_MAIN1", "strParam1", strParam1, "param1", enchantLevelHigh, "strParam2", itemName)
                                                 message.sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_GUILDMEMBER_CHEER")
                                                 message.addMsg = ""
                                                 Proc_ShowMessage_Ack_For_RewardSelect(message, 3.2, 22)

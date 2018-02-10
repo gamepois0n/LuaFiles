@@ -78,21 +78,15 @@ end
 Panel_ShipEndurance_Position = function()
   -- function num : 0_1
   local self = PaGlobalShipEnduranceList
-  if FGlobal_Panel_Radar_GetShow() then
-    if (PaGlobalHorseEnduranceList.panel):GetShow() or (PaGlobalCarriageEnduranceList.panel):GetShow() then
-      (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 3.1)
-    else
-      ;
-      (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 1.9)
-    end
-    ;
-    (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY() - FGlobal_Panel_Radar_GetSizeY() / 1.4)
+  self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
+  if (PaGlobalHorseEnduranceList.panel):GetShow() or (PaGlobalCarriageEnduranceList.panel):GetShow() then
+    (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 3.1)
   else
     ;
-    (self.panel):SetPosX(getScreenSizeX() - (self.panel):GetSizeX())
-    ;
-    (self.panel):SetPosY(35)
+    (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 1.9)
   end
+  ;
+  (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY() - FGlobal_Panel_Radar_GetSizeY() / 1.4)
   if Panel_Widget_TownNpcNavi:GetShow() then
     (self.panel):SetPosY(Panel_Widget_TownNpcNavi:GetSizeY() + Panel_Widget_TownNpcNavi:GetPosY() + 15)
   end
@@ -106,7 +100,12 @@ renderModeChange_Panel_ShipEndurance_Position = function(prevRenderModeList, nex
   Panel_ShipEndurance_Position()
 end
 
-PaGlobalShipEnduranceList:initialize()
+PaGlobalShipEnduranceList_Init = function()
+  -- function num : 0_3
+  PaGlobalShipEnduranceList:initialize()
+end
+
+registerEvent("FromClient_luaLoadComplete", "PaGlobalShipEnduranceList_Init")
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Panel_ShipEndurance_Position")
 registerEvent("onScreenResize", "Panel_ShipEndurance_Position")
 

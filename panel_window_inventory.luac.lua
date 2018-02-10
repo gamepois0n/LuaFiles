@@ -998,7 +998,15 @@ Inventory_SlotRClickXXX = function(slotNo, equipSlotNo, index)
                                 _btn_WayPoint:SetPosX(4)
                                 _btn_WayPoint:SetPosY(4)
                                 _btn_Widget:SetPosX(4)
-                                _btn_Widget:SetPosY(38)
+                                if itemWrapper:isSoulCollector() then
+                                  Panel_Invertory_ExchangeButton:SetSize(162, 40)
+                                  _btn_WayPoint:SetShow(false)
+                                  _btn_Widget:SetPosY(4)
+                                else
+                                  Panel_Invertory_ExchangeButton:SetSize(162, 74)
+                                  _btn_WayPoint:SetShow(true)
+                                  _btn_Widget:SetPosY(38)
+                                end
                                 _btn_WayPoint:addInputEvent("Mouse_LUp", "HandleClickedWayPoint( " .. slotNo .. " )")
                                 _btn_WayPoint:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
                                 _btn_Widget:addInputEvent("Mouse_Out", "ExchangeButton_Off()")
@@ -1869,131 +1877,124 @@ Inventory_updateSlotData = function()
           (slot.icon):EraseAllEffect()
         else
           if self.filterFunc ~= nil then
-            _Inventory_updateSlotData_AddEffectMapea(ii, slotNo)
-            itemExist = true
-            Panel_Inventory_isBlackStone_16002 = _Inventory_updateSlotData_AddEffectBlackStone(ii, isFiltered, slotNo)
-            local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
-            _Inventory_updateSlotData_AutoSetPotion(playerLevel, itemKey, currentWhereType, slotNo)
-            PaGlobal_TutorialManager:handleUpdateInventorySlotData(slot, itemKey)
-            if (itemKey == 42000 or itemKey == 42001 or itemKey == 41607 or itemKey == 42002 or itemKey == 42010 or itemKey == 42003 or itemKey == 42004 or itemKey == 42034 or itemKey == 42035 or itemKey == 42037 or itemKey == 42036 or itemKey == 42006 or itemKey == 42008 or itemKey == 42039 or itemKey == 42038 or itemKey == 42007 or itemKey == 42053 or itemKey == 41610 or itemKey == 42009 or itemKey == 42054 or itemKey == 42057 or itemKey == 42061 or itemKey == 42066 or itemKey == 42055 or itemKey == 42056) and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true and not FGlobal_FirstSummonItemUse() then
-              (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
+            (slot.icon):AddEffect("UI_Inventory_Filtering", true, 0, 0)
+          end
+          _Inventory_updateSlotData_AddEffectMapea(ii, slotNo)
+        end
+        itemExist = true
+        Panel_Inventory_isBlackStone_16002 = _Inventory_updateSlotData_AddEffectBlackStone(ii, isFiltered, slotNo)
+        local itemKey = ((itemWrapper:get()):getKey()):getItemKey()
+        _Inventory_updateSlotData_AutoSetPotion(playerLevel, itemKey, currentWhereType, slotNo)
+        PaGlobal_TutorialManager:handleUpdateInventorySlotData(slot, itemKey)
+        if (itemKey == 42000 or itemKey == 42001 or itemKey == 41607 or itemKey == 42002 or itemKey == 42010 or itemKey == 42003 or itemKey == 42004 or itemKey == 42034 or itemKey == 42035 or itemKey == 42037 or itemKey == 42036 or itemKey == 42006 or itemKey == 42008 or itemKey == 42039 or itemKey == 42038 or itemKey == 42007 or itemKey == 42053 or itemKey == 41610 or itemKey == 42009 or itemKey == 42054 or itemKey == 42057 or itemKey == 42061 or itemKey == 42066 or itemKey == 42055 or itemKey == 42056) and PaGlobal_SummonBossTutorial_Manager:isDoingSummonBossTutorial() == true and not FGlobal_FirstSummonItemUse() then
+          (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
+        end
+        if itemKey == 42405 and questList_hasProgressQuest(4015, 6) then
+          (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
+        end
+        local itemSSW = itemWrapper:getStaticStatus()
+        local item_type = itemSSW:getItemType()
+        if item_type == 5 then
+          Panel_Inventory_isSocketItem = true
+        end
+        local offencePoint = 0
+        local defencePoint = 0
+        local equipOffencePoint = 0
+        local equipDefencePoint = 0
+        local isEquip = ((itemWrapper:getStaticStatus()):get()):isEquipable()
+        local matchEquip = false
+        local isAccessory = false
+        offencePoint = _inventory_updateSlot_compareSpec(currentWhereType, slotNo, isAccessory)
+        local currentEndurance = (itemWrapper:get()):getEndurance()
+        local isUsableServant = (itemWrapper:getStaticStatus()):isUsableServant()
+        if not isUsableServant and not Panel_Window_Exchange:GetShow() then
+          if isEquip and defencePoint ~= nil and offencePoint ~= nil and currentEndurance > 0 and matchEquip == true and isAccessory == false and equipDefencePoint + equipOffencePoint < defencePoint + offencePoint then
+            (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
+            local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
+            Panel_NewEquip_Update(equipPos)
+            PaGlobal_TutorialManager:handleNewEquipInInventory(slot)
+          end
+          do
+            if currentEndurance > 0 and matchEquip == true and isAccessory == true and equipOffencePoint + equipDefencePoint < offencePoint + defencePoint then
+              (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
+              local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
+              Panel_NewEquip_Update(equipPos)
             end
-            if itemKey == 42405 and questList_hasProgressQuest(4015, 6) then
-              (slot.icon):AddEffect("fUI_Tuto_ItemHp_01A", true, 0, 0)
-            end
-            local itemSSW = itemWrapper:getStaticStatus()
-            local item_type = itemSSW:getItemType()
-            if item_type == 5 then
-              Panel_Inventory_isSocketItem = true
-            end
-            local offencePoint = 0
-            local defencePoint = 0
-            local equipOffencePoint = 0
-            local equipDefencePoint = 0
-            local isEquip = ((itemWrapper:getStaticStatus()):get()):isEquipable()
-            local matchEquip = false
-            local isAccessory = false
-            offencePoint = _inventory_updateSlot_compareSpec(currentWhereType, slotNo, isAccessory)
-            local currentEndurance = (itemWrapper:get()):getEndurance()
-            local isUsableServant = (itemWrapper:getStaticStatus()):isUsableServant()
-            if not isUsableServant and not Panel_Window_Exchange:GetShow() then
-              if isEquip and defencePoint ~= nil and offencePoint ~= nil and currentEndurance > 0 and matchEquip == true and isAccessory == false and equipDefencePoint + equipOffencePoint < defencePoint + offencePoint then
-                (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
-                local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
-                Panel_NewEquip_Update(equipPos)
-                PaGlobal_TutorialManager:handleNewEquipInInventory(slot)
-              end
+            do
               do
-                if currentEndurance > 0 and matchEquip == true and isAccessory == true and equipOffencePoint + equipDefencePoint < offencePoint + defencePoint then
-                  (slot.icon):AddEffect("fUI_BetterItemAura01", true, 0, 0)
-                  local equipPos = (itemWrapper:getStaticStatus()):getEquipSlotNo()
-                  Panel_NewEquip_Update(equipPos)
+                if slotNo < (self.config).slotCount and ((inven.slotEtcData)[slotNo]).isFirstItem == true and ((inven.slotEtcData)[slotNo]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
+                  local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem02", true, 0, 0)
+                  -- DECOMPILER ERROR at PC640: Confused about usage of register: R47 in 'UnsetPending'
+
+                  ;
+                  (effectScene.newItem)[slotNo] = newItemEffectSceneId
+                  UIMain_ItemUpdate()
+                end
+                local isUsableClass = nil
+                if itemSSW ~= nil then
+                  if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
+                    isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
+                  else
+                    isUsableClass = true
+                  end
+                else
+                  isUsableClass = false
+                end
+                if isEquip == false then
+                  (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+                else
+                  if isUsableClass == true then
+                    (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+                  else
+                    ;
+                    (slot.icon):SetColor(UI_color.C_FFD20000)
+                  end
+                end
+                for iii = 0, _exchangeIndex do
+                  if Panel_Window_Exchange:GetShow() and slotNo == _exchangeSlotNo[iii] then
+                    (slot.icon):SetColor(UI_color.C_FFD20000)
+                  else
+                    if slotNo == _exchangeSlotNo[iii] and _exchangeSlotNo[iii] == nil then
+                      (slot.icon):SetColor(UI_color.C_FFFFFFFF)
+                    end
+                  end
                 end
                 do
                   do
-                    if slotNo < (self.config).slotCount and ((inven.slotEtcData)[slotNo]).isFirstItem == true and ((inven.slotEtcData)[slotNo]).itemKey == ((itemWrapper:get()):getKey()):getItemKey() then
-                      local newItemEffectSceneId = (slot.icon):AddEffect("fUI_NewItem02", true, 0, 0)
-                      -- DECOMPILER ERROR at PC633: Confused about usage of register: R47 in 'UnsetPending'
-
+                    local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
+                    if Panel_Window_Exchange:GetShow() and itemBindType > 0 then
+                      (slot.icon):SetColor(UI_color.C_FFD20000)
+                    end
+                    equipDefencePoint = 0
+                    equipOffencePoint = 0
+                    defencePoint = 0
+                    offencePoint = 0
+                    if not itemExist then
+                      slot:clearItem()
                       ;
-                      (effectScene.newItem)[slotNo] = newItemEffectSceneId
-                      UIMain_ItemUpdate()
+                      (slot.icon):SetEnable(true)
+                      ;
+                      (slot.icon):SetMonoTone(true)
+                      ;
+                      (slot.icon):SetIgnore(false)
+                      slot.isEmpty = true
                     end
-                    local isUsableClass = nil
-                    if itemSSW ~= nil then
-                      if (itemSSW:get()):isWeapon() or (itemSSW:get()):isSubWeapon() or (itemSSW:get()):isAwakenWeapon() then
-                        isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
-                      else
-                        isUsableClass = true
-                      end
-                    else
-                      isUsableClass = false
-                    end
-                    if isEquip == false then
-                      (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                    else
-                      if isUsableClass == true then
-                        (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                      else
-                        ;
-                        (slot.icon):SetColor(UI_color.C_FFD20000)
-                      end
-                    end
-                    for iii = 0, _exchangeIndex do
-                      if Panel_Window_Exchange:GetShow() and slotNo == _exchangeSlotNo[iii] then
-                        (slot.icon):SetColor(UI_color.C_FFD20000)
-                      else
-                        if slotNo == _exchangeSlotNo[iii] and _exchangeSlotNo[iii] == nil then
-                          (slot.icon):SetColor(UI_color.C_FFFFFFFF)
-                        end
-                      end
-                    end
-                    do
-                      do
-                        local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
-                        if Panel_Window_Exchange:GetShow() and itemBindType > 0 then
-                          (slot.icon):SetColor(UI_color.C_FFD20000)
-                        end
-                        equipDefencePoint = 0
-                        equipOffencePoint = 0
-                        defencePoint = 0
-                        offencePoint = 0
-                        if not itemExist then
-                          slot:clearItem()
-                          ;
-                          (slot.icon):SetEnable(true)
-                          ;
-                          (slot.icon):SetMonoTone(true)
-                          ;
-                          (slot.icon):SetIgnore(false)
-                          slot.isEmpty = true
-                        end
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out DO_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC771: LeaveBlock: unexpected jumping out IF_STMT
 
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
-
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                        -- DECOMPILER ERROR at PC764: LeaveBlock: unexpected jumping out IF_STMT
-
-                      end
-                    end
                   end
                 end
               end
@@ -2241,6 +2242,22 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
                               offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
                               equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
                               matchEquip = true
+                            else
+                              -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC813: Unhandled construct in 'MakeBoolean' P3
+
+                              if (enum_class.ClassType_Lahn == classType and equipType == 67) or not isAwakenWeaponContentsOpen or equipType == 12 then
+                                offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
+                                equipOffencePoint = (((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMinDamage(0) + ((ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())):getStaticStatus()):getMaxDamage(0)) / 2
+                                matchEquip = true
+                              end
                             end
                           end
                         end
@@ -2252,157 +2269,173 @@ _inventory_updateSlot_compareSpec = function(whereType, slotNo, isAccessory)
             end
           end
         else
-          -- DECOMPILER ERROR at PC816: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC816: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC816: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC816: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
 
-          -- DECOMPILER ERROR at PC816: Unhandled construct in 'MakeBoolean' P3
+          -- DECOMPILER ERROR at PC873: Unhandled construct in 'MakeBoolean' P3
 
           if ((enum_class.ClassType_Warrior == classType or enum_class.ClassType_Valkyrie == classType) and equipType == 1) or not isAwakenWeaponContentsOpen or equipType == 12 then
             offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
             defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
             matchEquip = true
           else
-            -- DECOMPILER ERROR at PC855: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC855: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC855: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC855: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
 
-            -- DECOMPILER ERROR at PC855: Unhandled construct in 'MakeBoolean' P3
+            -- DECOMPILER ERROR at PC912: Unhandled construct in 'MakeBoolean' P3
 
             if (enum_class.ClassType_Giant == classType and equipType == 29) or not isAwakenWeaponContentsOpen or equipType == 12 then
               offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
               defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
               matchEquip = true
             else
-              -- DECOMPILER ERROR at PC894: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC951: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC894: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC951: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC894: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC951: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC894: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC951: Unhandled construct in 'MakeBoolean' P3
 
-              -- DECOMPILER ERROR at PC894: Unhandled construct in 'MakeBoolean' P3
+              -- DECOMPILER ERROR at PC951: Unhandled construct in 'MakeBoolean' P3
 
               if (enum_class.ClassType_Ranger == classType and equipType == 31) or not isAwakenWeaponContentsOpen or equipType == 12 then
                 offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(1) + (itemWrapper:getStaticStatus()):getMaxDamage(1)) / 2
                 defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                 matchEquip = true
               else
-                -- DECOMPILER ERROR at PC933: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC990: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC933: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC990: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC933: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC990: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC933: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC990: Unhandled construct in 'MakeBoolean' P3
 
-                -- DECOMPILER ERROR at PC933: Unhandled construct in 'MakeBoolean' P3
+                -- DECOMPILER ERROR at PC990: Unhandled construct in 'MakeBoolean' P3
 
                 if (enum_class.ClassType_Sorcerer == classType and equipType == 28) or not isAwakenWeaponContentsOpen or equipType == 12 then
                   offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                   defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                   matchEquip = true
                 else
-                  -- DECOMPILER ERROR at PC972: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC1029: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC972: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC1029: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC972: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC1029: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC972: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC1029: Unhandled construct in 'MakeBoolean' P3
 
-                  -- DECOMPILER ERROR at PC972: Unhandled construct in 'MakeBoolean' P3
+                  -- DECOMPILER ERROR at PC1029: Unhandled construct in 'MakeBoolean' P3
 
                   if (enum_class.ClassType_Tamer == classType and equipType == 2) or not isAwakenWeaponContentsOpen or equipType == 12 then
                     offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                     defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                     matchEquip = true
                   else
-                    -- DECOMPILER ERROR at PC1016: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1073: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC1016: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1073: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC1016: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1073: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC1016: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1073: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC1016: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1073: Unhandled construct in 'MakeBoolean' P3
 
-                    -- DECOMPILER ERROR at PC1016: Unhandled construct in 'MakeBoolean' P3
+                    -- DECOMPILER ERROR at PC1073: Unhandled construct in 'MakeBoolean' P3
 
                     if ((enum_class.ClassType_NinjaWomen == classType or enum_class.ClassType_NinjaMan == classType) and equipType == 2) or not isAwakenWeaponContentsOpen or equipType == 12 then
                       offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
                       defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                       matchEquip = true
                     else
-                      -- DECOMPILER ERROR at PC1058: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1115: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC1058: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1115: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC1058: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1115: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC1058: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1115: Unhandled construct in 'MakeBoolean' P3
 
-                      -- DECOMPILER ERROR at PC1058: Unhandled construct in 'MakeBoolean' P3
+                      -- DECOMPILER ERROR at PC1115: Unhandled construct in 'MakeBoolean' P3
 
                       if ((enum_class.ClassType_BladeMaster == classType or enum_class.ClassType_BladeMasterWomen == classType) and equipType == 3) or not isAwakenWeaponContentsOpen or equipType == 12 then
                         offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
                         defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                         matchEquip = true
                       else
-                        -- DECOMPILER ERROR at PC1100: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1157: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1100: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1157: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1100: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1157: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1100: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1157: Unhandled construct in 'MakeBoolean' P3
 
-                        -- DECOMPILER ERROR at PC1100: Unhandled construct in 'MakeBoolean' P3
+                        -- DECOMPILER ERROR at PC1157: Unhandled construct in 'MakeBoolean' P3
 
                         if ((enum_class.ClassType_Wizard == classType or enum_class.ClassType_WizardWomen == classType) and equipType == 6) or not isAwakenWeaponContentsOpen or equipType == 12 then
                           offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                           defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                           matchEquip = true
                         else
-                          -- DECOMPILER ERROR at PC1139: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1196: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1139: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1196: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1139: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1196: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1139: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1196: Unhandled construct in 'MakeBoolean' P3
 
-                          -- DECOMPILER ERROR at PC1139: Unhandled construct in 'MakeBoolean' P3
+                          -- DECOMPILER ERROR at PC1196: Unhandled construct in 'MakeBoolean' P3
 
                           if (enum_class.ClassType_DarkElf == classType and equipType == 63) or not isAwakenWeaponContentsOpen or equipType == 12 then
                             offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(2) + (itemWrapper:getStaticStatus()):getMaxDamage(2)) / 2
                             defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                             matchEquip = true
                           else
-                            -- DECOMPILER ERROR at PC1181: Unhandled construct in 'MakeBoolean' P3
+                            -- DECOMPILER ERROR at PC1238: Unhandled construct in 'MakeBoolean' P3
 
-                            -- DECOMPILER ERROR at PC1181: Unhandled construct in 'MakeBoolean' P3
+                            -- DECOMPILER ERROR at PC1238: Unhandled construct in 'MakeBoolean' P3
 
-                            -- DECOMPILER ERROR at PC1181: Unhandled construct in 'MakeBoolean' P3
+                            -- DECOMPILER ERROR at PC1238: Unhandled construct in 'MakeBoolean' P3
 
-                            -- DECOMPILER ERROR at PC1181: Unhandled construct in 'MakeBoolean' P3
+                            -- DECOMPILER ERROR at PC1238: Unhandled construct in 'MakeBoolean' P3
 
-                            -- DECOMPILER ERROR at PC1181: Unhandled construct in 'MakeBoolean' P3
+                            -- DECOMPILER ERROR at PC1238: Unhandled construct in 'MakeBoolean' P3
 
                             if enum_class.ClassType_Combattant == classType or ((enum_class.ClassType_CombattantWomen == classType and equipType == 65) or not isAwakenWeaponContentsOpen or equipType == 12) then
                               offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
                               defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
                               matchEquip = true
+                            else
+                              -- DECOMPILER ERROR at PC1277: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC1277: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC1277: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC1277: Unhandled construct in 'MakeBoolean' P3
+
+                              -- DECOMPILER ERROR at PC1277: Unhandled construct in 'MakeBoolean' P3
+
+                              if (enum_class.ClassType_Lahn == classType and equipType == 67) or not isAwakenWeaponContentsOpen or equipType == 12 then
+                                offencePoint = ((itemWrapper:getStaticStatus()):getMinDamage(0) + (itemWrapper:getStaticStatus()):getMaxDamage(0)) / 2
+                                defencePoint = (itemWrapper:getStaticStatus()):getDefence(0)
+                                matchEquip = true
+                              end
                             end
                           end
                         end
@@ -2975,7 +3008,7 @@ end
 
 UseItemAskFromOtherPlayer = function(fromName)
   -- function num : 0_107
-  local messageboxMemo = "[<PAColor0xFFE49800>" .. fromName .. "<PAOldColor>" .. PAGetString(Defines.StringSheet_GAME, "LUA_USEITEM_MESSAGEBOX_REQUEST")
+  local messageboxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_USEITEM_MESSAGEBOX_REQUEST", "for_name", fromName)
   local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_USEITEM_MESSAGEBOX_TITLE"), content = messageboxMemo, functionYes = UseItemFromOtherPlayer_Yes, functionCancel = UseItemFromOtherPlayer_No, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageboxData)

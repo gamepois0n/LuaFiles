@@ -429,7 +429,7 @@ local GenerateNodeInfo = function(nodeStaticStatus, nodeKey, isAffiliated, isMax
   FillTerritoryInfo(nodeStaticStatus)
   SetWeatherAndNodeTypeIcon(nodeKey)
   SetNodeType(nodeStaticStatus._nodeType)
-  Txt_Node_Title:SetText(getExploreNodeName(nodeStaticStatus))
+  Txt_Node_Title:SetText(PAGetString(Defines.StringSheet_RESOURCE, "WORLDMAP_NODE_LV_TITLE"))
   local nodeManagerName = requestNodeManagerName(nodeKey)
   Txt_NodeManager:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLD_MAP_NODE_MANAGER") .. " : ")
   if nodeManagerName ~= "" then

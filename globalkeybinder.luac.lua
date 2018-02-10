@@ -252,7 +252,7 @@ local _keyBinder_Chatting = function()
                                     end
                                     return true
                                   else
-                                    if isUsedMemoOpen() == true then
+                                    if _ContentsGroup_isMemoOpen == true then
                                       if FGlobal_Memo_CheckUiEdit(uiEdit) and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
                                         PaGlobal_Memo:Save()
                                       end
@@ -275,13 +275,13 @@ local _keyBinder_Chatting = function()
       end
     end
   end
-  if isNewCharacterInfo() == false and FGlobal_CheckMyIntroduceUiEdit(uiEdit) then
+  if _ContentsGroup_isUsedNewCharacterInfo == false and FGlobal_CheckMyIntroduceUiEdit(uiEdit) then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       FGlobal_MyIntroduceClearFocusEdit()
     end
     return true
   end
-  if isNewCharacterInfo() == true and FGlobal_UI_CharacterInfo_Basic_Global_CheckIntroduceUiEdit(uiEdit) then
+  if _ContentsGroup_isUsedNewCharacterInfo == true and FGlobal_UI_CharacterInfo_Basic_Global_CheckIntroduceUiEdit(uiEdit) then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
       (UI.ClearFocusEdit)()
     end
@@ -609,7 +609,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             PaGlobal_BuildingBuff:close()
             return 
           end
-          if isUsedMemoOpen() == true and Panel_Memo_List:GetShow() then
+          if _ContentsGroup_isMemoOpen == true and Panel_Memo_List:GetShow() then
             PaGlobal_Memo:ListClose()
             return 
           end
@@ -649,7 +649,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             return 
           end
         end
-        -- DECOMPILER ERROR at PC883: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC882: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Help) and Panel_KeyboardHelp ~= nil then
           if FGlobal_KeyboardHelpShow() then
@@ -659,7 +659,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
         end
         do return  end
-        -- DECOMPILER ERROR at PC918: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC917: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           if Panel_ProductNote_ShowToggle() then
@@ -673,7 +673,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           if Panel_Window_CharInfo_Status ~= nil then
             if Panel_Window_CharInfo_Status:GetShow() and not Panel_Window_CharInfo_Status:IsUISubApp() then
               audioPostEvent_SystemUi(1, 31)
-              if isNewCharacterInfo() == false then
+              if _ContentsGroup_isUsedNewCharacterInfo == false then
                 CharacterInfoWindow_Hide()
               else
                 PaGlobal_CharacterInfo:hideWindow()
@@ -691,7 +691,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
                 return 
               end
               audioPostEvent_SystemUi(1, 30)
-              if isNewCharacterInfo() == false then
+              if _ContentsGroup_isUsedNewCharacterInfo == false then
                 CharacterInfoWindow_Show()
               else
                 PaGlobal_CharacterInfo:showWindow(0)
@@ -729,7 +729,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC1103: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC1100: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -815,7 +815,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Present) then
           if not Panel_Window_CharInfo_Status:GetShow() then
             audioPostEvent_SystemUi(1, 34)
-            if isNewCharacterInfo() == false then
+            if _ContentsGroup_isUsedNewCharacterInfo == false then
               FGlobal_Challenge_Show()
             else
               PaGlobal_CharacterInfo:showWindow(3)
@@ -823,7 +823,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
             end
           else
             audioPostEvent_SystemUi(1, 31)
-            if isNewCharacterInfo() == false then
+            if _ContentsGroup_isUsedNewCharacterInfo == false then
               FGlobal_Challenge_Hide()
             else
               PaGlobal_CharacterInfo:hideWindow()
@@ -900,7 +900,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
               return 
             end
-            -- DECOMPILER ERROR at PC1580: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1575: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)
@@ -917,7 +917,7 @@ local _keyBinder_UIMode_CommonWindow = function(deltaTime)
               end
             end
             do return  end
-            -- DECOMPILER ERROR at PC1627: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC1622: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
               (UI.Set_ProcessorInputMode)(IM.eProcessorInputMode_UiMode)

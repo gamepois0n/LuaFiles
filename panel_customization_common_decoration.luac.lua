@@ -3,6 +3,7 @@
 
 -- params : ...
 -- function num : 0
+local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local NoCashType = CppEnums.CustomizationNoCashType
 local NoCashDeco = CppEnums.CustomizationNoCashDeco
 local isTattooMode = false
@@ -154,7 +155,7 @@ local clearContents = function()
 end
 
 OpenCommonDecorationUi = function(classType, uiId, checkType)
-  -- function num : 0_3 , upvalues : currentclassType, currentuiId, clearRadioButtons, CheckControlArr, CheckTextArr, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup, contentsStartY, controlOffset
+  -- function num : 0_3 , upvalues : currentclassType, currentuiId, clearRadioButtons, CheckControlArr, CheckTextArr, selectedClassType, selectedUiId, FrameTemplateColor, radioButtonColumnNum, contentsStartY, controlOffset, RadioButton_Template, radioButtonStartX, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
@@ -163,6 +164,8 @@ OpenCommonDecorationUi = function(classType, uiId, checkType)
     checkType = 0
   end
   clearRadioButtons()
+  Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
+  ClearAll_CustomizationUIGroup(0)
   ;
   (CheckControlArr[1]):SetShow(false)
   ;
@@ -176,6 +179,13 @@ OpenCommonDecorationUi = function(classType, uiId, checkType)
   FrameTemplateColor:SetSize(Panel_Customization_Common_Decoration:GetSizeX(), 0)
   FrameTemplateColor:SetShow(false)
   local contentsCount = getUiContentsCount(classType, uiId)
+  local countx = radioButtonColumnNum
+  local county = (math.floor)(contentsCount / radioButtonColumnNum)
+  if contentsCount % countx ~= 0 then
+    county = county + 1
+  end
+  contentsStartY = 0
+  contentsStartY = contentsStartY + (CheckControlArr[1]):GetSizeY() + controlOffset
   if contentsCount > 1 then
     for contentsIndex = 0, contentsCount - 1 do
       local luaContentsIndex = contentsIndex + 1
@@ -188,7 +198,7 @@ OpenCommonDecorationUi = function(classType, uiId, checkType)
       tempRadioButton:SetPosY(radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
       tempRadioButton:addInputEvent("Mouse_LUp", "UpdateDecorationContents(" .. contentsIndex .. ")")
       tempRadioButton:SetShow(true)
-      -- DECOMPILER ERROR at PC116: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC145: Confused about usage of register: R13 in 'UnsetPending'
 
       RadioButtonGroup[luaContentsIndex] = tempRadioButton
     end
@@ -212,6 +222,7 @@ CloseCommonDecorationUi = function()
   globalcurrentclassType = -2
   globalcurrentuiId = -2
   checkType = -1
+  setConsoleHeightPalette(0)
 end
 
 CloseEyeDecorationUi = function()
@@ -220,11 +231,13 @@ CloseEyeDecorationUi = function()
   globalcurrentclassType = -2
   globalcurrentuiId = -2
   checkType = -1
+  setConsoleHeightPalette(0)
 end
 
-UpdateDecorationContents = function(contentsIndex, currentclassType, currentuiId)
-  -- function num : 0_6 , upvalues : clearContents, currentcontentindex, selectedClassType, selectedUiId, contentsStartY, Frame_Content, Frame_ContentImage, NoCashType, NoCashDeco, Static_PayMark, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, PayMark, selectedListParamType, selectedListParamIndex, selectedItemIndex, FrameTemplate, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, Frame_Scroll
+UpdateDecorationContents = function(contentsIndex, currentclassType, currentuiId, historyapply)
+  -- function num : 0_6 , upvalues : clearContents, clearRadioButtons, currentcontentindex, selectedClassType, selectedUiId, UI_GroupType, radioButtonColumnNum, contentsStartY, RadioButton_Template, radioButtonStartX, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup, controlOffset, listColumCount, Frame_Content, Frame_ContentImage, NoCashType, NoCashDeco, Static_PayMark, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, PayMark, selectedListParamType, selectedListParamIndex, selectedItemIndex, FrameTemplate, imageFrameSizeY, sliderParamType, sliderParamIndex, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, Frame_Scroll
   clearContents()
+  clearRadioButtons()
   currentcontentindex = contentsIndex
   if currentclassType ~= nil then
     selectedClassType = currentclassType
@@ -232,183 +245,248 @@ UpdateDecorationContents = function(contentsIndex, currentclassType, currentuiId
   if currentuiId ~= nil then
     selectedUiId = currentuiId
   end
-  local texSize = 48.25
-  local controlPosY = contentsStartY
-  local listCount = getUiListCount(selectedClassType, selectedUiId, contentsIndex)
-  if listCount == 1 then
-    local listIndex = 0
-    local luaListIndex = listIndex + 1
-    local listTexture = getUiListTextureName(selectedClassType, selectedUiId, contentsIndex, listIndex)
-    local listParamType = getUiListParamType(selectedClassType, selectedUiId, contentsIndex, listIndex)
-    local listParamIndex = getUiListParamIndex(selectedClassType, selectedUiId, contentsIndex, listIndex)
-    local paramMax = getParamMax(selectedClassType, listParamType, listParamIndex)
-    for itemIndex = 0, paramMax do
-      local luaShapeIdx = itemIndex + 1
-      local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_Image_" .. itemIndex .. "_" .. selectedUiId)
-      CopyBaseProperty(Frame_ContentImage, tempContentImage)
-      tempContentImage:addInputEvent("Mouse_LUp", "UpdateDecorationListMessage(" .. listParamType .. "," .. listParamIndex .. "," .. itemIndex .. ")")
-      local staticPayMark = nil
-      if NoCashType.eCustomizationNoCashType_Deco == listParamType and (NoCashDeco.eCustomizationNoCashDeco_FaceTattoo == listParamIndex or NoCashDeco.eCustomizationNoCashDeco_BodyTattoo == listParamIndex) then
-        staticPayMark = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempContentImage, "Static_PayMark_" .. itemIndex .. "_" .. selectedUiId)
-        CopyBaseProperty(Static_PayMark, staticPayMark)
-      end
-      local mod = itemIndex % listColumCount
-      local divi = (math.floor)(itemIndex / listColumCount)
-      local texUV = {x1, y1, x2, y2}
-      texUV.x1 = mod * texSize
-      texUV.y1 = divi * texSize
-      texUV.x2 = texUV.x1 + texSize
-      texUV.y2 = texUV.y1 + texSize
-      tempContentImage:ChangeTextureInfoName(listTexture)
-      local x1, y1, x2, y2 = setTextureUV_Func(tempContentImage, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
-      ;
-      (tempContentImage:getBaseTexture()):setUV(x1, y1, x2, y2)
-      tempContentImage:SetPosX(itemIndex % listColumCount * listColumnWidth + listStartX)
-      tempContentImage:SetPosY((math.floor)(itemIndex / listColumCount) * listColumnHeight + listStartY)
-      tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
-      if not FGlobal_IsCommercialService() and not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) then
-        tempContentImage:SetShow(false)
-      else
-        if not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) and not FGlobal_IsInGameMode() and isServerFixedCharge() then
-          tempContentImage:SetShow(false)
-        else
-          tempContentImage:SetShow(true)
-        end
-      end
-      if NoCashType.eCustomizationNoCashType_Deco == listParamType and (NoCashDeco.eCustomizationNoCashDeco_FaceTattoo == listParamIndex or NoCashDeco.eCustomizationNoCashDeco_BodyTattoo == listParamIndex) then
-        if not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) then
-          staticPayMark:SetShow(true)
-        else
-          staticPayMark:SetShow(false)
-        end
-      end
-      -- DECOMPILER ERROR at PC236: Confused about usage of register: R26 in 'UnsetPending'
-
-      ContentImage[luaShapeIdx] = tempContentImage
-      -- DECOMPILER ERROR at PC238: Confused about usage of register: R26 in 'UnsetPending'
-
-      PayMark[luaShapeIdx] = staticPayMark
+  if historyapply == nil then
+    local indexX = Get_CustomizationUIgroupCurrentIndexX(0, 0)
+    local indexY = Get_CustomizationUIgroupCurrentIndexY(0, 0)
+    if indexX == -1 then
+      indexX = 0
     end
-    local param = getParam(listParamType, listParamIndex)
-    selectedListParamType = listParamType
-    selectedListParamIndex = listParamIndex
-    selectedItemIndex = param
-    FrameTemplate:SetShow(true)
-    FrameTemplate:SetPosY(controlPosY)
-    if paramMax < listColumCount then
-      FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY - listColumnHeight)
-    else
-      FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY)
+    if indexY == -1 then
+      indexY = 0
     end
-    controlPosY = controlPosY + FrameTemplate:GetSizeY() + controlOffset
+    ClearAll_CustomizationUIGroup(0)
+    Delete_CustomizationUIGroup(0, 0, false)
+    Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
+    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
+    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
+    Set_CustomizationUIgroupCurrentIndex(0, 0, indexX, indexY)
   end
   do
-    if listCount > 0 then
-      UpdateDecorationList()
+    local currentheight = 0
+    local maxcountx = 50
+    local maxcounty = 50
+    local contentsCount = getUiContentsCount(selectedClassType, selectedUiId)
+    local countx = radioButtonColumnNum
+    local county = (math.floor)(contentsCount / radioButtonColumnNum)
+    if contentsCount % countx ~= 0 then
+      county = county + 1
     end
-    local sliderCount = getUiSliderCount(selectedClassType, selectedUiId, contentsIndex)
-    local sliderValueBasePosX = 0
-    for sliderIndex = 0, sliderCount - 1 do
-      local luaSliderIndex = sliderIndex + 1
-      -- DECOMPILER ERROR at PC303: Confused about usage of register: R13 in 'UnsetPending'
+    contentsStartY = 0
+    if contentsCount > 1 then
+      for contentsIndex = 0, contentsCount - 1 do
+        local luaContentsIndex = contentsIndex + 1
+        local tempRadioButton = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON, Panel_Customization_Common_Decoration, "RadioButton_" .. luaContentsIndex)
+        CopyBaseProperty(RadioButton_Template, tempRadioButton)
+        local contentsDesc = getUiContentsDescName(selectedClassType, selectedUiId, contentsIndex)
+        tempRadioButton:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
+        tempRadioButton:SetText(PAGetString(Defines.StringSheet_GAME, contentsDesc))
+        tempRadioButton:SetPosX(radioButtonStartX + contentsIndex % radioButtonColumnNum * radioButtonColumnWidth)
+        tempRadioButton:SetPosY(radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
+        tempRadioButton:addInputEvent("Mouse_LUp", "UpdateDecorationContents(" .. contentsIndex .. ")")
+        tempRadioButton:SetShow(true)
+        -- DECOMPILER ERROR at PC150: Confused about usage of register: R17 in 'UnsetPending'
 
-      sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC311: Confused about usage of register: R13 in 'UnsetPending'
-
-      sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC326: Confused about usage of register: R14 in 'UnsetPending'
-
-      sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC335: Confused about usage of register: R14 in 'UnsetPending'
-
-      sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC344: Confused about usage of register: R14 in 'UnsetPending'
-
-      sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
-      ;
-      (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
-      ;
-      (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
-      ;
-      (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      ;
-      (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      ;
-      (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
-      ;
-      (SliderTextArr[luaSliderIndex]):SetPosY(controlPosY)
-      ;
-      (SliderTextArr[luaSliderIndex]):SetShow(true)
-      ;
-      (SliderControlArr[luaSliderIndex]):SetPosY(controlPosY + sliderOffset)
-      ;
-      (SliderControlArr[luaSliderIndex]):SetShow(true)
-      ;
-      (SliderValueArr[luaSliderIndex]):SetText(sliderParam)
-      ;
-      (SliderValueArr[luaSliderIndex]):SetPosY(controlPosY + sliderValueOffset)
-      ;
-      (SliderValueArr[luaSliderIndex]):SetShow(true)
-      if ToClient_getGameOptionControllerWrapper() ~= nil then
-        if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
-          (SliderValueArr[luaSliderIndex]):SetPosX(72)
-        else
-          ;
-          (SliderValueArr[luaSliderIndex]):SetPosX(64)
+        RadioButtonGroup[luaContentsIndex] = tempRadioButton
+        Add_CustomizationUIControl(0, 0, contentsIndex % countx, currentheight + contentsIndex / countx, maxcountx, maxcounty, RadioButtonGroup[luaContentsIndex])
+      end
+      local radioButtonRowCount = 1 + (math.floor)((contentsCount - 1) / radioButtonColumnNum)
+      contentsStartY = controlOffset + radioButtonRowCount * RadioButton_Template:GetSizeY() + controlOffset
+    else
+      do
+        contentsStartY = controlOffset
+        if contentsCount ~= 1 then
+          currentheight = currentheight + (county)
         end
-      end
-      local sliderTextSizeX = (SliderTextArr[luaSliderIndex]):GetPosX() + (SliderTextArr[luaSliderIndex]):GetTextSizeX()
-      local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
-      if sliderValuePosX < sliderTextSizeX then
-        sliderValueBasePosX = (math.max)(sliderValueBasePosX, sliderTextSizeX)
-      end
-      controlPosY = controlPosY + sliderHeight
-    end
-    if sliderValueBasePosX > 0 then
-      for sliderIndex = 0, sliderCount - 1 do
-        local luaSliderIndex = sliderIndex + 1
-        local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
-        ;
-        (SliderValueArr[luaSliderIndex]):SetPosX(sliderValueBasePosX + 5)
-        ;
-        (SliderControlArr[luaSliderIndex]):SetSize(174 - (sliderValueBasePosX - sliderValuePosX), (SliderControlArr[luaSliderIndex]):GetSizeY())
-        ;
-        (SliderControlArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
-        local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-        setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
-        ;
-        (SliderControlArr[luaSliderIndex]):SetInterval(100)
-      end
-    end
-    do
-      local paletteCount = getUiPaletteCount(selectedClassType, selectedUiId, contentsIndex)
-      if paletteCount == 1 then
-        controlPosY = controlPosY + controlOffset
-        local paletteParamType = getUiPaletteParamType(selectedClassType, selectedUiId, contentsIndex)
-        local paletteParamIndex = getUiPaletteParamIndex(selectedClassType, selectedUiId, contentsIndex)
-        local paletteIndex = getDecorationParamMethodValue(selectedClassType, paletteParamType, paletteParamIndex)
-        FrameTemplateColor:SetShow(true)
-        FrameTemplateColor:SetPosY(controlPosY)
-        CreateCommonPalette(FrameTemplateColor, Static_Collision, selectedClassType, paletteParamType, paletteParamIndex, paletteIndex)
-        local colorIndex = getParam(paletteParamType, paletteParamIndex)
-        UpdatePaletteMarkPosition(colorIndex)
-        local Frame_Content_Color = (UI.getChildControl)(FrameTemplateColor, "Frame_Content")
-        Static_SelectMark_Color = (UI.getChildControl)(Frame_Content_Color, "Static_SelectMark")
-        Frame_Content_Color:SetChildIndex(Static_SelectMark_Color, 9999)
-      else
+        local texSize = 48.25
+        local controlPosY = contentsStartY
+        local listCount = getUiListCount(selectedClassType, selectedUiId, contentsIndex)
+        if listCount == 1 then
+          local listIndex = 0
+          local luaListIndex = listIndex + 1
+          local listTexture = getUiListTextureName(selectedClassType, selectedUiId, contentsIndex, listIndex)
+          local listParamType = getUiListParamType(selectedClassType, selectedUiId, contentsIndex, listIndex)
+          local listParamIndex = getUiListParamIndex(selectedClassType, selectedUiId, contentsIndex, listIndex)
+          local paramMax = getParamMax(selectedClassType, listParamType, listParamIndex)
+          local countx = listColumCount
+          local county = (math.floor)(paramMax / listColumCount)
+          if paramMax % countx ~= 0 then
+            county = county + 1
+          end
+          for itemIndex = 0, paramMax do
+            local luaShapeIdx = itemIndex + 1
+            local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_Image_" .. itemIndex .. "_" .. selectedUiId)
+            CopyBaseProperty(Frame_ContentImage, tempContentImage)
+            tempContentImage:addInputEvent("Mouse_LUp", "UpdateDecorationListMessage(" .. listParamType .. "," .. listParamIndex .. "," .. itemIndex .. ")")
+            local staticPayMark = nil
+            if NoCashType.eCustomizationNoCashType_Deco == listParamType and (NoCashDeco.eCustomizationNoCashDeco_FaceTattoo == listParamIndex or NoCashDeco.eCustomizationNoCashDeco_BodyTattoo == listParamIndex) then
+              staticPayMark = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, tempContentImage, "Static_PayMark_" .. itemIndex .. "_" .. selectedUiId)
+              CopyBaseProperty(Static_PayMark, staticPayMark)
+            end
+            local mod = itemIndex % listColumCount
+            local divi = (math.floor)(itemIndex / listColumCount)
+            local texUV = {x1, y1, x2, y2}
+            texUV.x1 = mod * texSize
+            texUV.y1 = divi * texSize
+            texUV.x2 = texUV.x1 + texSize
+            texUV.y2 = texUV.y1 + texSize
+            tempContentImage:ChangeTextureInfoName(listTexture)
+            local x1, y1, x2, y2 = setTextureUV_Func(tempContentImage, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
+            ;
+            (tempContentImage:getBaseTexture()):setUV(x1, y1, x2, y2)
+            tempContentImage:SetPosX(itemIndex % listColumCount * listColumnWidth + listStartX)
+            tempContentImage:SetPosY((math.floor)(itemIndex / listColumCount) * listColumnHeight + listStartY)
+            tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
+            if not FGlobal_IsCommercialService() and not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) then
+              tempContentImage:SetShow(false)
+            else
+              if not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) and not FGlobal_IsInGameMode() and isServerFixedCharge() then
+                tempContentImage:SetShow(false)
+              else
+                tempContentImage:SetShow(true)
+              end
+            end
+            if NoCashType.eCustomizationNoCashType_Deco == listParamType and (NoCashDeco.eCustomizationNoCashDeco_FaceTattoo == listParamIndex or NoCashDeco.eCustomizationNoCashDeco_BodyTattoo == listParamIndex) then
+              if not isNormalCustomizingIndex(selectedClassType, listParamType, listParamIndex, itemIndex) then
+                staticPayMark:SetShow(true)
+              else
+                staticPayMark:SetShow(false)
+              end
+            end
+            -- DECOMPILER ERROR at PC422: Confused about usage of register: R35 in 'UnsetPending'
+
+            ContentImage[luaShapeIdx] = tempContentImage
+            -- DECOMPILER ERROR at PC424: Confused about usage of register: R35 in 'UnsetPending'
+
+            PayMark[luaShapeIdx] = staticPayMark
+            Add_CustomizationUIControl(0, 0, itemIndex % countx, currentheight + itemIndex / countx, maxcountx, maxcounty, ContentImage[luaShapeIdx])
+          end
+          currentheight = currentheight + (county)
+          local param = getParam(listParamType, listParamIndex)
+          selectedListParamType = listParamType
+          selectedListParamIndex = listParamIndex
+          selectedItemIndex = param
+          FrameTemplate:SetShow(true)
+          FrameTemplate:SetPosY(controlPosY)
+          if paramMax < listColumCount then
+            FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY - listColumnHeight)
+          else
+            FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY)
+          end
+          controlPosY = controlPosY + FrameTemplate:GetSizeY() + controlOffset
+        end
         do
-          clearPalette()
-          Panel_Customization_Common_Decoration:SetSize(Panel_Customization_Common_Decoration:GetSizeX(), controlPosY + FrameTemplateColor:GetSizeY() + controlOffset)
-          updateGroupFrameControls(Panel_Customization_Common_Decoration:GetSizeY(), Panel_Customization_Common_Decoration)
-          Panel_Customization_Common_Decoration:SetShow(true)
-          FrameTemplateColor:UpdateContentScroll()
-          FrameTemplateColor:UpdateContentPos()
-          FrameTemplate:UpdateContentScroll()
-          Frame_Scroll:SetControlTop()
-          FrameTemplate:UpdateContentPos()
+          if listCount > 0 then
+            UpdateDecorationList()
+          end
+          local sliderCount = getUiSliderCount(selectedClassType, selectedUiId, contentsIndex)
+          local sliderValueBasePosX = 0
+          for sliderIndex = 0, sliderCount - 1 do
+            local luaSliderIndex = sliderIndex + 1
+            -- DECOMPILER ERROR at PC501: Confused about usage of register: R20 in 'UnsetPending'
+
+            sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
+            -- DECOMPILER ERROR at PC509: Confused about usage of register: R20 in 'UnsetPending'
+
+            sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
+            local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            -- DECOMPILER ERROR at PC524: Confused about usage of register: R21 in 'UnsetPending'
+
+            sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            -- DECOMPILER ERROR at PC533: Confused about usage of register: R21 in 'UnsetPending'
+
+            sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            -- DECOMPILER ERROR at PC542: Confused about usage of register: R21 in 'UnsetPending'
+
+            sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
+            ;
+            (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
+            ;
+            (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateDecorationSlider(" .. sliderIndex .. ")")
+            ;
+            (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+            ;
+            (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+            local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
+            ;
+            (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
+            ;
+            (SliderTextArr[luaSliderIndex]):SetPosY(controlPosY)
+            ;
+            (SliderTextArr[luaSliderIndex]):SetShow(true)
+            ;
+            (SliderControlArr[luaSliderIndex]):SetPosY(controlPosY + sliderOffset)
+            ;
+            (SliderControlArr[luaSliderIndex]):SetShow(true)
+            ;
+            (SliderValueArr[luaSliderIndex]):SetText(sliderParam)
+            ;
+            (SliderValueArr[luaSliderIndex]):SetPosY(controlPosY + sliderValueOffset)
+            ;
+            (SliderValueArr[luaSliderIndex]):SetShow(true)
+            if ToClient_getGameOptionControllerWrapper() ~= nil then
+              if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
+                (SliderValueArr[luaSliderIndex]):SetPosX(72)
+              else
+                ;
+                (SliderValueArr[luaSliderIndex]):SetPosX(64)
+              end
+            end
+            local sliderTextSizeX = (SliderTextArr[luaSliderIndex]):GetPosX() + (SliderTextArr[luaSliderIndex]):GetTextSizeX()
+            local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
+            if sliderValuePosX < sliderTextSizeX then
+              sliderValueBasePosX = (math.max)(sliderValueBasePosX, sliderTextSizeX)
+            end
+            controlPosY = controlPosY + sliderHeight
+            Add_CustomizationUIControl(0, 0, 0, currentheight + sliderIndex, maxcountx, maxcounty, SliderButtonArr[luaSliderIndex])
+          end
+          currentheight = currentheight + sliderCount
+          if sliderValueBasePosX > 0 then
+            for sliderIndex = 0, sliderCount - 1 do
+              local luaSliderIndex = sliderIndex + 1
+              local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
+              ;
+              (SliderValueArr[luaSliderIndex]):SetPosX(sliderValueBasePosX + 5)
+              ;
+              (SliderControlArr[luaSliderIndex]):SetSize(174 - (sliderValueBasePosX - sliderValuePosX), (SliderControlArr[luaSliderIndex]):GetSizeY())
+              ;
+              (SliderControlArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
+              local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+              setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
+              ;
+              (SliderControlArr[luaSliderIndex]):SetInterval(100)
+            end
+          end
+          do
+            local paletteCount = getUiPaletteCount(selectedClassType, selectedUiId, contentsIndex)
+            if paletteCount == 1 then
+              setConsoleHeightPalette(currentheight)
+              controlPosY = controlPosY + controlOffset
+              local paletteParamType = getUiPaletteParamType(selectedClassType, selectedUiId, contentsIndex)
+              local paletteParamIndex = getUiPaletteParamIndex(selectedClassType, selectedUiId, contentsIndex)
+              local paletteIndex = getDecorationParamMethodValue(selectedClassType, paletteParamType, paletteParamIndex)
+              FrameTemplateColor:SetShow(true)
+              FrameTemplateColor:SetPosY(controlPosY)
+              CreateCommonPalette(FrameTemplateColor, Static_Collision, selectedClassType, paletteParamType, paletteParamIndex, paletteIndex)
+              local colorIndex = getParam(paletteParamType, paletteParamIndex)
+              UpdatePaletteMarkPosition(colorIndex)
+              local Frame_Content_Color = (UI.getChildControl)(FrameTemplateColor, "Frame_Content")
+              Static_SelectMark_Color = (UI.getChildControl)(Frame_Content_Color, "Static_SelectMark")
+              Frame_Content_Color:SetChildIndex(Static_SelectMark_Color, 9999)
+            else
+              do
+                clearPalette()
+                Panel_Customization_Common_Decoration:SetSize(Panel_Customization_Common_Decoration:GetSizeX(), controlPosY + FrameTemplateColor:GetSizeY() + controlOffset)
+                updateGroupFrameControls(Panel_Customization_Common_Decoration:GetSizeY(), Panel_Customization_Common_Decoration)
+                Panel_Customization_Common_Decoration:SetShow(true)
+                FrameTemplateColor:UpdateContentScroll()
+                FrameTemplateColor:UpdateContentPos()
+                FrameTemplate:UpdateContentScroll()
+                Frame_Scroll:SetControlTop()
+                FrameTemplate:UpdateContentPos()
+              end
+            end
+          end
         end
       end
     end
@@ -493,6 +571,8 @@ end
 
 OpenEyeDecorationUi = function(classType, uiId)
   -- function num : 0_13 , upvalues : currentclassType, currentuiId, clearRadioButtons, CheckControlArr, CheckTextArr, contentsStartY, controlOffset, selectedClassType, selectedUiId, FrameTemplateColor, RadioButton_Template, radioButtonStartX, radioButtonColumnNum, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup
+  Set_CustomizationUIPanel(0, Panel_CustomizationFrame, 10)
+  ClearAll_CustomizationUIGroup(0)
   globalcurrentclassType = classType
   globalcurrentuiId = uiId
   currentclassType = classType
@@ -528,7 +608,7 @@ OpenEyeDecorationUi = function(classType, uiId)
       tempRadioButton:SetPosY(contentsStartY + radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
       tempRadioButton:addInputEvent("Mouse_LUp", "UpdateEyeDecorationContents(" .. contentsIndex .. ", " .. 0 .. ")")
       tempRadioButton:SetShow(true)
-      -- DECOMPILER ERROR at PC130: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC138: Confused about usage of register: R10 in 'UnsetPending'
 
       RadioButtonGroup[luaContentsIndex] = tempRadioButton
     end
@@ -545,160 +625,227 @@ OpenEyeDecorationUi = function(classType, uiId)
   end
 end
 
-UpdateEyeDecorationContents = function(contentsIndex, addHistory, currentclassType, currentuiId)
-  -- function num : 0_14 , upvalues : clearContents, currentcontentindex, selectedClassType, selectedUiId, contentsStartY, FrameTemplate, Frame_Content, Frame_ContentImage, listColumCount, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, UpdateMarkPosition, imageFrameSizeY, controlOffset, sliderParamType, sliderParamIndex, sliderParamIndex2, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, CheckControlArr, Frame_Scroll
+UpdateEyeDecorationContents = function(contentsIndex, addHistory, currentclassType, currentuiId, historyapply)
+  -- function num : 0_14 , upvalues : clearContents, clearRadioButtons, UI_GroupType, currentcontentindex, selectedClassType, selectedUiId, CheckControlArr, radioButtonColumnNum, contentsStartY, controlOffset, RadioButton_Template, radioButtonStartX, radioButtonColumnWidth, radioButtonStartY, radioButtonColumnHeight, RadioButtonGroup, FrameTemplate, listColumCount, Frame_Content, Frame_ContentImage, listColumnWidth, listStartX, listColumnHeight, listStartY, ContentImage, UpdateMarkPosition, imageFrameSizeY, sliderParamType, sliderParamIndex, sliderParamIndex2, sliderParamMin, sliderParamMax, sliderParamDefault, SliderControlArr, SliderButtonArr, SliderTextArr, sliderOffset, SliderValueArr, sliderValueOffset, sliderHeight, FrameTemplateColor, Static_Collision, Frame_Scroll
   clearContents()
-  currentcontentindex = contentsIndex
-  if currentclassType ~= nil then
-    selectedClassType = currentclassType
-  end
-  if currentuiId ~= nil then
-    selectedUiId = currentuiId
-  end
-  local texSize = 48.25
-  local controlPosY = contentsStartY
-  local listCount = getUiListCount(selectedClassType, selectedUiId, contentsIndex)
-  if listCount == 1 then
-    local listIndex = 0
-    local luaListIndex = listIndex + 1
-    local listTexture = getUiListTextureName(selectedClassType, selectedUiId, contentsIndex, listIndex)
-    local listParamType = getUiListParamType(selectedClassType, selectedUiId, contentsIndex, listIndex)
-    local listParamIndex = getUiListParamIndex(selectedClassType, selectedUiId, contentsIndex, listIndex)
-    local listParamIndex2 = getUiListParamIndex(selectedClassType, selectedUiId, contentsIndex + 3, listIndex)
-    FrameTemplate:SetShow(true)
-    local paramMax = getParamMax(selectedClassType, listParamType, listParamIndex)
-    for itemIndex = 0, paramMax do
-      local luaShapeIdx = itemIndex + 1
-      local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_Image_" .. itemIndex)
-      CopyBaseProperty(Frame_ContentImage, tempContentImage)
-      tempContentImage:addInputEvent("Mouse_LUp", "UpdateEyeDecorationList(" .. listParamType .. "," .. listParamIndex .. "," .. listParamIndex2 .. "," .. itemIndex .. ")")
-      local mod = itemIndex % listColumCount
-      local divi = (math.floor)(itemIndex / listColumCount)
-      local texUV = {x1, y1, x2, y2}
-      texUV.x1 = mod * texSize
-      texUV.y1 = divi * texSize
-      texUV.x2 = texUV.x1 + texSize
-      texUV.y2 = texUV.y1 + texSize
-      tempContentImage:ChangeTextureInfoName(listTexture)
-      local x1, y1, x2, y2 = setTextureUV_Func(tempContentImage, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
-      ;
-      (tempContentImage:getBaseTexture()):setUV(x1, y1, x2, y2)
-      tempContentImage:SetPosX(itemIndex % listColumCount * listColumnWidth + listStartX)
-      tempContentImage:SetPosY((math.floor)(itemIndex / listColumCount) * listColumnHeight + listStartY)
-      tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
-      tempContentImage:SetShow(true)
-      -- DECOMPILER ERROR at PC153: Confused about usage of register: R27 in 'UnsetPending'
-
-      ContentImage[luaShapeIdx] = tempContentImage
+  clearRadioButtons()
+  if historyapply == nil then
+    local indexX = Get_CustomizationUIgroupCurrentIndexX(0, 0)
+    local indexY = Get_CustomizationUIgroupCurrentIndexY(0, 0)
+    if indexX == -1 then
+      indexX = 0
     end
-    local param = getParam(listParamType, listParamIndex)
-    UpdateMarkPosition(param)
-    FrameTemplate:SetPosY(controlPosY)
-    if paramMax < listColumCount then
-      FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY - listColumnHeight)
-    else
-      FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY)
+    if indexY == -1 then
+      indexY = 0
     end
-    controlPosY = controlPosY + FrameTemplate:GetSizeY() + controlOffset
+    ClearAll_CustomizationUIGroup(0)
+    Delete_CustomizationUIGroup(0, 0, false)
+    Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
+    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsolePrevFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_LB2)
+    Set_CustomizationUIgroupConsoleEvent(0, 0, "InConsoleNextFrame", (CppEnums.PA_CONSOLE_UI_EVENT_TYPE).eCONSOLE_UI_EVENT_TYPE_RB2)
+    Set_CustomizationUIgroupCurrentIndex(0, 0, indexX, indexY)
   end
   do
-    local sliderCount = getUiSliderCount(selectedClassType, selectedUiId, contentsIndex)
-    local sliderValueBasePosX = 0
-    for sliderIndex = 0, sliderCount - 1 do
-      local luaSliderIndex = sliderIndex + 1
-      -- DECOMPILER ERROR at PC210: Confused about usage of register: R14 in 'UnsetPending'
-
-      sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC218: Confused about usage of register: R14 in 'UnsetPending'
-
-      sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      -- DECOMPILER ERROR at PC226: Confused about usage of register: R14 in 'UnsetPending'
-
-      sliderParamIndex2[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex + 3, sliderIndex)
-      local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC241: Confused about usage of register: R15 in 'UnsetPending'
-
-      sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC250: Confused about usage of register: R15 in 'UnsetPending'
-
-      sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      -- DECOMPILER ERROR at PC259: Confused about usage of register: R15 in 'UnsetPending'
-
-      sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-      setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
-      ;
-      (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateEyeDecorationSlider(" .. sliderIndex .. ")")
-      ;
-      (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
-      local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
-      ;
-      (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
-      ;
-      (SliderTextArr[luaSliderIndex]):SetPosY(controlPosY)
-      ;
-      (SliderTextArr[luaSliderIndex]):SetShow(true)
-      ;
-      (SliderControlArr[luaSliderIndex]):SetPosY(controlPosY + sliderOffset)
-      ;
-      (SliderControlArr[luaSliderIndex]):SetShow(true)
-      ;
-      (SliderValueArr[luaSliderIndex]):SetText(sliderParam)
-      ;
-      (SliderValueArr[luaSliderIndex]):SetPosY(controlPosY + sliderValueOffset)
-      ;
-      (SliderValueArr[luaSliderIndex]):SetShow(true)
-      local sliderTextSizeX = (SliderTextArr[luaSliderIndex]):GetPosX() + (SliderTextArr[luaSliderIndex]):GetTextSizeX()
-      local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
-      if sliderValuePosX < sliderTextSizeX then
-        sliderValueBasePosX = (math.max)(sliderValueBasePosX, sliderTextSizeX)
-      end
-      controlPosY = controlPosY + sliderHeight
+    currentcontentindex = contentsIndex
+    if currentclassType ~= nil then
+      selectedClassType = currentclassType
     end
-    if sliderValueBasePosX > 0 then
-      for sliderIndex = 0, sliderCount - 1 do
-        local luaSliderIndex = sliderIndex + 1
-        local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
-        ;
-        (SliderValueArr[luaSliderIndex]):SetPosX(sliderValueBasePosX + 5)
-        ;
-        (SliderControlArr[luaSliderIndex]):SetSize(174 - (sliderValueBasePosX - sliderValuePosX), (SliderControlArr[luaSliderIndex]):GetSizeY())
-        ;
-        (SliderControlArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
-        local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
-        setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
-        ;
-        (SliderControlArr[luaSliderIndex]):SetInterval(100)
-      end
+    if currentuiId ~= nil then
+      selectedUiId = currentuiId
     end
-    do
-      local paletteCount = getUiPaletteCount(selectedClassType, selectedUiId, contentsIndex)
-      if paletteCount == 1 then
-        controlPosY = controlPosY + controlOffset
-        local paletteParamType = getUiPaletteParamType(selectedClassType, selectedUiId, contentsIndex)
-        local paletteParamIndex = getUiPaletteParamIndex(selectedClassType, selectedUiId, contentsIndex)
-        local paletteParamIndex2 = getUiPaletteParamIndex(selectedClassType, selectedUiId, contentsIndex + 3)
-        local paletteIndex = getDecorationParamMethodValue(selectedClassType, paletteParamType, paletteParamIndex)
-        FrameTemplateColor:SetShow(true)
-        FrameTemplateColor:SetPosY(controlPosY)
-        CreateEyePalette(FrameTemplateColor, Static_Collision, selectedClassType, paletteParamType, paletteParamIndex, paletteParamIndex2, paletteIndex, CheckControlArr[1], CheckControlArr[2])
-        local colorIndex = getParam(paletteParamType, paletteParamIndex)
-        UpdatePaletteMarkPosition(colorIndex)
-        local Frame_Content_Color = (UI.getChildControl)(FrameTemplateColor, "Frame_Content")
-        Static_SelectMark_Color = (UI.getChildControl)(Frame_Content_Color, "Static_SelectMark")
-        Frame_Content_Color:SetChildIndex(Static_SelectMark_Color, 9999)
-      else
+    local currentheight = 0
+    local maxcountx = 50
+    local maxcounty = 50
+    Add_CustomizationUIControl(0, 0, 0, 0, maxcountx, maxcounty, CheckControlArr[2])
+    Add_CustomizationUIControl(0, 0, 1, 0, maxcountx, maxcounty, CheckControlArr[1])
+    currentheight = 1
+    local contentsCount = getUiContentsCount(selectedClassType, selectedUiId) / 2
+    local countx = radioButtonColumnNum
+    local county = (math.floor)(contentsCount / radioButtonColumnNum)
+    if contentsCount % countx ~= 0 then
+      county = county + 1
+    end
+    contentsStartY = 0
+    contentsStartY = contentsStartY + (CheckControlArr[1]):GetSizeY() + controlOffset
+    if contentsCount > 1 then
+      for contentsIndex = 0, contentsCount - 1 do
+        local luaContentsIndex = contentsIndex + 1
+        local tempRadioButton = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_RADIOBUTTON, Panel_Customization_Common_Decoration, "RadioButton_" .. luaContentsIndex)
+        CopyBaseProperty(RadioButton_Template, tempRadioButton)
+        local contentsDesc = getUiContentsDescName(selectedClassType, selectedUiId, contentsIndex)
+        tempRadioButton:SetText(PAGetString(Defines.StringSheet_GAME, contentsDesc))
+        tempRadioButton:SetPosX(radioButtonStartX + contentsIndex % radioButtonColumnNum * radioButtonColumnWidth)
+        tempRadioButton:SetPosY(contentsStartY + radioButtonStartY + (math.floor)(contentsIndex / radioButtonColumnNum) * radioButtonColumnHeight)
+        tempRadioButton:addInputEvent("Mouse_LUp", "UpdateEyeDecorationContents(" .. contentsIndex .. ", " .. 0 .. ")")
+        tempRadioButton:SetShow(true)
+        -- DECOMPILER ERROR at PC180: Confused about usage of register: R18 in 'UnsetPending'
+
+        RadioButtonGroup[luaContentsIndex] = tempRadioButton
+        Add_CustomizationUIControl(0, 0, contentsIndex % countx, currentheight + contentsIndex / countx, maxcountx, maxcounty, RadioButtonGroup[luaContentsIndex])
+      end
+      local radioButtonRowCount = 1 + (math.floor)((contentsCount - 1) / radioButtonColumnNum)
+      contentsStartY = contentsStartY + controlOffset + radioButtonRowCount * RadioButton_Template:GetSizeY() + controlOffset
+    else
+      do
+        contentsStartY = contentsStartY + controlOffset
+        currentheight = currentheight + (county)
+        local texSize = 48.25
+        local controlPosY = contentsStartY
+        local listCount = getUiListCount(selectedClassType, selectedUiId, contentsIndex)
+        if listCount == 1 then
+          local listIndex = 0
+          local luaListIndex = listIndex + 1
+          local listTexture = getUiListTextureName(selectedClassType, selectedUiId, contentsIndex, listIndex)
+          local listParamType = getUiListParamType(selectedClassType, selectedUiId, contentsIndex, listIndex)
+          local listParamIndex = getUiListParamIndex(selectedClassType, selectedUiId, contentsIndex, listIndex)
+          local listParamIndex2 = getUiListParamIndex(selectedClassType, selectedUiId, contentsIndex + 3, listIndex)
+          FrameTemplate:SetShow(true)
+          local paramMax = getParamMax(selectedClassType, listParamType, listParamIndex)
+          countx = listColumCount
+          county = (math.floor)(paramMax / listColumCount)
+          if contentsCount % countx ~= 0 then
+            county = county + 1
+          end
+          for itemIndex = 0, paramMax do
+            local luaShapeIdx = itemIndex + 1
+            local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_Image_" .. itemIndex)
+            CopyBaseProperty(Frame_ContentImage, tempContentImage)
+            tempContentImage:addInputEvent("Mouse_LUp", "UpdateEyeDecorationList(" .. listParamType .. "," .. listParamIndex .. "," .. listParamIndex2 .. "," .. itemIndex .. ")")
+            local mod = itemIndex % listColumCount
+            local divi = (math.floor)(itemIndex / listColumCount)
+            local texUV = {x1, y1, x2, y2}
+            texUV.x1 = mod * texSize
+            texUV.y1 = divi * texSize
+            texUV.x2 = texUV.x1 + texSize
+            texUV.y2 = texUV.y1 + texSize
+            tempContentImage:ChangeTextureInfoName(listTexture)
+            local x1, y1, x2, y2 = setTextureUV_Func(tempContentImage, texUV.x1, texUV.y1, texUV.x2, texUV.y2)
+            ;
+            (tempContentImage:getBaseTexture()):setUV(x1, y1, x2, y2)
+            tempContentImage:SetPosX(itemIndex % listColumCount * listColumnWidth + listStartX)
+            tempContentImage:SetPosY((math.floor)(itemIndex / listColumCount) * listColumnHeight + listStartY)
+            tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
+            tempContentImage:SetShow(true)
+            -- DECOMPILER ERROR at PC372: Confused about usage of register: R34 in 'UnsetPending'
+
+            ContentImage[luaShapeIdx] = tempContentImage
+            Add_CustomizationUIControl(0, 0, itemIndex % countx, currentheight + itemIndex / countx, maxcountx, maxcounty, ContentImage[luaShapeIdx])
+          end
+          currentheight = currentheight + (county)
+          local param = getParam(listParamType, listParamIndex)
+          UpdateMarkPosition(param)
+          FrameTemplate:SetPosY(controlPosY)
+          if paramMax < listColumCount then
+            FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY - listColumnHeight)
+          else
+            FrameTemplate:SetSize(FrameTemplate:GetSizeX(), imageFrameSizeY)
+          end
+          controlPosY = controlPosY + FrameTemplate:GetSizeY() + controlOffset
+        end
         do
-          clearPalette()
-          Panel_Customization_Common_Decoration:SetSize(Panel_Customization_Common_Decoration:GetSizeX(), controlPosY + FrameTemplateColor:GetSizeY() + controlOffset)
-          updateGroupFrameControls(Panel_Customization_Common_Decoration:GetSizeY(), Panel_Customization_Common_Decoration)
-          Panel_Customization_Common_Decoration:SetShow(true)
-          FrameTemplateColor:UpdateContentScroll()
-          FrameTemplateColor:UpdateContentPos()
-          FrameTemplate:UpdateContentScroll()
-          Frame_Scroll:SetControlTop()
-          FrameTemplate:UpdateContentPos()
-          if addHistory == 1 then
-            add_CurrentHistory()
+          local sliderCount = getUiSliderCount(selectedClassType, selectedUiId, contentsIndex)
+          local sliderValueBasePosX = 0
+          for sliderIndex = 0, sliderCount - 1 do
+            local luaSliderIndex = sliderIndex + 1
+            -- DECOMPILER ERROR at PC441: Confused about usage of register: R21 in 'UnsetPending'
+
+            sliderParamType[luaSliderIndex] = getUiSliderParamType(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
+            -- DECOMPILER ERROR at PC449: Confused about usage of register: R21 in 'UnsetPending'
+
+            sliderParamIndex[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
+            -- DECOMPILER ERROR at PC457: Confused about usage of register: R21 in 'UnsetPending'
+
+            sliderParamIndex2[luaSliderIndex] = getUiSliderParamIndex(selectedClassType, selectedUiId, contentsIndex + 3, sliderIndex)
+            local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            -- DECOMPILER ERROR at PC472: Confused about usage of register: R22 in 'UnsetPending'
+
+            sliderParamMin[luaSliderIndex] = getParamMin(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            -- DECOMPILER ERROR at PC481: Confused about usage of register: R22 in 'UnsetPending'
+
+            sliderParamMax[luaSliderIndex] = getParamMax(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            -- DECOMPILER ERROR at PC490: Confused about usage of register: R22 in 'UnsetPending'
+
+            sliderParamDefault[luaSliderIndex] = getParamDefault(selectedClassType, sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+            setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
+            ;
+            (SliderButtonArr[luaSliderIndex]):addInputEvent("Mouse_LPress", "UpdateEyeDecorationSlider(" .. sliderIndex .. ")")
+            ;
+            (SliderControlArr[luaSliderIndex]):addInputEvent("Mouse_LUp", "add_CurrentHistory()")
+            local sliderDesc = getUiSliderDescName(selectedClassType, selectedUiId, contentsIndex, sliderIndex)
+            ;
+            (SliderTextArr[luaSliderIndex]):SetText(PAGetString(Defines.StringSheet_GAME, sliderDesc))
+            ;
+            (SliderTextArr[luaSliderIndex]):SetPosY(controlPosY)
+            ;
+            (SliderTextArr[luaSliderIndex]):SetShow(true)
+            ;
+            (SliderControlArr[luaSliderIndex]):SetPosY(controlPosY + sliderOffset)
+            ;
+            (SliderControlArr[luaSliderIndex]):SetShow(true)
+            ;
+            (SliderValueArr[luaSliderIndex]):SetText(sliderParam)
+            ;
+            (SliderValueArr[luaSliderIndex]):SetPosY(controlPosY + sliderValueOffset)
+            ;
+            (SliderValueArr[luaSliderIndex]):SetShow(true)
+            Add_CustomizationUIControl(0, 0, 0, currentheight + sliderIndex, maxcountx, maxcounty, SliderButtonArr[luaSliderIndex])
+            local sliderTextSizeX = (SliderTextArr[luaSliderIndex]):GetPosX() + (SliderTextArr[luaSliderIndex]):GetTextSizeX()
+            local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
+            if sliderValuePosX < sliderTextSizeX then
+              sliderValueBasePosX = (math.max)(sliderValueBasePosX, sliderTextSizeX)
+            end
+            controlPosY = controlPosY + sliderHeight
+          end
+          currentheight = currentheight + sliderCount
+          if sliderValueBasePosX > 0 then
+            for sliderIndex = 0, sliderCount - 1 do
+              local luaSliderIndex = sliderIndex + 1
+              local sliderValuePosX = (SliderValueArr[luaSliderIndex]):GetPosX()
+              ;
+              (SliderValueArr[luaSliderIndex]):SetPosX(sliderValueBasePosX + 5)
+              ;
+              (SliderControlArr[luaSliderIndex]):SetSize(174 - (sliderValueBasePosX - sliderValuePosX), (SliderControlArr[luaSliderIndex]):GetSizeY())
+              ;
+              (SliderControlArr[luaSliderIndex]):SetPosX(95 + (sliderValueBasePosX - sliderValuePosX) + 5)
+              local sliderParam = getParam(sliderParamType[luaSliderIndex], sliderParamIndex[luaSliderIndex])
+              setSliderValue(SliderControlArr[luaSliderIndex], sliderParam, sliderParamMin[luaSliderIndex], sliderParamMax[luaSliderIndex])
+              ;
+              (SliderControlArr[luaSliderIndex]):SetInterval(100)
+            end
+          end
+          do
+            local paletteCount = getUiPaletteCount(selectedClassType, selectedUiId, contentsIndex)
+            if paletteCount == 1 then
+              setConsoleHeightPalette(currentheight)
+              controlPosY = controlPosY + controlOffset
+              local paletteParamType = getUiPaletteParamType(selectedClassType, selectedUiId, contentsIndex)
+              local paletteParamIndex = getUiPaletteParamIndex(selectedClassType, selectedUiId, contentsIndex)
+              local paletteParamIndex2 = getUiPaletteParamIndex(selectedClassType, selectedUiId, contentsIndex + 3)
+              local paletteIndex = getDecorationParamMethodValue(selectedClassType, paletteParamType, paletteParamIndex)
+              FrameTemplateColor:SetShow(true)
+              FrameTemplateColor:SetPosY(controlPosY)
+              CreateEyePalette(FrameTemplateColor, Static_Collision, selectedClassType, paletteParamType, paletteParamIndex, paletteParamIndex2, paletteIndex, CheckControlArr[1], CheckControlArr[2])
+              local colorIndex = getParam(paletteParamType, paletteParamIndex)
+              UpdatePaletteMarkPosition(colorIndex)
+              local Frame_Content_Color = (UI.getChildControl)(FrameTemplateColor, "Frame_Content")
+              Static_SelectMark_Color = (UI.getChildControl)(Frame_Content_Color, "Static_SelectMark")
+              Frame_Content_Color:SetChildIndex(Static_SelectMark_Color, 9999)
+            else
+              do
+                clearPalette()
+                Panel_Customization_Common_Decoration:SetSize(Panel_Customization_Common_Decoration:GetSizeX(), controlPosY + FrameTemplateColor:GetSizeY() + controlOffset)
+                updateGroupFrameControls(Panel_Customization_Common_Decoration:GetSizeY(), Panel_Customization_Common_Decoration)
+                Panel_Customization_Common_Decoration:SetShow(true)
+                FrameTemplateColor:UpdateContentScroll()
+                FrameTemplateColor:UpdateContentPos()
+                FrameTemplate:UpdateContentScroll()
+                Frame_Scroll:SetControlTop()
+                FrameTemplate:UpdateContentPos()
+                if addHistory == 1 then
+                  add_CurrentHistory()
+                end
+              end
+            end
           end
         end
       end
@@ -801,6 +948,7 @@ CloseTattooDecorationUi = function()
   EnableDecorationSlide(true)
   CloseCommonDecorationUi()
   checkType = -1
+  setConsoleHeightPalette(0)
 end
 
 OpenCommonExpressionUi = function(classType, uiId)
@@ -819,6 +967,7 @@ CloseCommonExpressionUi = function()
   applyExpression(-1, 1)
   CloseCommonDecorationUi()
   checkType = -1
+  setConsoleHeightPalette(0)
 end
 
 SetExpression = function()
@@ -834,17 +983,17 @@ CommonDecorationHistoryApplyUpdate = function()
     return 
   end
   if checkType == 0 then
-    UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+    UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId, true)
   else
     if checkType == 1 then
-      UpdateEyeDecorationContents(currentcontentindex, 0, currentclassType, currentuiId)
+      UpdateEyeDecorationContents(currentcontentindex, 0, currentclassType, currentuiId, true)
     else
       if checkType == 2 then
-        UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+        UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId, true)
       else
         if checkType == 3 then
           SetExpression()
-          UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId)
+          UpdateDecorationContents(currentcontentindex, currentclassType, currentuiId, true)
         end
       end
     end

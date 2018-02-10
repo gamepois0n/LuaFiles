@@ -214,6 +214,9 @@ ItemmarketItemSet_ListUpdate = function(contents, key)
   DivisionLine2:SetShow(true)
   DivisionLine2:SetPosX(540)
   DivisionLine2:SetPosY(12)
+  local PrivateItemIcon = (UI.getChildControl)(contents, "Static_PassIcon")
+  PrivateItemIcon:SetPosX(AveragePrice_Title:GetPosX() - PrivateItemIcon:GetSizeX() - 10)
+  PrivateItemIcon:SetPosY(AveragePrice_Title:GetPosY())
   local currentTerritoryKey = currentMyTerritoryKey()
   local myItemInfo = getItemMarketMyItemByIndex(idx)
   if myItemInfo ~= nil then
@@ -245,6 +248,7 @@ ItemmarketItemSet_ListUpdate = function(contents, key)
       else
         ItemName:SetText(iess:getName())
       end
+      PrivateItemIcon:SetShow(myItemInfo:isPrivateItem())
       createSlot:setItemByStaticStatus(iess, myItemInfo:getCount(), -1, false)
       ;
       (createSlot.icon):addInputEvent("Mouse_On", "_ItemMarketItemSet_ShowToolTip( " .. idx .. " )")
@@ -795,11 +799,7 @@ FGlobal_ItemMarketItemSet_Open = function()
     return 
   end
   if Panel_Window_ItemMarket:GetShow() then
-    if isNewItemmarket_chk() then
-      FGolbal_ItemMarketNew_Close()
-    else
-      FGolbal_ItemMarketNew_Close()
-    end
+    FGolbal_ItemMarketNew_Close()
   end
   if Panel_ItemMarket_AlarmList:GetShow() then
     FGlobal_ItemMarketAlarmList_Close()

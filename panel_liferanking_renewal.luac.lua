@@ -42,7 +42,7 @@ LifeRankingHideAni = function()
 end
 
 PaGlobal_LifeRanking = {
-_ui = {_txtTitle = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Title"), _btnClose = (UI.getChildControl)(Panel_LifeRanking, "Button_Win_Close"), _btnHelp = (UI.getChildControl)(Panel_LifeRanking, "Button_Question"), _scroll = (UI.getChildControl)(Panel_LifeRanking, "Scroll_RankingList"), _listBg = (UI.getChildControl)(Panel_LifeRanking, "Static_BG"), _btnRefresh = (UI.getChildControl)(Panel_LifeRanking, "Button_Refresh"), _myRanking = (UI.getChildControl)(Panel_LifeRanking, "StaticText_MyRanking"), _inMyRankRate = (UI.getChildControl)(Panel_LifeRanking, "Slider_InMyRank"), firstRanker = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Rank_First"), firstRankerName = (UI.getChildControl)(Panel_LifeRanking, "StaticText_FirstCharacterName"), firstRankerGuild = (UI.getChildControl)(Panel_LifeRanking, "StaticText_FirstGuildName"), secondRanker = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Rank_Second"), secondRankerName = (UI.getChildControl)(Panel_LifeRanking, "StaticText_SecondCharacterName"), secondRankerGuild = (UI.getChildControl)(Panel_LifeRanking, "StaticText_SecondGuildName"), thirdRanker = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Rank_Third"), thirdRankerName = (UI.getChildControl)(Panel_LifeRanking, "StaticText_ThirdCharacterName"), thirdRankerGuild = (UI.getChildControl)(Panel_LifeRanking, "StaticText_ThirdGuildName"), 
+_ui = {_txtTitle = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Title"), _btnClose = (UI.getChildControl)(Panel_LifeRanking, "Button_Win_Close"), _btnHelp = (UI.getChildControl)(Panel_LifeRanking, "Button_Question"), _scroll = (UI.getChildControl)(Panel_LifeRanking, "Scroll_RankingList"), _listBg = (UI.getChildControl)(Panel_LifeRanking, "Static_BG"), _myRanking = (UI.getChildControl)(Panel_LifeRanking, "StaticText_MyRanking"), _inMyRankRate = (UI.getChildControl)(Panel_LifeRanking, "Slider_InMyRank"), firstRanker = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Rank_First"), firstRankerName = (UI.getChildControl)(Panel_LifeRanking, "StaticText_FirstCharacterName"), firstRankerGuild = (UI.getChildControl)(Panel_LifeRanking, "StaticText_FirstGuildName"), secondRanker = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Rank_Second"), secondRankerName = (UI.getChildControl)(Panel_LifeRanking, "StaticText_SecondCharacterName"), secondRankerGuild = (UI.getChildControl)(Panel_LifeRanking, "StaticText_SecondGuildName"), thirdRanker = (UI.getChildControl)(Panel_LifeRanking, "StaticText_Rank_Third"), thirdRankerName = (UI.getChildControl)(Panel_LifeRanking, "StaticText_ThirdCharacterName"), thirdRankerGuild = (UI.getChildControl)(Panel_LifeRanking, "StaticText_ThirdGuildName"), 
 _topGrade = {(UI.getChildControl)(Panel_LifeRanking, "StaticText_Grade_First"), (UI.getChildControl)(Panel_LifeRanking, "StaticText_Grade_Second"), (UI.getChildControl)(Panel_LifeRanking, "StaticText_Grade_Third")}
 , 
 _tab = {[0] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Gathering"), [1] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Fishing"), [2] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Hunting"), [3] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Cook"), [4] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Alchemy"), [5] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Manufacture"), [6] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Mating"), [7] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Trade"), [8] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Growth"), [9] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Sail"), [10] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Wealth"), [11] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Combat"), [12] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_LocalWar"), [13] = (UI.getChildControl)(Panel_LifeRanking, "RadioButton_Tab_Rally")}
@@ -63,7 +63,7 @@ _posConfig = {_tabStartPosX = 14, _tabPosXGap = 100, _listStartPosY = 265, _list
 _listUpdate = {[0] = false, [1] = false, [2] = false, [3] = false, [4] = false, [5] = false, [6] = false, [7] = false, [8] = false, [9] = false, [10] = false, [11] = false, [12] = false, [13] = false}
 }
 local rankingTabId = {tab_Gathering = 0, tab_Fishing = 1, tab_Hunting = 2, tab_Cook = 3, tab_Alchemy = 4, tab_Manufacture = 5, tab_Mating = 6, tab_Trade = 7, tab_Growth = 8, tab_Sail = 9, tab_Wealth = 10, tab_Combat = 11, tab_LocalWar = 12, tab_Rally = 13}
--- DECOMPILER ERROR at PC482: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC476: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.Initialize = function(self)
   -- function num : 0_2
@@ -123,7 +123,7 @@ PaGlobal_LifeRanking.Initialize = function(self)
   Panel_LifeRanking:SetChildIndex(((self._ui)._tooltip)._desc, 9999)
 end
 
--- DECOMPILER ERROR at PC486: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC480: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.Update = function(self)
   -- function num : 0_3 , upvalues : UI_color
@@ -271,7 +271,7 @@ PaGlobal_LifeRanking.Update = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC489: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC483: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.LevelFlotFunc = function(self, lifeRankerWrp)
   -- function num : 0_4
@@ -298,7 +298,7 @@ PaGlobal_LifeRanking.LevelFlotFunc = function(self, lifeRankerWrp)
   return rateDisplay
 end
 
--- DECOMPILER ERROR at PC492: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC486: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.SelectTab = function(self, idx)
   -- function num : 0_5
@@ -327,7 +327,7 @@ PaGlobal_LifeRanking.SelectTab = function(self, idx)
   end
 end
 
--- DECOMPILER ERROR at PC495: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC489: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.RankerWhisper = function(self, rankIdx)
   -- function num : 0_6
@@ -337,7 +337,7 @@ PaGlobal_LifeRanking.RankerWhisper = function(self, rankIdx)
   FGlobal_ChattingInput_ShowWhisper(lifeRankerCharName)
 end
 
--- DECOMPILER ERROR at PC499: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC493: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.MyLifeRankingText_Refresh = function(self)
   -- function num : 0_7 , upvalues : UI_color
@@ -414,7 +414,7 @@ PaGlobal_LifeRanking.MyLifeRankingText_Refresh = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC502: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC496: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.RequestLifeRank = function(self, tab)
   -- function num : 0_8
@@ -439,7 +439,7 @@ PaGlobal_LifeRanking.RequestLifeRank = function(self, tab)
   end
 end
 
--- DECOMPILER ERROR at PC505: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC499: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.GetMyLifeRank = function(self, tab)
   -- function num : 0_9
@@ -466,7 +466,7 @@ PaGlobal_LifeRanking.GetMyLifeRank = function(self, tab)
   return myRank
 end
 
--- DECOMPILER ERROR at PC508: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC502: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.GetUserCount = function(self, tab)
   -- function num : 0_10
@@ -493,7 +493,7 @@ PaGlobal_LifeRanking.GetUserCount = function(self, tab)
   return userCount
 end
 
--- DECOMPILER ERROR at PC511: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC505: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.GetLifeRankerAt = function(self, listIdx)
   -- function num : 0_11
@@ -520,7 +520,7 @@ PaGlobal_LifeRanking.GetLifeRankerAt = function(self, listIdx)
   return lifeRanker
 end
 
--- DECOMPILER ERROR at PC514: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC508: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.GetLifeRankerLv = function(self, lifeRanker, tab)
   -- function num : 0_12
@@ -537,7 +537,7 @@ PaGlobal_LifeRanking.GetLifeRankerLv = function(self, lifeRanker, tab)
   return lifeRankerLv
 end
 
--- DECOMPILER ERROR at PC517: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC511: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.CheckMyLifeLv = function(self, tab)
   -- function num : 0_13
@@ -554,7 +554,7 @@ PaGlobal_LifeRanking.CheckMyLifeLv = function(self, tab)
   return lifeRankerLv
 end
 
--- DECOMPILER ERROR at PC520: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC514: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.FillLifeRankList = function(self, lifeRanker, rankText, nameText, guildText, gradeText, listIdx, color)
   -- function num : 0_14
@@ -590,7 +590,11 @@ PaGlobal_LifeRanking.FillLifeRankList = function(self, lifeRanker, rankText, nam
   nameText:SetText(lifeRankerName .. "(" .. lifeRankerCharName .. ")")
   guildText:SetText(lifeRankerGuild)
   if self._selectedTabIdx <= 9 then
-    gradeText:SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, self._selectedTabIdx))
+    if isNewCharacterInfo() == false then
+      gradeText:SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, self._selectedTabIdx))
+    else
+      gradeText:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeRankerLv, self._selectedTabIdx))
+    end
   else
     if self._selectedTabIdx == 10 then
       gradeText:SetShow(false)
@@ -617,7 +621,7 @@ PaGlobal_LifeRanking.FillLifeRankList = function(self, lifeRanker, rankText, nam
   end
 end
 
--- DECOMPILER ERROR at PC523: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC517: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.ShowAndUpdate = function(self)
   -- function num : 0_15
@@ -696,6 +700,10 @@ FGlobal_LifeRanking_Open = function()
   else
     PaGlobal_LifeRanking:ShowAndUpdate()
   end
+  ;
+  (((self._ui)._tabMyRank)[13]):SetShow(false)
+  ;
+  (((self._ui)._tab)[13]):SetShow(false)
 end
 
 FGlobal_LifeRanking_Close = function()
@@ -762,7 +770,7 @@ FGlobal_LifeRanking_Show = function(index)
   end
 end
 
--- DECOMPILER ERROR at PC549: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC543: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.Simpletooltips = function(self, isShow, contolNo)
   -- function num : 0_27
@@ -777,7 +785,7 @@ PaGlobal_LifeRanking.Simpletooltips = function(self, isShow, contolNo)
   end
 end
 
--- DECOMPILER ERROR at PC552: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC546: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.TooltipHide = function(self)
   -- function num : 0_28
@@ -788,7 +796,7 @@ PaGlobal_LifeRanking.TooltipHide = function(self)
   (((self._ui)._tooltip)._desc):SetShow(false)
 end
 
--- DECOMPILER ERROR at PC555: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC549: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.TooltipShow = function(self, uiControl, name, desc, index)
   -- function num : 0_29
@@ -831,7 +839,7 @@ PaGlobal_LifeRanking.TooltipShow = function(self, uiControl, name, desc, index)
   (((self._ui)._tooltip)._desc):SetPosY((((self._ui)._tooltip)._name):GetPosY() + (((self._ui)._tooltip)._name):GetSizeY())
 end
 
--- DECOMPILER ERROR at PC558: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC552: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_LifeRanking.Tooltip = function(self, index)
   -- function num : 0_30

@@ -211,10 +211,10 @@ FromClient_AppliedChangeUseType_Ack = function(houseInfoSSWrapper)
   local useType_Name = houseInfoCraftWrapper:getReciepeName()
   local currentHouseLevel = rentHouse:getLevel()
   if currentHouseLevel > 1 then
-    Proc_ShowMessage_Ack(houseName .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_ONCHANGE_END_1", "typeName", useType_Name, "typeLevel", currentHouseLevel))
+    Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_ONCHANGE_END_1", "house_name", tostring(houseName), "typeName", useType_Name, "typeLevel", currentHouseLevel))
   else
     if currentHouseLevel == 1 then
-      Proc_ShowMessage_Ack(houseName .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_ONCHANGE_END_2", "typeName", useType_Name))
+      Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_ONCHANGE_END_2", "house_name", tostring(houseName), "typeName", useType_Name))
     end
   end
 end

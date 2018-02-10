@@ -84,7 +84,7 @@ Panel_MovieTheater320_ShowToggle = function()
   if Panel_MovieTheater_MessageBox:IsShow() == true then
     return 
   end
-  if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+  if isGameTypeKR2() or isGameTypeTH() or isGameTypeID() then
     return 
   end
   value_Panel_MovieTheater_320_IsCheckedShow = true
@@ -1266,7 +1266,7 @@ end
 Panel_MovieTheater320_Clicked_Func = function(isYes)
   -- function num : 0_9 , upvalues : _movieTheater_320, isMoviePlay
   if isYes == true then
-    value_GameOption_Check_ComboGuide:SetCheck(false)
+    GameOption_ComboGuideValueChange(false)
     setShowComboGuide(false)
     GameOption_UpdateOptionChanged()
     _currentSpiritGuideCheck = false

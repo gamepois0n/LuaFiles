@@ -7,12 +7,12 @@ local RAT_VIEW = 0
 local isDevelopment = ToClient_IsDevelopment()
 PaGlobal_RecommendEngine_CashVeiw = function(CashProductNo)
   -- function num : 0_0 , upvalues : RAT_VIEW
-  ToClient_sendRecommendEngineInfoCashShop(RAT_VIEW, CashProductNo)
+  ToClient_sendRecommendInfoCashShop(RAT_VIEW, CashProductNo)
 end
 
 PaGlobal_RecommendEngine_ItemMarketVeiw = function(ItemEnchantKey)
   -- function num : 0_1 , upvalues : RAT_VIEW
-  ToClient_sendRecommendEngineInfoItemMarket(RAT_VIEW, ItemEnchantKey)
+  ToClient_sendRecommendInfoItemMarket(RAT_VIEW, ItemEnchantKey)
 end
 
 

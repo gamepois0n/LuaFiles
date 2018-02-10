@@ -3,6 +3,7 @@
 
 -- params : ...
 -- function num : 0
+local UI_GroupType = CppEnums.PA_CONSOLE_UI_CONTROL_TYPE
 local Button_Close = (UI.getChildControl)(Panel_CustomizationVoice, "Button_Close")
 local static_Frame = (UI.getChildControl)(Panel_CustomizationVoice, "Static_Frame")
 local Frame_ContentImage = (UI.getChildControl)(Panel_CustomizationVoice, "Frame_Content_Image")
@@ -70,8 +71,6 @@ local textSliderPosY = StaticText_Slider:GetPosY()
 local sliderPosY = Slider_Voice:GetPosY()
 local textLowPosY = staticTextVoiceLow:GetPosY()
 local textHighPosY = staticTextVoiceHigh:GetPosY()
-local contentoption = false
-local isContentsCustomizationVoice = ToClient_IsContentsGroupOpen("244")
 local UpdateMarkPosition = function()
   -- function num : 0_0 , upvalues : markPosIndex, slideIndex, VoiceCount, columMaxIndex, ColumnCount, selectedRealIndex, Static_SelectMark, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY
   markPosIndex = slideIndex * 5
@@ -142,8 +141,8 @@ local social = 1000
 local combat = 2000
 local MotionTable = {[0] = none, [1] = none, [2] = none, [3] = none, [4] = none, [5] = social, [6] = social, [7] = social, [8] = none, [9] = social, [10] = none, [11] = social, [12] = none, [13] = none, [14] = none, [15] = none, [16] = none, [17] = none, [18] = none, [19] = none, [20] = none, [21] = none, [22] = none, [23] = social, [24] = none, [25] = social, [26] = social, [27] = none, [28] = none, [29] = none, [30] = social, [31] = none, [32] = none, [33] = social, [34] = none, [35] = none, [36] = none, [37] = combat, [38] = combat, [39] = combat}
 Initialize = function()
-  -- function num : 0_3 , upvalues : isContentsCustomizationVoice, Slider_Voice, staticTextVoiceLow, playVoice_Ctrl, StaticText_Title
-  if isContentsCustomizationVoice then
+  -- function num : 0_3 , upvalues : Slider_Voice, staticTextVoiceLow, playVoice_Ctrl, StaticText_Title
+  if _ContentsGroup_isContentsCustomizationVoice then
     Slider_Voice:SetSize(290, 7)
     Slider_Voice:SetInterval(290)
     staticTextVoiceLow:SetPosX(258)
@@ -159,17 +158,30 @@ Initialize = function()
 end
 
 createVoiceList = function(inGameMode, classType)
-  -- function num : 0_4 , upvalues : clearContentList, selectedInGameMode, selectedClassType, isContentsCustomizationVoice, VoiceCount, columIndex, ColumnCount, Frame_ContentImage, voiceCountText, Static_PayMark, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, NoCashType, NoCashVoice, columMaxIndex, ContentImage, ContentCount, Const_UsebleMotionbyServiceArea, InitMotionindex, MotionTable, social, Frame_Content, Frame_ContentMotionImage, textureColumnCount, MotionColumnWidth, MotionContentsOffsetX, MotionColumnHeight, MotionContentsOffsetY, ContentMotionImage, selectMotionItemIndex, combat, static_Frame_Motion
+  -- function num : 0_4 , upvalues : UI_GroupType, clearContentList, selectedInGameMode, selectedClassType, VoiceCount, Button_Close, ColumnCount, columIndex, Frame_ContentImage, voiceCountText, Static_PayMark, columnWidth, contentsOffsetX, columnHeight, contentsOffsetY, NoCashType, NoCashVoice, columMaxIndex, ContentImage, ContentCount, Slider_Voice_Btn, Const_UsebleMotionbyServiceArea, InitMotionindex, MotionTable, social, Frame_Content, Frame_ContentMotionImage, textureColumnCount, MotionColumnWidth, MotionContentsOffsetX, MotionColumnHeight, MotionContentsOffsetY, ContentMotionImage, selectMotionItemIndex, combat, static_Frame_Motion
+  Set_CustomizationUIPanel(0, Panel_CustomizationVoice, 10)
+  ClearAll_CustomizationUIGroup(0)
+  Add_CustomizationUIGroup(0, 0, UI_GroupType.eCONSOLE_UI_CONTROL_TYPE_CUSTOMIZATION)
   clearContentList()
   selectedInGameMode = inGameMode
   selectedClassType = classType
   local texWidth = 48
   local texHeight = 48
   local texColumCount = 4
-  if isContentsCustomizationVoice == false then
+  if _ContentsGroup_isContentsCustomizationVoice == false then
     VoiceCount = 1
   else
     VoiceCount = getClassVoiceCount()
+  end
+  local maxcountx = 50
+  local maxcounty = 50
+  Add_CustomizationUIControl(0, 0, 0, 0, maxcountx, maxcounty, Button_Close)
+  Set_CustomizationUIgroupCurrentIndex(0, 0, 0, 1)
+  local currentHeight = 1
+  local countx = ColumnCount
+  local county = (math.floor)(VoiceCount / ColumnCount)
+  if VoiceCount / ColumnCount ~= 0 then
+    county = county + 1
   end
   for itemIdx = 0, VoiceCount - 1 do
     columIndex = (math.ceil)((itemIdx + 1) / ColumnCount)
@@ -200,13 +212,16 @@ createVoiceList = function(inGameMode, classType)
     if columMaxIndex * ColumnCount <= itemIdx then
       tempContentImage:SetShow(false)
     end
-    -- DECOMPILER ERROR at PC165: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC210: Confused about usage of register: R17 in 'UnsetPending'
 
     ContentImage[itemIdx] = tempContentImage
-    -- DECOMPILER ERROR at PC167: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC212: Confused about usage of register: R17 in 'UnsetPending'
 
     ContentCount[itemIdx] = tempVoiceCount
+    Add_CustomizationUIControl(0, 0, itemIdx % countx, itemIdx / countx + currentHeight, maxcountx, maxcounty, ContentImage[itemIdx])
   end
+  currentHeight = currentHeight + (county)
+  Add_CustomizationUIControl(0, 0, 0, currentHeight, maxcountx, maxcounty, Slider_Voice_Btn)
   Voice_SetSize(columMaxIndex)
   check_ServiceArea()
   if Const_UsebleMotionbyServiceArea then
@@ -216,6 +231,11 @@ createVoiceList = function(inGameMode, classType)
     local textureName = getMotionTextureName(selectedClassType)
     local texSize = 48.25
     local createIndex = 0
+    countx = ColumnCount
+    county = (math.floor)(count / ColumnCount)
+    if count / ColumnCount ~= 0 then
+      county = county + 1
+    end
     for itemIdx = 0, count - 1 do
       if MotionTable[itemIdx] == social then
         local tempContentImage = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Frame_Content, "Frame_MotionImage_" .. createIndex)
@@ -236,10 +256,11 @@ createVoiceList = function(inGameMode, classType)
         tempContentImage:SetPosY((math.floor)(createIndex / ColumnCount) * MotionColumnHeight + MotionContentsOffsetY)
         tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
         tempContentImage:SetShow(true)
-        -- DECOMPILER ERROR at PC288: Confused about usage of register: R23 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC366: Confused about usage of register: R28 in 'UnsetPending'
 
         ContentMotionImage[itemIdx] = tempContentImage
         lastSocialControl = tempContentImage
+        Add_CustomizationUIControl(0, 0, createIndex % ColumnCount, currentHeight + createIndex / ColumnCount, maxcountx, maxcounty, ContentMotionImage[itemIdx])
         createIndex = createIndex + 1
         if InitMotionindex == false then
           selectMotionItemIndex = itemIdx
@@ -270,10 +291,11 @@ createVoiceList = function(inGameMode, classType)
         tempContentImage:SetPosY((math.floor)((createIndex) / ColumnCount) * MotionColumnHeight + MotionContentsOffsetY)
         tempContentImage:setRenderTexture(tempContentImage:getBaseTexture())
         tempContentImage:SetShow(true)
-        -- DECOMPILER ERROR at PC412: Confused about usage of register: R23 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC503: Confused about usage of register: R28 in 'UnsetPending'
 
         ContentMotionImage[itemIdx] = tempContentImage
         lastCombatControl = tempContentImage
+        Add_CustomizationUIControl(0, 0, (createIndex) % ColumnCount, currentHeight + (createIndex) / ColumnCount, maxcountx, maxcounty, ContentMotionImage[itemIdx])
         createIndex = createIndex + 1
       end
     end
@@ -320,8 +342,8 @@ UpdateVoice = function()
 end
 
 playVoice = function()
-  -- function num : 0_8 , upvalues : isContentsCustomizationVoice, currentVoiceIndex
-  if isContentsCustomizationVoice then
+  -- function num : 0_8 , upvalues : currentVoiceIndex
+  if _ContentsGroup_isContentsCustomizationVoice then
     applyVoice(currentVoiceIndex, false)
   else
     applyVoice(currentVoiceIndex, true)
@@ -329,10 +351,10 @@ playVoice = function()
 end
 
 check_ServiceArea = function()
-  -- function num : 0_9 , upvalues : isContentsCustomizationVoice, Const_UsebleMotionbyServiceArea, Frame_Content, static_Frame_Motion, StaticText_Motion
+  -- function num : 0_9 , upvalues : Const_UsebleMotionbyServiceArea, Frame_Content, static_Frame_Motion, StaticText_Motion
   local TYPE = CppEnums.CountryType
   local ServiceType = getGameServiceType()
-  if isContentsCustomizationVoice then
+  if _ContentsGroup_isContentsCustomizationVoice then
     Const_UsebleMotionbyServiceArea = true
     return 
   end
@@ -372,6 +394,9 @@ closeVoiceUI = function()
     CustomizationMainUIShow(true)
     selectPoseControl(0)
   end
+  Set_CustomizationUIPanel(0, Panel_CustomizationMain, 10)
+  ClearAll_CustomizationUIGroup(0)
+  CustomizationMain_SettingConsoleUI()
 end
 
 updatePitchSlider = function()

@@ -469,8 +469,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       ;
       (tempBtn.chatColor):SetShow(false)
       local isRoleplay = (eChatButtonType.eChatRolePlay == idx and not roleplayTypeOpen)
-      local isOpen = isGameTypeRussia()
-      -- DECOMPILER ERROR at PC109: Unhandled construct in 'MakeBoolean' P1
+      -- DECOMPILER ERROR at PC107: Unhandled construct in 'MakeBoolean' P1
 
       if (isGameTypeTaiwan() or isGameTypeJapan()) and idx >= 10 then
         if isArshaOpen then
@@ -481,7 +480,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       else
         index = idx
       end
-      if isGameTypeKorea() and not isGameServiceTypeDev() then
+      if (isGameTypeKorea() or isGameTypeRussia()) and not isGameServiceTypeDev() then
         if idx >= 8 then
           index = idx - 1
         else
@@ -491,16 +490,6 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         if idx >= 9 then
           if isLocalWarOpen or isArshaOpen then
             index = idx
-          else
-            index = idx - 1
-          end
-        else
-          index = idx
-        end
-      elseif isGameTypeRussia() then
-        if idx > 1 then
-          if idx > 8 then
-            index = idx - 2
           else
             index = idx - 1
           end
@@ -537,7 +526,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
       (tempBtn.chatFilter):SetPosX(self.slotStartX + self.slotGapX * col)
       ;
       (tempBtn.chatFilter):SetPosY(self.slotStartY + self.slotGapY * row)
-      -- DECOMPILER ERROR at PC232: Confused about usage of register: R17 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC220: Confused about usage of register: R16 in 'UnsetPending'
 
       btnFilter[idx] = tempBtn
       if eChatButtonType.eChatNotice == idx then
@@ -561,7 +550,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ;
         ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WORLD"))
         ;
-        ((btnFilter[idx]).chatFilter):SetShow(not isOpen)
+        ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
         ((btnFilter[idx]).chatFilter):addInputEvent("Mouse_LUp", "HandleClicked_ChattingTypeFilter_WorldWithItem( " .. panelIdex .. " )")
         ;
@@ -572,11 +561,8 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         ((btnFilter[idx]).chatFilter):SetCheck(chat:isShowChatType(UI_CT.World))
         ;
         ((btnFilter[idx]).chatFilter):SetFontColor(UI_color.C_FFFF973A)
-        if not isOpen then
-          ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_CHATTING_OPTION_FILTER_CHANNELGROUP"))
-        else
-          ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WORLD"))
-        end
+        ;
+        ((btnFilter[idx]).chatFilter):SetText(PAGetString(Defines.StringSheet_GAME, "CHATTING_TAB_WORLD"))
         ;
         ((btnFilter[idx]).chatFilter):SetShow(true)
         ;
@@ -718,7 +704,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     for idx = 0, self.chatSystemFilterCount - 1 do
       posX = self.slotSystemTypeStartX
       posY = self.slotSystemTypeStartY + idx * self.slotGapY
-      -- DECOMPILER ERROR at PC1040: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1015: Confused about usage of register: R14 in 'UnsetPending'
 
       btnSystemFilter[idx] = {}
       if eChatSystemButtonType.eChatSystem == idx then
@@ -802,7 +788,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
         _PA_LOG("�\128형욱", "처리되지 않은 eChatSystemButtonType Index : " .. idx)
       end
     end
-    -- DECOMPILER ERROR at PC1541: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC1516: Confused about usage of register: R10 in 'UnsetPending'
 
     chatPanel[panelIdex] = true
   end
@@ -1118,7 +1104,7 @@ ChattingOption_Initialize = function(panelIdex, _transparency, isCombinedMainPan
     rdo_FontSizeBig:addInputEvent("Mouse_Out", "HandleOn_ChattingOption_Tooltip(false)")
     ChattingOption_InitailizeChattingAnimationControl()
     FGlobal_ChatOption_HandleChattingOptionInitialize(panelIdex)
-    -- DECOMPILER ERROR: 90 unprocessed JMP targets
+    -- DECOMPILER ERROR: 86 unprocessed JMP targets
   end
 end
 

@@ -41,7 +41,16 @@ end
 
 FGlobal_Panel_Radar_Show = function(isShow)
   -- function num : 0_1
-  Panel_Radar:SetShow(isShow)
+  if _ContentsGroup_3DMiniMapOpen == false or Panel_WorldMiniMap == nil then
+    Panel_Radar:SetShow(isShow)
+    return 
+  end
+  local worldMiniMapState = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap)
+  if worldMiniMapState then
+    Panel_WorldMiniMap:SetShow(isShow)
+  else
+    Panel_Radar:SetShow(isShow)
+  end
 end
 
 FGlobal_Panel_Radar_GetShow = function()
@@ -51,7 +60,17 @@ end
 
 FGlobal_Panel_Radar_GetSizeX = function()
   -- function num : 0_3
-  return Panel_Radar:GetSizeX()
+  if Panel_WorldMiniMap == nil then
+    return Panel_Radar:GetSizeX()
+  end
+  local sizeX = 0
+  local worldMiniMapState = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap)
+  if worldMiniMapState then
+    sizeX = Panel_WorldMiniMap:GetSizeX() + 22
+  else
+    sizeX = Panel_Radar:GetSizeX()
+  end
+  return sizeX
 end
 
 FGlobal_Panel_Radar_GetSizeY = function()
@@ -71,12 +90,32 @@ end
 
 FGlobal_Panel_Radar_GetPosX = function()
   -- function num : 0_7
-  return Panel_Radar:GetPosX()
+  if Panel_WorldMiniMap == nil then
+    return Panel_Radar:GetPosX()
+  end
+  local posX = 0
+  local worldMiniMapState = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap)
+  if worldMiniMapState then
+    posX = FGlobal_Panel_WorldMiniMapPosX() - 14
+  else
+    posX = Panel_Radar:GetPosX()
+  end
+  return posX
 end
 
 FGlobal_Panel_Radar_GetPosY = function()
   -- function num : 0_8
-  return Panel_Radar:GetPosY()
+  if Panel_WorldMiniMap == nil then
+    return Panel_Radar:GetPosY()
+  end
+  local posY = 0
+  local worldMiniMapState = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap)
+  if worldMiniMapState then
+    posY = FGlobal_Panel_WorldMiniMapPosY()
+  else
+    posY = Panel_Radar:GetPosY()
+  end
+  return posY
 end
 
 FGlobal_Panel_Radar_Movable_UI = function()

@@ -599,7 +599,7 @@ end
 local setReward = function(uiSlot, reward, index, questType)
   -- function num : 0_9 , upvalues : UI_RewardType
   uiSlot._type = reward._type
-  if UI_RewardType.RewardType_Exp == reward._type then
+  if UI_RewardType.RewardType_Exp == reward._type or __eRewardExpGrade == reward._type then
     (uiSlot.count):SetText("")
     ;
     (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -608,7 +608,7 @@ local setReward = function(uiSlot, reward, index, questType)
     ;
     (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Exp\", false, \"" .. questType .. "\", " .. index .. " )")
   else
-    if UI_RewardType.RewardType_SkillExp == reward._type then
+    if UI_RewardType.RewardType_SkillExp == reward._type or __eRewardSkillExpGrade == reward._type then
       (uiSlot.count):SetText("")
       ;
       (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExp.dds")

@@ -250,9 +250,14 @@ MovieGuideButton_Position = function()
   Panel_MovieGuide:SetPosY(_btn_MovieGuide:GetPosY() + 60)
 end
 
-Panel_MovieGuide_Initialize()
-MovieGuideButton_Position()
+Panel_MovieGuide_Init = function()
+  -- function num : 0_12
+  Panel_MovieGuide_Initialize()
+  MovieGuideButton_Position()
+end
+
 registerEvent("EventSelfPlayerLevelUp", "Panel_MovieGuide_LevelCheck")
+registerEvent("FromClient_luaLoadComplete", "Panel_MovieGuide_Init")
 registerEvent("onScreenResize", "FGlobal_PersonalIcon_ButtonPosUpdate")
 registerEvent("EventSelfPlayerLevelUp", "Panel_MovieGuide_LevelCheck")
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_MovieGuideButton_Position")

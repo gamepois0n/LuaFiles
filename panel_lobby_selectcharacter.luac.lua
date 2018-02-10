@@ -1421,7 +1421,7 @@ CharacterSelect_PlayGame = function(index)
     isSpecialCharacter = true
     local curChannelData = getCurrentChannelServerData()
     if curChannelData ~= nil and curChannelData._isSiegeChannel then
-      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING_DONTJOIN"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+      local messageboxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = PAGetString(Defines.StringSheet_GAME, "LUA_SERVERLIST_SPECIALCHARACTER_WARNING"), functionApply = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
       ;
       (MessageBox.showMessageBox)(messageboxData)
       return 

@@ -25,56 +25,64 @@ CreateListContent_GuildBattle_EntryMember = function(content, index)
     return 
   end
   local memberIndex = Int64toInt32(index)
-  local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
-  if myGuildListInfo == nil then
-    return 
-  end
   local userNo = ToClient_GuildBattle_GetUserNoFromJoinedList(memberIndex)
-  local memberInfo = myGuildListInfo:getMemberByUserNo(userNo)
-  if memberInfo == nil then
-    return 
+  _PA_LOG("조재�\144", tostring(userNo))
+  local memberInfo = nil
+  if ToClient_isPersonalBattle() then
+    memberInfo = Toclient_getPersonalBattleMemberInfo(userNo)
+  else
+    local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
+    if myGuildListInfo == nil then
+      return 
+    end
+    memberInfo = myGuildListInfo:getMemberByUserNo(userNo)
   end
-  local checkBtn_AsEntry = (UI.getChildControl)(content, "CheckButton_ItemSort")
-  local static_ClassIcon = (UI.getChildControl)(content, "Static_ClassIcon")
-  local staticText_Level = (UI.getChildControl)(content, "StaticText_Level")
-  local staticText_Name = (UI.getChildControl)(content, "StaticText_CharacterName")
-  local staticText_State = (UI.getChildControl)(content, "StaticText_State")
-  local hideCheckBox = ToClient_GuildBattle_GetMaxEntryCount() > 1
-  local joinedCount = ToClient_GuildBattle_GetMyGuildMemberJoinedCount()
-  local maxEntryCount = ToClient_GuildBattle_GetMaxEntryCount()
-  local shouldSelectAll = joinedCount <= maxEntryCount
-  local classSymbomInfo = (CppEnums.ClassType_Symbol)[memberInfo:getClassType()]
-  static_ClassIcon:ChangeTextureInfoName(classSymbomInfo[1])
   do
-    local x1, y1, x2, y2 = setTextureUV_Func(static_ClassIcon, classSymbomInfo[2], classSymbomInfo[3], classSymbomInfo[4], classSymbomInfo[5])
-    ;
-    (static_ClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
-    static_ClassIcon:setRenderTexture(static_ClassIcon:getBaseTexture())
-    staticText_Level:SetText(tostring(memberInfo:getLevel()))
-    staticText_Name:SetText(memberInfo:getCharacterName())
-    if shouldSelectAll == true then
-      checkBtn_AsEntry:SetCheck(true)
-    elseif ToClient_GuildBattle_IsMemberInEntryList(userNo) == true then
-      checkBtn_AsEntry:SetShow(true)
-      checkBtn_AsEntry:SetCheck(true)
-      checkBtn_AsEntry:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectEntry:ToggleEntryMember(" .. memberIndex .. ")")
-    elseif hideCheckBox == true and ToClient_GuildBattle_IsEntryMemberComplete() == true then
-      checkBtn_AsEntry:SetShow(false)
-    else
-      checkBtn_AsEntry:SetShow(true)
-      checkBtn_AsEntry:SetCheck(false)
-      checkBtn_AsEntry:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectEntry:ToggleEntryMember(" .. memberIndex .. ")")
+    if memberInfo == nil then
+      return 
     end
-    if shouldSelectAll == true then
-      EnableControl(checkBtn_AsEntry, false)
-      staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_ALLFIGHT"))
-    else
-      staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_CANFIGHT"))
+    local checkBtn_AsEntry = (UI.getChildControl)(content, "CheckButton_ItemSort")
+    local static_ClassIcon = (UI.getChildControl)(content, "Static_ClassIcon")
+    local staticText_Level = (UI.getChildControl)(content, "StaticText_Level")
+    local staticText_Name = (UI.getChildControl)(content, "StaticText_CharacterName")
+    local staticText_State = (UI.getChildControl)(content, "StaticText_State")
+    local hideCheckBox = ToClient_GuildBattle_GetMaxEntryCount() > 1
+    local joinedCount = ToClient_GuildBattle_GetMyGuildMemberJoinedCount()
+    local maxEntryCount = ToClient_GuildBattle_GetMaxEntryCount()
+    local shouldSelectAll = joinedCount <= maxEntryCount
+    local classSymbomInfo = (CppEnums.ClassType_Symbol)[memberInfo:getClassType()]
+    static_ClassIcon:ChangeTextureInfoName(classSymbomInfo[1])
+    do
+      local x1, y1, x2, y2 = setTextureUV_Func(static_ClassIcon, classSymbomInfo[2], classSymbomInfo[3], classSymbomInfo[4], classSymbomInfo[5])
+      ;
+      (static_ClassIcon:getBaseTexture()):setUV(x1, y1, x2, y2)
+      static_ClassIcon:setRenderTexture(static_ClassIcon:getBaseTexture())
+      staticText_Level:SetText(tostring(memberInfo:getLevel()))
+      staticText_Name:SetText(memberInfo:getCharacterName())
+      if shouldSelectAll == true then
+        checkBtn_AsEntry:SetCheck(true)
+      elseif ToClient_GuildBattle_IsMemberInEntryList(userNo) == true then
+        checkBtn_AsEntry:SetShow(true)
+        checkBtn_AsEntry:SetCheck(true)
+        checkBtn_AsEntry:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectEntry:ToggleEntryMember(" .. memberIndex .. ")")
+      elseif hideCheckBox == true and ToClient_GuildBattle_IsEntryMemberComplete() == true then
+        checkBtn_AsEntry:SetShow(false)
+      else
+        checkBtn_AsEntry:SetShow(true)
+        checkBtn_AsEntry:SetCheck(false)
+        checkBtn_AsEntry:addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle_SelectEntry:ToggleEntryMember(" .. memberIndex .. ")")
+      end
+      if shouldSelectAll == true then
+        EnableControl(checkBtn_AsEntry, false)
+        staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_ALLFIGHT"))
+      else
+        staticText_State:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_PLAYERSTATE_CANFIGHT"))
+      end
+      if ToClient_GuildBattle_IsWaitingEntrySelectResult() == true or ToClient_GuildBattle_IsEntryMemberConfirmed() == true then
+        EnableControl(checkBtn_AsEntry, false)
+      end
+      -- DECOMPILER ERROR: 10 unprocessed JMP targets
     end
-    if ToClient_GuildBattle_IsWaitingEntrySelectResult() == true or ToClient_GuildBattle_IsEntryMemberConfirmed() == true then
-      EnableControl(checkBtn_AsEntry, false)
-    end
-    -- DECOMPILER ERROR: 10 unprocessed JMP targets
   end
 end
 

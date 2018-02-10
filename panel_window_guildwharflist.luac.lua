@@ -836,7 +836,11 @@ guildWharfList_SortByWayPointKey = function(index)
   if index == nil then
     return nil
   else
-    return (sortByExploreKey[index + 1])._index
+    if sortByExploreKey[index + 1] == nil then
+      return nil
+    else
+      return (sortByExploreKey[index + 1])._index
+    end
   end
 end
 

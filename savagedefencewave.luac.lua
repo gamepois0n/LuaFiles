@@ -24,8 +24,6 @@ end
 SavageDefenceWave.SetPosition = function(self)
   -- function num : 0_1
   local pivotY = Panel_SavageDefenceShop:GetSizeX() / 2
-  Panel_SavageDefenceWave:SetPosX(getScreenSizeX() - pivotY * 1.5)
-  Panel_SavageDefenceWave:SetPosY(Panel_SavageDefenceShop:GetPosY() - Panel_SavageDefenceWave:GetSizeY())
 end
 
 SavageDefenceWave_UpdateWaveData = function(wavecount)

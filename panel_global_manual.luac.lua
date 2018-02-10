@@ -1154,90 +1154,189 @@ local MiniGame_SummerEventCannon_1 = function()
   (ui._purposeText2):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBALMANUAL_EVENTCANNON_DESC"))
 end
 
+local KeyGuide_Squat = function()
+  -- function num : 0_47
+  if getSelfPlayer() == nil then
+    return 
+  end
+  if not IsSelfPlayerWaitAction() then
+    HideUseTab_Func()
+    return 
+  end
+  local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
+  if targetPanel == nil then
+    return 
+  end
+  local useTab = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseTab")
+  local x = getScreenSizeX() * 0.5 - useTab:GetSizeX()
+  local y = getScreenSizeY() * 0.5 + useTab:GetSizeY() * 7
+  useTab:SetPosX(x)
+  useTab:SetPosY(y)
+  useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_SQUAT"))
+  useTab:SetShow(true)
+end
+
+local KeyGuide_Down = function()
+  -- function num : 0_48
+  if getSelfPlayer() == nil then
+    return 
+  end
+  if not IsSelfPlayerWaitAction() then
+    HideUseTab_Func()
+    return 
+  end
+  local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
+  if targetPanel == nil then
+    return 
+  end
+  local useTab = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseTab")
+  local x = getScreenSizeX() * 0.5 - useTab:GetSizeX()
+  local y = getScreenSizeY() * 0.5 + useTab:GetSizeY() * 7
+  useTab:SetPosX(x)
+  useTab:SetPosY(y)
+  useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_DOWN"))
+  useTab:SetShow(true)
+end
+
+local KeyGuide_InWater = function()
+  -- function num : 0_49
+  if getSelfPlayer() == nil then
+    return 
+  end
+  local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
+  if targetPanel == nil then
+    return 
+  end
+  local useTab = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseTab")
+  local x = getScreenSizeX() * 0.5 - useTab:GetSizeX()
+  local y = getScreenSizeY() * 0.5 + useTab:GetSizeY() * 7
+  useTab:SetPosX(x)
+  useTab:SetPosY(y)
+  useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_INWATER"))
+  useTab:SetShow(true)
+end
+
+local KeyGuide_InWaterUnset = function()
+  -- function num : 0_50
+  if getSelfPlayer() == nil then
+    return 
+  end
+  local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
+  if targetPanel == nil then
+    return 
+  end
+  local useTab = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseTab")
+  local x = getScreenSizeX() * 0.5 - useTab:GetSizeX()
+  local y = getScreenSizeY() * 0.5 + useTab:GetSizeY() * 7
+  useTab:SetPosX(x)
+  useTab:SetPosY(y)
+  useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_INWATER_UNSET"))
+  useTab:SetShow(true)
+end
+
+local KeyGuide_Walk = function()
+  -- function num : 0_51
+  if getSelfPlayer() == nil then
+    return 
+  end
+  local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
+  if targetPanel == nil then
+    return 
+  end
+  local useTab = (UI.getChildControl)(Panel_OnlyPerframeUsed, "StaticText_UseTab")
+  local x = getScreenSizeX() * 0.5 - useTab:GetSizeX()
+  local y = getScreenSizeY() * 0.5 + useTab:GetSizeY() * 7
+  useTab:SetPosX(x)
+  useTab:SetPosY(y)
+  useTab:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_MANUAL_KEYGUIDE_WALK"))
+  useTab:SetShow(true)
+end
+
 local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
-  -- function num : 0_47 , upvalues : uiPress, ui_Value, isCartRace
+  -- function num : 0_52 , upvalues : uiPress, ui_Value, isCartRace
   if isSelf == false then
     return 
   end
   Panel_Fishing_End()
+  HideUseTab_Func()
   ;
   (uiPress._button_Space):ComputePos()
   Panel_Global_Manual:SetShow(false)
-  -- DECOMPILER ERROR at PC14: Confused about usage of register: R2 in 'UnsetPending'
-
-  ui_Value.isFirstTime_Manual_Timing_0 = true
   -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Timing_1 = true
+  ui_Value.isFirstTime_Manual_Timing_0 = true
   -- DECOMPILER ERROR at PC18: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Timing_2 = true
+  ui_Value.isFirstTime_Manual_Timing_1 = true
   -- DECOMPILER ERROR at PC20: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Cart_0 = true
+  ui_Value.isFirstTime_Manual_Timing_2 = true
   -- DECOMPILER ERROR at PC22: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Horse_Rope_0 = true
+  ui_Value.isFirstTime_Manual_Cart_0 = true
   -- DECOMPILER ERROR at PC24: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_HorseDrop_0 = true
+  ui_Value.isFirstTime_Manual_Horse_Rope_0 = true
   -- DECOMPILER ERROR at PC26: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Flute_0 = true
+  ui_Value.isFirstTime_Manual_HorseDrop_0 = true
   -- DECOMPILER ERROR at PC28: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Flute_1 = true
+  ui_Value.isFirstTime_Manual_Flute_0 = true
   -- DECOMPILER ERROR at PC30: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_HerbMachine_0 = true
+  ui_Value.isFirstTime_Manual_Flute_1 = true
   -- DECOMPILER ERROR at PC32: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_HerbMachine_1 = true
+  ui_Value.isFirstTime_Manual_HerbMachine_0 = true
   -- DECOMPILER ERROR at PC34: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_HerbMachine_2 = true
+  ui_Value.isFirstTime_Manual_HerbMachine_1 = true
   -- DECOMPILER ERROR at PC36: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_HerbMachine_3 = true
+  ui_Value.isFirstTime_Manual_HerbMachine_2 = true
   -- DECOMPILER ERROR at PC38: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_HerbMachine_4 = true
+  ui_Value.isFirstTime_Manual_HerbMachine_3 = true
   -- DECOMPILER ERROR at PC40: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_HerbMachine_5 = true
+  ui_Value.isFirstTime_Manual_HerbMachine_4 = true
   -- DECOMPILER ERROR at PC42: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Buoy_0 = true
+  ui_Value.isFirstTime_Manual_HerbMachine_5 = true
   -- DECOMPILER ERROR at PC44: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Buoy_1 = true
+  ui_Value.isFirstTime_Manual_Buoy_0 = true
   -- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Buoy_2 = true
+  ui_Value.isFirstTime_Manual_Buoy_1 = true
   -- DECOMPILER ERROR at PC48: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Buoy_3 = true
+  ui_Value.isFirstTime_Manual_Buoy_2 = true
   -- DECOMPILER ERROR at PC50: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Milky_0 = true
+  ui_Value.isFirstTime_Manual_Buoy_3 = true
   -- DECOMPILER ERROR at PC52: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Milky_1 = true
+  ui_Value.isFirstTime_Manual_Milky_0 = true
   -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Milky_2 = true
+  ui_Value.isFirstTime_Manual_Milky_1 = true
   -- DECOMPILER ERROR at PC56: Confused about usage of register: R2 in 'UnsetPending'
+
+  ui_Value.isFirstTime_Manual_Milky_2 = true
+  -- DECOMPILER ERROR at PC58: Confused about usage of register: R2 in 'UnsetPending'
 
   ui_Value.isFirstTime_Manual_Milky_3 = true
   MiniGame_Manual_Value_FishingStart = false
   GlobalValue_MiniGame_Value_HorseDrop = false
-  -- DECOMPILER ERROR at PC62: Confused about usage of register: R2 in 'UnsetPending'
-
-  ui_Value.isFirstTime_Manual_Drum_0 = true
   -- DECOMPILER ERROR at PC64: Confused about usage of register: R2 in 'UnsetPending'
 
-  ui_Value.isFirstTime_Manual_Drum_1 = true
+  ui_Value.isFirstTime_Manual_Drum_0 = true
   -- DECOMPILER ERROR at PC66: Confused about usage of register: R2 in 'UnsetPending'
+
+  ui_Value.isFirstTime_Manual_Drum_1 = true
+  -- DECOMPILER ERROR at PC68: Confused about usage of register: R2 in 'UnsetPending'
 
   ui_Value.isFirstTime_Manual_Bullet_0 = true
   IsChecked_WeaponOut = false
@@ -1252,7 +1351,7 @@ local Panel_Global_Manual_End = function(actorKeyRaw, isSelf)
 end
 
 local MiniGame_Manual_Instrument_1 = function(actorKeyRaw, isSelf)
-  -- function num : 0_48 , upvalues : Panel_Global_Manual_End
+  -- function num : 0_53 , upvalues : Panel_Global_Manual_End
   Panel_Global_Manual_End(actorKeyRaw, isSelf)
 end
 
@@ -1294,6 +1393,11 @@ ActionChartEventBindFunction(370, MiniGame_Diving_0)
 ActionChartEventBindFunction(371, MiniGame_Diving_1)
 ActionChartEventBindFunction(372, MiniGame_Diving_2)
 ActionChartEventBindFunction(400, MiniGame_SummerEventCannon_1)
+ActionChartEventBindFunction(410, KeyGuide_Squat)
+ActionChartEventBindFunction(411, KeyGuide_Down)
+ActionChartEventBindFunction(412, KeyGuide_InWater)
+ActionChartEventBindFunction(413, KeyGuide_Walk)
+ActionChartEventBindFunction(414, KeyGuide_InWaterUnset)
 ActionChartEventBindFunction(9998, FromAction_CheckedBasic)
 ActionChartEventBindFunction(9999, Panel_Global_Manual_End)
 Global_Manual_Initialize()

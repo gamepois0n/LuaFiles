@@ -214,16 +214,11 @@ end
 Panel_PlayerEndurance_Position = function()
   -- function num : 0_3
   local self = PaGlobalPlayerEnduranceList
-  if FGlobal_Panel_Radar_GetShow() then
-    (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX())
-    ;
-    (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY())
-  else
-    ;
-    (self.panel):SetPosX(getScreenSizeX() - (self.panel):GetSizeX())
-    ;
-    (self.panel):SetPosY(30)
-  end
+  self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
+  ;
+  (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX())
+  ;
+  (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY())
   if Panel_Widget_TownNpcNavi:GetShow() then
     (self.panel):SetPosY(Panel_Widget_TownNpcNavi:GetSizeY() + Panel_Widget_TownNpcNavi:GetPosY() + 10)
   end
@@ -237,7 +232,12 @@ renderModeChange_Panel_PlayerEndurance_Position = function(prevRenderModeList, n
   Panel_PlayerEndurance_Position()
 end
 
-PaGlobalPlayerEnduranceList:initialize()
+PaGlobalPlayerEnduranceList_Init = function()
+  -- function num : 0_5
+  PaGlobalPlayerEnduranceList:initialize()
+end
+
+registerEvent("FromClient_luaLoadComplete", "PaGlobalPlayerEnduranceList_Init")
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Panel_PlayerEndurance_Position")
 registerEvent("onScreenResize", "Panel_PlayerEndurance_Position")
 

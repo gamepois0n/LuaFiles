@@ -41,10 +41,12 @@ local _goldPremiumBuff = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_G
 local _challengeReward = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_Challenge")
 local _challengeNumber = (UI.getChildControl)(_challengeReward, "StaticText_ChallengeNumber")
 local _blackSpiritSkillTraining = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_BlackSpiritSkillTraining")
+local _memoryOfMaetsro = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_MaestroMemory")
 local _russiaKamasilv = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_RussiaKamasilv")
 local _russiaPack3 = (UI.getChildControl)(Panel_PersonalIcon_Left, "Static_RussiaPack3")
+local _currentNodeLv = 0
 local registEventHandler = function()
-  -- function num : 0_0 , upvalues : _btn_NewSkill, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _NodeLvBuffIcon, _pearlPackage, _expEvent, _dropEvent, _customize, _pearlPallete, _goldenBell, _skillReset, _awakenSkillReset, _blackSpiritTraining, _expVehicleEvent, _pcRoomUserHomeBuff, _goldPremiumBuff, _challengeReward, _blackSpiritSkillTraining, _btnCashShop, _btnAlertClose, _russiaPack3, _russiaKamasilv
+  -- function num : 0_0 , upvalues : _btn_NewSkill, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _NodeLvBuffIcon, _pearlPackage, _expEvent, _dropEvent, _customize, _pearlPallete, _goldenBell, _skillReset, _awakenSkillReset, _blackSpiritTraining, _expVehicleEvent, _pcRoomUserHomeBuff, _goldPremiumBuff, _challengeReward, _blackSpiritSkillTraining, _memoryOfMaetsro, _btnCashShop, _btnAlertClose, _russiaPack3, _russiaKamasilv
   _btn_NewSkill:addInputEvent("Mouse_LUp", "HandleMLUp_SkillWindow_OpenForLearn()")
   _btn_NewSkill:addInputEvent("Mouse_RUp", "Panel_SelfPlayer_EnableSkillCheck_Close()")
   _btn_NewSkill:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 0 )")
@@ -88,6 +90,8 @@ local registEventHandler = function()
   _challengeReward:addInputEvent("Mouse_LUp", "_challengeCall_byNewChallengeAlarm()")
   _blackSpiritSkillTraining:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 21 )")
   _blackSpiritSkillTraining:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 21 )")
+  _memoryOfMaetsro:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 22 )")
+  _memoryOfMaetsro:addInputEvent("Mouse_Out", "BuffIcon_ShowSimpleToolTip( false, 22 )")
   _btnCashShop:addInputEvent("Mouse_LUp", "PearlShop_Open()")
   _btnAlertClose:addInputEvent("Mouse_LUp", "PremiumNotice_Close()")
   _russiaPack3:addInputEvent("Mouse_On", "BuffIcon_ShowSimpleToolTip( true, 15 )")
@@ -102,7 +106,7 @@ _ExpFix:SetShow(false)
 _btn_NewSkill:ActiveMouseEventEffect(true)
 local _buffIconPosX = 0
 PackageIconPosition = function()
-  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _blackSpiritSkillTraining, _challengeReward, _goldPremiumBuff, _buffIconPosX
+  -- function num : 0_1 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _premiumAlert, _premiumText, _btnCashShop, _btnAlertClose, _pearlPackage, _btn_NewSkill, _txt_NewSkill, _NodeLvBuffIcon, _expEvent, _dropEvent, _expVehicleEvent, _customize, _pearlPallete, _russiaKamasilv, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _blackSpiritSkillTraining, _memoryOfMaetsro, _challengeReward, _goldPremiumBuff, _buffIconPosX
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -128,6 +132,7 @@ PackageIconPosition = function()
   local pcRoomUserHomeBuff = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local premiumValueBuff = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
   local blackSpiritSkillTrainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
+  local memoryOfMaestroTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
   local applyStarter = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_StarterPackage)
   local applyPremium = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumPackage)
   local applyPearl = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PearlPackage)
@@ -141,6 +146,7 @@ PackageIconPosition = function()
   local applyPcRoomUserHomeBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local applyPremiumValueBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
   local applyBlackSpiritSkillTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
+  local applyMemoryOfMaestro = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
   if _pcRoomIcon:GetShow() then
     _pcRoomIcon:SetPosX(iconPosX)
     iconPosX = iconPosX + _pcRoomIcon:GetSizeX() + iconGapX
@@ -256,12 +262,17 @@ PackageIconPosition = function()
     _blackSpiritSkillTraining:SetPosY(iconPosY)
     iconPosX = iconPosX + _blackSpiritSkillTraining:GetSizeX() + iconGapX
   end
+  if applyMemoryOfMaestro and memoryOfMaestroTime > 0 then
+    _memoryOfMaetsro:SetPosX(iconPosX)
+    _memoryOfMaetsro:SetPosY(iconPosY)
+    iconPosX = iconPosX + _memoryOfMaetsro:GetSizeX() + iconGapX
+  end
   if remainRewardCount > 0 then
     _challengeReward:SetPosX(iconPosX)
     _challengeReward:SetPosY(iconPosY)
     iconPosX = iconPosX + _challengeReward:GetSizeX() + iconGapX
   end
-  -- DECOMPILER ERROR at PC614: Unhandled construct in 'MakeBoolean' P3
+  -- DECOMPILER ERROR at PC639: Unhandled construct in 'MakeBoolean' P3
 
   if (((_pcRoomIcon:GetShow() and not applyPcRoomUserHomeBuff)) or applyPremiumValueBuff) and premiumValueBuff > 0 then
     _goldPremiumBuff:SetPosX(iconPosX)
@@ -278,7 +289,7 @@ local pcRoomNeedTime = ToClient_GetPcRoomUserHomeBuffLimitTime()
 local needTime = Int64toInt32(pcRoomNeedTime)
 local useTime = 0
 BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
-  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _btn_NewSkill, isBlackSpiritEnable, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff, needTime, useTime, _goldPremiumBuff, _challengeReward, _blackSpiritSkillTraining
+  -- function num : 0_2 , upvalues : UI_BUFFTYPE, _defaultEventExp, _currentNodeLv, _btn_NewSkill, isBlackSpiritEnable, _pcRoomIcon, _starterPackage, _premiumPackage, _pearlPackage, _NodeLvBuffIcon, _expEvent, _dropEvent, _customize, _pearlPallete, _russiaKamasilv, _fixedChargeIcon, _goldenBell, _skillReset, _awakenSkillReset, _russiaPack3, _blackSpiritTraining, _ExpFix, _expVehicleEvent, _pcRoomUserHomeBuff, needTime, useTime, _goldPremiumBuff, _challengeReward, _blackSpiritSkillTraining, _memoryOfMaetsro
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -311,6 +322,7 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
   local skilltrainingTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
   local pcRoomHomeTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local premiumValueTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
+  local memoryOfMaestroTime = player:getUserChargeTime(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
   local expEventPercent = getEventExpPercentByWorldNo(curChannelData._worldNo, curChannelData._serverNo)
   local expEventPercentShow = 0
   if _defaultEventExp < expEventPercent then
@@ -321,6 +333,7 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
   if _defaultEventExp < expVehiclePercent then
     expEventVehiclePercentShow = (math.floor)(expVehiclePercent / 10000 - 100)
   end
+  local expNodePercent = _currentNodeLv * ToClient_getNodeIncreaseItemDropPercent() / 10000
   if iconType == 0 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_NewSkillDesc")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_NEWSKILLPOINTS_TOOLTIP_DESC")
@@ -406,8 +419,13 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                               name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_TH")
                               desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_TH")
                             else
-                              name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE")
-                              desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC")
+                              if isGameTypeID() then
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE_ID")
+                                desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC_ID")
+                              else
+                                name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_TITLE")
+                                desc = leftTime .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EILEENBUFF_DESC")
+                              end
                             end
                           end
                         end
@@ -422,7 +440,11 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                     else
                       if iconType == 5 and localNodeInvestment == true then
                         name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_NODELVBUFF_TITLE")
-                        desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_NODELVBUFF_DESC", "nodeName", localNodeName)
+                        if expNodePercent > 0 then
+                          desc = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_NODELVBUFF_DESC_WITH_BUFF", "nodeName", localNodeName, "percent", tostring(expNodePercent))
+                        else
+                          desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_NODELVBUFF_DESC", "nodeName", localNodeName)
+                        end
                         uiControl = _NodeLvBuffIcon
                       else
                         if iconType == 5 and localNodeInvestment == false then
@@ -432,134 +454,180 @@ BuffIcon_ShowSimpleToolTip = function(isShow, iconType)
                         else
                           if iconType == 6 then
                             local expDesc = getBattleExpTooltipText(curChannelData)
-                            name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EXPBUFF", "percent", expEventPercentShow)
-                            if expDesc ~= "" then
-                              desc = "<PAColor0xFF66CC33>" .. expDesc .. "<PAOldColor>"
-                            else
-                              desc = ""
+                            if expDesc == "" then
+                              local battleExp = curChannelData:getBattleExp()
+                              if CppDefine.e100Percent < battleExp then
+                                if expDesc ~= "" then
+                                  expDesc = expDesc .. "\n"
+                                end
+                                expDesc = expDesc .. PAGetStringParam1(Defines.StringSheet_GAME, "EVENT_SYSTEM_ADD_EXP", "percent", tostring((battleExp - CppDefine.e100Percent) / CppDefine.e1Percent))
+                              end
+                              local skillExp = curChannelData:getSkillExp()
+                              if CppDefine.e100Percent < skillExp then
+                                if expDesc ~= "" then
+                                  expDesc = expDesc .. "\n"
+                                end
+                                expDesc = expDesc .. PAGetStringParam1(Defines.StringSheet_GAME, "EVENT_SYSTEM_ADD_SKILL_EXP", "percent", tostring((skillExp - CppDefine.e100Percent) / CppDefine.e1Percent))
+                              end
+                              local vehicleExp = curChannelData:getVehicleExp()
+                              if CppDefine.e100Percent < vehicleExp then
+                                if expDesc ~= "" then
+                                  expDesc = expDesc .. "\n"
+                                end
+                                expDesc = expDesc .. PAGetStringParam1(Defines.StringSheet_GAME, "EVENT_SYSTEM_ADD_VEHICLE_EXP", "percent", tostring((vehicleExp - CppDefine.e100Percent) / CppDefine.e1Percent))
+                              end
+                              for lifeIndex = 0, (CppEnums.LifeExperienceType).Type_Count - 1 do
+                                local lifeExp = curChannelData:getLifeExp(lifeIndex)
+                                if CppDefine.e100Percent < lifeExp then
+                                  if expDesc ~= "" then
+                                    expDesc = expDesc .. "\n"
+                                  end
+                                  expDesc = expDesc .. PAGetStringParam2(Defines.StringSheet_GAME, "EVENT_SYSTEM_ADD_LIFE_EXP", "type", (CppEnums.LifeExperienceString)[lifeIndex], "percent", tostring((lifeExp - CppDefine.e100Percent) / CppDefine.e1Percent))
+                                end
+                              end
                             end
-                            uiControl = _expEvent
-                          else
                             do
-                              if iconType == 7 then
-                                local expDesc = getBattleExpTooltipText(curChannelData)
-                                name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_DROPBUFF")
+                              do
+                                name = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_EXPBUFF", "percent", expEventPercentShow)
                                 if expDesc ~= "" then
                                   desc = "<PAColor0xFF66CC33>" .. expDesc .. "<PAOldColor>"
                                 else
                                   desc = ""
                                 end
-                                uiControl = _dropEvent
-                              else
-                                do
-                                  if iconType == 8 then
-                                    name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFCHARACTER_BUFF_TOOLTIP_NAME")
-                                    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CASH_CUSTOMIZATION_BUFFTOOLTIP_DESC", "customizationPackageTime", convertStringFromDatetime(toInt64(0, customize)))
-                                    uiControl = _customize
-                                  else
-                                    if iconType == 9 then
-                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE")
-                                      desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_DESC") .. convertStringFromDatetime(toInt64(0, dyeingPackage))
-                                      uiControl = _pearlPallete
-                                    else
-                                      if iconType == 10 then
-                                        name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TITLE")
-                                        desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_DESC") .. "\n" .. convertStringFromDatetime(toInt64(0, russiaKamasilv))
-                                        uiControl = _russiaKamasilv
+                                uiControl = _expEvent
+                                if iconType == 7 then
+                                  local expDesc = getBattleExpTooltipText(curChannelData)
+                                  do
+                                    do
+                                      if expDesc == "" then
+                                        local addRate = curChannelData:getItemDrop()
+                                        if CppDefine.e100Percent < addRate then
+                                          expDesc = PAGetStringParam1(Defines.StringSheet_GAME, "EVENT_SYSTEM_ADD_DROP_ITEM_RATE", "percent", tostring((addRate - CppDefine.e100Percent) / CppDefine.e1Percent))
+                                        end
+                                      end
+                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_DROPBUFF")
+                                      if expDesc ~= "" then
+                                        desc = "<PAColor0xFF66CC33>" .. expDesc .. "<PAOldColor>"
                                       else
-                                        if iconType == 11 then
-                                          local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
-                                          local fixedChargeTime = temporaryPCRoomWrapper:getFixedChargeTime()
-                                          local leftTime = calculateDayFromDateDay(toInt64(0, fixedChargeTime))
-                                          if leftTime < toInt64(0, 365) then
-                                            desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_DESC", "leftTime", convertStringFromDatetime(toInt64(0, temporaryPCRoomWrapper:getFixedChargeTime())))
-                                          else
-                                            desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_DESC_RU_FOR_INFINITY")
-                                          end
-                                          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_TITLE")
-                                          uiControl = _fixedChargeIcon
+                                        desc = ""
+                                      end
+                                      uiControl = _dropEvent
+                                      if iconType == 8 then
+                                        name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFCHARACTER_BUFF_TOOLTIP_NAME")
+                                        desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CASH_CUSTOMIZATION_BUFFTOOLTIP_DESC", "customizationPackageTime", convertStringFromDatetime(toInt64(0, customize)))
+                                        uiControl = _customize
+                                      else
+                                        if iconType == 9 then
+                                          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE")
+                                          desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_DESC") .. convertStringFromDatetime(toInt64(0, dyeingPackage))
+                                          uiControl = _pearlPallete
                                         else
-                                          do
-                                            if iconType == 12 then
-                                              local curChannelData = getCurrentChannelServerData()
-                                              local channelName = getChannelName(curChannelData._worldNo, curChannelData._serverNo)
-                                              name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_GOLDENBELL_TOOLTIP_NAME")
-                                              if goldenBellGuildName == nil or goldenBellGuildName == "" or goldenBellGuildName == " " then
-                                                desc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_GOLDENBELL_TOOLTIP_DESC_NOGUILD", "channelName", channelName, "name", goldenBellCharacterName, "percent", goldenBellPercentString) .. " <PAColor0xFFF26A6A>" .. goldenBellTime .. "<PAOldColor>"
+                                          if iconType == 10 then
+                                            name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_TITLE")
+                                            desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_YAZBUFF_DESC") .. "\n" .. convertStringFromDatetime(toInt64(0, russiaKamasilv))
+                                            uiControl = _russiaKamasilv
+                                          else
+                                            if iconType == 11 then
+                                              local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
+                                              local fixedChargeTime = temporaryPCRoomWrapper:getFixedChargeTime()
+                                              local leftTime = calculateDayFromDateDay(toInt64(0, fixedChargeTime))
+                                              if leftTime < toInt64(0, 365) then
+                                                desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_DESC", "leftTime", convertStringFromDatetime(toInt64(0, temporaryPCRoomWrapper:getFixedChargeTime())))
                                               else
-                                                desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_GOLDENBELL_TOOLTIP_DESC_GUILD", "channelName", channelName, "guildName", goldenBellGuildName, "name", goldenBellCharacterName, "percent", goldenBellPercentString) .. " <PAColor0xFFF26A6A>" .. goldenBellTime .. "<PAOldColor>"
+                                                desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_DESC_RU_FOR_INFINITY")
                                               end
-                                              uiControl = _goldenBell
+                                              name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PRIMIUMSERVER_TITLE")
+                                              uiControl = _fixedChargeIcon
                                             else
                                               do
-                                                if iconType == 13 then
-                                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_SKILLRESET_TOOLTIP_NAME")
-                                                  desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_SKILLRESET_TOOLTIP_DESC", "skillResetTime", convertStringFromDatetime(toInt64(0, skillResetTime)))
-                                                  uiControl = _skillReset
-                                                else
-                                                  if iconType == 14 then
-                                                    name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_AWAKENSKILL_TOOLTIP_NAME")
-                                                    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_AWAKENSKILL_TOOLTIP_DESC", "awakenSkillResetTime", convertStringFromDatetime(toInt64(0, awakenSkillResetTime)))
-                                                    uiControl = _awakenSkillReset
+                                                if iconType == 12 then
+                                                  local curChannelData = getCurrentChannelServerData()
+                                                  local channelName = getChannelName(curChannelData._worldNo, curChannelData._serverNo)
+                                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_GOLDENBELL_TOOLTIP_NAME")
+                                                  if goldenBellGuildName == nil or goldenBellGuildName == "" or goldenBellGuildName == " " then
+                                                    desc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_GOLDENBELL_TOOLTIP_DESC_NOGUILD", "channelName", channelName, "name", goldenBellCharacterName, "percent", goldenBellPercentString) .. " <PAColor0xFFF26A6A>" .. goldenBellTime .. "<PAOldColor>"
                                                   else
-                                                    if iconType == 15 then
-                                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_RUSSIAPACK3_TOOLTIP_NAME")
-                                                      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_RUSSIAPACK3_TOOLTIP_DESC", "russiaPack3Time", convertStringFromDatetime(toInt64(0, russiaPack3Time)))
-                                                      uiControl = _russiaPack3
+                                                    desc = PAGetStringParam4(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_GOLDENBELL_TOOLTIP_DESC_GUILD", "channelName", channelName, "guildName", goldenBellGuildName, "name", goldenBellCharacterName, "percent", goldenBellPercentString) .. " <PAColor0xFFF26A6A>" .. goldenBellTime .. "<PAOldColor>"
+                                                  end
+                                                  uiControl = _goldenBell
+                                                else
+                                                  do
+                                                    if iconType == 13 then
+                                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_SKILLRESET_TOOLTIP_NAME")
+                                                      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_SKILLRESET_TOOLTIP_DESC", "skillResetTime", convertStringFromDatetime(toInt64(0, skillResetTime)))
+                                                      uiControl = _skillReset
                                                     else
-                                                      if iconType == 16 then
-                                                        name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITTRAINING_TOOLTIP_NAME")
-                                                        desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITTRAINING_TOOLTIP_DESC", "trainingTime", convertStringFromDatetime(toInt64(0, trainingTime)))
-                                                        uiControl = _blackSpiritTraining
+                                                      if iconType == 14 then
+                                                        name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_AWAKENSKILL_TOOLTIP_NAME")
+                                                        desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_AWAKENSKILL_TOOLTIP_DESC", "awakenSkillResetTime", convertStringFromDatetime(toInt64(0, awakenSkillResetTime)))
+                                                        uiControl = _awakenSkillReset
                                                       else
-                                                        if iconType == 90 then
-                                                          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_TOOLTIP_FIXEXP_TITLE")
-                                                          desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_TOOLTIP_FIXEXP_DESC")
-                                                          uiControl = _ExpFix
+                                                        if iconType == 15 then
+                                                          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_RUSSIAPACK3_TOOLTIP_NAME")
+                                                          desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_RUSSIAPACK3_TOOLTIP_DESC", "russiaPack3Time", convertStringFromDatetime(toInt64(0, russiaPack3Time)))
+                                                          uiControl = _russiaPack3
                                                         else
-                                                          if iconType == 17 then
-                                                            name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_VEHICLEEXPBUFF")
-                                                            desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_VEHICLEEXPBUFF_TOOLTIP_DESC", "percent", expEventVehiclePercentShow)
-                                                            uiControl = _expVehicleEvent
+                                                          if iconType == 16 then
+                                                            name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITTRAINING_TOOLTIP_NAME")
+                                                            desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITTRAINING_TOOLTIP_DESC", "trainingTime", convertStringFromDatetime(toInt64(0, trainingTime)))
+                                                            uiControl = _blackSpiritTraining
                                                           else
-                                                            if iconType == 18 then
-                                                              name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF")
-                                                              uiControl = _pcRoomUserHomeBuff
-                                                              local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
-                                                              local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
-                                                              if isPremiumPcRoom == true then
-                                                                if isShow == true then
-                                                                  TooltipSimple_PCRoomHomeBuff_Show(uiControl, name, "", false, needTime, useTime)
-                                                                else
-                                                                  TooltipSimple_Hide()
-                                                                end
-                                                                return 
-                                                              else
-                                                                desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF_TOOLTIP_DESC", "paPcRoomHomeTime", convertStringFromDatetime(toInt64(0, pcRoomHomeTime)))
-                                                              end
+                                                            if iconType == 90 then
+                                                              name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_TOOLTIP_FIXEXP_TITLE")
+                                                              desc = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_TOOLTIP_FIXEXP_DESC")
+                                                              uiControl = _ExpFix
                                                             else
-                                                              do
-                                                                if iconType == 19 then
-                                                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PREMIUMVALUE_TITLE")
-                                                                  desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PREMIUMVALUE_DESC", "time", convertStringFromDatetime(toInt64(0, premiumValueTime)))
-                                                                  uiControl = _goldPremiumBuff
-                                                                else
-                                                                  if iconType == 20 then
-                                                                    name = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_NAME")
-                                                                    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_DESC", "count", remainRewardCount)
-                                                                    uiControl = _challengeReward
+                                                              if iconType == 17 then
+                                                                name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_VEHICLEEXPBUFF")
+                                                                desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_VEHICLEEXPBUFF_TOOLTIP_DESC", "percent", expEventVehiclePercentShow)
+                                                                uiControl = _expVehicleEvent
+                                                              else
+                                                                if iconType == 18 then
+                                                                  name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF")
+                                                                  uiControl = _pcRoomUserHomeBuff
+                                                                  local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
+                                                                  local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
+                                                                  if isPremiumPcRoom == true then
+                                                                    if isShow == true then
+                                                                      TooltipSimple_PCRoomHomeBuff_Show(uiControl, name, "", false, needTime, useTime)
+                                                                    else
+                                                                      TooltipSimple_Hide()
+                                                                    end
+                                                                    return 
                                                                   else
-                                                                    if iconType == 21 then
-                                                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITSKILLTRAINING_TOOLTIP_NAME")
-                                                                      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITSKILLTRAINING_TOOLTIP_DESC", "skilltrainingTime", convertStringFromDatetime(toInt64(0, skilltrainingTime)))
-                                                                      uiControl = _blackSpiritSkillTraining
+                                                                    desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PCROOMUSERHOMEBUFF_TOOLTIP_DESC", "paPcRoomHomeTime", convertStringFromDatetime(toInt64(0, pcRoomHomeTime)))
+                                                                  end
+                                                                else
+                                                                  do
+                                                                    if iconType == 19 then
+                                                                      name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PREMIUMVALUE_TITLE")
+                                                                      desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_PREMIUMVALUE_DESC", "time", convertStringFromDatetime(toInt64(0, premiumValueTime)))
+                                                                      uiControl = _goldPremiumBuff
+                                                                    else
+                                                                      if iconType == 20 then
+                                                                        name = PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_NAME")
+                                                                        desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PERSONALICON_LEFT_CHALLENGEREWARD_TOOLTIP_DESC", "count", remainRewardCount)
+                                                                        uiControl = _challengeReward
+                                                                      else
+                                                                        if iconType == 21 then
+                                                                          name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITSKILLTRAINING_TOOLTIP_NAME")
+                                                                          desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAGE_BLACKSPIRITSKILLTRAINING_TOOLTIP_DESC", "skilltrainingTime", convertStringFromDatetime(toInt64(0, skilltrainingTime)))
+                                                                          uiControl = _blackSpiritSkillTraining
+                                                                        else
+                                                                          if iconType == 22 then
+                                                                            name = PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_MAESTROTITLE")
+                                                                            desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_MAESTRODESC", "time", convertStringFromDatetime(toInt64(0, memoryOfMaestroTime)))
+                                                                            uiControl = _memoryOfMaetsro
+                                                                          end
+                                                                        end
+                                                                      end
+                                                                    end
+                                                                    if isShow == true then
+                                                                      TooltipSimple_Show(uiControl, name, desc)
+                                                                    else
+                                                                      TooltipSimple_Hide()
                                                                     end
                                                                   end
-                                                                end
-                                                                if isShow == true then
-                                                                  TooltipSimple_Show(uiControl, name, desc)
-                                                                else
-                                                                  TooltipSimple_Hide()
                                                                 end
                                                               end
                                                             end
@@ -629,7 +697,7 @@ end
 
 local valuePackCheck = false
 FromClient_PackageIconUpdate = function()
-  -- function num : 0_6 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, _challengeReward, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _blackSpiritSkillTraining, _pcRoomUserHomeBuff, _challengeNumber
+  -- function num : 0_6 , upvalues : UI_BUFFTYPE, _pcRoomIcon, _fixedChargeIcon, _starterPackage, _premiumPackage, _pearlPackage, _customize, _pearlPallete, _russiaKamasilv, _skillReset, _awakenSkillReset, _russiaPack3, _goldPremiumBuff, _challengeReward, valuePackCheck, _premiumText, _btnCashShop, _btnAlertClose, _premiumAlert, _blackSpiritTraining, _blackSpiritSkillTraining, _memoryOfMaetsro, _pcRoomUserHomeBuff, _challengeNumber
   local temporaryPCRoomWrapper = getTemporaryInformationWrapper()
   local isPremiumPcRoom = temporaryPCRoomWrapper:isPremiumPcRoom()
   local selfPlayer = getSelfPlayer()
@@ -657,6 +725,7 @@ FromClient_PackageIconUpdate = function()
   local pcRoomUserHomeBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PcRoomUserHomeBuff)
   local premiumValueBuff = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_PremiumValuePackageBuff)
   local blackSpiritSkillTraining = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_BlackSpritSkillTraining)
+  local memoryOfMaestro = player:isApplyChargeSkill(UI_BUFFTYPE.eUserChargeType_GetItemDaily)
   _pcRoomIcon:SetShow(false)
   _fixedChargeIcon:SetShow(false)
   _starterPackage:SetShow(false)
@@ -744,6 +813,11 @@ FromClient_PackageIconUpdate = function()
             _blackSpiritSkillTraining:SetShow(true)
           else
             _blackSpiritSkillTraining:SetShow(false)
+          end
+          if memoryOfMaestro then
+            _memoryOfMaetsro:SetShow(true)
+          else
+            _memoryOfMaetsro:SetShow(false)
           end
           if isPremiumPcRoom then
             _pcRoomUserHomeBuff:SetShow(false)
@@ -848,7 +922,7 @@ end
 
 local saveWayPoint = nil
 eventChangedExplorationNode = function(wayPointKey)
-  -- function num : 0_13 , upvalues : saveWayPoint, _NodeLvBuffIcon
+  -- function num : 0_13 , upvalues : saveWayPoint, _NodeLvBuffIcon, _currentNodeLv
   local nodeLv = ToClient_GetNodeLevel(wayPointKey)
   local nodeName = ToClient_GetNodeNameByWaypointKey(wayPointKey)
   local nodeExp = ToClient_GetNodeExperience_s64(wayPointKey)
@@ -863,6 +937,7 @@ eventChangedExplorationNode = function(wayPointKey)
     _NodeLvBuffIcon:setRenderTexture(_NodeLvBuffIcon:getBaseTexture())
     PackageIconPosition()
     localNodeInvestment = true
+    _currentNodeLv = nodeLv
   else
     do
       _NodeLvBuffIcon:SetShow(true)
@@ -873,6 +948,7 @@ eventChangedExplorationNode = function(wayPointKey)
       _NodeLvBuffIcon:setRenderTexture(_NodeLvBuffIcon:getBaseTexture())
       PackageIconPosition()
       localNodeInvestment = false
+      _currentNodeLv = 0
     end
   end
 end

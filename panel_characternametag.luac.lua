@@ -1068,6 +1068,10 @@ end
   if getSelfPlayer() == nil then
     return 
   end
+  local myLevel = ((getSelfPlayer()):get()):getLevel()
+  if myLevel > 30 then
+    return 
+  end
   local targetPanel = ((getSelfPlayer()):get()):getUIPanel()
   if targetPanel == nil then
     return 
@@ -1078,6 +1082,7 @@ end
   useTab:SetPosX(x)
   useTab:SetPosY(y)
   if IsChecked_WeaponOut == true then
+    useTab:SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_ACTOR_NAMETAG_USETAB"))
     useTab:SetShow(true)
   else
     useTab:SetShow(false)

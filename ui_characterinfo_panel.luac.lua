@@ -13,8 +13,8 @@ _staticDefaultBG = {}
 , 
 _radioButton = {}
 , _checkButtonPopUp = (UI.getChildControl)(Panel_Window_CharInfo_Status, "CheckButton_PopUp"), _buttonQuestion = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Button_Question"), _buttonClose = (UI.getChildControl)(Panel_Window_CharInfo_Status, "Button_Close")}
-}
--- DECOMPILER ERROR at PC47: Confused about usage of register: R0 in 'UnsetPending'
+, _isProfileOpen = ToClient_IsContentsGroupOpen("271")}
+-- DECOMPILER ERROR at PC51: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.showAni = function(self)
   -- function num : 0_0
@@ -34,14 +34,14 @@ PaGlobal_CharacterInfo.showAni = function(self)
   aniInfo2.IsChangeChild = true
 end
 
--- DECOMPILER ERROR at PC50: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.hideAni = function(self)
   -- function num : 0_1
   (UIAni.closeAni)(Panel_Window_CharInfo_Status)
 end
 
--- DECOMPILER ERROR at PC53: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.initialize = function(self)
   -- function num : 0_2
@@ -65,9 +65,11 @@ PaGlobal_CharacterInfo.initialize = function(self)
     ;
     (UI.deletePanel)(((self._panel)[index]):GetID())
   end
+  ;
+  (((self._ui)._radioButton)[(self._tabButton)._profile]):SetShow(self._isProfileOpen)
 end
 
--- DECOMPILER ERROR at PC56: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.registEventHandler = function(self)
   -- function num : 0_3
@@ -92,7 +94,7 @@ PaGlobal_CharacterInfo.registEventHandler = function(self)
   ((self._ui)._buttonClose):addInputEvent("Mouse_LUp", "PaGlobal_CharacterInfo:hideWindow()")
 end
 
--- DECOMPILER ERROR at PC59: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.showWindow = function(self, index)
   -- function num : 0_4
@@ -130,7 +132,7 @@ PaGlobal_CharacterInfo.showWindow = function(self, index)
   end
 end
 
--- DECOMPILER ERROR at PC62: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.hideWindow = function(self)
   -- function num : 0_5
@@ -145,7 +147,7 @@ PaGlobal_CharacterInfo.hideWindow = function(self)
   Panel_Tooltip_Item_hideTooltip()
 end
 
--- DECOMPILER ERROR at PC65: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.handleClicked_PopUp = function(self)
   -- function num : 0_6
@@ -157,7 +159,7 @@ PaGlobal_CharacterInfo.handleClicked_PopUp = function(self)
   TooltipSimple_Hide()
 end
 
--- DECOMPILER ERROR at PC68: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC72: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_CharacterInfo.popUpToolTip = function(self, isShow)
   -- function num : 0_7

@@ -1144,7 +1144,7 @@ end
 Panel_MovieTheater_SkillGuide_640_Clicked_Func = function(isYes)
   -- function num : 0_7
   if isYes == true then
-    value_GameOption_Check_ComboGuide:SetCheck(false)
+    GameOption_ComboGuideValueChange(false)
     _currentSpiritGuideCheck = false
     Panel_MovieTheater_SkillGuide_640:SetShow(false)
     Panel_MovieTheater_MessageBox:SetShow(false)

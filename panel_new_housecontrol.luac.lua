@@ -3416,12 +3416,13 @@ FGlobal_ReceiveChangeUseType = function(houseInfoSSWrapper, hasPreviouseHouse)
     end
   end
   do
+    local houseName = houseInfoSSWrapper:getName()
     if needTime ~= 0 then
       if currentHouseLevel > 1 then
-        Proc_ShowMessage_Ack(houseInfoSSWrapper:getName() .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_TYPENAME_MESSAGE_1", "typeName", typeName, "typeLevel", currentHouseLevel))
+        Proc_ShowMessage_Ack(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_TYPENAME_MESSAGE_1", "house_name", tostring(houseName), "typeName", typeName, "typeLevel", currentHouseLevel))
       else
         if currentHouseLevel == 1 then
-          Proc_ShowMessage_Ack(houseInfoSSWrapper:getName() .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_TYPENAME_MESSAGE_2", "typeName", typeName))
+          Proc_ShowMessage_Ack(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_HOUSECONTROL_TYPENAME_MESSAGE_2", "house_name", tostring(houseName), "typeName", typeName))
         end
       end
     end

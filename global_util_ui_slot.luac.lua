@@ -514,7 +514,7 @@ SlotItem.setItem = function(self, itemWrapper, slotNo, equipment)
       end
       do
         local whereType = Inventory_GetCurrentInventoryType()
-        if slotNo ~= nil and not isCash and self.itemLock ~= nil then
+        if slotNo ~= nil and self.itemLock ~= nil then
           if equipment ~= true then
             if ToClient_Inventory_CheckItemLock(slotNo, whereType) then
               (self.itemLock):ChangeTextureInfoName("new_ui_common_forlua/window/inventory/Item_Lock.dds")

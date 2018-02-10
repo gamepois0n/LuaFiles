@@ -788,18 +788,19 @@ end
 
 StableStallion.UpdateCount = function(self, isAwakenBtn)
   -- function num : 0_26
+  local progressSpeed = 2
   if isAwakenBtn == true then
     for i = 0, self._slotCount - 1 do
-      -- DECOMPILER ERROR at PC15: Confused about usage of register: R6 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC17: Confused about usage of register: R7 in 'UnsetPending'
 
       if (self._skillExpCount)[i] > 1 then
-        (self._skillExpCount)[i] = (self._skillExpCount)[i] - 2
+        (self._skillExpCount)[i] = (self._skillExpCount)[i] - 1 * progressSpeed
         ;
         (((self._slots)[i])._skillPercent):SetText(self:getfloorValueString((self._skillExpCount)[i]) .. "%")
         ;
         (((self._slots)[i])._skillExp):SetProgressRate((self._skillExpCount)[i] / 1.8)
       else
-        -- DECOMPILER ERROR at PC37: Confused about usage of register: R6 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC39: Confused about usage of register: R7 in 'UnsetPending'
 
         ;
         (self._skillExpCount)[i] = 0
@@ -817,31 +818,34 @@ StableStallion.UpdateCount = function(self, isAwakenBtn)
       ((self.awaken)._awakenExpCount):SetText(self:getfloorValueString(self._awakenExpCount * 2) .. "%")
     end
   else
-    -- DECOMPILER ERROR at PC83: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC85: Confused about usage of register: R3 in 'UnsetPending'
 
     if (self._skillExpCount)[self._index] >= 180 then
       (self._skillExpCount)[self._index] = 180
     else
-      -- DECOMPILER ERROR at PC101: Confused about usage of register: R2 in 'UnsetPending'
-
       if (self._itemCount)[self._index] > 0 then
+        if (self._itemCount)[self._index] == 1 then
+          progressSpeed = 1
+        end
+        -- DECOMPILER ERROR at PC110: Confused about usage of register: R3 in 'UnsetPending'
+
         if (self._skillExpCount)[self._index] >= 100 then
-          (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 0.5
-          self._awakenExpCount = self._awakenExpCount + 0.25
+          (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 0.5 * progressSpeed
+          self._awakenExpCount = self._awakenExpCount + 0.25 * progressSpeed
         else
-          -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC123: Confused about usage of register: R3 in 'UnsetPending'
 
           ;
-          (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 1
-          self._awakenExpCount = self._awakenExpCount + 0.5
+          (self._skillExpCount)[self._index] = (self._skillExpCount)[self._index] + 1 * progressSpeed
+          self._awakenExpCount = self._awakenExpCount + 0.5 * progressSpeed
         end
         if self._awakenExpCount > 100 then
           self._awakenExpCount = 100
         end
-        -- DECOMPILER ERROR at PC126: Confused about usage of register: R2 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC139: Confused about usage of register: R3 in 'UnsetPending'
 
         ;
-        (self._itemCount)[self._index] = (self._itemCount)[self._index] - 1
+        (self._itemCount)[self._index] = (self._itemCount)[self._index] - 1 * progressSpeed
         ;
         (((self._slots)[self._index]).count):SetText(tostring((self._itemCount)[self._index]))
         ;

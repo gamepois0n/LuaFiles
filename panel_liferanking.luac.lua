@@ -876,7 +876,7 @@ local lifeRanking_TooltipShow = function(uiControl, name, desc, index)
   ;
   (self._desc):SetShow(true)
   ;
-  (self._name):SetText(name .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENT_PLAYERINTRO"))
+  (self._name):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_GUILD_RECRUITMENT_PLAYERINTRO", "player_name", name))
   local nameLength = (math.max)(150, (self._name):GetTextSizeX())
   ;
   (self._desc):SetSize(nameLength, (self._desc):GetTextSizeY())

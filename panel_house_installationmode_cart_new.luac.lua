@@ -22,27 +22,27 @@ PaGlobal_HouseInstallationCart.initialize = function(self)
   -- function num : 0_0 , upvalues : UI_PUCT
   local setGroup = function()
     -- function num : 0_0_0 , upvalues : self
-    -- DECOMPILER ERROR at PC86: Confused about usage of register: R0 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC94: Confused about usage of register: R0 in 'UnsetPending'
 
-    self._ui = {_cart_Title = (UI.getChildControl)((self._ui)._bg_Cart, "StaticText_CartTitle"), _cartList = (UI.getChildControl)((self._ui)._bg_Cart, "Static_CartList"), _scroll = (UI.getChildControl)((self._ui)._bg_Cart, "Scroll_CartList"), _bg_BuyCart = (UI.getChildControl)((self._ui)._bg_Cart, "Static_BuyCartBG"), 
+    self._ui = {_cartList = (UI.getChildControl)((self._ui)._bg_Cart, "Static_CartList"), _scroll = (UI.getChildControl)((self._ui)._bg_Cart, "Scroll_CartList"), _bg_BuyCart = (UI.getChildControl)((self._ui)._bg_Cart, "Static_BuyCartBG"), 
 _scrollGroup = {}
 , 
 _buyCart = {}
-, _have_PearlIcon = (UI.getChildControl)((self._ui)._bg_BuyPearl, "Static_Have_PearlIcon"), _have_PearlText = (UI.getChildControl)((self._ui)._bg_BuyPearl, "StaticText_HavePearl"), _have_PearlValue = (UI.getChildControl)((self._ui)._bg_BuyPearl, "StaticText_HavePearlValue"), _btn_BuyPearl = (UI.getChildControl)((self._ui)._bg_BuyPearl, "Button_BuyPearl"), _interiorText = (UI.getChildControl)((self._ui)._bg_Interior, "StaticText_Total_InteriorPoint"), _interiorValue = (UI.getChildControl)((self._ui)._bg_Interior, "StaticText_Total_InteriorPointValue")}
-    -- DECOMPILER ERROR at PC130: Confused about usage of register: R0 in 'UnsetPending'
+, _have_PearlIcon = (UI.getChildControl)((self._ui)._bg_BuyPearl, "Static_Have_PearlIcon"), _have_PearlText = (UI.getChildControl)((self._ui)._bg_BuyPearl, "StaticText_HavePearl"), _have_PearlValue = (UI.getChildControl)((self._ui)._bg_BuyPearl, "StaticText_HavePearlValue"), _btn_BuyPearl = (UI.getChildControl)((self._ui)._bg_BuyPearl, "Button_BuyPearl"), _interiorText = (UI.getChildControl)((self._ui)._bg_Interior, "StaticText_Total_InteriorPoint"), _interiorValue = (UI.getChildControl)((self._ui)._bg_Interior, "StaticText_Total_InteriorPointValue"), _btn_ClearCart = (UI.getChildControl)((self._ui)._bg_Cart, "Button_ClearCart"), _btn_BuyCart = (UI.getChildControl)((self._ui)._bg_Cart, "Button_BuyCart")}
+    -- DECOMPILER ERROR at PC122: Confused about usage of register: R0 in 'UnsetPending'
 
     ;
-    (self._ui)._buyCart = {_btn_ClearCart = (UI.getChildControl)((self._ui)._bg_BuyCart, "Button_ClearCart"), _btn_BuyCart = (UI.getChildControl)((self._ui)._bg_BuyCart, "Button_BuyCart"), _sum_PearlIcon = (UI.getChildControl)((self._ui)._bg_BuyCart, "Static_CartTotal_PearlIcon"), _sum_Title = (UI.getChildControl)((self._ui)._bg_BuyCart, "StaticText_CartTotal_Title"), _sum_PearlValue = (UI.getChildControl)((self._ui)._bg_BuyCart, "StaticText_CartTotal_PearlValue")}
-    -- DECOMPILER ERROR at PC142: Confused about usage of register: R0 in 'UnsetPending'
+    (self._ui)._buyCart = {_sum_PearlIcon = (UI.getChildControl)((self._ui)._bg_BuyCart, "Static_CartTotal_PearlIcon"), _sum_Title = (UI.getChildControl)((self._ui)._bg_BuyCart, "StaticText_CartTotal_Title"), _sum_PearlValue = (UI.getChildControl)((self._ui)._bg_BuyCart, "StaticText_CartTotal_PearlValue")}
+    -- DECOMPILER ERROR at PC134: Confused about usage of register: R0 in 'UnsetPending'
 
     ;
     (self._ui)._scrollGroup = {_scrollCtrlBTN = (UI.getChildControl)((self._ui)._scroll, "Scroll_CtrlButton")}
   end
 
   setGroup()
-  local SlotStartX = 10
+  local SlotStartX = 5
   local SlotStartY = 5
-  local SlotGapX = 60
+  local SlotGapX = 55
   local SlotGapY = 55
   for slot_Idx = 0, self._maxSlotCount - 1 do
     local tempArray = {}
@@ -61,9 +61,9 @@ _buyCart = {}
     (SlotItem.new)(slot, "Panel_House_InstallationCart_SlotItem_" .. slot_Idx, slot_Idx, created_SlotBG, self._slotConfig)
     slot:createChild()
     ;
-    (slot.icon):SetPosX(3)
+    (slot.icon):SetPosX(2)
     ;
-    (slot.icon):SetPosY(3)
+    (slot.icon):SetPosY(2)
     ;
     (slot.icon):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallationCart:itemSlot(" .. slot_Idx .. ")")
     ;
@@ -85,7 +85,7 @@ PaGlobal_HouseInstallationCart.update = function(self, nowInterval)
   for slot_Idx = 0, self._maxSlotCount - 1 do
     local uiPool = (self._slotUIPool)[slot_Idx]
     ;
-    (uiPool.SlotBG):SetShow(false)
+    (uiPool.SlotBG):SetShow(true)
     ;
     (uiPool.slotItem):clearItem()
     ;
@@ -138,10 +138,11 @@ PaGlobal_HouseInstallationCart.update = function(self, nowInterval)
           ;
           ((uiPool.slotItem).icon):addInputEvent("Mouse_Out", "Panel_Tooltip_Item_hideTooltip()")
         end
+        Panel_Tooltip_Item_hideTooltip()
         if uiIdx == self._maxSlotCount - 1 then
           return 
         end
-        -- DECOMPILER ERROR at PC149: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC151: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end
@@ -329,9 +330,9 @@ PaGlobal_HouseInstallationCart.registEventHandler = function(self)
   -- function num : 0_16
   ((self._ui)._btn_BuyPearl):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallationCart:buyPearl()")
   ;
-  (((self._ui)._buyCart)._btn_BuyCart):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallationCart:buyItemAll()")
+  ((self._ui)._btn_BuyCart):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallationCart:buyItemAll()")
   ;
-  (((self._ui)._buyCart)._btn_ClearCart):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallationCart:clear()")
+  ((self._ui)._btn_ClearCart):addInputEvent("Mouse_LUp", "PaGlobal_HouseInstallationCart:clear()")
   ;
   ((self._ui)._cartList):addInputEvent("Mouse_DownScroll", "PaGlobal_HouseInstallationCart:scrollUpdate( true )")
   ;

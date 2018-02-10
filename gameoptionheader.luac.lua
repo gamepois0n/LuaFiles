@@ -5,292 +5,324 @@
 -- function num : 0
 local CONTROL = CppEnums.PA_UI_CONTROL_TYPE
 PaGlobal_Option = {
-UIMODE = {Main = 1, Spec = 2, Category = 3, Search = 4}
+UIMODE = {Main = 1, Category = 2, Search = 3}
 , 
 SPEC = {LowNormal = 1, MidNormal = 2, HighNormal = 3, HighestNormal = 4, LowSiege = 5, MidSiege = 6, HighSiege = 7, HighestSiege = 8}
 , 
 GRAPHIC = {VeryVeryLow = 6, VeryLow = 0, Low = 1, Medium = 2, High = 3, VeryHigh = 4, VeryVeryHigh = 5}
 , 
-ALERT = {Item = 0, Life = 0, Pvp = 0, Boss = 0, Etc = 0, ChangeRegion = 0, Growth = 0, AttackedOrFail = 0, HorseRace = 0, GetItem = 0, Guild = 0, War = 0, Party = 0}
+ALERT = {ChangeRegion = 0, NormalTrade = 1, RoyalTrade = 2, FitnessLevelUp = 3, TerritoryWar = 4, GuildWar = 5, OtherPlayerGetItem = 6, ItemMarket = 7, LifeLevelUp = 8, GuildQuestMessage = 9, NearMonster = 10, OtherMarket = 11, EnchantSuccess = 12, EnchantFail = 13}
 , 
-_ui = {_staticMainTopBg = (UI.getChildControl)(Panel_Window_cOption, "Static_MainTopBg"), _staticSubTopBg = (UI.getChildControl)(Panel_Window_cOption, "Static_SubTopBg"), _staticMainBg = (UI.getChildControl)(Panel_Window_cOption, "Static_MainBg"), _staticSpecBG = nil, _staticCategoryBG = nil, _list2 = nil, _listSearchBg = (UI.getChildControl)(Panel_Window_cOption, "List2_Search")}
+_tooltip = {
+ResetAll = {}
+, 
+SaveSetting = {}
+, 
+Apply = {}
+, 
+Cancel = {}
+, 
+Confirm = {}
+, 
+Home = {}
+, 
+CustomSave = {}
+, 
+ResetFrame = {}
+}
+, 
+_ui = {_staticMainTopBg = (UI.getChildControl)(Panel_Window_cOption, "Static_MainTopBg"), _staticSubTopBg = (UI.getChildControl)(Panel_Window_cOption, "Static_SubTopBg"), _staticMainBg = (UI.getChildControl)(Panel_Window_cOption, "Static_MainBg"), _staticSpecBG = nil, _staticCategoryBG = nil, _list2 = nil, _listSearchBg = (UI.getChildControl)(Panel_Window_cOption, "List2_Search"), 
+_specDescTable = {}
+, 
+_categoryTitleTable = {}
+, 
+_categoryDescTable = {}
+}
 , 
 _list2 = {_curCategory = nil, _curFrame = nil, 
 _tree2IndexMap = {}
 , _selectedKey = nil, _selectedSubKey = nil}
 , 
 _frames = {
-Performance = {Camera = Panel_Performance_Camera, GraphicQuality = Panel_Performance_GraphicQuality, Npc = Panel_Performance_Npc, Optimize = Panel_Performance_Optimize, OptimizeBeta = Panel_Performance_OptimizeBeta}
+Performance = {Optimize = Panel_Performance_Optimize, OptimizeBeta = Panel_Performance_OptimizeBeta, GraphicQuality = Panel_Performance_GraphicQuality, Camera = Panel_Performance_Camera, Npc = Panel_Performance_Npc}
 , 
-Function = {Alert = Panel_Function_Alert, Convenience = Panel_Function_Convenience, Etc = Panel_Function_Etc, Interaction = Panel_Function_Interaction, Nation = Panel_Function_Nation, View = Panel_Function_View, Worldmap = Panel_Function_Worldmap}
+Graphic = {Window = Panel_Graphic_Window, Quality = Panel_Graphic_Quality, Effect = Panel_Graphic_Effect, Camera = Panel_Graphic_Camera, ScreenShot = Panel_Graphic_ScreenShot}
 , 
-Graphic = {Camera = Panel_Graphic_Camera, Effect = Panel_Graphic_Effect, Quality = Panel_Graphic_Quality, ScreenShot = Panel_Graphic_ScreenShot, Window = Panel_Graphic_Window}
+Sound = {OnOff = Panel_Sound_OnOff, Volume = Panel_Sound_Volume}
 , 
-Interface = {Action = Panel_Interface_Action, Function = Panel_Interface_Function, Mouse = Panel_Interface_Mouse, Pad = Panel_Interface_Pad, QuickSlot = Panel_Interface_QuickSlot, UI = Panel_Interface_UI}
+Function = {Convenience = Panel_Function_Convenience, View = Panel_Function_View, Alert = Panel_Function_Alert, Worldmap = Panel_Function_Worldmap, Nation = Panel_Function_Nation, Etc = Panel_Function_Etc}
 , 
-Alert = {Alarm = Panel_Alert_Alarm}
-, 
-Sound = {Volume = Panel_Sound_Volume, OnOff = Panel_Sound_OnOff}
+Interface = {Action = Panel_Interface_Action, UI = Panel_Interface_UI, QuickSlot = Panel_Interface_QuickSlot, Function = Panel_Interface_Function, Mouse = Panel_Interface_Mouse, Pad = Panel_Interface_Pad}
 }
 , 
 _functions = {}
 , 
+_searchElementTable = {}
+, 
 _elements = {
-AimAssist = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AimAssist = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-UseNewQuickSlot = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+UseNewQuickSlot = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-EnableSimpleUI = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EnableSimpleUI = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-IsOnScreenSaver = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+IsOnScreenSaver = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-UIFontSizeType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+UIFontSizeType = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-ShowNavPathEffectType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+ShowNavPathEffectType = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-RefuseRequests = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+RefuseRequests = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-IsPvpRefuse = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+IsPvpRefuse = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-IsExchangeRefuse = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+IsExchangeRefuse = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-RotateRadarMode = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+RotateRadarMode = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-HideWindowByAttacked = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+HideWindowByAttacked = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AudioResourceType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-WatermarkNation = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+AudioResourceType = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 ServiceResourceType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-UseChattingFilter = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+UseChattingFilter = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-ChatChannelType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+ChatChannelType = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-SelfPlayerNameTagVisible = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+SelfPlayerNameTagVisible = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-OtherPlayerNameTagVisible = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+OtherPlayerNameTagVisible = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-PartyPlayerNameTagVisible = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+PartyPlayerNameTagVisible = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuildPlayerNameTagVisible = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuildPlayerNameTagVisible = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-RankingPlayerNameTagVisible = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+RankingPlayerNameTagVisible = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineZoneChange = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineZoneChange = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineQuestNPC = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineQuestNPC = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineNpcIntimacy = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineNpcIntimacy = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineWarAlly = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineWarAlly = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineNonWarPlayer = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineNonWarPlayer = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineEnemy = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineEnemy = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineGuild = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineGuild = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLineParty = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLineParty = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GuideLinePartyMemberEffect = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GuideLinePartyMemberEffect = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-PetRender = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+PetRender = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-RenderHitEffect = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+RenderHitEffect = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-ShowComboGuide = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+ShowComboGuide = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-HideMastOnCarrier = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+HideMastOnCarrier = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-WorkerVisible = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+WorkerVisible = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-WorldMapOpenType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+WorldMapOpenType = {_defaultValue = 3, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-WorldmapCameraPitchType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+WorldmapCameraPitchType = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-TextureQuality = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+TextureQuality = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON, _isPictureTooltipOn = true}
 , 
-GraphicOption = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+GraphicOption = {_defaultValue = 2, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-AntiAliasing = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AntiAliasing = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _isPictureTooltipOn = true}
 , 
-SSAO = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+SSAO = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _isPictureTooltipOn = true}
 , 
-PostFilter = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+PostFilter = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-Tessellation = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+Tessellation = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _isPictureTooltipOn = true}
 , 
-GraphicUltra = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GraphicUltra = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-Dof = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+Dof = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _isPictureTooltipOn = true}
 , 
-Representative = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+Representative = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _isPictureTooltipOn = true}
 , 
-CharacterEffect = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+CharacterEffect = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-SnowPoolOnlyInSafeZone = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+SnowPoolOnlyInSafeZone = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-BloodEffect = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+BloodEffect = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-LensBlood = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+LensBlood = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AutoOptimization = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AutoOptimization = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AutoOptimizationFrameLimit = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 60}
+AutoOptimizationFrameLimit = {_defaultValue = 0.33333, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 60}
 , 
-UpscaleEnable = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+UpscaleEnable = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-PresentLock = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+SelfPlayerOnlyEffect = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-UseEffectFrameOptimization = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+NearestPlayerOnlyEffect = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-EffectFrameOptimization = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0.1, _sliderValueMax = 25}
+SelfPlayerOnlyLantern = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-UsePlayerEffectDistOptimization = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+PresentLock = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-PlayerEffectDistOptimization = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 10, _sliderValueMax = 50}
+ShowHpRular = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-UseCharacterUpdateFrameOptimize = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+UseEffectFrameOptimization = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-UseOtherPlayerUpdate = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EffectFrameOptimization = {_defaultValue = 0.03, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0.1, _sliderValueMax = 25}
 , 
-Fov = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 40, _sliderValueMax = 70, _settingRightNow = true}
+UsePlayerEffectDistOptimization = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-CameraEffectMaster = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+PlayerEffectDistOptimization = {_defaultValue = 0.5, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 10, _sliderValueMax = 50}
 , 
-CameraShakePower = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+UseCharacterUpdateFrameOptimize = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-MotionBlurPower = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+UseOtherPlayerUpdate = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-CameraTranslatePower = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+Fov = {_defaultValue = 0.33333, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 40, _sliderValueMax = 70, _settingRightNow = true}
 , 
-CameraFovPower = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+CameraEffectMaster = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-LUT = {_controlType = CONTROL.PA_UI_CONTROL_BUTTON, _settingRightNow = true}
+CameraShakePower = {_defaultValue = 0.5, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-MouseInvertX = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+MotionBlurPower = {_defaultValue = 0.5, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-MouseInvertY = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+CameraTranslatePower = {_defaultValue = 0.5, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-MouseSensitivityX = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+CameraFovPower = {_defaultValue = 0.5, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-MouseSensitivityY = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+LUT = {_defaultValue = 8, _controlType = CONTROL.PA_UI_CONTROL_BUTTON, _settingRightNow = true}
 , 
-GameMouseMode = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+MouseInvertX = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-IsUIModeMouseLock = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+MouseInvertY = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GamePadEnable = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+MouseSensitivityX = {_defaultValue = 0.473684, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-GamePadVibration = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+MouseSensitivityY = {_defaultValue = 0.473684, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-GamePadInvertX = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+GameMouseMode = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GamePadInvertY = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+IsUIModeMouseLock = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GamePadSensitivityX = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+GamePadEnable = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-GamePadSensitivityY = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+GamePadVibration = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-ScreenShotQuality = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+GamePadInvertX = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-ScreenShotFormat = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+GamePadInvertY = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-WatermarkAlpha = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 20, _sliderValueMax = 100}
+GamePadSensitivityX = {_defaultValue = 0.473684, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-WatermarkScale = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+GamePadSensitivityY = {_defaultValue = 0.315789, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-WatermarkPosition = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+ScreenShotQuality = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-WatermarkService = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+ScreenShotFormat = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-ScreenMode = {_isChangeDisplay = true, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+WatermarkAlpha = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 20, _sliderValueMax = 100}
+, 
+WatermarkScale = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+, 
+WatermarkPosition = {_defaultValue = 3, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+, 
+WatermarkService = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+, 
+ScreenMode = {_defaultValue = 2, _isChangeDisplay = true, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 ScreenResolution = {_isChangeDisplay = true, _controlType = CONTROL.PA_UI_CONTROL_COMBOBOX, _comboBoxList = nil}
 , 
-CropModeEnable = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+CropModeEnable = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-CropModeScaleX = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 50, _sliderValueMax = 100}
+CropModeScaleX = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 50, _sliderValueMax = 100}
 , 
-CropModeScaleY = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 50, _sliderValueMax = 100}
+CropModeScaleY = {_defaultValue = 0.6, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 50, _sliderValueMax = 100}
 , 
-UIScale = {_isChangeDisplay = true, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 50, _sliderValueMax = 200}
+UIScale = {_defaultValue = 0.3333, _isChangeDisplay = true, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 50, _sliderValueMax = 200}
 , 
-GammaValue = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = -50, _sliderValueMax = 50, _settingRightNow = true}
+GammaValue = {_defaultValue = 0.5, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = -50, _sliderValueMax = 50, _settingRightNow = true}
 , 
-ContrastValue = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = -50, _sliderValueMax = 50, _settingRightNow = true}
+ContrastValue = {_defaultValue = 0.7, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = -50, _sliderValueMax = 50, _settingRightNow = true}
 , 
-EffectAlpha = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 30, _sliderValueMax = 100}
+EffectAlpha = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 30, _sliderValueMax = 100}
 , 
-SkillPostEffect = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+SkillPostEffect = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
 , 
-ColorBlind = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+ColorBlind = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-BlackSpiritNotice = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+BlackSpiritNotice = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-ShowCashAlert = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+ShowCashAlert = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-ShowGuildLoginMessage = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+ShowGuildLoginMessage = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-EnableMusic = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EnableMusic = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _settingRightNow = true}
 , 
-EnableSound = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EnableSound = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _settingRightNow = true}
 , 
-EnableEnv = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EnableEnv = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _settingRightNow = true}
 , 
-EnableRidingSound = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EnableRidingSound = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _settingRightNow = true}
 , 
-EnableWhisperMusic = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EnableWhisperMusic = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _settingRightNow = true}
 , 
-EnableTraySoundOnOff = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+EnableTraySoundOnOff = {_defaultValue = false, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON, _settingRightNow = true}
 , 
-BattleSoundType = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+BattleSoundType = {_defaultValue = 2, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON, _settingRightNow = true}
 , 
-VolumeMaster = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeMaster = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-VolumeMusic = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeMusic = {_defaultValue = 0.62, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-VolumeFx = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeFx = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-VolumeEnv = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeEnv = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-VolumeDlg = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeDlg = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-VolumeHitFxVolume = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeHitFxVolume = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-VolumeHitFxWeight = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeHitFxWeight = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-VolumeOtherPlayer = {_controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100}
+VolumeOtherPlayer = {_defaultValue = 1, _controlType = CONTROL.PA_UI_CONTROL_SLIDER, _sliderValueMin = 0, _sliderValueMax = 100, _settingRightNow = true}
 , 
-AlertItem = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertNormalTrade = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertLife = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertRoyalTrade = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertPvp = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertOtherPlayerGetItem = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertBoss = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertLifeLevelUp = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertEtc = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertItemMarket = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertChangeRegion = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertOtherMarket = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertGrowth = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertChangeRegion = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertAttackedOrFail = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertFitnessLevelUp = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertHorseRace = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertTerritoryWar = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertGetItem = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertGuildWar = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertGuild = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertEnchantSuccess = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertWar = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertEnchantFail = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-AlertParty = {_controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+AlertGuildQuestMessage = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
 , 
-KeyCustomMode = {_controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON, _settingRightNow = true}
+AlertNearMonster = {_defaultValue = true, _controlType = CONTROL.PA_UI_CONTROL_CHECKBUTTON}
+, 
+KeyCustomMode = {_defaultValue = 0, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON, _settingRightNow = true}
 , 
 PadFunction1 = {actionInputType = "PadFunction1", _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
@@ -434,7 +466,7 @@ UiCashShop = {uiInputType = 18, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON
 , 
 UiBeautyShop = {uiInputType = 19, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
-UiAlchemySton = {uiInputType = 20, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
+UiAlchemyStone = {uiInputType = 20, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 UiHouse = {uiInputType = 21, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
@@ -469,49 +501,54 @@ UiInteraction5 = {uiInputType = 35, _controlType = CONTROL.PA_UI_CONTROL_RADIOBU
 UiChatTabPrev = {uiInputType = 36, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 , 
 UiChatTabNext = {uiInputType = 37, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiConfirm = {uiInputType = 38, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiTravelCursorRight = {uiInputType = 39, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiTravelCursorLeft = {uiInputType = 40, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiTravelCursorUp = {uiInputType = 41, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiTravelCursorDown = {uiInputType = 42, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiPanelTravelPrev = {uiInputType = 43, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiPanelTravelNext = {uiInputType = 44, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
-, 
-UiPossessionByBlackSpirit = {uiInputType = 45, _controlType = CONTROL.PA_UI_CONTROL_RADIOBUTTON}
 }
 , 
 _userInitScreenResolution = {width = 0, height = 0}
 , 
 _findStrings = {}
-, _keyCustomPadMode = nil, _keyCustomInputType = nil, _resetCheck = nil, _availableResolutionList = nil, _screenResolutionCount = nil}
--- DECOMPILER ERROR at PC1574: Confused about usage of register: R1 in 'UnsetPending'
+, _keyCustomPadMode = nil, _keyCustomInputType = nil, _resetCheck = nil, _availableResolutionList = nil, _screenResolutionCount = nil, 
+_fpsTextControl = {}
+}
+isChecked_SkillCommand = true
+-- DECOMPILER ERROR at PC1801: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_Option.Get = function(self, optionName)
+  -- function num : 0_0
+  local option = (self._elements)[optionName]
+  if option == nil then
+    return false
+  end
+  local value = option._initValue
+  if option._applyValue ~= nil then
+    value = option._applyValue
+  end
+  if value == nil then
+    _PA_LOG("후진", "[GameOption][GET] 값을 얻어 오는�\176 실패했습니다.  Name : " .. optionName)
+  end
+  return value
+end
+
+-- DECOMPILER ERROR at PC1805: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AimAssist = function(value)
-  -- function num : 0_0
+  -- function num : 0_1
   setAimAssist(value)
 end
 
--- DECOMPILER ERROR at PC1578: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1809: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseNewQuickSlot = function(value)
-  -- function num : 0_1
+  -- function num : 0_2
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).NewQuickSlot, value, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
--- DECOMPILER ERROR at PC1582: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1813: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableSimpleUI = function(value)
-  -- function num : 0_2
+  -- function num : 0_3
   local selfPlayer = getSelfPlayer()
   if selfPlayer ~= nil then
     if (selfPlayer:get()):getLevel() > 5 then
@@ -524,19 +561,19 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1586: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1817: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsOnScreenSaver = function(value)
-  -- function num : 0_3
+  -- function num : 0_4
   setIsOnScreenSaver(value)
 end
 
--- DECOMPILER ERROR at PC1590: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1821: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UIFontSizeType = function(value)
-  -- function num : 0_4
+  -- function num : 0_5
   setUIFontSizeType(value)
   local addFontSize = convertUIFontTypeToUIFontSize(value)
   ;
@@ -593,79 +630,74 @@ end
   (ToClient_getFontWrapper("BaseFont_26_Glow")):changeCurrentFontSizeBeMore(addFontSize)
 end
 
--- DECOMPILER ERROR at PC1594: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1825: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowNavPathEffectType = function(value)
-  -- function num : 0_5
+  -- function num : 0_6
   setShowNavPathEffectType(value)
 end
 
--- DECOMPILER ERROR at PC1598: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1829: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RefuseRequests = function(value)
-  -- function num : 0_6
+  -- function num : 0_7
   setRefuseRequests(value)
 end
 
--- DECOMPILER ERROR at PC1602: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1833: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsPvpRefuse = function(value)
-  -- function num : 0_7
+  -- function num : 0_8
   setIsPvpRefuse(value)
 end
 
--- DECOMPILER ERROR at PC1606: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1837: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsExchangeRefuse = function(value)
-  -- function num : 0_8
+  -- function num : 0_9
   setIsExchangeRefuse(value)
 end
 
--- DECOMPILER ERROR at PC1610: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1841: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RotateRadarMode = function(value)
-  -- function num : 0_9
+  -- function num : 0_10
   setRotateRadarMode(value)
 end
 
--- DECOMPILER ERROR at PC1614: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1845: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).HideWindowByAttacked = function(value)
-  -- function num : 0_10
+  -- function num : 0_11
   setHideWindowByAttacked(value)
 end
 
--- DECOMPILER ERROR at PC1618: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1849: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AudioResourceType = function(value)
-  -- function num : 0_11
+  -- function num : 0_12
   setAudioResourceType(PaGlobal_Option:radioButtonMapping_AudioResourceType(value))
 end
 
--- DECOMPILER ERROR at PC1622: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).WatermarkNation = function(value)
-  -- function num : 0_12
-  setWatermarkService(PaGlobal_Option:radioButtonMapping_WatermarkService(value))
-end
-
--- DECOMPILER ERROR at PC1626: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1853: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ServiceResourceType = function(value)
   -- function num : 0_13
-  ToClient_saveServiceResourceType(PaGlobal_Option:radioButtonMapping_ServiceResourceType(value))
+  local serviceType = getGameServiceType()
+  if serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_DEV or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_REAL then
+    ToClient_saveServiceResourceType(PaGlobal_Option:radioButtonMapping_ServiceResourceType(value))
+  end
 end
 
--- DECOMPILER ERROR at PC1630: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1857: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseChattingFilter = function(value)
@@ -673,15 +705,18 @@ end
   setUseChattingFilter(value)
 end
 
--- DECOMPILER ERROR at PC1634: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1861: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ChatChannelType = function(value)
   -- function num : 0_15
-  ToClient_saveServiceResourceType(PaGlobal_Option:radioButtonMapping_ChatChannelType(value))
+  local serviceType = getGameServiceType()
+  if serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_DEV or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_REAL then
+    ToClient_saveChatChannelType(PaGlobal_Option:radioButtonMapping_ChatChannelType(value))
+  end
 end
 
--- DECOMPILER ERROR at PC1638: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1865: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SelfPlayerNameTagVisible = function(value)
@@ -689,7 +724,7 @@ end
   setSelfPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1642: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1869: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).OtherPlayerNameTagVisible = function(value)
@@ -702,7 +737,7 @@ end
   setOtherPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1646: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1873: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PartyPlayerNameTagVisible = function(value)
@@ -715,7 +750,7 @@ end
   setPartyPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1650: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1877: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuildPlayerNameTagVisible = function(value)
@@ -728,7 +763,7 @@ end
   setGuildPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1654: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1881: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RankingPlayerNameTagVisible = function(value)
@@ -741,7 +776,7 @@ end
   setRankingPlayerNameTagVisible(value)
 end
 
--- DECOMPILER ERROR at PC1658: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1885: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineZoneChange = function(value)
@@ -749,7 +784,7 @@ end
   setRenderPlayerColor("ZoneChange", value)
 end
 
--- DECOMPILER ERROR at PC1662: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1889: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineQuestNPC = function(value)
@@ -757,7 +792,7 @@ end
   setShowQuestActorColor(value)
 end
 
--- DECOMPILER ERROR at PC1666: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1893: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineNpcIntimacy = function(value)
@@ -765,7 +800,7 @@ end
   setShowHumanRelation(value)
 end
 
--- DECOMPILER ERROR at PC1670: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1897: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineWarAlly = function(value)
@@ -773,7 +808,7 @@ end
   setRenderPlayerColor("WarAlly", value)
 end
 
--- DECOMPILER ERROR at PC1674: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1901: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineNonWarPlayer = function(value)
@@ -781,7 +816,7 @@ end
   setRenderPlayerColor("NonWarPlayer", value)
 end
 
--- DECOMPILER ERROR at PC1678: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1905: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineEnemy = function(value)
@@ -789,7 +824,7 @@ end
   setRenderPlayerColor("Enemy", value)
 end
 
--- DECOMPILER ERROR at PC1682: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1909: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineGuild = function(value)
@@ -797,7 +832,7 @@ end
   setRenderPlayerColor("Guild", value)
 end
 
--- DECOMPILER ERROR at PC1686: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1913: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLineParty = function(value)
@@ -805,7 +840,7 @@ end
   setRenderPlayerColor("Party", value)
 end
 
--- DECOMPILER ERROR at PC1690: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1917: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GuideLinePartyMemberEffect = function(value)
@@ -813,7 +848,7 @@ end
   (ToClient_getGameOptionControllerWrapper()):setRenderHitEffectParty(value)
 end
 
--- DECOMPILER ERROR at PC1694: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1921: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PetRender = function(value)
@@ -821,7 +856,7 @@ end
   setPetRender(value)
 end
 
--- DECOMPILER ERROR at PC1698: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1925: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).RenderHitEffect = function(value)
@@ -829,7 +864,7 @@ end
   setRenderHitEffect(value)
 end
 
--- DECOMPILER ERROR at PC1702: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1929: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowComboGuide = function(value)
@@ -840,7 +875,7 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1706: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1933: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).HideMastOnCarrier = function(value)
@@ -848,7 +883,7 @@ end
   setHideMastOnCarrier(value)
 end
 
--- DECOMPILER ERROR at PC1710: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1937: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WorkerVisible = function(value)
@@ -856,7 +891,7 @@ end
   ToClient_setWorkerVisible(value)
 end
 
--- DECOMPILER ERROR at PC1714: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1941: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WorldMapOpenType = function(value)
@@ -864,7 +899,7 @@ end
   setWorldmapOpenType(value)
 end
 
--- DECOMPILER ERROR at PC1718: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1945: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WorldmapCameraPitchType = function(value)
@@ -872,7 +907,7 @@ end
   setWorldMapCameraPitchType(value)
 end
 
--- DECOMPILER ERROR at PC1722: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1949: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).TextureQuality = function(value)
@@ -880,7 +915,7 @@ end
   setTextureQuality(PaGlobal_Option:radioButtonMapping_TextureQuality(value))
 end
 
--- DECOMPILER ERROR at PC1726: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1953: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GraphicOption = function(value)
@@ -888,7 +923,7 @@ end
   setGraphicOption(PaGlobal_Option:radioButtonMapping_GraphicOption(value))
 end
 
--- DECOMPILER ERROR at PC1730: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1957: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AntiAliasing = function(value)
@@ -896,7 +931,7 @@ end
   setAntiAliasing(value)
 end
 
--- DECOMPILER ERROR at PC1734: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1961: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SSAO = function(value)
@@ -904,7 +939,7 @@ end
   setSSAO(value)
 end
 
--- DECOMPILER ERROR at PC1738: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1965: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PostFilter = function(value)
@@ -916,7 +951,7 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1742: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1969: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Tessellation = function(value)
@@ -924,7 +959,7 @@ end
   setTessellation(value)
 end
 
--- DECOMPILER ERROR at PC1746: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1973: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GraphicUltra = function(value)
@@ -932,7 +967,7 @@ end
   setGraphicUltra(value)
 end
 
--- DECOMPILER ERROR at PC1750: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1977: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Dof = function(value)
@@ -940,7 +975,7 @@ end
   setDof(value)
 end
 
--- DECOMPILER ERROR at PC1754: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1981: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Representative = function(value)
@@ -948,7 +983,7 @@ end
   setRepresentative(value)
 end
 
--- DECOMPILER ERROR at PC1758: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1985: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CharacterEffect = function(value)
@@ -956,7 +991,7 @@ end
   setCharacterEffect(value)
 end
 
--- DECOMPILER ERROR at PC1762: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1989: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SnowPoolOnlyInSafeZone = function(value)
@@ -964,7 +999,7 @@ end
   setSnowPoolOnlyInSafeZone(value)
 end
 
--- DECOMPILER ERROR at PC1766: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1993: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).BloodEffect = function(value)
@@ -976,7 +1011,7 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1770: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1997: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).LensBlood = function(value)
@@ -984,7 +1019,7 @@ end
   setLensBlood(value)
 end
 
--- DECOMPILER ERROR at PC1774: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2001: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AutoOptimization = function(value)
@@ -992,7 +1027,7 @@ end
   setAutoOptimization(value)
 end
 
--- DECOMPILER ERROR at PC1778: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2005: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AutoOptimizationFrameLimit = function(value)
@@ -1012,7 +1047,7 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1782: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2009: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UpscaleEnable = function(value)
@@ -1020,7 +1055,7 @@ end
   setUpscaleEnable(value)
 end
 
--- DECOMPILER ERROR at PC1786: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2013: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PresentLock = function(value)
@@ -1028,7 +1063,7 @@ end
   setPresentLock(value)
 end
 
--- DECOMPILER ERROR at PC1790: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2017: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseEffectFrameOptimization = function(value)
@@ -1036,7 +1071,7 @@ end
   setUseOptimizationEffectFrame(value)
 end
 
--- DECOMPILER ERROR at PC1794: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2021: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EffectFrameOptimization = function(value)
@@ -1056,7 +1091,7 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1798: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2025: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UsePlayerEffectDistOptimization = function(value)
@@ -1064,7 +1099,7 @@ end
   setUsePlayerOptimizationEffectFrame(value)
 end
 
--- DECOMPILER ERROR at PC1802: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2029: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).PlayerEffectDistOptimization = function(value)
@@ -1084,7 +1119,7 @@ end
   end
 end
 
--- DECOMPILER ERROR at PC1806: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2033: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseCharacterUpdateFrameOptimize = function(value)
@@ -1092,15 +1127,15 @@ end
   setUseCharacterDistUpdate(value)
 end
 
--- DECOMPILER ERROR at PC1810: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2037: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UseOtherPlayerUpdate = function(value)
   -- function num : 0_59
-  FromClient_OtherPlayeUpdateNEW(value, true)
+  FromClient_OtherPlayeUpdate(value, true)
 end
 
--- DECOMPILER ERROR at PC1814: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2041: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).Fov = function(value)
@@ -1109,7 +1144,7 @@ end
   setFov(value)
 end
 
--- DECOMPILER ERROR at PC1818: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2045: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraEffectMaster = function(value)
@@ -1117,7 +1152,7 @@ end
   setCameraMasterPower(value)
 end
 
--- DECOMPILER ERROR at PC1822: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2049: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraShakePower = function(value)
@@ -1125,7 +1160,7 @@ end
   setCameraShakePower(value)
 end
 
--- DECOMPILER ERROR at PC1826: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2053: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MotionBlurPower = function(value)
@@ -1133,7 +1168,7 @@ end
   setMotionBlurPower(value)
 end
 
--- DECOMPILER ERROR at PC1830: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2057: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraTranslatePower = function(value)
@@ -1141,7 +1176,7 @@ end
   setCameraTranslatePower(value)
 end
 
--- DECOMPILER ERROR at PC1834: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2061: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CameraFovPower = function(value)
@@ -1149,7 +1184,7 @@ end
   setCameraFovPower(value)
 end
 
--- DECOMPILER ERROR at PC1838: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2065: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseInvertX = function(value)
@@ -1157,7 +1192,7 @@ end
   setMouseInvertX(value)
 end
 
--- DECOMPILER ERROR at PC1842: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2069: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseInvertY = function(value)
@@ -1165,7 +1200,7 @@ end
   setMouseInvertY(value)
 end
 
--- DECOMPILER ERROR at PC1846: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2073: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseSensitivityX = function(value)
@@ -1174,7 +1209,7 @@ end
   setMouseSensitivityX(convertedValue)
 end
 
--- DECOMPILER ERROR at PC1850: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2077: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).MouseSensitivityY = function(value)
@@ -1183,7 +1218,7 @@ end
   setMouseSensitivityY(convertedValue)
 end
 
--- DECOMPILER ERROR at PC1854: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2081: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GameMouseMode = function(value)
@@ -1191,7 +1226,7 @@ end
   setGameMouseMode(value)
 end
 
--- DECOMPILER ERROR at PC1858: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2085: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).IsUIModeMouseLock = function(value)
@@ -1199,7 +1234,7 @@ end
   setIsUIModeMouseLock(value)
 end
 
--- DECOMPILER ERROR at PC1862: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2089: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadEnable = function(value)
@@ -1207,7 +1242,7 @@ end
   setGamePadEnable(value)
 end
 
--- DECOMPILER ERROR at PC1866: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2093: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadVibration = function(value)
@@ -1215,7 +1250,7 @@ end
   setGamePadVibration(value)
 end
 
--- DECOMPILER ERROR at PC1870: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2097: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadInvertX = function(value)
@@ -1223,7 +1258,7 @@ end
   setGamePadInvertX(value)
 end
 
--- DECOMPILER ERROR at PC1874: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2101: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadInvertY = function(value)
@@ -1231,7 +1266,7 @@ end
   setGamePadInvertY(value)
 end
 
--- DECOMPILER ERROR at PC1878: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2105: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadSensitivityX = function(value)
@@ -1240,7 +1275,7 @@ end
   setGamePadSensitivityX(convertedValue)
 end
 
--- DECOMPILER ERROR at PC1882: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2109: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GamePadSensitivityY = function(value)
@@ -1249,7 +1284,7 @@ end
   setGamePadSensitivityY(convertedValue)
 end
 
--- DECOMPILER ERROR at PC1886: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2113: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenShotQuality = function(value)
@@ -1257,7 +1292,7 @@ end
   setScreenShotQuality(value)
 end
 
--- DECOMPILER ERROR at PC1890: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2117: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenShotFormat = function(value)
@@ -1265,7 +1300,7 @@ end
   setScreenShotFormat(value)
 end
 
--- DECOMPILER ERROR at PC1894: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2121: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkAlpha = function(value)
@@ -1273,7 +1308,7 @@ end
   setWatermarkAlpha(value)
 end
 
--- DECOMPILER ERROR at PC1898: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2125: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkScale = function(value)
@@ -1281,7 +1316,7 @@ end
   setWatermarkScale(value)
 end
 
--- DECOMPILER ERROR at PC1902: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2129: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkPosition = function(value)
@@ -1289,15 +1324,15 @@ end
   setWatermarkPosition(value)
 end
 
--- DECOMPILER ERROR at PC1906: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2133: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).WatermarkService = function(value)
   -- function num : 0_83
-  setWatermarkService(PaGlobal_Option:radioButtonMapping_WatermarkService(value))
+  setWatermarkService(value)
 end
 
--- DECOMPILER ERROR at PC1910: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2137: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenMode = function(value)
@@ -1306,14 +1341,14 @@ end
   ischangedeplay = true
 end
 
--- DECOMPILER ERROR at PC1914: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2141: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ScreenResolution = function(value)
   -- function num : 0_85
   local width = 1280
   local height = 720
-  if value ~= -1 then
+  if value == -1 then
     width = (PaGlobal_Option._userInitScreenResolution).width
     height = (PaGlobal_Option._userInitScreenResolution).height
   else
@@ -1323,7 +1358,7 @@ end
   setScreenResolution(width, height)
 end
 
--- DECOMPILER ERROR at PC1918: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2146: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CropModeEnable = function(value)
@@ -1331,48 +1366,41 @@ end
   setCropModeEnable(value)
 end
 
--- DECOMPILER ERROR at PC1922: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2151: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CropModeScaleX = function(value)
   -- function num : 0_87
   local convertedScale = 0.5 + value * 0.5
-  local cropModeEnable = (PaGlobal_Option._elements).CropModeEnable
-  local check = cropModeEnable._initValue
-  if cropModeEnable._curValue ~= nil then
-    check = cropModeEnable._curValue
-  else
-    if cropModeEnable._applyValue ~= nil then
-      check = cropModeEnable._applyValue
-    end
+  local cropModeEnable = PaGlobal_Option:Get("CropModeEnable")
+  local cropModeScaleX = convertedScale
+  local cropModeScaleY = PaGlobal_Option:Get("CropModeScaleY")
+  if cropModeScaleX > 0.95 and cropModeScaleY > 0.95 and cropModeEnable == true then
+    PaGlobal_Option:SetXXX("CropModeEnable", false)
   end
-  if check == true then
+  if cropModeEnable == true then
     setCropModeScaleX(convertedScale)
   end
 end
 
--- DECOMPILER ERROR at PC1926: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2156: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).CropModeScaleY = function(value)
   -- function num : 0_88
   local convertedScale = 0.5 + value * 0.5
-  local cropModeScaleX = (PaGlobal_Option._elements).CropModeScaleX
-  local cropModeScaleY = (PaGlobal_Option._elements).CropModeScaleY
-  local check = cropModeScaleX._initValue
-  if cropModeScaleX._curValue ~= nil then
-    check = cropModeScaleX._curValue
-  else
-    if cropModeScaleX._applyValue ~= nil then
-      check = cropModeScaleX._applyValue
-    end
+  local cropModeEnable = PaGlobal_Option:Get("CropModeEnable")
+  local cropModeScaleX = PaGlobal_Option:Get("CropModeScaleX")
+  local cropModeScaleY = convertedScale
+  if cropModeScaleX > 0.95 and cropModeScaleY > 0.95 and cropModeEnable == true then
+    PaGlobal_Option:SetXXX("CropModeEnable", false)
   end
-  if check == true then
+  if cropModeEnable == true then
     setCropModeScaleY(convertedScale)
   end
 end
 
--- DECOMPILER ERROR at PC1930: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2161: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).UIScale = function(value)
@@ -1383,7 +1411,7 @@ end
   setUIScale(convertedValue)
 end
 
--- DECOMPILER ERROR at PC1934: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2166: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).GammaValue = function(value)
@@ -1391,7 +1419,7 @@ end
   setGammaValue(value)
 end
 
--- DECOMPILER ERROR at PC1938: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2171: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ContrastValue = function(value)
@@ -1399,15 +1427,17 @@ end
   setContrastValue(value)
 end
 
--- DECOMPILER ERROR at PC1942: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2176: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EffectAlpha = function(value)
   -- function num : 0_92
+  value = PaGlobal_Option:FromSliderValueToRealValue(value, ((PaGlobal_Option._elements).EffectAlpha)._sliderValueMin, ((PaGlobal_Option._elements).EffectAlpha)._sliderValueMax)
+  value = value * 0.01
   setEffectAlpha(value)
 end
 
--- DECOMPILER ERROR at PC1946: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2181: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).SkillPostEffect = function(value)
@@ -1415,7 +1445,7 @@ end
   setSkillPostEffect(value)
 end
 
--- DECOMPILER ERROR at PC1950: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2186: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ColorBlind = function(value)
@@ -1428,7 +1458,7 @@ end
   UIMain_QuestUpdate()
 end
 
--- DECOMPILER ERROR at PC1954: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2191: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).BlackSpiritNotice = function(value)
@@ -1436,15 +1466,15 @@ end
   setBlackSpiritNotice(value)
 end
 
--- DECOMPILER ERROR at PC1958: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2196: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowCashAlert = function(value)
   -- function num : 0_96
-  setShowCashAlert(value)
+  setShowCashAlert(not value)
 end
 
--- DECOMPILER ERROR at PC1962: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2201: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).ShowGuildLoginMessage = function(value)
@@ -1452,16 +1482,15 @@ end
   setShowGuildLoginMessage(value)
 end
 
--- DECOMPILER ERROR at PC1966: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2205: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).LUT = function(LUT)
   -- function num : 0_98
-  GameOption_SetLUTText(LUT)
   setCameraLUTFilter(LUT)
 end
 
--- DECOMPILER ERROR at PC1972: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2211: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 ((PaGlobal_Option._elements).LUT).GetButtonText = function(self, LUT)
@@ -1474,7 +1503,7 @@ end
   return filterString
 end
 
--- DECOMPILER ERROR at PC1976: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2216: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableMusic = function(value)
@@ -1482,7 +1511,7 @@ end
   setEnableSoundMusic(value)
 end
 
--- DECOMPILER ERROR at PC1980: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2221: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableSound = function(value)
@@ -1490,7 +1519,7 @@ end
   setEnableSoundFx(value)
 end
 
--- DECOMPILER ERROR at PC1984: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2226: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableEnv = function(value)
@@ -1498,7 +1527,7 @@ end
   setEnableSoundEnv(value)
 end
 
--- DECOMPILER ERROR at PC1988: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2231: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableRidingSound = function(value)
@@ -1506,7 +1535,7 @@ end
   setEnableRidingSound(value)
 end
 
--- DECOMPILER ERROR at PC1992: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2236: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableWhisperMusic = function(value)
@@ -1514,7 +1543,7 @@ end
   setEnableSoundWhisper(value)
 end
 
--- DECOMPILER ERROR at PC1996: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2241: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).EnableTraySoundOnOff = function(value)
@@ -1522,7 +1551,7 @@ end
   setEnableSoundTray(value)
 end
 
--- DECOMPILER ERROR at PC2000: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2246: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).BattleSoundType = function(value)
@@ -1530,7 +1559,7 @@ end
   setEnableBattleSoundType(value)
 end
 
--- DECOMPILER ERROR at PC2004: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2251: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeMaster = function(value)
@@ -1538,7 +1567,7 @@ end
   setVolumeParamMaster(value * 100)
 end
 
--- DECOMPILER ERROR at PC2009: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2256: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeMusic = function(value)
@@ -1546,7 +1575,7 @@ end
   setVolumeParamMusic(value * 100)
 end
 
--- DECOMPILER ERROR at PC2014: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2261: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeFx = function(value)
@@ -1554,7 +1583,7 @@ end
   setVolumeParamFx(value * 100)
 end
 
--- DECOMPILER ERROR at PC2019: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2266: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeEnv = function(value)
@@ -1562,7 +1591,7 @@ end
   setVolumeParamEnv(value * 100)
 end
 
--- DECOMPILER ERROR at PC2024: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2271: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeDlg = function(value)
@@ -1570,7 +1599,7 @@ end
   setVolumeParamDialog(value * 100)
 end
 
--- DECOMPILER ERROR at PC2029: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2276: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeHitFxVolume = function(value)
@@ -1578,7 +1607,7 @@ end
   setVolumeParamHitFxVolume(value * 100)
 end
 
--- DECOMPILER ERROR at PC2034: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2281: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeHitFxWeight = function(value)
@@ -1586,7 +1615,7 @@ end
   setVolumeParamHitFxWeight(value * 100)
 end
 
--- DECOMPILER ERROR at PC2039: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2286: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).VolumeOtherPlayer = function(value)
@@ -1594,108 +1623,149 @@ end
   setVolumeParamOtherPlayer(value * 100)
 end
 
--- DECOMPILER ERROR at PC2044: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2291: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertItem = function(value)
+(PaGlobal_Option._functions).AlertNormalTrade = function(value)
   -- function num : 0_115
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).Item, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).NormalTrade, not value)
 end
 
--- DECOMPILER ERROR at PC2049: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2296: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertLife = function(value)
+(PaGlobal_Option._functions).AlertRoyalTrade = function(value)
   -- function num : 0_116
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).Life, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).RoyalTrade, not value)
 end
 
--- DECOMPILER ERROR at PC2054: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2301: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertPvp = function(value)
+(PaGlobal_Option._functions).AlertOtherPlayerGetItem = function(value)
   -- function num : 0_117
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).Pvp, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).OtherPlayerGetItem, not value)
 end
 
--- DECOMPILER ERROR at PC2059: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2306: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertBoss = function(value)
+(PaGlobal_Option._functions).AlertLifeLevelUp = function(value)
   -- function num : 0_118
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).Boss, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).LifeLevelUp, not value)
 end
 
--- DECOMPILER ERROR at PC2064: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2311: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertEtc = function(value)
+(PaGlobal_Option._functions).AlertItemMarket = function(value)
   -- function num : 0_119
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).Etc, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).ItemMarket, not value)
 end
 
--- DECOMPILER ERROR at PC2069: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2316: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertOtherMarket = function(value)
+  -- function num : 0_120
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).OtherMarket, not value)
+end
+
+-- DECOMPILER ERROR at PC2321: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
 (PaGlobal_Option._functions).AlertChangeRegion = function(value)
-  -- function num : 0_120
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).ChangeRegion, value)
-end
-
--- DECOMPILER ERROR at PC2074: Confused about usage of register: R1 in 'UnsetPending'
-
-;
-(PaGlobal_Option._functions).AlertGrowth = function(value)
   -- function num : 0_121
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).AlertGrowth, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).ChangeRegion, not value)
 end
 
--- DECOMPILER ERROR at PC2079: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2326: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertAttackedOrFail = function(value)
+(PaGlobal_Option._functions).AlertFitnessLevelUp = function(value)
   -- function num : 0_122
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).AttackedOrFail, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).FitnessLevelUp, not value)
 end
 
--- DECOMPILER ERROR at PC2084: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2331: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertHorseRace = function(value)
+(PaGlobal_Option._functions).AlertTerritoryWar = function(value)
   -- function num : 0_123
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).HorseRace, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).TerritoryWar, not value)
 end
 
--- DECOMPILER ERROR at PC2089: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2336: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertGetItem = function(value)
+(PaGlobal_Option._functions).AlertGuildWar = function(value)
   -- function num : 0_124
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).GetItem, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).GuildWar, not value)
 end
 
--- DECOMPILER ERROR at PC2094: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2341: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertGuild = function(value)
+(PaGlobal_Option._functions).AlertEnchantSuccess = function(value)
   -- function num : 0_125
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).Guild, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).EnchantSuccess, not value)
 end
 
--- DECOMPILER ERROR at PC2099: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2346: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertWar = function(value)
+(PaGlobal_Option._functions).AlertEnchantFail = function(value)
   -- function num : 0_126
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).War, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).EnchantFail, not value)
 end
 
--- DECOMPILER ERROR at PC2104: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC2351: Confused about usage of register: R1 in 'UnsetPending'
 
 ;
-(PaGlobal_Option._functions).AlertParty = function(value)
+(PaGlobal_Option._functions).AlertGuildQuestMessage = function(value)
   -- function num : 0_127
-  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).Party, value)
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).GuildQuestMessage, not value)
+end
+
+-- DECOMPILER ERROR at PC2356: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).AlertNearMonster = function(value)
+  -- function num : 0_128
+  ToClient_SetMessageFilter((PaGlobal_Option.ALERT).NearMonster, not value)
+end
+
+-- DECOMPILER ERROR at PC2360: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).SelfPlayerOnlyEffect = function(value)
+  -- function num : 0_129
+  setSelfPlayerOnlyEffect(value)
+end
+
+-- DECOMPILER ERROR at PC2364: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).NearestPlayerOnlyEffect = function(value)
+  -- function num : 0_130
+  setNearestPlayerOnlyEffect(value)
+end
+
+-- DECOMPILER ERROR at PC2368: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).SelfPlayerOnlyLantern = function(value)
+  -- function num : 0_131
+  setSelfPlayerOnlyLantern(value)
+end
+
+-- DECOMPILER ERROR at PC2372: Confused about usage of register: R1 in 'UnsetPending'
+
+;
+(PaGlobal_Option._functions).ShowHpRular = function(value)
+  -- function num : 0_132
+  GameOptionApply_CharacterNameTag_Ruler(value)
+  setShowHpRular(value)
 end
 
 

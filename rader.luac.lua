@@ -12,9 +12,6 @@ Panel_TimeBar:RegisterShowEventFunc(false, " ")
 Panel_TimeBarNumber:SetIgnore(true)
 Panel_Radar:RegisterShowEventFunc(true, "RaderShowAni()")
 Panel_Radar:RegisterShowEventFunc(false, "RaderHideAni()")
-ToClient_setRadorUIPanel(Panel_Radar)
-ToClient_setRadorUIViewDistanceRate(7225)
-ToCleint_InitializeRadarActorPool(1000)
 local radorType = {radorType_none = 0, radorType_hide = 1, radorType_allymonster = 2, radorType_normalMonster = 3, radorType_namedMonster = 4, radorType_bossMonster = 5, radorType_normalMonsterQuestTarget = 6, radorType_namedMonsterQuestTarget = 7, radorType_bossMonsterQuestTarget = 8, radorType_lordManager = 9, radorType_skillTrainner = 10, radorType_tradeMerchantNpc = 11, radorType_nodeManager = 12, radorType_normalNpc = 13, radorType_warehouseNpc = 14, radorType_potionNpc = 15, radorType_weaponNpc = 16, radorType_horseNpc = 17, radorType_workerNpc = 18, radorType_jewelNpc = 19, radorType_furnitureNpc = 20, radorType_collectNpc = 21, radorType_shipNpc = 22, radorType_alchemyNpc = 23, radorType_fishNpc = 24, radorType_guild = 25, radorType_guildShop = 26, radorType_itemTrader = 27, radorType_TerritorySupply = 28, radorType_TerritoryTrade = 29, radorType_Cook = 30, radorType_Wharf = 31, radorType_itemRepairer = 32, radorType_shopMerchantNpc = 33, radorType_ImportantNpc = 34, radorType_QuestAcceptable = 35, radorType_QuestProgress = 36, radorType_QuestComplete = 37, radorType_unknownNpc = 38, radorType_partyMember = 39, radorType_guildMember = 40, radorType_normalPlayer = 41, radorType_isHorse = 42, radorType_isDonkey = 43, radorType_isCamel = 44, radorType_isElephant = 45, radorType_isBabyElePhant = 46, radorType_isShip = 47, radorType_isCarriage = 48, radorType_installation = 49, radorType_kingGuildTent = 50, radorType_lordGuildTent = 51, radorType_villageGuildTent = 52, radorType_selfDeadBody = 53, radorType_advancedBase = 54, radorType_Raft = 55, radorType_Boat = 56, radorType_FishingBoat = 57, radorType_PersonalTradeShip = 58, radorType_GalleyShip = 59, radorType_PersonalBattleShip = 60, radorType_huntingMonster = 61, radorType_huntingMonsterQuestTarget = 62, radorType_Count = 63}
 local template = {[radorType.radorType_none] = nil, [radorType.radorType_hide] = (UI.getChildControl)(Panel_Radar, "icon_hide"), [radorType.radorType_allymonster] = (UI.getChildControl)(Panel_Radar, "icon_horse"), [radorType.radorType_normalMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterGeneral_normal"), [radorType.radorType_namedMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterNamed_normal"), [radorType.radorType_bossMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterBoss_normal"), [radorType.radorType_normalMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterGeneral_quest"), [radorType.radorType_namedMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterNamed_quest"), [radorType.radorType_bossMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterBoss_quest"), [radorType.radorType_lordManager] = (UI.getChildControl)(Panel_Radar, "icon_npc_lordManager"), [radorType.radorType_skillTrainner] = (UI.getChildControl)(Panel_Radar, "icon_npc_skillTrainner"), [radorType.radorType_tradeMerchantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_trader"), [radorType.radorType_nodeManager] = (UI.getChildControl)(Panel_Radar, "icon_npc_nodeManager"), [radorType.radorType_normalNpc] = nil, [radorType.radorType_warehouseNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_warehouse"), [radorType.radorType_potionNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_potion"), [radorType.radorType_weaponNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_storeArmor"), [radorType.radorType_horseNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_horse"), [radorType.radorType_workerNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_worker"), [radorType.radorType_jewelNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_jewel"), [radorType.radorType_furnitureNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_furniture"), [radorType.radorType_collectNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_collect"), [radorType.radorType_shipNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_ship"), [radorType.radorType_alchemyNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_alchemy"), [radorType.radorType_fishNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_fish"), [radorType.radorType_guild] = (UI.getChildControl)(Panel_Radar, "icon_npc_guild"), [radorType.radorType_guildShop] = (UI.getChildControl)(Panel_Radar, "icon_npc_guildShop"), [radorType.radorType_itemTrader] = (UI.getChildControl)(Panel_Radar, "icon_npc_itemTrader"), [radorType.radorType_TerritorySupply] = (UI.getChildControl)(Panel_Radar, "icon_npc_territorySupply"), [radorType.radorType_TerritoryTrade] = (UI.getChildControl)(Panel_Radar, "icon_npc_territoryTrade"), [radorType.radorType_Cook] = (UI.getChildControl)(Panel_Radar, "icon_npc_cook"), [radorType.radorType_Wharf] = (UI.getChildControl)(Panel_Radar, "icon_npc_wharf"), [radorType.radorType_itemRepairer] = (UI.getChildControl)(Panel_Radar, "icon_npc_repairer"), [radorType.radorType_shopMerchantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_shop"), [radorType.radorType_ImportantNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_important"), [radorType.radorType_QuestAcceptable] = (UI.getChildControl)(Panel_Radar, "icon_quest_accept"), [radorType.radorType_QuestProgress] = (UI.getChildControl)(Panel_Radar, "icon_quest_doing"), [radorType.radorType_QuestComplete] = (UI.getChildControl)(Panel_Radar, "icon_quest_clear"), [radorType.radorType_unknownNpc] = (UI.getChildControl)(Panel_Radar, "icon_npc_unknown"), [radorType.radorType_partyMember] = (UI.getChildControl)(Panel_Radar, "icon_partyMember"), [radorType.radorType_guildMember] = (UI.getChildControl)(Panel_Radar, "icon_guildMember"), [radorType.radorType_normalPlayer] = (UI.getChildControl)(Panel_Radar, "icon_player"), [radorType.radorType_isHorse] = (UI.getChildControl)(Panel_Radar, "icon_horse"), [radorType.radorType_isDonkey] = (UI.getChildControl)(Panel_Radar, "icon_donkey"), [radorType.radorType_isShip] = (UI.getChildControl)(Panel_Radar, "icon_ship"), [radorType.radorType_isCarriage] = (UI.getChildControl)(Panel_Radar, "icon_carriage"), [radorType.radorType_isCamel] = (UI.getChildControl)(Panel_Radar, "icon_camel"), [radorType.radorType_isElephant] = nil, [radorType.radorType_isBabyElePhant] = (UI.getChildControl)(Panel_Radar, "icon_babyElephant"), [radorType.radorType_installation] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_kingGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_lordGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_villageGuildTent] = (UI.getChildControl)(Panel_Radar, "icon_tent"), [radorType.radorType_selfDeadBody] = (UI.getChildControl)(Panel_Radar, "icon_deadbody"), [radorType.radorType_advancedBase] = (UI.getChildControl)(Panel_Radar, "icon_Outpost"), [radorType.radorType_Raft] = (UI.getChildControl)(Panel_Radar, "icon_Raft"), [radorType.radorType_Boat] = (UI.getChildControl)(Panel_Radar, "icon_Boat"), [radorType.radorType_FishingBoat] = (UI.getChildControl)(Panel_Radar, "icon_FishingBoat"), [radorType.radorType_PersonalTradeShip] = (UI.getChildControl)(Panel_Radar, "icon_PersonalTradeShip"), [radorType.radorType_GalleyShip] = (UI.getChildControl)(Panel_Radar, "icon_GalleyShip"), [radorType.radorType_PersonalBattleShip] = (UI.getChildControl)(Panel_Radar, "icon_PersonalBattleShip"), [radorType.radorType_huntingMonster] = (UI.getChildControl)(Panel_Radar, "icon_monsterHunting_normal"), [radorType.radorType_huntingMonsterQuestTarget] = (UI.getChildControl)(Panel_Radar, "icon_monsterHunting_quest")}
 local typeDepth = {[radorType.radorType_none] = 0, [radorType.radorType_hide] = 0, [radorType.radorType_allymonster] = -5, [radorType.radorType_normalMonster] = -2, [radorType.radorType_namedMonster] = -10, [radorType.radorType_bossMonster] = -12, [radorType.radorType_normalMonsterQuestTarget] = -3, [radorType.radorType_namedMonsterQuestTarget] = -11, [radorType.radorType_bossMonsterQuestTarget] = -13, [radorType.radorType_huntingMonster] = -11, [radorType.radorType_huntingMonsterQuestTarget] = -12, [radorType.radorType_lordManager] = -14, [radorType.radorType_skillTrainner] = -15, [radorType.radorType_tradeMerchantNpc] = -16, [radorType.radorType_nodeManager] = -17, [radorType.radorType_normalNpc] = -2, [radorType.radorType_warehouseNpc] = -7, [radorType.radorType_potionNpc] = -8, [radorType.radorType_weaponNpc] = -9, [radorType.radorType_horseNpc] = -6, [radorType.radorType_workerNpc] = -10, [radorType.radorType_jewelNpc] = -11, [radorType.radorType_furnitureNpc] = -12, [radorType.radorType_collectNpc] = -13, [radorType.radorType_shipNpc] = -5, [radorType.radorType_alchemyNpc] = -4, [radorType.radorType_fishNpc] = -3, [radorType.radorType_guild] = -21, [radorType.radorType_guildShop] = -25, [radorType.radorType_itemTrader] = -26, [radorType.radorType_TerritorySupply] = -23, [radorType.radorType_TerritoryTrade] = -22, [radorType.radorType_Cook] = -24, [radorType.radorType_Wharf] = -20, [radorType.radorType_itemRepairer] = -33, [radorType.radorType_shopMerchantNpc] = -34, [radorType.radorType_ImportantNpc] = -32, [radorType.radorType_QuestAcceptable] = -41, [radorType.radorType_QuestProgress] = -40, [radorType.radorType_QuestComplete] = -42, [radorType.radorType_unknownNpc] = -2, [radorType.radorType_partyMember] = -90, [radorType.radorType_guildMember] = -80, [radorType.radorType_normalPlayer] = -1, [radorType.radorType_isHorse] = -100, [radorType.radorType_isDonkey] = -100, [radorType.radorType_isShip] = -100, [radorType.radorType_isCarriage] = -100, [radorType.radorType_isCamel] = -100, [radorType.radorType_isElephant] = -100, [radorType.radorType_isBabyElePhant] = -100, [radorType.radorType_installation] = -20, [radorType.radorType_kingGuildTent] = -20, [radorType.radorType_lordGuildTent] = -20, [radorType.radorType_selfDeadBody] = -40, [radorType.radorType_advancedBase] = -30, [radorType.radorType_Raft] = -100, [radorType.radorType_Boat] = -100, [radorType.radorType_FishingBoat] = -100, [radorType.radorType_PersonalTradeShip] = -100, [radorType.radorType_GalleyShip] = -100, [radorType.radorType_PersonalBattleShip] = -100}
@@ -46,9 +43,8 @@ local radar_DangetAlertBg = (UI.getChildControl)(Panel_Radar, "Static_Alert")
 local radar_WarAlert = (UI.getChildControl)(Panel_Radar, "StaticText_WarAlert")
 local radar_ChangeBtn = (UI.getChildControl)(Panel_Radar, "Button_Swap")
 local radar_SequenceAni = (UI.getChildControl)(Panel_Radar, "Static_SequenceAni")
-local isWorldMinimapOpen = ToClient_IsContentsGroupOpen("345")
-radar_ChangeBtn:SetShow(isWorldMinimapOpen)
-radar_SequenceAni:SetShow(isWorldMinimapOpen)
+radar_ChangeBtn:SetShow(_ContentsGroup_3DMiniMapOpen)
+radar_SequenceAni:SetShow(_ContentsGroup_3DMiniMapOpen)
 radar_regionName:SetAutoResize(true)
 radar_regionName:SetNotAbleMasking(true)
 radar_regionNodeName:SetAutoResize(true)
@@ -56,14 +52,6 @@ radar_regionNodeName:SetNotAbleMasking(true)
 radar_regionWarName:SetAutoResize(true)
 radar_regionWarName:SetNotAbleMasking(true)
 radar_Background:addInputEvent("Mouse_On", "FGlobal_Radar_HandleMouseOn()")
-local radar_Swap = nil
-if ToClient_IsDevelopment() then
-  radar_Swap = (UI.getChildControl)(Panel_Radar, "Button_Swap")
-  radar_Swap:SetShow(isWorldMinimapOpen)
-  radar_Swap:SetNotAbleMasking(true)
-  radar_Swap:addInputEvent("Mouse_LUp", "PaGlobal_changeRadarUI()")
-  radar_Swap:SetDepth(-9999)
-end
 redar_DangerAletText:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
 redar_DangerAletText:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTERALERT"))
 redar_DangerAletText:SetShow(false)
@@ -354,8 +342,6 @@ Radar_SetRotateMode = function(isRotate)
   ;
   (radarControl.rader_Background):SetParentRotCalc(isRotate)
   ;
-  (radarControl.rader_Background):SetParentRotCalc(isRotate)
-  ;
   (radarControl.icon_SelfPlayer):SetRotate(rot)
   FGlobal_GuildPinRotateMode(isRotate)
   FGlobal_PinRotateMode(isRotate)
@@ -532,6 +518,8 @@ local controlInit = function()
   (radarControl.rader_Close):SetNotAbleMasking(true)
   radar_MiniMapScl:SetNotAbleMasking(true)
   radar_ChangeBtn:SetNotAbleMasking(true)
+  radar_ChangeBtn:addInputEvent("Mouse_LUp", "PaGlobal_changeRadarUI()")
+  radar_ChangeBtn:SetDepth(-9999)
   radar_SequenceAni:SetNotAbleMasking(true)
   ;
   (radarControl.rader_Plus):SetAlpha(0)
@@ -776,7 +764,7 @@ SortRador_IconIndex = function()
   Panel_Radar:SetChildIndex(radar_MiniMapScl, 9999)
 end
 
--- DECOMPILER ERROR at PC1309: Confused about usage of register: R82 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1270: Confused about usage of register: R80 in 'UnsetPending'
 
 radarMap.getIdleIcon = function(self)
   -- function num : 0_29
@@ -790,14 +778,14 @@ radarMap.getIdleIcon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1313: Confused about usage of register: R82 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1274: Confused about usage of register: R80 in 'UnsetPending'
 
 radarMap.returnIconToPool = function(self, icon)
   -- function num : 0_30
   (self.iconPool):push_back(icon)
 end
 
--- DECOMPILER ERROR at PC1318: Confused about usage of register: R82 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1279: Confused about usage of register: R80 in 'UnsetPending'
 
 radarMap.getIdleQuest = function(self)
   -- function num : 0_31 , upvalues : QuestArrowHalfSize
@@ -822,7 +810,7 @@ radarMap.getIdleQuest = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC1322: Confused about usage of register: R82 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1283: Confused about usage of register: R80 in 'UnsetPending'
 
 radarMap.returnQuestToPool = function(self, questIcon)
   -- function num : 0_32
@@ -1826,7 +1814,7 @@ end
 
 RadarMap_UpdatePosition()
 local RadarMap_MouseOnOffAnimation = function(deltaTime)
-  -- function num : 0_58 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl, isWorldMinimapOpen, radar_SequenceAni
+  -- function num : 0_58 , upvalues : simpleUIAlpha, radar_SizeSlider, radar_SizeBtn, radar_AlphaScrl, radar_AlphaBtn, radar_MiniMapScl, radar_SequenceAni
   local mousePosX = getMousePosX()
   local mousePosY = getMousePosY()
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiMode == getInputMode() or (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == getInputMode()
@@ -1859,7 +1847,7 @@ local RadarMap_MouseOnOffAnimation = function(deltaTime)
     (UIAni.perFrameAlphaAnimation)(simpleUIAlpha, radar_AlphaBtn, 5 * deltaTime)
     ;
     (UIAni.perFrameAlphaAnimation)(simpleUIAlpha, radar_MiniMapScl, 5 * deltaTime)
-    if isWorldMinimapOpen then
+    if _ContentsGroup_3DMiniMapOpen then
       (UIAni.perFrameAlphaAnimation)(simpleUIAlpha, radar_SequenceAni, 5 * deltaTime)
     end
     -- DECOMPILER ERROR: 6 unprocessed JMP targets
@@ -1992,7 +1980,7 @@ local whaleTimeCheck = 0
 local chattingAlertTimeCheck = 60
 local strongMonsterCheckDistance = 3500
 RadarMap_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_63 , upvalues : RadarMap_UpdateSelfPlayerPerFrame, RadarMap_UpdateSelfPlayerNavigationGuide, RadarMap_UpdateQuestAreaPositionPerFrame, RadarMap_UpdateTerrainInfo, RadarMap_MouseOnOffAnimation, partyMemberIconPerFrame, whaleTimeCheck, _OnSiegeRide, strongMonsterCheckDistance, chattingAlertTimeCheck, redar_DangerAletText, radar_DangetAlertBg
+  -- function num : 0_63 , upvalues : RadarMap_UpdateSelfPlayerPerFrame, RadarMap_UpdateSelfPlayerNavigationGuide, RadarMap_UpdateQuestAreaPositionPerFrame, RadarMap_UpdateTerrainInfo, RadarMap_MouseOnOffAnimation, partyMemberIconPerFrame, whaleTimeCheck, _OnSiegeRide, strongMonsterCheckDistance, chattingAlertTimeCheck, redar_DangerAletText, radar_DangetAlertBg, radar_ChangeBtn, radar_SequenceAni
   RadarMap_UpdateSelfPlayerPerFrame()
   RadarMap_UpdateSelfPlayerNavigationGuide()
   RadarMap_UpdateQuestAreaPositionPerFrame()
@@ -2022,29 +2010,35 @@ RadarMap_UpdatePerFrame = function(deltaTime)
   whaleTimeCheck = whaleTimeCheck + deltaTime
   if whaleTimeCheck > 30 then
     whaleTimeCheck = 0
-  end
-  if isActionUiOpen() then
     FGlobal_WhaleConditionCheck()
     FGlobal_TerritoryWar_Caution()
     FGlobal_SummonPartyCheck()
     FGlobal_ReturnStoneCheck()
-    _OnSiegeRide = false
-    if ToClient_GetState_EnemyOnMyBoatAlert() then
-      FGlobal_EnemyAlert_OnShip_Show()
-    end
-    if not ToClient_GetMessageFilter(10) then
-      StrongMonsterByNear(deltaTime)
-      if FromClient_DetectsOfStrongMonster(strongMonsterCheckDistance) then
-        chattingAlertTimeCheck = chattingAlertTimeCheck + deltaTime
-        if chattingAlertTimeCheck > 60 then
-          chattingAlertTimeCheck = 0
-          chatting_sendMessage("", PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTER_CHATALERT"), (CppEnums.ChatType).System)
-        end
+  end
+  _OnSiegeRide = false
+  if ToClient_GetState_EnemyOnMyBoatAlert() then
+    FGlobal_EnemyAlert_OnShip_Show()
+  end
+  if not ToClient_GetMessageFilter(10) then
+    StrongMonsterByNear(deltaTime)
+    if FromClient_DetectsOfStrongMonster(strongMonsterCheckDistance) then
+      chattingAlertTimeCheck = chattingAlertTimeCheck + deltaTime
+      if chattingAlertTimeCheck > 60 then
+        chattingAlertTimeCheck = 0
+        chatting_sendMessage("", PAGetString(Defines.StringSheet_GAME, "LUA_RADER_NEARMONSTER_CHATALERT"), (CppEnums.ChatType).System)
       end
-    else
-      redar_DangerAletText:SetShow(false)
-      radar_DangetAlertBg:SetShow(false)
     end
+  else
+    redar_DangerAletText:SetShow(false)
+    radar_DangetAlertBg:SetShow(false)
+  end
+  local selfPlayer = (getSelfPlayer()):get()
+  if selfPlayer:getLevel() < ToClient_getTutorialLimitLevel() then
+    radar_ChangeBtn:SetShow(false)
+    radar_SequenceAni:SetShow(false)
+  else
+    radar_ChangeBtn:SetShow(_ContentsGroup_3DMiniMapOpen)
+    radar_SequenceAni:SetShow(_ContentsGroup_3DMiniMapOpen)
   end
 end
 
@@ -2188,9 +2182,18 @@ HandleClicked_RadarResize = function()
   ToClient_SaveUiInfo(false)
 end
 
+RadarMap_InitPanel = function()
+  -- function num : 0_74
+  ToClient_setRadarType(false)
+  ToClient_setRadorUIPanel(Panel_Radar)
+  ToClient_setRadorUIViewDistanceRate(7225)
+  ToCleint_InitializeRadarActorPool(1000)
+end
+
 checkLoad()
 controlInit()
 Radar_UpdateQuestList()
+RadarMap_InitPanel()
 registerEvent("selfPlayer_regionChanged", "RadarMap_updateRegion")
 registerEvent("EventActorDelete", "RadarMap_DestoryOtherActor")
 registerEvent("EventQuestListChanged", "Radar_UpdateQuestList")
@@ -2199,30 +2202,30 @@ Panel_Radar:addInputEvent("Mouse_On", "Rader_ChangeTexture_On()")
 Panel_Radar:addInputEvent("Mouse_Out", "Rader_ChangeTexture_Off()")
 Panel_Radar:addInputEvent("Mouse_LUp", "ResetPos_WidgetButton()")
 RadarMap_EnableSimpleUI_Force_Over = function()
-  -- function num : 0_74
+  -- function num : 0_75
   RadarMap_EnableSimpleUI(true)
 end
 
 RadarMap_EnableSimpleUI_Force_Out = function()
-  -- function num : 0_75
+  -- function num : 0_76
   RadarMap_EnableSimpleUI(false)
 end
 
 registerEvent("EventSimpleUIEnable", "RadarMap_EnableSimpleUI_Force_Over")
 registerEvent("EventSimpleUIDisable", "RadarMap_EnableSimpleUI_Force_Out")
 RadarMap_EnableSimpleUI = function(isEnable)
-  -- function num : 0_76 , upvalues : cacheSimpleUI_ShowButton
+  -- function num : 0_77 , upvalues : cacheSimpleUI_ShowButton
   cacheSimpleUI_ShowButton = true
 end
 
 if getEnableSimpleUI() then
   RadarMap_SetDragMode = function(isSet)
-  -- function num : 0_77 , upvalues : isDrag
+  -- function num : 0_78 , upvalues : isDrag
   isDrag = isSet
 end
 
   resetRadorActorListRotateValue = function()
-  -- function num : 0_78 , upvalues : typeDepth
+  -- function num : 0_79 , upvalues : typeDepth
   local actorList = nil
   for Key,value in pairs(typeDepth) do
     actorList = FromClient_getRadarIconList(Key)
@@ -2233,7 +2236,7 @@ end
 end
 
   FGlobal_Rador_SetColorBlindMode = function()
-  -- function num : 0_79 , upvalues : colorBlindNone, colorBlindRed, colorBlindGreen
+  -- function num : 0_80 , upvalues : colorBlindNone, colorBlindRed, colorBlindGreen
   local ActorIconList = nil
   local isColorBlindMode = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
   if isColorBlindMode == 0 then
@@ -2269,7 +2272,7 @@ end
 end
 
   FromClient_RadorUICreated = function(actorKeyRaw, control, actorProxyWrapper, radorTypeValue)
-  -- function num : 0_80 , upvalues : template, radorType, UI_color, typeDepth
+  -- function num : 0_81 , upvalues : template, radorType, UI_color, typeDepth
   control:SetSize(10, 10)
   local base = template[radorTypeValue]
   local isColorBlindType = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).ColorBlindMode)
@@ -2400,7 +2403,7 @@ end
 end
 
   FromClient_RadorTypeChanged = function(actorKeyRaw, targetUI, radorTypeValue)
-  -- function num : 0_81 , upvalues : template, radorType, UI_color, typeDepth
+  -- function num : 0_82 , upvalues : template, radorType, UI_color, typeDepth
   local templateUI = template[radorTypeValue]
   if templateUI == nil then
     targetUI:SetShow(false)
@@ -2527,7 +2530,7 @@ end
   registerEvent("FromClient_RadorTypeChanged", "FromClient_RadorTypeChanged")
   registerEvent("FromClient_RadorUICreated", "FromClient_RadorUICreated")
   local check_ServerChannel = function()
-  -- function num : 0_82 , upvalues : radarTime
+  -- function num : 0_83 , upvalues : radarTime
   local radarTimeControl = radarTime.controls
   ;
   (radarTimeControl.serverName):SetText(getCurrentWolrdName())
@@ -2545,7 +2548,7 @@ end
 
   check_ServerChannel()
   CalcPositionUseToTextUI = function(targetUIposX, targetUIposY, textUI)
-  -- function num : 0_83
+  -- function num : 0_84
   if Panel_Radar:GetSizeX() < targetUIposX + textUI:GetTextSizeX() then
     textUI:SetPosX(Panel_Radar:GetSizeX() - textUI:GetTextSizeX())
   else
@@ -2559,7 +2562,7 @@ end
 end
 
   FromClient_setNameOfMouseOverIcon = function(actorProxyWrapper, targetUI, targetUIposX, targetUIposY)
-  -- function num : 0_84 , upvalues : radar_OverName
+  -- function num : 0_85 , upvalues : radar_OverName
   local actorName = ""
   if (actorProxyWrapper:get()):isNpc() then
     if actorProxyWrapper:getCharacterTitle() ~= "" then
@@ -2597,7 +2600,7 @@ end
 end
 
   FromClient_NameOff = function()
-  -- function num : 0_85 , upvalues : radar_OverName
+  -- function num : 0_86 , upvalues : radar_OverName
   if radar_OverName == nil then
     return 
   end
@@ -2607,50 +2610,57 @@ end
 end
 
   PaGlobal_Radar_WarAlert = function(isShow)
-  -- function num : 0_86 , upvalues : radar_WarAlert
+  -- function num : 0_87 , upvalues : radar_WarAlert
   radar_WarAlert:SetShow(isShow)
 end
 
-  RaderResizeByReset = function()
-  -- function num : 0_87 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
-  local raderCurrentSizeX = Panel_Radar:GetSizeX()
-  local raderCurrentSizeY = Panel_Radar:GetSizeY()
-  Panel_Radar:SetSize(raderCurrentSizeX, raderCurrentSizeY)
-  ;
-  ((radarMap.controls).rader_Background):SetPosX(0)
-  ;
-  ((radarMap.controls).rader_Background):SetSize(Panel_OrigSizeX, Panel_OrigSizeY)
-  local SPI = (radarMap.controls).icon_SelfPlayer
-  local halfSelfSizeX = SPI:GetSizeX() / 2
-  local halfSelfSizeY = SPI:GetSizeY() / 2
-  local halfSizeX = Panel_Radar:GetSizeX() / 2
-  local halfSizeY = Panel_Radar:GetSizeY() / 2
-  SPI:SetPosX(halfSizeX - halfSelfSizeX)
-  SPI:SetPosY(halfSizeY - halfSelfSizeY)
-  -- DECOMPILER ERROR at PC52: Confused about usage of register: R7 in 'UnsetPending'
+  RaderResizeByReset = function(resetRadarScale)
+  -- function num : 0_88 , upvalues : Panel_OrigSizeX, Panel_OrigSizeY, controlAlign, raderAlert_Resize
+  if resetRadarScale == false then
+    local raderCurrentSizeX = Panel_Radar:GetSizeX()
+    local raderCurrentSizeY = Panel_Radar:GetSizeY()
+    Panel_Radar:SetSize(raderCurrentSizeX, raderCurrentSizeY)
+  else
+    do
+      Panel_Radar:SetSize(Panel_OrigSizeX, Panel_OrigSizeY)
+      ;
+      ((radarMap.controls).rader_Background):SetPosX(0)
+      ;
+      ((radarMap.controls).rader_Background):SetSize(Panel_OrigSizeX, Panel_OrigSizeY)
+      Panel_Radar:ComputePos()
+      local SPI = (radarMap.controls).icon_SelfPlayer
+      local halfSelfSizeX = SPI:GetSizeX() / 2
+      local halfSelfSizeY = SPI:GetSizeY() / 2
+      local halfSizeX = Panel_Radar:GetSizeX() / 2
+      local halfSizeY = Panel_Radar:GetSizeY() / 2
+      SPI:SetPosX(halfSizeX - halfSelfSizeX)
+      SPI:SetPosY(halfSizeY - halfSelfSizeY)
+      -- DECOMPILER ERROR at PC63: Confused about usage of register: R6 in 'UnsetPending'
 
-  ;
-  (radarMap.pcPosBaseControl).x = SPI:GetPosX() + halfSelfSizeX
-  -- DECOMPILER ERROR at PC58: Confused about usage of register: R7 in 'UnsetPending'
+      ;
+      (radarMap.pcPosBaseControl).x = SPI:GetPosX() + halfSelfSizeX
+      -- DECOMPILER ERROR at PC69: Confused about usage of register: R6 in 'UnsetPending'
 
-  ;
-  (radarMap.pcPosBaseControl).y = SPI:GetPosY() + halfSelfSizeY
-  ToClient_setRadorUICenterPosition(int2((radarMap.pcPosBaseControl).x, (radarMap.pcPosBaseControl).y))
-  controlAlign()
-  NpcNavi_Reset_Posistion()
-  TownNpcIcon_Resize()
-  Panel_PlayerEndurance_Position()
-  Panel_CarriageEndurance_Position()
-  Panel_HorseEndurance_Position()
-  Panel_ShipEndurance_Position()
-  FGlobal_PersonalIcon_ButtonPosUpdate()
-  ToClient_SaveUiInfo(false)
-  raderAlert_Resize()
+      ;
+      (radarMap.pcPosBaseControl).y = SPI:GetPosY() + halfSelfSizeY
+      ToClient_setRadorUICenterPosition(int2((radarMap.pcPosBaseControl).x, (radarMap.pcPosBaseControl).y))
+      controlAlign()
+      NpcNavi_Reset_Posistion()
+      TownNpcIcon_Resize()
+      Panel_PlayerEndurance_Position()
+      Panel_CarriageEndurance_Position()
+      Panel_HorseEndurance_Position()
+      Panel_ShipEndurance_Position()
+      FGlobal_PersonalIcon_ButtonPosUpdate()
+      ToClient_SaveUiInfo(false)
+      raderAlert_Resize()
+    end
+  end
 end
 
-  FGlobal_ResetRadarUI = function()
-  -- function num : 0_88 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
-  RaderResizeByReset()
+  FGlobal_ResetRadarUI = function(resetRadarScale)
+  -- function num : 0_89 , upvalues : radar_AlphaScrl, radar_SizeSlider, updateWorldMapDistance, scaleMinValue
+  RaderResizeByReset(resetRadarScale)
   radar_AlphaScrl:SetControlPos(ToClient_GetRaderAlpha() * 100)
   Rader_updateWorldMap_AlphaControl_Init()
   radar_SizeSlider:SetControlPos(ToClient_GetRaderScale() * 100)
@@ -2658,6 +2668,12 @@ end
   updateWorldMapDistance(scaleMinValue + scaleSlideValue * 100)
 end
 
+  Radar_luaLoadComplete = function()
+  -- function num : 0_90 , upvalues : controlAlign
+  controlAlign()
+end
+
+  registerEvent("FromClient_luaLoadComplete", "Radar_luaLoadComplete")
   registerEvent("FromClient_setNameOfMouseOverIcon", "FromClient_setNameOfMouseOverIcon")
   registerEvent("FromClient_NameOff", "FromClient_NameOff")
   registerEvent("FromClient_ChangeRadarRotateMode", "Radar_SetRotateMode")

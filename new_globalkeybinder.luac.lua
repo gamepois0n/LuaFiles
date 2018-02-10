@@ -79,6 +79,7 @@ PaGlobal_GlobalKeyBinder.Init = function(self)
   self:Register(UIMode.eUIMode_WoldMapSearch, self.Process_WorldMapSearch)
   self:Register(UIMode.eUIMode_ScreenShotMode, self.Process_UIMode_ScreenShotMode)
   self:Register(UIMode.eUIMode_InGameDance, self.Process_UIMode_InGameDance)
+  self:Register(UIMode.eUIMode_KeyCustom_ButtonShortcuts, self.Process_UIMode_KeyCustom_ButtonShortcuts)
 end
 
 -- DECOMPILER ERROR at PC25: Confused about usage of register: R8 in 'UnsetPending'

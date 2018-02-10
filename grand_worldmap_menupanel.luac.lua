@@ -273,6 +273,10 @@ FGlobal_WorldMapOpenForMenu = function()
   Panel_Worldmap_MovieGuide_Init()
   if isGameTypeKR2() then
     HelpMenu_Btn:SetShow(false)
+  else
+    if isGameTypeTH() then
+      HelpMenu_Btn:SetShow(false)
+    end
   end
 end
 

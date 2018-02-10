@@ -38,12 +38,8 @@ FGlobal_PersonalIcon_ButtonPosUpdate = function()
     if isGameTypeKR2() then
       (self._btn_MovieGuide):SetShow(false)
     else
-      if isGameTypeTH() then
-        (self._btn_MovieGuide):SetShow(false)
-      else
-        ;
-        (self._btn_MovieGuide):SetShow(true)
-      end
+      ;
+      (self._btn_MovieGuide):SetShow(true)
     end
   end
   if playerLV > 51 then
@@ -382,6 +378,10 @@ PersonalIcon_Tooltip = function()
   (self._btn_NpcNavi):addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
   ;
   (self._btn_NpcNaviTW):addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
+  ;
+  (self._btn_NpcNavi):setButtonShortcuts("PANEL_SIMPLESHORTCUT_FIND_NPC")
+  ;
+  (self._btn_NpcNaviTW):setButtonShortcuts("PANEL_SIMPLESHORTCUT_FIND_NPC")
   ;
   (self._btn_MovieGuide):addInputEvent("Mouse_LUp", "PaGlobal_MovieGuide_Web:Open()")
   ;

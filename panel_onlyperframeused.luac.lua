@@ -5,7 +5,6 @@
 -- function num : 0
 local luaLoadAfterTime = 0
 local luaLoadAfterFrameCount = 0
-local alchemyStoneTimeCheck = 0
 FGlobal_getLuaLoadTime = function()
   -- function num : 0_0 , upvalues : luaLoadAfterTime
   return luaLoadAfterTime
@@ -17,7 +16,7 @@ FGlobal_getFrameCount = function()
 end
 
 Panel_OnlyPerframeUsedFunction = function(deltaTime)
-  -- function num : 0_2 , upvalues : luaLoadAfterTime, luaLoadAfterFrameCount, alchemyStoneTimeCheck
+  -- function num : 0_2 , upvalues : luaLoadAfterTime, luaLoadAfterFrameCount
   luaLoadAfterTime = luaLoadAfterTime + deltaTime
   luaLoadAfterFrameCount = luaLoadAfterFrameCount + 1
   if NewQuickSlot_UpdatePerFrame ~= nil then
@@ -47,18 +46,14 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   do
     if FGlobal_AlchemyStonCheck() ~= nil then
       local cooltime = FGlobal_AlchemyStonCheck()
-      if cooltime > 0 then
-        if alchemyStoneTimeCheck == 0 then
-          FGlobal_AlchemyStone_Use()
-        end
-        alchemyStoneTimeCheck = alchemyStoneTimeCheck + deltaTime
-        if cooltime < alchemyStoneTimeCheck then
-          alchemyStoneTimeCheck = 0
-        end
-      else
-        alchemyStoneTimeCheck = 0
+      -- DECOMPILER ERROR at PC67: Unhandled construct in 'MakeBoolean' P1
+
+      if cooltime > 0 and ToClient_GetAlchemyStoneReuseNextTick() == true then
+        FGlobal_AlchemyStone_Use()
+        ToClient_SetAlchemyStoneReuseNextTick(cooltime)
       end
     end
+    ToClient_SetAlchemyStoneReuseNextTick(0)
     if FGlobal_AutoQuestManager_UpdatePerFrame ~= nil then
       FGlobal_AutoQuestManager_UpdatePerFrame(deltaTime)
     end

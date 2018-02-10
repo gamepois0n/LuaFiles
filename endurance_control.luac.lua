@@ -416,8 +416,8 @@ renderModeChange_Panel_Endurance_Update = function(prevRenderModeList, nextRende
   Panel_Endurance_Update()
 end
 
-Panel_Endurance_Update()
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_Panel_Endurance_Update")
+registerEvent("FromClient_luaLoadComplete", "Panel_Endurance_Update")
 registerEvent("FromClient_EquipEnduranceChanged", "Panel_Endurance_Update")
 registerEvent("EventEquipmentUpdate", "FromClient_PlayerEnduranceUpdate")
 registerEvent("EventServantEquipItem", "FromClient_ServantEnduranceUpdate")

@@ -2228,11 +2228,6 @@ IngameCashShop_DescUpdate = function()
                   (self._btn_BigCart):SetSpanSize(60, 10)
                   ;
                   (self._btn_BigBuy):SetSpanSize(20, 10)
-                  if isGameTypeSA() then
-                    (self._btn_BigGift):SetIgnore(true)
-                    ;
-                    (self._btn_BigGift):SetMonoTone(true)
-                  end
                   ;
                   (self._btn_BigGift):addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedGiftItem(" .. inGameShop._openProductKeyRaw .. ")")
                   ;
@@ -3388,6 +3383,7 @@ end
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTUSE"))
     return 
   end
+  FGlobal_WebHelper_ForceClose()
   if not FGlobal_IsCommercialService() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_NOTUSE"))
     return 
@@ -3623,6 +3619,12 @@ end
   local self = inGameShop
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNo)
   if cashProduct ~= nil then
+    local isAdultPeople = ToClient_isAdultUser()
+    local isAdultProduct = cashProduct:isAdultProduct()
+    if not isAdultPeople and isAdultProduct then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_TEENWORLD_DONTBUY"))
+      return 
+    end
     local category = cashProduct:getMainCategory()
     local tabIndex = 0
     for ii = 1, self._tabCount do
@@ -3648,7 +3650,7 @@ end
     if (self._tabs)[tabIndex] ~= nil then
       (((self._tabs)[tabIndex]).static):SetCheck(true)
     end
-    -- DECOMPILER ERROR at PC64: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC80: Confused about usage of register: R8 in 'UnsetPending'
 
     inGameShop._cashProductNoData = productNo
     IngameCashShop_SelectedItemXXX(productNo, true)

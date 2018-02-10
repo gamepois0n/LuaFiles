@@ -8,7 +8,7 @@ Panel_HouseName:SetShow(false)
 Panel_HouseName:SetIgnore(true)
 Panel_HouseName:RegisterShowEventFunc(true, "Panel_HouseName_ShowAni()")
 Panel_HouseName:RegisterShowEventFunc(false, "Panel_HouseName_HideAni()")
-local ui = {_houseName = (UI.getChildControl)(Panel_HouseName, "StaticText_HouseName"), _hosueIcon = (UI.getChildControl)(Panel_HouseName, "Static_HouseIcon"), _btnInstallationMode = (UI.getChildControl)(Panel_HouseName, "Button_Install"), _btnNoticeLighting = (UI.getChildControl)(Panel_HouseName, "StaticText_NoticeLighting"), _btnInstallGift = (UI.getChildControl)(Panel_HouseName, "Button_InstallGift"), _btnShowRank = (UI.getChildControl)(Panel_HouseName, "Button_ShowRank"), _btnScreenShot = (UI.getChildControl)(Panel_HouseName, "Button_Capture"), _btnSetUnderWear = (UI.getChildControl)(Panel_HouseName, "Button_SetUnderwear"), _btnToggleHideMaid = (UI.getChildControl)(Panel_HouseName, "Button_ToggleHideMaid"), _btnToggleHidePet = (UI.getChildControl)(Panel_HouseName, "Button_ToggleHidePet")}
+local ui = {_houseName = (UI.getChildControl)(Panel_HouseName, "StaticText_HouseName"), _hosueIcon = (UI.getChildControl)(Panel_HouseName, "Static_HouseIcon"), _btnInstallationMode = (UI.getChildControl)(Panel_HouseName, "Button_Install"), _btnNoticeLighting = (UI.getChildControl)(Panel_HouseName, "StaticText_NoticeLighting"), _btnInstallGift = (UI.getChildControl)(Panel_HouseName, "Button_InstallGift"), _btnShowRank = (UI.getChildControl)(Panel_HouseName, "Button_ShowRank"), _btnScreenShot = (UI.getChildControl)(Panel_HouseName, "Button_Capture"), _btnSetUnderWear = (UI.getChildControl)(Panel_HouseName, "Button_SetUnderwear"), _btnToggleHideMaid = (UI.getChildControl)(Panel_HouseName, "Button_ToggleHideMaid"), _btnToggleHidePet = (UI.getChildControl)(Panel_HouseName, "Button_ToggleHidePet"), _btnFurnitureWarehouse = (UI.getChildControl)(Panel_HouseName, "Button_FurnitureWarehouse")}
 ;
 (ui._btnSetUnderWear):addInputEvent("Mouse_LUp", "HandleClicked_SetShowUnderWearToggle()")
 ;
@@ -51,6 +51,14 @@ local ui = {_houseName = (UI.getChildControl)(Panel_HouseName, "StaticText_House
 (ui._btnShowRank):addInputEvent("Mouse_Out", "HouseName_ButtonTooltip( false )")
 ;
 (ui._btnShowRank):SetShow(false)
+;
+(ui._btnFurnitureWarehouse):addInputEvent("Mouse_LUp", "HouseName_Click_FurnitureWarehouse()")
+;
+(ui._btnFurnitureWarehouse):addInputEvent("Mouse_On", "HouseName_ButtonTooltip( true, " .. 6 .. " )")
+;
+(ui._btnFurnitureWarehouse):addInputEvent("Mouse_Out", "HouseName_ButtonTooltip( false )")
+;
+(ui._btnFurnitureWarehouse):SetShow(false)
 ;
 (ui._btnSetUnderWear):setTooltipEventRegistFunc("HouseName_ButtonTooltip( true, " .. 0 .. " )")
 ;
@@ -104,6 +112,10 @@ HouseName_ButtonTooltip = function(isShow, buttonNo)
               control = ui._btnToggleHideMaid
               name = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSENAME_MAID_TOOLTIP_NAME")
               desc = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSENAME_MAID_TOOLTIP_DESC")
+            else
+              if buttonNo == 6 then
+                return 
+              end
             end
           end
         end
@@ -134,8 +146,17 @@ Housename_Click_ShowRank = function()
   toClient_RequestHouseRankerList()
 end
 
-HandleClicked_LetsWorkerParty = function()
+HouseName_Click_FurnitureWarehouse = function()
   -- function num : 0_4
+  if Panel_Window_Warehouse:GetShow() == false then
+    ToClient_RequestFurnitureWarehouseInfo()
+  else
+    Warehouse_Close()
+  end
+end
+
+HandleClicked_LetsWorkerParty = function()
+  -- function num : 0_5
   local currentWayPointKey = getCurrentWaypointKey()
   local plantKey = ToClient_convertWaypointKeyToPlantKey(currentWayPointKey)
   local workerCount = ToClient_getPlantWaitWorkerListCount(plantKey, 0)
@@ -151,7 +172,7 @@ HandleClicked_LetsWorkerParty = function()
 end
 
 HandleClicked_SetShowUnderWearToggle = function()
-  -- function num : 0_5 , upvalues : ui
+  -- function num : 0_6 , upvalues : ui
   if not IsSelfPlayerWaitAction() or IsSelfPlayerBattleWaitAction() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_UNDERWEAR"))
     if (ui._btnSetUnderWear):IsCheck() then
@@ -180,7 +201,7 @@ HandleClicked_SetShowUnderWearToggle = function()
 end
 
 HandleClicked_ToggleHideMaidToggle = function()
-  -- function num : 0_6
+  -- function num : 0_7
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   local isHide = housing_getIsHideMaidActors()
   if houseWrapper ~= nil then
@@ -195,7 +216,7 @@ HandleClicked_ToggleHideMaidToggle = function()
 end
 
 HandleClicked_ToggleHidePet = function()
-  -- function num : 0_7
+  -- function num : 0_8
   local houseWrapper = housing_getHouseholdActor_CurrentPosition()
   local isHide = housing_getIsHidePetActors()
   if houseWrapper ~= nil then
@@ -210,7 +231,7 @@ HandleClicked_ToggleHidePet = function()
 end
 
 FromClient_ChangeUnderwearModeInHouse = function(isUnderwearModeInHouse)
-  -- function num : 0_8 , upvalues : ui
+  -- function num : 0_9 , upvalues : ui
   if ToClient_isAdultUser() == false then
     (ui._btnSetUnderWear):SetCheck(false)
   else
@@ -220,23 +241,23 @@ FromClient_ChangeUnderwearModeInHouse = function(isUnderwearModeInHouse)
 end
 
 Panel_HouseName_ShowAni = function()
-  -- function num : 0_9
+  -- function num : 0_10
   (UIAni.AlphaAnimation)(1, Panel_HouseName, 0, 1)
 end
 
 Panel_HouseName_HideAni = function()
-  -- function num : 0_10
+  -- function num : 0_11
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_HouseName, 0, 0.35)
   aniInfo:SetHideAtEnd(true)
 end
 
 Panel_HouseName_Resize = function()
-  -- function num : 0_11
+  -- function num : 0_12
   Panel_HouseName:SetPosX(getScreenSizeX() / 2 - Panel_HouseName:GetSizeX() / 2)
 end
 
 EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, isMine)
-  -- function num : 0_12 , upvalues : prevPoint, ui, _isMyHouse
+  -- function num : 0_13 , upvalues : prevPoint, ui, _isMyHouse
   _PA_LOG("�\128민혁", "EventHousingShowVisitHouse : " .. tostring(point))
   prevPoint = point
   local isShowUnderwear = ((getSelfPlayer()):get()):getUnderwearModeInhouse()
@@ -273,6 +294,8 @@ EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, is
     (ui._btnInstallationMode):SetShow(false)
     ;
     (ui._btnInstallGift):SetShow(false)
+    ;
+    (ui._btnFurnitureWarehouse):SetShow(false)
     return 
   else
     if isInnRoom then
@@ -281,9 +304,17 @@ EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, is
         (ui._btnInstallationMode):SetShow(true)
         ;
         (ui._btnInstallGift):SetShow(false)
+        if _ContentsGroup_isFurnitureWarehouse == true then
+          (ui._btnFurnitureWarehouse):SetShow(true)
+        else
+          ;
+          (ui._btnFurnitureWarehouse):SetShow(false)
+        end
       else
         ;
         (ui._btnInstallationMode):SetShow(false)
+        ;
+        (ui._btnFurnitureWarehouse):SetShow(false)
         if FGlobal_IsCommercialService() then
           (ui._btnInstallGift):SetShow(true)
         else
@@ -298,6 +329,8 @@ EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, is
       (ui._btnInstallationMode):SetShow(false)
       ;
       (ui._btnInstallGift):SetShow(false)
+      ;
+      (ui._btnFurnitureWarehouse):SetShow(false)
     end
   end
   local desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSING_HOUSENAME_LIVING", "user_nickname", userNickname) .. "( " .. houseName .. " ) " .. tostring(point)
@@ -319,11 +352,11 @@ EventHousingShowVisitHouse = function(isShow, houseName, userNickname, point, is
 end
 
 EventHousingShowChangeTopRanker = function(houseName, userNo, userNickname, point)
-  -- function num : 0_13
+  -- function num : 0_14
 end
 
 HouseLightingCheck = function(deltaTime)
-  -- function num : 0_14 , upvalues : updateTime, isAlertHouseLighting, ui
+  -- function num : 0_15 , upvalues : updateTime, isAlertHouseLighting, ui
   updateTime = updateTime + deltaTime
   if isAlertHouseLighting == false and (math.ceil)(updateTime) == 5 then
     local houseWrapper = housing_getHouseholdActor_CurrentPosition()
@@ -339,13 +372,13 @@ HouseLightingCheck = function(deltaTime)
 end
 
 FGlobal_AlertHouseLightingReset = function()
-  -- function num : 0_15 , upvalues : updateTime, isAlertHouseLighting
+  -- function num : 0_16 , upvalues : updateTime, isAlertHouseLighting
   updateTime = 0
   isAlertHouseLighting = false
 end
 
 Panel_HouseName_CheckHouse = function(prevRenderModeList, nextRenderModeList)
-  -- function num : 0_16
+  -- function num : 0_17
   if CheckRenderModebyGameMode(nextRenderModeList) == false then
     return 
   end
@@ -358,7 +391,7 @@ Panel_HouseName_CheckHouse = function(prevRenderModeList, nextRenderModeList)
 end
 
 InitializeModeClose_PetMaidInit = function()
-  -- function num : 0_17 , upvalues : ui
+  -- function num : 0_18 , upvalues : ui
   local isPet = housing_getIsHidePetActors()
   local isMaid = housing_getIsHideMaidActors()
   ;

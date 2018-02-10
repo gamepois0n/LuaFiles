@@ -69,6 +69,13 @@ end
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_MentalGame = function(deltaTime)
   -- function num : 0_3 , upvalues : VCK
+  if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_LEFT) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_A) then
+    MentalKnowledge_CardRotation_Left()
+  else
+    if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RIGHT) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_D) then
+      MentalKnowledge_CardRotation_Right()
+    end
+  end
   if not getEscHandle() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     MentalGame_Hide()
     SetUIMode((Defines.UIMode).eUIMode_NpcDialog)
@@ -227,13 +234,8 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap = function(deltaTime)
       return 
     end
     if Panel_Window_ItemMarket:GetShow() and Panel_Window_ItemMarket:IsUISubApp() == false then
-      if isNewItemmarket_chk() then
-        FGolbal_ItemMarketNew_Close()
-        return 
-      else
-        FGolbal_ItemMarket_Close()
-        return 
-      end
+      FGolbal_ItemMarketNew_Close()
+      return 
     end
     if Panel_Window_ItemMarket_ItemSet:GetShow() then
       FGlobal_ItemMarketItemSet_Close()
@@ -267,7 +269,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_WorldMap = function(deltaTime)
     FGlobal_HandleClicked_ItemMarketBackPage()
   end
   if (isGameTypeKorea() or isGameTypeJapan() or isGameTypeRussia()) and getContentsServiceType() ~= (CppEnums.ContentsServiceType).eContentsServiceType_CBT then
-    -- DECOMPILER ERROR at PC158: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC150: Unhandled construct in 'MakeBoolean' P1
 
     if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil then
       Panel_ProductNote_ShowToggle()
@@ -478,9 +480,16 @@ end
 PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionKey = function(deltaTime)
   -- function num : 0_15
   local isEnd = false
-  local inputType = KeyCustom_Action_GetInputType()
-  if isUsedNewOption() == true then
+  local inputType = nil
+  if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
     inputType = PaGlobal_Option:GetKeyCustomInputType()
+  else
+    inputType = KeyCustom_Action_GetInputType()
+  end
+  if inputType == nil or inputType < 0 then
+    setKeyCustomizing(false)
+    SetUIMode((Defines.UIMode).eUIMode_Default)
+    return 
   end
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     isEnd = true
@@ -497,7 +506,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionKey = function(deltaTime
   if isEnd then
     setKeyCustomizing(false)
     SetUIMode((Defines.UIMode).eUIMode_Default)
-    if isUsedNewOption() == true then
+    if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
       PaGlobal_Option:CompleteKeyCustomMode()
       return 
     end
@@ -511,9 +520,16 @@ end
 PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionPad = function(deltaTime)
   -- function num : 0_16
   local isEnd = false
-  local inputType = KeyCustom_Action_GetInputType()
-  if isUsedNewOption() == true then
+  local inputType = nil
+  if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
     inputType = PaGlobal_Option:GetKeyCustomInputType()
+  else
+    inputType = KeyCustom_Action_GetInputType()
+  end
+  if inputType == nil or inputType < 0 then
+    setKeyCustomizing(false)
+    SetUIMode((Defines.UIMode).eUIMode_Default)
+    return 
   end
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     isEnd = true
@@ -530,7 +546,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionPad = function(deltaTime
   if isEnd then
     setKeyCustomizing(false)
     SetUIMode((Defines.UIMode).eUIMode_Default)
-    if isUsedNewOption() == true then
+    if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
       PaGlobal_Option:CompleteKeyCustomMode()
       return 
     end
@@ -544,9 +560,16 @@ end
 PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_UiKey = function(deltaTime)
   -- function num : 0_17
   local isEnd = false
-  local inputType = KeyCustom_Ui_GetInputType()
-  if isUsedNewOption() == true then
+  local inputType = nil
+  if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
     inputType = PaGlobal_Option:GetKeyCustomInputType()
+  else
+    inputType = KeyCustom_Ui_GetInputType()
+  end
+  if inputType == nil or inputType < 0 then
+    setKeyCustomizing(false)
+    SetUIMode((Defines.UIMode).eUIMode_Default)
+    return 
   end
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     isEnd = true
@@ -563,7 +586,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_UiKey = function(deltaTime)
   if isEnd then
     setKeyCustomizing(false)
     SetUIMode((Defines.UIMode).eUIMode_Default)
-    if isUsedNewOption() == true then
+    if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
       PaGlobal_Option:CompleteKeyCustomMode()
       return 
     end
@@ -577,9 +600,16 @@ end
 PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_UiPad = function(deltaTime)
   -- function num : 0_18
   local isEnd = false
-  local inputType = KeyCustom_Ui_GetInputType()
-  if isUsedNewOption() == true then
+  local inputType = nil
+  if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
     inputType = PaGlobal_Option:GetKeyCustomInputType()
+  else
+    inputType = KeyCustom_Ui_GetInputType()
+  end
+  if inputType == nil or inputType < 0 then
+    setKeyCustomizing(false)
+    SetUIMode((Defines.UIMode).eUIMode_Default)
+    return 
   end
   if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
     isEnd = true
@@ -596,7 +626,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_UiPad = function(deltaTime)
   if isEnd then
     setKeyCustomizing(false)
     SetUIMode((Defines.UIMode).eUIMode_Default)
-    if isUsedNewOption() == true then
+    if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
       PaGlobal_Option:CompleteKeyCustomMode()
       return 
     end
@@ -625,7 +655,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionPadFunc1 = function(delt
   if isEnd then
     setKeyCustomizing(false)
     SetUIMode((Defines.UIMode).eUIMode_Default)
-    if isUsedNewOption() == true then
+    if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
       PaGlobal_Option:CompleteKeyCustomMode()
       return 
     end
@@ -654,7 +684,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ActionPadFunc2 = function(delt
   if isEnd then
     setKeyCustomizing(false)
     SetUIMode((Defines.UIMode).eUIMode_Default)
-    if isUsedNewOption() == true then
+    if isUsedNewOption() == true and PaGlobal_Option:isOpen() == true then
       PaGlobal_Option:CompleteKeyCustomMode()
       return 
     end
@@ -853,13 +883,9 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket = function(delataTime)
                   if Panel_Window_ItemMarket_BuyConfirm:GetShow() then
                     FGlobal_ItemMarket_BuyConfirm_Close()
                   else
-                    if isNewItemmarket_chk() then
-                      FGolbal_ItemMarketNew_Close()
-                      InventoryWindow_Close()
-                      Equipment_SetShow(false)
-                    else
-                      FGolbal_ItemMarket_Close()
-                    end
+                    FGolbal_ItemMarketNew_Close()
+                    InventoryWindow_Close()
+                    Equipment_SetShow(false)
                   end
                 else
                   FGolbal_ItemMarket_Function_Close()
@@ -881,11 +907,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket = function(delataTime)
     HandleClicked_ItemMarket_BuyItem()
   end
   if Panel_Window_ItemMarket:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
-    if isNewItemmarket_chk() then
-      FGolbal_ItemMarketNew_Search()
-    else
-      FGolbal_ItemMarket_Search()
-    end
+    FGolbal_ItemMarketNew_Search()
   end
   if Panel_ItemMarket_PreBid:GetShow() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
     if FGlobal_ItemMarketPreBid_Check_OpenType() == 0 then
@@ -895,7 +917,11 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_ItemMarket = function(delataTime)
     end
   end
   if Panel_Window_ItemMarket_RegistItem:GetShow() and (GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE)) then
-    FGlobal_ItemMarketRegistItem_RegistDO()
+    if Panel_IngameCashShop_Password:GetShow() == true then
+      PayMentPassword_Confirm()
+    else
+      FGlobal_ItemMarketRegistItem_RegistDO()
+    end
   end
   if getInputMode() ~= IM.eProcessorInputMode_ChattingInputMode and Panel_Window_ItemMarket:GetShow() and GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Inventory) then
     if Panel_Window_Inventory:IsShow() then
@@ -1032,10 +1058,44 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_InGameDance = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC145: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC144: Confused about usage of register: R4 in 'UnsetPending'
+
+PaGlobal_GlobalKeyBinder.Process_UIMode_KeyCustom_ButtonShortcuts = function(deltaTime)
+  -- function num : 0_36
+  local isEnd = false
+  local clickedAlt = isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_MENU)
+  local clickedShift = isKeyPressed((CppEnums.VirtualKeyCode).KeyCode_SHIFT)
+  if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_ESCAPE) then
+    isEnd = true
+  else
+    if isKeyUpFor((CppEnums.VirtualKeyCode).KeyCode_DELETE) then
+      PaGlobal_ButtonShortcuts:Remove()
+      isEnd = true
+    end
+  end
+  if isEnd then
+    setKeyCustomizing(false)
+    SetUIMode((Defines.UIMode).eUIMode_Default)
+    return 
+  end
+  if clickedAlt == false then
+    return 
+  end
+  local VirtualKeyCode = keyCustom_GetVirtualKey()
+  if VirtualKeyCode > 0 then
+    isEnd = true
+  end
+  if isEnd then
+    setKeyCustomizing(false)
+    SetUIMode((Defines.UIMode).eUIMode_Default)
+    PaGlobal_ButtonShortcuts:Register(VirtualKeyCode, clickedAlt, clickedShift)
+  end
+end
+
+-- DECOMPILER ERROR at PC148: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UiModeNotInput = function()
-  -- function num : 0_36 , upvalues : VCK
+  -- function num : 0_37 , upvalues : VCK
   if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     if GlobalSwitch_UseOldAlchemy == false then
       FGlobal_Alchemy_Close()
@@ -1045,10 +1105,10 @@ PaGlobal_GlobalKeyBinder.Process_UiModeNotInput = function()
   end
 end
 
--- DECOMPILER ERROR at PC149: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC152: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_ChattingMacro = function()
-  -- function num : 0_37 , upvalues : VCK
+  -- function num : 0_38 , upvalues : VCK
   if isKeyPressed(VCK.KeyCode_MENU) == false then
     return false
   end
@@ -1069,10 +1129,10 @@ PaGlobal_GlobalKeyBinder.Process_ChattingMacro = function()
   return false
 end
 
--- DECOMPILER ERROR at PC152: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC155: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_SkillkeyBinder = function(deltaTime)
-  -- function num : 0_38
+  -- function num : 0_39
   if isUseNewQuickSlot() then
     local ii = nil
     local quickSlot1 = (CppEnums.ActionInputType).ActionInputType_QuickSlot1
@@ -1098,10 +1158,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_SkillkeyBinder = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC158: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC161: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
-  -- function num : 0_39 , upvalues : VCK, IM, UIMode
+  -- function num : 0_40 , upvalues : VCK, IM, UIMode
   if (MessageBox.isPopUp)() then
     if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_SPACE) then
       (MessageBox.keyProcessEnter)()
@@ -1245,8 +1305,13 @@ PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
             return true
           else
             if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-              PaGlobal_UiSet_FreeSet_Close()
-              return true
+              if Panel_SaveSetting:GetShow() then
+                PaGlobal_Panel_SaveSetting_Hide()
+                return true
+              else
+                PaGlobal_UiSet_FreeSet_Close()
+                return true
+              end
             end
           end
         else
@@ -1258,8 +1323,13 @@ PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
               return true
             else
               if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
-                FGlobal_UiSet_Close()
-                return true
+                if Panel_SaveSetting:GetShow() then
+                  PaGlobal_Panel_SaveSetting_Hide()
+                  return true
+                else
+                  FGlobal_UiSet_Close()
+                  return true
+                end
               end
             end
           else
@@ -1326,17 +1396,17 @@ PaGlobal_GlobalKeyBinder.Process_Normal = function(deltaTime)
 end
 
 local InteractionCheck = function(interactionType)
-  -- function num : 0_40
+  -- function num : 0_41
   if interactionType == (CppEnums.InteractionType).InteractionType_ExchangeItem or interactionType == (CppEnums.InteractionType).InteractionType_InvitedParty or interactionType == (CppEnums.InteractionType).InteractionType_GuildInvite then
     return true
   end
   return false
 end
 
--- DECOMPILER ERROR at PC163: Confused about usage of register: R5 in 'UnsetPending'
+-- DECOMPILER ERROR at PC166: Confused about usage of register: R5 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
-  -- function num : 0_41 , upvalues : VCK
+  -- function num : 0_42 , upvalues : VCK
   uiEdit = GetFocusEdit()
   if uiEdit == nil then
     return false
@@ -1534,6 +1604,17 @@ PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
                                         PaGlobal_Memo:Save()
                                       end
                                       return true
+                                    else
+                                      if isUsedNewOption() == true and FGlobal_Option_CheckUiEdit(uiEdit) == true then
+                                        if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
+                                          ClearFocusEdit()
+                                        else
+                                          if GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_RETURN) then
+                                            PaGlobal_Option:ClickedSeachOption()
+                                          end
+                                        end
+                                        return true
+                                      end
                                     end
                                   end
                                 end
@@ -1571,11 +1652,15 @@ PaGlobal_GlobalKeyBinder.Process_ChattingInputMode = function()
 end
 
 local fastPinDelta = 0
--- DECOMPILER ERROR at PC170: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC173: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
-  -- function num : 0_42 , upvalues : VCK, fastPinDelta, InteractionCheck
+  -- function num : 0_43 , upvalues : VCK, fastPinDelta, InteractionCheck
   if FGlobal_GetFirstTutorialState() == true then
+    return 
+  end
+  local checkButtonShortcuts = ToClent_checkAndRunButtonShortcutsEvent()
+  if checkButtonShortcuts == true then
     return 
   end
   if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_MentalKnowledge) then
@@ -1638,7 +1723,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
               return 
             end
           else
-            -- DECOMPILER ERROR at PC198: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC203: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_1) and buttonCount >= 2 then
               FGlobal_InteractionButtonActionRun(1)
@@ -1648,7 +1733,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             end
           end
         end
-        -- DECOMPILER ERROR at PC219: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC224: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_2) and buttonCount >= 3 then
           FGlobal_InteractionButtonActionRun(2)
@@ -1656,7 +1741,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F6)
           return 
         end
-        -- DECOMPILER ERROR at PC240: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC245: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_3) and buttonCount >= 4 then
           FGlobal_InteractionButtonActionRun(3)
@@ -1664,7 +1749,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F7)
           return 
         end
-        -- DECOMPILER ERROR at PC261: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC266: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_4) and buttonCount >= 5 then
           FGlobal_InteractionButtonActionRun(4)
@@ -1672,7 +1757,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           setUiInputProcessed(VCK.KeyCode_F8)
           return 
         end
-        -- DECOMPILER ERROR at PC282: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC287: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Interaction_5) and buttonCount >= 6 then
           FGlobal_InteractionButtonActionRun(5)
@@ -1717,13 +1802,13 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           ;
           (QuestInfoData.questDescHideWindow)()
         end
-        -- DECOMPILER ERROR at PC433: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC438: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Help) and Panel_KeyboardHelp ~= nil then
-          FGlobal_KeyboardHelpShow()
+          FGlobal_Panel_WebHelper_ShowToggle()
         end
         do return  end
-        -- DECOMPILER ERROR at PC451: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC456: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_ProductionNote) and Panel_ProductNote ~= nil and not Panel_ProductNote:IsUISubApp() then
           Panel_ProductNote_ShowToggle()
@@ -1780,7 +1865,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
           end
           return 
         end
-        -- DECOMPILER ERROR at PC600: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC605: Unhandled construct in 'MakeBoolean' P1
 
         if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Skill) and Panel_Window_Skill ~= nil then
           if Panel_Window_Skill:IsShow() then
@@ -1925,7 +2010,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             return 
           end
           do
-            -- DECOMPILER ERROR at PC993: Unhandled construct in 'MakeBoolean' P1
+            -- DECOMPILER ERROR at PC998: Unhandled construct in 'MakeBoolean' P1
 
             if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Mail) and Panel_Mail_Main ~= nil and Panel_Mail_Detail ~= nil then
               local isMailMain = Panel_Mail_Main:IsShow()
@@ -1940,7 +2025,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
             do return  end
             if isUsedMemoOpen() == true then
               do
-                -- DECOMPILER ERROR at PC1026: Unhandled construct in 'MakeBoolean' P1
+                -- DECOMPILER ERROR at PC1031: Unhandled construct in 'MakeBoolean' P1
 
                 if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_Memo) and Panel_Memo_List ~= nil then
                   local isMemoList = Panel_Memo_List:IsShow()
@@ -1955,7 +2040,7 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
                 do return  end
                 do
                   do
-                    -- DECOMPILER ERROR at PC1057: Unhandled construct in 'MakeBoolean' P1
+                    -- DECOMPILER ERROR at PC1062: Unhandled construct in 'MakeBoolean' P1
 
                     if GlobalKeyBinder_CheckCustomKeyPressed((CppEnums.UiInputType).UiInputType_FriendList) and Panel_FriendList ~= nil then
                       local isFriendList = Panel_FriendList:IsShow()
@@ -2058,10 +2143,10 @@ PaGlobal_GlobalKeyBinder.Process_UIMode_CommonWindow = function(deltaTime)
   end
 end
 
--- DECOMPILER ERROR at PC174: Confused about usage of register: R6 in 'UnsetPending'
+-- DECOMPILER ERROR at PC177: Confused about usage of register: R6 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Process_CheckEscape = function()
-  -- function num : 0_43 , upvalues : VCK
+  -- function num : 0_44 , upvalues : VCK
   if getEscHandle() == true or GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) == false then
     return 
   end

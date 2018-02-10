@@ -9,6 +9,7 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local IM = CppEnums.EProcessorInputMode
+local isEnableMaid = ToClient_IsContentsGroupOpen("355")
 local MaidControl = {buttonMaid = (UI.getChildControl)(Panel_Icon_Maid, "Button_MaidIcon")}
 ;
 (MaidControl.buttonMaid):addInputEvent("Mouse_LUp", "MaidList_Open()")
@@ -26,6 +27,8 @@ config = {gapY = 25, normalSizeY = 155}
 , 
 maidInfo = {}
 , maxShowCount = 5, startIndex = 0, scrollInterval = 0}
+local albeWarehouseMaidCount = 0
+local albeMarketMaidCount = 0
 maidList.scrollCtrlBtn = (UI.getChildControl)(maidList.scroll, "Scroll_CtrlButton")
 ;
 (maidList.scrollCtrlBtn):addInputEvent("Mouse_LPress", "HandleClicked_MaidList_ScrollBtn()")
@@ -38,7 +41,7 @@ maidList.scrollCtrlBtn = (UI.getChildControl)(maidList.scroll, "Scroll_CtrlButto
 ;
 (maidList.scroll):addInputEvent("Mouse_LPress", "HandleClicked_MaidList_ScrollBtn()")
 maidList.Init = function(self)
-  -- function num : 0_0
+  -- function num : 0_0 , upvalues : isEnableMaid
   for maidIndex = 0, self.maxShowCount - 1 do
     local temp = {}
     temp.name = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATICTEXT, Panel_Window_MaidList, "StaticText_MaidName_" .. maidIndex)
@@ -69,6 +72,15 @@ maidList.Init = function(self)
 
     ;
     (self.maidInfo)[maidIndex] = temp
+  end
+  ;
+  (self.btnWarehouse):addInputEvent("Mouse_LUp", "FGlobal_WarehouseOpenByMaid(" .. 1 .. ")")
+  ;
+  (self.btnMarket):addInputEvent("Mouse_LUp", "FGlobal_WarehouseOpenByMaid(" .. 0 .. ")")
+  if isEnableMaid then
+    (self.btnWarehouse):setButtonShortcuts("PANEL_MAIDLIST_OPEN_WAREHOUSE")
+    ;
+    (self.btnMarket):setButtonShortcuts("PANEL_MAIDLIST_OPEN_ITEMMARKET")
   end
 end
 
@@ -127,8 +139,11 @@ MaidList_Set = function(startIndex)
 end
 
 MaidCoolTime_Update = function()
-  -- function num : 0_4 , upvalues : maidList
+  -- function num : 0_4 , upvalues : maidList, albeWarehouseMaidCount, albeMarketMaidCount
   local self = maidList
+  if getSelfPlayer() == nil then
+    return 
+  end
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
   if regionInfo == nil then
     return 
@@ -183,21 +198,21 @@ MaidCoolTime_Update = function()
                 (((self.maidInfo)[index]).func):SetShow(false)
                 ;
                 (((self.maidInfo)[index]).coolTime):SetShow(false)
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_STMT
 
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC199: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -206,8 +221,8 @@ MaidCoolTime_Update = function()
       end
     end
   end
-  local albeWarehouseMaidCount = 0
-  local albeMarketMaidCount = 0
+  albeWarehouseMaidCount = 0
+  albeMarketMaidCount = 0
   for index = 0, getTotalMaidList() - 1 do
     local maidInfoWrapper = getMaidDataByIndex(index)
     if maidInfoWrapper ~= nil and maidInfoWrapper:getCoolTime() == 0 then
@@ -225,8 +240,6 @@ MaidCoolTime_Update = function()
     (self.btnWarehouse):SetMonoTone(false)
     ;
     (self.btnWarehouse):SetFontColor((Defines.Color).C_FFEFEFEF)
-    ;
-    (self.btnWarehouse):addInputEvent("Mouse_LUp", "FGlobal_WarehouseOpenByMaid(" .. 1 .. ")")
   else
     ;
     (self.btnWarehouse):SetIgnore(true)
@@ -241,8 +254,6 @@ MaidCoolTime_Update = function()
     (self.btnMarket):SetMonoTone(false)
     ;
     (self.btnMarket):SetFontColor((Defines.Color).C_FFEFEFEF)
-    ;
-    (self.btnMarket):addInputEvent("Mouse_LUp", "FGlobal_WarehouseOpenByMaid(" .. 0 .. ")")
   else
     ;
     (self.btnMarket):SetIgnore(true)
@@ -252,7 +263,7 @@ MaidCoolTime_Update = function()
     (self.btnMarket):SetFontColor((Defines.Color).C_FFC4BEBE)
   end
   local countValuePos = (self.albeCount):GetTextSizeX()
-  local ableMaidCount = albeWarehouseMaidCount + (albeMarketMaidCount)
+  local ableMaidCount = albeWarehouseMaidCount + albeMarketMaidCount
   ;
   (self.albeCountValue):SetPosX(countValuePos)
   ;
@@ -267,8 +278,8 @@ MaidList_SetScroll = function()
   local scroll_Interval = maidCount - self.maxShowCount
   local scrollSizeY = (self.scroll):GetSizeY()
   local btn_scrollSizeY = scrollSizeY / 100 * pagePercent
-  if btn_scrollSizeY < 10 then
-    btn_scrollSizeY = 10
+  if btn_scrollSizeY < 30 then
+    btn_scrollSizeY = 30
   end
   if scrollSizeY <= btn_scrollSizeY then
     btn_scrollSizeY = scrollSizeY * 0.99
@@ -363,13 +374,19 @@ FGlobal_WarehouseOpenByMaid = function(index)
     return 
   end
   if isGuildBattle then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_GUILDBATTLE"))
+    if ToClient_isPersonalBattle() == true then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_PERSONALBATTLE"))
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_GUILDBATTLE"))
+    end
     return 
   end
   local myAffiliatedTownRegionKey = regionInfo:getAffiliatedTownRegionKey()
   local warehouseInMaid = checkMaid_WarehouseIn(true)
   local warehouseOutMaid = checkMaid_WarehouseOut(true)
   local marketMaid = checkMaid_SubmitMarket(true)
+  local enableWarehouseMaid = checkMaid_WarehouseIn(false)
+  local enableMarketMaid = checkMaid_SubmitMarket(false)
   if index == 0 then
     if marketMaid then
       FGlobal_ItemMarket_OpenByMaid()
@@ -404,6 +421,11 @@ FGlobal_WarehouseOpenByMaid = function(index)
             end
           end
           do
+            if enableMarketMaid == false then
+              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_MARKETMAID_NONE"))
+            else
+              Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_MARKETMAID_COOLTIME"))
+            end
             SetUIMode((Defines.UIMode).eUIMode_Default)
             if index == 1 then
               if warehouseOutMaid or warehouseInMaid then
@@ -445,6 +467,11 @@ FGlobal_WarehouseOpenByMaid = function(index)
                       end
                       do
                         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MAIDLIST_ALERT"))
+                        if enableWarehouseMaid == false then
+                          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_WAREHOUSEMAID_NONE"))
+                        else
+                          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ICON_MAID_WAREHOUSEMAID_COOLTIME"))
+                        end
                         SetUIMode((Defines.UIMode).eUIMode_Default)
                       end
                     end
@@ -626,6 +653,7 @@ registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_Icon_Mai
 FromClient_luaLoadComplete_Icon_Maid = function()
   -- function num : 0_14
   Panel_MyHouseNavi_Update(true)
+  MaidCoolTime_Update()
   LogInMaidShow()
 end
 

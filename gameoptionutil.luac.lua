@@ -23,89 +23,89 @@ end
 
 PaGlobal_Option.radioButtonMapping_TextureQuality = function(self, value, fromRadioButtonToCppEnum)
   -- function num : 0_1
-  local radioTextureQuality = {[0] = 2, [1] = 1, [2] = 0}
-  return PaGlobal_Option:RadioButtonMapping(radioTextureQuality, value, fromRadioButtonToCppEnum)
+  local radioMap = {[0] = 2, [1] = 1, [2] = 0}
+  return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
 
 -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Option.radioButtonMapping_GraphicOption = function(self, value, fromRadioButtonToCppEnum)
   -- function num : 0_2
-  local radioGraphicOption = {[0] = 5, [1] = 4, [2] = 3, [3] = 2, [4] = 1, [5] = 0, [6] = 6}
-  return PaGlobal_Option:RadioButtonMapping(radioGraphicOption, value, fromRadioButtonToCppEnum)
+  local radioMap = {[0] = 5, [1] = 4, [2] = 3, [3] = 2, [4] = 1, [5] = 0, [6] = 6}
+  return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
 
 -- DECOMPILER ERROR at PC13: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_Option.radioButtonMapping_WatermarkService = function(self, value, fromRadioButtonToCppEnum)
-  -- function num : 0_3
-  local radioGraphicOption = {[0] = 0, [1] = 1, [2] = 2, [3] = 3, [4] = 4, [5] = 5, [6] = 7, [7] = 6}
-  return PaGlobal_Option:RadioButtonMapping(radioGraphicOption, value, fromRadioButtonToCppEnum)
-end
-
--- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
-
 PaGlobal_Option.radioButtonMapping_AudioResourceType = function(self, value, fromRadioButtonToCppEnum)
-  -- function num : 0_4
-  local radioGraphicOption = {}
+  -- function num : 0_3
+  local radioMap = {}
   if isGameTypeKorea() then
-    radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_KR, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+    radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_KR, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
   else
     if isGameTypeJapan() then
-      radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_KR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+      radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_KR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
     else
     end
   end
   if not isGameTypeRussia() or isGameTypeEnglish() then
-    radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_KR}
+    radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_KR}
   else
     if isGameTypeTaiwan() then
-      radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TW, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_KR}
+      radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TW, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_JP, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_KR}
     else
       if isGameTypeTR() then
-        radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TR}
+        radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TR}
+      else
+        if isGameTypeID() then
+          radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+        else
+          if isGameTypeTH() then
+            radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+          end
+        end
       end
     end
   end
-  local val = PaGlobal_Option:RadioButtonMapping(radioGraphicOption, value, fromRadioButtonToCppEnum)
+  local val = PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
   if val == -1 then
     return 0
   end
   return val
 end
 
--- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Option.radioButtonMapping_ServiceResourceType = function(self, value, fromRadioButtonToCppEnum)
-  -- function num : 0_5
-  local radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID}
+  -- function num : 0_4
+  local radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID}
   local resourceType = getGameServiceType()
   if (CppEnums.GameServiceType).eGameServiceType_DEV == resourceType then
-    radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID}
+    radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_ID}
   else
     if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == resourceType then
-      radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE}
+      radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE}
     else
       if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == resourceType then
-        radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE}
+        radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_EN, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_FR, [2] = (CppEnums.ServiceResourceType).eServiceResourceType_DE}
       else
         if (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA == resourceType then
-          radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_PT, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_ES}
+          radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_PT, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_ES}
         else
           if (CppEnums.GameServiceType).eGameServiceType_SA_REAL == resourceType then
-            radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_PT, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_ES}
+            radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_PT, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_ES}
           else
             if (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA == resourceType then
-              radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_ID, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+              radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_ID, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
             else
               if (CppEnums.GameServiceType).eGameServiceType_ID_REAL == resourceType then
-                radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_ID, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+                radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_ID, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
               else
                 if (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA == resourceType then
-                  radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TR, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+                  radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TR, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
                 else
                   if (CppEnums.GameServiceType).eGameServiceType_TR_REAL == resourceType then
-                    radioGraphicOption = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TR, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
+                    radioMap = {[0] = (CppEnums.ServiceResourceType).eServiceResourceType_TR, [1] = (CppEnums.ServiceResourceType).eServiceResourceType_EN}
                   end
                 end
               end
@@ -115,42 +115,41 @@ PaGlobal_Option.radioButtonMapping_ServiceResourceType = function(self, value, f
       end
     end
   end
-  return PaGlobal_Option:RadioButtonMapping(radioGraphicOption, value, fromRadioButtonToCppEnum)
+  return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
 
--- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_Option.radioButtonMapping_ChatChannelType = function(self, value, fromRadioButtonToCppEnum)
-  -- function num : 0_6
-  local radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
+  -- function num : 0_5
+  local radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_ID}
   local resourceType = getGameServiceType()
-  _PA_LOG("후진", "value : " .. value .. " resourceType : " .. resourceType)
   if (CppEnums.GameServiceType).eGameServiceType_DEV == resourceType then
-    radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
+    radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_ID}
   else
     if (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA == resourceType then
-      radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
+      radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
     else
       if (CppEnums.GameServiceType).eGameServiceType_NA_REAL == resourceType then
-        radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
+        radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_French, [3] = (CppEnums.LangType).LangType_German}
       else
         if (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA == resourceType then
-          radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_Pt, [2] = (CppEnums.LangType).LangType_Es}
+          radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_Pt, [2] = (CppEnums.LangType).LangType_Es}
         else
           if (CppEnums.GameServiceType).eGameServiceType_SA_REAL == resourceType then
-            radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_Pt, [2] = (CppEnums.LangType).LangType_Es}
+            radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_Pt, [2] = (CppEnums.LangType).LangType_Es}
           else
             if (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA == resourceType then
-              radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_ID}
+              radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_ID}
             else
               if (CppEnums.GameServiceType).eGameServiceType_ID_REAL == resourceType then
-                radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_ID}
+                radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_English, [2] = (CppEnums.LangType).LangType_ID}
               else
                 if (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA == resourceType then
-                  radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_TR, [2] = (CppEnums.LangType).LangType_English}
+                  radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_TR, [2] = (CppEnums.LangType).LangType_English}
                 else
                   if (CppEnums.GameServiceType).eGameServiceType_TR_REAL == resourceType then
-                    radioGraphicOption = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_TR, [2] = (CppEnums.LangType).LangType_English}
+                    radioMap = {[0] = (CppEnums.LangType).LangType_International, [1] = (CppEnums.LangType).LangType_TR, [2] = (CppEnums.LangType).LangType_English}
                   end
                 end
               end
@@ -160,15 +159,15 @@ PaGlobal_Option.radioButtonMapping_ChatChannelType = function(self, value, fromR
       end
     end
   end
-  return PaGlobal_Option:RadioButtonMapping(radioGraphicOption, value, fromRadioButtonToCppEnum)
+  return PaGlobal_Option:RadioButtonMapping(radioMap, value, fromRadioButtonToCppEnum)
 end
 
 local isOnServiceResourceTypeTag = {[(CppEnums.ServiceResourceType).eServiceResourceType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.ServiceResourceType).eServiceResourceType_KR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_KR"), [(CppEnums.ServiceResourceType).eServiceResourceType_EN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.ServiceResourceType).eServiceResourceType_JP] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.ServiceResourceType).eServiceResourceType_CN] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.ServiceResourceType).eServiceResourceType_RU] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.ServiceResourceType).eServiceResourceType_FR] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.ServiceResourceType).eServiceResourceType_DE] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.ServiceResourceType).eServiceResourceType_ES] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.ServiceResourceType).eServiceResourceType_TW] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.ServiceResourceType).eServiceResourceType_PT] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.ServiceResourceType).eServiceResourceType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.ServiceResourceType).eServiceResourceType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.ServiceResourceType).eServiceResourceType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
-local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_INTERNATIONAL"), [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
--- DECOMPILER ERROR at PC279: Confused about usage of register: R3 in 'UnsetPending'
+local isOnServiceChatTypeTag = {[(CppEnums.LangType).LangType_Dev] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DEV"), [(CppEnums.LangType).LangType_International] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_INTERNATIONAL"), [(CppEnums.LangType).LangType_English] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_EN"), [(CppEnums.LangType).LangType_Jp] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_JP"), [(CppEnums.LangType).LangType_Cn] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_CN"), [(CppEnums.LangType).LangType_Ru] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_RU"), [(CppEnums.LangType).LangType_French] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_FR"), [(CppEnums.LangType).LangType_German] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_DE"), [(CppEnums.LangType).LangType_Es] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_ES"), [(CppEnums.LangType).LangType_Tw] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_TW"), [(CppEnums.LangType).LangType_Pt] = PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TEXT_PT"), [(CppEnums.LangType).LangType_TH] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TH"), [(CppEnums.LangType).LangType_ID] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_ID"), [(CppEnums.LangType).LangType_TR] = PAGetString(Defines.StringSheet_RESOURCE, "LUA_OPTION_TEXT_TR")}
+-- DECOMPILER ERROR at PC276: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.RadioButtonMapping = function(self, table, value, fromRadioButtonToCppEnum)
-  -- function num : 0_7
+  -- function num : 0_6
   if fromRadioButtonToCppEnum == nil or fromRadioButtonToCppEnum == false then
     return table[value]
   end
@@ -180,10 +179,10 @@ PaGlobal_Option.RadioButtonMapping = function(self, table, value, fromRadioButto
   return -1
 end
 
--- DECOMPILER ERROR at PC283: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC280: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.GetEventTypeText = function(self, controlTypeEnum)
-  -- function num : 0_8 , upvalues : CONTROL
+  -- function num : 0_7 , upvalues : CONTROL
   local eventType = nil
   if CONTROL.PA_UI_CONTROL_SLIDER == controlTypeEnum then
     eventType = "Mouse_LPress"
@@ -207,10 +206,10 @@ PaGlobal_Option.GetEventTypeText = function(self, controlTypeEnum)
   return eventType
 end
 
--- DECOMPILER ERROR at PC287: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC284: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.GetControlTypeByControlName = function(self, controlName)
-  -- function num : 0_9 , upvalues : CONTROL
+  -- function num : 0_8 , upvalues : CONTROL
   local controlTypeEnum = nil
   if controlName == "CheckButton" then
     controlTypeEnum = CONTROL.PA_UI_CONTROL_CHECKBUTTON
@@ -236,12 +235,12 @@ PaGlobal_Option.GetControlTypeByControlName = function(self, controlName)
   return controlTypeEnum
 end
 
--- DECOMPILER ERROR at PC290: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC287: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.FromSliderValueToRealValue = function(self, value, min, max)
-  -- function num : 0_10
+  -- function num : 0_9
   clamp = function(value, lower, upper)
-    -- function num : 0_10_0
+    -- function num : 0_9_0
     if upper < lower then
       lower = upper
     end
@@ -255,23 +254,25 @@ PaGlobal_Option.FromSliderValueToRealValue = function(self, value, min, max)
   return value
 end
 
--- DECOMPILER ERROR at PC293: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC290: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.FromRealValueToSliderValue = function(self, value, lower, upper)
-  -- function num : 0_11
+  -- function num : 0_10
   local offset = upper - lower
   value = value - lower
   value = (value) / offset
   return value
 end
 
--- DECOMPILER ERROR at PC298: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC295: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
-  -- function num : 0_12 , upvalues : isOnServiceResourceTypeTag, isOnServiceChatTypeTag
+  -- function num : 0_11 , upvalues : isOnServiceResourceTypeTag, isOnServiceChatTypeTag
   if elementName == "ServiceResourceType" then
     local count = nil
-    for ii = 0, 10 do
+    local tempCount = 10
+    local controlCount = 6
+    for ii = 0, tempCount do
       if self:radioButtonMapping_ServiceResourceType(ii) == nil then
         count = ii
         break
@@ -281,7 +282,7 @@ PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
       for i,eventControl in pairs(((self._elements)[elementName])._eventControl) do
         eventControl:SetText(isOnServiceResourceTypeTag[self:radioButtonMapping_ServiceResourceType(0)])
       end
-      for ii = 1, 6 do
+      for ii = 1, controlCount do
         if ((self._elements)[elementName])["_eventControl" .. ii] == nil then
           break
         end
@@ -297,7 +298,9 @@ PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
       do
         if elementName == "ChatChannelType" then
           local count = nil
-          for ii = 0, 10 do
+          local tempCount = 10
+          local controlCount = 6
+          for ii = 0, tempCount do
             if self:radioButtonMapping_ChatChannelType(ii) == nil then
               count = ii
               break
@@ -307,7 +310,7 @@ PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
             for i,eventControl in pairs(((self._elements)[elementName])._eventControl) do
               eventControl:SetText(isOnServiceChatTypeTag[self:radioButtonMapping_ChatChannelType(0)])
             end
-            for ii = 1, 6 do
+            for ii = 1, controlCount do
               if ((self._elements)[elementName])["_eventControl" .. ii] == nil then
                 break
               end
@@ -320,6 +323,109 @@ PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
                 end
               end
             end
+            do
+              if elementName == "AudioResourceType" then
+                local controlCount = 3
+                for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                  if ((self._elements)[elementName])._eventControl == nil and (((self._elements)[elementName])._eventControl)[index] == nil then
+                    return 
+                  else
+                    if ((self._elements)[elementName])._eventControl1 == nil and (((self._elements)[elementName])._eventControl1)[index] == nil then
+                      return 
+                    else
+                      if ((self._elements)[elementName])._eventControl2 == nil and (((self._elements)[elementName])._eventControl2)[index] == nil then
+                        return 
+                      end
+                    end
+                  end
+                end
+                if isGameTypeKorea() then
+                  for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                    ((((self._elements)[elementName])._eventControl)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
+                    ;
+                    ((((self._elements)[elementName])._eventControl1)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
+                    ;
+                    ((((self._elements)[elementName])._eventControl2)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+                  end
+                else
+                  do
+                    if isGameTypeJapan() then
+                      for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                        ((((self._elements)[elementName])._eventControl)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
+                        ;
+                        ((((self._elements)[elementName])._eventControl1)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
+                        ;
+                        ((((self._elements)[elementName])._eventControl2)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+                      end
+                    else
+                    end
+                    do
+                      if not isGameTypeRussia() or isGameTypeEnglish() then
+                        for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                          ((((self._elements)[elementName])._eventControl)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+                          ;
+                          ((((self._elements)[elementName])._eventControl1)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
+                          ;
+                          ((((self._elements)[elementName])._eventControl2)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
+                        end
+                      else
+                        do
+                          if isGameTypeTaiwan() then
+                            for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                              ((((self._elements)[elementName])._eventControl)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+                              ;
+                              ((((self._elements)[elementName])._eventControl1)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_JAPANESE"))
+                              ;
+                              ((((self._elements)[elementName])._eventControl2)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_KOREAN"))
+                            end
+                          else
+                            do
+                              if isGameTypeTR() then
+                                for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                                  ((((self._elements)[elementName])._eventControl)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+                                  ;
+                                  ((((self._elements)[elementName])._eventControl1)[index]):SetShow(false)
+                                  ;
+                                  ((((self._elements)[elementName])._eventControl2)[index]):SetShow(false)
+                                end
+                              else
+                                do
+                                  if isGameTypeID() then
+                                    for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                                      ((((self._elements)[elementName])._eventControl)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+                                      ;
+                                      ((((self._elements)[elementName])._eventControl1)[index]):SetShow(false)
+                                      ;
+                                      ((((self._elements)[elementName])._eventControl2)[index]):SetShow(false)
+                                    end
+                                  else
+                                    do
+                                      if isGameTypeTH() then
+                                        for index,eventControl in pairs(((self._elements)[elementName])._eventControl) do
+                                          ((((self._elements)[elementName])._eventControl)[index]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ENGLISH"))
+                                          ;
+                                          ((((self._elements)[elementName])._eventControl1)[index]):SetShow(false)
+                                          ;
+                                          ((((self._elements)[elementName])._eventControl2)[index]):SetShow(false)
+                                        end
+                                      else
+                                        do
+                                          _PA_LOG("LUA", "�\173 국가 리소스가 추가되면 �\180 곳도 수정 판단 해주어야합니�\164.")
+                                        end
+                                      end
+                                    end
+                                  end
+                                end
+                              end
+                            end
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
           end
         end
       end
@@ -327,10 +433,10 @@ PaGlobal_Option.SpecialCreateRadioButton = function(self, elementName)
   end
 end
 
--- DECOMPILER ERROR at PC301: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC298: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SetUltra = function(self, value)
-  -- function num : 0_13
+  -- function num : 0_12
   local graphicOption = (self._elements).GraphicOption
   if value == true then
     self:SetGraphicOption((self.GRAPHIC).VeryVeryHigh, true)
@@ -353,80 +459,143 @@ PaGlobal_Option.SetUltra = function(self, value)
   self:SetControlSettingTable(graphicOption, graphicOption._curValue)
 end
 
--- DECOMPILER ERROR at PC304: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC301: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SetGraphicOption = function(self, value, isIncrease)
-  -- function num : 0_14
+  -- function num : 0_13
   local _SSAO = (self._elements).SSAO
   local _AntiAliasing = (self._elements).AntiAliasing
   local _Dof = (self._elements).Dof
+  local _Tessellation = (self._elements).Tessellation
   if (self.GRAPHIC).VeryVeryLow == value then
     _SSAO._curValue = false
     _AntiAliasing._curValue = false
     _Dof._curValue = false
+    _Tessellation._curValue = false
+    for index,eventControl in pairs(_Tessellation._eventControl) do
+      eventControl:SetMonoTone(true)
+      eventControl:SetEnable(false)
+    end
   else
-    if (self.GRAPHIC).VeryLow == value then
-      if isIncrease == true then
-        _SSAO._curValue = true
-        _AntiAliasing._curValue = true
-      else
-        _Dof._curValue = false
-      end
-    else
-      if (self.GRAPHIC).Low == value then
+    do
+      if (self.GRAPHIC).VeryLow == value then
         if isIncrease == true then
           _SSAO._curValue = true
           _AntiAliasing._curValue = true
         else
-          _Dof._curValue = false
+          if isIncrease == false then
+            _Dof._curValue = false
+            _Tessellation._curValue = false
+          end
+        end
+        for index,eventControl in pairs(_Tessellation._eventControl) do
+          eventControl:SetMonoTone(true)
+          eventControl:SetEnable(false)
         end
       else
-        if (self.GRAPHIC).Medium == value then
-          if isIncrease == true then
-            _SSAO._curValue = true
-            _AntiAliasing._curValue = true
+        do
+          if (self.GRAPHIC).Low == value then
+            if isIncrease == true then
+              _SSAO._curValue = true
+              _AntiAliasing._curValue = true
+            else
+              if isIncrease == false then
+                _Dof._curValue = false
+                _Tessellation._curValue = false
+              end
+            end
+            for index,eventControl in pairs(_Tessellation._eventControl) do
+              eventControl:SetMonoTone(true)
+              eventControl:SetEnable(false)
+            end
           else
-            _Dof._curValue = false
-          end
-        else
-          -- DECOMPILER ERROR at PC53: Unhandled construct in 'MakeBoolean' P1
-
-          if (self.GRAPHIC).High == value and isIncrease == true then
-            _SSAO._curValue = true
-            _AntiAliasing._curValue = true
-            _Dof._curValue = true
+            do
+              if (self.GRAPHIC).Medium == value then
+                if isIncrease == true then
+                  _SSAO._curValue = true
+                  _AntiAliasing._curValue = true
+                else
+                  if isIncrease == false then
+                    _Dof._curValue = false
+                    _Tessellation._curValue = false
+                  end
+                end
+                for index,eventControl in pairs(_Tessellation._eventControl) do
+                  eventControl:SetMonoTone(true)
+                  eventControl:SetEnable(false)
+                end
+              else
+                do
+                  if (self.GRAPHIC).High == value then
+                    if isIncrease == true then
+                      _SSAO._curValue = true
+                      _AntiAliasing._curValue = true
+                      _Dof._curValue = true
+                      _Tessellation._curValue = false
+                    else
+                      if isIncrease == false then
+                        _Tessellation._curValue = false
+                      end
+                    end
+                    for index,eventControl in pairs(_Tessellation._eventControl) do
+                      eventControl:SetMonoTone(true)
+                      eventControl:SetEnable(false)
+                    end
+                  else
+                    do
+                      if (self.GRAPHIC).VeryHigh == value then
+                        if isIncrease == true then
+                          _SSAO._curValue = true
+                          _AntiAliasing._curValue = true
+                          _Dof._curValue = true
+                        end
+                        for index,eventControl in pairs(_Tessellation._eventControl) do
+                          eventControl:SetMonoTone(false)
+                          eventControl:SetEnable(true)
+                        end
+                      else
+                        do
+                          if (self.GRAPHIC).VeryVeryHigh == value then
+                            if isIncrease == true then
+                              _SSAO._curValue = true
+                              _AntiAliasing._curValue = true
+                              _Dof._curValue = true
+                            end
+                            for index,eventControl in pairs(_Tessellation._eventControl) do
+                              eventControl:SetMonoTone(false)
+                              eventControl:SetEnable(true)
+                            end
+                          end
+                          do
+                            self:SetControlSettingTable(_SSAO, _SSAO._curValue)
+                            self:SetControlSettingTable(_AntiAliasing, _AntiAliasing._curValue)
+                            self:SetControlSettingTable(_Dof, _Dof._curValue)
+                            self:SetControlSettingTable(_Tessellation, _Tessellation._curValue)
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
           end
         end
       end
     end
   end
-  -- DECOMPILER ERROR at PC63: Unhandled construct in 'MakeBoolean' P1
-
-  if (self.GRAPHIC).VeryHigh == value and isIncrease == true then
-    _SSAO._curValue = true
-    _AntiAliasing._curValue = true
-    _Dof._curValue = true
-  end
-  if (self.GRAPHIC).VeryVeryHigh == value and isIncrease == true then
-    _SSAO._curValue = true
-    _AntiAliasing._curValue = true
-    _Dof._curValue = true
-  end
-  self:SetControlSettingTable(_SSAO, _SSAO._curValue)
-  self:SetControlSettingTable(_AntiAliasing, _AntiAliasing._curValue)
-  self:SetControlSettingTable(_Dof, _Dof._curValue)
 end
 
--- DECOMPILER ERROR at PC307: Confused about usage of register: R3 in 'UnsetPending'
+-- DECOMPILER ERROR at PC304: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Option.SetSpecSetting = function(self, value)
-  -- function num : 0_15
+  -- function num : 0_14
   local PETRENDER = {ALL = 0, ONLYME = 1, NONE = 2}
   local options = self._elements
   -- DECOMPILER ERROR at PC12: Confused about usage of register: R4 in 'UnsetPending'
 
   if (self.SPEC).LowNormal == value then
-    (options.GraphicOption)._curValue = (self.GRAPHIC).VeryVeryLow
+    (options.GraphicOption)._curValue = (self.GRAPHIC).VeryLow
     self:SetGraphicOption((options.GraphicOption)._curValue, false)
     -- DECOMPILER ERROR at PC19: Confused about usage of register: R4 in 'UnsetPending'
 
@@ -570,7 +739,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
           -- DECOMPILER ERROR at PC132: Confused about usage of register: R4 in 'UnsetPending'
 
           if (self.SPEC).LowSiege == value then
-            (options.GraphicOption)._curValue = (self.GRAPHIC).VeryVeryLow
+            (options.GraphicOption)._curValue = (self.GRAPHIC).VeryLow
             self:SetGraphicOption((options.GraphicOption)._curValue, false)
             -- DECOMPILER ERROR at PC139: Confused about usage of register: R4 in 'UnsetPending'
 
@@ -579,7 +748,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
             -- DECOMPILER ERROR at PC141: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
-            (options.EffectFrameOptimization)._curValue = 0.9
+            (options.EffectFrameOptimization)._curValue = 1
             -- DECOMPILER ERROR at PC143: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
@@ -587,7 +756,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
             -- DECOMPILER ERROR at PC145: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
-            (options.PlayerEffectDistOptimization)._curValue = 0.9
+            (options.PlayerEffectDistOptimization)._curValue = 1
             -- DECOMPILER ERROR at PC147: Confused about usage of register: R4 in 'UnsetPending'
 
             ;
@@ -617,7 +786,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
               -- DECOMPILER ERROR at PC172: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
-              (options.EffectFrameOptimization)._curValue = 0.7
+              (options.EffectFrameOptimization)._curValue = 0.75
               -- DECOMPILER ERROR at PC174: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
@@ -625,7 +794,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
               -- DECOMPILER ERROR at PC176: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
-              (options.PlayerEffectDistOptimization)._curValue = 0.7
+              (options.PlayerEffectDistOptimization)._curValue = 0.75
               -- DECOMPILER ERROR at PC178: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
@@ -633,7 +802,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
               -- DECOMPILER ERROR at PC180: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
-              (options.UseOtherPlayerUpdate)._curValue = false
+              (options.UseOtherPlayerUpdate)._curValue = true
               -- DECOMPILER ERROR at PC182: Confused about usage of register: R4 in 'UnsetPending'
 
               ;
@@ -671,7 +840,7 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
                 -- DECOMPILER ERROR at PC211: Confused about usage of register: R4 in 'UnsetPending'
 
                 ;
-                (options.UseOtherPlayerUpdate)._curValue = false
+                (options.UseOtherPlayerUpdate)._curValue = true
                 -- DECOMPILER ERROR at PC213: Confused about usage of register: R4 in 'UnsetPending'
 
                 ;
@@ -726,12 +895,16 @@ PaGlobal_Option.SetSpecSetting = function(self, value)
       end
     end
   end
+  -- DECOMPILER ERROR at PC249: Confused about usage of register: R4 in 'UnsetPending'
+
+  ;
+  (options.GraphicUltra)._curValue = false
   self:ClickedConfirmOption()
-  self:MoveUi((self.UIMODE).Spec)
+  self:MoveUi((self.UIMODE).Main)
 end
 
 local InitSpectionOption_LUT = function()
-  -- function num : 0_16
+  -- function num : 0_15
   local parent = (UI.getChildControl)((((PaGlobal_Option._frames).Graphic).Effect)._uiFrameContent, "StaticText_BgOrder0_Import")
   ;
   ((UI.getChildControl)(parent, "Button_LUTReset")):addInputEvent("Mouse_LUp", "PaGlobal_Option:SetRecommandationLUT()")
@@ -743,10 +916,10 @@ local LUTRecommandation = -1
 local LUTRecommandation2 = -1
 local LUTRecommandationName = "Vibrance"
 local LUTRecommandationName2 = "NonContrast"
--- DECOMPILER ERROR at PC317: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC314: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_Option.SetRecommandationLUT = function(self)
-  -- function num : 0_17 , upvalues : LUTRecommandation, LUTRecommandationName
+  -- function num : 0_16 , upvalues : LUTRecommandation, LUTRecommandationName
   if LUTRecommandation == -1 then
     for idx = 0, 30 do
       if getCameraLUTFilterName(idx) == LUTRecommandationName then
@@ -765,10 +938,10 @@ PaGlobal_Option.SetRecommandationLUT = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC322: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC319: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_Option.SetRecommandationLUT2 = function(self)
-  -- function num : 0_18 , upvalues : LUTRecommandation2, LUTRecommandationName2
+  -- function num : 0_17 , upvalues : LUTRecommandation2, LUTRecommandationName2
   if LUTRecommandation2 == -1 then
     for idx = 0, 30 do
       if getCameraLUTFilterName(idx) == LUTRecommandationName2 then
@@ -787,29 +960,12 @@ PaGlobal_Option.SetRecommandationLUT2 = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC326: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC323: Confused about usage of register: R8 in 'UnsetPending'
 
 PaGlobal_Option.SpectialOptionInit = function(self)
-  -- function num : 0_19 , upvalues : InitSpectionOption_LUT
+  -- function num : 0_18 , upvalues : InitSpectionOption_LUT
   InitSpectionOption_LUT()
   InitSpectionOption_LUT = nil
-end
-
-FromClient_OtherPlayeUpdateNEW = function(isEnable, isOption)
-  -- function num : 0_20
-  local isShow = isEnable
-  if isEnable ~= false then
-    do
-      isEnable = isOption ~= true
-      setUseOtherPlayerUpdate(isEnable)
-      if isEnable then
-        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_PLAYERHIDEOFF"))
-      else
-        Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_TOOLTIP_PLAYERHIDEON"))
-      end
-      -- DECOMPILER ERROR: 4 unprocessed JMP targets
-    end
-  end
 end
 
 

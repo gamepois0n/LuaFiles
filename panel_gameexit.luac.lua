@@ -454,277 +454,294 @@ refreshCharacterInfoData = function(startIdx)
                                                                       ((isCharacterSlot[uiCount]):getBaseTexture()):setUV(x1, y1, x2, y2)
                                                                       ;
                                                                       (isCharacterSlot[uiCount]):setRenderTexture((isCharacterSlot[uiCount]):getBaseTexture())
-                                                                    end
-                                                                    do
-                                                                      local DefaultFace = UI_DefaultFaceTexture[char_Type]
-                                                                      ;
-                                                                      (isCharacterSlot[uiCount]):ChangeTextureInfoName(DefaultFace[1])
+                                                                    else
                                                                       do
-                                                                        local x1, y1, x2, y2 = setTextureUV_Func(isCharacterSlot[uiCount], DefaultFace[2], DefaultFace[3], DefaultFace[4], DefaultFace[5])
-                                                                        ;
-                                                                        ((isCharacterSlot[uiCount]):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                        ;
-                                                                        (isCharacterSlot[uiCount]):setRenderTexture((isCharacterSlot[uiCount]):getBaseTexture())
-                                                                        ;
-                                                                        (charLevelPool[uiCount]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. char_Level)
-                                                                        ;
-                                                                        (charNamePool[uiCount]):SetText(char_Name)
-                                                                        if (characterData._currentPosition).x == 0 and (characterData._currentPosition).y == 0 and (characterData._currentPosition).z == 0 then
-                                                                          (charPositionPool[uiCount]):SetText("")
-                                                                        else
-                                                                          if pcDeliveryRegionKey:get() ~= 0 and characterData._arrivalTime < serverUtc64 then
-                                                                            local retionInfoArrival = getRegionInfoByRegionKey(pcDeliveryRegionKey)
+                                                                        if char_Type == UI_Class.ClassType_Lahn then
+                                                                          (isCharacterSlot[uiCount]):ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_03.dds")
+                                                                          local x1, y1, x2, y2 = setTextureUV_Func(isCharacterSlot[uiCount], 1, 1, 156, 201)
+                                                                          ;
+                                                                          ((isCharacterSlot[uiCount]):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                          ;
+                                                                          (isCharacterSlot[uiCount]):setRenderTexture((isCharacterSlot[uiCount]):getBaseTexture())
+                                                                        end
+                                                                        do
+                                                                          local DefaultFace = UI_DefaultFaceTexture[char_Type]
+                                                                          ;
+                                                                          (isCharacterSlot[uiCount]):ChangeTextureInfoName(DefaultFace[1])
+                                                                          do
+                                                                            local x1, y1, x2, y2 = setTextureUV_Func(isCharacterSlot[uiCount], DefaultFace[2], DefaultFace[3], DefaultFace[4], DefaultFace[5])
                                                                             ;
-                                                                            (charPositionPool[uiCount]):SetText(retionInfoArrival:getAreaName())
-                                                                          else
-                                                                            do
-                                                                              ;
-                                                                              (charPositionPool[uiCount]):SetText(regionInfo:getAreaName())
-                                                                              ;
-                                                                              (normalStackPool[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (charWpCountPool[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (charWpCountPool[uiCount]):SetText(char_wp)
-                                                                              if ToClient_IsReceivedEnchantFailCount() then
-                                                                                (normalStackPool[uiCount]):SetText(defaultCount + valksCount)
+                                                                            ((isCharacterSlot[uiCount]):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                            ;
+                                                                            (isCharacterSlot[uiCount]):setRenderTexture((isCharacterSlot[uiCount]):getBaseTexture())
+                                                                            ;
+                                                                            (charLevelPool[uiCount]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. "." .. char_Level)
+                                                                            ;
+                                                                            (charNamePool[uiCount]):SetText(char_Name)
+                                                                            if (characterData._currentPosition).x == 0 and (characterData._currentPosition).y == 0 and (characterData._currentPosition).z == 0 then
+                                                                              (charPositionPool[uiCount]):SetText("")
+                                                                            else
+                                                                              if pcDeliveryRegionKey:get() ~= 0 and characterData._arrivalTime < serverUtc64 then
+                                                                                local retionInfoArrival = getRegionInfoByRegionKey(pcDeliveryRegionKey)
+                                                                                ;
+                                                                                (charPositionPool[uiCount]):SetText(retionInfoArrival:getAreaName())
                                                                               else
-                                                                                ;
-                                                                                (normalStackPool[uiCount]):SetText("-")
-                                                                              end
-                                                                              ;
-                                                                              (normalStackPool[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
-                                                                              ;
-                                                                              (charWpCountPool[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
-                                                                              ;
-                                                                              (normalStackPool[uiCount]):addInputEvent("Mouse_On", "GameExit_SimpleTooltips( true, " .. uiCount .. ", 0," .. defaultCount .. "," .. valksCount .. " )")
-                                                                              ;
-                                                                              (normalStackPool[uiCount]):addInputEvent("Mouse_Out", "GameExit_SimpleTooltips( false, " .. uiCount .. ", 0 )")
-                                                                              ;
-                                                                              (charWpCountPool[uiCount]):addInputEvent("Mouse_On", "GameExit_SimpleTooltips( true, " .. uiCount .. ", 1 )")
-                                                                              ;
-                                                                              (charWpCountPool[uiCount]):addInputEvent("Mouse_Out", "GameExit_SimpleTooltips( false, " .. uiCount .. ", 1 )")
-                                                                              ;
-                                                                              (charWorking[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (charPcDeliveryRemainTime[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (charLevelPool[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (charNamePool[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (charPositionPool[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (charEnterWaiting[uiCount]):SetShow(true)
-                                                                              ;
-                                                                              (isCharacterSlot[uiCount]):addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
-                                                                              ;
-                                                                              (CharacterChangeButton[uiCount]):addInputEvent("Mouse_LUp", "Panel_GameExit_ChangeCharacter(" .. idx .. ")")
-                                                                              local selfProxy = getSelfPlayer()
-                                                                              local characterNo_64 = toInt64(0, 0)
-                                                                              if selfProxy ~= nil then
-                                                                                characterNo_64 = selfProxy:getCharacterNo_64()
-                                                                              end
-                                                                              ;
-                                                                              (CharacterChangeButton[uiCount]):SetShow(false)
-                                                                              if characterNo_64 == characterData._characterNo_s64 then
-                                                                                (isCharacterSlot[uiCount]):SetMonoTone(false)
-                                                                                ;
-                                                                                (isCharacterSlot[uiCount]):SetIgnore(true)
-                                                                                ;
-                                                                                (isCharacterSlotBG[uiCount]):SetShow(true)
-                                                                                if startIdx + 4 <= characterDatacount - 1 then
-                                                                                  (isCharacterSlot[uiCount]):addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
-                                                                                  _charSlotBG:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. " )")
-                                                                                end
-                                                                                ;
-                                                                                (isCharacterSlot[uiCount]):addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
-                                                                                _charSlotBG:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
-                                                                                ;
-                                                                                (CharacterChangeButton[uiCount]):SetShow(false)
-                                                                                ;
-                                                                                (CharacterChangeButton[uiCount]):SetIgnore(true)
-                                                                                ;
-                                                                                (CharacterChangeButton[uiCount]):SetEnable(false)
-                                                                                ;
-                                                                                (normalStackPool[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
-                                                                                ;
-                                                                                (charWorking[uiCount]):SetText("")
-                                                                                ;
-                                                                                (charWorking[uiCount]):SetFontColor(UI_color.C_FF6DC6FF)
-                                                                                ;
-                                                                                (charPositionPool[uiCount]):SetShow(false)
-                                                                                ;
-                                                                                (charPcDeliveryRemainTime[uiCount]):SetText("")
-                                                                                nowPlayCharaterSlotNo = uiCount
-                                                                              else
-                                                                                ;
-                                                                                (isCharacterSlot[uiCount]):SetIgnore(false)
-                                                                                ;
-                                                                                (isCharacterSlot[uiCount]):SetMonoTone(true)
-                                                                                if startIdx + 4 <= characterDatacount - 1 then
-                                                                                  (isCharacterSlot[uiCount]):addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
-                                                                                  _charSlotBG:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
-                                                                                end
-                                                                                ;
-                                                                                (isCharacterSlot[uiCount]):addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
-                                                                                _charSlotBG:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
-                                                                                ;
-                                                                                (isCharacterSlotBG[uiCount]):SetShow(false)
-                                                                                ;
-                                                                                (normalStackPool[uiCount]):SetFontColor(UI_color.C_FFC4BEBE)
-                                                                                ;
-                                                                                (CharacterChangeButton[uiCount]):SetIgnore(false)
-                                                                                ;
-                                                                                (CharacterChangeButton[uiCount]):SetEnable(true)
-                                                                                ;
-                                                                                (charWorking[uiCount]):SetText(char_WorkTxt)
-                                                                                ;
-                                                                                (charWorking[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
-                                                                                ;
-                                                                                (charPcDeliveryRemainTime[uiCount]):SetText(pcDeliveryRemainTimeText)
-                                                                                local removeTime = getCharacterDataRemoveTime(idx)
-                                                                                if removeTime ~= nil then
-                                                                                  (charWorking[uiCount]):SetText(PAGetString(Defines.StringSheet_GAME, "CHARACTER_DELETING"))
-                                                                                  ;
-                                                                                  (charEnterWaiting[uiCount]):SetShow(false)
-                                                                                  ;
-                                                                                  (CharacterChangeButton[uiCount]):SetEnable(false)
-                                                                                  ;
-                                                                                  (charPositionPool[uiCount]):SetShow(false)
-                                                                                else
-                                                                                  ;
-                                                                                  (charWorking[uiCount]):SetText(char_WorkTxt)
-                                                                                end
-                                                                              end
-                                                                              do
                                                                                 do
-                                                                                  characterTicketNo = currentTicketNo - characterData._lastTicketNoByRegion
-                                                                                  if const_64.s64_m1 ~= firstTicketNo or const_64.s64_m1 ~= characterData._lastTicketNoByRegion and const_64.s64_m1 < characterTicketNo then
-                                                                                    (charEnterWaiting[uiCount]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_NOT_ENTER_TO_FIELD"))
+                                                                                  ;
+                                                                                  (charPositionPool[uiCount]):SetText(regionInfo:getAreaName())
+                                                                                  ;
+                                                                                  (normalStackPool[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (charWpCountPool[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (charWpCountPool[uiCount]):SetText(char_wp)
+                                                                                  if ToClient_IsReceivedEnchantFailCount() then
+                                                                                    (normalStackPool[uiCount]):SetText(defaultCount + valksCount)
                                                                                   else
-                                                                                    if characterNo_64 == characterData._characterNo_s64 then
+                                                                                    ;
+                                                                                    (normalStackPool[uiCount]):SetText("-")
+                                                                                  end
+                                                                                  ;
+                                                                                  (normalStackPool[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
+                                                                                  ;
+                                                                                  (charWpCountPool[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
+                                                                                  ;
+                                                                                  (normalStackPool[uiCount]):addInputEvent("Mouse_On", "GameExit_SimpleTooltips( true, " .. uiCount .. ", 0," .. defaultCount .. "," .. valksCount .. " )")
+                                                                                  ;
+                                                                                  (normalStackPool[uiCount]):addInputEvent("Mouse_Out", "GameExit_SimpleTooltips( false, " .. uiCount .. ", 0 )")
+                                                                                  ;
+                                                                                  (charWpCountPool[uiCount]):addInputEvent("Mouse_On", "GameExit_SimpleTooltips( true, " .. uiCount .. ", 1 )")
+                                                                                  ;
+                                                                                  (charWpCountPool[uiCount]):addInputEvent("Mouse_Out", "GameExit_SimpleTooltips( false, " .. uiCount .. ", 1 )")
+                                                                                  ;
+                                                                                  (charWorking[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (charPcDeliveryRemainTime[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (charLevelPool[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (charNamePool[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (charPositionPool[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (charEnterWaiting[uiCount]):SetShow(true)
+                                                                                  ;
+                                                                                  (isCharacterSlot[uiCount]):addInputEvent("Mouse_LUp", "Panel_GameExit_ClickCharSlot(" .. uiCount .. ")")
+                                                                                  ;
+                                                                                  (CharacterChangeButton[uiCount]):addInputEvent("Mouse_LUp", "Panel_GameExit_ChangeCharacter(" .. idx .. ")")
+                                                                                  local selfProxy = getSelfPlayer()
+                                                                                  local characterNo_64 = toInt64(0, 0)
+                                                                                  if selfProxy ~= nil then
+                                                                                    characterNo_64 = selfProxy:getCharacterNo_64()
+                                                                                  end
+                                                                                  ;
+                                                                                  (CharacterChangeButton[uiCount]):SetShow(false)
+                                                                                  if characterNo_64 == characterData._characterNo_s64 then
+                                                                                    (isCharacterSlot[uiCount]):SetMonoTone(false)
+                                                                                    ;
+                                                                                    (isCharacterSlot[uiCount]):SetIgnore(true)
+                                                                                    ;
+                                                                                    (isCharacterSlotBG[uiCount]):SetShow(true)
+                                                                                    if startIdx + 4 <= characterDatacount - 1 then
+                                                                                      (isCharacterSlot[uiCount]):addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
+                                                                                      _charSlotBG:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. " )")
+                                                                                    end
+                                                                                    ;
+                                                                                    (isCharacterSlot[uiCount]):addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
+                                                                                    _charSlotBG:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
+                                                                                    ;
+                                                                                    (CharacterChangeButton[uiCount]):SetShow(false)
+                                                                                    ;
+                                                                                    (CharacterChangeButton[uiCount]):SetIgnore(true)
+                                                                                    ;
+                                                                                    (CharacterChangeButton[uiCount]):SetEnable(false)
+                                                                                    ;
+                                                                                    (normalStackPool[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
+                                                                                    ;
+                                                                                    (charWorking[uiCount]):SetText("")
+                                                                                    ;
+                                                                                    (charWorking[uiCount]):SetFontColor(UI_color.C_FF6DC6FF)
+                                                                                    ;
+                                                                                    (charPositionPool[uiCount]):SetShow(false)
+                                                                                    ;
+                                                                                    (charPcDeliveryRemainTime[uiCount]):SetText("")
+                                                                                    nowPlayCharaterSlotNo = uiCount
+                                                                                  else
+                                                                                    ;
+                                                                                    (isCharacterSlot[uiCount]):SetIgnore(false)
+                                                                                    ;
+                                                                                    (isCharacterSlot[uiCount]):SetMonoTone(true)
+                                                                                    if startIdx + 4 <= characterDatacount - 1 then
+                                                                                      (isCharacterSlot[uiCount]):addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
+                                                                                      _charSlotBG:addInputEvent("Mouse_DownScroll", "refreshCharacterInfoData(" .. startIdx + 1 .. ")")
+                                                                                    end
+                                                                                    ;
+                                                                                    (isCharacterSlot[uiCount]):addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
+                                                                                    _charSlotBG:addInputEvent("Mouse_UpScroll", "refreshCharacterInfoData(" .. startIdx - 1 .. " )")
+                                                                                    ;
+                                                                                    (isCharacterSlotBG[uiCount]):SetShow(false)
+                                                                                    ;
+                                                                                    (normalStackPool[uiCount]):SetFontColor(UI_color.C_FFC4BEBE)
+                                                                                    ;
+                                                                                    (CharacterChangeButton[uiCount]):SetIgnore(false)
+                                                                                    ;
+                                                                                    (CharacterChangeButton[uiCount]):SetEnable(true)
+                                                                                    ;
+                                                                                    (charWorking[uiCount]):SetText(char_WorkTxt)
+                                                                                    ;
+                                                                                    (charWorking[uiCount]):SetFontColor(UI_color.C_FFE7E7E7)
+                                                                                    ;
+                                                                                    (charPcDeliveryRemainTime[uiCount]):SetText(pcDeliveryRemainTimeText)
+                                                                                    local removeTime = getCharacterDataRemoveTime(idx)
+                                                                                    if removeTime ~= nil then
+                                                                                      (charWorking[uiCount]):SetText(PAGetString(Defines.StringSheet_GAME, "CHARACTER_DELETING"))
+                                                                                      ;
                                                                                       (charEnterWaiting[uiCount]):SetShow(false)
+                                                                                      ;
+                                                                                      (CharacterChangeButton[uiCount]):SetEnable(false)
+                                                                                      ;
+                                                                                      (charPositionPool[uiCount]):SetShow(false)
+                                                                                    else
+                                                                                      ;
+                                                                                      (charWorking[uiCount]):SetText(char_WorkTxt)
                                                                                     end
                                                                                   end
-                                                                                  uiCount = uiCount + 1
-                                                                                  if uiCount == 4 then
-                                                                                    break
+                                                                                  do
+                                                                                    do
+                                                                                      characterTicketNo = currentTicketNo - characterData._lastTicketNoByRegion
+                                                                                      if const_64.s64_m1 ~= firstTicketNo or const_64.s64_m1 ~= characterData._lastTicketNoByRegion and const_64.s64_m1 < characterTicketNo then
+                                                                                        (charEnterWaiting[uiCount]):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEEXIT_NOT_ENTER_TO_FIELD"))
+                                                                                      else
+                                                                                        if characterNo_64 == characterData._characterNo_s64 then
+                                                                                          (charEnterWaiting[uiCount]):SetShow(false)
+                                                                                        end
+                                                                                      end
+                                                                                      uiCount = uiCount + 1
+                                                                                      if uiCount == 4 then
+                                                                                        break
+                                                                                      end
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_THEN_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out DO_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+
+                                                                                      -- DECOMPILER ERROR at PC1191: LeaveBlock: unexpected jumping out IF_STMT
+
+                                                                                    end
                                                                                   end
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_THEN_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out DO_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_ELSE_STMT
-
-                                                                                  -- DECOMPILER ERROR at PC1155: LeaveBlock: unexpected jumping out IF_STMT
-
                                                                                 end
                                                                               end
                                                                             end
@@ -1030,7 +1047,7 @@ Panel_GameExit_CharChange_Confirm = function()
   _btn_NoticeMsg:SetShow(true)
   _btn_NoticeMsg:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "GAMEEXIT_TEXT_COMMENT_TO_CHARACTER_CHANGE", "remainTime", logoutDelayTime))
   if PaGlobal_IsTagChange() == true then
-    local messageBoxMemo = PAGetString(Defines.StringSheet_RESOURCE, "LUA_TAG_CHANGING")
+    local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CHANGING")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
     ;
     (MessageBox.showMessageBox)(messageBoxData)

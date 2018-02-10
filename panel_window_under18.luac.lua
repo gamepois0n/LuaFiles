@@ -7,12 +7,9 @@ local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
 Panel_Message_Under18:SetShow(false, false)
 local UnderMessage = {MsgText = nil, isShowTime = false, timer = 0, animationEndTime = 5, elapsedTime = 5}
-local aleartMessage = PAGetString(Defines.StringSheet_GAME, "SYSTEM_MESSAGE_TIME_ALERT")
+local aleartMessage = PAGetString(Defines.StringSheet_GAME, "SYSTEM_MESSAGE_TIME_ALERT_UNDER")
 FromClient_AdultMessage = function(playingTime)
   -- function num : 0_0 , upvalues : aleartMessage, UnderMessage
-  if ToClient_IsDevelopment() == false then
-    return 
-  end
   local timeMessage = PAGetStringParam1(Defines.StringSheet_GAME, "SYSTEM_MESSAGE_OVER_TIME_ALERT", "time", tostring(playingTime))
   local adultMessage = timeMessage .. "\n" .. aleartMessage
   chatting_sendMessage("", timeMessage, (CppEnums.ChatType).System)
@@ -20,7 +17,8 @@ FromClient_AdultMessage = function(playingTime)
   ;
   (UnderMessage.MsgText):SetText(adultMessage)
   UnderMessage:AnimationAdd()
-  Panel_Message_Under18:SetShow(true, true)
+  AdultMessage_OnResize()
+  Panel_Message_Under18:SetShow(true, false)
 end
 
 UnderMessage.AnimationAdd = function(self)
@@ -63,12 +61,23 @@ PAGlobal_UnderMessage_Initialize = function()
   UnderMessage.MsgText = (UI.getChildControl)(Panel_Message_Under18, "MsgText")
   ;
   (UnderMessage.MsgText):SetText(" ")
-  local screenSizeX = getScreenSizeX()
-  local screenSizeY = getScreenSizeY()
-  Panel_Message_Under18:SetPosX(screenSizeX * 4 / 5 - Panel_Message_Under18:GetSizeX())
-  Panel_Message_Under18:SetPosY(screenSizeY * 3 / 5)
+end
+
+AdultMessage_OnResize = function()
+  -- function num : 0_3 , upvalues : UnderMessage
+  local ScrX = getScreenSizeX()
+  local ScrY = getScreenSizeY()
+  Panel_Message_Under18:SetSize(ScrX, 32)
+  Panel_Message_Under18:SetPosX(ScrX - 800)
+  Panel_Message_Under18:SetPosY(ScrY * 3 / 4)
+  if UnderMessage.MsgText == nil then
+    return 
+  end
+  ;
+  (UnderMessage.MsgText):ComputePos()
 end
 
 registerEvent("FromClient_luaLoadComplete", "PAGlobal_UnderMessage_Initialize")
 registerEvent("FromClient_AdultMessage", "FromClient_AdultMessage")
+registerEvent("onScreenResize", "AdultMessage_OnResize")
 

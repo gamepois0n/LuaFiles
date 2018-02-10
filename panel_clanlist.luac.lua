@@ -199,44 +199,48 @@ clanList.Update = function(self)
         if memberClass == 8 then
           (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_SORCERER"))
         else
-          if memberClass == 12 then
-            (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_GIANT"))
+          if memberClass == 11 then
+            (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_RAN"))
           else
-            if memberClass == 16 then
-              (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_TAMER"))
+            if memberClass == 12 then
+              (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_GIANT"))
             else
-              if memberClass == 19 then
-                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER"))
+              if memberClass == 16 then
+                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_TAMER"))
               else
-                if memberClass == 20 then
-                  (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER"))
+                if memberClass == 19 then
+                  (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_STRIKER"))
                 else
-                  if memberClass == 21 then
-                    (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN"))
+                  if memberClass == 20 then
+                    (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTER"))
                   else
-                    if memberClass == 23 then
-                      (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN"))
+                    if memberClass == 21 then
+                      (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_BLADEMASTERWOMAN"))
                     else
-                      if memberClass == 24 then
-                        (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE"))
+                      if memberClass == 23 then
+                        (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_COMBATTANTWOMEN"))
                       else
-                        if memberClass == 25 then
-                          (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN"))
+                        if memberClass == 24 then
+                          (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_VALKYRIE"))
                         else
-                          if memberClass == 26 then
-                            (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN"))
+                          if memberClass == 25 then
+                            (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAWOMEN"))
                           else
-                            if memberClass == 27 then
-                              (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF"))
+                            if memberClass == 26 then
+                              (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_NINJAMAN"))
                             else
-                              if memberClass == 28 then
-                                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD"))
+                              if memberClass == 27 then
+                                (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_DARKELF"))
                               else
-                                if memberClass == 30 then
-                                  (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI"))
+                                if memberClass == 28 then
+                                  (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARD"))
                                 else
-                                  if memberClass == 31 then
-                                    (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN"))
+                                  if memberClass == 30 then
+                                    (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_KUNOICHI"))
+                                  else
+                                    if memberClass == 31 then
+                                      (uiPool.MemberClass):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_CLASSTYPE_WIZARDWOMAN"))
+                                    end
                                   end
                                 end
                               end

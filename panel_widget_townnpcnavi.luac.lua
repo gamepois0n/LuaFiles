@@ -105,9 +105,12 @@ local iconTexture = {
 , 
 [UI_ST.eSpawnType_transfer] = {76, 224, 112, 260, 76, 261, 112, 297, 76, 298, 112, 334}
 }
-local toggleBtn = FGlobal_GetPersonalIconControl(0)
-toggleBtn:SetShow(true)
-toggleBtn:addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
+local toggleBtn = nil
+if not isActionUiOpen() then
+  toggleBtn = FGlobal_GetPersonalIconControl(0)
+  toggleBtn:SetShow(true)
+  toggleBtn:addInputEvent("Mouse_LUp", "NpcNavi_ShowToggle()")
+end
 local iconBG = (UI.getChildControl)(Panel_Widget_TownNpcNavi, "StaticText_ToolTip")
 local npcIcon = (UI.getChildControl)(Panel_Widget_TownNpcNavi, "StaticText_TownNpcNavi_Icon")
 iconBG:SetShow(false)
@@ -175,7 +178,7 @@ end
 local npcNaviIcon = {}
 local iconTypeCount = 0
 local slotConfig = {slotCount = 20, slotCols = 3, slotRows = 0, slotStartX = 20, slotStartY = 40, slotGapX = 125, slotGapY = 38}
-Panel_Widget_TownNpcNavi:SetShow(not isRecordMode, true)
+Panel_Widget_TownNpcNavi:SetShow((not isRecordMode and not isActionUiOpen()), true)
 TownfunctionNavi_Set = function()
   -- function num : 0_4 , upvalues : iconTypeCount, UI_ST, npcNaviIcon, npcIcon, npcTypeText, _spawnType, UI_TM, npcIconChangeTexture, isSupplyEnable, isTradeEnable, slotConfig
   if isFlushedUI() then
@@ -433,22 +436,22 @@ FGlobal_TownNavi_SetEffectForNewbie = function(bShow)
   end
 end
 
-local townNaviEffectTimeCheck = 0
-FGlobal_TownNpcNavi_UpdatePerFrame = function(deltaTime)
+do
+  local townNaviEffectTimeCheck = 0
+  FGlobal_TownNpcNavi_UpdatePerFrame = function(deltaTime)
   -- function num : 0_17 , upvalues : townNaviEffectTimeCheck
   townNaviEffectTimeCheck = townNaviEffectTimeCheck + deltaTime
-  if townNaviEffectTimeCheck > 10 then
-    if PaGlobal_TutorialManager:isDoingTutorial() == false then
-      FGlobal_TownNavi_SetEffectForNewbie(true)
-    end
+  if townNaviEffectTimeCheck > 10 and (PaGlobal_TutorialManager:isDoingTutorial() == false) then
     townNaviEffectTimeCheck = 0
   end
 end
 
-Panel_Widget_TownNpcNavi:RegisterUpdateFunc("FGlobal_TownNpcNavi_UpdatePerFrame")
-TownNpcIcon_Resize()
-registerEvent("selfPlayer_regionChanged", "TownfunctionNavi_Set")
-registerEvent("onScreenResize", "TownNpcIcon_Resize")
-registerEvent("FromClient_DeleteNavigationGuide", "FromClient_SpawnTypeInit")
-registerEvent("FromClient_ClearNavigationGuide", "FromClient_SpawnTypeInit")
+  Panel_Widget_TownNpcNavi:RegisterUpdateFunc("FGlobal_TownNpcNavi_UpdatePerFrame")
+  TownNpcIcon_Resize()
+  registerEvent("selfPlayer_regionChanged", "TownfunctionNavi_Set")
+  registerEvent("onScreenResize", "TownNpcIcon_Resize")
+  registerEvent("FromClient_DeleteNavigationGuide", "FromClient_SpawnTypeInit")
+  registerEvent("FromClient_ClearNavigationGuide", "FromClient_SpawnTypeInit")
+  -- DECOMPILER ERROR: 2 unprocessed JMP targets
+end
 

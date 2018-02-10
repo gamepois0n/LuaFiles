@@ -12,11 +12,11 @@ PaGlobal_Copyright.init = function(self)
   ;
   (self._Web):SetShow(true)
   ;
-  (self._Web):SetPosX(11)
+  (self._Web):SetVerticalMiddle()
   ;
-  (self._Web):SetPosY(50)
+  (self._Web):SetHorizonCenter()
   ;
-  (self._Web):SetSize(1220, 628)
+  (self._Web):SetSize(1280, 720)
   ;
   (self._Web):ResetUrl()
   ;
@@ -24,8 +24,13 @@ PaGlobal_Copyright.init = function(self)
 end
 
 PaGlobal_Copyright_ShowWindow = function()
-  -- function num : 0_1
+  -- function num : 0_1 , upvalues : PaGlobal_Copyright
+  local self = PaGlobal_Copyright
   Panel_Copyright:SetShow(true)
+  ;
+  (self._Web):ComputePos()
+  ;
+  (self._Web):SetUrl(1280, 720, "coui://UI_Data/UI_Html/copyright.html", false, true)
 end
 
 PaGlobal_Copyright_Close = function()

@@ -44,8 +44,8 @@ competitionCount:SetShow(false)
 nakItemIconBG:SetShow(false)
 nakItemIcon:SetShow(false)
 stallionIcon:SetShow(false)
-local messageType = {safetyArea = 0, combatArea = 1, challengeComplete = 2, normal = 3, selectReward = 4, territoryTradeEvent = 5, npcTradeEvent = 6, royalTrade = 7, supplyTrade = 8, fitnessLevelUp = 9, territoryWar_Start = 10, territoryWar_End = 11, territoryWar_Add = 12, territoryWar_Destroy = 13, territoryWar_Attack = 14, guildWar_Start = 15, guildWar_End = 16, roulette = 17, anotherPlayerGotItem = 18, itemMarket = 19, inSiegeArea = 20, outSiegeArea = 21, guildMsg = 22, lifeLevUp = 23, characterHPwarning = 24, servantWarning = 25, cookFail = 26, alchemyFail = 27, whaleShow = 28, whaleHide = 29, defeatBoss = 30, guildNotify = 31, changeSkill = 32, alchemyStoneGrowUp = 33, localWarJoin = 34, localWarExit = 35, raceFail = 36, raceFinish = 37, raceMoveStart = 38, raceReady = 39, raceStart = 40, raceWaiting = 41, worldBossShow = 42, raceAnother = 43, enchantFail = 44, localWarWin = 45, localWarLose = 46, localWarTurnAround = 47, localWarCriticalBlack = 48, localWarCriticalRed = 49, desertArea = 50, playerKiller = 51, huntingLandShow = 52, huntingLandHide = 53, goldenBell = 54, getValenciaItem = 55, competitionStart = 56, competitionStop = 57, guildServantRegist = 58, competitionRound = 59, eventBossTurking = 60, fieldBoss = 61, arshaSpearCountDown = 62, horseNineTier = 63, servantMarket = 64, workerMarket = 65, arshaNotify = 66, savageDefence = 67, itemAuctionStart = 68, itemAuctionEnd = 69, timeAttackSuccess = 70, timeAttackFail = 71, SavageDefenceWin = 72, SavageDefenceLose = 73, SavageDefenceStart = 74, militiaRecruitStart = 75, militiaReponseMsg = 76, savageDefenceBoss = 77, guildBattleNormal = 78, guildBattleStart = 79, guildBattleEnd = 80, bellBoss = 81, eventBossMamos = 82, eventBossIsabella = 83, enchantSuccess = 84}
-local messageTexture = {[messageType.normal] = "New_UI_Common_forLua/Widget/NakMessage/Alert_01.dds", [messageType.selectReward] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_RewardAlert_01.dds", [messageType.combatArea] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Combat_01.dds", [messageType.safetyArea] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Safety_01.dds", [messageType.challengeComplete] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_RewardAlert_01.dds", [messageType.territoryTradeEvent] = "New_UI_Common_forLua/Widget/NakMessage/Trade_GlobalEvent_01.dds", [messageType.npcTradeEvent] = "New_UI_Common_forLua/Widget/NakMessage/Trade_LocalEvent_01.dds", [messageType.royalTrade] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryAuth_Message01.dds", [messageType.supplyTrade] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryAuth_Message01.dds", [messageType.fitnessLevelUp] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Train.dds", [messageType.territoryWar_Start] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_Start.dds", [messageType.territoryWar_End] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_End.dds", [messageType.territoryWar_Add] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_addGuildTent.dds", [messageType.territoryWar_Destroy] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_destroyGuildTent.dds", [messageType.territoryWar_Attack] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_attackGuildTent.dds", [messageType.guildWar_Start] = "New_UI_Common_forLua/Widget/NakMessage/guildWar_start.dds", [messageType.guildWar_End] = "New_UI_Common_forLua/Widget/NakMessage/guildWar_End.dds", [messageType.roulette] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Roulette.dds", [messageType.anotherPlayerGotItem] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_anotherPlayerGotItem.dds", [messageType.itemMarket] = "New_UI_Common_forLua/Widget/NakMessage/Alert_01.dds", [messageType.inSiegeArea] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar.dds", [messageType.outSiegeArea] = "New_UI_Common_forLua/Widget/NakMessage/Non_TerritoryWar.dds", [messageType.guildMsg] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Guild.dds", [messageType.lifeLevUp] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_RewardAlert_01.dds", [messageType.characterHPwarning] = "New_UI_Common_forLua/Widget/NakMessage/Character_HPwarning.dds", [messageType.servantWarning] = "New_UI_Common_forLua/Widget/NakMessage/Horse_Warning.dds", [messageType.cookFail] = "New_UI_Common_forLua/Widget/NakMessage/Fail_Cooking.dds", [messageType.alchemyFail] = "New_UI_Common_forLua/Widget/NakMessage/Fail_Alchemy.dds", [messageType.whaleShow] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Hunting.dds", [messageType.whaleHide] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Hunting_End.dds", [messageType.defeatBoss] = "New_UI_Common_forLua/Widget/NakMessage/boss.dds", [messageType.guildNotify] = "New_UI_Common_forLua/Widget/NakMessage/Guild_Call.dds", [messageType.changeSkill] = "New_UI_Common_forLua/Widget/NakMessage/Horse_skillchange.dds", [messageType.alchemyStoneGrowUp] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_anotherPlayerGotItem.dds", [messageType.localWarJoin] = "New_UI_Common_forLua/Widget/NakMessage/LocalWar_Intro.dds", [messageType.localWarExit] = "New_UI_Common_forLua/Widget/NakMessage/LocalWar_Exit.dds", [messageType.raceFail] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Fail.dds", [messageType.raceFinish] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Finish.dds", [messageType.raceMoveStart] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_MoveStart.dds", [messageType.raceReady] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Ready.dds", [messageType.raceStart] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Start.dds", [messageType.raceWaiting] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Waitting.dds", [messageType.worldBossShow] = "New_UI_Common_forLua/Widget/NakMessage/WorldBoss_Show.dds", [messageType.raceAnother] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_AnotherPoint.dds", [messageType.enchantFail] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_FailEnchant.dds", [messageType.localWarWin] = "New_UI_Common_forLua/Widget/LocalWar/LocalWar_Win.dds", [messageType.localWarLose] = "New_UI_Common_forLua/Widget/LocalWar/LocalWar_Lose.dds", [messageType.localWarTurnAround] = "New_UI_Common_forLua/Widget/NakMessage/Turnaround.dds", [messageType.localWarCriticalBlack] = "New_UI_Common_forLua/Widget/NakMessage/BlackdesertScore.dds", [messageType.localWarCriticalRed] = "New_UI_Common_forLua/Widget/NakMessage/ReddesertScore.dds", [messageType.desertArea] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Danger.dds", [messageType.playerKiller] = "New_UI_Common_forLua/Widget/NakMessage/Kill_Murderer.dds", [messageType.huntingLandShow] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GroundHuntingSpawn.dds", [messageType.huntingLandHide] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GroundHuntingKill.dds", [messageType.goldenBell] = "New_UI_Common_forLua/Widget/NakMessage/GoldenBell.dds", [messageType.getValenciaItem] = "New_UI_Common_forLua/Widget/NakMessage/CombineComplete.dds", [messageType.competitionStart] = "New_UI_Common_forLua/Widget/NakMessage/Competition_Start.dds", [messageType.competitionStop] = "New_UI_Common_forLua/Widget/NakMessage/Competition_Stop.dds", [messageType.guildServantRegist] = "New_UI_Common_forLua/Widget/NakMessage/Guild_Production_Complete.dds", [messageType.competitionRound] = "New_UI_Common_forLua/Widget/NakMessage/PvP_RoundMessage.dds", [messageType.eventBossTurking] = "New_UI_Common_forLua/Widget/NakMessage/Turking_Show.dds", [messageType.fieldBoss] = "New_UI_Common_forLua/Widget/NakMessage/WorldBoss2_Show.dds", [messageType.arshaSpearCountDown] = "New_UI_Common_forLua/Widget/NakMessage/pvp_countdown.dds", [messageType.horseNineTier] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Superiorhorse.dds", [messageType.servantMarket] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_HorseAuction.dds", [messageType.workerMarket] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_WorkerAuction.dds", [messageType.arshaNotify] = "New_UI_Common_forLua/Widget/NakMessage/PvP_Megaphone.dds", [messageType.savageDefence] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Crackofbarbarism.dds", [messageType.itemAuctionStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_MasterpieceAuction.dds", [messageType.timeAttackSuccess] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Success.dds", [messageType.timeAttackFail] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Fail.dds", [messageType.SavageDefenceWin] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Success.dds", [messageType.SavageDefenceLose] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Fail.dds", [messageType.SavageDefenceStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Crackofbarbarism.dds", [messageType.militiaRecruitStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_MilitiaStart.dds", [messageType.militiaReponseMsg] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_MilitiaEnd.dds", [messageType.savageDefenceBoss] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_CrackofbarbarismBoss.dds", [messageType.guildBattleNormal] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GuildwarReservation.dds", [messageType.guildBattleStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GuildwarStart.dds", [messageType.guildBattleEnd] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GuildwarEnd.dds", [messageType.bellBoss] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Bell.dds", [messageType.eventBossMamos] = "New_UI_Common_forLua/Widget/NakMessage/BigBearMessage.dds", [messageType.eventBossIsabella] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Holloween_Isabella.dds", [messageType.enchantSuccess] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_anotherPlayerGotItem.dds"}
+local messageType = {safetyArea = 0, combatArea = 1, challengeComplete = 2, normal = 3, selectReward = 4, territoryTradeEvent = 5, npcTradeEvent = 6, royalTrade = 7, supplyTrade = 8, fitnessLevelUp = 9, territoryWar_Start = 10, territoryWar_End = 11, territoryWar_Add = 12, territoryWar_Destroy = 13, territoryWar_Attack = 14, guildWar_Start = 15, guildWar_End = 16, roulette = 17, anotherPlayerGotItem = 18, itemMarket = 19, inSiegeArea = 20, outSiegeArea = 21, guildMsg = 22, lifeLevUp = 23, characterHPwarning = 24, servantWarning = 25, cookFail = 26, alchemyFail = 27, whaleShow = 28, whaleHide = 29, defeatBoss = 30, guildNotify = 31, changeSkill = 32, alchemyStoneGrowUp = 33, localWarJoin = 34, localWarExit = 35, raceFail = 36, raceFinish = 37, raceMoveStart = 38, raceReady = 39, raceStart = 40, raceWaiting = 41, worldBossShow = 42, raceAnother = 43, enchantFail = 44, localWarWin = 45, localWarLose = 46, localWarTurnAround = 47, localWarCriticalBlack = 48, localWarCriticalRed = 49, desertArea = 50, playerKiller = 51, huntingLandShow = 52, huntingLandHide = 53, goldenBell = 54, getValenciaItem = 55, competitionStart = 56, competitionStop = 57, guildServantRegist = 58, competitionRound = 59, eventBossTurking = 60, fieldBoss = 61, arshaSpearCountDown = 62, horseNineTier = 63, servantMarket = 64, workerMarket = 65, arshaNotify = 66, savageDefence = 67, itemAuctionStart = 68, itemAuctionEnd = 69, timeAttackSuccess = 70, timeAttackFail = 71, SavageDefenceWin = 72, SavageDefenceLose = 73, SavageDefenceStart = 74, militiaRecruitStart = 75, militiaReponseMsg = 76, savageDefenceBoss = 77, guildBattleNormal = 78, guildBattleStart = 79, guildBattleEnd = 80, bellBoss = 81, eventBossMamos = 82, eventBossIsabella = 83, enchantSuccess = 84, fieldBossOpin = 85, worldBossNuver = 86, worldBossKaranda = 87, worldBossKutum = 88}
+local messageTexture = {[messageType.normal] = "New_UI_Common_forLua/Widget/NakMessage/Alert_01.dds", [messageType.selectReward] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_RewardAlert_01.dds", [messageType.combatArea] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Combat_01.dds", [messageType.safetyArea] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Safety_01.dds", [messageType.challengeComplete] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_RewardAlert_01.dds", [messageType.territoryTradeEvent] = "New_UI_Common_forLua/Widget/NakMessage/Trade_GlobalEvent_01.dds", [messageType.npcTradeEvent] = "New_UI_Common_forLua/Widget/NakMessage/Trade_LocalEvent_01.dds", [messageType.royalTrade] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryAuth_Message01.dds", [messageType.supplyTrade] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryAuth_Message01.dds", [messageType.fitnessLevelUp] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Train.dds", [messageType.territoryWar_Start] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_Start.dds", [messageType.territoryWar_End] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_End.dds", [messageType.territoryWar_Add] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_addGuildTent.dds", [messageType.territoryWar_Destroy] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_destroyGuildTent.dds", [messageType.territoryWar_Attack] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar_attackGuildTent.dds", [messageType.guildWar_Start] = "New_UI_Common_forLua/Widget/NakMessage/guildWar_start.dds", [messageType.guildWar_End] = "New_UI_Common_forLua/Widget/NakMessage/guildWar_End.dds", [messageType.roulette] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Roulette.dds", [messageType.anotherPlayerGotItem] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_anotherPlayerGotItem.dds", [messageType.itemMarket] = "New_UI_Common_forLua/Widget/NakMessage/Alert_01.dds", [messageType.inSiegeArea] = "New_UI_Common_forLua/Widget/NakMessage/TerritoryWar.dds", [messageType.outSiegeArea] = "New_UI_Common_forLua/Widget/NakMessage/Non_TerritoryWar.dds", [messageType.guildMsg] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Guild.dds", [messageType.lifeLevUp] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_RewardAlert_01.dds", [messageType.characterHPwarning] = "New_UI_Common_forLua/Widget/NakMessage/Character_HPwarning.dds", [messageType.servantWarning] = "New_UI_Common_forLua/Widget/NakMessage/Horse_Warning.dds", [messageType.cookFail] = "New_UI_Common_forLua/Widget/NakMessage/Fail_Cooking.dds", [messageType.alchemyFail] = "New_UI_Common_forLua/Widget/NakMessage/Fail_Alchemy.dds", [messageType.whaleShow] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Hunting.dds", [messageType.whaleHide] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Hunting_End.dds", [messageType.defeatBoss] = "New_UI_Common_forLua/Widget/NakMessage/boss.dds", [messageType.guildNotify] = "New_UI_Common_forLua/Widget/NakMessage/Guild_Call.dds", [messageType.changeSkill] = "New_UI_Common_forLua/Widget/NakMessage/Horse_skillchange.dds", [messageType.alchemyStoneGrowUp] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_anotherPlayerGotItem.dds", [messageType.localWarJoin] = "New_UI_Common_forLua/Widget/NakMessage/LocalWar_Intro.dds", [messageType.localWarExit] = "New_UI_Common_forLua/Widget/NakMessage/LocalWar_Exit.dds", [messageType.raceFail] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Fail.dds", [messageType.raceFinish] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Finish.dds", [messageType.raceMoveStart] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_MoveStart.dds", [messageType.raceReady] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Ready.dds", [messageType.raceStart] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Start.dds", [messageType.raceWaiting] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_Waitting.dds", [messageType.worldBossShow] = "New_UI_Common_forLua/Widget/NakMessage/WorldBoss_Show.dds", [messageType.raceAnother] = "New_UI_Common_forLua/Widget/NakMessage/RaceMatch_AnotherPoint.dds", [messageType.enchantFail] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_FailEnchant.dds", [messageType.localWarWin] = "New_UI_Common_forLua/Widget/LocalWar/LocalWar_Win.dds", [messageType.localWarLose] = "New_UI_Common_forLua/Widget/LocalWar/LocalWar_Lose.dds", [messageType.localWarTurnAround] = "New_UI_Common_forLua/Widget/NakMessage/Turnaround.dds", [messageType.localWarCriticalBlack] = "New_UI_Common_forLua/Widget/NakMessage/BlackdesertScore.dds", [messageType.localWarCriticalRed] = "New_UI_Common_forLua/Widget/NakMessage/ReddesertScore.dds", [messageType.desertArea] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Danger.dds", [messageType.playerKiller] = "New_UI_Common_forLua/Widget/NakMessage/Kill_Murderer.dds", [messageType.huntingLandShow] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GroundHuntingSpawn.dds", [messageType.huntingLandHide] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GroundHuntingKill.dds", [messageType.goldenBell] = "New_UI_Common_forLua/Widget/NakMessage/GoldenBell.dds", [messageType.getValenciaItem] = "New_UI_Common_forLua/Widget/NakMessage/CombineComplete.dds", [messageType.competitionStart] = "New_UI_Common_forLua/Widget/NakMessage/Competition_Start.dds", [messageType.competitionStop] = "New_UI_Common_forLua/Widget/NakMessage/Competition_Stop.dds", [messageType.guildServantRegist] = "New_UI_Common_forLua/Widget/NakMessage/Guild_Production_Complete.dds", [messageType.competitionRound] = "New_UI_Common_forLua/Widget/NakMessage/PvP_RoundMessage.dds", [messageType.eventBossTurking] = "New_UI_Common_forLua/Widget/NakMessage/Turking_Show.dds", [messageType.fieldBoss] = "New_UI_Common_forLua/Widget/NakMessage/WorldBoss2_Show.dds", [messageType.arshaSpearCountDown] = "New_UI_Common_forLua/Widget/NakMessage/pvp_countdown.dds", [messageType.horseNineTier] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Superiorhorse.dds", [messageType.servantMarket] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_HorseAuction.dds", [messageType.workerMarket] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_WorkerAuction.dds", [messageType.arshaNotify] = "New_UI_Common_forLua/Widget/NakMessage/PvP_Megaphone.dds", [messageType.savageDefence] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Crackofbarbarism.dds", [messageType.itemAuctionStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_MasterpieceAuction.dds", [messageType.timeAttackSuccess] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Success.dds", [messageType.timeAttackFail] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Fail.dds", [messageType.SavageDefenceWin] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Success.dds", [messageType.SavageDefenceLose] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_TimeAttack_Fail.dds", [messageType.SavageDefenceStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Crackofbarbarism.dds", [messageType.militiaRecruitStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_MilitiaStart.dds", [messageType.militiaReponseMsg] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_MilitiaEnd.dds", [messageType.savageDefenceBoss] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_CrackofbarbarismBoss.dds", [messageType.guildBattleNormal] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GuildwarReservation.dds", [messageType.guildBattleStart] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GuildwarStart.dds", [messageType.guildBattleEnd] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_GuildwarEnd.dds", [messageType.bellBoss] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Bell.dds", [messageType.eventBossMamos] = "New_UI_Common_forLua/Widget/NakMessage/BigBearMessage.dds", [messageType.eventBossIsabella] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Holloween_Isabella.dds", [messageType.enchantSuccess] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_anotherPlayerGotItem.dds", [messageType.fieldBossOpin] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Opin.dds", [messageType.worldBossNuver] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Nouver.dds", [messageType.worldBossKaranda] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_Karanda.dds", [messageType.worldBossKutum] = "New_UI_Common_forLua/Widget/NakMessage/NakBG_AncientKutum.dds"}
 local _territoryName = {[0] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADE_EVENTMSG_AREANAME_BALENOS"), [1] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADE_EVENTMSG_AREANAME_SERENDIA"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADE_EVENTMSG_AREANAME_CALPHEON"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_TRADE_EVENTMSG_AREANAME_MEDIA")}
 local npcKey = {[40715] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY1"), [40026] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY2"), [40025] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY3"), [40024] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY4"), [40031] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY5"), [40101] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY6"), [40609] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY7"), [40028] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY8"), [40010] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY9"), [41090] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY10"), [41223] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY11"), [41221] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY12"), [41085] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY13"), [41032] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY14"), [41030] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY15"), [41045] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY16"), [41222] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY17"), [41225] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY18"), [41224] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY19"), [41051] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY20"), [42301] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY21"), [42205] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY22"), [43433] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY23"), [50411] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY24"), [50415] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY25"), [50403] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY26"), [43449] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY27"), [43440] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY28"), [43446] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY29"), [43448] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY30"), [43510] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY31"), [42026] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY32"), [43010] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY33"), [43210] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY34"), [50428] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY35"), [50432] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY36"), [50430] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY37"), [50433] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY38"), [50418] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY39"), [50440] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY40"), [50434] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY41"), [50437] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY42"), [50438] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY43"), [50443] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY44"), [43310] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY45"), [43402] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY46"), [50456] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY47"), [43501] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY48"), [50455] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY49"), [50451] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY50"), [50459] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY51"), [42103] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY52"), [50466] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY53"), [50461] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY54"), [43407] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY55"), [42013] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY56"), [42005] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY57"), [44613] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY58"), [50551] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY59"), [50493] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY60"), [50550] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY61"), [50548] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY62"), [50475] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY63"), [44010] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY64"), [44110] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY65"), [44210] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY66"), [44610] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NPCKEY67")}
 local _commerceType = {[1] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_1"), [2] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_2"), [3] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_3"), [4] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_4"), [5] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_5"), [6] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_6"), [7] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_7"), [8] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_8"), [9] = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_COMMERCETYPE_9")}
@@ -61,11 +61,14 @@ _text_Msg:SetText("")
 _text_MsgSub:SetText("")
 local _msgType = nil
 local passFlush = false
-NoShowMessageReturn = function(msgType)
+NoShowMessageReturn = function(msgType, isSelfPlayer)
   -- function num : 0_0 , upvalues : messageType
-  if isUsedNewOption() == true then
+  if isSelfPlayer == true then
+    return false
+  end
+  if _ContentsGroup_isNewOption == true then
     local showJudgment = false
-    if messageType.challengeComplete == msgType or messageType.normal == msgType or messageType.selectReward == msgType or messageType.guildMsg == msgType or messageType.guildNotify == msgType or messageType.cookFail == msgType or messageType.alchemyFail == msgType or messageType.characterHPwarning == msgType or messageType.servantWarning == msgType or messageType.changeSkill == msgType or messageType.alchemyStoneGrowUp == msgType or messageType.localWarJoin == msgType or messageType.localWarExit == msgType or messageType.raceFail == msgType or messageType.raceFinish == msgType or messageType.raceMoveStart == msgType or messageType.raceReady == msgType or messageType.raceStart == msgType or messageType.raceWaiting == msgType or messageType.worldBossShow == msgType or messageType.raceAnother == msgType or messageType.localWarWin == msgType or messageType.localWarLose == msgType or messageType.localWarTurnAround == msgType or messageType.localWarCriticalBlack == msgType or messageType.localWarCriticalRed == msgType or messageType.playerKiller == msgType or messageType.whaleShow == msgType or messageType.huntingLandShow == msgType or messageType.whaleHide == msgType or messageType.huntingLandHide == msgType or messageType.goldenBell == msgType or messageType.getValenciaItem == msgType or messageType.competitionStart == msgType or messageType.competitionStop == msgType or messageType.guildServantRegist == msgType or messageType.competitionRound == msgType or messageType.eventBossTurking == msgType or messageType.fieldBoss == msgType or messageType.arshaNotify == msgType or messageType.savageDefence == msgType or messageType.itemAuctionStart == msgType or messageType.itemAuctionEnd == msgType or messageType.timeAttackSuccess == msgType or messageType.timeAttackFail == msgType or messageType.SavageDefenceWin == msgType or messageType.SavageDefenceLose == msgType or messageType.SavageDefenceStart == msgType or messageType.militiaRecruitStart == msgType or messageType.militiaReponseMsg == msgType or messageType.militiaReponseMsg == msgType or messageType.guildBattleNormal == msgType or messageType.guildBattleStart == msgType or messageType.guildBattleEnd == msgType or messageType.bellBoss == msgType or messageType.eventBossMamos == msgType or messageType.eventBossIsabella == msgType then
+    if messageType.challengeComplete == msgType or messageType.normal == msgType or messageType.selectReward == msgType or messageType.guildMsg == msgType or messageType.guildNotify == msgType or messageType.cookFail == msgType or messageType.alchemyFail == msgType or messageType.characterHPwarning == msgType or messageType.servantWarning == msgType or messageType.changeSkill == msgType or messageType.alchemyStoneGrowUp == msgType or messageType.localWarJoin == msgType or messageType.localWarExit == msgType or messageType.raceFail == msgType or messageType.raceFinish == msgType or messageType.raceMoveStart == msgType or messageType.raceReady == msgType or messageType.raceStart == msgType or messageType.raceWaiting == msgType or messageType.worldBossShow == msgType or messageType.raceAnother == msgType or messageType.localWarWin == msgType or messageType.localWarLose == msgType or messageType.localWarTurnAround == msgType or messageType.localWarCriticalBlack == msgType or messageType.localWarCriticalRed == msgType or messageType.playerKiller == msgType or messageType.whaleShow == msgType or messageType.huntingLandShow == msgType or messageType.whaleHide == msgType or messageType.huntingLandHide == msgType or messageType.goldenBell == msgType or messageType.getValenciaItem == msgType or messageType.competitionStart == msgType or messageType.competitionStop == msgType or messageType.guildServantRegist == msgType or messageType.competitionRound == msgType or messageType.eventBossTurking == msgType or messageType.fieldBoss == msgType or messageType.arshaNotify == msgType or messageType.savageDefence == msgType or messageType.itemAuctionStart == msgType or messageType.itemAuctionEnd == msgType or messageType.timeAttackSuccess == msgType or messageType.timeAttackFail == msgType or messageType.SavageDefenceWin == msgType or messageType.SavageDefenceLose == msgType or messageType.SavageDefenceStart == msgType or messageType.militiaRecruitStart == msgType or messageType.militiaReponseMsg == msgType or messageType.militiaReponseMsg == msgType or messageType.guildBattleNormal == msgType or messageType.guildBattleStart == msgType or messageType.guildBattleEnd == msgType or messageType.bellBoss == msgType or messageType.eventBossMamos == msgType or messageType.eventBossIsabella == msgType or messageType.fieldBossOpin == msgType or messageType.worldBossNuver == msgType or messageType.worldBossKaranda == msgType or messageType.worldBossKutum == msgType then
       showJudgment = false
     else
       if messageType.safetyArea == msgType or messageType.combatArea == msgType or messageType.desertArea == msgType then
@@ -121,7 +124,7 @@ NoShowMessageReturn = function(msgType)
   else
     do
       local showJudgment = false
-      if messageType.challengeComplete == msgType or messageType.normal == msgType or messageType.selectReward == msgType or messageType.guildMsg == msgType or messageType.guildNotify == msgType or messageType.cookFail == msgType or messageType.alchemyFail == msgType or messageType.characterHPwarning == msgType or messageType.servantWarning == msgType or messageType.changeSkill == msgType or messageType.alchemyStoneGrowUp == msgType or messageType.localWarJoin == msgType or messageType.localWarExit == msgType or messageType.raceFail == msgType or messageType.raceFinish == msgType or messageType.raceMoveStart == msgType or messageType.raceReady == msgType or messageType.raceStart == msgType or messageType.raceWaiting == msgType or messageType.worldBossShow == msgType or messageType.raceAnother == msgType or messageType.localWarWin == msgType or messageType.localWarLose == msgType or messageType.localWarTurnAround == msgType or messageType.localWarCriticalBlack == msgType or messageType.localWarCriticalRed == msgType or messageType.playerKiller == msgType or messageType.whaleShow == msgType or messageType.huntingLandShow == msgType or messageType.whaleHide == msgType or messageType.huntingLandHide == msgType or messageType.goldenBell == msgType or messageType.getValenciaItem == msgType or messageType.competitionStart == msgType or messageType.competitionStop == msgType or messageType.guildServantRegist == msgType or messageType.competitionRound == msgType or messageType.eventBossTurking == msgType or messageType.fieldBoss == msgType or messageType.arshaNotify == msgType or messageType.savageDefence == msgType or messageType.itemAuctionStart == msgType or messageType.itemAuctionEnd == msgType or messageType.timeAttackSuccess == msgType or messageType.timeAttackFail == msgType or messageType.SavageDefenceWin == msgType or messageType.SavageDefenceLose == msgType or messageType.SavageDefenceStart == msgType or messageType.militiaRecruitStart == msgType or messageType.militiaReponseMsg == msgType or messageType.militiaReponseMsg == msgType or messageType.guildBattleNormal == msgType or messageType.guildBattleStart == msgType or messageType.guildBattleEnd == msgType or messageType.bellBoss == msgType or messageType.eventBossMamos == msgType or messageType.eventBossIsabella == msgType then
+      if messageType.challengeComplete == msgType or messageType.normal == msgType or messageType.selectReward == msgType or messageType.guildMsg == msgType or messageType.guildNotify == msgType or messageType.cookFail == msgType or messageType.alchemyFail == msgType or messageType.characterHPwarning == msgType or messageType.servantWarning == msgType or messageType.changeSkill == msgType or messageType.alchemyStoneGrowUp == msgType or messageType.localWarJoin == msgType or messageType.localWarExit == msgType or messageType.raceFail == msgType or messageType.raceFinish == msgType or messageType.raceMoveStart == msgType or messageType.raceReady == msgType or messageType.raceStart == msgType or messageType.raceWaiting == msgType or messageType.worldBossShow == msgType or messageType.raceAnother == msgType or messageType.localWarWin == msgType or messageType.localWarLose == msgType or messageType.localWarTurnAround == msgType or messageType.localWarCriticalBlack == msgType or messageType.localWarCriticalRed == msgType or messageType.playerKiller == msgType or messageType.whaleShow == msgType or messageType.huntingLandShow == msgType or messageType.whaleHide == msgType or messageType.huntingLandHide == msgType or messageType.goldenBell == msgType or messageType.getValenciaItem == msgType or messageType.competitionStart == msgType or messageType.competitionStop == msgType or messageType.guildServantRegist == msgType or messageType.competitionRound == msgType or messageType.eventBossTurking == msgType or messageType.fieldBoss == msgType or messageType.arshaNotify == msgType or messageType.savageDefence == msgType or messageType.itemAuctionStart == msgType or messageType.itemAuctionEnd == msgType or messageType.timeAttackSuccess == msgType or messageType.timeAttackFail == msgType or messageType.SavageDefenceWin == msgType or messageType.SavageDefenceLose == msgType or messageType.SavageDefenceStart == msgType or messageType.militiaRecruitStart == msgType or messageType.militiaReponseMsg == msgType or messageType.militiaReponseMsg == msgType or messageType.guildBattleNormal == msgType or messageType.guildBattleStart == msgType or messageType.guildBattleEnd == msgType or messageType.bellBoss == msgType or messageType.eventBossMamos == msgType or messageType.eventBossIsabella == msgType or messageType.fieldBossOpin == msgType or messageType.worldBossNuver == msgType or messageType.worldBossKaranda == msgType or messageType.worldBossKutum == msgType then
         showJudgment = false
       else
         if messageType.safetyArea == msgType or messageType.combatArea == msgType or messageType.desertArea == msgType then
@@ -142,7 +145,7 @@ NoShowMessageReturn = function(msgType)
                   if messageType.guildWar_Start == msgType or messageType.guildWar_End == msgType then
                     msgTypeNum = 5
                   else
-                    if messageType.roulette == msgType or messageType.anotherPlayerGotItem == msgType or messageType.enchantFail == msgType or messageType.horseNineTier == msgType then
+                    if messageType.roulette == msgType or messageType.anotherPlayerGotItem == msgType or messageType.enchantFail == msgType or messageType.horseNineTier == msgType or messageType.enchantSuccess == msgType then
                       msgTypeNum = 6
                     else
                       if messageType.itemMarket == msgType then
@@ -151,7 +154,7 @@ NoShowMessageReturn = function(msgType)
                         if messageType.lifeLevUp == msgType then
                           msgTypeNum = 8
                         else
-                          if messageType.servantMarket == msgType or messageType.workerMarket then
+                          if messageType.servantMarket == msgType or messageType.workerMarket == msgType then
                             msgTypeNum = 11
                           end
                         end
@@ -226,12 +229,15 @@ FGlobal_WorldBossShow = function(message, noticeType, noticeValue)
     if noticeType == 12 then
       if noticeValue == 0 then
         audioPostEvent_SystemUi(19, 1)
+        msgType = messageType.worldBossNuver
       else
         if noticeValue == 1 then
           audioPostEvent_SystemUi(19, 4)
+          msgType = messageType.worldBossKaranda
         else
           if noticeValue == 2 then
             audioPostEvent_SystemUi(19, 5)
+            msgType = messageType.worldBossKutum
           else
             if noticeValue == 3 or noticeValue == 4 or noticeValue == 5 or noticeValue == 6 then
               audioPostEvent_SystemUi(19, 6)
@@ -252,12 +258,13 @@ FGlobal_WorldBossShow = function(message, noticeType, noticeValue)
                       audioPostEvent_SystemUi(19, 10)
                       msgType = messageType.eventBossMamos
                     else
-                      if noticeType == 12 then
+                      if noticeValue == 12 then
                         audioPostEvent_SystemUi(19, 11)
                         msgType = messageType.eventBossIsabella
                       else
-                        if noticeType == 13 then
+                        if noticeValue == 13 then
                           audioPostEvent_SystemUi(19, 12)
+                          msgType = messageType.fieldBossOpin
                         end
                       end
                     end
@@ -281,9 +288,9 @@ FGlobal_WorldBossShow = function(message, noticeType, noticeValue)
   end
 end
 
-Proc_ShowMessage_Ack_For_RewardSelect = function(message, showRate, msgType, exposure)
+Proc_ShowMessage_Ack_For_RewardSelect = function(message, showRate, msgType, exposure, isSelfPlayer)
   -- function num : 0_3 , upvalues : messageType, huntingRanker, passFlush
-  Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(message, showRate, msgType, exposure)
+  Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect(message, showRate, msgType, exposure, isSelfPlayer)
   if messageType.itemMarket == msgType then
     return 
   end
@@ -291,19 +298,19 @@ Proc_ShowMessage_Ack_For_RewardSelect = function(message, showRate, msgType, exp
     (huntingRanker[index]):SetShow(false)
   end
   do
-    -- DECOMPILER ERROR at PC86: Unhandled construct in 'MakeBoolean' P3
+    -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P3
 
-    -- DECOMPILER ERROR at PC86: Unhandled construct in 'MakeBoolean' P3
+    -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P3
 
-    -- DECOMPILER ERROR at PC86: Unhandled construct in 'MakeBoolean' P3
+    -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P3
 
-    -- DECOMPILER ERROR at PC86: Unhandled construct in 'MakeBoolean' P3
+    -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P3
 
-    -- DECOMPILER ERROR at PC86: Unhandled construct in 'MakeBoolean' P3
+    -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P3
 
-    -- DECOMPILER ERROR at PC86: Unhandled construct in 'MakeBoolean' P3
+    -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P3
 
-    -- DECOMPILER ERROR at PC86: Unhandled construct in 'MakeBoolean' P3
+    -- DECOMPILER ERROR at PC87: Unhandled construct in 'MakeBoolean' P3
 
     if messageType.itemMarket == msgType or ((messageType.territoryWar_Start <= msgType and msgType <= messageType.guildWar_End) or messageType.guildBattleEnd == msgType) then
       chatting_sendMessage("", message.main .. " " .. message.sub, (CppEnums.ChatType).System)
@@ -352,7 +359,7 @@ Proc_ShowMessage_Ack_For_RewardSelect = function(message, showRate, msgType, exp
   end
 end
 
-Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect = function(message, showRate, msgType, exposure)
+Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect = function(message, showRate, msgType, exposure, isSelfPlayer)
   -- function num : 0_4 , upvalues : animationEndTime, elapsedTime, curIndex, MessageData
   if (msgType >= 10 and msgType < 22) or msgType > 32 then
     return 
@@ -360,7 +367,7 @@ Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect = function(message
   if Panel_Global_Manual:GetShow() or Panel_Fishing:GetShow() then
     return 
   end
-  if NoShowMessageReturn(msgType) then
+  if NoShowMessageReturn(msgType, isSelfPlayer) then
     return 
   end
   if ToClient_GetMyTeamNoLocalWar() > 0 and (exposure == nil or exposure == true) then
@@ -372,6 +379,9 @@ Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect = function(message
   if ToClient_getPlayNowSavageDefence() and (exposure == nil or exposure == true) then
     return 
   end
+  if ToClient_getJoinGuildBattle() == true and (exposure == nil or exposure == true) then
+    return 
+  end
   if showRate == nil then
     animationEndTime = 2.3
     elapsedTime = 2.3
@@ -380,15 +390,15 @@ Proc_ShowMessage_Ack_WithOut_ChattingMessage_For_RewardSelect = function(message
     elapsedTime = showRate
   end
   curIndex = curIndex + 1
-  -- DECOMPILER ERROR at PC71: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC81: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   (MessageData._Msg)[curIndex] = {}
-  -- DECOMPILER ERROR at PC76: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC86: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   ((MessageData._Msg)[curIndex]).msg = message
-  -- DECOMPILER ERROR at PC81: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC91: Confused about usage of register: R5 in 'UnsetPending'
 
   ;
   ((MessageData._Msg)[curIndex]).type = msgType
@@ -508,7 +518,7 @@ FGlobal_FitnessLevelUp = function(addSp, addWeight, addHp, addMp, _type)
       end
       set_subString = set_subString .. comma .. PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LEVELUP_REWARD_LvupStatus2", "AddWeight", addWeight / 10000, "UserWeight", Int64toInt32(((getSelfPlayer()):get()):getPossessableWeight_s64()) / 10000)
       FGlobal_UpdateInventorySlotData()
-      if isNewCharacterInfo() == false then
+      if _ContentsGroup_isUsedNewCharacterInfo == false then
         FGlobal_MaxWeightChanged()
       else
         FromClient_UI_CharacterInfo_Basic_WeightChanged()
@@ -1143,6 +1153,7 @@ end
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_check_LeftNakMessage")
 FromClient_notifyGetItem = function(notifyType, playerName, fromName, iconPath, param1, itemStaticWrapper, isPickedFromShip)
   -- function num : 0_17 , upvalues : huntingRanker, messageType
+  local isSelfPlayer = (getSelfPlayer()):getOriginalName() == playerName
   local message = ""
   local subMessage = ""
   local itemIcon = nil
@@ -1165,89 +1176,72 @@ FromClient_notifyGetItem = function(notifyType, playerName, fromName, iconPath, 
     end
     subMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_GETITEM_SUBMSG", "fromName", fromName)
     itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
-  else
-    if notifyType == 1 then
-      message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
-      subMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_OPENBOX_SUBMSG", "fromName", fromName)
+  elseif notifyType == 1 then
+    message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
+    subMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_OPENBOX_SUBMSG", "fromName", fromName)
+    itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
+  elseif notifyType == 2 then
+    if Int64toInt32(param1) ~= nil and Int64toInt32(param1) ~= 0 then
+      if Int64toInt32(param1) >= 16 then
+        itemName = HighEnchantLevel_ReplaceString(Int64toInt32(param1)) .. " " .. itemName
+      elseif itemClassify == 4 then
+        itemName = HighEnchantLevel_ReplaceString(Int64toInt32(param1) + 15) .. " " .. itemName
+      else
+        itemName = "+" .. Int64toInt32(param1) .. " " .. itemName
+      end
+    end
+    message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
+    subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_SUCCESSENCHANT_SUBMSG")
+    itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
+  elseif notifyType == 3 then
+    message = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_GOODHORSE_MSG", "playerName", playerName)
+    subMessage = ""
+    itemIcon = iconPath
+  elseif notifyType == 4 then
+    if itemClassify == 11 then
+      return 
+    end
+    if itemClassify == 4 then
+      itemName = HighEnchantLevel_ReplaceString(Int64toInt32(enchantLevel + 1) + 15) .. " " .. itemName
+    else
+      itemName = HighEnchantLevel_ReplaceString(Int64toInt32(enchantLevel + 1)) .. " " .. itemName
+    end
+    message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_ENCHANTFAIL_MSG", "playerName", playerName, "itemName", itemName)
+    subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_ENCHANTENCHANT_SUBMSG")
+    itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
+  elseif notifyType == 5 then
+    if itemKey == 16016 or itemKey == 16019 then
+      message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NAKMESSAGE_LUXURYFIND_MAIN", "playerName", playerName, "itemName", itemName)
+      subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_NAKMESSAGE_LUXURYFIND_SUB")
       itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
     else
-      if notifyType == 2 then
-        if Int64toInt32(param1) ~= nil and Int64toInt32(param1) ~= 0 then
-          if Int64toInt32(param1) >= 16 then
-            itemName = HighEnchantLevel_ReplaceString(Int64toInt32(param1)) .. " " .. itemName
-          else
-            if itemClassify == 4 then
-              itemName = HighEnchantLevel_ReplaceString(Int64toInt32(param1) + 15) .. " " .. itemName
-            else
-              itemName = "+" .. Int64toInt32(param1) .. " " .. itemName
-            end
-          end
-        end
-        message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
-        subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_SUCCESSENCHANT_SUBMSG")
-        itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
-      else
-        if notifyType == 3 then
-          message = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_GOODHORSE_MSG", "playerName", playerName)
-          subMessage = ""
-          itemIcon = iconPath
-        else
-          if notifyType == 4 then
-            if itemClassify == 11 then
-              return 
-            end
-            if itemClassify == 4 then
-              itemName = HighEnchantLevel_ReplaceString(Int64toInt32(enchantLevel + 1) + 15) .. " " .. itemName
-            else
-              itemName = HighEnchantLevel_ReplaceString(Int64toInt32(enchantLevel + 1)) .. " " .. itemName
-            end
-            message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_ENCHANTFAIL_MSG", "playerName", playerName, "itemName", itemName)
-            subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_ENCHANTENCHANT_SUBMSG")
-            itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
-          else
-            if notifyType == 5 then
-              if itemKey == 16016 or itemKey == 16019 then
-                message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NAKMESSAGE_LUXURYFIND_MAIN", "playerName", playerName, "itemName", itemName)
-                subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_NAKMESSAGE_LUXURYFIND_SUB")
-                itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
-              else
-                message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
-                subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_NAKMESSAGE_ITEMCOMBINATION")
-                itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
-              end
-            else
-              if notifyType == 6 then
-                message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_HORSE9Tier_MSG", "playerName", playerName, "servantName", fromName)
-                subMessage = ""
-                itemIcon = iconPath
-              end
-            end
-          end
-        end
-      end
+      message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_COMMON_MSG", "playerName", playerName, "itemName", itemName)
+      subMessage = PAGetString(Defines.StringSheet_GAME, "LUA_NAKMESSAGE_ITEMCOMBINATION")
+      itemIcon = "Icon/" .. itemStaticWrapper:getIconPath()
     end
+  elseif notifyType == 6 then
+    message = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_REWARDSELECT_NAKMESSAGE_NOTIFY_HORSE9Tier_MSG", "playerName", playerName, "servantName", fromName)
+    subMessage = ""
+    itemIcon = iconPath
   end
-  local msg = {main = message, sub = subMessage, addMsg = itemIcon}
-  if notifyType == 4 then
-    Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.enchantFail)
-  else
-    if notifyType == 5 then
+  do
+    local msg = {main = message, sub = subMessage, addMsg = itemIcon}
+    if notifyType == 4 then
+      Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.enchantFail, nil, isSelfPlayer)
+    elseif notifyType == 5 then
       if itemKey == 16016 or itemKey == 16019 then
-        Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.getValenciaItem)
+        Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.getValenciaItem, nil, isSelfPlayer)
       else
-        Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.anotherPlayerGotItem)
+        Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.anotherPlayerGotItem, nil, isSelfPlayer)
       end
+    elseif notifyType == 6 then
+      Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.horseNineTier, nil, isSelfPlayer)
+    elseif notifyType == 2 then
+      Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.enchantSuccess, nil, isSelfPlayer)
     else
-      if notifyType == 6 then
-        Proc_ShowMessage_Ack_For_RewardSelect(msg, 5, messageType.horseNineTier)
-      else
-        if notifyType == 2 then
-          Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.enchantSuccess)
-        else
-          Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.anotherPlayerGotItem)
-        end
-      end
+      Proc_ShowMessage_Ack_For_RewardSelect(msg, 2.5, messageType.anotherPlayerGotItem, nil, isSelfPlayer)
     end
+    -- DECOMPILER ERROR: 26 unprocessed JMP targets
   end
 end
 
@@ -1257,7 +1251,7 @@ FromClient_notifyBroadcastLifeLevelUp = function(_notifyType, userNickName, char
   local lifeType_s32 = Int64toInt32(_param2)
   local lifeLevel_s32 = (Int64toInt32(_param1))
   local lifeType, lifeLev = nil, nil
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     lifeLev = FGlobal_CraftLevel_Replace(lifeLevel_s32, lifeType_s32)
     lifeType = FGlobal_CraftType_ReplaceName(lifeType_s32)
   else

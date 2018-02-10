@@ -84,16 +84,11 @@ end
 Panel_CarriageEndurance_Position = function()
   -- function num : 0_1
   local self = PaGlobalCarriageEnduranceList
-  if FGlobal_Panel_Radar_GetShow() then
-    (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 1.7)
-    ;
-    (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY() - FGlobal_Panel_Radar_GetSizeY() / 1.5)
-  else
-    ;
-    (self.panel):SetPosX(getScreenSizeX() - (self.panel):GetSizeX())
-    ;
-    (self.panel):SetPosY(30)
-  end
+  self.radarSizeX = FGlobal_Panel_Radar_GetSizeX()
+  ;
+  (self.panel):SetPosX(getScreenSizeX() - self.radarSizeX - (self.panel):GetSizeX() * 1.7)
+  ;
+  (self.panel):SetPosY(FGlobal_Panel_Radar_GetPosY() - FGlobal_Panel_Radar_GetSizeY() / 1.5)
   if Panel_Widget_TownNpcNavi:GetShow() then
     (self.panel):SetPosY(Panel_Widget_TownNpcNavi:GetSizeY() + Panel_Widget_TownNpcNavi:GetPosY() + 10)
   end
@@ -107,7 +102,12 @@ renderModeChange_CarriageEndurance_Position = function(prevRenderModeList, nextR
   Panel_CarriageEndurance_Position()
 end
 
-PaGlobalCarriageEnduranceList:initialize()
+PaGlobalCarriageEnduranceList_Init = function()
+  -- function num : 0_3
+  PaGlobalCarriageEnduranceList:initialize()
+end
+
+registerEvent("FromClient_luaLoadComplete", "PaGlobalCarriageEnduranceList_Init")
 registerEvent("FromClient_RenderModeChangeState", "renderModeChange_CarriageEndurance_Position")
 registerEvent("onScreenResize", "Panel_CarriageEndurance_Position")
 

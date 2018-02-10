@@ -10,7 +10,6 @@ Panel_SaveSetting:SetDragAll(true)
 Panel_SaveSetting:RegisterShowEventFunc(true, "PaGlobal_Panel_SaveSetting_ShowAni()")
 Panel_SaveSetting:RegisterShowEventFunc(false, "PaGlobal_Panel_SaveSetting_HideAni()")
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
-local isSaveSetting = ToClient_IsContentsGroupOpen("258")
 PaGlobal_Panel_SaveSetting_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
   (UIAni.fadeInSCR_Down)(Panel_SaveSetting)
@@ -50,15 +49,11 @@ _Web:SetPosY(50)
 _Web:SetSize(322, 407)
 _Web:ResetUrl()
 PaGlobal_Panel_SaveSetting_Show = function()
-  -- function num : 0_2 , upvalues : isSaveSetting, _Web
-  if isSaveSetting then
-    Panel_SaveSetting:SetShow(true, true)
-    Panel_SaveSetting:SetPosX(getScreenSizeX() / 2 - Panel_SaveSetting:GetSizeX() / 2)
-    Panel_SaveSetting:SetPosY(getScreenSizeY() / 2 - Panel_SaveSetting:GetSizeY() / 2)
-    GameOption_Cancel()
-  else
-    return 
-  end
+  -- function num : 0_2 , upvalues : _Web
+  Panel_SaveSetting:SetShow(true, true)
+  Panel_SaveSetting:SetPosX(getScreenSizeX() / 2 - Panel_SaveSetting:GetSizeX() / 2)
+  Panel_SaveSetting:SetPosY(getScreenSizeY() / 2 - Panel_SaveSetting:GetSizeY() / 2)
+  GameOption_Cancel()
   local myUserNo = ((getSelfPlayer()):get()):getUserNo()
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
   local temporaryWrapper = getTemporaryInformationWrapper()

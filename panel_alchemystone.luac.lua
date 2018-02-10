@@ -640,20 +640,23 @@ HandleClicked_AlchemyStone_Doit = function()
   local msgTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_MSGBOX_TITLE")
   local msgContent = ""
   if AlchemyStone.selectedTabIdx == AlchemyStoneTab.Upgrade then
+    if checkToEvolveAlchemyStone() ~= 0 then
+      return 
+    end
     if itemContentsParam2 == 3 or itemContentsParam2 == 4 then
       msgContent = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_MSGBOX_CONTENT1")
     else
       if itemContentsParam2 == 5 or itemContentsParam2 == 6 then
         msgContent = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_MSGBOX_CONTENT2")
       else
-        -- DECOMPILER ERROR at PC58: Unhandled construct in 'MakeBoolean' P1
+        -- DECOMPILER ERROR at PC63: Unhandled construct in 'MakeBoolean' P1
 
         if itemContentsParam2 == 7 and itemGrade < 3 then
           msgContent = PAGetString(Defines.StringSheet_GAME, "LUA_ALCHEMYSTONE_MSGBOX_CONTENT2")
         end
       end
     end
-    -- DECOMPILER ERROR at PC61: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC66: Confused about usage of register: R7 in 'UnsetPending'
 
     AlchemyStone.isPushDoit = true
     if msgContent ~= "" then
@@ -663,7 +666,7 @@ HandleClicked_AlchemyStone_Doit = function()
     end
   else
     do
-      -- DECOMPILER ERROR at PC81: Confused about usage of register: R7 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC86: Confused about usage of register: R7 in 'UnsetPending'
 
       AlchemyStone.isPushDoit = true
       doItType = AlchemyStone.selectedTabIdx

@@ -99,14 +99,19 @@ do
   local _btn_hitFxWeightVolume = (UI.getChildControl)(frame_Sound._slide_hitFxWeightVolume, "Slider_VoiceVolume_Button")
   local _btn_otherPlayerVolume = (UI.getChildControl)(frame_Sound._slide_otherPlayerVolume, "Slider_VoiceVolume_Button")
   local frame_Game = {_btn_ShowTag = (UI.getChildControl)(_frameContent_Game, "Checkbox_ShowCharTag"), _btn_AutoAim = (UI.getChildControl)(_frameContent_Game, "CheckButton_AutoAim"), _btn_RejectInvitation = (UI.getChildControl)(_frameContent_Game, "Checkbox_RejectInvitation"), _btn_HideWindow = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideUIWindow"), _btn_EnableSimpleUI = (UI.getChildControl)(_frameContent_Game, "Checkbox_SimpleUI"), _btn_SpiritGuide = (UI.getChildControl)(_frameContent_Game, "Checkbox_SpiritGuide"), _btn_MouseMove = (UI.getChildControl)(_frameContent_Game, "CheckBox_MoveMouse"), _btn_MiniMapRotation = (UI.getChildControl)(_frameContent_Game, "CheckBox_Minimap"), _btn_ShowAttackEffect = (UI.getChildControl)(_frameContent_Game, "CheckBox_ShowAttackEffect"), _btn_Alert_BlackSpirit = (UI.getChildControl)(_frameContent_Game, "CheckButton_BlackSpirit_Alert"), _btn_UseNewQuickSlot = (UI.getChildControl)(_frameContent_Game, "CheckButton_NewQuickSlot"), _btn_UseChattingFilter = (UI.getChildControl)(_frameContent_Game, "CheckButton_UseChattingFilter"), _btn_IsOnScreenSaver = (UI.getChildControl)(_frameContent_Game, "CheckButton_ScreenSaver"), _btn_UIModeMouseLock = (UI.getChildControl)(_frameContent_Game, "CheckButton_UIModeMouseLock"), _btn_PvpRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_PvpRefuse"), _btn_ExchangeRefuse = (UI.getChildControl)(_frameContent_Game, "CheckButton_ExchangeRefuse"), _btn_NewUI = (UI.getChildControl)(_frameContent_Game, "CheckButton_NewUI"), _btn_HideMast = (UI.getChildControl)(_frameContent_Game, "CheckButton_HideMast"), _btn_ShowCashAlert = (UI.getChildControl)(_frameContent_Game, "CheckButton_ShowCashAlert"), _btn_EnableOVR = (UI.getChildControl)(_frameContent_Game, "Checkbox_SupportOculus"), _btn_MouseX = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseX"), _btn_MouseY = (UI.getChildControl)(_frameContent_Game, "Checkbox_MouseY"), _txt_Pad_Title = (UI.getChildControl)(_frameContent_Game, "StaticText_GamePadSet"), _btn_UsePad = (UI.getChildControl)(_frameContent_Game, "Checkbox_UsePad"), _btn_UseVibe = (UI.getChildControl)(_frameContent_Game, "Checkbox_UseVibe"), _btn_PadX = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadX"), _btn_PadY = (UI.getChildControl)(_frameContent_Game, "Checkbox_PadY"), _btn_ConsoleMode = (UI.getChildControl)(_frameContent_Game, "Checkbox_ConsoleMode"), _btn_ComboMode = (UI.getChildControl)(_frameContent_Game, "Checkbox_ComboMode"), _btn_SelfNameShowAllways = (UI.getChildControl)(_frameContent_Game, "CheckButton_SelfPlayer"), _btn_SelfNameShowNoShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_MyCharacterNickNameShow"), _btn_SelfNameShowImportant = (UI.getChildControl)(_frameContent_Game, "Checkbox_AttackNameShow"), _btn_PetAll = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualAll"), _btn_PetMine = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualMine"), _btn_PetHide = (UI.getChildControl)(_frameContent_Game, "RadioButton_PetVisualHide"), _title_FontResize = (UI.getChildControl)(_frameContent_Game, "StaticText_FontResize"), _btn_FontResizeDefault = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeDefault"), _btn_FontResizeBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeBig"), _btn_FontResizeMoreBig = (UI.getChildControl)(_frameContent_Game, "RadioButton_FontResizeMoreBig"), _btn_NavGuideNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideNone"), _btn_NavGuideArrow = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideArrow"), _btn_NavGuideEffect = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideEffect"), _btn_NavGuideFairy = (UI.getChildControl)(_frameContent_Game, "RadioButton_NavGuideFairy"), _btn_WorldMapOpenByWestMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByWestMaintain"), _btn_WorldMapOpenByCharacterToWest = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterToWest"), _btn_WorldMapOpenByCharacterMaintain = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByCharacterMaintain"), _btn_WorldMapOpenByNone = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapOpenByNone"), _btn_WorldMapCameraAngle = (UI.getChildControl)(_frameContent_Game, "StaticText_WorldMapOpenAngle"), _btn_WorldMapCameraDefaultAngle = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDefaultAngle"), _btn_WorldMapCameraDegree30 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree30"), _btn_WorldMapCameraDegree90 = (UI.getChildControl)(_frameContent_Game, "RadioButton_WorldMapDegree90"), _btn_OtherNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_AnotherCharacterNickNameShow"), _btn_PartyNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyNickName"), _btn_GuildNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_GuildAndClanCharacterNickName"), _btn_RankingNameShow = (UI.getChildControl)(_frameContent_Game, "Checkbox_LifeRanking"), _btn_showHpRular = (UI.getChildControl)(_frameContent_Game, "CheckButton_HpBar"), _btn_GuideLineHumanRelation = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_HumanRelation"), _btn_GuideLineQuestObject = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_QuestObjectLine"), _btn_GuideLineZoneChange = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_ZoneChange"), _btn_GuideLineWarAlly = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_WarAlly"), _btn_GuideLineGuild = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Guild"), _btn_GuideLineParty = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Party"), _btn_GuideLineEnemy = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_Enemy"), _btn_GuideLineNonWarPlayer = (UI.getChildControl)(_frameContent_Game, "Checkbox_CharacterOutline_NonWarPlayer"), _btn_GuideLinePartyEffect = (UI.getChildControl)(_frameContent_Game, "Checkbox_PartyAttackEffect"), _btn_Alert_Region = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_Region"), _btn_Alert_TerritoryTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryTrade"), _btn_Alert_RoyalTrade = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_RoyalTrade"), _btn_Alert_Fitness = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_FitnessLevelUp"), _btn_Alert_TerritoryWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_TerritoryWar"), _btn_Alert_GuildWar = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildWarStart"), _btn_Alert_PlayerGotItem = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_AnotherPlayerGotItem"), _btn_Alert_ItemMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ItemMarket"), _btn_Alert_LifeLevUp = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_LifeLevUp"), _btn_Alert_GuildQuest = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_GuildQuest"), _btn_Alert_NearMonster = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_NearMonster"), _btn_Alert_ServantMarket = (UI.getChildControl)(_frameContent_Game, "CheckButton_Alert_ServantMarket"), _btn_GuildLogin = (UI.getChildControl)(_frameContent_Game, "CheckButton_GuildLogin"), _txt_MouXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseXSen"), _slide_MouXSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseXSenControl"), _txt_MouYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_MouseYSen"), _slide_MouYSen = (UI.getChildControl)(_frameContent_Game, "Slider_MouseYSenControl"), _txt_X_0 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen_0"), _txt_X_50 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen_50"), _txt_X_100 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen_100"), _txt_PadXSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadXSen"), _slide_PadXSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadXSenControl"), _txt_Y_0 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen_0"), _txt_Y_50 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen_50"), _txt_Y_100 = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen_100"), _txt_PadYSen = (UI.getChildControl)(_frameContent_Game, "StaticText_PadYSen"), _slide_PadYSen = (UI.getChildControl)(_frameContent_Game, "Slider_PadYSenControl"), _btn_Reset = (UI.getChildControl)(_frameContent_Game, "Button_Reset")}
-  if false == ToClient_IsDevelopment() then
-    (frame_Game._btn_showHpRular):SetShow(false)
-  end
   local randerPlayerColorStr = {zoneChange = "ZoneChange", warAlly = "WarAlly", guild = "Guild", party = "Party", enemy = "Enemy", nonWarPlayer = "NonWarPlayer"}
   value_GameOption_Check_ComboGuide = frame_Game._btn_SpiritGuide
   value_GameOption_Check_ComboGuide:SetCheck(true)
   _currentSpiritGuideCheck = true
   value_GameOption_Check_ComboGuide:SetShow(not isGameTypeKR2())
+  GameOption_ComboGuideValueChange = function(isShow)
+  -- function num : 0_0
+  value_GameOption_Check_ComboGuide:SetCheck(isShow)
+end
+
+  if false == ToClient_IsContentsGroupOpen("346") then
+    (frame_Game._btn_showHpRular):SetShow(false)
+  end
   local _btn_MouXSen = (UI.getChildControl)(frame_Game._slide_MouXSen, "Slider_MouseXSen_Button")
   local _btn_MouYSen = (UI.getChildControl)(frame_Game._slide_MouYSen, "Slider_MouseYSen_Button")
   local _btn_PadXSen = (UI.getChildControl)(frame_Game._slide_PadXSen, "Slider_PadXSen_Button")
@@ -133,40 +138,40 @@ screenResolutionList = {}
   local configDataIndex = 0
   local keyConfigData = {}
   local getKeyConfigData = function(index)
-  -- function num : 0_0 , upvalues : keyConfigData, configDataIndex
+  -- function num : 0_1 , upvalues : keyConfigData, configDataIndex
   return keyConfigData[configDataIndex + index - 2]
 end
 
   local setKeyConfigDataTitle = function(index, title)
-  -- function num : 0_1 , upvalues : keyConfigData
+  -- function num : 0_2 , upvalues : keyConfigData
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R2 in 'UnsetPending'
 
   keyConfigData[index] = {titleText = title, buttonKeyText = "", padKeyText = "", padOnly = false}
 end
 
   local setKeyConfigDataConfigButton = function(index, button)
-  -- function num : 0_2 , upvalues : keyConfigData
+  -- function num : 0_3 , upvalues : keyConfigData
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
 
   (keyConfigData[index]).buttonKeyText = button
 end
 
   local setKeyConfigDataConfigPad = function(index, pad)
-  -- function num : 0_3 , upvalues : keyConfigData
+  -- function num : 0_4 , upvalues : keyConfigData
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
 
   (keyConfigData[index]).padKeyText = pad
 end
 
   local setKeyConfigDataConfigOnlyPad = function(index, padOnly)
-  -- function num : 0_4 , upvalues : keyConfigData
+  -- function num : 0_5 , upvalues : keyConfigData
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R2 in 'UnsetPending'
 
   (keyConfigData[index]).padOnly = padOnly
 end
 
   local updateKeyConfig = function()
-  -- function num : 0_5 , upvalues : keyConfigListShowCount, getKeyConfigData, STATIC_INPUT_TITLE, BUTTON_KEY, BUTTON_PAD
+  -- function num : 0_6 , upvalues : keyConfigListShowCount, getKeyConfigData, STATIC_INPUT_TITLE, BUTTON_KEY, BUTTON_PAD
   for index = 0, keyConfigListShowCount - 1 do
     local keyConfigData = getKeyConfigData(index)
     if keyConfigData ~= nil then
@@ -219,12 +224,12 @@ end
   local configDataIndex_UI = 0
   local keyConfigData_UI = {}
   local getKeyConfigData_UI = function(index)
-  -- function num : 0_6 , upvalues : keyConfigData_UI, configDataIndex_UI
+  -- function num : 0_7 , upvalues : keyConfigData_UI, configDataIndex_UI
   return keyConfigData_UI[configDataIndex_UI + index]
 end
 
   local setKeyConfigData_UI = function(index, title, button, padKey)
-  -- function num : 0_7 , upvalues : keyConfigData_UI
+  -- function num : 0_8 , upvalues : keyConfigData_UI
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R4 in 'UnsetPending'
 
   if title ~= nil then
@@ -244,22 +249,22 @@ end
 end
 
   local setKeyConfigData_UITitle = function(index, title)
-  -- function num : 0_8 , upvalues : setKeyConfigData_UI
+  -- function num : 0_9 , upvalues : setKeyConfigData_UI
   setKeyConfigData_UI(index, title, "", "")
 end
 
   local setKeyConfigData_UIConfigButton = function(index, button)
-  -- function num : 0_9 , upvalues : setKeyConfigData_UI
+  -- function num : 0_10 , upvalues : setKeyConfigData_UI
   setKeyConfigData_UI(index, nil, button, nil)
 end
 
   local setKeyConfigData_UIConfigPad = function(index, pad)
-  -- function num : 0_10 , upvalues : setKeyConfigData_UI
+  -- function num : 0_11 , upvalues : setKeyConfigData_UI
   setKeyConfigData_UI(index, nil, nil, pad)
 end
 
   local updateKeyConfig_UI = function()
-  -- function num : 0_11 , upvalues : keyConfigListShowCount_UI, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI, BUTTON_KEY_UI, BUTTON_PAD_UI
+  -- function num : 0_12 , upvalues : keyConfigListShowCount_UI, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI, BUTTON_KEY_UI, BUTTON_PAD_UI
   for index = 0, keyConfigListShowCount_UI - 1 do
     local keyConfigData_UI = getKeyConfigData_UI(index)
     if keyConfigData_UI ~= nil and (CppEnums.UiInputType).UiInputType_Cancel ~= index then
@@ -671,7 +676,7 @@ end
     const_LowMaxScaleValue = 100
   end
   Panel_GameOption_Initialize = function()
-  -- function num : 0_12 , upvalues : chk_Option, gamePanel_Main, isSaveSetting, UI_TM, GetStr_Option, frame_Display, frame_Game, frame_Sound
+  -- function num : 0_13 , upvalues : chk_Option, gamePanel_Main, isSaveSetting, UI_TM, GetStr_Option, frame_Display, frame_Game, frame_Sound
   HideAllFrame_Func()
   getFrameSize_SetSlideSize()
   -- DECOMPILER ERROR at PC13: Confused about usage of register: R0 in 'UnsetPending'
@@ -1478,7 +1483,7 @@ end
   local _txt_LanguageOption, _txt_ChatChannelOption = nil, nil
   local _ServiceResComputePosY = 0
   local createServiceResOption = function(frame, frameContent)
-  -- function num : 0_13 , upvalues : isOnServiceResourceTypeList, _btn_ServiceResourceType, isOnServiceResourceTypeTag, serviceResEnumsNumber, serviceResCount, UI_TM, _ServiceResComputePosY, _txt_LanguageOption, _frameContent_Game
+  -- function num : 0_14 , upvalues : isOnServiceResourceTypeList, _btn_ServiceResourceType, isOnServiceResourceTypeTag, serviceResEnumsNumber, serviceResCount, UI_TM, _ServiceResComputePosY, _txt_LanguageOption, _frameContent_Game
   local serviceResourceTypeControl = (UI.getChildControl)(frameContent, "RadioButton_ServiceResourceType")
   local _frameContent = (UI.getChildControl)(frame, "Frame_1_Content")
   local _txt_LanguageDesc = (UI.getChildControl)(_frameContent, "Static_LanguageCommentBG")
@@ -1518,7 +1523,7 @@ end
   local _btn_ChatLanguageType = {}
   local ChatChannelEnumsNumber = {}
   local createChatChannelOption = function(frame, frameContent)
-  -- function num : 0_14 , upvalues : isOnServiceChatTypeList, _btn_ChatLanguageType, _ServiceResComputePosY, isOnServiceChatTypeTag, ChatChannelEnumsNumber, UI_TM, _txt_ChatChannelOption
+  -- function num : 0_15 , upvalues : isOnServiceChatTypeList, _btn_ChatLanguageType, _ServiceResComputePosY, isOnServiceChatTypeTag, ChatChannelEnumsNumber, UI_TM, _txt_ChatChannelOption
   local serviceResourceTypeControl = (UI.getChildControl)(frameContent, "RadioButton_ChannelChat_Language")
   local _frameContent = (UI.getChildControl)(frame, "Frame_1_Content")
   local _txt_LanguageDesc = (UI.getChildControl)(_frameContent, "Static_LanguageCommentBG")
@@ -1555,7 +1560,7 @@ end
 end
 
   local eraseChatChannelOption = function(frameContent)
-  -- function num : 0_15
+  -- function num : 0_16
   local textChannelChat = (UI.getChildControl)(frameContent, "StaticText_ChannelChat_Language")
   local radioChannelChat = (UI.getChildControl)(frameContent, "RadioButton_ChannelChat_Language")
   local _txt_LanguageDesc = (UI.getChildControl)(frameContent, "Static_LanguageCommentBG")
@@ -1571,7 +1576,7 @@ end
 end
 
   local loadLanguageResType = function()
-  -- function num : 0_16 , upvalues : _frame_Language, _frameContent_Language, _frame_Game, _frameContent_Game, _txt_LanguageOption, createServiceResOption, createChatChannelOption, eraseChatChannelOption
+  -- function num : 0_17 , upvalues : _frame_Language, _frameContent_Language, _frame_Game, _frameContent_Game, _txt_LanguageOption, createServiceResOption, createChatChannelOption, eraseChatChannelOption
   local serviceType = (getGameServiceType())
   local _cpy_frame, _cpy_frameContent = nil, nil
   if isNeedGameOptionFromServer() == false then
@@ -1619,7 +1624,7 @@ end
 
   loadLanguageResType()
   getFrameSize_SetSlideSize = function()
-  -- function num : 0_17 , upvalues : gamePanel_Main, _display_sld, _display_SizeY, _display_sld_btn, _sound_sld, _sound_SizeY, _sound_sld_btn, _frame_Sound, _game_sld, _game_SizeY, _game_sld_btn, _frame_Game, _keyConfig_sld, _keyConfig_SizeY, _keyConfig_sld_btn, _frame_KeyConfig, _keyConfigUI_sld, _keyConfig_UI_SizeY, _keyConfigUI_sld_btn, _frame_KeyConfig_UI, _Language_sld, _Language_SizeY, _frame_Language
+  -- function num : 0_18 , upvalues : gamePanel_Main, _display_sld, _display_SizeY, _display_sld_btn, _sound_sld, _sound_SizeY, _sound_sld_btn, _frame_Sound, _game_sld, _game_SizeY, _game_sld_btn, _frame_Game, _keyConfig_sld, _keyConfig_SizeY, _keyConfig_sld_btn, _frame_KeyConfig, _keyConfigUI_sld, _keyConfig_UI_SizeY, _keyConfigUI_sld_btn, _frame_KeyConfig_UI, _Language_sld, _Language_SizeY, _frame_Language
   if (gamePanel_Main._btn_Display):IsCheck() then
     _display_sld:SetShow(false)
     if _display_SizeY >= 600 then
@@ -1683,7 +1688,7 @@ end
 end
 
   HideAllFrame_Func = function()
-  -- function num : 0_18 , upvalues : _frame_Display, _frame_Sound, _frame_Game, _frame_KeyConfig, _frame_KeyConfig_UI, _frame_Language, _static_KeySetBG, _static_PadSetBG, _static_ResetKeyConfig, _static_KeySetTitle, _static_KeySetBG_UI, _static_PadSetBG_UI, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, _static_KeySetTitle_UI
+  -- function num : 0_19 , upvalues : _frame_Display, _frame_Sound, _frame_Game, _frame_KeyConfig, _frame_KeyConfig_UI, _frame_Language, _static_KeySetBG, _static_PadSetBG, _static_ResetKeyConfig, _static_KeySetTitle, _static_KeySetBG_UI, _static_PadSetBG_UI, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, _static_KeySetTitle_UI
   _frame_Display:SetShow(false)
   _frame_Sound:SetShow(false)
   _frame_Game:SetShow(false)
@@ -1703,7 +1708,7 @@ end
 end
 
   optionCommentary = function()
-  -- function num : 0_19 , upvalues : gamePanel_Main, UI_TM, GetStr_Option, _static_KeySetBG, _static_PadSetBG, _static_ResetKeyConfig, _static_KeySetTitle, _static_KeySetBG_UI, _static_PadSetBG_UI, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, _static_KeySetTitle_UI
+  -- function num : 0_20 , upvalues : gamePanel_Main, UI_TM, GetStr_Option, _static_KeySetBG, _static_PadSetBG, _static_ResetKeyConfig, _static_KeySetTitle, _static_KeySetBG_UI, _static_PadSetBG_UI, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI, _static_KeySetTitle_UI
   if (gamePanel_Main._btn_Display):IsCheck() then
     (gamePanel_Main._txt_Comment):SetTextMode(UI_TM.eTextMode_AutoWrap)
     ;
@@ -1781,7 +1786,7 @@ end
 end
 
   gameOption_SetEnableArea_Func = function()
-  -- function num : 0_20 , upvalues : _frame_Display, _frame_Sound, _frame_Game
+  -- function num : 0_21 , upvalues : _frame_Display, _frame_Sound, _frame_Game
   local updateList = {}
   if _frame_Display:GetShow() == true then
     updateList = {}
@@ -1800,7 +1805,7 @@ end
 end
 
   ShowFrame_Func = function()
-  -- function num : 0_21 , upvalues : gamePanel_Main, _frame_Display, isKeyConfig_Open, isKeyConfig_UI_Open, _frame_Sound, _frame_Game, _frame_KeyConfig, configDataIndex, updateKeyConfig, _frame_KeyConfig_UI, configDataIndex_UI, updateKeyConfig_UI, _frame_Language
+  -- function num : 0_22 , upvalues : gamePanel_Main, _frame_Display, isKeyConfig_Open, isKeyConfig_UI_Open, _frame_Sound, _frame_Game, _frame_KeyConfig, configDataIndex, updateKeyConfig, _frame_KeyConfig_UI, configDataIndex_UI, updateKeyConfig_UI, _frame_Language
   audioPostEvent_SystemUi(0, 0)
   getFrameSize_SetSlideSize()
   if (gamePanel_Main._btn_Display):IsCheck() then
@@ -1882,7 +1887,7 @@ end
 end
 
   FGlobal_GameOption_OpenByMenu = function(index)
-  -- function num : 0_22 , upvalues : gamePanel_Main
+  -- function num : 0_23 , upvalues : gamePanel_Main
   showGameOption()
   ;
   (gamePanel_Main._btn_Display):SetCheck(index == 0)
@@ -1901,7 +1906,7 @@ end
 end
 
   FGlobal_GameOptionOpen = function()
-  -- function num : 0_23 , upvalues : gamePanel_Main, _game_sld, _frame_Game
+  -- function num : 0_24 , upvalues : gamePanel_Main, _game_sld, _frame_Game
   if not Panel_Window_Option:GetShow() then
     showGameOption()
   end
@@ -1924,7 +1929,7 @@ end
 end
 
   Option_ShowAni = function()
-  -- function num : 0_24 , upvalues : _frame_Display, UI_ANI_ADV, _display_sld, _sound_sld, _game_sld, _keyConfig_sld, _keyConfigUI_sld, _frame_Game
+  -- function num : 0_25 , upvalues : _frame_Display, UI_ANI_ADV, _display_sld, _sound_sld, _game_sld, _keyConfig_sld, _keyConfigUI_sld, _frame_Game
   (UIAni.fadeInSCR_Down)(Panel_Window_Option)
   _frame_Display:SetShow(true)
   local aniInfo1 = Panel_Window_Option:addScaleAnimation(0, 0.08, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
@@ -1955,26 +1960,26 @@ end
 end
 
   Option_HideAni = function()
-  -- function num : 0_25
+  -- function num : 0_26
   Panel_Window_Option:SetAlpha(1)
   local aniInfo = (UIAni.AlphaAnimation)(0, Panel_Window_Option, 0, 0.1)
   aniInfo:SetHideAtEnd(true)
 end
 
   Option_Hide = function()
-  -- function num : 0_26
+  -- function num : 0_27
   SetUIMode((Defines.UIMode).eUIMode_Default)
   Panel_Window_Option:SetShow(false, true)
   TooltipSimple_Hide()
 end
 
   Option_Update = function()
-  -- function num : 0_27
+  -- function num : 0_28
   GameOption_RefreshFPSText()
 end
 
   Option_RegistMessageHandler = function()
-  -- function num : 0_28
+  -- function num : 0_29
   registerEvent("EventGameOptionToggle", "GameOption_TogglePanel")
   registerEvent("EventGameOptionInitGameOption", "GameOption_InitGameOption")
   registerEvent("EventGameOptionInitDisplayModeList", "GameOption_InitDisplayModeList")
@@ -2000,7 +2005,7 @@ end
     end
   end
   Option_RegistEventHandler = function()
-  -- function num : 0_29 , upvalues : gamePanel_Main, frame_Display, chk_Option, _btn_CropModeScaleX, _btn_CropModeScaleY, _btn_AutoOptimizationSlide, _frameContent_Display, _btn_Gamma, _btn_WatermarkAlpha, _btn_Contrast, _btn_UIScale, _btn_Fov, frame_Sound, _btn_TotalVol, _btn_MusicVol, _btn_FxVol, _btn_EnvFxVol, _btn_VoiceVol, _btn_hitFxWeightVolume, _btn_otherPlayerVolume, frame_Game, randerPlayerColorStr, simpleToolTipIdx, _btn_EffectAlpha, _btn_CameraMaster, _btn_ColorByPass, _btn_CameraShake, _btn_MotionBlur, _btn_CameraPos, _btn_CameraFov, _btn_MouXSen, _btn_MouYSen, _btn_PadXSen, _btn_PadYSen, _btn_hitFxVolume, _static_ResetKeyConfig, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI
+  -- function num : 0_30 , upvalues : gamePanel_Main, frame_Display, chk_Option, _btn_CropModeScaleX, _btn_CropModeScaleY, _btn_AutoOptimizationSlide, _frameContent_Display, _btn_Gamma, _btn_WatermarkAlpha, _btn_Contrast, _btn_UIScale, _btn_Fov, frame_Sound, _btn_TotalVol, _btn_MusicVol, _btn_FxVol, _btn_EnvFxVol, _btn_VoiceVol, _btn_hitFxWeightVolume, _btn_otherPlayerVolume, frame_Game, randerPlayerColorStr, simpleToolTipIdx, _btn_EffectAlpha, _btn_CameraMaster, _btn_ColorByPass, _btn_CameraShake, _btn_MotionBlur, _btn_CameraPos, _btn_CameraFov, _btn_MouXSen, _btn_MouYSen, _btn_PadXSen, _btn_PadYSen, _btn_hitFxVolume, _static_ResetKeyConfig, _static_ResetKeyConfig_UI, _static_ResetPositionConfig_UI
   (gamePanel_Main._btn_Close):addInputEvent("Mouse_LUp", "Option_Hide()")
   ;
   (gamePanel_Main._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"UIGameOption\" )")
@@ -3226,7 +3231,7 @@ end
 
   local isFirst = true
   InitGraphicOptionAll = function(gameOptionSetting, optionType)
-  -- function num : 0_30 , upvalues : chk_Option, currentResolutionX, currentResolutionY, isFirst
+  -- function num : 0_31 , upvalues : chk_Option, currentResolutionX, currentResolutionY, isFirst
   local screenModeIdx = gameOptionSetting:getScreenMode()
   GameOption_InitScreenMode(screenModeIdx)
   GameOption_SetScreenModeButtons(chk_Option.currentScreenModeIdx)
@@ -3347,7 +3352,7 @@ end
 end
 
   InitSoundOptionAll = function(gameOptionSetting)
-  -- function num : 0_31
+  -- function num : 0_32
   local enableMusic = gameOptionSetting:getEnableMusic()
   local enableSound = gameOptionSetting:getEnableSound()
   local enableEnvSound = gameOptionSetting:getEnableEnvSound()
@@ -3370,7 +3375,7 @@ end
 
   local currentLUT = nil
   GameOption_InitGameOption = function(gameOptionSetting, optionType)
-  -- function num : 0_32 , upvalues : frame_Game, gamePanel_Main, currentLUT
+  -- function num : 0_33 , upvalues : frame_Game, gamePanel_Main, currentLUT
   (frame_Game._btn_HideWindow):SetCheck(true)
   ;
   (gamePanel_Main._btn_Apply):SetEnable(false)
@@ -3382,12 +3387,12 @@ end
 end
 
   FGlobal_GetCurrentLUT = function()
-  -- function num : 0_33 , upvalues : currentLUT
+  -- function num : 0_34 , upvalues : currentLUT
   return currentLUT
 end
 
   Option_Init_KeyConfig = function()
-  -- function num : 0_34 , upvalues : frame_Key, UI_TM, keyConfigListShowCount, STATIC_INPUT_TITLE, _frameContent_KeyConfig, BUTTON_KEY, BUTTON_PAD, INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataTitle, setKeyConfigDataConfigOnlyPad, _frame_KeyConfig
+  -- function num : 0_35 , upvalues : frame_Key, UI_TM, keyConfigListShowCount, STATIC_INPUT_TITLE, _frameContent_KeyConfig, BUTTON_KEY, BUTTON_PAD, INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataTitle, setKeyConfigDataConfigOnlyPad, _frame_KeyConfig
   local adderPosY = 35
   local titleStaticPosY = (frame_Key._button_Pad_Func1):GetPosY()
   local keyButtonPosY = (frame_Key._button_Pad_Func1):GetPosY()
@@ -3477,7 +3482,7 @@ end
 end
 
   Option_Init_KeyConfig_UI = function()
-  -- function num : 0_35 , upvalues : frame_Key_UI, UI_TM, keyConfigListShowCount_UI, STATIC_INPUT_TITLE_UI, _frameContent_KeyConfig_UI, BUTTON_KEY_UI, BUTTON_PAD_UI, INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UITitle, _frame_KeyConfig_UI
+  -- function num : 0_36 , upvalues : frame_Key_UI, UI_TM, keyConfigListShowCount_UI, STATIC_INPUT_TITLE_UI, _frameContent_KeyConfig_UI, BUTTON_KEY_UI, BUTTON_PAD_UI, INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UITitle, _frame_KeyConfig_UI
   local adderPosY = 35
   local titleStaticPosY = (frame_Key_UI._button_Pad_Func1):GetPosY()
   local keyButtonPosY = (frame_Key_UI._button_Pad_Func1):GetPosY()
@@ -3576,7 +3581,7 @@ end
 end
 
   GameOption_InitScreenMode = function(screenModeIdx)
-  -- function num : 0_36 , upvalues : chk_Option
+  -- function num : 0_37 , upvalues : chk_Option
   local self = chk_Option
   if screenModeIdx >= 0 and screenModeIdx < self.SCREEN_MODE_COUNT then
     self.currentScreenModeIdx = screenModeIdx
@@ -3586,7 +3591,7 @@ end
 end
 
   GameOption_SetCurrentScreenMode = function(screenModeIdx)
-  -- function num : 0_37 , upvalues : chk_Option
+  -- function num : 0_38 , upvalues : chk_Option
   local self = chk_Option
   if self.currentScreenModeIdx ~= screenModeIdx then
     self.currentScreenModeIdx = screenModeIdx
@@ -3596,7 +3601,7 @@ end
 end
 
   GameOption_SetScreenModeButtons = function(screenModeIdx)
-  -- function num : 0_38 , upvalues : chk_Option, frame_Display
+  -- function num : 0_39 , upvalues : chk_Option, frame_Display
   if screenModeIdx == chk_Option.FULL_SCREEN_IDX then
     ((frame_Display._btn_ScreenMode)[chk_Option.FULL_SCREEN_IDX]):SetCheck(true)
     ;
@@ -3623,7 +3628,7 @@ end
 end
 
   GameOption_InitScale = function(uiScale, screenHeight)
-  -- function num : 0_39 , upvalues : scaleRangeTable, const_UiScaleValue, chk_Option
+  -- function num : 0_40 , upvalues : scaleRangeTable, const_UiScaleValue, chk_Option
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R2 in 'UnsetPending'
 
   if screenHeight <= scaleRangeTable.minScaleHeight then
@@ -3683,7 +3688,7 @@ end
 end
 
   GameOption_InitScale_50_200 = function(uiScale)
-  -- function num : 0_40 , upvalues : scaleRangeTable, const_UiScaleValue, chk_Option
+  -- function num : 0_41 , upvalues : scaleRangeTable, const_UiScaleValue, chk_Option
   -- DECOMPILER ERROR at PC3: Confused about usage of register: R1 in 'UnsetPending'
 
   scaleRangeTable.minScaleValue = const_UiScaleValue[1]
@@ -3704,7 +3709,7 @@ end
 end
 
   GameOption_InitScreenShotFormat = function(Format)
-  -- function num : 0_41 , upvalues : chk_Option
+  -- function num : 0_42 , upvalues : chk_Option
   local self = chk_Option
   self.currentScreenShotFormat = Format
   self.savedScreenShotFormat = Format
@@ -3713,7 +3718,7 @@ end
 end
 
   GameOption_InitScreenShotSize = function(isSize)
-  -- function num : 0_42 , upvalues : chk_Option
+  -- function num : 0_43 , upvalues : chk_Option
   local self = chk_Option
   self.currentScreenShotSize = isSize
   self.savedScreenShotSize = isSize
@@ -3722,7 +3727,7 @@ end
 end
 
   GameOption_InitEffectLODLevel = function(lodLevel)
-  -- function num : 0_43 , upvalues : chk_Option
+  -- function num : 0_44 , upvalues : chk_Option
   local self = chk_Option
   self.currentEffectLOD = lodLevel
   self.savedEffectLOD = lodLevel
@@ -3731,7 +3736,7 @@ end
 end
 
   GameOption_InitWatermarkService = function(Format)
-  -- function num : 0_44 , upvalues : chk_Option
+  -- function num : 0_45 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkService = Format
   self.savedWatermarkService = Format
@@ -3740,7 +3745,7 @@ end
 end
 
   GameOption_InitWatermarkPosition = function(Format)
-  -- function num : 0_45 , upvalues : chk_Option
+  -- function num : 0_46 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkPosition = Format
   self.savedWatermarkPosition = Format
@@ -3749,7 +3754,7 @@ end
 end
 
   GameOption_InitWatermarkScale = function(Format)
-  -- function num : 0_46 , upvalues : chk_Option
+  -- function num : 0_47 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkScale = Format
   self.savedWatermarkScale = Format
@@ -3758,7 +3763,7 @@ end
 end
 
   GameOption_InitColorBlindMode = function(Format)
-  -- function num : 0_47 , upvalues : chk_Option
+  -- function num : 0_48 , upvalues : chk_Option
   local self = chk_Option
   self.currentColorBlind = Format
   self.savedColorBlind = Format
@@ -3767,7 +3772,7 @@ end
 end
 
   GameOption_InitSelfPlayerOnlyEffect = function(isSelfPlayerOnlyEffect)
-  -- function num : 0_48 , upvalues : chk_Option, frame_Display
+  -- function num : 0_49 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isSelfPlayerOnlyEffect
   ;
@@ -3779,7 +3784,7 @@ end
 end
 
   GameOption_InitNearestPlayerOnlyEffect = function(isNearestPlayerOnlyEffect)
-  -- function num : 0_49 , upvalues : chk_Option, frame_Display
+  -- function num : 0_50 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isNearestPlayerOnlyEffect
   ;
@@ -3791,7 +3796,7 @@ end
 end
 
   GameOption_InitWorkerVisible = function(isWorkerVisible)
-  -- function num : 0_50 , upvalues : chk_Option, frame_Display
+  -- function num : 0_51 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isWorkerVisible
   ;
@@ -3809,7 +3814,7 @@ end
 end
 
   GameOption_InitSelfPlayerOnlyLantern = function(isSelfPlayerOnlyLantern)
-  -- function num : 0_51 , upvalues : chk_Option, frame_Display
+  -- function num : 0_52 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isSelfPlayerOnlyLantern
   ;
@@ -3821,7 +3826,7 @@ end
 end
 
   GameOption_InitLowPower = function(isLowPower)
-  -- function num : 0_52 , upvalues : chk_Option, frame_Display
+  -- function num : 0_53 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isLowPower
   ;
@@ -3835,61 +3840,61 @@ end
 end
 
   GameOption_CheckScreenShotBMP = function()
-  -- function num : 0_53 , upvalues : chk_Option
+  -- function num : 0_54 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotFormat(self.SCREENSHOT_BMP)
 end
 
   GameOption_CheckScreenShotJPG = function()
-  -- function num : 0_54 , upvalues : chk_Option
+  -- function num : 0_55 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotFormat(self.SCREENSHOT_JPG)
 end
 
   GameOption_CheckScreenShotPNG = function()
-  -- function num : 0_55 , upvalues : chk_Option
+  -- function num : 0_56 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotFormat(self.SCREENSHOT_PNG)
 end
 
   GameOption_CheckScreenShotSize_4k = function()
-  -- function num : 0_56 , upvalues : chk_Option
+  -- function num : 0_57 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotSize(self.SCREENSHOTSIZE_4k)
 end
 
   GameOption_CheckScreenShotSize_8k = function()
-  -- function num : 0_57 , upvalues : chk_Option
+  -- function num : 0_58 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotSize(self.SCREENSHOTSIZE_8k)
 end
 
   GameOption_CheckScreenShotSize_Default = function()
-  -- function num : 0_58 , upvalues : chk_Option
+  -- function num : 0_59 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetScreenShotSize(self.SCREENSHOTSIZE_DEFAULT)
 end
 
   GameOption_EffectLOD_High = function()
-  -- function num : 0_59 , upvalues : chk_Option
+  -- function num : 0_60 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetEffectLOD(self.EFFECTLOD_HIGH)
 end
 
   GameOption_EffectLOD_Normal = function()
-  -- function num : 0_60 , upvalues : chk_Option
+  -- function num : 0_61 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetEffectLOD(self.EFFECTLOD_NORMAL)
 end
 
   GameOption_EffectLOD_Low = function()
-  -- function num : 0_61 , upvalues : chk_Option
+  -- function num : 0_62 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetEffectLOD(self.EFFECTLOD_LOW)
 end
 
   GameOption_SetScreenShotFormat = function(Format)
-  -- function num : 0_62 , upvalues : chk_Option
+  -- function num : 0_63 , upvalues : chk_Option
   local self = chk_Option
   if self.currentScreenShotFormat ~= Format then
     self.currentScreenShotFormat = Format
@@ -3899,7 +3904,7 @@ end
 end
 
   GameOption_SetScreenShotSize = function(isSize)
-  -- function num : 0_63 , upvalues : chk_Option
+  -- function num : 0_64 , upvalues : chk_Option
   local self = chk_Option
   if self.currentScreenShotSize ~= isSize then
     self.currentScreenShotSize = isSize
@@ -3909,7 +3914,7 @@ end
 end
 
   GameOption_SetEffectLOD = function(lodLevel)
-  -- function num : 0_64 , upvalues : chk_Option
+  -- function num : 0_65 , upvalues : chk_Option
   local self = chk_Option
   if self.currentEffectLOD ~= lodLevel then
     self.currentEffectLOD = lodLevel
@@ -3919,25 +3924,25 @@ end
 end
 
   GameOption_CheckColorBlindNONE = function()
-  -- function num : 0_65 , upvalues : chk_Option
+  -- function num : 0_66 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetColorBlindMode(self.COLORBLIND_NONE)
 end
 
   GameOption_CheckColorBlindPROTANOPIA = function()
-  -- function num : 0_66 , upvalues : chk_Option
+  -- function num : 0_67 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetColorBlindMode(self.COLORBLIND_PROTANOPIA)
 end
 
   GameOption_CheckColorBlindEDUTERANOP = function()
-  -- function num : 0_67 , upvalues : chk_Option
+  -- function num : 0_68 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetColorBlindMode(self.COLORBLIND_DEUTERANOP)
 end
 
   GameOption_SetColorBlindMode = function(Format)
-  -- function num : 0_68 , upvalues : chk_Option
+  -- function num : 0_69 , upvalues : chk_Option
   local self = chk_Option
   if self.currentColorBlind ~= Format then
     self.currentColorBlind = Format
@@ -3947,7 +3952,7 @@ end
 end
 
   GameOption_CheckScreenShotFormat = function(Format)
-  -- function num : 0_69 , upvalues : frame_Display, chk_Option
+  -- function num : 0_70 , upvalues : frame_Display, chk_Option
   if Format == 0 then
     ((frame_Display._btn_ScreenShotFormat)[chk_Option.SCREENSHOT_BMP]):SetCheck(true)
     ;
@@ -3974,7 +3979,7 @@ end
 end
 
   GameOption_CheckScreenShotSize = function(isSize)
-  -- function num : 0_70 , upvalues : frame_Display, chk_Option
+  -- function num : 0_71 , upvalues : frame_Display, chk_Option
   if isSize == 0 then
     ((frame_Display._btn_ScreenShotSize)[chk_Option.SCREENSHOTSIZE_DEFAULT]):SetCheck(true)
     ;
@@ -4001,11 +4006,11 @@ end
 end
 
   GameOption_CheckEffectLODLevel = function(lodLevel)
-  -- function num : 0_71
+  -- function num : 0_72
 end
 
   GameOption_CheckColorBlind = function(Format)
-  -- function num : 0_72 , upvalues : frame_Display, chk_Option
+  -- function num : 0_73 , upvalues : frame_Display, chk_Option
   if Format == 0 then
     ((frame_Display._btn_ColorBlind)[chk_Option.COLORBLIND_NONE]):SetCheck(true)
     ;
@@ -4032,25 +4037,25 @@ end
 end
 
   GameOption_CheckFullScreen = function()
-  -- function num : 0_73 , upvalues : chk_Option
+  -- function num : 0_74 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetCurrentScreenMode(self.FULL_SCREEN_IDX)
 end
 
   GameOption_CheckFullScreenWindowed = function()
-  -- function num : 0_74 , upvalues : chk_Option
+  -- function num : 0_75 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetCurrentScreenMode(self.FULL_SCREEN_WINDOWED_IDX)
 end
 
   GameOption_CheckWindowed = function()
-  -- function num : 0_75 , upvalues : chk_Option
+  -- function num : 0_76 , upvalues : chk_Option
   local self = chk_Option
   GameOption_SetCurrentScreenMode(self.WINDOWED_IDX)
 end
 
   GameOption_CheckWatermarkService = function(watermark_type)
-  -- function num : 0_76 , upvalues : frame_Display, chk_Option
+  -- function num : 0_77 , upvalues : frame_Display, chk_Option
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_KR]):SetCheck(false)
   ;
   ((frame_Display._btn_WatermarkService)[chk_Option.WATERMARK_SERVICE_JP]):SetCheck(false)
@@ -4076,7 +4081,7 @@ end
 end
 
   GameOption_CheckWatermarkPosition = function(watermark_type)
-  -- function num : 0_77 , upvalues : frame_Display, chk_Option
+  -- function num : 0_78 , upvalues : frame_Display, chk_Option
   ((frame_Display._btn_WatermarkPosition)[chk_Option.WATERMARK_POSITION_LT]):SetCheck(false)
   ;
   ((frame_Display._btn_WatermarkPosition)[chk_Option.WATERMARK_POSITION_RT]):SetCheck(false)
@@ -4094,7 +4099,7 @@ end
 end
 
   GameOption_CheckWatermarkScale = function(watermark_type)
-  -- function num : 0_78 , upvalues : frame_Display, chk_Option
+  -- function num : 0_79 , upvalues : frame_Display, chk_Option
   ((frame_Display._btn_WatermarkScale)[chk_Option.WATERMARK_SCALE_SMALL]):SetCheck(false)
   ;
   ((frame_Display._btn_WatermarkScale)[chk_Option.WATERMARK_SCALE_REGULAR]):SetCheck(false)
@@ -4110,7 +4115,7 @@ end
 end
 
   GameOption_InitWatermarkAlpha = function(watermarkAlpha)
-  -- function num : 0_79 , upvalues : chk_Option, frame_Display
+  -- function num : 0_80 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentWatermarkAlpha = watermarkAlpha
   self.savedWatermarkAlpha = watermarkAlpha
@@ -4120,7 +4125,7 @@ end
 end
 
   GameOption_SetWatermarkAlpha = function(watermarkAlpha)
-  -- function num : 0_80 , upvalues : chk_Option
+  -- function num : 0_81 , upvalues : chk_Option
   local self = chk_Option
   self.currentWatermarkAlpha = watermarkAlpha
   setWatermarkAlpha(watermarkAlpha)
@@ -4128,19 +4133,19 @@ end
 end
 
   GameOption_ChangeWatermarkAlpha_slider = function()
-  -- function num : 0_81 , upvalues : frame_Display
+  -- function num : 0_82 , upvalues : frame_Display
   local ratio = (frame_Display._slide_WatermarkAlpha):GetControlPos()
   GameOption_SetWatermarkAlpha(ratio)
 end
 
   GameOption_ChangeWatermarkAlpha_button = function()
-  -- function num : 0_82 , upvalues : _btn_WatermarkAlpha, frame_Display
+  -- function num : 0_83 , upvalues : _btn_WatermarkAlpha, frame_Display
   local ratio = _btn_WatermarkAlpha:GetPosX() / ((frame_Display._slide_WatermarkAlpha):GetSizeX() - _btn_WatermarkAlpha:GetSizeX())
   GameOption_SetWatermarkAlpha(ratio)
 end
 
   GameOption_InitScreenResolution = function(screenResolutionIdx)
-  -- function num : 0_83 , upvalues : chk_Option
+  -- function num : 0_84 , upvalues : chk_Option
   local self = chk_Option
   if screenResolutionIdx >= 0 and screenResolutionIdx <= self.SCREEN_RESOLUTION_COUNT then
     self.currentScreenResolutionIdx = screenResolutionIdx
@@ -4150,7 +4155,7 @@ end
 end
 
   GameOption_SetCurrentScreenResolution = function(screenResolutionIdx)
-  -- function num : 0_84 , upvalues : chk_Option
+  -- function num : 0_85 , upvalues : chk_Option
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
   if screenResolutionIdx > 0 and screenResolutionIdx <= chk_Option.SCREEN_RESOLUTION_COUNT then
@@ -4161,7 +4166,7 @@ end
 end
 
   GameOption_SetScreenResolutionText = function(screenResolutionIdx)
-  -- function num : 0_85 , upvalues : chk_Option, frame_Display, scaleRangeTable, const_UiScaleValue
+  -- function num : 0_86 , upvalues : chk_Option, frame_Display, scaleRangeTable, const_UiScaleValue
   local self = chk_Option
   if screenResolutionIdx > 0 and screenResolutionIdx <= self.SCREEN_RESOLUTION_COUNT then
     local screenResolution = (self.screenResolutionList)[screenResolutionIdx]
@@ -4183,17 +4188,17 @@ end
 end
 
   GameOption_Fix_UiScale = function()
-  -- function num : 0_86 , upvalues : chk_Option
+  -- function num : 0_87 , upvalues : chk_Option
   GameOption_SetUIMode(chk_Option.currentCheckUIScale)
 end
 
   GameOption_SetScreenResolutionText_exception = function(screenWidth, screenHeight)
-  -- function num : 0_87 , upvalues : frame_Display
+  -- function num : 0_88 , upvalues : frame_Display
   (frame_Display._btn_ScrSize):SetText(tostring(screenWidth .. " x " .. screenHeight))
 end
 
   GameOption_FindScreenResolutionIdx = function(screenWidth, screenHeight)
-  -- function num : 0_88 , upvalues : chk_Option, isFindScreenResolution, screenResolutionIndex
+  -- function num : 0_89 , upvalues : chk_Option, isFindScreenResolution, screenResolutionIndex
   local self = chk_Option
   local screenResolutionList = self.screenResolutionList
   for ii = 1, self.SCREEN_RESOLUTION_COUNT do
@@ -4283,7 +4288,7 @@ end
 end
 
   GameOption_ScreenResolutionIncrease = function()
-  -- function num : 0_89 , upvalues : frame_Display, chk_Option
+  -- function num : 0_90 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -4303,7 +4308,7 @@ end
 end
 
   GameOption_ScreenResolutionDecrease = function()
-  -- function num : 0_90 , upvalues : frame_Display, chk_Option
+  -- function num : 0_91 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -4327,7 +4332,7 @@ end
   local LUTRecommandationName = "Vibrance"
   local LUTRecommandationName2 = "NonContrast"
   GameOption_InitLUT = function(LUT)
-  -- function num : 0_91 , upvalues : chk_Option
+  -- function num : 0_92 , upvalues : chk_Option
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentLUT = LUT
@@ -4341,7 +4346,7 @@ end
 end
 
   GameOption_SetRecommandationLUT = function()
-  -- function num : 0_92 , upvalues : LUTRecommandation, LUTRecommandationName, frame_Display
+  -- function num : 0_93 , upvalues : LUTRecommandation, LUTRecommandationName, frame_Display
   if LUTRecommandation == -1 then
     for idx = 0, 30 do
       if getCameraLUTFilterName(idx) == LUTRecommandationName then
@@ -4362,7 +4367,7 @@ end
 end
 
   GameOption_SetRecommandationLUT2 = function()
-  -- function num : 0_93 , upvalues : LUTRecommandation2, LUTRecommandationName2, frame_Display
+  -- function num : 0_94 , upvalues : LUTRecommandation2, LUTRecommandationName2, frame_Display
   if LUTRecommandation2 == -1 then
     for idx = 0, 30 do
       if getCameraLUTFilterName(idx) == LUTRecommandationName2 then
@@ -4383,7 +4388,7 @@ end
 end
 
   GameOption_SetCurrentLUT = function(LUT)
-  -- function num : 0_94 , upvalues : chk_Option, currentLUT
+  -- function num : 0_95 , upvalues : chk_Option, currentLUT
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentLUT = LUT
@@ -4393,13 +4398,13 @@ end
 end
 
   GameOption_GetFilterName = function(filterName)
-  -- function num : 0_95
+  -- function num : 0_96
   local filterPrefixName = "LUA_GAMEOPTION_PHOTOFILTER_"
   return PAGetString(Defines.StringSheet_GAME, filterPrefixName .. filterName)
 end
 
   GameOption_SetLUTText = function(LUT)
-  -- function num : 0_96 , upvalues : LUTRecommandationName, LUTRecommandationName2, frame_Display
+  -- function num : 0_97 , upvalues : LUTRecommandationName, LUTRecommandationName2, frame_Display
   local filterName = getCameraLUTFilterName(LUT)
   if filterName == LUTRecommandationName or filterName == LUTRecommandationName2 then
     (frame_Display._btn_LUT):SetText(GameOption_GetFilterName(filterName) .. "  <PAColor0xffffce22>[" .. PAGetString(Defines.StringSheet_GAME, "LUA_OPTION_RECOMMANDATION") .. "]<PAOldColor>")
@@ -4410,7 +4415,7 @@ end
 end
 
   GameOption_LUTIncrease = function()
-  -- function num : 0_97 , upvalues : frame_Display, chk_Option
+  -- function num : 0_98 , upvalues : frame_Display, chk_Option
   (frame_Display._btn_LUT):EraseAllEffect()
   ;
   (frame_Display._btn_LUT):AddEffect("UI_ButtonLineRight_White", false, 0, 0)
@@ -4420,7 +4425,7 @@ end
 end
 
   GameOption_LUTDecrease = function()
-  -- function num : 0_98 , upvalues : frame_Display, chk_Option
+  -- function num : 0_99 , upvalues : frame_Display, chk_Option
   (frame_Display._btn_LUT):EraseAllEffect()
   ;
   (frame_Display._btn_LUT):AddEffect("UI_ButtonLineLeft_White", false, 0, 0)
@@ -4430,7 +4435,7 @@ end
 end
 
   GameOption_InitTextureQuality = function(textureQualityIdx)
-  -- function num : 0_99 , upvalues : chk_Option
+  -- function num : 0_100 , upvalues : chk_Option
   local self = chk_Option
   if textureQualityIdx >= 0 and textureQualityIdx < self.TEXTURE_QUALITY_COUNT then
     self.currentTextureQualityIdx = textureQualityIdx
@@ -4440,7 +4445,7 @@ end
 end
 
   GameOption_SetCurrentTextureQuality = function(textureQualityIdx)
-  -- function num : 0_100 , upvalues : chk_Option
+  -- function num : 0_101 , upvalues : chk_Option
   local self = chk_Option
   if textureQualityIdx >= 0 and textureQualityIdx < self.TEXTURE_QUALITY_COUNT then
     self.currentTextureQualityIdx = textureQualityIdx
@@ -4450,7 +4455,7 @@ end
 end
 
   GameOption_SetTextureQualityText = function(textureQualityIdx)
-  -- function num : 0_101 , upvalues : chk_Option, frame_Display
+  -- function num : 0_102 , upvalues : chk_Option, frame_Display
   if textureQualityIdx == chk_Option.TEXTURE_QUALITY_HIGH then
     (frame_Display._btn_Trxt):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_OPTION_HIGH"))
     ;
@@ -4471,7 +4476,7 @@ end
 end
 
   GameOption_TextureQualityIncrease = function()
-  -- function num : 0_102 , upvalues : frame_Display, chk_Option
+  -- function num : 0_103 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -4507,7 +4512,7 @@ end
 end
 
   GameOption_TextureQualityDecrease = function()
-  -- function num : 0_103 , upvalues : frame_Display, chk_Option
+  -- function num : 0_104 , upvalues : frame_Display, chk_Option
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -4534,14 +4539,14 @@ end
 end
 
   GameOption_TextureQualityApply = function()
-  -- function num : 0_104 , upvalues : chk_Option
+  -- function num : 0_105 , upvalues : chk_Option
   local self = chk_Option
   local texQuality = self.currentTextureQualityIdx - 1
   GameOption_SetCurrentTextureQuality(texQuality)
 end
 
   MessageBox_TextureQualityAlert = function()
-  -- function num : 0_105
+  -- function num : 0_106
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TEXTUREQUALITYALERT_MEMO")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = messageBoxMemo, functionYes = GameOption_TextureQualityApply, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -4549,7 +4554,7 @@ end
 end
 
   GameOption_InitGraphicOption = function(graphicOptionIdx)
-  -- function num : 0_106 , upvalues : chk_Option
+  -- function num : 0_107 , upvalues : chk_Option
   local self = chk_Option
   if graphicOptionIdx >= 0 and graphicOptionIdx < self.GRAPHIC_OPTION_COUNT then
     self.currentGraphicOptionIdx = graphicOptionIdx
@@ -4559,7 +4564,7 @@ end
 end
 
   GameOption_SetCurrentGraphicOption = function(graphicOptionIdx)
-  -- function num : 0_107 , upvalues : chk_Option
+  -- function num : 0_108 , upvalues : chk_Option
   local self = chk_Option
   if graphicOptionIdx >= 0 and graphicOptionIdx < self.GRAPHIC_OPTION_COUNT then
     self.currentGraphicOptionIdx = graphicOptionIdx
@@ -4570,7 +4575,7 @@ end
 end
 
   GameOption_SetGraphicOptionText = function(graphicOptionIdx)
-  -- function num : 0_108 , upvalues : chk_Option, frame_Display
+  -- function num : 0_109 , upvalues : chk_Option, frame_Display
   if graphicOptionIdx == chk_Option.GRAPHIC_OPTION_HIGH0 then
     (frame_Display._btn_Rndr):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WINDOW_OPTION_VERYHIGH"))
     ;
@@ -4615,7 +4620,7 @@ end
 end
 
   GameOption_GraphicOptionIncrease = function()
-  -- function num : 0_109 , upvalues : chk_Option, frame_Display
+  -- function num : 0_110 , upvalues : chk_Option, frame_Display
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -4664,7 +4669,7 @@ end
 end
 
   GameOption_GraphicOptionDecrease = function()
-  -- function num : 0_110 , upvalues : chk_Option, frame_Display
+  -- function num : 0_111 , upvalues : chk_Option, frame_Display
   if not isOptionVariableAction() then
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
     local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -4718,7 +4723,7 @@ end
 end
 
   GameOption_InitGraphicCustomOption = function(gameOptionSetting)
-  -- function num : 0_111 , upvalues : chk_Option
+  -- function num : 0_112 , upvalues : chk_Option
   local self = chk_Option
   local dof = gameOptionSetting:getDof()
   self.currentCheckDof = dof
@@ -4770,7 +4775,7 @@ end
 end
 
   GameOption_GraphicChanged = function()
-  -- function num : 0_112 , upvalues : chk_Option, frame_Display
+  -- function num : 0_113 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   if self.currentCheckUltra then
     GameOption_SetGraphicOptionText(chk_Option.GRAPHIC_OPTION_HIGH0)
@@ -4848,7 +4853,7 @@ end
 end
 
   GameOption_SetGraphicCustomOption = function()
-  -- function num : 0_113 , upvalues : chk_Option, frame_Display
+  -- function num : 0_114 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   ;
   (frame_Display._btn_DOF):SetCheck(self.currentCheckDof)
@@ -4894,7 +4899,7 @@ end
 end
 
   GameOption_CheckDof = function()
-  -- function num : 0_114 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_115 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckDof = ((PaGlobal_GameOption_Optimization._ui)._btn_DOF):IsCheck()
@@ -4909,14 +4914,14 @@ end
 end
 
   GameOption_CheckSelfPlayerOnlyEffect = function()
-  -- function num : 0_115 , upvalues : chk_Option, frame_Display
+  -- function num : 0_116 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentSelfPlayerOnlyEffect = (frame_Display._btn_SelfPlayerOnlyEffect):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
   GameOption_CheckNearestPlayerOnlyEffect = function()
-  -- function num : 0_116 , upvalues : chk_Option, frame_Display
+  -- function num : 0_117 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_NearestPlayerOnlyEffect):IsCheck()
   self.currentNearestPlayerOnlyEffect = check
@@ -4924,14 +4929,14 @@ end
 end
 
   GameOption_CheckSelfPlayerOnlyLantern = function()
-  -- function num : 0_117 , upvalues : chk_Option, frame_Display
+  -- function num : 0_118 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentSelfPlayerOnlyLantern = (frame_Display._btn_SelfPlayerOnlyLantern):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
   GameOption_CheckLowPower = function()
-  -- function num : 0_118 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_119 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentLowPower = ((PaGlobal_GameOption_Optimization._ui)._btn_LowPower):IsCheck()
@@ -4946,7 +4951,7 @@ end
 end
 
   GameOption_CheckAA = function()
-  -- function num : 0_119 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_120 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckAA = ((PaGlobal_GameOption_Optimization._ui)._btn_AntiAlli):IsCheck()
@@ -4961,7 +4966,7 @@ end
 end
 
   GameOption_CheckSSAO = function()
-  -- function num : 0_120 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_121 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckSSAO = ((PaGlobal_GameOption_Optimization._ui)._btn_SSAO):IsCheck()
@@ -4976,7 +4981,7 @@ end
 end
 
   GameOption_CheckTessellation = function()
-  -- function num : 0_121 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_122 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckTessellation = ((PaGlobal_GameOption_Optimization._ui)._btn_Tessellation):IsCheck()
@@ -4991,7 +4996,7 @@ end
 end
 
   GameOption_CheckPostFilter = function()
-  -- function num : 0_122 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_123 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckPostFilter = ((PaGlobal_GameOption_Optimization._ui)._btn_PostFilter):IsCheck()
@@ -5006,7 +5011,7 @@ end
 end
 
   GameOption_CheckCharacterEffect = function()
-  -- function num : 0_123 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_124 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckCharacterEffect = ((PaGlobal_GameOption_Optimization._ui)._btn_CharacterEffect):IsCheck()
@@ -5021,7 +5026,7 @@ end
 end
 
   GameOption_CheckUltra = function()
-  -- function num : 0_124 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_125 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckUltra = ((PaGlobal_GameOption_Optimization._ui)._btn_Ultra):IsCheck()
@@ -5037,7 +5042,7 @@ end
 end
 
   GameOption_CheckLensBlood = function()
-  -- function num : 0_125 , upvalues : chk_Option, frame_Display
+  -- function num : 0_126 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_LensBlood):IsCheck()
   self.currentCheckLensBlood = check
@@ -5045,7 +5050,7 @@ end
 end
 
   GameOption_CheckBloodEffect = function()
-  -- function num : 0_126 , upvalues : chk_Option, frame_Display
+  -- function num : 0_127 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = (frame_Display._btn_BloodEffect):IsCheck()
   self.currentCheckBloodEffect = check
@@ -5053,7 +5058,7 @@ end
 end
 
   GameOption_CheckRepresent = function()
-  -- function num : 0_127 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_128 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   local check = false
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
@@ -5070,7 +5075,7 @@ end
 end
 
   GameOption_CheckSnowPoolOnlyInSafeZone = function()
-  -- function num : 0_128 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_129 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentCheckSnowPoolOnlyInSafeZone = ((PaGlobal_GameOption_Optimization._ui)._btn_SnowPoolOnlyInSafeZone):IsCheck()
@@ -5085,7 +5090,7 @@ end
 end
 
   GameOption_RefreshFPSText = function()
-  -- function num : 0_129 , upvalues : frame_Display
+  -- function num : 0_130 , upvalues : frame_Display
   local value = (math.floor)(ToClient_getFPS())
   if value < 20 then
     (frame_Display._txt_FPS):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_FPS") .. ": " .. "<PAColor0xfff25221>" .. tostring(value) .. "<PAOldColor>")
@@ -5100,7 +5105,7 @@ end
 end
 
   GameOption_InitUpscale = function(isUpscaleEnable)
-  -- function num : 0_130 , upvalues : chk_Option, frame_Display
+  -- function num : 0_131 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local check = isUpscaleEnable
   ;
@@ -5114,7 +5119,7 @@ end
 end
 
   GameOption_CheckUpscale = function()
-  -- function num : 0_131 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_132 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentUpscaleEnable = ((PaGlobal_GameOption_Optimization._ui)._btn_UpscaleEnable):IsCheck()
@@ -5129,7 +5134,7 @@ end
 end
 
   GameOption_InitCropMode = function(isEnable, scaleX, scaleY)
-  -- function num : 0_132 , upvalues : chk_Option, frame_Display
+  -- function num : 0_133 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   ;
   (frame_Display._btn_CropModeEnable):SetCheck(isEnable)
@@ -5150,14 +5155,14 @@ end
 end
 
   GameOption_CheckCropMode = function()
-  -- function num : 0_133 , upvalues : chk_Option, frame_Display
+  -- function num : 0_134 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentCropModeEnable = (frame_Display._btn_CropModeEnable):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
   GameOption_SetCropModeScaleX = function(scale)
-  -- function num : 0_134 , upvalues : chk_Option
+  -- function num : 0_135 , upvalues : chk_Option
   local self = chk_Option
   local convertedScale = 0.5 + scale * 0.5
   self.currentCropModeScaleX = convertedScale
@@ -5166,21 +5171,21 @@ end
 end
 
   GameOption_CropModeScaleX_slider = function()
-  -- function num : 0_135 , upvalues : frame_Display
+  -- function num : 0_136 , upvalues : frame_Display
   local ratio = 0
   ratio = (frame_Display._slide_CropModeScaleX):GetControlPos()
   GameOption_SetCropModeScaleX(ratio)
 end
 
   GameOption_CropModeScaleX_button = function()
-  -- function num : 0_136 , upvalues : _btn_CropModeScaleX, frame_Display
+  -- function num : 0_137 , upvalues : _btn_CropModeScaleX, frame_Display
   local ratio = 0
   ratio = _btn_CropModeScaleX:GetPosX() / ((frame_Display._slide_CropModeScaleX):GetSizeX() - _btn_CropModeScaleX:GetSizeX())
   GameOption_SetCropModeScaleX(ratio)
 end
 
   GameOption_SetCropModeScaleY = function(scale)
-  -- function num : 0_137 , upvalues : chk_Option
+  -- function num : 0_138 , upvalues : chk_Option
   local self = chk_Option
   local convertedScale = 0.5 + scale * 0.5
   self.currentCropModeScaleY = convertedScale
@@ -5189,21 +5194,21 @@ end
 end
 
   GameOption_CropModeScaleY_slider = function()
-  -- function num : 0_138 , upvalues : frame_Display
+  -- function num : 0_139 , upvalues : frame_Display
   local ratio = 0
   ratio = (frame_Display._slide_CropModeScaleY):GetControlPos()
   GameOption_SetCropModeScaleY(ratio)
 end
 
   GameOption_CropModeScaleY_button = function()
-  -- function num : 0_139 , upvalues : _btn_CropModeScaleY, frame_Display
+  -- function num : 0_140 , upvalues : _btn_CropModeScaleY, frame_Display
   local ratio = 0
   ratio = _btn_CropModeScaleY:GetPosX() / ((frame_Display._slide_CropModeScaleY):GetSizeX() - _btn_CropModeScaleY:GetSizeX())
   GameOption_SetCropModeScaleY(ratio)
 end
 
   GameOption_InitAutoOptimization = function(isEnable, frame)
-  -- function num : 0_140 , upvalues : chk_Option, frame_Display
+  -- function num : 0_141 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   ;
   (frame_Display._btn_AutoOptimization):SetCheck(isEnable)
@@ -5227,7 +5232,7 @@ end
 end
 
   GameOption_CheckAutoOptimization = function()
-  -- function num : 0_141 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_142 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     self.currentAutoOptimization = ((PaGlobal_GameOption_Optimization._ui)._btn_AutoOptimization):IsCheck()
@@ -5242,7 +5247,7 @@ end
 end
 
   GameOption_AutoOptimizationSetFrame = function(ratio)
-  -- function num : 0_142 , upvalues : chk_Option, frame_Display
+  -- function num : 0_143 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   local convertedFrame = (math.ceil)(ratio * 60)
   ;
@@ -5257,7 +5262,7 @@ end
 end
 
   GameOption_AutoOptimization_slider = function()
-  -- function num : 0_143 , upvalues : gamePanel_Main, frame_Display
+  -- function num : 0_144 , upvalues : gamePanel_Main, frame_Display
   local ratio = 0
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     ratio = ((PaGlobal_GameOption_Optimization._ui)._slide_AutoOptimization):GetControlPos()
@@ -5272,17 +5277,17 @@ end
 end
 
   GameOption_EffectOptionToSliderPos = function(value)
-  -- function num : 0_144
+  -- function num : 0_145
   return value * 4
 end
 
   GameOption_SliderPosToEffectOption = function(value)
-  -- function num : 0_145
+  -- function num : 0_146
   return value * 24.9 + 0.1
 end
 
   GameOption_InitEffectOption = function(isEnable, frame)
-  -- function num : 0_146 , upvalues : chk_Option
+  -- function num : 0_147 , upvalues : chk_Option
   local self = chk_Option
   ;
   ((PaGlobal_GameOption_Optimization._ui)._btn_EffectOption):SetCheck(isEnable)
@@ -5298,7 +5303,7 @@ end
 end
 
   GameOption_EffectOption = function()
-  -- function num : 0_147 , upvalues : chk_Option, gamePanel_Main
+  -- function num : 0_148 , upvalues : chk_Option, gamePanel_Main
   local self = chk_Option
   local check = false
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
@@ -5309,7 +5314,7 @@ end
 end
 
   GameOption_EffectOptionSetFrame = function(ratio)
-  -- function num : 0_148 , upvalues : chk_Option
+  -- function num : 0_149 , upvalues : chk_Option
   local self = chk_Option
   local convertedFrame = GameOption_SliderPosToEffectOption(ratio)
   self.currentEffectOptionFrame = convertedFrame
@@ -5320,24 +5325,24 @@ end
 end
 
   GameOption_EffectOption_slider = function()
-  -- function num : 0_149
+  -- function num : 0_150
   local ratio = 0
   ratio = ((PaGlobal_GameOption_Optimization._ui)._slide_EffectOption):GetControlPos()
   GameOption_EffectOptionSetFrame(ratio)
 end
 
   GameOption_PlayerEffectOptionToSliderPos = function(value)
-  -- function num : 0_150
+  -- function num : 0_151
   return (value - 10) * 2.5
 end
 
   GameOption_SliderPosToPlayerEffectOption = function(value)
-  -- function num : 0_151
+  -- function num : 0_152
   return value * 40 + 10
 end
 
   GameOption_InitPlayerEffectOption = function(isEnable, frame)
-  -- function num : 0_152 , upvalues : chk_Option
+  -- function num : 0_153 , upvalues : chk_Option
   local self = chk_Option
   ;
   ((PaGlobal_GameOption_Optimization._ui)._btn_PlayerEffectOption):SetCheck(isEnable)
@@ -5355,7 +5360,7 @@ end
 end
 
   GameOption_PlayerEffectOption = function()
-  -- function num : 0_153 , upvalues : chk_Option
+  -- function num : 0_154 , upvalues : chk_Option
   local self = chk_Option
   local check = false
   check = ((PaGlobal_GameOption_Optimization._ui)._btn_PlayerEffectOption):IsCheck()
@@ -5364,7 +5369,7 @@ end
 end
 
   GameOption_PlayerEffectOptionSetFrame = function(ratio)
-  -- function num : 0_154 , upvalues : chk_Option
+  -- function num : 0_155 , upvalues : chk_Option
   local self = chk_Option
   local convertedFrame = GameOption_SliderPosToPlayerEffectOption(ratio)
   ;
@@ -5377,14 +5382,14 @@ end
 end
 
   GameOption_PlayerEffectOption_slider = function()
-  -- function num : 0_155
+  -- function num : 0_156
   local ratio = 0
   ratio = ((PaGlobal_GameOption_Optimization._ui)._slide_PlayerEffectOption):GetControlPos()
   GameOption_PlayerEffectOptionSetFrame(ratio)
 end
 
   GameOption_InitCharacterDistUpdateOption = function(isEnable)
-  -- function num : 0_156 , upvalues : chk_Option
+  -- function num : 0_157 , upvalues : chk_Option
   local self = chk_Option
   ;
   ((PaGlobal_GameOption_Optimization._ui)._btn_CharacterDistUpdate):SetCheck(isEnable)
@@ -5395,7 +5400,7 @@ end
 end
 
   GameOption_CharacterDistUpdate = function()
-  -- function num : 0_157 , upvalues : chk_Option, gamePanel_Main
+  -- function num : 0_158 , upvalues : chk_Option, gamePanel_Main
   local self = chk_Option
   local check = false
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
@@ -5406,7 +5411,7 @@ end
 end
 
   GameOption_InitPlayerHide = function(isEnable)
-  -- function num : 0_158 , upvalues : chk_Option
+  -- function num : 0_159 , upvalues : chk_Option
   local self = chk_Option
   do
     local isShow = isEnable == false
@@ -5422,7 +5427,7 @@ end
 end
 
   GameOption_PlayerHide = function()
-  -- function num : 0_159 , upvalues : chk_Option, gamePanel_Main
+  -- function num : 0_160 , upvalues : chk_Option, gamePanel_Main
   local self = chk_Option
   local check = false
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
@@ -5433,7 +5438,7 @@ end
 end
 
   GameOption_InitCameraPos = function(posPowerValue)
-  -- function num : 0_160 , upvalues : chk_Option, frame_Display
+  -- function num : 0_161 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentCheckCameraPosPower = posPowerValue
   self.savedCheckCameraPosPower = posPowerValue
@@ -5443,14 +5448,14 @@ end
 end
 
   GameOption_SetCameraPosValueText = function(posPowerValue)
-  -- function num : 0_161 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_162 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(posPowerValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_CameraPos):SetText(GetStr_Option[22] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
   GameOption_InitCameraFov = function(fovPowerValue)
-  -- function num : 0_162 , upvalues : chk_Option, frame_Display
+  -- function num : 0_163 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentCheckCameraFovPower = fovPowerValue
   self.savedCheckCameraFovPower = fovPowerValue
@@ -5460,14 +5465,14 @@ end
 end
 
   GameOption_SetCameraFovValueText = function(fovPowerValue)
-  -- function num : 0_163 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_164 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(posPowerValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_CameraFov):SetText(GetStr_Option[23] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
   GameOption_InitGamma = function(gammaValue)
-  -- function num : 0_164 , upvalues : chk_Option, frame_Display
+  -- function num : 0_165 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentGammaValue = gammaValue
   self.savedGammaValue = gammaValue
@@ -5477,14 +5482,14 @@ end
 end
 
   GameOption_SetGammaValueText = function(gammaValue)
-  -- function num : 0_165 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_166 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(gammaValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_Gamma):SetText(GetStr_Option[4] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
   GameOption_SetGamma = function(gammaValue)
-  -- function num : 0_166 , upvalues : chk_Option
+  -- function num : 0_167 , upvalues : chk_Option
   local self = chk_Option
   self.currentGammaValue = gammaValue
   GameOption_SetGammaValueText(gammaValue)
@@ -5493,19 +5498,19 @@ end
 end
 
   GameOption_ChangeGamma_slider = function()
-  -- function num : 0_167 , upvalues : frame_Display
+  -- function num : 0_168 , upvalues : frame_Display
   local ratio = (frame_Display._slide_Gamma):GetControlPos()
   GameOption_SetGamma(ratio)
 end
 
   GameOption_ChangeGamma_button = function()
-  -- function num : 0_168 , upvalues : _btn_Gamma, frame_Display
+  -- function num : 0_169 , upvalues : _btn_Gamma, frame_Display
   local ratio = _btn_Gamma:GetPosX() / ((frame_Display._slide_Gamma):GetSizeX() - _btn_Gamma:GetSizeX())
   GameOption_SetGamma(ratio)
 end
 
   GameOption_InitContrast = function(contrastValue)
-  -- function num : 0_169 , upvalues : chk_Option, frame_Display
+  -- function num : 0_170 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentContrastValue = contrastValue
   self.savedContrastValue = contrastValue
@@ -5515,14 +5520,14 @@ end
 end
 
   GameOption_SetContrastValueText = function(contrastValue)
-  -- function num : 0_170 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_171 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(contrastValue * 100 + 0.5 - 50)
   ;
   (frame_Display._txt_Contrast):SetText(GetStr_Option[21] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. "% <PAOldColor>) ")
 end
 
   GameOption_SetContrast = function(contrastValue)
-  -- function num : 0_171 , upvalues : chk_Option
+  -- function num : 0_172 , upvalues : chk_Option
   local self = chk_Option
   self.currentContrastValue = contrastValue
   GameOption_SetContrastValueText(contrastValue)
@@ -5531,19 +5536,19 @@ end
 end
 
   GameOption_ChangeContrast_slider = function()
-  -- function num : 0_172 , upvalues : frame_Display
+  -- function num : 0_173 , upvalues : frame_Display
   local ratio = (frame_Display._slide_Contrast):GetControlPos()
   GameOption_SetContrast(ratio)
 end
 
   GameOption_ChangeContrast_button = function()
-  -- function num : 0_173 , upvalues : _btn_Contrast, frame_Display
+  -- function num : 0_174 , upvalues : _btn_Contrast, frame_Display
   local ratio = _btn_Contrast:GetPosX() / ((frame_Display._slide_Contrast):GetSizeX() - _btn_Contrast:GetSizeX())
   GameOption_SetContrast(ratio)
 end
 
   GameOption_InitFov = function(fovValue)
-  -- function num : 0_174 , upvalues : chk_Option, frame_Display
+  -- function num : 0_175 , upvalues : chk_Option, frame_Display
   local self = chk_Option
   self.currentFovValue = fovValue
   self.savedFovValue = fovValue
@@ -5563,7 +5568,7 @@ end
 end
 
   GameOption_SetFovValueText = function(fovValue)
-  -- function num : 0_175 , upvalues : frame_Display, GetStr_Option
+  -- function num : 0_176 , upvalues : frame_Display, GetStr_Option
   local value = (math.floor)(fovValue + 0.5)
   ;
   (frame_Display._txt_Fov):SetText(GetStr_Option[24] .. " ( <PAColor0xffbcf281>" .. tostring(value) .. " <PAOldColor>) ")
@@ -5572,7 +5577,7 @@ end
 end
 
   GameOption_SetFov = function(fovValue)
-  -- function num : 0_176 , upvalues : chk_Option
+  -- function num : 0_177 , upvalues : chk_Option
   local self = chk_Option
   self.currentFovValue = fovValue
   GameOption_SetFovValueText(fovValue)
@@ -5581,7 +5586,7 @@ end
 end
 
   GameOption_ChangeFov_slider = function()
-  -- function num : 0_177 , upvalues : gamePanel_Main, frame_Display
+  -- function num : 0_178 , upvalues : gamePanel_Main, frame_Display
   local ratio = 0
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     ratio = ((PaGlobal_GameOption_Optimization._ui)._slide_Fov):GetControlPos()
@@ -5596,7 +5601,7 @@ end
 end
 
   GameOption_ChangeFov_button = function()
-  -- function num : 0_178 , upvalues : gamePanel_Main, frame_Display, _btn_Fov
+  -- function num : 0_179 , upvalues : gamePanel_Main, frame_Display, _btn_Fov
   local ratio = 0
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     ratio = ((PaGlobal_GameOption_Optimization._sld_btn)._btn_Fov):GetPosX() / (((PaGlobal_GameOption_Optimization._ui)._slide_Fov):GetSizeX() - ((PaGlobal_GameOption_Optimization._sld_btn)._btn_Fov):GetSizeX())
@@ -5613,7 +5618,7 @@ end
   ;
   (frame_Display._slide_UIScale):SetInterval(150)
   GameOption_SetUIMode = function(uiScale)
-  -- function num : 0_179 , upvalues : scaleRangeTable, frame_Display, GetStr_Option
+  -- function num : 0_180 , upvalues : scaleRangeTable, frame_Display, GetStr_Option
   local uiScale_Slider = uiScale
   local uiScale_Percent = (math.floor)(uiScale * 100)
   local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
@@ -5624,7 +5629,7 @@ end
 end
 
   GameOption_UIScale_Change = function()
-  -- function num : 0_180 , upvalues : frame_Display, scaleRangeTable, chk_Option, GetStr_Option
+  -- function num : 0_181 , upvalues : frame_Display, scaleRangeTable, chk_Option, GetStr_Option
   local slide_posX = (frame_Display._slide_UIScale):GetControlPos()
   local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
   ;
@@ -5644,7 +5649,7 @@ end
 end
 
   GameOption_InitSystemNotify = function()
-  -- function num : 0_181 , upvalues : frame_Game
+  -- function num : 0_182 , upvalues : frame_Game
   (frame_Game._btn_Alert_Region):SetCheck(ToClient_GetMessageFilter(0))
   ;
   (frame_Game._btn_Alert_TerritoryTrade):SetCheck(ToClient_GetMessageFilter(1))
@@ -5671,7 +5676,7 @@ end
 end
 
   GameOption_InitSound = function(enableMusic, enableSound, enableEnvSound, hitFxType, masterVolume, fxVolume, dlgVolume, envVolume, musicVolume, hitFxWeight, otherPlayerVolume, riddingMusic, combatMusic, whisperMusic, TraySound, npcVoiceType)
-  -- function num : 0_182 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_183 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   self.currentMaster = masterVolume
   self.appliedMaster = masterVolume
@@ -5788,7 +5793,7 @@ end
 end
 
   GameOption_SetVolumeText = function(masterVolume, fxVolume, dlgVolume, envVolume, musicVolume, hitFxVolume, hitFxWeight, otherplayerVolume)
-  -- function num : 0_183 , upvalues : frame_Sound, GetStr_Option
+  -- function num : 0_184 , upvalues : frame_Sound, GetStr_Option
   local master = (math.floor)(masterVolume + 0.5)
   local music = (math.floor)(musicVolume + 0.5)
   local fx = (math.floor)(fxVolume + 0.5)
@@ -5816,7 +5821,7 @@ end
 end
 
   GameOption_SetVolume = function(masterVolume, fxVolume, dlgVolume, envVolume, musicVolume, hitFxVolume, hitFxWeight, otherVolume)
-  -- function num : 0_184 , upvalues : chk_Option, _volumeParam
+  -- function num : 0_185 , upvalues : chk_Option, _volumeParam
   local self = chk_Option
   self.currentMaster = masterVolume
   self.currentMusic = musicVolume
@@ -5856,7 +5861,7 @@ end
 end
 
   GameOption_SetEnableSound = function(enableMusic, enableSound, enableEnvSound, hitFxType)
-  -- function num : 0_185 , upvalues : chk_Option
+  -- function num : 0_186 , upvalues : chk_Option
   local self = chk_Option
   self.currentCheckMusic = enableMusic
   self.currentCheckSound = enableSound
@@ -5866,77 +5871,77 @@ end
 end
 
   GameOption_Master_slider = function()
-  -- function num : 0_186 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_187 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_TotalVol):GetControlPos() * 100
   GameOption_SetVolume(volume, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_Master_button = function()
-  -- function num : 0_187 , upvalues : chk_Option, _btn_TotalVol, frame_Sound
+  -- function num : 0_188 , upvalues : chk_Option, _btn_TotalVol, frame_Sound
   local self = chk_Option
   local volume = _btn_TotalVol:GetPosX() / ((frame_Sound._slide_TotalVol):GetSizeX() - _btn_TotalVol:GetSizeX()) * 100
   GameOption_SetVolume(volume, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_Music_slider = function()
-  -- function num : 0_188 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_189 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_MusicVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, volume, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_Music_button = function()
-  -- function num : 0_189 , upvalues : chk_Option, _btn_MusicVol, frame_Sound
+  -- function num : 0_190 , upvalues : chk_Option, _btn_MusicVol, frame_Sound
   local self = chk_Option
   local volume = _btn_MusicVol:GetPosX() / ((frame_Sound._slide_MusicVol):GetSizeX() - _btn_MusicVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, volume, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_FxSound_slider = function()
-  -- function num : 0_190 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_191 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_FxVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, volume, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_FxSound_button = function()
-  -- function num : 0_191 , upvalues : chk_Option, _btn_FxVol, frame_Sound
+  -- function num : 0_192 , upvalues : chk_Option, _btn_FxVol, frame_Sound
   local self = chk_Option
   local volume = _btn_FxVol:GetPosX() / ((frame_Sound._slide_FxVol):GetSizeX() - _btn_FxVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, volume, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_EnvSound_slider = function()
-  -- function num : 0_192 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_193 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_EnvFxVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, volume, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_EnvSound_button = function()
-  -- function num : 0_193 , upvalues : chk_Option, _btn_EnvFxVol, frame_Sound
+  -- function num : 0_194 , upvalues : chk_Option, _btn_EnvFxVol, frame_Sound
   local self = chk_Option
   local volume = _btn_EnvFxVol:GetPosX() / ((frame_Sound._slide_EnvFxVol):GetSizeX() - _btn_EnvFxVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, volume, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_DlgSound_slider = function()
-  -- function num : 0_194 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_195 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_VoiceVol):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, volume, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_DlgSound_button = function()
-  -- function num : 0_195 , upvalues : chk_Option, _btn_VoiceVol, frame_Sound
+  -- function num : 0_196 , upvalues : chk_Option, _btn_VoiceVol, frame_Sound
   local self = chk_Option
   local volume = _btn_VoiceVol:GetPosX() / ((frame_Sound._slide_VoiceVol):GetSizeX() - _btn_VoiceVol:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, volume, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, self.currentPlayerVolume)
 end
 
   GameOption_CheckMusic = function()
-  -- function num : 0_196 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_197 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_MusicOnOff):IsCheck()
   self.currentCheckMusic = check
@@ -5944,7 +5949,7 @@ end
 end
 
   GameOption_CheckSound = function()
-  -- function num : 0_197 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_198 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_FXOnOff):IsCheck()
   self.currentCheckSound = check
@@ -5952,7 +5957,7 @@ end
 end
 
   GameOption_CheckEnvSound = function()
-  -- function num : 0_198 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_199 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_EnvFXOnOff):IsCheck()
   self.currentCheckEnvSound = check
@@ -5960,7 +5965,7 @@ end
 end
 
   GameOption_CheckRiddingMusic = function()
-  -- function num : 0_199 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_200 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_RiddingOnOff):IsCheck()
   self.currentCheckRiddingMusic = check
@@ -5968,7 +5973,7 @@ end
 end
 
   GameOption_CheckWhisperMusic = function()
-  -- function num : 0_200 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_201 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_WhisperOnOff):IsCheck()
   self.currentCheckWhisperMusic = check
@@ -5976,7 +5981,7 @@ end
 end
 
   GameOption_CheckTraySound = function()
-  -- function num : 0_201 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_202 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local check = (frame_Sound._btn_TraySoundOnOff):IsCheck()
   self.currentCheckTraySoundOnOff = check
@@ -5984,7 +5989,7 @@ end
 end
 
   GameOption_CheckCombatSound = function()
-  -- function num : 0_202 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_203 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local combatOffCheck = (frame_Sound._btn_CombatAllwaysOff):IsCheck()
   local combatOnCheck = (frame_Sound._btn_CombatAllwaysOn):IsCheck()
@@ -6002,7 +6007,7 @@ end
 end
 
   GameOption_CheckNpcVoice = function()
-  -- function num : 0_203 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_204 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local voice1Check = (frame_Sound._btn_NpcVoice1):IsCheck()
   local voice2Check = (frame_Sound._btn_NpcVoice2):IsCheck()
@@ -6073,39 +6078,39 @@ end
 end
 
   GameOption_CheckHitFxType = function()
-  -- function num : 0_204
+  -- function num : 0_205
 end
 
   GameOption_HitFxWeight_slider = function()
-  -- function num : 0_205 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_206 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_hitFxWeightVolume):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, volume, self.currentPlayerVolume)
 end
 
   GameOption_HitFxWeight_button = function()
-  -- function num : 0_206 , upvalues : chk_Option, _btn_hitFxWeightVolume, frame_Sound
+  -- function num : 0_207 , upvalues : chk_Option, _btn_hitFxWeightVolume, frame_Sound
   local self = chk_Option
   local volume = _btn_hitFxWeightVolume:GetPosX() / ((frame_Sound._slide_hitFxWeightVolume):GetSizeX() - _btn_hitFxWeightVolume:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, volume, self.currentPlayerVolume)
 end
 
   GameOption_OtherPlayer_slider = function()
-  -- function num : 0_207 , upvalues : chk_Option, frame_Sound
+  -- function num : 0_208 , upvalues : chk_Option, frame_Sound
   local self = chk_Option
   local volume = (frame_Sound._slide_otherPlayerVolume):GetControlPos() * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, volume)
 end
 
   GameOption_OtherPlayer_button = function()
-  -- function num : 0_208 , upvalues : chk_Option, _btn_otherPlayerVolume, frame_Sound
+  -- function num : 0_209 , upvalues : chk_Option, _btn_otherPlayerVolume, frame_Sound
   local self = chk_Option
   local volume = _btn_otherPlayerVolume:GetPosX() / ((frame_Sound._slide_otherPlayerVolume):GetSizeX() - _btn_otherPlayerVolume:GetSizeX()) * 100
   GameOption_SetVolume(self.currentMaster, self.currentFxSound, self.currentDlgSound, self.currentEnvSound, self.currentMusic, self.currentHitFxVolume, self.currentHitFxWeight, volume)
 end
 
   GameOption_SetGameMode = function(gameOptionSetting)
-  -- function num : 0_209 , upvalues : randerPlayerColorStr, serviceResCount, serviceResEnumsNumber, ChatChannelEnumsNumber, chk_Option, frame_Game, _btn_ServiceResourceType, _btn_ChatLanguageType, frame_Display, frame_Sound, effectAlphaRangeTable, GetStr_Option
+  -- function num : 0_210 , upvalues : randerPlayerColorStr, serviceResCount, serviceResEnumsNumber, ChatChannelEnumsNumber, chk_Option, frame_Game, _btn_ServiceResourceType, _btn_ChatLanguageType, frame_Display, frame_Sound, effectAlphaRangeTable, GetStr_Option
   local showSkillCmd = gameOptionSetting:getShowSkillCmd()
   local showComboGuide = gameOptionSetting:getShowComboGuide()
   local mouseMove = gameOptionSetting:getGameMouseMode()
@@ -6604,12 +6609,12 @@ end
 end
 
   FGlobal_IsChecked_SkillCommand = function()
-  -- function num : 0_210
+  -- function num : 0_211
   return isChecked_SkillCommand
 end
 
   FGlobal_SkillCommand_LevelCheck = function()
-  -- function num : 0_211
+  -- function num : 0_212
   if ((getSelfPlayer()):get()):getLevel() >= 50 then
     setShowSkillCmd(false)
     GameOption_UpdateOptionChanged()
@@ -6619,7 +6624,7 @@ end
 end
 
   GameOption_ShowComboGuide = function()
-  -- function num : 0_212 , upvalues : chk_Option
+  -- function num : 0_213 , upvalues : chk_Option
   local self = chk_Option
   local check = value_GameOption_Check_ComboGuide:IsCheck()
   self.currentCheckShowComboGuide = check
@@ -6627,7 +6632,7 @@ end
 end
 
   GameOption_AutoAim = function()
-  -- function num : 0_213 , upvalues : chk_Option, frame_Game
+  -- function num : 0_214 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_AutoAim):IsCheck()
   self.currentCheckAutoAim = check
@@ -6635,7 +6640,7 @@ end
 end
 
   GameOption_CheckHideWindow = function()
-  -- function num : 0_214 , upvalues : chk_Option, frame_Game
+  -- function num : 0_215 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_HideWindow):IsCheck()
   self.currentCheckHideWindowByAttacked = check
@@ -6643,13 +6648,13 @@ end
 end
 
   GameOption_GetHideWindow = function()
-  -- function num : 0_215 , upvalues : chk_Option
+  -- function num : 0_216 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckHideWindowByAttacked
 end
 
   SimpleUI_EnableCheck = function(simpleUI_Check)
-  -- function num : 0_216 , upvalues : frame_Game
+  -- function num : 0_217 , upvalues : frame_Game
   local selfPlayer = getSelfPlayer()
   if selfPlayer ~= nil and (selfPlayer:get()):getLevel() == 6 then
     (frame_Game._btn_EnableSimpleUI):SetCheck(simpleUI_Check)
@@ -6658,7 +6663,7 @@ end
 end
 
   GameOption_CheckSimpleUI = function()
-  -- function num : 0_217 , upvalues : chk_Option, frame_Game
+  -- function num : 0_218 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_EnableSimpleUI):IsCheck()
   self.currentCheckEnableSimpleUI = check
@@ -6666,13 +6671,13 @@ end
 end
 
   GameOption_GetEnableSimpleUI = function()
-  -- function num : 0_218 , upvalues : chk_Option
+  -- function num : 0_219 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckEnableSimpleUI
 end
 
   GameOption_CheckEnableOVR = function()
-  -- function num : 0_219 , upvalues : chk_Option, frame_Game
+  -- function num : 0_220 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_EnableOVR):IsCheck()
   self.currentCheckEnableOVR = check
@@ -6680,13 +6685,13 @@ end
 end
 
   GameOption_GetEnableOVR = function()
-  -- function num : 0_220 , upvalues : chk_Option
+  -- function num : 0_221 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckEnableOVR
 end
 
   Panel_KeyViewer_MainFunc = function()
-  -- function num : 0_221 , upvalues : isChecked_KeyViewer
+  -- function num : 0_222 , upvalues : isChecked_KeyViewer
   if isChecked_KeyViewer == false then
     FGlobal_KeyViewer_Show()
     isChecked_KeyViewer = true
@@ -6699,7 +6704,7 @@ end
 end
 
   Panel_GuildLogin_MainFunc = function()
-  -- function num : 0_222 , upvalues : chk_Option, frame_Game
+  -- function num : 0_223 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local GuildLoginState = (frame_Game._btn_GuildLogin):IsCheck()
   self.currentCheckShowGuildLoginMessage = GuildLoginState
@@ -6707,13 +6712,13 @@ end
 end
 
   GameOption_ShowGuildLoginMessage = function()
-  -- function num : 0_223 , upvalues : chk_Option
+  -- function num : 0_224 , upvalues : chk_Option
   local self = chk_Option
   return self.appliedCheckShowGuildLoginMessage
 end
 
   Panel_RejectInvitation_MainFunc = function()
-  -- function num : 0_224 , upvalues : chk_Option, frame_Game
+  -- function num : 0_225 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_RejectInvitation):IsCheck()
   self.currentCheckRejectInvitation = check
@@ -6721,12 +6726,12 @@ end
 end
 
   GameOption_SpiritGuide_ShowFunc = function()
-  -- function num : 0_225 , upvalues : frame_Game
+  -- function num : 0_226 , upvalues : frame_Game
   local tempCheck = (frame_Game._btn_SpiritGuide):IsCheck()
 end
 
   GameOption_EffectAlpha_slider = function()
-  -- function num : 0_226 , upvalues : chk_Option, frame_Display, effectAlphaRangeTable, GetStr_Option
+  -- function num : 0_227 , upvalues : chk_Option, frame_Display, effectAlphaRangeTable, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_EffectAlpha):GetControlPos()
   local interval = effectAlphaRangeTable.maxAlphaValue - effectAlphaRangeTable.minAlphaValue
@@ -6739,7 +6744,7 @@ end
 end
 
   GameOption_EffectAlpha_button = function()
-  -- function num : 0_227 , upvalues : chk_Option, _btn_EffectAlpha, frame_Display, effectAlphaRangeTable, GetStr_Option
+  -- function num : 0_228 , upvalues : chk_Option, _btn_EffectAlpha, frame_Display, effectAlphaRangeTable, GetStr_Option
   local self = chk_Option
   local volume = _btn_EffectAlpha:GetPosX() / ((frame_Display._slide_EffectAlpha):GetSizeX() - _btn_EffectAlpha:GetSizeX())
   local interval = effectAlphaRangeTable.maxAlphaValue - effectAlphaRangeTable.minAlphaValue
@@ -6754,7 +6759,7 @@ end
 end
 
   GameOption_SetEffectAlpha = function()
-  -- function num : 0_228 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_229 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local currentCheckEffectAlpha = self.currentCheckEffectAlpha * 100
   setEffectAlpha(self.currentCheckEffectAlpha)
@@ -6766,7 +6771,7 @@ end
 end
 
   GameOption_ColorByPass_slider = function()
-  -- function num : 0_229 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_230 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_ColorByPass):GetControlPos()
   self.currentCheckCameraMasterPower = volume
@@ -6777,7 +6782,7 @@ end
 end
 
   GameOption_ColorByPass_button = function()
-  -- function num : 0_230 , upvalues : chk_Option, _btn_ColorByPass, frame_Display, GetStr_Option
+  -- function num : 0_231 , upvalues : chk_Option, _btn_ColorByPass, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = _btn_ColorByPass:GetPosX() / ((frame_Display._slide_ColorByPass):GetSizeX() - _btn_ColorByPass:GetSizeX())
   self.currentCheckColorByPass = volume
@@ -6788,7 +6793,7 @@ end
 end
 
   GameOption_SetColorByPass = function()
-  -- function num : 0_231 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_232 , upvalues : chk_Option, frame_Display, GetStr_Option
   local colorByPass_Percent = chk_Option.currentCheckColorByPass * 100
   ;
   (frame_Display._slide_ColorByPass):SetControlPos(colorByPass_Percent)
@@ -6799,7 +6804,7 @@ end
 end
 
   GameOption_CameraMasterPower_slider = function()
-  -- function num : 0_232 , upvalues : chk_Option, gamePanel_Main, frame_Display, GetStr_Option
+  -- function num : 0_233 , upvalues : chk_Option, gamePanel_Main, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = 0
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
@@ -6821,7 +6826,7 @@ end
 end
 
   GameOption_CameraMasterPower_button = function()
-  -- function num : 0_233 , upvalues : chk_Option, gamePanel_Main, frame_Display, _btn_CameraMaster, GetStr_Option
+  -- function num : 0_234 , upvalues : chk_Option, gamePanel_Main, frame_Display, _btn_CameraMaster, GetStr_Option
   local self = chk_Option
   local volume = 0
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
@@ -6843,7 +6848,7 @@ end
 end
 
   GameOption_SetCameraMasterPower = function()
-  -- function num : 0_234 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_235 , upvalues : chk_Option, frame_Display, GetStr_Option
   local cameraMasterPower_Percent = chk_Option.currentCheckCameraMasterPower * 100
   ;
   (frame_Display._slide_CameraMaster):SetControlPos(cameraMasterPower_Percent)
@@ -6856,7 +6861,7 @@ end
 end
 
   GameOption_CameraShakePower_slider = function()
-  -- function num : 0_235 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_236 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_CameraShake):GetControlPos()
   self.currentCheckCameraShakePower = volume
@@ -6867,7 +6872,7 @@ end
 end
 
   GameOption_CameraShakePower_button = function()
-  -- function num : 0_236 , upvalues : chk_Option, _btn_CameraShake, frame_Display, GetStr_Option
+  -- function num : 0_237 , upvalues : chk_Option, _btn_CameraShake, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = 0
   volume = _btn_CameraShake:GetPosX() / ((frame_Display._slide_CameraShake):GetSizeX() - _btn_CameraShake:GetSizeX())
@@ -6879,7 +6884,7 @@ end
 end
 
   GameOption_SetCameraShakePower = function()
-  -- function num : 0_237 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_238 , upvalues : chk_Option, frame_Display, GetStr_Option
   local cameraShakePower_Percent = chk_Option.currentCheckCameraShakePower * 100
   ;
   (frame_Display._slide_CameraShake):SetControlPos(cameraShakePower_Percent)
@@ -6889,7 +6894,7 @@ end
 end
 
   GameOption_MotionBlurPower_slider = function()
-  -- function num : 0_238 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_239 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_MotionBlur):GetControlPos()
   self.currentCheckMotionBlurPower = volume
@@ -6900,7 +6905,7 @@ end
 end
 
   GameOption_MotionBlurPower_button = function()
-  -- function num : 0_239 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_240 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = 0
   volume = (frame_Display._slide_MotionBlur):GetControlPos()
@@ -6912,7 +6917,7 @@ end
 end
 
   GameOption_SetMotionBlurPower = function()
-  -- function num : 0_240 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_241 , upvalues : chk_Option, frame_Display, GetStr_Option
   local motionBlurPower_Percent = chk_Option.currentCheckMotionBlurPower * 100
   ;
   (frame_Display._slide_MotionBlur):SetControlPos(motionBlurPower_Percent)
@@ -6922,7 +6927,7 @@ end
 end
 
   GameOption_CameraPosPower_slider = function()
-  -- function num : 0_241 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_242 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = 0
   volume = (frame_Display._slide_CameraPos):GetControlPos()
@@ -6934,7 +6939,7 @@ end
 end
 
   GameOption_CameraPosPower_button = function()
-  -- function num : 0_242 , upvalues : chk_Option, _btn_CameraPos, frame_Display, GetStr_Option
+  -- function num : 0_243 , upvalues : chk_Option, _btn_CameraPos, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = _btn_CameraPos:GetPosX() / ((frame_Display._slide_CameraPos):GetSizeX() - _btn_CameraPos:GetSizeX())
   self.currentCheckCameraPosPower = volume
@@ -6945,7 +6950,7 @@ end
 end
 
   GameOption_SetCameraPosPower = function()
-  -- function num : 0_243 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_244 , upvalues : chk_Option, frame_Display, GetStr_Option
   local CameraPosPower_Percent = chk_Option.currentCheckCameraPosPower * 100
   ;
   (frame_Display._slide_CameraPos):SetControlPos(CameraPosPower_Percent)
@@ -6955,7 +6960,7 @@ end
 end
 
   GameOption_CameraFovPower_slider = function()
-  -- function num : 0_244 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_245 , upvalues : chk_Option, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = (frame_Display._slide_CameraFov):GetControlPos()
   self.currentCheckCameraFovPower = volume
@@ -6966,7 +6971,7 @@ end
 end
 
   GameOption_CameraFovPower_button = function()
-  -- function num : 0_245 , upvalues : chk_Option, _btn_CameraFov, frame_Display, GetStr_Option
+  -- function num : 0_246 , upvalues : chk_Option, _btn_CameraFov, frame_Display, GetStr_Option
   local self = chk_Option
   local volume = 0
   volume = _btn_CameraFov:GetPosX() / ((frame_Display._slide_CameraFov):GetSizeX() - _btn_CameraFov:GetSizeX())
@@ -6978,7 +6983,7 @@ end
 end
 
   GameOption_SetCameraFovPower = function()
-  -- function num : 0_246 , upvalues : chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_247 , upvalues : chk_Option, frame_Display, GetStr_Option
   local CameraFovPower_Percent = chk_Option.currentCheckCameraFovPower * 100
   ;
   (frame_Display._slide_CameraFov):SetControlPos(CameraFovPower_Percent)
@@ -6988,7 +6993,7 @@ end
 end
 
   GameOption_CheckMouseMove = function()
-  -- function num : 0_247 , upvalues : chk_Option, frame_Game
+  -- function num : 0_248 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MouseMove):IsCheck()
   self.currentCheckMouseMove = check
@@ -6996,7 +7001,7 @@ end
 end
 
   GameOption_CheckMiniMapRotation = function()
-  -- function num : 0_248 , upvalues : chk_Option, frame_Game
+  -- function num : 0_249 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MiniMapRotation):IsCheck()
   self.currentCheckMiniMapRotation = check
@@ -7004,7 +7009,7 @@ end
 end
 
   GameOption_CheckShowAttackEffect = function()
-  -- function num : 0_249 , upvalues : chk_Option, gamePanel_Main, frame_Game
+  -- function num : 0_250 , upvalues : chk_Option, gamePanel_Main, frame_Game
   local self = chk_Option
   local check = false
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
@@ -7021,7 +7026,7 @@ end
 end
 
   GameOption_CheckBlackSpiritAlert = function()
-  -- function num : 0_250 , upvalues : chk_Option, frame_Game
+  -- function num : 0_251 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_Alert_BlackSpirit):IsCheck()
   self.currentCheckBlackSpiritAlert = check
@@ -7029,7 +7034,7 @@ end
 end
 
   GameOption_CheckUseNewQuickSlot = function()
-  -- function num : 0_251 , upvalues : chk_Option, frame_Game
+  -- function num : 0_252 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UseNewQuickSlot):IsCheck()
   self.currentCheckUseNewQuickSlot = check
@@ -7037,7 +7042,7 @@ end
 end
 
   GameOption_CheckUseChattingFilter = function()
-  -- function num : 0_252 , upvalues : chk_Option, frame_Game
+  -- function num : 0_253 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UseChattingFilter):IsCheck()
   self.currentCheckUseChattingFilter = check
@@ -7045,7 +7050,7 @@ end
 end
 
   GameOption_CheckIsOnScreenSaver = function()
-  -- function num : 0_253 , upvalues : chk_Option, frame_Game
+  -- function num : 0_254 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_IsOnScreenSaver):IsCheck()
   self.currentCheckIsOnScreenSaver = check
@@ -7053,7 +7058,7 @@ end
 end
 
   GameOption_CheckUIModeMouseLock = function()
-  -- function num : 0_254 , upvalues : chk_Option, frame_Game
+  -- function num : 0_255 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UIModeMouseLock):IsCheck()
   self.currentCheckIsUIModeMouseLock = check
@@ -7061,7 +7066,7 @@ end
 end
 
   GameOption_CheckPvpRefuse = function()
-  -- function num : 0_255 , upvalues : chk_Option, frame_Game
+  -- function num : 0_256 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_PvpRefuse):IsCheck()
   self.currentCheckIsPvpRefuse = check
@@ -7069,7 +7074,7 @@ end
 end
 
   GameOption_CheckExchangeRefuse = function()
-  -- function num : 0_256 , upvalues : chk_Option, frame_Game
+  -- function num : 0_257 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_ExchangeRefuse):IsCheck()
   self.currentCheckIsExchangeRefuse = check
@@ -7077,7 +7082,7 @@ end
 end
 
   GameOption_CheckNewUI = function()
-  -- function num : 0_257 , upvalues : chk_Option, frame_Game
+  -- function num : 0_258 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_NewUI):IsCheck()
   self.currentCheckIsNewUI = check
@@ -7085,7 +7090,7 @@ end
 end
 
   GameOption_CheckHideMast = function()
-  -- function num : 0_258 , upvalues : chk_Option, frame_Game
+  -- function num : 0_259 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_HideMast):IsCheck()
   self.currentCheckIsHideMast = check
@@ -7093,7 +7098,7 @@ end
 end
 
   GameOption_CheckCashAlert = function()
-  -- function num : 0_259 , upvalues : chk_Option, frame_Game
+  -- function num : 0_260 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_ShowCashAlert):IsCheck()
   self.currentCheckShowCashAlert = check
@@ -7101,7 +7106,7 @@ end
 end
 
   GameOption_CheckShowHpRular = function()
-  -- function num : 0_260 , upvalues : chk_Option, frame_Game
+  -- function num : 0_261 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_showHpRular):IsCheck()
   self.currentCheckShowHpRular = check
@@ -7109,12 +7114,12 @@ end
 end
 
   GameOption_GetShowHpRular = function()
-  -- function num : 0_261 , upvalues : chk_Option
+  -- function num : 0_262 , upvalues : chk_Option
   return chk_Option.currentCheckShowHpRular
 end
 
   GameOption_CheckMouseInvertX = function()
-  -- function num : 0_262 , upvalues : chk_Option, frame_Game
+  -- function num : 0_263 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MouseX):IsCheck()
   self.currentCheckMouseInvertX = check
@@ -7122,7 +7127,7 @@ end
 end
 
   GameOption_CheckMouseInvertY = function()
-  -- function num : 0_263 , upvalues : chk_Option, frame_Game
+  -- function num : 0_264 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_MouseY):IsCheck()
   self.currentCheckMouseInvertY = check
@@ -7130,7 +7135,7 @@ end
 end
 
   GameOption_MouseSensitivityX_slider = function()
-  -- function num : 0_264 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_265 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_MouXSen):GetControlPos()
   self.currentCheckMouseSensitivityX = volume * 1.9 + 0.1
@@ -7140,7 +7145,7 @@ end
 end
 
   GameOption_MouseSensitivityX_button = function()
-  -- function num : 0_265 , upvalues : chk_Option, _btn_MouXSen, frame_Game, GetStr_Option
+  -- function num : 0_266 , upvalues : chk_Option, _btn_MouXSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_MouXSen:GetPosX() / ((frame_Game._slide_MouXSen):GetSizeX() - _btn_MouXSen:GetSizeX())
   self.currentCheckMouseSensitivityX = volume * 1.9 + 0.1
@@ -7150,7 +7155,7 @@ end
 end
 
   GameOption_MouseSensitivityY_slider = function()
-  -- function num : 0_266 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_267 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_MouYSen):GetControlPos()
   self.currentCheckMouseSensitivityY = volume * 1.9 + 0.1
@@ -7160,7 +7165,7 @@ end
 end
 
   GameOption_MouseSensitivityY_button = function()
-  -- function num : 0_267 , upvalues : chk_Option, _btn_MouYSen, frame_Game, GetStr_Option
+  -- function num : 0_268 , upvalues : chk_Option, _btn_MouYSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_MouYSen:GetPosX() / ((frame_Game._slide_MouYSen):GetSizeX() - _btn_MouYSen:GetSizeX())
   self.currentCheckMouseSensitivityY = volume * 1.9 + 0.1
@@ -7170,7 +7175,7 @@ end
 end
 
   GameOption_hitFxVolume_slider = function()
-  -- function num : 0_268 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
+  -- function num : 0_269 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
   local self = chk_Option
   local volume = _btn_hitFxVolume:GetPosX() / ((frame_Sound._slide_hitFxVolume):GetSizeX() - _btn_hitFxVolume:GetSizeX())
   self.currentHitFxVolume = volume * 100
@@ -7205,7 +7210,7 @@ end
 end
 
   GameOption_CheckPadEnable = function()
-  -- function num : 0_269 , upvalues : chk_Option, frame_Game
+  -- function num : 0_270 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UsePad):IsCheck()
   self.currentCheckPadEnable = check
@@ -7213,7 +7218,7 @@ end
 end
 
   GameOption_CheckSelfPlayerNameTagVisible = function()
-  -- function num : 0_270 , upvalues : chk_Option, frame_Game
+  -- function num : 0_271 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_SelfNameShowAllways):IsCheck() then
     self.currentSelfPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -7228,7 +7233,7 @@ end
 end
 
   GameOption_CheckPetObjectShow = function()
-  -- function num : 0_271 , upvalues : chk_Option, gamePanel_Main, frame_Game
+  -- function num : 0_272 , upvalues : chk_Option, gamePanel_Main, frame_Game
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     if ((PaGlobal_GameOption_Optimization._ui)._btn_PetAll):IsCheck() then
@@ -7268,7 +7273,7 @@ end
 end
 
   GameOption_CheckWorkerObjectShow = function(workerVisible)
-  -- function num : 0_272 , upvalues : chk_Option, gamePanel_Main, frame_Display
+  -- function num : 0_273 , upvalues : chk_Option, gamePanel_Main, frame_Display
   local self = chk_Option
   if (gamePanel_Main._btn_Optimization):IsCheck() == true then
     if ((PaGlobal_GameOption_Optimization._ui)._btn_WorkerVisible):IsCheck() then
@@ -7307,7 +7312,7 @@ end
 end
 
   GameOption_CheckFontResize = function()
-  -- function num : 0_273 , upvalues : chk_Option, frame_Game
+  -- function num : 0_274 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_FontResizeDefault):IsCheck() then
     self.currentFontResizeType = (CppEnums.UIFontSizeType).eUIFontSizeType_Normal
@@ -7322,7 +7327,7 @@ end
 end
 
   GameOption_CheckNavGuidType = function()
-  -- function num : 0_274 , upvalues : chk_Option, frame_Game
+  -- function num : 0_275 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_NavGuideNone):IsCheck() then
     self.currentNavPathEffectType = (CppEnums.NavPathEffectType).eNavPathEffectType_None
@@ -7341,7 +7346,7 @@ end
 end
 
   GameOption_CheckWorldMapOpenType = function()
-  -- function num : 0_275 , upvalues : chk_Option, frame_Game
+  -- function num : 0_276 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_WorldMapOpenByWestMaintain):IsCheck() then
     self.currentWorldMapOpenType = (CppEnums.WorldMapAnimationStyle).afterSpinNorth
@@ -7364,7 +7369,7 @@ end
 end
 
   GameOption_WorldMapAngle = function()
-  -- function num : 0_276 , upvalues : chk_Option, frame_Game
+  -- function num : 0_277 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_WorldMapCameraDefaultAngle):IsCheck() then
     self.currentWorldMapCameraType = (CppEnums.WorldMapCameraPitchType).eWorldMapCameraPitchType_Default
@@ -7383,7 +7388,7 @@ end
 end
 
   GameOption_ServiceResourceTypeFunc = function()
-  -- function num : 0_277 , upvalues : chk_Option, serviceResCount, _btn_ServiceResourceType, serviceResEnumsNumber, _btn_ChatLanguageType, ChatChannelEnumsNumber
+  -- function num : 0_278 , upvalues : chk_Option, serviceResCount, _btn_ServiceResourceType, serviceResEnumsNumber, _btn_ChatLanguageType, ChatChannelEnumsNumber
   local self = chk_Option
   for index = 0, serviceResCount - 1 do
     if (_btn_ServiceResourceType[index]):IsCheck() then
@@ -7405,7 +7410,7 @@ end
 end
 
   ChatChannelOption = function()
-  -- function num : 0_278 , upvalues : chk_Option, serviceResCount, _btn_ChatLanguageType, ChatChannelEnumsNumber
+  -- function num : 0_279 , upvalues : chk_Option, serviceResCount, _btn_ChatLanguageType, ChatChannelEnumsNumber
   local self = chk_Option
   for index = 0, serviceResCount do
     if (_btn_ChatLanguageType[index]):IsCheck() then
@@ -7419,7 +7424,7 @@ end
 end
 
   GameOption_CheckOtherPlayerNameTagVisible = function()
-  -- function num : 0_279 , upvalues : chk_Option, frame_Game
+  -- function num : 0_280 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_OtherNameShow):IsCheck() then
     self.currentOtherPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -7430,23 +7435,12 @@ end
 end
 
   GameOption_CheckPartyPlayerNameTagVisible = function()
-  -- function num : 0_280 , upvalues : chk_Option, frame_Game
+  -- function num : 0_281 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_PartyNameShow):IsCheck() then
     self.currentPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
   else
     self.currentPartyPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_ImportantShow
-  end
-  GameOption_UpdateOptionChanged()
-end
-
-  GameOption_CheckGuildPlayerNameTagVisible = function()
-  -- function num : 0_281 , upvalues : chk_Option, frame_Game
-  local self = chk_Option
-  if (frame_Game._btn_GuildNameShow):IsCheck() then
-    self.currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
-  else
-    self.currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_ImportantShow
   end
   GameOption_UpdateOptionChanged()
 end
@@ -7462,8 +7456,19 @@ end
   GameOption_UpdateOptionChanged()
 end
 
-  GameOption_CheckRankingPlayerNameTagVisible = function()
+  GameOption_CheckGuildPlayerNameTagVisible = function()
   -- function num : 0_283 , upvalues : chk_Option, frame_Game
+  local self = chk_Option
+  if (frame_Game._btn_GuildNameShow):IsCheck() then
+    self.currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
+  else
+    self.currentGuildPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_ImportantShow
+  end
+  GameOption_UpdateOptionChanged()
+end
+
+  GameOption_CheckRankingPlayerNameTagVisible = function()
+  -- function num : 0_284 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   if (frame_Game._btn_RankingNameShow):IsCheck() then
     self.currentRankingPlayerNameTagVisible = (CppEnums.VisibleNameTagType).eVisibleNameTagType_AllwaysShow
@@ -7474,28 +7479,28 @@ end
 end
 
   GameOption_CheckGuideLine_HumanRelation = function()
-  -- function num : 0_284 , upvalues : chk_Option, frame_Game
+  -- function num : 0_285 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   self.currentGuideLineHumanRelation = (frame_Game._btn_GuideLineHumanRelation):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
   GameOption_CheckGuideLine_QuestLine = function()
-  -- function num : 0_285 , upvalues : chk_Option, frame_Game
+  -- function num : 0_286 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   self.currentGuideLineQuestLine = (frame_Game._btn_GuideLineQuestObject):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
   GameOption_CheckGuideLine_PartyMemberEffect = function()
-  -- function num : 0_286 , upvalues : chk_Option, frame_Game
+  -- function num : 0_287 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   self.currentGuideLinePartyMemberEffect = (frame_Game._btn_GuideLinePartyEffect):IsCheck()
   GameOption_UpdateOptionChanged()
 end
 
   GameOption_CheckGuideLine_RanderColor = function(renderColorType)
-  -- function num : 0_287 , upvalues : randerPlayerColorStr, chk_Option, frame_Game
+  -- function num : 0_288 , upvalues : randerPlayerColorStr, chk_Option, frame_Game
   -- DECOMPILER ERROR at PC9: Confused about usage of register: R1 in 'UnsetPending'
 
   if randerPlayerColorStr.zoneChange == renderColorType then
@@ -7535,7 +7540,7 @@ end
 end
 
   GameOption_CheckPadVibration = function()
-  -- function num : 0_288 , upvalues : chk_Option, frame_Game
+  -- function num : 0_289 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_UseVibe):IsCheck()
   self.currentCheckPadVibration = check
@@ -7543,7 +7548,7 @@ end
 end
 
   GameOption_CheckPadInvertX = function()
-  -- function num : 0_289 , upvalues : chk_Option, frame_Game
+  -- function num : 0_290 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_PadX):IsCheck()
   self.currentCheckPadInvertX = check
@@ -7551,7 +7556,7 @@ end
 end
 
   GameOption_CheckPadInvertY = function()
-  -- function num : 0_290 , upvalues : chk_Option, frame_Game
+  -- function num : 0_291 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_PadY):IsCheck()
   self.currentCheckPadInvertY = check
@@ -7559,7 +7564,7 @@ end
 end
 
   GameOption_CheckConsoleUIMode = function()
-  -- function num : 0_291 , upvalues : chk_Option, frame_Game
+  -- function num : 0_292 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_ConsoleMode):IsCheck()
   self.currentCheckPadConsoleUIMode = check
@@ -7567,7 +7572,7 @@ end
 end
 
   GameOption_CheckConsoleComboMode = function()
-  -- function num : 0_292 , upvalues : chk_Option, frame_Game
+  -- function num : 0_293 , upvalues : chk_Option, frame_Game
   local self = chk_Option
   local check = (frame_Game._btn_ComboMode):IsCheck()
   self.currentCheckPadConsoleComboMode = check
@@ -7575,7 +7580,7 @@ end
 end
 
   GameOption_CheckAlertMSG = function(alertType)
-  -- function num : 0_293 , upvalues : frame_Game
+  -- function num : 0_294 , upvalues : frame_Game
   if alertType == 0 then
     bCheck = (frame_Game._btn_Alert_Region):IsCheck()
   else
@@ -7627,7 +7632,7 @@ end
 end
 
   GameOption_PadSensitivityX_slider = function()
-  -- function num : 0_294 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_295 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_PadXSen):GetControlPos()
   self.currentCheckPadSensitivityX = volume * 1.9 + 0.1
@@ -7637,7 +7642,7 @@ end
 end
 
   GameOption_PadSensitivityX_button = function()
-  -- function num : 0_295 , upvalues : chk_Option, _btn_PadXSen, frame_Game, GetStr_Option
+  -- function num : 0_296 , upvalues : chk_Option, _btn_PadXSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_PadXSen:GetPosX() / ((frame_Game._slide_PadXSen):GetSizeX() - _btn_PadXSen:GetSizeX())
   self.currentCheckPadSensitivityX = volume * 1.9 + 0.1
@@ -7647,7 +7652,7 @@ end
 end
 
   GameOption_PadSensitivityY_slider = function()
-  -- function num : 0_296 , upvalues : chk_Option, frame_Game, GetStr_Option
+  -- function num : 0_297 , upvalues : chk_Option, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = (frame_Game._slide_PadYSen):GetControlPos()
   self.currentCheckPadSensitivityY = volume * 1.9 + 0.1
@@ -7657,7 +7662,7 @@ end
 end
 
   GameOption_PadSensitivityY_button = function()
-  -- function num : 0_297 , upvalues : chk_Option, _btn_PadYSen, frame_Game, GetStr_Option
+  -- function num : 0_298 , upvalues : chk_Option, _btn_PadYSen, frame_Game, GetStr_Option
   local self = chk_Option
   local volume = _btn_PadYSen:GetPosX() / ((frame_Game._slide_PadYSen):GetSizeX() - _btn_PadYSen:GetSizeX())
   self.currentCheckPadSensitivityY = volume * 1.9 + 0.1
@@ -7667,7 +7672,7 @@ end
 end
 
   GameOption_hitFxVolume_button = function()
-  -- function num : 0_298 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
+  -- function num : 0_299 , upvalues : chk_Option, _btn_hitFxVolume, frame_Sound, _volumeParam, GetStr_Option
   local self = chk_Option
   local volume = _btn_hitFxVolume:GetPosX() / ((frame_Sound._slide_hitFxVolume):GetSizeX() - _btn_hitFxVolume:GetSizeX())
   self.currentHitFxVolume = volume * 100
@@ -7702,7 +7707,7 @@ end
 end
 
   KeyCustom_Action_ButtonPushed_Key = function(inputTypeIndex)
-  -- function num : 0_299 , upvalues : configDataIndex, INPUT_TYPE
+  -- function num : 0_300 , upvalues : configDataIndex, INPUT_TYPE
   local inputType = configDataIndex + inputTypeIndex - 2
   if inputType >= 0 then
     INPUT_TYPE = inputType
@@ -7712,7 +7717,7 @@ end
 end
 
   KeyCustom_Action_ButtonPushed_Pad = function(inputTypeIndex)
-  -- function num : 0_300 , upvalues : configDataIndex, INPUT_TYPE
+  -- function num : 0_301 , upvalues : configDataIndex, INPUT_TYPE
   local inputType = configDataIndex + inputTypeIndex - 2
   if inputType >= 0 then
     INPUT_TYPE = inputType
@@ -7728,19 +7733,19 @@ end
 end
 
   KeyCustom_Action_ButtonPushed_PadFunc1 = function()
-  -- function num : 0_301
+  -- function num : 0_302
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_ActionPadFunc1)
   setKeyCustomizing(true)
 end
 
   KeyCustom_Action_ButtonPushed_PadFunc2 = function()
-  -- function num : 0_302
+  -- function num : 0_303
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_ActionPadFunc2)
   setKeyCustomizing(true)
 end
 
   KeyCustom_Action_UpdateButtonText_Key = function()
-  -- function num : 0_303 , upvalues : INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigButton, updateKeyConfig
+  -- function num : 0_304 , upvalues : INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigButton, updateKeyConfig
   for ii = INPUT_COUNT_START, INPUT_COUNT_END do
     setKeyConfigDataConfigButton(ii, keyCustom_GetString_ActionKey(ii))
   end
@@ -7748,7 +7753,7 @@ end
 end
 
   KeyCustom_Action_UpdateButtonText_Pad = function()
-  -- function num : 0_304 , upvalues : keyConfigData, INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigPad, updateKeyConfig
+  -- function num : 0_305 , upvalues : keyConfigData, INPUT_COUNT_START, INPUT_COUNT_END, setKeyConfigDataConfigPad, updateKeyConfig
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R0 in 'UnsetPending'
 
   (keyConfigData[-2]).padKeyText = keyCustom_GetString_ActionPadFunc1()
@@ -7763,27 +7768,27 @@ end
 end
 
   KeyCustom_Action_GetInputType = function()
-  -- function num : 0_305 , upvalues : INPUT_TYPE
+  -- function num : 0_306 , upvalues : INPUT_TYPE
   return INPUT_TYPE
 end
 
   KeyCustom_Action_KeyButtonCheckReset = function(inputType)
-  -- function num : 0_306 , upvalues : BUTTON_KEY
+  -- function num : 0_307 , upvalues : BUTTON_KEY
   (BUTTON_KEY[inputType + 2]):SetCheck(false)
 end
 
   KeyCustom_Action_PadButtonCheckReset = function(inputType)
-  -- function num : 0_307 , upvalues : BUTTON_PAD
+  -- function num : 0_308 , upvalues : BUTTON_PAD
   (BUTTON_PAD[inputType + 2]):SetCheck(false)
 end
 
   KeyCustom_Action_FuncPadButtonCheckReset = function(inputType)
-  -- function num : 0_308 , upvalues : BUTTON_PAD
+  -- function num : 0_309 , upvalues : BUTTON_PAD
   (BUTTON_PAD[inputType]):SetCheck(false)
 end
 
   ResetKeyCustombyAttacked = function()
-  -- function num : 0_309 , upvalues : INPUT_TYPE, INPUT_TYPE_UI
+  -- function num : 0_310 , upvalues : INPUT_TYPE, INPUT_TYPE_UI
   if Panel_Window_Option:GetShow() then
     setKeyCustomizing(false)
     if INPUT_TYPE ~= nil then
@@ -7799,7 +7804,7 @@ end
 end
 
   KeyCustom_UI_ButtonPushed_Key = function(inputTypeIndex)
-  -- function num : 0_310 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
+  -- function num : 0_311 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
   local inputType = configDataIndex_UI + inputTypeIndex
   INPUT_TYPE_UI = inputType
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_UiKey)
@@ -7807,7 +7812,7 @@ end
 end
 
   KeyCustom_UI_ButtonPushed_Pad = function(inputTypeIndex)
-  -- function num : 0_311 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
+  -- function num : 0_312 , upvalues : configDataIndex_UI, INPUT_TYPE_UI
   local inputType = configDataIndex_UI + inputTypeIndex
   INPUT_TYPE_UI = inputType
   SetUIMode((Defines.UIMode).eUIMode_KeyCustom_UiPad)
@@ -7815,7 +7820,7 @@ end
 end
 
   KeyCustom_Ui_UpdateButtonText_Key = function()
-  -- function num : 0_312 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigButton, updateKeyConfig_UI
+  -- function num : 0_313 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigButton, updateKeyConfig_UI
   for ii = INPUT_COUNT_START_UI, INPUT_COUNT_END_UI do
     setKeyConfigData_UIConfigButton(ii, keyCustom_GetString_UiKey(ii))
   end
@@ -7823,7 +7828,7 @@ end
 end
 
   KeyCustom_Ui_UpdateButtonText_Pad = function()
-  -- function num : 0_313 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigPad, updateKeyConfig_UI
+  -- function num : 0_314 , upvalues : INPUT_COUNT_START_UI, INPUT_COUNT_END_UI, setKeyConfigData_UIConfigPad, updateKeyConfig_UI
   for ii = INPUT_COUNT_START_UI, INPUT_COUNT_END_UI do
     setKeyConfigData_UIConfigPad(ii, keyCustom_GetString_UiPad(ii))
   end
@@ -7831,22 +7836,22 @@ end
 end
 
   KeyCustom_Ui_GetInputType = function()
-  -- function num : 0_314 , upvalues : INPUT_TYPE_UI
+  -- function num : 0_315 , upvalues : INPUT_TYPE_UI
   return INPUT_TYPE_UI
 end
 
   KeyCustom_Ui_KeyButtonCheckReset = function(inputType)
-  -- function num : 0_315 , upvalues : BUTTON_KEY_UI
+  -- function num : 0_316 , upvalues : BUTTON_KEY_UI
   (BUTTON_KEY_UI[inputType]):SetCheck(false)
 end
 
   KeyCustom_Ui_PadButtonCheckReset = function(inputType)
-  -- function num : 0_316 , upvalues : BUTTON_PAD_UI
+  -- function num : 0_317 , upvalues : BUTTON_PAD_UI
   (BUTTON_PAD_UI[inputType]):SetCheck(false)
 end
 
   GameOption_UpdateOptionChanged = function()
-  -- function num : 0_317 , upvalues : chk_Option, gamePanel_Main
+  -- function num : 0_318 , upvalues : chk_Option, gamePanel_Main
   local self = chk_Option
   if self.currentScreenModeIdx == self.appliedScreenModeIdx and self.currentScreenResolutionIdx == self.appliedScreenModeIdx and self.currentScreenShotFormat == self.appliedScreenShotFormat and self.currentScreenShotSize == self.appliedScreenShotSize and self.currentEffectLOD == self.appliedEffectLOD and self.currentWatermarkService == self.appliedWatermarkService and self.currentWatermarkPosition == self.appliedWatermarkPosition and self.currentWatermarkScale == self.appliedWatermarkScale and self.currentWatermarkAlpha == self.appliedWatermarkAlpha and self.currentColorBlind == self.appliedColorBlind and self.currentSelfPlayerOnlyEffect == self.appliedSelfPlayerOnlyEffect and self.currentNearestPlayerOnlyEffect == self.appliedNearestPlayerOnlyEffect and self.currentSelfPlayerOnlyLantern == self.appliedSelfPlayerOnlyLantern and self.currentLowPower == self.appliedLowPower and self.currentUpscaleEnable == self.appliedUpscaleEnable and self.currentCropModeEnable == self.appliedCropModeEnable and self.currentCropModeScaleX == self.appliedCropModeScaleX and self.currentCropModeScaleY == self.appliedCropModeScaleY and self.currentAutoOptimization == self.appliedAutoOptimization and self.currentEffectOption == self.appliedEffectOption and self.currentPlayerEffectOption == self.appliedPlayerEffectOption and self.currentCharacterDistUpdate == self.appliedCharacterDistUpdate and self.currentPlayerHide == self.appliedPlayerHide and self.currentOptimizationFrame == self.appliedOptimizationFrame and self.currentEffectOptionFrame == self.appliedEffectOptionFrame and self.currentPlayerEffectOptionFrame == self.appliedPlayerEffectOptionFrame and self.currentTextureQualityIdx == self.appliedTextureQualityIdx and self.currentGraphicOptionIdx == self.appliedGraphicOptionIdx and self.currentGammaValue == self.appliedGammaValue and self.currentContrastValue == self.appliedContrastValue and self.currentCheckDof == self.appliedCheckDof and self.currentCheckAA == self.appliedCheckAA and self.currentCheckUltra == self.appliedCheckUltra and self.currentCheckLensBlood == self.appliedCheckLensBlood and self.currentCheckBloodEffect == self.appliedCheckBloodEffect and self.currentCheckRepresent == self.appliedCheckRepresent and self.currentCheckSnowPoolOnlyInSafeZone == self.appliedCheckSnowPoolOnlyInSafeZone and self.currentCheckSSAO == self.appliedCheckSSAO and self.currentCheckTessellation == self.appliedCheckTessellation and self.currentCheckPostFilter == self.appliedCheckPostFilter and self.currentCheckCharacterEffect == self.appliedCheckCharacterEffect and self.currentMaster == self.appliedMaster and self.currentMusic == self.appliedMusic and self.currentFxSound == self.appliedFxSound and self.currentEnvSound == self.appliedEnvSound and self.currentDlgSound == self.appliedDlgSound and self.currentCheckMusic == self.appliedCheckMusic and self.currentCheckSound == self.appliedCheckSound and self.currentCheckEnvSound == self.appliedCheckEnvSound and self.currentCheckCombatMusic == self.appliedCheckCombatMusic and self.currentCheckNpcVoice == self.appliedCheckNpcVoice and self.currentCheckRiddingMusic == self.appliedCheckRiddingMusic and self.currentCheckWhisperMusic == self.appliedCheckWhisperMusic and self.currentCheckTraySoundOnOff == self.appliedCheckTraySoundOnOff and self.currentCheckShowSkillCmd == self.appliedCheckShowSkillCmd and self.currentCheckAutoAim == self.appliedCheckAutoAim and self.currentCheckHideWindowByAttacked == self.appliedCheckHideWindowByAttacked and self.currentCheckShowGuildLoginMessage == self.appliedCheckShowGuildLoginMessage and self.currentCheckEnableSimpleUI == self.appliedCheckEnableSimpleUI and self.currentCheckRenderCharacterColor == self.appliedCheckRenderCharacterColor and self.currentCheckMouseMove == self.appliedCheckMouseMove and self.currentCheckEnableOVR == self.appliedCheckEnableOVR and self.currentCheckEffectAlpha == self.appliedCheckEffectAlpha and self.currentCheckMouseInvertX == self.appliedCheckMouseInvertX and self.currentCheckMouseInvertY == self.appliedCheckMouseInvertY and self.currentCheckMouseSensitivityX == self.appliedCheckMouseSensitivityX and self.currentCheckMouseSensitivityY == self.appliedCheckMouseSensitivityY and self.currentCheckPadEnable == self.appliedCheckPadEnable and self.currentCheckPadVibration == self.appliedCheckPadVibration and self.currentCheckPadInvertX == self.appliedCheckPadInvertX and self.currentCheckPadInvertY == self.appliedCheckPadInvertY and self.currentCheckPadSensitivityX == self.appliedCheckPadSensitivityX and self.currentCheckPadSensitivityY == self.appliedCheckPadSensitivityY and self.currentCheckPadConsoleUIMode == self.appliedCheckPadConsoleUIMode and self.currentCheckPadConsoleComboMode == self.appliedCheckPadConsoleComboMode and self.currentCheckCameraMasterPower == self.appliedCheckCameraMasterPower and self.currentCheckColorByPass == self.appliedCheckColorByPass and self.currentCheckCameraShakePower == self.appliedCheckCameraShakePower and self.currentCheckMotionBlurPower == self.appliedCheckMotionBlurPower and self.currentCheckCameraPosPower == self.appliedCheckCameraPosPower and self.currentCheckCameraFovPower == self.appliedCheckCameraFovPower and self.currentCheckUIScale == self.appliedCheckUIScale and self.currentSelfPlayerNameTagVisible == self.appliedSelfPlayerNameTagVisible and self.currentOtherPlayerNameTagVisible == self.appliedOtherPlayerNameTagVisible and self.currentPartyPlayerNameTagVisible == self.appliedPartyPlayerNameTagVisible and self.currentGuildPlayerNameTagVisible == self.appliedGuildPlayerNameTagVisible and self.currentRankingPlayerNameTagVisible == self.appliedRankingPlayerNameTagVisible and self.currentPetObjectShow == self.appliedPetObjectShow and self.currentFontResizeType == self.appliedFontResizeType and self.currentNavPathEffectType == self.appliedNavPathEffectType and self.currentWorldMapOpenType == self.appliedWorldMapOpenType and self.currentWorldMapCameraType == self.appliedWorldMapCamreraType and self.currentHitFxWeight == self.appliedHitFxWeight and self.currentPlayerVolume == self.appliedPlayerVolume and self.currentFovValue == self.appliedFovValue and self.currentServiceResourceType == self.appliedServiceResourceType and self.currentChatChannelType == self.appliedChatChannelType and self.currentCheckIsUIModeMouseLock == self.appliedCheckIsUIModeMouseLock and self.currentCheckIsPvpRefuse == self.appliedCheckIsPvpRefuse and self.currentCheckIsExchangeRefuse == self.appliedCheckIsExchangeRefuse and self.currentCheckIsNewUI == self.appliedCheckIsNewUI and self.currentCheckIsHideMast == self.appliedCheckIsHideMast and self.currentCheckWorkerVisible == self.appliedCheckWorkerVisible and self.currentCheckShowCashAlert == self.appliedCheckShowCashAlert and self.currentCheckShowHpRular == self.appliedCheckShowHpRular then
     (gamePanel_Main._btn_Apply):SetEnable(false)
@@ -7857,7 +7862,7 @@ end
 end
 
   GameOption_InitDisplayModeList = function(availableScreenResolution)
-  -- function num : 0_318 , upvalues : chk_Option
+  -- function num : 0_319 , upvalues : chk_Option
   local self = chk_Option
   local screenResolutionList = self.screenResolutionList
   self.SCREEN_RESOLUTION_COUNT = availableScreenResolution:getDisplayModeListSize()
@@ -7870,7 +7875,7 @@ end
 end
 
   GameOption_TogglePanel = function()
-  -- function num : 0_319 , upvalues : gamePanel_Main, frame_Game, isKeyConfig_Open, isKeyConfig_UI_Open
+  -- function num : 0_320 , upvalues : gamePanel_Main, frame_Game, isKeyConfig_Open, isKeyConfig_UI_Open
   if (CppEnums.EProcessorInputMode).eProcessorInputMode_ChattingInputMode == (UI.Get_ProcessorInputMode)() then
     return 
   end
@@ -7932,7 +7937,7 @@ end
 end
 
   GameOption_Cancel = function()
-  -- function num : 0_320 , upvalues : chk_Option, currentLUT, isFindScreenResolution, _volumeParam, gamePanel_Main
+  -- function num : 0_321 , upvalues : chk_Option, currentLUT, isFindScreenResolution, _volumeParam, gamePanel_Main
   local self = chk_Option
   if self.appliedScreenModeIdx ~= self.currentScreenModeIdx then
     setScreenMode(self.appliedScreenModeIdx)
@@ -8248,7 +8253,7 @@ end
 end
 
   GameOption_Confirm = function()
-  -- function num : 0_321
+  -- function num : 0_322
   if isNeedGameOptionFromServer() == true then
     FGlobal_QuestWindowRateSetting()
     Panel_UIControl_SetShow(false)
@@ -8259,12 +8264,12 @@ end
 end
 
   GameOption_SaveSetting = function()
-  -- function num : 0_322
+  -- function num : 0_323
   PaGlobal_Panel_SaveSetting_Show()
 end
 
   GameOption_Apply = function()
-  -- function num : 0_323 , upvalues : chk_Option, frame_Display, _volumeParam, frame_Game, randerPlayerColorStr, gamePanel_Main
+  -- function num : 0_324 , upvalues : chk_Option, frame_Display, _volumeParam, frame_Game, randerPlayerColorStr, gamePanel_Main
   local isChangedDisplay = false
   local isResetUI = false
   local self = chk_Option
@@ -8877,12 +8882,12 @@ end
 end
 
   FGlobal_SpiritGuide_IsShow = function()
-  -- function num : 0_324
+  -- function num : 0_325
   return _currentSpiritGuideCheck
 end
 
   GameOption_ChangeDisplayApply = function()
-  -- function num : 0_325 , upvalues : chk_Option
+  -- function num : 0_326 , upvalues : chk_Option
   if isNeedGameOptionFromServer() == true then
     FGlobal_QuestWindowRateSetting()
   end
@@ -8985,7 +8990,7 @@ end
 end
 
   GameOption_ChangeDisplayCancel = function()
-  -- function num : 0_326 , upvalues : chk_Option, currentResolutionX, currentResolutionY, screenResolutionIndex, scaleRangeTable
+  -- function num : 0_327 , upvalues : chk_Option, currentResolutionX, currentResolutionY, screenResolutionIndex, scaleRangeTable
   local self = chk_Option
   if self.appliedScreenModeIdx ~= self.savedScreenModeIdx then
     self.appliedScreenModeIdx = self.savedScreenModeIdx
@@ -9018,26 +9023,26 @@ end
 end
 
   GameOption_ChangeDisplayTimeOut = function()
-  -- function num : 0_327
+  -- function num : 0_328
   if (MessageBox.isPopUp)() == true then
     messageBox_CancelButtonUp()
   end
 end
 
   GameExitOpen = function()
-  -- function num : 0_328
+  -- function num : 0_329
   GameExitShowToggle()
   GameOption_Cancel()
 end
 
   GameUIRepos = function()
-  -- function num : 0_329
+  -- function num : 0_330
   Panel_UIControl_SetShow(true)
   GameOption_Cancel()
 end
 
   GameOption_ReSetKeyConfig = function(target)
-  -- function num : 0_330
+  -- function num : 0_331
   if target == 0 then
     keyCustom_SetDefaultAction()
     KeyCustom_Action_UpdateButtonText_Key()
@@ -9056,7 +9061,7 @@ end
 end
 
   GameOption_ResetAllOptionConfirm = function()
-  -- function num : 0_331
+  -- function num : 0_332
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ALLRESETCONFIRMMESSAGE")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = messageBoxMemo, functionYes = GameOption_ResetAllOption, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
@@ -9064,7 +9069,7 @@ end
 end
 
   GameOption_ResetAllOption = function()
-  -- function num : 0_332
+  -- function num : 0_333
   GameOption_ResetDisplayOption()
   GameOption_ResetSoundOption()
   GameOption_ResetGameOption()
@@ -9078,7 +9083,7 @@ end
 end
 
   GameOption_DefaultOption = function(gameOptionSetting, optionType)
-  -- function num : 0_333 , upvalues : chk_Option, randerPlayerColorStr, frame_Game
+  -- function num : 0_334 , upvalues : chk_Option, randerPlayerColorStr, frame_Game
   -- DECOMPILER ERROR at PC5: Confused about usage of register: R2 in 'UnsetPending'
 
   if optionType == 1 then
@@ -9510,7 +9515,7 @@ end
 end
 
   GameOption_ResetDisplayOption = function()
-  -- function num : 0_334 , upvalues : chk_Option, scaleRangeTable, frame_Display, GetStr_Option, gamePanel_Main
+  -- function num : 0_335 , upvalues : chk_Option, scaleRangeTable, frame_Display, GetStr_Option, gamePanel_Main
   resetDisplayOption()
   GameOption_SetScreenModeButtons(chk_Option.currentScreenModeIdx)
   if chk_Option.currentScreenResolutionIdx == 0 then
@@ -9599,7 +9604,7 @@ end
 end
 
   GameOption_ResetSoundOption = function()
-  -- function num : 0_335 , upvalues : frame_Sound, chk_Option, gamePanel_Main
+  -- function num : 0_336 , upvalues : frame_Sound, chk_Option, gamePanel_Main
   resetSoundOption()
   ;
   (frame_Sound._btn_MusicOnOff):SetCheck(chk_Option.currentCheckMusic)
@@ -9669,7 +9674,7 @@ end
 end
 
   GameOption_ResetGameOption = function()
-  -- function num : 0_336 , upvalues : chk_Option, frame_Game, GetStr_Option, gamePanel_Main
+  -- function num : 0_337 , upvalues : chk_Option, frame_Game, GetStr_Option, gamePanel_Main
   resetGameOption()
   local mouseSensitivityX_Percent = (chk_Option.currentCheckMouseSensitivityX - 0.1) / 1.9 * 100
   local mouseSensitivityY_Percent = (chk_Option.currentCheckMouseSensitivityY - 0.1) / 1.9 * 100
@@ -9817,7 +9822,7 @@ end
 end
 
   GameOption_DisplayOptimizationReset = function()
-  -- function num : 0_337 , upvalues : chk_Option, frame_Display, frame_Game
+  -- function num : 0_338 , upvalues : chk_Option, frame_Display, frame_Game
   resetDisplayOption()
   resetGameOption()
   GameOption_SetTextureQualityText(chk_Option.currentTextureQualityIdx)
@@ -9868,11 +9873,11 @@ end
 end
 
   GameOption_UIPositon_Reset = function()
-  -- function num : 0_338
+  -- function num : 0_339
 end
 
   GameOption_SimpleToolTips = function(isShow, optionType)
-  -- function num : 0_339 , upvalues : gamePanel_Main, frame_Sound
+  -- function num : 0_340 , upvalues : gamePanel_Main, frame_Sound
   if optionType == 1 then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TOOLTIP_DISPLAY_NAME")
     desc = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_TOOLTIP_DISPLAY_DESC")
@@ -10006,7 +10011,7 @@ end
 end
 
   Button_Simpletooltips = function(isShow, targetNo)
-  -- function num : 0_340 , upvalues : toolTipIdxValue
+  -- function num : 0_341 , upvalues : toolTipIdxValue
   if isShow == true then
     registTooltipControl((toolTipIdxValue[targetNo]).control, Panel_Tooltip_SimpleText)
     TooltipSimple_Show((toolTipIdxValue[targetNo]).control, (toolTipIdxValue[targetNo]).name, (toolTipIdxValue[targetNo]).desc)
@@ -10016,7 +10021,7 @@ end
 end
 
   Show_PictureTooltips = function(isShow, tooltipType)
-  -- function num : 0_341 , upvalues : frame_Display
+  -- function num : 0_342 , upvalues : frame_Display
   for index = 0, #frame_Display._pictureTooltip do
     ((frame_Display._pictureTooltip)[index]):SetShow(false)
   end
@@ -10076,7 +10081,7 @@ end
 end
 
   FGlobal_getUIScale = function()
-  -- function num : 0_342 , upvalues : scaleRangeTable
+  -- function num : 0_343 , upvalues : scaleRangeTable
   local uiScale = {}
   uiScale.min = scaleRangeTable.minScaleValue
   uiScale.max = scaleRangeTable.maxScaleValue
@@ -10084,12 +10089,12 @@ end
 end
 
   FGlobal_returnUIScale = function()
-  -- function num : 0_343 , upvalues : chk_Option
+  -- function num : 0_344 , upvalues : chk_Option
   return chk_Option.currentCheckUIScale
 end
 
   FGlobal_saveUIScale = function(scale)
-  -- function num : 0_344 , upvalues : chk_Option
+  -- function num : 0_345 , upvalues : chk_Option
   -- DECOMPILER ERROR at PC2: Confused about usage of register: R1 in 'UnsetPending'
 
   chk_Option.currentCheckUIScale = scale / 100
@@ -10102,7 +10107,7 @@ end
 end
 
   FGlobal_ApplyUIScale = function(scalePercent)
-  -- function num : 0_345 , upvalues : scaleRangeTable, chk_Option, frame_Display, GetStr_Option
+  -- function num : 0_346 , upvalues : scaleRangeTable, chk_Option, frame_Display, GetStr_Option
   local interval = scaleRangeTable.maxScaleValue - scaleRangeTable.minScaleValue
   local uiScale_Percent = scalePercent
   -- DECOMPILER ERROR at PC13: Confused about usage of register: R3 in 'UnsetPending'
@@ -10134,7 +10139,7 @@ end
   ToClient_initGameOption()
   gameOption_SetEnableArea_Func()
   GameOption_FontResizeCheckFontType = function(fontRaiseSize)
-  -- function num : 0_346
+  -- function num : 0_347
   local addFontSize = convertUIFontTypeToUIFontSize(fontRaiseSize)
   ;
   (ToClient_getFontWrapper("BaseFont_10")):changeCurrentFontSizeBeMore(addFontSize)
@@ -10191,7 +10196,7 @@ end
 end
 
   getUiFontSize = function()
-  -- function num : 0_347 , upvalues : frame_Game
+  -- function num : 0_348 , upvalues : frame_Game
   if (frame_Game._btn_FontResizeDefault):IsCheck() then
     return 0
   else
@@ -10207,13 +10212,13 @@ end
 
   local simpleUI_Check = (frame_Game._btn_EnableSimpleUI):IsCheck()
   SimpleUI_Check = function()
-  -- function num : 0_348 , upvalues : simpleUI_Check
+  -- function num : 0_349 , upvalues : simpleUI_Check
   SimpleUI_EnableCheck(simpleUI_Check)
 end
 
   SimpleUI_EnableCheck(simpleUI_Check)
   FromClient_ChangeScreenMode = function()
-  -- function num : 0_349
+  -- function num : 0_350
   reloadGameUI()
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_CHANGESCREENMODE_FULL")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_MESSAGEBOX_NOTIFY"), content = messageBoxMemo, functionYes = ToClient_ChangePreScreenMode, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -10222,7 +10227,7 @@ end
 end
 
   GameOption_SimpleTipOnce = function(isShow)
-  -- function num : 0_350 , upvalues : frame_Display
+  -- function num : 0_351 , upvalues : frame_Display
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -10235,7 +10240,7 @@ end
 end
 
   GameOption_UIKeySetting_Simpletooltip = function(isShow, index, keyType)
-  -- function num : 0_351 , upvalues : getKeyConfigData, STATIC_INPUT_TITLE, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI
+  -- function num : 0_352 , upvalues : getKeyConfigData, STATIC_INPUT_TITLE, getKeyConfigData_UI, STATIC_INPUT_TITLE_UI
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -10260,7 +10265,7 @@ end
 end
 
   GameOption_UIKeySetting_PadKey_Simpletooltip = function(isShow, index, keyType)
-  -- function num : 0_352 , upvalues : getKeyConfigData, BUTTON_PAD, getKeyConfigData_UI, BUTTON_PAD_UI
+  -- function num : 0_353 , upvalues : getKeyConfigData, BUTTON_PAD, getKeyConfigData_UI, BUTTON_PAD_UI
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -10285,7 +10290,7 @@ end
 end
 
   GameOption_Repos = function()
-  -- function num : 0_353 , upvalues : chk_Option
+  -- function num : 0_354 , upvalues : chk_Option
   local screenSizeX = getScreenSizeX()
   local screenSizeY = getScreenSizeY()
   Panel_Window_Option:SetPosX((screenSizeX - Panel_Window_Option:GetSizeX()) / 2)
@@ -10298,12 +10303,12 @@ end
 end
 
   isNearMonsterAlert = function()
-  -- function num : 0_354 , upvalues : frame_Game
+  -- function num : 0_355 , upvalues : frame_Game
   return (frame_Game._btn_Alert_NearMonster):IsCheck()
 end
 
   FromClient_ChangePetOptionForSiege = function(visibleType)
-  -- function num : 0_355 , upvalues : chk_Option
+  -- function num : 0_356 , upvalues : chk_Option
   self = chk_Option
   -- DECOMPILER ERROR at PC7: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -10317,7 +10322,7 @@ end
 end
 
   FromClient_OtherPlayeUpdate = function(isEnable, isOption)
-  -- function num : 0_356 , upvalues : chk_Option
+  -- function num : 0_357 , upvalues : chk_Option
   local self = chk_Option
   do
     local isShow = false
@@ -10341,6 +10346,11 @@ end
     end
     -- DECOMPILER ERROR: 6 unprocessed JMP targets
   end
+end
+
+  FGlobal_Option_GetShow = function()
+  -- function num : 0_358
+  return Panel_Window_Option:GetShow()
 end
 
   registerEvent("FromClient_ChangeScreenMode", "FromClient_ChangeScreenMode")

@@ -578,11 +578,7 @@ FGlobal_WorldMapCloseSubPanel = function()
   Panel_manageWorker:SetShow(false)
   Panel_Working_Progress:SetShow(false)
   FGlobal_ItemMarketItemSet_Close()
-  if isNewItemmarket_chk() then
-    FGolbal_ItemMarketNew_Close()
-  else
-    FGolbal_ItemMarket_Close()
-  end
+  FGolbal_ItemMarketNew_Close()
   FromClient_OutWorldMapQuestInfo()
   FromClient_OnTerritoryTooltipHide()
   NodeName_ShowToggle(false)

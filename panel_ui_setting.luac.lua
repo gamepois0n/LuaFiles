@@ -579,8 +579,15 @@ prePos = {x = 0, y = 0}
 }
 end
 UiSet.panelCount = #panelControl
+setChangeUiSettingRadarUI = function(panel)
+  -- function num : 0_0 , upvalues : panelControl, panelID
+  -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
+
+  (panelControl[panelID.Radar]).control = panel
+end
+
 PAGlobal_setIsChangePanelState = function(index, state, ischatPanel)
-  -- function num : 0_0 , upvalues : UiSet, panelControl
+  -- function num : 0_1 , upvalues : UiSet, panelControl
   if ischatPanel == false then
     for idx = 1, UiSet.panelCount do
       -- DECOMPILER ERROR at PC15: Confused about usage of register: R7 in 'UnsetPending'
@@ -601,7 +608,7 @@ PAGlobal_setIsChangePanelState = function(index, state, ischatPanel)
 end
 
 PAGlobal_setPanelChattingPoolRelativeSize = function(index, sizex, sizey)
-  -- function num : 0_1 , upvalues : UiSet, panelID, panelControl
+  -- function num : 0_2 , upvalues : UiSet, panelID, panelControl
   local scale = UiSet.currentScale / 100
   local preScale = UiSet.preScale
   local currentScreenSize = {x = getScreenSizeX(), y = getScreenSizeY()}
@@ -652,7 +659,7 @@ local cacheSizeY = {}
 local cachePreScale = {}
 local ChatPanelIsOpenState = {[1] = false, [2] = false, [3] = false, [4] = false, [5] = false}
 UiSet_Initialize = function()
-  -- function num : 0_2 , upvalues : UiSet, panelControl, panelID
+  -- function num : 0_3 , upvalues : UiSet, panelControl, panelID
   for idx = 1, UiSet.panelCount do
     local slot = {}
     local fixedType = ""
@@ -676,6 +683,11 @@ UiSet_Initialize = function()
     (slot.control):addInputEvent("Mouse_LPress", "HandleClicked_UiSet_MoveControl( " .. idx .. " )")
     ;
     (slot.control):addInputEvent("Mouse_LUp", "HandleClicked_UiSet_PositionCheck( " .. idx .. " )")
+    if idx >= 46 and idx <= 55 then
+      (slot.control):addInputEvent("Mouse_On", "PaGlobal_SimpleTooltips_Index(true, " .. idx .. ")")
+      ;
+      (slot.control):addInputEvent("Mouse_Out", "PaGlobal_SimpleTooltips_Index(false, " .. idx .. ")")
+    end
     slot.close = (UI.createAndCopyBasePropertyControl)(Panel_UI_Setting, "Button_Close", slot.control, "UiSet_Btn_CreateClose_" .. idx)
     ;
     (slot.close):SetShow(true)
@@ -687,11 +699,11 @@ UiSet_Initialize = function()
     (slot.close):addInputEvent("Mouse_LUp", "HandleClicked_UiSet_ControlShowToggle( " .. idx .. " )")
     ;
     (slot.close):SetCheck(((panelControl[idx]).control):GetShow())
-    -- DECOMPILER ERROR at PC129: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC149: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (UiSet.panelPool)[idx] = slot
-    -- DECOMPILER ERROR at PC137: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC157: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     (panelControl[idx]).isShow = ((panelControl[idx]).control):GetShow()
@@ -730,25 +742,25 @@ UiSet_Initialize = function()
         relativePosX = ToClient_GetUiInfo((panelControl[idx]).PAGameUIType, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionX)
         relativePosY = ToClient_GetUiInfo((panelControl[idx]).PAGameUIType, 0, (CppEnums.PanelSaveType).PanelSaveType_RelativePositionY)
       end
-      -- DECOMPILER ERROR at PC300: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC320: Confused about usage of register: R9 in 'UnsetPending'
 
       if relativePosX == -1 or relativePosX == -1 then
         if ((panelControl[idx]).control):GetRelativePosX() > 0 or ((panelControl[idx]).control):GetRelativePosY() > 0 then
           (panelControl[idx]).isChange = true
         else
-          -- DECOMPILER ERROR at PC304: Confused about usage of register: R9 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC324: Confused about usage of register: R9 in 'UnsetPending'
 
           ;
           (panelControl[idx]).isChange = false
         end
       else
-        -- DECOMPILER ERROR at PC312: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC332: Confused about usage of register: R9 in 'UnsetPending'
 
         if relativePosX > 0 or relativePosY > 0 then
           (panelControl[idx]).isChange = true
         end
       end
-      -- DECOMPILER ERROR at PC320: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC340: Confused about usage of register: R9 in 'UnsetPending'
 
       if (panelControl[idx]).posFixed == true then
         (panelControl[idx]).isChange = false
@@ -765,10 +777,21 @@ UiSet_Initialize = function()
   end
   ;
   (UiSet.slider_UI_Scale):SetInterval(160)
+  ;
+  (UiSet.btn_SaveUIFreeSet):SetShow(true)
+  ;
+  (UiSet.btn_SaveUIFreeSet):addInputEvent("Mouse_LUp", "PaGlobal_Panel_SaveSetting_Show()")
+  ;
+  (UiSet.btn_SaveUIFreeSet):addInputEvent("Mouse_On", "PaGlobal_SimpleTooltips(true)")
+  ;
+  (UiSet.btn_SaveUIFreeSet):addInputEvent("Mouse_Out", "PaGlobal_SimpleTooltips(false)")
+  if ToClient_IsContentsGroupOpen("258") == false then
+    (UiSet.btn_SaveUIFreeSet):SetShow(false)
+  end
 end
 
 UiSet_update = function()
-  -- function num : 0_3 , upvalues : UiSet, panelID, isLargePartyOpen, panelControl
+  -- function num : 0_4 , upvalues : UiSet, panelID, isLargePartyOpen, panelControl
   (UiSet.slider_UI_Scale):SetControlPos(UiSet.nowCurrentPercent)
   local scaleText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SCALETEXT", "currentScale", UiSet.currentScale)
   ;
@@ -988,7 +1011,7 @@ UiSet_update = function()
 end
 
 HandleClicked_UiSet_MoveControlSet_Start = function(idx)
-  -- function num : 0_4 , upvalues : panelControl, original_MouseX, original_MouseY, UiSet, original_controlPosX, original_controlPosY, posGapX, posGapY
+  -- function num : 0_5 , upvalues : panelControl, original_MouseX, original_MouseY, UiSet, original_controlPosX, original_controlPosY, posGapX, posGapY
   if (panelControl[idx]).posFixed then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_UI_SETTING_POSFIXED_ACK"))
     return 
@@ -1003,7 +1026,7 @@ HandleClicked_UiSet_MoveControlSet_Start = function(idx)
 end
 
 HandleClicked_UiSet_MoveControl = function(idx)
-  -- function num : 0_5 , upvalues : panelControl, UiSet, posGapX, posGapY, cachePosX, cachePosY, cachePreScale, cacheSizeX, cacheSizeY
+  -- function num : 0_6 , upvalues : panelControl, UiSet, posGapX, posGapY, cachePosX, cachePosY, cachePreScale, cacheSizeX, cacheSizeY
   if (panelControl[idx]).posFixed then
     return 
   end
@@ -1036,7 +1059,7 @@ HandleClicked_UiSet_MoveControl = function(idx)
 end
 
 HandleClicked_UiSet_PositionCheck = function(index)
-  -- function num : 0_6 , upvalues : panelID, UiSet
+  -- function num : 0_7 , upvalues : panelID, UiSet
   local checkindex = false
   if (panelID.NewQuickSlot0 <= index and index <= panelID.NewQuickSlot19) or panelID.SkillCoolTimeQuickSlot0 <= index and index <= panelID.SkillCoolTimeQuickSlot9 then
     checkindex = true
@@ -1057,7 +1080,7 @@ HandleClicked_UiSet_PositionCheck = function(index)
 end
 
 HandleClicked_UiSet_PositionCheck_SetPos = function(index, startIndex, endIndex)
-  -- function num : 0_7 , upvalues : UiSet
+  -- function num : 0_8 , upvalues : UiSet
   local basePosX = (((UiSet.panelPool)[index]).control):GetPosX()
   local basePosY = (((UiSet.panelPool)[index]).control):GetPosY()
   for qIndex = startIndex, endIndex do
@@ -1092,14 +1115,14 @@ HandleClicked_UiSet_PositionCheck_SetPos = function(index, startIndex, endIndex)
 end
 
 UiSet_MoveControlSet_End = function(idx)
-  -- function num : 0_8 , upvalues : panelControl
+  -- function num : 0_9 , upvalues : panelControl
   if (panelControl[idx]).posFixed then
     return 
   end
 end
 
 UiSet_ChangeTexture_BG = function(idx, state)
-  -- function num : 0_9 , upvalues : UiSet, BG_Texture
+  -- function num : 0_10 , upvalues : UiSet, BG_Texture
   local control = ((UiSet.panelPool)[idx]).control
   control:ChangeTextureInfoName("New_UI_Common_forLua/Default/UIcontrolPanel.dds")
   local x1, y1, x2, y2 = setTextureUV_Func(control, (BG_Texture[state])[1], (BG_Texture[state])[2], (BG_Texture[state])[3], (BG_Texture[state])[4])
@@ -1109,7 +1132,7 @@ UiSet_ChangeTexture_BG = function(idx, state)
 end
 
 HandleClicked_UiSet_ControlShowToggle = function(idx)
-  -- function num : 0_10 , upvalues : panelID, UiSet, panelControl
+  -- function num : 0_11 , upvalues : panelID, UiSet, panelControl
   local panelOpen = 0
   if idx == panelID.MainQuest then
     if getSelfPlayer() == nil then
@@ -1189,14 +1212,15 @@ HandleClicked_UiSet_ControlShowToggle = function(idx)
 end
 
 UiSet_FreeSet_Open = function()
-  -- function num : 0_11 , upvalues : UiSet
+  -- function num : 0_12 , upvalues : UiSet
   Panel_SaveFreeSet:SetShow(true)
   ;
   (UiSet.title):SetShow(false)
+  PaGlobal_Panel_SaveSetting_Hide()
 end
 
 PaGlobal_UiSet_FreeSet_Close = function()
-  -- function num : 0_12 , upvalues : UiSet
+  -- function num : 0_13 , upvalues : UiSet
   Panel_SaveFreeSet:SetShow(false)
   ;
   (UiSet.title):SetShow(true)
@@ -1205,7 +1229,7 @@ PaGlobal_UiSet_FreeSet_Close = function()
 end
 
 UiSet_GridView = function()
-  -- function num : 0_13 , upvalues : UiSet
+  -- function num : 0_14 , upvalues : UiSet
   local isCheck = (UiSet.chk_GridView):IsCheck()
   if isCheck then
     (UiSet.bg_Grid):SetShow(true)
@@ -1216,7 +1240,7 @@ UiSet_GridView = function()
 end
 
 UiSet_ConfrimSetting_Sub = function(isReset)
-  -- function num : 0_14 , upvalues : UiSet, panelControl, panelID
+  -- function num : 0_15 , upvalues : UiSet, panelControl, panelID
   local scale = UiSet.currentScale / 100
   local preScale = UiSet.preScale
   local currentScreenSize = {x = getScreenSizeX(), y = getScreenSizeY()}
@@ -1469,7 +1493,7 @@ UiSet_ConfrimSetting_Sub = function(isReset)
 end
 
 HandleClicked_UiSet_ConfirmSetting = function(isReset)
-  -- function num : 0_15 , upvalues : renderMode, _isMenu
+  -- function num : 0_16 , upvalues : renderMode, _isMenu
   PaGlobal_UiSet_FreeSet_Close()
   SetUIMode((Defines.UIMode).eUIMode_Default)
   renderMode:reset()
@@ -1491,7 +1515,7 @@ HandleClicked_UiSet_ConfirmSetting = function(isReset)
 end
 
 UiSet_Panel_ShowValueUpdate = function()
-  -- function num : 0_16 , upvalues : UiSet, panelControl
+  -- function num : 0_17 , upvalues : UiSet, panelControl
   for idx = 1, UiSet.panelCount do
     -- DECOMPILER ERROR at PC12: Confused about usage of register: R4 in 'UnsetPending'
 
@@ -1508,7 +1532,7 @@ UiSet_Panel_ShowValueUpdate = function()
 end
 
 HandleClicked_UiSet_FieldViewToggle = function()
-  -- function num : 0_17 , upvalues : UiSet
+  -- function num : 0_18 , upvalues : UiSet
   if (UiSet.btn_FieldView):IsCheck() then
     FieldViewMode_ShowToggle(true)
   else
@@ -1517,7 +1541,7 @@ HandleClicked_UiSet_FieldViewToggle = function()
 end
 
 HandleClicked_UiSet_ChangeScale = function()
-  -- function num : 0_18 , upvalues : UiSet, cachePosX, cachePosY, cacheSizeX, cacheSizeY, cachePreScale, panelID
+  -- function num : 0_19 , upvalues : UiSet, cachePosX, cachePosY, cacheSizeX, cacheSizeY, cachePreScale, panelID
   local nowPercent = (UiSet.slider_UI_Scale):GetControlPos()
   local realPercent = (math.ceil)(UiSet.replaceScale / 100 * (nowPercent * 100) + UiSet.minScale)
   -- DECOMPILER ERROR at PC16: Confused about usage of register: R2 in 'UnsetPending'
@@ -1593,7 +1617,7 @@ HandleClicked_UiSet_ChangeScale = function()
 end
 
 HandleClicked_UiSet_ChangeScale_LDown = function()
-  -- function num : 0_19 , upvalues : UiSet, cachePosX, cachePosY, cachePreScale, cacheSizeX, cacheSizeY
+  -- function num : 0_20 , upvalues : UiSet, cachePosX, cachePosY, cachePreScale, cacheSizeX, cacheSizeY
   local scale = UiSet.currentScale / 100
   for idx = 1, UiSet.panelCount do
     local control = ((UiSet.panelPool)[idx]).control
@@ -1616,7 +1640,7 @@ HandleClicked_UiSet_ChangeScale_LDown = function()
 end
 
 UiSet_ScaleSet = function()
-  -- function num : 0_20 , upvalues : UiSet
+  -- function num : 0_21 , upvalues : UiSet
   local scaleValue = FGlobal_getUIScale()
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -1639,7 +1663,7 @@ UiSet_ScaleSet = function()
 end
 
 FGlobal_UiSet_Open = function(isMenu)
-  -- function num : 0_21 , upvalues : UiSet, renderMode, panelID, ChatPanelIsOpenState, _isMenu
+  -- function num : 0_22 , upvalues : UiSet, renderMode, panelID, ChatPanelIsOpenState, _isMenu
   close_force_WindowPanelList()
   ToClient_SaveUiInfo(false)
   ;
@@ -1719,7 +1743,7 @@ FGlobal_UiSet_Open = function(isMenu)
 end
 
 FGlobal_UiSet_Close = function()
-  -- function num : 0_22 , upvalues : renderMode, _isMenu, ChatPanelIsOpenState, closePanelState
+  -- function num : 0_23 , upvalues : renderMode, _isMenu, ChatPanelIsOpenState, closePanelState
   PaGlobal_UiSet_FreeSet_Close()
   if Panel_UI_Setting:IsShow() == false then
     return 
@@ -1752,7 +1776,7 @@ FGlobal_UiSet_Close = function()
 end
 
 UiSet_OnScreenEvent = function()
-  -- function num : 0_23 , upvalues : UiSet, UiSave
+  -- function num : 0_24 , upvalues : UiSet, UiSave
   Panel_UI_Setting:SetSize(getScreenSizeX(), getScreenSizeY())
   Panel_SaveFreeSet:ComputePos()
   ;
@@ -1774,7 +1798,7 @@ UiSet_OnScreenEvent = function()
 end
 
 UiSet_registEventHandler = function()
-  -- function num : 0_24 , upvalues : UiSave, UiSet
+  -- function num : 0_25 , upvalues : UiSave, UiSet
   (UiSave.btn_SaveClose):addInputEvent("Mouse_LUp", "PaGlobal_UiSet_FreeSet_Close()")
   ;
   (UiSave.btn_SaveDefault):addInputEvent("Mouse_LUp", "HandleClicked_UiSet_ConfirmSetting()")
@@ -1802,9 +1826,9 @@ UiSet_registEventHandler = function()
 end
 
 HandleClicked_Reset_UiSetting_Msg = function()
-  -- function num : 0_25 , upvalues : UiSet, renderMode, panelControl, panelID, cachePosX, cachePosY, ChatPanelIsOpenState
+  -- function num : 0_26 , upvalues : UiSet, renderMode, panelControl, panelID, cachePosX, cachePosY, ChatPanelIsOpenState
   local reset_GameUI = function()
-    -- function num : 0_25_0 , upvalues : UiSet, renderMode, panelControl, panelID, cachePosX, cachePosY, ChatPanelIsOpenState
+    -- function num : 0_26_0 , upvalues : UiSet, renderMode, panelControl, panelID, cachePosX, cachePosY, ChatPanelIsOpenState
     local screenSizeX = getScreenSizeX()
     local screenSizeY = getScreenSizeY()
     local const_LowMaxScaleValue = 90
@@ -2212,7 +2236,7 @@ UiSet_registEventHandler()
 ;
 (UiSet.btn_UIFreeSet3):addInputEvent("Mouse_LUp", "applyPresetInfo( " .. 2 .. ")")
 savePresetInfo = function(presetIndex)
-  -- function num : 0_26 , upvalues : UiSet, panelControl, panelID
+  -- function num : 0_27 , upvalues : UiSet, panelControl, panelID
   local currentScreenSize = {x = getScreenSizeX(), y = getScreenSizeY()}
   for idx = 1, UiSet.panelCount do
     local slot = ((UiSet.panelPool)[idx]).control
@@ -2255,8 +2279,9 @@ savePresetInfo = function(presetIndex)
 end
 
 applyPresetInfo = function(presetIndex)
-  -- function num : 0_27 , upvalues : UiSet, panelID, panelControl
+  -- function num : 0_28 , upvalues : UiSet, panelID, panelControl
   if (ToClient_getGameUIManagerWrapper()):isPresetListEmpty(presetIndex) then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_NOPRESET"))
     return 
   end
   for idx = 1, UiSet.panelCount do
@@ -2272,7 +2297,7 @@ applyPresetInfo = function(presetIndex)
 end
 
 FromClient_getUiSettingChattingPanelInfo = function(chatWindowIndex, isOpen, isCombined, sizeX, sizeY, isUsedSmoothChattingup)
-  -- function num : 0_28 , upvalues : panelID, closePanelState, closeEmptyPanelState, ChatPanelIsOpenState, UiSet, panelControl
+  -- function num : 0_29 , upvalues : panelID, closePanelState, closeEmptyPanelState, ChatPanelIsOpenState, UiSet, panelControl
   local index = chatWindowIndex + panelID.Chat0
   -- DECOMPILER ERROR at PC4: Confused about usage of register: R7 in 'UnsetPending'
 
@@ -2352,7 +2377,7 @@ FromClient_getUiSettingChattingPanelInfo = function(chatWindowIndex, isOpen, isC
 end
 
 FromClient_getUiSettingPanelInfo = function(panelIndex, posX, posY, isShow, chatWindowIndex, relativePosX, relativePosY)
-  -- function num : 0_29 , upvalues : panelControl, UiSet, closeEmptyPanelState, panelID
+  -- function num : 0_30 , upvalues : panelControl, UiSet, closeEmptyPanelState, panelID
   if (panelControl[panelIndex]).posFixed == false then
     (((UiSet.panelPool)[panelIndex]).control):SetPosX(posX)
     ;
@@ -2399,8 +2424,36 @@ FromClient_getUiSettingPanelInfo = function(panelIndex, posX, posY, isShow, chat
   end
 end
 
+PaGlobal_SimpleTooltips = function(isShow)
+  -- function num : 0_31 , upvalues : UiSet
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_GAMEOPTION_SAVESETTING")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_BTN_DESC")
+  control = UiSet.btn_save
+  TooltipSimple_Show(control, name, desc)
+end
+
+PaGlobal_SimpleTooltips_Index = function(isShow, idx)
+  -- function num : 0_32 , upvalues : UiSet
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  if idx >= 46 and idx <= 55 then
+    local name, desc, control = nil, nil, nil
+    name = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILLCOOLTIME_TITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_COOLTIME_DESC")
+    control = ((UiSet.panelPool)[idx]).control
+    TooltipSimple_Show(control, name, desc)
+  end
+end
+
 FromClient_applyChattingOptionToLua = function(presetIndex, chatWindowIndex, chatFontSizeType, chatNameType, isCombined, transparency, isUsedSmoothChattingUp)
-  -- function num : 0_30
+  -- function num : 0_33
   ChattingOption_Open(chatWindowIndex, chatWindowIndex, isCombined)
   FGlobal_Chatting_PanelTransparency(chatWindowIndex, transparency, false)
   HandleClicked_ChattingTypeFilter_Notice(chatWindowIndex)

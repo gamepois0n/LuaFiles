@@ -16,7 +16,7 @@ local isExtractionCommon = ToClient_IsContentsGroupOpen("1006")
 local isExtractionJapan = ToClient_IsContentsGroupOpen("1007")
 local isItemLock = ToClient_IsContentsGroupOpen("219")
 local isCronStone = ToClient_IsContentsGroupOpen("74")
-local isMaxEnchanterEnable = false
+local isMaxEnchanterEnable = ToClient_IsContentsGroupOpen("352")
 local normalTooltip = {mainPanel = Panel_Tooltip_Item, itemName = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_Name"), itemIcon = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_Icon"), enchantLevel = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_Enchant_value"), itemType = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_Type"), dying = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_Dying"), isEnchantable = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_isEnchantable"), isSealed = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_isSealed"), bindType = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_BindType"), balksExtraction = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_Balks"), cronsExtraction = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_Cron"), useDyeColorTitle = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_DyeColorInfo"), 
 useDyeColorIcon_Part = {(UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part2"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part3"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part4"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part5"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part6"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part7"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part8"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part9"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part10"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part11"), (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part12"); [0] = (UI.getChildControl)(Panel_Tooltip_Item, "Static_DyeColorIcon_Part1")}
 , useLimit_category = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_category"), useLimit_panel = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_panel"), useLimit_level = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_level"), useLimit_level_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_level_value"), useLimit_extendedslot = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_extendedslot"), useLimit_extendedslot_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_extendedslot_value"), useLimit_class = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_class"), useLimit_class_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_class_value"), useLimit_Exp = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_Exp"), useLimit_Exp_gage = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_Exp_gage"), useLimit_Exp_gage_value = (UI.getChildControl)(Panel_Tooltip_Item, "Progress_UseLimit_Exp_gage_value"), useLimit_Exp_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_Exp_value"), useLimit_endurance = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_endurance"), useLimit_endurance_gage = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_endurance_gage"), useLimit_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item, "Progress_UseLimit_endurance_gage_value"), useLimit_dynamic_endurance_gage_value = (UI.getChildControl)(Panel_Tooltip_Item, "Progress2_MaxEndurance"), useLimit_endurance_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_endurance_value"), remainTime = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_remainTime"), remainTime_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_UseLimit_remainTime_value"), expireIcon_white = (UI.getChildControl)(Panel_Tooltip_Item, "Static_Expire_Icon1"), expireIcon_red = (UI.getChildControl)(Panel_Tooltip_Item, "Static_Expire_Icon2"), expireIcon_end = (UI.getChildControl)(Panel_Tooltip_Item, "Static_Expire_Icon3"), defaultEffect_category = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_category"), defaultEffect_panel = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_panel"), attack = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_attack"), attack_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_attack_value"), attack_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_attackDiff_value"), isMeleeAttack = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_attack_isMeleeAttack"), isRangeAttack = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_attack_isRangeAttack"), isMagicAttack = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_attack_isMagicAttack"), defense = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_defense"), defense_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_defense_value"), defense_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_defenseDiff_value"), weight = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_weight"), weight_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_weight_value"), weight_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_DefaultEffect_weightDiff_value"), _hit = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_hit"), _hit_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_hit_value"), _hit_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_hitDiff_value"), _dv = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_dv"), _dv_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_dv_value"), _dv_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_dvDiff_value"), _pv = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_pv"), _pv_value = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_pv_value"), _pv_diffValue = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_DefaultEffect_pvDiff_value"), _txt_MaxEnchanter = (UI.getChildControl)(Panel_Tooltip_Item, "StaticText_MaxEnchantCharName"), soketOption_panel = (UI.getChildControl)(Panel_Tooltip_Item, "Tooltip_Item_SoketOption_panel"), 
@@ -294,15 +294,37 @@ Panel_Tooltip_Item_Refresh = function()
   end
 end
 
-Panel_Tooltip_Item_Show = function(itemStaticStatus, uiBase, isSSW, isItemWrapper, chattingLinkedItem, index, isItemMarket, invenSlotNo)
+Panel_Tooltip_Item_Show = function(itemStaticStatus, uiBase, isSSW, isItemWrapper, chattingLinkedItem, index, isItemMarket, invenSlotNo, TooltipType, indexForNaming)
   -- function num : 0_5 , upvalues : Panel_Tooltip_Item_DataObject, normalTooltip, equippedTooltip
-  -- DECOMPILER ERROR at PC1: Confused about usage of register: R8 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1: Confused about usage of register: R10 in 'UnsetPending'
 
   Panel_Tooltip_Item_DataObject.itemMarket = isItemMarket
-  -- DECOMPILER ERROR at PC3: Confused about usage of register: R8 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3: Confused about usage of register: R10 in 'UnsetPending'
 
   Panel_Tooltip_Item_DataObject.inventory = nil
-  local isEquipalbeItem, servantItem = showTooltip_Item(normalTooltip, itemStaticStatus, isSSW, isItemWrapper, chattingLinkedItem, index, nil, invenSlotNo)
+  local itemNamingStr = nil
+  if TooltipType ~= nil and indexForNaming ~= nil then
+    if TooltipType == "Dye" then
+      itemNamingStr = getItemNaming(getTItemNoBySlotNo(indexForNaming, true))
+    else
+      if TooltipType == "Improve" then
+        itemNamingStr = getItemNaming(getTItemNoBySlotNo(indexForNaming, false))
+      else
+        if TooltipType == "InventoryBag" then
+          itemNamingStr = getItemNaming(indexForNaming)
+        else
+          if TooltipType == "WeaponChange" then
+            itemNamingStr = getItemNaming(getTItemNoBySlotNo(indexForNaming, false))
+          else
+            if TooltipType == "Delivery" then
+              itemNamingStr = getItemNaming(indexForNaming)
+            end
+          end
+        end
+      end
+    end
+  end
+  local isEquipalbeItem, servantItem = showTooltip_Item(normalTooltip, itemStaticStatus, isSSW, isItemWrapper, chattingLinkedItem, index, nil, invenSlotNo, itemNamingStr)
   local equipItemWrapper = nil
   if isEquipalbeItem and not servantItem and isItemMarket then
     if isSSW then
@@ -429,6 +451,7 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
           local itemWrapper = nil
           local isEquipOn = false
           local isServantEquipOn = false
+          local DeliveryItemNo = nil
           if slotType == "servant_inventory" then
             itemWrapper = getServantInventoryItemBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo)
           else
@@ -486,10 +509,10 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                             isEquipOn = true
                             parent = true
                             inven = true
-                            -- DECOMPILER ERROR at PC220: Confused about usage of register: R10 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC221: Confused about usage of register: R11 in 'UnsetPending'
 
                             EquipItem_Lock.equipment = true
-                            -- DECOMPILER ERROR at PC226: Confused about usage of register: R10 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC227: Confused about usage of register: R11 in 'UnsetPending'
 
                             EquipItem_Lock.itemLock = ToClient_EquipSlot_CheckItemLock(slotNo, 1)
                           else
@@ -568,6 +591,7 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                     local deliveryInfo = deliveryList:atPointer(deliverySlotNo)
                                                                     if deliveryInfo ~= nil then
                                                                       itemWrapper = deliveryInfo:getItemWrapper(deliverySlotNo)
+                                                                      DeliveryItemNo = deliveryInfo:getItemNo()
                                                                     end
                                                                   end
                                                                 else
@@ -654,122 +678,157 @@ Panel_Tooltip_Item_Show_GeneralNormal = function(slotNo, slotType, isOn, index)
                                                                                                 return 
                                                                                               end
                                                                                               local itemNamingStr = nil
-                                                                                              if isEquipOn then
+                                                                                              if isEquipOn and slotType ~= "SocketItem" then
                                                                                                 itemNamingStr = getItemNaming(getTItemNoBySlotNo((itemWrapper:getStaticStatus()):getEquipSlotNo(), true))
                                                                                               else
                                                                                                 if slotType == "Enchant" then
                                                                                                   itemNamingStr = getItemNaming(PaGlobal_Enchant:enchantItem_ToItemNo())
                                                                                                 else
-                                                                                                  itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNo + 2, false))
-                                                                                                end
-                                                                                              end
-                                                                                              local isEquipalbeItem = false
-                                                                                              local servantItem = false
-                                                                                              local skillKey = SkillKey()
-                                                                                              -- DECOMPILER ERROR at PC582: Confused about usage of register: R14 in 'UnsetPending'
-
-                                                                                              Panel_Tooltip_Item_DataObject.isSkill = false
-                                                                                              -- DECOMPILER ERROR at PC591: Confused about usage of register: R14 in 'UnsetPending'
-
-                                                                                              if (itemWrapper:getStaticStatus()):isSkillBook(skillKey) then
-                                                                                                Panel_Tooltip_Item_DataObject.skillSlot = slot
-                                                                                                Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
-                                                                                                -- DECOMPILER ERROR at PC600: Confused about usage of register: R14 in 'UnsetPending'
-
-                                                                                                Panel_Tooltip_Item_DataObject.isSkill = true
-                                                                                                return 
-                                                                                              else
-                                                                                                if not isEquipOn then
-                                                                                                  local itemSSW = itemWrapper:getStaticStatus()
-                                                                                                  if not itemSSW:isEquipable() then
-                                                                                                    isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
+                                                                                                  if slotType == "WareHouse" then
+                                                                                                    local warehouseItemNo = Warehouse_GetToolTipItemNo()
+                                                                                                    if warehouseItemNo ~= nil then
+                                                                                                      itemNamingStr = getItemNaming(warehouseItemNo)
+                                                                                                    end
                                                                                                   else
-                                                                                                    -- DECOMPILER ERROR at PC632: Overwrote pending register: R12 in 'AssignReg'
-
-                                                                                                    isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, slotNo, nil, nil, itemNamingStr)
-                                                                                                  end
-                                                                                                else
-                                                                                                  do
-                                                                                                    showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
-                                                                                                    if isEquipalbeItem and not isEquipOn then
-                                                                                                      local equipItemWrapper, campingItemWrapper = nil, nil
-                                                                                                      if servantItem or isServantEquipOn then
-                                                                                                        local temporaryWrapper = getTemporaryInformationWrapper()
-                                                                                                        if temporaryWrapper ~= nil then
-                                                                                                          local campingWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_CampingTent)
-                                                                                                          if campingWrapper ~= nil then
-                                                                                                            local servantKind = campingWrapper:getServantKind()
-                                                                                                            if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
-                                                                                                              campingItemWrapper = campingWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+                                                                                                    do
+                                                                                                      if slotType == "servant_inventory" then
+                                                                                                        itemNamingStr = getItemNaming(servantInventory_getItemNoBySlotNo(ServantInventory_GetActorKeyRawFromIndex(index), slotNo))
+                                                                                                      else
+                                                                                                        if slotType == "SocketItem" then
+                                                                                                          itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNo, false))
+                                                                                                        else
+                                                                                                          if slotType == "FixEquip" then
+                                                                                                            slotNumber = PaGlobal_FixEquip:fixEquip_GetMainSlotNo()
+                                                                                                            if slotNumber ~= nil then
+                                                                                                              itemNamingStr = getItemNaming(getTItemNoBySlotNo(slotNumber, false))
                                                                                                             end
                                                                                                           else
-                                                                                                            do
-                                                                                                              local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
-                                                                                                              do
-                                                                                                                if servantWrapper ~= nil then
-                                                                                                                  local servantKind = servantWrapper:getServantKind()
-                                                                                                                  if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
-                                                                                                                    equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                                  end
-                                                                                                                end
-                                                                                                                do
-                                                                                                                  local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
-                                                                                                                  -- DECOMPILER ERROR at PC714: Confused about usage of register: R17 in 'UnsetPending'
+                                                                                                            if slotType == "DeliveryRequest" then
+                                                                                                              itemNamingStr = getItemNaming(delivery_packItemNoByIndex(slotNo))
+                                                                                                            else
+                                                                                                              -- DECOMPILER ERROR at PC642: Unhandled construct in 'MakeBoolean' P1
 
-                                                                                                                  if accSlotNo ~= nil then
-                                                                                                                    EquipItem_Lock.itemAccNo = accSlotNo
-                                                                                                                    equipItemWrapper = ToClient_getEquipmentItem(accSlotNo)
-                                                                                                                  else
-                                                                                                                    -- DECOMPILER ERROR at PC721: Confused about usage of register: R17 in 'UnsetPending'
+                                                                                                              if slotType == "DeliveryCarriageInformation" and DeliveryItemNo ~= nil then
+                                                                                                                itemNamingStr = getItemNaming(DeliveryItemNo)
+                                                                                                              end
+                                                                                                            end
+                                                                                                          end
+                                                                                                        end
+                                                                                                      end
+                                                                                                      itemNamingStr = getItemNaming(getTItemNoBySlotNo(getInventory_RealSlotNo(slotNo), false))
+                                                                                                      local isEquipalbeItem = false
+                                                                                                      local servantItem = false
+                                                                                                      local skillKey = SkillKey()
+                                                                                                      -- DECOMPILER ERROR at PC658: Confused about usage of register: R15 in 'UnsetPending'
 
-                                                                                                                    EquipItem_Lock.itemAccNo = -1
-                                                                                                                    equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
-                                                                                                                  end
-                                                                                                                  if equipItemWrapper ~= nil and slotType ~= "Enchant" then
-                                                                                                                    showTooltip_Item(equippedTooltip, equipItemWrapper, false, true)
-                                                                                                                    ;
-                                                                                                                    (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                    local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
-                                                                                                                    ;
-                                                                                                                    ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                    ;
-                                                                                                                    (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
-                                                                                                                  end
-                                                                                                                  do
-                                                                                                                    if campingItemWrapper ~= nil and slotType ~= "Enchant" then
-                                                                                                                      showTooltip_Item(equippedTooltip, campingItemWrapper, false, true)
-                                                                                                                      ;
-                                                                                                                      (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                      local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
-                                                                                                                      ;
-                                                                                                                      ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                      ;
-                                                                                                                      (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                      Panel_Tooltip_Item_DataObject.isSkill = false
+                                                                                                      -- DECOMPILER ERROR at PC667: Confused about usage of register: R15 in 'UnsetPending'
+
+                                                                                                      if (itemWrapper:getStaticStatus()):isSkillBook(skillKey) then
+                                                                                                        Panel_Tooltip_Item_DataObject.skillSlot = slot
+                                                                                                        Panel_SkillTooltip_Show(skillKey:getSkillNo(), false, "itemToSkill", false)
+                                                                                                        -- DECOMPILER ERROR at PC676: Confused about usage of register: R15 in 'UnsetPending'
+
+                                                                                                        Panel_Tooltip_Item_DataObject.isSkill = true
+                                                                                                        return 
+                                                                                                      else
+                                                                                                        if not isEquipOn then
+                                                                                                          local itemSSW = itemWrapper:getStaticStatus()
+                                                                                                          if not itemSSW:isEquipable() then
+                                                                                                            isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
+                                                                                                          else
+                                                                                                            -- DECOMPILER ERROR at PC708: Overwrote pending register: R13 in 'AssignReg'
+
+                                                                                                            isEquipalbeItem = showTooltip_Item(normalTooltip, itemWrapper, false, true, nil, slotNo, nil, nil, itemNamingStr)
+                                                                                                          end
+                                                                                                        else
+                                                                                                          do
+                                                                                                            showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, nil, nil, itemNamingStr)
+                                                                                                            if isEquipalbeItem and not isEquipOn then
+                                                                                                              local equipItemWrapper, campingItemWrapper = nil, nil
+                                                                                                              if servantItem or isServantEquipOn then
+                                                                                                                local temporaryWrapper = getTemporaryInformationWrapper()
+                                                                                                                if temporaryWrapper ~= nil then
+                                                                                                                  local campingWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_CampingTent)
+                                                                                                                  if campingWrapper ~= nil then
+                                                                                                                    local servantKind = campingWrapper:getServantKind()
+                                                                                                                    if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+                                                                                                                      campingItemWrapper = campingWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
                                                                                                                     end
+                                                                                                                  else
                                                                                                                     do
-                                                                                                                      if slotType == "Enchant" then
-                                                                                                                        local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
-                                                                                                                        if isCash == false then
-                                                                                                                          showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true, nil, itemNamingStr)
-                                                                                                                        end
-                                                                                                                        ;
-                                                                                                                        (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
-                                                                                                                        local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
-                                                                                                                        ;
-                                                                                                                        ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                                        ;
-                                                                                                                        (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
-                                                                                                                      end
+                                                                                                                      local servantWrapper = temporaryWrapper:getUnsealVehicle((CppEnums.ServantType).Type_Vehicle)
                                                                                                                       do
-                                                                                                                        if ((slot.icon):getParent()):IsUISubApp() then
-                                                                                                                          Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
-                                                                                                                          ;
-                                                                                                                          (equippedTooltip.mainPanel):OpenUISubApp()
-                                                                                                                          if not isEquipOn then
-                                                                                                                            (normalTooltip.mainPanel):OpenUISubApp()
+                                                                                                                        if servantWrapper ~= nil then
+                                                                                                                          local servantKind = servantWrapper:getServantKind()
+                                                                                                                          if ((itemWrapper:getStaticStatus()):get()):isServantTypeUsable(servantKind) then
+                                                                                                                            equipItemWrapper = servantWrapper:getEquipItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
                                                                                                                           end
-                                                                                                                        else
-                                                                                                                          Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+                                                                                                                        end
+                                                                                                                        do
+                                                                                                                          local accSlotNo = FGlobal_AccSlotNo(itemWrapper)
+                                                                                                                          -- DECOMPILER ERROR at PC790: Confused about usage of register: R18 in 'UnsetPending'
+
+                                                                                                                          if accSlotNo ~= nil then
+                                                                                                                            EquipItem_Lock.itemAccNo = accSlotNo
+                                                                                                                            equipItemWrapper = ToClient_getEquipmentItem(accSlotNo)
+                                                                                                                          else
+                                                                                                                            -- DECOMPILER ERROR at PC797: Confused about usage of register: R18 in 'UnsetPending'
+
+                                                                                                                            EquipItem_Lock.itemAccNo = -1
+                                                                                                                            equipItemWrapper = ToClient_getEquipmentItem((itemWrapper:getStaticStatus()):getEquipSlotNo())
+                                                                                                                          end
+                                                                                                                          if equipItemWrapper ~= nil and slotType ~= "Enchant" then
+                                                                                                                            local equipNamingStr = ""
+                                                                                                                            equipNamingStr = getItemNaming(getTItemNoBySlotNo((equipItemWrapper:getStaticStatus()):getEquipSlotNo(), true))
+                                                                                                                            showTooltip_Item(equippedTooltip, equipItemWrapper, false, true, nil, nil, nil, nil, equipNamingStr)
+                                                                                                                            ;
+                                                                                                                            (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+                                                                                                                            local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
+                                                                                                                            ;
+                                                                                                                            ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                            ;
+                                                                                                                            (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                          end
+                                                                                                                          do
+                                                                                                                            if campingItemWrapper ~= nil and slotType ~= "Enchant" then
+                                                                                                                              showTooltip_Item(equippedTooltip, campingItemWrapper, false, true)
+                                                                                                                              ;
+                                                                                                                              (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+                                                                                                                              local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 38, 43, 74, 109)
+                                                                                                                              ;
+                                                                                                                              ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                              ;
+                                                                                                                              (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                            end
+                                                                                                                            do
+                                                                                                                              if slotType == "Enchant" then
+                                                                                                                                local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
+                                                                                                                                if isCash == false then
+                                                                                                                                  showTooltip_Item(equippedTooltip, itemWrapper, false, true, nil, nil, true, nil, itemNamingStr)
+                                                                                                                                end
+                                                                                                                                ;
+                                                                                                                                (equippedTooltip.arrow):ChangeTextureInfoName("new_ui_common_forlua/widget/tooltip/tooltip_00.dds")
+                                                                                                                                local x1, y1, x2, y2 = setTextureUV_Func(equippedTooltip.arrow, 1, 43, 37, 109)
+                                                                                                                                ;
+                                                                                                                                ((equippedTooltip.arrow):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                                                ;
+                                                                                                                                (equippedTooltip.arrow):setRenderTexture((equippedTooltip.arrow):getBaseTexture())
+                                                                                                                              end
+                                                                                                                              do
+                                                                                                                                if ((slot.icon):getParent()):IsUISubApp() then
+                                                                                                                                  Panel_Tooltip_Item_Set_Position_UISubApp(slot.icon, parent, inven)
+                                                                                                                                  ;
+                                                                                                                                  (equippedTooltip.mainPanel):OpenUISubApp()
+                                                                                                                                  if not isEquipOn then
+                                                                                                                                    (normalTooltip.mainPanel):OpenUISubApp()
+                                                                                                                                  end
+                                                                                                                                else
+                                                                                                                                  Panel_Tooltip_Item_Set_Position(slot.icon, parent, inven)
+                                                                                                                                end
+                                                                                                                              end
+                                                                                                                            end
+                                                                                                                          end
                                                                                                                         end
                                                                                                                       end
                                                                                                                     end
@@ -1616,203 +1675,225 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
               end
               ;
               (target.itemIcon):ChangeTextureInfoName("icon/" .. itemSSW:getIconPath())
-              local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
-              if enchantLevel > 0 and enchantLevel < 16 then
-                (target.enchantLevel):SetText("+" .. tostring(enchantLevel))
-                ;
-                (target.enchantLevel):SetShow(true)
-              else
-                if enchantLevel == 16 then
-                  (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
+              if itemWrapper ~= nil then
+                local isSoulCollector = itemWrapper:isSoulCollector()
+                local isCurrentSoulCount = itemWrapper:getSoulCollectorCount()
+                local isMaxSoulCount = itemWrapper:getSoulCollectorMaxCount()
+                if isSoulCollector then
+                  (target.itemIcon):ChangeTextureInfoName("icon/" .. (itemWrapper:getStaticStatus()):getIconPath())
+                  if isCurrentSoulCount == 0 then
+                    (target.itemIcon):ChangeTextureInfoName("icon/" .. (itemWrapper:getStaticStatus()):getIconPath())
+                  end
+                  if isCurrentSoulCount > 0 then
+                    (target.itemIcon):ChangeTextureInfoName("New_UI_Common_forLua/ExceptionIcon/00040351_1.dds")
+                  end
+                  if isCurrentSoulCount == isMaxSoulCount then
+                    (target.itemIcon):ChangeTextureInfoName("New_UI_Common_forLua/ExceptionIcon/00040351_2.dds")
+                  end
+                end
+              end
+              do
+                local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+                local isEnchantLevel5 = false
+                if enchantLevel > 0 and enchantLevel < 16 then
+                  (target.enchantLevel):SetText("+" .. tostring(enchantLevel))
                   ;
                   (target.enchantLevel):SetShow(true)
                 else
-                  if enchantLevel == 17 then
-                    (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
+                  if enchantLevel == 16 then
+                    (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
                     ;
                     (target.enchantLevel):SetShow(true)
                   else
-                    if enchantLevel == 18 then
-                      (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
+                    if enchantLevel == 17 then
+                      (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
                       ;
                       (target.enchantLevel):SetShow(true)
                     else
-                      if enchantLevel == 19 then
-                        (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
+                      if enchantLevel == 18 then
+                        (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
                         ;
                         (target.enchantLevel):SetShow(true)
                       else
-                        if enchantLevel == 20 then
-                          (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
+                        if enchantLevel == 19 then
+                          (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
                           ;
                           (target.enchantLevel):SetShow(true)
                         else
-                          ;
-                          (target.enchantLevel):SetShow(false)
+                          if enchantLevel == 20 then
+                            (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
+                            ;
+                            (target.enchantLevel):SetShow(true)
+                            isEnchantLevel5 = true
+                          else
+                            ;
+                            (target.enchantLevel):SetShow(false)
+                          end
                         end
                       end
                     end
                   end
                 end
-              end
-              if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
-                if enchantLevel == 1 then
-                  (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
-                  ;
-                  (target.enchantLevel):SetShow(true)
-                else
-                  if enchantLevel == 2 then
-                    (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
+                if (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
+                  if enchantLevel == 1 then
+                    (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_1"))
                     ;
                     (target.enchantLevel):SetShow(true)
                   else
-                    if enchantLevel == 3 then
-                      (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
+                    if enchantLevel == 2 then
+                      (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_2"))
                       ;
                       (target.enchantLevel):SetShow(true)
                     else
-                      if enchantLevel == 4 then
-                        (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
+                      if enchantLevel == 3 then
+                        (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_3"))
                         ;
                         (target.enchantLevel):SetShow(true)
                       else
-                        if enchantLevel == 5 then
-                          (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
+                        if enchantLevel == 4 then
+                          (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_4"))
                           ;
                           (target.enchantLevel):SetShow(true)
+                        else
+                          if enchantLevel == 5 then
+                            (target.enchantLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ENCHANTLEVEL_5"))
+                            ;
+                            (target.enchantLevel):SetShow(true)
+                            isEnchantLevel5 = true
+                          end
                         end
                       end
                     end
                   end
                 end
-              end
-              if (itemSSW:get()):isCash() then
-                (target.enchantLevel):SetShow(false)
-              end
-              ;
-              (target._txt_MaxEnchanter):SetShow(false)
-              ;
-              (target.itemName):SetTextMode(UI_TM.eTextMode_AutoWrap)
-              if itemSSW:getItemType() == 1 and enchantLevel > 15 then
-                local itemAndEnchantName = HighEnchantLevel_ReplaceString(enchantLevel) .. " " .. itemSSW:getName()
-                if itemNamingStr ~= nil then
-                  (target.itemName):SetText(itemAndEnchantName)
-                  ;
-                  (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
-                  ;
-                  (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", itemNamingStr))
-                else
-                  if chattingLinkedItem ~= nil and chattingLinkedItem:getItemNamingUserName() ~= "" then
+                if (itemSSW:get()):isCash() then
+                  (target.enchantLevel):SetShow(false)
+                end
+                ;
+                (target._txt_MaxEnchanter):SetShow(false)
+                ;
+                (target.itemName):SetTextMode(UI_TM.eTextMode_AutoWrap)
+                if itemSSW:getItemType() == 1 and enchantLevel > 15 then
+                  local itemAndEnchantName = HighEnchantLevel_ReplaceString(enchantLevel) .. " " .. itemSSW:getName()
+                  if itemNamingStr ~= nil and isEnchantLevel5 == true then
                     (target.itemName):SetText(itemAndEnchantName)
                     ;
                     (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
                     ;
-                    (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", chattingLinkedItem:getItemNamingUserName()))
+                    (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", itemNamingStr))
                   else
-                    ;
-                    (target.itemName):SetText(itemAndEnchantName)
-                  end
-                end
-              else
-                do
-                  if enchantLevel > 0 and (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
-                    local itemAndEnchantName = HighEnchantLevel_ReplaceString(enchantLevel + 15) .. " " .. itemSSW:getName()
-                    if itemNamingStr ~= nil then
+                    if chattingLinkedItem ~= nil and chattingLinkedItem:getItemNamingUserName() ~= "" then
                       (target.itemName):SetText(itemAndEnchantName)
                       ;
                       (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
                       ;
-                      (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", itemNamingStr))
+                      (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", chattingLinkedItem:getItemNamingUserName()))
                     else
-                      if chattingLinkedItem ~= nil and chattingLinkedItem:getItemNamingUserName() ~= "" then
-                        (target.itemName):SetText(itemAndEnchantName)
-                        ;
-                        (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
-                        ;
-                        (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", chattingLinkedItem:getItemNamingUserName()))
-                      else
-                        ;
-                        (target.itemName):SetText(itemAndEnchantName)
-                      end
+                      ;
+                      (target.itemName):SetText(itemAndEnchantName)
                     end
-                  else
-                    do
-                      if itemNamingStr ~= nil then
-                        (target.itemName):SetText(itemSSW:getName())
+                  end
+                else
+                  do
+                    if enchantLevel > 0 and (CppEnums.ItemClassifyType).eItemClassify_Accessory == itemSSW:getItemClassify() then
+                      local itemAndEnchantName = HighEnchantLevel_ReplaceString(enchantLevel + 15) .. " " .. itemSSW:getName()
+                      if itemNamingStr ~= nil and isEnchantLevel5 == true then
+                        (target.itemName):SetText(itemAndEnchantName)
                         ;
                         (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
                         ;
                         (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", itemNamingStr))
                       else
                         if chattingLinkedItem ~= nil and chattingLinkedItem:getItemNamingUserName() ~= "" then
-                          (target.itemName):SetText(itemSSW:getName())
+                          (target.itemName):SetText(itemAndEnchantName)
                           ;
                           (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
                           ;
                           (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", chattingLinkedItem:getItemNamingUserName()))
                         else
                           ;
+                          (target.itemName):SetText(itemAndEnchantName)
+                        end
+                      end
+                    else
+                      do
+                        if itemNamingStr ~= nil and isEnchantLevel5 == true then
                           (target.itemName):SetText(itemSSW:getName())
-                        end
-                      end
-                      local changeItemNamePos = 25
-                      local iconMovePos = 0
-                      if (target.itemName):GetLineCount() > 1 then
-                        changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + (target.itemName):GetTextSizeY()
-                        iconMovePos = -30
-                      else
-                        if (target.itemName):GetLineCount() == 3 then
-                          changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + (target.itemName):GetTextSizeY()
-                          iconMovePos = -60
+                          ;
+                          (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
+                          ;
+                          (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", itemNamingStr))
                         else
-                          if (target.itemName):GetLineCount() == 4 then
-                            changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + (target.itemName):GetTextSizeY()
-                            iconMovePos = -90
-                          end
-                        end
-                      end
-                      local item_type = itemSSW:getItemType()
-                      local isTradeItem = itemSSW:isTradeAble()
-                      if item_type == 1 then
-                        (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIPMENT"))
-                      else
-                        if item_type == 2 then
-                          if isTradeItem == true then
-                            (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ITEM"))
+                          if chattingLinkedItem ~= nil and chattingLinkedItem:getItemNamingUserName() ~= "" then
+                            (target.itemName):SetText(itemSSW:getName())
+                            ;
+                            (target._txt_MaxEnchanter):SetShow(isMaxEnchanterEnable)
+                            ;
+                            (target._txt_MaxEnchanter):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_MAXENCHANTER", "name", chattingLinkedItem:getItemNamingUserName()))
                           else
                             ;
-                            (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_CONSUME"))
+                            (target.itemName):SetText(itemSSW:getName())
                           end
+                        end
+                        local changeItemNamePos = 25
+                        local iconMovePos = 0
+                        if (target.itemName):GetLineCount() > 1 then
+                          changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + (target.itemName):GetTextSizeY()
+                          iconMovePos = -30
                         else
-                          if item_type == 3 then
-                            (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TENT_TOOL"))
+                          if (target.itemName):GetLineCount() == 3 then
+                            changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + (target.itemName):GetTextSizeY()
+                            iconMovePos = -60
                           else
-                            if item_type == 4 then
-                              (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_INSTALL_TOOL"))
+                            if (target.itemName):GetLineCount() == 4 then
+                              changeItemNamePos = ((target.itemName):GetLineCount() - 1) * 11 + (target.itemName):GetTextSizeY()
+                              iconMovePos = -90
+                            end
+                          end
+                        end
+                        local item_type = itemSSW:getItemType()
+                        local isTradeItem = itemSSW:isTradeAble()
+                        if item_type == 1 then
+                          (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIPMENT"))
+                        else
+                          if item_type == 2 then
+                            if isTradeItem == true then
+                              (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ITEM"))
                             else
-                              if item_type == 5 then
-                                (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SOCKET_ITEM"))
+                              ;
+                              (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_CONSUME"))
+                            end
+                          else
+                            if item_type == 3 then
+                              (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TENT_TOOL"))
+                            else
+                              if item_type == 4 then
+                                (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_INSTALL_TOOL"))
                               else
-                                if item_type == 6 then
-                                  (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_CANNONBALL"))
+                                if item_type == 5 then
+                                  (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SOCKET_ITEM"))
                                 else
-                                  if item_type == 7 then
-                                    (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_LICENCE"))
+                                  if item_type == 6 then
+                                    (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_CANNONBALL"))
                                   else
-                                    if item_type == 8 then
-                                      (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCTION"))
+                                    if item_type == 7 then
+                                      (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_LICENCE"))
                                     else
-                                      if item_type == 9 then
-                                        (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_ENTER_AIR"))
+                                      if item_type == 8 then
+                                        (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCTION"))
                                       else
-                                        if item_type == 10 then
-                                          (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SPECIAL_PRODUCTION"))
+                                        if item_type == 9 then
+                                          (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_ENTER_AIR"))
                                         else
-                                          if (itemSSW:get()):isForJustTrade() == true then
-                                            (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOMAL") .. "/" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ITEM"))
+                                          if item_type == 10 then
+                                            (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SPECIAL_PRODUCTION"))
                                           else
-                                            ;
-                                            (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOMAL"))
+                                            if (itemSSW:get()):isForJustTrade() == true then
+                                              (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOMAL") .. "/" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ITEM"))
+                                            else
+                                              ;
+                                              (target.itemType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOMAL"))
+                                            end
                                           end
                                         end
                                       end
@@ -1823,941 +1904,922 @@ Panel_Tooltip_Item_ShowInfo = function(target, inputValue, isSSW, isItemWrapper,
                             end
                           end
                         end
-                      end
-                      if item_type == 8 and (itemSSW:get()):isForJustTrade() == true then
-                        (target.itemType):SetText((target.itemType):GetText() .. "/" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ITEM"))
-                      end
-                      ;
-                      (target.isSealed):SetShow(false)
-                      if itemSSW:isEquipable() and not isSSW and not (itemSSW:get()):isCash() and item:isSealed() then
-                        (target.isSealed):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_ISEQUIPSEAL"))
-                        ;
-                        (target.isSealed):SetShow(true)
-                      end
-                      local isAble = false
-                      if itemWrapper ~= nil then
-                        isAble = requestIsRegisterItemForItemMarket((itemWrapper:get()):getKey())
-                      end
-                      if (itemSSW:get()):isCash() and not isSSW and isAble and item:isSealed() and not itemSSW:isStackable() and not item:isVested() then
-                        (target.isSealed):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_TAXFREE"))
-                        ;
-                        (target.isSealed):SetShow(true)
-                      end
-                      ;
-                      (target.isEnchantable):SetShow(false)
-                      local isPossibleToEnchant = (itemSSW:get()):isEnchantable()
-                      if itemSSW:isEquipable() then
-                        if isPossibleToEnchant == false then
-                          (target.isEnchantable):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_ENCHANT"))
-                          ;
-                          (target.isEnchantable):SetShow(true)
-                        else
-                          ;
-                          (target.isEnchantable):SetShow(false)
-                        end
-                      end
-                      local interiorPoint = 0
-                      if (itemSSW:get()):isItemInstallation() then
-                        interiorPoint = ((itemSSW:getCharacterStaticStatus()):getObjectStaticStatus()):getInteriorSensPoint()
-                        if interiorPoint > 0 then
-                          (target.isEnchantable):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_INTERIOR_POINT") .. interiorPoint .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_POINT"))
-                          ;
-                          (target.isEnchantable):SetShow(true)
-                        end
-                      else
-                        if not (target.isEnchantable):GetShow() then
-                          (target.isEnchantable):SetShow(false)
-                        end
-                      end
-                      local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
-                      if not isSSW and item:isVested() then
-                        if itemSSW:isUserVested() then
-                          (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HOLDED_FAMILYACOUNT"))
-                        else
-                          ;
-                          (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HOLDED"))
+                        if item_type == 8 and (itemSSW:get()):isForJustTrade() == true then
+                          (target.itemType):SetText((target.itemType):GetText() .. "/" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ITEM"))
                         end
                         ;
-                        (target.bindType):SetShow(true)
-                      else
-                        if itemBindType == 1 then
-                          if isSSW and itemSSW:isUserVested() then
-                            (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_GETBIND_FAMILY"))
+                        (target.isSealed):SetShow(false)
+                        if itemSSW:isEquipable() and not isSSW and not (itemSSW:get()):isCash() and item:isSealed() then
+                          (target.isSealed):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_ISEQUIPSEAL"))
+                          ;
+                          (target.isSealed):SetShow(true)
+                        end
+                        local isAble = false
+                        if itemWrapper ~= nil then
+                          isAble = requestIsRegisterItemForItemMarket((itemWrapper:get()):getKey())
+                        end
+                        if (itemSSW:get()):isCash() and not isSSW and isAble and item:isSealed() and not itemSSW:isStackable() and not item:isVested() then
+                          (target.isSealed):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_TAXFREE"))
+                          ;
+                          (target.isSealed):SetShow(true)
+                        end
+                        ;
+                        (target.isEnchantable):SetShow(false)
+                        local isPossibleToEnchant = (itemSSW:get()):isEnchantable()
+                        if itemSSW:isEquipable() then
+                          if isPossibleToEnchant == false then
+                            (target.isEnchantable):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_ENCHANT"))
                             ;
-                            (target.bindType):SetShow(true)
+                            (target.isEnchantable):SetShow(true)
                           else
                             ;
-                            (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_GETBIND_CHARACTER"))
+                            (target.isEnchantable):SetShow(false)
+                          end
+                        end
+                        local interiorPoint = 0
+                        if (itemSSW:get()):isItemInstallation() then
+                          interiorPoint = ((itemSSW:getCharacterStaticStatus()):getObjectStaticStatus()):getInteriorSensPoint()
+                          if interiorPoint > 0 then
+                            (target.isEnchantable):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_INTERIOR_POINT") .. interiorPoint .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_POINT"))
                             ;
-                            (target.bindType):SetShow(true)
+                            (target.isEnchantable):SetShow(true)
                           end
                         else
-                          if itemBindType == 2 then
+                          if not (target.isEnchantable):GetShow() then
+                            (target.isEnchantable):SetShow(false)
+                          end
+                        end
+                        local itemBindType = ((itemSSW:get())._vestedType):getItemKey()
+                        if not isSSW and item:isVested() then
+                          if itemSSW:isUserVested() then
+                            (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HOLDED_FAMILYACOUNT"))
+                          else
+                            ;
+                            (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HOLDED"))
+                          end
+                          ;
+                          (target.bindType):SetShow(true)
+                        else
+                          if itemBindType == 1 then
                             if isSSW and itemSSW:isUserVested() then
-                              (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_EQUIPBIND_FAMILY"))
+                              (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_GETBIND_FAMILY"))
                               ;
                               (target.bindType):SetShow(true)
                             else
                               ;
-                              (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_EQUIPBIND_CHARACTER"))
+                              (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_GETBIND_CHARACTER"))
                               ;
                               (target.bindType):SetShow(true)
                             end
                           else
-                            ;
-                            (target.bindType):SetShow(false)
+                            if itemBindType == 2 then
+                              if isSSW and itemSSW:isUserVested() then
+                                (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_EQUIPBIND_FAMILY"))
+                                ;
+                                (target.bindType):SetShow(true)
+                              else
+                                ;
+                                (target.bindType):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_EQUIPBIND_CHARACTER"))
+                                ;
+                                (target.bindType):SetShow(true)
+                              end
+                            else
+                              ;
+                              (target.bindType):SetShow(false)
+                            end
                           end
                         end
-                      end
-                      local balksCount = itemSSW:getExtractionCount_s64()
-                      local cronsCount = itemSSW:getCronCount_s64()
-                      if balksCount ~= nil and toInt64(0, 0) ~= balksCount and (itemSSW:get()):isCash() and (isExtractionCommon or isExtractionJapan) then
-                        (target.balksExtraction):SetShow(true)
-                        ;
-                        (target.balksExtraction):SetFontColor(UI_color.C_FFBC56E1)
-                        ;
-                        (target.balksExtraction):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_BALKS_EXTRACTION", "balksCount", Int64toInt32(balksCount)))
-                      else
-                        ;
-                        (target.balksExtraction):SetShow(false)
-                      end
-                      if cronsCount ~= nil and toInt64(0, 0) ~= cronsCount and (itemSSW:get()):isCash() and isCronStone and (isExtractionJapan or isExtractionCommon) then
-                        (target.cronsExtraction):SetShow(true)
-                        ;
-                        (target.cronsExtraction):SetFontColor(UI_color.C_FFBC56E1)
-                        ;
-                        (target.cronsExtraction):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_CRONS_EXTRACTION", "cronsCount", Int64toInt32(cronsCount)))
-                      else
-                        ;
-                        (target.cronsExtraction):SetShow(false)
-                      end
-                      ;
-                      (target.personalTrade):SetShow(false)
-                      if isUsePcExchangeInLocalizingValue() or (CppEnums.CountryType).DEV == getGameServiceType() then
-                        (target.personalTrade):SetShow(true)
-                        if itemWrapper ~= nil then
-                          if itemSSW:isPersonalTrade() and not (itemWrapper:get()):isVested() then
-                            (target.personalTrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_PERSONALTRADE_ENABLE"))
-                          else
-                            ;
-                            (target.personalTrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_PERSONALTRADE_DISABLE"))
-                          end
+                        local balksCount = itemSSW:getExtractionCount_s64()
+                        local cronsCount = itemSSW:getCronCount_s64()
+                        if balksCount ~= nil and toInt64(0, 0) ~= balksCount and (itemSSW:get()):isCash() and (isExtractionCommon or isExtractionJapan) then
+                          (target.balksExtraction):SetShow(true)
+                          ;
+                          (target.balksExtraction):SetFontColor(UI_color.C_FFBC56E1)
+                          ;
+                          (target.balksExtraction):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_BALKS_EXTRACTION", "balksCount", Int64toInt32(balksCount)))
                         else
-                          if itemSSW ~= nil then
-                            if itemSSW:isPersonalTrade() then
+                          ;
+                          (target.balksExtraction):SetShow(false)
+                        end
+                        if cronsCount ~= nil and toInt64(0, 0) ~= cronsCount and (itemSSW:get()):isCash() and isCronStone and (isExtractionJapan or isExtractionCommon) then
+                          (target.cronsExtraction):SetShow(true)
+                          ;
+                          (target.cronsExtraction):SetFontColor(UI_color.C_FFBC56E1)
+                          ;
+                          (target.cronsExtraction):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_CRONS_EXTRACTION", "cronsCount", Int64toInt32(cronsCount)))
+                        else
+                          ;
+                          (target.cronsExtraction):SetShow(false)
+                        end
+                        ;
+                        (target.personalTrade):SetShow(false)
+                        if isUsePcExchangeInLocalizingValue() or (CppEnums.CountryType).DEV == getGameServiceType() then
+                          (target.personalTrade):SetShow(true)
+                          if itemWrapper ~= nil then
+                            if itemSSW:isPersonalTrade() and not (itemWrapper:get()):isVested() then
                               (target.personalTrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_PERSONALTRADE_ENABLE"))
                             else
                               ;
                               (target.personalTrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_PERSONALTRADE_DISABLE"))
                             end
-                          end
-                        end
-                      end
-                      ;
-                      (target.cronStoneEnchant):SetShow(false)
-                      ;
-                      (target.cronStoneValue):SetShow(false)
-                      ;
-                      (target.cronStoneGrade):SetShow(false)
-                      ;
-                      (target.cronStoneProgressBg):SetShow(false)
-                      ;
-                      (target.cronStoneProgress):SetShow(false)
-                      ;
-                      ((target.cronStoneGradeValue)[0]):SetShow(false)
-                      ;
-                      ((target.cronStoneGradeValue)[1]):SetShow(false)
-                      ;
-                      ((target.cronStoneGradeValue)[2]):SetShow(false)
-                      ;
-                      ((target.cronStoneGradeValue)[3]):SetShow(false)
-                      ;
-                      ((target.cronStoneCountValue)[0]):SetShow(false)
-                      ;
-                      ((target.cronStoneCountValue)[1]):SetShow(false)
-                      ;
-                      ((target.cronStoneCountValue)[2]):SetShow(false)
-                      ;
-                      ((target.cronStoneCountValue)[3]):SetShow(false)
-                      ;
-                      (target.cronStoneValue):SetSize(300, (target.cronStoneValue):GetSizeY())
-                      ;
-                      (target.cronStoneValue):SetTextMode(UI_TM.eTextMode_AutoWrap)
-                      local itemaddedDD = 0
-                      local itemaddedHit = 0
-                      local itemaddedDV = 0
-                      local itemaddedHDV = 0
-                      local itemaddedPV = 0
-                      local itemaddedHPV = 0
-                      if (equippedTooltip ~= target or isNextEnchantInfo ~= true) and (ItemMarket_getIsMarketItem() ~= true or equippedTooltip == target) then
-                        local currentEnchantFailCount = 0
-                        if itemWrapper ~= nil then
-                          currentEnchantFailCount = itemWrapper:getCronEnchantFailCount()
-                        else
-                          if chattingLinkedItem ~= nil then
-                            currentEnchantFailCount = chattingLinkedItem:getItemParam(0)
-                          end
-                        end
-                        if currentEnchantFailCount > 0 then
-                          local itemSSW, itemEnchantWrapper = nil, nil
-                          if itemWrapper ~= nil then
-                            itemSSW = itemWrapper:getStaticStatus()
-                            itemEnchantWrapper = itemWrapper
                           else
-                            if chattingLinkedItem ~= nil then
-                              itemSSW = chattingLinkedItem:getLinkedItemStaticStatus()
-                              itemEnchantWrapper = chattingLinkedItem
-                            end
-                          end
-                          local itemClassifyType = itemSSW:getItemClassify()
-                          local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
-                          local gradeCount = ToClient_GetCronEnchnatInfoCount(itemClassifyType, enchantLevel)
-                          local startPosX = 2
-                          local lastCount = 0
-                          local lastIndex = gradeCount - 1
-                          if gradeCount > 0 then
-                            local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, lastIndex)
-                            local enchantablelastCount = cronEnchantSSW:getCount()
-                            if currentEnchantFailCount > 0 then
-                              for gradeIndex = 0, gradeCount - 1 do
-                                local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, gradeIndex)
-                                local enchantableCount = cronEnchantSSW:getCount()
+                            if itemSSW ~= nil then
+                              if itemSSW:isPersonalTrade() then
+                                (target.personalTrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_PERSONALTRADE_ENABLE"))
+                              else
                                 ;
-                                ((target.cronStoneGradeValue)[gradeIndex]):SetFontColor((Defines.Color).C_FF69BB4C)
-                                ;
-                                ((target.cronStoneGradeValue)[gradeIndex]):SetPosX(startPosX + 300 * enchantableCount / enchantablelastCount)
-                                ;
-                                ((target.cronStoneCountValue)[gradeIndex]):SetText(enchantableCount)
-                                ;
-                                ((target.cronStoneCountValue)[gradeIndex]):SetFontColor((Defines.Color).C_FF69BB4C)
-                                ;
-                                ((target.cronStoneCountValue)[gradeIndex]):SetPosX(startPosX + 300 * enchantableCount / enchantablelastCount)
-                                if currentEnchantFailCount < enchantableCount then
-                                  ((target.cronStoneCountValue)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
-                                  ;
-                                  ((target.cronStoneGradeValue)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
-                                end
-                                if gradeCount - 1 == gradeIndex then
-                                  lastCount = enchantableCount
-                                end
+                                (target.personalTrade):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_PERSONALTRADE_DISABLE"))
                               end
                             end
-                            do
-                              currentEnchantFailCount = (math.min)(currentEnchantFailCount, lastCount)
-                              local bonusText = ""
-                              itemaddedDD = itemEnchantWrapper:getAddedDD()
-                              itemaddedHit = itemEnchantWrapper:getAddedHIT()
-                              itemaddedDV = itemEnchantWrapper:getAddedDV()
-                              itemaddedHDV = itemEnchantWrapper:getCronHDV()
-                              itemaddedPV = itemEnchantWrapper:getAddedPV()
-                              itemaddedHPV = itemEnchantWrapper:getCronHPV()
-                              local itemMaxHp = itemEnchantWrapper:getAddedMaxHP()
+                          end
+                        end
+                        ;
+                        (target.cronStoneEnchant):SetShow(false)
+                        ;
+                        (target.cronStoneValue):SetShow(false)
+                        ;
+                        (target.cronStoneGrade):SetShow(false)
+                        ;
+                        (target.cronStoneProgressBg):SetShow(false)
+                        ;
+                        (target.cronStoneProgress):SetShow(false)
+                        ;
+                        ((target.cronStoneGradeValue)[0]):SetShow(false)
+                        ;
+                        ((target.cronStoneGradeValue)[1]):SetShow(false)
+                        ;
+                        ((target.cronStoneGradeValue)[2]):SetShow(false)
+                        ;
+                        ((target.cronStoneGradeValue)[3]):SetShow(false)
+                        ;
+                        ((target.cronStoneCountValue)[0]):SetShow(false)
+                        ;
+                        ((target.cronStoneCountValue)[1]):SetShow(false)
+                        ;
+                        ((target.cronStoneCountValue)[2]):SetShow(false)
+                        ;
+                        ((target.cronStoneCountValue)[3]):SetShow(false)
+                        ;
+                        (target.cronStoneValue):SetSize(300, (target.cronStoneValue):GetSizeY())
+                        ;
+                        (target.cronStoneValue):SetTextMode(UI_TM.eTextMode_AutoWrap)
+                        local itemaddedDD = 0
+                        local itemaddedHit = 0
+                        local itemaddedDV = 0
+                        local itemaddedHDV = 0
+                        local itemaddedPV = 0
+                        local itemaddedHPV = 0
+                        if (equippedTooltip ~= target or isNextEnchantInfo ~= true) and (ItemMarket_getIsMarketItem() ~= true or equippedTooltip == target) then
+                          local currentEnchantFailCount = 0
+                          if itemWrapper ~= nil then
+                            currentEnchantFailCount = itemWrapper:getCronEnchantFailCount()
+                          else
+                            if chattingLinkedItem ~= nil then
+                              currentEnchantFailCount = chattingLinkedItem:getItemParam(0)
+                            end
+                          end
+                          if currentEnchantFailCount > 0 then
+                            local itemSSW, itemEnchantWrapper = nil, nil
+                            if itemWrapper ~= nil then
+                              itemSSW = itemWrapper:getStaticStatus()
+                              itemEnchantWrapper = itemWrapper
+                            else
+                              if chattingLinkedItem ~= nil then
+                                itemSSW = chattingLinkedItem:getLinkedItemStaticStatus()
+                                itemEnchantWrapper = chattingLinkedItem
+                              end
+                            end
+                            local itemClassifyType = itemSSW:getItemClassify()
+                            local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+                            local gradeCount = ToClient_GetCronEnchnatInfoCount(itemClassifyType, enchantLevel)
+                            local startPosX = 2
+                            local lastCount = 0
+                            local lastIndex = gradeCount - 1
+                            if gradeCount > 0 then
+                              local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, lastIndex)
+                              local enchantablelastCount = cronEnchantSSW:getCount()
+                              if currentEnchantFailCount > 0 then
+                                for gradeIndex = 0, gradeCount - 1 do
+                                  local cronEnchantSSW = ToClient_GetCronEnchantWrapper(itemClassifyType, enchantLevel, gradeIndex)
+                                  local enchantableCount = cronEnchantSSW:getCount()
+                                  ;
+                                  ((target.cronStoneGradeValue)[gradeIndex]):SetFontColor((Defines.Color).C_FF69BB4C)
+                                  ;
+                                  ((target.cronStoneGradeValue)[gradeIndex]):SetPosX(startPosX + 300 * enchantableCount / enchantablelastCount)
+                                  ;
+                                  ((target.cronStoneCountValue)[gradeIndex]):SetText(enchantableCount)
+                                  ;
+                                  ((target.cronStoneCountValue)[gradeIndex]):SetFontColor((Defines.Color).C_FF69BB4C)
+                                  ;
+                                  ((target.cronStoneCountValue)[gradeIndex]):SetPosX(startPosX + 300 * enchantableCount / enchantablelastCount)
+                                  if currentEnchantFailCount < enchantableCount then
+                                    ((target.cronStoneCountValue)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
+                                    ;
+                                    ((target.cronStoneGradeValue)[gradeIndex]):SetFontColor((Defines.Color).C_FFC4BEBE)
+                                  end
+                                  if gradeCount - 1 == gradeIndex then
+                                    lastCount = enchantableCount
+                                  end
+                                end
+                              end
                               do
-                                local itemMaxMp = itemEnchantWrapper:getAddedMaxMP()
-                                if itemaddedDD > 0 then
-                                  if bonusText == "" then
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACK", "value", itemaddedDD)
-                                  else
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACKB", "value", itemaddedDD)
-                                  end
-                                end
-                                if (math.floor)(itemaddedHit) > 0 then
-                                  if bonusText == "" then
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HIT", "value", (math.floor)(itemaddedHit))
-                                  else
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HITB", "value", (math.floor)(itemaddedHit))
-                                  end
-                                end
-                                if itemaddedDV > 0 then
-                                  if bonusText == "" then
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE", "value", itemaddedDV)
-                                  else
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGEB", "value", itemaddedDV)
-                                  end
-                                end
-                                if itemaddedHDV > 0 then
-                                  bonusText = bonusText .. "(+" .. tostring(itemaddedHDV) .. ")"
-                                end
-                                if itemaddedPV > 0 then
-                                  if bonusText == "" then
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE", "value", itemaddedPV)
-                                  else
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCEB", "value", itemaddedPV)
-                                  end
-                                end
-                                if itemaddedHPV > 0 then
-                                  bonusText = bonusText .. "(+" .. tostring(itemaddedHPV) .. ")"
-                                end
-                                if itemMaxHp > 0 then
-                                  if bonusText == "" then
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HP", "value", itemMaxHp)
-                                  else
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HPB", "value", itemMaxHp)
-                                  end
-                                end
-                                if itemMaxMp > 0 then
-                                  if bonusText == "" then
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MP", "value", itemMaxMp)
-                                  else
-                                    bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MPB", "value", itemMaxMp)
-                                  end
-                                end
-                                if bonusText == "" then
-                                  bonusText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_NOTHING")
-                                end
-                                ;
-                                (target.cronStoneEnchant):SetShow(true)
-                                ;
-                                (target.cronStoneValue):SetShow(true)
-                                ;
-                                (target.cronStoneGrade):SetShow(true)
-                                ;
-                                (target.cronStoneProgressBg):SetShow(true)
-                                ;
-                                (target.cronStoneProgress):SetShow(true)
-                                ;
-                                ((target.cronStoneGradeValue)[0]):SetShow(true)
-                                ;
-                                ((target.cronStoneGradeValue)[1]):SetShow(true)
-                                ;
-                                ((target.cronStoneGradeValue)[2]):SetShow(true)
-                                ;
-                                ((target.cronStoneGradeValue)[3]):SetShow(true)
-                                ;
-                                ((target.cronStoneCountValue)[0]):SetShow(true)
-                                ;
-                                ((target.cronStoneCountValue)[1]):SetShow(true)
-                                ;
-                                ((target.cronStoneCountValue)[2]):SetShow(true)
-                                ;
-                                ((target.cronStoneCountValue)[3]):SetShow(true)
-                                ;
-                                (target.cronStoneGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_VALUE", "failCount", currentEnchantFailCount))
-                                ;
-                                (target.cronStoneValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_BONUS", "bonusText", bonusText))
-                                ;
-                                (target.cronStoneProgress):SetAniSpeed(0)
-                                ;
-                                (target.cronStoneProgress):SetProgressRate(0)
-                                ;
-                                (target.cronStoneProgress):SetProgressRate(currentEnchantFailCount / lastCount * 100)
-                                ;
-                                (target.itemLock):SetShow(false)
-                                if Panel_Tooltip_Item_DataObject.inventory == true and isItemLock == true and not Panel_Tooltip_Item_equipped:GetShow() then
-                                  local itemSSW = itemWrapper:getStaticStatus()
-                                  if ToClient_Inventory_CheckItemLock(Inventory_GetToolTipItemSlotNo()) and (itemSSW:get()):isCash() == false then
-                                    (target.itemLock):SetShow(true)
-                                    ;
-                                    (target.itemLock):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_ITEMLOCK"))
-                                    ;
-                                    (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_UNLOCK"))
-                                  else
-                                    ;
-                                    (target.itemLock):SetShow(false)
-                                    ;
-                                    (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_LOCK"))
-                                  end
-                                else
-                                  do
-                                    if EquipItem_Lock.equipment == true then
-                                      if EquipItem_Lock.itemLock then
-                                        (target.itemLock):SetShow(true)
-                                        ;
-                                        (target.itemLock):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_ITEMLOCK"))
-                                      else
-                                        ;
-                                        (target.itemLock):SetShow(false)
-                                      end
+                                currentEnchantFailCount = (math.min)(currentEnchantFailCount, lastCount)
+                                local bonusText = ""
+                                itemaddedDD = itemEnchantWrapper:getAddedDD()
+                                itemaddedHit = itemEnchantWrapper:getAddedHIT()
+                                itemaddedDV = itemEnchantWrapper:getAddedDV()
+                                itemaddedHDV = itemEnchantWrapper:getCronHDV()
+                                itemaddedPV = itemEnchantWrapper:getAddedPV()
+                                itemaddedHPV = itemEnchantWrapper:getCronHPV()
+                                local itemMaxHp = itemEnchantWrapper:getAddedMaxHP()
+                                do
+                                  local itemMaxMp = itemEnchantWrapper:getAddedMaxMP()
+                                  if itemaddedDD > 0 then
+                                    if bonusText == "" then
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACK", "value", itemaddedDD)
                                     else
-                                      local itemCheckLock = false
-                                      if -1 ~= EquipItem_Lock.itemAccNo then
-                                        itemCheckLock = ToClient_EquipSlot_CheckItemLock(EquipItem_Lock.itemAccNo, 1)
-                                        if itemCheckLock then
-                                          (equippedTooltip.itemLock):SetShow(true)
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_ATTACKB", "value", itemaddedDD)
+                                    end
+                                  end
+                                  if (math.floor)(itemaddedHit) > 0 then
+                                    if bonusText == "" then
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HIT", "value", (math.floor)(itemaddedHit))
+                                    else
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HITB", "value", (math.floor)(itemaddedHit))
+                                    end
+                                  end
+                                  if itemaddedDV > 0 then
+                                    if bonusText == "" then
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGE", "value", itemaddedDV)
+                                    else
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_DODGEB", "value", itemaddedDV)
+                                    end
+                                  end
+                                  if itemaddedHDV > 0 then
+                                    bonusText = bonusText .. "(+" .. tostring(itemaddedHDV) .. ")"
+                                  end
+                                  if itemaddedPV > 0 then
+                                    if bonusText == "" then
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCE", "value", itemaddedPV)
+                                    else
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_REDUCEB", "value", itemaddedPV)
+                                    end
+                                  end
+                                  if itemaddedHPV > 0 then
+                                    bonusText = bonusText .. "(+" .. tostring(itemaddedHPV) .. ")"
+                                  end
+                                  if itemMaxHp > 0 then
+                                    if bonusText == "" then
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HP", "value", itemMaxHp)
+                                    else
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_HPB", "value", itemMaxHp)
+                                    end
+                                  end
+                                  if itemMaxMp > 0 then
+                                    if bonusText == "" then
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MP", "value", itemMaxMp)
+                                    else
+                                      bonusText = bonusText .. PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_MPB", "value", itemMaxMp)
+                                    end
+                                  end
+                                  if bonusText == "" then
+                                    bonusText = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_NOTHING")
+                                  end
+                                  ;
+                                  (target.cronStoneEnchant):SetShow(true)
+                                  ;
+                                  (target.cronStoneValue):SetShow(true)
+                                  ;
+                                  (target.cronStoneGrade):SetShow(true)
+                                  ;
+                                  (target.cronStoneProgressBg):SetShow(true)
+                                  ;
+                                  (target.cronStoneProgress):SetShow(true)
+                                  ;
+                                  ((target.cronStoneGradeValue)[0]):SetShow(true)
+                                  ;
+                                  ((target.cronStoneGradeValue)[1]):SetShow(true)
+                                  ;
+                                  ((target.cronStoneGradeValue)[2]):SetShow(true)
+                                  ;
+                                  ((target.cronStoneGradeValue)[3]):SetShow(true)
+                                  ;
+                                  ((target.cronStoneCountValue)[0]):SetShow(true)
+                                  ;
+                                  ((target.cronStoneCountValue)[1]):SetShow(true)
+                                  ;
+                                  ((target.cronStoneCountValue)[2]):SetShow(true)
+                                  ;
+                                  ((target.cronStoneCountValue)[3]):SetShow(true)
+                                  ;
+                                  (target.cronStoneGrade):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_VALUE", "failCount", currentEnchantFailCount))
+                                  ;
+                                  (target.cronStoneValue):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_TOOLTIP_CRONENCHANT_BONUS", "bonusText", bonusText))
+                                  ;
+                                  (target.cronStoneProgress):SetAniSpeed(0)
+                                  ;
+                                  (target.cronStoneProgress):SetProgressRate(0)
+                                  ;
+                                  (target.cronStoneProgress):SetProgressRate(currentEnchantFailCount / lastCount * 100)
+                                  ;
+                                  (target.itemLock):SetShow(false)
+                                  if Panel_Tooltip_Item_DataObject.inventory == true and isItemLock == true and not Panel_Tooltip_Item_equipped:GetShow() then
+                                    local itemSSW = itemWrapper:getStaticStatus()
+                                    if ToClient_Inventory_CheckItemLock(Inventory_GetToolTipItemSlotNo()) and (itemSSW:get()):isCash() == false then
+                                      (target.itemLock):SetShow(true)
+                                      ;
+                                      (target.itemLock):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_ITEMLOCK"))
+                                      ;
+                                      (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_UNLOCK"))
+                                    else
+                                      ;
+                                      (target.itemLock):SetShow(false)
+                                      ;
+                                      (target.productNotify):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_TOOLTIP_ITEM_SHIFTCLICK") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_SHIFTRCLICK_LOCK"))
+                                    end
+                                  else
+                                    do
+                                      if true == EquipItem_Lock.equipment then
+                                        if EquipItem_Lock.itemLock then
+                                          (target.itemLock):SetShow(true)
                                           ;
-                                          (equippedTooltip.itemLock):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_ITEMLOCK"))
+                                          (target.itemLock):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_ITEMLOCK"))
                                         else
                                           ;
-                                          (equippedTooltip.itemLock):SetShow(false)
+                                          (target.itemLock):SetShow(false)
+                                        end
+                                      else
+                                        local itemCheckLock = false
+                                        if -1 ~= EquipItem_Lock.itemAccNo then
+                                          itemCheckLock = ToClient_EquipSlot_CheckItemLock(EquipItem_Lock.itemAccNo, 1)
+                                          if itemCheckLock then
+                                            (equippedTooltip.itemLock):SetShow(true)
+                                            ;
+                                            (equippedTooltip.itemLock):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_TOOLTIP_ITEM_ITEMLOCK"))
+                                          else
+                                            ;
+                                            (equippedTooltip.itemLock):SetShow(false)
+                                          end
                                         end
                                       end
-                                    end
-                                    do
-                                      ;
-                                      (target.useDyeColorTitle):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[0]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[1]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[2]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[3]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[4]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[5]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[6]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[7]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[8]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[9]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[10]):SetShow(false)
-                                      ;
-                                      ((target.useDyeColorIcon_Part)[11]):SetShow(false)
-                                      ;
-                                      (target.dying):SetShow(false)
-                                      if nil ~= itemWrapper or nil ~= chattingLinkedItem then
-                                        local dyeAble = itemSSW:isDyeable()
-                                        if itemSSW:isEquipable() then
-                                          local dyeingPartCount = 0
-                                          if nil ~= itemWrapper then
-                                            dyeingPartCount = itemWrapper:getDyeingPartCount()
-                                          else
-                                            if nil ~= chattingLinkedItem then
-                                              dyeingPartCount = chattingLinkedItem:getDyeingPartCount()
+                                      do
+                                        ;
+                                        (target.useDyeColorTitle):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[0]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[1]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[2]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[3]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[4]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[5]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[6]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[7]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[8]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[9]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[10]):SetShow(false)
+                                        ;
+                                        ((target.useDyeColorIcon_Part)[11]):SetShow(false)
+                                        ;
+                                        (target.dying):SetShow(false)
+                                        if nil ~= itemWrapper or nil ~= chattingLinkedItem then
+                                          local dyeAble = itemSSW:isDyeable()
+                                          if itemSSW:isEquipable() then
+                                            local dyeingPartCount = 0
+                                            if nil ~= itemWrapper then
+                                              dyeingPartCount = itemWrapper:getDyeingPartCount()
+                                            else
+                                              if nil ~= chattingLinkedItem then
+                                                dyeingPartCount = chattingLinkedItem:getDyeingPartCount()
+                                              end
                                             end
-                                          end
-                                          if true == dyeAble then
-                                            for dyeingPart_Index = 0, dyeingPartCount - 1 do
-                                              local bEmpty = false
-                                              if nil ~= itemWrapper then
-                                                bEmpty = itemWrapper:isEmptyDyeingPartColorAt(dyeingPart_Index)
-                                                if not itemWrapper:isAllreadyDyeingSlot(dyeingPart_Index) then
-                                                  bEmpty = true
-                                                end
-                                              else
-                                                if nil ~= chattingLinkedItem then
-                                                  bEmpty = chattingLinkedItem:isEmptyDyeingPartColorAt(dyeingPart_Index)
-                                                  if not chattingLinkedItem:isAllreadyDyeingSlot(dyeingPart_Index) then
+                                            if true == dyeAble then
+                                              for dyeingPart_Index = 0, dyeingPartCount - 1 do
+                                                local bEmpty = false
+                                                if nil ~= itemWrapper then
+                                                  bEmpty = itemWrapper:isEmptyDyeingPartColorAt(dyeingPart_Index)
+                                                  if not itemWrapper:isAllreadyDyeingSlot(dyeingPart_Index) then
                                                     bEmpty = true
                                                   end
-                                                end
-                                              end
-                                              if not bEmpty then
-                                                (target.dying):SetShow(true)
-                                                local dyeingPartColor = nil
-                                                if nil ~= itemWrapper then
-                                                  dyeingPartColor = itemWrapper:getDyeingPartColorAt(dyeingPart_Index)
                                                 else
                                                   if nil ~= chattingLinkedItem then
-                                                    dyeingPartColor = chattingLinkedItem:getDyeingPartColorAt(dyeingPart_Index)
+                                                    bEmpty = chattingLinkedItem:isEmptyDyeingPartColorAt(dyeingPart_Index)
+                                                    if not chattingLinkedItem:isAllreadyDyeingSlot(dyeingPart_Index) then
+                                                      bEmpty = true
+                                                    end
                                                   end
                                                 end
-                                                _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, dyeingPartColor)
-                                              else
-                                                do
+                                                if not bEmpty then
+                                                  (target.dying):SetShow(true)
+                                                  local dyeingPartColor = nil
+                                                  if nil ~= itemWrapper then
+                                                    dyeingPartColor = itemWrapper:getDyeingPartColorAt(dyeingPart_Index)
+                                                  else
+                                                    if nil ~= chattingLinkedItem then
+                                                      dyeingPartColor = chattingLinkedItem:getDyeingPartColorAt(dyeingPart_Index)
+                                                    end
+                                                  end
+                                                  _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, dyeingPartColor)
+                                                else
                                                   do
-                                                    _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
-                                                    ;
-                                                    ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetShow(true)
-                                                    -- DECOMPILER ERROR at PC2381: LeaveBlock: unexpected jumping out DO_STMT
+                                                    do
+                                                      _toolTip_ChangeDyeInfoTexture(target, bEmpty, dyeingPart_Index, UI_color.C_FFFFFFFF)
+                                                      ;
+                                                      ((target.useDyeColorIcon_Part)[dyeingPart_Index]):SetShow(true)
+                                                      -- DECOMPILER ERROR at PC2436: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                    -- DECOMPILER ERROR at PC2381: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                      -- DECOMPILER ERROR at PC2436: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                    -- DECOMPILER ERROR at PC2381: LeaveBlock: unexpected jumping out IF_STMT
+                                                      -- DECOMPILER ERROR at PC2436: LeaveBlock: unexpected jumping out IF_STMT
 
+                                                    end
                                                   end
                                                 end
                                               end
-                                            end
-                                            if 0 < dyeingPartCount then
-                                              local isPearlPallete = ""
-                                              if nil ~= itemWrapper and itemWrapper:isExpirationDyeing() then
-                                                isPearlPallete = "(" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE") .. ")"
-                                              end
-                                              ;
-                                              (target.useDyeColorTitle):SetShow(true)
-                                              ;
-                                              (target.useDyeColorTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEINFO") .. isPearlPallete)
-                                            end
-                                          else
-                                            do
-                                              do
+                                              if 0 < dyeingPartCount then
+                                                local isPearlPallete = ""
+                                                if nil ~= itemWrapper and itemWrapper:isExpirationDyeing() then
+                                                  isPearlPallete = "(" .. PAGetString(Defines.StringSheet_GAME, "LUA_SELFPLAYEREXPGAUGE_DYEINGPACKEAGE_TITLE") .. ")"
+                                                end
                                                 ;
                                                 (target.useDyeColorTitle):SetShow(true)
                                                 ;
-                                                (target.useDyeColorTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEIMPOSSIBLE"))
-                                                local useLimitShow = false
-                                                local minLevel = (itemSSW:get())._minLevel
-                                                local isExistMaxLevel = (itemSSW:get()):isMaxLevelRestricted()
-                                                local myInfo = getSelfPlayer()
-                                                local myLevel = (myInfo:get()):getLevel()
-                                                local minLevelString = tostring(minLevel)
-                                                local jewelLevel = 0
-                                                local maxLevel = (itemSSW:get())._maxLevel
-                                                local maxLevelString = tostring(maxLevel)
-                                                if not isSSW then
-                                                  jewelLevel = item:getJewelValidLevel()
-                                                  if 0 ~= jewelLevel then
-                                                    minLevelString = minLevelString .. "(" .. tostring(minLevel + jewelLevel) .. ")"
-                                                  end
-                                                end
-                                                if isExistMaxLevel == true then
-                                                  if not isSSW and 0 ~= jewelLevel then
-                                                    maxLevelString = maxLevelString .. "(" .. tostring(maxLevel + jewelLevel) .. ")"
-                                                  end
-                                                  ;
-                                                  (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USEITEM_LIMIT", "minLevel", minLevelString, "maxLevel", maxLevelString))
-                                                  ;
-                                                  (target.useLimit_level_value):SetShow(true)
-                                                  ;
-                                                  (target.useLimit_level):SetShow(true)
-                                                  useLimitShow = true
-                                                  if myLevel < maxLevel then
-                                                    (target.useLimit_level_value):SetFontColor(UI_color.C_FFC4BEBE)
-                                                  end
-                                                else
-                                                  if 1 < minLevel then
-                                                    if myLevel < minLevel then
-                                                      (target.useLimit_level_value):SetFontColor(UI_color.C_FFF26A6A)
-                                                    else
-                                                      ;
-                                                      (target.useLimit_level_value):SetFontColor(UI_color.C_FFC4BEBE)
-                                                    end
-                                                    ;
-                                                    (target.useLimit_level_value):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USEITEM_FROM", "limitLevel", minLevelString))
-                                                    ;
-                                                    (target.useLimit_level_value):SetShow(true)
-                                                    ;
-                                                    (target.useLimit_level):SetShow(true)
-                                                    useLimitShow = true
-                                                  else
-                                                    ;
-                                                    (target.useLimit_level_value):SetShow(false)
-                                                    ;
-                                                    (target.useLimit_level):SetShow(false)
-                                                  end
-                                                end
-                                                local craftType = nil
-                                                local gather = 0
-                                                fishing = 1
-                                                hunting = 2
-                                                cooking = 3
-                                                alchemy = 4
-                                                manufacture = 5
-                                                training = 6
-                                                trade = 7
-                                                local lifeminLevel = 0
-                                                local lifeType = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GATHERING"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_FISHING"), [2] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HUNTING"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_COOKING"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_ALCHEMY"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PROCESSING"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_OBEDIENCE"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GROWTH")}
-                                                local craftType = (itemSSW:get()):getLifeExperienceType()
-                                                local lifeminLevel = (itemSSW:get()):getLifeMinLevel(craftType)
+                                                (target.useDyeColorTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEINFO") .. isPearlPallete)
+                                              end
+                                            else
+                                              do
                                                 do
-                                                  if 0 < lifeminLevel then
-                                                    local myLifeLevel = (myInfo:get()):getLifeExperienceLevel(craftType)
-                                                    if isNewCharacterInfo() == false then
-                                                      (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_CraftLevel_Replace(lifeminLevel, craftType)))
-                                                    else
-                                                      ;
-                                                      (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeminLevel)))
+                                                  ;
+                                                  (target.useDyeColorTitle):SetShow(true)
+                                                  ;
+                                                  (target.useDyeColorTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEIMPOSSIBLE"))
+                                                  local useLimitShow = false
+                                                  local minLevel = (itemSSW:get())._minLevel
+                                                  local isExistMaxLevel = (itemSSW:get()):isMaxLevelRestricted()
+                                                  local myInfo = getSelfPlayer()
+                                                  local myLevel = (myInfo:get()):getLevel()
+                                                  local minLevelString = tostring(minLevel)
+                                                  local jewelLevel = 0
+                                                  local maxLevel = (itemSSW:get())._maxLevel
+                                                  local maxLevelString = tostring(maxLevel)
+                                                  if not isSSW then
+                                                    jewelLevel = item:getJewelValidLevel()
+                                                    if 0 ~= jewelLevel then
+                                                      minLevelString = minLevelString .. "(" .. tostring(minLevel + jewelLevel) .. ")"
                                                     end
+                                                  end
+                                                  if isExistMaxLevel == true then
+                                                    if not isSSW and 0 ~= jewelLevel then
+                                                      maxLevelString = maxLevelString .. "(" .. tostring(maxLevel + jewelLevel) .. ")"
+                                                    end
+                                                    ;
+                                                    (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USEITEM_LIMIT", "minLevel", minLevelString, "maxLevel", maxLevelString))
                                                     ;
                                                     (target.useLimit_level_value):SetShow(true)
                                                     ;
                                                     (target.useLimit_level):SetShow(true)
                                                     useLimitShow = true
-                                                    if myLifeLevel < lifeminLevel then
-                                                      (target.useLimit_level_value):SetFontColor(UI_color.C_FFF26A6A)
-                                                    else
-                                                      ;
+                                                    if myLevel < maxLevel then
                                                       (target.useLimit_level_value):SetFontColor(UI_color.C_FFC4BEBE)
                                                     end
+                                                  else
+                                                    if 1 < minLevel then
+                                                      if myLevel < minLevel then
+                                                        (target.useLimit_level_value):SetFontColor(UI_color.C_FFF26A6A)
+                                                      else
+                                                        ;
+                                                        (target.useLimit_level_value):SetFontColor(UI_color.C_FFC4BEBE)
+                                                      end
+                                                      ;
+                                                      (target.useLimit_level_value):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USEITEM_FROM", "limitLevel", minLevelString))
+                                                      ;
+                                                      (target.useLimit_level_value):SetShow(true)
+                                                      ;
+                                                      (target.useLimit_level):SetShow(true)
+                                                      useLimitShow = true
+                                                    else
+                                                      ;
+                                                      (target.useLimit_level_value):SetShow(false)
+                                                      ;
+                                                      (target.useLimit_level):SetShow(false)
+                                                    end
                                                   end
-                                                  local item_type = itemSSW:getItemType()
-                                                  local equip = {
+                                                  local craftType = nil
+                                                  local gather = 0
+                                                  fishing = 1
+                                                  hunting = 2
+                                                  cooking = 3
+                                                  alchemy = 4
+                                                  manufacture = 5
+                                                  training = 6
+                                                  trade = 7
+                                                  local lifeminLevel = 0
+                                                  local lifeType = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GATHERING"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_FISHING"), [2] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_HUNTING"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_COOKING"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_ALCHEMY"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PROCESSING"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_OBEDIENCE"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_GROWTH")}
+                                                  local craftType = (itemSSW:get()):getLifeExperienceType()
+                                                  local lifeminLevel = (itemSSW:get()):getLifeMinLevel(craftType)
+                                                  do
+                                                    if 0 < lifeminLevel then
+                                                      local myLifeLevel = (myInfo:get()):getLifeExperienceLevel(craftType)
+                                                      if _ContentsGroup_isUsedNewCharacterInfo == false then
+                                                        (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_CraftLevel_Replace(lifeminLevel, craftType)))
+                                                      else
+                                                        ;
+                                                        (target.useLimit_level_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_USELIMIT_LEVEL_VALUE", "craftType", lifeType[craftType], "lifeminLevel", FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeminLevel)))
+                                                      end
+                                                      ;
+                                                      (target.useLimit_level_value):SetShow(true)
+                                                      ;
+                                                      (target.useLimit_level):SetShow(true)
+                                                      useLimitShow = true
+                                                      if myLifeLevel < lifeminLevel then
+                                                        (target.useLimit_level_value):SetFontColor(UI_color.C_FFF26A6A)
+                                                      else
+                                                        ;
+                                                        (target.useLimit_level_value):SetFontColor(UI_color.C_FFC4BEBE)
+                                                      end
+                                                    end
+                                                    local item_type = itemSSW:getItemType()
+                                                    local equip = {
 slotNoId = {[0] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_MAINHAND"), [1] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_SUBHAND"), [2] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_PICKINGTOOLS"), [3] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_UPPERBODY"), [4] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_GLOVES"), [5] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_BOOTS"), [6] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_HELM"), [7] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_NECKLACE"), [8] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [9] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_RING"), [10] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [11] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EARRING"), [12] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_WAISTBAND"), [13] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_LANTERN"), [14] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_UPPERBODY"), [15] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_GLOVES"), [16] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_BOOTS"), [17] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_HELM"), [18] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_MAINHAND"), [19] = PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_AVATAR_SUBHAND")}
 , 
 extendedSlotInfoArray = {}
 , checkExtendedSlot = 0}
-                                                  ;
-                                                  (target.useLimit_extendedslot_value):SetShow(false)
-                                                  if 1 == item_type then
-                                                    if ItemTooltip_UsableClssTypeCheck(itemSSW) then
-                                                      local itemName = itemSSW:getName()
-                                                      local slotNoMax = itemSSW:getExtendedSlotCount()
-                                                      local extendedSlotString = ""
-                                                      local compareSlot = {}
-                                                      for i = 1, slotNoMax do
-                                                        local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                        -- DECOMPILER ERROR at PC2928: Confused about usage of register: R62 in 'UnsetPending'
+                                                    ;
+                                                    (target.useLimit_extendedslot_value):SetShow(false)
+                                                    if 1 == item_type then
+                                                      if ItemTooltip_UsableClssTypeCheck(itemSSW) then
+                                                        local itemName = itemSSW:getName()
+                                                        local slotNoMax = itemSSW:getExtendedSlotCount()
+                                                        local extendedSlotString = ""
+                                                        local compareSlot = {}
+                                                        for i = 1, slotNoMax do
+                                                          local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
+                                                          -- DECOMPILER ERROR at PC2982: Confused about usage of register: R63 in 'UnsetPending'
 
-                                                        if slotNoMax ~= extendSlotNo then
-                                                          (equip.extendedSlotInfoArray)[extendSlotNo] = i
-                                                          equip.checkExtendedSlot = 1
-                                                          compareSlot[i] = extendSlotNo
-                                                          local compareCheck = false
-                                                          if 1 == i then
-                                                            extendedSlotString = extendedSlotString .. ", " .. (equip.slotNoId)[extendSlotNo]
-                                                          else
-                                                            if 1 < i then
+                                                          if slotNoMax ~= extendSlotNo then
+                                                            (equip.extendedSlotInfoArray)[extendSlotNo] = i
+                                                            equip.checkExtendedSlot = 1
+                                                            compareSlot[i] = extendSlotNo
+                                                            local compareCheck = false
+                                                            if 1 == i then
                                                               extendedSlotString = extendedSlotString .. ", " .. (equip.slotNoId)[extendSlotNo]
+                                                            else
+                                                              if 1 < i then
+                                                                extendedSlotString = extendedSlotString .. ", " .. (equip.slotNoId)[extendSlotNo]
+                                                              end
                                                             end
                                                           end
                                                         end
-                                                      end
-                                                      if 1 == equip.checkExtendedSlot then
-                                                        local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                        -- DECOMPILER ERROR at PC2963: Confused about usage of register: R58 in 'UnsetPending'
+                                                        if 1 == equip.checkExtendedSlot then
+                                                          local selfSlotNo = itemSSW:getEquipSlotNo()
+                                                          -- DECOMPILER ERROR at PC3017: Confused about usage of register: R59 in 'UnsetPending'
 
-                                                        ;
-                                                        (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
-                                                        ;
-                                                        (target.useLimit_extendedslot_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EXTENDEDSLOT", "selfSlotNo", (equip.slotNoId)[selfSlotNo], "extendedSlotString", extendedSlotString))
-                                                        ;
-                                                        (target.useLimit_extendedslot_value):SetShow(true)
-                                                        useLimitShow = true
-                                                      else
-                                                        do
+                                                          ;
+                                                          (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
+                                                          ;
+                                                          (target.useLimit_extendedslot_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EXTENDEDSLOT", "selfSlotNo", (equip.slotNoId)[selfSlotNo], "extendedSlotString", extendedSlotString))
+                                                          ;
+                                                          (target.useLimit_extendedslot_value):SetShow(true)
+                                                          useLimitShow = true
+                                                        else
                                                           do
-                                                            ;
-                                                            (target.useLimit_extendedslot_value):SetShow(false)
-                                                            local itemName = itemSSW:getName()
-                                                            local slotNoMax = itemSSW:getExtendedSlotCount()
-                                                            local extendedSlotString = ""
-                                                            local compareSlot = {}
-                                                            local servantKindType = (ItemTooltip_UsableServantKind(itemSSW))
-                                                            if nil ~= servantKindType then
-                                                              for i = 1, slotNoMax do
-                                                                local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
-                                                                -- DECOMPILER ERROR at PC3018: Confused about usage of register: R63 in 'UnsetPending'
+                                                            do
+                                                              ;
+                                                              (target.useLimit_extendedslot_value):SetShow(false)
+                                                              local itemName = itemSSW:getName()
+                                                              local slotNoMax = itemSSW:getExtendedSlotCount()
+                                                              local extendedSlotString = ""
+                                                              local compareSlot = {}
+                                                              local servantKindType = (ItemTooltip_UsableServantKind(itemSSW))
+                                                              if nil ~= servantKindType then
+                                                                for i = 1, slotNoMax do
+                                                                  local extendSlotNo = itemSSW:getExtendedSlotIndex(i - 1)
+                                                                  -- DECOMPILER ERROR at PC3072: Confused about usage of register: R64 in 'UnsetPending'
 
-                                                                if slotNoMax ~= extendSlotNo then
-                                                                  (equip.extendedSlotInfoArray)[extendSlotNo] = i
-                                                                  equip.checkExtendedSlot = 1
-                                                                  compareSlot[i] = extendSlotNo
-                                                                  local compareCheck = false
-                                                                  if 1 == i then
-                                                                    extendedSlotString = extendedSlotString .. ", " .. (servantKindTypeString[servantKindType])[extendSlotNo]
-                                                                  else
-                                                                    if 1 < i then
+                                                                  if slotNoMax ~= extendSlotNo then
+                                                                    (equip.extendedSlotInfoArray)[extendSlotNo] = i
+                                                                    equip.checkExtendedSlot = 1
+                                                                    compareSlot[i] = extendSlotNo
+                                                                    local compareCheck = false
+                                                                    if 1 == i then
                                                                       extendedSlotString = extendedSlotString .. ", " .. (servantKindTypeString[servantKindType])[extendSlotNo]
+                                                                    else
+                                                                      if 1 < i then
+                                                                        extendedSlotString = extendedSlotString .. ", " .. (servantKindTypeString[servantKindType])[extendSlotNo]
+                                                                      end
                                                                     end
                                                                   end
                                                                 end
                                                               end
-                                                            end
-                                                            do
-                                                              if 1 == equip.checkExtendedSlot then
-                                                                local selfSlotNo = itemSSW:getEquipSlotNo()
-                                                                -- DECOMPILER ERROR at PC3053: Confused about usage of register: R59 in 'UnsetPending'
+                                                              do
+                                                                if 1 == equip.checkExtendedSlot then
+                                                                  local selfSlotNo = itemSSW:getEquipSlotNo()
+                                                                  -- DECOMPILER ERROR at PC3107: Confused about usage of register: R60 in 'UnsetPending'
 
-                                                                ;
-                                                                (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
-                                                                ;
-                                                                (target.useLimit_extendedslot_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EXTENDEDSLOT", "selfSlotNo", (servantKindTypeString[servantKindType])[selfSlotNo], "extendedSlotString", extendedSlotString))
-                                                                ;
-                                                                (target.useLimit_extendedslot_value):SetShow(true)
-                                                                useLimitShow = true
-                                                              else
-                                                                do
+                                                                  ;
+                                                                  (equip.extendedSlotInfoArray)[selfSlotNo] = selfSlotNo
+                                                                  ;
+                                                                  (target.useLimit_extendedslot_value):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EQUIP_EXTENDEDSLOT", "selfSlotNo", (servantKindTypeString[servantKindType])[selfSlotNo], "extendedSlotString", extendedSlotString))
+                                                                  ;
+                                                                  (target.useLimit_extendedslot_value):SetShow(true)
+                                                                  useLimitShow = true
+                                                                else
                                                                   do
-                                                                    ;
-                                                                    (target.useLimit_extendedslot_value):SetShow(false)
-                                                                    local isAllClass = true
-                                                                    local classNameList = nil
-                                                                    for idx = 0, getCharacterClassCount() - 1 do
-                                                                      local classType = getCharacterClassTypeByIndex(idx)
-                                                                      local className = (getCharacterClassName(classType))
-                                                                      if nil ~= className and className ~= "" and className ~= " " then
-                                                                        if ((itemSSW:get())._usableClassType):isOn(classType) then
-                                                                          if nil == classNameList then
-                                                                            classNameList = className
-                                                                          else
-                                                                            classNameList = classNameList .. ", " .. className
-                                                                          end
-                                                                        else
-                                                                          isAllClass = false
-                                                                        end
-                                                                      end
-                                                                    end
                                                                     do
-                                                                      if isAllClass or nil == classNameList then
-                                                                        (target.useLimit_class_value):SetShow(false)
-                                                                        ;
-                                                                        (target.useLimit_class):SetShow(false)
-                                                                      else
-                                                                        useLimitShow = true
-                                                                        ;
-                                                                        (target.useLimit_class_value):SetTextMode(UI_TM.eTextMode_AutoWrap)
-                                                                        ;
-                                                                        (target.useLimit_class_value):SetShow(true)
-                                                                        ;
-                                                                        (target.useLimit_class):SetShow(true)
-                                                                        local isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
-                                                                        if isUsableClass == false then
-                                                                          (target.useLimit_class_value):SetFontColor(UI_color.C_FFF26A6A)
-                                                                        else
-                                                                          ;
-                                                                          (target.useLimit_class_value):SetFontColor(UI_color.C_FFC4BEBE)
-                                                                        end
-                                                                        if nil ~= classNameList then
-                                                                          (target.useLimit_class_value):SetText("- " .. classNameList .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_CLASSONLY"))
-                                                                        else
-                                                                          ;
-                                                                          (target.useLimit_class_value):SetText(" ")
+                                                                      ;
+                                                                      (target.useLimit_extendedslot_value):SetShow(false)
+                                                                      local isAllClass = true
+                                                                      local classNameList = nil
+                                                                      for idx = 0, getCharacterClassCount() - 1 do
+                                                                        local classType = getCharacterClassTypeByIndex(idx)
+                                                                        local className = (getCharacterClassName(classType))
+                                                                        if nil ~= className and className ~= "" and className ~= " " then
+                                                                          if ((itemSSW:get())._usableClassType):isOn(classType) then
+                                                                            if nil == classNameList then
+                                                                              classNameList = className
+                                                                            else
+                                                                              classNameList = classNameList .. ", " .. className
+                                                                            end
+                                                                          else
+                                                                            isAllClass = false
+                                                                          end
                                                                         end
                                                                       end
                                                                       do
-                                                                        if not isSSW then
-                                                                          if (item:getExpirationDate()):isIndefinite() then
-                                                                            (target.remainTime_value):SetShow(false)
-                                                                            ;
-                                                                            (target.remainTime):SetShow(false)
-                                                                          else
-                                                                            local s64_remainingTime = getLeftSecond_s64(item:getExpirationDate())
-                                                                            local fontColor = UI_color.C_FFC4BEBE
-                                                                            local itemExpiration = item:getExpirationDate()
-                                                                            local leftPeriod = FromClient_getTradeItemExpirationDate(itemExpiration, ((itemWrapper:getStaticStatus()):get())._expirationPeriod)
-                                                                            if not (itemSSW:get()):isCash() and itemSSW:isTradeAble() then
-                                                                              (target.remainTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_REMAINTIME_PRICEREMAIN"))
-                                                                            else
-                                                                              ;
-                                                                              (target.remainTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_REMAINTIME_REMAINTIME"))
-                                                                            end
-                                                                            if (Defines.s64_const).s64_0 == s64_remainingTime then
-                                                                              if not (itemSSW:get()):isCash() and itemSSW:isTradeAble() then
-                                                                                (target.remainTime_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_REMAIN_TIME") .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_MARKETPRICE") .. " : " .. leftPeriod / 10000 .. " %)")
-                                                                              else
-                                                                                ;
-                                                                                (target.remainTime_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_REMAIN_TIME"))
-                                                                              end
-                                                                              fontColor = UI_color.C_FFF26A6A
-                                                                            else
-                                                                              if not (itemSSW:get()):isCash() and itemSSW:isTradeAble() then
-                                                                                (target.remainTime_value):SetText(convertStringFromDatetime(s64_remainingTime) .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_MARKETPRICE") .. " : " .. leftPeriod / 10000 .. " %)")
-                                                                              else
-                                                                                ;
-                                                                                (target.remainTime_value):SetText(convertStringFromDatetime(s64_remainingTime))
-                                                                              end
-                                                                            end
-                                                                            ;
-                                                                            (target.remainTime_value):SetFontColor(fontColor)
-                                                                            ;
-                                                                            (target.remainTime_value):SetShow(true)
-                                                                            ;
-                                                                            (target.remainTime):SetShow(true)
-                                                                            useLimitShow = true
-                                                                          end
+                                                                        if isAllClass or nil == classNameList then
+                                                                          (target.useLimit_class_value):SetShow(false)
+                                                                          ;
+                                                                          (target.useLimit_class):SetShow(false)
                                                                         else
-                                                                          do
+                                                                          useLimitShow = true
+                                                                          ;
+                                                                          (target.useLimit_class_value):SetTextMode(UI_TM.eTextMode_AutoWrap)
+                                                                          ;
+                                                                          (target.useLimit_class_value):SetShow(true)
+                                                                          ;
+                                                                          (target.useLimit_class):SetShow(true)
+                                                                          local isUsableClass = ((itemSSW:get())._usableClassType):isOn(classType)
+                                                                          if isUsableClass == false then
+                                                                            (target.useLimit_class_value):SetFontColor(UI_color.C_FFF26A6A)
+                                                                          else
                                                                             ;
-                                                                            (target.remainTime_value):SetShow(false)
+                                                                            (target.useLimit_class_value):SetFontColor(UI_color.C_FFC4BEBE)
+                                                                          end
+                                                                          if nil ~= classNameList then
+                                                                            (target.useLimit_class_value):SetText("- " .. classNameList .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_CLASSONLY"))
+                                                                          else
                                                                             ;
-                                                                            (target.remainTime):SetShow(false)
-                                                                            ;
-                                                                            (target.useLimit_category):SetShow(false)
-                                                                            ;
-                                                                            (target.useLimit_panel):SetShow(useLimitShow)
-                                                                            local attackShow = false
-                                                                            local defenseShow = false
-                                                                            local attackString = ""
-                                                                            local minAttack = 0
-                                                                            local maxAttack = 0
-                                                                            for idx = 0, 2 do
-                                                                              local currentMin = itemSSW:getMinDamage(idx)
-                                                                              if minAttack < currentMin then
-                                                                                minAttack = currentMin
+                                                                            (target.useLimit_class_value):SetText(" ")
+                                                                          end
+                                                                        end
+                                                                        do
+                                                                          if not isSSW then
+                                                                            if (item:getExpirationDate()):isIndefinite() then
+                                                                              (target.remainTime_value):SetShow(false)
+                                                                              ;
+                                                                              (target.remainTime):SetShow(false)
+                                                                            else
+                                                                              local s64_remainingTime = getLeftSecond_s64(item:getExpirationDate())
+                                                                              local fontColor = UI_color.C_FFC4BEBE
+                                                                              local itemExpiration = item:getExpirationDate()
+                                                                              local leftPeriod = FromClient_getTradeItemExpirationDate(itemExpiration, ((itemWrapper:getStaticStatus()):get())._expirationPeriod)
+                                                                              if not (itemSSW:get()):isCash() and itemSSW:isTradeAble() then
+                                                                                (target.remainTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_REMAINTIME_PRICEREMAIN"))
+                                                                              else
+                                                                                ;
+                                                                                (target.remainTime):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_REMAINTIME_REMAINTIME"))
                                                                               end
-                                                                              local currentMax = itemSSW:getMaxDamage(idx)
-                                                                              if maxAttack < currentMax then
-                                                                                maxAttack = currentMax
-                                                                              end
-                                                                            end
-                                                                            if 0 ~= maxAttack and 0 ~= minAttack then
-                                                                              attackShow = true
-                                                                            end
-                                                                            if 1 == itemSSW:getItemType() and 36 == itemSSW:getEquipType() then
-                                                                              minAttack = itemSSW:getMinDamage(0)
-                                                                              maxAttack = itemSSW:getMaxDamage(0)
-                                                                            end
-                                                                            minAttack = minAttack + itemaddedDD
-                                                                            maxAttack = maxAttack + itemaddedDD
-                                                                            attackString = tostring(minAttack) .. " ~ " .. tostring(maxAttack)
-                                                                            ;
-                                                                            (target.attack_value):SetText(attackString)
-                                                                            ;
-                                                                            (target.attack_value):SetShow(attackShow)
-                                                                            ;
-                                                                            (target.attack):SetShow(attackShow)
-                                                                            target.att_Value = (maxAttack + (minAttack)) / 2
-                                                                            local defenseString = ""
-                                                                            local def_value = 0
-                                                                            if item_type == 1 then
-                                                                              for idx = 0, 2 do
-                                                                                local currentdef_value = itemSSW:getDefence(idx) + itemaddedDV + itemaddedPV
-                                                                                if def_value < currentdef_value then
-                                                                                  def_value = currentdef_value
+                                                                              if (Defines.s64_const).s64_0 == s64_remainingTime then
+                                                                                if not (itemSSW:get()):isCash() and itemSSW:isTradeAble() then
+                                                                                  (target.remainTime_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_REMAIN_TIME") .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_MARKETPRICE") .. " : " .. leftPeriod / 10000 .. " %)")
+                                                                                else
+                                                                                  ;
+                                                                                  (target.remainTime_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_REMAIN_TIME"))
+                                                                                end
+                                                                                fontColor = UI_color.C_FFF26A6A
+                                                                              else
+                                                                                if not (itemSSW:get()):isCash() and itemSSW:isTradeAble() then
+                                                                                  (target.remainTime_value):SetText(convertStringFromDatetime(s64_remainingTime) .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_MARKETPRICE") .. " : " .. leftPeriod / 10000 .. " %)")
+                                                                                else
+                                                                                  ;
+                                                                                  (target.remainTime_value):SetText(convertStringFromDatetime(s64_remainingTime))
                                                                                 end
                                                                               end
+                                                                              ;
+                                                                              (target.remainTime_value):SetFontColor(fontColor)
+                                                                              ;
+                                                                              (target.remainTime_value):SetShow(true)
+                                                                              ;
+                                                                              (target.remainTime):SetShow(true)
+                                                                              useLimitShow = true
                                                                             end
+                                                                          else
                                                                             do
-                                                                              if 0 ~= def_value then
-                                                                                defenseShow = true
-                                                                              end
-                                                                              defenseString = tostring(def_value)
                                                                               ;
-                                                                              (target.defense_value):SetText(defenseString)
+                                                                              (target.remainTime_value):SetShow(false)
                                                                               ;
-                                                                              (target.defense_value):SetShow(defenseShow)
+                                                                              (target.remainTime):SetShow(false)
                                                                               ;
-                                                                              (target.defense):SetShow(defenseShow)
-                                                                              target.def_Value = def_value
-                                                                              local gotWeight = (itemSSW:get())._weight
-                                                                              local hit = 0
-                                                                              local hitShow = false
-                                                                              local hitString = ""
+                                                                              (target.useLimit_category):SetShow(false)
+                                                                              ;
+                                                                              (target.useLimit_panel):SetShow(useLimitShow)
+                                                                              local attackShow = false
+                                                                              local defenseShow = false
+                                                                              local attackString = ""
+                                                                              local minAttack = 0
+                                                                              local maxAttack = 0
                                                                               for idx = 0, 2 do
-                                                                                local currentHit = itemSSW:ToClient_getHit(idx)
-                                                                                if hit < currentHit then
-                                                                                  hit = currentHit
+                                                                                local currentMin = itemSSW:getMinDamage(idx)
+                                                                                if minAttack < currentMin then
+                                                                                  minAttack = currentMin
+                                                                                end
+                                                                                local currentMax = itemSSW:getMaxDamage(idx)
+                                                                                if maxAttack < currentMax then
+                                                                                  maxAttack = currentMax
                                                                                 end
                                                                               end
-                                                                              hit = hit + itemaddedHit
-                                                                              if 0 ~= hit then
-                                                                                hitShow = true
+                                                                              if 0 ~= maxAttack and 0 ~= minAttack then
+                                                                                attackShow = true
                                                                               end
                                                                               if 1 == itemSSW:getItemType() and 36 == itemSSW:getEquipType() then
-                                                                                hit = itemSSW:ToClient_getHit(0)
+                                                                                minAttack = itemSSW:getMinDamage(0)
+                                                                                maxAttack = itemSSW:getMaxDamage(0)
                                                                               end
-                                                                              hitString = tostring(hit)
+                                                                              minAttack = minAttack + itemaddedDD
+                                                                              maxAttack = maxAttack + itemaddedDD
+                                                                              attackString = tostring(minAttack) .. " ~ " .. tostring(maxAttack)
                                                                               ;
-                                                                              (target._hit_value):SetText(hitString)
+                                                                              (target.attack_value):SetText(attackString)
                                                                               ;
-                                                                              (target._hit_value):SetShow(hitShow)
+                                                                              (target.attack_value):SetShow(attackShow)
                                                                               ;
-                                                                              (target._hit):SetShow(hitShow)
-                                                                              local dv = 0
-                                                                              local hdv = 0
-                                                                              local dvShow = false
-                                                                              local dvString = ""
+                                                                              (target.attack):SetShow(attackShow)
+                                                                              target.att_Value = (maxAttack + (minAttack)) / 2
+                                                                              local defenseString = ""
+                                                                              local def_value = 0
                                                                               if item_type == 1 then
                                                                                 for idx = 0, 2 do
-                                                                                  local currnetDv = itemSSW:ToClient_getDV(idx)
-                                                                                  if dv < currnetDv then
-                                                                                    dv = currnetDv
-                                                                                  end
-                                                                                  local currentHDV = itemSSW:ToClient_getHDV(idx)
-                                                                                  if hdv < currentHDV then
-                                                                                    hdv = currentHDV
+                                                                                  local currentdef_value = itemSSW:getDefence(idx) + itemaddedDV + itemaddedPV
+                                                                                  if def_value < currentdef_value then
+                                                                                    def_value = currentdef_value
                                                                                   end
                                                                                 end
                                                                               end
                                                                               do
-                                                                                dv = dv + itemaddedDV
-                                                                                if 0 < dv + hdv + itemaddedHDV then
-                                                                                  dvShow = true
+                                                                                if 0 ~= def_value then
+                                                                                  defenseShow = true
                                                                                 end
-                                                                                if 0 < hdv + itemaddedHDV then
-                                                                                  dvString = tostring(dv) .. " (+" .. tostring(hdv + itemaddedHDV) .. ")"
-                                                                                else
-                                                                                  dvString = tostring(dv)
+                                                                                defenseString = tostring(def_value)
+                                                                                ;
+                                                                                (target.defense_value):SetText(defenseString)
+                                                                                ;
+                                                                                (target.defense_value):SetShow(defenseShow)
+                                                                                ;
+                                                                                (target.defense):SetShow(defenseShow)
+                                                                                target.def_Value = def_value
+                                                                                local gotWeight = (itemSSW:get())._weight
+                                                                                local hit = 0
+                                                                                local hitShow = false
+                                                                                local hitString = ""
+                                                                                for idx = 0, 2 do
+                                                                                  local currentHit = itemSSW:ToClient_getHit(idx)
+                                                                                  if hit < currentHit then
+                                                                                    hit = currentHit
+                                                                                  end
                                                                                 end
+                                                                                hit = hit + itemaddedHit
+                                                                                if 0 ~= hit then
+                                                                                  hitShow = true
+                                                                                end
+                                                                                if 1 == itemSSW:getItemType() and 36 == itemSSW:getEquipType() then
+                                                                                  hit = itemSSW:ToClient_getHit(0)
+                                                                                end
+                                                                                hitString = tostring(hit)
                                                                                 ;
-                                                                                (target._dv_value):SetText(dvString)
+                                                                                (target._hit_value):SetText(hitString)
                                                                                 ;
-                                                                                (target._dv_value):SetShow(dvShow)
+                                                                                (target._hit_value):SetShow(hitShow)
                                                                                 ;
-                                                                                (target._dv):SetShow(dvShow)
-                                                                                local pv = 0
-                                                                                local hpv = 0
-                                                                                local pvShow = false
-                                                                                local pvString = ""
+                                                                                (target._hit):SetShow(hitShow)
+                                                                                local dv = 0
+                                                                                local hdv = 0
+                                                                                local dvShow = false
+                                                                                local dvString = ""
                                                                                 if item_type == 1 then
                                                                                   for idx = 0, 2 do
-                                                                                    local currentPv = itemSSW:ToClient_getPV(idx)
-                                                                                    if pv < currentPv then
-                                                                                      pv = currentPv
+                                                                                    local currnetDv = itemSSW:ToClient_getDV(idx)
+                                                                                    if dv < currnetDv then
+                                                                                      dv = currnetDv
                                                                                     end
-                                                                                    local currentHPv = itemSSW:ToClient_getHPV(idx)
-                                                                                    if hpv < currentHPv then
-                                                                                      hpv = currentHPv
+                                                                                    local currentHDV = itemSSW:ToClient_getHDV(idx)
+                                                                                    if hdv < currentHDV then
+                                                                                      hdv = currentHDV
                                                                                     end
                                                                                   end
                                                                                 end
                                                                                 do
-                                                                                  pv = pv + itemaddedPV
-                                                                                  if 0 < pv + hpv + itemaddedHPV then
-                                                                                    pvShow = true
+                                                                                  dv = dv + itemaddedDV
+                                                                                  if 0 < dv + hdv + itemaddedHDV then
+                                                                                    dvShow = true
                                                                                   end
-                                                                                  if 0 < hpv + itemaddedHPV then
-                                                                                    pvString = tostring(pv) .. " (+" .. tostring(hpv + itemaddedHPV) .. ")"
+                                                                                  if 0 < hdv + itemaddedHDV then
+                                                                                    dvString = tostring(dv) .. " (+" .. tostring(hdv + itemaddedHDV) .. ")"
                                                                                   else
-                                                                                    pvString = tostring(pv)
+                                                                                    dvString = tostring(dv)
                                                                                   end
                                                                                   ;
-                                                                                  (target._pv_value):SetText(pvString)
+                                                                                  (target._dv_value):SetText(dvString)
                                                                                   ;
-                                                                                  (target._pv_value):SetShow(pvShow)
+                                                                                  (target._dv_value):SetShow(dvShow)
                                                                                   ;
-                                                                                  (target._pv):SetShow(pvShow)
-                                                                                  if 99 < gotWeight then
-                                                                                    (target.weight):SetShow(true)
+                                                                                  (target._dv):SetShow(dvShow)
+                                                                                  local pv = 0
+                                                                                  local hpv = 0
+                                                                                  local pvShow = false
+                                                                                  local pvString = ""
+                                                                                  if item_type == 1 then
+                                                                                    for idx = 0, 2 do
+                                                                                      local currentPv = itemSSW:ToClient_getPV(idx)
+                                                                                      if pv < currentPv then
+                                                                                        pv = currentPv
+                                                                                      end
+                                                                                      local currentHPv = itemSSW:ToClient_getHPV(idx)
+                                                                                      if hpv < currentHPv then
+                                                                                        hpv = currentHPv
+                                                                                      end
+                                                                                    end
+                                                                                  end
+                                                                                  do
+                                                                                    pv = pv + itemaddedPV
+                                                                                    if 0 < pv + hpv + itemaddedHPV then
+                                                                                      pvShow = true
+                                                                                    end
+                                                                                    if 0 < hpv + itemaddedHPV then
+                                                                                      pvString = tostring(pv) .. " (+" .. tostring(hpv + itemaddedHPV) .. ")"
+                                                                                    else
+                                                                                      pvString = tostring(pv)
+                                                                                    end
                                                                                     ;
-                                                                                    (target.weight_value):SetShow(true)
-                                                                                    local calcWeight = gotWeight / 10000
+                                                                                    (target._pv_value):SetText(pvString)
                                                                                     ;
-                                                                                    (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
-                                                                                  else
-                                                                                    do
-                                                                                      ;
+                                                                                    (target._pv_value):SetShow(pvShow)
+                                                                                    ;
+                                                                                    (target._pv):SetShow(pvShow)
+                                                                                    if 99 < gotWeight then
                                                                                       (target.weight):SetShow(true)
                                                                                       ;
                                                                                       (target.weight_value):SetShow(true)
+                                                                                      local calcWeight = gotWeight / 10000
+                                                                                      ;
+                                                                                      (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
+                                                                                    else
                                                                                       do
-                                                                                        local calcWeight = gotWeight / 10000
                                                                                         ;
-                                                                                        (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
-                                                                                        target.wei_Value = gotWeight / 10000
-                                                                                        if (itemSSW:get()):isCash() then
-                                                                                          (target.weight):SetShow(false)
+                                                                                        (target.weight):SetShow(true)
+                                                                                        ;
+                                                                                        (target.weight_value):SetShow(true)
+                                                                                        do
+                                                                                          local calcWeight = gotWeight / 10000
                                                                                           ;
-                                                                                          (target.weight_value):SetShow(false)
-                                                                                        end
-                                                                                        if Panel_Tooltip_Item_equipped:GetShow() then
-                                                                                          local _weightPoint = 0
-                                                                                          local _offencePoint = 0
-                                                                                          local _defencePoint = 0
-                                                                                          if 0 == normalTooltip.att_Value then
-                                                                                            _offencePoint = 0
-                                                                                          else
-                                                                                            _offencePoint = normalTooltip.att_Value - equippedTooltip.att_Value
+                                                                                          (target.weight_value):SetText((string.format)("%.2f", calcWeight) .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_WEIGHT"))
+                                                                                          target.wei_Value = gotWeight / 10000
+                                                                                          if (itemSSW:get()):isCash() then
+                                                                                            (target.weight):SetShow(false)
+                                                                                            ;
+                                                                                            (target.weight_value):SetShow(false)
                                                                                           end
-                                                                                          if 0 == normalTooltip.def_Value then
-                                                                                            _defencePoint = 0
-                                                                                          else
-                                                                                            _defencePoint = normalTooltip.def_Value - equippedTooltip.def_Value
-                                                                                          end
-                                                                                          _weightPoint = normalTooltip.wei_Value - equippedTooltip.wei_Value
-                                                                                          if 0 < _weightPoint then
-                                                                                            _weightPoint = "<PAColor0xFFFF0000>â–\178" .. (string.format)("%.2f", _weightPoint) .. "<PAOldColor>"
-                                                                                          else
-                                                                                            if _weightPoint < 0 then
-                                                                                              _weightPoint = "<PAColor0xFFFFCE22>â–\188" .. (string.format)("%.2f", _weightPoint * -1) .. "<PAOldColor>"
-                                                                                            end
-                                                                                          end
-                                                                                          if 0 ~= _offencePoint and 0 == _defencePoint then
-                                                                                            if 0 < _offencePoint then
-                                                                                              _offencePoint = "<PAColor0xFFFFCE22>â–\178" .. _offencePoint .. "<PAOldColor>"
+                                                                                          if Panel_Tooltip_Item_equipped:GetShow() then
+                                                                                            local _weightPoint = 0
+                                                                                            local _offencePoint = 0
+                                                                                            local _defencePoint = 0
+                                                                                            if 0 == normalTooltip.att_Value then
+                                                                                              _offencePoint = 0
                                                                                             else
-                                                                                              if _offencePoint < 0 then
-                                                                                                _offencePoint = "<PAColor0xFFFF0000>â–\188" .. _offencePoint * -1 .. "<PAOldColor>"
+                                                                                              _offencePoint = normalTooltip.att_Value - equippedTooltip.att_Value
+                                                                                            end
+                                                                                            if 0 == normalTooltip.def_Value then
+                                                                                              _defencePoint = 0
+                                                                                            else
+                                                                                              _defencePoint = normalTooltip.def_Value - equippedTooltip.def_Value
+                                                                                            end
+                                                                                            _weightPoint = normalTooltip.wei_Value - equippedTooltip.wei_Value
+                                                                                            if 0 < _weightPoint then
+                                                                                              _weightPoint = "<PAColor0xFFFF0000>â–\178" .. (string.format)("%.2f", _weightPoint) .. "<PAOldColor>"
+                                                                                            else
+                                                                                              if _weightPoint < 0 then
+                                                                                                _weightPoint = "<PAColor0xFFFFCE22>â–\188" .. (string.format)("%.2f", _weightPoint * -1) .. "<PAOldColor>"
                                                                                               end
                                                                                             end
-                                                                                            attackString = "(" .. _offencePoint .. " )"
-                                                                                            ;
-                                                                                            (normalTooltip.attack_diffValue):SetText(attackString)
-                                                                                            ;
-                                                                                            (normalTooltip.attack_diffValue):SetShow(true)
-                                                                                            ;
-                                                                                            (normalTooltip.defense_diffValue):SetText("")
-                                                                                            ;
-                                                                                            (normalTooltip.defense_diffValue):SetShow(false)
-                                                                                          else
-                                                                                            if 0 ~= _offencePoint and 0 ~= _defencePoint then
+                                                                                            if 0 ~= _offencePoint and 0 == _defencePoint then
                                                                                               if 0 < _offencePoint then
                                                                                                 _offencePoint = "<PAColor0xFFFFCE22>â–\178" .. _offencePoint .. "<PAOldColor>"
                                                                                               else
@@ -2765,25 +2827,24 @@ extendedSlotInfoArray = {}
                                                                                                   _offencePoint = "<PAColor0xFFFF0000>â–\188" .. _offencePoint * -1 .. "<PAOldColor>"
                                                                                                 end
                                                                                               end
-                                                                                              if 0 < _defencePoint then
-                                                                                                _defencePoint = "<PAColor0xFFFFCE22>â–\178" .. _defencePoint .. "<PAOldColor>"
-                                                                                              else
-                                                                                                if _defencePoint < 0 then
-                                                                                                  _defencePoint = "<PAColor0xFFFF0000>â–\188" .. _defencePoint * -1 .. "<PAOldColor>"
-                                                                                                end
-                                                                                              end
                                                                                               attackString = "(" .. _offencePoint .. " )"
                                                                                               ;
                                                                                               (normalTooltip.attack_diffValue):SetText(attackString)
-                                                                                              defenseString = "(" .. _defencePoint .. " )"
-                                                                                              ;
-                                                                                              (normalTooltip.defense_diffValue):SetText(defenseString)
                                                                                               ;
                                                                                               (normalTooltip.attack_diffValue):SetShow(true)
                                                                                               ;
-                                                                                              (normalTooltip.defense_diffValue):SetShow(true)
+                                                                                              (normalTooltip.defense_diffValue):SetText("")
+                                                                                              ;
+                                                                                              (normalTooltip.defense_diffValue):SetShow(false)
                                                                                             else
-                                                                                              if 0 == _offencePoint and 0 ~= _defencePoint then
+                                                                                              if 0 ~= _offencePoint and 0 ~= _defencePoint then
+                                                                                                if 0 < _offencePoint then
+                                                                                                  _offencePoint = "<PAColor0xFFFFCE22>â–\178" .. _offencePoint .. "<PAOldColor>"
+                                                                                                else
+                                                                                                  if _offencePoint < 0 then
+                                                                                                    _offencePoint = "<PAColor0xFFFF0000>â–\188" .. _offencePoint * -1 .. "<PAOldColor>"
+                                                                                                  end
+                                                                                                end
                                                                                                 if 0 < _defencePoint then
                                                                                                   _defencePoint = "<PAColor0xFFFFCE22>â–\178" .. _defencePoint .. "<PAOldColor>"
                                                                                                 else
@@ -2791,184 +2852,222 @@ extendedSlotInfoArray = {}
                                                                                                     _defencePoint = "<PAColor0xFFFF0000>â–\188" .. _defencePoint * -1 .. "<PAOldColor>"
                                                                                                   end
                                                                                                 end
+                                                                                                attackString = "(" .. _offencePoint .. " )"
+                                                                                                ;
+                                                                                                (normalTooltip.attack_diffValue):SetText(attackString)
                                                                                                 defenseString = "(" .. _defencePoint .. " )"
                                                                                                 ;
                                                                                                 (normalTooltip.defense_diffValue):SetText(defenseString)
                                                                                                 ;
-                                                                                                (normalTooltip.attack_diffValue):SetText("")
-                                                                                                ;
-                                                                                                (normalTooltip.attack_diffValue):SetShow(false)
+                                                                                                (normalTooltip.attack_diffValue):SetShow(true)
                                                                                                 ;
                                                                                                 (normalTooltip.defense_diffValue):SetShow(true)
                                                                                               else
-                                                                                                ;
-                                                                                                (normalTooltip.attack_diffValue):SetShow(false)
-                                                                                                ;
-                                                                                                (normalTooltip.defense_diffValue):SetShow(false)
+                                                                                                if 0 == _offencePoint and 0 ~= _defencePoint then
+                                                                                                  if 0 < _defencePoint then
+                                                                                                    _defencePoint = "<PAColor0xFFFFCE22>â–\178" .. _defencePoint .. "<PAOldColor>"
+                                                                                                  else
+                                                                                                    if _defencePoint < 0 then
+                                                                                                      _defencePoint = "<PAColor0xFFFF0000>â–\188" .. _defencePoint * -1 .. "<PAOldColor>"
+                                                                                                    end
+                                                                                                  end
+                                                                                                  defenseString = "(" .. _defencePoint .. " )"
+                                                                                                  ;
+                                                                                                  (normalTooltip.defense_diffValue):SetText(defenseString)
+                                                                                                  ;
+                                                                                                  (normalTooltip.attack_diffValue):SetText("")
+                                                                                                  ;
+                                                                                                  (normalTooltip.attack_diffValue):SetShow(false)
+                                                                                                  ;
+                                                                                                  (normalTooltip.defense_diffValue):SetShow(true)
+                                                                                                else
+                                                                                                  ;
+                                                                                                  (normalTooltip.attack_diffValue):SetShow(false)
+                                                                                                  ;
+                                                                                                  (normalTooltip.defense_diffValue):SetShow(false)
+                                                                                                end
                                                                                               end
                                                                                             end
-                                                                                          end
-                                                                                          if 0 ~= _weightPoint then
-                                                                                            (normalTooltip.weight_diffValue):SetText(" (" .. _weightPoint .. " )")
-                                                                                            ;
-                                                                                            (normalTooltip.weight_diffValue):SetShow(true)
-                                                                                          end
-                                                                                          if 0 == normalTooltip.att_Value and 0 == normalTooltip.def_Value then
-                                                                                            (normalTooltip.attack_diffValue):SetShow(false)
-                                                                                            ;
-                                                                                            (normalTooltip.defense_diffValue):SetShow(false)
-                                                                                            ;
-                                                                                            (normalTooltip.weight_diffValue):SetShow(false)
-                                                                                          end
-                                                                                        else
-                                                                                          do
-                                                                                            ;
-                                                                                            (normalTooltip.attack_diffValue):SetShow(false)
-                                                                                            ;
-                                                                                            (normalTooltip.defense_diffValue):SetShow(false)
-                                                                                            ;
-                                                                                            (normalTooltip.weight_diffValue):SetShow(false)
-                                                                                            local soketCount = 0
-                                                                                            if false == ((itemSSW:get()):getEnchant()):empty() then
-                                                                                              soketCount = ((itemSSW:get()):getEnchant())._socketCount
+                                                                                            if 0 ~= _weightPoint then
+                                                                                              (normalTooltip.weight_diffValue):SetText(" (" .. _weightPoint .. " )")
+                                                                                              ;
+                                                                                              (normalTooltip.weight_diffValue):SetShow(true)
                                                                                             end
-                                                                                            local itemEnchantSSW = nil
-                                                                                            if not isSSW then
-                                                                                              soketCount = item:getUsableItemSocketCount()
+                                                                                            if 0 == normalTooltip.att_Value and 0 == normalTooltip.def_Value then
+                                                                                              (normalTooltip.attack_diffValue):SetShow(false)
+                                                                                              ;
+                                                                                              (normalTooltip.defense_diffValue):SetShow(false)
+                                                                                              ;
+                                                                                              (normalTooltip.weight_diffValue):SetShow(false)
                                                                                             end
-                                                                                            local socketMaxCount = ToClient_GetMaxItemSocketCount()
-                                                                                            for jewelIdx = 0, 5 do
-                                                                                              if jewelIdx < socketMaxCount - 1 then
-                                                                                                if not isSSW then
-                                                                                                  itemEnchantSSW = itemWrapper:getPushedItem(jewelIdx)
-                                                                                                else
-                                                                                                  itemEnchantSSW = nil
-                                                                                                  if isItemWrapper or nil ~= chattingLinkedItem then
-                                                                                                    local pushedKey = nil
-                                                                                                    if isItemWrapper then
-                                                                                                      pushedKey = item:getPushedKey(jewelIdx)
-                                                                                                    else
-                                                                                                      if nil ~= chattingLinkedItem then
-                                                                                                        pushedKey = chattingLinkedItem:getPushedKey(jewelIdx)
+                                                                                          else
+                                                                                            do
+                                                                                              ;
+                                                                                              (normalTooltip.attack_diffValue):SetShow(false)
+                                                                                              ;
+                                                                                              (normalTooltip.defense_diffValue):SetShow(false)
+                                                                                              ;
+                                                                                              (normalTooltip.weight_diffValue):SetShow(false)
+                                                                                              local soketCount = 0
+                                                                                              if false == ((itemSSW:get()):getEnchant()):empty() then
+                                                                                                soketCount = ((itemSSW:get()):getEnchant())._socketCount
+                                                                                              end
+                                                                                              local itemEnchantSSW = nil
+                                                                                              if not isSSW then
+                                                                                                soketCount = item:getUsableItemSocketCount()
+                                                                                              end
+                                                                                              local socketMaxCount = ToClient_GetMaxItemSocketCount()
+                                                                                              for jewelIdx = 0, 5 do
+                                                                                                if jewelIdx < socketMaxCount - 1 then
+                                                                                                  if not isSSW then
+                                                                                                    itemEnchantSSW = itemWrapper:getPushedItem(jewelIdx)
+                                                                                                  else
+                                                                                                    itemEnchantSSW = nil
+                                                                                                    if isItemWrapper or nil ~= chattingLinkedItem then
+                                                                                                      local pushedKey = nil
+                                                                                                      if isItemWrapper then
+                                                                                                        pushedKey = item:getPushedKey(jewelIdx)
+                                                                                                      else
+                                                                                                        if nil ~= chattingLinkedItem then
+                                                                                                          pushedKey = chattingLinkedItem:getPushedKey(jewelIdx)
+                                                                                                        end
+                                                                                                      end
+                                                                                                      if pushedKey ~= nil and 0 < pushedKey:get() then
+                                                                                                        itemEnchantSSW = getItemEnchantStaticStatus(pushedKey)
                                                                                                       end
                                                                                                     end
-                                                                                                    if pushedKey ~= nil and 0 < pushedKey:get() then
-                                                                                                      itemEnchantSSW = getItemEnchantStaticStatus(pushedKey)
+                                                                                                  end
+                                                                                                  do
+                                                                                                    if target.mainPanel ~= Panel_Tooltip_Item_equipped and nil ~= Panel_Tooltip_Item_DataObject.itemMarket then
+                                                                                                      itemEnchantSSW = nil
                                                                                                     end
-                                                                                                  end
-                                                                                                end
-                                                                                                do
-                                                                                                  if target.mainPanel ~= Panel_Tooltip_Item_equipped and nil ~= Panel_Tooltip_Item_DataObject.itemMarket then
-                                                                                                    itemEnchantSSW = nil
-                                                                                                  end
-                                                                                                  if soketCount <= jewelIdx then
-                                                                                                    ((target.soketName)[jewelIdx + 1]):SetShow(false)
-                                                                                                    ;
-                                                                                                    ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
-                                                                                                    ;
-                                                                                                    ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
-                                                                                                  else
-                                                                                                    if nil ~= itemEnchantSSW then
-                                                                                                      ((target.soketName)[jewelIdx + 1]):SetShow(true)
+                                                                                                    if soketCount <= jewelIdx then
+                                                                                                      ((target.soketName)[jewelIdx + 1]):SetShow(false)
                                                                                                       ;
-                                                                                                      ((target.soketEffect)[jewelIdx + 1]):SetShow(true)
+                                                                                                      ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
                                                                                                       ;
-                                                                                                      ((target.soketSlot)[jewelIdx + 1]):SetShow(true)
-                                                                                                      ;
-                                                                                                      ((target.soketName)[jewelIdx + 1]):SetText(itemEnchantSSW:getName())
-                                                                                                      ;
-                                                                                                      ((target.soketSlot)[jewelIdx + 1]):ChangeTextureInfoName("icon/" .. itemEnchantSSW:getIconPath())
-                                                                                                      local x1, y1, x2, y2 = setTextureUV_Func((target.soketSlot)[jewelIdx + 1], 0, 0, 42, 42)
-                                                                                                      ;
-                                                                                                      (((target.soketSlot)[jewelIdx + 1]):getBaseTexture()):setUV(x1, y1, x2, y2)
-                                                                                                      ;
-                                                                                                      ((target.soketSlot)[jewelIdx + 1]):setRenderTexture(((target.soketSlot)[jewelIdx + 1]):getBaseTexture())
-                                                                                                      local skillSSW = (itemEnchantSSW:getSkillByIdx(classType))
-                                                                                                      if nil == skillSSW then
-                                                                                                        ((target.soketEffect)[jewelIdx + 1]):SetText(" ")
-                                                                                                      else
-                                                                                                        local buffList = ""
-                                                                                                        for buffIdx = 0, skillSSW:getBuffCount() - 1 do
-                                                                                                          local desc = (skillSSW:getBuffDescription(buffIdx))
-                                                                                                          if nil ~= desc then
-                                                                                                            do
-                                                                                                              if desc == "" then
-                                                                                                                break
-                                                                                                              end
-                                                                                                              if nil == buffList or buffList == "" then
-                                                                                                                buffList = desc
-                                                                                                              else
-                                                                                                                buffList = buffList .. " / " .. desc
-                                                                                                              end
-                                                                                                              -- DECOMPILER ERROR at PC4372: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                      ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
+                                                                                                    else
+                                                                                                      if nil ~= itemEnchantSSW then
+                                                                                                        ((target.soketName)[jewelIdx + 1]):SetShow(true)
+                                                                                                        ;
+                                                                                                        ((target.soketEffect)[jewelIdx + 1]):SetShow(true)
+                                                                                                        ;
+                                                                                                        ((target.soketSlot)[jewelIdx + 1]):SetShow(true)
+                                                                                                        ;
+                                                                                                        ((target.soketName)[jewelIdx + 1]):SetText(itemEnchantSSW:getName())
+                                                                                                        ;
+                                                                                                        ((target.soketSlot)[jewelIdx + 1]):ChangeTextureInfoName("icon/" .. itemEnchantSSW:getIconPath())
+                                                                                                        local x1, y1, x2, y2 = setTextureUV_Func((target.soketSlot)[jewelIdx + 1], 0, 0, 42, 42)
+                                                                                                        ;
+                                                                                                        (((target.soketSlot)[jewelIdx + 1]):getBaseTexture()):setUV(x1, y1, x2, y2)
+                                                                                                        ;
+                                                                                                        ((target.soketSlot)[jewelIdx + 1]):setRenderTexture(((target.soketSlot)[jewelIdx + 1]):getBaseTexture())
+                                                                                                        local skillSSW = (itemEnchantSSW:getSkillByIdx(classType))
+                                                                                                        if nil == skillSSW then
+                                                                                                          ((target.soketEffect)[jewelIdx + 1]):SetText(" ")
+                                                                                                        else
+                                                                                                          local buffList = ""
+                                                                                                          for buffIdx = 0, skillSSW:getBuffCount() - 1 do
+                                                                                                            local desc = (skillSSW:getBuffDescription(buffIdx))
+                                                                                                            if nil ~= desc then
+                                                                                                              do
+                                                                                                                if desc == "" then
+                                                                                                                  break
+                                                                                                                end
+                                                                                                                if nil == buffList or buffList == "" then
+                                                                                                                  buffList = desc
+                                                                                                                else
+                                                                                                                  buffList = buffList .. " / " .. desc
+                                                                                                                end
+                                                                                                                -- DECOMPILER ERROR at PC4426: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                              -- DECOMPILER ERROR at PC4372: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                                -- DECOMPILER ERROR at PC4426: LeaveBlock: unexpected jumping out IF_STMT
 
+                                                                                                              end
                                                                                                             end
                                                                                                           end
+                                                                                                          ;
+                                                                                                          ((target.soketEffect)[jewelIdx + 1]):SetText(buffList)
                                                                                                         end
-                                                                                                        ;
-                                                                                                        ((target.soketEffect)[jewelIdx + 1]):SetText(buffList)
-                                                                                                      end
-                                                                                                    else
-                                                                                                      do
+                                                                                                      else
                                                                                                         do
-                                                                                                          ;
-                                                                                                          ((target.soketName)[jewelIdx + 1]):SetShow(true)
-                                                                                                          ;
-                                                                                                          ((target.soketEffect)[jewelIdx + 1]):SetShow(true)
-                                                                                                          ;
-                                                                                                          ((target.soketSlot)[jewelIdx + 1]):SetShow(true)
-                                                                                                          ;
-                                                                                                          ((target.soketName)[jewelIdx + 1]):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EMPTY_SLOT"))
-                                                                                                          ;
-                                                                                                          ((target.soketEffect)[jewelIdx + 1]):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EMPTY_SLOT_DESC"))
-                                                                                                          ;
-                                                                                                          ((target.soketSlot)[jewelIdx + 1]):ChangeTextureInfoName(" ")
-                                                                                                          ;
-                                                                                                          ((target.soketName)[jewelIdx + 1]):SetShow(false)
-                                                                                                          ;
-                                                                                                          ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
-                                                                                                          ;
-                                                                                                          ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                          do
+                                                                                                            ;
+                                                                                                            ((target.soketName)[jewelIdx + 1]):SetShow(true)
+                                                                                                            ;
+                                                                                                            ((target.soketEffect)[jewelIdx + 1]):SetShow(true)
+                                                                                                            ;
+                                                                                                            ((target.soketSlot)[jewelIdx + 1]):SetShow(true)
+                                                                                                            ;
+                                                                                                            ((target.soketName)[jewelIdx + 1]):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EMPTY_SLOT"))
+                                                                                                            ;
+                                                                                                            ((target.soketEffect)[jewelIdx + 1]):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_EMPTY_SLOT_DESC"))
+                                                                                                            ;
+                                                                                                            ((target.soketSlot)[jewelIdx + 1]):ChangeTextureInfoName(" ")
+                                                                                                            ;
+                                                                                                            ((target.soketName)[jewelIdx + 1]):SetShow(false)
+                                                                                                            ;
+                                                                                                            ((target.soketEffect)[jewelIdx + 1]):SetShow(false)
+                                                                                                            ;
+                                                                                                            ((target.soketSlot)[jewelIdx + 1]):SetShow(false)
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_STMT
 
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out DO_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out DO_STMT
 
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                                                                                                          -- DECOMPILER ERROR at PC4463: LeaveBlock: unexpected jumping out IF_STMT
+                                                                                                            -- DECOMPILER ERROR at PC4517: LeaveBlock: unexpected jumping out IF_STMT
 
+                                                                                                          end
                                                                                                         end
                                                                                                       end
                                                                                                     end
                                                                                                   end
                                                                                                 end
                                                                                               end
-                                                                                            end
-                                                                                            ;
-                                                                                            (target.soketOption_panel):SetShow(0 ~= soketCount)
-                                                                                            ;
-                                                                                            (target.useLimit_Exp):SetShow(false)
-                                                                                            ;
-                                                                                            (target.useLimit_Exp_gage):SetShow(false)
-                                                                                            ;
-                                                                                            (target.useLimit_Exp_gage_value):SetShow(false)
-                                                                                            ;
-                                                                                            (target.useLimit_Exp_value):SetShow(false)
-                                                                                            if isGrowthContents or isTotemContents or true == isQuestBookContents then
-                                                                                              if nil ~= itemWrapper and (32 == (itemSSW:get()):getContentsEventType() or 37 == (itemSSW:get()):getContentsEventType()) then
-                                                                                                local alchemyStoneType = ((itemWrapper:getStaticStatus()):get())._contentsEventParam1
-                                                                                                if alchemyStoneType < 3 then
-                                                                                                  local alchemystoneExp = itemWrapper:getExperience() / 10000
+                                                                                              ;
+                                                                                              (target.soketOption_panel):SetShow(0 ~= soketCount)
+                                                                                              ;
+                                                                                              (target.useLimit_Exp):SetShow(false)
+                                                                                              ;
+                                                                                              (target.useLimit_Exp_gage):SetShow(false)
+                                                                                              ;
+                                                                                              (target.useLimit_Exp_gage_value):SetShow(false)
+                                                                                              ;
+                                                                                              (target.useLimit_Exp_value):SetShow(false)
+                                                                                              if isGrowthContents or isTotemContents or true == isQuestBookContents then
+                                                                                                if nil ~= itemWrapper and (32 == (itemSSW:get()):getContentsEventType() or 37 == (itemSSW:get()):getContentsEventType()) then
+                                                                                                  local alchemyStoneType = ((itemWrapper:getStaticStatus()):get())._contentsEventParam1
+                                                                                                  if alchemyStoneType < 3 then
+                                                                                                    local alchemystoneExp = itemWrapper:getExperience() / 10000
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp):SetShow(true)
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp_gage):SetShow(true)
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp_gage_value):SetShow(true)
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp_value):SetShow(true)
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp_value):SetText((string.format)("%.2f", alchemystoneExp) .. "%")
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp_gage_value):SetCurrentProgressRate(alchemystoneExp)
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp_gage_value):SetProgressRate(alchemystoneExp)
+                                                                                                    ;
+                                                                                                    (target.useLimit_Exp_gage_value):SetAniSpeed(0)
+                                                                                                  end
+                                                                                                elseif nil ~= itemWrapper and (CppEnums.ContentsEventType).ContentsType_QuestBook == (itemSSW:get()):getContentsEventType() then
+                                                                                                  local dstExp = itemWrapper:getExperience() / 15000
                                                                                                   ;
                                                                                                   (target.useLimit_Exp):SetShow(true)
                                                                                                   ;
@@ -2978,107 +3077,88 @@ extendedSlotInfoArray = {}
                                                                                                   ;
                                                                                                   (target.useLimit_Exp_value):SetShow(true)
                                                                                                   ;
-                                                                                                  (target.useLimit_Exp_value):SetText((string.format)("%.2f", alchemystoneExp) .. "%")
+                                                                                                  (target.useLimit_Exp_value):SetText((string.format)("%.2f", dstExp) .. "%")
                                                                                                   ;
-                                                                                                  (target.useLimit_Exp_gage_value):SetCurrentProgressRate(alchemystoneExp)
+                                                                                                  (target.useLimit_Exp_gage_value):SetCurrentProgressRate(dstExp)
                                                                                                   ;
-                                                                                                  (target.useLimit_Exp_gage_value):SetProgressRate(alchemystoneExp)
+                                                                                                  (target.useLimit_Exp_gage_value):SetProgressRate(dstExp)
                                                                                                   ;
                                                                                                   (target.useLimit_Exp_gage_value):SetAniSpeed(0)
                                                                                                 end
-                                                                                              elseif nil ~= itemWrapper and (CppEnums.ContentsEventType).ContentsType_QuestBook == (itemSSW:get()):getContentsEventType() then
-                                                                                                local dstExp = itemWrapper:getExperience() / 15000
-                                                                                                ;
-                                                                                                (target.useLimit_Exp):SetShow(true)
-                                                                                                ;
-                                                                                                (target.useLimit_Exp_gage):SetShow(true)
-                                                                                                ;
-                                                                                                (target.useLimit_Exp_gage_value):SetShow(true)
-                                                                                                ;
-                                                                                                (target.useLimit_Exp_value):SetShow(true)
-                                                                                                ;
-                                                                                                (target.useLimit_Exp_value):SetText((string.format)("%.2f", dstExp) .. "%")
-                                                                                                ;
-                                                                                                (target.useLimit_Exp_gage_value):SetCurrentProgressRate(dstExp)
-                                                                                                ;
-                                                                                                (target.useLimit_Exp_gage_value):SetProgressRate(dstExp)
-                                                                                                ;
-                                                                                                (target.useLimit_Exp_gage_value):SetAniSpeed(0)
                                                                                               end
-                                                                                            end
-                                                                                            local maxEndurance = 32767
-                                                                                            local dynamicMaxEndurance = 32767
-                                                                                            if false == (itemSSW:get()):isUnbreakable() then
-                                                                                              maxEndurance = (itemSSW:get()):getMaxEndurance()
-                                                                                            end
-                                                                                            if not isSSW then
-                                                                                              dynamicMaxEndurance = item:getMaxEndurance()
-                                                                                            end
-                                                                                            local currentEndurance = maxEndurance
-                                                                                            if not isSSW then
-                                                                                              currentEndurance = item:getEndurance()
-                                                                                            end
-                                                                                            local calcEndurance = currentEndurance / maxEndurance
-                                                                                            local calcDynamicEndurance = dynamicMaxEndurance / maxEndurance
-                                                                                            ;
-                                                                                            (target.useLimit_endurance_gage_value):SetCurrentProgressRate(calcEndurance * 100)
-                                                                                            ;
-                                                                                            (target.useLimit_endurance_gage_value):SetProgressRate(calcEndurance * 100)
-                                                                                            ;
-                                                                                            (target.useLimit_endurance_gage_value):SetAniSpeed(0)
-                                                                                            ;
-                                                                                            (target.useLimit_dynamic_endurance_gage_value):SetCurrentProgressRate(calcDynamicEndurance * 100)
-                                                                                            ;
-                                                                                            (target.useLimit_dynamic_endurance_gage_value):SetProgressRate(calcDynamicEndurance * 100)
-                                                                                            ;
-                                                                                            (target.useLimit_dynamic_endurance_gage_value):SetAniSpeed(0)
-                                                                                            if 32767 ~= dynamicMaxEndurance then
-                                                                                              (target.useLimit_endurance_value):SetText(currentEndurance .. " / " .. dynamicMaxEndurance .. "  [" .. maxEndurance .. "]")
+                                                                                              local maxEndurance = 32767
+                                                                                              local dynamicMaxEndurance = 32767
+                                                                                              if false == (itemSSW:get()):isUnbreakable() then
+                                                                                                maxEndurance = (itemSSW:get()):getMaxEndurance()
+                                                                                              end
+                                                                                              if not isSSW then
+                                                                                                dynamicMaxEndurance = item:getMaxEndurance()
+                                                                                              end
+                                                                                              local currentEndurance = maxEndurance
+                                                                                              if not isSSW then
+                                                                                                currentEndurance = item:getEndurance()
+                                                                                              end
+                                                                                              local calcEndurance = currentEndurance / maxEndurance
+                                                                                              local calcDynamicEndurance = dynamicMaxEndurance / maxEndurance
                                                                                               ;
-                                                                                              (target.useLimit_endurance):SetShow(true)
+                                                                                              (target.useLimit_endurance_gage_value):SetCurrentProgressRate(calcEndurance * 100)
                                                                                               ;
-                                                                                              (target.useLimit_endurance_value):SetShow(true)
+                                                                                              (target.useLimit_endurance_gage_value):SetProgressRate(calcEndurance * 100)
                                                                                               ;
-                                                                                              (target.useLimit_endurance_gage_value):SetShow(true)
+                                                                                              (target.useLimit_endurance_gage_value):SetAniSpeed(0)
                                                                                               ;
-                                                                                              (target.useLimit_dynamic_endurance_gage_value):SetShow(true)
+                                                                                              (target.useLimit_dynamic_endurance_gage_value):SetCurrentProgressRate(calcDynamicEndurance * 100)
                                                                                               ;
-                                                                                              (target.useLimit_endurance_gage):SetShow(true)
-                                                                                            elseif 32767 ~= maxEndurance then
-                                                                                              (target.useLimit_endurance_value):SetText(currentEndurance .. " / " .. maxEndurance)
+                                                                                              (target.useLimit_dynamic_endurance_gage_value):SetProgressRate(calcDynamicEndurance * 100)
                                                                                               ;
-                                                                                              (target.useLimit_endurance):SetShow(true)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_value):SetShow(true)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_gage_value):SetShow(true)
-                                                                                              ;
-                                                                                              (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_gage):SetShow(true)
-                                                                                            else
-                                                                                              (target.useLimit_endurance):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_value):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_gage_value):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_gage):SetShow(false)
-                                                                                            end
-                                                                                            if Panel_House_InstallationMode:GetShow() then
-                                                                                              (target.useLimit_endurance):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_value):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_gage_value):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
-                                                                                              ;
-                                                                                              (target.useLimit_endurance_gage):SetShow(false)
-                                                                                            end
-                                                                                            local check_fishingRod = function(itemKey)
+                                                                                              (target.useLimit_dynamic_endurance_gage_value):SetAniSpeed(0)
+                                                                                              if 32767 ~= dynamicMaxEndurance then
+                                                                                                (target.useLimit_endurance_value):SetText(currentEndurance .. " / " .. dynamicMaxEndurance .. "  [" .. maxEndurance .. "]")
+                                                                                                ;
+                                                                                                (target.useLimit_endurance):SetShow(true)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_value):SetShow(true)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage_value):SetShow(true)
+                                                                                                ;
+                                                                                                (target.useLimit_dynamic_endurance_gage_value):SetShow(true)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage):SetShow(true)
+                                                                                              elseif 32767 ~= maxEndurance then
+                                                                                                (target.useLimit_endurance_value):SetText(currentEndurance .. " / " .. maxEndurance)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance):SetShow(true)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_value):SetShow(true)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage_value):SetShow(true)
+                                                                                                ;
+                                                                                                (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage):SetShow(true)
+                                                                                              else
+                                                                                                (target.useLimit_endurance):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_value):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage_value):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage):SetShow(false)
+                                                                                              end
+                                                                                              if Panel_House_InstallationMode:GetShow() then
+                                                                                                (target.useLimit_endurance):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_value):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage_value):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
+                                                                                                ;
+                                                                                                (target.useLimit_endurance_gage):SetShow(false)
+                                                                                              end
+                                                                                              local check_fishingRod = function(itemKey)
     -- function num : 0_18_0
     if itemKey == 17591 or itemKey == 17592 or itemKey == 17596 or itemKey == 17612 or itemKey == 17613 or itemKey == 17669 then
       return true
@@ -3087,193 +3167,193 @@ extendedSlotInfoArray = {}
     end
   end
 
-                                                                                            if nil ~= itemWrapper then
-                                                                                              local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
-                                                                                              if true == isCash and false == check_fishingRod(((itemSSW:get())._key):getItemKey()) then
-                                                                                                (target.useLimit_endurance):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_endurance_value):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_endurance_gage_value):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_endurance_gage):SetShow(false)
-                                                                                              end
-                                                                                            elseif nil ~= itemSSW then
-                                                                                              local isCash = (itemSSW:get()):isCash()
-                                                                                              if true == isCash and false == check_fishingRod(((itemSSW:get())._key):getItemKey()) then
-                                                                                                (target.useLimit_endurance):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_endurance_value):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_endurance_gage_value):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
-                                                                                                ;
-                                                                                                (target.useLimit_endurance_gage):SetShow(false)
-                                                                                              end
-                                                                                            end
-                                                                                            ;
-                                                                                            (target.enchantDifficulty):SetShow(false)
-                                                                                            do
-                                                                                              if nil ~= itemSSW then
-                                                                                                local enchantDifficulty = (itemSSW:get()):getEnchantDifficulty()
-                                                                                                if 0 < enchantDifficulty then
-                                                                                                  (target.enchantDifficulty):SetShow(true)
-                                                                                                  if 1 == enchantDifficulty then
-                                                                                                    (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_EASY"))
-                                                                                                  elseif 2 == enchantDifficulty then
-                                                                                                    (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_NORMAL"))
-                                                                                                  elseif 3 == enchantDifficulty then
-                                                                                                    (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_HARD"))
-                                                                                                  end
+                                                                                              if nil ~= itemWrapper then
+                                                                                                local isCash = ((itemWrapper:getStaticStatus()):get()):isCash()
+                                                                                                if true == isCash and false == check_fishingRod(((itemSSW:get())._key):getItemKey()) then
+                                                                                                  (target.useLimit_endurance):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_endurance_value):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_endurance_gage_value):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_endurance_gage):SetShow(false)
+                                                                                                end
+                                                                                              elseif nil ~= itemSSW then
+                                                                                                local isCash = (itemSSW:get()):isCash()
+                                                                                                if true == isCash and false == check_fishingRod(((itemSSW:get())._key):getItemKey()) then
+                                                                                                  (target.useLimit_endurance):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_endurance_value):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_endurance_gage_value):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_dynamic_endurance_gage_value):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.useLimit_endurance_gage):SetShow(false)
                                                                                                 end
                                                                                               end
                                                                                               ;
-                                                                                              (target.soulCollector):SetShow(false)
-                                                                                              if true == Panel_Tooltip_Item_DataObject.inventory and nil ~= itemSSW then
-                                                                                                local isSoulCollecTor = itemWrapper:isSoulCollector()
-                                                                                                if true == isSoulCollecTor then
-                                                                                                  (target.soulCollector):SetShow(true)
-                                                                                                  local countSoul = nil
-                                                                                                  if itemWrapper:getSoulCollectorMaxCount() < itemWrapper:getSoulCollectorCount() then
-                                                                                                    countSoul = itemWrapper:getSoulCollectorMaxCount()
+                                                                                              (target.enchantDifficulty):SetShow(false)
+                                                                                              do
+                                                                                                if nil ~= itemSSW then
+                                                                                                  local enchantDifficulty = (itemSSW:get()):getEnchantDifficulty()
+                                                                                                  if 0 < enchantDifficulty then
+                                                                                                    (target.enchantDifficulty):SetShow(true)
+                                                                                                    if 1 == enchantDifficulty then
+                                                                                                      (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_EASY"))
+                                                                                                    elseif 2 == enchantDifficulty then
+                                                                                                      (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_NORMAL"))
+                                                                                                    elseif 3 == enchantDifficulty then
+                                                                                                      (target.enchantDifficulty):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ENCHANTDIFFICULTY_HARD"))
+                                                                                                    end
+                                                                                                  end
+                                                                                                end
+                                                                                                ;
+                                                                                                (target.soulCollector):SetShow(false)
+                                                                                                if true == Panel_Tooltip_Item_DataObject.inventory and nil ~= itemWrapper then
+                                                                                                  local isSoulCollecTor = itemWrapper:isSoulCollector()
+                                                                                                  if true == isSoulCollecTor then
+                                                                                                    (target.soulCollector):SetShow(true)
+                                                                                                    local countSoul = nil
+                                                                                                    if itemWrapper:getSoulCollectorMaxCount() < itemWrapper:getSoulCollectorCount() then
+                                                                                                      countSoul = itemWrapper:getSoulCollectorMaxCount()
+                                                                                                    else
+                                                                                                      countSoul = itemWrapper:getSoulCollectorCount()
+                                                                                                    end
+                                                                                                    ;
+                                                                                                    (target.soulCollector):SetText("- " .. PAGetString(Defines.StringSheet_GAME, "LUA_SOULCOLLECTOR_STATE") .. " : " .. tostring(countSoul) .. "/" .. tostring(itemWrapper:getSoulCollectorMaxCount()))
+                                                                                                  end
+                                                                                                end
+                                                                                                ;
+                                                                                                (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), target.panelSize - 30 * (6 - soketCount - 1))
+                                                                                                ;
+                                                                                                (target.soketOption_panel):SetSize((target.soketOption_panel):GetSizeX(), target.socketSize - 30 * (6 - soketCount))
+                                                                                                ;
+                                                                                                (target.itemProducedPlace):ComputePos()
+                                                                                                ;
+                                                                                                (target.itemDescription):ComputePos()
+                                                                                                ;
+                                                                                                (target.itemPrice_panel):ComputePos()
+                                                                                                ;
+                                                                                                (target.itemPrice_transportBuy):ComputePos()
+                                                                                                ;
+                                                                                                (target.itemPrice_transportBuy_value):ComputePos()
+                                                                                                ;
+                                                                                                (target.itemPrice_storeSell):ComputePos()
+                                                                                                ;
+                                                                                                (target.itemPrice_storeSell_value):ComputePos()
+                                                                                                if true == (itemSSW:get()):isForJustTrade() and not isSSW then
+                                                                                                  local nodeLevel = ToClient_GetNodeLevel(itemWrapper:getProductionRegionKey())
+                                                                                                  if 1 <= nodeLevel then
+                                                                                                    (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_LINK") .. ")")
                                                                                                   else
-                                                                                                    countSoul = itemWrapper:getSoulCollectorCount()
+                                                                                                    (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOLINK") .. ")")
+                                                                                                  end
+                                                                                                else
+                                                                                                  (target.itemProducedPlace):SetText("")
+                                                                                                end
+                                                                                                ;
+                                                                                                (target.itemDescription):SetTextMode(UI_TM.eTextMode_AutoWrap)
+                                                                                                ;
+                                                                                                (target.itemDescription):SetAutoResize(true)
+                                                                                                local _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TITLE") .. " " .. itemSSW:getDescription()
+                                                                                                if item_type == 2 and true == (itemSSW:get()):isForJustTrade() then
+                                                                                                  _desc = _desc .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TRADEITEM")
+                                                                                                end
+                                                                                                if itemSSW:getEnchantDescription() ~= "" then
+                                                                                                  _desc = _desc .. "\n\n- " .. itemSSW:getEnchantDescription()
+                                                                                                end
+                                                                                                ;
+                                                                                                (target.itemDescription):SetText(_desc)
+                                                                                                local isExchangeItem = itemSSW:isExchangeItem()
+                                                                                                local exchangeDesc = ""
+                                                                                                if isExchangeItem then
+                                                                                                  (target.exchangeTitle):SetShow(true)
+                                                                                                  ;
+                                                                                                  (target.exchangeDesc):SetShow(true)
+                                                                                                  ;
+                                                                                                  (target.exchangeDesc):SetText(itemSSW:getExchangeDescription())
+                                                                                                else
+                                                                                                  (target.exchangeTitle):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.exchangeDesc):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.exchangeDesc):SetText("")
+                                                                                                end
+                                                                                                local _const = Defines.s64_const
+                                                                                                local isTradeItem = itemSSW:isTradeAble()
+                                                                                                if isTradeItem == true and not isSSW then
+                                                                                                  if _const.s64_0 < item:getBuyingPrice_s64() then
+                                                                                                    (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(item:getBuyingPrice_s64())))
+                                                                                                  else
+                                                                                                    (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOTHING"))
                                                                                                   end
                                                                                                   ;
-                                                                                                  (target.soulCollector):SetText("- " .. PAGetString(Defines.StringSheet_GAME, "LUA_SOULCOLLECTOR_STATE") .. " : " .. tostring(countSoul) .. "/" .. tostring(itemWrapper:getSoulCollectorMaxCount()))
-                                                                                                end
-                                                                                              end
-                                                                                              ;
-                                                                                              (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), target.panelSize - 30 * (6 - soketCount - 1))
-                                                                                              ;
-                                                                                              (target.soketOption_panel):SetSize((target.soketOption_panel):GetSizeX(), target.socketSize - 30 * (6 - soketCount))
-                                                                                              ;
-                                                                                              (target.itemProducedPlace):ComputePos()
-                                                                                              ;
-                                                                                              (target.itemDescription):ComputePos()
-                                                                                              ;
-                                                                                              (target.itemPrice_panel):ComputePos()
-                                                                                              ;
-                                                                                              (target.itemPrice_transportBuy):ComputePos()
-                                                                                              ;
-                                                                                              (target.itemPrice_transportBuy_value):ComputePos()
-                                                                                              ;
-                                                                                              (target.itemPrice_storeSell):ComputePos()
-                                                                                              ;
-                                                                                              (target.itemPrice_storeSell_value):ComputePos()
-                                                                                              if true == (itemSSW:get()):isForJustTrade() and not isSSW then
-                                                                                                local nodeLevel = ToClient_GetNodeLevel(itemWrapper:getProductionRegionKey())
-                                                                                                if 1 <= nodeLevel then
-                                                                                                  (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_LINK") .. ")")
-                                                                                                else
-                                                                                                  (target.itemProducedPlace):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_PRODUCT_PLACE") .. " : " .. itemWrapper:getProductionRegion() .. " (" .. PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOLINK") .. ")")
-                                                                                                end
-                                                                                              else
-                                                                                                (target.itemProducedPlace):SetText("")
-                                                                                              end
-                                                                                              ;
-                                                                                              (target.itemDescription):SetTextMode(UI_TM.eTextMode_AutoWrap)
-                                                                                              ;
-                                                                                              (target.itemDescription):SetAutoResize(true)
-                                                                                              local _desc = PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TITLE") .. " " .. itemSSW:getDescription()
-                                                                                              if item_type == 2 and true == (itemSSW:get()):isForJustTrade() then
-                                                                                                _desc = _desc .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_DESC_TRADEITEM")
-                                                                                              end
-                                                                                              if itemSSW:getEnchantDescription() ~= "" then
-                                                                                                _desc = _desc .. "\n\n- " .. itemSSW:getEnchantDescription()
-                                                                                              end
-                                                                                              ;
-                                                                                              (target.itemDescription):SetText(_desc)
-                                                                                              local isExchangeItem = itemSSW:isExchangeItem()
-                                                                                              local exchangeDesc = ""
-                                                                                              if isExchangeItem then
-                                                                                                (target.exchangeTitle):SetShow(true)
-                                                                                                ;
-                                                                                                (target.exchangeDesc):SetShow(true)
-                                                                                                ;
-                                                                                                (target.exchangeDesc):SetText(itemSSW:getExchangeDescription())
-                                                                                              else
-                                                                                                (target.exchangeTitle):SetShow(false)
-                                                                                                ;
-                                                                                                (target.exchangeDesc):SetShow(false)
-                                                                                                ;
-                                                                                                (target.exchangeDesc):SetText("")
-                                                                                              end
-                                                                                              local _const = Defines.s64_const
-                                                                                              local isTradeItem = itemSSW:isTradeAble()
-                                                                                              if isTradeItem == true and not isSSW then
-                                                                                                if _const.s64_0 < item:getBuyingPrice_s64() then
-                                                                                                  (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(item:getBuyingPrice_s64())))
-                                                                                                else
-                                                                                                  (target.itemPrice_transportBuy_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOTHING"))
-                                                                                                end
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_BUY_PRICE") .. " : ")
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy):SetFontColor(4287137928)
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy):SetShow(true)
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy_value):SetShow(true)
-                                                                                                ;
-                                                                                                (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 50)
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
-                                                                                              else
-                                                                                                (target.itemPrice_transportBuy):SetText("")
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy):SetFontColor(4290733156)
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy):SetShow(true)
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy_value):SetShow(false)
-                                                                                                ;
-                                                                                                (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 25)
-                                                                                                ;
-                                                                                                (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
-                                                                                              end
-                                                                                              local s64_originalPrice = (itemSSW:get())._originalPrice_s64
-                                                                                              local s64_sellPrice = (itemSSW:get())._sellPriceToNpc_s64
-                                                                                              if isTradeItem then
-                                                                                                (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ORIGINAL_PRICE") .. ":")
-                                                                                                if _const.s64_0 < s64_originalPrice and 0 == enchantLevel then
-                                                                                                  (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_originalPrice)))
+                                                                                                  (target.itemPrice_transportBuy):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_BUY_PRICE") .. " : ")
                                                                                                   ;
-                                                                                                  (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                                                  (target.itemPrice_transportBuy):SetFontColor(4287137928)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_transportBuy):SetShow(true)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_transportBuy_value):SetShow(true)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 50)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
                                                                                                 else
-                                                                                                  (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
+                                                                                                  (target.itemPrice_transportBuy):SetText("")
                                                                                                   ;
-                                                                                                  (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                                                  (target.itemPrice_transportBuy):SetFontColor(4290733156)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_transportBuy):SetShow(true)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_transportBuy_value):SetShow(false)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_panel):SetSize((target.itemPrice_panel):GetSizeX(), 25)
+                                                                                                  ;
+                                                                                                  (target.itemPrice_transportBuy_value):SetSpanSize((target.itemPrice_transportBuy):GetTextSizeX() + 20, 0)
                                                                                                 end
-                                                                                              else
-                                                                                                (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SELL_PRICE") .. " : ")
-                                                                                                if _const.s64_0 < s64_sellPrice and 0 == enchantLevel then
-                                                                                                  (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_sellPrice)))
-                                                                                                  ;
-                                                                                                  (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                                                local s64_originalPrice = (itemSSW:get())._originalPrice_s64
+                                                                                                local s64_sellPrice = (itemSSW:get())._sellPriceToNpc_s64
+                                                                                                if isTradeItem then
+                                                                                                  (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_TRADE_ORIGINAL_PRICE") .. ":")
+                                                                                                  if _const.s64_0 < s64_originalPrice and 0 == enchantLevel then
+                                                                                                    (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_originalPrice)))
+                                                                                                    ;
+                                                                                                    (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                                                  else
+                                                                                                    (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
+                                                                                                    ;
+                                                                                                    (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                                                  end
                                                                                                 else
-                                                                                                  (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
-                                                                                                  ;
-                                                                                                  (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                                                  (target.itemPrice_storeSell):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_SELL_PRICE") .. " : ")
+                                                                                                  if _const.s64_0 < s64_sellPrice and 0 == enchantLevel then
+                                                                                                    (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_AUCTION_GOLDTEXT") .. " " .. tostring(makeDotMoney(s64_sellPrice)))
+                                                                                                    ;
+                                                                                                    (target.itemPrice_storeSell_value):SetFontColor(4292726146)
+                                                                                                  else
+                                                                                                    (target.itemPrice_storeSell_value):SetText(PAGetString(Defines.StringSheet_GAME, "PANEL_TOOLTIP_NOT_SELLING_ITEM"))
+                                                                                                    ;
+                                                                                                    (target.itemPrice_storeSell_value):SetFontColor(4290733156)
+                                                                                                  end
                                                                                                 end
-                                                                                              end
-                                                                                              ;
-                                                                                              (target.itemPrice_storeSell_value):SetSpanSize((target.itemPrice_storeSell):GetTextSizeX() + 20, 0)
-                                                                                              local elementBiggap = 10
-                                                                                              local elementgap = 2
-                                                                                              local TooltipYPos = 10
-                                                                                              if target.mainPanel == Panel_Tooltip_Item_equipped then
-                                                                                                (target.itemType):SetPosY(8)
                                                                                                 ;
-                                                                                                (chattingLinkedItemTooltip.itemType):SetPosX(175)
-                                                                                                ;
-                                                                                                (chattingLinkedItemClickTooltip.itemType):SetPosX(175)
-                                                                                                ;
-                                                                                                (target.dying):SetPosY(50 + (changeItemNamePos))
-                                                                                                local showPosisionSetting = function(target, attackShow, defenseShow, hitShow, dvShow, pvShow)
+                                                                                                (target.itemPrice_storeSell_value):SetSpanSize((target.itemPrice_storeSell):GetTextSizeX() + 20, 0)
+                                                                                                local elementBiggap = 10
+                                                                                                local elementgap = 2
+                                                                                                local TooltipYPos = 10
+                                                                                                if target.mainPanel == Panel_Tooltip_Item_equipped then
+                                                                                                  (target.itemType):SetPosY(8)
+                                                                                                  ;
+                                                                                                  (chattingLinkedItemTooltip.itemType):SetPosX(175)
+                                                                                                  ;
+                                                                                                  (chattingLinkedItemClickTooltip.itemType):SetPosX(175)
+                                                                                                  ;
+                                                                                                  (target.dying):SetPosY(50 + (changeItemNamePos))
+                                                                                                  local showPosisionSetting = function(target, attackShow, defenseShow, hitShow, dvShow, pvShow)
     -- function num : 0_18_1 , upvalues : changeItemNamePos
     local index = -1
     local bottomTarget = 0
@@ -3340,146 +3420,141 @@ extendedSlotInfoArray = {}
     return bottomTarget
   end
 
-                                                                                                local bottomTarget = showPosisionSetting(target, attackShow, defenseShow, hitShow, dvShow, pvShow)
-                                                                                                if 0 == bottomTarget then
-                                                                                                  (target.itemIcon):SetPosY(30 + (changeItemNamePos))
+                                                                                                  local bottomTarget = showPosisionSetting(target, attackShow, defenseShow, hitShow, dvShow, pvShow)
+                                                                                                  if 0 == bottomTarget then
+                                                                                                    (target.itemIcon):SetPosY(30 + (changeItemNamePos))
+                                                                                                    local iconPosY = (target.itemIcon):GetPosY()
+                                                                                                    local iconSizeY = (target.itemIcon):GetSizeY()
+                                                                                                    ;
+                                                                                                    (target.weight):SetPosY(iconPosY + iconSizeY - 15)
+                                                                                                    ;
+                                                                                                    (target.weight_value):SetPosY(iconPosY + iconSizeY - 15)
+                                                                                                  else
+                                                                                                    if 1 == bottomTarget then
+                                                                                                      TooltipYPos = GetBottomPos(target.attack) + elementgap
+                                                                                                    elseif 2 == bottomTarget then
+                                                                                                      TooltipYPos = GetBottomPos(target._hit) + elementgap
+                                                                                                    elseif 3 == bottomTarget then
+                                                                                                      TooltipYPos = GetBottomPos(target.defense) + elementgap
+                                                                                                    elseif 4 == bottomTarget then
+                                                                                                      TooltipYPos = GetBottomPos(target._dv) + elementgap
+                                                                                                    elseif 5 == bottomTarget then
+                                                                                                      TooltipYPos = GetBottomPos(target._pv) + elementgap
+                                                                                                    end
+                                                                                                    local iconSizeY = (target.itemIcon):GetSizeY()
+                                                                                                    local iconPosY = (TooltipYPos - (changeItemNamePos)) * 0.5 - iconSizeY * 0.5 + (changeItemNamePos) + iconMovePos
+                                                                                                    ;
+                                                                                                    (target.itemIcon):SetPosY(iconPosY + (changeItemNamePos))
+                                                                                                    ;
+                                                                                                    (target.weight):SetPosY(TooltipYPos)
+                                                                                                    ;
+                                                                                                    (target.weight_value):SetPosY(TooltipYPos)
+                                                                                                  end
+                                                                                                  TooltipYPos = GetBottomPos(target.weight_value) + elementgap
+                                                                                                  local itemiconPosY = GetBottomPos(target.itemIcon) + elementgap
+                                                                                                  if TooltipYPos < itemiconPosY then
+                                                                                                    TooltipYPos = itemiconPosY
+                                                                                                  end
                                                                                                   local iconPosY = (target.itemIcon):GetPosY()
                                                                                                   local iconSizeY = (target.itemIcon):GetSizeY()
-                                                                                                  ;
-                                                                                                  (target.weight):SetPosY(iconPosY + iconSizeY - 15)
-                                                                                                  ;
-                                                                                                  (target.weight_value):SetPosY(iconPosY + iconSizeY - 15)
-                                                                                                else
-                                                                                                  if 1 == bottomTarget then
-                                                                                                    TooltipYPos = GetBottomPos(target.attack) + elementgap
-                                                                                                  elseif 2 == bottomTarget then
-                                                                                                    TooltipYPos = GetBottomPos(target._hit) + elementgap
-                                                                                                  elseif 3 == bottomTarget then
-                                                                                                    TooltipYPos = GetBottomPos(target.defense) + elementgap
-                                                                                                  elseif 4 == bottomTarget then
-                                                                                                    TooltipYPos = GetBottomPos(target._dv) + elementgap
-                                                                                                  elseif 5 == bottomTarget then
-                                                                                                    TooltipYPos = GetBottomPos(target._pv) + elementgap
-                                                                                                  end
-                                                                                                  local iconSizeY = (target.itemIcon):GetSizeY()
-                                                                                                  local iconPosY = (TooltipYPos - (changeItemNamePos)) * 0.5 - iconSizeY * 0.5 + (changeItemNamePos) + iconMovePos
-                                                                                                  ;
-                                                                                                  (target.itemIcon):SetPosY(iconPosY + (changeItemNamePos))
-                                                                                                  ;
-                                                                                                  (target.weight):SetPosY(TooltipYPos)
-                                                                                                  ;
-                                                                                                  (target.weight_value):SetPosY(TooltipYPos)
-                                                                                                end
-                                                                                                TooltipYPos = GetBottomPos(target.weight_value) + elementgap
-                                                                                                local itemiconPosY = GetBottomPos(target.itemIcon) + elementgap
-                                                                                                if TooltipYPos < itemiconPosY then
-                                                                                                  TooltipYPos = itemiconPosY
-                                                                                                end
-                                                                                                local iconPosY = (target.itemIcon):GetPosY()
-                                                                                                local iconSizeY = (target.itemIcon):GetSizeY()
-                                                                                                local enchantSizeY = (target.enchantLevel):GetSizeY()
-                                                                                                ;
-                                                                                                (target.enchantLevel):SetPosY(iconPosY + iconSizeY * 0.5 - enchantSizeY * 0.5)
-                                                                                                if (normalTooltip.attack_diffValue):GetShow() then
-                                                                                                  (normalTooltip.attack_diffValue):SetPosX((normalTooltip.attack_value):GetPosX() + (normalTooltip.attack_value):GetTextSizeX() + 10)
-                                                                                                  ;
-                                                                                                  (normalTooltip.attack_diffValue):SetPosY((normalTooltip.attack_value):GetPosY() + 7)
-                                                                                                end
-                                                                                                if (normalTooltip.defense_diffValue):GetShow() then
-                                                                                                  (normalTooltip.defense_diffValue):SetPosX((normalTooltip.defense_value):GetPosX() + (normalTooltip.defense_value):GetTextSizeX() + 10)
-                                                                                                  ;
-                                                                                                  (normalTooltip.defense_diffValue):SetPosY((normalTooltip.defense_value):GetPosY() + 7)
-                                                                                                end
-                                                                                                if (normalTooltip.weight_diffValue):GetShow() then
-                                                                                                  (normalTooltip.weight_diffValue):SetPosX((normalTooltip.weight_value):GetPosX() + (normalTooltip.weight_value):GetTextSizeX() + 10)
-                                                                                                  ;
-                                                                                                  (normalTooltip.weight_diffValue):SetPosY((normalTooltip.weight_value):GetPosY())
-                                                                                                end
-                                                                                                if (target._txt_MaxEnchanter):GetShow() then
-                                                                                                  (target._txt_MaxEnchanter):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target._txt_MaxEnchanter) + elementgap
-                                                                                                end
-                                                                                                if (target.isEnchantable):GetShow() then
-                                                                                                  (target.isEnchantable):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.isEnchantable) + elementgap
-                                                                                                end
-                                                                                                if (target.isSealed):GetShow() then
-                                                                                                  (target.isSealed):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.isSealed) + elementgap
-                                                                                                end
-                                                                                                if (target.bindType):GetShow() then
-                                                                                                  (target.bindType):SetPosY(TooltipYPos)
-                                                                                                  TooltipYPos = GetBottomPos(target.bindType) + elementgap
-                                                                                                end
-                                                                                                if (target.cronStoneEnchant):GetShow() then
-                                                                                                  (target.cronStoneEnchant):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.cronStoneEnchant, true)
-                                                                                                  ;
-                                                                                                  (target.cronStoneGrade):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.cronStoneGrade, true)
-                                                                                                  ;
-                                                                                                  (target.cronStoneValue):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.cronStoneValue, true)
-                                                                                                  ;
-                                                                                                  (target.cronStoneProgressBg):SetPosY(TooltipYPos + 13)
-                                                                                                  ;
-                                                                                                  (target.cronStoneProgress):SetPosY(TooltipYPos + 19)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneGradeValue)[0]):SetPosY(TooltipYPos + 5)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneGradeValue)[1]):SetPosY(TooltipYPos + 5)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneGradeValue)[2]):SetPosY(TooltipYPos + 5)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneGradeValue)[3]):SetPosY(TooltipYPos + 5)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneCountValue)[0]):SetPosY(TooltipYPos + 25)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneCountValue)[1]):SetPosY(TooltipYPos + 25)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneCountValue)[2]):SetPosY(TooltipYPos + 25)
-                                                                                                  ;
-                                                                                                  ((target.cronStoneCountValue)[3]):SetPosY(TooltipYPos + 25)
-                                                                                                  TooltipYPos = GetBottomPos((target.cronStoneCountValue)[0]) + elementgap
-                                                                                                end
-                                                                                                if (target.personalTrade):GetShow() then
-                                                                                                  (target.personalTrade):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.personalTrade) + elementgap
-                                                                                                end
-                                                                                                if (target.enchantDifficulty):GetShow() then
-                                                                                                  (target.enchantDifficulty):SetPosY(TooltipYPos + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.enchantDifficulty) + elementgap
-                                                                                                end
-                                                                                                if (target.itemLock):GetShow() then
-                                                                                                  (target.itemLock):SetPosY(TooltipYPos)
-                                                                                                  TooltipYPos = GetBottomPos(target.itemLock) + elementgap
-                                                                                                end
-                                                                                                if (target.soulCollector):GetShow() then
-                                                                                                  (target.soulCollector):SetPosY(TooltipYPos)
-                                                                                                  TooltipYPos = GetBottomPos(target.soulCollector) + elementgap
-                                                                                                end
-                                                                                                if (target.tradeInfo_Panel):GetShow() then
-                                                                                                  (target.tradeInfo_Panel):SetPosY(TooltipYPos)
-                                                                                                  ;
-                                                                                                  (target.tradeInfo_Title):SetPosY(TooltipYPos + 5)
-                                                                                                  ;
-                                                                                                  (target.tradeInfo_Value):SetPosY(TooltipYPos + (target.tradeInfo_Title):GetSizeY() + 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.tradeInfo_Panel) + elementgap
-                                                                                                end
-                                                                                                if (target.balksExtraction):GetShow() then
-                                                                                                  (target.balksExtraction):SetPosY(TooltipYPos)
-                                                                                                  TooltipYPos = GetBottomPos(target.balksExtraction) + elementgap
-                                                                                                end
-                                                                                                if (target.cronsExtraction):GetShow() then
-                                                                                                  (target.cronsExtraction):SetPosY(TooltipYPos - 5)
-                                                                                                  TooltipYPos = GetBottomPos(target.cronsExtraction) + elementgap
-                                                                                                end
-                                                                                                if (target.useDyeColorTitle):GetShow() then
-                                                                                                  (target.useDyeColorTitle):SetPosY(TooltipYPos)
-                                                                                                  TooltipYPos = GetBottomPos(target.useDyeColorTitle) + elementgap
-                                                                                                end
-                                                                                                do
                                                                                                   do
+                                                                                                    local enchantSizeY = (target.enchantLevel):GetSizeY()
+                                                                                                    ;
+                                                                                                    (target.enchantLevel):SetPosY(iconPosY + iconSizeY * 0.5 - enchantSizeY * 0.5)
+                                                                                                    if (normalTooltip.attack_diffValue):GetShow() then
+                                                                                                      (normalTooltip.attack_diffValue):SetPosX((normalTooltip.attack_value):GetPosX() + (normalTooltip.attack_value):GetTextSizeX() + 10)
+                                                                                                      ;
+                                                                                                      (normalTooltip.attack_diffValue):SetPosY((normalTooltip.attack_value):GetPosY() + 7)
+                                                                                                    end
+                                                                                                    if (normalTooltip.defense_diffValue):GetShow() then
+                                                                                                      (normalTooltip.defense_diffValue):SetPosX((normalTooltip.defense_value):GetPosX() + (normalTooltip.defense_value):GetTextSizeX() + 10)
+                                                                                                      ;
+                                                                                                      (normalTooltip.defense_diffValue):SetPosY((normalTooltip.defense_value):GetPosY() + 7)
+                                                                                                    end
+                                                                                                    if (normalTooltip.weight_diffValue):GetShow() then
+                                                                                                      (normalTooltip.weight_diffValue):SetPosX((normalTooltip.weight_value):GetPosX() + (normalTooltip.weight_value):GetTextSizeX() + 10)
+                                                                                                      ;
+                                                                                                      (normalTooltip.weight_diffValue):SetPosY((normalTooltip.weight_value):GetPosY())
+                                                                                                    end
+                                                                                                    if (target._txt_MaxEnchanter):GetShow() then
+                                                                                                      (target._txt_MaxEnchanter):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target._txt_MaxEnchanter) + elementgap
+                                                                                                    end
+                                                                                                    if (target.isEnchantable):GetShow() then
+                                                                                                      (target.isEnchantable):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.isEnchantable) + elementgap
+                                                                                                    end
+                                                                                                    if (target.isSealed):GetShow() then
+                                                                                                      (target.isSealed):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.isSealed) + elementgap
+                                                                                                    end
+                                                                                                    if (target.bindType):GetShow() then
+                                                                                                      (target.bindType):SetPosY(TooltipYPos)
+                                                                                                      TooltipYPos = GetBottomPos(target.bindType) + elementgap
+                                                                                                    end
+                                                                                                    if (target.cronStoneEnchant):GetShow() then
+                                                                                                      (target.cronStoneEnchant):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.cronStoneEnchant, true)
+                                                                                                      ;
+                                                                                                      (target.cronStoneGrade):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.cronStoneGrade, true)
+                                                                                                      ;
+                                                                                                      (target.cronStoneValue):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.cronStoneValue, true)
+                                                                                                      ;
+                                                                                                      (target.cronStoneProgressBg):SetPosY(TooltipYPos + 13)
+                                                                                                      ;
+                                                                                                      (target.cronStoneProgress):SetPosY(TooltipYPos + 19)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneGradeValue)[0]):SetPosY(TooltipYPos + 5)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneGradeValue)[1]):SetPosY(TooltipYPos + 5)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneGradeValue)[2]):SetPosY(TooltipYPos + 5)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneGradeValue)[3]):SetPosY(TooltipYPos + 5)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneCountValue)[0]):SetPosY(TooltipYPos + 25)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneCountValue)[1]):SetPosY(TooltipYPos + 25)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneCountValue)[2]):SetPosY(TooltipYPos + 25)
+                                                                                                      ;
+                                                                                                      ((target.cronStoneCountValue)[3]):SetPosY(TooltipYPos + 25)
+                                                                                                      TooltipYPos = GetBottomPos((target.cronStoneCountValue)[0]) + elementgap
+                                                                                                    end
+                                                                                                    if (target.personalTrade):GetShow() then
+                                                                                                      (target.personalTrade):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.personalTrade) + elementgap
+                                                                                                    end
+                                                                                                    if (target.enchantDifficulty):GetShow() then
+                                                                                                      (target.enchantDifficulty):SetPosY(TooltipYPos + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.enchantDifficulty) + elementgap
+                                                                                                    end
+                                                                                                    if (target.itemLock):GetShow() then
+                                                                                                      (target.itemLock):SetPosY(TooltipYPos)
+                                                                                                      TooltipYPos = GetBottomPos(target.itemLock) + elementgap
+                                                                                                    end
+                                                                                                    if (target.soulCollector):GetShow() then
+                                                                                                      (target.soulCollector):SetPosY(TooltipYPos)
+                                                                                                      TooltipYPos = GetBottomPos(target.soulCollector) + elementgap
+                                                                                                    end
+                                                                                                    if (target.tradeInfo_Panel):GetShow() then
+                                                                                                      (target.tradeInfo_Panel):SetPosY(TooltipYPos)
+                                                                                                      ;
+                                                                                                      (target.tradeInfo_Title):SetPosY(TooltipYPos + 5)
+                                                                                                      ;
+                                                                                                      (target.tradeInfo_Value):SetPosY(TooltipYPos + (target.tradeInfo_Title):GetSizeY() + 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.tradeInfo_Panel) + elementgap
+                                                                                                    end
+                                                                                                    if (target.balksExtraction):GetShow() then
+                                                                                                      (target.balksExtraction):SetPosY(TooltipYPos)
+                                                                                                      TooltipYPos = GetBottomPos(target.balksExtraction) + elementgap
+                                                                                                    end
+                                                                                                    if (target.cronsExtraction):GetShow() then
+                                                                                                      (target.cronsExtraction):SetPosY(TooltipYPos - 5)
+                                                                                                      TooltipYPos = GetBottomPos(target.cronsExtraction) + elementgap
+                                                                                                    end
                                                                                                     if itemSSW:isEquipable() and itemSSW:isDyeable() then
                                                                                                       local dyeingPartCount = 0
                                                                                                       if nil ~= itemWrapper then
@@ -3498,6 +3573,14 @@ extendedSlotInfoArray = {}
                                                                                                         end
                                                                                                         TooltipYPos = GetBottomPos((target.useDyeColorIcon_Part)[0]) + elementgap + 10
                                                                                                       end
+                                                                                                    elseif itemSSW:isEquipable() and false == itemSSW:isDyeable() then
+                                                                                                      (target.useDyeColorTitle):SetShow(true)
+                                                                                                      ;
+                                                                                                      (target.useDyeColorTitle):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_ITEM_DYE_DYEIMPOSSIBLE"))
+                                                                                                    end
+                                                                                                    if (target.useDyeColorTitle):GetShow() then
+                                                                                                      (target.useDyeColorTitle):SetPosY(TooltipYPos)
+                                                                                                      TooltipYPos = GetBottomPos(target.useDyeColorTitle) + elementgap
                                                                                                     end
                                                                                                     if useLimitShow == true then
                                                                                                       (target.useLimit_category):SetShow(true)
@@ -3675,7 +3758,7 @@ extendedSlotInfoArray = {}
                                                                                                     ;
                                                                                                     (target.recoveryDesc):SetShow(false)
                                                                                                     if not (itemSSW:get()):isCash() then
-                                                                                                      if itemSSW:isEquipable() and 0 < itemSSW:getRecoveryMaxEndurance() and dynamicMaxEndurance <= 50 then
+                                                                                                      if itemSSW:isEquipable() and 0 < itemSSW:getRecoveryMaxEndurance() and dynamicMaxEndurance <= 50 and 16145 ~= ((itemSSW:get())._key):getItemKey() then
                                                                                                         (target.recoveryDesc):SetShow(true)
                                                                                                         ;
                                                                                                         (target.recoveryDesc):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_ITEMTOOLTIP_RECOVOERYDESC"))
@@ -3698,7 +3781,7 @@ extendedSlotInfoArray = {}
                                                                                                     ;
                                                                                                     (target.mainPanel):SetSize((target.mainPanel):GetSizeX(), TooltipYPos + elementBiggap / 2)
                                                                                                     do return item_type == 1, itemSSW:isUsableServant() end
-                                                                                                    -- DECOMPILER ERROR: 99 unprocessed JMP targets
+                                                                                                    -- DECOMPILER ERROR: 100 unprocessed JMP targets
                                                                                                   end
                                                                                                 end
                                                                                               end

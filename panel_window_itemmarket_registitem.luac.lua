@@ -10,11 +10,11 @@ Panel_Window_ItemMarket_RegistItem:setGlassBackground(true)
 Panel_Window_ItemMarket_RegistItem:ActiveMouseEventEffect(true)
 local ItemMarketRegistItem = {
 slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true}
-, btn_Close = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Win_Close"), btn_Cancle = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Cancle"), btn_Confirm = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Confirm"), slotBG = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_SlotBG"), itemName = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_ItemName"), priceEdit = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Edit_SellPrice"), btn_MinPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_MinPrice"), btn_MaxPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_MaxPrice"), btn_CheckPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_CheckSum"), SellSumPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_SellSumPriceValue"), sellItemTitle = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_SubTitle1"), averagePriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_AveragePrice_TitleIcon"), recentPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RecentPrice_TitleIcon"), maxPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_MaxPrice_TitleIcon"), minPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_MinPrice_TitleIcon"), registHighPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistHighPrice_TitleIcon"), registLowPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistLowPrice_TitleIcon"), registListCountIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistListCount_TitleIcon"), registItemCountIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistItemCount_TitleIcon"), guideText = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_GuideText"), titleText = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_Title"), averagePrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_AveragePrice_Value"), recentPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RecentPrice_Value"), max_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_Max_Value"), minPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_MinPrice_Value"), registHighPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistHighPrice_Value"), registLowPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistLowPrice_Value"), registListCount_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistListCount_Value"), registItemCount_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistItemCount_Value"), _buttonQuestion = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Question"), 
+, btn_Close = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Win_Close"), btn_Cancle = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Cancle"), btn_Confirm = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Confirm"), slotBG = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_SlotBG"), itemName = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_ItemName"), priceEdit = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Edit_SellPrice"), btn_MinPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_MinPrice"), btn_MaxPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_MaxPrice"), btn_CheckPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_CheckSum"), SellSumPrice = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_SellSumPriceValue"), sellItemTitle = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_SubTitle1"), averagePriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_AveragePrice_TitleIcon"), recentPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RecentPrice_TitleIcon"), maxPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_MaxPrice_TitleIcon"), minPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_MinPrice_TitleIcon"), registHighPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistHighPrice_TitleIcon"), registLowPriceIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistLowPrice_TitleIcon"), registListCountIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistListCount_TitleIcon"), registItemCountIcon = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Static_RegistItemCount_TitleIcon"), guideText = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_GuideText"), titleText = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_Title"), averagePrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_AveragePrice_Value"), recentPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RecentPrice_Value"), max_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_Max_Value"), minPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_MinPrice_Value"), registHighPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistHighPrice_Value"), registLowPrice_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistLowPrice_Value"), registListCount_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistListCount_Value"), registItemCount_Value = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_RegistItemCount_Value"), _buttonQuestion = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Question"), _buttonPassword = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "Button_Pass"), _staticTextPassword = (UI.getChildControl)(Panel_Window_ItemMarket_RegistItem, "StaticText_PassState"), 
 itemSlot = {}
 , _invenWhereType = 0, _invenSlotNo = 0, _registerCount = 0, _waypointKey = 0, _minPrice = 0, _maxPrice = 0, _isByMaid = false, _priceCheck = false, _isAblePearlProduct = false, 
 _lastRegistPrice = {}
-, _itemKey = nil}
+, _itemKey = nil, _password = 0}
 local territoryKey = {[0] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_0")), [1] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_1")), [2] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_2")), [3] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_3")), [4] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_4")), [5] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_5")), [6] = tostring(PAGetString(Defines.StringSheet_GAME, "LUA_TERRITORYNAME_6"))}
 ItemMarketRegistItem_ShowAni = function()
   -- function num : 0_0
@@ -215,14 +215,14 @@ ItemMarketRegistItem.RegistDO = function(self)
           return 
         end
         if checkMaid_SubmitMarket(true) then
-          requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+          requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne, self._password)
         else
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_COOLTIME"))
           return 
         end
       else
         do
-          requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+          requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne, self._password)
           self._priceCheck = false
           itemMarket_afterRegist()
         end
@@ -249,6 +249,8 @@ itemMarket_afterRegist = function()
   local registedItemCount = getItemMarketMyItemsCount()
   ;
   (self.sellItemTitle):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ITEMMARKET_REGISTITEM_ENABLE_REGISTCOUNT", "itemCount", 30 - registedItemCount))
+  FGlobal_ItemMarketPassword_CanelPassword()
+  FGlobal_ItemMarketRegistItem_CancelPassword()
 end
 
 ItemMarketItemSet_RegistDo_FromDoBroadcast = function()
@@ -272,14 +274,14 @@ ItemMarketItemSet_RegistDo_FromDoBroadcast = function()
         return 
       end
       if checkMaid_SubmitMarket(true) then
-        requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+        requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne, self._password)
       else
         Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_COOLTIME"))
         return 
       end
     else
       do
-        requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+        requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne, self._password)
         self._priceCheck = false
         itemMarket_afterRegist()
       end
@@ -300,14 +302,14 @@ ItemMarketItemSet_RegistDo_FromPaymentPassword = function()
       return 
     end
     if checkMaid_SubmitMarket(true) then
-      requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+      requestRegisterItemForItemMarketByMaid(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne, self._password)
     else
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GLOBAL_COOLTIME"))
       return 
     end
   else
     do
-      requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne)
+      requestRegisterItemForItemMarket(self._invenWhereType, self._invenSlotNo, self._registerCount, pricePerOne, self._password)
       self._priceCheck = false
       itemMarket_afterRegist()
     end
@@ -509,6 +511,7 @@ end
 FGlobal_ItemMarketRegistItem_Close = function(isItemMarketItemSet_Show)
   -- function num : 0_20 , upvalues : ItemMarketRegistItem
   Panel_Window_ItemMarket_RegistItem:SetShow(false)
+  FGlobal_ItemMarketPassword_CanelPassword()
   ItemMarketRegistItem_SimpleToolTip(false)
   Inventory_SetFunctor(nil, nil, nil, nil)
   if ItemMarketRegistItem._isByMaid then
@@ -815,13 +818,43 @@ ItemMarketRegistItem.registEventHandler = function(self)
   (self._buttonQuestion):addInputEvent("Mouse_On", "HelpMessageQuestion_Show( \"ItemMarket\", \"true\")")
   ;
   (self._buttonQuestion):addInputEvent("Mouse_Out", "HelpMessageQuestion_Show( \"ItemMarket\", \"false\")")
+  ;
+  (self._buttonPassword):addInputEvent("Mouse_LUp", "HandleClicked_ItemMarketRegistItem_OpenRegistPassword()")
+end
+
+HandleClicked_ItemMarketRegistItem_OpenRegistPassword = function()
+  -- function num : 0_28 , upvalues : ItemMarketRegistItem
+  if ItemMarketRegistItem._invenSlotNo > 0 then
+    FGlobal_ItemMarketPassword_Open(ItemMarketRegistItem._password)
+  end
+end
+
+FGlobal_ItemMarketRegistItem_RegistPassword = function(password)
+  -- function num : 0_29 , upvalues : ItemMarketRegistItem
+  (ItemMarketRegistItem._staticTextPassword):SetText("잠금 아이�\156")
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
+
+  ItemMarketRegistItem._password = password
+end
+
+FGlobal_ItemMarketRegistItem_CancelPassword = function()
+  -- function num : 0_30 , upvalues : ItemMarketRegistItem
+  (ItemMarketRegistItem._staticTextPassword):SetText("")
+  -- DECOMPILER ERROR at PC6: Confused about usage of register: R0 in 'UnsetPending'
+
+  ItemMarketRegistItem._password = 0
 end
 
 ItemMarketRegistItem.registMessageHandler = function(self)
-  -- function num : 0_28
+  -- function num : 0_31
 end
 
 ItemMarketRegistItem:Initialize()
 ItemMarketRegistItem:registEventHandler()
 ItemMarketRegistItem:registMessageHandler()
+if ToClient_IsContentsGroupOpen("344") == false then
+  (ItemMarketRegistItem._buttonPassword):SetShow(false)
+  ;
+  (ItemMarketRegistItem._staticTextPassword):SetShow(false)
+end
 

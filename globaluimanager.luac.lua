@@ -7,13 +7,13 @@ local IM = CppEnums.EProcessorInputMode
 local VCK = CppEnums.VirtualKeyCode
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local isClickControlKey = 0
-local panel_WindowList = {Panel_Window_ServantInfo, Panel_PartyOption, Panel_Alchemy, Panel_Window_StableFunction, Panel_Window_StableList, Panel_Window_StableInfo, Panel_Window_StableEquipInfo, Panel_Window_StableShop, Panel_Window_StableMating, Panel_Window_StableRegister, Panel_Window_StableStallion, Panel_Servant_Market_Input, Panel_Window_WharfFunction, Panel_Window_WharfList, Panel_Window_WharfInfo, Panel_Window_WharfRegister, Panel_Window_Exchange_Number, Panel_Win_System, Panel_Window_Delivery_Request, Panel_Window_Delivery_Information, Panel_Window_Delivery_CarriageInformation, Panel_Mail_Detail, Panel_Mail_Send, Panel_CreateClan, Panel_IntroMovie, Panel_Window_Repair, Panel_Scroll, Panel_SkillAwaken, Panel_Popup_MoveItem, Panel_LordMenu, Panel_CarriageInfo, Panel_FixEquip, Panel_Dialogue_Itemtake, Panel_CreateGuild, Panel_EnableSkill, Panel_HelpMessage, Panel_ProductNote, Panel_KeyboardHelp, Panel_WebControl, Panel_Window_Quest_New, Panel_Interaction_HouseRank, Panel_ColorBalance, Panel_CheckedQuestInfo, Panel_Window_Quest_History, Panel_Tooltip_Common, Panel_ShipInfo, Panel_Window_PetListNew, Panel_AgreementGuild_Master, Panel_Housing_FarmInfo_New, Panel_Window_ItemMarket_ItemSet, Panel_ClanList, Panel_CarveSeal, Panel_ResetSeal, Panel_ClearVested, Panel_Window_CharInfo_Status, Panel_Chatting_Input, Panel_Window_GameTips, Panel_Window_SkillGuide, Panel_MovieTheater_320, Panel_MovieTheater_640, Panel_MovieTheater_SkillGuide_640, Panel_NewKnowledge, Panel_QuestInfo, Panel_MovieGuide, Panel_Window_PetRegister, Panel_FishEncyclopedia, Panel_Tooltip_Item_chattingLinkedItem, Panel_Window_ItemMarket_BuyConfirm, Panel_Tooltip_SimpleText, Panel_Event_100Day, Panel_HousingList, Panel_LifeRanking, Panel_RecommandName, Panel_Interaction_FriendHouseList, Panel_GuildWarScore, Panel_KnowledgeManagement, Panel_Window_StableMix, Panel_RecentCook, Panel_Window_PetCompose, Panel_GuildWebInfo, Panel_Guild_Rank, Panel_TransferLifeExperience, Panel_LinkedHorse_Skill, Panel_Window_MaidList, Panel_Window_WorkerRandomSelect, Panel_Worker_Auction, Panel_Window_UnknownRandomSelect, Panel_NodeWarMenu, Panel_RallyRanking, Panel_Window_Warehouse, Panel_Manufacture, Panel_EnchantExtraction, Panel_Join, Panel_Window_PetMarket, Panel_Window_PetMarketRegist, Panel_Window_GuildStableFunction, Panel_Window_GuildStable_List, Panel_Window_GuildStable_Info, Panel_Window_GuildStableRegister, Panel_ChangeWeapon, Panel_WorkerChangeSkill, Panel_GuildServantList, Panel_DyePalette, Panel_SetShortCut, Panel_ExitConfirm, Panel_Party_ItemList, Panel_Harvest_WorkManager, Panel_HarvestList, Panel_GuildDuel, Panel_Window_PetLookChange, Panel_Win_Check, Panel_Chatting_Filter, Panel_CustomizingAlbum, Panel_SetVoiceChat, Panel_Chatting_Color, Panel_WorkerShipInfo, Panel_Window_ItemMarket, Panel_GuildRank_Web, Panel_SkillReinforce, Panel_ItemWarp, Panel_Tooltip_Item_chattingLinkedItemClick, Panel_GoldenTreasureBox, Panel_ScreenShotAlbum, Panel_ScreenShotAlbum_FullScreen, Panel_GuildHouse_Auction, Panel_Window_ReinforceSkill, Panel_Guild_Incentive_Foundation, Panel_Window_Quest_New_Option, Panel_CompetitionGame_JoinDesc, Panel_IngameCashShop_Coupon, Panel_CompetitionGame_GuildReservation, Panel_PartyList, Panel_Window_Profile, Panel_Window_Dance, Panel_DanceFrame, Panel_GuildServant_RevivalList, Panel_Copyright, Panel_TranslationReport, Panel_CharacterTag, Panel_Widget_DropItem, Panel_Window_DropItem, Panel_SkillCoolTimeSlot, Panel_PetRestoreAll}
+local panel_WindowList = {Panel_Window_ServantInfo, Panel_PartyOption, Panel_Alchemy, Panel_Window_StableFunction, Panel_Window_StableList, Panel_Window_StableInfo, Panel_Window_StableEquipInfo, Panel_Window_StableShop, Panel_Window_StableMating, Panel_Window_StableRegister, Panel_Window_StableStallion, Panel_Servant_Market_Input, Panel_Window_WharfFunction, Panel_Window_WharfList, Panel_Window_WharfInfo, Panel_Window_WharfRegister, Panel_Window_Exchange_Number, Panel_Win_System, Panel_Window_Delivery_Request, Panel_Window_Delivery_Information, Panel_Window_Delivery_CarriageInformation, Panel_Mail_Detail, Panel_Mail_Send, Panel_CreateClan, Panel_IntroMovie, Panel_Window_Repair, Panel_Scroll, Panel_SkillAwaken, Panel_Popup_MoveItem, Panel_LordMenu, Panel_CarriageInfo, Panel_FixEquip, Panel_Dialogue_Itemtake, Panel_CreateGuild, Panel_EnableSkill, Panel_HelpMessage, Panel_ProductNote, Panel_KeyboardHelp, Panel_WebControl, Panel_Window_Quest_New, Panel_Interaction_HouseRank, Panel_ColorBalance, Panel_CheckedQuestInfo, Panel_Window_Quest_History, Panel_Tooltip_Common, Panel_ShipInfo, Panel_Window_PetListNew, Panel_AgreementGuild_Master, Panel_Housing_FarmInfo_New, Panel_Window_ItemMarket_ItemSet, Panel_ClanList, Panel_CarveSeal, Panel_ResetSeal, Panel_ClearVested, Panel_Window_CharInfo_Status, Panel_Chatting_Input, Panel_Window_GameTips, Panel_Window_SkillGuide, Panel_MovieTheater_320, Panel_MovieTheater_640, Panel_MovieTheater_SkillGuide_640, Panel_NewKnowledge, Panel_QuestInfo, Panel_MovieGuide, Panel_Window_PetRegister, Panel_FishEncyclopedia, Panel_Tooltip_Item_chattingLinkedItem, Panel_Window_ItemMarket_BuyConfirm, Panel_Tooltip_SimpleText, Panel_Event_100Day, Panel_HousingList, Panel_LifeRanking, Panel_RecommandName, Panel_Interaction_FriendHouseList, Panel_GuildWarScore, Panel_KnowledgeManagement, Panel_Window_StableMix, Panel_RecentCook, Panel_Window_PetCompose, Panel_GuildWebInfo, Panel_Guild_Rank, Panel_TransferLifeExperience, Panel_LinkedHorse_Skill, Panel_Window_MaidList, Panel_Window_WorkerRandomSelect, Panel_Worker_Auction, Panel_Window_UnknownRandomSelect, Panel_NodeWarMenu, Panel_RallyRanking, Panel_Window_Warehouse, Panel_Manufacture, Panel_EnchantExtraction, Panel_Join, Panel_Window_PetMarket, Panel_Window_PetMarketRegist, Panel_Window_GuildStableFunction, Panel_Window_GuildStable_List, Panel_Window_GuildStable_Info, Panel_Window_GuildStableRegister, Panel_ChangeWeapon, Panel_WorkerChangeSkill, Panel_GuildServantList, Panel_DyePalette, Panel_SetShortCut, Panel_ExitConfirm, Panel_Party_ItemList, Panel_Harvest_WorkManager, Panel_HarvestList, Panel_GuildDuel, Panel_Window_PetLookChange, Panel_Win_Check, Panel_Chatting_Filter, Panel_CustomizingAlbum, Panel_SetVoiceChat, Panel_Chatting_Color, Panel_WorkerShipInfo, Panel_Window_ItemMarket, Panel_GuildRank_Web, Panel_SkillReinforce, Panel_ItemWarp, Panel_Tooltip_Item_chattingLinkedItemClick, Panel_GoldenTreasureBox, Panel_ScreenShotAlbum, Panel_ScreenShotAlbum_FullScreen, Panel_GuildHouse_Auction, Panel_Window_ReinforceSkill, Panel_Guild_Incentive_Foundation, Panel_Window_Quest_New_Option, Panel_CompetitionGame_JoinDesc, Panel_IngameCashShop_Coupon, Panel_CompetitionGame_GuildReservation, Panel_PartyList, Panel_Window_Profile, Panel_Window_Dance, Panel_DanceFrame, Panel_GuildServant_RevivalList, Panel_Copyright, Panel_TranslationReport, Panel_CharacterTag, Panel_Widget_DropItem, Panel_Window_DropItem, Panel_SkillCoolTimeSlot, Panel_PetRestoreAll, Panel_Guild_NoneJoinMember, Panel_ButtonShortcuts}
 local panel_SoundedWindowList = {Panel_Window_Inventory, Panel_Equipment, Panel_Window_Skill, Panel_Window_Enchant, Panel_Window_ServantInventory, Panel_Window_Warehouse, Panel_Mail_Main, Panel_Window_Option, Panel_Manufacture, Panel_Window_Socket, Panel_FriendList, Panel_Housing_SettingVendingMachine, Panel_Housing_VendingMachineList, Panel_Housing_SettingConsignmentSale, Panel_Housing_RegisterConsignmentSale, Panel_Housing_ConsignmentSale, Panel_SkillAwaken, Panel_Improvement}
-if isUsedNewOption() then
+if _ContentsGroup_isNewOption then
   panel_SoundedWindowList[8] = Panel_Window_cOption
 end
 local panel_HideListAnimationTrue = {}
-if isUsedNewTradeEventNotice_chk() then
+if _ContentsGroup_isUsedNewTradeEventNotice then
   panel_HideListAnimationTrue = {Panel_Window_Guild, Panel_ItemMarket_AlarmList, Panel_GuildWarInfo, Panel_ChannelSelect, Panel_TradeEventNotice_Renewal, Panel_WorkerManager, Panel_LevelupGuide}
 else
   panel_HideListAnimationTrue = {Panel_Window_Guild, Panel_ItemMarket_AlarmList, Panel_GuildWarInfo, Panel_ChannelSelect, Panel_TradeMarket_EventInfo, Panel_WorkerManager, Panel_LevelupGuide}
@@ -327,6 +327,9 @@ close_WindowPanelList = function()
         end
       end
     end
+    if Panel_ButtonShortcuts:GetShow() == true then
+      PaGlobal_ButtonShortcuts:Close()
+    end
   end
 end
 
@@ -506,7 +509,7 @@ close_force_WindowPanelList = function()
   if Panel_MovieTheater_320:IsShow() then
     Panel_MovieTheater320_JustClose()
   end
-  if isUsedNewTradeEventNotice_chk() and Panel_TradeEventNotice_Renewal:IsShow() then
+  if _ContentsGroup_isUsedNewTradeEventNotice and Panel_TradeEventNotice_Renewal:IsShow() then
     FGlobal_TradeEventNotice_Renewal_Close()
   end
   if Panel_TradeMarket_EventInfo:IsShow() then
@@ -606,7 +609,7 @@ close_UISubAppPanelList = function()
   if Panel_WorkerManager:GetShow() and Panel_WorkerManager:IsUISubApp() then
     workerManager_Close()
   end
-  if isUsedNewTradeEventNotice_chk() and Panel_TradeEventNotice_Renewal:IsShow() and Panel_TradeEventNotice_Renewal:IsUISubApp() then
+  if _ContentsGroup_isUsedNewTradeEventNotice and Panel_TradeEventNotice_Renewal:IsShow() and Panel_TradeEventNotice_Renewal:IsUISubApp() then
     FGlobal_TradeEventNotice_Renewal_Close()
   end
   if Panel_TradeMarket_EventInfo:IsShow() and Panel_TradeMarket_EventInfo:IsUISubApp() then
@@ -625,7 +628,7 @@ close_UISubAppPanelList = function()
     Panel_GuildWarInfo_Hide()
   end
   if Panel_Window_CharInfo_Status:GetShow() and Panel_Window_CharInfo_Status:IsUISubApp() then
-    if isNewCharacterInfo() == false then
+    if _ContentsGroup_isUsedNewCharacterInfo == false then
       CharacterInfoWindow_Hide()
     else
       PaGlobal_CharacterInfo:hideWindow()

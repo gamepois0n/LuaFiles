@@ -167,6 +167,10 @@ end
 
 PaGlobal_Camp.remoteSeal = function(self)
   -- function num : 0_9
+  local hasTent = ToClient_requestCheckHasServantCampingTent()
+  if hasTent == false then
+    return 
+  end
   local FunctionYesRemoteSeal = function()
     -- function num : 0_9_0
     ToClient_requestServantCompulsionSealCampingTent()
@@ -234,7 +238,7 @@ PaGlobal_Camp.update = function(self)
     end
   end
   if isUnseal then
-    if ToClient_IsContentsGroupOpen("347") then
+    if _ContentsGroup_isCamp then
       ((self._ui)._btn_Seal):SetShow(true)
       ;
       ((self._ui)._btn_Seal):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_CAMP_BUILDINGBUFFLIST_BUTTON_TEXT"))
@@ -252,8 +256,6 @@ PaGlobal_Camp.update = function(self)
     ((self._ui)._txtTentTitle):SetShow(true)
     ;
     ((self._ui)._btn_Seal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:sealTent()")
-    ;
-    ((self._ui)._btn_RemoteSeal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:remoteSeal()")
   else
     ;
     ((self._ui)._btn_UnSealTent):SetShow(true)
@@ -263,8 +265,6 @@ PaGlobal_Camp.update = function(self)
     ((self._ui)._btn_RemoteSeal):SetShow(false)
     ;
     ((self._ui)._txtTentTitle):SetShow(false)
-    ;
-    ((self._ui)._btn_UnSealTent):addInputEvent("Mouse_LUp", "PaGlobal_Camp:unSealTent()")
   end
 end
 
@@ -552,6 +552,15 @@ PaGlobal_Camp.registMessageHandler = function(self)
   ((self._ui)._guideIcon):addInputEvent("Mouse_On", "PaGlobal_Camp:guideTooltipShow( true )")
   ;
   ((self._ui)._guideIcon):addInputEvent("Mouse_Out", "PaGlobal_Camp:guideTooltipShow( false )")
+  ;
+  ((self._ui)._btn_RemoteSeal):addInputEvent("Mouse_LUp", "PaGlobal_Camp:remoteSeal()")
+  ;
+  ((self._ui)._btn_UnSealTent):addInputEvent("Mouse_LUp", "PaGlobal_Camp:unSealTent()")
+  if _ContentsGroup_isCamp then
+    ((self._ui)._btn_RemoteSeal):setButtonShortcuts("PANEL_SIMPLESHORTCUT_TENT_UNINSTALL")
+    ;
+    ((self._ui)._btn_UnSealTent):setButtonShortcuts("PANEL_SIMPLESHORTCUT_TENT_INSTALL")
+  end
   registerEvent("FromClient_OpenCampingRepair", "FromClient_OpenCampingRepair")
   registerEvent("FromClient_OpenCampingShop", "FromClient_OpenCampingShop")
   registerEvent("FromClient_OpenCampingInfo", "FromClient_Camp_OpenByActorKeyRaw")

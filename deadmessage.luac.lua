@@ -32,6 +32,7 @@ local reviveScroll = (UI.getChildControl)(Panel_DeadNodeSelect, "Scroll_List")
 local _deadNodeSelectClose = (UI.getChildControl)(Panel_DeadNodeSelect, "Button_Close")
 reviveScroll:SetShow(false)
 reviveScroll:SetShow(false)
+_checkBoxUseFairy:SetShow(false)
 _deadNodeSelectClose:addInputEvent("Mouse_LUp", "deadNodeSelectClose()")
 local STATIC_DROP_ITEM = {}
 for ii = 0, 9 do

@@ -594,4 +594,9 @@ guildbattleStop = function(isstop)
   ToClient_GuildBattle_RequestGuildBattleStop(isstop)
 end
 
+testP = function()
+  -- function num : 0_31
+  ToClient_joinPersonalBattle()
+end
+
 

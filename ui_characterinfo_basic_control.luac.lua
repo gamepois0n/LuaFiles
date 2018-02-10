@@ -268,31 +268,35 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
 [UI_LifeType.trade] = {"new_ui_common_forlua/default/default_etc_02.dds", 236, 1, 246, 11}
 , 
 [UI_LifeType.growth] = {"new_ui_common_forlua/default/default_etc_02.dds", 159, 12, 169, 22}
-, 
-[UI_LifeType.sail] = {"new_ui_common_forlua/default/default_etc_02.dds", 170, 12, 180, 22}
 }
-  for index = 0, #LifeIcon do
+  local isSailOpen = ToClient_IsContentsGroupOpen("83")
+  if isSailOpen then
+    LifeIcon[UI_LifeType.sail] = {"new_ui_common_forlua/default/default_etc_02.dds", 170, 12, 180, 22}
+  end
+  for index = 0, #LifeIcon + 1 do
     local tableIdx = index + 1
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC121: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._craftTable)[tableIdx])._type = index
-    -- DECOMPILER ERROR at PC127: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC133: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._craftTable)[tableIdx])._level = (self._playerGet):getLifeExperienceLevel(((self._craftTable)[tableIdx])._type)
-    -- DECOMPILER ERROR at PC139: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC145: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._craftTable)[tableIdx])._exp = (self._playerGet):getCurrLifeExperiencePoint(((self._craftTable)[tableIdx])._type)
-    -- DECOMPILER ERROR at PC151: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC157: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._craftTable)[tableIdx])._maxExp = (self._playerGet):getDemandLifeExperiencePoint(((self._craftTable)[tableIdx])._type)
-    -- DECOMPILER ERROR at PC157: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC163: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     (self._sortCraftTable)[tableIdx] = (self._craftTable)[tableIdx]
+    ;
+    (((self._ui)._staticCraftIcon)[index]):SetShow(true)
   end
   ;
   (table.sort)(self._sortCraftTable, function(a, b)
@@ -324,7 +328,7 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
     (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetText(ExpRate .. "%")
     ;
     (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(((self._craftTable)[tableIdx])._level))
-    if isGameTypeTH() then
+    if isGameTypeTH() or isGameTypeID() then
       (((self._ui)._staticTextCraft_Level)[tableIdx]):SetSpanSize(80, -3)
       ;
       (((self._ui)._staticTextCraft_Percent)[tableIdx]):SetShow(false)
@@ -351,10 +355,9 @@ FromClient_UI_CharacterInfo_Basic_CraftLevelChanged = function()
   (((self._ui)._staticTextCraft_Percent)[0]):SetText(ExpRate .. "%")
   ;
   (((self._ui)._staticTextCraft_Percent)[0]):SetFontColor(FGlobal_UI_CharacterInfo_Basic_Global_CraftColorReplace(((self._sortCraftTable)[1])._level))
-  -- DECOMPILER ERROR at PC443: Confused about usage of register: R7 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC460: Confused about usage of register: R8 in 'UnsetPending'
 
   self._requestRank = true
-  FGlobal_LifeRanking_RequestRank(crafType)
 end
 
 FromClient_UI_CharacterInfo_Basic_RankChanged = function()
@@ -400,11 +403,11 @@ FromClient_UI_CharacterInfo_Basic_PotentialChanged = function()
         ((((self._ui)._staticPotencialPlusGrade)[index])[slotIndex]):SetShow(slotIndex < currentData[index])
       end
     end
-    if isGameTypeTH() then
+    if isGameTypeTH() or isGameTypeID() then
       (((self._ui)._staticTextPotential_Value)[index]):SetShow(false)
     end
   end
-  -- DECOMPILER ERROR: 5 unprocessed JMP targets
+  -- DECOMPILER ERROR: 6 unprocessed JMP targets
 end
 
 FromClient_UI_CharacterInfo_Basic_FitnessChanged = function(addSp, addWeight, addHp, addMp)

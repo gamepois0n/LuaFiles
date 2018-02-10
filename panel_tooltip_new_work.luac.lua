@@ -398,8 +398,8 @@ local Insert_Tooltip_Work_Data = function(esSSW, isToolTip, controlIndex, nodeIn
       ;
       (self._WorkVolume_Value):SetText("( " .. workVolume .. " )")
       ;
-      (self._WorkVolume_Guide):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_WORK_TIME_0") .. " " .. defaultWorkSpeed .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_WORK_TIME_1") .. " " .. workTime .. PAGetString(Defines.StringSheet_GAME, "LUA_TOOLTIP_WORK_TIME_2"))
-      -- DECOMPILER ERROR at PC359: Confused about usage of register: R19 in 'UnsetPending'
+      (self._WorkVolume_Guide):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_TOOLTIP_WORK_TIME_0", "default_WorkSpeed", defaultWorkSpeed, "work_time", workTime))
+      -- DECOMPILER ERROR at PC347: Confused about usage of register: R19 in 'UnsetPending'
 
       default_PosY_Size._AdjustPosY_SubPanel_3 = (self._WorkVolume_Guide):GetSizeY() - default_PosY_Size._WorkVolume_Guide_SizeY
       if isToolTip == true then

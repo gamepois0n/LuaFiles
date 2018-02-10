@@ -1059,7 +1059,7 @@ end
 end
 
   InGameShopBuy_Count = function(isUp)
-  -- function num : 0_21 , upvalues : inGameShopBuy, UI_color
+  -- function num : 0_21 , upvalues : inGameShopBuy, UI_color, UI_CCC
   local self = inGameShopBuy
   local count = tonumber((self._edit_count):GetEditText())
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._productNoRaw)
@@ -1107,21 +1107,26 @@ end
   ;
   (self._txt_PearlIconPrice):SetText(makeDotMoney(sumPrice))
   if Panel_IngameCashShop_Coupon:GetShow() == false then
-    IngameCashShopCoupon_Open(0, self._productNoRaw, count)
+    local categoryType = cashProduct:getMainCategory()
+    if UI_CCC.eCashProductCategory_Pearl ~= categoryType and UI_CCC.eCashProductCategory_Mileage ~= categoryType then
+      IngameCashShopCoupon_Open(0, self._productNoRaw, count)
+    end
   else
-    FGlobal_IngameCashShopCoupon_RefreshList(self._productNoRaw, count)
-    FGlobal_IngameCashShopCoupon_ReturnValueCancel()
+    do
+      FGlobal_IngameCashShopCoupon_RefreshList(self._productNoRaw, count)
+      FGlobal_IngameCashShopCoupon_ReturnValueCancel()
+      FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(sumPrice, cashProduct:getMainCategory())
+      ;
+      (self._static_Price):SetText(makeDotMoney(sumPrice))
+      ;
+      (self._edit_count):SetEditText(tostring(count), false)
+      ;
+      (self._button_Confirm):ComputePos()
+      ;
+      (self._button_Cancle):ComputePos()
+      self:update()
+    end
   end
-  FGlobal_IngameCashShop_BuyOrGift_SetPearlStampValue(sumPrice, cashProduct:getMainCategory())
-  ;
-  (self._static_Price):SetText(makeDotMoney(sumPrice))
-  ;
-  (self._edit_count):SetEditText(tostring(count), false)
-  ;
-  (self._button_Confirm):ComputePos()
-  ;
-  (self._button_Cancle):ComputePos()
-  self:update()
 end
 
   InGameShopBuy_ResetCount = function(isCouponApply)

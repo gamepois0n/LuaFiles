@@ -111,12 +111,20 @@ PaGlobal_Skill.initControl = function(self)
     ;
     (self._btn_MovieToolTipDesc):SetShow(false)
   else
-    ;
-    (self._btn_MovieToolTip):SetShow(true)
-    ;
-    (self._btn_MovieToolTipBG):SetShow(true)
-    ;
-    (self._btn_MovieToolTipDesc):SetShow(true)
+    if isGameTypeTH() or isGameTypeID() then
+      (self._btn_MovieToolTip):SetShow(false)
+      ;
+      (self._btn_MovieToolTipBG):SetShow(false)
+      ;
+      (self._btn_MovieToolTipDesc):SetShow(false)
+    else
+      ;
+      (self._btn_MovieToolTip):SetShow(true)
+      ;
+      (self._btn_MovieToolTipBG):SetShow(true)
+      ;
+      (self._btn_MovieToolTipDesc):SetShow(true)
+    end
   end
   if isGameTypeKR2() then
     (self._btn_MovieToolTip):SetShow(false)
@@ -822,6 +830,9 @@ PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
   audioPostEvent_SystemUi(0, 0)
   if isSuccess then
     audioPostEvent_SystemUi(4, 2)
+    if (self.skillNoSlot)[skillNo] == nil or ((self.skillNoSlot)[skillNo]).icon == nil then
+      return 
+    end
     ;
     (((self.skillNoSlot)[skillNo]).icon):AddEffect("UI_NewSkill01", false, 0, 0)
     ;
@@ -829,7 +840,7 @@ PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
     ;
     (self.learnedSkillList):push_back(skillNo)
   end
-  if ((self.skillNoSlot)[skillNo]).icon == nil then
+  if (self.skillNoSlot)[skillNo] == nil or ((self.skillNoSlot)[skillNo]).icon == nil then
     return 
   end
   UI_MAIN_checkSkillLearnable()

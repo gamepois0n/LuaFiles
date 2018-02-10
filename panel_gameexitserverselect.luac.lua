@@ -95,6 +95,7 @@ ChannelSelect_Init = function()
       ((self.groupBg)[index]):SetSize(((self.groupBg)[index]):GetSizeX(), self._channelUiMaxCount * 30 + 5)
     end
   end
+  local isAdult = ToClient_isAdultUser()
   if isChannelCountLow then
     for index = 0, channelCount - 1 do
       local channelList = {}
@@ -138,7 +139,7 @@ ChannelSelect_Init = function()
       (channelList.channelSelectedBg):SetPosX(0)
       ;
       (channelList.channelSelectedBg):SetPosY(0)
-      -- DECOMPILER ERROR at PC306: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC308: Confused about usage of register: R13 in 'UnsetPending'
 
       ;
       (self.channelSelectUIPool)[index] = channelList
@@ -188,7 +189,7 @@ ChannelSelect_Init = function()
         (channelList.channelSelectedBg):SetPosX(0)
         ;
         (channelList.channelSelectedBg):SetPosY(0)
-        -- DECOMPILER ERROR at PC526: Confused about usage of register: R13 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC528: Confused about usage of register: R14 in 'UnsetPending'
 
         ;
         (self.channelSelectUIPool)[index] = channelList
@@ -201,19 +202,17 @@ ChannelSelect_Init = function()
         ;
         (channelMainDesc._serverDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
         ;
-        (channelMainDesc._serverDesc):SetText((channelMainDesc._serverDesc):GetText())
-        ;
         (channelMainDesc._pkTitle):SetShow(false)
         ;
         (channelMainDesc._pkDesc):SetShow(false)
         local sizeControl = nil
-        if isGameTypeSA() then
+        if isGameTypeSA() or isGameTypeTR() then
           (channelMainDesc._speedTitle):SetShow(false)
           ;
           (channelMainDesc._speedDesc):SetShow(false)
           sizeControl = channelMainDesc._serverDesc
         else
-          if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+          if isGameTypeKR2() or isGameTypeTH() or isGameTypeID() then
             (channelMainDesc._speedTitle):SetShow(false)
             ;
             (channelMainDesc._speedDesc):SetShow(false)
@@ -237,13 +236,32 @@ ChannelSelect_Init = function()
             (channelMainDesc._scheduleNodeWar):SetShow(false)
             sizeControl = channelMainDesc._serverDesc
           else
-            if isGameTypeKorea() or isGameTypeRussia() or isGameTypeEnglish() then
+            if isGameTypeRussia() or isGameTypeEnglish() then
               (channelMainDesc._pkTitle):SetShow(true)
               ;
               (channelMainDesc._pkDesc):SetShow(true)
               sizeControl = channelMainDesc._pkDesc
             else
-              sizeControl = channelMainDesc._speedDesc
+              if isGameTypeKorea() then
+                if isAdult then
+                  (channelMainDesc._serverDesc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_CHANNELSELECTDESC"))
+                  ;
+                  (channelMainDesc._pkTitle):SetShow(true)
+                  ;
+                  (channelMainDesc._pkDesc):SetShow(true)
+                  sizeControl = channelMainDesc._pkDesc
+                else
+                  ;
+                  (channelMainDesc._serverDesc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_CHANNELSELECTDESC_15"))
+                  ;
+                  (channelMainDesc._pkTitle):SetShow(false)
+                  ;
+                  (channelMainDesc._pkDesc):SetShow(false)
+                  sizeControl = channelMainDesc._pkDesc
+                end
+              else
+                sizeControl = channelMainDesc._speedDesc
+              end
             end
           end
         end
@@ -293,11 +311,47 @@ ChannelSelect_Init = function()
         (channelMainDesc._scheduleSiege):SetPosY((channelMainDesc._scheduleTitle):GetPosY() + 20)
         ;
         (channelMainDesc._scheduleNodeWar):SetPosY((channelMainDesc._scheduleSiege):GetPosY() + 20)
-        if isGameTypeKR2() or isGameTypeTR() or isGameTypeTH() or isGameTypeID() then
+        if isGameTypeKorea() and not isAdult then
+          (channelMainDesc._pkTitle):SetShow(false)
+          ;
+          (channelMainDesc._pkDesc):SetShow(false)
+          ;
+          (channelMainDesc._speedTitle):SetShow(false)
+          ;
+          (channelMainDesc._speedDesc):SetShow(false)
+          ;
+          (channelMainDesc._siegeTitle):SetShow(false)
+          ;
+          (channelMainDesc._siegeBalenos):SetShow(false)
+          ;
+          (channelMainDesc._siegeSerendia):SetShow(false)
+          ;
+          (channelMainDesc._siegeCalpheon):SetShow(false)
+          ;
+          (channelMainDesc._siegeMedia):SetShow(false)
+          ;
+          (channelMainDesc._siegeValencia):SetShow(false)
+          ;
+          (channelMainDesc._scheduleTitle):SetShow(false)
+          ;
+          (channelMainDesc._scheduleSiege):SetShow(false)
+          ;
+          (channelMainDesc._scheduleNodeWar):SetShow(false)
+        end
+        if isGameTypeKR2() or isGameTypeTH() or isGameTypeID() then
           (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._serverDesc):GetPosY() + (channelMainDesc._serverDesc):GetTextSizeY())
         else
-          ;
-          (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._scheduleNodeWar):GetPosY() + (channelMainDesc._scheduleNodeWar):GetTextSizeY())
+          if isGameTypeKorea() then
+            if isAdult then
+              (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._scheduleNodeWar):GetPosY() + (channelMainDesc._scheduleNodeWar):GetTextSizeY())
+            else
+              ;
+              (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._serverDesc):GetPosY() + (channelMainDesc._serverDesc):GetTextSizeY())
+            end
+          else
+            ;
+            (self._mainDescBg):SetSize((self._mainDescBg):GetSizeX(), (channelMainDesc._scheduleNodeWar):GetPosY() + (channelMainDesc._scheduleNodeWar):GetTextSizeY())
+          end
         end
         ;
         (self._mainDesc):SetSize((self._mainDesc):GetSizeX(), (self._mainDescBg):GetSizeY() + 15)

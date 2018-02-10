@@ -5,7 +5,7 @@
 -- function num : 0
 Panel_Window_BuildingBuff:SetShow(false)
 PaGlobal_BuildingBuff = {
-_ui = {_list2 = (UI.getChildControl)(Panel_Window_BuildingBuff, "List2_BuffList"), _btn_Close = (UI.getChildControl)(Panel_Window_BuildingBuff, "Button_Win_Close"), _txt_DescBG = (UI.getChildControl)(Panel_Window_BuildingBuff, "StaticText_BottomDesc")}
+_ui = {_list2 = (UI.getChildControl)(Panel_Window_BuildingBuff, "List2_BuffList"), _btn_Close = (UI.getChildControl)(Panel_Window_BuildingBuff, "Button_Win_Close"), _txt_DescBG = (UI.getChildControl)(Panel_Window_BuildingBuff, "StaticText_BottomDesc"), _txt_Title = (UI.getChildControl)(Panel_Window_BuildingBuff, "StaticText_RankTitle")}
 , _maxPriceKey = 0, 
 _keyCount = {}
 , 
@@ -15,7 +15,7 @@ _limitControl = {}
 , 
 _limitControlDesc = {}
 }
--- DECOMPILER ERROR at PC37: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.initialize = function(self)
   -- function num : 0_0
@@ -38,9 +38,11 @@ PaGlobal_BuildingBuff.initialize = function(self)
   Panel_Window_BuildingBuff:SetSize(585, 360 + ((self._ui)._txt_DescBG):GetSizeY() + 10)
   ;
   ((self._ui)._txt_DescBG):ComputePos()
+  ;
+  ((self._ui)._txt_Title):SetText(PAGetString(Defines.StringSheet_GAME, "INTIMACYINFORMATION_TYPE_BUFF"))
 end
 
--- DECOMPILER ERROR at PC40: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.open = function(self)
   -- function num : 0_1
@@ -86,14 +88,14 @@ PaGlobal_BuildingBuff.open = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.close = function(self)
   -- function num : 0_2
   Panel_Window_BuildingBuff:SetShow(false)
 end
 
--- DECOMPILER ERROR at PC46: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC52: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.setPos = function(self)
   -- function num : 0_3
@@ -101,7 +103,7 @@ PaGlobal_BuildingBuff.setPos = function(self)
   Panel_Window_BuildingBuff:SetPosY(getScreenSizeY() / 2 - Panel_Window_BuildingBuff:GetSizeY() / 2)
 end
 
--- DECOMPILER ERROR at PC49: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC55: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.update = function(self)
   -- function num : 0_4
@@ -112,7 +114,7 @@ BuildingBuff_ListControlCreate = function(content, key)
   PaGlobal_BuildingBuff:BuildingBuff_ListControlCreate(content, key)
 end
 
--- DECOMPILER ERROR at PC54: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.BuildingBuff_ListControlCreate = function(self, content, key)
   -- function num : 0_6
@@ -123,7 +125,7 @@ PaGlobal_BuildingBuff.BuildingBuff_ListControlCreate = function(self, content, k
   local price = (UI.getChildControl)(content, "StaticText_List2_Price")
   local keyCount = (self._keyCount)[index]
   local buffIndex = (self._buffCount)[index]
-  keyText:SetText(tostring((self._keyCount)[index] + 1) .. "ê°\156")
+  keyText:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_INNEROBJECTMAXCOUNT", "count", tostring((self._keyCount)[index] + 1)))
   local skillNo = ToClient_GetBuildingBuff(keyCount, buffIndex)
   if skillNo ~= 0 then
     local skillWrapper = getSkillTypeStaticStatus(skillNo)
@@ -131,11 +133,11 @@ PaGlobal_BuildingBuff.BuildingBuff_ListControlCreate = function(self, content, k
     buffPrice = makeDotMoney(buffPrice)
     buff:SetTextMode((CppEnums.TextMode).eTextMode_Limit_AutoWrap)
     buff:SetText(tostring(skillWrapper:getName()))
-    -- DECOMPILER ERROR at PC67: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC71: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._limitControlDesc)[index] = skillWrapper:getDescription()
-    -- DECOMPILER ERROR at PC69: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC73: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (self._limitControl)[index] = buff
@@ -146,7 +148,7 @@ PaGlobal_BuildingBuff.BuildingBuff_ListControlCreate = function(self, content, k
   end
 end
 
--- DECOMPILER ERROR at PC57: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.limitTextTooltip = function(self, isShow, index, skillWrapper)
   -- function num : 0_7
@@ -158,7 +160,7 @@ PaGlobal_BuildingBuff.limitTextTooltip = function(self, isShow, index, skillWrap
   TooltipSimple_Show((self._limitControl)[index], name)
 end
 
--- DECOMPILER ERROR at PC60: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC66: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.applyBuff = function(self, keyCount, buffIndex, index)
   -- function num : 0_8
@@ -173,7 +175,7 @@ PaGlobal_BuildingBuff.applyBuff = function(self, keyCount, buffIndex, index)
   (MessageBox.showMessageBox)(messageBoxData)
 end
 
--- DECOMPILER ERROR at PC63: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC69: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_BuildingBuff.registEventHandler = function(self)
   -- function num : 0_9

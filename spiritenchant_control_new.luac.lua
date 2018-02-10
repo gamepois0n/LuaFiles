@@ -138,7 +138,7 @@ PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone)
     -- DECOMPILER ERROR at PC65: Confused about usage of register: R8 in 'UnsetPending'
 
     ;
-    (self._strForEnchantInfo)._checked = enduranceDesc .. self:getStr_EnchantProtectInfo(enchantType)
+    (self._strForEnchantInfo)._cronChecked = enduranceDesc .. self:getStr_EnchantProtectInfo(enchantType)
   else
     do
       self:setEnable_CheckboxUseCron(false)
@@ -149,7 +149,7 @@ PaGlobal_Enchant.didsetEnchantTarget = function(self, isMonotone)
         -- DECOMPILER ERROR at PC102: Confused about usage of register: R8 in 'UnsetPending'
 
         ;
-        (self._strForEnchantInfo)._checked = enduranceDesc .. self:getStr_PerfectEnchantInfo(needCountForPerfectEnchant_s64, (self._enchantInfo):ToClient_getDecMaxEnduraPerfect())
+        (self._strForEnchantInfo)._forcedChecked = enduranceDesc .. self:getStr_PerfectEnchantInfo(needCountForPerfectEnchant_s64, (self._enchantInfo):ToClient_getDecMaxEnduraPerfect())
       else
         do
           self:setEnable_CheckboxForcedEnchant(false)
@@ -178,6 +178,7 @@ PaGlobal_Enchant.setEnchantMaterial = function(self, isMonotone)
   local inventoryType = (self._enchantInfo):ToClient_getNeedItemWhereType()
   if isMonotone == true or (self._enchantInfo):ToClient_setEnchantSlot(inventoryType, slotNo) ~= 0 then
     self:setItemToSlotMonoTone((self._ui)._slot_EnchantMaterial, (self._enchantInfo):ToClient_getNeedItemStaticInformation())
+    self:setEnable_button_Apply(false)
     return 
   end
   local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
@@ -222,6 +223,8 @@ PaGlobal_Enchant.startEnchantAnimation = function(self)
   ToClient_BlackspiritEnchantStart()
   self._animationTimeStamp = 0
   self._isAnimating = true
+  audioPostEvent_SystemUi(5, 6)
+  audioPostEvent_SystemUi(5, 9)
 end
 
 -- DECOMPILER ERROR at PC38: Confused about usage of register: R0 in 'UnsetPending'
@@ -231,6 +234,10 @@ PaGlobal_Enchant.startEnchant = function(self)
   self:setAsEnchantButton()
   if Panel_Window_Enchant:IsShow() == true then
     (self._enchantInfo):ToClient_doEnchant(((self._ui)._checkbox_ForcedEnchant):IsCheck(), self:isDifficultEnchant())
+  end
+  if self._isAnimating == true then
+    audioPostEvent_SystemUi(5, 6)
+    audioPostEvent_SystemUi(5, 9)
   end
 end
 
@@ -258,16 +265,19 @@ PaGlobal_Enchant.didEnchant = function(self, resultType, mainWhereType, mainSlot
       end
     end
     do
-      if enchantLevel == 20 then
-        self._isLastEnchant = true
-      end
-      if self._isLastEnchant then
-        self:setItemToSlot((self._ui)._slot_TargetItem, mainSlotNo, itemWrapper, mainWhereType)
-        ;
-        ((self._ui)._statictext_EnchantInfo):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FINALENCHANT"))
-      else
-        self:clearEnchantSlot()
-        self:showTab()
+      do
+        if enchantLevel == 20 then
+          self._isLastEnchant = true
+        end
+        if self._isLastEnchant then
+          self:setItemToSlot((self._ui)._slot_TargetItem, mainSlotNo, itemWrapper, mainWhereType)
+          ;
+          ((self._ui)._statictext_EnchantInfo):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_FINALENCHANT"))
+        else
+          self:clearEnchantSlot()
+          self:showTab()
+        end
+        self:showEnchantResultText(resultType, mainSlotNo, mainWhereType)
       end
     end
   end
@@ -286,6 +296,7 @@ PaGlobal_Enchant.showEnchantResultEffect = function(self, resultType)
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_SPIRITENCHANT_SUCCESSENCHANT"))
     ToClient_BlackspiritEnchantSuccess()
   else
+    audioPostEvent_SystemUi(0, 7)
     if resultType == (self._enum_EnchantResult)._broken then
       audioPostEvent_SystemUi(5, 8)
     else
@@ -303,7 +314,7 @@ PaGlobal_Enchant.showEnchantResultEffect = function(self, resultType)
     end
     ToClient_BlackspiritEnchantCancel()
   end
-  self:showEnchantResultText(resultType)
+  self:didsetEnchantTarget(false)
 end
 
 -- DECOMPILER ERROR at PC47: Confused about usage of register: R0 in 'UnsetPending'
@@ -628,6 +639,10 @@ FGlobal_Enchant_RClickMaterialItem = function(slotNo, itemWrapper, Count, invent
   if self._isAnimating then
     return 
   end
+  if itemWrapper:checkToValksItem() then
+    Inventory_UseItemTargetSelf(inventoryType, slotNo, 0)
+    return 
+  end
   self._isLastEnchant = false
   self:clearItemSlot((self._ui)._slot_EnchantMaterial)
   self:setEnchantMaterial()
@@ -637,6 +652,10 @@ FGlobal_Enchant_RClickCronItem = function(slotNo, itemWrapper, Count, inventoryT
   -- function num : 0_44
   local self = PaGlobal_Enchant
   if self._isAnimating then
+    return 
+  end
+  if itemWrapper:checkToValksItem() then
+    Inventory_UseItemTargetSelf(inventoryType, slotNo, 0)
     return 
   end
   self._isLastEnchant = false
@@ -707,7 +726,7 @@ end
 
 FGlobal_Enchant_InvenFilerCronItem = function(slotNo, notUse_itemWrappers, whereType)
   -- function num : 0_48
-  local cronItemWrapper = getInventoryItemByType((CppEnums.ItemWhereType).eInventory, slotNo)
+  local cronItemWrapper = getInventoryItemByType(whereType, slotNo)
   local protectItemSSW = FromClient_getPreventDownGradeItem()
   if cronItemWrapper ~= nil then
     local itemSSW = cronItemWrapper:getStaticStatus()

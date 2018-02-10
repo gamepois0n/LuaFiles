@@ -20,17 +20,17 @@ local panelList = {
 , 
 [2] = {[0] = Panel_Window_Guild, [1] = Panel_Window_CharInfo_Status, [2] = Panel_WebControl, [3] = Panel_KeyboardHelp, [4] = Panel_ProductNote, [5] = Panel_Window_Skill, [6] = Panel_Manufacture, [7] = Panel_FishEncyclopedia, [8] = Panel_Window_ItemMarket, [9] = Panel_GuildRank_Web, [10] = Panel_LifeRanking, [11] = Panel_EventNotify, [12] = Panel_Window_DailyStamp, [13] = Panel_Window_BlackSpiritAdventure, [14] = Panel_LocalWarInfo, [15] = Panel_GameExit, [16] = Panel_CustomizingAlbum, [17] = Panel_ScreenShotAlbum}
 }
--- DECOMPILER ERROR at PC133: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC132: Confused about usage of register: R12 in 'UnsetPending'
 
-if isUsedNewOption() then
+if _ContentsGroup_isNewOption then
   (panelList[1])[2] = Panel_Window_cOption
 end
--- DECOMPILER ERROR at PC140: Confused about usage of register: R12 in 'UnsetPending'
+-- DECOMPILER ERROR at PC138: Confused about usage of register: R12 in 'UnsetPending'
 
-if isUsedNewTradeEventNotice_chk() then
+if _ContentsGroup_isUsedNewTradeEventNotice then
   (panelList[0])[1] = Panel_TradeEventNotice_Renewal
 else
-  -- DECOMPILER ERROR at PC144: Confused about usage of register: R12 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC142: Confused about usage of register: R12 in 'UnsetPending'
 
   (panelList[0])[1] = Panel_TradeMarket_EventInfo
 end
@@ -123,25 +123,25 @@ local panelInfo = {
 [17] = {posX = 8, posY = -14, sizeX = 15}
 }
 }
--- DECOMPILER ERROR at PC363: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC360: Confused about usage of register: R13 in 'UnsetPending'
 
-if isUsedNewOption() then
+if _ContentsGroup_isNewOption then
   ((panelInfo[1])[2]).posX = 0
-  -- DECOMPILER ERROR at PC366: Confused about usage of register: R13 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC363: Confused about usage of register: R13 in 'UnsetPending'
 
   ;
   ((panelInfo[1])[2]).posY = -20
-  -- DECOMPILER ERROR at PC369: Confused about usage of register: R13 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC366: Confused about usage of register: R13 in 'UnsetPending'
 
   ;
   ((panelInfo[1])[2]).sizeX = 0
 end
--- DECOMPILER ERROR at PC376: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC373: Confused about usage of register: R13 in 'UnsetPending'
 
 if isGameTypeEnglish() then
   ((panelInfo[1])[5]).sizeX = -157
 end
--- DECOMPILER ERROR at PC385: Confused about usage of register: R13 in 'UnsetPending'
+-- DECOMPILER ERROR at PC382: Confused about usage of register: R13 in 'UnsetPending'
 
 if (ToClient_getGameOptionControllerWrapper()):getUIFontSizeType() > 0 then
   ((panelInfo[1])[5]).sizeX = -207
@@ -451,7 +451,7 @@ end
 
   FGlobal_SeasonTexture_ChannelSelectPanelSizeCahnge = function(sizeX)
   -- function num : 0_3 , upvalues : contentOpen, textureControl
-  if isLuaLoadingComplete and contentOpen then
+  if isLuaLoadingComplete and contentOpen and (textureControl[1])[6] ~= nil then
     ((textureControl[1])[6]):SetSize(sizeX, ((textureControl[1])[6]):GetSizeY())
   end
 end
