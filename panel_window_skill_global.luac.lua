@@ -4,7 +4,6 @@
 -- params : ...
 -- function num : 0
 local UI_TM = CppEnums.TextMode
-local skillOldandNew = ToClient_IsContentsGroupOpen("920")
 PaGlobal_Skill = {staticBottomBox; 
 slotConfig = {createIcon = true, createEffect = true, createFG = true, createFGDisabled = true, createFG_Passive = true, createMinus = true, createLevel = true, createLearnButton = true, createTestimonial = true, createLockIcon = true, createMouseOver = true, 
 template = {effect = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_Effect"), iconFG = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_FG"), iconFGDisabled = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_FG_DISABLE"), iconFG_Passive = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_BG"), iconMinus = (UI.getChildControl)(Panel_Window_Skill, "Static_Icon_Skill_EffectMinus"), learnButton = (UI.getChildControl)(Panel_Window_Skill, "Button_Skill_Point"), mouseOverButton = (UI.getChildControl)(Panel_Window_Skill, "Button_Skill_OverMouse"), testimonial = (UI.getChildControl)(Panel_Window_Skill, "Static_Skill_Effect"), lockIcon = (UI.getChildControl)(Panel_Window_Skill, "Static_SkillLockIcon")}
@@ -46,11 +45,11 @@ _static_SlotBG = {}
 (PaGlobal_Skill._btn_CommandLock):SetShow(false)
 local beforCombatSkillNo = -1
 local beforAwakenSkillNo = -1
--- DECOMPILER ERROR at PC548: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC544: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initialize = function(self)
-  -- function num : 0_0 , upvalues : skillOldandNew, UI_TM
-  if skillOldandNew then
+  -- function num : 0_0 , upvalues : UI_TM
+  if _ContentsGroup_skillOldandNew then
     self._static_CombiSkill_BG = (UI.getChildControl)(Panel_Window_Skill, "Static_SlotBG")
     self._combinationSkillTitle = (UI.getChildControl)(Panel_Window_Skill, "StaticText_SlotTitle")
   end
@@ -61,7 +60,7 @@ PaGlobal_Skill.initialize = function(self)
   (self._txt_ResourceSaveDesc):SetShow(false)
   ;
   (self._txt_MentalTip):SetTextMode(UI_TM.eTextMode_AutoWrap)
-  if skillOldandNew == false then
+  if _ContentsGroup_skillOldandNew == false then
     (self._txt_MentalTip):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_MENTALTIP") .. "\n" .. PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SKILL_RESOURCESAVEDESC"))
     ;
     (self._bottomBG):SetSize((self._bottomBG):GetSizeX(), (self._txt_MentalTip):GetTextSizeY() + 10)
@@ -84,7 +83,7 @@ PaGlobal_Skill.initialize = function(self)
   self:initSkillLearnableSlot()
 end
 
--- DECOMPILER ERROR at PC552: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC548: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initControl = function(self)
   -- function num : 0_1 , upvalues : UI_TM
@@ -111,27 +110,19 @@ PaGlobal_Skill.initControl = function(self)
     ;
     (self._btn_MovieToolTipDesc):SetShow(false)
   else
-    if isGameTypeTH() or isGameTypeID() then
-      (self._btn_MovieToolTip):SetShow(false)
-      ;
-      (self._btn_MovieToolTipBG):SetShow(false)
-      ;
-      (self._btn_MovieToolTipDesc):SetShow(false)
-    else
-      ;
-      (self._btn_MovieToolTip):SetShow(true)
-      ;
-      (self._btn_MovieToolTipBG):SetShow(true)
-      ;
-      (self._btn_MovieToolTipDesc):SetShow(true)
-    end
+    ;
+    (self._btn_MovieToolTip):SetShow(true)
+    ;
+    (self._btn_MovieToolTipBG):SetShow(true)
+    ;
+    (self._btn_MovieToolTipDesc):SetShow(true)
   end
   if isGameTypeKR2() then
     (self._btn_MovieToolTip):SetShow(false)
   end
 end
 
--- DECOMPILER ERROR at PC555: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC551: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initCombiControl = function(self, cellTable, parent, container, isLearn)
   -- function num : 0_2
@@ -290,7 +281,7 @@ FromClient_responseClearFusionSkill = function()
   PaGlobal_Skill:initTabControl_Combination(false)
 end
 
--- DECOMPILER ERROR at PC562: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC558: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl = function(self, cellTable, parent, container)
   -- function num : 0_5
@@ -387,7 +378,7 @@ PaGlobal_Skill.initTabControl = function(self, cellTable, parent, container)
   -- DECOMPILER ERROR: 12 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC565: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC561: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.HandleMLUp_CombiSkillWindow_LearnButtonClick = function(self, index)
   -- function num : 0_6
@@ -406,7 +397,7 @@ SkillWindow_ScrollDownEvent = function()
   PaGlobal_Skill:Skill_ScrollMove("down")
 end
 
--- DECOMPILER ERROR at PC572: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC568: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl_Combat = function(self)
   -- function num : 0_9
@@ -425,7 +416,7 @@ PaGlobal_Skill.initTabControl_Combat = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC575: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC571: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl_AwakeningWeapon = function(self)
   -- function num : 0_10
@@ -447,11 +438,11 @@ PaGlobal_Skill.initTabControl_AwakeningWeapon = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC579: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC574: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initTabControl_Combination = function(self, isLearn)
-  -- function num : 0_11 , upvalues : skillOldandNew
-  if skillOldandNew == false then
+  -- function num : 0_11
+  if _ContentsGroup_skillOldandNew == false then
     return 
   end
   local isPossible = PaGlobal_Skill:OnOffCombinationTab()
@@ -462,7 +453,7 @@ PaGlobal_Skill.initTabControl_Combination = function(self, isLearn)
   self:initCombiControl(cellTable, self._static_CombiSkill_BG, self._slot_CombiSkill, isLearn)
 end
 
--- DECOMPILER ERROR at PC582: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC577: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.OnOffCombinationTab = function(self)
   -- function num : 0_12
@@ -510,7 +501,7 @@ PaGlobal_Skill.OnOffCombinationTab = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC585: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC580: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.combinationSkillLearn = function(self, learnSkillNo, slotNo)
   -- function num : 0_13
@@ -564,11 +555,11 @@ PaGlobal_Skill.combinationSkillLearn = function(self, learnSkillNo, slotNo)
   end
 end
 
--- DECOMPILER ERROR at PC589: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC583: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.CombiSkill = function(self, isLearn, index)
-  -- function num : 0_14 , upvalues : skillOldandNew
-  if skillOldandNew == false then
+  -- function num : 0_14
+  if _ContentsGroup_skillOldandNew == false then
     return 
   end
   if isLearn == true then
@@ -597,7 +588,7 @@ PaGlobal_Skill.CombiSkill = function(self, isLearn, index)
   end
 end
 
--- DECOMPILER ERROR at PC592: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC586: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.initSkillLearnableSlot = function(self)
   -- function num : 0_15
@@ -619,7 +610,7 @@ PaGlobal_Skill.initSkillLearnableSlot = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC595: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC589: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.getLineTemplate = function(self, isSlotColumn, isSlotRow, lineType)
   -- function num : 0_16
@@ -640,7 +631,7 @@ PaGlobal_Skill.getLineTemplate = function(self, isSlotColumn, isSlotRow, lineTyp
   return lineDef[lineType]
 end
 
--- DECOMPILER ERROR at PC598: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC592: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.Skill_ScrollMove = function(self, moveDirection)
   -- function num : 0_17
@@ -656,7 +647,7 @@ PaGlobal_Skill.Skill_ScrollMove = function(self, moveDirection)
   HandleMScroll_SkillWindow_ScrollEvent(true)
 end
 
--- DECOMPILER ERROR at PC601: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC595: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillCalcPosYByRow = function(self, row)
   -- function num : 0_18
@@ -667,7 +658,7 @@ PaGlobal_Skill.SkillCalcPosYByRow = function(self, row)
   end
 end
 
--- DECOMPILER ERROR at PC604: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC598: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillCalcPosYByColumn = function(self, col)
   -- function num : 0_19
@@ -678,7 +669,7 @@ PaGlobal_Skill.SkillCalcPosYByColumn = function(self, col)
   end
 end
 
--- DECOMPILER ERROR at PC607: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC601: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.Skill_WindowPosSet = function(self, pos, isAwaken)
   -- function num : 0_20
@@ -694,7 +685,7 @@ PaGlobal_Skill.Skill_WindowPosSet = function(self, pos, isAwaken)
   ((PaGlobal_Skill.frames)[index]):UpdateContentPos()
 end
 
--- DECOMPILER ERROR at PC612: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC606: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindowEffect = function(self, row, col, skillNo, isOn, isAwaken)
   -- function num : 0_21 , upvalues : beforAwakenSkillNo, beforCombatSkillNo
@@ -739,7 +730,7 @@ PaGlobal_Skill.SkillWindowEffect = function(self, row, col, skillNo, isOn, isAwa
   end
 end
 
--- DECOMPILER ERROR at PC615: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC609: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_UpdateClearData = function(self)
   -- function num : 0_22
@@ -797,7 +788,7 @@ PaGlobal_Skill.SkillWindow_UpdateClearData = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC618: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC612: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_PlayerLearnableSkill = function(self)
   -- function num : 0_23
@@ -812,7 +803,7 @@ PaGlobal_Skill.SkillWindow_PlayerLearnableSkill = function(self)
   return false
 end
 
--- DECOMPILER ERROR at PC621: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC615: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
   -- function num : 0_24
@@ -849,14 +840,14 @@ PaGlobal_Skill.SkillWindow_LearnButtonClick = function(self, skillNo)
   end
 end
 
--- DECOMPILER ERROR at PC624: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC618: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.UpdateLearnableSlots = function(self)
   -- function num : 0_25
   self:ClearLearnableSlots()
 end
 
--- DECOMPILER ERROR at PC627: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC621: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.ClearLearnableSlots = function(self)
   -- function num : 0_26
@@ -866,7 +857,7 @@ PaGlobal_Skill.ClearLearnableSlots = function(self)
   self.learnableSlotCount = 0
 end
 
--- DECOMPILER ERROR at PC630: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC624: Confused about usage of register: R3 in 'UnsetPending'
 
 PaGlobal_Skill.SkillWindow_Show = function(self)
   -- function num : 0_27

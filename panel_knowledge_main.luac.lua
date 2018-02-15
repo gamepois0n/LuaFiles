@@ -8,11 +8,53 @@ local UI_PUCT = CppEnums.PA_UI_CONTROL_TYPE
 local UI_color = Defines.Color
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local IM = CppEnums.EProcessorInputMode
+local UI_PD = CppEnums.Padding
 local renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_Knowledge}, false)
 Panel_Knowledge_Main:TEMP_UseUpdateListSwap(true)
 Panel_Knowledge_List:TEMP_UseUpdateListSwap(true)
+Panel_Knowledge_Point:SetShow(false)
 local ui_Copy = {_icon = (UI.getChildControl)(Panel_Knowledge_Main, "Static_C_Knowledge_Icon"), _gaugeBG = (UI.getChildControl)(Panel_Knowledge_Main, "Static_C_GaugeBG"), _gauge = (UI.getChildControl)(Panel_Knowledge_Main, "Progress_C_Gauge"), _name = (UI.getChildControl)(Panel_Knowledge_Main, "StaticText_C_Knowledge_Name"), _normal = (UI.getChildControl)(Panel_Knowledge_Main, "Static_C_Knowledge_Nor"), _cardIcon = (UI.getChildControl)(Panel_Knowledge_Main, "StaticText_C_Knowledge_NrIcon"), _category = (UI.getChildControl)(Panel_Knowledge_List, "StaticText_ListStep_1"), _nextArrow = (UI.getChildControl)(Panel_Knowledge_List, "Static_ListStepArrow_1"), _list_Step2 = (UI.getChildControl)(Panel_Knowledge_List, "StaticText_ListStep_2"), _list_Step3 = (UI.getChildControl)(Panel_Knowledge_List, "StaticText_ListStep_3"), _list_Arrow2 = (UI.getChildControl)(Panel_Knowledge_List, "Static_ListStepArrow_2")}
-uiConst = {main = Panel_Knowledge_Main, main_WhosKnowledge = (UI.getChildControl)(Panel_Knowledge_Main, "StaticText_WhosKnowledge"), main_Top = (UI.getChildControl)(Panel_Knowledge_Main, "Button_Top"), main_Hint = (UI.getChildControl)(Panel_Knowledge_Main, "StaticText_Notice"), list = Panel_Knowledge_List, list_MenuBg = (UI.getChildControl)(Panel_Knowledge_List, "Static_TopMenuBG"), list_ListBg = (UI.getChildControl)(Panel_Knowledge_List, "Static_ListBG"), list_Edit = (UI.getChildControl)(Panel_Knowledge_List, "Edit_FindKnowledge"), list_Tree = (UI.getChildControl)(Panel_Knowledge_List, "Tree_Knowledge_List"), list_FindList = (UI.getChildControl)(Panel_Knowledge_List, "Button_MyList"), list_Hint = (UI.getChildControl)(Panel_Knowledge_List, "StaticText_Notice"), info = Panel_Knowledge_Info, info_Picture = (UI.getChildControl)(Panel_Knowledge_Info, "Static_Knowledge_Icon"), info_Name = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_NamePanel"), info_Story = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_Knowledge_Story"), info_Zodiac = (UI.getChildControl)(Panel_Knowledge_Info, "Static_StarBG"), info_zodiacName = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_StarName"), info_InfoBg = (UI.getChildControl)(Panel_Knowledge_Info, "Static_InfoBG"), info_npcInfoBG = (UI.getChildControl)(Panel_Knowledge_Info, "Static_NpcInfo_BG"), info_NpcInterest = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_OnlyNpc_Interest"), info_NpcInt = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_OnlyNpc_NpcInt"), info_NpcValue = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_OnlyNpc_Value"), info_Value = (UI.getChildControl)(Panel_Knowledge_Info, "Static_Icon_Value"), info_Interest = (UI.getChildControl)(Panel_Knowledge_Info, "Static_Icon_Interest"), info_CardEffect = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_CardEffect"), list_GetKnowledgeCount = (UI.getChildControl)(Panel_Knowledge_List, "StaticText_GetKnowledgeCount")}
+uiConst = {main = Panel_Knowledge_Main, main_WhosKnowledge = (UI.getChildControl)(Panel_Knowledge_Main, "StaticText_WhosKnowledge"), main_Top = (UI.getChildControl)(Panel_Knowledge_Main, "Button_Top"), main_Hint = (UI.getChildControl)(Panel_Knowledge_Main, "StaticText_Notice"), staticText_KnowledgeBuff = (UI.getChildControl)(Panel_Knowledge_Main, "StaticText_KnowledgeBuff"), list = Panel_Knowledge_List, list_MenuBg = (UI.getChildControl)(Panel_Knowledge_List, "Static_TopMenuBG"), list_ListBg = (UI.getChildControl)(Panel_Knowledge_List, "Static_ListBG"), list_Edit = (UI.getChildControl)(Panel_Knowledge_List, "Edit_FindKnowledge"), list_Tree = (UI.getChildControl)(Panel_Knowledge_List, "Tree_Knowledge_List"), list_FindList = (UI.getChildControl)(Panel_Knowledge_List, "Button_MyList"), list_Hint = (UI.getChildControl)(Panel_Knowledge_List, "StaticText_Notice"), info = Panel_Knowledge_Info, info_Picture = (UI.getChildControl)(Panel_Knowledge_Info, "Static_Knowledge_Icon"), info_Name = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_NamePanel"), info_Story = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_Knowledge_Story"), info_Zodiac = (UI.getChildControl)(Panel_Knowledge_Info, "Static_StarBG"), info_zodiacName = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_StarName"), info_InfoBg = (UI.getChildControl)(Panel_Knowledge_Info, "Static_InfoBG"), info_npcInfoBG = (UI.getChildControl)(Panel_Knowledge_Info, "Static_NpcInfo_BG"), info_NpcInterest = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_OnlyNpc_Interest"), info_NpcInt = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_OnlyNpc_NpcInt"), info_NpcValue = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_OnlyNpc_Value"), info_Value = (UI.getChildControl)(Panel_Knowledge_Info, "Static_Icon_Value"), info_Interest = (UI.getChildControl)(Panel_Knowledge_Info, "Static_Icon_Interest"), info_CardEffect = (UI.getChildControl)(Panel_Knowledge_Info, "StaticText_CardEffect"), list_GetKnowledgeCount = (UI.getChildControl)(Panel_Knowledge_List, "StaticText_GetKnowledgeCount")}
+PaGlobal_Knowledge_Point = {point_Btn_Question = (UI.getChildControl)(Panel_Knowledge_Point, "Button_Question"), point_Txt_Desc = (UI.getChildControl)(Panel_Knowledge_Point, "StaticText_Desc"), point_Tooltip = (UI.getChildControl)(Panel_Knowledge_Point, "StaticText_TooltipBg"), 
+point_Title = {}
+, 
+point_Desc = {}
+, point_Count = 10}
+-- DECOMPILER ERROR at PC280: Confused about usage of register: R8 in 'UnsetPending'
+
+PaGlobal_Knowledge_Point.Init = function(self)
+  -- function num : 0_0
+  local titleTextSizeX = 0
+  local descTextSizeX = 0
+  for index = 0, self.point_Count - 1 do
+    -- DECOMPILER ERROR at PC15: Confused about usage of register: R7 in 'UnsetPending'
+
+    (self.point_Title)[index] = (UI.getChildControl)(self.point_Tooltip, "StaticText_" .. index)
+    -- DECOMPILER ERROR at PC24: Confused about usage of register: R7 in 'UnsetPending'
+
+    ;
+    (self.point_Desc)[index] = (UI.getChildControl)(self.point_Tooltip, "StaticText_GreDesc_" .. index)
+    titleTextSizeX = (math.max)(titleTextSizeX, ((self.point_Title)[index]):GetTextSizeX())
+    descTextSizeX = (math.max)(descTextSizeX, ((self.point_Desc)[index]):GetTextSizeX())
+  end
+  if titleTextSizeX > 70 then
+    (self.point_Tooltip):SetSize(20 + titleTextSizeX + 5 + descTextSizeX + 10, (self.point_Tooltip):GetSizeY())
+    ;
+    (self.point_Tooltip):SetPosX(300 - (self.point_Tooltip):GetSizeX())
+    for index = 0, self.point_Count - 1 do
+      ((self.point_Desc)[index]):SetPosX(20 + titleTextSizeX + 5)
+    end
+  else
+    do
+      ;
+      (self.point_Tooltip):SetSize((math.max)(300, 90 + descTextSizeX + 10), (self.point_Tooltip):GetSizeY())
+      ;
+      (self.point_Tooltip):SetPosX(300 - (self.point_Tooltip):GetSizeX())
+    end
+  end
+end
+
+PaGlobal_Knowledge_Point:Init()
 local uiListControlByKey = {[1] = (UI.getChildControl)(Panel_Knowledge_List, "Button_Man"), [5001] = (UI.getChildControl)(Panel_Knowledge_List, "Button_Land"), [5020] = (UI.getChildControl)(Panel_Knowledge_List, "Button_BigSea"), [10001] = (UI.getChildControl)(Panel_Knowledge_List, "Button_Env"), [25001] = (UI.getChildControl)(Panel_Knowledge_List, "Button_Book"), [20001] = (UI.getChildControl)(Panel_Knowledge_List, "Button_Travel"), [30001] = (UI.getChildControl)(Panel_Knowledge_List, "Button_Life"), [31300] = (UI.getChildControl)(Panel_Knowledge_List, "Button_Guide"), [31310] = (UI.getChildControl)(Panel_Knowledge_List, "Button_TradeItem")}
 local circularColorValue = {[1] = (Defines.Color).C_FFF4D35D, [5001] = (Defines.Color).C_FF387f14, [5020] = (Defines.Color).C_FF3E5CFF, [10001] = (Defines.Color).C_FF00C2EA, [25001] = (Defines.Color).C_FF844BE3, [20001] = (Defines.Color).C_FFBCF44B, [30001] = (Defines.Color).C_FFDA0000, [31300] = (Defines.Color).C_FFf570a1, [31310] = (Defines.Color).C_FF25c28b}
 local ui = {
@@ -37,7 +79,7 @@ lineKeyList = {}
 lineBGKeyList = {}
 , colorBG = float4(0.8, 0.9, 0.6, 0.5), colorFG = float4(0.8, 0.9, 0.6, 1), zOrderBG = 5, widthBG = 10, category = "InstantLine_MentalKnowledgeZodiac"}
 local init = function()
-  -- function num : 0_0 , upvalues : ui_Copy, uiListControlByKey, UI_TM
+  -- function num : 0_1 , upvalues : ui_Copy, uiListControlByKey, UI_TM
   for _,v in pairs(ui_Copy) do
     v:SetShow(false)
   end
@@ -94,7 +136,7 @@ local init = function()
 end
 
 Panel_Knowledge_AddItemTree = function(parentUIItem, theme)
-  -- function num : 0_1
+  -- function num : 0_2
   local childItem = (uiConst.list_Tree):createRootItem()
   childItem:SetKey(-theme:getKey())
   local nameString = theme:getName()
@@ -134,7 +176,7 @@ Panel_Knowledge_AddItemTree = function(parentUIItem, theme)
 end
 
 local createMainControls = function(progressCount)
-  -- function num : 0_2 , upvalues : ui, UI_PUCT, ui_Copy
+  -- function num : 0_3 , upvalues : ui, UI_PUCT, ui_Copy
   for index = 0, progressCount - 1 do
     -- DECOMPILER ERROR at PC12: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -200,7 +242,7 @@ local createMainControls = function(progressCount)
 end
 
 local createCurrentControls = function(progressCount)
-  -- function num : 0_3 , upvalues : ui, UI_PUCT, ui_Copy
+  -- function num : 0_4 , upvalues : ui, UI_PUCT, ui_Copy
   for index = 0, progressCount - 1 do
     -- DECOMPILER ERROR at PC12: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -279,7 +321,7 @@ local createCurrentControls = function(progressCount)
 end
 
 local createCardControls = function(count)
-  -- function num : 0_4 , upvalues : ui, UI_PUCT, ui_Copy
+  -- function num : 0_5 , upvalues : ui, UI_PUCT, ui_Copy
   for index = 0, count - 1 do
     -- DECOMPILER ERROR at PC12: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -306,7 +348,7 @@ local createCardControls = function(count)
 end
 
 local createTopListControls = function(count)
-  -- function num : 0_5 , upvalues : ui, UI_PUCT, ui_Copy
+  -- function num : 0_6 , upvalues : ui, UI_PUCT, ui_Copy
   for index = 0, count - 1 do
     -- DECOMPILER ERROR at PC12: Confused about usage of register: R5 in 'UnsetPending'
 
@@ -340,7 +382,7 @@ local createTopListControls = function(count)
 end
 
 local createAndUpdateCircle = function(inputData)
-  -- function num : 0_6
+  -- function num : 0_7
   if inputData.circleLineRadius <= 0 then
     return 
   end
@@ -373,7 +415,7 @@ local createAndUpdateCircle = function(inputData)
 end
 
 local insertCircleLineAndObject = function(zodiacSignStaticStatusWrapper)
-  -- function num : 0_7 , upvalues : zodiacInfo
+  -- function num : 0_8 , upvalues : zodiacInfo
   (uiConst.info_Zodiac):ChangeTextureInfoName(zodiacSignStaticStatusWrapper:getZodiacImagePath())
   local defaultPosX = (uiConst.info_Zodiac):GetParentPosX() + (uiConst.info_Zodiac):GetSizeX() / 2
   local defaultPosY = (uiConst.info_Zodiac):GetParentPosY() + (uiConst.info_Zodiac):GetSizeY() / 2
@@ -436,28 +478,28 @@ local insertCircleLineAndObject = function(zodiacSignStaticStatusWrapper)
 end
 
 local removeMainControls = function()
-  -- function num : 0_8 , upvalues : ui
+  -- function num : 0_9 , upvalues : ui
   for key,value in pairs(ui.mainGroup) do
     (value._gaugeBG):SetShow(false)
   end
 end
 
 local removeCurrentControls = function()
-  -- function num : 0_9 , upvalues : ui
+  -- function num : 0_10 , upvalues : ui
   for key,value in pairs(ui.currentGroup) do
     (value._gaugeBG):SetShow(false)
   end
 end
 
 local removeCardControls = function()
-  -- function num : 0_10 , upvalues : ui
+  -- function num : 0_11 , upvalues : ui
   for key,value in pairs(ui.cardGroup) do
     (value._cardIcon):SetShow(false)
   end
 end
 
 local removeTopListControls = function()
-  -- function num : 0_11 , upvalues : ui
+  -- function num : 0_12 , upvalues : ui
   for key,value in pairs(ui.topList) do
     (value._category):SetShow(false)
     ;
@@ -466,7 +508,7 @@ local removeTopListControls = function()
 end
 
 local removeCircle = function(inputData)
-  -- function num : 0_12
+  -- function num : 0_13
   if inputData.circleKey ~= -1 then
     deleteLine(inputData.lineCategory, inputData.circleKey, inputData.coreInteractionLineOrder)
     inputData.circleKey = -1
@@ -475,7 +517,7 @@ local removeCircle = function(inputData)
 end
 
 local clearZodiacLine = function()
-  -- function num : 0_13 , upvalues : zodiacInfo
+  -- function num : 0_14 , upvalues : zodiacInfo
   for key,value in pairs(zodiacInfo.lineKeyList) do
     deleteLine(zodiacInfo.category, value, zodiacInfo.zOrder)
   end
@@ -485,7 +527,7 @@ local clearZodiacLine = function()
 end
 
 local settingUIMainGroup = function(isFullUpdate)
-  -- function num : 0_14 , upvalues : ui, circularColorValue, rotateValue, radiusValue
+  -- function num : 0_15 , upvalues : ui, circularColorValue, rotateValue, radiusValue
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local childCount = knowledge:getMainKnowledgeCount()
   local visibleChildCount = childCount
@@ -552,7 +594,7 @@ local settingUIMainGroup = function(isFullUpdate)
 end
 
 local settingUICurrentGroup = function(isFullUpdate)
-  -- function num : 0_15 , upvalues : ui, rotateValue, radiusValue
+  -- function num : 0_16 , upvalues : ui, rotateValue, radiusValue
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local childCount = knowledge:getCurrentThemeChildThemeCount()
   for index,value in pairs(ui.currentGroup) do
@@ -602,7 +644,7 @@ local settingUICurrentGroup = function(isFullUpdate)
 end
 
 local settingUIMainCard = function(isFullupdate)
-  -- function num : 0_16 , upvalues : rotateValue, radiusValue, ui
+  -- function num : 0_17 , upvalues : rotateValue, radiusValue, ui
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local currentTheme = knowledge:getCurrentTheme()
   local childCardCount = currentTheme:getChildCardCount()
@@ -633,7 +675,7 @@ local settingUIMainCard = function(isFullupdate)
 end
 
 local settingToFirstButton = function()
-  -- function num : 0_17
+  -- function num : 0_18
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local pos2d = knowledge:getPlayerPos2d(float3(0, -100, 0))
   pos2d.x = 350
@@ -650,7 +692,7 @@ local settingToFirstButton = function()
 end
 
 local settingUIListIcon = function(progressCount)
-  -- function num : 0_18 , upvalues : uiListControlByKey, constValue
+  -- function num : 0_19 , upvalues : uiListControlByKey, constValue
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   for _,value in pairs(uiListControlByKey) do
     value:SetShow(false)
@@ -669,7 +711,7 @@ local settingUIListIcon = function(progressCount)
 end
 
 local settingUIListTree = function()
-  -- function num : 0_19 , upvalues : circularColorValue
+  -- function num : 0_20 , upvalues : circularColorValue
   (uiConst.list_Tree):ClearTree()
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local mainTopTheme = knowledge:getMainTheme()
@@ -686,7 +728,7 @@ local settingUIListTree = function()
 end
 
 local settingListTopLine = function()
-  -- function num : 0_20 , upvalues : removeTopListControls, createTopListControls, ui
+  -- function num : 0_21 , upvalues : removeTopListControls, createTopListControls, ui
   local nameList = (Array.new)()
   local treeItem = (uiConst.list_Tree):GetSelectItem()
   while treeItem ~= nil do
@@ -721,7 +763,7 @@ local settingListTopLine = function()
 end
 
 local settingCardInfo = function()
-  -- function num : 0_21 , upvalues : clearZodiacLine, UI_TM, insertCircleLineAndObject, constValue
+  -- function num : 0_22 , upvalues : clearZodiacLine, UI_TM, insertCircleLineAndObject, constValue
   (uiConst.info):SetShow(false)
   clearZodiacLine()
   local selectItem = (uiConst.list_Tree):GetSelectItem()
@@ -910,7 +952,7 @@ local settingCardInfo = function()
 end
 
 local settingTheme = function()
-  -- function num : 0_22
+  -- function num : 0_23
   local selectItem = (uiConst.list_Tree):GetSelectItem()
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   if selectItem == nil then
@@ -936,7 +978,7 @@ local settingTheme = function()
 end
 
 local settingForNextTheme = function()
-  -- function num : 0_23 , upvalues : radiusResultValue, rotateValue, rotateResultValue
+  -- function num : 0_24 , upvalues : radiusResultValue, rotateValue, rotateResultValue
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   radiusResultValue = 0
   rotateValue = 0
@@ -948,7 +990,7 @@ end
 
 local inputData = {lineCategory = "InstantLine_HumanRelation", lineAlpha = 1, circleLineRadius = 150, isChanged = false, circleKey = -1, intimacyKey = -1, coreInteractionLineOrder = 10, constAlphaAura = 0.2, constAlphaCore = 0.7, position = float3(0, 0, 0)}
 local settingCircleInputData = function()
-  -- function num : 0_24 , upvalues : inputData, radiusValue
+  -- function num : 0_25 , upvalues : inputData, radiusValue
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local targetPos = knowledge:getCameraTargetPos()
   targetPos.y = targetPos.y + 30
@@ -967,7 +1009,7 @@ end
 
 local UIMode = Defines.UIMode
 local onShowLoadControls = function()
-  -- function num : 0_25 , upvalues : rotateResultValue, rotateValue, radiusValue, radiusResultValue, UIMode, renderMode, createMainControls, settingUIMainGroup, settingUIListTree, settingUIListIcon, settingCardInfo
+  -- function num : 0_26 , upvalues : rotateResultValue, rotateValue, radiusValue, radiusResultValue, UIMode, renderMode, createMainControls, settingUIMainGroup, settingUIListTree, settingUIListIcon, settingCardInfo
   ToClient_SaveUiInfo(false)
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local mainKnowledgeCount = knowledge:getMainKnowledgeCount()
@@ -988,10 +1030,12 @@ local onShowLoadControls = function()
   (uiConst.list):SetShow(true)
   settingUIListIcon(mainKnowledgeCount)
   settingCardInfo()
+  ;
+  (PaGlobal_Knowledge_Point.point_Tooltip):SetShow(false)
 end
 
 local onHideCloseControls = function()
-  -- function num : 0_26 , upvalues : UIMode, renderMode, removeMainControls, removeCurrentControls, removeCardControls, removeCircle, inputData, clearZodiacLine
+  -- function num : 0_27 , upvalues : UIMode, renderMode, removeMainControls, removeCurrentControls, removeCardControls, removeCircle, inputData, clearZodiacLine
   SetUIMode(UIMode.eUIMode_Default)
   renderMode:reset()
   ;
@@ -1015,7 +1059,7 @@ local onHideCloseControls = function()
 end
 
 local updateMainUI = function()
-  -- function num : 0_27 , upvalues : removeMainControls, removeCurrentControls, removeCardControls, createMainControls, settingUIMainGroup, createCurrentControls, createCardControls, settingUICurrentGroup, settingUIMainCard, settingListTopLine, settingCardInfo
+  -- function num : 0_28 , upvalues : removeMainControls, removeCurrentControls, removeCardControls, createMainControls, settingUIMainGroup, createCurrentControls, createCardControls, settingUICurrentGroup, settingUIMainCard, settingListTopLine, settingCardInfo
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   removeMainControls()
   removeCurrentControls()
@@ -1038,7 +1082,7 @@ end
 
 local _cardKeyRaw = nil
 Panel_Knowledge_Show = function()
-  -- function num : 0_28 , upvalues : onShowLoadControls, _cardKeyRaw
+  -- function num : 0_29 , upvalues : onShowLoadControls, _cardKeyRaw
   if ToClient_getJoinGuildBattle() == true then
     return 
   end
@@ -1053,6 +1097,7 @@ Panel_Knowledge_Show = function()
   if selfPlayerIsInCompetitionArea() then
     return 
   end
+  TooltipSimple_Hide()
   audioPostEvent_SystemUi(1, 32)
   local isShowable = knowledge:show()
   if isShowable == false then
@@ -1061,8 +1106,12 @@ Panel_Knowledge_Show = function()
   if Panel_Win_System:GetShow() then
     allClearMessageData()
   end
+  if Panel_TranslationReport:GetShow() == true then
+    TranslationReport_Close()
+  end
   FGlobal_WebHelper_ForceClose()
   UIMain_KnowledgeUpdateRemove()
+  PaGlobal_Knowledge_Point_Show()
   ;
   (uiConst.list_GetKnowledgeCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_GETKNOWLEDGECOUNT", "count", ToClient_GetTotalMentalCardCount()))
   onShowLoadControls()
@@ -1070,10 +1119,30 @@ Panel_Knowledge_Show = function()
     _cardKeyRaw = FGlobal_CardKeyReturn()
     Panel_Knowledge_SelectAnotherCard(_cardKeyRaw)
   end
+  Panel_KnowledgeBuff_Update()
+end
+
+Panel_KnowledgeBuff_Update = function()
+  -- function num : 0_30
+  local knowledgePoint = ToClient_getKnowledgePoint()
+  local battleBuffPercent = ToClient_getBattleExperienceByKnowledgePoint()
+  local dropItemBuffPercent = ToClient_getEfficiencyOfDropItemByKnowledgePoint()
+  battleBuffPercent = battleBuffPercent / 10000
+  dropItemBuffPercent = dropItemBuffPercent / 10000
+  local str1 = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_POINT_TEXT", "point", tostring(knowledgePoint))
+  local str2 = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_BUFF_TEXT", "battlePercent", tostring(battleBuffPercent), "dropPercent", tostring(dropItemBuffPercent))
+  ;
+  (uiConst.staticText_KnowledgeBuff):SetShow(false)
+  ;
+  (uiConst.staticText_KnowledgeBuff):SetText(str1 .. "\n" .. str2)
 end
 
 Panel_Knowledge_Hide = function()
-  -- function num : 0_29 , upvalues : onHideCloseControls
+  -- function num : 0_31 , upvalues : onHideCloseControls
+  if Panel_TranslationReport:GetShow() == true then
+    TranslationReport_Close()
+    return 
+  end
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -1089,7 +1158,7 @@ Panel_Knowledge_Hide = function()
 end
 
 Panel_Knowledge_ShowHint = function(index)
-  -- function num : 0_30 , upvalues : ui, UI_TM
+  -- function num : 0_32 , upvalues : ui, UI_TM
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local mentalCardKeyRaw = knowledge:getCurrentThemeChildCardKeyByIndex(index)
   local card = knowledge:getCardByKeyRaw(mentalCardKeyRaw)
@@ -1117,14 +1186,14 @@ Panel_Knowledge_ShowHint = function(index)
 end
 
 Panel_Knowledge_HideHint = function()
-  -- function num : 0_31
+  -- function num : 0_33
   (uiConst.main_Hint):SetShow(false)
   ;
   (uiConst.list_Hint):SetShow(false)
 end
 
 Panel_Knowledge_ShowHint_byList = function()
-  -- function num : 0_32 , upvalues : UI_TM
+  -- function num : 0_34 , upvalues : UI_TM
   local isUiMode = (CppEnums.EProcessorInputMode).eProcessorInputMode_UiModeNotInput == getInputMode()
   local index = (uiConst.list_Tree):GetOverItemKey()
   if index < 0 or isUiMode == false then
@@ -1186,32 +1255,32 @@ end
 ;
 (uiConst.list_Edit):RegistReturnKeyEvent("Panel_Knowledge_OutInputMode( true )")
 Panel_Knowledge_OverBarUpdatePerFrame = function(deltaTime)
-  -- function num : 0_33
+  -- function num : 0_35
   Panel_Knowledge_ShowHint_byList()
 end
 
 Panel_Knowledge_OnLPressStart = function()
-  -- function num : 0_34
+  -- function num : 0_36
   inputModeManageMove(true)
 end
 
 Panel_Knowledge_OnLPressEnd = function()
-  -- function num : 0_35
+  -- function num : 0_37
   inputModeManageMove(false)
 end
 
 Panel_Knowledge_OnRPressStart = function()
-  -- function num : 0_36
+  -- function num : 0_38
   inputModeManageRotate(true)
 end
 
 Panel_Knowledge_OnRPressEnd = function()
-  -- function num : 0_37
+  -- function num : 0_39
   inputModeManageRotate(false)
 end
 
 Panel_Knowledge_SelectElement = function()
-  -- function num : 0_38 , upvalues : settingForNextTheme, updateMainUI
+  -- function num : 0_40 , upvalues : settingForNextTheme, updateMainUI
   local selectItem = (uiConst.list_Tree):GetSelectItem()
   if selectItem == nil then
     return 
@@ -1240,7 +1309,7 @@ Panel_Knowledge_SelectElement = function()
 end
 
 Panel_Knowledge_GotoRoot = function()
-  -- function num : 0_39
+  -- function num : 0_41
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   knowledge:setCurrentTheme(knowledge:getMainTheme())
   ;
@@ -1248,7 +1317,7 @@ Panel_Knowledge_GotoRoot = function()
 end
 
 Panel_Knowledge_GotoParents = function()
-  -- function num : 0_40 , upvalues : settingForNextTheme
+  -- function num : 0_42 , upvalues : settingForNextTheme
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local theme = knowledge:getCurrentTheme()
   if theme == nil then
@@ -1268,7 +1337,7 @@ Panel_Knowledge_GotoParents = function()
 end
 
 Panel_Knowledge_SelectMainUI = function(index)
-  -- function num : 0_41 , upvalues : settingForNextTheme
+  -- function num : 0_43 , upvalues : settingForNextTheme
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local theme = knowledge:getCurrentTheme()
   local childTheme = theme:getChildThemeByIndex(index)
@@ -1281,7 +1350,7 @@ Panel_Knowledge_SelectMainUI = function(index)
 end
 
 Panel_Knowledge_SelectMainUICard = function(index)
-  -- function num : 0_42 , upvalues : updateMainUI, ui
+  -- function num : 0_44 , upvalues : updateMainUI, ui
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local theme = knowledge:getCurrentTheme()
   local childCard = theme:getChildCardByIndex(index)
@@ -1297,7 +1366,7 @@ Panel_Knowledge_SelectMainUICard = function(index)
 end
 
 Panel_Knowledge_SelectMainUIByKey = function(themeKeyRaw)
-  -- function num : 0_43 , upvalues : settingForNextTheme
+  -- function num : 0_45 , upvalues : settingForNextTheme
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local theme = knowledge:getThemeByKeyRaw(themeKeyRaw)
   if theme == nil then
@@ -1309,7 +1378,7 @@ Panel_Knowledge_SelectMainUIByKey = function(themeKeyRaw)
 end
 
 Panel_Knowledge_SelectAnotherCard = function(cardKeyRaw)
-  -- function num : 0_44 , upvalues : settingForNextTheme, updateMainUI
+  -- function num : 0_46 , upvalues : settingForNextTheme, updateMainUI
   local knowledge = ((getSelfPlayer()):get()):getMentalKnowledge()
   local childCard = knowledge:getCardByKeyRaw(cardKeyRaw)
   if childCard == nil then
@@ -1325,7 +1394,7 @@ Panel_Knowledge_SelectAnotherCard = function(cardKeyRaw)
 end
 
 Panel_Knowledge_OnInputMode = function()
-  -- function num : 0_45
+  -- function num : 0_47
   SetFocusEdit(uiConst.list_Edit)
   ;
   (uiConst.list_Edit):SetEditText("")
@@ -1333,7 +1402,7 @@ end
 
 local filterText = ""
 Panel_Knowledge_OutInputMode = function(isApply)
-  -- function num : 0_46
+  -- function num : 0_48
   if isApply ~= true then
     (uiConst.list_Edit):SetEditText("")
   end
@@ -1345,13 +1414,13 @@ Panel_Knowledge_OutInputMode = function(isApply)
 end
 
 Panel_Knowledge_CheckCurrentUiEdit = function(targetUI)
-  -- function num : 0_47
+  -- function num : 0_49
   do return targetUI ~= nil and targetUI:GetKey() == (uiConst.list_Edit):GetKey() end
   -- DECOMPILER ERROR: 1 unprocessed JMP targets
 end
 
 Panel_Knowledge_RotateValueUpdate = function(isUp)
-  -- function num : 0_48 , upvalues : rotateResultValue
+  -- function num : 0_50 , upvalues : rotateResultValue
   if isUp then
     rotateResultValue = rotateResultValue + 1
   else
@@ -1360,7 +1429,7 @@ Panel_Knowledge_RotateValueUpdate = function(isUp)
 end
 
 Panel_Knowledge_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_49 , upvalues : rotateResultValue, rotateValue, radiusResultValue, radiusValue, settingTheme, updateMainUI, settingCircleInputData, settingUIMainCard, settingUIMainGroup, settingUICurrentGroup, settingToFirstButton, createAndUpdateCircle, inputData
+  -- function num : 0_51 , upvalues : rotateResultValue, rotateValue, radiusResultValue, radiusValue, settingTheme, updateMainUI, settingCircleInputData, settingUIMainCard, settingUIMainGroup, settingUICurrentGroup, settingToFirstButton, createAndUpdateCircle, inputData
   local diff = rotateResultValue - rotateValue
   if diff ~= 0 then
     if (math.abs)(diff) < 0.01 then
@@ -1404,10 +1473,90 @@ Panel_Knowledge_UpdatePerFrame = function(deltaTime)
   end
 end
 
+-- DECOMPILER ERROR at PC720: Confused about usage of register: R48 in 'UnsetPending'
+
+PaGlobal_Knowledge_Point.Init = function(self)
+  -- function num : 0_52
+  (self.point_Btn_Question):SetShow(true)
+  ;
+  (self.point_Btn_Question):addInputEvent("Mouse_On", "PaGlobal_Knowledge_Point_Tooltip(true, 0)")
+  ;
+  (self.point_Btn_Question):addInputEvent("Mouse_Out", "PaGlobal_Knowledge_Point_Tooltip(false)")
+end
+
+-- DECOMPILER ERROR at PC725: Confused about usage of register: R48 in 'UnsetPending'
+
+PaGlobal_Knowledge_Point.Update = function(self)
+  -- function num : 0_53 , upvalues : UI_TM, UI_PD
+  local knowledgePoint = ToClient_getKnowledgePoint()
+  local battleBuffPercent = ToClient_getBattleExperienceByKnowledgePoint()
+  local dropItemBuffPercent = ToClient_getEfficiencyOfDropItemByKnowledgePoint()
+  battleBuffPercent = battleBuffPercent / 10000
+  dropItemBuffPercent = dropItemBuffPercent / 10000
+  local isBattleBuff = ""
+  local isDropItemBuff = ""
+  if battleBuffPercent > 0 then
+    isBattleBuff = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_BATTLEEXPBUFF", "battleBuff", tostring(battleBuffPercent))
+  end
+  if dropItemBuffPercent > 0 then
+    isDropItemBuff = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_ITEMDROPBUFF", "dropItemBuff", tostring(dropItemBuffPercent))
+  end
+  local txt_Comma = "\n"
+  if dropItemBuffPercent == 0 then
+    txt_Comma = ""
+  end
+  local isText = isBattleBuff .. txt_Comma .. isDropItemBuff
+  local isGetKnowledge = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_CURRENTPOINTBUFF", "knowledgePoint", tostring(knowledgePoint), "isText", tostring(isText))
+  if knowledgePoint < 500 then
+    isGetKnowledge = PAGetString(Defines.StringSheet_GAME, "LUA_KNOWLEDGE_MAIN_NONEBUFF")
+  end
+  ;
+  (self.point_Txt_Desc):SetTextMode(UI_TM.eTextMode_AutoWrap)
+  ;
+  (self.point_Txt_Desc):setPadding(UI_PD.ePadding_Left, 10)
+  ;
+  (self.point_Txt_Desc):setPadding(UI_PD.ePadding_Top, 5)
+  ;
+  (self.point_Txt_Desc):setPadding(UI_PD.ePadding_Right, 10)
+  ;
+  (self.point_Txt_Desc):setPadding(UI_PD.ePadding_Bottom, 5)
+  ;
+  (self.point_Txt_Desc):SetText(isGetKnowledge)
+  PaGlobal_Knowledge_Point:Position()
+end
+
+PaGlobal_Knowledge_Point_Show = function()
+  -- function num : 0_54
+  Panel_Knowledge_Point:SetShow(true)
+  PaGlobal_Knowledge_Point:Update()
+end
+
+PaGlobal_Knowledge_Point_Close = function()
+  -- function num : 0_55
+  Panel_Knowledge_Point:SetShow(false)
+end
+
+-- DECOMPILER ERROR at PC732: Confused about usage of register: R48 in 'UnsetPending'
+
+PaGlobal_Knowledge_Point.Position = function(self)
+  -- function num : 0_56
+  Panel_Knowledge_Point:SetSize(Panel_Knowledge_Point:GetSizeX(), (self.point_Txt_Desc):GetTextSizeY() + 65)
+  ;
+  (self.point_Txt_Desc):SetSize((self.point_Txt_Desc):GetSizeX(), (self.point_Txt_Desc):GetTextSizeY() + 13)
+  Panel_Knowledge_Point:SetPosX(Panel_Knowledge_List:GetPosX() - Panel_Knowledge_Point:GetSizeX() - 5)
+  Panel_Knowledge_Point:SetPosY(Panel_Knowledge_List:GetPosY() + (Panel_Knowledge_List:GetSizeY() - Panel_Knowledge_Point:GetSizeY()))
+end
+
+PaGlobal_Knowledge_Point_Tooltip = function(isShow, tipType)
+  -- function num : 0_57
+  (PaGlobal_Knowledge_Point.point_Tooltip):SetShow(isShow)
+end
+
+PaGlobal_Knowledge_Point:Init()
 registerEvent("onScreenResize", "Panel_Knowledge_ReSizeScreen")
 registerEvent("ToClient_MentalKnowlegeViewFirstUpdate", "ToClient_MentalKnowlegeViewFirstUpdate")
 Panel_Knowledge_ReSizeScreen = function()
-  -- function num : 0_50
+  -- function num : 0_58
   (uiConst.main):SetSize(getScreenSizeX(), getScreenSizeY())
   ;
   (uiConst.main):SetPosX(0)
@@ -1442,7 +1591,7 @@ Panel_Knowledge_ReSizeScreen = function()
 end
 
 ToClient_MentalKnowlegeViewFirstUpdate = function()
-  -- function num : 0_51 , upvalues : settingToFirstButton
+  -- function num : 0_59 , upvalues : settingToFirstButton
   settingToFirstButton()
 end
 

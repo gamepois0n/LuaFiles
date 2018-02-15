@@ -5,7 +5,6 @@
 -- function num : 0
 local UI_color = Defines.Color
 local UI_TM = CppEnums.TextMode
-local UI_RewardType = CppEnums.RewardType
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 Panel_CheckedQuestInfo:ActiveMouseEventEffect(true)
 Panel_CheckedQuestInfo:setGlassBackground(true)
@@ -407,42 +406,42 @@ _QuestDetail_ShowReward = function(questInfo, PosY)
 
     ;
     (_baseReward[baseReward_index])._type = baseReward:getType()
-    -- DECOMPILER ERROR at PC32: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC30: Confused about usage of register: R9 in 'UnsetPending'
 
-    if (CppEnums.RewardType).RewardType_Exp == baseReward:getType() then
+    if __eRewardExp == baseReward:getType() then
       (_baseReward[baseReward_index])._exp = baseReward:getExperience()
     else
-      -- DECOMPILER ERROR at PC45: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC41: Confused about usage of register: R9 in 'UnsetPending'
 
-      if (CppEnums.RewardType).RewardType_SkillExp == baseReward:getType() then
+      if __eRewardSkillExp == baseReward:getType() then
         (_baseReward[baseReward_index])._exp = baseReward:getSkillExperience()
       else
-        -- DECOMPILER ERROR at PC58: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC52: Confused about usage of register: R9 in 'UnsetPending'
 
-        if (CppEnums.RewardType).RewardType_ProductExp == baseReward:getType() then
+        if __eRewardLifeExp == baseReward:getType() then
           (_baseReward[baseReward_index])._exp = baseReward:getProductExperience()
         else
-          -- DECOMPILER ERROR at PC71: Confused about usage of register: R9 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC63: Confused about usage of register: R9 in 'UnsetPending'
 
-          if (CppEnums.RewardType).RewardType_Item == baseReward:getType() then
+          if __eRewardItem == baseReward:getType() then
             (_baseReward[baseReward_index])._item = baseReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC76: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC68: Confused about usage of register: R9 in 'UnsetPending'
 
             ;
             (_baseReward[baseReward_index])._count = baseReward:getItemCount()
           else
-            -- DECOMPILER ERROR at PC89: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC79: Confused about usage of register: R9 in 'UnsetPending'
 
-            if (CppEnums.RewardType).RewardType_Intimacy == baseReward:getType() then
+            if __eRewardIntimacy == baseReward:getType() then
               (_baseReward[baseReward_index])._character = baseReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC94: Confused about usage of register: R9 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC84: Confused about usage of register: R9 in 'UnsetPending'
 
               ;
               (_baseReward[baseReward_index])._value = baseReward:getIntimacyValue()
             else
-              -- DECOMPILER ERROR at PC107: Confused about usage of register: R9 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC95: Confused about usage of register: R9 in 'UnsetPending'
 
-              if (CppEnums.RewardType).RewardType_Knowledge == baseReward:getType() then
+              if __eRewardKnowledge == baseReward:getType() then
                 (_baseReward[baseReward_index])._mentalCard = baseReward:getMentalCardKey()
               end
             end
@@ -454,49 +453,49 @@ _QuestDetail_ShowReward = function(questInfo, PosY)
   _selectReward = {}
   for selectReward_index = 1, selectCount do
     local selectReward = questInfo:getQuestSelectRewardAt(selectReward_index - 1)
-    -- DECOMPILER ERROR at PC120: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC108: Confused about usage of register: R9 in 'UnsetPending'
 
     _selectReward[selectReward_index] = {}
-    -- DECOMPILER ERROR at PC125: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC113: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     (_selectReward[selectReward_index])._type = selectReward:getType()
-    -- DECOMPILER ERROR at PC137: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC123: Confused about usage of register: R9 in 'UnsetPending'
 
-    if (CppEnums.RewardType).RewardType_Exp == selectReward:getType() then
+    if __eRewardExp == selectReward:getType() then
       (_selectReward[selectReward_index])._exp = selectReward:getExperience()
     else
-      -- DECOMPILER ERROR at PC150: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC134: Confused about usage of register: R9 in 'UnsetPending'
 
-      if (CppEnums.RewardType).RewardType_SkillExp == selectReward:getType() then
+      if __eRewardSkillExp == selectReward:getType() then
         (_selectReward[selectReward_index])._exp = selectReward:getSkillExperience()
       else
-        -- DECOMPILER ERROR at PC163: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC145: Confused about usage of register: R9 in 'UnsetPending'
 
-        if (CppEnums.RewardType).RewardType_ProductExp == selectReward:getType() then
+        if __eRewardLifeExp == selectReward:getType() then
           (_selectReward[selectReward_index])._exp = selectReward:getProductExperience()
         else
-          -- DECOMPILER ERROR at PC176: Confused about usage of register: R9 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC156: Confused about usage of register: R9 in 'UnsetPending'
 
-          if (CppEnums.RewardType).RewardType_Item == selectReward:getType() then
+          if __eRewardItem == selectReward:getType() then
             (_selectReward[selectReward_index])._item = selectReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC181: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC161: Confused about usage of register: R9 in 'UnsetPending'
 
             ;
             (_selectReward[selectReward_index])._count = selectReward:getItemCount()
           else
-            -- DECOMPILER ERROR at PC194: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC172: Confused about usage of register: R9 in 'UnsetPending'
 
-            if (CppEnums.RewardType).RewardType_Intimacy == selectReward:getType() then
+            if __eRewardIntimacy == selectReward:getType() then
               (_selectReward[selectReward_index])._character = selectReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC199: Confused about usage of register: R9 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC177: Confused about usage of register: R9 in 'UnsetPending'
 
               ;
               (_selectReward[selectReward_index])._value = selectReward:getIntimacyValue()
             else
-              -- DECOMPILER ERROR at PC212: Confused about usage of register: R9 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC188: Confused about usage of register: R9 in 'UnsetPending'
 
-              if (CppEnums.RewardType).RewardType_Knowledge == selectReward:getType() then
+              if __eRewardKnowledge == selectReward:getType() then
                 (_selectReward[selectReward_index])._mentalCard = selectReward:getMentalCardKey()
               end
             end
@@ -597,9 +596,9 @@ rewardTooltip_ForQuestWidgetInfo = function(type, show, questtype, index, mental
 end
 
 local setReward = function(uiSlot, reward, index, questType)
-  -- function num : 0_9 , upvalues : UI_RewardType
+  -- function num : 0_9
   uiSlot._type = reward._type
-  if UI_RewardType.RewardType_Exp == reward._type or __eRewardExpGrade == reward._type then
+  if __eRewardExp == reward._type or __eRewardExpGrade == reward._type then
     (uiSlot.count):SetText("")
     ;
     (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -608,7 +607,7 @@ local setReward = function(uiSlot, reward, index, questType)
     ;
     (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Exp\", false, \"" .. questType .. "\", " .. index .. " )")
   else
-    if UI_RewardType.RewardType_SkillExp == reward._type or __eRewardSkillExpGrade == reward._type then
+    if __eRewardSkillExp == reward._type or __eRewardSkillExpGrade == reward._type then
       (uiSlot.count):SetText("")
       ;
       (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExp.dds")
@@ -617,7 +616,7 @@ local setReward = function(uiSlot, reward, index, questType)
       ;
       (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"SkillExp\", false, \"" .. questType .. "\", " .. index .. " )")
     else
-      if UI_RewardType.RewardType_ProductExp == reward._type then
+      if __eRewardLifeExp == reward._type then
         (uiSlot.count):SetText("")
         ;
         (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -626,7 +625,7 @@ local setReward = function(uiSlot, reward, index, questType)
         ;
         (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"ProductExp\", false, \"" .. questType .. "\", " .. index .. " )")
       else
-        if UI_RewardType.RewardType_Item == reward._type then
+        if __eRewardItem == reward._type then
           local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(reward._item))
           uiSlot:setItemByStaticStatus(itemStatic, reward._count)
           uiSlot._item = reward._item
@@ -643,7 +642,7 @@ local setReward = function(uiSlot, reward, index, questType)
           return reward._isEquipable
         else
           do
-            if UI_RewardType.RewardType_Intimacy == reward._type then
+            if __eRewardIntimacy == reward._type then
               (uiSlot.count):SetText(tostring(reward._value))
               ;
               (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/00000000_Special_Contributiveness.dds")
@@ -652,7 +651,7 @@ local setReward = function(uiSlot, reward, index, questType)
               ;
               (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip_ForQuestWidgetInfo( \"Intimacy\", false, \"" .. questType .. "\", " .. index .. " )")
             else
-              if UI_RewardType.RewardType_Knowledge == reward._type then
+              if __eRewardKnowledge == reward._type then
                 (uiSlot.count):SetText("")
                 ;
                 (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/00000000_know_icon.dds")

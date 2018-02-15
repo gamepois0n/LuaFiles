@@ -19,6 +19,10 @@ groupBg = {}
 channelSelectUIPool = {}
 , _selectChannel = -1, _channelUiMaxCount = 0, _serverCountInGroup = 0}
 channelSelect._mainDescBg = (UI.getChildControl)(channelSelect._mainDesc, "Static_ChannelSelectDescBG")
+local isCalpheon = ToClient_IsContentsGroupOpen("2")
+local isMedia = ToClient_IsContentsGroupOpen("3")
+local isValencia = ToClient_IsContentsGroupOpen("4")
+local isSiegeEnable = ToClient_IsContentsGroupOpen("21")
 local channelGroupCount = {}
 if isGameTypeKorea() then
   channelGroupCount = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 1; [0] = 5}
@@ -58,7 +62,7 @@ end
 
 local bgIndex = nil
 ChannelSelect_Init = function()
-  -- function num : 0_2 , upvalues : channelSelect, channelGroupCount, bgIndex, UI_PUCT, channelChildControl, channelMainDesc
+  -- function num : 0_2 , upvalues : channelSelect, channelGroupCount, bgIndex, UI_PUCT, channelChildControl, channelMainDesc, isCalpheon, isSiegeEnable, isMedia, isValencia
   local self = channelSelect
   local curChannelData = getCurrentChannelServerData()
   if curChannelData == nil then
@@ -202,9 +206,17 @@ ChannelSelect_Init = function()
         ;
         (channelMainDesc._serverDesc):SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
         ;
+        (channelMainDesc._serverDesc):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVERSELECT_CHANNELSELECTDESC"))
+        ;
         (channelMainDesc._pkTitle):SetShow(false)
         ;
         (channelMainDesc._pkDesc):SetShow(false)
+        ;
+        (channelMainDesc._siegeCalpheon):SetShow(false)
+        ;
+        (channelMainDesc._siegeMedia):SetShow(false)
+        ;
+        (channelMainDesc._siegeValencia):SetShow(false)
         local sizeControl = nil
         if isGameTypeSA() or isGameTypeTR() then
           (channelMainDesc._speedTitle):SetShow(false)
@@ -265,6 +277,24 @@ ChannelSelect_Init = function()
             end
           end
         end
+        if isCalpheon and isSiegeEnable then
+          (channelMainDesc._siegeCalpheon):SetShow(true)
+        else
+          ;
+          (channelMainDesc._siegeCalpheon):SetShow(false)
+        end
+        if isMedia and isSiegeEnable then
+          (channelMainDesc._siegeMedia):SetShow(true)
+        else
+          ;
+          (channelMainDesc._siegeMedia):SetShow(false)
+        end
+        if isValencia and isSiegeEnable then
+          (channelMainDesc._siegeValencia):SetShow(true)
+        else
+          ;
+          (channelMainDesc._siegeValencia):SetShow(false)
+        end
         ;
         (channelMainDesc._speedTitle):SetPosY((channelMainDesc._serverDesc):GetPosY() + (channelMainDesc._serverDesc):GetTextSizeY() + 15)
         ;
@@ -307,6 +337,15 @@ ChannelSelect_Init = function()
         (channelMainDesc._siegeValencia):SetPosY((channelMainDesc._siegeMedia):GetPosY() + 20)
         ;
         (channelMainDesc._scheduleTitle):SetPosY((channelMainDesc._siegeValencia):GetPosY() + 30)
+        if isCalpheon then
+          (channelMainDesc._scheduleTitle):SetPosY((channelMainDesc._siegeCalpheon):GetPosY() + 30)
+        end
+        if isMedia then
+          (channelMainDesc._scheduleTitle):SetPosY((channelMainDesc._siegeMedia):GetPosY() + 30)
+        end
+        if isValencia then
+          (channelMainDesc._scheduleTitle):SetPosY((channelMainDesc._siegeValencia):GetPosY() + 30)
+        end
         ;
         (channelMainDesc._scheduleSiege):SetPosY((channelMainDesc._scheduleTitle):GetPosY() + 20)
         ;

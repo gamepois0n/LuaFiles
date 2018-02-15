@@ -81,7 +81,7 @@ InitializeFairyIcon = function()
   -- function num : 0_1 , upvalues : FairyIcon
   Panel_Window_FairyIcon:SetIgnore(false)
   ;
-  (FairyIcon._icon):addInputEvent("Mouse_LUp", "PaGlobal_FairyList_Open()")
+  (FairyIcon._icon):addInputEvent("Mouse_LUp", "PaGlobal_FairyListNew_Open()")
   ;
   (FairyIcon._icon):ActiveMouseEventEffect(true)
   PaGlobal_Fairy_SetPosIcon()

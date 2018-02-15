@@ -84,7 +84,11 @@ PaGlobal_TutorialUiManager.loadAllUiSavedInfo = function(self)
   for key,value in pairs(self._uiPanelInfo) do
     local isShow = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_IsShow)
     if isShow ~= -1 then
-      key:SetShow(isShow)
+      if (CppEnums.PAGameUIType).PAGameUIPanel_RadarMap == value then
+        FGlobal_Panel_Radar_Show(true)
+      else
+        key:SetShow(isShow)
+      end
       local posX = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionX)
       local posY = ToClient_GetUiInfo(value, 0, (CppEnums.PanelSaveType).PanelSaveType_PositionY)
       local relativePosX = -1
@@ -243,7 +247,7 @@ PaGlobal_TutorialUiManager.showConditionalUi = function(self)
   else
     PvpMode_ShowButton(false)
   end
-  FGlobal_ResetRadarUI()
+  FGlobal_ResetRadarUI(false)
 end
 
 -- DECOMPILER ERROR at PC254: Confused about usage of register: R0 in 'UnsetPending'

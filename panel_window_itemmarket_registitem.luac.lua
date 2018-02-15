@@ -168,6 +168,9 @@ ItemMarketRegistItem.Update = function(self)
   if itemMaxPrice < recentPrice or recentPrice < itemMinPrice then
     (self.priceEdit):SetEditText(tostring(makeDotMoney(highAndLowAvgPrice)), true)
   end
+  if registItemCount == toInt64(0, 0) then
+    (self.priceEdit):SetEditText(tostring(makeDotMoney(itemMaxPrice)), true)
+  end
 end
 
 ItemMarketRegistItem.RegistDO = function(self)
@@ -520,9 +523,6 @@ FGlobal_ItemMarketRegistItem_Close = function(isItemMarketItemSet_Show)
     end
     if Panel_Window_Warehouse:GetShow() then
       Warehouse_Close()
-    end
-    if GetUIMode() ~= (Defines.UIMode).eUIMode_NpcDialog then
-      FGlobal_WarehouseOpenByMaid(0)
     end
     return 
   end

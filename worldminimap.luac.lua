@@ -6,148 +6,185 @@
 PaGlobal_WorldMiniMap = {
 _ui = {}
 , _panelSizeScale = false, _isRotate = false, _nodeWarRegionName = nil, _initialize = false}
--- DECOMPILER ERROR at PC10: Confused about usage of register: R0 in 'UnsetPending'
-
-PaGlobal_WorldMiniMap.InitWorldMiniMap = function(self)
+local swapRadar = function(radarType)
   -- function num : 0_0
-  if ToClient_IsDevelopment() then
-    ToClient_initializeWorldMiniMap()
-  else
-    return 
-  end
-  if Panel_WorldMiniMap ~= nil then
-    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
-    Panel_WorldMiniMap:SetPosY(30)
-    Panel_WorldMiniMap:SetShow(false)
-  end
-  -- DECOMPILER ERROR at PC35: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui).regionName = (UI.getChildControl)(Panel_WorldMiniMap, "StaticText_RegionName")
-  ;
-  ((self._ui).regionName):SetShow(true)
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui).regionNodeName = (UI.getChildControl)(Panel_WorldMiniMap, "StaticText_RegionNodeName")
-  ;
-  ((self._ui).regionNodeName):SetShow(true)
-  -- DECOMPILER ERROR at PC59: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui).regionWarName = (UI.getChildControl)(Panel_WorldMiniMap, "StaticText_RegionWarName")
-  ;
-  ((self._ui).regionWarName):SetShow(true)
-  PaGlobal_WorldMiniMap:setPositionRegionNameList()
-  -- DECOMPILER ERROR at PC74: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui).btn_changeScale = (UI.getChildControl)(Panel_WorldMiniMap, "Button_changeScale")
-  ;
-  ((self._ui).btn_changeScale):SetShow(true)
-  -- DECOMPILER ERROR at PC86: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui).btn_changeRadar = (UI.getChildControl)(Panel_WorldMiniMap, "Button_changeRadar")
-  ;
-  ((self._ui).btn_changeRadar):SetShow(true)
-  ;
-  ((self._ui).btn_changeScale):addInputEvent("Mouse_LUp", "PaGlobal_WorldMiniMap:changePanelSize()")
-  ;
-  ((self._ui).btn_changeRadar):addInputEvent("Mouse_LUp", "PaGlobal_changeRadarUI()")
-  -- DECOMPILER ERROR at PC110: Confused about usage of register: R1 in 'UnsetPending'
-
-  ;
-  (self._ui).static_selfPlayerArrow = (UI.getChildControl)(Panel_WorldMiniMap, "Static_SelfPlayerArrow")
-  ;
-  ((self._ui).static_selfPlayerArrow):SetShow(true)
-  ;
-  ((self._ui).static_selfPlayerArrow):SetSize(30, 26)
-  ;
-  ((self._ui).static_selfPlayerArrow):SetPosX()
-  ;
-  ((self._ui).static_selfPlayerArrow):ComputePos()
-  GLOBAL_CHECK_WORLDMINIMAP = false
-  if ToClient_isWorldMiniMapUse() then
-    PaGlobal_changeRadarUI()
-  else
-    GLOBAL_CHECK_WORLDMINIMAP = false
-  end
-  Panel_WorldMiniMap:RegisterUpdateFunc("Panel_WorldMiniMap_UpdatePerFrame")
-  registerEvent("selfPlayer_regionChanged", "worldMiniMap_updateRegion")
-  registerEvent("FromClint_EventChangedExplorationNode", "worldMiniMap_NodeLevelRegionNameShow")
-  registerEvent("FromClient_RClickedWorldMiniMap", "FromClient_RClickedWorldMiniMap")
-  registerEvent("FromClient_ChangeRadarRotateMode", "FromClient_SetRotateMode")
-  -- DECOMPILER ERROR at PC162: Confused about usage of register: R1 in 'UnsetPending'
-
-  PaGlobal_WorldMiniMap._initialize = true
-end
-
-PaGlobal_changeRadarUI = function()
-  -- function num : 0_1
-  if PaGlobal_WorldMiniMap._initialize == true then
-    ToClient_changeRadar()
-  end
-  if ToClient_getRadarType() == true then
-    GLOBAL_CHECK_WORLDMINIMAP = true
-    FGlobal_Panel_Radar_Show(false)
-    Panel_WorldMiniMap:SetShow(true)
+  if radarType == true then
     ToClient_setRadorUIPanel(Panel_WorldMiniMap)
-    ToClient_setRadorUIViewDistanceRate(7225)
-    ToCleint_InitializeRadarActorPool(1000)
     ToClient_updateCameraWorldMiniMap()
     setChangeUiSettingRadarUI(Panel_WorldMiniMap)
   else
-    GLOBAL_CHECK_WORLDMINIMAP = false
-    Panel_WorldMiniMap:SetShow(false)
-    FGlobal_Panel_Radar_Show(true)
     ToClient_setRadorUIPanel(Panel_Radar)
-    ToClient_setRadorUIViewDistanceRate(7225)
-    ToCleint_InitializeRadarActorPool(1000)
     setChangeUiSettingRadarUI(Panel_Radar)
+  end
+  ToClient_setRadarType(radarType)
+  ;
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap, radarType, (CppEnums.VariableStorageType).eVariableStorageType_User)
+  if radarType == true then
+    Panel_WorldMiniMap:SetShow(true)
+    Panel_Radar:SetShow(false)
+    FromClient_SetRotateMode(radarMap.isRotateMode)
+    FromClient_reSizeWorldMiniMap()
+  else
+    Panel_WorldMiniMap:SetShow(false)
+    Panel_Radar:SetShow(true)
+    setRotateRadarMode(radarMap.isRotateMode)
+    Panel_Radar:ComputePos()
   end
   local self = PaGlobal_WorldMiniMap
   self._panelSizeScale = true
   self:changePanelSize()
+  ToClient_SaveUiInfo(false)
 end
 
--- DECOMPILER ERROR at PC15: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobal_changeRadarUI = function()
+  -- function num : 0_1 , upvalues : swapRadar
+  GLOBAL_CHECK_WORLDMINIMAP = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap)
+  GLOBAL_CHECK_WORLDMINIMAP = not GLOBAL_CHECK_WORLDMINIMAP
+  swapRadar(GLOBAL_CHECK_WORLDMINIMAP)
+end
 
-PaGlobal_WorldMiniMap.changePanelSize = function(self)
+FromClient_SetRotateMode = function(isRotate)
   -- function num : 0_2
-  local miniMap = ToClient_getWorldMiniMapPanel()
-  if self._panelSizeScale == true then
-    miniMap:SetSize(300, 260)
-    Panel_WorldMiniMap:SetSize(300, 260)
-    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+  local self = PaGlobal_WorldMiniMap
+  local camRot = getCameraRotation()
+  local rot = 0
+  if isRotate == false then
+    rot = 0
   else
-    miniMap:SetSize(500, 460)
-    Panel_WorldMiniMap:SetSize(500, 460)
-    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    resetRadorActorListRotateValue()
+    rot = math.pi
   end
+  self._isRotate = isRotate
+  ;
+  ((self._ui).static_selfPlayerArrow):SetRotate(rot)
+  FGlobal_WorldMiniMap_GuildPinRotateMode(isRotate)
+end
+
+-- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_WorldMiniMap.resetPanelSize = function(self)
+  -- function num : 0_3
+  local miniMap = ToClient_getWorldMiniMapPanel()
+  local iconPath = "new_ui_common_forlua/Widget/Rader/Minimap_01.dds"
+  miniMap:SetSize(300, 260)
+  Panel_WorldMiniMap:SetSize(300, 260)
+  Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+  ;
+  ((self._ui).btn_changeScale):ChangeTextureInfoName(iconPath)
+  local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 157, 54, 182, 79)
+  ;
+  (((self._ui).btn_changeScale):getBaseTexture()):setUV(x1, y1, x2, y2)
+  ;
+  ((self._ui).btn_changeScale):setRenderTexture(((self._ui).btn_changeScale):getBaseTexture())
+  ;
+  ((self._ui).btn_changeScale):ChangeOnTextureInfoName(iconPath)
+  local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 184, 54, 208, 79)
+  ;
+  (((self._ui).btn_changeScale):getOnTexture()):setUV(x1, y1, x2, y2)
+  ;
+  ((self._ui).btn_changeScale):ChangeClickTextureInfoName(iconPath)
+  local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 209, 54, 234, 79)
+  ;
+  (((self._ui).btn_changeScale):getClickTexture()):setUV(x1, y1, x2, y2)
   ;
   ((self._ui).btn_changeScale):ComputePos()
   ;
   ((self._ui).static_selfPlayerArrow):ComputePos()
   PaGlobal_WorldMiniMap:setPositionRegionNameList()
-  self._panelSizeScale = not self._panelSizeScale
+  self._panelSizeScale = false
+  FGlobal_PersonalIcon_ButtonPosUpdate()
+  Panel_PlayerEndurance_Position()
+  Panel_HorseEndurance_Position()
+  Panel_ShipEndurance_Position()
+  Panel_CarriageEndurance_Position()
+end
+
+-- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_WorldMiniMap.changePanelSize = function(self)
+  -- function num : 0_4
+  local miniMap = ToClient_getWorldMiniMapPanel()
+  local iconPath = "new_ui_common_forlua/Widget/Rader/Minimap_01.dds"
+  if self._panelSizeScale == true then
+    miniMap:SetSize(300, 260)
+    Panel_WorldMiniMap:SetSize(300, 260)
+    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    ;
+    ((self._ui).btn_changeScale):ChangeTextureInfoName(iconPath)
+    local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 157, 54, 182, 79)
+    ;
+    (((self._ui).btn_changeScale):getBaseTexture()):setUV(x1, y1, x2, y2)
+    ;
+    ((self._ui).btn_changeScale):setRenderTexture(((self._ui).btn_changeScale):getBaseTexture())
+    ;
+    ((self._ui).btn_changeScale):ChangeOnTextureInfoName(iconPath)
+    local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 184, 54, 208, 79)
+    ;
+    (((self._ui).btn_changeScale):getOnTexture()):setUV(x1, y1, x2, y2)
+    ;
+    ((self._ui).btn_changeScale):ChangeClickTextureInfoName(iconPath)
+    local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 209, 54, 234, 79)
+    ;
+    (((self._ui).btn_changeScale):getClickTexture()):setUV(x1, y1, x2, y2)
+  else
+    do
+      miniMap:SetSize(500, 460)
+      Panel_WorldMiniMap:SetSize(500, 460)
+      Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+      ;
+      ((self._ui).btn_changeScale):ChangeTextureInfoName(iconPath)
+      local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 79, 54, 104, 79)
+      ;
+      (((self._ui).btn_changeScale):getBaseTexture()):setUV(x1, y1, x2, y2)
+      ;
+      ((self._ui).btn_changeScale):setRenderTexture(((self._ui).btn_changeScale):getBaseTexture())
+      ;
+      ((self._ui).btn_changeScale):ChangeOnTextureInfoName(iconPath)
+      local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 105, 54, 130, 79)
+      ;
+      (((self._ui).btn_changeScale):getOnTexture()):setUV(x1, y1, x2, y2)
+      ;
+      ((self._ui).btn_changeScale):ChangeClickTextureInfoName(iconPath)
+      do
+        local x1, y1, x2, y2 = setTextureUV_Func((self._ui).btn_changeScale, 131, 54, 156, 79)
+        ;
+        (((self._ui).btn_changeScale):getClickTexture()):setUV(x1, y1, x2, y2)
+        ;
+        ((self._ui).btn_changeScale):ComputePos()
+        ;
+        ((self._ui).static_selfPlayerArrow):ComputePos()
+        PaGlobal_WorldMiniMap:setPositionRegionNameList()
+        self._panelSizeScale = not self._panelSizeScale
+        FGlobal_PersonalIcon_ButtonPosUpdate()
+        Panel_PlayerEndurance_Position()
+        Panel_HorseEndurance_Position()
+        Panel_ShipEndurance_Position()
+        Panel_CarriageEndurance_Position()
+      end
+    end
+  end
+end
+
+-- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_WorldMiniMap.handleOnEvent = function(self, isOver)
+  -- function num : 0_5
+  ((self._ui).sequenceAni):SetShow(isOver)
 end
 
 PaGlobal_WorldMiniMap_luaLoadComplete = function()
-  -- function num : 0_3
+  -- function num : 0_6
   local self = PaGlobal_WorldMiniMap
-  if ToClient_IsDevelopment() then
+  if _ContentsGroup_3DMiniMapOpen == true then
     PaGlobal_WorldMiniMap:InitWorldMiniMap()
   else
     self._initialize = false
-  end
-  if Panel_WorldMiniMap ~= nil then
-    Panel_WorldMiniMap:SetShow(true)
+    return 
   end
 end
 
 worldMiniMap_updateRegion = function(regionData)
-  -- function num : 0_4
+  -- function num : 0_7
   local self = PaGlobal_WorldMiniMap
   ;
   ((self._ui).regionName):SetAutoResize(true)
@@ -224,7 +261,7 @@ worldMiniMap_updateRegion = function(regionData)
 end
 
 worldMiniMap_NodeLevelRegionNameShow = function(wayPointKey)
-  -- function num : 0_5
+  -- function num : 0_8
   local self = PaGlobal_WorldMiniMap
   local nodeName = ToClient_GetNodeNameByWaypointKey(wayPointKey)
   if nodeName == "" or nodeName == nil then
@@ -261,10 +298,10 @@ worldMiniMap_NodeLevelRegionNameShow = function(wayPointKey)
   end
 end
 
--- DECOMPILER ERROR at PC24: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC31: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_WorldMiniMap.setPositionRegionNameList = function(self)
-  -- function num : 0_6
+  -- function num : 0_9
   ((self._ui).regionName):SetPosX(5)
   ;
   ((self._ui).regionName):SetPosY(5)
@@ -286,32 +323,17 @@ PaGlobal_WorldMiniMap.setPositionRegionNameList = function(self)
   ((self._ui).regionWarName):ComputePos()
 end
 
-FromClient_SetRotateMode = function(isRotate)
-  -- function num : 0_7
-  local self = PaGlobal_WorldMiniMap
-  local camRot = getCameraRotation()
-  local rot = 0
-  if isRotate == false then
-    rot = 0
-  else
-    rot = math.pi
-  end
-  self._isRotate = isRotate
-  Panel_WorldMiniMap:SetParentRotCalc(isRotate)
-  ;
-  ((self._ui).static_selfPlayerArrow):SetRotate(rot)
-end
-
 Panel_WorldMiniMap_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_8
+  -- function num : 0_10
   local self = PaGlobal_WorldMiniMap
   if self._isRotate == false then
-    ((self._ui).static_selfPlayerArrow):SetRotate(getCameraRotation() + math.pi)
+    ((self._ui).static_selfPlayerArrow):SetRotate(getCameraRotation())
   end
+  FGlobal_WorldMiniMap_UpdateRadarPin()
 end
 
 FromClient_RClickedWorldMiniMap = function(position, clickActor)
-  -- function num : 0_9
+  -- function num : 0_11
   local self = PaGlobal_WorldMiniMap
   if ToClient_IsShowNaviGuideGroup(0) then
     ToClient_DeleteNaviGuideByGroup(0)
@@ -332,9 +354,197 @@ FromClient_RClickedWorldMiniMap = function(position, clickActor)
         return 
       end
       ToClient_WorldMapNaviStart(position, NavigationGuideParam(), false, true)
+      audioPostEvent_SystemUi(0, 14)
     end
   end
 end
 
+FromClient_worldMiniMapSetNameOfMouseOverIcon = function(actorProxyWrapper, targetUI, targetUIposX, targetUIposY)
+  -- function num : 0_12
+  local actorName = ""
+  if (actorProxyWrapper:get()):isNpc() then
+    if actorProxyWrapper:getCharacterTitle() ~= "" then
+      actorName = actorProxyWrapper:getName() .. " " .. actorProxyWrapper:getCharacterTitle()
+    else
+      actorName = actorProxyWrapper:getName()
+    end
+  else
+    if (actorProxyWrapper:get()):isHouseHold() then
+      actorName = getHouseHoldName(actorProxyWrapper:get())
+    else
+      do
+        if (actorProxyWrapper:get()):isPlayer() then
+          local playerActorProxyWrapper = getPlayerActor(actorProxyWrapper:getActorKey())
+          if playerActorProxyWrapper ~= nil and (playerActorProxyWrapper:get()):isVolunteer() then
+            return 
+          end
+        end
+        actorName = actorProxyWrapper:getName()
+        local self = PaGlobal_WorldMiniMap
+        targetUIposX = targetUI:GetPosX()
+        targetUIposY = targetUI:GetPosY()
+        ;
+        ((self._ui).static_overName):SetShow(true)
+        ;
+        ((self._ui).static_overName):SetText(actorName)
+        ;
+        ((self._ui).static_overName):SetSize(((self._ui).static_overName):GetTextSizeX() + 15, ((self._ui).static_overName):GetTextSizeY() + (((self._ui).static_overName):GetSpanSize()).y)
+        Panel_WorldMiniMap:SetChildIndex((self._ui).static_overName, 9999)
+        calcPosUseToTextUI(targetUIposX, targetUIposY, (self._ui).static_overName)
+        ;
+        ((self._ui).static_overName):SetDepth(-1000)
+      end
+    end
+  end
+end
+
+calcPosUseToTextUI = function(targetUIposX, targetUIposY, textUI)
+  -- function num : 0_13
+  if Panel_WorldMiniMap:GetSizeX() < targetUIposX + textUI:GetTextSizeX() then
+    textUI:SetPosX(Panel_WorldMiniMap:GetSizeX() - textUI:GetTextSizeX())
+  else
+    textUI:SetPosX(targetUIposX)
+  end
+  if targetUIposY - textUI:GetTextSizeY() < Panel_WorldMiniMap:GetPosY() then
+    textUI:SetPosY(Panel_WorldMiniMap:GetPosY())
+  else
+    textUI:SetPosY(targetUIposY - textUI:GetTextSizeY())
+  end
+end
+
+FromClient_worldMiniMapNameOff = function()
+  -- function num : 0_14
+  local self = PaGlobal_WorldMiniMap
+  if (self._ui).static_overName == nil then
+    return 
+  end
+  if ((self._ui).static_overName):GetShow() then
+    ((self._ui).static_overName):SetShow(false)
+  end
+end
+
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_WorldMiniMap.InitWorldMiniMap = function(self)
+  -- function num : 0_15 , upvalues : swapRadar
+  ToClient_initializeWorldMiniMap()
+  if Panel_WorldMiniMap ~= nil then
+    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    Panel_WorldMiniMap:SetPosY(30)
+    Panel_WorldMiniMap:SetShow(false)
+  end
+  -- DECOMPILER ERROR at PC29: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).regionName = (UI.getChildControl)(Panel_WorldMiniMap, "StaticText_RegionName")
+  ;
+  ((self._ui).regionName):SetShow(true)
+  -- DECOMPILER ERROR at PC41: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).regionNodeName = (UI.getChildControl)(Panel_WorldMiniMap, "StaticText_RegionNodeName")
+  ;
+  ((self._ui).regionNodeName):SetShow(true)
+  -- DECOMPILER ERROR at PC53: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).regionWarName = (UI.getChildControl)(Panel_WorldMiniMap, "StaticText_RegionWarName")
+  ;
+  ((self._ui).regionWarName):SetShow(true)
+  PaGlobal_WorldMiniMap:setPositionRegionNameList()
+  -- DECOMPILER ERROR at PC68: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).btn_changeScale = (UI.getChildControl)(Panel_WorldMiniMap, "Button_changeScale")
+  ;
+  ((self._ui).btn_changeScale):SetShow(true)
+  -- DECOMPILER ERROR at PC80: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).btn_changeRadar = (UI.getChildControl)(Panel_WorldMiniMap, "Button_changeRadar")
+  ;
+  ((self._ui).btn_changeRadar):SetShow(true)
+  -- DECOMPILER ERROR at PC92: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).sequenceAni = (UI.getChildControl)(Panel_WorldMiniMap, "Static_SequenceAni")
+  ;
+  ((self._ui).sequenceAni):SetShow(false)
+  -- DECOMPILER ERROR at PC101: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).minimap = ToClient_getWorldMiniMapPanel()
+  if (self._ui).minimap ~= nil then
+    ((self._ui).minimap):addInputEvent("Mouse_On", "PaGlobal_WorldMiniMap:handleOnEvent(true)")
+    ;
+    ((self._ui).minimap):addInputEvent("Mouse_Out", "PaGlobal_WorldMiniMap:handleOnEvent(false)")
+  end
+  ;
+  ((self._ui).btn_changeScale):addInputEvent("Mouse_LUp", "PaGlobal_WorldMiniMap:changePanelSize()")
+  ;
+  ((self._ui).btn_changeRadar):addInputEvent("Mouse_LUp", "PaGlobal_changeRadarUI()")
+  -- DECOMPILER ERROR at PC136: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).static_selfPlayerArrow = (UI.getChildControl)(Panel_WorldMiniMap, "Static_SelfPlayerArrow")
+  ;
+  ((self._ui).static_selfPlayerArrow):SetShow(true)
+  ;
+  ((self._ui).static_selfPlayerArrow):SetSize(25, 21)
+  ;
+  ((self._ui).static_selfPlayerArrow):SetPosX()
+  Panel_WorldMiniMap:SetChildIndex((self._ui).static_selfPlayerArrow, 9998)
+  ;
+  ((self._ui).static_selfPlayerArrow):SetDepth(-1000)
+  ;
+  ((self._ui).static_selfPlayerArrow):ComputePos()
+  -- DECOMPILER ERROR at PC173: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).static_overName = (UI.getChildControl)(Panel_WorldMiniMap, "Static_OverName")
+  GLOBAL_CHECK_WORLDMINIMAP = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap)
+  local selfPlayer = (getSelfPlayer()):get()
+  if ToClient_getTutorialLimitLevel() < selfPlayer:getLevel() then
+    swapRadar(GLOBAL_CHECK_WORLDMINIMAP)
+  else
+    GLOBAL_CHECK_WORLDMINIMAP = false
+    ToClient_setRadorUIPanel(Panel_Radar)
+    setChangeUiSettingRadarUI(Panel_Radar)
+    ToClient_setRadarType(GLOBAL_CHECK_WORLDMINIMAP)
+    ;
+    (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap, GLOBAL_CHECK_WORLDMINIMAP, (CppEnums.VariableStorageType).eVariableStorageType_User)
+    ToClient_SaveUiInfo(false)
+  end
+  Panel_WorldMiniMap:RegisterUpdateFunc("Panel_WorldMiniMap_UpdatePerFrame")
+  registerEvent("selfPlayer_regionChanged", "worldMiniMap_updateRegion")
+  registerEvent("FromClint_EventChangedExplorationNode", "worldMiniMap_NodeLevelRegionNameShow")
+  registerEvent("FromClient_RClickedWorldMiniMap", "FromClient_RClickedWorldMiniMap")
+  registerEvent("FromClient_ChangeRadarRotateMode", "FromClient_SetRotateMode")
+  -- DECOMPILER ERROR at PC242: Confused about usage of register: R2 in 'UnsetPending'
+
+  PaGlobal_WorldMiniMap._initialize = true
+end
+
+FromClient_reSizeWorldMiniMap = function()
+  -- function num : 0_16
+  if PaGlobal_WorldMiniMap._initialize == true and Panel_WorldMiniMap:GetShow() then
+    Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
+    Panel_WorldMiniMap:ComputePos()
+  end
+end
+
+FGlobal_Panel_WorldMiniMapPosX = function()
+  -- function num : 0_17
+  return Panel_WorldMiniMap:GetPosX()
+end
+
+FGlobal_Panel_WorldMiniMapPosY = function()
+  -- function num : 0_18
+  return Panel_WorldMiniMap:GetPosY()
+end
+
 registerEvent("FromClient_luaLoadComplete", "PaGlobal_WorldMiniMap_luaLoadComplete")
+registerEvent("FromClient_worldMiniMapNameOff", "FromClient_worldMiniMapNameOff")
+registerEvent("FromClient_worldMiniMapSetNameOfMouseOverIcon", "FromClient_worldMiniMapSetNameOfMouseOverIcon")
+registerEvent("onScreenResize", "FromClient_reSizeWorldMiniMap")
 

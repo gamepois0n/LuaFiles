@@ -3,18 +3,43 @@
 
 -- params : ...
 -- function num : 0
-reportTroll = function(userNo, forced)
+CreateAllStar = function()
   -- function num : 0_0
-  ToClient_SavageDefenceReportTroll(userNo, forced)
+  ToClient_createAllStar()
+end
+
+GetAllStar = function()
+  -- function num : 0_1
+  ToClient_getAllStarGuildList()
+end
+
+GetAllReq = function()
+  -- function num : 0_2
+  ToClient_getAllStarRequestList()
+end
+
+preq = function()
+  -- function num : 0_3
+  ToClient_joinAllStar(0, false)
+end
+
+greq = function()
+  -- function num : 0_4
+  ToClient_joinAllStar(0, true)
+end
+
+allact = function()
+  -- function num : 0_5
+  ToClient_acceptAllStar(0)
 end
 
 testCreate = function()
-  -- function num : 0_1
+  -- function num : 0_6
   ToClient_qaCreateItem(10010, 15, 1)
 end
 
 workerready = function(level)
-  -- function num : 0_2
+  -- function num : 0_7
   ToClient_qaCreateItem(64204, 0, 1)
   ToClient_qaCreateItem(64205, 0, 1)
   ToClient_qaCreateItem(64206, 0, 1)
@@ -37,7 +62,7 @@ workerready = function(level)
 end
 
 runAutoFrameCheck = function()
-  -- function num : 0_3
+  -- function num : 0_8
   FGlobal_AutoFrameCheck_setMinFrame(25)
   FGlobal_setAutoFrameCheckRepeat(true)
   FGlobal_AutoFrameCheck_addPositionList(100, 100, 100)
@@ -46,7 +71,7 @@ end
 
 local UI_CT = CppEnums.ClassType
 BeHero = function()
-  -- function num : 0_4
+  -- function num : 0_9
   ToClient_qaCreateItem(9693, 0, 10)
   ToClient_qaCreateItem(793, 0, 20)
   ToClient_qaCreateItem(45220, 0, 1)
@@ -67,7 +92,7 @@ BeHero = function()
 end
 
 WarReady = function(enchantLeve1)
-  -- function num : 0_5
+  -- function num : 0_10
   createBuffItem(enchantLeve1)
   createBossWeapon(enchantLeve1)
   createBossArmor(enchantLeve1)
@@ -75,7 +100,7 @@ WarReady = function(enchantLeve1)
 end
 
 createBuffItem = function(enchantLevel)
-  -- function num : 0_6
+  -- function num : 0_11
   ToClient_qaCreateItem(65487, 0, 1)
   ToClient_qaCreateItem(65488, 0, 1)
   ToClient_qaCreateItem(65489, 0, 1)
@@ -88,7 +113,7 @@ createBuffItem = function(enchantLevel)
 end
 
 createBossWeapon = function(enchantLeve1)
-  -- function num : 0_7 , upvalues : UI_CT
+  -- function num : 0_12 , upvalues : UI_CT
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -303,6 +328,21 @@ createBossWeapon = function(enchantLeve1)
                                 ToClient_qaCreateItem(185, 0, 1)
                                 ToClient_qaCreateItem(186, 0, 1)
                                 ToClient_qaCreateItem(594, 0, 200)
+                              else
+                                if isClassType == UI_CT.ClassType_Lahn then
+                                  ToClient_qaCreateItem(13410, enchantLeve1, 1)
+                                  ToClient_qaCreateItem(13538, enchantLeve1, 1)
+                                  ToClient_qaCreateItem(13540, enchantLeve1, 1)
+                                  ToClient_qaCreateItem(550502, enchantLeve1, 1)
+                                  ToClient_qaLevelUp(60)
+                                  ToClient_qaConditionCompleteQuest()
+                                  ToClient_qaCompleteQuest(345, 5)
+                                  ToClient_qaCompleteQuest(653, 6)
+                                  ToClient_qaCreateItem(184, 0, 1)
+                                  ToClient_qaCreateItem(185, 0, 1)
+                                  ToClient_qaCreateItem(186, 0, 1)
+                                  ToClient_qaCreateItem(594, 0, 200)
+                                end
                               end
                             end
                           end
@@ -321,7 +361,7 @@ createBossWeapon = function(enchantLeve1)
 end
 
 createBossArmor = function(enchantLevel)
-  -- function num : 0_8
+  -- function num : 0_13
   ToClient_qaCreateItem(11013, enchantLevel, 1)
   ToClient_qaCreateItem(11101, enchantLevel, 1)
   ToClient_qaCreateItem(11015, enchantLevel, 1)
@@ -331,7 +371,7 @@ createBossArmor = function(enchantLevel)
 end
 
 createAccessory = function(enchantLeve1)
-  -- function num : 0_9
+  -- function num : 0_14
   if enchantLeve1 == 16 then
     ToClient_qaCreateItem(12230, 0, 1)
     ToClient_qaCreateItem(12031, 0, 2)

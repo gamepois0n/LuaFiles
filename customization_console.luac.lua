@@ -60,7 +60,9 @@ Add_CustomizationUIControl = function(panelindex, groupindex, x, y, xcount, ycou
   -- function num : 0_5 , upvalues : customPanel
   if (CppEnums.CountryType).DEV == getGameServiceType() then
     local group = (customPanel[panelindex]):getConsoleUIGroup(groupindex)
-    group:addControl(x, y, xcount, ycount, control)
+    if group ~= nil then
+      group:addControl(x, y, xcount, ycount, control)
+    end
   end
 end
 

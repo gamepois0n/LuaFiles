@@ -1214,6 +1214,7 @@ DailyStamp_ShowToggle = function(showType)
     dailyStamp:TapInit()
   end
   if dailyStampCount <= 0 then
+    PcRoomNotify_FirstUsePearl_Open()
     return 
   end
   local self = dailyStamp

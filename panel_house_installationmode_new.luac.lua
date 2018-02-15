@@ -225,10 +225,8 @@ PaGlobal_HouseInstallation.setScroll = function(self)
   if interval < 0 then
     interval = 0
   end
-  self._maxInterval = interval
+  self._maxInterval = totalLine - self._maxSlotCount / countByline
   self._nowInterval = 0
-  ;
-  (((self._ui)._itemList)._scroll):SetInterval(self._maxInterval)
   local viewLine = self._maxSlotCount / countByline
   local pagePercent = viewLine / totalLine * 100
   local scrollSizeY = (((self._ui)._itemList)._scroll):GetSizeY()
@@ -241,6 +239,8 @@ PaGlobal_HouseInstallation.setScroll = function(self)
   end
   ;
   (((self._ui)._itemList)._scrollCTRLBTN):SetSize((((self._ui)._itemList)._scrollCTRLBTN):GetSizeX(), btn_scrollSizeY)
+  ;
+  (((self._ui)._itemList)._scroll):SetInterval(self._maxInterval)
 end
 
 -- DECOMPILER ERROR at PC217: Confused about usage of register: R5 in 'UnsetPending'
@@ -711,7 +711,11 @@ PaGlobal_HouseInstallation.houseInstall_Reset = function(self)
         localfunctionYes = installed_Delete_All
         localfunctionCancle = MessageBox_Empty_function
       else
-        localcontent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_5", "count", installedCount) .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_6")
+        if self._houseInstallationMode == true then
+          localcontent = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_5", "count", installedCount) .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_HOUSING_INSTALLMODE_WITHDRAW_6")
+        else
+          localcontent = PAGetString(Defines.StringSheet_GAME, "LUA_HOUSE_INSTALLATIONMODE_TOOLTIP_RESET_DESC")
+        end
         localfunctionYes = installed_Delete_All
         localfunctionCancle = MessageBox_Empty_function
       end
@@ -896,7 +900,7 @@ PaGlobal_HouseInstallation.updateScroll = function(self, isDown)
   local max = self._maxInterval
   local now = self._nowInterval
   if isDown == true then
-    if now < max - 2 then
+    if now < max then
       now = now + 1
       ;
       (((self._ui)._itemList)._scroll):ControlButtonDown()
@@ -1501,13 +1505,13 @@ end
 HandleClicked_HouseInstallation_Exit_ByAttacked = function()
   -- function num : 0_42
   if housing_isBuildMode() or housing_isInstallMode() then
-    HouseInstallation:close()
+    PaGlobal_HouseInstallation:close()
   end
 end
 
 HouseInstallation_Hide = function()
   -- function num : 0_43
-  HouseInstallation:close()
+  PaGlobal_HouseInstallation:close()
 end
 
 -- DECOMPILER ERROR at PC323: Confused about usage of register: R5 in 'UnsetPending'

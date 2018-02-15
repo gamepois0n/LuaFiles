@@ -527,6 +527,8 @@ PaGlobal_Enchant.initialize = function(self)
   registerEvent("FromClient_UpdateEnchantFailCount", "FromClient_UpdateEnchantFailCount")
   registerEvent("onScreenResize", "OnScreenEvent")
   Panel_Window_Enchant:RegisterUpdateFunc("UpdateFunc_checkAnimation")
+  ;
+  ((self._ui)._radiobutton_CronEnchantTab):SetShow(self._isCronEnchantOpen)
 end
 
 -- DECOMPILER ERROR at PC1334: Confused about usage of register: R0 in 'UnsetPending'
@@ -556,6 +558,9 @@ PaGlobal_Enchant.init_EnchantFrame = function(self)
   self:setText_NumOfCron(0, 0)
   self:setAsEnchantButton()
   self:showDifficultEnchantButton(false)
+  if not self._isContentsEnable then
+    ((self._ui)._useCronIcon):SetShow(false)
+  end
 end
 
 -- DECOMPILER ERROR at PC1337: Confused about usage of register: R0 in 'UnsetPending'
@@ -727,6 +732,10 @@ end
 
 PaGlobal_Enchant.setEnable_CheckboxUseCron = function(self, isEnable)
   -- function num : 0_14
+  if not self._isContentsEnable then
+    isEnable = false
+  end
+  ;
   ((self._ui)._checkbox_UseCron):SetIgnore(not isEnable)
   ;
   ((self._ui)._checkbox_UseCron):SetMonoTone(not isEnable)
@@ -1377,18 +1386,38 @@ PaGlobal_Enchant.showEnchantResultText = function(self, resultType, mainSlotNo, 
   -- function num : 0_49
   if resultType == (self._enum_EnchantResult)._success then
     ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_0"))
+    ;
+    ((self._ui)._statictext_EnchantResult):EraseAllEffect()
+    ;
+    ((self._ui)._statictext_EnchantResult):AddEffect("UI_QustComplete01", false, 0, 0)
   else
     if resultType == (self._enum_EnchantResult)._fail then
       ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_1"))
+      ;
+      ((self._ui)._statictext_EnchantResult):EraseAllEffect()
+      ;
+      ((self._ui)._statictext_EnchantResult):AddEffect("fUI_Enchant_Fail", false, 0, 0)
     else
       if resultType == (self._enum_EnchantResult)._broken then
         ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_2"))
+        ;
+        ((self._ui)._statictext_EnchantResult):EraseAllEffect()
+        ;
+        ((self._ui)._statictext_EnchantResult):AddEffect("fUI_Enchant_Fail", false, 0, 0)
       else
         if resultType == (self._enum_EnchantResult)._gradedown then
           ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_3"))
+          ;
+          ((self._ui)._statictext_EnchantResult):EraseAllEffect()
+          ;
+          ((self._ui)._statictext_EnchantResult):AddEffect("fUI_Enchant_Fail", false, 0, 0)
         else
           if resultType == (self._enum_EnchantResult)._failAndPrevent then
             ((self._ui)._statictext_EnchantResult):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_RESULT_4"))
+            ;
+            ((self._ui)._statictext_EnchantResult):EraseAllEffect()
+            ;
+            ((self._ui)._statictext_EnchantResult):AddEffect("fUI_Enchant_Fail", false, 0, 0)
           end
         end
       end
@@ -1396,10 +1425,6 @@ PaGlobal_Enchant.showEnchantResultText = function(self, resultType, mainSlotNo, 
   end
   ;
   ((self._ui)._statictext_EnchantResult):SetShow(true)
-  ;
-  ((self._ui)._statictext_EnchantResult):EraseAllEffect()
-  ;
-  ((self._ui)._statictext_EnchantResult):AddEffect("UI_QustComplete01", false, 0, 0)
   self._resultFlag = true
   self._resultTimeCheck = true
   self:showEffectByResult(resultType, mainSlotNo, mainWhereType)
@@ -1420,6 +1445,11 @@ PaGlobal_Enchant.showEffectByResult = function(self, resultType, mainSlotNo, mai
         ;
         (((self._ui)._slot_TargetItem).icon):AddEffect("UI_ItemEnchant01", false, -6, -6)
       end
+    end
+  else
+    do
+      ;
+      (((self._ui)._slot_TargetItem).icon):AddEffect("", false, -6, -6)
     end
   end
 end

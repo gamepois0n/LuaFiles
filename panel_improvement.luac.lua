@@ -284,7 +284,7 @@ Improvement_Tooltip = function(isShow, slotType)
     return 
   end
   if isShow then
-    Panel_Tooltip_Item_Show(itemWrapper, uiBase, false, true)
+    Panel_Tooltip_Item_Show(itemWrapper, uiBase, false, true, nil, nil, nil, nil, "Improve", slotNo)
   else
     Panel_Tooltip_Item_hideTooltip()
   end

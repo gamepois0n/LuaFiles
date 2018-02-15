@@ -48,12 +48,14 @@ _Web:SetHorizonCenter()
 _Web:SetPosY(50)
 _Web:SetSize(322, 407)
 _Web:ResetUrl()
-PaGlobal_Panel_SaveSetting_Show = function()
+PaGlobal_Panel_SaveSetting_Show = function(ignoreRollBack)
   -- function num : 0_2 , upvalues : _Web
   Panel_SaveSetting:SetShow(true, true)
   Panel_SaveSetting:SetPosX(getScreenSizeX() / 2 - Panel_SaveSetting:GetSizeX() / 2)
   Panel_SaveSetting:SetPosY(getScreenSizeY() / 2 - Panel_SaveSetting:GetSizeY() / 2)
-  GameOption_Cancel()
+  if ignoreRollBack == false then
+    GameOption_Cancel()
+  end
   local myUserNo = ((getSelfPlayer()):get()):getUserNo()
   local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
   local temporaryWrapper = getTemporaryInformationWrapper()
@@ -83,13 +85,8 @@ PaGlobal_Panel_SaveSetting_Hide = function()
   _Web:ResetUrl()
 end
 
-PaGlobal_Panel_SaveSetting_Open = function()
-  -- function num : 0_5
-  PaGlobal_Panel_SaveSetting_Show()
-end
-
 PaGlobal_Panel_SaveSetting_PopUp_ShowIconToolTip = function(isShow)
-  -- function num : 0_6 , upvalues : checkPopUp
+  -- function num : 0_5 , upvalues : checkPopUp
   if isShow then
     local name = PAGetString(Defines.StringSheet_GAME, "LUA_POPUI_TOOLTIP_NAME")
     local desc = ""
@@ -107,7 +104,7 @@ PaGlobal_Panel_SaveSetting_PopUp_ShowIconToolTip = function(isShow)
 end
 
 PaGlobal_Panel_SaveSetting_WebCall_CheckSafetyzone = function()
-  -- function num : 0_7
+  -- function num : 0_6
   local selfPlayer = getSelfPlayer()
   if selfPlayer == nil then
     return 
@@ -118,7 +115,7 @@ PaGlobal_Panel_SaveSetting_WebCall_CheckSafetyzone = function()
 end
 
 FromClient_OpenExplorer_SaveGameOption = function(title, defaultName, paramList)
-  -- function num : 0_8 , upvalues : _Web
+  -- function num : 0_7 , upvalues : _Web
   local paramCount = 0
   local subNameStringBDC = ""
   for key,value in pairs(paramList) do
@@ -138,7 +135,7 @@ FromClient_OpenExplorer_SaveGameOption = function(title, defaultName, paramList)
 end
 
 FromClient_OnDownloadFromWeb_loadGameOption = function(path, filename)
-  -- function num : 0_9
+  -- function num : 0_8
   if (string.find)(filename, ".bdcp", -5) == nil then
     return 
   end
@@ -147,13 +144,13 @@ FromClient_OnDownloadFromWeb_loadGameOption = function(path, filename)
 end
 
 FromClient_applyGameOptionEnd = function()
-  -- function num : 0_10
+  -- function num : 0_9
   chatting_sendMessage("", PAGetString(Defines.StringSheet_GAME, "LUA_SAVESETTING_APPLYCOMPLETE"), (CppEnums.ChatType).System)
   UiSet_update()
 end
 
 FromClient_NotifyMessageAboutSaveSetting = function()
-  -- function num : 0_11
+  -- function num : 0_10
   local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_GAMEOPTION_ISOPTIONVARIABLEACTION_MEMO")
   local messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_ALERT_NOTIFICATIONS"), content = messageBoxMemo, functionYes = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;

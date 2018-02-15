@@ -71,6 +71,7 @@ PcRoomNotify_FirstUsePearl_Open = function()
       if isSvc == 5 or isSvc == 6 then
         url = PAGetString(Defines.StringSheet_GAME, "LUA_PCROOMNOTIFY_URL")
       else
+        EventNotify_Open()
         return 
       end
     end

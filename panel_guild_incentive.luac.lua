@@ -470,7 +470,7 @@ Panel_Guild_Incentive_Foundation_Update = function()
   end
   local businessFunds = myGuildListInfo:getGuildBusinessFunds_s64()
   local businessFunds10 = businessFunds * toInt64(0, 10) / toInt64(0, 100)
-  local businessFunds30 = businessFunds * toInt64(0, 30) / toInt64(0, 100)
+  local businessFunds30 = businessFunds * toInt64(0, 40) / toInt64(0, 100)
   ;
   (self._txt_Founds):SetText(PAGetStringParam3(Defines.StringSheet_GAME, "LUA_GUILD_INCENTIVE_FOUNDATION_RANGEOFMONEY", "businessFunds", makeDotMoney(businessFunds), "businessFunds10", makeDotMoney(businessFunds10), "businessFunds30", makeDotMoney(businessFunds30)))
   ;
@@ -486,7 +486,7 @@ Panel_Guild_Incentive_Foundation_MainShowToggle = function()
   end
   local businessFunds = myGuildListInfo:getGuildBusinessFunds_s64()
   local businessFunds10 = businessFunds * toInt64(0, 10) / toInt64(0, 100)
-  local businessFunds30 = businessFunds * toInt64(0, 30) / toInt64(0, 100)
+  local businessFunds30 = businessFunds * toInt64(0, 40) / toInt64(0, 100)
   local editMoney = tonumber64((string.gsub)((self._edit_MoneyValue):GetEditText(), ",", ""))
   if editMoney < businessFunds10 or businessFunds30 < editMoney then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILD_INCENTIVE_FOUNDATION_RANGEOFMONEY_ALERT"))
@@ -514,7 +514,7 @@ Panel_Guild_Incentive_Foundation_Editing = function()
   end
   local businessFunds = myGuildListInfo:getGuildBusinessFunds_s64()
   local businessFunds10 = businessFunds * toInt64(0, 10) / toInt64(0, 100)
-  local businessFunds30 = businessFunds * toInt64(0, 30) / toInt64(0, 100)
+  local businessFunds30 = businessFunds * toInt64(0, 40) / toInt64(0, 100)
   Panel_NumberPad_Show(true, businessFunds30, nil, Panel_Guild_Incentive_Foundation_ConfirmFunction)
 end
 

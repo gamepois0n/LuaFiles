@@ -707,13 +707,13 @@ ToClient_CashCumaBuy_Confirm_Do = function()
     ToClient_InGameSaveCustomizationData(false, (CashCustomizationData[self.SelectedItemNo]).slotNo, (CashCustomizationData[self.SelectedItemNo]).itemWhereType)
   else
     if CashCumaBuy.ApplyType == "goods" then
-      (getIngameCashMall()):requestBuyItem((CashCustomizationData[self.SelectedItemNo]).productNo, 1, (CashCustomizationData[self.SelectedItemNo]).pearlPrice, (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_UiUpdate, toInt64(0, -1), 0)
+      (getIngameCashMall()):requestBuyItem((CashCustomizationData[self.SelectedItemNo]).productNo, 1, (CashCustomizationData[self.SelectedItemNo]).pearlPrice, (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_UiUpdate, toInt64(0, -1), 0, 0)
     else
       if CashCumaBuy.ApplyType == "pearl" then
-        (getIngameCashMall()):requestBuyItem((CashCustomizationData[self.SelectedItemNo]).productNo, 1, (CashCustomizationData[self.SelectedItemNo]).cashPrice, (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_UiUpdate, toInt64(0, -1), 0)
+        (getIngameCashMall()):requestBuyItem((CashCustomizationData[self.SelectedItemNo]).productNo, 1, (CashCustomizationData[self.SelectedItemNo]).cashPrice, (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_UiUpdate, toInt64(0, -1), 0, 0)
       else
         ;
-        (getIngameCashMall()):requestBuyItem((CashCustomizationData[self.SelectedItemNo]).productNo, 1, (CashCustomizationData[self.SelectedItemNo]).pearlPrice, (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_ImmediatelyUse, toInt64(0, -1), 0)
+        (getIngameCashMall()):requestBuyItem((CashCustomizationData[self.SelectedItemNo]).productNo, 1, (CashCustomizationData[self.SelectedItemNo]).pearlPrice, (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_ImmediatelyUse, toInt64(0, -1), 0, 0)
       end
     end
   end
@@ -767,4 +767,11 @@ FromClient_NotifyCustomizingChange = function()
 end
 
 registerEvent("FromClient_NotifyCustomizingChange", "FromClient_NotifyCustomizingChange")
+FGlobal_CashCustomization_ConsoleAdd = function()
+  -- function num : 0_21 , upvalues : CashCustomization
+  Add_CustomizationUIGroup(0, 4, (CppEnums.PA_CONSOLE_UI_CONTROL_TYPE).eCONSOLE_UI_CONTROL_TYPE_NOTEVENT, true)
+  Add_CustomizationUIControl(0, 4, 0, 0, 1, 2, CashCustomization.BTN_Apply)
+  Add_CustomizationUIControl(0, 4, 0, 1, 1, 2, CashCustomization.BTN_Close)
+end
+
 

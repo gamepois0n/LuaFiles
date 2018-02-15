@@ -74,6 +74,7 @@ FGlobal_Panel_CompetitionGame_GuildReservation_Open = function()
   local isGuildLeader = isGuildMaster or isGuildSubMaster
   FGlobal_RefreshReservationInfo()
   Panel_CompetitionGame_GuildReservation:SetShow(true)
+  Panel_CompetitionGame_GuildReservation:SetPosX(Panel_CompetitionGame_JoinDesc:GetPosX() + Panel_CompetitionGame_JoinDesc:GetSizeX() + 10, Panel_CompetitionGame_JoinDesc:GetPosY())
 end
 
 FGlobal_Panel_CompetitionGame_GuildReservation_Close = function()

@@ -507,6 +507,8 @@ show_HouseSelectedAni_bySellBuy = function()
     local HouseBtn = ToClient_findHouseButtonByKey(HouseKey)
     if HouseBtn ~= nil then
       local selectedAni = HouseBtn:FromClient_getSelectedAni()
+      selectedAni:SetHorizonCenter()
+      selectedAni:SetVerticalMiddle()
       selectedAni:SetShow(true)
     end
   end
@@ -567,15 +569,17 @@ end
 
 local checkControl, currentIdx, currentIndex = nil, nil, nil
 HandleOn_ListValueButton = function(idx, isValue)
-  -- function num : 0_18 , upvalues : checkControl, param_Scroll, House_List, currentIdx, currentIndex
+  -- function num : 0_18 , upvalues : checkControl, param_Scroll, House_List, currentIndex, currentIdx
   checkControl = isValue
   local index = param_Scroll._offsetIndex + idx
-  local HouseKey = (House_List[index])._Key
-  local indexKey = housing_getHouseIndexByCharacterKey(HouseKey) + 1
-  local HouseBtn = ToClient_findHouseButtonByKey(HouseKey)
-  FromClient_OnWorldMapHouse(HouseBtn)
-  currentIdx = idx
-  currentIndex = indexKey
+  if House_List[index] ~= nil then
+    local HouseKey = (House_List[index])._Key
+    local indexKey = housing_getHouseIndexByCharacterKey(HouseKey) + 1
+    local HouseBtn = ToClient_findHouseButtonByKey(HouseKey)
+    FromClient_OnWorldMapHouse(HouseBtn)
+    currentIndex = indexKey
+    currentIdx = idx
+  end
 end
 
 HandleOut_ListValueButton = function(idx, isValue)

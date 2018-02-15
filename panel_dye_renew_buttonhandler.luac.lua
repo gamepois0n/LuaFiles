@@ -225,7 +225,7 @@ HandleClicked_OnOut_ShowEquipItemToolTip = function(isShow, equipSlotNo, slotIdx
   if isShow == true then
     local itemWrapper = ToClient_RequestGetDyeingTargetItemWrapper(equipSlotNo)
     local SlotIcon = ((self._arrEquipSlotItem)[slotIdx]).icon
-    Panel_Tooltip_Item_Show(itemWrapper, SlotIcon, false, true)
+    Panel_Tooltip_Item_Show(itemWrapper, SlotIcon, false, true, nil, nil, nil, nil, "Dye", equipSlotNo)
   else
     do
       Panel_Tooltip_Item_hideTooltip()
@@ -246,6 +246,19 @@ HandleClicked_LUp_SelectEquipItem = function(equipSlotNo, equipSlotIndex)
   end
   self._selected_EquipSlotNo = equipSlotNo
   ToClient_RequestSelectedEquipItem(equipSlotNo)
+  local checkButton_ToggleAwakenWeapon = (UI.getChildControl)(Panel_Dye_ReNew, "CheckButton_AwakenWeapon")
+  -- DECOMPILER ERROR at PC50: Unhandled construct in 'MakeBoolean' P1
+
+  -- DECOMPILER ERROR at PC50: Unhandled construct in 'MakeBoolean' P1
+
+  if checkButton_ToggleAwakenWeapon:GetShow() == true and (equipSlotNo == 0 or equipSlotNo == 1 or equipSlotNo == 18 or equipSlotNo == 19) and PaGlobal_DyeReNew_GetAwakenWeapon() == true then
+    HandleClicked_DyeReNew_SetAwakenWeapon()
+    checkButton_ToggleAwakenWeapon:SetCheck(false)
+  end
+  if (equipSlotNo == 29 or equipSlotNo == 30) and PaGlobal_DyeReNew_GetAwakenWeapon() == false then
+    HandleClicked_DyeReNew_SetAwakenWeapon()
+    checkButton_ToggleAwakenWeapon:SetCheck(true)
+  end
   self._nowClickPartId = -1
   self._nowClickPartSlotId = -1
   self:Reset_Part(true)
@@ -509,15 +522,21 @@ HandleClicked_DyeReNew_SetFaceGuard = function()
   ToClient_RequestHideBattleHelmet(self._bOpenFaceGuard)
 end
 
-HandleClicked_DyeReNew_SetAwakenWeapon = function()
+PaGlobal_DyeReNew_GetAwakenWeapon = function()
   -- function num : 0_24
+  local self = FGlobal_DyeReNew_GetInstance()
+  return self._bShowAwakenWeapon
+end
+
+HandleClicked_DyeReNew_SetAwakenWeapon = function()
+  -- function num : 0_25
   local self = FGlobal_DyeReNew_GetInstance()
   self._bShowAwakenWeapon = not self._bShowAwakenWeapon
   ToClient_SetAwakenWeaponShow(self._bShowAwakenWeapon)
 end
 
 HandleOver_DyeReNew_SimpleTooltipCheckbutton = function(isShow, tipType)
-  -- function num : 0_25 , upvalues : enToggleIndex
+  -- function num : 0_26 , upvalues : enToggleIndex
   local name, desc, control = nil, nil, nil
   if enToggleIndex.Underwear == tipType then
     name = PAGetString(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_SETEQUIP_SHOWUNDERWEAR")
@@ -562,7 +581,7 @@ HandleOver_DyeReNew_SimpleTooltipCheckbutton = function(isShow, tipType)
 end
 
 HandleClicked_DeyReNew_DoDye = function()
-  -- function num : 0_26 , upvalues : dyePartString
+  -- function num : 0_27 , upvalues : dyePartString
   local self = FGlobal_DyeReNew_GetInstance()
   local _dyePartString = ""
   local equipSlotNo = self._selected_EquipSlotNo
@@ -575,18 +594,18 @@ HandleClicked_DeyReNew_DoDye = function()
     return 
   end
   local noAction = function()
-    -- function num : 0_26_0
+    -- function num : 0_27_0
     return 
   end
 
   local doDye = function()
-    -- function num : 0_26_1 , upvalues : self
+    -- function num : 0_27_1 , upvalues : self
     ToClient_RequestDye(self._isPearlPalette)
     FGlobal_Panel_DyeReNew_Hide()
   end
 
   local askDoDye = function()
-    -- function num : 0_26_2 , upvalues : _dyePartString, doDye, noAction
+    -- function num : 0_27_2 , upvalues : _dyePartString, doDye, noAction
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
     local messageBoxMemo = PAGetStringParam1(Defines.StringSheet_GAME, "PANEL_DYENEW_SURE_DYE_THIS_PART", "partString", _dyePartString)
     local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = doDye, functionNo = noAction, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -596,7 +615,7 @@ HandleClicked_DeyReNew_DoDye = function()
   end
 
   local alreadyPearlDye = function()
-    -- function num : 0_26_3 , upvalues : askDoDye, noAction
+    -- function num : 0_27_3 , upvalues : askDoDye, noAction
     local messageBoxTitle = PAGetString(Defines.StringSheet_GAME, "LUA_ALERT_DEFAULT_TITLE")
     local messageBoxMemo = PAGetString(Defines.StringSheet_GAME, "LUA_DYENEW_ALREADY_PEARLCOLOR")
     local messageBoxData = {title = messageBoxTitle, content = messageBoxMemo, functionYes = askDoDye, functionNo = noAction, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
@@ -645,7 +664,7 @@ HandleClicked_DeyReNew_DoDye = function()
 end
 
 HandleClicked_DyeReNew_SetShowUI = function()
-  -- function num : 0_27
+  -- function num : 0_28
   if Panel_Dye_ReNew:GetShow() then
     Panel_Dye_ReNew:SetShow(false)
     Panel_Window_Inventory:SetShow(false)

@@ -39,7 +39,7 @@ inventory = {startX = 15, startY = 60, gapY = 275}
 , 
 slot = {count = 41, column = 8, row = 0, startX = 9, startY = 40, gapX = 47, gapY = 47}
 , inventoryCount = (CppEnums.ServantType).Type_Count - 1}
-, _buttonClose = (UI.getChildControl)(Panel_Window_ServantInventory, "Button_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_ServantInventory, "Button_Question"), _inventory = (Array.new)(), _deleteSlotNo = nil, _s64_deleteCount = (Defines.s64_const).s64_0, _targetActorKeyRaw = nil}
+, _buttonClose = (UI.getChildControl)(Panel_Window_ServantInventory, "Button_Close"), _buttonQuestion = (UI.getChildControl)(Panel_Window_ServantInventory, "Button_Question"), _txt_Title = (UI.getChildControl)(Panel_Window_ServantInventory, "StaticText_Title"), _inventory = (Array.new)(), _deleteSlotNo = nil, _s64_deleteCount = (Defines.s64_const).s64_0, _targetActorKeyRaw = nil}
 servantInventory.init = function(self)
   -- function num : 0_2
   local slotConfig = (self._config).slot
@@ -460,14 +460,28 @@ ServantInventoryOpenWithInventory = function(actorKeyRaw)
     return 
   end
   local vehicleType = vehicleActor:getVehicleType()
+  if vehicleType == UI_VT.Type_CampingTent then
+    (self._txt_Title):SetText(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_SERVANTINVENTORY_TENT_TITLE"))
+    ;
+    (self._buttonQuestion):SetShow(false)
+    ;
+    (self._buttonQuestion):addInputEvent("Mouse_LUp", "")
+  else
+    ;
+    (self._txt_Title):SetText(PAGetString(Defines.StringSheet_RESOURCE, "UI_SERVANTINVENTORY_TITLE"))
+    ;
+    (self._buttonQuestion):SetShow(true)
+    ;
+    (self._buttonQuestion):addInputEvent("Mouse_LUp", "Panel_WebHelper_ShowToggle( \"PanelServantInventory\" )")
+  end
   if not vehicleActor:isCannon() and not vehicleActor:isSiegeInstanceObject() and vehicleType ~= UI_VT.Type_Train and vehicleType ~= UI_VT.Type_CampingTent then
     ServantInventory_OpenAll()
   else
-    -- DECOMPILER ERROR at PC56: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC95: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._inventory)[0])._actorKeyRaw = actorKeyRaw
-    -- DECOMPILER ERROR at PC62: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC101: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._inventory)[0])._type = (CppEnums.MoveItemToType).Type_Vehicle

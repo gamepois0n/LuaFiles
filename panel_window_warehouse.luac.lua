@@ -522,7 +522,7 @@ end
 warehouse.isFurnitureWareHouse = function(self)
   -- function num : 0_10
   if (CppEnums.WarehoouseFromType).eWarehoouseFromType_Furniture ~= self._fromType then
-    do return isFurnitureWarehouse_chk() ~= true end
+    do return _ContentsGroup_isFurnitureWarehouse ~= true end
     do return false end
     -- DECOMPILER ERROR: 3 unprocessed JMP targets
   end
@@ -680,7 +680,7 @@ end
 
 FromClient_FurnitureWarehouseUpdate = function()
   -- function num : 0_22 , upvalues : warehouse
-  if isFurnitureWarehouse_chk() == false then
+  if _ContentsGroup_isFurnitureWarehouse == false then
     return 
   end
   local self = warehouse
@@ -1170,8 +1170,21 @@ Warehouse_IconOver = function(index)
   Panel_Tooltip_Item_Show_GeneralNormal(index, "WareHouse", true)
 end
 
-Warehouse_IconOut = function(index)
+Warehouse_GetToolTipItemNo = function()
   -- function num : 0_52 , upvalues : warehouse
+  local self = warehouse
+  local warehouseWrapper = self:getWarehouse()
+  if warehouseWrapper == nil then
+    return nil
+  end
+  if self._tooltipSlotNo == nil then
+    return nil
+  end
+  return warehouseWrapper:getItemNoBySlotNo(self._tooltipSlotNo)
+end
+
+Warehouse_IconOut = function(index)
+  -- function num : 0_53 , upvalues : warehouse
   local self = warehouse
   local slot = (self.slots)[index]
   self._tooltipSlotNo = nil
@@ -1179,7 +1192,7 @@ Warehouse_IconOut = function(index)
 end
 
 Warehouse_GetToopTipItem = function()
-  -- function num : 0_53 , upvalues : warehouse
+  -- function num : 0_54 , upvalues : warehouse
   local self = warehouse
   local warehouseWrapper = self:getWarehouse()
   if warehouseWrapper == nil then
@@ -1192,7 +1205,7 @@ Warehouse_GetToopTipItem = function()
 end
 
 Warehouse_GetItem = function(slotNo)
-  -- function num : 0_54 , upvalues : warehouse
+  -- function num : 0_55 , upvalues : warehouse
   local self = warehouse
   local warehouseWrapper = self:getWarehouse()
   if warehouseWrapper == nil then
@@ -1202,7 +1215,7 @@ Warehouse_GetItem = function(slotNo)
 end
 
 Warehouse_SetIgnoreMoneyButton = function(setIgnore)
-  -- function num : 0_55 , upvalues : warehouse
+  -- function num : 0_56 , upvalues : warehouse
   local self = warehouse
   if setIgnore == true then
     (self.buttonMoney):SetIgnore(true)
@@ -1213,7 +1226,7 @@ Warehouse_SetIgnoreMoneyButton = function(setIgnore)
 end
 
 FromClient_WarehouseOpenByInstallation = function(actorKeyRaw, waypointKey)
-  -- function num : 0_56 , upvalues : warehouse
+  -- function num : 0_57 , upvalues : warehouse
   local self = warehouse
   self._installationActorKeyRaw = actorKeyRaw
   Warehouse_OpenPanel(waypointKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Installation)
@@ -1222,7 +1235,7 @@ FromClient_WarehouseOpenByInstallation = function(actorKeyRaw, waypointKey)
 end
 
 Warehouse_OpenPanelFromDialog = function()
-  -- function num : 0_57 , upvalues : warehouse
+  -- function num : 0_58 , upvalues : warehouse
   local self = warehouse
   self.sellCheck = false
   warehouse_clearSellToSystem()
@@ -1249,7 +1262,7 @@ Warehouse_OpenPanelFromDialog = function()
 end
 
 Warehouse_OpenPanelFromDialogWithoutInventory = function(waypointKey, fromType)
-  -- function num : 0_58 , upvalues : warehouse
+  -- function num : 0_59 , upvalues : warehouse
   local self = warehouse
   Warehouse_OpenPanel(waypointKey, fromType)
   Warehouse_SetIgnoreMoneyButton(true)
@@ -1261,7 +1274,7 @@ Warehouse_OpenPanelFromDialogWithoutInventory = function(waypointKey, fromType)
 end
 
 Warehouse_OpenPanelFromWorldmap = function(waypointKey, fromType)
-  -- function num : 0_59 , upvalues : warehouse
+  -- function num : 0_60 , upvalues : warehouse
   local self = warehouse
   if ToClient_WorldMapIsShow() then
     WorldMapPopupManager:increaseLayer(true)
@@ -1287,7 +1300,7 @@ Warehouse_OpenPanelFromWorldmap = function(waypointKey, fromType)
 end
 
 Warehouse_OpenPanelFromMaid = function()
-  -- function num : 0_60 , upvalues : warehouse
+  -- function num : 0_61 , upvalues : warehouse
   local self = warehouse
   local regionInfo = getRegionInfoByPosition(((getSelfPlayer()):get()):getPosition())
   if regionInfo == nil then
@@ -1313,7 +1326,7 @@ end
 
 local btnMarketRegistSizeX = (warehouse.BtnMarketRegist):GetSizeX()
 Warehouse_OpenPanel = function(waypointKey, fromType)
-  -- function num : 0_61 , upvalues : warehouse, btnMarketRegistSizeX, btnMarketRegSpanSizeY
+  -- function num : 0_62 , upvalues : warehouse, btnMarketRegistSizeX, btnMarketRegSpanSizeY
   local self = warehouse
   self._currentWaypointKey = waypointKey
   self._fromType = fromType
@@ -1402,7 +1415,7 @@ Warehouse_OpenPanel = function(waypointKey, fromType)
 end
 
 Warehouse_OpenWithInventory = function()
-  -- function num : 0_62 , upvalues : warehouse
+  -- function num : 0_63 , upvalues : warehouse
   local self = warehouse
   Inventory_SetFunctor(nil, FGlobal_PopupMoveItem_InitByInventory, Warehouse_Close, nil)
   InventoryWindow_Show()
@@ -1413,7 +1426,7 @@ Warehouse_OpenWithInventory = function()
 end
 
 Warehouse_Close = function()
-  -- function num : 0_63 , upvalues : warehouse
+  -- function num : 0_64 , upvalues : warehouse
   local self = warehouse
   self._fromType = (CppEnums.WarehoouseFromType).eWarehoouseFromType_Worldmap
   if Panel_Window_Warehouse:GetShow() then
@@ -1448,18 +1461,18 @@ Warehouse_Close = function()
 end
 
 Warehouse_GetWarehouseWarpper = function()
-  -- function num : 0_64 , upvalues : warehouse
+  -- function num : 0_65 , upvalues : warehouse
   local self = warehouse
   return self:getWarehouse()
 end
 
 Warehouse_updateSlotData = function()
-  -- function num : 0_65
+  -- function num : 0_66
   FromClient_WarehouseUpdate()
 end
 
 Warehouse_SetFunctor = function(filterFunc, rClickFunc)
-  -- function num : 0_66 , upvalues : warehouse
+  -- function num : 0_67 , upvalues : warehouse
   local self = warehouse
   if filterFunc ~= nil and type(filterFunc) ~= "function" then
     filterFunc = nil
@@ -1480,7 +1493,7 @@ Warehouse_SetFunctor = function(filterFunc, rClickFunc)
 end
 
 FGlobal_Warehouse_ResetFilter = function()
-  -- function num : 0_67 , upvalues : warehouse
+  -- function num : 0_68 , upvalues : warehouse
   local self = warehouse
   if ToClient_IsDevelopment() == true and Panel_Window_SearchMenuWareHouse:GetShow() == false then
     FGlobal_SearchMenuWareHouse_Show(true)
@@ -1493,7 +1506,7 @@ FGlobal_Warehouse_ResetFilter = function()
 end
 
 Warehouse_OpenPanelFromManufacture = function()
-  -- function num : 0_68
+  -- function num : 0_69
   Warehouse_OpenPanel(getCurrentWaypointKey(), (CppEnums.WarehoouseFromType).eWarehoouseFromType_Manufacture)
 end
 

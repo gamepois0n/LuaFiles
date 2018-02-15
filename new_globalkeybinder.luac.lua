@@ -9,12 +9,11 @@ local UIMode = Defines.UIMode
 local _uiMode = UIMode.eUIMode_Default
 local mouseKeyTable = {}
 local isOnlyCombat = false
-local curProcessedInputType = (CppEnums.UiInputType).UiInputType_Undefined
 local escHandle = false
 PaGlobal_GlobalKeyBinder = {
 _uiMode = {}
-}
--- DECOMPILER ERROR at PC21: Confused about usage of register: R8 in 'UnsetPending'
+, curProcessedInputType = (CppEnums.UiInputType).UiInputType_Undefined}
+-- DECOMPILER ERROR at PC22: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Init = function(self)
   -- function num : 0_0 , upvalues : IM, UIMode
@@ -82,12 +81,13 @@ PaGlobal_GlobalKeyBinder.Init = function(self)
   self:Register(UIMode.eUIMode_KeyCustom_ButtonShortcuts, self.Process_UIMode_KeyCustom_ButtonShortcuts)
 end
 
--- DECOMPILER ERROR at PC25: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC27: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Update = function(self, deltaTime)
-  -- function num : 0_1 , upvalues : IM
+  -- function num : 0_1 , upvalues : IM, UIMode
   local curUIMode = (GetUIMode())
   local rv = nil
+  self.curProcessedInputType = keyCustom_GetProcessedUiInputType()
   rv = (self.Process_Normal)(deltaTime)
   if rv == true then
     self:Clear()
@@ -97,20 +97,28 @@ PaGlobal_GlobalKeyBinder.Update = function(self, deltaTime)
     (self.Process_ChattingInputMode)(deltaTime)
     return 
   end
-  if (self._uiMode)[curUIMode] == nil or ((self._uiMode)[curUIMode])._keyBinderData == nil then
-    self:Clear()
-    return 
-  end
-  local KeyBinder = ((self._uiMode)[curUIMode])._keyBinderData
-  for index in pairs(KeyBinder) do
-    if ((KeyBinder[index])._CustomCondition)() == true then
-      ((KeyBinder[index])._ProcessFunc)(deltaTime)
+  do
+    if UIMode.eUIMode_KeyCustom_ButtonShortcuts ~= GetUIMode() then
+      local checkButtonShortcuts = ToClent_checkAndRunButtonShortcutsEvent()
+      if checkButtonShortcuts == true then
+        return 
+      end
     end
+    if (self._uiMode)[curUIMode] == nil or ((self._uiMode)[curUIMode])._keyBinderData == nil then
+      self:Clear()
+      return 
+    end
+    local KeyBinder = ((self._uiMode)[curUIMode])._keyBinderData
+    for index in pairs(KeyBinder) do
+      if ((KeyBinder[index])._CustomCondition)() == true then
+        ((KeyBinder[index])._ProcessFunc)(deltaTime)
+      end
+    end
+    self:Clear()
   end
-  self:Clear()
 end
 
--- DECOMPILER ERROR at PC28: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC30: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Register = function(self, uiMode, func, customCondition)
   -- function num : 0_2
@@ -141,11 +149,12 @@ PaGlobal_GlobalKeyBinder.Register = function(self, uiMode, func, customCondition
   end
 end
 
--- DECOMPILER ERROR at PC32: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC34: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.Clear = function(self)
   -- function num : 0_3 , upvalues : mouseKeyTable
   mouseKeyTable = {}
+  self.curProcessedInputType = (CppEnums.UiInputType).UiInputType_Undefined
 end
 
 GlobalKeyBinder_MouseKeyMap = function(uiInputType)
@@ -161,28 +170,22 @@ GlobalKeyBinder_CheckKeyPressed = function(keyCode)
   return isKeyDown_Once(keyCode)
 end
 
-GlobalKeyBinder_CheckCustomKeyPressed = function(uiInputType)
-  -- function num : 0_6 , upvalues : mouseKeyTable, VCK
-  do return (keyCustom_IsDownOnce_Ui(uiInputType) or mouseKeyTable[uiInputType]) and not GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_MENU) and not isPhotoMode() end
-  -- DECOMPILER ERROR: 2 unprocessed JMP targets
-end
-
 SetUIMode = function(uiMode)
-  -- function num : 0_7 , upvalues : UIMode, _uiMode
+  -- function num : 0_6 , upvalues : UIMode, _uiMode
   if uiMode >= 0 and uiMode < UIMode.eUIMode_Count then
     _uiMode = uiMode
   end
 end
 
 GetUIMode = function()
-  -- function num : 0_8 , upvalues : _uiMode
+  -- function num : 0_7 , upvalues : _uiMode
   return _uiMode
 end
 
--- DECOMPILER ERROR at PC53: Confused about usage of register: R8 in 'UnsetPending'
+-- DECOMPILER ERROR at PC51: Confused about usage of register: R7 in 'UnsetPending'
 
 PaGlobal_GlobalKeyBinder.CheckMouseDragEvent = function(self)
-  -- function num : 0_9 , upvalues : VCK, escHandle
+  -- function num : 0_8 , upvalues : VCK, escHandle
   if DragManager:isDragging() and GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_ESCAPE) then
     DragManager:clearInfo()
     Inventory_DropEscape()
@@ -193,8 +196,17 @@ PaGlobal_GlobalKeyBinder.CheckMouseDragEvent = function(self)
 end
 
 getEscHandle = function()
-  -- function num : 0_10 , upvalues : escHandle
+  -- function num : 0_9 , upvalues : escHandle
   return escHandle
+end
+
+GlobalKeyBinder_CheckCustomKeyPressed = function(uiInputType)
+  -- function num : 0_10 , upvalues : mouseKeyTable, VCK
+  if uiInputType == (CppEnums.UiInputType).UiInputType_Undefined then
+    return false
+  end
+  do return (PaGlobal_GlobalKeyBinder.curProcessedInputType == uiInputType or mouseKeyTable[uiInputType]) and not GlobalKeyBinder_CheckKeyPressed(VCK.KeyCode_MENU) and not isPhotoMode() end
+  -- DECOMPILER ERROR: 2 unprocessed JMP targets
 end
 
 FromClient_PerFrameGlobalKeyBinderUpdate = function(deltaTime)

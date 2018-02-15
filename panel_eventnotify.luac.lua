@@ -57,7 +57,7 @@ EventNotify_Open = function(isDo, isMenu)
   if isGameTypeKR2() then
     return 
   end
-  tempWrapper = getTemporaryInformationWrapper()
+  local tempWrapper = getTemporaryInformationWrapper()
   if tempWrapper:isEventBeforeShow() and isDo == nil then
     return 
   end
@@ -137,6 +137,7 @@ EventNotify_Close = function()
   Panel_EventNotify:SetShow(false, false)
   _Web:ResetUrl()
   FGlobal_LevelupGuide_Open()
+  local tempWrapper = getTemporaryInformationWrapper()
   if not tempWrapper:isEventBeforeShow() then
     tempWrapper:setEventBeforeShow(true)
   end

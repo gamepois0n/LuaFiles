@@ -300,6 +300,9 @@ PaGlobal_Window_Skill_CoolTimeSlot.skillCoolTimeSlot_Setting = function(self)
     return 
   end
   for iii = 0, 1 do
+    if cellTable[iii] == nil then
+      return 
+    end
     local cols = (cellTable[iii]):capacityX()
     local rows = (cellTable[iii]):capacityY()
     for row = 0, rows - 1 do
@@ -310,7 +313,7 @@ PaGlobal_Window_Skill_CoolTimeSlot.skillCoolTimeSlot_Setting = function(self)
           local skillLevelInfo = getSkillLevelInfo(skillNo)
           local skillStaticWrapper = getSkillStaticStatus(skillNo, 1)
           local skillType = getSkillTypeStaticStatus(skillNo)
-          -- DECOMPILER ERROR at PC87: Confused about usage of register: R25 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC91: Confused about usage of register: R25 in 'UnsetPending'
 
           if skillType:isValidLocalizing() == true and skillLevelInfo._learnable == false and skillLevelInfo._usable == true and (skillStaticWrapper:get())._reuseCycle > 0 then
             (self._usableSkillTable)[usableSkillCount] = {_skillName = skillStaticWrapper:getName(), _skillNo = skillNo, _insertNo = usableSkillCount}
@@ -336,7 +339,7 @@ PaGlobal_Window_Skill_CoolTimeSlot.skillCoolTimeSlot_Setting = function(self)
             if skillNo ~= 0 and ToClient_isLearnedSkill(skillNo) == true then
               local skillStaticWrapper = getSkillStaticStatus(skillNo, 1)
               local skillType = getSkillTypeStaticStatus(skillNo)
-              -- DECOMPILER ERROR at PC157: Confused about usage of register: R23 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC161: Confused about usage of register: R23 in 'UnsetPending'
 
               if skillType:isValidLocalizing() == true then
                 (self._usableSkillTable)[usableSkillCount] = {_skillName = skillStaticWrapper:getName(), _skillNo = skillNo, _insertNo = usableSkillCount}

@@ -123,13 +123,16 @@ PaGlobal_CharacterTag_IconMouseToolTip = function(isShow)
 end
 
 InitializeTagIcon = function()
-  -- function num : 0_3 , upvalues : Button_CharacterTag
+  -- function num : 0_3 , upvalues : Button_CharacterTag, isOpenCharacterTag
   Panel_Icon_CharacterTag:SetIgnore(false)
   Panel_Icon_CharacterTag:SetShow(true)
   Button_CharacterTag = (UI.getChildControl)(Panel_Icon_CharacterTag, "Button_TagIcon")
   Button_CharacterTag:ActiveMouseEventEffect(true)
   Button_CharacterTag:addInputEvent("Mouse_LUp", "PaGlobal_CharacterTag_Open()")
   Button_CharacterTag:addInputEvent("Mouse_RUp", "PaGlobal_TagCharacter_Change()")
+  if isOpenCharacterTag then
+    Button_CharacterTag:setButtonShortcutsWithEvent("Mouse_RUp", "PANEL_SIMPLESHORTCUT_CHARACTER_CHANGE")
+  end
   Button_CharacterTag:addInputEvent("Mouse_Out", "PaGlobal_CharacterTag_IconMouseToolTip(false)")
   Button_CharacterTag:addInputEvent("Mouse_On", "PaGlobal_CharacterTag_IconMouseToolTip(true)")
   PaGlobal_CharacterTag_SetPosIcon()

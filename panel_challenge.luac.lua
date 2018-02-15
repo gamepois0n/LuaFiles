@@ -65,7 +65,7 @@ expTooltip:SetShow(false)
 Panel_ChallengeReward_Alert:SetShow(false)
 HandleClicked_challengeRewardAlert_Open = function()
   -- function num : 0_0
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     CharacterInfoWindow_Show()
   else
     PaGlobal_CharacterInfo:showWindow(0)
@@ -720,10 +720,8 @@ Challenge_Update = function()
     remainRewardCountValue:SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_CHALLENGE_REWARDCOUNTVALUE_HAVE", "remainRewardCount", remainRewardCount))
     remainRewardCountValue:SetFontColor(UI_color.C_FFFFFFFF)
     Panel_ChallengeReward_Alert:SetShow(false)
-    if not isActionUiOpen() then
-      PackageIconPosition()
-      FromClient_PackageIconUpdate()
-    end
+    PackageIconPosition()
+    FromClient_PackageIconUpdate()
   end
   local viewCount = 4
   for list_Idx = 0, viewCount - 1 do

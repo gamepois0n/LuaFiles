@@ -2864,42 +2864,42 @@ HandleClicked_QuestReward_Show = function(groupId, questId, window)
 
     ;
     (_baseReward[baseReward_index])._type = baseReward:getType()
-    -- DECOMPILER ERROR at PC32: Confused about usage of register: R12 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC30: Confused about usage of register: R12 in 'UnsetPending'
 
-    if (CppEnums.RewardType).RewardType_Exp == baseReward:getType() then
+    if __eRewardExp == baseReward:getType() then
       (_baseReward[baseReward_index])._exp = baseReward:getExperience()
     else
-      -- DECOMPILER ERROR at PC44: Confused about usage of register: R12 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC40: Confused about usage of register: R12 in 'UnsetPending'
 
-      if (CppEnums.RewardType).RewardType_SkillExp == baseReward:getType() then
+      if __eRewardSkillExp == baseReward:getType() then
         (_baseReward[baseReward_index])._exp = baseReward:getSkillExperience()
       else
-        -- DECOMPILER ERROR at PC56: Confused about usage of register: R12 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC50: Confused about usage of register: R12 in 'UnsetPending'
 
-        if (CppEnums.RewardType).RewardType_ProductExp == baseReward:getType() then
+        if __eRewardLifeExp == baseReward:getType() then
           (_baseReward[baseReward_index])._exp = baseReward:getProductExperience()
         else
-          -- DECOMPILER ERROR at PC68: Confused about usage of register: R12 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC60: Confused about usage of register: R12 in 'UnsetPending'
 
-          if (CppEnums.RewardType).RewardType_Item == baseReward:getType() then
+          if __eRewardItem == baseReward:getType() then
             (_baseReward[baseReward_index])._item = baseReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC72: Confused about usage of register: R12 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC64: Confused about usage of register: R12 in 'UnsetPending'
 
             ;
             (_baseReward[baseReward_index])._count = baseReward:getItemCount()
           else
-            -- DECOMPILER ERROR at PC84: Confused about usage of register: R12 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC74: Confused about usage of register: R12 in 'UnsetPending'
 
-            if (CppEnums.RewardType).RewardType_Intimacy == baseReward:getType() then
+            if __eRewardIntimacy == baseReward:getType() then
               (_baseReward[baseReward_index])._character = baseReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC88: Confused about usage of register: R12 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC78: Confused about usage of register: R12 in 'UnsetPending'
 
               ;
               (_baseReward[baseReward_index])._value = baseReward:getIntimacyValue()
             else
-              -- DECOMPILER ERROR at PC100: Confused about usage of register: R12 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC88: Confused about usage of register: R12 in 'UnsetPending'
 
-              if (CppEnums.RewardType).RewardType_Knowledge == baseReward:getType() then
+              if __eRewardKnowledge == baseReward:getType() then
                 (_baseReward[baseReward_index])._mentalCard = baseReward:getMentalCardKey()
               end
             end
@@ -2912,46 +2912,46 @@ HandleClicked_QuestReward_Show = function(groupId, questId, window)
   for selectReward_index = 1, selectCount do
     local selectReward = questReward:getQuestSelectRewardAt(selectReward_index - 1)
     _selectReward[selectReward_index] = {}
-    -- DECOMPILER ERROR at PC115: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC103: Confused about usage of register: R13 in 'UnsetPending'
 
     ;
     (_selectReward[selectReward_index])._type = selectReward:getType()
-    -- DECOMPILER ERROR at PC126: Confused about usage of register: R13 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC112: Confused about usage of register: R13 in 'UnsetPending'
 
-    if (CppEnums.RewardType).RewardType_Exp == selectReward:getType() then
+    if __eRewardExp == selectReward:getType() then
       (_selectReward[selectReward_index])._exp = selectReward:getExperience()
     else
-      -- DECOMPILER ERROR at PC138: Confused about usage of register: R13 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC122: Confused about usage of register: R13 in 'UnsetPending'
 
-      if (CppEnums.RewardType).RewardType_SkillExp == selectReward:getType() then
+      if __eRewardSkillExp == selectReward:getType() then
         (_selectReward[selectReward_index])._exp = selectReward:getSkillExperience()
       else
-        -- DECOMPILER ERROR at PC150: Confused about usage of register: R13 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC132: Confused about usage of register: R13 in 'UnsetPending'
 
-        if (CppEnums.RewardType).RewardType_ProductExp == selectReward:getType() then
+        if __eRewardLifeExp == selectReward:getType() then
           (_selectReward[selectReward_index])._exp = selectReward:getProductExperience()
         else
-          -- DECOMPILER ERROR at PC162: Confused about usage of register: R13 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC142: Confused about usage of register: R13 in 'UnsetPending'
 
-          if (CppEnums.RewardType).RewardType_Item == selectReward:getType() then
+          if __eRewardItem == selectReward:getType() then
             (_selectReward[selectReward_index])._item = selectReward:getItemEnchantKey()
-            -- DECOMPILER ERROR at PC166: Confused about usage of register: R13 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC146: Confused about usage of register: R13 in 'UnsetPending'
 
             ;
             (_selectReward[selectReward_index])._count = selectReward:getItemCount()
           else
-            -- DECOMPILER ERROR at PC178: Confused about usage of register: R13 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC156: Confused about usage of register: R13 in 'UnsetPending'
 
-            if (CppEnums.RewardType).RewardType_Intimacy == selectReward:getType() then
+            if __eRewardIntimacy == selectReward:getType() then
               (_selectReward[selectReward_index])._character = selectReward:getIntimacyCharacter()
-              -- DECOMPILER ERROR at PC182: Confused about usage of register: R13 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC160: Confused about usage of register: R13 in 'UnsetPending'
 
               ;
               (_selectReward[selectReward_index])._value = selectReward:getIntimacyValue()
             else
-              -- DECOMPILER ERROR at PC194: Confused about usage of register: R13 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC170: Confused about usage of register: R13 in 'UnsetPending'
 
-              if (CppEnums.RewardType).RewardType_Knowledge == selectReward:getType() then
+              if __eRewardKnowledge == selectReward:getType() then
                 (_selectReward[selectReward_index])._mentalCard = selectReward:getMentalCardKey()
               end
             end

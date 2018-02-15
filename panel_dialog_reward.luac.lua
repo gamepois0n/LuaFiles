@@ -3,7 +3,6 @@
 
 -- params : ...
 -- function num : 0
-local UI_RewardType = CppEnums.RewardType
 local UI_TM = CppEnums.TextMode
 local UI_color = Defines.Color
 local _questrewardSlotConfig = {createIcon = true, createBorder = true, createCount = true, createClassEquipBG = true, createCash = true}
@@ -124,10 +123,10 @@ HandleOnSelectedReward = function(index)
 end
 
 local setReward = function(uiSlot, reward, index, questType)
-  -- function num : 0_5 , upvalues : UI_RewardType, _uiButtonSelectRewardSlots
+  -- function num : 0_5 , upvalues : _uiButtonSelectRewardSlots
   rewardTooltip(nil, false)
   uiSlot._type = reward._type
-  if UI_RewardType.RewardType_Exp == reward._type or __eRewardExpGrade == reward._type then
+  if __eRewardExp == reward._type or __eRewardExpGrade == reward._type then
     (uiSlot.count):SetText("")
     ;
     (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -136,7 +135,7 @@ local setReward = function(uiSlot, reward, index, questType)
     ;
     (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip( \"Exp\", false, \"" .. questType .. "\", " .. index .. " )")
   else
-    if UI_RewardType.RewardType_SkillExp == reward._type or __eRewardSkillExpGrade == reward._type then
+    if __eRewardSkillExp == reward._type or __eRewardSkillExpGrade == reward._type then
       (uiSlot.count):SetText("")
       ;
       (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExp.dds")
@@ -145,7 +144,7 @@ local setReward = function(uiSlot, reward, index, questType)
       ;
       (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip( \"SkillExp\", false, \"" .. questType .. "\", " .. index .. " )")
     else
-      if UI_RewardType.RewardType_ProductExp == reward._type then
+      if __eRewardLifeExp == reward._type then
         (uiSlot.count):SetText("")
         ;
         (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -154,7 +153,7 @@ local setReward = function(uiSlot, reward, index, questType)
         ;
         (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip( \"ProductExp\", false, \"" .. questType .. "\", " .. index .. " )")
       else
-        if UI_RewardType.RewardType_Item == reward._type then
+        if __eRewardItem == reward._type then
           local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(reward._item))
           uiSlot:setItemByStaticStatus(itemStatic, reward._count)
           uiSlot._item = reward._item
@@ -175,7 +174,7 @@ local setReward = function(uiSlot, reward, index, questType)
           return reward._isEquipable
         else
           do
-            if UI_RewardType.RewardType_Intimacy == reward._type then
+            if __eRewardIntimacy == reward._type then
               (uiSlot.count):SetText(tostring(reward._value))
               ;
               (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/00000000_Special_Contributiveness.dds")
@@ -184,7 +183,7 @@ local setReward = function(uiSlot, reward, index, questType)
               ;
               (uiSlot.icon):addInputEvent("Mouse_Out", "rewardTooltip( \"Intimacy\", false, \"" .. questType .. "\", " .. index .. " )")
             else
-              if UI_RewardType.RewardType_Knowledge == reward._type then
+              if __eRewardKnowledge == reward._type then
                 (uiSlot.count):SetText("")
                 ;
                 (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/00000000_know_icon.dds")

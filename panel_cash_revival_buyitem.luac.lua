@@ -240,7 +240,7 @@ ToClient_Buy_CashRevivalBuy_Do = function()
   -- function num : 0_6
   local cPSSW = ToClient_GetCashProductStaticStatusWrapperByKeyRaw(getRevivalItem())
   ;
-  (getIngameCashMall()):requestBuyItem(cPSSW:getNoRaw(), 1, cPSSW:getPrice(), (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_ImmediatelyUse, toInt64(0, -1), 0)
+  (getIngameCashMall()):requestBuyItem(cPSSW:getNoRaw(), 1, cPSSW:getPrice(), (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_ImmediatelyUse, toInt64(0, -1), 0, 0)
 end
 
 HandleClicked_Apply_CashRevivalItem = function(respawnType)

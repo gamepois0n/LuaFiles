@@ -188,7 +188,7 @@ loadCustomizationUI = function()
 end
 
 loadLobbyUI = function()
-  -- function num : 0_12 , upvalues : UIGroup, renewalUiOpen
+  -- function num : 0_12 , upvalues : UIGroup, renewalUiOpen, RenderMode
   _PA_LOG("광운", "***********  UI_DATA1 function loadLobbyUI()")
   basicLoadUI("UI_Data/UI_Lobby/UI_Startl.xml", "Panel_Start", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/UI_Lobby/UI_CharacterSelect.xml", "Panel_CharacterSelect", UIGroup.PAGameUIGroup_Windows)
@@ -227,6 +227,10 @@ loadLobbyUI = function()
   runLua("UI_Data/Script/Widget/Lobby/Panel_Lobby_DataProgress.lua")
   basicLoadUI("UI_Data/Window/Mercenary/Panel_Window_RedDesert.XML", "Panel_Window_RedDesert", UIGroup.PAGameUIGroup_Windows)
   runLua("UI_Data/Script/Window/Mercenary/Panel_Window_RedDesert.lua")
+  if ToClient_IsDevelopment() == true then
+    loadUI("UI_Data/Widget/MainStatus/UI_Cursor.XML", "Panel_Cursor", UIGroup.PAGameUIGroup_Windows, PAUIRenderModeBitSet({RenderMode.eRenderMode_Default, RenderMode.eRenderMode_customScreenShot, RenderMode.eRenderMode_IngameCustomize}))
+    runLua("UI_Data/Script/globalPreLoadUI.lua")
+  end
 end
 
 preLoadGameUI = function()
@@ -440,12 +444,13 @@ preLoadGameUI = function()
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_Compose.XML", "Panel_Window_PetCompose", UIGroup.PAGameUIGroup_InstanceMission)
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetMarket.XML", "Panel_Window_PetMarket", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Window/PetInfo/Panel_Window_PetMarketRegister.XML", "Panel_Window_PetMarketRegist", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairyCompose.XML", "Panel_Window_FairyCompose", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairyRegister.XML", "Panel_Window_FairyRegister", UIGroup.PAGameUIGroup_Windows)
+  if true == _ContentsGroup_isFairy then
+    basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairyRegister.XML", "Panel_Window_FairyRegister", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairySetting.XML", "Panel_Window_FairySetting", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairyUpgrade.XML", "Panel_Window_FairyUpgrade", UIGroup.PAGameUIGroup_Windows)
+    basicLoadUI("UI_Data/Window/FairyInfo/Panel_Fairyinfo.XML", "Panel_FairyInfo", UIGroup.PAGameUIGroup_Windows)
+  end
   basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairyIcon.XML", "Panel_Window_FairyIcon", UIGroup.PAGameUIGroup_Widget)
-  basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairyListNew.XML", "Panel_Window_FairyListNew", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairyUpgrade.XML", "Panel_Window_FairyUpgrade", UIGroup.PAGameUIGroup_Windows)
-  basicLoadUI("UI_Data/Window/FairyInfo/Panel_Window_FairySetting.XML", "Panel_Window_FairySetting", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Widget/Maid/Panel_Icon_Maid.XML", "Panel_Icon_Maid", UIGroup.PAGameUIGroup_Widget)
   basicLoadUI("UI_Data/Widget/Maid/Panel_Window_MaidList.XML", "Panel_Window_MaidList", UIGroup.PAGameUIGroup_Windows)
   basicLoadUI("UI_Data/Widget/Camp/Panel_Icon_Camp.XML", "Panel_Icon_Camp", UIGroup.PAGameUIGroup_Widget)
@@ -821,7 +826,7 @@ preLoadGameUI = function()
   basicLoadUI("UI_Data/Widget/SkillCommand/UI_SkillCommand.xml", "Panel_SkillCommand", UIGroup.PAGameUIGroup_MainUI)
   basicLoadUI("UI_Data/Widget/Menu/Panel_Combo_Guide.xml", "Panel_Combo_Guide", UIGroup.PAGameUIGroup_MainUI)
   if ToClient_IsDevelopment() then
-    basicLoadUI("UI_Data/Widget/SkillCommand/UI_ComboCommand.xml", "Panel_ComboCommand", UIGroup.PAGAMEUIGroup_MainUI)
+    basicLoadUI("UI_Data/Widget/SkillCommand/UI_ComboCommand.xml", "Panel_ComboCommand", UIGroup.PAGameUIGroup_MainUI)
     basicLoadUI("UI_Data/Widget/Console/UI_Widget_NextCombo.xml", "Panel_ConsoleCombo", UIGroup.PAGameUIGroup_MainUI)
   end
   loadUI("UI_Data/Widget/Search/UI_Dialog_Search.xml", "Panel_Dialog_Search", UIGroup.PAGameUIGroup_MainUI, PAUIRenderModeBitSet({RenderMode.eRenderMode_Dialog}))
@@ -1255,11 +1260,13 @@ loadGameUI = function()
   runLua("UI_Data/Script/Window/PetInfo/Panel_Window_PetLookChange.lua")
   runLua("UI_Data/Script/Window/PetInfo/Panel_Window_PetMarket.lua")
   runLua("UI_Data/Script/Window/PetInfo/Panel_Window_PetMarketRegist.lua")
-  runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairyRegister.lua")
+  if _ContentsGroup_isFairy == true then
+    runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairyRegister.lua")
+    runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairySetting_ReNew.lua")
+    runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairyUpgrade.lua")
+    runLua("UI_Data/Script/Window/FairyInfo/Panel_Fairyinfo.lua")
+  end
   runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairyIcon.lua")
-  runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairyListNew.lua")
-  runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairySetting.lua")
-  runLua("UI_Data/Script/Window/FairyInfo/Panel_Window_FairyUpgrade.lua")
   runLua("UI_Data/Script/Widget/MessageHistory/Panel_MessageHistory.lua")
   runLua("UI_Data/Script/Window/Servant/Panel_Cannon.lua")
   runLua("UI_Data/Script/Window/Servant/Panel_CannonShip.lua")

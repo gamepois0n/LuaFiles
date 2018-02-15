@@ -132,6 +132,7 @@ GuildRecruitment.Update = function(self)
   local guildUnjoinedCount = ToClient_GetGuildUnjoinedPlayerCount()
   local playerCount = (math.min)(guildUnjoinedCount, self.maxPlayerList)
   local viewCount = (math.min)(playerCount, self.maxSlotCount)
+  _PA_LOG("정태�\164", "self.maxSlotCount : " .. tostring(self.maxSlotCount) .. " / playerCount : " .. tostring(playerCount))
   if self.maxSlotCount < playerCount then
     (self.scroll):SetShow(true)
   else
@@ -191,7 +192,7 @@ GuildRecruitment.Update = function(self)
     end
   end
   ;
-  (UIScroll.SetButtonSize)(self.scroll, self.maxSlotCount, (math.ceil)(playerCount / 2))
+  (UIScroll.SetButtonSize)(self.scroll, self.maxSlotCount, playerCount)
 end
 
 GuildRecruitment_SelectPlayer = function(idx, uiIdx)
@@ -235,26 +236,10 @@ end
 GuildRecuit_ScrollEvent = function(isUp)
   -- function num : 0_5 , upvalues : GuildRecruitment
   local self = GuildRecruitment
-  if isUp then
-    if self._startIndex < 2 then
-      return 
-    end
-    self._startIndex = self._startIndex - 2
-  else
-    local guildUnjoinedCount = ToClient_GetGuildUnjoinedPlayerCount()
-    local playerCount = (math.min)(guildUnjoinedCount, self.maxPlayerList)
-    if self.maxPlayerList < self._startIndex + self.maxSlotCount + 2 then
-      return 
-    else
-      if playerCount <= self._startIndex + self.maxSlotCount then
-        return 
-      end
-    end
-    self._startIndex = self._startIndex + 2
-  end
-  do
-    self:Update()
-  end
+  local guildUnjoinedCount = ToClient_GetGuildUnjoinedPlayerCount()
+  local playerCount = (math.min)(guildUnjoinedCount, self.maxPlayerList)
+  self._startIndex = (UIScroll.ScrollEvent)(self.scroll, isUp, self.maxSlotCount, playerCount, self._startIndex, 1)
+  self:Update()
 end
 
 FGolbal_Guild_Recruitment_SelectPlayerClose = function()

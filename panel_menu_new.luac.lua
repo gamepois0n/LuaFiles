@@ -30,7 +30,7 @@ _customButton = {}
 _customButtonBg = {}
 , _bottomBanner_Hot = nil, _bottomBanner_New = nil, _bottomBanner_Hot_1 = nil, _bottomBanner_Hot_2 = nil, _bottomBanner_New_1 = nil, _bottomBanner_New_2 = nil}
 , 
-_contentsGroup = {_isLocalwarOpen = ToClient_IsContentsGroupOpen("43"), _isBlackSpiritAdventure = ToClient_IsContentsGroupOpen("1015"), _isBlackSpiritAdventureForPc = ToClient_IsContentsGroupOpen("1021"), _webAlbumOpen = ToClient_IsContentsGroupOpen("205"), _photoGalleryOpen = ToClient_IsContentsGroupOpen("213"), _remoteControlOpen = ToClient_IsContentsGroupOpen("241"), _isTradeEventOpen = ToClient_IsContentsGroupOpen("26"), _joinCheckOpen = ToClient_IsContentsGroupOpen("1025"), _isMercenaryOpen = ToClient_IsContentsGroupOpen("245"), _isMonsterRanking = ToClient_IsContentsGroupOpen("275"), _isSavageOpen = ToClient_IsContentsGroupOpen("249"), _isContentsArsha = ToClient_IsContentsGroupOpen("227"), _partyListOpen = ToClient_IsContentsGroupOpen("254"), _isFreeFight = ToClient_IsContentsGroupOpen("255"), _isBlackSpiritAdventure2 = ToClient_IsContentsGroupOpen("277"), _isMasterpieceOpen = ToClient_IsContentsGroupOpen("270"), _isSiegeEnable = ToClient_IsContentsGroupOpen("21"), _isMemoOpen = isUsedMemoOpen(), _isDropItemOpen = ToClient_IsContentsGroupOpen("337"), _isTeamDuelOpen = ToClient_IsContentsGroupOpen("350")}
+_contentsGroup = {_isLocalwarOpen = ToClient_IsContentsGroupOpen("43"), _isBlackSpiritAdventure = ToClient_IsContentsGroupOpen("1015"), _isBlackSpiritAdventureForPc = ToClient_IsContentsGroupOpen("1021"), _webAlbumOpen = _ContentsGroup_webAlbumOpen, _photoGalleryOpen = ToClient_IsContentsGroupOpen("213"), _remoteControlOpen = ToClient_IsContentsGroupOpen("241"), _isTradeEventOpen = ToClient_IsContentsGroupOpen("26"), _joinCheckOpen = ToClient_IsContentsGroupOpen("1025"), _isMercenaryOpen = ToClient_IsContentsGroupOpen("245"), _isMonsterRanking = ToClient_IsContentsGroupOpen("275"), _isSavageOpen = ToClient_IsContentsGroupOpen("249"), _isContentsArsha = ToClient_IsContentsGroupOpen("227"), _partyListOpen = ToClient_IsContentsGroupOpen("254"), _isFreeFight = ToClient_IsContentsGroupOpen("255"), _isBlackSpiritAdventure2 = ToClient_IsContentsGroupOpen("277"), _isMasterpieceOpen = ToClient_IsContentsGroupOpen("270"), _isSiegeEnable = ToClient_IsContentsGroupOpen("21"), _isMemoOpen = _ContentsGroup_isMemoOpen, _isDropItemOpen = ToClient_IsContentsGroupOpen("337"), _isTeamDuelOpen = ToClient_IsContentsGroupOpen("350"), _isButtonShortCut = ToClient_IsContentsGroupOpen("351")}
 , 
 _categoryData = {}
 , _mainButtonCount = 5, _categoryCount = 4, _maxUiSlotCount = 16, _currentCategoryIndex = 1, 
@@ -70,43 +70,43 @@ _bannerAnimationPos = {
 , 
 _color = {_defaultIconColor = 4289642191, _defaultNormalFontColor = 4286352799, _defaultOverFontColor = 4289449972, _defaultClickFontColor = 4289449972, _newIconColor = 4292520281, _newNormalFontColor = 4293639262, _newOverFontColor = 4294960300, _newClickFontColor = 4294960300, _hotIconColor = 4287996368, _hotNormalFontColor = 4286813382, _hotOverFontColor = 4285830305, _hotClickFontColor = 4285830305, _customIconColor = 4288857556, _customNormalFontColor = 4289320682, _customOverFontColor = 4289320682, _customClickFontColor = 4289320682}
 }
--- DECOMPILER ERROR at PC369: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC370: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
 (PaGlobal_Menu._ui)._custom = {_bg = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "Static_Bg"), _templeteButtonBg = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "Static_IconBg"), _templeteButton = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "Button_Icon"), _beforeMenu = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "StaticText_SelectedMenu"), _afterMenu = (UI.getChildControl)((PaGlobal_Menu._ui)._customWindow, "StaticText_SelectedChangeMenu"), _effect = nil, _checkIcon = nil}
--- DECOMPILER ERROR at PC381: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC382: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
 ((PaGlobal_Menu._ui)._custom)._beforeIcon = (UI.getChildControl)(((PaGlobal_Menu._ui)._custom)._beforeMenu, "Button_MenuIcon")
--- DECOMPILER ERROR at PC393: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC394: Confused about usage of register: R0 in 'UnsetPending'
 
 ;
 ((PaGlobal_Menu._ui)._custom)._afterIcon = (UI.getChildControl)(((PaGlobal_Menu._ui)._custom)._afterMenu, "Button_MenuIcon")
--- DECOMPILER ERROR at PC403: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC405: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Menu._main = {_help = 0, _cashShop = 1, _escape = 2, _option = 3, _inven = 4, _gameExit = 5, _count = 6}
--- DECOMPILER ERROR at PC421: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobal_Menu._main = {_help = 0, _cashShop = 1, _escape = 2, _shortCut = 3, _inven = 4, _option = 5, _gameExit = 6, _count = 7}
+-- DECOMPILER ERROR at PC423: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._contents = {_beauty = 0, _dye = 1, _pallet = 2, _pet = 3, _blackSpirit = 4, _questInfo = 5, _skill = 6, _manufacture = 7, _uiSetting = 8, _dailyStamp = 9, _blackSpiritAdventure = 10, _blackSpiritAdventure2 = 11, _beautyAlbum = 12, _photoGallery = 13, _count = 14}
--- DECOMPILER ERROR at PC432: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC434: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._cooperation = {_localWar = 0, _freeFighting = 1, _waveDefence = 2, _arsha = 3, _militia = 4, _partyFind = 5, _teamDuel = 6, _count = 7}
--- DECOMPILER ERROR at PC453: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC455: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._infomation = {_keyboard = 0, _productNote = 1, _myInfo = 2, _serverChange = 3, _fishEncyclopedia = 4, _knowledge = 5, _worldMap = 6, _workerList = 7, _itemMarket = 8, _tradeInfo = 9, _warInfo = 10, _event = 11, _update = 12, _steam = 13, _notice = 14, _masterpiece = 15, _dropItem = 16, _count = 17}
--- DECOMPILER ERROR at PC468: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC470: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._community = {_guild = 0, _friend = 1, _mail = 2, _guildRank = 3, _lifeRank = 4, _monsterRank = 5, _chattingFilter = 6, _language = 7, _blackDesertTv = 8, _socialAction = 9, _memo = 10, _count = 11}
--- DECOMPILER ERROR at PC474: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC476: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._banner = {_blackDesertTv = 0, _memo = 1, _count = 2}
--- DECOMPILER ERROR at PC488: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC491: Confused about usage of register: R0 in 'UnsetPending'
 
-PaGlobal_Menu._bannerHot = {_pet = 0, _cashShop = 1, _beauty = 2, _dailyStamp = 3, _itemMarket = 4, _militia = 5, _partyFind = 6, _guild = 7, _guildRank = 8, _update = 9, _count = 10}
--- DECOMPILER ERROR at PC497: Confused about usage of register: R0 in 'UnsetPending'
+PaGlobal_Menu._bannerHot = {_pet = 0, _cashShop = 1, _beauty = 2, _dailyStamp = 3, _itemMarket = 4, _militia = 5, _partyFind = 6, _guild = 7, _guildRank = 8, _update = 9, _event = 10, _count = 11}
+-- DECOMPILER ERROR at PC500: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Menu._bannerNew = {_waveDefence = 0, _masterpiece = 1, _dropItem = 2, _blackDesertTv = 3, _memo = 4, _count = 5}
--- DECOMPILER ERROR at PC960: Confused about usage of register: R0 in 'UnsetPending'
+-- DECOMPILER ERROR at PC1022: Confused about usage of register: R0 in 'UnsetPending'
 
 if not isGameTypeKorea() then
   PaGlobal_Menu._bannerData = {
@@ -130,6 +130,8 @@ _hot = {
 [(PaGlobal_Menu._bannerHot)._guildRank] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_GUILDRANKER"), _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds", _x1 = 189, _y1 = 291, _x2 = 376, _y2 = 348, _isContentOpen = true}
 , 
 [(PaGlobal_Menu._bannerHot)._update] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_UPDATE"), _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds", _x1 = 189, _y1 = 409, _x2 = 376, _y2 = 464, _isContentOpen = isGameServiceTypeDev()}
+, 
+[(PaGlobal_Menu._bannerHot)._event] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_EVENT"), _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds", _x1 = 1, _y1 = 465, _x2 = 188, _y2 = 522, _isContentOpen = true}
 , _count = (PaGlobal_Menu._bannerHot)._count}
 , 
 _new = {
@@ -144,13 +146,13 @@ _new = {
 [(PaGlobal_Menu._bannerNew)._memo] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MEMONAME"), _path = "Renewal/Button/PC_Btn_ESCBanner_00.dds", _x1 = 1, _y1 = 117, _x2 = 188, _y2 = 174, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isMemoOpen}
 , _count = (PaGlobal_Menu._bannerNew)._count}
 }
-  -- DECOMPILER ERROR at PC981: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1043: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_Menu._myMenu = {_graphic = 0, _sound = 1, _game = 2, _performance = 3, _characterSelect = 4, _count = 5}
-  -- DECOMPILER ERROR at PC1000: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC1062: Confused about usage of register: R0 in 'UnsetPending'
 
   PaGlobal_Menu._customIndex = {6, 16, 20, 21, 22, 24, 35, 25, 29, 34, 44, 49; [0] = 14}
-  -- DECOMPILER ERROR at PC3700: Confused about usage of register: R0 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC3933: Confused about usage of register: R0 in 'UnsetPending'
 
   if ((isGameTypeEnglish() or isGameTypeSA() or not isGameTypeKorea()) and isGameTypeEnglish()) or not isGameTypeEnglish() then
     PaGlobal_Menu._categoryData = {
@@ -166,6 +168,8 @@ _new = {
 [(PaGlobal_Menu._main)._gameExit] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_EXIT"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds", _x1 = 263, _y1 = 3, _x2 = 323, _y2 = 63, _isContentOpen = true, _isNew = false, _isHot = false, _index = 4}
 , 
 [(PaGlobal_Menu._main)._cashShop] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_MENUBUTTONTEXTID_CASHSHOP"), _hotKey = keyCustom_GetString_UiKey((CppEnums.UiInputType).UiInputType_CashShop), _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds", _x1 = 449, _y1 = 189, _x2 = 509, _y2 = 249, _isContentOpen = (CppEnums.ContentsServiceType).eContentsServiceType_Commercial == getContentsServiceType(), _isNew = false, _isHot = false, _index = 5}
+, 
+[(PaGlobal_Menu._main)._shortCut] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_BUTTONSHORTCUT_SUBTITLE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu_01.dds", _x1 = 90, _y1 = 397, _x2 = 150, _y2 = 457, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isButtonShortCut, _isNew = false, _isHot = false, _index = 3}
 , _name = "", _count = (PaGlobal_Menu._main)._count}
 , 
 [1] = {
@@ -211,7 +215,7 @@ _new = {
 , 
 [(PaGlobal_Menu._cooperation)._partyFind] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_PARTYLIST_TITLE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 64, _y1 = 436, _x2 = 124, _y2 = 496, _isContentOpen = (PaGlobal_Menu._contentsGroup)._partyListOpen, _isNew = false, _isHot = true, _index = 25}
 , 
-[(PaGlobal_Menu._cooperation)._teamDuel] = {_string = "개인 결전", _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 64, _y1 = 436, _x2 = 124, _y2 = 496, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isTeamDuelOpen, _isNew = true, _isHot = false, _index = 61}
+[(PaGlobal_Menu._cooperation)._teamDuel] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_PERSONALBATTLE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 498, _y1 = 188, _x2 = 558, _y2 = 248, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isTeamDuelOpen, _isNew = true, _isHot = false, _index = 61}
 , _name = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_CATEGORYTITLE_2"), _count = (PaGlobal_Menu._cooperation)._count}
 , 
 [3] = {
@@ -237,7 +241,7 @@ _new = {
 , 
 [(PaGlobal_Menu._infomation)._warInfo] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_SIEGE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 312, _y1 = 374, _x2 = 372, _y2 = 434, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isSiegeEnable, _isNew = false, _isHot = false, _index = 36}
 , 
-[(PaGlobal_Menu._infomation)._event] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_EVENT"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 250, _y1 = 188, _x2 = 310, _y2 = 248, _isContentOpen = (not isGameTypeKR2() and not isGameTypeEnglish() and not isServerFixedCharge()), _isNew = false, _isHot = false, _index = 37}
+[(PaGlobal_Menu._infomation)._event] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_BTN_EVENT"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 250, _y1 = 188, _x2 = 310, _y2 = 248, _isContentOpen = (not isGameTypeKR2() and not isGameTypeEnglish() and not isServerFixedCharge()), _isNew = false, _isHot = true, _index = 37}
 , 
 [(PaGlobal_Menu._infomation)._steam] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_EXTRACTIONGAME"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 374, _y1 = 188, _x2 = 434, _y2 = 248, _isContentOpen = isGameServiceTypeDev(), _isNew = false, _isHot = false, _index = 38}
 , 
@@ -309,7 +313,7 @@ _new = {
           categoryData._x2 = 372
           categoryData._y2 = 248
         end
-        -- DECOMPILER ERROR at PC3766: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4000: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.Init = function(self)
   -- function num : 0_0
@@ -433,7 +437,7 @@ _new = {
   end
 end
 
-        -- DECOMPILER ERROR at PC3770: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4004: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleOver_MenuOpenWay = function(self, openType)
   -- function num : 0_1
@@ -450,14 +454,14 @@ end
   TooltipSimple_Show(uiControl, desc)
 end
 
-        -- DECOMPILER ERROR at PC3774: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4008: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleOver_ChangeMenu = function(self)
   -- function num : 0_2
   TooltipSimple_Show(((self._ui)._main)._btnChange, PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MENU_CHANGEUI"))
 end
 
-        -- DECOMPILER ERROR at PC3778: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4012: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetMainMenu = function(self)
   -- function num : 0_3
@@ -477,8 +481,14 @@ end
     (((self._ui)._main)[index]):addInputEvent("Mouse_Out", "")
     self:ChangeTexture(index, 0, index, nil, true)
     group_2:addControl(index, 0, (self._main)._count, 1, ((self._ui)._main)[index])
+    if (((self._categoryData)[0])[index])._isContentOpen then
+      (((self._ui)._main)[index]):SetShow(true)
+    else
+      ;
+      (((self._ui)._main)[index]):SetShow(false)
+    end
   end
-  -- DECOMPILER ERROR at PC93: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC112: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   ((self._ui)._main)._btnChange = (UI.getChildControl)(Panel_Menu_New, "Button_Change")
@@ -488,9 +498,25 @@ end
   (((self._ui)._main)._btnChange):addInputEvent("Mouse_On", "PaGlobal_Menu:HandleOver_ChangeMenu()")
   ;
   (((self._ui)._main)._btnChange):addInputEvent("Mouse_Out", "PaGlobal_Menu:CustomWindow_TooltipHide()")
+  if (PaGlobal_Menu._contentsGroup)._isButtonShortCut then
+    (((self._ui)._main)[1]):SetSpanSize(-140, 75)
+    ;
+    (((self._ui)._main)[3]):SetSpanSize(-50, 75)
+    ;
+    (((self._ui)._main)[5]):SetSpanSize(40, 75)
+    ;
+    (((self._ui)._main)[6]):SetSpanSize(130, 75)
+  else
+    ;
+    (((self._ui)._main)[1]):SetSpanSize(-90, 75)
+    ;
+    (((self._ui)._main)[5]):SetSpanSize(0, 75)
+    ;
+    (((self._ui)._main)[6]):SetSpanSize(90, 75)
+  end
 end
 
-        -- DECOMPILER ERROR at PC3782: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4016: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetBanner = function(self)
   -- function num : 0_4
@@ -498,7 +524,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3786: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4020: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetCustomWindow = function(self)
   -- function num : 0_5
@@ -645,7 +671,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3790: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4024: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetMenuOpenWay = function(self, isLeft)
   -- function num : 0_6
@@ -658,7 +684,7 @@ end
   (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).MenuOpenWay, way, (CppEnums.VariableStorageType).eVariableStorageType_User)
 end
 
-        -- DECOMPILER ERROR at PC3794: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4028: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.ComboGuideShowToggle = function(self)
   -- function num : 0_7
@@ -666,7 +692,7 @@ end
   PaGlobal_ConsoleKeyFirstCombo:showToggle()
 end
 
-        -- DECOMPILER ERROR at PC3798: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4032: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.ChangeTexture = function(self, menuIndex, categoryIndex, uiIndex, isCustom, isMain)
   -- function num : 0_8
@@ -826,7 +852,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3804: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4038: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetSubButtonIcon = function(self, count)
   -- function num : 0_10
@@ -1067,7 +1093,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3808: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4042: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleClicked_CategoryGroup = function(self, index)
   -- function num : 0_11
@@ -1125,7 +1151,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3812: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4046: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleClicked_CustomCategory = function(self, isCustom)
   -- function num : 0_12
@@ -1179,7 +1205,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3816: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4050: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.Check_MenuIndex = function(self, index)
   -- function num : 0_13
@@ -1206,7 +1232,7 @@ end
   return nil
 end
 
-        -- DECOMPILER ERROR at PC3820: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4054: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetCustomMode = function(self)
   -- function num : 0_14
@@ -1230,7 +1256,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3824: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4058: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.CustomModeAnimation = function(self, isCustom, isLeft)
   -- function num : 0_15
@@ -1295,7 +1321,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3828: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4062: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetCurrentMenu = function(self, categoryIndex, menuIndex, uiIndex)
   -- function num : 0_16
@@ -1366,7 +1392,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3832: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4066: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetChangeMenu = function(self, categoryIndex, menuIndex, realIndex)
   -- function num : 0_17
@@ -1396,7 +1422,7 @@ end
   (((self._ui)._custom)._checkIcon):SetPosY(131 + (math.floor)(realIndex / 7) * 45)
 end
 
-        -- DECOMPILER ERROR at PC3836: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4070: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.CustomWindow_OverEffect = function(self, index, dataIndex)
   -- function num : 0_18
@@ -1411,7 +1437,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3840: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4074: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.CustomWindow_OverEffect_MyMenu = function(self, index, dataIndex)
   -- function num : 0_19
@@ -1427,14 +1453,14 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3844: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4078: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.CustomWindow_TooltipHide = function(self)
   -- function num : 0_20
   TooltipSimple_Hide()
 end
 
-        -- DECOMPILER ERROR at PC3848: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4082: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SaveChangeMenu = function(self)
   -- function num : 0_21
@@ -1474,7 +1500,7 @@ end
   self:HandleClicked_CustomCategory(true)
 end
 
-        -- DECOMPILER ERROR at PC3852: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4086: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.CancelChangeMenu = function(self)
   -- function num : 0_22
@@ -1484,7 +1510,7 @@ end
   ((self._ui)._customWindow):SetShow(false)
 end
 
-        -- DECOMPILER ERROR at PC3856: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4090: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleClicked_MenuButton = function(self, index, categoryIndex, uiIndex)
   -- function num : 0_23
@@ -1509,6 +1535,11 @@ end
         if ToClient_IsMyselfInArena() then
           Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ARSHA_COMMON_ARLERT"))
           return 
+        else
+          if ToClient_getJoinGuildBattle() == true then
+            Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_TAG_CANTDO_GUILDBATTLE"))
+            return 
+          end
         end
         HandleClicked_RescueConfirm()
       else
@@ -1523,6 +1554,10 @@ end
             else
               if (PaGlobal_Menu._main)._cashShop == index then
                 GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_CashShop)
+              else
+                if (PaGlobal_Menu._main)._shortCut == index then
+                  FGlobal_ButtonShortcuts_Open()
+                end
               end
             end
           end
@@ -1679,68 +1714,69 @@ end
                                     if (PaGlobal_Menu._cooperation)._partyFind == index then
                                       FGlobal_PartyList_ShowToggle()
                                     else
+                                      if (PaGlobal_Menu._cooperation)._teamDuel == index then
+                                        PaGlobal_PersonalBattle:open()
+                                      end
                                     end
                                   end
                                 end
                               end
-                              if (PaGlobal_Menu._cooperation)._teamDuel == index then
-                                if categoryIndex == 3 then
-                                  if (PaGlobal_Menu._infomation)._keyboard == index then
-                                    FGlobal_KeyboardHelpShow()
+                              if categoryIndex == 3 then
+                                if (PaGlobal_Menu._infomation)._keyboard == index then
+                                  FGlobal_KeyboardHelpShow()
+                                else
+                                  if (PaGlobal_Menu._infomation)._productNote == index then
+                                    Panel_ProductNote_ShowToggle()
                                   else
-                                    if (PaGlobal_Menu._infomation)._productNote == index then
-                                      Panel_ProductNote_ShowToggle()
+                                    if (PaGlobal_Menu._infomation)._myInfo == index then
+                                      GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_PlayerInfo)
                                     else
-                                      if (PaGlobal_Menu._infomation)._myInfo == index then
-                                        GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_PlayerInfo)
+                                      if (PaGlobal_Menu._infomation)._fishEncyclopedia == index then
+                                        FGlobal_FishEncyclopedia_Open()
                                       else
-                                        if (PaGlobal_Menu._infomation)._fishEncyclopedia == index then
-                                          FGlobal_FishEncyclopedia_Open()
+                                        if (PaGlobal_Menu._infomation)._knowledge == index then
+                                          GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_MentalKnowledge)
                                         else
-                                          if (PaGlobal_Menu._infomation)._knowledge == index then
-                                            GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_MentalKnowledge)
+                                          if (PaGlobal_Menu._infomation)._worldMap == index then
+                                            GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_WorldMap)
                                           else
-                                            if (PaGlobal_Menu._infomation)._worldMap == index then
-                                              GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_WorldMap)
+                                            if (PaGlobal_Menu._infomation)._workerList == index then
+                                              workerManager_Toggle()
                                             else
-                                              if (PaGlobal_Menu._infomation)._workerList == index then
-                                                workerManager_Toggle()
+                                              if (PaGlobal_Menu._infomation)._itemMarket == index then
+                                                FGlobal_ItemMarket_Open_ForWorldMap(1, true)
+                                                audioPostEvent_SystemUi(1, 30)
                                               else
-                                                if (PaGlobal_Menu._infomation)._itemMarket == index then
-                                                  FGlobal_ItemMarket_Open_ForWorldMap(1, true)
-                                                  audioPostEvent_SystemUi(1, 30)
-                                                else
-                                                  if (PaGlobal_Menu._infomation)._tradeInfo == index then
-                                                    if isUsedNewTradeEventNotice_chk() then
-                                                      FGlobal_TradeEventNotice_Renewal_Show()
-                                                    else
-                                                      TradeEventInfo_Show()
-                                                    end
+                                                if (PaGlobal_Menu._infomation)._tradeInfo == index then
+                                                  if _ContentsGroup_isUsedNewTradeEventNotice then
+                                                    FGlobal_TradeEventNotice_Renewal_Show()
                                                   else
-                                                    if (PaGlobal_Menu._infomation)._warInfo == index then
-                                                      FGlobal_GuildWarInfo_Show()
+                                                    TradeEventInfo_Show()
+                                                  end
+                                                else
+                                                  if (PaGlobal_Menu._infomation)._warInfo == index then
+                                                    FGlobal_GuildWarInfo_Show()
+                                                  else
+                                                    if (PaGlobal_Menu._infomation)._event == index then
+                                                      EventNotify_Open(true, true)
                                                     else
-                                                      if (PaGlobal_Menu._infomation)._event == index then
-                                                        EventNotify_Open(true, true)
+                                                      if (PaGlobal_Menu._infomation)._steam == index then
+                                                        PaGlobal_Steam_Redemption()
                                                       else
-                                                        if (PaGlobal_Menu._infomation)._steam == index then
-                                                          PaGlobal_Steam_Redemption()
+                                                        if (PaGlobal_Menu._infomation)._update == index then
+                                                          Panel_WebHelper_ShowToggle("Update")
                                                         else
-                                                          if (PaGlobal_Menu._infomation)._update == index then
-                                                            Panel_WebHelper_ShowToggle("Update")
+                                                          if (PaGlobal_Menu._infomation)._notice == index then
+                                                            EventNotify_Open(true, true)
                                                           else
-                                                            if (PaGlobal_Menu._infomation)._notice == index then
-                                                              EventNotify_Open(true, true)
+                                                            if (PaGlobal_Menu._infomation)._serverChange == index then
+                                                              FGlobal_ChannelSelect_Show()
                                                             else
-                                                              if (PaGlobal_Menu._infomation)._serverChange == index then
-                                                                FGlobal_ChannelSelect_Show()
+                                                              if (PaGlobal_Menu._infomation)._masterpiece == index then
+                                                                FGlobal_MasterpieceAuction_OpenAuctionItemNotNpc()
                                                               else
-                                                                if (PaGlobal_Menu._infomation)._masterpiece == index then
-                                                                  FGlobal_MasterpieceAuction_OpenAuctionItemNotNpc()
-                                                                else
-                                                                  if (PaGlobal_Menu._infomation)._dropItem == index then
-                                                                    FGlobal_DropItemWindow_Open()
-                                                                  end
+                                                                if (PaGlobal_Menu._infomation)._dropItem == index then
+                                                                  FGlobal_DropItemWindow_Open()
                                                                 end
                                                               end
                                                             end
@@ -1757,41 +1793,41 @@ end
                                       end
                                     end
                                   end
-                                else
-                                  if categoryIndex == 4 then
-                                    if (PaGlobal_Menu._community)._guild == index then
-                                      GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Guild)
+                                end
+                              else
+                                if categoryIndex == 4 then
+                                  if (PaGlobal_Menu._community)._guild == index then
+                                    GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Guild)
+                                  else
+                                    if (PaGlobal_Menu._community)._friend == index then
+                                      GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_FriendList)
                                     else
-                                      if (PaGlobal_Menu._community)._friend == index then
-                                        GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_FriendList)
+                                      if (PaGlobal_Menu._community)._mail == index then
+                                        GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Mail)
                                       else
-                                        if (PaGlobal_Menu._community)._mail == index then
-                                          GlobalKeyBinder_MouseKeyMap((CppEnums.UiInputType).UiInputType_Mail)
+                                        if (PaGlobal_Menu._community)._guildRank == index then
+                                          GuildRank_Web_Show()
                                         else
-                                          if (PaGlobal_Menu._community)._guildRank == index then
-                                            GuildRank_Web_Show()
+                                          if (PaGlobal_Menu._community)._lifeRank == index then
+                                            FGlobal_LifeRanking_Open()
                                           else
-                                            if (PaGlobal_Menu._community)._lifeRank == index then
-                                              FGlobal_LifeRanking_Open()
+                                            if (PaGlobal_Menu._community)._monsterRank == index then
+                                              FGlobal_MonsterRanking_Open()
                                             else
-                                              if (PaGlobal_Menu._community)._monsterRank == index then
-                                                FGlobal_MonsterRanking_Open()
+                                              if (PaGlobal_Menu._community)._chattingFilter == index then
+                                                FGlobal_ChattingFilterList_Open()
                                               else
-                                                if (PaGlobal_Menu._community)._chattingFilter == index then
-                                                  FGlobal_ChattingFilterList_Open()
+                                                if (PaGlobal_Menu._community)._language == index then
+                                                  FGlobal_GameOptionOpen()
                                                 else
-                                                  if (PaGlobal_Menu._community)._language == index then
-                                                    FGlobal_GameOptionOpen()
+                                                  if (PaGlobal_Menu._community)._blackDesertTv == index then
+                                                    PaGlobal_Twitch:ShowWindow()
                                                   else
-                                                    if (PaGlobal_Menu._community)._blackDesertTv == index then
-                                                      PaGlobal_Twitch:ShowWindow()
+                                                    if (PaGlobal_Menu._community)._socialAction == index then
+                                                      FGlobal_SocialAction_ShowToggle()
                                                     else
-                                                      if (PaGlobal_Menu._community)._socialAction == index then
-                                                        FGlobal_SocialAction_ShowToggle()
-                                                      else
-                                                        if (PaGlobal_Menu._community)._memo == index then
-                                                          PaGlobal_Memo:ListOpen()
-                                                        end
+                                                      if (PaGlobal_Menu._community)._memo == index then
+                                                        PaGlobal_Memo:ListOpen()
                                                       end
                                                     end
                                                   end
@@ -1802,32 +1838,32 @@ end
                                         end
                                       end
                                     end
-                                  else
-                                    if categoryIndex == 5 then
-                                      if (PaGlobal_Menu._banner)._blackDesertTv == index then
-                                        PaGlobal_Twitch:ShowWindow()
-                                      else
-                                        if (PaGlobal_Menu._banner)._memo == index then
-                                          PaGlobal_Memo:ListOpen()
-                                        end
-                                      end
+                                  end
+                                else
+                                  if categoryIndex == 5 then
+                                    if (PaGlobal_Menu._banner)._blackDesertTv == index then
+                                      PaGlobal_Twitch:ShowWindow()
                                     else
-                                      if categoryIndex == 6 then
-                                        if (PaGlobal_Menu._myMenu)._graphic == index then
-                                          FGlobal_GameOption_OpenByMenu(0)
+                                      if (PaGlobal_Menu._banner)._memo == index then
+                                        PaGlobal_Memo:ListOpen()
+                                      end
+                                    end
+                                  else
+                                    if categoryIndex == 6 then
+                                      if (PaGlobal_Menu._myMenu)._graphic == index then
+                                        FGlobal_GameOption_OpenByMenu(0)
+                                      else
+                                        if (PaGlobal_Menu._myMenu)._sound == index then
+                                          FGlobal_GameOption_OpenByMenu(1)
                                         else
-                                          if (PaGlobal_Menu._myMenu)._sound == index then
-                                            FGlobal_GameOption_OpenByMenu(1)
+                                          if (PaGlobal_Menu._myMenu)._game == index then
+                                            FGlobal_GameOption_OpenByMenu(2)
                                           else
-                                            if (PaGlobal_Menu._myMenu)._game == index then
-                                              FGlobal_GameOption_OpenByMenu(2)
+                                            if (PaGlobal_Menu._myMenu)._performance == index then
+                                              FGlobal_GameOption_OpenByMenu(5)
                                             else
-                                              if (PaGlobal_Menu._myMenu)._performance == index then
-                                                FGlobal_GameOption_OpenByMenu(5)
-                                              else
-                                                if (PaGlobal_Menu._myMenu)._characterSelect == index then
-                                                  Panel_GameExit_ClickSelectCharacter()
-                                                end
+                                              if (PaGlobal_Menu._myMenu)._characterSelect == index then
+                                                Panel_GameExit_ClickSelectCharacter()
                                               end
                                             end
                                           end
@@ -1853,7 +1889,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3860: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4094: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetCheckIcon = function(self, uiIndex)
   -- function num : 0_24
@@ -1875,7 +1911,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3864: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4098: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.CustomWindow_Init = function(self)
   -- function num : 0_25
@@ -1908,7 +1944,7 @@ end
   self:SetCheckIcon()
 end
 
-        -- DECOMPILER ERROR at PC3868: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4102: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.CustomIndex_Init = function(self)
   -- function num : 0_26
@@ -1945,7 +1981,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3872: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4106: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.ContentOpenCheckByIndex = function(self, index)
   -- function num : 0_27
@@ -1965,7 +2001,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3876: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4110: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetShow = function(self, isShow)
   -- function num : 0_28
@@ -2007,7 +2043,7 @@ end
   return isShow
 end
 
-        -- DECOMPILER ERROR at PC3882: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4116: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.Resize = function(self)
   -- function num : 0_30
@@ -2069,7 +2105,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3886: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4120: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.ShowAni = function(self)
   -- function num : 0_31
@@ -2092,7 +2128,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3890: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4124: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HideAni = function(self)
   -- function num : 0_32
@@ -2113,7 +2149,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3894: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4128: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.SetVertexAni = function(self, index)
   -- function num : 0_33
@@ -2136,7 +2172,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3898: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4132: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.ResetVertexAni = function(self)
   -- function num : 0_34
@@ -2153,7 +2189,7 @@ end
   ((self._ui)._effect_BottomBanner):SetShow(false)
 end
 
-        -- DECOMPILER ERROR at PC3902: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4136: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleClicked_Banner = function(self, isHot)
   -- function num : 0_35
@@ -2190,6 +2226,10 @@ end
                     else
                       if (self._bannerHot)._update == index then
                         Panel_WebHelper_ShowToggle("Update")
+                      else
+                        if (self._bannerHot)._event == index then
+                          EventNotify_Open(true, true)
+                        end
                       end
                     end
                   end
@@ -2230,7 +2270,7 @@ end
   end
 end
 
-        -- DECOMPILER ERROR at PC3906: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4140: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleOvered_MainMenuButon = function(self, index)
   -- function num : 0_36
@@ -2246,7 +2286,7 @@ end
   ((self._ui)._effect_MainMenuButton):SetPosY(((self._ui)._mainMenuBg):GetPosY() + (((self._ui)._main)[index]):GetPosY())
 end
 
-        -- DECOMPILER ERROR at PC3910: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4144: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleOvered_Banner = function(self, isHot)
   -- function num : 0_37
@@ -2269,7 +2309,7 @@ end
   self._isBannerOver = true
 end
 
-        -- DECOMPILER ERROR at PC3914: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4148: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.HandleOuted_Banner = function(self)
   -- function num : 0_38
@@ -2286,7 +2326,7 @@ end
   PaGlobal_Menu:Init()
 end
 
-        -- DECOMPILER ERROR at PC3922: Confused about usage of register: R0 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC4156: Confused about usage of register: R0 in 'UnsetPending'
 
         PaGlobal_Menu.registerEvent = function(self)
   -- function num : 0_41
@@ -2378,7 +2418,7 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC3953: Confused about usage of register: R1 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC4187: Confused about usage of register: R1 in 'UnsetPending'
 
           PaGlobal_Menu.BannerAnimation = function(self, flag, aniType, isHot)
   -- function num : 0_55
@@ -2419,7 +2459,7 @@ end
   end
 end
 
-          -- DECOMPILER ERROR at PC3957: Confused about usage of register: R1 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC4191: Confused about usage of register: R1 in 'UnsetPending'
 
           PaGlobal_Menu.ChangeBannerTexture = function(self, control, isHot)
   -- function num : 0_56

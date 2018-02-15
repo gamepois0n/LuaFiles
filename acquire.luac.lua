@@ -24,7 +24,7 @@ local itemGradeBorderData = {
 , 
 [4] = {texture = "new_ui_common_forlua/window/skill/skill_ui_00.dds", x1 = 129, y1 = 44, x2 = 171, y2 = 86}
 }
-local Acquire_Enum = {LevelUp = 0, GainProductSkillPoint = 1, GainCombatSkillPoint = 2, GainGuildSkillPoint = 3, LearnSkill = 4, SkillLearnable = 5, SkillAwakened = 6, QuestAccept = 7, QuestFailed = 8, QuestComplete = 9, GetRareItem = 10, DiscoveryExplorationNode = 11, UpgradeExplorationNode = 12, LearnMentalCard = 13, ServantLevelUp = 14, GainExplorePoint = 15, Detected = 16, AddNpcWorker = 17, GetAlchemy = 18, GetManufacture = 19, LearnGuildSkill = 20, MentalThemeComplete = 21, ProductLevelUp = 22, GetFishEncyclopedia = 23, UpdateFishLength = 24, GetFish = 25, AcquiredTitle = 26, ServantLearnSkill = 27, ServantSkillMaster = 28, PetLearnSkill = 29, ClearGuildSkill = 30, AlertInvidualShutDown = 31, AlertWorldShutDown = 32, Normal = 0, Viliage = 1, City = 2, Gate = 3, Farm = 4, Filtration = 5, Collect = 6, Quarry = 7, Logging = 8, Deco_Tree = 9}
+local Acquire_Enum = {LevelUp = 0, GainProductSkillPoint = 1, GainCombatSkillPoint = 2, GainGuildSkillPoint = 3, LearnSkill = 4, SkillLearnable = 5, SkillAwakened = 6, QuestAccept = 7, QuestFailed = 8, QuestComplete = 9, GetRareItem = 10, DiscoveryExplorationNode = 11, UpgradeExplorationNode = 12, LearnMentalCard = 13, ServantLevelUp = 14, GainExplorePoint = 15, Detected = 16, AddNpcWorker = 17, GetAlchemy = 18, GetManufacture = 19, LearnGuildSkill = 20, MentalThemeComplete = 21, ProductLevelUp = 22, GetFishEncyclopedia = 23, UpdateFishLength = 24, GetFish = 25, AcquiredTitle = 26, ServantLearnSkill = 27, ServantSkillMaster = 28, PetLearnSkill = 29, ClearGuildSkill = 30, AlertInvidualShutDown = 31, AlertWorldShutDown = 32, FairyLearnSkill = 33, Normal = 0, Viliage = 1, City = 2, Gate = 3, Farm = 4, Filtration = 5, Collect = 6, Quarry = 7, Logging = 8, Deco_Tree = 9}
 local Acquire_Value = {elapsedTime = Acquire_ConstValue.animationEndTime}
 local isView = false
 local preDefaultMsg, preArcObjectMsg, saveEventItem = nil, nil, nil
@@ -443,6 +443,52 @@ local Acquire_SetData = function(notifyMsg)
                                       arcObjectMsg = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLD_SHUTDOWN_COUNTDOWN_MSG", "time", Int64toInt32(notifyMsg._Param))
                                       defaultMsg = ""
                                       arcIconPath = ""
+                                    elseif Acquire_Enum.FairyLearnSkill == arcType then
+                                      local skillSSW = notifyMsg:getSkillStaticstatusWrapper()
+                                      local petNo = (Uint64toInt64(notifyMsg._Param2))
+                                      local skillName, petName = nil, nil
+                                      if skillSSW ~= nil then
+                                        local skillTypeSSW = skillSSW:getSkillTypeStaticStatusWrapper()
+                                        if skillTypeSSW ~= nil then
+                                          arcIconPath = skillTypeSSW:getIconPath()
+                                          skillName = skillTypeSSW:getName()
+                                        end
+                                      else
+                                        _PA_LOG("�\128민혁", "skillSSW = nullptr 입니�\164.")
+                                      end
+                                      local petCountUnseal = ToClient_getFairyUnsealedList()
+                                      for index = 0, petCountUnseal - 1 do
+                                        local PcPetData = ToClient_getFairyUnsealedDataByIndex(index)
+                                        if PcPetData == nil then
+                                          return 
+                                        end
+                                        if petNo == PcPetData:getPcPetNo() then
+                                          petName = PcPetData:getName()
+                                        end
+                                      end
+                                      local petCountSeal = ToClient_getFairySealedList()
+                                      for index = 0, petCountSeal - 1 do
+                                        local PcPetData = ToClient_getFairySealedDataByIndex(index)
+                                        if PcPetData == nil then
+                                          return 
+                                        end
+                                        if petNo == PcPetData._petNo then
+                                          petName = PcPetData:getName()
+                                        end
+                                      end
+                                      if skillTypeSSW ~= nil then
+                                        (Acquire_UI.servantSkillIcon):SetShow(true)
+                                        ;
+                                        (Acquire_UI.servantSkillName):SetShow(true)
+                                        ;
+                                        (Acquire_UI.servantSkillIcon):ChangeTextureInfoName("Icon/" .. arcIconPath)
+                                        ;
+                                        (Acquire_UI.servantSkillName):SetText(skillName)
+                                        ;
+                                        (Acquire_UI.servantSkillIcon):SetText(PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4"))
+                                      end
+                                      arcObjectMsg = PAGetStringParam2(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_27", "name", petName, "skillname", skillName)
+                                      defaultMsg = PAGetString(Defines.StringSheet_GAME, "ACQUIRE_TITLEMESSAGE_4")
                                     end
                                     ;
                                     (Acquire_UI.titleText):SetText(defaultMsg)
@@ -523,7 +569,7 @@ local Acquire_SetData = function(notifyMsg)
                                       local aniIsPlaying = Acquire_Animation()
                                       if not aniIsPlaying then
                                         (Acquire_UI.mainPanel):SetShow(true, true)
-                                        -- DECOMPILER ERROR at PC1127: Confused about usage of register: R8 in 'UnsetPending'
+                                        -- DECOMPILER ERROR at PC1244: Confused about usage of register: R8 in 'UnsetPending'
 
                                         Acquire_Value.elapsedTime = 0
                                       end
@@ -536,7 +582,7 @@ local Acquire_SetData = function(notifyMsg)
                                       preDefaultMsg = defaultMsg
                                       preArcObjectMsg = arcObjectMsg
                                       do return true end
-                                      -- DECOMPILER ERROR: 43 unprocessed JMP targets
+                                      -- DECOMPILER ERROR: 51 unprocessed JMP targets
                                     end
                                   end
                                 end

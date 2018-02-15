@@ -32,7 +32,7 @@ _subButtonSize = {_BigX = 303, _SmallX = 121}
 _const = {_sortTypeAsc = 1, _sortTypeDesc = 2}
 , _static_TopLineBG = (UI.getChildControl)(Panel_IngameCashShop, "Static_TopLineBG"), _static_PromotionBanner = (UI.getChildControl)(Panel_IngameCashShop, "Static_PromotionBanner"), _static_GradationTop = (UI.getChildControl)(Panel_IngameCashShop, "Static_Gradation_Top"), _static_GradationBottom = (UI.getChildControl)(Panel_IngameCashShop, "Static_Gradation_Bottom"), _staticText_CashCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_NowCashCount"), _staticText_PearlCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_NowPearlCount"), _staticText_SilverCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_SilverCount"), _staticText_MileageCount = (UI.getChildControl)(Panel_IngameCashShop, "StaticText_MileageCount"), _static_SideLineLeft = (UI.getChildControl)(Panel_IngameCashShop, "Static_SideLineLeft"), _static_SideLineRight = (UI.getChildControl)(Panel_IngameCashShop, "Static_SideLineRight"), _scroll_IngameCash = (UI.getChildControl)(Panel_IngameCashShop, "Scroll_IngameCash"), _static_ScrollArea = (UI.getChildControl)(Panel_IngameCashShop, "Static_ScrollArea"), _static_ScrollArea1 = (UI.getChildControl)(Panel_IngameCashShop, "Static_ScrollArea_1"), _static_ScrollArea2 = (UI.getChildControl)(Panel_IngameCashShop, "Static_ScrollArea_2"), _static_Construction = (UI.getChildControl)(Panel_IngameCashShop, "Static_Construction"), _edit_Search = (UI.getChildControl)(Panel_IngameCashShop, "Edit_GoodsName"), _button_Search = (UI.getChildControl)(Panel_IngameCashShop, "Button_Search"), _combo_Class = (UI.getChildControl)(Panel_IngameCashShop, "Combobox_ClassSort"), _combo_Sort = (UI.getChildControl)(Panel_IngameCashShop, "Combobox_PriceSort"), _combo_SubFilter = (UI.getChildControl)(Panel_IngameCashShop, "Combobox_SubFilter"), _haveCashBoxBG = (UI.getChildControl)(Panel_IngameCashShop, "Static_HaveCashBoxBG"), _pearlBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_PearlBox"), _nowPearlIcon = (UI.getChildControl)(Panel_IngameCashShop, "Static_NowPearlIcon"), _silverBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_SilverBox"), _silver = (UI.getChildControl)(Panel_IngameCashShop, "Static_SilverIcon"), _mileageBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_MileageBox"), _mileage = (UI.getChildControl)(Panel_IngameCashShop, "Static_MileageIcon"), _cashBox = (UI.getChildControl)(Panel_IngameCashShop, "Static_CashBox"), _nowCash = (UI.getChildControl)(Panel_IngameCashShop, "Static_CashIcon"), _btn_BuyPearl = (UI.getChildControl)(Panel_IngameCashShop, "Button_BuyPearl"), _btn_BuyDaum = (UI.getChildControl)(Panel_IngameCashShop, "Button_BuyDaum"), _btn_RefreshCash = (UI.getChildControl)(Panel_IngameCashShop, "Button_RefreshCash"), _btn_HowUsePearl = (UI.getChildControl)(Panel_IngameCashShop, "Button_PearlHowUse"), 
 desc = {_static_ItemNameCombo = nil, _staticText_Title = nil, _static_SlotBG = nil, _static_Slot = nil, _static_Desc = nil, _staticText_ProductInfo_Title = nil, _staticText_PurchaseLimit = nil, _static_VestedDesc = nil, _static_TradeDesc = nil, _static_ClassDesc = nil, _static_WarningDesc = nil, _static_DiscountPeriodDesc = nil, _static_ItemListTitle = nil, _static_RelatedItemTitle = nil, _static_PearlIcon = nil, _static_PearOriginalPrice = nil, _static_PearlPrice = nil, _btn_BigBuy = nil, _btn_BigCart = nil, _btn_BigGift = nil}
-, _subItemButton = (Array.new)(), _subItemCount = 20, _endSunPositionY = 0, _bigButtonCount = 0, _smallButtonCount = 0, _skipCount = 0, _itemCount = 20, _items = (Array.new)(), _relatedItems = (Array.new)(), _comboList = (Array.new)(), _listComboCount = 1, itemDescDetailSize = 0, _openFunction = false, _openProductKeyRaw = -1, _categoryWeb = nil, _promotionWeb = nil, _promotionSizeY = 0, 
+, _subItemButton = (Array.new)(), _subItemCount = 20, _endSunPositionY = 0, _bigButtonCount = 0, _smallButtonCount = 0, _skipCount = 0, _itemCount = 20, _items = (Array.new)(), _relatedItems = (Array.new)(), _comboList = (Array.new)(), _listComboCount = 1, itemDescDetailSize = 0, _chooseProductList = (Array.new)(), _chooseProductListCount = 10, _chooseProductClickList = (Array.new)(), _endChoosePositionY = 0, _openFunction = false, _openProductKeyRaw = -1, _categoryWeb = nil, _promotionWeb = nil, _promotionSizeY = 0, 
 _promotionTab = {}
 , 
 _myCartTab = {}
@@ -1442,11 +1442,12 @@ InGameShop_ScrollEvent = function(isUp)
   end
 end
 
-InGameShop_ProductShowToolTip = function(productKeyRaw, uiIdx)
+InGameShop_ProductShowToolTip = function(productKeyRaw, uiIdx, isChoose)
   -- function num : 0_36 , upvalues : inGameShop
   local self = inGameShop
   local slotIcon = ((self._slots)[uiIdx]).icon
-  FGlobal_CashShop_GoodsTooltipInfo_Open(productKeyRaw, slotIcon)
+  local scrollArea = self._static_ScrollArea
+  FGlobal_CashShop_GoodsTooltipInfo_Open(productKeyRaw, slotIcon, isChoose, scrollArea)
 end
 
 InGameShop_ShowSimpleToolTip = function(isShow, buttonType)
@@ -1918,6 +1919,36 @@ IngameCashShop_Descinit = function()
     ;
     (selfPanel._subItemButton)[kk] = subitem
   end
+  local chooseProductListCount = inGameShop._chooseProductListCount
+  for jj = 0, chooseProductListCount - 1 do
+    local chooseProduct = {}
+    chooseProduct.staticBG = (UI.createAndCopyBasePropertyControl)(inGameShop._goodDescBG, "RadioButton_Banner", inGameShop._goodDescBG, "InGameShop_ChooseCashBG_" .. jj)
+    ;
+    (chooseProduct.staticBG):SetShow(false)
+    ;
+    (chooseProduct.staticBG):addInputEvent("Mouse_UpScroll", "InGameShop_ScrollEvent( true )")
+    ;
+    (chooseProduct.staticBG):addInputEvent("Mouse_DownScroll", "InGameShop_ScrollEvent( false )")
+    chooseProduct.staticAddPlusBtn = (UI.createAndCopyBasePropertyControl)(inGameShop._goodDescBG, "Button_ChooseCountPlus", inGameShop._goodDescBG, "InGameShop_ChooseCountPlus_" .. jj)
+    ;
+    (chooseProduct.staticAddPlusBtn):SetShow(false)
+    ;
+    (chooseProduct.staticAddPlusBtn):addInputEvent("Mouse_LUp", "InGameShop_ChooseCashClickEvent(" .. jj .. ", true )")
+    chooseProduct.staticAddMinusBtn = (UI.createAndCopyBasePropertyControl)(inGameShop._goodDescBG, "Button_ChooseCountMinus", inGameShop._goodDescBG, "InGameShop_ChooseCountMinus_" .. jj)
+    ;
+    (chooseProduct.staticAddMinusBtn):SetShow(false)
+    ;
+    (chooseProduct.staticAddMinusBtn):addInputEvent("Mouse_LUp", "InGameShop_ChooseCashClickEvent(" .. jj .. ", false )")
+    chooseProduct.staticEditCount = (UI.createAndCopyBasePropertyControl)(inGameShop._goodDescBG, "Edit_ChooseCount", inGameShop._goodDescBG, "InGameShop_ChooseCount_" .. jj)
+    ;
+    (chooseProduct.staticEditCount):SetShow(false)
+    ;
+    (chooseProduct.staticEditCount):SetIgnore(true)
+    -- DECOMPILER ERROR at PC384: Confused about usage of register: R10 in 'UnsetPending'
+
+    ;
+    (selfPanel._chooseProductList)[jj] = chooseProduct
+  end
 end
 
 IngameCashShop_DescUpdate = function()
@@ -2021,6 +2052,9 @@ IngameCashShop_DescUpdate = function()
     buttonSizeY = 0
   end
   local optionDesc_PosY = subConfig._startY + buttonSizeY
+  if cashProduct:isChooseCash() then
+    optionDesc_PosY = optionDesc_PosY + inGameShop._endChoosePositionY
+  end
   ;
   (self._staticText_ProductInfo_Title):SetPosY(optionDesc_PosY - 35)
   ;
@@ -2095,10 +2129,10 @@ IngameCashShop_DescUpdate = function()
       (self._static_ItemListTitle):SetPosY(optionDesc_PosY + descConfig._gapY * (descCount))
       descCount = descCount + 1
       optionDesc_PosY = optionDesc_PosY + (((inGameShop._items)[0]).iconBG):GetSizeY() + 20
-      -- DECOMPILER ERROR at PC560: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC567: Confused about usage of register: R14 in 'UnsetPending'
 
       inGameShop.itemDescDetailSize = optionDesc_PosY + descConfig._gapY * (descCount)
-      -- DECOMPILER ERROR at PC564: Confused about usage of register: R14 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC571: Confused about usage of register: R14 in 'UnsetPending'
 
       inGameShop._maxDescSize = inGameShop.itemDescDetailSize
       local limitType = cashProduct:getCashPurchaseLimitType()
@@ -2228,6 +2262,18 @@ IngameCashShop_DescUpdate = function()
                   (self._btn_BigCart):SetSpanSize(60, 10)
                   ;
                   (self._btn_BigBuy):SetSpanSize(20, 10)
+                  if cashProduct:isChooseCash() then
+                    (self._btn_BigGift):SetMonoTone(true)
+                    ;
+                    (self._btn_BigCart):SetMonoTone(true)
+                    ;
+                    (self._btn_BigGift):SetEnable(false)
+                    ;
+                    (self._btn_BigCart):SetEnable(false)
+                  end
+                  if isGameTypeTR() or isGameTypeID() or isGameTypeTH() then
+                    (self._btn_BigGift):SetShow(false)
+                  end
                   ;
                   (self._btn_BigGift):addInputEvent("Mouse_LUp", "IngameCashShop_DescSelectedGiftItem(" .. inGameShop._openProductKeyRaw .. ")")
                   ;
@@ -2470,6 +2516,106 @@ IngameCashShop_initDescData = function()
         (((inGameShop._subItemButton)[ii]).static):SetPosY(40 + (positionSY) * (configButton._subButton)._gapY)
       end
     end
+    do
+      local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(inGameShop._openProductKeyRaw)
+      if cashProduct == nil then
+        return 
+      end
+      -- DECOMPILER ERROR at PC487: Confused about usage of register: R12 in 'UnsetPending'
+
+      inGameShop._endChoosePositionY = 0
+      -- DECOMPILER ERROR at PC489: Confused about usage of register: R12 in 'UnsetPending'
+
+      inGameShop._chooseProductClickList = nil
+      ;
+      (getIngameCashMall()):clearChooseProductCount()
+      if cashProduct:isChooseCash() then
+        local validChooseCashProduct = cashProduct:chooseCashCount()
+        local nextLine = -1
+        -- DECOMPILER ERROR at PC505: Confused about usage of register: R14 in 'UnsetPending'
+
+        inGameShop._chooseProductClickList = (Array.new)()
+        for ii = 0, validChooseCashProduct - 1 do
+          local chooseCashProduct = cashProduct:getChooseCashByIndex(ii)
+          if chooseCashProduct == nil then
+            return 
+          end
+          local radioBenner = (inGameShop._chooseProductList)[ii]
+          if ii % 3 == 0 then
+            nextLine = nextLine + 1
+          end
+          ;
+          (radioBenner.staticAddPlusBtn):SetShow(true)
+          ;
+          (radioBenner.staticAddPlusBtn):SetIgnore(false)
+          ;
+          (radioBenner.staticAddPlusBtn):SetPosX(200 + 220 * (ii % 3))
+          ;
+          (radioBenner.staticAddPlusBtn):SetPosY(60 + 59 * (nextLine))
+          ;
+          (radioBenner.staticAddMinusBtn):SetShow(true)
+          ;
+          (radioBenner.staticAddMinusBtn):SetIgnore(false)
+          ;
+          (radioBenner.staticAddMinusBtn):SetPosX(200 + 220 * (ii % 3))
+          ;
+          (radioBenner.staticAddMinusBtn):SetPosY(77 + 59 * (nextLine))
+          ;
+          (radioBenner.staticEditCount):SetShow(true)
+          ;
+          (radioBenner.staticEditCount):SetText("0")
+          ;
+          (radioBenner.staticEditCount):SetPosX(165 + 220 * (ii % 3))
+          ;
+          (radioBenner.staticEditCount):SetPosY(59 + 59 * (nextLine))
+          ;
+          (radioBenner.staticBG):SetShow(true)
+          ;
+          (radioBenner.staticBG):ChangeTextureInfoName(chooseCashProduct:getPackageIcon())
+          ;
+          (radioBenner.staticBG):SetIgnore(false)
+          ;
+          (radioBenner.staticBG):SetPosX(10 + 220 * (ii % 3))
+          ;
+          (radioBenner.staticBG):SetPosY(50 + 59 * (nextLine))
+          ;
+          (radioBenner.staticBG):addInputEvent("Mouse_On", "InGameShop_ProductShowToolTip( " .. chooseCashProduct:getNoRaw() .. ", " .. ii .. ", true )")
+          ;
+          (radioBenner.staticBG):addInputEvent("Mouse_Out", "FGlobal_CashShop_GoodsTooltipInfo_Close()")
+          ;
+          (radioBenner.staticBG):addInputEvent("Mouse_LUp", "InGameShop_ChooseCashView(" .. chooseCashProduct:getNoRaw() .. ")")
+          -- DECOMPILER ERROR at PC631: Confused about usage of register: R20 in 'UnsetPending'
+
+          ;
+          (inGameShop._chooseProductClickList)[ii] = 0
+        end
+        -- DECOMPILER ERROR at PC639: Confused about usage of register: R14 in 'UnsetPending'
+
+        inGameShop._endChoosePositionY = inGameShop._endChoosePositionY + 59 * (nextLine + 1)
+      else
+        do
+          for ii = 0, inGameShop._chooseProductListCount - 1 do
+            local radioBenner = (inGameShop._chooseProductList)[ii]
+            ;
+            (radioBenner.staticBG):SetShow(false)
+            ;
+            (radioBenner.staticBG):SetIgnore(true)
+            ;
+            (radioBenner.staticAddPlusBtn):SetShow(false)
+            ;
+            (radioBenner.staticAddPlusBtn):SetIgnore(true)
+            ;
+            (radioBenner.staticAddMinusBtn):SetShow(false)
+            ;
+            (radioBenner.staticAddMinusBtn):SetIgnore(true)
+            ;
+            (radioBenner.staticEditCount):SetShow(false)
+            ;
+            (radioBenner.staticEditCount):SetText("0")
+          end
+        end
+      end
+    end
   end
 end
 
@@ -2596,7 +2742,7 @@ IngameCashShop_SelectedItem = function(index)
 end
 
 IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
-  -- function num : 0_64 , upvalues : inGameShop
+  -- function num : 0_64 , upvalues : inGameShop, UI_CCC, tabIndexList
   local self = inGameShop
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNoRaw)
   if cashProduct == nil then
@@ -2675,8 +2821,10 @@ IngameCashShop_SelectedItemXXX = function(productNoRaw, isForcePositionSet)
           ;
           (self._goodDescBG):SetSize((self._goodDescBG):GetSizeX(), 1)
           IngameCashShop_DescUpdate()
-          FGlobal_CashShop_SetEquip_Update(productNoRaw)
-          FGlobal_CashShop_SetEquip_SelectedItem(productNoRaw)
+          if Return_CashShopController_FirstIgnore() == false or UI_CCC.eCashProductCategory_Costumes ~= (tabIndexList[self._currentTab])[5] then
+            FGlobal_CashShop_SetEquip_Update(productNoRaw)
+            FGlobal_CashShop_SetEquip_SelectedItem(productNoRaw)
+          end
           PaGlobal_RecommendEngine_CashVeiw(productNoRaw)
           self:update()
         end
@@ -2720,8 +2868,63 @@ FGlobal_IngameCashShop_SelectedItemReset = function()
   IngameCashShop_initSubItemButton()
 end
 
-FGlobal_Update_IngameCashShop_CartEffect = function()
+InGameShop_ChooseCashClickEvent = function(index, isUp)
   -- function num : 0_67 , upvalues : inGameShop
+  local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(inGameShop._openProductKeyRaw)
+  if cashProduct == nil then
+    return 
+  end
+  local validChooseCount = cashProduct:chooseCashCount()
+  local mustChooseCount = cashProduct:mustChooseCount()
+  local checkCount = 0
+  local isEnable = false
+  for ii = 0, validChooseCount - 1 do
+    checkCount = checkCount + (inGameShop._chooseProductClickList)[ii]
+  end
+  if checkCount == mustChooseCount and isUp == true then
+    local radioBenner = (inGameShop._chooseProductList)[index]
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOP_CHOOSECOUNTOVER"))
+    return 
+  else
+    do
+      -- DECOMPILER ERROR at PC48: Confused about usage of register: R7 in 'UnsetPending'
+
+      if isUp == true then
+        (inGameShop._chooseProductClickList)[index] = (inGameShop._chooseProductClickList)[index] + 1
+      else
+        if (inGameShop._chooseProductClickList)[index] == 0 then
+          Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CASHSHOP_CHOOSECOUNTMINIMUM"))
+          return 
+        end
+        -- DECOMPILER ERROR at PC69: Confused about usage of register: R7 in 'UnsetPending'
+
+        ;
+        (inGameShop._chooseProductClickList)[index] = (inGameShop._chooseProductClickList)[index] - 1
+      end
+      do
+        local radioBenner = (inGameShop._chooseProductList)[index]
+        ;
+        (radioBenner.staticEditCount):SetText((inGameShop._chooseProductClickList)[index])
+        ;
+        (getIngameCashMall()):setChooseProductCount(index, isUp)
+      end
+    end
+  end
+end
+
+InGameShop_ChooseCashView = function(productNoRaw)
+  -- function num : 0_68
+  FGlobal_CashShop_SetEquip_Update(productNoRaw)
+  FGlobal_CashShop_SetEquip_SelectedItem(productNoRaw)
+end
+
+FGlobal_IngameCashShopCashCheckList_ReturnValue = function()
+  -- function num : 0_69 , upvalues : inGameShop
+  return inGameShop._chooseProductClickList
+end
+
+FGlobal_Update_IngameCashShop_CartEffect = function()
+  -- function num : 0_70 , upvalues : inGameShop
   local self = inGameShop
   ;
   ((self._myCartTab).static):EraseAllEffect()
@@ -2730,7 +2933,7 @@ FGlobal_Update_IngameCashShop_CartEffect = function()
 end
 
 IngameCashShop_CartItem = function(index)
-  -- function num : 0_68 , upvalues : inGameShop
+  -- function num : 0_71 , upvalues : inGameShop
   local self = inGameShop
   local slot = (self._slots)[index]
   local tempSaveProductKeyRaw = slot.productNoRaw
@@ -2755,7 +2958,7 @@ IngameCashShop_CartItem = function(index)
     return 
   end
   local doAnotherClassItem = function()
-    -- function num : 0_68_0 , upvalues : slot, tempSaveProductKeyRaw
+    -- function num : 0_71_0 , upvalues : slot, tempSaveProductKeyRaw
     local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(slot.productNoRaw)
     if cashProduct == nil then
       return 
@@ -2780,7 +2983,7 @@ IngameCashShop_CartItem = function(index)
 end
 
 IngameCashShop_DescSelectedCartItem = function(productKeyRaw)
-  -- function num : 0_69 , upvalues : inGameShop
+  -- function num : 0_72 , upvalues : inGameShop
   local self = inGameShop
   local tempSaveProductKeyRaw = productKeyRaw
   if inGameShop._openProductKeyRaw ~= -1 then
@@ -2804,7 +3007,7 @@ IngameCashShop_DescSelectedCartItem = function(productKeyRaw)
     return 
   end
   local doAnotherClassItem = function()
-    -- function num : 0_69_0 , upvalues : productKeyRaw, tempSaveProductKeyRaw
+    -- function num : 0_72_0 , upvalues : productKeyRaw, tempSaveProductKeyRaw
     local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productKeyRaw)
     if cashProduct == nil then
       return 
@@ -2829,7 +3032,7 @@ IngameCashShop_DescSelectedCartItem = function(productKeyRaw)
 end
 
 IngameCashShop_GiftItem = function(index)
-  -- function num : 0_70 , upvalues : inGameShop
+  -- function num : 0_73 , upvalues : inGameShop
   local self = inGameShop
   local slot = (self._slots)[index]
   local selfplayer = getSelfPlayer()
@@ -2871,7 +3074,7 @@ IngameCashShop_GiftItem = function(index)
 end
 
 IngameCashShop_DescSelectedGiftItem = function(productNoRaw)
-  -- function num : 0_71 , upvalues : inGameShop
+  -- function num : 0_74 , upvalues : inGameShop
   local self = inGameShop
   local selfplayer = getSelfPlayer()
   if selfplayer == nil then
@@ -2911,7 +3114,7 @@ IngameCashShop_DescSelectedGiftItem = function(productNoRaw)
 end
 
 IngameCashShop_BuyItem = function(index)
-  -- function num : 0_72 , upvalues : inGameShop, tabIndexList, UI_CCC, isKorea, isNaver
+  -- function num : 0_75 , upvalues : inGameShop, tabIndexList, UI_CCC, isKorea, isNaver
   local self = inGameShop
   local slot = (self._slots)[index]
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(slot.productNoRaw)
@@ -2957,7 +3160,7 @@ IngameCashShop_BuyItem = function(index)
 end
 
 IngameCashShop_DescSelectedBuyItem = function(productNoRaw)
-  -- function num : 0_73 , upvalues : inGameShop, tabIndexList, UI_CCC, isKorea, isNaver
+  -- function num : 0_76 , upvalues : inGameShop, tabIndexList, UI_CCC, isKorea, isNaver
   local self = inGameShop
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNoRaw)
   if cashProduct == nil then
@@ -3002,7 +3205,7 @@ IngameCashShop_DescSelectedBuyItem = function(productNoRaw)
 end
 
 InGameShop_OpenClassList = function()
-  -- function num : 0_74 , upvalues : inGameShop
+  -- function num : 0_77 , upvalues : inGameShop
   local self = inGameShop
   local list = (self._combo_Class):GetListControl()
   audioPostEvent_SystemUi(0, 0)
@@ -3011,7 +3214,7 @@ InGameShop_OpenClassList = function()
 end
 
 InGameShop_SelectClass = function()
-  -- function num : 0_75 , upvalues : inGameShop
+  -- function num : 0_78 , upvalues : inGameShop
   local self = inGameShop
   local selectIndex = (self._combo_Class):GetSelectIndex()
   if selectIndex == -1 then
@@ -3039,7 +3242,7 @@ InGameShop_SelectClass = function()
 end
 
 InGameShop_OpenSorList = function()
-  -- function num : 0_76 , upvalues : inGameShop
+  -- function num : 0_79 , upvalues : inGameShop
   local self = inGameShop
   local list = (self._combo_Sort):GetListControl()
   audioPostEvent_SystemUi(0, 0)
@@ -3048,7 +3251,7 @@ InGameShop_OpenSorList = function()
 end
 
 InGameShop_SelectSort = function()
-  -- function num : 0_77 , upvalues : inGameShop
+  -- function num : 0_80 , upvalues : inGameShop
   local self = inGameShop
   local selectIndex = (self._combo_Sort):GetSelectIndex()
   if selectIndex == -1 then
@@ -3076,7 +3279,7 @@ InGameShop_SelectSort = function()
 end
 
 InGameShop_OpenSubFilterList = function()
-  -- function num : 0_78 , upvalues : inGameShop
+  -- function num : 0_81 , upvalues : inGameShop
   local self = inGameShop
   local list = (self._combo_SubFilter):GetListControl()
   audioPostEvent_SystemUi(0, 0)
@@ -3085,7 +3288,7 @@ InGameShop_OpenSubFilterList = function()
 end
 
 InGameShop_SelectSubFilter = function()
-  -- function num : 0_79 , upvalues : inGameShop
+  -- function num : 0_82 , upvalues : inGameShop
   local self = inGameShop
   local selectIndex = (self._combo_SubFilter):GetSelectIndex()
   if selectIndex == -1 then
@@ -3113,7 +3316,7 @@ InGameShop_SelectSubFilter = function()
 end
 
 InGameShop_UpdateCashShop = function()
-  -- function num : 0_80 , upvalues : inGameShop
+  -- function num : 0_83 , upvalues : inGameShop
   local self = inGameShop
   ;
   (self._static_Construction):SetShow(false)
@@ -3132,26 +3335,26 @@ InGameShop_UpdateCashShop = function()
 end
 
 InGameShop_UpdateCash = function()
-  -- function num : 0_81 , upvalues : inGameShop
+  -- function num : 0_84 , upvalues : inGameShop
   local self = inGameShop
   local cash, pearl, mileage = self:updateMoney()
   return cash, pearl, mileage
 end
 
 InGameShop_OuterEventByAttacked = function()
-  -- function num : 0_82
+  -- function num : 0_85
   if Panel_IngameCashShop:GetShow() then
     InGameShop_Close()
   end
 end
 
 InGameShop_OuterEventForDead = function()
-  -- function num : 0_83
+  -- function num : 0_86
   InGameShop_Close()
 end
 
 InGameShop_Resize = function()
-  -- function num : 0_84 , upvalues : inGameShop, isKorea, isNaver, tabId, _AllBG
+  -- function num : 0_87 , upvalues : inGameShop, isKorea, isNaver, tabId, _AllBG
   local self = inGameShop
   local slotConfig = (self._config)._slot
   local tabConfig = (self._config)._tab
@@ -3254,7 +3457,7 @@ InGameShop_Resize = function()
 end
 
 _ingameCashShop_SetViewListCount = function()
-  -- function num : 0_85 , upvalues : inGameShop
+  -- function num : 0_88 , upvalues : inGameShop
   local self = inGameShop
   local scrSizeY = getScreenSizeY()
   local areaPosY = (self._static_ScrollArea):GetPosY()
@@ -3275,7 +3478,7 @@ end
 do
   local cumulatedTime = 0
   InGameCashshopUpdatePerFrame = function(deltaTime)
-  -- function num : 0_86 , upvalues : disCountSetUse, cumulatedTime
+  -- function num : 0_89 , upvalues : disCountSetUse, cumulatedTime
   if disCountSetUse == true then
     cumulatedTime = cumulatedTime + deltaTime
     if cumulatedTime > 1 then
@@ -3287,7 +3490,7 @@ do
 end
 
   CashShopUpdateRamainedTimePerSecond = function()
-  -- function num : 0_87 , upvalues : inGameShop
+  -- function num : 0_90 , upvalues : inGameShop
   local self = inGameShop
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self._openProductKeyRaw)
   if cashProduct == nil then
@@ -3303,7 +3506,7 @@ end
 end
 
   InGameCashshopDescUpdate = function(deltaTime)
-  -- function num : 0_88 , upvalues : inGameShop
+  -- function num : 0_91 , upvalues : inGameShop
   local self = inGameShop
   if self._position == self._currentPos and self._maxDescSize == (self._goodDescBG):GetSizeY() and self:getMaxPosition() < self._position + 2 then
     (self._static_GradationBottom):SetShow(false)
@@ -3360,7 +3563,7 @@ end
 end
 
   InGameShop_Open = function()
-  -- function num : 0_89 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG
+  -- function num : 0_92 , upvalues : isNaver, renderMode, inGameShop, UI_SERVICE_RESOURCE, isTaiwanNation, _AllBG
   if Panel_IngameCashShop_EasyPayment:IsShow() then
     Panel_IngameCashShop_EasyPayment:SetShow(false, false)
   end
@@ -3540,14 +3743,14 @@ end
 end
 
   FGlobal_CheckPromotionTab = function()
-  -- function num : 0_90 , upvalues : inGameShop
+  -- function num : 0_93 , upvalues : inGameShop
   local self = inGameShop
   ;
   ((self._promotionTab).static):SetCheck(true)
 end
 
   InGameShop_Close = function()
-  -- function num : 0_91 , upvalues : inGameShop, renderMode, _AllBG
+  -- function num : 0_94 , upvalues : inGameShop, renderMode, _AllBG
   local self = inGameShop
   if getIngameCashMall() ~= nil then
     (getIngameCashMall()):clearEquipViewList()
@@ -3608,14 +3811,14 @@ end
 end
 
   InGameShop_UpdateCartButton = function()
-  -- function num : 0_92 , upvalues : inGameShop
+  -- function num : 0_95 , upvalues : inGameShop
   local cartListCount = (getIngameCashMall()):getCartListCount()
   ;
   ((inGameShop._myCartTab).static):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_UPDATECART", "cartListCount", cartListCount))
 end
 
   ToClient_RequestShowProduct = function(productNo, price)
-  -- function num : 0_93 , upvalues : inGameShop, tabIndexList
+  -- function num : 0_96 , upvalues : inGameShop, tabIndexList
   local self = inGameShop
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(productNo)
   if cashProduct ~= nil then
@@ -3663,19 +3866,19 @@ end
 end
 
   ToClient_CategoryWebFocusOut = function()
-  -- function num : 0_94 , upvalues : inGameShop
+  -- function num : 0_97 , upvalues : inGameShop
   local self = inGameShop
   ;
   (self._categoryWeb):FocusOut()
 end
 
   InGameShop_HowUsePearlShop = function()
-  -- function num : 0_95
+  -- function num : 0_98
   Panel_IngameCashShop_HowUsePearlShop_Open()
 end
 
   FGlobal_CheckEditBox_IngameCashShop = function(uiEditBox)
-  -- function num : 0_96 , upvalues : inGameShop
+  -- function num : 0_99 , upvalues : inGameShop
   do
     local self = inGameShop
     do return (uiEditBox ~= nil and self._edit_Search ~= nil and uiEditBox:GetKey() == (self._edit_Search):GetKey() and Panel_IngameCashShop:GetShow()) end
@@ -3684,13 +3887,13 @@ end
 end
 
   FGlobal_EscapeEditBox_IngameCashShop = function()
-  -- function num : 0_97 , upvalues : inGameShop
+  -- function num : 0_100 , upvalues : inGameShop
   local self = inGameShop
   ClearFocusEdit(self._edit_Search)
 end
 
   InGameShop_MoneyIcon_Tooltip = function(isShow, tipType)
-  -- function num : 0_98 , upvalues : inGameShop
+  -- function num : 0_101 , upvalues : inGameShop
   local self = inGameShop
   local name, desc, control = nil, nil, nil
   if tipType == 0 then
@@ -3732,7 +3935,7 @@ end
 end
 
   InGameShop_SubTab_Tooltip = function(isShow, ii, jj)
-  -- function num : 0_99 , upvalues : inGameShop, tabIndexList
+  -- function num : 0_102 , upvalues : inGameShop, tabIndexList
   if not isShow then
     TooltipSimple_Hide()
     return 

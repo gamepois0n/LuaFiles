@@ -268,8 +268,9 @@ ShowTooltip_ClothInven = function(fromWhereType, fromSlotNo, index)
     return 
   end
   local itemWrapper = getInventoryBagItemByType(fromWhereType, fromSlotNo, index)
+  local itemNo = getInventoryBagItemNoByType(fromWhereType, fromSlotNo, index)
   if itemWrapper ~= nil then
-    Panel_Tooltip_Item_Show(itemWrapper, ((clothInven.slot)[index]).icon, false, true)
+    Panel_Tooltip_Item_Show(itemWrapper, ((clothInven.slot)[index]).icon, false, true, nil, nil, nil, nil, "InventoryBag", itemNo)
   end
 end
 

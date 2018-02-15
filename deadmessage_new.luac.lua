@@ -923,7 +923,11 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
         _text_ImmediateCount:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_PVPBATTLE_IMMEDIATECOUNT_TEXT"))
         _text_ImmediateCount:SetShow(true)
         _button_LocalWar:SetShow(false)
-        _button_ObserverMode:SetShow(true)
+        if PaGlobal_GuildBattle:isOneOneMode() == true then
+          _button_ObserverMode:SetShow(false)
+        else
+          _button_ObserverMode:SetShow(true)
+        end
         _button_SavageOut:SetShow(false)
         _button_Volunteer:SetShow(false)
         ResurrectionTime = revivalTime
@@ -1248,6 +1252,9 @@ deadMessage_UpdatePerFrame = function(deltaTime)
           SetUIMode((Defines.UIMode).eUIMode_Default)
           local isObserverMode = false
           if ((getSelfPlayer()):get()):isCompetitionDefined() then
+            isObserverMode = true
+          end
+          if ToClient_getJoinGuildBattle() == true then
             isObserverMode = true
           end
           _button_ObserverMode:SetShow(isObserverMode)

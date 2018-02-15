@@ -273,33 +273,25 @@ FromClient_GuildHistoryInfo_Update = function()
 end
 
 GuildHistory_HelpWidget_Show = function(isShow, index, isLeft)
-  -- function num : 0_3 , upvalues : currentValue, helpWidget, _dayHistoryValue
-  if index ~= nil then
-    local journalCount = ToClient_GetJournalListCount(currentValue._year, currentValue._month, currentValue._myHistory)
-    if journalCount <= index or index < 0 then
-      return 
-    end
-    local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._guildHistory, index)
-    if journalInfo ~= nil then
-      local helpDesc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_TIME", "hour", journalInfo:getJournalHour(), "minute", journalInfo:getJournalMinute(), "second", journalInfo:getJournalSecond())
-      helpWidget:SetText(helpDesc)
-      helpWidget:SetSize(80, 20)
-    else
-      do
-        do
-          helpWidget:SetShow(false)
-          do return  end
-          if isLeft == true then
-            helpWidget:SetPosX((_dayHistoryValue[index]):GetPosX() - (_dayHistoryValue[index]):GetTextSizeX() - 35)
-          else
-            helpWidget:SetPosX((_dayHistoryValue[index]):GetPosX() + (_dayHistoryValue[index]):GetTextSizeX() + 5)
-          end
-          helpWidget:SetPosY((_dayHistoryValue[index]):GetPosY() - 6)
-          helpWidget:SetShow(isShow)
-        end
-      end
-    end
+  -- function num : 0_3 , upvalues : currentValue, _dayHistoryValue
+  if index == nil then
+    TooltipSimple_Hide()
+    return 
   end
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._myHistory, index)
+  if journalInfo == nil then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name = ""
+  local helpName = tostring(journalInfo:getName())
+  local helpDesc = "<PAColor0xFFFFF3AF>" .. PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_TIME", "hour", journalInfo:getJournalHour(), "minute", journalInfo:getJournalMinute(), "second", journalInfo:getJournalSecond()) .. "<PAOldColor>"
+  local desc = helpName .. "\n" .. helpDesc
+  TooltipSimple_Show(_dayHistoryValue[index], name, desc)
 end
 
 HandleClicked_GuildHistory_MonthCheck = function(index)

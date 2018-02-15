@@ -343,7 +343,7 @@ PaGlobal_LifeRanking.MyLifeRankingText_Refresh = function(self)
   -- function num : 0_7 , upvalues : UI_color
   for tab = 0, self._createTabCount - 1 do
     do
-      if tab == 12 or tab == 13 then
+      if tab == 13 then
         local lifeRankerLvTmp = PaGlobal_LifeRanking:CheckMyLifeLv(tab)
         if lifeRankerLvTmp == 0 then
           checkData = false
@@ -407,7 +407,7 @@ PaGlobal_LifeRanking.MyLifeRankingText_Refresh = function(self)
         end
       end
       do
-        -- DECOMPILER ERROR at PC206: LeaveBlock: unexpected jumping out DO_STMT
+        -- DECOMPILER ERROR at PC204: LeaveBlock: unexpected jumping out DO_STMT
 
       end
     end
@@ -444,6 +444,7 @@ end
 PaGlobal_LifeRanking.GetMyLifeRank = function(self, tab)
   -- function num : 0_9
   local myRank = 0
+  _PA_LOG("정태�\164", "tab : " .. tostring(tab))
   if tab <= 9 then
     myRank = ToClient_GetLifeMyRank_Param(tab)
   else
@@ -455,6 +456,7 @@ PaGlobal_LifeRanking.GetMyLifeRank = function(self, tab)
       else
         if tab == 12 then
           myRank = ToClient_GetContentsMyRank(2)
+          _PA_LOG("정태�\164", "myRank : " .. tostring(myRank))
         else
           if tab == 13 then
             myRank = ToClient_GetMyMatchRank(0)
@@ -590,7 +592,7 @@ PaGlobal_LifeRanking.FillLifeRankList = function(self, lifeRanker, rankText, nam
   nameText:SetText(lifeRankerName .. "(" .. lifeRankerCharName .. ")")
   guildText:SetText(lifeRankerGuild)
   if self._selectedTabIdx <= 9 then
-    if isNewCharacterInfo() == false then
+    if _ContentsGroup_isUsedNewCharacterInfo == false then
       gradeText:SetText(FGlobal_CraftLevel_Replace(lifeRankerLv, self._selectedTabIdx))
     else
       gradeText:SetText(FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(lifeRankerLv, self._selectedTabIdx))

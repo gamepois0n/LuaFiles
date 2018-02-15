@@ -3,6 +3,7 @@
 
 -- params : ...
 -- function num : 0
+local FairyMessageType = {eTurnOnLantern = 0, eTurnOffLantern = 1}
 Panel_Window_FairyList:SetShow(false)
 Panel_Window_FairyCompose:SetShow(false)
 local UI_classType = CppEnums.ClassType
@@ -199,7 +200,7 @@ FairyList.SetFairyList = function(self, noclearscroll)
   end
 end
 
-FairyListCreate = function(control, key)
+FairyList = function(control, key)
   -- function num : 0_8 , upvalues : UI_TM, FairyHpRateText, FairyList
   local bg = (UI.getChildControl)(control, "Template_Static_ListContentBG")
   local iconBg = (UI.getChildControl)(control, "Template_Static_IconFairyBG")
@@ -353,7 +354,6 @@ FairyListCreate = function(control, key)
             local SettingData = ToClient_getFairySettingData(petNo_s64)
             if SettingData ~= nil then
               text_HpItem:SetText(FairyHpRateText[SettingData._hpMinRate])
-              _PA_LOG("�\128민혁", tostring(SettingData._mpMinRate))
               text_MpItem:SetText(FairyList:GetSubGageRateText(SettingData._mpMinRate))
               local ItemSSW = getItemEnchantStaticStatus(SettingData._hpItemKey)
               if ItemSSW ~= nil then
@@ -381,15 +381,15 @@ FairyListCreate = function(control, key)
                   btn_unSeal:SetShow(true)
                   btn_Seal:SetShow(false)
                   btn_unSeal:addInputEvent("Mouse_RUp", "PaGlobal_FairyComposeSetting(\"" .. tostring(petNo_s64) .. "," .. petRace .. "," .. unsealPetIndex .. "\")")
-                  -- DECOMPILER ERROR at PC547: LeaveBlock: unexpected jumping out DO_STMT
+                  -- DECOMPILER ERROR at PC541: LeaveBlock: unexpected jumping out DO_STMT
 
-                  -- DECOMPILER ERROR at PC547: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                  -- DECOMPILER ERROR at PC541: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                  -- DECOMPILER ERROR at PC547: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC541: LeaveBlock: unexpected jumping out IF_STMT
 
-                  -- DECOMPILER ERROR at PC547: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                  -- DECOMPILER ERROR at PC541: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                  -- DECOMPILER ERROR at PC547: LeaveBlock: unexpected jumping out IF_STMT
+                  -- DECOMPILER ERROR at PC541: LeaveBlock: unexpected jumping out IF_STMT
 
                 end
               end
@@ -596,35 +596,13 @@ PaGlobal_FairyList_IsMp = function(mpKeyStr)
   return false
 end
 
-PaGlobal_FairySetting_SetPortion = function(itemKey)
-  -- function num : 0_22 , upvalues : FairyList
-  local self = FairyList
-  local isSetting = false
-  -- DECOMPILER ERROR at PC11: Confused about usage of register: R3 in 'UnsetPending'
-
-  if PaGlobal_FairyList_IsHp(tostring(itemKey:get())) == true then
-    (self._cacheSetting)._hpKey = itemKey
-    isSetting = true
-  end
-  -- DECOMPILER ERROR at PC22: Confused about usage of register: R3 in 'UnsetPending'
-
-  if PaGlobal_FairyList_IsMp(tostring(itemKey:get())) == true then
-    (self._cacheSetting)._mpKey = itemKey
-    isSetting = true
-  end
-  if isSetting == false then
-    Proc_ShowMessage_Ack_WithOut_ChattingMessage("등록�\160 �\152 없는 아이템입니다.")
-  end
-  FairyList:Update_Setting(self._currentPetNoStr, false)
-end
-
 FromClient_FairyUpdate = function()
-  -- function num : 0_23 , upvalues : FairyList
+  -- function num : 0_22 , upvalues : FairyList
   FairyList:SetFairyList()
 end
 
 PaGlobal_FairySetting_HpReset = function()
-  -- function num : 0_24 , upvalues : FairyList
+  -- function num : 0_23 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -635,7 +613,7 @@ PaGlobal_FairySetting_HpReset = function()
 end
 
 PaGlobal_FairySetting_MpReset = function()
-  -- function num : 0_25 , upvalues : FairyList
+  -- function num : 0_24 , upvalues : FairyList
   local self = FairyList
   -- DECOMPILER ERROR at PC6: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -643,6 +621,22 @@ PaGlobal_FairySetting_MpReset = function()
   (self._cacheSetting)._mpKey = ItemEnchantKey(0, 0)
   Panel_Tooltip_Item_hideTooltip()
   self:Update_Setting(self._currentPetNoStr, false)
+end
+
+FromClient_ShowFairyMessageByType = function(msgType)
+  -- function num : 0_25 , upvalues : FairyMessageType
+  if ToClient_IsDevelopment() == false then
+    return 
+  end
+  if FairyMessageType.eTurnOnLantern == msgType then
+    Proc_ShowMessage_Ack("요정�\180 주변�\132 밝혀줍니�\164.")
+  else
+    if FairyMessageType.eTurnOffLantern == msgType then
+      Proc_ShowMessage_Ack("요정�\152 밝은 빛이 사라집니�\164.")
+    else
+      _PA_LOG("�\128민혁", "정의되지 않은 값이 들어왔습니다. msgType = " .. tostring(msgType) .. " , GameEnginePetManager.h �\144 enum �\146 확인해주세요.")
+    end
+  end
 end
 
 FairyList.Initialize = function(self)
@@ -665,6 +659,7 @@ FairyList.Initialize = function(self)
   registerEvent("FromClient_PetDelList", "FromClient_FairyUpdate")
   registerEvent("FromClient_InputPetName", "FromClient_FairyUpdate")
   registerEvent("FromClient_PetInfoChanged", "FromClient_FairyUpdate")
+  registerEvent("FromClient_ShowFairyMessageByType", "FromClient_ShowFairyMessageByType")
   ;
   ((self.Radio_HpRate)[10]):addInputEvent("Mouse_LUp", "PaGlobal_FairyList_HpRateCheck(10)")
   ;

@@ -744,7 +744,7 @@ tradeGraph.tradeMarket_DrawGraph = function(commerceIndexForGraph, itemKey, UIIn
           local needLifeType = (tradeItemWrapper:get()):getNeedLifeType()
           local needLifeLevel = ((tradeItemWrapper:get()):getNeedLifeLevel())
           local conditionLevel, conditionTypeName = nil, nil
-          if isNewCharacterInfo() == false then
+          if _ContentsGroup_isUsedNewCharacterInfo == false then
             conditionLevel = FGlobal_CraftLevel_Replace(needLifeLevel + 1, needLifeType)
             conditionTypeName = FGlobal_CraftType_ReplaceName(needLifeType)
           else

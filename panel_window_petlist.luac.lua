@@ -520,12 +520,11 @@ PetList.Open = function(self)
   -- function num : 0_9 , upvalues : petComposeNo, PetList
   self:SetPosition()
   PetCompose_Init()
-  petGroupList_Load()
   Panel_Window_PetListNew:SetShow(true, true)
-  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
 
   petComposeNo[0] = nil
-  -- DECOMPILER ERROR at PC14: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
 
   petComposeNo[1] = nil
   PetList:showFeedUi(-1)
@@ -1347,6 +1346,7 @@ FGlobal_HandleClicked_petControl_AllSeal = function(groupIndex)
         end
       end
       if isDuplication == false then
+        Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_PETLIST_GROUPPET_SEAL", "index", groupIndex))
         petListNew_UnSeal(tostring(petNo_s64), true)
       end
     end
@@ -2485,6 +2485,14 @@ PetList.registEventHandler = function(self)
   ;
   (self.BTN_GroupSeal3):addInputEvent("Mouse_LUp", "FGlobal_HandleClicked_petControl_AllSeal(3)")
   ;
+  (self.BTN_AllUnSeal):setButtonShortcuts("PANEL_SIMPLESHORTCUT_PET_ALLGROUP")
+  ;
+  (self.BTN_GroupSeal1):setButtonShortcuts("PANEL_SIMPLESHORTCUT_PET_GROUP1")
+  ;
+  (self.BTN_GroupSeal2):setButtonShortcuts("PANEL_SIMPLESHORTCUT_PET_GROUP2")
+  ;
+  (self.BTN_GroupSeal3):setButtonShortcuts("PANEL_SIMPLESHORTCUT_PET_GROUP3")
+  ;
   (self.list2_PetList):registEvent((CppEnums.PAUIList2EventType).luaChangeContent, "PetListControlCreate")
   ;
   (self.list2_PetList):createChildContent((CppEnums.PAUIList2ElementManagerType).list)
@@ -2522,6 +2530,13 @@ FromClient_luaLoadComplete_PetList = function()
   Panel_MyHouseNavi_Update(true)
   PetList:registEventHandler()
   PetList:registMessageHandler()
+  petGroupList_Load()
+  -- DECOMPILER ERROR at PC35: Confused about usage of register: R0 in 'UnsetPending'
+
+  PetList.UnSealDATACount = ToClient_getPetUnsealedList()
+  -- DECOMPILER ERROR at PC39: Confused about usage of register: R0 in 'UnsetPending'
+
+  PetList.SealDATACount = ToClient_getPetSealedList()
 end
 
 PetList_VScroll_MoveTop = function()

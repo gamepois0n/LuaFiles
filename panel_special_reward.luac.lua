@@ -115,10 +115,8 @@ FromClient_CompleteChallengeReward = function()
     FromClient_ChallengeReward_UpdateText()
     FGlobal_RightBottomIconReposition()
     PcRoomGift_TimeCheck()
-    if not isActionUiOpen() then
-      PackageIconPosition()
-      FromClient_PackageIconUpdate()
-    end
+    PackageIconPosition()
+    FromClient_PackageIconUpdate()
   end
   messagePosition()
 end
@@ -230,14 +228,14 @@ end
 HandleClicked_PcRoomJackPotBox = function()
   -- function num : 0_13
   if not Panel_Window_CharInfo_Status:GetShow() then
-    if isNewCharacterInfo() == false then
+    if _ContentsGroup_isUsedNewCharacterInfo == false then
       FGlobal_CharInfoStatusShowAni()
     else
       PaGlobal_CharacterInfo:showAni()
     end
     Panel_Window_CharInfo_Status:SetShow(true)
   end
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     HandleClicked_CharacterInfo_Tab(3)
   else
     PaGlobal_CharacterInfo:showWindow(3)

@@ -193,29 +193,39 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
 
     ;
     ((self._ui)._progress2Resist)[index] = (UI.getChildControl)(((self._ui)._staticTextResist_Title)[index], "Progress2_Gauge")
+    ;
+    (((self._ui)._staticTextResist_Title)[index]):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
   end
+  ;
+  (((self._ui)._staticTextResist_Title)[0]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_STUNRESIST"))
+  ;
+  (((self._ui)._staticTextResist_Title)[1]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_DOWNESIST"))
+  ;
+  (((self._ui)._staticTextResist_Title)[2]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_CAPTURERESIST"))
+  ;
+  (((self._ui)._staticTextResist_Title)[3]):SetText(PAGetString(Defines.StringSheet_RESOURCE, "CHARACTERINFO_TEXT_KNOCKBACKRESIST"))
   for key,index in pairs(self._potential) do
-    -- DECOMPILER ERROR at PC139: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC187: Confused about usage of register: R6 in 'UnsetPending'
 
     ((self._ui)._staticTextPotential_Title)[index] = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Potential_" .. index)
-    -- DECOMPILER ERROR at PC149: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC197: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextPotential_Value)[index] = (UI.getChildControl)(((self._ui)._staticTextPotential_Title)[index], "StaticText_Value")
-    -- DECOMPILER ERROR at PC153: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC201: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((self._ui)._staticPotencialGradeBg)[index] = {}
-    -- DECOMPILER ERROR at PC157: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC205: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((self._ui)._staticPotencialPlusGrade)[index] = {}
-    -- DECOMPILER ERROR at PC161: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC209: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((self._ui)._staticPotencialMinusGrade)[index] = {}
     for slotIndex = 0, 4 do
-      -- DECOMPILER ERROR at PC183: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC231: Confused about usage of register: R10 in 'UnsetPending'
 
       (((self._ui)._staticPotencialGradeBg)[index])[slotIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, ((self._ui)._staticTextPotential_Title)[index], "attackSpeed_SlotBG_" .. index .. "_" .. slotIndex)
       CopyBaseProperty((self._ui)._templetePotentialGradeBg, (((self._ui)._staticPotencialGradeBg)[index])[slotIndex])
@@ -225,7 +235,7 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
       ((((self._ui)._staticPotencialGradeBg)[index])[slotIndex]):SetPosX(1 + slotIndex * 30)
       ;
       ((((self._ui)._staticPotencialGradeBg)[index])[slotIndex]):SetPosY(22)
-      -- DECOMPILER ERROR at PC231: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC279: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       (((self._ui)._staticPotencialPlusGrade)[index])[slotIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, ((self._ui)._staticTextPotential_Title)[index], "attackSpeed_PlusSlot_" .. index .. "_" .. slotIndex)
@@ -236,7 +246,7 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
       ((((self._ui)._staticPotencialPlusGrade)[index])[slotIndex]):SetPosX(2 + slotIndex * 30)
       ;
       ((((self._ui)._staticPotencialPlusGrade)[index])[slotIndex]):SetPosY(23)
-      -- DECOMPILER ERROR at PC279: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC327: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       (((self._ui)._staticPotencialMinusGrade)[index])[slotIndex] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, ((self._ui)._staticTextPotential_Title)[index], "attackSpeed_MinusSlot_" .. index .. "_" .. slotIndex)
@@ -250,83 +260,83 @@ PaGlobal_CharacterInfoBasic.initializeControl = function(self)
     end
   end
   for key,index in pairs(self._fitness) do
-    -- DECOMPILER ERROR at PC326: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC374: Confused about usage of register: R6 in 'UnsetPending'
 
     ((self._ui)._staticTextFitness_Title)[index] = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Fitness_" .. index)
-    -- DECOMPILER ERROR at PC336: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC384: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextFitness_Level)[index] = (UI.getChildControl)(((self._ui)._staticTextFitness_Title)[index], "StaticText_Level")
     local staminaGaugeBG = (UI.getChildControl)(((self._ui)._staticTextFitness_Title)[index], "Static_GaugeBG")
-    -- DECOMPILER ERROR at PC351: Confused about usage of register: R7 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC399: Confused about usage of register: R7 in 'UnsetPending'
 
     ;
     ((self._ui)._progress2Fitness)[index] = (UI.getChildControl)(staminaGaugeBG, "Progress2_Gauge")
   end
-  -- DECOMPILER ERROR at PC361: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC409: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._staticTextPlayTime = (UI.getChildControl)((self._ui)._staticPlayTimeIcon, "StaticText_SelfTimer")
   local EditLineBG = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_Introduce_TitleBG")
-  -- DECOMPILER ERROR at PC373: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC421: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._ui)._multilineEditIntroduce = (UI.getChildControl)(EditLineBG, "MultilineEdit_IntroduceLine")
-  -- DECOMPILER ERROR at PC381: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC429: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._ui)._staticIntroduceBG_Text = (UI.getChildControl)((self._ui)._staticIntroduceBG, "Static_MultilineTextBg")
-  -- DECOMPILER ERROR at PC389: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC437: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._ui)._staticTextIntroduce_Title = (UI.getChildControl)((self._ui)._staticIntroduceBG, "StaticText_Title_Introduce")
-  -- DECOMPILER ERROR at PC397: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC445: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._ui)._multilineEdit = (UI.getChildControl)((self._ui)._staticIntroduceBG, "MultilineEdit_Introduce")
-  -- DECOMPILER ERROR at PC405: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC453: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._ui)._buttonSetIntroduce = (UI.getChildControl)((self._ui)._staticIntroduceBG, "Button_SetIntroduce")
-  -- DECOMPILER ERROR at PC413: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC461: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._ui)._buttonResetIntroduce = (UI.getChildControl)((self._ui)._staticIntroduceBG, "Button_ResetIntroduce")
-  -- DECOMPILER ERROR at PC421: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC469: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (self._ui)._buttonCloseIntroduce = (UI.getChildControl)((self._ui)._staticIntroduceBG, "Button_CloseIntroduce")
   local staticFacePhotoBG = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_CharSlot_BG")
   local staticSymbolBG = (UI.getChildControl)(staticFacePhotoBG, "Static_ClassSymbol_BG")
-  -- DECOMPILER ERROR at PC438: Confused about usage of register: R4 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC486: Confused about usage of register: R4 in 'UnsetPending'
 
   ;
   (self._ui)._staticCharSlot = (UI.getChildControl)(staticFacePhotoBG, "Static_CharSlot")
   local staticFamily = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "StaticText_FamilyBG")
   for key,index in pairs(self._familyPoint) do
-    -- DECOMPILER ERROR at PC457: Confused about usage of register: R10 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC505: Confused about usage of register: R10 in 'UnsetPending'
 
     ((self._ui)._staticTextFamilyPoints)[index] = (UI.getChildControl)(staticFamily, "StaticText_FamilyPoint_" .. index)
   end
   for index = 0, 10 do
-    -- DECOMPILER ERROR at PC473: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC521: Confused about usage of register: R9 in 'UnsetPending'
 
     ((self._ui)._staticCraftIcon)[index] = (UI.getChildControl)(Panel_Window_CharInfo_BasicStatus, "Static_Craft_" .. index)
     ;
     (((self._ui)._staticCraftIcon)[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC489: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC537: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextCraft_Title)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "StaticText_Title")
-    -- DECOMPILER ERROR at PC499: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC547: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextCraft_Level)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "StaticText_Level")
-    -- DECOMPILER ERROR at PC509: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC557: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._staticTextCraft_Percent)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "StaticText_Percent")
-    -- DECOMPILER ERROR at PC519: Confused about usage of register: R9 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC567: Confused about usage of register: R9 in 'UnsetPending'
 
     ;
     ((self._ui)._progress2Craft)[index] = (UI.getChildControl)(((self._ui)._staticCraftIcon)[index], "Progress2_Gauge")

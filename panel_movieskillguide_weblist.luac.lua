@@ -11,20 +11,14 @@ _Web:SetPosX(11)
 _Web:SetPosY(50)
 _Web:SetSize(640, 544)
 _Web:ResetUrl()
--- DECOMPILER ERROR at PC42: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC41: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_MovieSkillGuide_Weblist.init = function(self)
-  -- function num : 0_0 , upvalues : _Web
+  -- function num : 0_0
   (self.btn_Close):addInputEvent("Mouse_LUp", "PaGlobal_MovieSkillGuide_Weblist:Close()")
-  local checkAgeType = ToClient_isAdultUser()
-  if checkAgeType then
-    _Web:SetMonoTone(false)
-  else
-    _Web:SetMonoTone(true)
-  end
 end
 
--- DECOMPILER ERROR at PC46: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC45: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_MovieSkillGuide_Weblist.Open = function(self, title, youtubeURL, strKey)
   -- function num : 0_1 , upvalues : _Web
@@ -33,19 +27,21 @@ PaGlobal_MovieSkillGuide_Weblist.Open = function(self, title, youtubeURL, strKey
   end
   local temporaryWrapper = getTemporaryInformationWrapper()
   local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  local cryptKey = ((getSelfPlayer()):get()):getWebAuthenticKeyCryptString()
+  local userNo = ((getSelfPlayer()):get()):getUserNo()
   local url = PaGlobal_URL_Check(worldNo)
   Panel_MovieSkillGuide_Weblist:SetPosX(getScreenSizeX() / 2 - Panel_MovieSkillGuide_Weblist:GetSizeX() / 2)
   Panel_MovieSkillGuide_Weblist:SetPosY(getScreenSizeY() / 2 - Panel_MovieSkillGuide_Weblist:GetSizeY() / 2)
   do
     if url ~= nil then
-      local realURL = url .. "/MovieGuide/Index/IngameSkillPop?ComboDesc=" .. tostring(strKey) .. "&YoutubeUrl=" .. youtubeURL
+      local realURL = url .. "/MovieGuide/Index/IngameSkillPop?ComboDesc=" .. tostring(strKey) .. "&YoutubeUrl=" .. youtubeURL .. "&userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey)
       _Web:SetUrl(640, 544, realURL, false, true)
     end
     Panel_MovieSkillGuide_Weblist:SetShow(true)
   end
 end
 
--- DECOMPILER ERROR at PC50: Confused about usage of register: R2 in 'UnsetPending'
+-- DECOMPILER ERROR at PC49: Confused about usage of register: R2 in 'UnsetPending'
 
 PaGlobal_MovieSkillGuide_Weblist.Close = function(self)
   -- function num : 0_2 , upvalues : _Web

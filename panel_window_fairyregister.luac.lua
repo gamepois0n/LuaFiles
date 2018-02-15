@@ -14,29 +14,8 @@ Radio_HpRate = {[10] = (UI.getChildControl)(uiStatic_FairyBG, "Radiobutton_HP10P
 Radio_MpRate = {[10] = (UI.getChildControl)(uiStatic_FairyBG, "Radiobutton_MP10Percent"), [20] = (UI.getChildControl)(uiStatic_FairyBG, "Radiobutton_MP20Percent"), [30] = (UI.getChildControl)(uiStatic_FairyBG, "Radiobutton_MP30Percent"), [50] = (UI.getChildControl)(uiStatic_FairyBG, "Radiobutton_MP50Percent")}
 }
 FromClient_InputFairyName = function(fromWhereType, fromSlotNo)
-  -- function num : 0_0 , upvalues : FairyRegister
-  tempFromWhereType = fromWhereType
-  tempFromSlotNo = fromSlotNo
-  local self = FairyRegister
-  local petName = (self.uiEdit_FairyName):GetEditText()
-  local itemWrapper = getInventoryItemByType(fromWhereType, fromSlotNo)
-  if itemWrapper == nil then
-    return 
-  end
-  local characterKey = ((itemWrapper:getStaticStatus()):get())._contentsEventParam1
-  local fairyRegisterPSS = ToClient_getPetStaticStatus(characterKey)
-  local fairyIconPath = fairyRegisterPSS:getIconPath()
-  ;
-  (self.uiIcon_FairyIcon):ChangeTextureInfoName(fairyIconPath)
-  ;
-  (self.uiIcon_FairyIcon):SetShow(true)
-  ;
-  (self.uiEdit_FairyName):SetEditText("", true)
-  ;
-  (self.uiEdit_FairyName):SetMaxInput(getGameServiceTypePetNameLength())
-  HandleClicked_FairyRegister_ClearEdit()
-  self:SetPosition()
-  Panel_Window_FairyRegister:SetShow(true)
+  -- function num : 0_0
+  FromClient_InputPetName(fromWhereType, fromSlotNo)
 end
 
 FairyRegister.SetPosition = function(self)
@@ -57,4 +36,5 @@ HandleClicked_FairyRegister_ClearEdit = function()
   SetFocusEdit(self.uiEdit_FairyName)
 end
 
+registerEvent("FromClient_InputFairyName", "FromClient_InputFairyName")
 

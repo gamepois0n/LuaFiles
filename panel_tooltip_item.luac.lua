@@ -8,7 +8,6 @@ local _const = Defines.u64_const
 local u64_hour = toUint64(0, 3600)
 local u64_minute = toUint64(0, 60)
 local UI_color = Defines.Color
-local UI_RewardType = CppEnums.RewardType
 local isGrowthContents = ToClient_IsContentsGroupOpen("35")
 local isTotemContents = ToClient_IsContentsGroupOpen("44")
 local isQuestBookContents = ToClient_IsContentsGroupOpen("335")
@@ -1104,7 +1103,7 @@ Panel_Tooltip_Item_Show_GeneralStatic = function(slotNo, slotType, isOn, index)
 end
 
 Panel_Tooltip_Item_Show_General = function(slotNo, slotType, isOn, isNormal, index)
-  -- function num : 0_10 , upvalues : Panel_Tooltip_Item_DataObject, normalTooltip, equippedTooltip, UI_RewardType
+  -- function num : 0_10 , upvalues : Panel_Tooltip_Item_DataObject, normalTooltip, equippedTooltip
   -- DECOMPILER ERROR at PC1: Confused about usage of register: R5 in 'UnsetPending'
 
   Panel_Tooltip_Item_DataObject.itemMarket = nil
@@ -1152,7 +1151,7 @@ Panel_Tooltip_Item_Show_General = function(slotNo, slotType, isOn, isNormal, ind
   if slot == nil then
     return false
   end
-  if slot._type ~= nil and (UI_RewardType.RewardType_Exp == slot._type or UI_RewardType.RewardType_SkillExp == slot._type or UI_RewardType.RewardType_ProductExp == slot._type) then
+  if slot._type ~= nil and (__eRewardExp == slot._type or __eRewardSkillExp == slot._type or __eRewardLifeExp == slot._type) then
     return false
   end
   return true

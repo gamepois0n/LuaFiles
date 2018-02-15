@@ -726,6 +726,7 @@ HandleClicked_petControl_AllUnSeal = function(groupIndex)
         FGlobal_petListNew_Seal(tostring(unsealPetNo_s64), index)
       end
     end
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_PETCONTROL_ALLUNSEAL"))
     FGlobal_petListNew_Seal(tostring(unsealPetNo_s64), index)
   end
   PetList_VScroll_MoveTop()

@@ -715,7 +715,7 @@ FromClient_SuccessSkillReinforce = function(skillNo, level)
     end
   end
   do
-    ReqeustDialog_retryTalk()
+    Panel_ReinforceSkill_Show()
   end
 end
 

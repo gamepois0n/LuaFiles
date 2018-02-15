@@ -43,7 +43,7 @@ local deliveryInformation = {
 slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true, createEnduranceIcon = true}
 , 
 const = {deliveryProgressTypeRequest = 0, deliveryProgressTypeIng = 1, deliveryProgressTypeComplete = 2}
-, panel_Background = (UI.getChildControl)(Panel_Window_Delivery_Information, "Static_Bakcground"), button_Close = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Win_Close"), buttonQuestion = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Question"), button_Request = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Send"), button_Information = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Cancel_Recieve"), button_ReceiveAll = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_ReceiveAll"), button_Refresh = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Refresh"), check_Cancel = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Cancel"), check_Recieve = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Recieve"), empty_List = (UI.getChildControl)(Panel_Window_Delivery_Information, "StaticText_Empty_List"), list2 = (UI.getChildControl)(Panel_Window_Delivery_Information, "List2_DeliveryItemList"), currentWaypointKey = 0, scrollIndex = 0}
+, panel_Background = (UI.getChildControl)(Panel_Window_Delivery_Information, "Static_Bakcground"), button_Close = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Win_Close"), buttonQuestion = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Question"), button_Request = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_Send"), button_ReceiveAll = (UI.getChildControl)(Panel_Window_Delivery_Information, "Button_ReceiveAll"), radiobutton_trans_list = (UI.getChildControl)(Panel_Window_Delivery_Information, "RadioButton_Tranlist"), radiobutton_alltrans_list = (UI.getChildControl)(Panel_Window_Delivery_Information, "RadioButton_AllTranlist"), check_Cancel = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Cancel"), check_Recieve = (UI.getChildControl)(Panel_Window_Delivery_Information, "CheckButton_Recieve"), empty_List = (UI.getChildControl)(Panel_Window_Delivery_Information, "StaticText_Empty_List"), list2 = (UI.getChildControl)(Panel_Window_Delivery_Information, "List2_DeliveryItemList"), currentWaypointKey = 0, scrollIndex = 0, deliveryList = nil}
 deliveryInformation.registMessageHandler = function(self)
   -- function num : 0_2
   registerEvent("FromClient_MoveDeliveryItem", "DeliveryInformation_UpdateSlotData")
@@ -57,7 +57,9 @@ deliveryInformation.registEventHandler = function(self)
   ;
   (self.button_Request):addInputEvent("Mouse_LUp", "DeliveryRequestWindow_Open()")
   ;
-  (self.button_Refresh):addInputEvent("Mouse_LUp", "DeliveryInformation_Refresh()")
+  (self.radiobutton_trans_list):addInputEvent("Mouse_LUp", "DeliveryInformation_Refresh(" .. 1 .. ")")
+  ;
+  (self.radiobutton_alltrans_list):addInputEvent("Mouse_LUp", "DeliveryInformation_Refresh(" .. 2 .. ")")
   ;
   (self.button_ReceiveAll):addInputEvent("Mouse_LUp", "Delivery_Receive_All()")
   ;
@@ -99,30 +101,46 @@ deliveryInformation.init = function(self)
   (self.check_Cancel):SetCheck(true)
   ;
   (self.check_Recieve):SetCheck(true)
+  ;
+  (self.radiobutton_trans_list):SetCheck(true)
+  ;
+  (self.radiobutton_alltrans_list):SetCheck(false)
 end
 
 local deliveryCountCache = 0
 deliveryInformation.updateSlot = function(self)
   -- function num : 0_5 , upvalues : deliveryCountCache
-  local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
-  if deliveryList == nil then
+  if (self.radiobutton_trans_list):IsCheck() then
+    self.deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+  else
+    self.deliveryList = delivery_listAll()
+  end
+  if self.deliveryList == nil then
     (self.empty_List):SetShow(true)
     return 
   else
     ;
     (self.empty_List):SetShow(false)
   end
-  local deliveryCount = deliveryList:size()
+  local deliveryCount = (self.deliveryList):size()
   if deliveryCountCache < deliveryCount then
     for idx = deliveryCountCache, deliveryCount - 1 do
-      local deliveryInfo = deliveryList:atPointer(idx)
-      -- DECOMPILER ERROR at PC60: Unhandled construct in 'MakeBoolean' P1
+      local deliveryInfo = (self.deliveryList):atPointer(idx)
+      -- DECOMPILER ERROR at PC89: Unhandled construct in 'MakeBoolean' P3
 
-      if (((self.check_Cancel):IsCheck() and (self.const).deliveryProgressTypeRequest == deliveryInfo:getProgressType()) or not (self.check_Recieve):IsCheck() or (self.const).deliveryProgressTypeComplete == deliveryInfo:getProgressType()) and deliveryInfo ~= nil then
+      -- DECOMPILER ERROR at PC89: Unhandled construct in 'MakeBoolean' P1
+
+      if (((self.check_Cancel):IsCheck() and (self.const).deliveryProgressTypeRequest == deliveryInfo:getProgressType()) or not (self.check_Cancel):IsCheck() or not (self.check_Recieve):IsCheck() or (self.const).deliveryProgressTypeComplete == deliveryInfo:getProgressType()) and deliveryInfo ~= nil then
         ((self.list2):getElementManager()):pushKey(toInt64(0, idx))
       end
       ;
       ((self.list2):getElementManager()):removeKey(toInt64(0, idx))
+      if deliveryInfo ~= nil then
+        ((self.list2):getElementManager()):pushKey(toInt64(0, idx))
+      else
+        ;
+        ((self.list2):getElementManager()):removeKey(toInt64(0, idx))
+      end
     end
   else
     do
@@ -163,7 +181,11 @@ DeliveryInformation_UpdateSlotData = function()
   end
   local self = deliveryInformation
   if DeliveryInformation_WaypointKey() ~= nil then
-    deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+    if (self.radiobutton_trans_list):IsCheck() then
+      self.deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+    else
+      self.deliveryList = delivery_listAll()
+    end
   end
   ;
   ((self.list2):getElementManager()):clearKey()
@@ -193,6 +215,10 @@ DeliveryInformationWindow_Open = function()
   ;
   (self.list2):moveTopIndex()
   self.scrollIndex = 0
+  ;
+  (self.radiobutton_trans_list):SetCheck(true)
+  ;
+  (self.radiobutton_alltrans_list):SetCheck(false)
 end
 
 DeliveryInformationWindow_Close = function()
@@ -208,9 +234,13 @@ DeliveryInformationWindow_Close = function()
   ;
   ((self.list2):getElementManager()):clearKey()
   deliveryCountCache = 0
+  ;
+  (self.radiobutton_trans_list):SetCheck(true)
+  ;
+  (self.radiobutton_alltrans_list):SetCheck(false)
 end
 
-DeliveryInformation_Refresh = function()
+DeliveryInformation_Refresh = function(_type)
   -- function num : 0_11
   delivery_refreshClear()
   delivery_requsetList()
@@ -239,8 +269,8 @@ end
 Delivery_Cancel = function(index)
   -- function num : 0_14 , upvalues : deliveryInformation
   local self = deliveryInformation
-  local deliveryList = delivery_list(self.currentWaypointKey)
-  local deliveryInfo = deliveryList:atPointer(index)
+  self.deliveryList = delivery_list(self.currentWaypointKey)
+  local deliveryInfo = (self.deliveryList):atPointer(index)
   local itemNo = deliveryInfo:getItemNo()
   delivery_cancelbyItemNo(itemNo)
   self:updateSlot()
@@ -249,8 +279,8 @@ end
 Delivery_Receive = function(index)
   -- function num : 0_15 , upvalues : deliveryInformation
   local self = deliveryInformation
-  local deliveryList = delivery_list(self.currentWaypointKey)
-  local deliveryInfo = deliveryList:atPointer(index)
+  self.deliveryList = delivery_list(self.currentWaypointKey)
+  local deliveryInfo = (self.deliveryList):atPointer(index)
   local itemNo = deliveryInfo:getItemNo()
   delivery_receiveItemNo(itemNo)
   self:updateSlot()
@@ -266,8 +296,12 @@ Delivery_ListControlCreate = function(content, key)
   -- function num : 0_17 , upvalues : deliveryInformation
   local self = deliveryInformation
   local index = Int64toInt32(key)
-  local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
-  local deliveryInfo = deliveryList:atPointer(index)
+  if (self.radiobutton_trans_list):IsCheck() then
+    self.deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+  else
+    self.deliveryList = delivery_listAll()
+  end
+  local deliveryInfo = (self.deliveryList):atPointer(index)
   local itemWrapper = deliveryInfo:getItemWrapper()
   if itemWrapper == nil then
     return 
@@ -311,12 +345,44 @@ Delivery_ListControlCreate = function(content, key)
   local cancel = (UI.getChildControl)(content, "Button_List2_Cancel")
   cancel:SetPosX(325)
   cancel:SetPosY(14)
-  if deliveryInfo:getProgressType() == 0 then
-    receive:SetShow(false)
-    cancel:SetShow(true)
+  local Ready = (UI.getChildControl)(content, "Button_List2_Ready")
+  Ready:SetPosX(325)
+  Ready:SetPosY(14)
+  local Ing = (UI.getChildControl)(content, "Button_List2_Ing")
+  Ing:SetPosX(325)
+  Ing:SetPosY(14)
+  local Complete = (UI.getChildControl)(content, "Button_List2_Complete")
+  Complete:SetPosX(325)
+  Complete:SetPosY(14)
+  if (self.radiobutton_trans_list):IsCheck() then
+    Ready:SetShow(false)
+    Ing:SetShow(false)
+    Complete:SetShow(false)
+    if (self.const).deliveryProgressTypeRequest == deliveryInfo:getProgressType() then
+      receive:SetShow(false)
+      cancel:SetShow(true)
+    else
+      cancel:SetShow(false)
+      receive:SetShow(true)
+    end
   else
     cancel:SetShow(false)
-    receive:SetShow(true)
+    receive:SetShow(false)
+    if (self.const).deliveryProgressTypeRequest == deliveryInfo:getProgressType() then
+      Ready:SetShow(true)
+      Ing:SetShow(false)
+      Complete:SetShow(false)
+    else
+      if (self.const).deliveryProgressTypeIng == deliveryInfo:getProgressType() then
+        Ready:SetShow(false)
+        Ing:SetShow(true)
+        Complete:SetShow(false)
+      else
+        Ready:SetShow(false)
+        Ing:SetShow(false)
+        Complete:SetShow(true)
+      end
+    end
   end
   local arrow = (UI.getChildControl)(content, "Static_List2_Arrow")
   arrow:SetShow(true)
@@ -338,20 +404,24 @@ end
 
 DeliveryItem_Tooltip_Show = function(idx, isOn)
   -- function num : 0_18 , upvalues : deliveryInformation
-  local self = deliveryInformation
   if isOn == false then
     Panel_Tooltip_Item_hideTooltip()
   end
+  local self = deliveryInformation
   local control = self.list2
   local contents = control:GetContentByKey(toInt64(0, idx))
   if contents ~= nil then
     local itemIcon = (UI.getChildControl)(contents, "Static_List2_Slot")
     if isOn == true then
-      local deliveryList = delivery_list(DeliveryInformation_WaypointKey())
-      local deliveryInfo = deliveryList:atPointer(idx)
+      if (self.radiobutton_trans_list):IsCheck() then
+        self.deliveryList = delivery_list(DeliveryInformation_WaypointKey())
+      else
+        self.deliveryList = delivery_listAll()
+      end
+      local deliveryInfo = (self.deliveryList):atPointer(idx)
       local itemWrapper = deliveryInfo:getItemWrapper()
       local itemSSW = itemWrapper:getStaticStatus()
-      Panel_Tooltip_Item_Show(itemSSW, itemIcon, true, false, nil, nil, true)
+      Panel_Tooltip_Item_Show(itemSSW, itemIcon, true, false, nil, nil, true, nil, "Delivery", deliveryInfo:getItemNo())
     end
   end
 end

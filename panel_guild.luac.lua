@@ -1808,6 +1808,12 @@ GuildManager.TabToggle = function(self, index)
     PaGlobal_GuildBattle:Close()
     tabNumber = 6
   elseif index == 7 then
+    if ToClient_isGuildBattle() == false then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_CANNOT_GUILDBATTLE_SERVER"))
+      ;
+      (self.mainBtn_GuildBattle):SetCheck(false)
+      return 
+    end
     self:ChangeTab(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_GUILDBATTLE"), 107, 1, 119, 15)
     FGlobal_GuildBattle_Open()
     FGlobal_GuildHistory_Show(false)
@@ -1824,7 +1830,7 @@ GuildManager.TabToggle = function(self, index)
   FGlobal_Guild_CraftInfo_Open(index == 6)
   FGlobal_GuildMenuButtonHide()
   _index = index
-  -- DECOMPILER ERROR: 34 unprocessed JMP targets
+  -- DECOMPILER ERROR: 35 unprocessed JMP targets
 end
 
 -- DECOMPILER ERROR at PC406: Confused about usage of register: R47 in 'UnsetPending'
@@ -3067,7 +3073,7 @@ FromClient_NotifyGuildMessage = function(msgType, strParam1, strParam2, s64_para
                                             local message = {}
                                             if param1 <= 8 then
                                               local lifeLevel = nil
-                                              if isNewCharacterInfo() == false then
+                                              if _ContentsGroup_isUsedNewCharacterInfo == false then
                                                 lifeLevel = FGlobal_CraftLevel_Replace(param2, param1)
                                               else
                                                 lifeLevel = FGlobal_UI_CharacterInfo_Basic_Global_CraftLevelReplace(param2)
@@ -3327,12 +3333,8 @@ SetDATAByGuildGrade = function()
           ;
           (GuildInfoPage._btnTaxPayment):SetShow(false)
         end
-        if GuildManager._doHaveSeige then
-          (GuildListInfoPage._btnGiveIncentive):SetShow(true)
-        else
-          ;
-          (GuildListInfoPage._btnGiveIncentive):SetShow(false)
-        end
+        ;
+        (GuildListInfoPage._btnGiveIncentive):SetShow(true)
       else
         if ((getSelfPlayer()):get()):isGuildSubMaster() then
           (GuildWarInfoPage._txtWarInfoTitle):SetSpanSize(50, 395)

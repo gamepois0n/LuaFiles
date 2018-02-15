@@ -71,6 +71,9 @@ end
 
 PaGlobal_Enchant.didShowEnchantTab = function(self)
   -- function num : 0_5
+  if self._enchantInfo == nil then
+    return 
+  end
   self._screctExtractIvenType = (self._enchantInfo):ToClient_getVaildSecretExtractionIvenType()
   self:setEnchantFailCount()
   self:setEnable_button_Apply(false)
@@ -179,6 +182,8 @@ PaGlobal_Enchant.setEnchantMaterial = function(self, isMonotone)
   if isMonotone == true or (self._enchantInfo):ToClient_setEnchantSlot(inventoryType, slotNo) ~= 0 then
     self:setItemToSlotMonoTone((self._ui)._slot_EnchantMaterial, (self._enchantInfo):ToClient_getNeedItemStaticInformation())
     self:setEnable_button_Apply(false)
+    ;
+    (self._enchantInfo):materialClearData()
     return 
   end
   local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
@@ -383,6 +388,8 @@ PaGlobal_Enchant.setCronEnchantMaterial = function(self, isMonotone)
   local inventoryType = (self._enchantInfo):ToClient_getCronItemWhereType()
   if isMonotone == true or (self._enchantInfo):ToClient_setCronEnchantSlot(inventoryType, slotNo) ~= 0 then
     self:setItemToSlotMonoTone((self._ui)._slot_EnchantMaterial, FromClient_getPreventDownGradeItem())
+    ;
+    (self._enchantInfo):materialClearData()
     return 
   end
   local itemWrapper = getInventoryItemByType(inventoryType, slotNo)
@@ -482,24 +489,43 @@ end
 
 PaGlobal_Enchant.getStr_EnchantInfo = function(self, curMaxEndura, decEndura, enchantType, isChecked)
   -- function num : 0_29
-  local str = nil
+  local str = ""
   if enchantType == (self._enum_EnchantType)._safe then
     str = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_100PERCENT")
   else
     if ((self._ui)._radiobutton_DifficultEnchant):GetShow() and ((self._ui)._radiobutton_DifficultEnchant):IsCheck() then
       decEndura = decEndura * 0.8
     end
-    str = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_0", "maxEndurance", tostring(decEndura), "currentEndurance", tostring(curMaxEndura))
-    if isChecked == nil then
-      if enchantType == (self._enum_EnchantType)._broken or enchantType == (self._enum_EnchantType)._downAndBroken then
-        str = str .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_1")
+    local itemWrapper = getInventoryItemByType(self._grantItemWhereType, self._grantItemSlotNo)
+    if itemWrapper ~= nil then
+      local itemSSW = itemWrapper:getStaticStatus()
+      local enchantLevel = ((itemSSW:get())._key):getEnchantLevel()
+      if (CppEnums.ItemClassifyType).eItemClassify_Accessory ~= itemSSW:getItemClassify() then
+        str = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_0", "maxEndurance", tostring(decEndura), "currentEndurance", tostring(curMaxEndura))
       end
-      if enchantType == (self._enum_EnchantType)._gradedown or enchantType == (self._enum_EnchantType)._downAndBroken then
-        str = str .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_2")
+    end
+    do
+      do
+        if isChecked == nil then
+          if enchantType == (self._enum_EnchantType)._broken or enchantType == (self._enum_EnchantType)._downAndBroken then
+            if str == "" then
+              str = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_1")
+            else
+              str = str .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_1")
+            end
+          end
+          if enchantType == (self._enum_EnchantType)._gradedown or enchantType == (self._enum_EnchantType)._downAndBroken then
+            if str == "" then
+              str = PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_2")
+            else
+              str = str .. "\n" .. PAGetString(Defines.StringSheet_GAME, "LUA_NEWENCHANT_PENALTY_2")
+            end
+          end
+        end
+        return str
       end
     end
   end
-  return str
 end
 
 -- DECOMPILER ERROR at PC92: Confused about usage of register: R0 in 'UnsetPending'
@@ -645,7 +671,7 @@ FGlobal_Enchant_RClickMaterialItem = function(slotNo, itemWrapper, Count, invent
   end
   self._isLastEnchant = false
   self:clearItemSlot((self._ui)._slot_EnchantMaterial)
-  self:setEnchantMaterial()
+  self:setEnchantMaterial(false)
 end
 
 FGlobal_Enchant_RClickCronItem = function(slotNo, itemWrapper, Count, inventoryType)

@@ -388,7 +388,7 @@ PaGlobal_GuildBattle.UpdateGuildBattleInfo = function(self)
             end
           end
           if didIJoinGuildBattle == false and battleState ~= BattleStates.Idle and battleState ~= BattleStates.Join then
-            ((self._ui)._txt_progress):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE") .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
+            ((self._ui)._txt_progress):SetText(PaGlobal_GuildBattle:GetTitle() .. " " .. PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_ONGOING"))
           end
         end
       end
@@ -401,61 +401,72 @@ end
 
 -- DECOMPILER ERROR at PC124: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.notifyJoinGuildBattle = function(self)
+PaGlobal_GuildBattle.isOneOneMode = function(self)
   -- function num : 0_7
+  do
+    local gamemode = ToClient_GuildBattle_GetCurrentMode()
+    do return gamemode == 1 end
+    -- DECOMPILER ERROR: 1 unprocessed JMP targets
+  end
+end
+
+-- DECOMPILER ERROR at PC127: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_GuildBattle.notifyJoinGuildBattle = function(self)
+  -- function num : 0_8
   local msg = {main = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_USE_GUILDWINDOW"), sub = PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_SET_BATTLE"), addMsg = ""}
   Proc_ShowMessage_Ack_For_RewardSelect(msg, 6, 78)
   ToClient_GuildBattle_UpdateGuildBattleInfo()
 end
 
--- DECOMPILER ERROR at PC127: Confused about usage of register: R1 in 'UnsetPending'
-
-PaGlobal_GuildBattle.ModeChangeRequest = function(self, mode)
-  -- function num : 0_8
-end
-
 -- DECOMPILER ERROR at PC130: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.Open = function(self)
+PaGlobal_GuildBattle.ModeChangeRequest = function(self, mode)
   -- function num : 0_9
+end
+
+-- DECOMPILER ERROR at PC133: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_GuildBattle.Open = function(self)
+  -- function num : 0_10
   ToClient_GuildBattle_UpdateGuildBattleInfo()
   ;
   ((self._ui)._guildBattleBG):SetShow(true)
 end
 
 FGlobal_GuildBattle_Open = function()
-  -- function num : 0_10
+  -- function num : 0_11
   PaGlobal_GuildBattle:Open()
 end
 
--- DECOMPILER ERROR at PC135: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC138: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_GuildBattle.Close = function(self)
-  -- function num : 0_11
+  -- function num : 0_12
   ((self._ui)._guildBattleBG):SetShow(false)
 end
 
 FGlobal_GuildBattle_Close = function()
-  -- function num : 0_12
+  -- function num : 0_13
   PaGlobal_GuildBattle:Close()
 end
 
--- DECOMPILER ERROR at PC140: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC143: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_GuildBattle.IsShow = function(self)
-  -- function num : 0_13
+  -- function num : 0_14
   return ((self._ui)._guildBattleBG):GetShow()
 end
 
 FGlobal_GuildBattle_IsOpen = function()
-  -- function num : 0_14
+  -- function num : 0_15
   return PaGlobal_GuildBattle:IsShow()
 end
 
--- DECOMPILER ERROR at PC145: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC148: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_GuildBattle.UpdateRemainTime = function(self)
-  -- function num : 0_15
+  -- function num : 0_16
   local remainTime = ToClient_GuildBattle_GetRemainTime()
   local remainTimeOriginal = ToClient_GuildBattle_GetRemainTimeOriginal()
   if remainTime < 0 then
@@ -469,55 +480,59 @@ PaGlobal_GuildBattle.UpdateRemainTime = function(self)
   (((self._ui)._joinProgressTimer)._progressBar):SetProgressRate(remainTime * 100 / remainTimeOriginal)
 end
 
--- DECOMPILER ERROR at PC148: Confused about usage of register: R1 in 'UnsetPending'
-
-PaGlobal_GuildBattle.Reservation = function(self)
-  -- function num : 0_16
-  ToClient_GuildBattle_ReserveGuildBattle(self._battingPrice)
-end
-
 -- DECOMPILER ERROR at PC151: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.Reservation_Cancel = function(self)
+PaGlobal_GuildBattle.Reservation = function(self)
   -- function num : 0_17
-  ToClient_GuildBattle_CancelGuildBattle()
+  ToClient_GuildBattle_ReserveGuildBattle(self._battingPrice)
 end
 
 -- DECOMPILER ERROR at PC154: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.Join = function(self)
+PaGlobal_GuildBattle.Reservation_Cancel = function(self)
   -- function num : 0_18
-  ToClient_GuildBattle_JoinGuildBattle()
+  ToClient_GuildBattle_CancelGuildBattle()
 end
 
 -- DECOMPILER ERROR at PC157: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.UnJoin = function(self)
+PaGlobal_GuildBattle.Join = function(self)
   -- function num : 0_19
-  ToClient_GuildBattle_UnjoinGuildBattle()
+  if ToClient_isPersonalBattle() == true then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_CANNOT_GUILDBATTLE_SERVER"))
+    return 
+  end
+  ToClient_GuildBattle_JoinGuildBattle()
 end
 
 -- DECOMPILER ERROR at PC160: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.Start = function(self)
+PaGlobal_GuildBattle.UnJoin = function(self)
   -- function num : 0_20
-  ToClient_GuildBattle_StartGuildBattle()
-  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WE_ARE_READY_SHORT"))
+  ToClient_GuildBattle_UnjoinGuildBattle()
 end
 
 -- DECOMPILER ERROR at PC163: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.UseFreeCam = function(self)
+PaGlobal_GuildBattle.Start = function(self)
   -- function num : 0_21
-  ToClient_GuildBattle_SetFreeCamMode()
+  ToClient_GuildBattle_StartGuildBattle()
+  Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE_WE_ARE_READY_SHORT"))
 end
 
 -- DECOMPILER ERROR at PC166: Confused about usage of register: R1 in 'UnsetPending'
 
-PaGlobal_GuildBattle.SetPrice = function(self)
+PaGlobal_GuildBattle.UseFreeCam = function(self)
   -- function num : 0_22
+  ToClient_GuildBattle_SetFreeCamMode()
+end
+
+-- DECOMPILER ERROR at PC169: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_GuildBattle.SetPrice = function(self)
+  -- function num : 0_23
   local setEditText = function(inputNumber)
-    -- function num : 0_22_0 , upvalues : self
+    -- function num : 0_23_0 , upvalues : self
     ((self._ui)._edit_PriceInput):SetText(makeDotMoney(inputNumber))
     -- DECOMPILER ERROR at PC12: Confused about usage of register: R1 in 'UnsetPending'
 
@@ -529,10 +544,21 @@ PaGlobal_GuildBattle.SetPrice = function(self)
   Panel_NumberPad_Show(true, getGuildMoney, 0, setEditText)
 end
 
--- DECOMPILER ERROR at PC169: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC172: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_GuildBattle.GetTitle = function(self)
+  -- function num : 0_24
+  if ToClient_isPersonalBattle() == true then
+    return PAGetString(Defines.StringSheet_GAME, "LUA_PERSONALBATTLE")
+  else
+    return PAGetString(Defines.StringSheet_GAME, "LUA_GUILDBATTLE")
+  end
+end
+
+-- DECOMPILER ERROR at PC175: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_GuildBattle.registMessageHandler = function(self)
-  -- function num : 0_23
+  -- function num : 0_25
   ((self._ui)._btn_Reservation):addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle:Reservation()")
   ;
   ((self._ui)._btn_Cancle):addInputEvent("Mouse_LUp", "PaGlobal_GuildBattle:Reservation_Cancel()")
@@ -547,40 +573,41 @@ PaGlobal_GuildBattle.registMessageHandler = function(self)
 end
 
 FromClient_ReserveGuildBattleSuccess = function(cancel)
-  -- function num : 0_24
+  -- function num : 0_26
   PaGlobal_GuildBattle:SetProgressServer(cancel)
   ToClient_GuildBattle_UpdateGuildBattleInfo()
 end
 
 FromClient_responseRequestGuildBattleInfo = function()
-  -- function num : 0_25
+  -- function num : 0_27
   PaGlobal_GuildBattle:UpdateGuildBattleInfo()
 end
 
 FromClient_notifyGuildBattleJoin = function()
-  -- function num : 0_26
+  -- function num : 0_28
   PaGlobal_GuildBattle:notifyJoinGuildBattle()
 end
 
 FromClient_guildBattleModeChangeRequest = function(mode)
-  -- function num : 0_27
+  -- function num : 0_29
   PaGlobal_GuildBattle:ModeChangeRequest(mode)
 end
 
 FromClient_cancelAnotherGuild = function(cancel)
-  -- function num : 0_28
+  -- function num : 0_30
   if cancel == true then
     ToClient_GuildBattle_UpdateGuildBattleInfo()
   end
 end
 
 FromClient_luaLoadComplete_GuildBattleWindow = function()
-  -- function num : 0_29
+  -- function num : 0_31
   Panel_Window_GuildBattle:SetShow(false)
   Panel_Window_GuildBattle:setGlassBackground(true)
   Panel_Window_GuildBattle:ActiveMouseEventEffect(true)
   PaGlobal_GuildBattle:registMessageHandler()
   PaGlobal_GuildBattle:Initialize()
+  ToClient_GuildBattle_UpdateGuildBattleInfo()
 end
 
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_GuildBattleWindow")
@@ -590,13 +617,8 @@ registerEvent("FromClient_ReserveGuildBattleSuccess", "FromClient_ReserveGuildBa
 registerEvent("FromClient_guildBattleModeChangeRequest", "FromClient_guildBattleModeChangeRequest")
 registerEvent("FromClient_cancelAnotherGuild", "FromClient_cancelAnotherGuild")
 guildbattleStop = function(isstop)
-  -- function num : 0_30
+  -- function num : 0_32
   ToClient_GuildBattle_RequestGuildBattleStop(isstop)
-end
-
-testP = function()
-  -- function num : 0_31
-  ToClient_joinPersonalBattle()
 end
 
 

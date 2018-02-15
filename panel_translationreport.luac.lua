@@ -22,36 +22,12 @@ end
 
 Panel_TranslationReport.Open = function(self, staticType, key1, key2, key3, textNo)
   -- function num : 0_1 , upvalues : _translationReportWebControl
-  local url = ""
+  local temporaryWrapper = getTemporaryInformationWrapper()
+  local worldNo = temporaryWrapper:getSelectedWorldServerNo()
+  local url = PaGlobal_URL_Check(worldNo)
   local serviceType = getGameServiceType()
-  if (CppEnums.CountryType).DEV == serviceType then
-    url = "http://10.32.129.20/Translation"
-  else
-    if (CppEnums.CountryType).TR_ALPHA == serviceType then
-      url = "http://game-qa.tr.playblackdesert.com/Translation"
-    else
-      if (CppEnums.CountryType).TR_REAL == serviceType then
-        url = "https://game.tr.playblackdesert.com/Translation"
-      else
-        if (CppEnums.CountryType).TH_ALPHA == serviceType then
-          url = "http://game-qa.th.playblackdesert.com/Translation"
-        else
-          if (CppEnums.CountryType).TH_REAL == serviceType then
-            url = "https://game.th.playblackdesert.com/Translation"
-          else
-            if (CppEnums.CountryType).ID_ALPHA == serviceType then
-              url = "http://game-qa.sea.playblackdesert.com/Translation"
-            else
-              if (CppEnums.CountryType).ID_REAL == serviceType then
-                url = "https://game.sea.playblackdesert.com/Translation"
-              else
-                return 
-              end
-            end
-          end
-        end
-      end
-    end
+  if (CppEnums.CountryType).KOR_REAL == serviceType or (CppEnums.CountryType).KOR_ALPHA == serviceType then
+    return 
   end
   audioPostEvent_SystemUi(13, 6)
   Panel_TranslationReport:SetShow(true, true)
@@ -62,7 +38,7 @@ Panel_TranslationReport.Open = function(self, staticType, key1, key2, key3, text
   local userNo = (selfPlayer:get()):getUserNo()
   local cryptKey = (selfPlayer:get()):getWebAuthenticKeyCryptString()
   local languageType = ToClient_GetLanguageType()
-  url = url .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey1=" .. tostring(key1) .. "&translationKey2=" .. tostring(key2) .. "&translationKey3=" .. tostring(key3) .. "&textNo=" .. tostring(textNo) .. "&languageType=" .. tostring(languageType) .. "&staticType=" .. tostring(staticType)
+  url = url .. "/Translation" .. "?userNo=" .. tostring(userNo) .. "&certKey=" .. tostring(cryptKey) .. "&translationKey1=" .. tostring(key1) .. "&translationKey2=" .. tostring(key2) .. "&translationKey3=" .. tostring(key3) .. "&textNo=" .. tostring(textNo) .. "&languageType=" .. tostring(languageType) .. "&staticType=" .. tostring(staticType)
   _translationReportWebControl:SetUrl(700, 610, url, false, true)
   _translationReportWebControl:SetIME(true)
   Panel_TranslationReport:SetPosX(getScreenSizeX() / 2 - Panel_TranslationReport:GetSizeX() / 2, getScreenSizeY() / 2 - Panel_TranslationReport:GetSizeY() / 2)

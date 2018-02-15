@@ -223,6 +223,7 @@ _uiButtonNote:addInputEvent("Mouse_LUp", "Note_Mouse_LUp()")
 _uiButtonNote:addInputEvent("Mouse_On", "Note_Mouse_On()")
 local _frameManufactureDesc = (UI.getChildControl)(Panel_Manufacture, "Frame_ManufactureDesc")
 local _frameContent = (UI.getChildControl)(_frameManufactureDesc, "Frame_1_Content")
+local _frameScroll = (UI.getChildControl)(_frameManufactureDesc, "VerticalScroll")
 local _uiKnowledgeDesc = (UI.getChildControl)(_frameContent, "StaticText_KnowledgeDesc")
 _uiKnowledgeDesc:SetAutoResize(true)
 local _uiKnowledgeIcon = (UI.getChildControl)(Panel_Manufacture, "Static_KnoeledgeIcon")
@@ -2195,7 +2196,7 @@ Manufacture_Button_LUp_Craft = function(isClear)
 end
 
 Manufacture_KnowledgeList_SelectKnowledge = function(index)
-  -- function num : 0_49 , upvalues : _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _uiKnowledgeIcon, selectIndex, list2
+  -- function num : 0_49 , upvalues : _startKnowledgeIndex, _uiKnowledgeDesc, _frameContent, _uiKnowledgeIcon, _frameScroll, _frameManufactureDesc, selectIndex, list2
   if Panel_Win_System:GetShow() then
     return 
   end
@@ -2218,6 +2219,9 @@ Manufacture_KnowledgeList_SelectKnowledge = function(index)
           _uiKnowledgeDesc:SetText(" ")
           _uiKnowledgeIcon:ChangeTextureInfoName("UI_Artwork/Unkown_Intelligence.dds")
           _frameContent:SetSize(_frameContent:GetSizeX(), _uiKnowledgeDesc:GetSizeY())
+          _frameScroll:SetControlTop()
+          _frameManufactureDesc:UpdateContentScroll()
+          _frameManufactureDesc:UpdateContentPos()
           local prevSelectIndex = selectIndex
           selectIndex = index
           list2:requestUpdateByKey(toInt64(0, index))

@@ -219,7 +219,7 @@ WeaponChange_IconOver = function(isShow, controlId)
       end
       control = equipSlot.icon
       local itemWrapper = getInventoryItemByType(selectedItemWhere, selectedItemSlotNo)
-      Panel_Tooltip_Item_Show(itemWrapper, control, false, true, nil, nil, nil)
+      Panel_Tooltip_Item_Show(itemWrapper, control, false, true, nil, nil, nil, nil, "WeaponChange", selectedItemSlotNo)
     else
       do
         if controlId == 1 then

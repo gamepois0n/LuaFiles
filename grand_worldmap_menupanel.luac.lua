@@ -61,37 +61,26 @@ local worldMap_Init = function()
   NpcFind:addInputEvent("Mouse_LUp", "BtnEvent_NpcNavi()")
   ServantStable_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 0 .. " )")
   ServantStable_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 0 .. " )")
-  ServantStable_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 0 .. " )")
   WareHouse_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 1 .. " )")
   WareHouse_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 1 .. " )")
-  WareHouse_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 1 .. " )")
   Quest_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 2 .. " )")
   Quest_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 2 .. " )")
-  Quest_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 2 .. " )")
   Transport_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 3 .. " )")
   Transport_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 3 .. " )")
-  Transport_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 3 .. " )")
   ItemMarket_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 4 .. " )")
   ItemMarket_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 4 .. " )")
-  ItemMarket_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 4 .. " )")
   WorkerList_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 5 .. " )")
   WorkerList_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 5 .. " )")
-  WorkerList_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 5 .. " )")
   HelpMenu_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 6 .. " )")
   HelpMenu_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 6 .. " )")
-  HelpMenu_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 6 .. " )")
   Exit_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 7 .. " )")
   Exit_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 7 .. " )")
-  Exit_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 7 .. " )")
   WorkerTrade_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 8 .. " )")
   WorkerTrade_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 8 .. " )")
-  WorkerTrade_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 8 .. " )")
   StableMarket_Btn:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 9 .. " )")
   StableMarket_Btn:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 9 .. " )")
-  StableMarket_Btn:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 9 .. " )")
   NpcFind:addInputEvent("Mouse_On", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 10 .. " )")
   NpcFind:addInputEvent("Mouse_Out", "HandleOnOut_WorldmapGrand_MenuButtonTooltip( false, " .. 10 .. " )")
-  NpcFind:setTooltipEventRegistFunc("HandleOnOut_WorldmapGrand_MenuButtonTooltip( true, " .. 10 .. " )")
 end
 
 GrandWorldMap_CheckPopup = function(openPanel)
@@ -273,10 +262,6 @@ FGlobal_WorldMapOpenForMenu = function()
   Panel_Worldmap_MovieGuide_Init()
   if isGameTypeKR2() then
     HelpMenu_Btn:SetShow(false)
-  else
-    if isGameTypeTH() then
-      HelpMenu_Btn:SetShow(false)
-    end
   end
 end
 
@@ -351,7 +336,6 @@ HandleOnOut_WorldmapGrand_MenuButtonTooltip = function(isShow, buttonType)
         end
       end
     end
-    registTooltipControl(control, Panel_Tooltip_SimpleText)
     TooltipSimple_Show(control, name, desc)
   else
     do

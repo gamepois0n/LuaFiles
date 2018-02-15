@@ -34,6 +34,9 @@ CreateListContent_GuildBattle_AttendMember = function(content, index)
   local userNo = (ToClient_GuildBattle_GetUserNoFromEntryList(memberIndex))
   local memberInfo = nil
   if ToClient_isPersonalBattle() then
+    if ToClient_GuildBattle_AmIMasterForThisBattle() == false then
+      userNo = ToClient_GuildBattle_GetUserNoFromJoinedList(memberIndex)
+    end
     memberInfo = Toclient_getPersonalBattleMemberInfo(userNo)
   else
     local myGuildListInfo = ToClient_GetMyGuildInfoWrapper()
@@ -51,6 +54,7 @@ CreateListContent_GuildBattle_AttendMember = function(content, index)
     local staticText_Level = (UI.getChildControl)(content, "StaticText_Level")
     local staticText_Name = (UI.getChildControl)(content, "StaticText_CharacterName")
     local staticText_State = (UI.getChildControl)(content, "StaticText_State")
+    local staticPartyLeaderIcon = (UI.getChildControl)(content, "Static_PartyLeaderIcon")
     local hideCheckBox = ToClient_GuildBattle_GetMaxAttendCount() > 1
     local isEnableText = true
     if PaGlobal_GuildBattle_SelectAttend._canSelectAttend == true then
@@ -108,7 +112,14 @@ CreateListContent_GuildBattle_AttendMember = function(content, index)
       if ToClient_GuildBattle_IsWaitingAttendSelectResult() == true or ToClient_GuildBattle_IsAttendMemberConfirmed() == true then
         EnableControl(checkBtn_AsAttend, false)
       end
-      -- DECOMPILER ERROR: 11 unprocessed JMP targets
+      staticPartyLeaderIcon:SetShow(false)
+      if ToClient_GuildBattle_AmIMasterForThisBattle() == false then
+        checkBtn_AsAttend:SetShow(false)
+        if memberIndex == 0 then
+          staticPartyLeaderIcon:SetShow(true)
+        end
+      end
+      -- DECOMPILER ERROR: 12 unprocessed JMP targets
     end
   end
 end
@@ -152,6 +163,9 @@ PaGlobal_GuildBattle_SelectAttend.Show = function(self, isShow)
     else
       self._canSelectAttend = false
     end
+    if ToClient_isPersonalBattle() == true then
+      ((self._ui)._btn_Reload):SetShow(false)
+    end
   end
 end
 
@@ -167,7 +181,12 @@ end
 PaGlobal_GuildBattle_SelectAttend.UpdateMemberInfo = function(self)
   -- function num : 0_6
   local ui = self._ui
-  local entryCount = ToClient_GuildBattle_GetEntryCount()
+  local entryCount = 0
+  if ToClient_isPersonalBattle() == true then
+    entryCount = ToClient_getPersonalBattleMemberCount()
+  else
+    entryCount = ToClient_GuildBattle_GetEntryCount()
+  end
   local memberListElementManager = (ui._list_GuildMembers):getElementManager()
   memberListElementManager:clearKey()
   for i = 1, entryCount do
@@ -242,6 +261,20 @@ PaGlobal_GuildBattle_SelectAttend.UpdateConfirmButton = function(self)
       EnableControl((self._ui)._btn_ConfirmAttend, false)
     end
   end
+  if ToClient_GuildBattle_AmIMasterForThisBattle() == false then
+    ((self._ui)._btn_ConfirmAttend):SetShow(false)
+    ;
+    ((self._ui)._staticText_AttendCount):SetShow(false)
+    ;
+    ((self._ui)._staticText_CheckTitle):SetShow(false)
+  else
+    ;
+    ((self._ui)._btn_ConfirmAttend):SetShow(true)
+    ;
+    ((self._ui)._staticText_AttendCount):SetShow(true)
+    ;
+    ((self._ui)._staticText_CheckTitle):SetShow(true)
+  end
 end
 
 -- DECOMPILER ERROR at PC68: Confused about usage of register: R2 in 'UnsetPending'
@@ -266,6 +299,23 @@ FromClient_GuildBattle_SelectAttendResult = function(isSuccess)
   end
 end
 
+FromClient_UpdateUnjoinAttend = function()
+  -- function num : 0_14
+  local ui = PaGlobal_GuildBattle_SelectAttend._ui
+  local entryCount = 0
+  if ToClient_isPersonalBattle() == true then
+    entryCount = ToClient_getPersonalBattleMemberCount()
+  else
+    entryCount = ToClient_GuildBattle_GetEntryCount()
+  end
+  local memberListElementManager = (ui._list_GuildMembers):getElementManager()
+  memberListElementManager:clearKey()
+  for i = 1, entryCount do
+    memberListElementManager:pushKey(i - 1)
+  end
+end
+
 registerEvent("FromClient_luaLoadComplete", "FromClient_luaLoadComplete_GuildBattle_SelectAttend")
 registerEvent("FromClient_selectAttendResult", "FromClient_GuildBattle_SelectAttendResult")
+registerEvent("FromClient_GuildBattle_OurMemberUnjoined", "FromClient_UpdateUnjoinAttend")
 

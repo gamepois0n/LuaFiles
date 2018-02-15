@@ -39,6 +39,8 @@ HorseMP_init = function()
   Panel_HorseMp:ComputePos()
   ;
   (servantMpBar._button_AutoCarrot):SetShow(false)
+  ;
+  (servantMpBar._button_AutoCarrot):SetCheck(true)
 end
 
 HorseMp_InitStaminaAlertText = function(vehicleType)

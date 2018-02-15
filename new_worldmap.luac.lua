@@ -78,10 +78,11 @@ Panel_NaviButton:SetShow(false)
 local naviBtn = (UI.getChildControl)(Panel_NaviButton, "Button_Navi")
 naviBtn:SetShow(true)
 naviBtn:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVITITLE"))
-naviBtn:SetSize(naviBtn:GetTextSizeX() + 10, naviBtn:GetSizeY())
+naviBtn:SetSize(naviBtn:GetTextSizeX() + 20, naviBtn:GetSizeY())
 naviBtn:addInputEvent("Mouse_LUp", "HandleClicked_CompleteNode()")
-naviBtn:addInputEvent("Mouse_On", "SimpleTooltip_NodeBtn(true)")
+naviBtn:addInputEvent("Mouse_On", "SimpleTooltip_NodeBtn(true, 0)")
 naviBtn:addInputEvent("Mouse_Out", "SimpleTooltip_NodeBtn(false)")
+naviBtn:setButtonShortcuts("PANEL_WORLDMAPNAVIBUTTON_AUTONAVI", (Defines.RenderMode).eRenderMode_WorldMap)
 WorldMap_NaviButton_RePos = function()
   -- function num : 0_3 , upvalues : isCullingNaviBtn
   if Panel_NaviButton:IsUse() == false then
@@ -100,26 +101,42 @@ WorldMap_NaviButton_RePos = function()
 end
 
 HandleClicked_CompleteNode = function()
-  -- function num : 0_4 , upvalues : isCullingNaviBtn
+  -- function num : 0_4 , upvalues : HideAutoCompletedNaviBtn, isCullingNaviBtn
+  if ToClient_WorldMapNaviEmpty() == true or ToClient_WorldMapNaviIsLoopPath() == true or HideAutoCompletedNaviBtn ~= false then
+    return 
+  end
+  if ToClient_GetMyTeamNoLocalWar() ~= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_LOCALWAR_CANTNAVI_ACK"))
+    return 
+  end
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    return 
+  end
+  if (selfPlayer:getRegionInfoWrapper()):isDesert() == true then
+    return 
+  end
+  ToClient_DeleteNaviGuideByGroup(0)
   ToClient_OnCompletedNodeLoop(NavigationGuideParam())
   Panel_NaviButton:SetShow(false)
   TooltipSimple_Hide()
   isCullingNaviBtn = true
 end
 
-SimpleTooltip_NodeBtn = function(isShow)
+SimpleTooltip_NodeBtn = function(isShow, tipType)
   -- function num : 0_5 , upvalues : naviBtn
-  if isShow then
-    local name = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVITITLE")
-    local desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVIDESC")
-    local control = naviBtn
-    TooltipSimple_Show(control, name, desc)
-  else
-    do
-      TooltipSimple_Hide()
-      ToClient_OnNaviRenderAsloopPath(isShow)
-    end
+  if not isShow then
+    ToClient_OnNaviRenderAsloopPath(isShow)
+    TooltipSimple_Hide()
+    return 
   end
+  if tipType == 0 then
+    name = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVITITLE")
+    desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAP_AUTONAVIDESC")
+    control = naviBtn
+  end
+  TooltipSimple_Show(control, name, desc)
+  ToClient_OnNaviRenderAsloopPath(isShow)
 end
 
 FromClient_DeleteNaviGuidOnTheWorldmapPanel = function()
@@ -496,9 +513,9 @@ FGlobal_WorldMapWindowEscape = function()
     return 
   end
   if ToClient_WorldMapIsShow() then
-    -- DECOMPILER ERROR at PC137: Unhandled construct in 'MakeBoolean' P1
+    -- DECOMPILER ERROR at PC136: Unhandled construct in 'MakeBoolean' P1
 
-    if (((not isUsedNewTradeEventNotice_chk() or Panel_HouseControl:GetShow() ~= false or Panel_LargeCraft_WorkManager:GetShow() ~= false or Panel_RentHouse_WorkManager:GetShow() ~= false or Panel_Building_WorkManager:GetShow() ~= false or Panel_House_SellBuy_Condition:GetShow() ~= false or Panel_Window_Delivery_Information:GetShow() ~= false or Panel_Window_Delivery_Request:GetShow() ~= false or Panel_Trade_Market_Graph_Window:GetShow() ~= false or (Panel_TradeEventNotice_Renewal:GetShow() ~= false and Panel_TradeEventNotice_Renewal:IsUISubApp() ~= true) or Worldmap_Grand_GuildHouseControl:GetShow() ~= false or Worldmap_Grand_GuildCraft:GetShow() ~= false or Panel_NodeStable:GetShow() ~= false or Panel_Window_Warehouse:GetShow() ~= false or (Panel_CheckedQuest:GetShow() ~= false and Panel_CheckedQuest:IsUISubApp() ~= true) or Panel_Window_Delivery_InformationView:GetShow() ~= false or (Panel_Window_ItemMarket:GetShow() ~= false and Panel_Window_ItemMarket:IsUISubApp() ~= true) or (Panel_WorkerManager:GetShow() ~= false and Panel_WorkerManager:IsUISubApp() ~= true) or Panel_WorldMap_MovieGuide:GetShow() ~= false or Panel_WorkerTrade:GetShow() ~= false or Panel_WorkerTrade_Caravan:GetShow() == false))) then
+    if (((not _ContentsGroup_isUsedNewTradeEventNotice or Panel_HouseControl:GetShow() ~= false or Panel_LargeCraft_WorkManager:GetShow() ~= false or Panel_RentHouse_WorkManager:GetShow() ~= false or Panel_Building_WorkManager:GetShow() ~= false or Panel_House_SellBuy_Condition:GetShow() ~= false or Panel_Window_Delivery_Information:GetShow() ~= false or Panel_Window_Delivery_Request:GetShow() ~= false or Panel_Trade_Market_Graph_Window:GetShow() ~= false or (Panel_TradeEventNotice_Renewal:GetShow() ~= false and Panel_TradeEventNotice_Renewal:IsUISubApp() ~= true) or Worldmap_Grand_GuildHouseControl:GetShow() ~= false or Worldmap_Grand_GuildCraft:GetShow() ~= false or Panel_NodeStable:GetShow() ~= false or Panel_Window_Warehouse:GetShow() ~= false or (Panel_CheckedQuest:GetShow() ~= false and Panel_CheckedQuest:IsUISubApp() ~= true) or Panel_Window_Delivery_InformationView:GetShow() ~= false or (Panel_Window_ItemMarket:GetShow() ~= false and Panel_Window_ItemMarket:IsUISubApp() ~= true) or (Panel_WorkerManager:GetShow() ~= false and Panel_WorkerManager:IsUISubApp() ~= true) or Panel_WorldMap_MovieGuide:GetShow() ~= false or Panel_WorkerTrade:GetShow() ~= false or Panel_WorkerTrade_Caravan:GetShow() == false))) then
       ToClient_WorldMapPushEscape()
     end
     if (((Panel_HouseControl:GetShow() ~= false or Panel_LargeCraft_WorkManager:GetShow() ~= false or Panel_RentHouse_WorkManager:GetShow() ~= false or Panel_Building_WorkManager:GetShow() ~= false or Panel_House_SellBuy_Condition:GetShow() ~= false or Panel_Window_Delivery_Information:GetShow() ~= false or Panel_Window_Delivery_Request:GetShow() ~= false or Panel_Trade_Market_Graph_Window:GetShow() ~= false or (Panel_TradeMarket_EventInfo:GetShow() ~= false and Panel_TradeMarket_EventInfo:IsUISubApp() ~= true) or Worldmap_Grand_GuildHouseControl:GetShow() ~= false or Worldmap_Grand_GuildCraft:GetShow() ~= false or Panel_NodeStable:GetShow() ~= false or Panel_Window_Warehouse:GetShow() ~= false or (Panel_CheckedQuest:GetShow() ~= false and Panel_CheckedQuest:IsUISubApp() ~= true) or Panel_Window_Delivery_InformationView:GetShow() ~= false or (Panel_Window_ItemMarket:GetShow() ~= false and Panel_Window_ItemMarket:IsUISubApp() ~= true) or (Panel_WorkerManager:GetShow() ~= false and Panel_WorkerManager:IsUISubApp() ~= true) or Panel_WorldMap_MovieGuide:GetShow() ~= false or Panel_WorkerTrade:GetShow() ~= false or Panel_WorkerTrade_Caravan:GetShow() == false))) then
@@ -582,7 +599,7 @@ FGlobal_WorldMapCloseSubPanel = function()
   FromClient_OutWorldMapQuestInfo()
   FromClient_OnTerritoryTooltipHide()
   NodeName_ShowToggle(false)
-  if not isUsedNewTradeEventNotice_chk() and not Panel_TradeMarket_EventInfo:IsUISubApp() then
+  if not _ContentsGroup_isUsedNewTradeEventNotice and not Panel_TradeMarket_EventInfo:IsUISubApp() then
     TradeEventInfo_Close()
   end
   FGlobal_SetNodeFilter()

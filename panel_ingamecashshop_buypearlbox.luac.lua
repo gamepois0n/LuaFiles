@@ -196,7 +196,7 @@ _IngameCashShop_PearlCharge_ConfirmDO = function()
   local self = PearlCharge
   local cashProduct = (getIngameCashMall()):getCashProductStaticStatusByProductNoRaw(self.selected_productNoRaw)
   ;
-  (getIngameCashMall()):requestBuyItem(self.selected_productNoRaw, 1, cashProduct:getCashPrice(), (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_UiUpdate, toInt64(0, -1), 0)
+  (getIngameCashMall()):requestBuyItem(self.selected_productNoRaw, 1, cashProduct:getCashPrice(), (CppEnums.BuyItemReqTrType).eBuyItemReqTrType_UiUpdate, toInt64(0, -1), 0, 0)
 end
 
 FGlobal_IngameCashShop_PearlCharge_Open = function()

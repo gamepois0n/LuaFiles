@@ -354,7 +354,7 @@ GoodsTooltipInfo.Open = function(self)
   Panel_IngameCashShop_GoodsTooltip:SetShow(true)
 end
 
-GoodsTooltipInfo.SetPosition = function(self, icon)
+GoodsTooltipInfo.SetPosition = function(self, icon, isChoose, scrollArea)
   -- function num : 0_3
   local itemShow = Panel_IngameCashShop_GoodsTooltip:GetShow()
   if not itemShow then
@@ -404,18 +404,22 @@ GoodsTooltipInfo.SetPosition = function(self, icon)
     if isTop then
       yTmp = yTmp - tooltipSize.height
     end
+    if isChoose == true then
+      posX = scrollArea:GetSizeX() + 20
+      yTmp = scrollArea:GetPosY()
+    end
     Panel_IngameCashShop_GoodsTooltip:SetPosX(posX)
     Panel_IngameCashShop_GoodsTooltip:SetPosY(yTmp)
   end
-  -- DECOMPILER ERROR: 9 unprocessed JMP targets
+  -- DECOMPILER ERROR: 10 unprocessed JMP targets
 end
 
-FGlobal_CashShop_GoodsTooltipInfo_Open = function(productKeyRaw, slotIcon)
+FGlobal_CashShop_GoodsTooltipInfo_Open = function(productKeyRaw, slotIcon, isChoose, scrollArea)
   -- function num : 0_4 , upvalues : GoodsTooltipInfo
   local self = GoodsTooltipInfo
   self.SelectedProductKeyRaw = productKeyRaw
   self:Open()
-  self:SetPosition(slotIcon)
+  self:SetPosition(slotIcon, isChoose, scrollArea)
 end
 
 FGlobal_CashShop_GoodsTooltipInfo_Close = function()

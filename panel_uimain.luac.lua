@@ -475,14 +475,14 @@ _challengeCall_byNewChallengeAlarm = function()
   end
   if not Panel_Window_CharInfo_Status:GetShow() then
     Panel_Window_CharInfo_Status:SetShow(true)
-    if isNewCharacterInfo() == false then
+    if _ContentsGroup_isUsedNewCharacterInfo == false then
       FGlobal_CharInfoStatusShowAni()
     else
       PaGlobal_CharacterInfo:showAni()
     end
     audioPostEvent_SystemUi(1, 34)
   end
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     HandleClicked_CharacterInfo_Tab(3)
   else
     PaGlobal_CharacterInfo:showWindow(3)

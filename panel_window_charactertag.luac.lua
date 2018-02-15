@@ -274,7 +274,7 @@ end
 
 CharacterTag.FaceSetting = function(self, targetImage, char_Type)
   -- function num : 0_9 , upvalues : UI_Class, UI_DefaultFaceTexture
-  if isNewCharacterInfo() == false then
+  if _ContentsGroup_isUsedNewCharacterInfo == false then
     if char_Type == UI_Class.ClassType_Warrior then
       targetImage:ChangeTextureInfoName("New_UI_Common_forLua/Window/GameExit/GameExit_CharSlot_00.dds")
       local x1, y1, x2, y2 = setTextureUV_Func(targetImage, 1, 1, 156, 201)

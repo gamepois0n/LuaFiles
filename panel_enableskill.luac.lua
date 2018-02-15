@@ -66,6 +66,9 @@ recommendSkill[UI_classType.ClassType_CombattantWomen] = {[0] = 2723, [1] = 2724
 recommendSkill[UI_classType.ClassType_Lahn] = {[0] = 3221, [1] = 3222, [2] = 3223, [3] = 3224, [4] = 2948, [5] = 2975, [6] = 2976, [7] = 2949, [8] = 2977, [9] = 2950, [10] = 2978, [11] = 2979, [12] = 2980, [13] = 2981, [14] = 2951, [15] = 2992, [16] = 2993, [17] = 2994, [18] = 2952, [19] = 2982, [20] = 2983, [21] = 2984, [22] = 2985, [23] = 2986, [24] = 2953, [25] = 2987, [26] = 2988, [27] = 2989, [28] = 2954, [29] = 2990, [30] = 2991, [31] = 2955, [31] = 2995, [32] = 2956, [33] = 2957, [34] = 2996, [35] = 2997, [36] = 2958, [37] = 2959, [38] = 2960, [39] = 2998, [40] = 2999, [41] = 2961, [42] = 2962, [43] = 3000, [44] = 3001, [45] = 3002, [46] = 2964, [47] = 3003, [48] = 3004, [49] = 2966, [50] = 3005, [51] = 3006, [52] = 2967, [53] = 3007, [54] = 3008, [55] = 3009, [56] = 3010, [57] = 2969, [58] = 3011, [59] = 3012, [60] = 2970, [61] = 3013, [62] = 3014, [63] = 3015, [64] = 3016, [65] = 2971, [66] = 3017, [67] = 3018, [68] = 3019, [69] = 2972, [70] = 3020, [71] = 3021, [72] = 2973, [73] = 3022, [74] = 3023, [75] = 3024, [76] = 2974, [77] = 3025, [78] = 3026, [79] = 3027, [80] = 3028, [81] = 3029, [81] = 3147, [82] = 3148, [83] = 3149, [84] = 3150}
 recommendSkill[UI_classType.ClassType_ShyWomen] = {}
 recommendSkill[22] = {}
+recommendSkill[29] = {}
+recommendSkill[17] = {}
+recommendSkill[18] = {}
 EnableSkill_ShowAni = function()
   -- function num : 0_0 , upvalues : UI_ANI_ADV
   (UIAni.AlphaAnimation)(1, Panel_EnableSkill, 0, 0.15)
@@ -640,6 +643,9 @@ EnableSkill_Setting = function()
   Panel_EnableSkill_Value_elementCount = 0
   recommendSkillCount = 0
   for iii = 0, 1 do
+    if cellTable[iii] == nil then
+      return 
+    end
     local cols = (cellTable[iii]):capacityX()
     local rows = (cellTable[iii]):capacityY()
     for row = 0, rows - 1 do
@@ -652,16 +658,16 @@ EnableSkill_Setting = function()
           local needSp = (skillStaticWrapper:get())._needSkillPointForLearning
           local recommendCheck = false
           local skillType = getSkillTypeStaticStatus(skillNo)
-          -- DECOMPILER ERROR at PC95: Confused about usage of register: R27 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC99: Confused about usage of register: R27 in 'UnsetPending'
 
-          -- DECOMPILER ERROR at PC95: Unhandled construct in 'MakeBoolean' P1
+          -- DECOMPILER ERROR at PC99: Unhandled construct in 'MakeBoolean' P1
 
           if skillType:isValidLocalizing() and isAllCheck == true and not recommendCheck then
             skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
-            -- DECOMPILER ERROR at PC100: Confused about usage of register: R27 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC104: Confused about usage of register: R27 in 'UnsetPending'
 
             editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-            -- DECOMPILER ERROR at PC103: Confused about usage of register: R27 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC107: Confused about usage of register: R27 in 'UnsetPending'
 
             editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
             Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
@@ -672,21 +678,21 @@ EnableSkill_Setting = function()
             for i = 0, maxRecommendCount - 1 do
               if skillNo == (recommendSkill[selfPlayer:getClassType()])[i] then
                 for ii = Panel_EnableSkill_Value_elementCount + 1, recommendSkillCount, -1 do
-                  -- DECOMPILER ERROR at PC144: Confused about usage of register: R35 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC148: Confused about usage of register: R35 in 'UnsetPending'
 
                   if recommendSkillCount == ii then
                     skillNumber[ii] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
                   else
-                    -- DECOMPILER ERROR at PC150: Confused about usage of register: R35 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC154: Confused about usage of register: R35 in 'UnsetPending'
 
                     skillNumber[ii] = skillNumber[ii - 1]
                   end
                 end
                 recommendSkillCount = recommendSkillCount + 1
-                -- DECOMPILER ERROR at PC159: Confused about usage of register: R31 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC163: Confused about usage of register: R31 in 'UnsetPending'
 
                 editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-                -- DECOMPILER ERROR at PC162: Confused about usage of register: R31 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC166: Confused about usage of register: R31 in 'UnsetPending'
 
                 editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
                 Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
@@ -696,23 +702,23 @@ EnableSkill_Setting = function()
           end
           do
             do
-              -- DECOMPILER ERROR at PC178: Confused about usage of register: R27 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC182: Confused about usage of register: R27 in 'UnsetPending'
 
               if not recommendCheck then
                 skillNumber[Panel_EnableSkill_Value_elementCount] = {_skillNo = skillNo, _needSp = needSp, _row = row, _col = col, _awaken = iii}
-                -- DECOMPILER ERROR at PC183: Confused about usage of register: R27 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC187: Confused about usage of register: R27 in 'UnsetPending'
 
                 editSkillName[Panel_EnableSkill_Value_elementCount] = skillStaticWrapper:getName()
-                -- DECOMPILER ERROR at PC186: Confused about usage of register: R27 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC190: Confused about usage of register: R27 in 'UnsetPending'
 
                 editSkillNo[Panel_EnableSkill_Value_elementCount] = skillNo
                 Panel_EnableSkill_Value_elementCount = Panel_EnableSkill_Value_elementCount + 1
               end
-              -- DECOMPILER ERROR at PC190: LeaveBlock: unexpected jumping out DO_STMT
+              -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out DO_STMT
 
-              -- DECOMPILER ERROR at PC190: LeaveBlock: unexpected jumping out IF_THEN_STMT
+              -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-              -- DECOMPILER ERROR at PC190: LeaveBlock: unexpected jumping out IF_STMT
+              -- DECOMPILER ERROR at PC194: LeaveBlock: unexpected jumping out IF_STMT
 
             end
           end

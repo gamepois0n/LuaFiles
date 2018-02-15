@@ -60,7 +60,14 @@ FieldViewMode_PushFreeSet = function(number)
         wheel = 407.600433
         distance = 800
       else
-        return 
+        if number == 4 then
+          x = 0
+          y = 0
+          wheel = 369.200378
+          distance = 230
+        else
+          return 
+        end
       end
     end
   end

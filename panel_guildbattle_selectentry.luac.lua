@@ -153,12 +153,15 @@ PaGlobal_GuildBattle_SelectEntry.UpdateMemberInfo = function(self)
       end
     end
     memberListElementManager:clearKey()
+    if ToClient_isPersonalBattle() == true and ToClient_GuildBattle_AmIMasterForThisBattle() == false then
+      memberCountJoined = ToClient_getPersonalBattleMemberCount()
+    end
     for i = 1, memberCountJoined do
       memberListElementManager:pushKey(i - 1)
     end
     self:UpdateControlButton()
     self:UpdateMemberCountText()
-    -- DECOMPILER ERROR: 2 unprocessed JMP targets
+    -- DECOMPILER ERROR: 3 unprocessed JMP targets
   end
 end
 
@@ -200,6 +203,12 @@ PaGlobal_GuildBattle_SelectEntry.UpdateControlButton = function(self)
         end
       end
     end
+  end
+  if ToClient_GuildBattle_AmIMasterForThisBattle() == false then
+    ((self._ui)._btn_ConfirmEntry):SetShow(false)
+  else
+    ;
+    ((self._ui)._btn_ConfirmEntry):SetShow(true)
   end
 end
 

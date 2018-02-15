@@ -12,6 +12,7 @@ local UI_PP = CppEnums.PAUIMB_PRIORITY
 local UI_TT = CppEnums.PAUI_TEXTURE_TYPE
 local nodeStaticStatus, _wayPointKey = nil, nil
 local isProgressReset = false
+local _currentNodeLv = nil
 local Txt_Node_Title = (UI.getChildControl)(Panel_NodeMenu, "MainMenu_Title")
 local Txt_NodeManager = (UI.getChildControl)(Panel_NodeMenu, "MainMenu_StaticText_NodeManager")
 local static_NodeManagerBG = (UI.getChildControl)(Panel_NodeMenu, "MainMenu_Bg")
@@ -609,13 +610,14 @@ FGlobal_NodeMenu_SetEnableNodeUnlinkButton = function(bEnable)
 end
 
 NodeLevelGroup.SetNodeLevel = function(self, nodeKey)
-  -- function num : 0_22 , upvalues : isProgressReset
+  -- function num : 0_22 , upvalues : _currentNodeLv, isProgressReset
   local nodeLv = ToClient_GetNodeLevel(nodeKey)
   local nodeExp = Int64toInt32(ToClient_GetNodeExperience_s64(nodeKey))
   local nodeExpMax = Int64toInt32(ToClient_GetNeedExperienceToNextNodeLevel_s64(nodeKey))
   local nodeExpPercent = nodeExp / nodeExpMax * 100
   ;
   (self.Txt_NodeLevel):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_COMMON_LV") .. ". " .. tostring(nodeLv))
+  _currentNodeLv = nodeLv
   if isProgressReset then
     (self.Progress_NodeLevel):SetProgressRate(0)
     isProgressReset = false
@@ -1001,19 +1003,26 @@ HandleOnout_GrandWorldMap_NodeMenu_explorePointHelp = function(isShow, buttonTyp
     local name = ""
     local desc = nil
     if buttonType == 0 then
+      local currentNodeBuffPercent = ToClient_getNodeIncreaseItemDropPercent() * PaGlobal_NodeMenu_GetCurrentNodeLv()
+      currentNodeBuffPercent = currentNodeBuffPercent / 10000
       control = NodeLevelGroup.Btn_NodeLevHelp
       name = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_NODELEVEL")
-      desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_NODELEVEL_DESC")
+      if currentNodeBuffPercent > 0 then
+        desc = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_NODELEVEL_DESC_WITH_BUFF", "percent", tostring(currentNodeBuffPercent))
+      else
+        desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_NODELEVEL_DESC")
+      end
     else
-      control = SelfExplorePointGroup.Btn_ExplorePoint_Help
-      name = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_EXPLORERPOINT")
-      desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_EXPLORERPOINT_DESC")
-    end
-    registTooltipControl(control, Panel_Tooltip_SimpleText)
-    TooltipSimple_Show(control, name, desc)
-  else
-    do
-      TooltipSimple_Hide()
+      do
+        do
+          control = SelfExplorePointGroup.Btn_ExplorePoint_Help
+          name = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_EXPLORERPOINT")
+          desc = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_HELPICON_EXPLORERPOINT_DESC")
+          registTooltipControl(control, Panel_Tooltip_SimpleText)
+          TooltipSimple_Show(control, name, desc)
+          TooltipSimple_Hide()
+        end
+      end
     end
   end
 end
@@ -1036,6 +1045,14 @@ FomClient_Worldmap_GuildVehicleIcon_Clicked = function(actorKeyRaw)
   messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPGRAND_VEHICLEDISTROY_TITLE"), content = desc, functionYes = ApplyDistroy, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   ;
   (MessageBox.showMessageBox)(messageBoxData)
+end
+
+PaGlobal_NodeMenu_GetCurrentNodeLv = function()
+  -- function num : 0_49 , upvalues : _currentNodeLv
+  if _currentNodeLv == nil then
+    return 0
+  end
+  return _currentNodeLv
 end
 
 registerEvent("FromClient_CreateWorldMapNodeIcon", "FromClient_CreateNodeIcon")

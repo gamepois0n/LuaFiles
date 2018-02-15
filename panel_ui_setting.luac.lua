@@ -7,7 +7,7 @@ Panel_UI_Setting:SetShow(false)
 local UI_TM = CppEnums.TextMode
 local renderMode = (RenderModeWrapper.new)(100, {(Defines.RenderMode).eRenderMode_UISetting}, false)
 local _isMenu = true
-local UiSet = {title = (UI.getChildControl)(Panel_UI_Setting, "StaticText_Title"), main_BG = (UI.getChildControl)(Panel_UI_Setting, "Static_MainBG"), btn_Win_Close = (UI.getChildControl)(Panel_UI_Setting, "Button_Win_Close"), btn_save = (UI.getChildControl)(Panel_UI_Setting, "Button_Save"), btn_cancel = (UI.getChildControl)(Panel_UI_Setting, "Button_Cancel"), btn_reset = (UI.getChildControl)(Panel_UI_Setting, "Button_Reset"), bg_Grid = (UI.getChildControl)(Panel_UI_Setting, "Static_Grid"), btn_FieldView = (UI.getChildControl)(Panel_UI_Setting, "CheckButton_FieldView"), btn_QuickSlotMagnetic = (UI.getChildControl)(Panel_UI_Setting, "CheckButton_QuickSlot"), chk_GridView = (UI.getChildControl)(Panel_UI_Setting, "CheckButton_GridView"), txt_UISize = (UI.getChildControl)(Panel_UI_Setting, "StaticText_UISize"), txt_UI_LOW = (UI.getChildControl)(Panel_UI_Setting, "StaticText_UI_LOW"), txt_UI_HIGH = (UI.getChildControl)(Panel_UI_Setting, "StaticText_UI_HIGH"), slider_UI_Scale = (UI.getChildControl)(Panel_UI_Setting, "Slider_UI_Scaling"), txt_UIFreeSet = (UI.getChildControl)(Panel_UI_Setting, "StaticText_FreeSet"), btn_UIFreeSet1 = (UI.getChildControl)(Panel_UI_Setting, "Button_UI1"), btn_UIFreeSet2 = (UI.getChildControl)(Panel_UI_Setting, "Button_UI2"), btn_UIFreeSet3 = (UI.getChildControl)(Panel_UI_Setting, "Button_UI3"), btn_SaveUIFreeSet = (UI.getChildControl)(Panel_UI_Setting, "Button_SaveFreeSet"), panelCount = 0, 
+local UiSet = {title = (UI.getChildControl)(Panel_UI_Setting, "StaticText_Title"), main_BG = (UI.getChildControl)(Panel_UI_Setting, "Static_MainBG"), btn_Win_Close = (UI.getChildControl)(Panel_UI_Setting, "Button_Win_Close"), btn_save = (UI.getChildControl)(Panel_UI_Setting, "Button_Save"), btn_cancel = (UI.getChildControl)(Panel_UI_Setting, "Button_Cancel"), btn_reset = (UI.getChildControl)(Panel_UI_Setting, "Button_Reset"), bg_Grid = (UI.getChildControl)(Panel_UI_Setting, "Static_Grid"), btn_FieldView = (UI.getChildControl)(Panel_UI_Setting, "CheckButton_FieldView"), btn_QuickSlotMagnetic = (UI.getChildControl)(Panel_UI_Setting, "CheckButton_QuickSlot"), chk_GridView = (UI.getChildControl)(Panel_UI_Setting, "CheckButton_GridView"), txt_UISize = (UI.getChildControl)(Panel_UI_Setting, "StaticText_UISize"), txt_UI_LOW = (UI.getChildControl)(Panel_UI_Setting, "StaticText_UI_LOW"), txt_UI_HIGH = (UI.getChildControl)(Panel_UI_Setting, "StaticText_UI_HIGH"), slider_UI_Scale = (UI.getChildControl)(Panel_UI_Setting, "Slider_UI_Scaling"), txt_UIFreeSet = (UI.getChildControl)(Panel_UI_Setting, "StaticText_FreeSet"), btn_UIFreeSet1 = (UI.getChildControl)(Panel_UI_Setting, "Button_UI1"), btn_UIFreeSet2 = (UI.getChildControl)(Panel_UI_Setting, "Button_UI2"), btn_UIFreeSet3 = (UI.getChildControl)(Panel_UI_Setting, "Button_UI3"), panelCount = 0, 
 panelPool = {}
 , preScale = 0, currentScale = 100, minScale = 50, maxScale = 120, replaceScale = 0, nowCurrentPercent = 0, saveScale = 100}
 local UiSave = {txt_Desc = (UI.getChildControl)(Panel_SaveFreeSet, "StaticText_Desc"), btn_SaveClose = (UI.getChildControl)(Panel_SaveFreeSet, "Button_Win_Close"), btn_SaveDefault = (UI.getChildControl)(Panel_SaveFreeSet, "Button_DefaultUI"), btn_SaveUI1 = (UI.getChildControl)(Panel_SaveFreeSet, "Button_UI1"), btn_SaveUI2 = (UI.getChildControl)(Panel_SaveFreeSet, "Button_UI2"), btn_SaveUI3 = (UI.getChildControl)(Panel_SaveFreeSet, "Button_UI3"), bg_Block = (UI.getChildControl)(Panel_SaveFreeSet, "Static_Block")}
@@ -53,8 +53,6 @@ UiSet.btn_Scale = (UI.getChildControl)(UiSet.slider_UI_Scale, "Slider_UI_Scaling
 ;
 (UiSet.title):AddChild(UiSet.btn_UIFreeSet3)
 ;
-(UiSet.title):AddChild(UiSet.btn_SaveUIFreeSet)
-;
 (UiSet.title):AddChild(UiSet.btn_Win_Close)
 Panel_UI_Setting:RemoveControl(UiSet.main_BG)
 Panel_UI_Setting:RemoveControl(UiSet.btn_save)
@@ -71,7 +69,6 @@ Panel_UI_Setting:RemoveControl(UiSet.slider_UI_Scale)
 Panel_UI_Setting:RemoveControl(UiSet.btn_UIFreeSet1)
 Panel_UI_Setting:RemoveControl(UiSet.btn_UIFreeSet2)
 Panel_UI_Setting:RemoveControl(UiSet.btn_UIFreeSet3)
-Panel_UI_Setting:RemoveControl(UiSet.btn_SaveUIFreeSet)
 Panel_UI_Setting:RemoveControl(UiSet.btn_Win_Close)
 ;
 (UiSet.main_BG):ComputePos()
@@ -105,8 +102,6 @@ Panel_UI_Setting:RemoveControl(UiSet.btn_Win_Close)
 (UiSet.btn_UIFreeSet2):ComputePos()
 ;
 (UiSet.btn_UIFreeSet3):ComputePos()
-;
-(UiSet.btn_SaveUIFreeSet):ComputePos()
 ;
 (UiSet.btn_Win_Close):ComputePos()
 ;
@@ -777,17 +772,6 @@ UiSet_Initialize = function()
   end
   ;
   (UiSet.slider_UI_Scale):SetInterval(160)
-  ;
-  (UiSet.btn_SaveUIFreeSet):SetShow(true)
-  ;
-  (UiSet.btn_SaveUIFreeSet):addInputEvent("Mouse_LUp", "PaGlobal_Panel_SaveSetting_Show()")
-  ;
-  (UiSet.btn_SaveUIFreeSet):addInputEvent("Mouse_On", "PaGlobal_SimpleTooltips(true)")
-  ;
-  (UiSet.btn_SaveUIFreeSet):addInputEvent("Mouse_Out", "PaGlobal_SimpleTooltips(false)")
-  if ToClient_IsContentsGroupOpen("258") == false then
-    (UiSet.btn_SaveUIFreeSet):SetShow(false)
-  end
 end
 
 UiSet_update = function()
@@ -885,61 +869,65 @@ UiSet_update = function()
             else
               UiSet_ChangeTexture_BG(R7_PC305, 1)
             end
-            -- DECOMPILER ERROR at PC313: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC312: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC314: Confused about usage of register: R6 in 'UnsetPending'
+            ;
+            (slot.close):SetCheck(isChecked_SkillCommand)
+            -- DECOMPILER ERROR at PC317: Overwrote pending register: R7 in 'AssignReg'
+
+            -- DECOMPILER ERROR at PC318: Confused about usage of register: R6 in 'UnsetPending'
 
             ;
             (panelControl[idx]).isShow = R7_PC305
           else
-            -- DECOMPILER ERROR at PC324: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC328: Overwrote pending register: R7 in 'AssignReg'
 
             if idx == panelID.KeyGuide then
               if isChecked_KeyViewer == true then
                 UiSet_ChangeTexture_BG(R7_PC305, 2)
               else
-                -- DECOMPILER ERROR at PC329: Overwrote pending register: R7 in 'AssignReg'
+                -- DECOMPILER ERROR at PC333: Overwrote pending register: R7 in 'AssignReg'
 
                 UiSet_ChangeTexture_BG(R7_PC305, 1)
               end
             else
-              -- DECOMPILER ERROR at PC339: Overwrote pending register: R7 in 'AssignReg'
+              -- DECOMPILER ERROR at PC343: Overwrote pending register: R7 in 'AssignReg'
 
-              -- DECOMPILER ERROR at PC344: Overwrote pending register: R7 in 'AssignReg'
+              -- DECOMPILER ERROR at PC348: Overwrote pending register: R7 in 'AssignReg'
 
               if idx == panelID.Adrenallin then
                 if (getSelfPlayer()):isEnableAdrenalin() then
                   (slot.control):SetShow(true)
-                  -- DECOMPILER ERROR at PC348: Overwrote pending register: R7 in 'AssignReg'
+                  -- DECOMPILER ERROR at PC352: Overwrote pending register: R7 in 'AssignReg'
 
                   ;
                   (slot.close):SetShow(true)
                 else
-                  -- DECOMPILER ERROR at PC353: Overwrote pending register: R7 in 'AssignReg'
+                  -- DECOMPILER ERROR at PC357: Overwrote pending register: R7 in 'AssignReg'
 
                   ;
                   (slot.control):SetShow(false)
-                  -- DECOMPILER ERROR at PC357: Overwrote pending register: R7 in 'AssignReg'
+                  -- DECOMPILER ERROR at PC361: Overwrote pending register: R7 in 'AssignReg'
 
                   ;
                   (slot.close):SetShow(false)
                 end
               else
-                -- DECOMPILER ERROR at PC370: Overwrote pending register: R7 in 'AssignReg'
+                -- DECOMPILER ERROR at PC374: Overwrote pending register: R7 in 'AssignReg'
 
                 if idx == panelID.Pvp then
                   if isPvpEnable() then
                     (slot.control):SetShow(true)
-                    -- DECOMPILER ERROR at PC374: Overwrote pending register: R7 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC378: Overwrote pending register: R7 in 'AssignReg'
 
                     ;
                     (slot.close):SetShow(true)
                   else
-                    -- DECOMPILER ERROR at PC379: Overwrote pending register: R7 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC383: Overwrote pending register: R7 in 'AssignReg'
 
                     ;
                     (slot.control):SetShow(false)
-                    -- DECOMPILER ERROR at PC383: Overwrote pending register: R7 in 'AssignReg'
+                    -- DECOMPILER ERROR at PC387: Overwrote pending register: R7 in 'AssignReg'
 
                     ;
                     (slot.close):SetShow(false)
@@ -949,24 +937,24 @@ UiSet_update = function()
             end
           end
         end
-        -- DECOMPILER ERROR at PC397: Overwrote pending register: R7 in 'AssignReg'
+        -- DECOMPILER ERROR at PC401: Overwrote pending register: R7 in 'AssignReg'
 
         if (panelControl[idx]).isShow then
           if (panelControl[idx]).posFixed then
             (slot.control):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_IMPOSSIBLE", "name", (panelControl[idx]).name))
           else
-            -- DECOMPILER ERROR at PC410: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC414: Overwrote pending register: R7 in 'AssignReg'
 
             ;
             (slot.control):SetText((panelControl[idx]).name)
           end
         else
-          -- DECOMPILER ERROR at PC419: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC423: Overwrote pending register: R7 in 'AssignReg'
 
           if idx == 21 then
             (slot.control):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_UISETTING_SKILLGUIDE_EXTRA"))
           else
-            -- DECOMPILER ERROR at PC428: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC432: Overwrote pending register: R7 in 'AssignReg'
 
             ;
             (slot.control):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_UI_SETTING_SLOTCONTROL_OFF", "name", (panelControl[idx]).name))
@@ -974,20 +962,20 @@ UiSet_update = function()
         end
         do
           local stateValue = 0
-          -- DECOMPILER ERROR at PC440: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC444: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC441: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC445: Overwrote pending register: R7 in 'AssignReg'
 
-          -- DECOMPILER ERROR at PC442: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC446: Overwrote pending register: R7 in 'AssignReg'
 
           if not R7_PC305 then
             stateValue = 1
           else
-            -- DECOMPILER ERROR at PC447: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC451: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC448: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC452: Overwrote pending register: R7 in 'AssignReg'
 
-            -- DECOMPILER ERROR at PC449: Overwrote pending register: R7 in 'AssignReg'
+            -- DECOMPILER ERROR at PC453: Overwrote pending register: R7 in 'AssignReg'
 
             if R7_PC305 then
               stateValue = 3
@@ -995,14 +983,14 @@ UiSet_update = function()
               stateValue = 2
             end
           end
-          -- DECOMPILER ERROR at PC455: Overwrote pending register: R7 in 'AssignReg'
+          -- DECOMPILER ERROR at PC459: Overwrote pending register: R7 in 'AssignReg'
 
-          R7_PC305(R8_PC458, stateValue)
-          -- DECOMPILER ERROR at PC459: LeaveBlock: unexpected jumping out DO_STMT
+          R7_PC305(R8_PC462, stateValue)
+          -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out DO_STMT
 
-          -- DECOMPILER ERROR at PC459: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+          -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-          -- DECOMPILER ERROR at PC459: LeaveBlock: unexpected jumping out IF_STMT
+          -- DECOMPILER ERROR at PC463: LeaveBlock: unexpected jumping out IF_STMT
 
         end
       end
@@ -2187,19 +2175,22 @@ HandleClicked_Reset_UiSetting_Msg = function()
         end
       end
       Panel_NewEquip_EffectLastUpdate()
-      FGlobal_ResetRadarUI()
+      FGlobal_ResetRadarUI(true)
+      if PaGlobal_WorldMiniMap ~= nil then
+        PaGlobal_WorldMiniMap:resetPanelSize()
+      end
       HouseNaviBasicInitPosition()
       FGlobal_PetListNew_NoPet()
       PartyPanel_Repos()
       local count = ToClient_getChattingPanelCount()
       for chattingPanelindex = 0, count - 1 do
         Chatting_setIsOpenValue(chattingPanelindex, ChatPanelIsOpenState[chattingPanelindex + 1])
-        -- DECOMPILER ERROR at PC1308: Confused about usage of register: R15 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC1315: Confused about usage of register: R15 in 'UnsetPending'
 
         ChatPanelIsOpenState[chattingPanelindex + 1] = false
       end
       Chatting_setIsOpenValue(0, true)
-      -- DECOMPILER ERROR at PC1315: Confused about usage of register: R11 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC1322: Confused about usage of register: R11 in 'UnsetPending'
 
       ChatPanelIsOpenState[1] = true
       FGlobal_ChattingPanel_Reset()

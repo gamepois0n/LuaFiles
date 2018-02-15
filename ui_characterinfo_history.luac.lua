@@ -173,23 +173,19 @@ FromClient_MyHistoryInfo_Update = function()
                       (_dayHistoryValue[i]):addInputEvent("Mouse_On", "MyHistory_HelpWidget_Show(true," .. i .. ", true)")
                       ;
                       (_dayHistoryValue[i]):addInputEvent("Mouse_Out", "MyHistory_HelpWidget_Show(false)")
-                      ;
-                      (_dayHistoryValue[i]):setTooltipEventRegistFunc("MyHistory_HelpWidget_Show(true," .. i .. ", true)")
                     else
                       do
                         do
                           do
                             local _dayHistoryRightValue = (UI.createControl)(UI_PUCT.PA_UI_CONTROL_STATICTEXT, _contentHistoryList, "StaticText_MyHistory_" .. i)
                             CopyBaseProperty(dayHistoryRightValue, _dayHistoryRightValue)
-                            -- DECOMPILER ERROR at PC324: Confused about usage of register: R20 in 'UnsetPending'
+                            -- DECOMPILER ERROR at PC316: Confused about usage of register: R20 in 'UnsetPending'
 
                             _dayHistoryValue[i] = _dayHistoryRightValue
                             ;
                             (_dayHistoryValue[i]):addInputEvent("Mouse_On", "MyHistory_HelpWidget_Show(true," .. i .. ", false)")
                             ;
                             (_dayHistoryValue[i]):addInputEvent("Mouse_Out", "MyHistory_HelpWidget_Show(false)")
-                            ;
-                            (_dayHistoryValue[i]):setTooltipEventRegistFunc("MyHistory_HelpWidget_Show(true," .. i .. ", false)")
                             ;
                             (_dayHistoryValue[i]):SetAutoResize(true)
                             ;
@@ -200,17 +196,17 @@ FromClient_MyHistoryInfo_Update = function()
                             (_dayHistoryValue[i]):SetShow(true)
                             ;
                             (_dayHistoryValue[i]):SetIgnore(false)
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC361: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out DO_STMT
+                            -- DECOMPILER ERROR at PC361: LeaveBlock: unexpected jumping out DO_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                            -- DECOMPILER ERROR at PC361: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC361: LeaveBlock: unexpected jumping out IF_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_THEN_STMT
+                            -- DECOMPILER ERROR at PC361: LeaveBlock: unexpected jumping out IF_THEN_STMT
 
-                            -- DECOMPILER ERROR at PC377: LeaveBlock: unexpected jumping out IF_STMT
+                            -- DECOMPILER ERROR at PC361: LeaveBlock: unexpected jumping out IF_STMT
 
                           end
                         end
@@ -233,13 +229,13 @@ FromClient_MyHistoryInfo_Update = function()
                   dayLogCount = dayLogCount + 1
                   firstDay = dayIndex
                 end
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC393: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out DO_STMT
+                -- DECOMPILER ERROR at PC393: LeaveBlock: unexpected jumping out DO_STMT
 
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                -- DECOMPILER ERROR at PC393: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                -- DECOMPILER ERROR at PC409: LeaveBlock: unexpected jumping out IF_STMT
+                -- DECOMPILER ERROR at PC393: LeaveBlock: unexpected jumping out IF_STMT
 
               end
             end
@@ -275,34 +271,21 @@ FromClient_MyHistoryInfo_Update = function()
 end
 
 MyHistory_HelpWidget_Show = function(isShow, index, isLeft)
-  -- function num : 0_3 , upvalues : currentValue, helpWidget, _dayHistoryValue
-  if index ~= nil then
-    local journalCount = ToClient_GetJournalListCount(currentValue._year, currentValue._month, currentValue._myHistory)
-    if journalCount <= index or index < 0 then
-      return 
-    end
-    local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._myHistory, index)
-    if journalInfo ~= nil then
-      local helpDesc = PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_TIME", "hour", journalInfo:getJournalHour(), "minute", journalInfo:getJournalMinute(), "second", journalInfo:getJournalSecond())
-      helpWidget:SetText(helpDesc)
-      helpWidget:SetSize(helpWidget:GetTextSizeX() + 15, 20)
-    else
-      do
-        do
-          helpWidget:SetShow(false)
-          do return  end
-          if isLeft == true then
-            helpWidget:SetPosX((_dayHistoryValue[index]):GetPosX() - (_dayHistoryValue[index]):GetTextSizeX() + 100)
-          else
-            helpWidget:SetPosX((_dayHistoryValue[index]):GetPosX() + (_dayHistoryValue[index]):GetTextSizeX() + 5)
-          end
-          helpWidget:SetPosY((_dayHistoryValue[index]):GetPosY() - 6)
-          registTooltipControl(_dayHistoryValue[index], helpWidget)
-          helpWidget:SetShow(isShow)
-        end
-      end
-    end
+  -- function num : 0_3 , upvalues : currentValue, _dayHistoryValue
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
   end
+  local journalInfo = ToClient_GetJournal(currentValue._year, currentValue._month, currentValue._myHistory, index)
+  if journalInfo == nil then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name = ""
+  local helpName = tostring(journalInfo:getName())
+  local helpDesc = "<PAColor0xFFFFF3AF>" .. PAGetStringParam3(Defines.StringSheet_GAME, "LUA_CHARACTERINFO_HISTORY_TIME", "hour", journalInfo:getJournalHour(), "minute", journalInfo:getJournalMinute(), "second", journalInfo:getJournalSecond()) .. "<PAOldColor>"
+  local desc = helpName .. "\n" .. helpDesc
+  TooltipSimple_Show(_dayHistoryValue[index], name, desc)
 end
 
 HandleClicked_MyHistory_MonthCheck = function(index)

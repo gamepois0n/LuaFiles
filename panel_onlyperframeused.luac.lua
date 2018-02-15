@@ -34,8 +34,8 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
   if OnlyPerFrame_ProgressBar_Collect_Update ~= nil then
     OnlyPerFrame_ProgressBar_Collect_Update(deltaTime)
   end
-  if WorldMap_NaviButton_RePos ~= nil then
-    WorldMap_NaviButton_RePos()
+  if WorldMap_ShortcutButton_RePos ~= nil then
+    WorldMap_ShortcutButton_RePos()
   end
   if ChattingViewManager_UpdatePerFrame ~= nil then
     ChattingViewManager_UpdatePerFrame(deltaTime)
@@ -71,6 +71,9 @@ Panel_OnlyPerframeUsedFunction = function(deltaTime)
     end
     if FGlobal_GuildBattle_UpdatePerFrame ~= nil then
       FGlobal_GuildBattle_UpdatePerFrame(deltaTime)
+    end
+    if UpdateFunc_FairyRegisterAni ~= nil then
+      UpdateFunc_FairyRegisterAni(deltaTime)
     end
   end
 end

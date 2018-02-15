@@ -286,7 +286,7 @@ local __npcType = {
 [14] = {_text = "New_UI_Common_ForLua/Widget/WorldMap/WorldMap_Etc_00.dds", x1 = 401, y1 = 1, x2 = 437, y2 = 37}
 }
 FromClient_CreateKnowledge = function(knowledgeStatic)
-  -- function num : 0_0 , upvalues : __existMentalInfo, __extraMentalInfo, __npcType, UI_color
+  -- function num : 0_0 , upvalues : __existMentalInfo, __extraMentalInfo, __npcType, UI_color, UI_TM
   local mentalCardStaticWrapper = knowledgeStatic:FromClient_getKnowledgeInfo()
   local isUniqueTexture = false
   local textureData = __existMentalInfo[mentalCardStaticWrapper:getMainThemeKeyRaw()]
@@ -340,7 +340,9 @@ FromClient_CreateKnowledge = function(knowledgeStatic)
         ;
         (uiHintQuestionStatic:getBaseTexture()):setUV(x1, y1, x2, y2)
         uiHintQuestionStatic:setRenderTexture(uiHintQuestionStatic:getBaseTexture())
+        uiHintStatic:SetTextMode(UI_TM.eTextMode_AutoWrap)
         uiHintStatic:SetText(mentalCardStaticWrapper:getKeyword())
+        uiHintStatic:SetSize(uiHintStatic:GetSizeX(), uiHintStatic:GetTextSizeY() + 20)
         uiHintStatic:SetSize(uiHintStatic:GetTextSizeX() + 40, uiHintStatic:GetSizeY())
         uiHintStatic:SetShow(false)
         uiHintQuestionStatic:SetShow(true)
@@ -352,11 +354,12 @@ end
 FromClient_OnWorldMapKnowledge = function(knowledgeStatic)
   -- function num : 0_1
   local uiHintStatic = knowledgeStatic:FromClient_getKnowledgeHint()
-  local uiHintQuestionStatic = knowledgeStatic:FromClient_getKnowledgeHintQuestion()
-  uiHintStatic:SetShow(true)
-  uiHintQuestionStatic:SetAlpha(0)
-  if isLuaLoadingComplete then
-    TooltipSimple_ShowMouseGuide(knowledgeStatic, false, true)
+  do
+    local uiHintQuestionStatic = knowledgeStatic:FromClient_getKnowledgeHintQuestion()
+    uiHintStatic:SetShow(true)
+    uiHintQuestionStatic:SetAlpha(0)
+    if isLuaLoadingComplete then
+    end
   end
 end
 

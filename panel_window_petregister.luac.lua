@@ -95,12 +95,12 @@ FromClient_PetAddSealedList = function(petNo, reason, petType)
     return 
   end
   if reason == 1 then
-    if petType == (CppEnums.PetType).Normal then
+    if petType == __ePetType_Normal then
       FGlobal_PetListNew_Open()
       FGlobal_PetInfoInit()
     else
-      if petType == (CppEnums.PetType).Fairy then
-        PaGlobal_FairyList_Open()
+      if petType == __ePetType_Fairy then
+        PaGlobal_FairyListNew_Open()
       else
         return 
       end

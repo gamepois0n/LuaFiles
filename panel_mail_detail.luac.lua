@@ -192,10 +192,10 @@ Mail_Detail_Open = function(mailNo)
       ;
       (self._itemText):SetShow(true)
       if isGameTypeKorea() then
-        (self._itemText):SetSpanSize(30, 40)
+        (self._itemText):SetSpanSize(30, 485)
       else
         ;
-        (self._itemText):SetSpanSize(10, 40)
+        (self._itemText):SetSpanSize(10, 485)
       end
       ;
       (self._buttonReceive):SetShow(true)

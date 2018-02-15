@@ -26,7 +26,7 @@ slotConfig = {createIcon = true, createBorder = true}
 _blacksmithIcon = {}
 , 
 _balksIcon = {}
-}
+, _inventoryOpen = false}
 enchantExtraction.Init = function(self)
   -- function num : 0_2
   (SlotItem.new)(self._blacksmithIcon, "Static_Icon_1", 0, (self.control).slot_1, self.slotConfig)
@@ -95,7 +95,7 @@ Panel_EnchantExtraction_Show = function()
   -- function num : 0_4 , upvalues : enchantExtraction
   local self = enchantExtraction
   if not Panel_EnchantExtraction:GetShow() then
-    if isNewEnchant_chk() == false then
+    if _ContentsGroup_isUsedNewEnchant == false then
       PaGlobal_Enchant:show()
     end
     Panel_EnchantExtraction:SetShow(true)
@@ -105,7 +105,7 @@ Panel_EnchantExtraction_Show = function()
   ;
   ((self.control).enchantCount):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_ENCHANTCOUNTEXTRACTION_2", "count", "+" .. failCount))
   enchantExtraction:DataInit()
-  if isNewEnchant_chk() == false then
+  if _ContentsGroup_isUsedNewEnchant == false then
     local isHave, isExistCash = PaGlobal_Enchant:SecretExtractionCheck()
     if isExistCash then
       FGlobal_CashInventoryOpen_ByEnchant()
@@ -175,9 +175,16 @@ EnchantExtraction_SetItem = function(slotNo, itemWrapper, count, inventoryType)
 end
 
 Panel_EnchantExtraction_Close = function()
-  -- function num : 0_8
+  -- function num : 0_8 , upvalues : enchantExtraction
   Panel_EnchantExtraction:SetShow(false)
-  if isNewEnchant_chk() == true then
+  -- DECOMPILER ERROR at PC9: Confused about usage of register: R0 in 'UnsetPending'
+
+  if enchantExtraction._inventoryOpen == true then
+    enchantExtraction._inventoryOpen = false
+    Inventory_SetFunctor()
+    return 
+  end
+  if _ContentsGroup_isUsedNewEnchant == true then
     PaGlobal_Enchant:didShowEnchantTab()
   else
     PaGlobal_Enchant:enchantFailCount()
@@ -272,15 +279,35 @@ end
 FromClient_ConvertEnchantFailItemToCountAck = function()
   -- function num : 0_15
   Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_ENCHANTCOUNTEXTRACTION_6"))
-  if isNewEnchant_chk() == true then
+  if _ContentsGroup_isUsedNewEnchant == true then
     PaGlobal_Enchant:setEnchantFailCount()
   else
     PaGlobal_Enchant:enchantFailCount()
   end
 end
 
+FromClient_ConvertEnchantFailCountToItem = function(fromWhereType, fromSlotNo)
+  -- function num : 0_16 , upvalues : enchantExtraction
+  local selfPlayer = getSelfPlayer()
+  if selfPlayer == nil then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CURRENTACTION_NOT_SUMMON_BLACKSPIRIT"))
+    return 
+  end
+  local failCount = ((getSelfPlayer()):get()):getEnchantFailCount()
+  if failCount == nil or failCount <= 0 then
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_CANNOT_ENCHANT_EXTRACTION"))
+    return 
+  end
+  -- DECOMPILER ERROR at PC31: Confused about usage of register: R4 in 'UnsetPending'
+
+  enchantExtraction._inventoryOpen = true
+  Panel_EnchantExtraction_Show()
+  local itemWrapper = getInventoryItemByType(fromWhereType, fromSlotNo)
+  EnchantExtraction_SetItem(fromSlotNo, itemWrapper, 1, fromWhereType)
+end
+
 enchantExtraction.registerEvent = function(self)
-  -- function num : 0_16
+  -- function num : 0_17
   Panel_EnchantExtraction:RegisterUpdateFunc("EnchantExtraction_updateTime")
   registerEvent("FromClient_ConvertEnchantFailCountToItem", "FromClient_ConvertEnchantFailCountToItem")
   registerEvent("FromClient_ConvertEnchantFailItemToCount", "FromClient_ConvertEnchantFailItemToCount")

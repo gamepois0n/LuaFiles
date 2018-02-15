@@ -96,11 +96,11 @@ PaGlobal_Option.InitUi = function(self)
   ;
   ((self._ui)._buttonTopHome):addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false , " .. "\"" .. "Home" .. "\"" .. ")")
   local topSaveSetting = (UI.getChildControl)((self._ui)._staticMainTopBg, "Button_SaveSetting")
-  topSaveSetting:addInputEvent("Mouse_LUp", "PaGlobal_Panel_SaveSetting_Show()")
+  topSaveSetting:addInputEvent("Mouse_LUp", "PaGlobal_Panel_SaveSetting_Show(false)")
   topSaveSetting:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true , " .. "\"" .. "TopSaveSetting" .. "\"" .. ")")
   topSaveSetting:addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false , " .. "\"" .. "TopSaveSetting" .. "\"" .. ")")
   local bottomSaveSetting = (UI.getChildControl)((self._ui)._staticSubTopBg, "Button_SaveSetting")
-  bottomSaveSetting:addInputEvent("Mouse_LUp", "PaGlobal_Panel_SaveSetting_Show()")
+  bottomSaveSetting:addInputEvent("Mouse_LUp", "PaGlobal_Panel_SaveSetting_Show(false)")
   bottomSaveSetting:addInputEvent("Mouse_On", "PaGlobal_Option:Simpletooltips( true , " .. "\"" .. "BottomSaveSetting" .. "\"" .. ")")
   bottomSaveSetting:addInputEvent("Mouse_Out", "PaGlobal_Option:Simpletooltips( false , " .. "\"" .. "BottomSaveSetting" .. "\"" .. ")")
   local topResetAll = (UI.getChildControl)((self._ui)._staticMainTopBg, "Button_ResetAll")
@@ -347,15 +347,7 @@ PaGlobal_Option.InitUi = function(self)
     (self._tooltip).ResetFrame = {control = (self._ui)._buttonResetFrame, desc = PAGetString(Defines.StringSheet_GAME, "LUA_NEWGAMEOPTION_TOOLTIPDESC_RESETBUTTON")}
     self:MoveUi((self.UIMODE).Main)
     self:SetContentsOption()
-    if ToClient_IsContentsGroupOpen("258") == false then
-      topSaveSetting:SetShow(false)
-      bottomSaveSetting:SetShow(false)
-      topResetAll:SetPosX(topSaveSetting:GetPosX())
-      topResetAll:SetPosY(topSaveSetting:GetPosY())
-      bottomResetAll:SetPosX(bottomSaveSetting:GetPosX())
-      bottomResetAll:SetPosY(bottomSaveSetting:GetPosY())
-    end
-    -- DECOMPILER ERROR: 5 unprocessed JMP targets
+    -- DECOMPILER ERROR: 4 unprocessed JMP targets
   end
 end
 
@@ -658,6 +650,7 @@ FGlobal_Option_ResetAllOption = function()
   keyCustom_SetDefaultAction()
   keyCustom_SetDefaultUI()
   PaGlobal_Option:ResetKeyCustomString()
+  saveGameOption(false)
 end
 
 -- DECOMPILER ERROR at PC43: Confused about usage of register: R0 in 'UnsetPending'
@@ -682,16 +675,18 @@ FGlobal_Option_ResetFrame = function()
   local isKeyCustomReset = false
   for index,elementName in ipairs(resetElements) do
     local option = (self._elements)[elementName]
-    if option.actionInputType ~= nil or option.uiInputType ~= nil then
-      self:KeyCustomResetFrame(option)
-      isKeyCustomReset = true
-    else
-      if option._defaultValue ~= nil then
-        self:ResetControlSetting(elementName)
-        self:SetXXX(elementName, option._defaultValue)
-        option._initValue = option._defaultValue
-        option._applyValue = nil
-        option._curValue = nil
+    if option ~= nil then
+      if option.actionInputType ~= nil or option.uiInputType ~= nil then
+        self:KeyCustomResetFrame(option)
+        isKeyCustomReset = true
+      else
+        if option._defaultValue ~= nil then
+          self:ResetControlSetting(elementName)
+          self:SetXXX(elementName, option._defaultValue)
+          option._initValue = option._defaultValue
+          option._applyValue = nil
+          option._curValue = nil
+        end
       end
     end
   end
@@ -705,6 +700,9 @@ end
 
 PaGlobal_Option.KeyCustomResetFrame = function(self, option)
   -- function num : 0_15
+  if option == nil then
+    return 
+  end
   if option.actionInputType ~= nil then
     if option.actionInputType == "PadFunction1" then
       keyCustom_SetDefaultPadFunc1()
@@ -1287,6 +1285,7 @@ end
 
 FGlobal_Option_LoadCustomOption = function()
   -- function num : 0_50
+  local fontsize = PaGlobal_Option:Get("UIFontSizeType")
   local index = PaGlobal_Option._curCustomOption
   local result = ToClient_loadCustimizeOption(index)
   if result == true then
@@ -1295,6 +1294,9 @@ FGlobal_Option_LoadCustomOption = function()
     end
     ;
     (((PaGlobal_Option._ui)._customLoadConfirmIcon)[index]):SetShow(true)
+    if fontsize ~= ((PaGlobal_Option._elements).UIFontSizeType)._initValue then
+      PaGlobal_Option:SetXXX("UIFontSizeType", ((PaGlobal_Option._elements).UIFontSizeType)._initValue)
+    end
   else
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_RESOURCE, "PANEL_NEWGAMEOPTION_MESSAGEBOX_CUSTOM_NOLOAD"))
   end
@@ -1317,8 +1319,7 @@ registerEvent("FromClient_ChangeScreenMode", "FromClient_ChangeScreenMode")
 
 PaGlobal_Option.SetContentsOption = function(self)
   -- function num : 0_52
-  local serviceType = getGameServiceType()
-  if serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_NA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_DEV or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_SA_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_ID_REAL or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_ALPHA or serviceType == (CppEnums.GameServiceType).eGameServiceType_TR_REAL then
+  if ToClient_isAvailableChangeServiceType() == true then
     if ((self._frames).Function).Nation ~= nil then
       ((UI.getChildControl)((((self._frames).Function).Nation)._uiFrameContent, "StaticText_BgOrder2_Import")):SetShow(true)
       ;
@@ -1327,14 +1328,14 @@ PaGlobal_Option.SetContentsOption = function(self)
     local bg = (UI.getChildControl)((((self._frames).Function).Nation)._uiFrameContent, "StaticText_BgOrder2_Import")
     local checkbuttonUseChattingFilter = (UI.getChildControl)(bg, "CheckButton_UseChattingFilter")
     local staticUseChattingFilter = (UI.getChildControl)(bg, "StaticText_UseChattingFilterDesc")
-    if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_NA) or isGameTypeSA() == true or (CppEnums.GameServiceType).eGameServiceType_DEV == getGameServiceType() then
+    if isGameTypeThisCountry((CppEnums.ContryCode).eContryCode_NA) or isGameTypeSA() == true or isGameTypeTH() == true or isGameTypeID() == true or (CppEnums.GameServiceType).eGameServiceType_DEV == getGameServiceType() then
       checkbuttonUseChattingFilter:SetShow(true)
       staticUseChattingFilter:SetShow(true)
     else
       checkbuttonUseChattingFilter:SetShow(false)
       staticUseChattingFilter:SetShow(false)
       setUseChattingFilter(true)
-      -- DECOMPILER ERROR at PC127: Confused about usage of register: R5 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC92: Confused about usage of register: R4 in 'UnsetPending'
 
       ;
       (self._elements).UseChattingFilter = nil
@@ -1342,62 +1343,131 @@ PaGlobal_Option.SetContentsOption = function(self)
   else
     do
       if ((self._frames).Function).Nation ~= nil then
-        ((UI.getChildControl)((((self._frames).Function).Nation)._uiFrameContent, "StaticText_BgOrder2_Import")):SetShow(false)
-        ;
-        ((UI.getChildControl)((((self._frames).Function).Nation)._uiFrameContent, "StaticText_BgOrder3_Import")):SetShow(false)
-      end
-      if isNeedGameOptionFromServer() == false then
-        return 
-      end
-      if ToClient_IsContentsGroupOpen("346") == false and ((self._frames).Function).View ~= nil then
-        local bg = (UI.getChildControl)((((self._frames).Function).View)._uiFrameContent, "StaticText_BgOrder0_Import")
-        local checkbuttonHpbar = (UI.getChildControl)(bg, "CheckButton_ShowHpRular")
-        local staticHpbar = (UI.getChildControl)(bg, "StaticText_ShowHpRular_Desc")
-        checkbuttonHpbar:SetShow(false)
-        staticHpbar:SetShow(false)
-        bg:SetSize(((((self._frames).Function).View)._uiFrame):GetSizeX(), bg:GetSizeY() - checkbuttonHpbar:GetSizeY())
-        -- DECOMPILER ERROR at PC209: Confused about usage of register: R5 in 'UnsetPending'
-
-        ;
-        (self._elements).ShowHpRular = nil
+        local nationBgOrder2 = (UI.getChildControl)((((self._frames).Function).Nation)._uiFrameContent, "StaticText_BgOrder2_Import")
+        local nationBgOrder3 = (UI.getChildControl)((((self._frames).Function).Nation)._uiFrameContent, "StaticText_BgOrder3_Import")
+        nationBgOrder2:SetShow(false)
+        nationBgOrder3:SetShow(false)
+        if isGameTypeTH() == true then
+          nationBgOrder2:SetShow(true)
+          nationBgOrder2:SetSize(nationBgOrder2:GetSizeX(), nationBgOrder2:GetSizeY() - 40)
+          ;
+          ((UI.getChildControl)(nationBgOrder2, "RadioButton_ServiceResourceType")):SetShow(false)
+          ;
+          ((UI.getChildControl)(nationBgOrder2, "RadioButton_ServiceResourceType1")):SetShow(false)
+          ;
+          ((UI.getChildControl)(nationBgOrder2, "RadioButton_ServiceResourceType2")):SetShow(false)
+        end
       end
       do
-        local availableExchangeRefuse = isDev == true or isUsePcExchangeInLocalizingValue() == true
-        if availableExchangeRefuse == false and ((self._frames).Function).Etc ~= nil then
-          local bg = (UI.getChildControl)((((self._frames).Function).Etc)._uiFrameContent, "StaticText_BgOrder1_Import")
-          local checkbuttonExchangeRefuse = (UI.getChildControl)(bg, "CheckButton_IsExchangeRefuse")
-          local staticExchangeRefuse = (UI.getChildControl)(bg, "StaticText_IsExchangeRefuse_Desc")
-          checkbuttonExchangeRefuse:SetShow(false)
-          staticExchangeRefuse:SetShow(false)
-          bg:SetSize(((((self._frames).Function).Etc)._uiFrame):GetSizeX(), bg:GetSizeY() - checkbuttonExchangeRefuse:GetSizeY())
-          -- DECOMPILER ERROR at PC264: Confused about usage of register: R6 in 'UnsetPending'
+        if isNeedGameOptionFromServer() == false then
+          return 
+        end
+        if ToClient_IsContentsGroupOpen("346") == false and ((self._frames).Function).View ~= nil then
+          local bg = (UI.getChildControl)((((self._frames).Function).View)._uiFrameContent, "StaticText_BgOrder0_Import")
+          local checkbuttonHpbar = (UI.getChildControl)(bg, "CheckButton_ShowHpRular")
+          local staticHpbar = (UI.getChildControl)(bg, "StaticText_ShowHpRular_Desc")
+          checkbuttonHpbar:SetShow(false)
+          staticHpbar:SetShow(false)
+          bg:SetSize(((((self._frames).Function).View)._uiFrame):GetSizeX(), bg:GetSizeY() - checkbuttonHpbar:GetSizeY())
+          -- DECOMPILER ERROR at PC212: Confused about usage of register: R4 in 'UnsetPending'
 
           ;
-          (self._elements).IsExchangeRefuse = nil
-        end
-        if not isGameServiceTypeDev() and not isGameTypeTaiwan() and not isGameTypeKorea() then
-          local availablefontSize = isGameTypeJapan()
+          (self._elements).ShowHpRular = nil
         end
         do
-          if availablefontSize == false and ((self._frames).Function).Convenience then
-            local bg = (UI.getChildControl)((((self._frames).Function).Convenience)._uiFrameContent, "StaticText_BgOrder1_Import")
-            bg:SetShow(false)
-            -- DECOMPILER ERROR at PC298: Confused about usage of register: R5 in 'UnsetPending'
+          local availableExchangeRefuse = isDev == true or isUsePcExchangeInLocalizingValue() == true
+          if availableExchangeRefuse == false and ((self._frames).Function).Etc ~= nil then
+            local bg = (UI.getChildControl)((((self._frames).Function).Etc)._uiFrameContent, "StaticText_BgOrder1_Import")
+            local checkbuttonExchangeRefuse = (UI.getChildControl)(bg, "CheckButton_IsExchangeRefuse")
+            local staticExchangeRefuse = (UI.getChildControl)(bg, "StaticText_IsExchangeRefuse_Desc")
+            checkbuttonExchangeRefuse:SetShow(false)
+            staticExchangeRefuse:SetShow(false)
+            bg:SetSize(((((self._frames).Function).Etc)._uiFrame):GetSizeX(), bg:GetSizeY() - checkbuttonExchangeRefuse:GetSizeY())
+            -- DECOMPILER ERROR at PC267: Confused about usage of register: R5 in 'UnsetPending'
 
             ;
-            (self._elements).UIFontSizeType = nil
+            (self._elements).IsExchangeRefuse = nil
           end
-          -- DECOMPILER ERROR: 4 unprocessed JMP targets
+          if not isGameServiceTypeDev() and not isGameTypeTaiwan() and not isGameTypeKorea() then
+            local availablefontSize = isGameTypeJapan()
+          end
+          do
+            if availablefontSize == false and ((self._frames).Function).Convenience then
+              local bg = (UI.getChildControl)((((self._frames).Function).Convenience)._uiFrameContent, "StaticText_BgOrder1_Import")
+              bg:SetShow(false)
+              -- DECOMPILER ERROR at PC301: Confused about usage of register: R4 in 'UnsetPending'
+
+              ;
+              (self._elements).UIFontSizeType = nil
+            end
+            local availableConsoleShortcuts = ToClient_IsDevelopment()
+            if availableConsoleShortcuts == true then
+              local bg = (UI.getChildControl)((((self._frames).Interface).Action)._uiFrameContent, "StaticText_BgOrder2_Import")
+              local name1 = (UI.createAndCopyBasePropertyControl)(bg, "StaticText_DD_1", bg, "StaticText_Intelligent1")
+              local name2 = (UI.createAndCopyBasePropertyControl)(bg, "StaticText_DD_2", bg, "StaticText_Intelligent2")
+              local settingButton = (UI.createAndCopyBasePropertyControl)(bg, "RadioButton_ActionComplicated3", bg, "RadioButton_Intelligent")
+              ;
+              ((UI.getChildControl)(bg, "StaticText_DD_1")):SetShow(true)
+              ;
+              ((UI.getChildControl)(bg, "StaticText_DD_2")):SetShow(true)
+              ;
+              ((UI.getChildControl)(bg, "RadioButton_ActionComplicated3")):SetShow(true)
+              name1:SetSpanSize((name1:GetSpanSize()).x, (name1:GetSpanSize()).y + 30)
+              name2:SetSpanSize((name2:GetSpanSize()).x, (name2:GetSpanSize()).y + 30)
+              settingButton:SetSpanSize((settingButton:GetSpanSize()).x, (settingButton:GetSpanSize()).y + 30)
+              name1:SetText("인터랙션")
+              name2:SetText("�\128�\172")
+              settingButton:addInputEvent("Mouse_LUp", "FGlobal_Temp_ActionKeySetting( 50 )")
+              settingButton:SetText(keyCustom_GetString_ActionPad(50))
+              ;
+              ((UI.getChildControl)(bg, "StaticText_DD_1")):SetShow(true)
+              ;
+              ((UI.getChildControl)(bg, "StaticText_DD_2")):SetShow(true)
+              ;
+              ((UI.getChildControl)(bg, "RadioButton_ActionComplicated3")):SetShow(true)
+              bg:SetSize(bg:GetSizeX(), bg:GetSizeY() + 100)
+              ;
+              ((((self._frames).Interface).Action)._uiFrame):UpdateContentScroll()
+              ;
+              ((((self._frames).Interface).Action)._uiFrame):UpdateContentPos()
+              bg = (UI.getChildControl)((((self._frames).Interface).Pad)._uiFrameContent, "StaticText_BgOrder0_Import")
+              local bg1 = (UI.getChildControl)((((self._frames).Interface).Pad)._uiFrameContent, "StaticText_BgOrder1_Import")
+              settingButton = (UI.createAndCopyBasePropertyControl)(bg, "CheckButton_GamePadEnable", bg1, "CheckButton_CameraMove")
+              name2 = (UI.createAndCopyBasePropertyControl)(bg, "StaticText_UsePadDesc", bg1, "StaticText_CameraMove")
+              name2:SetSpanSize((name2:GetSpanSize()).x, 180)
+              settingButton:SetSpanSize((settingButton:GetSpanSize()).x, 180)
+              settingButton:SetText("패드 카메�\188 조작 �\128�\189")
+              name2:SetText("패드 카메�\188 조작�\132 LStick �\128경합니다. LB 누르�\160 LStick�\132 조작하면 카메라가 �\128직임.")
+              ;
+              ((UI.getChildControl)(bg, "CheckButton_GamePadEnable")):SetShow(true)
+              ;
+              ((UI.getChildControl)(bg, "StaticText_UsePadDesc")):SetShow(true)
+              settingButton:addInputEvent("Mouse_LUp", "ToClient_setPadTestCameraChange()")
+            end
+            -- DECOMPILER ERROR: 5 unprocessed JMP targets
+          end
         end
       end
     end
   end
 end
 
--- DECOMPILER ERROR at PC165: Confused about usage of register: R0 in 'UnsetPending'
+FGlobal_Temp_ActionKeySetting = function(actionInputType)
+  -- function num : 0_53
+  if ToClient_IsDevelopment() == false then
+    return 
+  end
+  -- DECOMPILER ERROR at PC10: Confused about usage of register: R1 in 'UnsetPending'
+
+  PaGlobal_Option._keyCustomInputType = {nil, actionInputType}
+  SetUIMode((Defines.UIMode).eUIMode_KeyCustom_ActionPad)
+  setKeyCustomizing(true)
+end
+
+-- DECOMPILER ERROR at PC167: Confused about usage of register: R0 in 'UnsetPending'
 
 PaGlobal_Option.CheckEnableSimpleUI = function(self)
-  -- function num : 0_53
+  -- function num : 0_54
   local selfPlayer = getSelfPlayer()
   if selfPlayer ~= nil then
     if (selfPlayer:get()):getLevel() > 5 then
@@ -1414,7 +1484,7 @@ PaGlobal_Option.CheckEnableSimpleUI = function(self)
 end
 
 FGlobal_GameOption_OpenByMenu = function(index)
-  -- function num : 0_54
+  -- function num : 0_55
   showGameOption()
   if index == 0 then
     PaGlobal_Option:MoveUi((PaGlobal_Option.UIMODE).Category)
@@ -1448,7 +1518,7 @@ FGlobal_GameOption_OpenByMenu = function(index)
 end
 
 FGlobal_GameOptionOpen = function()
-  -- function num : 0_55
+  -- function num : 0_56
   if PaGlobal_Option:isOpen() == false then
     showGameOption()
   end
@@ -1457,46 +1527,46 @@ FGlobal_GameOptionOpen = function()
 end
 
 FGlobal_GetCurrentLUT = function()
-  -- function num : 0_56
+  -- function num : 0_57
   return PaGlobal_Option:Get("LUT")
 end
 
 FGlobal_IsChecked_SkillCommand = function()
-  -- function num : 0_57
+  -- function num : 0_58
   return isChecked_SkillCommand
 end
 
 GameOption_GetHideWindow = function()
-  -- function num : 0_58
+  -- function num : 0_59
   return PaGlobal_Option:Get("HideWindowByAttacked")
 end
 
 GameOption_ShowGuildLoginMessage = function()
-  -- function num : 0_59
+  -- function num : 0_60
   return PaGlobal_Option:Get("ShowGuildLoginMessage")
 end
 
 GameOption_GetShowHpRular = function()
-  -- function num : 0_60
+  -- function num : 0_61
   return PaGlobal_Option:Get("ShowHpRular")
 end
 
 GameOption_UpdateOptionChanged = function()
-  -- function num : 0_61
+  -- function num : 0_62
 end
 
 GameOption_Cancel = function()
-  -- function num : 0_62
+  -- function num : 0_63
   PaGlobal_Option:Close()
 end
 
 FGlobal_SpiritGuide_IsShow = function()
-  -- function num : 0_63
+  -- function num : 0_64
   return PaGlobal_Option:Get("ShowComboGuide")
 end
 
 FGlobal_getUIScale = function()
-  -- function num : 0_64
+  -- function num : 0_65
   local uiScale = {}
   uiScale.min = 50
   uiScale.max = 200
@@ -1504,7 +1574,7 @@ FGlobal_getUIScale = function()
 end
 
 FGlobal_returnUIScale = function()
-  -- function num : 0_65
+  -- function num : 0_66
   local interval = ((PaGlobal_Option._elements).UIScale)._sliderValueMax - ((PaGlobal_Option._elements).UIScale)._sliderValueMin
   local convertedValue = (((PaGlobal_Option._elements).UIScale)._sliderValueMin + interval * PaGlobal_Option:Get("UIScale")) * 0.01
   convertedValue = (math.floor)((convertedValue + 0.002) * 100) / 100
@@ -1512,7 +1582,7 @@ FGlobal_returnUIScale = function()
 end
 
 FGlobal_saveUIScale = function(scale)
-  -- function num : 0_66
+  -- function num : 0_67
   local sliderValue = PaGlobal_Option:FromRealValueToSliderValue(scale, 0.5, 2)
   if sliderValue >= 1 then
     return 
@@ -1521,12 +1591,12 @@ FGlobal_saveUIScale = function(scale)
 end
 
 getUiFontSize = function()
-  -- function num : 0_67
+  -- function num : 0_68
   return PaGlobal_Option:Get("UIFontSizeType")
 end
 
 SimpleUI_Check = function(simpleUI_Check)
-  -- function num : 0_68
+  -- function num : 0_69
   local selfPlayer = getSelfPlayer()
   if selfPlayer ~= nil and (selfPlayer:get()):getLevel() == 6 then
     PaGlobal_Option:SetXXX("EnableSimpleUI", simpleUI_Check)
@@ -1534,13 +1604,13 @@ SimpleUI_Check = function(simpleUI_Check)
 end
 
 GameOption_SetUIMode = function(uiScale)
-  -- function num : 0_69
+  -- function num : 0_70
   local uiScaleOption = (PaGlobal_Option._elements).UIScale
   uiScaleOption._initValue = PaGlobal_Option:FromRealValueToSliderValue(uiScale, 0.5, 2)
 end
 
 ResetKeyCustombyAttacked = function()
-  -- function num : 0_70
+  -- function num : 0_71
   if Panel_Window_cOption:GetShow() then
     setKeyCustomizing(false)
     SetUIMode((Defines.UIMode).eUIMode_Default)
@@ -1548,7 +1618,7 @@ ResetKeyCustombyAttacked = function()
 end
 
 GameOption_ComboGuideValueChange = function(isShow)
-  -- function num : 0_71
+  -- function num : 0_72
 end
 
 
