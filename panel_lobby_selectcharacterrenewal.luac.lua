@@ -1626,6 +1626,7 @@ click_EnterWaitingCancel = function()
   if configData.isWaitLine == true then
     sendEnterWaitingCancel()
   end
+  Panel_Lobby_SelectCharacter_EnableSelectButton(true)
 end
 
 HandleClicked_PreOrderAndEvent = function(linkType)

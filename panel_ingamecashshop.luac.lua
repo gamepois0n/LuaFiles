@@ -2271,7 +2271,7 @@ IngameCashShop_DescUpdate = function()
                     ;
                     (self._btn_BigCart):SetEnable(false)
                   end
-                  if isGameTypeTR() or isGameTypeID() or isGameTypeTH() then
+                  if isGameTypeID() or isGameTypeTH() then
                     (self._btn_BigGift):SetShow(false)
                   end
                   ;
@@ -3046,7 +3046,7 @@ IngameCashShop_GiftItem = function(index)
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 
   end
-  if myLevel < 56 and isGameTypeSA() then
+  if myLevel < 56 and (isGameTypeSA() or isGameTypeTR()) then
     limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 
@@ -3087,7 +3087,7 @@ IngameCashShop_DescSelectedGiftItem = function(productNoRaw)
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 
   end
-  if myLevel < 56 and isGameTypeSA() then
+  if myLevel < 56 and (isGameTypeSA() or isGameTypeTR()) then
     limitLevel = 56
     Proc_ShowMessage_Ack(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_INGAMECASHSHOP_LIMIT_20LEVEL", "level", limitLevel))
     return 

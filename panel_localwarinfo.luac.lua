@@ -329,8 +329,11 @@ localWarInfo.Update = function(self)
     localWarServerCountLimit = ToClient_GetLocalwarStatusCount()
   end
   local count = 0
-  for listIdx = self._startIndex, localWarServerCountLimit - 1 do
+  for listIdx = self._startIndex, self._createListCount - 1 do
     if self._createListCount <= count then
+      break
+    end
+    if localWarServerCountLimit <= count then
       break
     end
     local localWarStatusData = ToClient_GetLocalwarStatusData(listIdx)
@@ -342,93 +345,73 @@ localWarInfo.Update = function(self)
     local warTimeSecond = Int64toInt32(getRemainTime) % 60
     local channelName = getChannelName(curChannelData._worldNo, getServerNo)
     local isLimitLocalWar = localWarStatusData:isLimitedLocalWar()
-    if getJoinMemberCount < 0 then
-      getJoinMemberCount = 0
-    end
-    local list = (self._listPool)[count]
-    if isGameTypeKorea() or isGameTypeJapan() then
-      (list.level):SetShow(true)
-      ;
-      (list.level):SetPosX(0)
-      ;
-      (list.ap):SetPosX(25)
-      ;
-      (list.dp):SetPosX(55)
-      ;
-      (list.adSum):SetPosX(85)
-    else
-      ;
-      (list.level):SetShow(false)
-      ;
-      (list.ap):SetPosX(0)
-      ;
-      (list.dp):SetPosX(40)
-      ;
-      (list.adSum):SetPosX(85)
-    end
-    if isLimitLocalWar then
-      (list.unLimit):SetShow(false)
-      ;
-      (list.level):SetText(ToClient_GetLevelForLimitedLocalWar() - 1)
-      ;
-      (list.ap):SetText(ToClient_GetAttackForLimitedLocalWar() - 1)
-      ;
-      (list.dp):SetText(ToClient_GetDefenseForLimitedLocalWar() - 1)
-      ;
-      (list.adSum):SetText(ToClient_GetADSummaryForLimitedLocalWar() - 1)
-    else
-      ;
-      (list.unLimit):SetShow(true)
-      ;
-      (list.level):SetText("")
-      ;
-      (list.ap):SetText("")
-      ;
-      (list.dp):SetText("")
-      ;
-      (list.adSum):SetText("")
-    end
-    if getCurrentState == 0 then
-      isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN_WAITING")
-      isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_WAITING")
-      ;
-      (list.join):SetFontColor((Defines.Color).C_FF3B8BBE)
-      ;
-      (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
-      ;
-      (list.join):SetIgnore(false)
-    else
-      if getCurrentState == 1 then
-        isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ING")
-        isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
-        if warTimeMinute >= 10 then
-          (list.join):SetFontColor((Defines.Color).C_FF3B8BBE)
-          ;
-          (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
-          ;
-          (list.join):SetIgnore(false)
-        else
-          ;
-          (list.join):SetFontColor((Defines.Color).C_FFF26A6A)
-          ;
-          (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
-          ;
-          (list.join):SetIgnore(true)
-        end
+    if channelName ~= nil then
+      if getJoinMemberCount < 0 then
+        getJoinMemberCount = 0
+      end
+      local list = (self._listPool)[count]
+      if isGameTypeKorea() or isGameTypeJapan() then
+        (list.level):SetShow(true)
+        ;
+        (list.level):SetPosX(0)
+        ;
+        (list.ap):SetPosX(25)
+        ;
+        (list.dp):SetPosX(55)
+        ;
+        (list.adSum):SetPosX(85)
       else
-        if getCurrentState == 2 then
-          isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_SOONFINISH")
+        ;
+        (list.level):SetShow(false)
+        ;
+        (list.ap):SetPosX(0)
+        ;
+        (list.dp):SetPosX(40)
+        ;
+        (list.adSum):SetPosX(85)
+      end
+      if isLimitLocalWar then
+        (list.unLimit):SetShow(false)
+        ;
+        (list.level):SetText(ToClient_GetLevelForLimitedLocalWar() - 1)
+        ;
+        (list.ap):SetText(ToClient_GetAttackForLimitedLocalWar() - 1)
+        ;
+        (list.dp):SetText(ToClient_GetDefenseForLimitedLocalWar() - 1)
+        ;
+        (list.adSum):SetText(ToClient_GetADSummaryForLimitedLocalWar() - 1)
+      else
+        ;
+        (list.unLimit):SetShow(true)
+        ;
+        (list.level):SetText("")
+        ;
+        (list.ap):SetText("")
+        ;
+        (list.dp):SetText("")
+        ;
+        (list.adSum):SetText("")
+      end
+      if getCurrentState == 0 then
+        isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN_WAITING")
+        isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_WAITING")
+        ;
+        (list.join):SetFontColor((Defines.Color).C_FF3B8BBE)
+        ;
+        (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
+        ;
+        (list.join):SetIgnore(false)
+      else
+        if getCurrentState == 1 then
+          isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_ING")
           isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
-          ;
-          (list.join):SetFontColor((Defines.Color).C_FFF26A6A)
-          ;
-          (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
-          ;
-          (list.join):SetIgnore(true)
-        else
-          if getCurrentState == 3 then
-            isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
-            isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
+          if warTimeMinute >= 10 then
+            (list.join):SetFontColor((Defines.Color).C_FF3B8BBE)
+            ;
+            (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_JOIN"))
+            ;
+            (list.join):SetIgnore(false)
+          else
             ;
             (list.join):SetFontColor((Defines.Color).C_FFF26A6A)
             ;
@@ -436,28 +419,50 @@ localWarInfo.Update = function(self)
             ;
             (list.join):SetIgnore(true)
           end
+        else
+          if getCurrentState == 2 then
+            isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_SOONFINISH")
+            isWarTime = PAGetStringParam2(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_TIME", "warTimeMinute", warTimeMinute, "warTimeSecond", Int64toInt32(warTimeSecond))
+            ;
+            (list.join):SetFontColor((Defines.Color).C_FFF26A6A)
+            ;
+            (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
+            ;
+            (list.join):SetIgnore(true)
+          else
+            if getCurrentState == 3 then
+              isCurrentState = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
+              isWarTime = PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_FINISH")
+              ;
+              (list.join):SetFontColor((Defines.Color).C_FFF26A6A)
+              ;
+              (list.join):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_LOCALWARINFO_CANTJOIN"))
+              ;
+              (list.join):SetIgnore(true)
+            end
+          end
         end
       end
+      ;
+      (list.BG):SetShow(true)
+      ;
+      (list.channel):SetShow(true)
+      ;
+      (list.joinMember):SetShow(true)
+      ;
+      (list.remainTime):SetShow(true)
+      ;
+      (list.join):SetShow(true)
+      ;
+      (list.channel):SetText(channelName)
+      ;
+      (list.joinMember):SetText(getJoinMemberCount)
+      ;
+      (list.remainTime):SetText(isWarTime)
+      ;
+      (list.join):addInputEvent("Mouse_LUp", "LocalWawrInfo_ClickedJoinLocalWar( " .. listIdx .. "," .. tostring(isLimitLocalWar) .. " )")
+      count = count + 1
     end
-    ;
-    (list.BG):SetShow(true)
-    ;
-    (list.channel):SetShow(true)
-    ;
-    (list.joinMember):SetShow(true)
-    ;
-    (list.remainTime):SetShow(true)
-    ;
-    (list.join):SetShow(true)
-    ;
-    (list.channel):SetText(channelName)
-    ;
-    (list.joinMember):SetText(getJoinMemberCount)
-    ;
-    (list.remainTime):SetText(isWarTime)
-    ;
-    (list.join):addInputEvent("Mouse_LUp", "LocalWawrInfo_ClickedJoinLocalWar( " .. listIdx .. "," .. tostring(isLimitLocalWar) .. " )")
-    count = count + 1
   end
   do
     local inMyChannelInfo = ToClient_GetLocalwarStatusDataToServer(curChannelData._serverNo)

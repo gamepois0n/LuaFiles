@@ -9,7 +9,7 @@ Panel_RecommandName:SetDragAll(true)
 Panel_RecommandName:setGlassBackground(true)
 Panel_RecommandName:ActiveMouseEventEffect(true)
 Panel_RecommandName:setMaskingChild(true)
-local HelpMailType = {eHelpMailType_Repay = 0, eHelpMailType_Thanks = 1, eHelpMailType_Valentine = 2}
+local HelpMailType = {eHelpMailType_Repay = 0, eHelpMailType_Thanks = 1, eHelpMailType_ValentineNot1 = 2, eHelpMailType_ValentineNot2 = 3, eHelpMailType_Valentine = 4}
 local _helpMailType = HelpMailType.eHelpMailType_Thanks
 local uiButtonCloseX = (UI.getChildControl)(Panel_RecommandName, "Button_Win_Close")
 local uiButtonApply = (UI.getChildControl)(Panel_RecommandName, "Button_Apply")
@@ -39,8 +39,13 @@ HandleClicked_SendMailForHelp = function()
       title = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_RECOMMANDGIFT")
       content = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_SENDMAIL1")
     else
-      title = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE")
-      content = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_SENDMAIL_BALENTINE")
+      if _helpMailType == HelpMailType.eHelpMailType_Valentine then
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE_TITLE")
+        content = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE_DESC")
+      else
+        title = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE")
+        content = PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_SENDMAIL_BALENTINE")
+      end
     end
   end
   ToClient_SendMailForHelp(uiEditName:GetEditText(), title, content)
@@ -67,10 +72,17 @@ FromClient_SendMailForHelp = function(helpMailType)
       uiStaticTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_PAYMAIL"))
       uiStaticWarnning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_EDITCHARACTERNAME"))
     else
-      uiStaticContentHelper:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_BALENTINEMAIL"))
-      uiStaticTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_BALENTINEMAIL"))
-      uiStaticWarnning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_EDITCHARACTERNAME"))
-      uiButtonApply:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_SEND_BTN"))
+      if _helpMailType == HelpMailType.eHelpMailType_Valentine then
+        uiStaticContentHelper:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE_SENDER_DESC"))
+        uiStaticTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE_SENDER_TITLE"))
+        uiStaticWarnning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_EDITCHARACTERNAME"))
+        uiButtonApply:SetText(PAGetString(Defines.StringSheet_RESOURCE, "MAIL_SEND_BTN_SEND"))
+      else
+        uiStaticContentHelper:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_BALENTINEMAIL"))
+        uiStaticTitle:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_BALENTINEMAIL"))
+        uiStaticWarnning:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_EDITCHARACTERNAME"))
+        uiButtonApply:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_SEND_BTN"))
+      end
     end
   end
   SetFocusEdit(uiEditName)
@@ -86,10 +98,18 @@ FromClient_SendMailForHelpComplete = function(isSender, helpMailType)
     end
   else
   end
-  if helpMailType ~= HelpMailType.eHelpMailType_Repay or isSender then
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_SENDCOMPLETE_BALENTINE"))
+  if helpMailType ~= HelpMailType.eHelpMailType_Repay or helpMailType == HelpMailType.eHelpMailType_Valentine then
+    if isSender then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE_COMPLETE"))
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_VALENTINE_GETCOMPLETE"))
+    end
   else
-    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_GETBALENTINE"))
+    if isSender then
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_SENDCOMPLETE_BALENTINE"))
+    else
+      Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_RECOMMANDNAME_GETBALENTINE"))
+    end
   end
 end
 

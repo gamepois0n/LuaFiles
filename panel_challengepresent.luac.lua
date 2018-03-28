@@ -3,7 +3,6 @@
 
 -- params : ...
 -- function num : 0
-local UI_RewardType = CppEnums.RewardType
 local UI_TM = CppEnums.TextMode
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
@@ -135,9 +134,9 @@ ShowTooltip_SpecialReward = function(index)
 end
 
 Set_Special_Reward = function(uiSlot, reward, index, questType)
-  -- function num : 0_4 , upvalues : UI_RewardType, _uiButtonSelectRewardSlots
+  -- function num : 0_4 , upvalues : _uiButtonSelectRewardSlots
   uiSlot._type = reward._type
-  if UI_RewardType.RewardType_Exp == reward._type then
+  if __eRewardExp == reward._type then
     (uiSlot.count):SetText("")
     ;
     (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -146,7 +145,7 @@ Set_Special_Reward = function(uiSlot, reward, index, questType)
     ;
     (uiSlot.icon):addInputEvent("Mouse_Out", "SpecialRewardTooltip( \"Exp\", false, \"" .. questType .. "\", " .. index .. " )")
   else
-    if UI_RewardType.RewardType_SkillExp == reward._type then
+    if __eRewardSkillExp == reward._type then
       (uiSlot.count):SetText("")
       ;
       (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/SkillExp.dds")
@@ -155,7 +154,7 @@ Set_Special_Reward = function(uiSlot, reward, index, questType)
       ;
       (uiSlot.icon):addInputEvent("Mouse_Out", "SpecialRewardTooltip( \"SkillExp\", false, \"" .. questType .. "\", " .. index .. " )")
     else
-      if UI_RewardType.RewardType_ProductExp == reward._type then
+      if __eRewardLifeExp == reward._type then
         (uiSlot.count):SetText("")
         ;
         (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/03_ETC/12_DoApplyDirectlyItem/EXP.dds")
@@ -164,7 +163,7 @@ Set_Special_Reward = function(uiSlot, reward, index, questType)
         ;
         (uiSlot.icon):addInputEvent("Mouse_Out", "SpecialRewardTooltip( \"ProductExp\", false, \"" .. questType .. "\", " .. index .. " )")
       else
-        if UI_RewardType.RewardType_Item == reward._type then
+        if __eRewardItem == reward._type then
           local itemStatic = getItemEnchantStaticStatus(ItemEnchantKey(reward._item))
           uiSlot:setItemByStaticStatus(itemStatic, reward._count)
           uiSlot._item = reward._item
@@ -185,7 +184,7 @@ Set_Special_Reward = function(uiSlot, reward, index, questType)
           return reward._isEquipable
         else
           do
-            if UI_RewardType.RewardType_Intimacy == reward._type then
+            if __eRewardIntimacy == reward._type then
               (uiSlot.count):SetText(tostring(reward._value))
               ;
               (uiSlot.icon):ChangeTextureInfoName("Icon/New_Icon/00000000_Special_Contributiveness.dds")
@@ -261,35 +260,35 @@ FromClient_SpecialReward_UpdateText = function()
 
       ;
       (_baseReward[idx])._type = baseReward._type
-      -- DECOMPILER ERROR at PC55: Confused about usage of register: R9 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC53: Confused about usage of register: R9 in 'UnsetPending'
 
-      if (CppEnums.RewardType).RewardType_Exp == baseReward._type then
+      if __eRewardExp == baseReward._type then
         (_baseReward[idx])._exp = baseReward._experience
       else
-        -- DECOMPILER ERROR at PC65: Confused about usage of register: R9 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC61: Confused about usage of register: R9 in 'UnsetPending'
 
-        if (CppEnums.RewardType).RewardType_SkillExp == baseReward._type then
+        if __eRewardSkillExp == baseReward._type then
           (_baseReward[idx])._exp = baseReward._skillExperience
         else
-          -- DECOMPILER ERROR at PC75: Confused about usage of register: R9 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC69: Confused about usage of register: R9 in 'UnsetPending'
 
-          if (CppEnums.RewardType).RewardType_ProductExp == baseReward._type then
+          if __eRewardLifeExp == baseReward._type then
             (_baseReward[idx])._exp = baseReward._productExperience
           else
-            -- DECOMPILER ERROR at PC86: Confused about usage of register: R9 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC78: Confused about usage of register: R9 in 'UnsetPending'
 
-            if (CppEnums.RewardType).RewardType_Item == baseReward._type then
+            if __eRewardItem == baseReward._type then
               (_baseReward[idx])._item = baseReward:getItemEnchantKey()
-              -- DECOMPILER ERROR at PC89: Confused about usage of register: R9 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC81: Confused about usage of register: R9 in 'UnsetPending'
 
               ;
               (_baseReward[idx])._count = baseReward._itemCount
             else
-              -- DECOMPILER ERROR at PC100: Confused about usage of register: R9 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC90: Confused about usage of register: R9 in 'UnsetPending'
 
-              if (CppEnums.RewardType).RewardType_Intimacy == baseReward._type then
+              if __eRewardIntimacy == baseReward._type then
                 (_baseReward[idx])._character = baseReward:getIntimacyCharacter()
-                -- DECOMPILER ERROR at PC103: Confused about usage of register: R9 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC93: Confused about usage of register: R9 in 'UnsetPending'
 
                 ;
                 (_baseReward[idx])._value = baseReward._intimacyValue
@@ -306,37 +305,37 @@ FromClient_SpecialReward_UpdateText = function()
       for idx = 1, selectCount do
         local selectReward = rewardWrapper:getSelectRewardAt(idx - 1)
         _selectReward[idx] = {}
-        -- DECOMPILER ERROR at PC123: Confused about usage of register: R11 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC113: Confused about usage of register: R11 in 'UnsetPending'
 
         ;
         (_selectReward[idx])._type = selectReward._type
-        -- DECOMPILER ERROR at PC132: Confused about usage of register: R11 in 'UnsetPending'
+        -- DECOMPILER ERROR at PC120: Confused about usage of register: R11 in 'UnsetPending'
 
-        if (CppEnums.RewardType).RewardType_Exp == selectReward._type then
+        if __eRewardExp == selectReward._type then
           (_selectReward[idx])._exp = selectReward._experience
         else
-          -- DECOMPILER ERROR at PC142: Confused about usage of register: R11 in 'UnsetPending'
+          -- DECOMPILER ERROR at PC128: Confused about usage of register: R11 in 'UnsetPending'
 
-          if (CppEnums.RewardType).RewardType_SkillExp == selectReward._type then
+          if __eRewardSkillExp == selectReward._type then
             (_selectReward[idx])._exp = selectReward._skillExperience
           else
-            -- DECOMPILER ERROR at PC152: Confused about usage of register: R11 in 'UnsetPending'
+            -- DECOMPILER ERROR at PC136: Confused about usage of register: R11 in 'UnsetPending'
 
-            if (CppEnums.RewardType).RewardType_ProductExp == selectReward._type then
+            if __eRewardLifeExp == selectReward._type then
               (_selectReward[idx])._exp = selectReward._productExperience
             else
-              -- DECOMPILER ERROR at PC163: Confused about usage of register: R11 in 'UnsetPending'
+              -- DECOMPILER ERROR at PC145: Confused about usage of register: R11 in 'UnsetPending'
 
-              if (CppEnums.RewardType).RewardType_Item == selectReward._type then
+              if __eRewardItem == selectReward._type then
                 (_selectReward[idx])._item = selectReward:getItemEnchantKey()
-                -- DECOMPILER ERROR at PC166: Confused about usage of register: R11 in 'UnsetPending'
+                -- DECOMPILER ERROR at PC148: Confused about usage of register: R11 in 'UnsetPending'
 
                 ;
                 (_selectReward[idx])._count = selectReward._itemCount
                 local selfPlayer = getSelfPlayer()
                 if selfPlayer ~= nil then
                   local classType = selfPlayer:getClassType()
-                  -- DECOMPILER ERROR at PC177: Confused about usage of register: R13 in 'UnsetPending'
+                  -- DECOMPILER ERROR at PC159: Confused about usage of register: R13 in 'UnsetPending'
 
                   ;
                   (_selectReward[idx])._isEquipable = selectReward:isEquipable(classType)
@@ -344,32 +343,32 @@ FromClient_SpecialReward_UpdateText = function()
               else
                 do
                   do
-                    -- DECOMPILER ERROR at PC188: Confused about usage of register: R11 in 'UnsetPending'
+                    -- DECOMPILER ERROR at PC168: Confused about usage of register: R11 in 'UnsetPending'
 
-                    if (CppEnums.RewardType).RewardType_Intimacy == selectReward._type then
+                    if __eRewardIntimacy == selectReward._type then
                       (_selectReward[idx])._character = selectReward:getIntimacyCharacter()
-                      -- DECOMPILER ERROR at PC191: Confused about usage of register: R11 in 'UnsetPending'
+                      -- DECOMPILER ERROR at PC171: Confused about usage of register: R11 in 'UnsetPending'
 
                       ;
                       (_selectReward[idx])._value = selectReward._intimacyValue
                     end
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out DO_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out DO_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_ELSE_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_ELSE_STMT
 
-                    -- DECOMPILER ERROR at PC192: LeaveBlock: unexpected jumping out IF_STMT
+                    -- DECOMPILER ERROR at PC172: LeaveBlock: unexpected jumping out IF_STMT
 
                   end
                 end

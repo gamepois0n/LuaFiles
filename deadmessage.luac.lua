@@ -37,6 +37,8 @@ _deadNodeSelectClose:addInputEvent("Mouse_LUp", "deadNodeSelectClose()")
 local STATIC_DROP_ITEM = {}
 for ii = 0, 9 do
   STATIC_DROP_ITEM[ii] = (UI.getChildControl)(Panel_DeadMessage, "Static_DropItem_" .. ii)
+  ;
+  (STATIC_DROP_ITEM[ii]):SetIgnore(true)
 end
 local UI_ANI_ADV = CppEnums.PAUI_ANIM_ADVANCE_TYPE
 local UI_color = Defines.Color
@@ -280,15 +282,28 @@ deadMessage_Resize = function()
   end
   _checkBoxUseCache:SetCheck(false)
   _checkBoxUseFairy:SetCheck(false)
-  if ToClient_Fairy_CanRespawn() == true then
+  local canFairyRespawn = ToClient_Fairy_CanRespawn()
+  if canFairyRespawn == true and _ContentsGroup_isFairy == true then
     _checkBoxUseFairy:SetShow(true)
-  else
-    _checkBoxUseFairy:SetShow(false)
+    _useCashItemBG:SetSize(125, 55)
   end
+  if canFairyRespawn == false or _ContentsGroup_isFairy == false then
+    _checkBoxUseFairy:SetShow(false)
+    _useCashItemBG:SetSize(_checkBoxUseCache:GetTextSizeX() + 40, 25)
+  end
+  local buttonSizeY = _button_Immediate:GetSizeY()
+  if canFairyRespawn == false or _ContentsGroup_isFairy == false then
+    _useCashItemBG:SetPosY(screenY / 2 + buttonSizeY * 2.4)
+  else
+    _useCashItemBG:SetPosY(screenY / 2 + buttonSizeY * 1.9)
+  end
+  _useCashItemBG:ComputePos()
+  _checkBoxUseCache:SetEnableArea(0, 0, _checkBoxUseCache:GetTextSizeX() + 30, 19)
+  _checkBoxUseFairy:SetEnableArea(0, 0, _checkBoxUseFairy:GetTextSizeX() + 30, 19)
 end
 
 local deadMessage_Animation = function()
-  -- function num : 0_6 , upvalues : _deadBlackHole, UI_ANI_ADV, UI_color, _button_MoveTown, _deadQuestion, _text_reviveNotify, _button_MoveExploration, _button_ObserverMode, _button_Immediate, _text_ImmediateCount, _button_SiegeIng, _button_AdvancedBase, _text_AdvancedBaseAlert, _button_LocalWar, _button_SavageOut, _button_GuildSpawn, _button_Volunteer, _checkBoxUseCache, _useCashItemBG, _deadMessage, _regenTime, startTimer
+  -- function num : 0_6 , upvalues : _deadBlackHole, UI_ANI_ADV, UI_color, _button_MoveTown, _deadQuestion, _text_reviveNotify, _button_MoveExploration, _button_ObserverMode, _button_Immediate, _text_ImmediateCount, _button_SiegeIng, _button_AdvancedBase, _text_AdvancedBaseAlert, _button_LocalWar, _button_SavageOut, _button_GuildSpawn, _button_Volunteer, _checkBoxUseCache, _checkBoxUseFairy, _useCashItemBG, _deadMessage, _regenTime, startTimer
   Panel_DeadMessage:SetShowWithFade((CppEnums.PAUI_SHOW_FADE_TYPE).PAUI_ANI_TYPE_FADE_IN)
   local aniInfo1 = _deadBlackHole:addColorAnimation(0, 3, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfo1:SetStartColor(UI_color.C_00FFFFFF)
@@ -495,6 +510,14 @@ local deadMessage_Animation = function()
   aniInfoCheckBox5:SetStartColor(UI_color.C_00FFFFFF)
   aniInfoCheckBox5:SetEndColor(UI_color.C_FFFFFFFF)
   aniInfoCheckBox5.IsChangeChild = true
+  local aniInfoCheckBox6 = _checkBoxUseFairy:addColorAnimation(0, 3, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  aniInfoCheckBox6:SetStartColor(UI_color.C_00FFFFFF)
+  aniInfoCheckBox6:SetEndColor(UI_color.C_00FFFFFF)
+  aniInfoCheckBox6.IsChangeChild = true
+  aniInfoCheckBox6 = _checkBoxUseFairy:addColorAnimation(3, 4, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
+  aniInfoCheckBox6:SetStartColor(UI_color.C_00FFFFFF)
+  aniInfoCheckBox6:SetEndColor(UI_color.C_FFFFFFFF)
+  aniInfoCheckBox6.IsChangeChild = true
   local aniInfoCheckBoxBG5 = _useCashItemBG:addColorAnimation(0, 3, UI_ANI_ADV.PAUI_ANIM_ADVANCE_COS_HALF_PI)
   aniInfoCheckBoxBG5:SetStartColor(UI_color.C_00FFFFFF)
   aniInfoCheckBoxBG5:SetEndColor(UI_color.C_00FFFFFF)
@@ -536,7 +559,7 @@ local deadMessage_Animation = function()
 end
 
 deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestoreExp, isAblePvPMatchRevive, respawnTime)
-  -- function num : 0_7 , upvalues : _button_SavageOut, _button_ObserverMode, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _checkBoxUseFairy, _text_ImmediateCount, _button_LocalWar, _button_Volunteer, _deadQuestion, _deadMessage, ResurrectionTime, revivalTime, deadMessage_Animation, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
+  -- function num : 0_7 , upvalues : _checkBoxUseFairy, _button_SavageOut, _button_ObserverMode, isPvPMatchRevive, _button_SiegeIng, _button_MoveExploration, _button_MoveTown, _button_AdvancedBase, _text_AdvancedBaseAlert, _text_reviveNotify, _button_Immediate, _button_GuildSpawn, _useCashItemBG, _checkBoxUseCache, _text_ImmediateCount, _button_LocalWar, _button_Volunteer, _deadQuestion, _deadMessage, ResurrectionTime, revivalTime, deadMessage_Animation, _regenTime, isHasRestoreExperience, isSiegeBeingInDead, buttonAbleTime, isUseButtonAbleTime, STATIC_DROP_ITEM, revivalCacheItemCount
   if Panel_GameExit:GetShow() then
     Panel_GameExit:SetShow(false)
   end
@@ -548,6 +571,7 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
   if selfProxy == nil then
     return 
   end
+  _checkBoxUseFairy:SetCheck(false)
   _button_SavageOut:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MENU_WAVE_OUT"))
   _button_ObserverMode:SetShow(false)
   local attackerActorProxyWrapper = getActor(attackerActorKeyRaw)
@@ -885,95 +909,107 @@ deadMessage_Show = function(attackerActorKeyRaw, isSkipDeathPenalty, isHasRestor
                 else
                   _checkBoxUseCache:SetShow(true)
                   _useCashItemBG:SetShow(true)
-                  if ToClient_Fairy_CanRespawn() == true then
+                  _useCashItemBG:SetSize(_checkBoxUseCache:GetTextSizeX() + 40, 25)
+                  if ToClient_Fairy_CanRespawn() == true and _ContentsGroup_isFairy == true then
                     _checkBoxUseFairy:SetShow(true)
+                    _useCashItemBG:SetSize(125, 55)
+                    local buttonSizeY = _button_Immediate:GetSizeY()
+                    _useCashItemBG:SetPosY(screenY / 2 + buttonSizeY * 1.9)
                   end
-                end
-                _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
-                _text_ImmediateCount:SetShow(true)
-                local setMessage = ""
-                local revivalItemCount = ToClient_InventorySizeByProductCategory((CppEnums.ItemWhereType).eCashInventory, (CppEnums.ItemProductCategory).eItemProductCategory_Revival)
-                if isFreeArea and (selfProxy:get()):getLevel() <= freeRevivalLevel then
-                  setMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_RESURRECTION_POSSIBLE", "freeRevivalLevel", freeRevivalLevel)
-                else
-                  if revivalItemCount <= 0 then
-                    setMessage = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_ITEM_RESURRECTION")
-                  else
-                    setMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_GET_ITEM_RESURRECTION", "revivalItemCount", revivalItemCount)
-                  end
-                end
-                _text_ImmediateCount:SetText(setMessage)
-              else
-                do
-                  if isArena == true then
-                    _button_Immediate:SetShow(true)
-                    _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
-                  else
-                    _button_Immediate:SetShow(false)
-                  end
-                  _text_ImmediateCount:SetShow(false)
-                  _useCashItemBG:SetShow(false)
-                  _checkBoxUseCache:SetShow(false)
-                  local temporaryWrapper = getTemporaryInformationWrapper()
-                  local fortressSize = temporaryWrapper:getMyFortressSize()
-                  if isMyChannelSiegeBeing == true then
-                    if deadMessage_isInSiegeBattle() == true then
-                      _button_Immediate:SetShow(false)
-                      _text_ImmediateCount:SetShow(false)
-                      _button_SiegeIng:SetShow(true)
-                    else
-                      if isSiegeBeingInDead == true then
-                        _button_Immediate:SetShow(false)
-                        _text_ImmediateCount:SetShow(false)
-                      else
-                        if isHasFortress() == true and isSiegeBeingInDead == false then
-                          _text_reviveNotify:SetShow(true)
+                  do
+                    if ToClient_Fairy_CanRespawn() == false or _ContentsGroup_isFairy == false then
+                      _checkBoxUseFairy:SetShow(false)
+                      local buttonSizeY = _button_Immediate:GetSizeY()
+                      _useCashItemBG:SetPosY(screenY / 2 + buttonSizeY * 2.4)
+                    end
+                    do
+                      _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
+                      _text_ImmediateCount:SetShow(true)
+                      local setMessage = ""
+                      do
+                        local revivalItemCount = ToClient_InventorySizeByProductCategory((CppEnums.ItemWhereType).eCashInventory, (CppEnums.ItemProductCategory).eItemProductCategory_Revival)
+                        if isFreeArea and (selfProxy:get()):getLevel() <= freeRevivalLevel then
+                          setMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_RESURRECTION_POSSIBLE", "freeRevivalLevel", freeRevivalLevel)
                         else
-                          if getNoAccessArea() == false then
-                            _button_MoveTown:SetShow(false)
+                          if revivalItemCount <= 0 then
+                            setMessage = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_ITEM_RESURRECTION")
+                          else
+                            setMessage = PAGetStringParam1(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_GET_ITEM_RESURRECTION", "revivalItemCount", revivalItemCount)
+                          end
+                        end
+                        _text_ImmediateCount:SetText(setMessage)
+                        if isArena == true then
+                          _button_Immediate:SetShow(true)
+                          _button_Immediate:SetText(PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_IMMEDIATE_RESURRECTION"))
+                        else
+                          _button_Immediate:SetShow(false)
+                        end
+                        _text_ImmediateCount:SetShow(false)
+                        _useCashItemBG:SetShow(false)
+                        _checkBoxUseCache:SetShow(false)
+                        local temporaryWrapper = getTemporaryInformationWrapper()
+                        local fortressSize = temporaryWrapper:getMyFortressSize()
+                        if isMyChannelSiegeBeing == true then
+                          if deadMessage_isInSiegeBattle() == true then
                             _button_Immediate:SetShow(false)
                             _text_ImmediateCount:SetShow(false)
+                            _button_SiegeIng:SetShow(true)
+                          else
+                            if isSiegeBeingInDead == true then
+                              _button_Immediate:SetShow(false)
+                              _text_ImmediateCount:SetShow(false)
+                            else
+                              if isHasFortress() == true and isSiegeBeingInDead == false then
+                                _text_reviveNotify:SetShow(true)
+                              else
+                                if getNoAccessArea() == false then
+                                  _button_MoveTown:SetShow(false)
+                                  _button_Immediate:SetShow(false)
+                                  _text_ImmediateCount:SetShow(false)
+                                end
+                              end
+                            end
+                          end
+                          _deadQuestion:SetShow(false)
+                          if (regionInfo:get()):isMajorSiegeBeing() or (linkedSiegeRegionInfoWrapper:get()):isMinorSiegeBeing() then
+                            _button_MoveExploration:SetShow(false)
+                          end
+                          _button_Immediate:SetShow(false)
+                          _text_ImmediateCount:SetShow(false)
+                          if (selfProxy:get()):isVolunteer() then
+                            _button_Volunteer:SetShow(true)
+                          end
+                          local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
+                          if myGuildInfo ~= nil then
+                            local guildNo = myGuildInfo:getGuildNo_s64()
+                            if ToClient_IsInSiegeBattle(guildNo) then
+                              _button_ObserverMode:SetShow(true)
+                            end
+                          end
+                        else
+                          do
+                            if getNoAccessArea() == false then
+                              _button_Immediate:SetShow(false)
+                              _text_ImmediateCount:SetShow(false)
+                            end
+                            local guildUnSealCount = guildstable_getUnsealGuildServantCount()
+                            if guildUnSealCount ~= 0 then
+                              for index = 0, guildUnSealCount - 1 do
+                                local servantInfo = guildStable_getUnsealGuildServantAt(index)
+                                if servantInfo ~= nil and (servantInfo:getVehicleType() == 34 or servantInfo:getVehicleType() == 44) then
+                                  _button_GuildSpawn:SetShow(true)
+                                end
+                              end
+                            end
+                            do
+                              if (selfProxy:get()):isGuildMember() and (selfProxy:get()):isAdvancedBaseActorKey() then
+                                _button_AdvancedBase:SetShow(true)
+                                _text_AdvancedBaseAlert:SetShow(true)
+                              end
+                              revivalCacheItemCount = ToClient_InventorySizeByProductCategory((CppEnums.ItemWhereType).eCashInventory, (CppEnums.ItemProductCategory).eItemProductCategory_Revival)
+                            end
                           end
                         end
-                      end
-                    end
-                    _deadQuestion:SetShow(false)
-                    if (regionInfo:get()):isMajorSiegeBeing() or (linkedSiegeRegionInfoWrapper:get()):isMinorSiegeBeing() then
-                      _button_MoveExploration:SetShow(false)
-                    end
-                    _button_Immediate:SetShow(false)
-                    _text_ImmediateCount:SetShow(false)
-                    if (selfProxy:get()):isVolunteer() then
-                      _button_Volunteer:SetShow(true)
-                    end
-                    local myGuildInfo = ToClient_GetMyGuildInfoWrapper()
-                    if myGuildInfo ~= nil then
-                      local guildNo = myGuildInfo:getGuildNo_s64()
-                      if ToClient_IsInSiegeBattle(guildNo) then
-                        _button_ObserverMode:SetShow(true)
-                      end
-                    end
-                  else
-                    do
-                      if getNoAccessArea() == false then
-                        _button_Immediate:SetShow(false)
-                        _text_ImmediateCount:SetShow(false)
-                      end
-                      local guildUnSealCount = guildstable_getUnsealGuildServantCount()
-                      if guildUnSealCount ~= 0 then
-                        for index = 0, guildUnSealCount - 1 do
-                          local servantInfo = guildStable_getUnsealGuildServantAt(index)
-                          if servantInfo ~= nil and (servantInfo:getVehicleType() == 34 or servantInfo:getVehicleType() == 44) then
-                            _button_GuildSpawn:SetShow(true)
-                          end
-                        end
-                      end
-                      do
-                        if (selfProxy:get()):isGuildMember() and (selfProxy:get()):isAdvancedBaseActorKey() then
-                          _button_AdvancedBase:SetShow(true)
-                          _text_AdvancedBaseAlert:SetShow(true)
-                        end
-                        revivalCacheItemCount = ToClient_InventorySizeByProductCategory((CppEnums.ItemWhereType).eCashInventory, (CppEnums.ItemProductCategory).eItemProductCategory_Revival)
                       end
                     end
                   end
@@ -1462,12 +1498,24 @@ useCheckFairy = function(respawnType)
 end
 
 deadMessage_SimpleTooltips = function(isShow)
-  -- function num : 0_28 , upvalues : _useCashItemBG
+  -- function num : 0_28 , upvalues : _checkBoxUseCache
   local uiControl, name, desc = nil, nil, nil
   name = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_NAME")
   desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_DESC")
-  uiControl = _useCashItemBG
-  registTooltipControl(uiControl, Panel_Tooltip_SimpleText)
+  uiControl = _checkBoxUseCache
+  if isShow == true then
+    TooltipSimple_Show(uiControl, name, desc)
+  else
+    TooltipSimple_Hide()
+  end
+end
+
+deadMessage_SimpleTooltipsFairy = function(isShow)
+  -- function num : 0_29 , upvalues : _checkBoxUseFairy
+  local uiControl, name, desc = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_NAME")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_DEADMESSAGE_TOOLTIP_FAIRY_DESC")
+  uiControl = _checkBoxUseFairy
   if isShow == true then
     TooltipSimple_Show(uiControl, name, desc)
   else
@@ -1476,7 +1524,7 @@ deadMessage_SimpleTooltips = function(isShow)
 end
 
 deadMessage_PkPenalty_Tooltip = function(isShow)
-  -- function num : 0_29 , upvalues : _deadQuestion
+  -- function num : 0_30 , upvalues : _deadQuestion
   if not isShow then
     TooltipSimple_Hide()
     return 
@@ -1493,7 +1541,7 @@ deadMessage_PkPenalty_Tooltip = function(isShow)
 end
 
 deadMessage_ButtonPushed_ObserverMode = function()
-  -- function num : 0_30 , upvalues : ResurrectionTime
+  -- function num : 0_31 , upvalues : ResurrectionTime
   if Panel_DeadMessage:GetShow() then
     Panel_DeadMessage:SetShow(false)
   end
@@ -1506,13 +1554,13 @@ deadMessage_ButtonPushed_ObserverMode = function()
 end
 
 deadMessage_ResurrectionTimeReturn = function(Rtime)
-  -- function num : 0_31 , upvalues : ResurrectionTime, buttonAbleTime
+  -- function num : 0_32 , upvalues : ResurrectionTime, buttonAbleTime
   ResurrectionTime = Rtime
   buttonAbleTime = Rtime
 end
 
 FromClient_ResurrectionTimeResetByKingOrLordTentDestroy = function(notifyType, regionKeyRaw)
-  -- function num : 0_32
+  -- function num : 0_33
   local regionInfoWrapper = getRegionInfoWrapper(regionKeyRaw)
   if regionInfoWrapper == nil then
     return 
@@ -1520,8 +1568,20 @@ FromClient_ResurrectionTimeResetByKingOrLordTentDestroy = function(notifyType, r
   deadMessage_ResurrectionTimeReturn(0)
 end
 
+deadMessage_toggleRespawnCheck = function(cacheClick)
+  -- function num : 0_34 , upvalues : _checkBoxUseFairy, _checkBoxUseCache
+  -- DECOMPILER ERROR at PC8: Unhandled construct in 'MakeBoolean' P1
+
+  if cacheClick == true and _checkBoxUseFairy ~= nil then
+    _checkBoxUseFairy:SetCheck(false)
+  end
+  if _checkBoxUseCache ~= nil then
+    _checkBoxUseCache:SetCheck(false)
+  end
+end
+
 deadMessage_registEventHandler = function()
-  -- function num : 0_33 , upvalues : _button_MoveTown, _button_MoveExploration, _button_Immediate, _button_SiegeIng, _button_AdvancedBase, _button_LocalWar, _button_SavageOut, _button_GuildSpawn, _useCashItemBG, _button_ObserverMode, _button_Volunteer, _deadQuestion
+  -- function num : 0_35 , upvalues : _button_MoveTown, _button_MoveExploration, _button_Immediate, _button_SiegeIng, _button_AdvancedBase, _button_LocalWar, _button_SavageOut, _button_GuildSpawn, _checkBoxUseCache, _checkBoxUseFairy, _button_ObserverMode, _button_Volunteer, _deadQuestion
   _button_MoveTown:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_MoveToVillage()")
   _button_MoveExploration:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_MoveExploration()")
   _button_Immediate:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_Immediate()")
@@ -1530,17 +1590,20 @@ deadMessage_registEventHandler = function()
   _button_LocalWar:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_LocalWar()")
   _button_SavageOut:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_SavageDefence()")
   _button_GuildSpawn:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_GuildSpawn()")
-  _useCashItemBG:addInputEvent("Mouse_On", "deadMessage_SimpleTooltips( true )")
-  _useCashItemBG:addInputEvent("Mouse_Out", "deadMessage_SimpleTooltips( false )")
-  _useCashItemBG:setTooltipEventRegistFunc("deadMessage_SimpleTooltips( true )")
+  _checkBoxUseCache:addInputEvent("Mouse_On", "deadMessage_SimpleTooltips( true )")
+  _checkBoxUseCache:addInputEvent("Mouse_Out", "deadMessage_SimpleTooltips( false )")
+  _checkBoxUseFairy:addInputEvent("Mouse_On", "deadMessage_SimpleTooltipsFairy( true )")
+  _checkBoxUseFairy:addInputEvent("Mouse_Out", "deadMessage_SimpleTooltipsFairy( false )")
   _button_ObserverMode:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_ObserverMode()")
   _button_Volunteer:addInputEvent("Mouse_LUp", "deadMessage_ButtonPushed_Volunteer()")
   _deadQuestion:addInputEvent("Mouse_On", "deadMessage_PkPenalty_Tooltip(true)")
   _deadQuestion:addInputEvent("Mouse_Out", "deadMessage_PkPenalty_Tooltip(false)")
+  _checkBoxUseFairy:addInputEvent("Mouse_LUp", "deadMessage_toggleRespawnCheck(false)")
+  _checkBoxUseCache:addInputEvent("Mouse_LUp", "deadMessage_toggleRespawnCheck(true)")
 end
 
 deadMessage_registMessageHandler = function()
-  -- function num : 0_34
+  -- function num : 0_36
   registerEvent("EventSelfPlayerDead", "deadMessage_Show")
   registerEvent("Event_DeadMessage_AddDropItem", "deadMessage_AddDropItem")
   registerEvent("Event_DeadMessage_WeakEquip", "deadMessage_WeakEquip")

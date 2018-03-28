@@ -100,7 +100,8 @@ FromClient_PetAddSealedList = function(petNo, reason, petType)
       FGlobal_PetInfoInit()
     else
       if petType == __ePetType_Fairy then
-        PaGlobal_FairyListNew_Open()
+        PaGlobal_FairyInfo_Open(false)
+        PaGlobal_Fairy_SetPosIcon()
       else
         return 
       end

@@ -104,7 +104,9 @@ PaGlobal_CharacterTag_SetPosIcon = function()
   else
     do
       Panel_Icon_CharacterTag:SetShow(false)
-      PaGlobal_Fairy_SetPosIcon()
+      if _ContentsGroup_isFairy == true then
+        PaGlobal_Fairy_SetPosIcon()
+      end
     end
   end
 end

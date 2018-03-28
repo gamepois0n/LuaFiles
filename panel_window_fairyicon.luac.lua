@@ -6,17 +6,15 @@
 local FairyIcon = {_icon = (UI.getChildControl)(Panel_Window_FairyIcon, "Button_FairyIcon")}
 PaGlobal_Fairy_SetPosIcon = function()
   -- function num : 0_0 , upvalues : FairyIcon
-  if ToClient_IsDevelopment() == false then
+  if _ContentsGroup_isFairy == false then
+    Panel_Window_FairyIcon:SetShow(false)
     return 
   end
   if isFlushedUI() then
-    return 
+    Panel_Window_FairyIcon:SetShow(false)
   end
   if FairyIcon._icon == nil then
-    return 
-  end
-  if PaGlobal_TutorialManager:isDoingTutorial() == true then
-    return 
+    Panel_Window_FairyIcon:SetShow(false)
   end
   if ToClient_getFairyUnsealedList() + ToClient_getFairySealedList() > 0 then
     local posX, posY = nil, nil
@@ -81,10 +79,27 @@ InitializeFairyIcon = function()
   -- function num : 0_1 , upvalues : FairyIcon
   Panel_Window_FairyIcon:SetIgnore(false)
   ;
-  (FairyIcon._icon):addInputEvent("Mouse_LUp", "PaGlobal_FairyListNew_Open()")
+  (FairyIcon._icon):addInputEvent("Mouse_LUp", "PaGlobal_FairyInfo_Open(false)")
+  ;
+  (FairyIcon._icon):addInputEvent("Mouse_On", "PaGlobal_FairyInfo_SimpleTooltips(true)")
+  ;
+  (FairyIcon._icon):addInputEvent("Mouse_Out", "PaGlobal_FairyInfo_SimpleTooltips(false)")
   ;
   (FairyIcon._icon):ActiveMouseEventEffect(true)
   PaGlobal_Fairy_SetPosIcon()
+end
+
+PaGlobal_FairyInfo_SimpleTooltips = function(isShow)
+  -- function num : 0_2 , upvalues : FairyIcon
+  if not isShow then
+    TooltipSimple_Hide()
+    return 
+  end
+  local name, desc, control = nil, nil, nil
+  name = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYICON_TITLE")
+  desc = PAGetString(Defines.StringSheet_GAME, "LUA_FAIRYICON_DESC")
+  control = FairyIcon._icon
+  TooltipSimple_Show(control, name, desc)
 end
 
 registerEvent("FromClient_luaLoadComplete", "InitializeFairyIcon")

@@ -100,8 +100,25 @@ WorldMap_NaviButton_RePos = function()
   end
 end
 
+WorldMap_ShortcutButton_RePos = function()
+  -- function num : 0_4 , upvalues : isCullingNaviBtn
+  if Panel_NaviButton:IsUse() == false then
+    return 
+  end
+  Panel_NaviButton:SetPosX((ToClient_getNaviEndPathPostion()).x * getScreenSizeX() - 60)
+  Panel_NaviButton:SetPosY((ToClient_getNaviEndPathPostion()).y * getScreenSizeY() + 60)
+  local playerModelPositionPosZ = (ToClient_getNaviEndPathPostion()).z
+  if playerModelPositionPosZ > 1 or playerModelPositionPosZ < 0 then
+    Panel_NaviButton:SetShow(false)
+  else
+    if isCullingNaviBtn == false then
+      Panel_NaviButton:SetShow(true)
+    end
+  end
+end
+
 HandleClicked_CompleteNode = function()
-  -- function num : 0_4 , upvalues : HideAutoCompletedNaviBtn, isCullingNaviBtn
+  -- function num : 0_5 , upvalues : HideAutoCompletedNaviBtn, isCullingNaviBtn
   if ToClient_WorldMapNaviEmpty() == true or ToClient_WorldMapNaviIsLoopPath() == true or HideAutoCompletedNaviBtn ~= false then
     return 
   end
@@ -124,7 +141,7 @@ HandleClicked_CompleteNode = function()
 end
 
 SimpleTooltip_NodeBtn = function(isShow, tipType)
-  -- function num : 0_5 , upvalues : naviBtn
+  -- function num : 0_6 , upvalues : naviBtn
   if not isShow then
     ToClient_OnNaviRenderAsloopPath(isShow)
     TooltipSimple_Hide()
@@ -140,13 +157,13 @@ SimpleTooltip_NodeBtn = function(isShow, tipType)
 end
 
 FromClient_DeleteNaviGuidOnTheWorldmapPanel = function()
-  -- function num : 0_6
+  -- function num : 0_7
   ToClient_DeleteNaviGuideByGroup(0)
   Panel_NaviButton:SetShow(false)
 end
 
 FromClient_RClickWorldmapPanel = function(pos3D, immediately, isTopPicking)
-  -- function num : 0_7 , upvalues : VCK, isCullingNaviBtn, HideAutoCompletedNaviBtn
+  -- function num : 0_8 , upvalues : VCK, isCullingNaviBtn, HideAutoCompletedNaviBtn
   if immediately == false and ToClient_IsShowNaviGuideGroup(0) then
     if ((getSelfPlayer()):get()):getLevel() < 11 then
       Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_NEW_WORLDMAP_TUTORIAL_ACK"))
@@ -183,13 +200,13 @@ FromClient_RClickWorldmapPanel = function(pos3D, immediately, isTopPicking)
   if ToClient_WorldMapNaviPickingIsDesert(pos3D) == false and (selfPlayer:getRegionInfoWrapper()):isDesert() == false and ToClient_WorldMapNaviIsLoopPath() == false and (selfPlayer:getRegionInfoWrapper()):isOcean() == false and ToClient_WorldMapNaviEmpty() == false and HideAutoCompletedNaviBtn == false then
     isCullingNaviBtn = false
     Panel_NaviButton:SetShow(true)
-    WorldMap_NaviButton_RePos()
+    WorldMap_ShortcutButton_RePos()
   end
   HideAutoCompletedNaviBtn = false
 end
 
 FromClient_WorldMapFadeOutHideUI = function(frameTime)
-  -- function num : 0_8 , upvalues : UI_ANI_ADV, UI_color
+  -- function num : 0_9 , upvalues : UI_ANI_ADV, UI_color
   local worldmapRenderUI = ToClient_getWorldmapRenderBase()
   worldmapRenderUI:ResetVertexAni()
   local selfPlayer = getSelfPlayer()
@@ -257,19 +274,19 @@ FromClient_WorldMapFadeOutHideUI = function(frameTime)
 end
 
 FromClient_LClickedWorldMapNode = function(explorationNode)
-  -- function num : 0_9 , upvalues : SelectedNode
+  -- function num : 0_10 , upvalues : SelectedNode
   SelectedNode = explorationNode:FromClient_getExplorationNodeInClient()
   PaGlobal_TutorialManager:handleLClickWorldMapNode(explorationNode)
 end
 
 FromClient_NodeIsNextSiege = function(explorationNode)
-  -- function num : 0_10
+  -- function num : 0_11
   explorationNode:EraseAllEffect()
   explorationNode:AddEffect("UI_ArrowMark_Diagonal01", true, 70, 80)
 end
 
 FromClient_KnowledgeWorldMapPath = function(pos3D)
-  -- function num : 0_11
+  -- function num : 0_12
   local navParam = NavigationGuideParam()
   navParam._worldmapColor = float4(1, 0.55, 0.55, 0.55)
   navParam._worldmapBgColor = float4(1, 0.85, 0.85, 0.6)
@@ -279,7 +296,7 @@ FromClient_KnowledgeWorldMapPath = function(pos3D)
 end
 
 UpdateWorldMapNode = function(node)
-  -- function num : 0_12
+  -- function num : 0_13
   local plantKey = node:getPlantKey()
   local nodeKey = plantKey:getWaypointKey()
   local wayPlant = ToClient_getPlant(plantKey)
@@ -312,7 +329,7 @@ UpdateWorldMapNode = function(node)
 end
 
 FGlobal_OpenOtherPanelWithNodeMenu = function(node, isShow)
-  -- function num : 0_13
+  -- function num : 0_14
   if ToClient_WorldMapIsShow() == false then
     return 
   end
@@ -350,14 +367,14 @@ FGlobal_OpenOtherPanelWithNodeMenu = function(node, isShow)
 end
 
 FromClient_WorldMapNodeFindNearNode = function(nodeKey)
-  -- function num : 0_14
+  -- function num : 0_15
   ToClient_DeleteNaviGuideByGroup(0)
   ToClient_WorldMapFindNearNode(nodeKey, NavigationGuideParam())
   audioPostEvent_SystemUi(0, 14)
 end
 
 FromClient_WorldMapNodeFindTargetNode = function(nodeKey)
-  -- function num : 0_15
+  -- function num : 0_16
   local explorationSSW = ToClient_getExplorationStaticStatusWrapper(nodeKey)
   if explorationSSW == nil then
     return 
@@ -368,7 +385,7 @@ FromClient_WorldMapNodeFindTargetNode = function(nodeKey)
 end
 
 FGlobal_LoadWorldMapTownSideWindow = function(nodeKey)
-  -- function num : 0_16
+  -- function num : 0_17
   local regionInfoWrapper = ToClient_getRegionInfoWrapperByWaypoint(nodeKey)
   if regionInfoWrapper ~= nil and (regionInfoWrapper:get()):isMainOrMinorTown() and (regionInfoWrapper:get()):hasWareHouseNpc() then
     Warehouse_OpenPanelFromWorldmap(nodeKey, (CppEnums.WarehoouseFromType).eWarehoouseFromType_Worldmap)
@@ -376,7 +393,7 @@ FGlobal_LoadWorldMapTownSideWindow = function(nodeKey)
 end
 
 FGlobal_PushOpenWorldMap = function()
-  -- function num : 0_17
+  -- function num : 0_18
   if GetUIMode() == (Defines.UIMode).eUIMode_Gacha_Roulette then
     return 
   end
@@ -393,7 +410,7 @@ FGlobal_PushOpenWorldMap = function()
 end
 
 FGlobal_CloseWorldmapForLuaKeyHandling = function()
-  -- function num : 0_18
+  -- function num : 0_19
   if (Defines.UIMode).eUIMode_WoldMapSearch == GetUIMode() then
     ClearFocusEdit()
     SetUIMode((Defines.UIMode).eUIMode_WorldMap)
@@ -402,7 +419,7 @@ FGlobal_CloseWorldmapForLuaKeyHandling = function()
 end
 
 FGlobal_PopCloseWorldMap = function()
-  -- function num : 0_19 , upvalues : isCloseWorldMap
+  -- function num : 0_20 , upvalues : isCloseWorldMap
   if ToClient_WorldMapIsShow() then
     ToClient_preCloseMap()
     Panel_NodeSiegeTooltip:SetShow(false)
@@ -417,7 +434,7 @@ FGlobal_PopCloseWorldMap = function()
 end
 
 FromClient_WorldMapOpen = function()
-  -- function num : 0_20 , upvalues : isFadeOutWindow, isPrevShowPanel, isPrevShowMainQuestPanel, isCullingNaviBtn, renderMode
+  -- function num : 0_21 , upvalues : isFadeOutWindow, isPrevShowPanel, isPrevShowMainQuestPanel, isCullingNaviBtn, renderMode
   if isDeadInWatchingMode() then
     Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMAPOPENALERT_INDEAD"))
     return 
@@ -478,28 +495,28 @@ FromClient_WorldMapOpen = function()
 end
 
 FGlobal_Worldmap_SetRenderMode = function(renderModeList)
-  -- function num : 0_21 , upvalues : renderMode
+  -- function num : 0_22 , upvalues : renderMode
   renderMode:setRenderMode(renderModeList)
 end
 
 FGlobal_Worldmap_ResetRenderMode = function()
-  -- function num : 0_22 , upvalues : renderMode
+  -- function num : 0_23 , upvalues : renderMode
   renderMode:reset()
 end
 
 Panel_WorldMapNaviBtn = function()
-  -- function num : 0_23 , upvalues : isCullingNaviBtn
+  -- function num : 0_24 , upvalues : isCullingNaviBtn
   if ToClient_WorldMapNaviEmpty() == false and ToClient_WorldMapNaviIsLoopPath() == false then
     isCullingNaviBtn = false
     Panel_NaviButton:SetShow(true)
-    WorldMap_NaviButton_RePos()
+    WorldMap_ShortcutButton_RePos()
     return 
   end
   Panel_NaviButton:SetShow(false)
 end
 
 FGlobal_OpenWorldMapWithHouse = function()
-  -- function num : 0_24 , upvalues : isCloseWorldMap
+  -- function num : 0_25 , upvalues : isCloseWorldMap
   FGlobal_PushOpenWorldMap()
   local actorWrapper = interaction_getInteractable()
   ToClient_OpenWorldMapWithHouse(actorWrapper:get())
@@ -507,7 +524,7 @@ FGlobal_OpenWorldMapWithHouse = function()
 end
 
 FGlobal_WorldMapWindowEscape = function()
-  -- function num : 0_25
+  -- function num : 0_26
   if Panel_WorkerTrade_Caravan:GetShow() then
     FGlobal_WorkerTradeCaravan_Hide()
     return 
@@ -534,29 +551,29 @@ FGlobal_WorldMapWindowEscape = function()
 end
 
 FromClient_ExitWorldMap = function()
-  -- function num : 0_26 , upvalues : isCloseWorldMap
+  -- function num : 0_27 , upvalues : isCloseWorldMap
   isCloseWorldMap = true
 end
 
 FromClient_WorldMapFadeOut = function()
-  -- function num : 0_27 , upvalues : isFadeOutWindow
+  -- function num : 0_28 , upvalues : isFadeOutWindow
   isFadeOutWindow = true
   ChatInput_Close()
 end
 
 FGlobal_IsFadeOutState = function()
-  -- function num : 0_28 , upvalues : isFadeOutWindow
+  -- function num : 0_29 , upvalues : isFadeOutWindow
   return isFadeOutWindow
 end
 
 FGlobal_AskCloseWorldMap = function()
-  -- function num : 0_29 , upvalues : isCloseWorldMap
+  -- function num : 0_30 , upvalues : isCloseWorldMap
   return isCloseWorldMap
 end
 
 local IM = CppEnums.EProcessorInputMode
 FGlobal_WorldMapClose = function()
-  -- function num : 0_30 , upvalues : isFadeOutWindow, renderMode, isCloseWorldMap, isPrevShowPanel, isPrevShowMainQuestPanel
+  -- function num : 0_31 , upvalues : isFadeOutWindow, renderMode, isCloseWorldMap, isPrevShowPanel, isPrevShowMainQuestPanel
   FGlobal_TentTooltipHide()
   isFadeOutWindow = false
   DragManager:clearInfo()
@@ -590,7 +607,7 @@ FGlobal_WorldMapClose = function()
 end
 
 FGlobal_WorldMapCloseSubPanel = function()
-  -- function num : 0_31 , upvalues : isCullingNaviBtn
+  -- function num : 0_32 , upvalues : isCullingNaviBtn
   Panel_Window_Warehouse:SetShow(false)
   Panel_manageWorker:SetShow(false)
   Panel_Working_Progress:SetShow(false)
@@ -609,7 +626,7 @@ end
 local eCheckState = CppEnums.WorldMapCheckState
 local eWorldmapState = CppEnums.WorldMapState
 FromClient_RenderStateChange = function(state)
-  -- function num : 0_32 , upvalues : eWorldmapState, eCheckState
+  -- function num : 0_33 , upvalues : eWorldmapState, eCheckState
   if eWorldmapState.eWMS_EXPLORE_PLANT == state then
     local questShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Quest)
     local knowledgeShow = ToClient_isWorldmapCheckState(eCheckState.eCheck_Knowledge)
@@ -696,7 +713,7 @@ end
 
 local _townModeWaypointKey = nil
 FromClient_SetTownMode = function(waypointKey)
-  -- function num : 0_33 , upvalues : _townModeWaypointKey, eCheckState
+  -- function num : 0_34 , upvalues : _townModeWaypointKey, eCheckState
   _townModeWaypointKey = waypointKey
   local explorationNodeInClient = ToClient_getExploratioNodeInClientByWaypointKey(waypointKey)
   if explorationNodeInClient ~= nil then
@@ -727,7 +744,7 @@ FromClient_SetTownMode = function(waypointKey)
 end
 
 FromClient_resetTownMode = function()
-  -- function num : 0_34 , upvalues : _townModeWaypointKey
+  -- function num : 0_35 , upvalues : _townModeWaypointKey
   _townModeWaypointKey = nil
   ToClient_worldmapHouseManagerSetShow(false, CppEnums.WaypointKeyUndefined)
   ToClient_worldmapGuildHouseSetShow(true, CppEnums.WaypointKeyUndefined)
@@ -746,7 +763,7 @@ FromClient_resetTownMode = function()
 end
 
 FGlobal_OpenNodeStable = function()
-  -- function num : 0_35 , upvalues : _townModeWaypointKey
+  -- function num : 0_36 , upvalues : _townModeWaypointKey
   if _townModeWaypointKey == nil then
     return 
   end
@@ -757,14 +774,14 @@ FGlobal_OpenNodeStable = function()
 end
 
 AltKeyGuide_ReSize = function()
-  -- function num : 0_36 , upvalues : altKeyGuide
+  -- function num : 0_37 , upvalues : altKeyGuide
   local altKeyGuideTextX = altKeyGuide:GetTextSizeX() + 10
   local altKeyGuideTextY = altKeyGuide:GetTextSizeY() + 10
   altKeyGuide:SetSize(altKeyGuideTextX, altKeyGuideTextY)
 end
 
 FromClient_HideAutoCompletedNaviBtn = function(isShow)
-  -- function num : 0_37 , upvalues : HideAutoCompletedNaviBtn
+  -- function num : 0_38 , upvalues : HideAutoCompletedNaviBtn
   HideAutoCompletedNaviBtn = isShow
 end
 

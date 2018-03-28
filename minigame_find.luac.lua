@@ -24,7 +24,7 @@ PaGlobal_MiniGame_Find.initialize = function(self)
   -- DECOMPILER ERROR at PC15: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._percent = (UI.getChildControl)((self._ui)._rightTopBG, "StaticText_DDPercent")
+  (self._ui)._endurance = (UI.getChildControl)((self._ui)._rightTopBG, "StaticText_DDPercent")
   -- DECOMPILER ERROR at PC23: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
@@ -56,19 +56,23 @@ PaGlobal_MiniGame_Find.initialize = function(self)
   -- DECOMPILER ERROR at PC79: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._emptyCnt = (UI.getChildControl)((self._ui)._LeftValueBg, "StaticText_LandCountValue")
+  (self._ui)._commercialValue = (UI.getChildControl)((self._ui)._rightBG, "StaticText_CommercialValue")
   -- DECOMPILER ERROR at PC87: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
-  (self._ui)._subObjCnt = (UI.getChildControl)((self._ui)._LeftValueBg, "StaticText_RootCountValue")
+  (self._ui)._emptyCnt = (UI.getChildControl)((self._ui)._LeftValueBg, "StaticText_LandCountValue")
   -- DECOMPILER ERROR at PC95: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui)._subObjCnt = (UI.getChildControl)((self._ui)._LeftValueBg, "StaticText_RootCountValue")
+  -- DECOMPILER ERROR at PC103: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._trapCnt = (UI.getChildControl)((self._ui)._LeftValueBg, "StaticText_StoneCountValue")
   self:createSlot()
   self:createRewardSlot()
   self:registEventHandler()
-  self._messageBoxData = {tostringitle = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = "종료하면 보상 못받습니�\164. 종료 하시겠습니까?", functionYes = FGlobal_MiniGameFind_Close, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
+  self._messageBoxData = {title = PAGetString(Defines.StringSheet_GAME, "LUA_WARNING"), content = PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_NOREWARDALERT"), functionYes = FGlobal_MiniGameFind_Close, functionNo = MessageBox_Empty_function, priority = (CppEnums.PAUIMB_PRIORITY).PAUIMB_PRIORITY_LOW}
   Panel_MiniGame_Find:SetShow(false)
 end
 
@@ -104,6 +108,10 @@ PaGlobal_MiniGame_Find.createSlot = function(self)
       ;
       (slot.close):SetShow(false)
       ;
+      (slot.close):setOnMouseCursorType(__eMouseCursorType_Dig)
+      ;
+      (slot.close):setClickMouseCursorType(__eMouseCursorType_Dig)
+      ;
       (slot.open):SetSize((self._config)._slotSize, (self._config)._slotSize)
       ;
       (slot.open):SetPosX((self._config)._slotStartPosX + (self._config)._slotSize * col)
@@ -117,13 +125,13 @@ PaGlobal_MiniGame_Find.createSlot = function(self)
       (slot.close):addInputEvent("Mouse_LUp", "PaGlobal_MiniGame_Find:ClickCloseSlot(" .. col .. "," .. row .. "," .. (self._clickType).LClcik .. ")")
       ;
       (slot.close):addInputEvent("Mouse_RUp", "PaGlobal_MiniGame_Find:ClickCloseSlot(" .. col .. "," .. row .. "," .. (self._clickType).RClcik .. ")")
-      -- DECOMPILER ERROR at PC146: Confused about usage of register: R10 in 'UnsetPending'
+      -- DECOMPILER ERROR at PC154: Confused about usage of register: R10 in 'UnsetPending'
 
       ;
       ((self._slots)[col])[row] = slot
     end
   end
-  -- DECOMPILER ERROR at PC158: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC166: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui)._mainObjBG = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, Panel_MiniGame_Find, "MainObjBG")
@@ -161,10 +169,12 @@ PaGlobal_MiniGame_Find.ClickCloseSlot = function(self, col, row, clickType)
       audioPostEvent_SystemUi(11, 31)
     else
       audioPostEvent_SystemUi(11, 32)
+      ;
+      ((self._ui)._RClickCnt):AddEffect("fUI_Light", false, 5, 0)
     end
     ToClient_MiniGameFindClick(col, row, clickType)
   else
-    Proc_ShowMessage_Ack("아이템의 내구도가 0입니�\164.")
+    Proc_ShowMessage_Ack(PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_NOREWARDALERT"))
   end
 end
 
@@ -229,7 +239,7 @@ PaGlobal_MiniGame_Find.askGameClose = function(self)
     self:close()
   else
     ;
-    (MessageBox.showMessageBox)(self._messageBoxData, "top")
+    (MessageBox.showMessageBox)(self._messageBoxData)
   end
 end
 
@@ -243,7 +253,7 @@ PaGlobal_MiniGame_Find.createRewardSlot = function(self)
     slot.background = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (self._ui)._rightBG, "RewardItemBG_" .. ii)
     CopyBaseProperty((self._ui)._slotBackground, slot.background)
     ;
-    (slot.background):SetPosY(122 + ii * 65)
+    (slot.background):SetPosY(200 + ii * 65)
     ;
     (slot.background):SetShow(true)
     ;
@@ -291,7 +301,6 @@ PaGlobal_MiniGame_Find.getRewardIndex = function(self, pct)
   if pct == 100 then
     return 0
   else
-    local idx = 1
     for ii = 1, (self._config)._rewardMaxCount - 1 do
       if pct <= ii * 20 then
         return (self._config)._rewardMaxCount - ii
@@ -319,9 +328,18 @@ FGlobal_MiniGameFind_RefreshText = function()
   local itemWrapper = ToClient_getEquipmentItem((CppEnums.EquipSlotNoClient).eEquipSlotNoSubTool)
   if itemWrapper ~= nil then
     local lv = ((itemWrapper:get()):getKey()):getEnchantLevel()
-    self._maxRClickCount = ToClient_GetMiniGameToolParam(lv, 0)
+    local RClickCount = ToClient_GetMiniGameToolParam(lv, 0) - self._curRClickCount
+    if RClickCount ~= self._tmpRClickCount then
+      ((self._ui)._RClickCnt):AddEffect("fUI_Light", false, 5, 0)
+      self._tmpRClickCount = RClickCount
+    end
+    if RClickCount <= 0 then
+      RClickCount = 0
+    end
     ;
-    ((self._ui)._RClickCnt):SetText((string.format)("%s / %s", self._curRClickCount, self._maxRClickCount))
+    ((self._ui)._RClickCnt):SetText(tostring(RClickCount))
+    ;
+    ((self._ui)._endurance):SetText(tostring((itemWrapper:get()):getEndurance()))
   end
 end
 
@@ -341,7 +359,7 @@ FGlobal_MiniGameFind_Update = function(deltaTime)
   end
   self._curSec = self._curSec + deltaTime
   ;
-  ((self._ui)._timerMsg):SetText((string.format)("다음 게임 : %s �\136", (math.floor)((self._config)._nextGameSec - self._curSec + 1)))
+  ((self._ui)._timerMsg):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_LEFTTIME", "second", (math.floor)((self._config)._nextGameSec - self._curSec + 1)))
   if (self._config)._nextGameSec <= self._curSec then
     self:nextGameStart()
   end
@@ -365,9 +383,9 @@ FromClient_MiniGameFindSlotShowMain = function(col, row, uv0, uv1, uv2, uv3, ima
   local self = PaGlobal_MiniGame_Find
   local slot = (((self._slots)[col])[row]).close
   if self._isMainLoad == false then
-    ((self._ui)._mainObjBG):SetPosX(slot:GetPosX())
+    ((self._ui)._mainObjBG):SetPosX(slot:GetPosX() - 14)
     ;
-    ((self._ui)._mainObjBG):SetPosY(slot:GetPosY())
+    ((self._ui)._mainObjBG):SetPosY(slot:GetPosY() - 14)
     ;
     ((self._ui)._mainObjBG):SetShow(true)
     self._isMainLoad = true
@@ -394,13 +412,13 @@ FromClient_MiniGameFindSlotShowTrap = function(col, row, stoneType)
   local slot = (((self._slots)[col])[row]).open
   slot:ChangeTextureInfoName("New_UI_Common_forLua/Window/MiniGame/MiniGameFind_01.dds")
   if stoneType == 0 then
-    local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, 1, 595, 54, 648)
+    local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, 1, 295, 54, 348)
     ;
     (slot:getBaseTexture()):setUV(xx1, yy1, xx2, yy2)
   else
     do
       do
-        local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, 1, 649, 54, 702)
+        local xx1, yy1, xx2, yy2 = setTextureUV_Func(slot, 1, 349, 54, 402)
         ;
         (slot:getBaseTexture()):setUV(xx1, yy1, xx2, yy2)
         slot:setRenderTexture(slot:getBaseTexture())
@@ -421,25 +439,44 @@ FromClient_MiniGameFindDynamicInfo = function(damageRate, RClickCount, emptyCoun
     curPercent = 0
   end
   self._curRClickCount = RClickCount
+  FGlobal_MiniGameFind_RefreshText()
   ;
-  ((self._ui)._percent):SetText((string.format)("%.2f", curPercent) .. "%")
+  ((self._ui)._commercialValue):SetText((string.format)("상품�\177 : %.1f", curPercent) .. "%")
   ;
   ((self._ui)._damageGauge):SetProgressRate(curPercent)
   ;
   ((self._ui)._damageGauge):SetCurrentProgressRate(curPercent)
   ;
-  ((self._ui)._RClickCnt):SetText((string.format)("%s / %s", self._curRClickCount, self._maxRClickCount))
+  ((self._ui)._emptyCnt):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_COUNT", "count", emptyCount))
   ;
-  ((self._ui)._emptyCnt):SetText((string.format)("%s �\156", emptyCount))
+  ((self._ui)._subObjCnt):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_COUNT", "count", subObjCount))
   ;
-  ((self._ui)._subObjCnt):SetText((string.format)("%s �\156", subObjCount))
-  ;
-  ((self._ui)._trapCnt):SetText((string.format)("%s �\156", trapCount))
+  ((self._ui)._trapCnt):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_COUNT", "count", trapCount))
+  if emptyCount ~= self._maxEmptyCount then
+    ((self._ui)._emptyCnt):AddEffect("UI_LevelUP_Skill", false, 5, 0)
+    self._maxEmptyCount = emptyCount
+  end
+  if subObjCount ~= self._maxSubObjCount then
+    ((self._ui)._subObjCnt):AddEffect("UI_LevelUP_Skill", false, 5, 0)
+    self._maxSubObjCount = subObjCount
+  end
+  if trapCount ~= self._maxTrapCount then
+    ((self._ui)._trapCnt):AddEffect("UI_LevelUP_Skill", false, 5, 0)
+    self._maxTrapCount = trapCount
+  end
+  if curPercent ~= self._curPecent then
+    ((self._ui)._commercialValue):AddEffect("fUI_Skill_Cooltime01", false, 5, 0)
+    self._curPecent = curPercent
+  end
   local idx = self:getRewardIndex(curPercent)
-  ;
-  ((self._ui)._curRewardSlot):SetPosX((((self._rewardSlot)[idx]).background):GetPosX() - 5)
-  ;
-  ((self._ui)._curRewardSlot):SetPosY((((self._rewardSlot)[idx]).background):GetPosY() - 5)
+  if idx ~= self._rewardIndex then
+    ((self._ui)._curRewardSlot):SetPosX((((self._rewardSlot)[idx]).background):GetPosX() - 5)
+    ;
+    ((self._ui)._curRewardSlot):SetPosY((((self._rewardSlot)[idx]).background):GetPosY() - 5)
+    ;
+    (((self._rewardSlot)[self._rewardIndex]).icon):SetMonoTone(true)
+    self._rewardIndex = idx
+  end
 end
 
 FromClient_MiniGameFindStaticInfo = function(damageRate, RClickCount, emptyCount, subObjCount, trapCount, gameCurDepth, gameLastDepth)
@@ -450,32 +487,40 @@ FromClient_MiniGameFindStaticInfo = function(damageRate, RClickCount, emptyCount
     curPercent = 0
   end
   self._curRClickCount = 0
-  self._maxRClickCount = RClickCount
+  self._curPecent = 100
   self._maxEmptyCount = emptyCount
   self._maxSubObjCount = subObjCount
+  self._maxTrapCount = trapCount
   self._gameCurDepth = gameCurDepth
   self._gameLastDepth = gameLastDepth
+  FGlobal_MiniGameFind_RefreshText()
   ;
-  ((self._ui)._percent):SetText((string.format)("%.2f", curPercent) .. "%")
+  ((self._ui)._commercialValue):SetText((string.format)("상품�\177 : %.1f", curPercent) .. "%")
   ;
   ((self._ui)._damageGauge):SetProgressRate(curPercent)
   ;
   ((self._ui)._damageGauge):SetCurrentProgressRate(curPercent)
   ;
-  ((self._ui)._RClickCnt):SetText((string.format)("%s / %s", self._curRClickCount, self._maxRClickCount))
+  ((self._ui)._emptyCnt):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_COUNT", "count", self._maxEmptyCount))
   ;
-  ((self._ui)._emptyCnt):SetText((string.format)("%s �\156", self._maxEmptyCount))
+  ((self._ui)._subObjCnt):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_COUNT", "count", self._maxSubObjCount))
   ;
-  ((self._ui)._subObjCnt):SetText((string.format)("%s �\156", self._maxSubObjCount))
+  ((self._ui)._trapCnt):SetText(PAGetStringParam1(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_COUNT", "count", self._maxTrapCount))
   ;
-  ((self._ui)._trapCnt):SetText((string.format)("%s �\156", trapCount))
-  ;
-  ((self._ui)._gameDepth):SetText((string.format)("%s / %s 단계", self._gameCurDepth, self._gameLastDepth))
+  ((self._ui)._gameDepth):SetText(PAGetStringParam2(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_CURRENTGRADE", "currentGrade", self._gameCurDepth, "maxGrade", self._gameLastDepth))
   local idx = self:getRewardIndex(curPercent)
-  ;
-  ((self._ui)._curRewardSlot):SetPosX((((self._rewardSlot)[idx]).background):GetPosX() - 5)
-  ;
-  ((self._ui)._curRewardSlot):SetPosY((((self._rewardSlot)[idx]).background):GetPosY() - 5)
+  if idx == 0 then
+    for ii = 0, (self._config)._rewardMaxCount - 1 do
+      (((self._rewardSlot)[ii]).icon):SetMonoTone(false)
+    end
+  end
+  do
+    ;
+    ((self._ui)._curRewardSlot):SetPosX((((self._rewardSlot)[idx]).background):GetPosX() - 5)
+    ;
+    ((self._ui)._curRewardSlot):SetPosY((((self._rewardSlot)[idx]).background):GetPosY() - 5)
+    self._rewardIndex = idx
+  end
 end
 
 FromClient_MiniGameFindDefaultImage = function(col, row, uv0, uv1, uv2, uv3, imagePath)
@@ -493,7 +538,7 @@ FromClient_MiniGameFindSetShow = function(isShow, col, row)
   -- function num : 0_23
   local self = PaGlobal_MiniGame_Find
   if isShow == true then
-    ((self._ui)._percent):SetText((string.format)("%.2f", 100) .. "%")
+    self._tmpRClickCount = 0
     self._gameState = (self._state).Play
     self:refresh(col, row)
     self._isMainLoad = false
@@ -527,7 +572,7 @@ FromClient_MiniGameFindSetState = function(serverState)
   local self = PaGlobal_MiniGame_Find
   self._gameState = serverState
   if serverState == (self._state).None then
-    ((self._ui)._timerMsg):SetText("게임 종료")
+    ((self._ui)._timerMsg):SetText(PAGetString(Defines.StringSheet_GAME, "LUA_MINIGAME_FIND_FINISH"))
     self:endGame()
   else
     if serverState == (self._state).Wait then

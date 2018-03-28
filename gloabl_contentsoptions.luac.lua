@@ -23,6 +23,7 @@ if not ToClient_IsContentsGroupOpen("315") then
             if getGamePadEnable() then
               _ContentsGroup_isConsoleTest = ToClient_IsDevelopment()
               _ContentsGroup_isCamp = ToClient_IsContentsGroupOpen("347")
+              _ContentsGroup_isFairy = ToClient_IsContentsGroupOpen("357")
             end
           end
         end

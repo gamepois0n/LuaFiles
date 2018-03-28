@@ -740,6 +740,7 @@ Itemmarket_CategoryUpdate = function(contents, key)
   categoryBar:setNotImpactScrollEvent(true)
   local categoryIcon = (UI.getChildControl)(contents, "Template_RadioButton_CategoryIcon")
   if not isWakenWeaponOpen then
+    _PA_LOG("정태�\164", "여기 들어오면안됩니다.")
     if not isAlchemyStoneOpen then
       _categoryTexture = {
 {
@@ -879,6 +880,7 @@ Itemmarket_CategoryUpdate = function(contents, key)
     end
   else
     if not isAlchemyStoneOpen then
+      _PA_LOG("정태�\164", "여기 들어오나�\148 ?  야ㅕㄴ금석이 안열려있는데!?")
       _categoryTexture = {
 {
 [0] = {226, 162, 244, 180}
@@ -949,6 +951,7 @@ Itemmarket_CategoryUpdate = function(contents, key)
 }
 }
     else
+      _PA_LOG("정태�\164", "여기 들어오나�\148 ?  연금석이 열려있는�\176 주의하시죠@!")
       _categoryTexture = {
 {
 [0] = {226, 162, 244, 180}

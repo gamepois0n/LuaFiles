@@ -86,7 +86,6 @@ GuildWharfFunction_RegisterAck = function()
     return 
   end
   Inventory_SetFunctor(nil)
-  InventoryWindow_Close()
   GuildWharfRegister_Close()
   local self = guildWharfFunction
 end

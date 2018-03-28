@@ -3,7 +3,6 @@
 
 -- params : ...
 -- function num : 0
-local UI_RewardType = CppEnums.RewardType
 local reward = {currentBenefitReward = -1, currentRewardCount = -1}
 local pcRoomGift_icon = (UI.getChildControl)(Panel_NewEventProduct_Alarm, "Static_Icon")
 local pcRoomGift_Text = (UI.getChildControl)(Panel_NewEventProduct_Alarm, "StaticText_SumText")

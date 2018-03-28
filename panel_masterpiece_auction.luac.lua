@@ -48,7 +48,7 @@ end
 PaGlobal_MasterpieceAuction = {
 _ui = {_btn_Close = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "Button_Close"), _but_Question = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "Button_Question"), _radioBtnList = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "RadioButton_ItemList"), _radioBtnMyBid = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "RadioButton_MyBidList"), _staticBtnReload = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "Button_AddFriend"), _staticLeftBG = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "Static_LeftBG"), _staticCenterBG = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "Static_CenterBG01"), _list2_LeftContent = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "List2_LeftContent"), _staticMoneyBG = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "Static_ListBG"), _staticTextWareHouse = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "StaticText_Warehouse"), _staticTextMoney = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "StaticText_Money"), _staticRightBG = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "Static_RightBG"), _list2_RightContent = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "List2_RightContent"), _staticTextDescTitle = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "StaticText_DescTitle"), _staticTextDescBG = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "StaticText_DescBg"), _txt_BottomDesc = (UI.getChildControl)(Panel_Window_MasterpieceAuction, "StaticText_BottomDesc"), _staticTextCenterLeftTime = nil, _staticTextItemName = nil, _staticTextItemAuthor = nil, _staticTextItemStory = nil, _staticTextCurrentPrice = nil, _staticTextCurrentPriceValue = nil, _staticTextReady = nil, _staticBottomBG = nil, _staticAuctionItemSlot = nil, _editPriceInput = nil, _btn_Bid = nil}
 , 
-_slotConfig = {createIcon = true, createBorder = true, createCount = true, createEnchant = true, createCash = true, createEnduranceIcon = true}
+_slotConfig = {createIcon = true, createBorder = true, createEnchant = true, createCash = true, createEnduranceIcon = true}
 , 
 _bidType = {_bidNone = 0, _bidTry = 1, _bidFail = 2, _bidSuccess = 3}
 , 
@@ -57,7 +57,7 @@ _slotItem = {}
 _itemTooltipDesc = {}
 }
 local isOpenEscMenu = false
--- DECOMPILER ERROR at PC183: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC182: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.initialize = function(self)
   -- function num : 0_2 , upvalues : UI_TM
@@ -154,7 +154,7 @@ PaGlobal_MasterpieceAuction.initialize = function(self)
   ((self._ui)._txt_BottomDesc):SetSize(((self._ui)._txt_BottomDesc):GetSizeX(), ((self._ui)._txt_BottomDesc):GetTextSizeY() + 15)
 end
 
--- DECOMPILER ERROR at PC186: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC185: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.open = function(self)
   -- function num : 0_3
@@ -179,7 +179,7 @@ PaGlobal_MasterpieceAuction.open = function(self)
   PaGlobal_MasterpieceAuction:update(self._selectTabIndex)
 end
 
--- DECOMPILER ERROR at PC189: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC188: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.close = function(self)
   -- function num : 0_4
@@ -192,7 +192,7 @@ PaGlobal_MasterpieceAuction.close = function(self)
   self._masterpieceCountCache = 0
 end
 
--- DECOMPILER ERROR at PC192: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC191: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.setPos = function(self)
   -- function num : 0_5
@@ -200,7 +200,7 @@ PaGlobal_MasterpieceAuction.setPos = function(self)
   Panel_Window_MasterpieceAuction:SetPosY(getScreenSizeY() / 2 - Panel_Window_MasterpieceAuction:GetSizeY() / 2 - 50)
 end
 
--- DECOMPILER ERROR at PC195: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC194: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.update = function(self, tabIndex)
   -- function num : 0_6
@@ -270,7 +270,7 @@ MasterpieceAution_LeftContent_ListControlCreate = function(content, key)
   radioBtn:addInputEvent("Mouse_LUp", "PaGlobal_MasterpieceAuction:information( " .. index .. " )")
 end
 
--- DECOMPILER ERROR at PC201: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC200: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.information = function(self, index)
   -- function num : 0_8 , upvalues : UI_TM
@@ -322,7 +322,7 @@ PaGlobal_MasterpieceAuction.information = function(self, index)
   self._selectListIndex = index
 end
 
--- DECOMPILER ERROR at PC204: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC203: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.tooltipShow = function(self, index, auctionType)
   -- function num : 0_9
@@ -330,14 +330,14 @@ PaGlobal_MasterpieceAuction.tooltipShow = function(self, index, auctionType)
   Panel_Tooltip_Item_Show_GeneralStatic(index, "masterpiecdAuction", true, auctionType)
 end
 
--- DECOMPILER ERROR at PC207: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC206: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.tooltipHide = function(self)
   -- function num : 0_10
   Panel_Tooltip_Item_hideTooltip()
 end
 
--- DECOMPILER ERROR at PC210: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC209: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.setPrice = function(self, index)
   -- function num : 0_11
@@ -353,7 +353,7 @@ PaGlobal_MasterpieceAuction.setPrice = function(self, index)
   Panel_NumberPad_Show(true, s64_maxNumber, 0, setEditText)
 end
 
--- DECOMPILER ERROR at PC213: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC212: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.bidItem = function(self, index, isBiddable)
   -- function num : 0_12
@@ -589,7 +589,7 @@ FGlobal_MasterPieceAuction_Reset = function()
   Panel_Window_MasterpieceAuction:SetSize(580, 590)
 end
 
--- DECOMPILER ERROR at PC227: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC226: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.itemTooptip = function(self, isShow, index)
   -- function num : 0_17
@@ -600,7 +600,7 @@ PaGlobal_MasterpieceAuction.itemTooptip = function(self, isShow, index)
   TooltipSimple_Show(Panel_Window_MasterpieceAuction, (self._itemTooltipDesc)[index])
 end
 
--- DECOMPILER ERROR at PC230: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC229: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.cancelBidorSell = function(self, index)
   -- function num : 0_18
@@ -608,7 +608,7 @@ PaGlobal_MasterpieceAuction.cancelBidorSell = function(self, index)
   self._bidTypeIndex = (self._bidType)._bidFail
 end
 
--- DECOMPILER ERROR at PC233: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC232: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.getSuccessItemorMoney = function(self, index)
   -- function num : 0_19
@@ -642,7 +642,7 @@ FromClient_BidAuctionGoods = function(goodsType, param1, param2)
   end
 end
 
--- DECOMPILER ERROR at PC242: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC241: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.showList_Left = function(self, isShow)
   -- function num : 0_22 , upvalues : isOpenEscMenu
@@ -696,7 +696,7 @@ PaGlobal_MasterpieceAuction.showList_Left = function(self, isShow)
   -- DECOMPILER ERROR: 4 unprocessed JMP targets
 end
 
--- DECOMPILER ERROR at PC245: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC244: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.showList_Right = function(self, isShow)
   -- function num : 0_23
@@ -730,7 +730,7 @@ PaGlobal_MasterpieceAuction.showList_Right = function(self, isShow)
   ((self._ui)._staticTextDescBG):ComputePos()
 end
 
--- DECOMPILER ERROR at PC248: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC247: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.selectTab = function(self, index)
   -- function num : 0_24
@@ -745,7 +745,7 @@ PaGlobal_MasterpieceAuction.selectTab = function(self, index)
   end
 end
 
--- DECOMPILER ERROR at PC251: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC250: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.selectTabMouseEvent = function(self, index)
   -- function num : 0_25
@@ -760,7 +760,7 @@ EventWarehouseUpdate = function()
   ((self._ui)._staticTextMoney):SetText(makeDotMoney(wareHouseMoney))
 end
 
--- DECOMPILER ERROR at PC256: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC255: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.bidTypeMessage = function(self, index)
   -- function num : 0_27
@@ -770,7 +770,7 @@ PaGlobal_MasterpieceAuction.bidTypeMessage = function(self, index)
   self._bidTypeIndex = (self._bidType)._bidNone
 end
 
--- DECOMPILER ERROR at PC259: Confused about usage of register: R4 in 'UnsetPending'
+-- DECOMPILER ERROR at PC258: Confused about usage of register: R4 in 'UnsetPending'
 
 PaGlobal_MasterpieceAuction.registerEvent = function(self)
   -- function num : 0_28

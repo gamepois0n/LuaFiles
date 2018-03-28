@@ -47,40 +47,42 @@ PaGlobal_WorldDropItem.Init = function(self)
   -- function num : 0_0
   local control = self._ui
   control._selectedRegionName = (UI.getChildControl)(control._topDescBg, "StaticText_SelectedRegionName")
+  ;
+  ((self._ui)._selectedRegionName):SetTextMode((CppEnums.TextMode).eTextMode_LimitText)
   control._needAp = (UI.getChildControl)(control._topDescBg, "StaticText_NeedAp")
   control._frameContent = (UI.getChildControl)(control._frameDropItem, "Frame_1_Content")
-  -- DECOMPILER ERROR at PC25: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC32: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._itemGroupUi)[0] = (UI.getChildControl)(control._frameContent, "Static_WeaponGroup")
-  -- DECOMPILER ERROR at PC33: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC40: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._title)[0] = (UI.getChildControl)((control._itemGroupUi)[0], "StaticText_WeaponTitle")
   control._weaponSlotTempleteBg = (UI.getChildControl)((control._itemGroupUi)[0], "Static_ItemSlotBg")
-  -- DECOMPILER ERROR at PC47: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC54: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._itemGroupUi)[1] = (UI.getChildControl)(control._frameContent, "Static_ArmorGroup")
-  -- DECOMPILER ERROR at PC55: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC62: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._title)[1] = (UI.getChildControl)((control._itemGroupUi)[1], "StaticText_ArmorTitle")
   control._armorSlotTempleteBg = (UI.getChildControl)((control._itemGroupUi)[1], "Static_ItemSlotBg")
-  -- DECOMPILER ERROR at PC69: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC76: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._itemGroupUi)[2] = (UI.getChildControl)(control._frameContent, "Static_AccessoryGroup")
-  -- DECOMPILER ERROR at PC77: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC84: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._title)[2] = (UI.getChildControl)((control._itemGroupUi)[2], "StaticText_AccessoryTitle")
   control._accessorySlotTempleteBg = (UI.getChildControl)((control._itemGroupUi)[2], "Static_ItemSlotBg")
-  -- DECOMPILER ERROR at PC91: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC98: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._itemGroupUi)[3] = (UI.getChildControl)(control._frameContent, "Static_EtcGroup")
-  -- DECOMPILER ERROR at PC99: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC106: Confused about usage of register: R2 in 'UnsetPending'
 
   ;
   (control._title)[3] = (UI.getChildControl)((control._itemGroupUi)[3], "StaticText_EtcTitle")
@@ -96,7 +98,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     ((control._list2Region):getElementManager()):pushKey(regionKey_s64)
   end
   for index = 0, self._maxSlot - 1 do
-    -- DECOMPILER ERROR at PC160: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC167: Confused about usage of register: R6 in 'UnsetPending'
 
     ((control._slotBg)[0])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[0], "DropItem_WeaponSlotBg_" .. index)
     CopyBaseProperty(control._weaponSlotTempleteBg, ((control._slotBg)[0])[index])
@@ -106,7 +108,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[0])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[0])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC195: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC202: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[0])[index] = {}
@@ -118,7 +120,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     ((((control._slot)[0])[index]).icon):addInputEvent("Mouse_On", "PaGlobal_WorldDropItem:ItemTooltip_Show(" .. 0 .. "," .. index .. ")")
     ;
     ((((control._slot)[0])[index]).icon):addInputEvent("Mouse_Out", "PaGlobal_WorldDropItem:ItemTooltip_Hide()")
-    -- DECOMPILER ERROR at PC249: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC256: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slotBg)[1])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[1], "DropItem_ArmorSlotBg_" .. index)
@@ -129,7 +131,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[1])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[1])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC284: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC291: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[1])[index] = {}
@@ -141,7 +143,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     ((((control._slot)[1])[index]).icon):addInputEvent("Mouse_On", "PaGlobal_WorldDropItem:ItemTooltip_Show(" .. 1 .. "," .. index .. ")")
     ;
     ((((control._slot)[1])[index]).icon):addInputEvent("Mouse_Out", "PaGlobal_WorldDropItem:ItemTooltip_Hide()")
-    -- DECOMPILER ERROR at PC338: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC345: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slotBg)[2])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[2], "DropItem_AccessorySlotBg_" .. index)
@@ -152,7 +154,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[2])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[2])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC373: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC380: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[2])[index] = {}
@@ -164,7 +166,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     ((((control._slot)[2])[index]).icon):addInputEvent("Mouse_On", "PaGlobal_WorldDropItem:ItemTooltip_Show(" .. 2 .. "," .. index .. ")")
     ;
     ((((control._slot)[2])[index]).icon):addInputEvent("Mouse_Out", "PaGlobal_WorldDropItem:ItemTooltip_Hide()")
-    -- DECOMPILER ERROR at PC427: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC434: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slotBg)[3])[index] = (UI.createControl)((CppEnums.PA_UI_CONTROL_TYPE).PA_UI_CONTROL_STATIC, (control._itemGroupUi)[3], "DropItem_EtcSlotBg_" .. index)
@@ -175,7 +177,7 @@ PaGlobal_WorldDropItem.Init = function(self)
     (((control._slotBg)[3])[index]):SetPosY(35 + (math.floor)(index / 6) * 55)
     ;
     (((control._slotBg)[3])[index]):SetShow(false)
-    -- DECOMPILER ERROR at PC462: Confused about usage of register: R6 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC469: Confused about usage of register: R6 in 'UnsetPending'
 
     ;
     ((control._slot)[3])[index] = {}
@@ -198,6 +200,7 @@ DropItemRegion_ControlCreate = function(content, key)
   -- function num : 0_1
   local regionButton = (UI.getChildControl)(content, "RadioButton_RegionName")
   local focusEffect = (UI.getChildControl)(content, "Static_Focus")
+  regionButton:SetTextMode((CppEnums.TextMode).eTextMode_AutoWrap)
   local self = PaGlobal_WorldDropItem
   local regionKey = Int64toInt32(key)
   if self._selectedRegionKey == regionKey then

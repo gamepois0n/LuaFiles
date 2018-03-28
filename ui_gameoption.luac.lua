@@ -9474,42 +9474,45 @@ end
     -- DECOMPILER ERROR at PC440: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckIsOnScreenSaver = gameOptionSetting:getIsOnScreenSaver()
-    -- DECOMPILER ERROR at PC442: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC444: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentCheckUseChattingFilter = gameOptionSetting:getUseChattingFilter()
+    -- DECOMPILER ERROR at PC446: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckUseNewQuickSlot = false
     ;
     (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).NewQuickSlot, chk_Option.currentCheckUseNewQuickSlot, (CppEnums.VariableStorageType).eVariableStorageType_User)
-    -- DECOMPILER ERROR at PC460: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC464: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineZoneChange = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.zoneChange)
-    -- DECOMPILER ERROR at PC466: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC470: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineWarAlly = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.warAlly)
-    -- DECOMPILER ERROR at PC472: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineGuild = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.guild)
     -- DECOMPILER ERROR at PC476: Confused about usage of register: R2 in 'UnsetPending'
 
+    chk_Option.currentGuideLineGuild = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.guild)
+    -- DECOMPILER ERROR at PC480: Confused about usage of register: R2 in 'UnsetPending'
+
     chk_Option.currentGuideLineQuestLine = gameOptionSetting:getShowQuestActorColor()
-    -- DECOMPILER ERROR at PC482: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC486: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGuideLineNonWarPlayer = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.nonWarPlayer)
-    -- DECOMPILER ERROR at PC488: Confused about usage of register: R2 in 'UnsetPending'
-
-    chk_Option.currentGuideLineParty = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.party)
     -- DECOMPILER ERROR at PC492: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentGuideLineHumanRelation = gameOptionSetting:getShowHumanRelation()
-    -- DECOMPILER ERROR at PC498: Confused about usage of register: R2 in 'UnsetPending'
+    chk_Option.currentGuideLineParty = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.party)
+    -- DECOMPILER ERROR at PC496: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentGuideLineEnemy = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.enemy)
+    chk_Option.currentGuideLineHumanRelation = gameOptionSetting:getShowHumanRelation()
     -- DECOMPILER ERROR at PC502: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentGuideLinePartyMemberEffect = gameOptionSetting:getRenderHitEffectParty()
+    chk_Option.currentGuideLineEnemy = gameOptionSetting:getRenderPlayerColor(randerPlayerColorStr.enemy)
     -- DECOMPILER ERROR at PC506: Confused about usage of register: R2 in 'UnsetPending'
 
-    chk_Option.currentAutoRunCamera = gameOptionSetting:getAutoRunCamera()
+    chk_Option.currentGuideLinePartyMemberEffect = gameOptionSetting:getRenderHitEffectParty()
     -- DECOMPILER ERROR at PC510: Confused about usage of register: R2 in 'UnsetPending'
+
+    chk_Option.currentAutoRunCamera = gameOptionSetting:getAutoRunCamera()
+    -- DECOMPILER ERROR at PC514: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentAutoRunCameraRotation = gameOptionSetting:getAutoRunCameraRotation()
     ;
@@ -9537,53 +9540,53 @@ end
     ;
     (frame_Game._btn_Alert_ServantMarket):SetCheck(ToClient_SetMessageFilter(11, false))
   end
-  -- DECOMPILER ERROR at PC621: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC626: Confused about usage of register: R2 in 'UnsetPending'
 
   if 4 == optionType then
     chk_Option.currentAutoOptimization = gameOptionSetting:getAutoOptimization()
-    -- DECOMPILER ERROR at PC627: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC632: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentEffectOption = gameOptionSetting:getUseOptimizationEffectFrame()
-    -- DECOMPILER ERROR at PC633: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC638: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentPlayerEffectOption = gameOptionSetting:getUsePlayerOptimizationEffectFrame()
-    -- DECOMPILER ERROR at PC639: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC644: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCharacterDistUpdate = gameOptionSetting:getUseCharacterDistUpdate()
-    -- DECOMPILER ERROR at PC645: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC650: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentPlayerHide = gameOptionSetting:getUseOtherPlayerUpdate()
-    -- DECOMPILER ERROR at PC651: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC656: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentEffectOptionFrame = gameOptionSetting:getEffectFrameEffectOptimization()
-    -- DECOMPILER ERROR at PC657: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC662: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentOptimizationFrame = gameOptionSetting:getAutoOptimizationFrameLimit()
-    -- DECOMPILER ERROR at PC665: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC670: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentPlayerEffectOptionFrame = gameOptionSetting:getPlayerEffectFrameEffectOptimization() / 100
-    -- DECOMPILER ERROR at PC669: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC674: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentTextureQualityIdx = gameOptionSetting:getTextureQuality()
-    -- DECOMPILER ERROR at PC673: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC678: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentGraphicOptionIdx = gameOptionSetting:getGraphicOption()
-    -- DECOMPILER ERROR at PC677: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC682: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentLowPower = gameOptionSetting:getPresentLock()
-    -- DECOMPILER ERROR at PC681: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC686: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentUpscaleEnable = gameOptionSetting:getUpscaleEnable()
-    -- DECOMPILER ERROR at PC685: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC690: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckShowAttackEffect = gameOptionSetting:getRenderHitEffect()
-    -- DECOMPILER ERROR at PC689: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC694: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentPetObjectShow = gameOptionSetting:getPetRender()
-    -- DECOMPILER ERROR at PC693: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC698: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentFovValue = gameOptionSetting:getFov()
-    -- DECOMPILER ERROR at PC697: Confused about usage of register: R2 in 'UnsetPending'
+    -- DECOMPILER ERROR at PC702: Confused about usage of register: R2 in 'UnsetPending'
 
     chk_Option.currentCheckCameraMasterPower = gameOptionSetting:getCameraMasterPower()
   end

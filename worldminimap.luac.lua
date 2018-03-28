@@ -5,7 +5,7 @@
 -- function num : 0
 PaGlobal_WorldMiniMap = {
 _ui = {}
-, _panelSizeScale = false, _isRotate = false, _nodeWarRegionName = nil, _initialize = false}
+, _panelSizeScale = false, _isRotate = false, _nodeWarRegionName = nil, _initialize = false, _isAlphaOver = false, _alphaMinUnit = 0.05}
 local swapRadar = function(radarType)
   -- function num : 0_0
   if radarType == true then
@@ -27,7 +27,7 @@ local swapRadar = function(radarType)
   else
     Panel_WorldMiniMap:SetShow(false)
     Panel_Radar:SetShow(true)
-    setRotateRadarMode(radarMap.isRotateMode)
+    Radar_SetRotateMode(radarMap.isRotateMode)
     Panel_Radar:ComputePos()
   end
   local self = PaGlobal_WorldMiniMap
@@ -60,7 +60,7 @@ FromClient_SetRotateMode = function(isRotate)
   FGlobal_WorldMiniMap_GuildPinRotateMode(isRotate)
 end
 
--- DECOMPILER ERROR at PC16: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC18: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_WorldMiniMap.resetPanelSize = function(self)
   -- function num : 0_3
@@ -99,7 +99,7 @@ PaGlobal_WorldMiniMap.resetPanelSize = function(self)
   Panel_CarriageEndurance_Position()
 end
 
--- DECOMPILER ERROR at PC19: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC21: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_WorldMiniMap.changePanelSize = function(self)
   -- function num : 0_4
@@ -152,6 +152,10 @@ PaGlobal_WorldMiniMap.changePanelSize = function(self)
         ;
         ((self._ui).btn_changeScale):ComputePos()
         ;
+        ((self._ui).btn_changeAlphaPlus):ComputePos()
+        ;
+        ((self._ui).btn_changeAlphaMinus):ComputePos()
+        ;
         ((self._ui).static_selfPlayerArrow):ComputePos()
         PaGlobal_WorldMiniMap:setPositionRegionNameList()
         self._panelSizeScale = not self._panelSizeScale
@@ -165,15 +169,52 @@ PaGlobal_WorldMiniMap.changePanelSize = function(self)
   end
 end
 
--- DECOMPILER ERROR at PC22: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC24: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_WorldMiniMap.changePanelAlpha = function(self, isIncrease)
+  -- function num : 0_5
+  local currentAlphaValue = ToClient_get3DMiniMapAlpha()
+  if isIncrease then
+    currentAlphaValue = currentAlphaValue + self._alphaMinUnit
+  else
+    currentAlphaValue = currentAlphaValue - self._alphaMinUnit
+  end
+  ToClient_set3DMiniMapAlpha(currentAlphaValue)
+  ;
+  (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).RadarAlpha, (currentAlphaValue) * 100, (CppEnums.VariableStorageType).eVariableStorageType_User)
+end
+
+-- DECOMPILER ERROR at PC27: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_WorldMiniMap.handleOnEvent = function(self, isOver)
-  -- function num : 0_5
+  -- function num : 0_6
   ((self._ui).sequenceAni):SetShow(isOver)
+  if not isOver then
+    ((self._ui).btn_changeAlphaPlus):SetShow(self._isAlphaOver)
+    if not isOver then
+      ((self._ui).btn_changeAlphaMinus):SetShow(self._isAlphaOver)
+    end
+  end
+end
+
+-- DECOMPILER ERROR at PC30: Confused about usage of register: R1 in 'UnsetPending'
+
+PaGlobal_WorldMiniMap.alphaBtnOverEvent = function(self, isOver)
+  -- function num : 0_7
+  self._isAlphaOver = isOver
+  ;
+  ((self._ui).btn_changeAlphaPlus):SetShow(isOver)
+  ;
+  ((self._ui).btn_changeAlphaMinus):SetShow(isOver)
+  if isOver then
+    TooltipSimple_Show((self._ui).btn_changeAlphaPlus, PAGetString(Defines.StringSheet_GAME, "LUA_WORLDMINIMAP_ALPHABUTTON_TOOLTIP"))
+  else
+    TooltipSimple_Hide()
+  end
 end
 
 PaGlobal_WorldMiniMap_luaLoadComplete = function()
-  -- function num : 0_6
+  -- function num : 0_8
   local self = PaGlobal_WorldMiniMap
   if _ContentsGroup_3DMiniMapOpen == true then
     PaGlobal_WorldMiniMap:InitWorldMiniMap()
@@ -184,7 +225,7 @@ PaGlobal_WorldMiniMap_luaLoadComplete = function()
 end
 
 worldMiniMap_updateRegion = function(regionData)
-  -- function num : 0_7
+  -- function num : 0_9
   local self = PaGlobal_WorldMiniMap
   ;
   ((self._ui).regionName):SetAutoResize(true)
@@ -261,7 +302,7 @@ worldMiniMap_updateRegion = function(regionData)
 end
 
 worldMiniMap_NodeLevelRegionNameShow = function(wayPointKey)
-  -- function num : 0_8
+  -- function num : 0_10
   local self = PaGlobal_WorldMiniMap
   local nodeName = ToClient_GetNodeNameByWaypointKey(wayPointKey)
   if nodeName == "" or nodeName == nil then
@@ -298,10 +339,10 @@ worldMiniMap_NodeLevelRegionNameShow = function(wayPointKey)
   end
 end
 
--- DECOMPILER ERROR at PC31: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC39: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_WorldMiniMap.setPositionRegionNameList = function(self)
-  -- function num : 0_9
+  -- function num : 0_11
   ((self._ui).regionName):SetPosX(5)
   ;
   ((self._ui).regionName):SetPosY(5)
@@ -324,7 +365,7 @@ PaGlobal_WorldMiniMap.setPositionRegionNameList = function(self)
 end
 
 Panel_WorldMiniMap_UpdatePerFrame = function(deltaTime)
-  -- function num : 0_10
+  -- function num : 0_12
   local self = PaGlobal_WorldMiniMap
   if self._isRotate == false then
     ((self._ui).static_selfPlayerArrow):SetRotate(getCameraRotation())
@@ -333,7 +374,7 @@ Panel_WorldMiniMap_UpdatePerFrame = function(deltaTime)
 end
 
 FromClient_RClickedWorldMiniMap = function(position, clickActor)
-  -- function num : 0_11
+  -- function num : 0_13
   local self = PaGlobal_WorldMiniMap
   if ToClient_IsShowNaviGuideGroup(0) then
     ToClient_DeleteNaviGuideByGroup(0)
@@ -360,7 +401,7 @@ FromClient_RClickedWorldMiniMap = function(position, clickActor)
 end
 
 FromClient_worldMiniMapSetNameOfMouseOverIcon = function(actorProxyWrapper, targetUI, targetUIposX, targetUIposY)
-  -- function num : 0_12
+  -- function num : 0_14
   local actorName = ""
   if (actorProxyWrapper:get()):isNpc() then
     if actorProxyWrapper:getCharacterTitle() ~= "" then
@@ -399,7 +440,7 @@ FromClient_worldMiniMapSetNameOfMouseOverIcon = function(actorProxyWrapper, targ
 end
 
 calcPosUseToTextUI = function(targetUIposX, targetUIposY, textUI)
-  -- function num : 0_13
+  -- function num : 0_15
   if Panel_WorldMiniMap:GetSizeX() < targetUIposX + textUI:GetTextSizeX() then
     textUI:SetPosX(Panel_WorldMiniMap:GetSizeX() - textUI:GetTextSizeX())
   else
@@ -413,7 +454,7 @@ calcPosUseToTextUI = function(targetUIposX, targetUIposY, textUI)
 end
 
 FromClient_worldMiniMapNameOff = function()
-  -- function num : 0_14
+  -- function num : 0_16
   local self = PaGlobal_WorldMiniMap
   if (self._ui).static_overName == nil then
     return 
@@ -423,10 +464,10 @@ FromClient_worldMiniMapNameOff = function()
   end
 end
 
--- DECOMPILER ERROR at PC45: Confused about usage of register: R1 in 'UnsetPending'
+-- DECOMPILER ERROR at PC53: Confused about usage of register: R1 in 'UnsetPending'
 
 PaGlobal_WorldMiniMap.InitWorldMiniMap = function(self)
-  -- function num : 0_15 , upvalues : swapRadar
+  -- function num : 0_17 , upvalues : swapRadar
   ToClient_initializeWorldMiniMap()
   if Panel_WorldMiniMap ~= nil then
     Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
@@ -470,7 +511,19 @@ PaGlobal_WorldMiniMap.InitWorldMiniMap = function(self)
   (self._ui).sequenceAni = (UI.getChildControl)(Panel_WorldMiniMap, "Static_SequenceAni")
   ;
   ((self._ui).sequenceAni):SetShow(false)
-  -- DECOMPILER ERROR at PC101: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC104: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).btn_changeAlphaPlus = (UI.getChildControl)(Panel_WorldMiniMap, "Button_AlphaPlus")
+  ;
+  ((self._ui).btn_changeAlphaPlus):SetShow(false)
+  -- DECOMPILER ERROR at PC116: Confused about usage of register: R1 in 'UnsetPending'
+
+  ;
+  (self._ui).btn_changeAlphaMinus = (UI.getChildControl)(Panel_WorldMiniMap, "Button_AlphaMinus")
+  ;
+  ((self._ui).btn_changeAlphaMinus):SetShow(false)
+  -- DECOMPILER ERROR at PC125: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).minimap = ToClient_getWorldMiniMapPanel()
@@ -483,7 +536,19 @@ PaGlobal_WorldMiniMap.InitWorldMiniMap = function(self)
   ((self._ui).btn_changeScale):addInputEvent("Mouse_LUp", "PaGlobal_WorldMiniMap:changePanelSize()")
   ;
   ((self._ui).btn_changeRadar):addInputEvent("Mouse_LUp", "PaGlobal_changeRadarUI()")
-  -- DECOMPILER ERROR at PC136: Confused about usage of register: R1 in 'UnsetPending'
+  ;
+  ((self._ui).btn_changeAlphaPlus):addInputEvent("Mouse_On", "PaGlobal_WorldMiniMap:alphaBtnOverEvent(true)")
+  ;
+  ((self._ui).btn_changeAlphaPlus):addInputEvent("Mouse_Out", "PaGlobal_WorldMiniMap:alphaBtnOverEvent(false)")
+  ;
+  ((self._ui).btn_changeAlphaPlus):addInputEvent("Mouse_LUp", "PaGlobal_WorldMiniMap:changePanelAlpha(true)")
+  ;
+  ((self._ui).btn_changeAlphaMinus):addInputEvent("Mouse_On", "PaGlobal_WorldMiniMap:alphaBtnOverEvent(true)")
+  ;
+  ((self._ui).btn_changeAlphaMinus):addInputEvent("Mouse_Out", "PaGlobal_WorldMiniMap:alphaBtnOverEvent(false)")
+  ;
+  ((self._ui).btn_changeAlphaMinus):addInputEvent("Mouse_LUp", "PaGlobal_WorldMiniMap:changePanelAlpha(false)")
+  -- DECOMPILER ERROR at PC196: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).static_selfPlayerArrow = (UI.getChildControl)(Panel_WorldMiniMap, "Static_SelfPlayerArrow")
@@ -498,7 +563,7 @@ PaGlobal_WorldMiniMap.InitWorldMiniMap = function(self)
   ((self._ui).static_selfPlayerArrow):SetDepth(-1000)
   ;
   ((self._ui).static_selfPlayerArrow):ComputePos()
-  -- DECOMPILER ERROR at PC173: Confused about usage of register: R1 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC233: Confused about usage of register: R1 in 'UnsetPending'
 
   ;
   (self._ui).static_overName = (UI.getChildControl)(Panel_WorldMiniMap, "Static_OverName")
@@ -515,18 +580,22 @@ PaGlobal_WorldMiniMap.InitWorldMiniMap = function(self)
     (ToClient_getGameUIManagerWrapper()):setLuaCacheDataListBool((CppEnums.GlobalUIOptionType).RadarSwap, GLOBAL_CHECK_WORLDMINIMAP, (CppEnums.VariableStorageType).eVariableStorageType_User)
     ToClient_SaveUiInfo(false)
   end
+  local radarAlphaValue = (ToClient_getGameUIManagerWrapper()):getLuaCacheDataListNumber((CppEnums.GlobalUIOptionType).RadarAlpha)
+  if radarAlphaValue > 0 then
+    ToClient_set3DMiniMapAlpha(radarAlphaValue / 100)
+  end
   Panel_WorldMiniMap:RegisterUpdateFunc("Panel_WorldMiniMap_UpdatePerFrame")
   registerEvent("selfPlayer_regionChanged", "worldMiniMap_updateRegion")
   registerEvent("FromClint_EventChangedExplorationNode", "worldMiniMap_NodeLevelRegionNameShow")
   registerEvent("FromClient_RClickedWorldMiniMap", "FromClient_RClickedWorldMiniMap")
   registerEvent("FromClient_ChangeRadarRotateMode", "FromClient_SetRotateMode")
-  -- DECOMPILER ERROR at PC242: Confused about usage of register: R2 in 'UnsetPending'
+  -- DECOMPILER ERROR at PC314: Confused about usage of register: R3 in 'UnsetPending'
 
   PaGlobal_WorldMiniMap._initialize = true
 end
 
 FromClient_reSizeWorldMiniMap = function()
-  -- function num : 0_16
+  -- function num : 0_18
   if PaGlobal_WorldMiniMap._initialize == true and Panel_WorldMiniMap:GetShow() then
     Panel_WorldMiniMap:SetPosX(getScreenSizeX() - Panel_WorldMiniMap:GetSizeX() - 15)
     Panel_WorldMiniMap:ComputePos()
@@ -534,12 +603,12 @@ FromClient_reSizeWorldMiniMap = function()
 end
 
 FGlobal_Panel_WorldMiniMapPosX = function()
-  -- function num : 0_17
+  -- function num : 0_19
   return Panel_WorldMiniMap:GetPosX()
 end
 
 FGlobal_Panel_WorldMiniMapPosY = function()
-  -- function num : 0_18
+  -- function num : 0_20
   return Panel_WorldMiniMap:GetPosY()
 end
 

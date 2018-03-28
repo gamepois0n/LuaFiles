@@ -247,7 +247,7 @@ _new = {
 , 
 [(PaGlobal_Menu._infomation)._update] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_UPDATE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 126, _y1 = 312, _x2 = 186, _y2 = 372, _isContentOpen = isGameServiceTypeDev(), _isNew = false, _isHot = true, _index = 39}
 , 
-[(PaGlobal_Menu._infomation)._notice] = {_string = PAGetString(Defines.StringSheet_GAME, "CHATTING_NOTICE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 436, _y1 = 312, _x2 = 496, _y2 = 372, _isContentOpen = isGameTypeEnglish(), _isNew = false, _isHot = false, _index = 40}
+[(PaGlobal_Menu._infomation)._notice] = {_string = PAGetString(Defines.StringSheet_GAME, "LUA_MENU_NOTICE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 436, _y1 = 312, _x2 = 496, _y2 = 372, _isContentOpen = isGameTypeEnglish(), _isNew = false, _isHot = false, _index = 40}
 , 
 [(PaGlobal_Menu._infomation)._masterpiece] = {_string = PAGetString(Defines.StringSheet_RESOURCE, "PANEL_MASTERPIECEAUCTION_TITLE"), _hotKey = "", _path = "Renewal/Button/Console_Btn_ESCMenu.dds", _x1 = 374, _y1 = 436, _x2 = 434, _y2 = 496, _isContentOpen = (PaGlobal_Menu._contentsGroup)._isMasterpieceOpen, _isNew = true, _isHot = false, _index = 53}
 , 
